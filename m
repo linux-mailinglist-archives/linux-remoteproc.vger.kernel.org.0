@@ -2,103 +2,489 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B1811513
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  2 May 2019 10:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E685716378
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 May 2019 14:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726369AbfEBIKs (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 2 May 2019 04:10:48 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:46880 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726563AbfEBIKp (ORCPT
+        id S1726322AbfEGMJt (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 7 May 2019 08:09:49 -0400
+Received: from zimbra2.kalray.eu ([92.103.151.219]:57602 "EHLO
+        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726276AbfEGMJt (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 2 May 2019 04:10:45 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x42862Rc006167;
-        Thu, 2 May 2019 10:10:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=Qcbov99m1lkaIUfnuX86RHd5PLWtt8rqoo5dDBx7OIc=;
- b=Zh8B5pku59XK3VwUjPpI5cGRLhMu0xQN5/KsS71HfPXm9SycMR3+Ki/oEO+R9KwmDg8I
- MQlmGhf8/NLcl1YQdM0JOGx206Q3/liQAjXRxhUEmfugPF8L4jH4+N26S/V47dN9YGXs
- BN2Eb6ToJeoLedoZGTF9I1aJ/sWkwmDZOzgc9iPmKDGwovCJGckWh5gppEvdckSsZvPO
- mtFD0zclMFCISbTuoXBq1iA8W70BQFjwBfPWBvGCGFbPlhRilrkwv3kb7eyfTmO5BKjb
- Yv0bYLSQUdp7q7TRT3OcM+W4ujWV1FiCcAgOuFKHbqCCRLObe0fxZOHBPgaGXbMS4OOR yA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2s6xgcq4aq-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Thu, 02 May 2019 10:10:27 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7087A38;
-        Thu,  2 May 2019 08:10:26 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas24.st.com [10.75.90.94])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5092EEDE;
-        Thu,  2 May 2019 08:10:26 +0000 (GMT)
-Received: from SAFEX1HUBCAS21.st.com (10.75.90.45) by Safex1hubcas24.st.com
- (10.75.90.94) with Microsoft SMTP Server (TLS) id 14.3.439.0; Thu, 2 May 2019
- 10:10:26 +0200
-Received: from localhost (10.129.4.86) by Webmail-ga.st.com (10.75.90.48) with
- Microsoft SMTP Server (TLS) id 14.3.361.1; Thu, 2 May 2019 10:10:25 +0200
-From:   Fabien Dessenne <fabien.dessenne@st.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
+        Tue, 7 May 2019 08:09:49 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 3C17827E7305;
+        Tue,  7 May 2019 14:09:47 +0200 (CEST)
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id CNlOwg260z6j; Tue,  7 May 2019 14:09:46 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 5C76427E7314;
+        Tue,  7 May 2019 14:09:46 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 5C76427E7314
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1557230986;
+        bh=7AO4JhK+/05MdKVi1vmXwrge2Lky1SMjrj+MfJJvUJg=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=e7iySYY3HNCmRFiem3glClzD02iAAB9lNmctK2vwfvBPOAs8fQm/fgGo4K3QFHveV
+         bzQVVfwUS9SE2Q3WlpCwbVrjZ3h6Rc72n+0r7VzBmx1mjCScJLP3KUuUAlOXf/ikmy
+         rqwka4DxP3e/VjCWE2lOdQ3iHJqVpPvaoFu1gZ6Y=
+X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ckDOd8HNfP8P; Tue,  7 May 2019 14:09:46 +0200 (CEST)
+Received: from zimbra2.kalray.eu (zimbra2.kalray.eu [192.168.40.202])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 4371027E7305;
+        Tue,  7 May 2019 14:09:46 +0200 (CEST)
+Date:   Tue, 7 May 2019 14:09:46 +0200 (CEST)
+From:   =?utf-8?Q?Cl=C3=A9ment?= Leger <cleger@kalray.eu>
+To:     linux-remoteproc <linux-remoteproc@vger.kernel.org>,
         Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-CC:     Fabien Dessenne <fabien.dessenne@st.com>,
-        Loic Pallardy <loic.pallardy@st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        "Ludovic Barre" <ludovic.barre@st.com>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH v3 8/8] ARM: dts: stm32: enable m4 coprocessor support on STM32MP157a-dk1
-Date:   Thu, 2 May 2019 10:10:06 +0200
-Message-ID: <1556784606-3016-9-git-send-email-fabien.dessenne@st.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1556784606-3016-1-git-send-email-fabien.dessenne@st.com>
-References: <1556784606-3016-1-git-send-email-fabien.dessenne@st.com>
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Loic PALLARDY <loic.pallardy@st.com>
+Message-ID: <2077801405.670546.1557230986215.JavaMail.zimbra@kalray.eu>
+In-Reply-To: <200341833.8193594.1554193736818.JavaMail.zimbra@kalray.eu>
+References: <200341833.8193594.1554193736818.JavaMail.zimbra@kalray.eu>
+Subject: Re: [RFC PATCH] rproc: Add elf64 support in elf loader
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.129.4.86]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-02_03:,,
- signatures=0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [192.168.40.202]
+X-Mailer: Zimbra 8.8.12_GA_3794 (ZimbraWebClient - GC71 (Linux)/8.8.12_GA_3794)
+Thread-Topic: rproc: Add elf64 support in elf loader
+Thread-Index: BEkhkMiGOnBSYshE/E2mIgycfVYDcuE2kaU0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Enable m4 coprocessor for STM32MP157a-dk1 board.
+Ping ?
 
-Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
+----- Original Message -----
+From: "Cl=C3=A9ment Leger" <cleger@kalray.eu>
+To: "linux-remoteproc" <linux-remoteproc@vger.kernel.org>, "Ohad Ben-Cohen"=
+ <ohad@wizery.com>, "Bjorn Andersson" <bjorn.andersson@linaro.org>
+Cc: "Loic PALLARDY" <loic.pallardy@st.com>
+Sent: Tuesday, 2 April, 2019 10:28:56
+Subject: [RFC PATCH] rproc: Add elf64 support in elf loader
+
+elf32 and elf64 mainly differ by their types. In order to avoid
+copy/pasting the whole loader code, generate static inline functions
+which will access values according to the elf class. It allows to keep a
+common loader basis.
+In order to accomodate both elf types sizes, the maximum size for a
+elf header member is chosen using the maximum value of both elf class.
+
+Signed-off-by: Clement Leger <clement.leger@kalray.eu>
 ---
- arch/arm/boot/dts/stm32mp157a-dk1.dts | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/remoteproc/remoteproc_elf_loader.c | 130 +++++++++++++++++--------=
+----
+ drivers/remoteproc/remoteproc_elf_loader.h |  78 +++++++++++++++++
+ drivers/remoteproc/remoteproc_internal.h   |   2 +-
+ include/linux/remoteproc.h                 |   4 +-
+ 4 files changed, 159 insertions(+), 55 deletions(-)
+ create mode 100644 drivers/remoteproc/remoteproc_elf_loader.h
 
-diff --git a/arch/arm/boot/dts/stm32mp157a-dk1.dts b/arch/arm/boot/dts/stm32mp157a-dk1.dts
-index 26ce8de..da64ee2 100644
---- a/arch/arm/boot/dts/stm32mp157a-dk1.dts
-+++ b/arch/arm/boot/dts/stm32mp157a-dk1.dts
-@@ -116,6 +116,16 @@
- 	status = "okay";
- };
- 
-+&m4_rproc {
-+	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
-+			<&vdev0vring1>, <&vdev0buffer>;
-+	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>;
-+	mbox-names = "vq0", "vq1", "shutdown";
-+	interrupt-parent = <&exti>;
-+	interrupts = <68 1>;
-+	status = "okay";
-+};
+diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remotepro=
+c/remoteproc_elf_loader.c
+index b17d72ec8603..f6aefa46e45c 100644
+--- a/drivers/remoteproc/remoteproc_elf_loader.c
++++ b/drivers/remoteproc/remoteproc_elf_loader.c
+@@ -31,6 +31,7 @@
+ #include <linux/elf.h>
+=20
+ #include "remoteproc_internal.h"
++#include "remoteproc_elf_loader.h"
+=20
+ /**
+  * rproc_elf_sanity_check() - Sanity Check ELF firmware image
+@@ -44,7 +45,10 @@ int rproc_elf_sanity_check(struct rproc *rproc, const st=
+ruct firmware *fw)
+ =09const char *name =3D rproc->firmware;
+ =09struct device *dev =3D &rproc->dev;
+ =09struct elf32_hdr *ehdr;
++=09u32 elf_shdr_size;
++=09u64 phoff, shoff;
+ =09char class;
++=09u16 phnum;
+=20
+ =09if (!fw) {
+ =09=09dev_err(dev, "failed to load %s\n", name);
+@@ -58,9 +62,13 @@ int rproc_elf_sanity_check(struct rproc *rproc, const st=
+ruct firmware *fw)
+=20
+ =09ehdr =3D (struct elf32_hdr *)fw->data;
+=20
+-=09/* We only support ELF32 at this point */
++=09if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG)) {
++=09=09dev_err(dev, "Image is corrupted (bad magic)\n");
++=09=09return -EINVAL;
++=09}
 +
- &rng1 {
- 	status = "okay";
+ =09class =3D ehdr->e_ident[EI_CLASS];
+-=09if (class !=3D ELFCLASS32) {
++=09if (class !=3D ELFCLASS32 && class !=3D ELFCLASS64) {
+ =09=09dev_err(dev, "Unsupported class: %d\n", class);
+ =09=09return -EINVAL;
+ =09}
+@@ -75,26 +83,29 @@ int rproc_elf_sanity_check(struct rproc *rproc, const s=
+truct firmware *fw)
+ =09=09return -EINVAL;
+ =09}
+=20
+-=09if (fw->size < ehdr->e_shoff + sizeof(struct elf32_shdr)) {
+-=09=09dev_err(dev, "Image is too small\n");
+-=09=09return -EINVAL;
+-=09}
++=09phoff =3D elf_hdr_e_phoff(class, fw->data);
++=09shoff =3D elf_hdr_e_shoff(class, fw->data);
++=09phnum =3D  elf_hdr_e_phnum(class, fw->data);
++=09elf_shdr_size =3D elf_size_of_shdr(class);
+=20
+-=09if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG)) {
+-=09=09dev_err(dev, "Image is corrupted (bad magic)\n");
++=09if (fw->size < shoff + elf_shdr_size) {
++=09=09dev_err(dev, "Image is too small\n");
+ =09=09return -EINVAL;
+ =09}
+=20
+-=09if (ehdr->e_phnum =3D=3D 0) {
++=09if (phnum =3D=3D 0) {
+ =09=09dev_err(dev, "No loadable segments\n");
+ =09=09return -EINVAL;
+ =09}
+=20
+-=09if (ehdr->e_phoff > fw->size) {
++=09if (phoff > fw->size) {
+ =09=09dev_err(dev, "Firmware size is too small\n");
+ =09=09return -EINVAL;
+ =09}
+=20
++=09dev_dbg(dev, "Firmware is an elf%d file\n",
++=09=09class =3D=3D ELFCLASS32 ? 32 : 64);
++
+ =09return 0;
+ }
+ EXPORT_SYMBOL(rproc_elf_sanity_check);
+@@ -110,11 +121,9 @@ EXPORT_SYMBOL(rproc_elf_sanity_check);
+  * Note that the boot address is not a configurable property of all remote
+  * processors. Some will always boot at a specific hard-coded address.
+  */
+-u32 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw=
+)
++u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw=
+)
+ {
+-=09struct elf32_hdr *ehdr  =3D (struct elf32_hdr *)fw->data;
+-
+-=09return ehdr->e_entry;
++=09return elf_hdr_e_entry(fw_elf_get_class(fw), fw->data);
+ }
+ EXPORT_SYMBOL(rproc_elf_get_boot_addr);
+=20
+@@ -145,37 +154,41 @@ EXPORT_SYMBOL(rproc_elf_get_boot_addr);
+ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw=
+)
+ {
+ =09struct device *dev =3D &rproc->dev;
+-=09struct elf32_hdr *ehdr;
+-=09struct elf32_phdr *phdr;
++=09const void *ehdr, *phdr;
+ =09int i, ret =3D 0;
++=09u16 phnum;
+ =09const u8 *elf_data =3D fw->data;
++=09u8 class =3D fw_elf_get_class(fw);
++=09u32 elf_phdr_size =3D elf_size_of_phdr(class);
+=20
+-=09ehdr =3D (struct elf32_hdr *)elf_data;
+-=09phdr =3D (struct elf32_phdr *)(elf_data + ehdr->e_phoff);
++=09ehdr =3D elf_data;
++=09phnum =3D elf_hdr_e_phnum(class, ehdr);
++=09phdr =3D elf_data + elf_hdr_e_phoff(class, ehdr);
+=20
+ =09/* go through the available ELF segments */
+-=09for (i =3D 0; i < ehdr->e_phnum; i++, phdr++) {
+-=09=09u32 da =3D phdr->p_paddr;
+-=09=09u32 memsz =3D phdr->p_memsz;
+-=09=09u32 filesz =3D phdr->p_filesz;
+-=09=09u32 offset =3D phdr->p_offset;
++=09for (i =3D 0; i < phnum; i++, phdr +=3D elf_phdr_size) {
++=09=09u64 da =3D elf_phdr_p_paddr(class, phdr);
++=09=09u64 memsz =3D elf_phdr_p_memsz(class, phdr);
++=09=09u64 filesz =3D elf_phdr_p_filesz(class, phdr);
++=09=09u64 offset =3D elf_phdr_p_offset(class, phdr);
++=09=09u32 type =3D elf_phdr_p_type(class, phdr);
+ =09=09void *ptr;
+=20
+-=09=09if (phdr->p_type !=3D PT_LOAD)
++=09=09if (type !=3D PT_LOAD)
+ =09=09=09continue;
+=20
+-=09=09dev_dbg(dev, "phdr: type %d da 0x%x memsz 0x%x filesz 0x%x\n",
+-=09=09=09phdr->p_type, da, memsz, filesz);
++=09=09dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
++=09=09=09type, da, memsz, filesz);
+=20
+ =09=09if (filesz > memsz) {
+-=09=09=09dev_err(dev, "bad phdr filesz 0x%x memsz 0x%x\n",
++=09=09=09dev_err(dev, "bad phdr filesz 0x%llx memsz 0x%llx\n",
+ =09=09=09=09filesz, memsz);
+ =09=09=09ret =3D -EINVAL;
+ =09=09=09break;
+ =09=09}
+=20
+ =09=09if (offset + filesz > fw->size) {
+-=09=09=09dev_err(dev, "truncated fw: need 0x%x avail 0x%zx\n",
++=09=09=09dev_err(dev, "truncated fw: need 0x%llx avail 0x%zx\n",
+ =09=09=09=09offset + filesz, fw->size);
+ =09=09=09ret =3D -EINVAL;
+ =09=09=09break;
+@@ -184,14 +197,15 @@ int rproc_elf_load_segments(struct rproc *rproc, cons=
+t struct firmware *fw)
+ =09=09/* grab the kernel address for this device address */
+ =09=09ptr =3D rproc_da_to_va(rproc, da, memsz);
+ =09=09if (!ptr) {
+-=09=09=09dev_err(dev, "bad phdr da 0x%x mem 0x%x\n", da, memsz);
++=09=09=09dev_err(dev, "bad phdr da 0x%llx mem 0x%llx\n", da,
++=09=09=09=09memsz);
+ =09=09=09ret =3D -EINVAL;
+ =09=09=09break;
+ =09=09}
+=20
+ =09=09/* put the segment where the remote processor expects it */
+-=09=09if (phdr->p_filesz)
+-=09=09=09memcpy(ptr, elf_data + phdr->p_offset, filesz);
++=09=09if (filesz)
++=09=09=09memcpy(ptr, elf_data + offset, filesz);
+=20
+ =09=09/*
+ =09=09 * Zero out remaining memory for this segment.
+@@ -208,24 +222,32 @@ int rproc_elf_load_segments(struct rproc *rproc, cons=
+t struct firmware *fw)
+ }
+ EXPORT_SYMBOL(rproc_elf_load_segments);
+=20
+-static struct elf32_shdr *
+-find_table(struct device *dev, struct elf32_hdr *ehdr, size_t fw_size)
++static const void *
++find_table(struct device *dev, const struct firmware *fw)
+ {
+-=09struct elf32_shdr *shdr;
++=09const void *shdr, *name_table_shdr;
+ =09int i;
+ =09const char *name_table;
+ =09struct resource_table *table =3D NULL;
+-=09const u8 *elf_data =3D (void *)ehdr;
++=09const u8 *elf_data =3D (void *)fw->data;
++=09u8 class =3D fw_elf_get_class(fw);
++=09size_t fw_size =3D fw->size;
++=09const void *ehdr =3D elf_data;
++=09u16 shnum =3D elf_hdr_e_shnum(class, ehdr);
++=09u32 elf_shdr_size =3D elf_size_of_shdr(class);
++=09u16 shstrndx =3D elf_hdr_e_shstrndx(class, ehdr);
+=20
+ =09/* look for the resource table and handle it */
+-=09shdr =3D (struct elf32_shdr *)(elf_data + ehdr->e_shoff);
+-=09name_table =3D elf_data + shdr[ehdr->e_shstrndx].sh_offset;
++=09shdr =3D elf_data + elf_hdr_e_shoff(class, ehdr);
++=09name_table_shdr =3D shdr + (shstrndx * elf_shdr_size);
++=09name_table =3D elf_data + elf_shdr_sh_offset(class, name_table_shdr);
+=20
+-=09for (i =3D 0; i < ehdr->e_shnum; i++, shdr++) {
+-=09=09u32 size =3D shdr->sh_size;
+-=09=09u32 offset =3D shdr->sh_offset;
++=09for (i =3D 0; i < shnum; i++, shdr +=3D elf_shdr_size) {
++=09=09u64 size =3D elf_shdr_sh_size(class, shdr);
++=09=09u64 offset =3D elf_shdr_sh_offset(class, shdr);
++=09=09u32 name =3D elf_shdr_sh_name(class, shdr);
+=20
+-=09=09if (strcmp(name_table + shdr->sh_name, ".resource_table"))
++=09=09if (strcmp(name_table + name, ".resource_table"))
+ =09=09=09continue;
+=20
+ =09=09table =3D (struct resource_table *)(elf_data + offset);
+@@ -279,21 +301,21 @@ find_table(struct device *dev, struct elf32_hdr *ehdr=
+, size_t fw_size)
+  */
+ int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *f=
+w)
+ {
+-=09struct elf32_hdr *ehdr;
+-=09struct elf32_shdr *shdr;
++=09const void *shdr;
+ =09struct device *dev =3D &rproc->dev;
+ =09struct resource_table *table =3D NULL;
+ =09const u8 *elf_data =3D fw->data;
+ =09size_t tablesz;
++=09u8 class =3D fw_elf_get_class(fw);
++=09u64 sh_offset;
+=20
+-=09ehdr =3D (struct elf32_hdr *)elf_data;
+-
+-=09shdr =3D find_table(dev, ehdr, fw->size);
++=09shdr =3D find_table(dev, fw);
+ =09if (!shdr)
+ =09=09return -EINVAL;
+=20
+-=09table =3D (struct resource_table *)(elf_data + shdr->sh_offset);
+-=09tablesz =3D shdr->sh_size;
++=09sh_offset =3D elf_shdr_sh_offset(class, shdr);
++=09table =3D (struct resource_table *)(elf_data + sh_offset);
++=09tablesz =3D elf_shdr_sh_size(class, shdr);
+=20
+ =09/*
+ =09 * Create a copy of the resource table. When a virtio device starts
+@@ -326,13 +348,17 @@ EXPORT_SYMBOL(rproc_elf_load_rsc_table);
+ struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc=
+,
+ =09=09=09=09=09=09       const struct firmware *fw)
+ {
+-=09struct elf32_hdr *ehdr =3D (struct elf32_hdr *)fw->data;
+-=09struct elf32_shdr *shdr;
++=09const void *shdr;
++=09u64 sh_addr, sh_size;
++=09u8 class =3D fw_elf_get_class(fw);
+=20
+-=09shdr =3D find_table(&rproc->dev, ehdr, fw->size);
++=09shdr =3D find_table(&rproc->dev, fw);
+ =09if (!shdr)
+ =09=09return NULL;
+=20
+-=09return rproc_da_to_va(rproc, shdr->sh_addr, shdr->sh_size);
++=09sh_addr =3D elf_shdr_sh_addr(class, shdr);
++=09sh_size =3D elf_shdr_sh_size(class, shdr);
++
++=09return rproc_da_to_va(rproc, sh_addr, sh_size);
+ }
+ EXPORT_SYMBOL(rproc_elf_find_loaded_rsc_table);
+diff --git a/drivers/remoteproc/remoteproc_elf_loader.h b/drivers/remotepro=
+c/remoteproc_elf_loader.h
+new file mode 100644
+index 000000000000..e37a55c61eae
+--- /dev/null
++++ b/drivers/remoteproc/remoteproc_elf_loader.h
+@@ -0,0 +1,78 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Remote processor elf loader defines
++ *
++ * Copyright (C) 2019 Kalray, Inc.
++ *
++ * This software is licensed under the terms of the GNU General Public
++ * License version 2, as published by the Free Software Foundation, and
++ * may be copied, distributed, and modified under those terms.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ */
++
++#ifndef REMOTEPROC_ELF_LOADER_H
++#define REMOTEPROC_ELF_LOADER_H
++
++#include <linux/elf.h>
++#include <linux/types.h>
++
++/**
++ * fw_elf_get_class - Get elf class
++ * @fw: the ELF firmware image
++ *
++ * Note that we use and elf32_hdr to access the class since the start of t=
+he
++ * struct is the same for both elf class
++ *
++ * Return: elf class of the firmware
++ */
++static inline u8 fw_elf_get_class(const struct firmware *fw)
++{
++=09struct elf32_hdr *ehdr =3D (struct elf32_hdr *)fw->data;
++
++=09return ehdr->e_ident[EI_CLASS];
++}
++
++#define ELF_GET_FIELD(__s, __field, __type) \
++static inline __type elf_##__s##_##__field(u8 class, const void *arg) \
++{ \
++=09if (class =3D=3D ELFCLASS32) \
++=09=09return (__type) ((const struct elf32_##__s *) arg)->__field; \
++=09else \
++=09=09return (__type) ((const struct elf64_##__s *) arg)->__field; \
++}
++
++ELF_GET_FIELD(hdr, e_entry, u64)
++ELF_GET_FIELD(hdr, e_phnum, u16)
++ELF_GET_FIELD(hdr, e_shnum, u16)
++ELF_GET_FIELD(hdr, e_phoff, u64)
++ELF_GET_FIELD(hdr, e_shoff, u64)
++ELF_GET_FIELD(hdr, e_shstrndx, u16)
++
++ELF_GET_FIELD(phdr, p_paddr, u64)
++ELF_GET_FIELD(phdr, p_filesz, u64)
++ELF_GET_FIELD(phdr, p_memsz, u64)
++ELF_GET_FIELD(phdr, p_type, u32)
++ELF_GET_FIELD(phdr, p_offset, u64)
++
++ELF_GET_FIELD(shdr, sh_size, u64)
++ELF_GET_FIELD(shdr, sh_offset, u64)
++ELF_GET_FIELD(shdr, sh_name, u32)
++ELF_GET_FIELD(shdr, sh_addr, u64)
++
++#define ELF_STRUCT_SIZE(__s) \
++static inline unsigned long elf_size_of_##__s(u8 class) \
++{ \
++=09if (class =3D=3D ELFCLASS32)\
++=09=09return sizeof(struct elf32_##__s); \
++=09else \
++=09=09return sizeof(struct elf64_##__s); \
++}
++
++ELF_STRUCT_SIZE(shdr)
++ELF_STRUCT_SIZE(phdr)
++
++#endif /* REMOTEPROC_ELF_LOADER_H */
+diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/=
+remoteproc_internal.h
+index b02b15f74a5e..6d4a5ffcb28b 100644
+--- a/drivers/remoteproc/remoteproc_internal.h
++++ b/drivers/remoteproc/remoteproc_internal.h
+@@ -55,7 +55,7 @@ void *rproc_da_to_va(struct rproc *rproc, u64 da, int len=
+);
+ int rproc_trigger_recovery(struct rproc *rproc);
+=20
+ int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw)=
+;
+-u32 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw=
+);
++u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw=
+);
+ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw=
+);
+ int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *f=
+w);
+ struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc=
+,
+diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+index a3edd981220e..9a7c4c3f1c92 100644
+--- a/include/linux/remoteproc.h
++++ b/include/linux/remoteproc.h
+@@ -381,7 +381,7 @@ struct rproc_ops {
+ =09=09=09=09struct rproc *rproc, const struct firmware *fw);
+ =09int (*load)(struct rproc *rproc, const struct firmware *fw);
+ =09int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
+-=09u32 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
++=09u64 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
  };
--- 
-2.7.4
-
+=20
+ /**
+@@ -497,7 +497,7 @@ struct rproc {
+ =09int num_traces;
+ =09struct list_head carveouts;
+ =09struct list_head mappings;
+-=09u32 bootaddr;
++=09u64 bootaddr;
+ =09struct list_head rvdevs;
+ =09struct list_head subdevs;
+ =09struct idr notifyids;
+--=20
+2.15.0.276.g89ea799
