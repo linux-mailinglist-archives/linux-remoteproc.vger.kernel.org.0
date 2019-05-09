@@ -2,49 +2,51 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D82001896A
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 May 2019 14:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9569189D8
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 May 2019 14:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726448AbfEIMCN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 9 May 2019 08:02:13 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:64810 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726411AbfEIMCN (ORCPT
+        id S1726438AbfEIMgK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 9 May 2019 08:36:10 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:22262 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726426AbfEIMgK (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 9 May 2019 08:02:13 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x49C1E1t018521;
-        Thu, 9 May 2019 14:02:07 +0200
+        Thu, 9 May 2019 08:36:10 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x49Ca38C031849;
+        Thu, 9 May 2019 14:36:03 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=sEvzOi/QzaGsuHXN7zZECXWsXfKXQgXC8Cgqu9yuy9o=;
- b=lfcT9wl1TT9pptAszVisUS+VizxTZbMklRc2ywkEO2SqMGZ6TRLzbe09gCTQ1m5hYnYb
- XA7KD+Ngu/DQNhhspYYc42OQ/gg1jj+8qC2a/fLMZuvtxJeTQYaBQr8zMDHD1KYfxa7u
- o7KAIqtlU3DqpQOWGBFjPJUL+M5rWcbDvC246W3xG5R+R80LZXNSHniNCgNkuE4OQGSj
- VdDopDdQYPjA4WUypsy1BT1Jisic31eNpQefzc9lvjNa76Fx2PJbtrtrjzPkau2XzztP
- e5425HB2bagLogFIgJmhtFVYhHdXcTXqGuRoMK3UTumiJ+YtbKiBLxC0DZg5STl0PVFz Jg== 
+ bh=lzahlOCPl/m4qOdpoCm6sRQ4fgNa6XR57MFqoMEUk3s=;
+ b=tz0XnmDlUgp6OcyUADfpM0KcP5IXW3YuoI/kJEhSBr3GV//BTyo+Ts5oylWKlc/07gWa
+ Ug3TLZoqu/p85GlWC/dkQnFuhG1RUboqDfI/Zu470giPYWtV9khVH/PdUgJCLJGd3Wue
+ Opg1DAnbffOG1upq0Tpi2N4Mr6fJ6kdkAVDZ55hyuQmoICtpfRhYv0wWdOx9BLVIJWCY
+ DMSVG9rDOewE72xNqn/3MQ29oDK3wGFIgRfMGAhLoNITNsKUsRsVa0BC4mWxIQub01Yu
+ Dh0EHUonMNaTTOvcNC5hpTBHU7sQ2zhdN02m4fNzFO/LwHipNka2t/sg+qryu4kZQcGS eA== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2scdjp278h-1
+        by mx08-00178001.pphosted.com with ESMTP id 2sc9s4bfkh-1
         (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Thu, 09 May 2019 14:02:07 +0200
+        Thu, 09 May 2019 14:36:03 +0200
 Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A27F231;
-        Thu,  9 May 2019 12:02:06 +0000 (GMT)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EC7BB31;
+        Thu,  9 May 2019 12:36:01 +0000 (GMT)
 Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 556E524D3;
-        Thu,  9 May 2019 12:02:06 +0000 (GMT)
-Received: from [10.48.0.131] (10.75.127.47) by SFHDAG3NODE1.st.com
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BD5382527;
+        Thu,  9 May 2019 12:36:01 +0000 (GMT)
+Received: from [10.48.0.131] (10.75.127.45) by SFHDAG3NODE1.st.com
  (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 9 May
- 2019 14:02:05 +0200
-Subject: Re: [PATCH 2/3] rpmsg: virtio_rpmsg_bus: allocate rx/tx buffer
- separately
+ 2019 14:36:00 +0200
+Subject: Re: [PATCH 3/3] rpmsg: virtio_rpmsg_bus: get buffer size from config
+ space
 To:     Xiang Xiao <xiaoxiang781216@gmail.com>, <ohad@wizery.com>,
         <bjorn.andersson@linaro.org>, <wendy.liang@xilinx.com>,
         <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Xiang Xiao <xiaoxiang@xiaomi.com>
+CC:     Xiang Xiao <xiaoxiang@xiaomi.com>,
+        Loic PALLARDY <loic.pallardy@st.com>,
+        Suman Anna <s-anna@ti.com>
 References: <1548949280-31794-1-git-send-email-xiaoxiang@xiaomi.com>
- <1548949280-31794-3-git-send-email-xiaoxiang@xiaomi.com>
+ <1548949280-31794-4-git-send-email-xiaoxiang@xiaomi.com>
 From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=arnaud.pouliquen@st.com; prefer-encrypt=mutual; keydata=
@@ -90,17 +92,17 @@ Autocrypt: addr=arnaud.pouliquen@st.com; prefer-encrypt=mutual; keydata=
  36tfTyducLyZtGB3mbJYfWeI7aiFgYsd5ehov6OIBlOz5iOshd97+wbbmziYEp6jWMIMX+Em
  zqSvS5ETZydayO5JBbw7fFBd1nGVYk1WL6Ll72g+iEnqgIckMtxey1TgfT7GhPkR7hl54ZAe
  8mOik8I/F6EW8XyQAA2P
-Message-ID: <01b88b99-ebc1-a5a3-2ff9-39fe476847be@st.com>
-Date:   Thu, 9 May 2019 14:02:05 +0200
+Message-ID: <bc0e287e-cadd-c61c-c6c4-28cad642b9eb@st.com>
+Date:   Thu, 9 May 2019 14:36:00 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <1548949280-31794-3-git-send-email-xiaoxiang@xiaomi.com>
+In-Reply-To: <1548949280-31794-4-git-send-email-xiaoxiang@xiaomi.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG3NODE1.st.com
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE1.st.com
  (10.75.127.7)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-09_02:,,
  signatures=0
@@ -111,169 +113,220 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 
 Hello Xiang,
 
-This patch has the opposite effect on my platform as DMA allocation is
-aligned on 4k page.
-For instance i declared:
-- in RX  6 buffers (of 512 bytes)
-- in TX  4 buffers ( of 512 bytes)
+Similar mechanism has been proposed by Loic 2 years ago (link to the
+series here https://lkml.org/lkml/2017/3/28/349).
 
-The result is (kernel trace)
-[   41.915896] virtio_rpmsg_bus virtio0: rx buffers: va ebb5f5ca, dma
-0x0x10042000
-[   41.915922] virtio_rpmsg_bus virtio0: tx buffers: va a7865153, dma
-0x0x10043000
+Did you see them? Regarding history, patches seem just on hold...
 
-The TX buffer memory is allocated on next 4k page...
-
-Anyway separate the RX and TX allocation makes sense. This could also
-allow to allocate buffers in 2 different memories.
-For time being, issue is that only one memory area can be attached to
-the virtio device for DMA allocation... and PA/DA translations are missing.
-This means that we probably need (in a first step) a new remoteproc API
-for memory allocation.
-These memories should be declared and mmaped in rproc platform drivers
-(memory region) or in resource table (carveout).
-This is partially done in the API for the platform driver
-(rproc_mem_entry_init) but not available for rproc clients.
+Main differences (except interesting RX/TX size split) seems that you
+- don't use the virtio_config_ops->get
+- define a new feature VIRTIO_RPMSG_F_NS.
 
 Regards
 Arnaud
 
 
 On 1/31/19 4:41 PM, Xiang Xiao wrote:
-> many dma allocator align the returned address with buffer size,
-> so two small allocation could reduce the alignment requirement
-> and save the the memory space wasted by the potential alignment.
+> 512 bytes isn't always suitable for all case, let firmware
+> maker decide the best value from resource table.
+> enable by VIRTIO_RPMSG_F_BUFSZ feature bit.
 > 
 > Signed-off-by: Xiang Xiao <xiaoxiang@xiaomi.com>
 > ---
->  drivers/rpmsg/virtio_rpmsg_bus.c | 58 +++++++++++++++++++++++-----------------
->  1 file changed, 34 insertions(+), 24 deletions(-)
+>  drivers/rpmsg/virtio_rpmsg_bus.c  | 50 +++++++++++++++++++++++++--------------
+>  include/uapi/linux/virtio_rpmsg.h | 24 +++++++++++++++++++
+>  2 files changed, 56 insertions(+), 18 deletions(-)
+>  create mode 100644 include/uapi/linux/virtio_rpmsg.h
 > 
 > diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> index fb0d2eb..59c4554 100644
+> index 59c4554..049dd97 100644
 > --- a/drivers/rpmsg/virtio_rpmsg_bus.c
 > +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> @@ -40,7 +40,8 @@
+> @@ -16,6 +16,7 @@
+>  #include <linux/virtio.h>
+>  #include <linux/virtio_ids.h>
+>  #include <linux/virtio_config.h>
+> +#include <linux/virtio_rpmsg.h>
+>  #include <linux/scatterlist.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/slab.h>
+> @@ -38,7 +39,8 @@
+>   * @sbufs:	kernel address of tx buffers
+>   * @num_rbufs:	total number of buffers for rx
 >   * @num_sbufs:	total number of buffers for tx
->   * @buf_size:	size of one rx or tx buffer
+> - * @buf_size:	size of one rx or tx buffer
+> + * @rbuf_size:	size of one rx buffer
+> + * @sbuf_size:	size of one tx buffer
 >   * @last_sbuf:	index of last tx buffer used
-> - * @bufs_dma:	dma base addr of the buffers
-> + * @rbufs_dma:	dma base addr of rx buffers
-> + * @sbufs_dma:	dma base addr of tx buffers
->   * @tx_lock:	protects svq, sbufs and sleepers, to allow concurrent senders.
->   *		sending a message might require waking up a dozing remote
->   *		processor, which involves sleeping, hence the mutex.
-> @@ -62,7 +63,8 @@ struct virtproc_info {
+>   * @rbufs_dma:	dma base addr of rx buffers
+>   * @sbufs_dma:	dma base addr of tx buffers
+> @@ -61,7 +63,8 @@ struct virtproc_info {
+>  	void *rbufs, *sbufs;
+>  	unsigned int num_rbufs;
 >  	unsigned int num_sbufs;
->  	unsigned int buf_size;
+> -	unsigned int buf_size;
+> +	unsigned int rbuf_size;
+> +	unsigned int sbuf_size;
 >  	int last_sbuf;
-> -	dma_addr_t bufs_dma;
-> +	dma_addr_t rbufs_dma;
-> +	dma_addr_t sbufs_dma;
->  	struct mutex tx_lock;
->  	struct idr endpoints;
->  	struct mutex endpoints_lock;
-> @@ -872,9 +874,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
->  	static const char * const names[] = { "input", "output" };
->  	struct virtqueue *vqs[2];
->  	struct virtproc_info *vrp;
-> -	void *bufs_va;
->  	int err = 0, i;
-> -	size_t total_buf_space;
->  	bool notify;
+>  	dma_addr_t rbufs_dma;
+>  	dma_addr_t sbufs_dma;
+> @@ -73,9 +76,6 @@ struct virtproc_info {
+>  	struct rpmsg_endpoint *ns_ept;
+>  };
 >  
->  	vrp = kzalloc(sizeof(*vrp), GFP_KERNEL);
-> @@ -909,25 +909,28 @@ static int rpmsg_probe(struct virtio_device *vdev)
->  
->  	vrp->buf_size = MAX_RPMSG_BUF_SIZE;
->  
-> -	total_buf_space = (vrp->num_rbufs + vrp->num_sbufs) * vrp->buf_size;
+> -/* The feature bitmap for virtio rpmsg */
+> -#define VIRTIO_RPMSG_F_NS	0 /* RP supports name service notifications */
 > -
->  	/* allocate coherent memory for the buffers */
-> -	bufs_va = dma_alloc_coherent(vdev->dev.parent->parent,
-> -				     total_buf_space, &vrp->bufs_dma,
-> -				     GFP_KERNEL);
-> -	if (!bufs_va) {
-> +	vrp->rbufs = dma_alloc_coherent(vdev->dev.parent->parent,
-> +					vrp->num_rbufs * vrp->buf_size,
-> +					&vrp->rbufs_dma, GFP_KERNEL);
-> +	if (!vrp->rbufs) {
->  		err = -ENOMEM;
->  		goto vqs_del;
+>  /**
+>   * struct rpmsg_hdr - common header for all rpmsg messages
+>   * @src: source address
+> @@ -452,7 +452,7 @@ static void *get_a_tx_buf(struct virtproc_info *vrp)
+>  
+>  	/* either pick the next unused tx buffer */
+>  	if (vrp->last_sbuf < vrp->num_sbufs)
+> -		ret = vrp->sbufs + vrp->buf_size * vrp->last_sbuf++;
+> +		ret = vrp->sbufs + vrp->sbuf_size * vrp->last_sbuf++;
+>  	/* or recycle a used one */
+>  	else
+>  		ret = virtqueue_get_buf(vrp->svq, &len);
+> @@ -578,7 +578,7 @@ static int rpmsg_send_offchannel_raw(struct rpmsg_device *rpdev,
+>  	 * messaging), or to improve the buffer allocator, to support
+>  	 * variable-length buffer sizes.
+>  	 */
+> -	if (len > vrp->buf_size - sizeof(struct rpmsg_hdr)) {
+> +	if (len > vrp->sbuf_size - sizeof(struct rpmsg_hdr)) {
+>  		dev_err(dev, "message is too big (%d)\n", len);
+>  		return -EMSGSIZE;
 >  	}
+> @@ -718,7 +718,7 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
+>  	 * We currently use fixed-sized buffers, so trivially sanitize
+>  	 * the reported payload length.
+>  	 */
+> -	if (len > vrp->buf_size ||
+> +	if (len > vrp->rbuf_size ||
+>  	    msg->len > (len - sizeof(struct rpmsg_hdr))) {
+>  		dev_warn(dev, "inbound msg too big: (%d, %d)\n", len, msg->len);
+>  		return -EINVAL;
+> @@ -751,7 +751,7 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
+>  		dev_warn(dev, "msg received with no recipient\n");
 >  
-> -	dev_dbg(&vdev->dev, "buffers: va %p, dma %pad\n",
-> -		bufs_va, &vrp->bufs_dma);
-> +	dev_dbg(&vdev->dev, "rx buffers: va %p, dma 0x%pad\n",
-> +		vrp->rbufs, &vrp->rbufs_dma);
+>  	/* publish the real size of the buffer */
+> -	rpmsg_sg_init(&sg, msg, vrp->buf_size);
+> +	rpmsg_sg_init(&sg, msg, vrp->rbuf_size);
 >  
-> -	/* first part of the buffers is dedicated for RX */
-> -	vrp->rbufs = bufs_va;
-> +	vrp->sbufs = dma_alloc_coherent(vdev->dev.parent->parent,
-> +					vrp->num_sbufs * vrp->buf_size,
-> +					&vrp->sbufs_dma, GFP_KERNEL);
-> +	if (!vrp->sbufs) {
-> +		err = -ENOMEM;
-> +		goto free_rbufs;
+>  	/* add the buffer back to the remote processor's virtqueue */
+>  	err = virtqueue_add_inbuf(vrp->rvq, &sg, 1, msg, GFP_KERNEL);
+> @@ -907,11 +907,24 @@ static int rpmsg_probe(struct virtio_device *vdev)
+>  	else
+>  		vrp->num_sbufs = MAX_RPMSG_NUM_BUFS;
+>  
+> -	vrp->buf_size = MAX_RPMSG_BUF_SIZE;
+> +	/* try to get buffer size from config space */
+> +	if (virtio_has_feature(vdev, VIRTIO_RPMSG_F_BUFSZ)) {
+> +		/* note: virtio_rpmsg_config is defined from remote view */
+> +		virtio_cread(vdev, struct virtio_rpmsg_config,
+> +			     txbuf_size, &vrp->rbuf_size);
+> +		virtio_cread(vdev, struct virtio_rpmsg_config,
+> +			     rxbuf_size, &vrp->sbuf_size);
 > +	}
+> +
+> +	/* use the default if resource table doesn't provide one */
+> +	if (!vrp->rbuf_size)
+> +		vrp->rbuf_size = MAX_RPMSG_BUF_SIZE;
+> +	if (!vrp->sbuf_size)
+> +		vrp->sbuf_size = MAX_RPMSG_BUF_SIZE;
 >  
-> -	/* and second part is dedicated for TX */
-> -	vrp->sbufs = bufs_va + vrp->num_rbufs * vrp->buf_size;
-> +	dev_dbg(&vdev->dev, "tx buffers: va %p, dma 0x%pad\n",
-> +		vrp->sbufs, &vrp->sbufs_dma);
+>  	/* allocate coherent memory for the buffers */
+>  	vrp->rbufs = dma_alloc_coherent(vdev->dev.parent->parent,
+> -					vrp->num_rbufs * vrp->buf_size,
+> +					vrp->num_rbufs * vrp->rbuf_size,
+>  					&vrp->rbufs_dma, GFP_KERNEL);
+>  	if (!vrp->rbufs) {
+>  		err = -ENOMEM;
+> @@ -922,7 +935,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
+>  		vrp->rbufs, &vrp->rbufs_dma);
 >  
+>  	vrp->sbufs = dma_alloc_coherent(vdev->dev.parent->parent,
+> -					vrp->num_sbufs * vrp->buf_size,
+> +					vrp->num_sbufs * vrp->sbuf_size,
+>  					&vrp->sbufs_dma, GFP_KERNEL);
+>  	if (!vrp->sbufs) {
+>  		err = -ENOMEM;
+> @@ -935,9 +948,9 @@ static int rpmsg_probe(struct virtio_device *vdev)
 >  	/* set up the receive buffers */
 >  	for (i = 0; i < vrp->num_rbufs; i++) {
-> @@ -954,7 +957,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
->  		if (!vrp->ns_ept) {
->  			dev_err(&vdev->dev, "failed to create the ns ept\n");
->  			err = -ENOMEM;
-> -			goto free_coherent;
-> +			goto free_sbufs;
->  		}
->  	}
+>  		struct scatterlist sg;
+> -		void *cpu_addr = vrp->rbufs + i * vrp->buf_size;
+> +		void *cpu_addr = vrp->rbufs + i * vrp->rbuf_size;
 >  
-> @@ -979,9 +982,14 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> -		rpmsg_sg_init(&sg, cpu_addr, vrp->buf_size);
+> +		rpmsg_sg_init(&sg, cpu_addr, vrp->rbuf_size);
 >  
->  	return 0;
+>  		err = virtqueue_add_inbuf(vrp->rvq, &sg, 1, cpu_addr,
+>  					  GFP_KERNEL);
+> @@ -984,11 +997,11 @@ static int rpmsg_probe(struct virtio_device *vdev)
 >  
-> -free_coherent:
-> -	dma_free_coherent(vdev->dev.parent->parent, total_buf_space,
-> -			  bufs_va, vrp->bufs_dma);
-> +free_sbufs:
-> +	dma_free_coherent(vdev->dev.parent->parent,
-> +			  vrp->num_sbufs * vrp->buf_size,
-> +			  vrp->sbufs, vrp->sbufs_dma);
-> +free_rbufs:
-> +	dma_free_coherent(vdev->dev.parent->parent,
-> +			  vrp->num_rbufs * vrp->buf_size,
-> +			  vrp->rbufs, vrp->rbufs_dma);
+>  free_sbufs:
+>  	dma_free_coherent(vdev->dev.parent->parent,
+> -			  vrp->num_sbufs * vrp->buf_size,
+> +			  vrp->num_sbufs * vrp->sbuf_size,
+>  			  vrp->sbufs, vrp->sbufs_dma);
+>  free_rbufs:
+>  	dma_free_coherent(vdev->dev.parent->parent,
+> -			  vrp->num_rbufs * vrp->buf_size,
+> +			  vrp->num_rbufs * vrp->rbuf_size,
+>  			  vrp->rbufs, vrp->rbufs_dma);
 >  vqs_del:
 >  	vdev->config->del_vqs(vrp->vdev);
->  free_vrp:
-> @@ -999,8 +1007,6 @@ static int rpmsg_remove_device(struct device *dev, void *data)
->  static void rpmsg_remove(struct virtio_device *vdev)
->  {
->  	struct virtproc_info *vrp = vdev->priv;
-> -	unsigned int num_bufs = vrp->num_rbufs + vrp->num_sbufs;
-> -	size_t total_buf_space = num_bufs * vrp->buf_size;
->  	int ret;
->  
->  	vdev->config->reset(vdev);
-> @@ -1016,8 +1022,12 @@ static void rpmsg_remove(struct virtio_device *vdev)
->  
+> @@ -1023,10 +1036,10 @@ static void rpmsg_remove(struct virtio_device *vdev)
 >  	vdev->config->del_vqs(vrp->vdev);
 >  
-> -	dma_free_coherent(vdev->dev.parent->parent, total_buf_space,
-> -			  vrp->rbufs, vrp->bufs_dma);
-> +	dma_free_coherent(vdev->dev.parent->parent,
-> +			  vrp->num_sbufs * vrp->buf_size,
-> +			  vrp->sbufs, vrp->sbufs_dma);
-> +	dma_free_coherent(vdev->dev.parent->parent,
-> +			  vrp->num_rbufs * vrp->buf_size,
-> +			  vrp->rbufs, vrp->rbufs_dma);
+>  	dma_free_coherent(vdev->dev.parent->parent,
+> -			  vrp->num_sbufs * vrp->buf_size,
+> +			  vrp->num_sbufs * vrp->sbuf_size,
+>  			  vrp->sbufs, vrp->sbufs_dma);
+>  	dma_free_coherent(vdev->dev.parent->parent,
+> -			  vrp->num_rbufs * vrp->buf_size,
+> +			  vrp->num_rbufs * vrp->rbuf_size,
+>  			  vrp->rbufs, vrp->rbufs_dma);
 >  
 >  	kfree(vrp);
->  }
+> @@ -1039,6 +1052,7 @@ static struct virtio_device_id id_table[] = {
+>  
+>  static unsigned int features[] = {
+>  	VIRTIO_RPMSG_F_NS,
+> +	VIRTIO_RPMSG_F_BUFSZ,
+>  };
+>  
+>  static struct virtio_driver virtio_ipc_driver = {
+> diff --git a/include/uapi/linux/virtio_rpmsg.h b/include/uapi/linux/virtio_rpmsg.h
+> new file mode 100644
+> index 0000000..24fa0dd
+> --- /dev/null
+> +++ b/include/uapi/linux/virtio_rpmsg.h
+> @@ -0,0 +1,24 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +/*
+> + * Copyright (C) Pinecone Inc. 2019
+> + * Copyright (C) Xiang Xiao <xiaoxiang@pinecone.net>
+> + */
+> +
+> +#ifndef _UAPI_LINUX_VIRTIO_RPMSG_H
+> +#define _UAPI_LINUX_VIRTIO_RPMSG_H
+> +
+> +#include <linux/types.h>
+> +
+> +/* The feature bitmap for virtio rpmsg */
+> +#define VIRTIO_RPMSG_F_NS	0 /* RP supports name service notifications */
+> +#define VIRTIO_RPMSG_F_BUFSZ	2 /* RP get buffer size from config space */
+> +
+> +struct virtio_rpmsg_config {
+> +	/* The tx/rx individual buffer size(if VIRTIO_RPMSG_F_BUFSZ) */
+> +	__u32 txbuf_size;
+> +	__u32 rxbuf_size;
+> +	__u32 reserved[14]; /* Reserve for the future use */
+> +	/* Put the customize config here */
+> +} __attribute__((packed));
+> +
+> +#endif /* _UAPI_LINUX_VIRTIO_RPMSG_H */
 > 
