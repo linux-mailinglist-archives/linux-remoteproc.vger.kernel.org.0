@@ -2,168 +2,112 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B181979D
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 10 May 2019 06:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3A719FC5
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 10 May 2019 17:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727152AbfEJEej (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 10 May 2019 00:34:39 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34264 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727149AbfEJEee (ORCPT
+        id S1727650AbfEJPDo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 10 May 2019 11:03:44 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:39152 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727346AbfEJPDo (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 10 May 2019 00:34:34 -0400
-Received: by mail-pf1-f196.google.com with SMTP id n19so2514874pfa.1
-        for <linux-remoteproc@vger.kernel.org>; Thu, 09 May 2019 21:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=iX3tMXHfmXAFXgezY0ndg+xouFZG1EouvpxfWVnQyEI=;
-        b=wPfwc2D5OF/jIrQh6ZiDhbghVvEWi/KSKgRlbqnjQdVSy1tBYJ/ow053Yrs0CJfGRH
-         0LybhQkgMUqXokj+6NjwjduqZqgutOyy0QX9GcL8zyspz4T+Bt9pGDhSF57RQaNGLY+M
-         cVLmvrlpp7Qz1hO6bALHejmw8tpzUXStqxX3W1Iip0hFVhB4z1p/1FS0J4Cy+nTbGJtP
-         lfaDV6tyBANfmTO3J8s0WwMFJEI3NfTxbXYbcKnwoJORsYhUVtHglzjpo6wJDiaxm/g6
-         Ajqb+Thj3C1/9Mn4zOaHND+I0qL1LYR3KXR5tkXTclDP4XRG/JML+XFhOFPhBrCsdjtw
-         Duow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=iX3tMXHfmXAFXgezY0ndg+xouFZG1EouvpxfWVnQyEI=;
-        b=LFwgKYsqdDKLMjfyQSqzKJOzuq8mLriTsUbmNidufWKs+dlQjy8RYUtnroJQ4WuH1O
-         IfGDUdCNy16lD4N6pRVbmvb/8OU2erE9NKllQW8HYI3w8RRdug9oSaUtzfTNVw072oOl
-         rFp3U+UmQ6sqysQ9iQK5vDevkBgBASCTEMT5azXwqTNzYv2xQkJhfpuBjkF2vwrHGfxz
-         fXVisH2eczFVYC0GCbzVBeHw5boHYDR/WMGCczLp3wO0zRvRKW60jnFCsG9qz/iIqeJk
-         07wfdLhRxdZsTz4fTPiZI4sIWpYHSSooI2HofdkD4qL13K4JOoK9KZEY6Z1sq59uG/H7
-         R+pw==
-X-Gm-Message-State: APjAAAWVQUyFfWElPTcKmqbohZDt8S8BiNKZZTsDUo14VI2ZA8/hGM2I
-        FO3Q95nrSYUzNZB/dx3YlcCW4g==
-X-Google-Smtp-Source: APXvYqz+VCrGwz0F1OeNQEiRJZyZwGUfV3b04q0MFLWKiNqRgZb4ye/bbEOX7ZRjTy+HIpkkBqHGmw==
-X-Received: by 2002:a63:ed03:: with SMTP id d3mr11006230pgi.7.1557462873882;
-        Thu, 09 May 2019 21:34:33 -0700 (PDT)
-Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id s17sm4785317pfm.149.2019.05.09.21.34.32
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 May 2019 21:34:33 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        David Brown <david.brown@linaro.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 8/8] arm64: dts: qcom: qcs404: Add fastrpc nodes
-Date:   Thu,  9 May 2019 21:34:21 -0700
-Message-Id: <20190510043421.31393-9-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20190510043421.31393-1-bjorn.andersson@linaro.org>
-References: <20190510043421.31393-1-bjorn.andersson@linaro.org>
+        Fri, 10 May 2019 11:03:44 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4AF1SGw024827;
+        Fri, 10 May 2019 17:03:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=lKyNfPMxjeNEOTVeoxdaJaRQWuSGzvXAvpttJx+3BqI=;
+ b=HTxwKAv4ORkCmeJ8x744pOg4vmUsTyoACZLbIgTRRUc7FzQJHUSPs60riHvLjRNHtGyp
+ vs/ubWMTnxeEg72laGrlehF8r/D0BZoWqfXz7Cn6bAzxCYdJlSHuVbK2277dZhWyry6z
+ KjnQB8TmYjDtLgD5nUT3yfC5g/6b+Q/PRrTw2F3wTjzyXyAnevFJeMAP3Dqqf9h+cb7D
+ rXj9Y4vWHsLFOjD6gZZZNfLUpDL+2d0qGVTE+DDUmnn8y43i6Gu7UlFtOgyghHkVKcSo
+ wrvTkyvwu2cp0kgIQAjPdmgw6ZfFPlGkO/C9ZI7kP/O0txxUkMjdpvb5L++XxBiBcZod pA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2scdjp9rnq-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Fri, 10 May 2019 17:03:08 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 401CE34;
+        Fri, 10 May 2019 15:03:07 +0000 (GMT)
+Received: from Webmail-eu.st.com (Safex1hubcas24.st.com [10.75.90.94])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 191F92ABA;
+        Fri, 10 May 2019 15:03:07 +0000 (GMT)
+Received: from SAFEX1HUBCAS23.st.com (10.75.90.47) by Safex1hubcas24.st.com
+ (10.75.90.94) with Microsoft SMTP Server (TLS) id 14.3.439.0; Fri, 10 May
+ 2019 17:03:06 +0200
+Received: from localhost (10.48.0.131) by webmail-ga.st.com (10.75.90.48) with
+ Microsoft SMTP Server (TLS) id 14.3.439.0; Fri, 10 May 2019 17:03:06 +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        xiang xiao <xiaoxiang781216@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+CC:     <arnaud.pouliquen@st.com>, Fabien DESSENNE <fabien.dessenne@st.com>
+Subject: [PATCH v2 0/2] TTY: add rpmsg tty driver
+Date:   Fri, 10 May 2019 17:02:55 +0200
+Message-ID: <1557500577-22366-1-git-send-email-arnaud.pouliquen@st.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.48.0.131]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-09_02:,,
+ signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Thierry Escande <thierry.escande@linaro.org>
+This patch set introduces a TTY console on top of the RPMsg framework which
+enables the following use cases:
+- Provide a console to communicate easily with the remote processor
+  application.
+- Provide an interface to get the remote processor log traces without
+  ring buffer limitation.
+- Ease the migration from MPU + MCU processors to multi core processors
+  (MPU and MCU integrated in one processor)
 
-The ADSP fastrpc provides 3 context banks and are assigned to IOMMU
-context banks 23, 24 and 25; using SIDs 0x804, 0x805 and 0x806.  The
-CDSP fastrpc provides 5 context banks and are assigned to IOMMU context
-banks 5, 6, 7, 8 and 9; using SIDs 0x1001 through 0x1005. Add these to
-their respective remoteproc.
+An alternative of this proposed solution would consist in using the virtio
+console:
+The drawback with that solution is that it requires a specific virtio buffer
+(in addition to the one already used for RPMsg) which does not fit with remote
+processors with little memory. The proposed solution allows to multiplex the
+console with the other rpmsg services, optimizing the memory.
 
-The lower 4 bits of the SID is used to identify the context bank when
-communicating with the fastrpc firmware, so this gives the reg values.
+The first patch adds an API to the rpmsg framework ('get buffer size') and the
+second one is the rpmsg tty driver itself.
 
-Signed-off-by: Thierry Escande <thierry.escande@linaro.org>
-[bjorn: Added SMMU linkage and extend commit message]
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- arch/arm64/boot/dts/qcom/qcs404.dtsi | 66 ++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+History:
+-V1 to V2:
+	- modify message structure to allow to data transmission but also
+	flow control
+	- add documentation file to describe message structure for remote
+	  implementation. 
+	- add dtr/rts management
+	- disable termios modes that generates non optimized behavior on RPMsg
+	  transfers
+	- replace rpmsg_send by rpmsg_trysend to not block the write
+	- suppress useless spinlock on read.
+	- miscellaneous fixes to improve robustness
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-index fcde4f0334c2..858a53160564 100644
---- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-@@ -243,6 +243,45 @@
- 				mboxes = <&apcs_glb 12>;
- 
- 				label = "cdsp";
-+
-+				fastrpc_cdsp: fastrpc {
-+					compatible = "qcom,fastrpc";
-+					qcom,glink-channels = "fastrpcglink-apps-dsp";
-+					label = "cdsp";
-+
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					cb@1 {
-+						compatible = "qcom,fastrpc-compute-cb";
-+						reg = <1>;
-+						iommus = <&apps_iommu 5>;
-+					};
-+
-+					cb@2 {
-+						compatible = "qcom,fastrpc-compute-cb";
-+						reg = <2>;
-+						iommus = <&apps_iommu 6>;
-+					};
-+
-+					cb@3 {
-+						compatible = "qcom,fastrpc-compute-cb";
-+						reg = <3>;
-+						iommus = <&apps_iommu 7>;
-+					};
-+
-+					cb@4 {
-+						compatible = "qcom,fastrpc-compute-cb";
-+						reg = <4>;
-+						iommus = <&apps_iommu 8>;
-+					};
-+
-+					cb@5 {
-+						compatible = "qcom,fastrpc-compute-cb";
-+						reg = <5>;
-+						iommus = <&apps_iommu 9>;
-+					};
-+				};
- 			};
- 		};
- 
-@@ -928,6 +967,33 @@
- 				mboxes = <&apcs_glb 8>;
- 
- 				label = "adsp";
-+
-+				fastrpc_adsp: fastrpc {
-+					compatible = "qcom,fastrpc";
-+					qcom,glink-channels = "fastrpcglink-apps-dsp";
-+					label = "adsp";
-+
-+					#address-cells = <1>;
-+					#size-cells = <0>;
-+
-+					cb@4 {
-+						compatible = "qcom,fastrpc-compute-cb";
-+						reg = <4>;
-+						iommus = <&apps_iommu 23>;
-+					};
-+
-+					cb@5 {
-+						compatible = "qcom,fastrpc-compute-cb";
-+						reg = <5>;
-+						iommus = <&apps_iommu 24>;
-+					};
-+
-+					cb@6 {
-+						compatible = "qcom,fastrpc-compute-cb";
-+						reg = <6>;
-+						iommus = <&apps_iommu 25>;
-+					};
-+				};
- 			};
- 		};
- 	};
+Arnaud Pouliquen (2):
+  rpmsg: core: add possibility to get message payload length
+  tty: add rpmsg driver
+
+ Documentation/serial/tty_rpmsg.txt |  38 +++
+ drivers/rpmsg/rpmsg_core.c         |  20 ++
+ drivers/rpmsg/rpmsg_internal.h     |   2 +
+ drivers/rpmsg/virtio_rpmsg_bus.c   |  11 +
+ drivers/tty/Kconfig                |   9 +
+ drivers/tty/Makefile               |   1 +
+ drivers/tty/rpmsg_tty.c            | 479 +++++++++++++++++++++++++++++++++++++
+ include/linux/rpmsg.h              |  10 +
+ 8 files changed, 570 insertions(+)
+ create mode 100644 Documentation/serial/tty_rpmsg.txt
+ create mode 100644 drivers/tty/rpmsg_tty.c
+
 -- 
-2.18.0
+2.7.4
 
