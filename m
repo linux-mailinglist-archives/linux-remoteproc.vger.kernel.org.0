@@ -2,296 +2,90 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCBD18A2E
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 May 2019 15:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E462F1979F
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 10 May 2019 06:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726511AbfEINAW (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 9 May 2019 09:00:22 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:36859 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726054AbfEINAW (ORCPT
+        id S1727010AbfEJEe0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 10 May 2019 00:34:26 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:34266 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727004AbfEJEe0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 9 May 2019 09:00:22 -0400
-Received: by mail-qt1-f195.google.com with SMTP id a17so1077441qth.3;
-        Thu, 09 May 2019 06:00:21 -0700 (PDT)
+        Fri, 10 May 2019 00:34:26 -0400
+Received: by mail-pg1-f196.google.com with SMTP id c13so2366607pgt.1
+        for <linux-remoteproc@vger.kernel.org>; Thu, 09 May 2019 21:34:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AFf5YJI+u+GR5yZiIxTRCn38IQWix2LIwu6HPgqqURU=;
-        b=QD8lE6ld6rdy4QFqLGk9mbXYDZneaTGvZ+hF+RE4vU7+9154wQc7Z1c/fXfYd9bh2G
-         RzCahup8OiTP7V8rBzqgjaIdMjI91peAVFKqr7+gTcuMeyAIj43UdIHshARCdfrOxrpo
-         KlwLsCmazdxHF4peTlewZOrUipTTzpGyAPa9IAxGIjJYJdDzYv+/k5MPmgVSOVl3DI0G
-         s5tS5UN09uGKba6OmLOa8DMYkBb4hxwjUosfdx/5zYhDk/Lfvpn4rdXU/QS8rmpY2BpS
-         v6BWxNqjH2HhArgMYo3Xd7cZDTVugiq1AAyi7VcFamVEV+mnzeGkWQbtY07Sgy2seCpU
-         rAag==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=ib+MUjfQhZnZSro4VhngEMbvlKvKCZvtG3Xyv5qHdHM=;
+        b=Y8kT4pXGqWTcxgxc4KCfDvBPKoX9ELoCs2hDyY4Ly2GO7yVbII5C5sIybh7CoMWWhn
+         4irrfpAX6ysaErLDHDcQJRGttSZkhh9Ww19O4oEUoX5Wbl8w0QiEkoN7U8w2gWc7MbkW
+         AqhObpLDDOK2kISIX3NSTtSucgohoBF4rSc+YzDtS8HF+vo0q/yfsdNP9L5CqD25sOsV
+         PtGgfAAyumJepwJX9awssnffDPrKnW8KYZTbSbyPqXFjhgsqKv6kGET/MTYWpsHZkmK1
+         39EJ/vXp90+YA8s+wb0a29uGlUi02OibPxvIzcamKW2OrcAS1QMohj5w5Mc1xXKnnSBU
+         l8SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AFf5YJI+u+GR5yZiIxTRCn38IQWix2LIwu6HPgqqURU=;
-        b=IZ/u2uEexbCwv0noEWDUO7F33TAjCommAIUpPurWZPsN6B5kpJt/T3gV4ox3n+gtu6
-         3mgf4aKHk5ny/Q/Xm0Ef7pZFOxMNqAw6FzAli48eIza+cEEMoqBXIenhrCBfcp+0awo3
-         HgOB/3I/+Vb3kL+X8oETznj0/KHHaa7GjDAzrx040cdBvqdU/pJDyVkCwimx6iD97yjy
-         FhxPhg0Km0fbz18CIPMqKcBDjJ9Dyh6MQhXTEvPWjNQYxa+DstcPb2AaHVQs/MJxNPAC
-         Gxwk9/WHiZR6cF9kV4V4k6Igp9EjZDFKkvZIKUxBk+bPyACtcm1ggzx0IjPGAdhLxSIA
-         +heA==
-X-Gm-Message-State: APjAAAX1MAnYyAfxWsdB61GSW93NKTBbvAxi3jpO6T1j3pMdykwISjUD
-        3KjY7Olmvdq8STeP8xhCWDyGbLo1oASO573wy90=
-X-Google-Smtp-Source: APXvYqzAagP/WoP7Sg52D+mHpEV8Oq5swHUFKZADFawvZsZ+xXB6WH3QOJG2kgbSIHGFbqP8Kk6u0hgXiS9MZQSWcgU=
-X-Received: by 2002:ac8:2291:: with SMTP id f17mr3529626qta.330.1557406820839;
- Thu, 09 May 2019 06:00:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <1548949280-31794-1-git-send-email-xiaoxiang@xiaomi.com>
- <1548949280-31794-4-git-send-email-xiaoxiang@xiaomi.com> <bc0e287e-cadd-c61c-c6c4-28cad642b9eb@st.com>
-In-Reply-To: <bc0e287e-cadd-c61c-c6c4-28cad642b9eb@st.com>
-From:   xiang xiao <xiaoxiang781216@gmail.com>
-Date:   Thu, 9 May 2019 21:00:08 +0800
-Message-ID: <CAH2Cfb_kCvyYpRS8BVgkmA0W7ZHjjCXcC7nhaXji2oMOuqm76w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] rpmsg: virtio_rpmsg_bus: get buffer size from config space
-To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Cc:     Ohad Ben Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        wendy.liang@xilinx.com, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiang Xiao <xiaoxiang@xiaomi.com>,
-        Loic PALLARDY <loic.pallardy@st.com>,
-        Suman Anna <s-anna@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ib+MUjfQhZnZSro4VhngEMbvlKvKCZvtG3Xyv5qHdHM=;
+        b=qA0d09Wqah1wnCuP/BkBSP3i5FAxSLxBjhlNkQ5T/zdYCMMbcQ6C12HHVvZmkRx1dQ
+         JJRetjQJrwyBzlUwGfFp0uc0hE9YiJDjJTuJf50U+e8bDAKb0rN45k4OtBX4l+YEcyaQ
+         zUbXmFsgPaeXhPlRKS0b2ptQAiMezleDRLquI0A7Rk/LXC+x+dPBYmX35CE9M2ofkTU8
+         AP17gmjTjbcG1/MmHe2uKVMWH9N+V/rlQf+kq9cAzHC5irpmRtimRbO7fjAXCj7P18me
+         lR/jGRAamltVGdsiiy6KEAAszHel2D4NIcSMjzElJXIw5P1ExNE/9Mi0gGJWV0ngnSqv
+         ovQw==
+X-Gm-Message-State: APjAAAXlqCEipLgBnJbki/dL3y//+Z2GrKIjFh8PT2amablDtoCTahZz
+        TwUcnJ19H7QabsFLCp3QwudAYw==
+X-Google-Smtp-Source: APXvYqzWbJYyDIfDb0r0u0JljNU5JZ51XRGaYNlxCB4WAlDG+AP+mkXCY46HRjIg+iRu5M3TEr3K5Q==
+X-Received: by 2002:a65:4907:: with SMTP id p7mr11059685pgs.288.1557462864894;
+        Thu, 09 May 2019 21:34:24 -0700 (PDT)
+Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id s17sm4785317pfm.149.2019.05.09.21.34.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 May 2019 21:34:24 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        David Brown <david.brown@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/8] Qualcomm QCS404 CDSP improvements and fastrpc
+Date:   Thu,  9 May 2019 21:34:13 -0700
+Message-Id: <20190510043421.31393-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.18.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu, May 9, 2019 at 8:36 PM Arnaud Pouliquen <arnaud.pouliquen@st.com> wrote:
->
-> Hello Xiang,
->
-> Similar mechanism has been proposed by Loic 2 years ago (link to the
-> series here https://lkml.org/lkml/2017/3/28/349).
->
-> Did you see them? Regarding history, patches seem just on hold...
->
+This series introduces the non-Trustzone based CDSP support, restructures the
+remoteproc nodes in the dts, introduces the IOMMU and adds the fastrpc nodes.
 
-Just saw this patchset, so it's common problem hit by many vendor,
-rpmsg framework need to address it.:)
+The matrix_multi app is used for verification, the test completes 100% of the
+time, but exits only succesfully 70% of the time.
 
-> Main differences (except interesting RX/TX size split) seems that you
-> - don't use the virtio_config_ops->get
+Bjorn Andersson (7):
+  dt-bindings: remoteproc: Rename and amend Hexagon v56 binding
+  remoteproc: qcom: qdsp6-adsp: Add support for QCS404 CDSP
+  arm64: dts: qcom: qcs404-evb: Mark CDSP clocks protected
+  arm64: dts: qcom: qcs404: Add TCSR node
+  arm64: dts: qcom: qcs404: Fully describe the CDSP
+  arm64: dts: qcom: qcs404: Move lpass and q6 into soc
+  arm64: dts: qcom: qcs404: Define APPS IOMMU
 
-virtio_cread call virtio_config_ops->get internally, the ideal is same
-for both patch, just the implementation detail is different.
+Thierry Escande (1):
+  arm64: dts: qcom: qcs404: Add fastrpc nodes
 
-> - define a new feature VIRTIO_RPMSG_F_NS.
+ ...qcom,adsp-pil.txt => qcom,hexagon-v56.txt} |  35 +-
+ arch/arm64/boot/dts/qcom/qcs404-evb.dtsi      |   7 +
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          | 364 +++++++++++++-----
+ drivers/remoteproc/qcom_q6v5_adsp.c           |  73 +++-
+ 4 files changed, 358 insertions(+), 121 deletions(-)
+ rename Documentation/devicetree/bindings/remoteproc/{qcom,adsp-pil.txt => qcom,hexagon-v56.txt} (74%)
 
-I add this flag to keep the compatibility with old remote peer, and
-also follow the common virito driver practice.
+-- 
+2.18.0
 
->
-> Regards
-> Arnaud
->
->
-> On 1/31/19 4:41 PM, Xiang Xiao wrote:
-> > 512 bytes isn't always suitable for all case, let firmware
-> > maker decide the best value from resource table.
-> > enable by VIRTIO_RPMSG_F_BUFSZ feature bit.
-> >
-> > Signed-off-by: Xiang Xiao <xiaoxiang@xiaomi.com>
-> > ---
-> >  drivers/rpmsg/virtio_rpmsg_bus.c  | 50 +++++++++++++++++++++++++--------------
-> >  include/uapi/linux/virtio_rpmsg.h | 24 +++++++++++++++++++
-> >  2 files changed, 56 insertions(+), 18 deletions(-)
-> >  create mode 100644 include/uapi/linux/virtio_rpmsg.h
-> >
-> > diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> > index 59c4554..049dd97 100644
-> > --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> > +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/virtio.h>
-> >  #include <linux/virtio_ids.h>
-> >  #include <linux/virtio_config.h>
-> > +#include <linux/virtio_rpmsg.h>
-> >  #include <linux/scatterlist.h>
-> >  #include <linux/dma-mapping.h>
-> >  #include <linux/slab.h>
-> > @@ -38,7 +39,8 @@
-> >   * @sbufs:   kernel address of tx buffers
-> >   * @num_rbufs:       total number of buffers for rx
-> >   * @num_sbufs:       total number of buffers for tx
-> > - * @buf_size:        size of one rx or tx buffer
-> > + * @rbuf_size:       size of one rx buffer
-> > + * @sbuf_size:       size of one tx buffer
-> >   * @last_sbuf:       index of last tx buffer used
-> >   * @rbufs_dma:       dma base addr of rx buffers
-> >   * @sbufs_dma:       dma base addr of tx buffers
-> > @@ -61,7 +63,8 @@ struct virtproc_info {
-> >       void *rbufs, *sbufs;
-> >       unsigned int num_rbufs;
-> >       unsigned int num_sbufs;
-> > -     unsigned int buf_size;
-> > +     unsigned int rbuf_size;
-> > +     unsigned int sbuf_size;
-> >       int last_sbuf;
-> >       dma_addr_t rbufs_dma;
-> >       dma_addr_t sbufs_dma;
-> > @@ -73,9 +76,6 @@ struct virtproc_info {
-> >       struct rpmsg_endpoint *ns_ept;
-> >  };
-> >
-> > -/* The feature bitmap for virtio rpmsg */
-> > -#define VIRTIO_RPMSG_F_NS    0 /* RP supports name service notifications */
-> > -
-> >  /**
-> >   * struct rpmsg_hdr - common header for all rpmsg messages
-> >   * @src: source address
-> > @@ -452,7 +452,7 @@ static void *get_a_tx_buf(struct virtproc_info *vrp)
-> >
-> >       /* either pick the next unused tx buffer */
-> >       if (vrp->last_sbuf < vrp->num_sbufs)
-> > -             ret = vrp->sbufs + vrp->buf_size * vrp->last_sbuf++;
-> > +             ret = vrp->sbufs + vrp->sbuf_size * vrp->last_sbuf++;
-> >       /* or recycle a used one */
-> >       else
-> >               ret = virtqueue_get_buf(vrp->svq, &len);
-> > @@ -578,7 +578,7 @@ static int rpmsg_send_offchannel_raw(struct rpmsg_device *rpdev,
-> >        * messaging), or to improve the buffer allocator, to support
-> >        * variable-length buffer sizes.
-> >        */
-> > -     if (len > vrp->buf_size - sizeof(struct rpmsg_hdr)) {
-> > +     if (len > vrp->sbuf_size - sizeof(struct rpmsg_hdr)) {
-> >               dev_err(dev, "message is too big (%d)\n", len);
-> >               return -EMSGSIZE;
-> >       }
-> > @@ -718,7 +718,7 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
-> >        * We currently use fixed-sized buffers, so trivially sanitize
-> >        * the reported payload length.
-> >        */
-> > -     if (len > vrp->buf_size ||
-> > +     if (len > vrp->rbuf_size ||
-> >           msg->len > (len - sizeof(struct rpmsg_hdr))) {
-> >               dev_warn(dev, "inbound msg too big: (%d, %d)\n", len, msg->len);
-> >               return -EINVAL;
-> > @@ -751,7 +751,7 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
-> >               dev_warn(dev, "msg received with no recipient\n");
-> >
-> >       /* publish the real size of the buffer */
-> > -     rpmsg_sg_init(&sg, msg, vrp->buf_size);
-> > +     rpmsg_sg_init(&sg, msg, vrp->rbuf_size);
-> >
-> >       /* add the buffer back to the remote processor's virtqueue */
-> >       err = virtqueue_add_inbuf(vrp->rvq, &sg, 1, msg, GFP_KERNEL);
-> > @@ -907,11 +907,24 @@ static int rpmsg_probe(struct virtio_device *vdev)
-> >       else
-> >               vrp->num_sbufs = MAX_RPMSG_NUM_BUFS;
-> >
-> > -     vrp->buf_size = MAX_RPMSG_BUF_SIZE;
-> > +     /* try to get buffer size from config space */
-> > +     if (virtio_has_feature(vdev, VIRTIO_RPMSG_F_BUFSZ)) {
-> > +             /* note: virtio_rpmsg_config is defined from remote view */
-> > +             virtio_cread(vdev, struct virtio_rpmsg_config,
-> > +                          txbuf_size, &vrp->rbuf_size);
-> > +             virtio_cread(vdev, struct virtio_rpmsg_config,
-> > +                          rxbuf_size, &vrp->sbuf_size);
-> > +     }
-> > +
-> > +     /* use the default if resource table doesn't provide one */
-> > +     if (!vrp->rbuf_size)
-> > +             vrp->rbuf_size = MAX_RPMSG_BUF_SIZE;
-> > +     if (!vrp->sbuf_size)
-> > +             vrp->sbuf_size = MAX_RPMSG_BUF_SIZE;
-> >
-> >       /* allocate coherent memory for the buffers */
-> >       vrp->rbufs = dma_alloc_coherent(vdev->dev.parent->parent,
-> > -                                     vrp->num_rbufs * vrp->buf_size,
-> > +                                     vrp->num_rbufs * vrp->rbuf_size,
-> >                                       &vrp->rbufs_dma, GFP_KERNEL);
-> >       if (!vrp->rbufs) {
-> >               err = -ENOMEM;
-> > @@ -922,7 +935,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
-> >               vrp->rbufs, &vrp->rbufs_dma);
-> >
-> >       vrp->sbufs = dma_alloc_coherent(vdev->dev.parent->parent,
-> > -                                     vrp->num_sbufs * vrp->buf_size,
-> > +                                     vrp->num_sbufs * vrp->sbuf_size,
-> >                                       &vrp->sbufs_dma, GFP_KERNEL);
-> >       if (!vrp->sbufs) {
-> >               err = -ENOMEM;
-> > @@ -935,9 +948,9 @@ static int rpmsg_probe(struct virtio_device *vdev)
-> >       /* set up the receive buffers */
-> >       for (i = 0; i < vrp->num_rbufs; i++) {
-> >               struct scatterlist sg;
-> > -             void *cpu_addr = vrp->rbufs + i * vrp->buf_size;
-> > +             void *cpu_addr = vrp->rbufs + i * vrp->rbuf_size;
-> >
-> > -             rpmsg_sg_init(&sg, cpu_addr, vrp->buf_size);
-> > +             rpmsg_sg_init(&sg, cpu_addr, vrp->rbuf_size);
-> >
-> >               err = virtqueue_add_inbuf(vrp->rvq, &sg, 1, cpu_addr,
-> >                                         GFP_KERNEL);
-> > @@ -984,11 +997,11 @@ static int rpmsg_probe(struct virtio_device *vdev)
-> >
-> >  free_sbufs:
-> >       dma_free_coherent(vdev->dev.parent->parent,
-> > -                       vrp->num_sbufs * vrp->buf_size,
-> > +                       vrp->num_sbufs * vrp->sbuf_size,
-> >                         vrp->sbufs, vrp->sbufs_dma);
-> >  free_rbufs:
-> >       dma_free_coherent(vdev->dev.parent->parent,
-> > -                       vrp->num_rbufs * vrp->buf_size,
-> > +                       vrp->num_rbufs * vrp->rbuf_size,
-> >                         vrp->rbufs, vrp->rbufs_dma);
-> >  vqs_del:
-> >       vdev->config->del_vqs(vrp->vdev);
-> > @@ -1023,10 +1036,10 @@ static void rpmsg_remove(struct virtio_device *vdev)
-> >       vdev->config->del_vqs(vrp->vdev);
-> >
-> >       dma_free_coherent(vdev->dev.parent->parent,
-> > -                       vrp->num_sbufs * vrp->buf_size,
-> > +                       vrp->num_sbufs * vrp->sbuf_size,
-> >                         vrp->sbufs, vrp->sbufs_dma);
-> >       dma_free_coherent(vdev->dev.parent->parent,
-> > -                       vrp->num_rbufs * vrp->buf_size,
-> > +                       vrp->num_rbufs * vrp->rbuf_size,
-> >                         vrp->rbufs, vrp->rbufs_dma);
-> >
-> >       kfree(vrp);
-> > @@ -1039,6 +1052,7 @@ static struct virtio_device_id id_table[] = {
-> >
-> >  static unsigned int features[] = {
-> >       VIRTIO_RPMSG_F_NS,
-> > +     VIRTIO_RPMSG_F_BUFSZ,
-> >  };
-> >
-> >  static struct virtio_driver virtio_ipc_driver = {
-> > diff --git a/include/uapi/linux/virtio_rpmsg.h b/include/uapi/linux/virtio_rpmsg.h
-> > new file mode 100644
-> > index 0000000..24fa0dd
-> > --- /dev/null
-> > +++ b/include/uapi/linux/virtio_rpmsg.h
-> > @@ -0,0 +1,24 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > +/*
-> > + * Copyright (C) Pinecone Inc. 2019
-> > + * Copyright (C) Xiang Xiao <xiaoxiang@pinecone.net>
-> > + */
-> > +
-> > +#ifndef _UAPI_LINUX_VIRTIO_RPMSG_H
-> > +#define _UAPI_LINUX_VIRTIO_RPMSG_H
-> > +
-> > +#include <linux/types.h>
-> > +
-> > +/* The feature bitmap for virtio rpmsg */
-> > +#define VIRTIO_RPMSG_F_NS    0 /* RP supports name service notifications */
-> > +#define VIRTIO_RPMSG_F_BUFSZ 2 /* RP get buffer size from config space */
-> > +
-> > +struct virtio_rpmsg_config {
-> > +     /* The tx/rx individual buffer size(if VIRTIO_RPMSG_F_BUFSZ) */
-> > +     __u32 txbuf_size;
-> > +     __u32 rxbuf_size;
-> > +     __u32 reserved[14]; /* Reserve for the future use */
-> > +     /* Put the customize config here */
-> > +} __attribute__((packed));
-> > +
-> > +#endif /* _UAPI_LINUX_VIRTIO_RPMSG_H */
-> >
