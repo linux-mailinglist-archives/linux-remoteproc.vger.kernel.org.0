@@ -2,65 +2,58 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BA61B24E
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 May 2019 11:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBD51B25B
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 May 2019 11:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728513AbfEMJHn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 May 2019 05:07:43 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:63598 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728495AbfEMJHl (ORCPT
+        id S1728492AbfEMJIm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 13 May 2019 05:08:42 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:36564 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727873AbfEMJIm (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 May 2019 05:07:41 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4D92ULC008574;
-        Mon, 13 May 2019 11:07:29 +0200
+        Mon, 13 May 2019 05:08:42 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4D91WUA018957;
+        Mon, 13 May 2019 11:08:38 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
  : date : message-id : references : in-reply-to : content-type : content-id
  : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=6oiqA8T+mnKQvbNWYLWPTsV6nFYs+iYkXtXuj8wduJA=;
- b=bL/ofrGYbBQtinEd3E54RDqD7WMSd65lpyuYYdXN4Ot6jm+kb7RsnFesDdxg44x7WUu4
- JK0WxLoa6DvV4nt9YtWkZDyo+4efixHV1/vC/VF5kaM/LaD9DhKoyri13JoJ/JcDyZKj
- m0RFC+hGHq0iSGauddBUnxDJfaxk/8kEUl3Rc9Ww3igGdzoEnMENKMo9FDknNkZg0tv2
- eFkbvB7jwsch7UMecRBr6lZjiXJMHuKKKoIiQ3bCMYjdg4loKti/n9Ra9BcPmuYihPyl
- zLWp15Cv8kA9AVS7QN0fAzFsgSpDUruWXoDbHLxjq9pR8TqqzA664I6Ms7nWBbxdcJK8 2w== 
+ bh=7JfNU5hJZeQI2Z2irz+/r2driLkYKCI2Dra2gHoDtvI=;
+ b=itIjo/afThYHPF2GIwWuBAyRGwqOdxpRmm8UPpJFAXyUiqZhnZj97937Q2B5jJ1PFgYa
+ gKYgmepUm4JmpFB6sYAbCeUgq6E008IA9GRPIsm1T765l4q6Q49LiPFDR9wrVPFq4mko
+ VXsmRt1DMFi1VwJ4FOwpyXNr4BHKAeOvCZmPPiah0/akHF1fZMEpUN3ZBKGV6nHxA0l9
+ kil7oVkCFw0FJEYeBW/X8hReAil5HWvO9R2teQXfYLklQkFuJ1yznXykUIhwV22nRR4X
+ NafbNHwNeaGjAtyw2Ndmxuox0eSbyFhysmE9jj3Udx6yAXlsjdRIYnIu88Mww073VSVo 5g== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2sdkuyhyt8-1
+        by mx08-00178001.pphosted.com with ESMTP id 2sdn9fhxub-1
         (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Mon, 13 May 2019 11:07:29 +0200
+        Mon, 13 May 2019 11:08:38 +0200
 Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0B64A31;
-        Mon, 13 May 2019 09:07:29 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D78911623;
-        Mon, 13 May 2019 09:07:28 +0000 (GMT)
-Received: from SFHDAG5NODE3.st.com (10.75.127.15) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 13 May
- 2019 11:07:28 +0200
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 31B9646;
+        Mon, 13 May 2019 09:08:33 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag5node2.st.com [10.75.127.14])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 199801629;
+        Mon, 13 May 2019 09:08:33 +0000 (GMT)
+Received: from SFHDAG5NODE3.st.com (10.75.127.15) by SFHDAG5NODE2.st.com
+ (10.75.127.14) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 13 May
+ 2019 11:08:32 +0200
 Received: from SFHDAG5NODE3.st.com ([fe80::7c09:5d6b:d2c7:5f47]) by
  SFHDAG5NODE3.st.com ([fe80::7c09:5d6b:d2c7:5f47%20]) with mapi id
- 15.00.1347.000; Mon, 13 May 2019 11:07:28 +0200
+ 15.00.1347.000; Mon, 13 May 2019 11:08:32 +0200
 From:   Fabien DESSENNE <fabien.dessenne@st.com>
-To:     Benjamin Gaignard <benjamin.gaignard@linaro.org>
-CC:     Ohad Ben-Cohen <ohad@wizery.com>,
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
         "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benjamin GAIGNARD <benjamin.gaignard@st.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Benjamin GAIGNARD <benjamin.gaignard@st.com>,
         Fabien DESSENNE <fabien.dessenne@st.com>
-Subject: Re: [PATCH] hwspinlock: stm32: implement the relax() ops
-Thread-Topic: [PATCH] hwspinlock: stm32: implement the relax() ops
-Thread-Index: AQHU1PxebOxSL1urhkiJOta3IjoEXqYBnh0AgGds9YA=
-Date:   Mon, 13 May 2019 09:07:28 +0000
-Message-ID: <b05fff00-2dd7-75d7-e8fe-de004b0f20da@st.com>
-References: <1551973336-23048-1-git-send-email-fabien.dessenne@st.com>
- <CA+M3ks6r_OWvit3OK0yqDDgfnVyyxPoo5aO2n9tRhhoS4=u4XQ@mail.gmail.com>
-In-Reply-To: <CA+M3ks6r_OWvit3OK0yqDDgfnVyyxPoo5aO2n9tRhhoS4=u4XQ@mail.gmail.com>
+Subject: Re: [PATCH v2] hwspinlock: ignore disabled device
+Thread-Topic: [PATCH v2] hwspinlock: ignore disabled device
+Thread-Index: AQHU1c+IbaR/OFm2ZUewPczzg3JWJaZpCbkA
+Date:   Mon, 13 May 2019 09:08:32 +0000
+Message-ID: <f9baeb01-5610-8a4c-c355-20beeb6d6ec7@st.com>
+References: <1552064026-11415-1-git-send-email-fabien.dessenne@st.com>
+In-Reply-To: <1552064026-11415-1-git-send-email-fabien.dessenne@st.com>
 Accept-Language: fr-FR, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -71,7 +64,7 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-exchange-transport-fromentityheader: Hosted
 x-originating-ip: [10.75.127.49]
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <3014D1D5A3EB094197DF17DF3BAA24C2@st.com>
+Content-ID: <1557BEA9C8793C47916CB14CC25127BC@st.com>
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-13_05:,,
@@ -81,34 +74,20 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-SGkNCg0KDQpBbnkgZnVydGhlciBjb21tZW50cz8NCg0KDQpGYWJpZW4NCg0KT24gMDgvMDMvMjAx
-OSAxOjQyIFBNLCBCZW5qYW1pbiBHYWlnbmFyZCB3cm90ZToNCj4gTGUgamV1LiA3IG1hcnMgMjAx
-OSDDoCAxNjo0MiwgRmFiaWVuIERlc3Nlbm5lIDxmYWJpZW4uZGVzc2VubmVAc3QuY29tPiBhIMOp
-Y3JpdCA6DQo+PiBJbXBsZW1lbnQgdGhpcyBvcHRpb25hbCBvcHMsIGNhbGxlZCBieSBod3NwaW5s
-b2NrIGNvcmUgd2hpbGUgc3Bpbm5pbmcgb24NCj4+IGEgbG9jaywgYmV0d2VlbiB0d28gc3VjY2Vz
-c2l2ZSBpbnZvY2F0aW9ucyBvZiB0cnlsb2NrKCkuDQo+Pg0KPj4gU2lnbmVkLW9mZi1ieTogRmFi
-aWVuIERlc3Nlbm5lIDxmYWJpZW4uZGVzc2VubmVAc3QuY29tPg0KPiBSZXZpZXdlZC1ieTogQmVu
-amFtaW4gR2FpZ25hcmQgPGJlbmphbWluLmdhaWduYXJkQHN0LmNvbT4NCj4NCj4+IC0tLQ0KPj4g
-ICBkcml2ZXJzL2h3c3BpbmxvY2svc3RtMzJfaHdzcGlubG9jay5jIHwgNyArKysrKysrDQo+PiAg
-IDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9od3NwaW5sb2NrL3N0bTMyX2h3c3BpbmxvY2suYyBiL2RyaXZlcnMvaHdzcGlubG9jay9z
-dG0zMl9od3NwaW5sb2NrLmMNCj4+IGluZGV4IDQ0MTgzOTIuLmM4ZWFjZjQgMTAwNjQ0DQo+PiAt
-LS0gYS9kcml2ZXJzL2h3c3BpbmxvY2svc3RtMzJfaHdzcGlubG9jay5jDQo+PiArKysgYi9kcml2
-ZXJzL2h3c3BpbmxvY2svc3RtMzJfaHdzcGlubG9jay5jDQo+PiBAQCAtNSw2ICs1LDcgQEANCj4+
-ICAgICovDQo+Pg0KPj4gICAjaW5jbHVkZSA8bGludXgvY2xrLmg+DQo+PiArI2luY2x1ZGUgPGxp
-bnV4L2RlbGF5Lmg+DQo+PiAgICNpbmNsdWRlIDxsaW51eC9od3NwaW5sb2NrLmg+DQo+PiAgICNp
-bmNsdWRlIDxsaW51eC9pby5oPg0KPj4gICAjaW5jbHVkZSA8bGludXgva2VybmVsLmg+DQo+PiBA
-QCAtNDIsOSArNDMsMTUgQEAgc3RhdGljIHZvaWQgc3RtMzJfaHdzcGlubG9ja191bmxvY2soc3Ry
-dWN0IGh3c3BpbmxvY2sgKmxvY2spDQo+PiAgICAgICAgICB3cml0ZWwoU1RNMzJfTVVURVhfQ09S
-RUlELCBsb2NrX2FkZHIpOw0KPj4gICB9DQo+Pg0KPj4gK3N0YXRpYyB2b2lkIHN0bTMyX2h3c3Bp
-bmxvY2tfcmVsYXgoc3RydWN0IGh3c3BpbmxvY2sgKmxvY2spDQo+PiArew0KPj4gKyAgICAgICBu
-ZGVsYXkoNTApOw0KPj4gK30NCj4+ICsNCj4+ICAgc3RhdGljIGNvbnN0IHN0cnVjdCBod3NwaW5s
-b2NrX29wcyBzdG0zMl9od3NwaW5sb2NrX29wcyA9IHsNCj4+ICAgICAgICAgIC50cnlsb2NrICAg
-ICAgICA9IHN0bTMyX2h3c3BpbmxvY2tfdHJ5bG9jaywNCj4+ICAgICAgICAgIC51bmxvY2sgICAg
-ICAgICA9IHN0bTMyX2h3c3BpbmxvY2tfdW5sb2NrLA0KPj4gKyAgICAgICAucmVsYXggICAgICAg
-ICAgPSBzdG0zMl9od3NwaW5sb2NrX3JlbGF4LA0KPj4gICB9Ow0KPj4NCj4+ICAgc3RhdGljIGlu
-dCBzdG0zMl9od3NwaW5sb2NrX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+
-PiAtLQ0KPj4gMi43LjQNCj4+DQo+Pg0KPj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18NCj4+IGxpbnV4LWFybS1rZXJuZWwgbWFpbGluZyBsaXN0DQo+PiBs
-aW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcNCj4+IGh0dHA6Ly9saXN0cy5pbmZy
-YWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtYXJtLWtlcm5lbA0KPg0KPg==
+SGkNCg0KDQpHZW50bGUgcmVtaW5kZXINCg0KDQpGYWJpZW4NCg0KT24gMDgvMDMvMjAxOSA1OjUz
+IFBNLCBGYWJpZW4gRGVzc2VubmUgd3JvdGU6DQo+IERvIG5vdCB3YWl0IGZvciBod3NwaW5sb2Nr
+IGRldmljZSByZWdpc3RyYXRpb24gaWYgaXQgaXMgbm90IGF2YWlsYWJsZQ0KPiBmb3IgdXNlLg0K
+Pg0KPiBTaWduZWQtb2ZmLWJ5OiBGYWJpZW4gRGVzc2VubmUgPGZhYmllbi5kZXNzZW5uZUBzdC5j
+b20+DQo+IC0tLQ0KPiBWMjogdXNlICdnb3RvIG91dCcgaW5zdGVhZCBvZiAncmV0dXJuJw0KPg0K
+PiAgIGRyaXZlcnMvaHdzcGlubG9jay9od3NwaW5sb2NrX2NvcmUuYyB8IDUgKysrKysNCj4gICAx
+IGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspDQo+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
+L2h3c3BpbmxvY2svaHdzcGlubG9ja19jb3JlLmMgYi9kcml2ZXJzL2h3c3BpbmxvY2svaHdzcGlu
+bG9ja19jb3JlLmMNCj4gaW5kZXggMmJhZDQwZC4uZDgwNjMwNyAxMDA2NDQNCj4gLS0tIGEvZHJp
+dmVycy9od3NwaW5sb2NrL2h3c3BpbmxvY2tfY29yZS5jDQo+ICsrKyBiL2RyaXZlcnMvaHdzcGlu
+bG9jay9od3NwaW5sb2NrX2NvcmUuYw0KPiBAQCAtMzMzLDYgKzMzMywxMSBAQCBpbnQgb2ZfaHdz
+cGluX2xvY2tfZ2V0X2lkKHN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAsIGludCBpbmRleCkNCj4gICAJ
+aWYgKHJldCkNCj4gICAJCXJldHVybiByZXQ7DQo+ICAgDQo+ICsJaWYgKCFvZl9kZXZpY2VfaXNf
+YXZhaWxhYmxlKGFyZ3MubnApKSB7DQo+ICsJCXJldCA9IC1FTk9FTlQ7DQo+ICsJCWdvdG8gb3V0
+Ow0KPiArCX0NCj4gKw0KPiAgIAkvKiBGaW5kIHRoZSBod3NwaW5sb2NrIGRldmljZTogd2UgbmVl
+ZCBpdHMgYmFzZV9pZCAqLw0KPiAgIAlyZXQgPSAtRVBST0JFX0RFRkVSOw0KPiAgIAlyY3VfcmVh
+ZF9sb2NrKCk7
