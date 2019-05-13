@@ -2,153 +2,117 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 466971BBA9
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 May 2019 19:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56D21BD28
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 May 2019 20:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731338AbfEMRTZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 May 2019 13:19:25 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:45804 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729503AbfEMRTZ (ORCPT
+        id S1726464AbfEMS2e (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 13 May 2019 14:28:34 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42032 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726107AbfEMS2e (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 May 2019 13:19:25 -0400
-Received: by mail-ot1-f67.google.com with SMTP id t24so3797219otl.12;
-        Mon, 13 May 2019 10:19:24 -0700 (PDT)
+        Mon, 13 May 2019 14:28:34 -0400
+Received: by mail-pf1-f196.google.com with SMTP id 13so7638401pfw.9
+        for <linux-remoteproc@vger.kernel.org>; Mon, 13 May 2019 11:28:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=lULlTV7m1pBxNEpFfsXGT5YAWHe6OnD78UhuQracLx8=;
+        b=ba8z1HjqfNcfNQjKO962vacXZSrGJfjVu0a94Rx2cmEQ0Dj9bHClLAPxRIitovoLUL
+         go+R0p+2WQ886PHGs9YVj6K4v936eyoIutajrb9hqAgsDZJ9WTJHtueRbJDUeHIWS7R5
+         XN6BC3BFEMfgTjd+VgvJ0iBKCiaL/dfGiZ6XirafRYfXoh1777NT/CcQ5SZYEhV1y6qL
+         RvgE5njVf/5gBOjDVUAF/vXjxWfDs+9tZ4ak39aqjn7aWm8ctR1eL1U8ysBphRallsPd
+         nHf9xrrvYxEo6uF00XfTT81EZc2KciUMYhQ4uEZdrA5009BwxnOwwO5mncxQ/UTF2frQ
+         rdgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gxg55zJpNlVm2nYvWvCM959D+KA++JweeXldKs1l7XI=;
-        b=YOpx5Gfuiz7/I1GC2K2JHc/cK0drj3PAq7S03vi4BQ0Dm0RVTfhrY2YfRv92ttsQ7P
-         7VOZ2rOmqwSdDhptWaj1QvBXKmjLgUQKm6mzYoqqqJTLvuUTF2Sx8YBrWYVUC4C5wBqx
-         zD9B6FhoLkY4G+ggX+lWPh9Xzzd/bTHBQWC/xhd7kG5oq02TOI0TAmBgABmuTdthmGxX
-         EHR7dx1pP1COqYKGJsdrxvEXV2NtbAuhYUJS4Ca6GPQ2YPi9oBed6EWKI7gXGDEsgs+9
-         ZWG1MYDsG3VjNC0VOeh3RfuBPF7NncgvKPXBwx/qVJImV/m33xxF5UxIhrpjD5YPL1U3
-         OG7Q==
-X-Gm-Message-State: APjAAAUtHT6m/W1L/cKTa93Ro1I+GrwZy8Om2sZ7OlPZRpHbwgH2DqLF
-        JpjoJrdaeK3FoR9IoTjt3Q==
-X-Google-Smtp-Source: APXvYqx7PhGUwDZEi+8Vj6jS0VwAlzO0fyOLufMf85clsIBI268PujGqMZ25iGzjREBsER4YemD1fg==
-X-Received: by 2002:a05:6830:11ce:: with SMTP id v14mr15390493otq.184.1557767964113;
-        Mon, 13 May 2019 10:19:24 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id g84sm5482087oia.31.2019.05.13.10.19.22
+        bh=lULlTV7m1pBxNEpFfsXGT5YAWHe6OnD78UhuQracLx8=;
+        b=q0QwXdriK8MPTxvGpbnL7rxAqfOVOAz2yrTFvB7BBCBl4uz0erlFrBJwqcKu0zMjgf
+         6jqUqmjanRST9AQ/si0IkT5RTEnigknbkk/0tNfH8VPpte/q29WWwJSTj0dDO1oFX89i
+         kJ3eJcx67G8Rg0mx59s4k40CqdooyiYTYY5EajHL3DZheWUDEYzfZ0lnyCYbEupk1Eq2
+         E38RHl3pHyFoXLjNR2PjEAFU+dnFBlEAwYGQqBkuQ9M4zSvj8to4zQsuTpC3b7XtDaxl
+         HBIFcXxh4ntB6tgaVCTsyW0QGvIS3kVAOPyn+CSc9N4Ky6U9Gfa/2c7S8YqsIvJyCWTs
+         4JIQ==
+X-Gm-Message-State: APjAAAVwAMKcmjDqdwHzDlnNdim1PaU9EmuQeP3K3RnFD3f8qWTSHuNO
+        vk9Rt3DPiaN2qrllQ9GJLVwgVojz6+k=
+X-Google-Smtp-Source: APXvYqyyRyX/Z1Ftzu6C+Ft3g/y3kRv4J5edtr6lSayFN26x2cJKgLsUkqLQAty3g5bhEFF2jBUONg==
+X-Received: by 2002:a63:6b41:: with SMTP id g62mr21612026pgc.240.1557772113010;
+        Mon, 13 May 2019 11:28:33 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id r124sm15257455pgr.91.2019.05.13.11.28.31
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 13 May 2019 10:19:23 -0700 (PDT)
-Date:   Mon, 13 May 2019 12:19:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Fabien Dessenne <fabien.dessenne@st.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
+        Mon, 13 May 2019 11:28:32 -0700 (PDT)
+Date:   Mon, 13 May 2019 11:28:53 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        David Brown <david.brown@linaro.org>,
         Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        Loic Pallardy <loic.pallardy@st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Ludovic Barre <ludovic.barre@st.com>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: Re: [PATCH v3 2/8] dt-bindings: remoteproc: add bindings for stm32
- remote processor driver
-Message-ID: <20190513171922.GA25458@bogus>
-References: <1556784606-3016-1-git-send-email-fabien.dessenne@st.com>
- <1556784606-3016-3-git-send-email-fabien.dessenne@st.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 7/8] arm64: dts: qcom: qcs404: Define APPS IOMMU
+Message-ID: <20190513182853.GI2085@tuxbook-pro>
+References: <20190510043421.31393-1-bjorn.andersson@linaro.org>
+ <20190510043421.31393-8-bjorn.andersson@linaro.org>
+ <20190513045402.GA2707@vkoul-mobl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1556784606-3016-3-git-send-email-fabien.dessenne@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190513045402.GA2707@vkoul-mobl>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu, May 02, 2019 at 10:10:00AM +0200, Fabien Dessenne wrote:
-> Add the device tree bindings document for the stm32 remoteproc devices.
+On Sun 12 May 21:54 PDT 2019, Vinod Koul wrote:
+
+> On 09-05-19, 21:34, Bjorn Andersson wrote:
+> > The APPS IOMMU provides contexts for FastRPC, MDP and WLAN, among other
+> > things.  Define these. We use the qcom_iommu binding because the
+>         ^^^
+> Double spaces crept in..
 > 
-> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
-> ---
->  .../devicetree/bindings/remoteproc/stm32-rproc.txt | 63 ++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/stm32-rproc.txt
+
+That's to give you some breathing room while reading it - but not as
+much as a new paragraph :)
+
+> > firmware restrictions in incompatible with the arm-smmu.
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/qcs404.dtsi | 85 ++++++++++++++++++++++++++++
+> >  1 file changed, 85 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+> > index b213f6acad76..fcde4f0334c2 100644
+> > --- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+> > @@ -378,6 +378,91 @@
+> >  			reg = <0x01937000 0x25000>;
+> >  		};
+> >  
+> > +		apps_iommu: iommu@1e20000 {
+> > +			compatible = "qcom,qcs404-iommu", "qcom,msm-iommu-v1";
 > 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/stm32-rproc.txt b/Documentation/devicetree/bindings/remoteproc/stm32-rproc.txt
-> new file mode 100644
-> index 0000000..a495757
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/stm32-rproc.txt
-> @@ -0,0 +1,63 @@
-> +STMicroelectronics STM32 Remoteproc
-> +-----------------------------------
-> +This document defines the binding for the remoteproc component that loads and
-> +boots firmwares on the ST32MP family chipset.
-> +
-> +Required properties:
-> +- compatible:	Must be "st,stm32mp1-m4"
-> +- reg:		Address ranges of the RETRAM and MCU SRAM memories used by the
-> +		remote processor.
-> +- resets:	Reference to a reset controller asserting the remote processor.
-> +- st,syscfg-holdboot: Reference to the system configuration which holds the
-> +		remote processor reset hold boot
-> +	1st cell: phandle of syscon block
-> +	2nd cell: register offset containing the hold boot setting
-> +	3rd cell: register bitmask for the hold boot field
-> +- st,syscfg-tz: Reference to the system configuration which holds the RCC trust
-> +		zone mode
-> +	1st cell: phandle to syscon block
-> +	2nd cell: register offset containing the RCC trust zone mode setting
-> +	3rd cell: register bitmask for the RCC trust zone mode bit
-> +
-> +Optional properties:
-> +- interrupts:	Should contain the watchdog interrupt
-> +- mboxes:	This property is required only if the rpmsg/virtio functionality
-> +		is used. List of phandle and mailbox channel specifiers:
-> +		- a channel (a) used to communicate through virtqueues with the
-> +		  remote proc.
-> +		  Bi-directional channel:
-> +		      - from local to remote = send message
-> +		      - from remote to local = send message ack
-> +		- a channel (b) working the opposite direction of channel (a)
-> +		- a channel (c) used by the local proc to notify the remote proc
-> +		  that it is about to be shut down.
-> +		  Unidirectional channel:
-> +		      - from local to remote, where ACK from the remote means
-> +		        that it is ready for shutdown
-> +- mbox-names:	This property is required if the mboxes property is used.
-> +		- must be "vq0" for channel (a)
-> +		- must be "vq1" for channel (b)
-> +		- must be "shutdown" for channel (c)
-> +- memory-region: List of phandles to the reserved memory regions associated with
-> +		the remoteproc device. This is variable and describes the
-> +		memories shared with the remote processor (eg: remoteproc
-> +		firmware and carveouts, rpmsg vrings, ...).
-> +		(see ../reserved-memory/reserved-memory.txt)
-> +- st,syscfg-pdds: Reference to the system configuration which holds the remote
-> +		processor deep sleep setting
-> +	1st cell: phandle to syscon block
-> +	2nd cell: register offset containing the deep sleep setting
-> +	3rd cell: register bitmask for the deep sleep bit
-> +- st,auto_boot:	If defined, when remoteproc is probed, it loads the default
-> +		firmware and starts the remote processor.
-
-s/_/-/
-
-> +
-> +Example:
-> +	m4_rproc: m4@38000000 {
-> +		compatible = "st,stm32mp1-m4";
-> +		reg = <0x00000000 0x10000>,
-
-Doesn't match the unit-address.
-
-> +		      <0x10000000 0x40000>,
-> +		      <0x30000000 0x40000>;
-> +		resets = <&rcc MCU_R>;
-> +		st,syscfg-holdboot = <&rcc 0x10C 0x1>;
-> +		st,syscfg-tz = <&rcc 0x000 0x1>;
-> +	};
-> -- 
-> 2.7.4
+> Did we define qcom,qcs404-iommu in bindings, It does not seem to be
+> there in this patch, next or integration one
 > 
+
+No, this was entirely intended to fall back on the generic compatible.
+
+That said, further testing of this series indicates that we have a
+cache issue related to the SMMU. In working out this I came up with a
+series of patches to the arm-smmu driver that allow us to use this with
+the standard Qualcomm bootloader.
+
+So let's ignore patch 7 and 8 in this series until we know how to deal
+with the SMMU.
+
+Regards,
+Bjorn
