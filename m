@@ -2,58 +2,61 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBD51B25B
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 May 2019 11:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07941B264
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 May 2019 11:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728492AbfEMJIm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 May 2019 05:08:42 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:36564 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727873AbfEMJIm (ORCPT
+        id S1727905AbfEMJKm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 13 May 2019 05:10:42 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:22272 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726132AbfEMJKl (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 May 2019 05:08:42 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4D91WUA018957;
-        Mon, 13 May 2019 11:08:38 +0200
+        Mon, 13 May 2019 05:10:41 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4D92P8b008551;
+        Mon, 13 May 2019 11:10:36 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
  : date : message-id : references : in-reply-to : content-type : content-id
  : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=7JfNU5hJZeQI2Z2irz+/r2driLkYKCI2Dra2gHoDtvI=;
- b=itIjo/afThYHPF2GIwWuBAyRGwqOdxpRmm8UPpJFAXyUiqZhnZj97937Q2B5jJ1PFgYa
- gKYgmepUm4JmpFB6sYAbCeUgq6E008IA9GRPIsm1T765l4q6Q49LiPFDR9wrVPFq4mko
- VXsmRt1DMFi1VwJ4FOwpyXNr4BHKAeOvCZmPPiah0/akHF1fZMEpUN3ZBKGV6nHxA0l9
- kil7oVkCFw0FJEYeBW/X8hReAil5HWvO9R2teQXfYLklQkFuJ1yznXykUIhwV22nRR4X
- NafbNHwNeaGjAtyw2Ndmxuox0eSbyFhysmE9jj3Udx6yAXlsjdRIYnIu88Mww073VSVo 5g== 
+ bh=542weskigKoJ42ITdEuds81sog7neozb87KgExSQchc=;
+ b=cSXFz5U5+rl87jTLh3kdexVxm5fRCNpouuv96sL1JOgXGaa0b8KPKsrLNRt9aIHp29vS
+ Xq6SOif1jgsxrp1XLoyRvpZixzwSl7L50Kk/cEKtHY6Wm9ZMXAO7tgM98zStFrid6RAx
+ /gaYxiQ2ZcqQrVtqksTZpbWWKAqds1hX3OSj9np1UAC8bGcw4XzUOsQzwAPqeD5dBng6
+ vJR6skv4YXWaWKzpM7j6lrt63LWRzi3tY2IbRWEJ4xfE1a+9FPmKDyECc13gAMUMnmqk
+ eQm3kBhSuIPmIAHWEbwAoRrFBQb9bHe59nyZ4cUexNiobiiI+PgecrKj4Nl+OA+ZNlml 2g== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2sdn9fhxub-1
+        by mx07-00178001.pphosted.com with ESMTP id 2sdkuyj0d4-1
         (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Mon, 13 May 2019 11:08:38 +0200
+        Mon, 13 May 2019 11:10:36 +0200
 Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 31B9646;
-        Mon, 13 May 2019 09:08:33 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag5node2.st.com [10.75.127.14])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 199801629;
-        Mon, 13 May 2019 09:08:33 +0000 (GMT)
-Received: from SFHDAG5NODE3.st.com (10.75.127.15) by SFHDAG5NODE2.st.com
- (10.75.127.14) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 13 May
- 2019 11:08:32 +0200
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3C90664;
+        Mon, 13 May 2019 09:10:35 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EE83F1334;
+        Mon, 13 May 2019 09:10:34 +0000 (GMT)
+Received: from SFHDAG5NODE3.st.com (10.75.127.15) by SFHDAG3NODE3.st.com
+ (10.75.127.9) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 13 May
+ 2019 11:10:34 +0200
 Received: from SFHDAG5NODE3.st.com ([fe80::7c09:5d6b:d2c7:5f47]) by
  SFHDAG5NODE3.st.com ([fe80::7c09:5d6b:d2c7:5f47%20]) with mapi id
- 15.00.1347.000; Mon, 13 May 2019 11:08:32 +0200
+ 15.00.1347.000; Mon, 13 May 2019 11:10:34 +0200
 From:   Fabien DESSENNE <fabien.dessenne@st.com>
 To:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 CC:     Benjamin GAIGNARD <benjamin.gaignard@st.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
         Fabien DESSENNE <fabien.dessenne@st.com>
-Subject: Re: [PATCH v2] hwspinlock: ignore disabled device
-Thread-Topic: [PATCH v2] hwspinlock: ignore disabled device
-Thread-Index: AQHU1c+IbaR/OFm2ZUewPczzg3JWJaZpCbkA
-Date:   Mon, 13 May 2019 09:08:32 +0000
-Message-ID: <f9baeb01-5610-8a4c-c355-20beeb6d6ec7@st.com>
-References: <1552064026-11415-1-git-send-email-fabien.dessenne@st.com>
-In-Reply-To: <1552064026-11415-1-git-send-email-fabien.dessenne@st.com>
+Subject: Re: [PATCH 0/2] hwspinlock: add the 'in_atomic' API
+Thread-Topic: [PATCH 0/2] hwspinlock: add the 'in_atomic' API
+Thread-Index: AQHU1P6fLTW2AJMeL0au0cFYbaNSr6ZpC+wA
+Date:   Mon, 13 May 2019 09:10:34 +0000
+Message-ID: <41036bca-1266-70e9-6485-b718c9741c3f@st.com>
+References: <1551974303-24542-1-git-send-email-fabien.dessenne@st.com>
+In-Reply-To: <1551974303-24542-1-git-send-email-fabien.dessenne@st.com>
 Accept-Language: fr-FR, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -62,9 +65,9 @@ user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 x-ms-exchange-messagesentrepresentingtype: 1
 x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.49]
+x-originating-ip: [10.75.127.51]
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <1557BEA9C8793C47916CB14CC25127BC@st.com>
+Content-ID: <DC814E615EC016498780E18E25E92ACE@st.com>
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-13_05:,,
@@ -74,20 +77,23 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-SGkNCg0KDQpHZW50bGUgcmVtaW5kZXINCg0KDQpGYWJpZW4NCg0KT24gMDgvMDMvMjAxOSA1OjUz
-IFBNLCBGYWJpZW4gRGVzc2VubmUgd3JvdGU6DQo+IERvIG5vdCB3YWl0IGZvciBod3NwaW5sb2Nr
-IGRldmljZSByZWdpc3RyYXRpb24gaWYgaXQgaXMgbm90IGF2YWlsYWJsZQ0KPiBmb3IgdXNlLg0K
-Pg0KPiBTaWduZWQtb2ZmLWJ5OiBGYWJpZW4gRGVzc2VubmUgPGZhYmllbi5kZXNzZW5uZUBzdC5j
-b20+DQo+IC0tLQ0KPiBWMjogdXNlICdnb3RvIG91dCcgaW5zdGVhZCBvZiAncmV0dXJuJw0KPg0K
-PiAgIGRyaXZlcnMvaHdzcGlubG9jay9od3NwaW5sb2NrX2NvcmUuYyB8IDUgKysrKysNCj4gICAx
-IGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspDQo+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L2h3c3BpbmxvY2svaHdzcGlubG9ja19jb3JlLmMgYi9kcml2ZXJzL2h3c3BpbmxvY2svaHdzcGlu
-bG9ja19jb3JlLmMNCj4gaW5kZXggMmJhZDQwZC4uZDgwNjMwNyAxMDA2NDQNCj4gLS0tIGEvZHJp
-dmVycy9od3NwaW5sb2NrL2h3c3BpbmxvY2tfY29yZS5jDQo+ICsrKyBiL2RyaXZlcnMvaHdzcGlu
-bG9jay9od3NwaW5sb2NrX2NvcmUuYw0KPiBAQCAtMzMzLDYgKzMzMywxMSBAQCBpbnQgb2ZfaHdz
-cGluX2xvY2tfZ2V0X2lkKHN0cnVjdCBkZXZpY2Vfbm9kZSAqbnAsIGludCBpbmRleCkNCj4gICAJ
-aWYgKHJldCkNCj4gICAJCXJldHVybiByZXQ7DQo+ICAgDQo+ICsJaWYgKCFvZl9kZXZpY2VfaXNf
-YXZhaWxhYmxlKGFyZ3MubnApKSB7DQo+ICsJCXJldCA9IC1FTk9FTlQ7DQo+ICsJCWdvdG8gb3V0
-Ow0KPiArCX0NCj4gKw0KPiAgIAkvKiBGaW5kIHRoZSBod3NwaW5sb2NrIGRldmljZTogd2UgbmVl
-ZCBpdHMgYmFzZV9pZCAqLw0KPiAgIAlyZXQgPSAtRVBST0JFX0RFRkVSOw0KPiAgIAlyY3VfcmVh
-ZF9sb2NrKCk7
+SGkNCg0KDQpHZW50bGUgcmVtaW5kZXINCg0KDQpGYWJpZW4NCg0KT24gMDcvMDMvMjAxOSA0OjU4
+IFBNLCBGYWJpZW4gRGVzc2VubmUgd3JvdGU6DQo+IEluIGl0cyBjdXJyZW50IGltcGxlbWVudGF0
+aW9uLCB0aGUgaHdzcGlubG9jayBmcmFtZXdvcmsgcmVsaWVzIG9uIGppZmZpZXMNCj4gdG8gaGFu
+ZGxlIHRoZSB0aW1lb3V0IG9mIHRoZSBod3NwaW5fbG9ja190aW1lb3V0X3h4eCgpIEFQSS4NCj4g
+SW4gYW4gYXRvbWljIGNvbnRleHQgKG9yIG1vcmUgcHJlY2lzZWx5IHdoZW4gaXJxIGFyZSBkaXNh
+YmxlZCkgamlmZmllcyBkb2VzIG5vdA0KPiBpbmNyZWFzZSwgd2hpY2ggcHJldmVudHMgdGhlIHRp
+bWVvdXQgdG8gcmVhY2ggaXRzIHRhcmdldCB2YWx1ZSAoaW5maW5pdGUgbG9vcCkuDQo+DQo+IE5v
+dGUgdGhhdCB0aGVyZSBpcyBhbHJlYWR5IGFuIGh3c3BpbmxvY2sgdXNlciB0aGF0IHJ1bnMgaW4g
+YXRvbWljIGNvbnRleHQNCj4gKGRyaXZlcnMvaXJxY2hpcC9pcnEtc3RtMzItZXh0aS5jKSBhbmQg
+dGhhdCBoYXMgdG8gaGFuZGxlIGJ5IGl0c2VsZiB0aGUNCj4gdGltZW91dC4NCj4NCj4gVGhlIGZp
+cnN0IHBhdGNoIG9mIHRoZSBzZXJpZXMgY29tcGxldGVzIHRoZSBEb2N1bWVudGF0aW9uICh0aGUg
+J3JhdycgQVBJDQo+IGlzIG5vdCBkb2N1bWVudGVkKSwgYW5kIHRoZSBzZWNvbmQgcGF0Y2ggcHJv
+dmlkZXMgd2l0aCB0aGUgJ2luX2F0b21pYycgQVBJLg0KPg0KPiBGYWJpZW4gRGVzc2VubmUgKDIp
+Og0KPiAgICBod3NwaW5sb2NrOiBkb2N1bWVudCB0aGUgaHdzcGlubG9jayAncmF3JyBBUEkNCj4g
+ICAgaHdzcGlubG9jazogYWRkIHRoZSAnaW5fYXRvbWljJyBBUEkNCj4NCj4gICBEb2N1bWVudGF0
+aW9uL2h3c3BpbmxvY2sudHh0ICAgICAgICAgfCA4MSArKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysNCj4gICBkcml2ZXJzL2h3c3BpbmxvY2svaHdzcGlubG9ja19jb3JlLmMgfCA0
+MyArKysrKysrKysrKysrLS0tLS0tDQo+ICAgaW5jbHVkZS9saW51eC9od3NwaW5sb2NrLmggICAg
+ICAgICAgIHwgNjEgKysrKysrKysrKysrKysrKysrKysrKysrKy0tDQo+ICAgMyBmaWxlcyBjaGFu
+Z2VkLCAxNjkgaW5zZXJ0aW9ucygrKSwgMTYgZGVsZXRpb25zKC0pDQo+
