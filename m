@@ -2,117 +2,118 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B56D21BD28
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 May 2019 20:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CC41C4CD
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 May 2019 10:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726464AbfEMS2e (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 May 2019 14:28:34 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:42032 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbfEMS2e (ORCPT
+        id S1726736AbfENI1d (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 14 May 2019 04:27:33 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:59152 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726148AbfENI1c (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 May 2019 14:28:34 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 13so7638401pfw.9
-        for <linux-remoteproc@vger.kernel.org>; Mon, 13 May 2019 11:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=lULlTV7m1pBxNEpFfsXGT5YAWHe6OnD78UhuQracLx8=;
-        b=ba8z1HjqfNcfNQjKO962vacXZSrGJfjVu0a94Rx2cmEQ0Dj9bHClLAPxRIitovoLUL
-         go+R0p+2WQ886PHGs9YVj6K4v936eyoIutajrb9hqAgsDZJ9WTJHtueRbJDUeHIWS7R5
-         XN6BC3BFEMfgTjd+VgvJ0iBKCiaL/dfGiZ6XirafRYfXoh1777NT/CcQ5SZYEhV1y6qL
-         RvgE5njVf/5gBOjDVUAF/vXjxWfDs+9tZ4ak39aqjn7aWm8ctR1eL1U8ysBphRallsPd
-         nHf9xrrvYxEo6uF00XfTT81EZc2KciUMYhQ4uEZdrA5009BwxnOwwO5mncxQ/UTF2frQ
-         rdgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lULlTV7m1pBxNEpFfsXGT5YAWHe6OnD78UhuQracLx8=;
-        b=q0QwXdriK8MPTxvGpbnL7rxAqfOVOAz2yrTFvB7BBCBl4uz0erlFrBJwqcKu0zMjgf
-         6jqUqmjanRST9AQ/si0IkT5RTEnigknbkk/0tNfH8VPpte/q29WWwJSTj0dDO1oFX89i
-         kJ3eJcx67G8Rg0mx59s4k40CqdooyiYTYY5EajHL3DZheWUDEYzfZ0lnyCYbEupk1Eq2
-         E38RHl3pHyFoXLjNR2PjEAFU+dnFBlEAwYGQqBkuQ9M4zSvj8to4zQsuTpC3b7XtDaxl
-         HBIFcXxh4ntB6tgaVCTsyW0QGvIS3kVAOPyn+CSc9N4Ky6U9Gfa/2c7S8YqsIvJyCWTs
-         4JIQ==
-X-Gm-Message-State: APjAAAVwAMKcmjDqdwHzDlnNdim1PaU9EmuQeP3K3RnFD3f8qWTSHuNO
-        vk9Rt3DPiaN2qrllQ9GJLVwgVojz6+k=
-X-Google-Smtp-Source: APXvYqyyRyX/Z1Ftzu6C+Ft3g/y3kRv4J5edtr6lSayFN26x2cJKgLsUkqLQAty3g5bhEFF2jBUONg==
-X-Received: by 2002:a63:6b41:: with SMTP id g62mr21612026pgc.240.1557772113010;
-        Mon, 13 May 2019 11:28:33 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id r124sm15257455pgr.91.2019.05.13.11.28.31
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 13 May 2019 11:28:32 -0700 (PDT)
-Date:   Mon, 13 May 2019 11:28:53 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        David Brown <david.brown@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Tue, 14 May 2019 04:27:32 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4E8Q8xp029562;
+        Tue, 14 May 2019 10:27:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=cSw7dbXcAbS5Q/0FeaUhUZjqh7E4PIut1NGw2jFxHQc=;
+ b=RbfAZWNaTw7ekn4Qvx6XDaQ9kqvaprs9BUC9VSJL84SFK4sSm4IYGB51dn7AVuELdKoP
+ JSLiGo8Fmqbtkb59Zu0MpxjzII8Uvb6kOpnhQnrURRAMdVfldmCuTLq+IdVrZkk1eDgv
+ gcWXN1t+8q2Bs9CVPZ2C7eIGkBEZnSfZEPbP5eDejPJeEuWjC2uT5p2GFDtUUyDHvBFQ
+ 20//UDlxX1gc5+EWb3v/UiVhVHOhGayDDMnxANEaOvvpz+sYlUclC0+XaQPUSH0W9JS6
+ XA6upeebVf4E7YerIPeavihghI6g1hWcVEekqpgFqlBZ2R84MtOZV7lznn3YJb8dip9A sQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2sdkuyqnmk-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Tue, 14 May 2019 10:27:08 +0200
+Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B86A434;
+        Tue, 14 May 2019 08:27:07 +0000 (GMT)
+Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7E2C81551;
+        Tue, 14 May 2019 08:27:07 +0000 (GMT)
+Received: from SAFEX1HUBCAS23.st.com (10.75.90.47) by SAFEX1HUBCAS21.st.com
+ (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 14 May
+ 2019 10:27:07 +0200
+Received: from localhost (10.201.23.25) by webmail-ga.st.com (10.75.90.48)
+ with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 14 May 2019 10:27:06
+ +0200
+From:   Fabien Dessenne <fabien.dessenne@st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 7/8] arm64: dts: qcom: qcs404: Define APPS IOMMU
-Message-ID: <20190513182853.GI2085@tuxbook-pro>
-References: <20190510043421.31393-1-bjorn.andersson@linaro.org>
- <20190510043421.31393-8-bjorn.andersson@linaro.org>
- <20190513045402.GA2707@vkoul-mobl>
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+CC:     Fabien Dessenne <fabien.dessenne@st.com>,
+        Loic Pallardy <loic.pallardy@st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        "Ludovic Barre" <ludovic.barre@st.com>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: [PATCH v4 0/8] stm32 m4 remoteproc on STM32MP157c
+Date:   Tue, 14 May 2019 10:26:55 +0200
+Message-ID: <1557822423-22658-1-git-send-email-fabien.dessenne@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190513045402.GA2707@vkoul-mobl>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: text/plain
+X-Originating-IP: [10.201.23.25]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-14_05:,,
+ signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Sun 12 May 21:54 PDT 2019, Vinod Koul wrote:
+STMicrolectronics STM32MP157 MPU are based on a Dual Arm Cortex-A7 core and a
+Cortex-M4.
+This patchset adds the support of the stm32_rproc driver allowing to control
+the M4 remote processor.
 
-> On 09-05-19, 21:34, Bjorn Andersson wrote:
-> > The APPS IOMMU provides contexts for FastRPC, MDP and WLAN, among other
-> > things.  Define these. We use the qcom_iommu binding because the
->         ^^^
-> Double spaces crept in..
-> 
+Changes since v3:
+-Replaced "st,auto_boot" with "st,auto-boot"
+-Update m4 reg values and align with unit-address
 
-That's to give you some breathing room while reading it - but not as
-much as a new paragraph :)
+Changes since v2:
+- Clarified "reg" description
+- Change m4 unit adress to 38000000
+- Renamed "auto_boot" in "st,auto-boot"
 
-> > firmware restrictions in incompatible with the arm-smmu.
-> > 
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/qcs404.dtsi | 85 ++++++++++++++++++++++++++++
-> >  1 file changed, 85 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> > index b213f6acad76..fcde4f0334c2 100644
-> > --- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-> > @@ -378,6 +378,91 @@
-> >  			reg = <0x01937000 0x25000>;
-> >  		};
-> >  
-> > +		apps_iommu: iommu@1e20000 {
-> > +			compatible = "qcom,qcs404-iommu", "qcom,msm-iommu-v1";
-> 
-> Did we define qcom,qcs404-iommu in bindings, It does not seem to be
-> there in this patch, next or integration one
-> 
+Changes since v1:
+- Gave details about the memory mapping (in bindings).
+- Used 'dma-ranges' instead of 'ranges'.
+- Updated the 'compatible' property.
+- Remove the 'recovery', 'reset-names' and 'interrupt-names' properties.
+- Clarified why / when mailboxes are optional.
 
-No, this was entirely intended to fall back on the generic compatible.
+Fabien Dessenne (8):
+  dt-bindings: stm32: add bindings for ML-AHB interconnect
+  dt-bindings: remoteproc: add bindings for stm32 remote processor
+    driver
+  remoteproc: stm32: add an ST stm32_rproc driver
+  ARM: dts: stm32: add m4 remoteproc support on STM32MP157c
+  ARM: dts: stm32: declare copro reserved memories on STM32MP157c-ed1
+  ARM: dts: stm32: enable m4 coprocessor support on STM32MP157c-ed1
+  ARM: dts: stm32: declare copro reserved memories on STM32MP157a-dk1
+  ARM: dts: stm32: enable m4 coprocessor support on STM32MP157a-dk1
 
-That said, further testing of this series indicates that we have a
-cache issue related to the SMMU. In working out this I came up with a
-series of patches to the arm-smmu driver that allow us to use this with
-the standard Qualcomm bootloader.
+ .../devicetree/bindings/arm/stm32/mlahb.txt        |  37 ++
+ .../devicetree/bindings/remoteproc/stm32-rproc.txt |  63 +++
+ arch/arm/boot/dts/stm32mp157a-dk1.dts              |  52 ++
+ arch/arm/boot/dts/stm32mp157c-ed1.dts              |  52 ++
+ arch/arm/boot/dts/stm32mp157c.dtsi                 |  20 +
+ drivers/remoteproc/Kconfig                         |  15 +
+ drivers/remoteproc/Makefile                        |   1 +
+ drivers/remoteproc/stm32_rproc.c                   | 628 +++++++++++++++++++++
+ 8 files changed, 868 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/stm32/mlahb.txt
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/stm32-rproc.txt
+ create mode 100644 drivers/remoteproc/stm32_rproc.c
 
-So let's ignore patch 7 and 8 in this series until we know how to deal
-with the SMMU.
+-- 
+2.7.4
 
-Regards,
-Bjorn
