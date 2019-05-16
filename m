@@ -2,78 +2,135 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B92C51CEF7
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 May 2019 20:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32EE720DCA
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 May 2019 19:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727612AbfENSVA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 14 May 2019 14:21:00 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:33098 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727176AbfENSU7 (ORCPT
+        id S1727019AbfEPRVT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 16 May 2019 13:21:19 -0400
+Received: from www.llwyncelyn.cymru ([82.70.14.225]:42792 "EHLO fuzix.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726807AbfEPRVT (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 14 May 2019 14:20:59 -0400
-Received: by mail-oi1-f196.google.com with SMTP id m204so12904473oib.0;
-        Tue, 14 May 2019 11:20:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Pw9JQbzKS0a4HXNL7Bkj2dhXDflsHMPuLdGRZTT4jqU=;
-        b=NlZ9KzUotdF6SzN2u3FGCMtaki8PynsT9bguVfmlf16shT/QtL5wJM5dUHZT+vQRvc
-         l3a0uuJbLD34RdDFZwAtjCx9w4EXCvF503QQOebgugi+JYTS1lLEPx8LBdRxHTTEbV92
-         EIoBzvyvzlVUJ9s+VgGO5Mfim0qqTnve5L1gXNyrEZsGOi86TkdfROLnVs8rjF6QuSu2
-         TWjJAsCNCnz9pPC3I6mySi8R6zi43htWlYDMWCZZsMcC1FKp1QW4uCOUfwjzfMhX4n2G
-         lsICisDSuwDNN/W31e6/WpL+uhAiXVcJbIV5dHIbLLD4hYzI0T0Oc7qhABp8PgAR2NY5
-         9dsQ==
-X-Gm-Message-State: APjAAAXqFZfQ0q40dD2Y0qezNvRKTG4zUtnCXmoVbhkZFZLiFe/DIvz6
-        HT/mFFZuAVQUBZ7R5YF57w==
-X-Google-Smtp-Source: APXvYqxZeCsZUomLSIAJ/MyTJbnDCD5r2MgFiIhPMfVTTg2CPXMGsQkk5wZZ/VGWG2FzDkYqmDF21Q==
-X-Received: by 2002:aca:7297:: with SMTP id p145mr4065474oic.87.1557858058769;
-        Tue, 14 May 2019 11:20:58 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id n95sm4392204otn.73.2019.05.14.11.20.58
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 14 May 2019 11:20:58 -0700 (PDT)
-Date:   Tue, 14 May 2019 13:20:57 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Fabien Dessenne <fabien.dessenne@st.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
+        Thu, 16 May 2019 13:21:19 -0400
+Received: from alans-desktop (82-70-14-226.dsl.in-addr.zen.co.uk [82.70.14.226])
+        by fuzix.org (8.15.2/8.15.2) with ESMTP id x4GHKxbf002968;
+        Thu, 16 May 2019 18:20:59 +0100
+Date:   Thu, 16 May 2019 18:20:58 +0100
+From:   Alan Cox <gnomes@lxorguk.ukuu.org.uk>
+To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        Fabien Dessenne <fabien.dessenne@st.com>,
-        Loic Pallardy <loic.pallardy@st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Ludovic Barre <ludovic.barre@st.com>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: Re: [PATCH v4 2/8] dt-bindings: remoteproc: add bindings for stm32
- remote processor driver
-Message-ID: <20190514182057.GA27475@bogus>
-References: <1557822423-22658-1-git-send-email-fabien.dessenne@st.com>
- <1557822423-22658-3-git-send-email-fabien.dessenne@st.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>,
+        xiang xiao <xiaoxiang781216@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        Fabien DESSENNE <fabien.dessenne@st.com>
+Subject: Re: [PATCH v2 2/2] tty: add rpmsg driver
+Message-ID: <20190516182058.2a565748@alans-desktop>
+In-Reply-To: <1557500577-22366-3-git-send-email-arnaud.pouliquen@st.com>
+References: <1557500577-22366-1-git-send-email-arnaud.pouliquen@st.com>
+        <1557500577-22366-3-git-send-email-arnaud.pouliquen@st.com>
+Organization: Intel Corporation
+X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1557822423-22658-3-git-send-email-fabien.dessenne@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, 14 May 2019 10:26:57 +0200, Fabien Dessenne wrote:
-> Add the device tree bindings document for the stm32 remoteproc devices.
-> 
-> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
-> ---
->  .../devicetree/bindings/remoteproc/stm32-rproc.txt | 63 ++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/stm32-rproc.txt
-> 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+> +static int rpmsg_tty_data_handler(struct rpmsg_device *rpdev, void *data,
+> +				  int len, void *priv, u32 src)
+> +{
+> +	struct rpmsg_tty_port *cport = dev_get_drvdata(&rpdev->dev);
+> +	u8 *cbuf;
+> +	int space;
+> +
+> +	dev_dbg(&rpdev->dev, "msg(<- src 0x%x) len %d\n", src, len);
+> +
+> +	if (!len)
+> +		return 0;
+> +
+> +	dev_dbg(&rpdev->dev, "space available: %d\n",
+> +		tty_buffer_space_avail(&cport->port));
+> +
+> +	space = tty_prepare_flip_string(&cport->port, &cbuf, len);
+> +	if (space <= 0) {
+> +		dev_err(&rpdev->dev, "No memory for tty_prepare_flip_string\n");
+> +		return -ENOMEM;
+> +	}
+
+Really bad idea.
+
+1. It's not an 'error'. It's normal that in the case the consumer is
+blocked you can run out of processing space
+
+2. You will trigger this when being hit by a very large fast flow of data
+so responding by burning CPU spewing messages (possibly even out of this
+tty) is bad.
+
+It's not a bug - just keep statistics and throw it away. If anyone cares
+they will do flow control.
+
+
+> +
+> +static int rpmsg_tty_write_control(struct tty_struct *tty, u8 ctrl, u8 *values,
+> +				   unsigned int n_value)
+> +{
+> +	struct rpmsg_tty_port *cport = idr_find(&tty_idr, tty->index);
+> +	struct rpmsg_tty_payload *msg;
+> +	struct rpmsg_tty_ctrl *m_ctrl;
+> +	struct rpmsg_device *rpdev;
+> +	unsigned int msg_size;
+> +	int ret;
+> +
+> +	if (!cport) {
+> +		dev_err(tty->dev, "cannot get cport\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	rpdev = cport->rpdev;
+> +
+> +	msg_size = sizeof(*msg) + sizeof(*m_ctrl) + n_value;
+> +	msg = kzalloc(msg_size, GFP_KERNEL);
+
+
+Out of memory check ?
+
+> +static int rpmsg_tty_write(struct tty_struct *tty, const u8 *buf, int len)
+> +{
+> +	struct rpmsg_tty_port *cport = idr_find(&tty_idr, tty->index);
+> +	struct rpmsg_device *rpdev;
+> +	int msg_size, msg_max_size, ret = 0;
+> +	int cmd_sz = sizeof(struct rpmsg_tty_payload);
+> +	u8 *tmpbuf;
+> +
+> +	if (!cport) {
+> +		dev_err(tty->dev, "cannot get cport\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	/* If cts not set, the message is not sent*/
+> +	if (!cport->cts)
+> +		return 0;
+> +
+> +	rpdev = cport->rpdev;
+> +
+> +	dev_dbg(&rpdev->dev, "%s: send msg from tty->index = %d, len = %d\n",
+> +		__func__, tty->index, len);
+> +	if (!buf) {
+> +		dev_err(&rpdev->dev, "buf shouldn't be null.\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	msg_max_size = rpmsg_get_buf_payload_size(rpdev->ept);
+> +	if (msg_max_size < 0)
+> +		return msg_max_size;
+> +
+> +	msg_size = min(len + cmd_sz, msg_max_size);
+> +	tmpbuf = kzalloc(msg_size, GFP_KERNEL);
+
+Allocation failure check ?
+
