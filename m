@@ -2,353 +2,110 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 586003555A
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  5 Jun 2019 04:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D003235600
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  5 Jun 2019 06:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726595AbfFECkc (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 4 Jun 2019 22:40:32 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:41393 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726593AbfFECkc (ORCPT
+        id S1725446AbfFEEeI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 5 Jun 2019 00:34:08 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:40160 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbfFEEeI (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 4 Jun 2019 22:40:32 -0400
-Received: by mail-qk1-f193.google.com with SMTP id c11so4250755qkk.8;
-        Tue, 04 Jun 2019 19:40:31 -0700 (PDT)
+        Wed, 5 Jun 2019 00:34:08 -0400
+Received: by mail-pg1-f194.google.com with SMTP id d30so11660654pgm.7
+        for <linux-remoteproc@vger.kernel.org>; Tue, 04 Jun 2019 21:34:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Th/In1EH7UcyHmxW7K3uDsljxw8v1wY5CcUNV8kWPWQ=;
-        b=m9vN1qtdZleGVMto+cOZMhkx6Kgbuj8mmg75Oa/DJfeJwL76Pu8EIp5ncAXiQLbrO4
-         gSmiscK+BwWKCgiPw3WU0wxzk1GzUyZMhaLvDHgItcJcoq/JOVcsMRQbSsCxtkNKDEKP
-         biJq570+7Dz8WU+BPr6BfGzHu6sjkm84/4rWr4Igeg3HoM6+0oR5XEBK5Z7qc8dMw/I+
-         xmZG/1Z9LK4h5eNfOOWkFPHFZ6cXE+bGMGPcIJujPW9RpqH2AoFRKm+Xkf7ZJ3JmdcX5
-         Le7HJaaJ2nmcd2x5kspmk+p5oRYXSO+zWpcstrFDOO9FzuEz1sFL7qxLdW8r6XNecwBI
-         0mqg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Pc+c8eY7Iq/+7TtGxqa35YybGgmrc2UlNdR+JGfsU4M=;
+        b=zkcAKbCn2gFSmlQi34ZZkufmznF9FSLA8mpn09NFi+m1OVsEL3ASGTnJeGNHnFXWpF
+         UjsjvAoxGm35tZs+K1UjJ3uFX66rwlxbprNwUebASYISBOqSWsYyFiBFY+u/j3pKZfxl
+         nvoI6PTX3Omm32LIyhKVoigr66Dr2E5jfhexllz0jb/TRGJXUP8TlAhA23uSle7R1YPh
+         jcxLZaHBUKzgYSYSLPueb2ZeOznwlCyZUFSR7euf/85DAvWYrtG3/tSbpqbhhP9b6IWL
+         b7h3q/xKdPOeSWQ7Aq6xE+fHQE6NpETOfHamY4ZRPguXOi9jyv13D007sR0cdqiLaXA8
+         iDNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Th/In1EH7UcyHmxW7K3uDsljxw8v1wY5CcUNV8kWPWQ=;
-        b=Dj74pbV49Uy1ba9hMIvST6DEtlfbFzMPAfEsTUZHc34GyJlNuo5sR4qYV0DlC2DilW
-         SADLpsOiS1ithocb3ZkmU9iyxCKGLdYTR+c4LQMcrzPRefCUGw09+YrpY7IzXtc8xi2b
-         J9Q+zmq7iz95LiDXEfIZ64bzhmCf9v+wZTubRWy8WmDRUtg4fMR635jk2o7I1iyUtUBe
-         zN/hLFyKuJBy1EmX5pXPDAJX3aSVRzGhTNL8xucjXPovlh0lOqlVD7vy50c6m3i2sQB6
-         0peDDHX3cOuag8AaOILAuMOedjQ5Njxfcl39cSeLHnXmjmp8Jhu43oKPDfodozS3e3X+
-         PaFQ==
-X-Gm-Message-State: APjAAAU+M/hDLrrlM8hBQJLGIWxITzgwhargzfSSRMbmjxsAXT8b5uwL
-        go0XAbPuBdGgfedOr5vWoLPRMnQMdUIrwfGSEsv7ONpDvis=
-X-Google-Smtp-Source: APXvYqxv1dF8beeJXku4qb8frV4bNnruTr+jGJVLRqeH2fjyubuCrCC+cZnP9DnapXg44nKFmy/GTRl6sDbGcfun7gY=
-X-Received: by 2002:ae9:ed48:: with SMTP id c69mr29692139qkg.114.1559702431012;
- Tue, 04 Jun 2019 19:40:31 -0700 (PDT)
-MIME-Version: 1.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Pc+c8eY7Iq/+7TtGxqa35YybGgmrc2UlNdR+JGfsU4M=;
+        b=cCHt0pE3QdPSRpd+3RN+NN8QyNcDKkJQyb69ZjTNwzZrUKmsqREFh2+iIel5cDJ3+H
+         8QRqz8rpjglIL4qnztMZ91ibi2ylu4Kmz+c9P6/llSLPHzIC3/OBxhnQ6GeaYu4Xk8dt
+         gTBCJ5uVgwNTnCRPqxM7XISgWvp1HP/1AFyOcWB36xq2A+DBvGVPjHzuU37u8wcrGsrq
+         uOPlbV/MAtA8JjhVWMKyUh1rFOBrPHEJh8vhZPJV4D+JAWoAkMErHGUNjjw7i0GGuS73
+         QMK0iVCurelx4Rqk/6XWthqTHX341BLWGTeJyGGy8iO1hOWBFWxJZmNFUthQW5u3xFui
+         xIpg==
+X-Gm-Message-State: APjAAAV8JOFENW85f5qPPSR6XT2qP/RVcIeDFgQyLiy0fH9JSGSqhQ58
+        9mUAVM52/doSx6mSHt34ElD48A==
+X-Google-Smtp-Source: APXvYqz9sXuQx/EU3mOB34oM3DKhkPDs+bF8LZHwDiH9jjJI+PMu78/upExQhosAA/9iTcdG7GuKnQ==
+X-Received: by 2002:a17:90a:6505:: with SMTP id i5mr38438089pjj.13.1559709247265;
+        Tue, 04 Jun 2019 21:34:07 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id w187sm26524476pfb.4.2019.06.04.21.34.06
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 04 Jun 2019 21:34:06 -0700 (PDT)
+Date:   Tue, 4 Jun 2019 21:34:52 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Xiang Xiao <xiaoxiang781216@gmail.com>
+Cc:     ohad@wizery.com, wendy.liang@xilinx.com, arnaud.pouliquen@st.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xiang Xiao <xiaoxiang@xiaomi.com>
+Subject: Re: [PATCH 0/3] Enhance virtio rpmsg bus driver buffer allocation
+Message-ID: <20190605043452.GI22737@tuxbook-pro>
 References: <1548949280-31794-1-git-send-email-xiaoxiang@xiaomi.com>
- <1548949280-31794-4-git-send-email-xiaoxiang@xiaomi.com> <bc0e287e-cadd-c61c-c6c4-28cad642b9eb@st.com>
- <CAH2Cfb_kCvyYpRS8BVgkmA0W7ZHjjCXcC7nhaXji2oMOuqm76w@mail.gmail.com> <eb650649-e8cc-dd7a-c579-7ffb580273b9@st.com>
-In-Reply-To: <eb650649-e8cc-dd7a-c579-7ffb580273b9@st.com>
-From:   xiang xiao <xiaoxiang781216@gmail.com>
-Date:   Wed, 5 Jun 2019 10:40:17 +0800
-Message-ID: <CAH2Cfb8QOjDPRa9p--9qcnbJ7mbosDKXg59OQeVxB44GGY3_3w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] rpmsg: virtio_rpmsg_bus: get buffer size from config space
-To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Cc:     Ohad Ben Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        wendy.liang@xilinx.com, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Xiang Xiao <xiaoxiang@xiaomi.com>,
-        Loic PALLARDY <loic.pallardy@st.com>,
-        Suman Anna <s-anna@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1548949280-31794-1-git-send-email-xiaoxiang@xiaomi.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Jun 4, 2019 at 10:25 PM Arnaud Pouliquen
-<arnaud.pouliquen@st.com> wrote:
->
-> Hello Xiang,
->
-> On 5/9/19 3:00 PM, xiang xiao wrote:
-> > On Thu, May 9, 2019 at 8:36 PM Arnaud Pouliquen <arnaud.pouliquen@st.com> wrote:
-> >>
-> >> Hello Xiang,
-> >>
-> >> Similar mechanism has been proposed by Loic 2 years ago (link to the
-> >> series here https://lkml.org/lkml/2017/3/28/349).
-> >>
-> >> Did you see them? Regarding history, patches seem just on hold...
-> >>
-> >
-> > Just saw this patchset, so it's common problem hit by many vendor,
-> > rpmsg framework need to address it.:)
-> >
-> >> Main differences (except interesting RX/TX size split) seems that you
-> >> - don't use the virtio_config_ops->get
-> >
-> > virtio_cread call virtio_config_ops->get internally, the ideal is same
-> > for both patch, just the implementation detail is different.
-> >
-> >> - define a new feature VIRTIO_RPMSG_F_NS.
-> >
-> > I add this flag to keep the compatibility with old remote peer, and
-> > also follow the common virito driver practice.
-> I discussed with Loic, he is ok to go further with your patch and
-> abandon his one. Please find some remarks below in-line
-> >
-> >>
-> >> Regards
-> >> Arnaud
-> >>
-> >>
-> >> On 1/31/19 4:41 PM, Xiang Xiao wrote:
-> >>> 512 bytes isn't always suitable for all case, let firmware
-> >>> maker decide the best value from resource table.
-> >>> enable by VIRTIO_RPMSG_F_BUFSZ feature bit.
-> >>>
-> >>> Signed-off-by: Xiang Xiao <xiaoxiang@xiaomi.com>
-> >>> ---
-> >>>  drivers/rpmsg/virtio_rpmsg_bus.c  | 50 +++++++++++++++++++++++++--------------
-> >>>  include/uapi/linux/virtio_rpmsg.h | 24 +++++++++++++++++++
-> >>>  2 files changed, 56 insertions(+), 18 deletions(-)
-> >>>  create mode 100644 include/uapi/linux/virtio_rpmsg.h
-> >>>
-> >>> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> >>> index 59c4554..049dd97 100644
-> >>> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> >>> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> >>> @@ -16,6 +16,7 @@
-> >>>  #include <linux/virtio.h>
-> >>>  #include <linux/virtio_ids.h>
-> >>>  #include <linux/virtio_config.h>
-> >>> +#include <linux/virtio_rpmsg.h>
-> >>>  #include <linux/scatterlist.h>
-> >>>  #include <linux/dma-mapping.h>
-> >>>  #include <linux/slab.h>
-> >>> @@ -38,7 +39,8 @@
-> >>>   * @sbufs:   kernel address of tx buffers
-> >>>   * @num_rbufs:       total number of buffers for rx
-> >>>   * @num_sbufs:       total number of buffers for tx
-> >>> - * @buf_size:        size of one rx or tx buffer
-> >>> + * @rbuf_size:       size of one rx buffer
-> >>> + * @sbuf_size:       size of one tx buffer
-> >>>   * @last_sbuf:       index of last tx buffer used
-> >>>   * @rbufs_dma:       dma base addr of rx buffers
-> >>>   * @sbufs_dma:       dma base addr of tx buffers
-> >>> @@ -61,7 +63,8 @@ struct virtproc_info {
-> >>>       void *rbufs, *sbufs;
-> >>>       unsigned int num_rbufs;
-> >>>       unsigned int num_sbufs;
-> >>> -     unsigned int buf_size;
-> >>> +     unsigned int rbuf_size;
-> >>> +     unsigned int sbuf_size;
-> >>>       int last_sbuf;
-> >>>       dma_addr_t rbufs_dma;
-> >>>       dma_addr_t sbufs_dma;
-> >>> @@ -73,9 +76,6 @@ struct virtproc_info {
-> >>>       struct rpmsg_endpoint *ns_ept;
-> >>>  };
-> >>>
-> >>> -/* The feature bitmap for virtio rpmsg */
-> >>> -#define VIRTIO_RPMSG_F_NS    0 /* RP supports name service notifications */
-> >>> -
-> >>>  /**
-> >>>   * struct rpmsg_hdr - common header for all rpmsg messages
-> >>>   * @src: source address
-> >>> @@ -452,7 +452,7 @@ static void *get_a_tx_buf(struct virtproc_info *vrp)
-> >>>
-> >>>       /* either pick the next unused tx buffer */
-> >>>       if (vrp->last_sbuf < vrp->num_sbufs)
-> >>> -             ret = vrp->sbufs + vrp->buf_size * vrp->last_sbuf++;
-> >>> +             ret = vrp->sbufs + vrp->sbuf_size * vrp->last_sbuf++;
-> >>>       /* or recycle a used one */
-> >>>       else
-> >>>               ret = virtqueue_get_buf(vrp->svq, &len);
-> >>> @@ -578,7 +578,7 @@ static int rpmsg_send_offchannel_raw(struct rpmsg_device *rpdev,
-> >>>        * messaging), or to improve the buffer allocator, to support
-> >>>        * variable-length buffer sizes.
-> >>>        */
-> >>> -     if (len > vrp->buf_size - sizeof(struct rpmsg_hdr)) {
-> >>> +     if (len > vrp->sbuf_size - sizeof(struct rpmsg_hdr)) {
-> >>>               dev_err(dev, "message is too big (%d)\n", len);
-> >>>               return -EMSGSIZE;
-> >>>       }
-> >>> @@ -718,7 +718,7 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
-> >>>        * We currently use fixed-sized buffers, so trivially sanitize
-> >>>        * the reported payload length.
-> >>>        */
-> >>> -     if (len > vrp->buf_size ||
-> >>> +     if (len > vrp->rbuf_size ||
-> >>>           msg->len > (len - sizeof(struct rpmsg_hdr))) {
-> >>>               dev_warn(dev, "inbound msg too big: (%d, %d)\n", len, msg->len);
-> >>>               return -EINVAL;
-> >>> @@ -751,7 +751,7 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
-> >>>               dev_warn(dev, "msg received with no recipient\n");
-> >>>
-> >>>       /* publish the real size of the buffer */
-> >>> -     rpmsg_sg_init(&sg, msg, vrp->buf_size);
-> >>> +     rpmsg_sg_init(&sg, msg, vrp->rbuf_size);
-> >>>
-> >>>       /* add the buffer back to the remote processor's virtqueue */
-> >>>       err = virtqueue_add_inbuf(vrp->rvq, &sg, 1, msg, GFP_KERNEL);
-> >>> @@ -907,11 +907,24 @@ static int rpmsg_probe(struct virtio_device *vdev)
-> >>>       else
-> >>>               vrp->num_sbufs = MAX_RPMSG_NUM_BUFS;
-> >>>
-> >>> -     vrp->buf_size = MAX_RPMSG_BUF_SIZE;
-> >>> +     /* try to get buffer size from config space */
-> >>> +     if (virtio_has_feature(vdev, VIRTIO_RPMSG_F_BUFSZ)) {
-> >>> +             /* note: virtio_rpmsg_config is defined from remote view */
-> >>> +             virtio_cread(vdev, struct virtio_rpmsg_config,
-> >>> +                          txbuf_size, &vrp->rbuf_size);
-> >>> +             virtio_cread(vdev, struct virtio_rpmsg_config,
-> >>> +                          rxbuf_size, &vrp->sbuf_size);
-> >>> +     }
-> >>> +
-> >>> +     /* use the default if resource table doesn't provide one */
-> >>> +     if (!vrp->rbuf_size)
-> >>> +             vrp->rbuf_size = MAX_RPMSG_BUF_SIZE;
-> In this case constant should be renamed DEFAULT_RPMSG_BUF_SIZE as it is
-> no more a max value
+On Thu 31 Jan 07:41 PST 2019, Xiang Xiao wrote:
 
-Yes, DEFAULT_RPMSG_BUF_SIZE is more reasonable now.
+> Hi,
+> This series enhance the buffer allocation by:
+> 1.Support the different buffer number in rx/tx direction
+> 2.Get the individual rx/tx buffer size from config space
+> 
+> Here is the related OpenAMP change:
+> https://github.com/OpenAMP/open-amp/pull/155
+> 
 
-> >>> +     if (!vrp->sbuf_size)
-> >>> +             vrp->sbuf_size = MAX_RPMSG_BUF_SIZE;
-> Here, if the config space exists you need to update it in consequence to
-> ensure coherency with the remote processor config.
+This looks pretty reasonable, but can you confirm that it's possible to
+use new firmware with an old Linux kernel when introducing this?
 
-The update is already done in if (virtio_has_feature(vdev,
-VIRTIO_RPMSG_F_BUFSZ)), here just handle the zero value in config
-space which mean the remote side want to use the default value even
-VIRTIO_RPMSG_F_BUFSZ set.
-For example:
-1.remote side want to change one direction buffer size, but keep
-another direction as default
-2.or remote side want to change other config options(define in the
-furture) not the buffer size
 
->
-> >>>
-> >>>       /* allocate coherent memory for the buffers */
-> >>>       vrp->rbufs = dma_alloc_coherent(vdev->dev.parent->parent,
-> >>> -                                     vrp->num_rbufs * vrp->buf_size,
-> >>> +                                     vrp->num_rbufs * vrp->rbuf_size,
-> >>>                                       &vrp->rbufs_dma, GFP_KERNEL);
-> >>>       if (!vrp->rbufs) {
-> >>>               err = -ENOMEM;
-> >>> @@ -922,7 +935,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
-> >>>               vrp->rbufs, &vrp->rbufs_dma);
-> >>>
-> >>>       vrp->sbufs = dma_alloc_coherent(vdev->dev.parent->parent,
-> >>> -                                     vrp->num_sbufs * vrp->buf_size,
-> >>> +                                     vrp->num_sbufs * vrp->sbuf_size,
-> >>>                                       &vrp->sbufs_dma, GFP_KERNEL);
-> >>>       if (!vrp->sbufs) {
-> >>>               err = -ENOMEM;
-> >>> @@ -935,9 +948,9 @@ static int rpmsg_probe(struct virtio_device *vdev)
-> >>>       /* set up the receive buffers */
-> >>>       for (i = 0; i < vrp->num_rbufs; i++) {
-> >>>               struct scatterlist sg;
-> >>> -             void *cpu_addr = vrp->rbufs + i * vrp->buf_size;
-> >>> +             void *cpu_addr = vrp->rbufs + i * vrp->rbuf_size;
-> >>>
-> >>> -             rpmsg_sg_init(&sg, cpu_addr, vrp->buf_size);
-> >>> +             rpmsg_sg_init(&sg, cpu_addr, vrp->rbuf_size);
-> >>>
-> >>>               err = virtqueue_add_inbuf(vrp->rvq, &sg, 1, cpu_addr,
-> >>>                                         GFP_KERNEL);
-> >>> @@ -984,11 +997,11 @@ static int rpmsg_probe(struct virtio_device *vdev)
-> >>>
-> >>>  free_sbufs:
-> >>>       dma_free_coherent(vdev->dev.parent->parent,
-> >>> -                       vrp->num_sbufs * vrp->buf_size,
-> >>> +                       vrp->num_sbufs * vrp->sbuf_size,
-> >>>                         vrp->sbufs, vrp->sbufs_dma);
-> >>>  free_rbufs:
-> >>>       dma_free_coherent(vdev->dev.parent->parent,
-> >>> -                       vrp->num_rbufs * vrp->buf_size,
-> >>> +                       vrp->num_rbufs * vrp->rbuf_size,
-> >>>                         vrp->rbufs, vrp->rbufs_dma);
-> >>>  vqs_del:
-> >>>       vdev->config->del_vqs(vrp->vdev);
-> >>> @@ -1023,10 +1036,10 @@ static void rpmsg_remove(struct virtio_device *vdev)
-> >>>       vdev->config->del_vqs(vrp->vdev);
-> >>>
-> >>>       dma_free_coherent(vdev->dev.parent->parent,
-> >>> -                       vrp->num_sbufs * vrp->buf_size,
-> >>> +                       vrp->num_sbufs * vrp->sbuf_size,
-> >>>                         vrp->sbufs, vrp->sbufs_dma);
-> >>>       dma_free_coherent(vdev->dev.parent->parent,
-> >>> -                       vrp->num_rbufs * vrp->buf_size,
-> >>> +                       vrp->num_rbufs * vrp->rbuf_size,
-> >>>                         vrp->rbufs, vrp->rbufs_dma);
-> >>>
-> >>>       kfree(vrp);
-> >>> @@ -1039,6 +1052,7 @@ static struct virtio_device_id id_table[] = {
-> >>>
-> >>>  static unsigned int features[] = {
-> >>>       VIRTIO_RPMSG_F_NS,
-> >>> +     VIRTIO_RPMSG_F_BUFSZ,
-> >>>  };
-> >>>
-> >>>  static struct virtio_driver virtio_ipc_driver = {
-> >>> diff --git a/include/uapi/linux/virtio_rpmsg.h b/include/uapi/linux/virtio_rpmsg.h
-> >>> new file mode 100644
-> >>> index 0000000..24fa0dd
-> >>> --- /dev/null
-> >>> +++ b/include/uapi/linux/virtio_rpmsg.h
-> Strange to define a user space API for kernel usage need. Could you
-> elaborate?
+But ever since we discussed Loic's similar proposal earlier I've been
+questioning if the fixed buffer size isn't just an artifact of how we
+preallocate our buffers. The virtqueue seems to support arbitrary sizes
+of buffers and I see that the receive function in OpenAMP has been fixed
+to put back the buffer of the size that was received, rather than 512
+bytes. So it seems like Linux would be able to send whatever size
+messages to OpenAMP it would handle it.
 
-I just follow the practice other virtio drivers(e.g.
-include/uapi/virtio_net.h) applied, but rpmsg driver don't need to
-talk with the host VM software like other virtio driver, yes this
-header file isn't really needed.
+The question is if we could do the same in the other direction, perhaps
+by letting the OpenAMP side do it's message allocation when it's
+sending, rather than Linux pushing inbufs to be filled by the remote.
 
-> >>> @@ -0,0 +1,24 @@
-> >>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> >>> +/*
-> >>> + * Copyright (C) Pinecone Inc. 2019
-> >>> + * Copyright (C) Xiang Xiao <xiaoxiang@pinecone.net>
-> >>> + */
-> >>> +
-> >>> +#ifndef _UAPI_LINUX_VIRTIO_RPMSG_H
-> >>> +#define _UAPI_LINUX_VIRTIO_RPMSG_H
-> >>> +
-> >>> +#include <linux/types.h>
-> >>> +
-> >>> +/* The feature bitmap for virtio rpmsg */
-> >>> +#define VIRTIO_RPMSG_F_NS    0 /* RP supports name service notifications */
-> >>> +#define VIRTIO_RPMSG_F_BUFSZ 2 /* RP get buffer size from config space */
-> Would be useful to document it in rpmsg.txt
+This would remove the problem of always having suboptimal buffer sizes.
 
-Good point, but it is better to put them into this document:
-https://docs.oasis-open.org/virtio/virtio/v1.1/csprd01/virtio-v1.1-csprd01.html
-like other vritio driver spec.
+Regards,
+Bjorn
 
-> >>> +
-> >>> +struct virtio_rpmsg_config {
-> >>> +     /* The tx/rx individual buffer size(if VIRTIO_RPMSG_F_BUFSZ) */
-> >>> +     __u32 txbuf_size;
-> >>> +     __u32 rxbuf_size;
-> >>> +     __u32 reserved[14]; /* Reserve for the future use */
-> >>> +     /* Put the customize config here */
-> >>> +} __attribute__((packed));
-> >>> +
-> Wouldn't it be better to add an identifier and a version fields at the
-> beginning of the structure? Idea would be to simplify a future extension
-> In this case is VIRTIO_RPMSG_F_BUFSZ still useful?
->
-
-Yes, I consider this option before, but after review all
-include/uapi/virtio_*.h, I found that virito driver prefer feature
-bits than version number to handle the compability issue.
-For example, if we need introduce more options in the furture, we need:
-1.Add new feature bit to notice the option exist
-2.Allocate the field from reserved space
-
-> >>> +#endif /* _UAPI_LINUX_VIRTIO_RPMSG_H */
-> >>>
-> --
-> Thanks
-> Arnaud
+> Xiang Xiao (3):
+>   rpmsg: virtio_rpmsg_bus: allow the different vring size for send/recv
+>   rpmsg: virtio_rpmsg_bus: allocate rx/tx buffer separately
+>   rpmsg: virtio_rpmsg_bus: get buffer size from config space
+> 
+>  drivers/rpmsg/virtio_rpmsg_bus.c  | 127 +++++++++++++++++++++++---------------
+>  include/uapi/linux/virtio_rpmsg.h |  24 +++++++
+>  2 files changed, 100 insertions(+), 51 deletions(-)
+>  create mode 100644 include/uapi/linux/virtio_rpmsg.h
+> 
+> -- 
+> 2.7.4
+> 
