@@ -2,103 +2,75 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4647439559
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  7 Jun 2019 21:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 385ED421AB
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Jun 2019 11:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729768AbfFGTNS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 7 Jun 2019 15:13:18 -0400
-Received: from gateway23.websitewelcome.com ([192.185.49.180]:12213 "EHLO
-        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729474AbfFGTNS (ORCPT
+        id S2437899AbfFLJz2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 12 Jun 2019 05:55:28 -0400
+Received: from zimbra2.kalray.eu ([92.103.151.219]:38338 "EHLO
+        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437898AbfFLJz2 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 7 Jun 2019 15:13:18 -0400
-X-Greylist: delayed 1200 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jun 2019 15:13:17 EDT
-Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id 6131A4850
-        for <linux-remoteproc@vger.kernel.org>; Fri,  7 Jun 2019 13:53:16 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id ZJzIhDzss2PzOZJzIhXoOU; Fri, 07 Jun 2019 13:53:16 -0500
-X-Authority-Reason: nr=8
-Received: from [189.250.134.24] (port=47362 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hZJzH-002Xxo-A5; Fri, 07 Jun 2019 13:53:15 -0500
-Date:   Fri, 7 Jun 2019 13:53:14 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] remoteproc: Use struct_size() helper
-Message-ID: <20190607185314.GA15771@embeddedor>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.250.134.24
-X-Source-L: No
-X-Exim-ID: 1hZJzH-002Xxo-A5
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [189.250.134.24]:47362
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 14
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+        Wed, 12 Jun 2019 05:55:28 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 47D6027FBC29;
+        Wed, 12 Jun 2019 11:55:26 +0200 (CEST)
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id MD5AgQDHufF4; Wed, 12 Jun 2019 11:55:26 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 08A3927FBC1F;
+        Wed, 12 Jun 2019 11:55:26 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 08A3927FBC1F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1560333326;
+        bh=Xdas7U+/35dIUC2bbOxt1kt+SfAUvBNoiNo+nMRpq+s=;
+        h=From:To:Date:Message-Id;
+        b=NS2AunL/nFw+WezH5UE0jdjSTh6j1IqDQ0mnVeYyOlMOAdnEWqQ70/EedjPZoHGe8
+         3/+/X1X6bcoI2yTxlF/u43fi8P72f6T94rju9PMHi7NJB4s2BIg6fq50WBwsszR+DL
+         hk2/8JvodVtWhBZPxtNIQKKEJYNP0tbGIBpyXyLc=
+X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 37PL_mHoZxo4; Wed, 12 Jun 2019 11:55:25 +0200 (CEST)
+Received: from triton.lin.mbt.kalray.eu (unknown [192.168.37.25])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id EBFF027FBC0C;
+        Wed, 12 Jun 2019 11:55:25 +0200 (CEST)
+From:   Clement Leger <cleger@kalray.eu>
+To:     "Ohad Ben-Cohen" <ohad@wizery.com>,
+        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
+        "linux-remoteproc" <linux-remoteproc@vger.kernel.org>
+Cc:     Clement Leger <cleger@kalray.eu>
+Subject: [PATCH] remoteproc: recopy parent dma_pfn_offset for vdev
+Date:   Wed, 12 Jun 2019 11:55:21 +0200
+Message-Id: <20190612095521.4703-1-cleger@kalray.eu>
+X-Mailer: git-send-email 2.15.0.276.g89ea799
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-One of the more common cases of allocation size calculations is finding
-the size of a structure that has a zero-sized array at the end, along
-with memory for some number of elements for that array. For example:
-
-struct resource_table {
-	...
-        u32 offset[0];
-} __packed;
-
-Make use of the struct_size() helper instead of an open-coded version
-in order to avoid any potential type mistakes.
-
-So, replace the following form:
-
-table->num * sizeof(table->offset[0]) + sizeof(struct resource_table)
-
-with:
-
-struct_size(table, offset, table->num)
-
-This code was detected with the help of Coccinelle.
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+When preparing the subdevice for the vdev, also copy dma_pfn_offset
+since this is used for sub device dma allocations. Without that, there
+is incoherency between the parent dma settings and the childs one,
+potentially leading to dma_alloc_coherent failure (due to phys_to_dma
+using dma_pfn_offset for translation).
 ---
- drivers/remoteproc/remoteproc_elf_loader.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/remoteproc/remoteproc_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
-index 215a4400f21e..606aae166eba 100644
---- a/drivers/remoteproc/remoteproc_elf_loader.c
-+++ b/drivers/remoteproc/remoteproc_elf_loader.c
-@@ -247,8 +247,7 @@ find_table(struct device *dev, struct elf32_hdr *ehdr, size_t fw_size)
- 		}
- 
- 		/* make sure the offsets array isn't truncated */
--		if (table->num * sizeof(table->offset[0]) +
--				sizeof(struct resource_table) > size) {
-+		if (struct_size(table, offset, table->num) > size) {
- 			dev_err(dev, "resource table incomplete\n");
- 			return NULL;
- 		}
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 263e9c9614a8..3b56ca043231 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -520,6 +520,7 @@ static int rproc_handle_vdev(struct rproc *rproc, struct fw_rsc_vdev *rsc,
+ 	/* Initialise vdev subdevice */
+ 	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
+ 	rvdev->dev.parent = rproc->dev.parent;
++	rvdev->dev.dma_pfn_offset = rproc->dev.parent->dma_pfn_offset;
+ 	rvdev->dev.release = rproc_rvdev_release;
+ 	dev_set_name(&rvdev->dev, "%s#%s", dev_name(rvdev->dev.parent), name);
+ 	dev_set_drvdata(&rvdev->dev, rvdev);
 -- 
-2.21.0
+2.15.0.276.g89ea799
 
