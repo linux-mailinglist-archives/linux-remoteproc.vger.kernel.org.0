@@ -2,116 +2,102 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72ED75ACFB
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 29 Jun 2019 21:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319C55ACFC
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 29 Jun 2019 21:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726937AbfF2TEd (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 29 Jun 2019 15:04:33 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37925 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726882AbfF2TEa (ORCPT
+        id S1726906AbfF2TFb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 29 Jun 2019 15:05:31 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:36490 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726883AbfF2TFb (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 29 Jun 2019 15:04:30 -0400
-Received: by mail-pg1-f195.google.com with SMTP id z75so4067907pgz.5
-        for <linux-remoteproc@vger.kernel.org>; Sat, 29 Jun 2019 12:04:30 -0700 (PDT)
+        Sat, 29 Jun 2019 15:05:31 -0400
+Received: by mail-pf1-f195.google.com with SMTP id r7so4574204pfl.3
+        for <linux-remoteproc@vger.kernel.org>; Sat, 29 Jun 2019 12:05:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=bJ63361E8dsG3z2xPB9fFpVPGIWLlMbEVzu+QndpyIg=;
-        b=NX/E0BlqnT+uz9qblZjXXFu3/K/FYOmmeDQjhOXu7z/PqHsEjoxkqRzCE8gSomvfPN
-         rgGuzMGZTAFDx8heZotHTHPzEjqB2C+mnsPkB9J6pbBjFq9wJI7ljmMNaz8vjHak30Ba
-         a/KDQ1MD/pbzIvd1hfAvWJTPn3p17G3XK1V9KUztIh7JHmj1ThDBnuFPh22pa5Mi53hl
-         5wmEdLa0jgd9MUxpKlovofSSObqjbHuJNLSlR8+iNwqcdaw2AAvVfg8sbgqj9sMYT2OC
-         3poXpSPvcYQbD9IMuWKejcBGZIKHdkyM33JlrE5+A031oYonyGNSn92yV0zuPdFn1RBi
-         Mq3A==
+        bh=bTs7ErguXXMoWO56S334gRVdj+FZX2DsPTRLxIpz9t8=;
+        b=LLdZE4M2ciYbPY4mOKh8tQHXyqmji0erJvQCPdtNO0fP9nZWb2lrY4/qJkwtJkj042
+         zMCSTm5KGLpMUXbxP3emIU4VrLkNnTzRNeZ5zbsDL9u6ZTvr4lt1ytyCSr8FWL2E09EI
+         4Mhp//XdkmXj8fZg6oGJrwFkrOefeIV5QLEZV53jSd/InI0z11jDqHRcpiYLEBaMxRix
+         FwXOBVcHrySC587/h6TrHFjlGa3m0y+1OEZ8Cm+fgPitY96afTXYWzFTPJPt50GmpJka
+         JoyvTts6+nqF+F/zYlzzscC8LZllH6pRLEtJ92cXrp9GkU3Y9UOo3e8aVYDtraiHYoUf
+         MYQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=bJ63361E8dsG3z2xPB9fFpVPGIWLlMbEVzu+QndpyIg=;
-        b=rP+m9dtLFln9ZnCP3R4YS5vl52HXKWPdHuVvvSPUAzqqKebQEERM5nuISKbjY1GEvX
-         RMfgRq2TW8CFA1Xz+7qWHHly7aC+a2YN0wYKIuAR5k5yB/V0RAgY/IajH5XibtK4SaNI
-         PjMZ1CwNUakb6HgjohiC0cN2Y8aKBsRQnFn13NaCVd+WjhDVArCeZFq/6oNeLAignaSt
-         hr1XX1DTmjkOnDW39BJGMNkKlTdtVvhM5wBzVcbfIEFkIjX/F+2EeZIXs2jEdBJX2gt+
-         O1RMyBampwVzbx7EdlQZzqi9PtvU6P0q/LpS4P3RfbahP3n9kSF6B+UUwdPOGbQb9wB2
-         CnVg==
-X-Gm-Message-State: APjAAAVT66PUniPzLKyIhu5XS3k5N6P+NtkvoBL3zF0CN3FavQFUbn8N
-        Qd4qWZBzs8g6u3xh32t/b0bdLw==
-X-Google-Smtp-Source: APXvYqyjlKUvT5kDN94EI2+RgRwCFl8Em05upW7HoAJ85wnqCari6NJcFpI6jC5hAt3FLaY+o5qfNA==
-X-Received: by 2002:a63:1f47:: with SMTP id q7mr15914252pgm.264.1561835069807;
-        Sat, 29 Jun 2019 12:04:29 -0700 (PDT)
+        bh=bTs7ErguXXMoWO56S334gRVdj+FZX2DsPTRLxIpz9t8=;
+        b=f2Tky9ei9s7Eae21c9+ARQC4IuuP113HvP9wWMyATlkFtPTd6IyXwheMTR1IlF6koc
+         vYilCvU8BLnFqB/tRi5fLe8wX5RfT12aQEfzWEdPZ7rgm3fva/6KILJNSclj5XHnKT0F
+         2swQDSkNXpeXHN6Uj4IAzKa7HIXKpHTuVgS0iIOMXrtks7UBJ4b994NCaOZDiyOAmhhO
+         MXMDAzbYIPGp6U0x9EQqBqydxYeWc0r5M3RkhO+3sn/DoN4yRynbhZJAPoCTyrNrVHPH
+         OuVo7eGAPRP3oGg6HC5SgP8kwKlakJp1pMKEHPFxfwbMjOO3tqkLFvXQ/vi4XsC5ZSCZ
+         NRiQ==
+X-Gm-Message-State: APjAAAWiodlOuMTABIPDY05NZAKzW9tE5YW4i6/NO5m0QnkY7pgw/yNg
+        r6+ua9Ter1xGDOcP98VqMOMQgA==
+X-Google-Smtp-Source: APXvYqwFqUQNKvCJEdwC8KlJelEfndpt8UZDkqqrlqpdG3G7Bc2576Sl4aGCvBpkKsTABGZBRezztQ==
+X-Received: by 2002:a63:e43:: with SMTP id 3mr1359183pgo.402.1561835130627;
+        Sat, 29 Jun 2019 12:05:30 -0700 (PDT)
 Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id c8sm2920333pjq.2.2019.06.29.12.04.28
+        by smtp.gmail.com with ESMTPSA id v22sm1462700pgk.69.2019.06.29.12.05.29
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 29 Jun 2019 12:04:29 -0700 (PDT)
-Date:   Sat, 29 Jun 2019 12:04:27 -0700
+        Sat, 29 Jun 2019 12:05:29 -0700 (PDT)
+Date:   Sat, 29 Jun 2019 12:05:27 -0700
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Fabien Dessenne <fabien.dessenne@st.com>
 Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] remoteproc: Use struct_size() helper
-Message-ID: <20190629190427.GF23094@builder>
-References: <20190607185314.GA15771@embeddedor>
+        linux-kernel@vger.kernel.org,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: Re: [PATCH v2] hwspinlock: ignore disabled device
+Message-ID: <20190629190527.GG23094@builder>
+References: <1552064026-11415-1-git-send-email-fabien.dessenne@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190607185314.GA15771@embeddedor>
+In-Reply-To: <1552064026-11415-1-git-send-email-fabien.dessenne@st.com>
 User-Agent: Mutt/1.10.0 (2018-05-17)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri 07 Jun 11:53 PDT 2019, Gustavo A. R. Silva wrote:
+On Fri 08 Mar 08:53 PST 2019, Fabien Dessenne wrote:
 
-> One of the more common cases of allocation size calculations is finding
-> the size of a structure that has a zero-sized array at the end, along
-> with memory for some number of elements for that array. For example:
+> Do not wait for hwspinlock device registration if it is not available
+> for use.
 > 
-> struct resource_table {
-> 	...
->         u32 offset[0];
-> } __packed;
-> 
-> Make use of the struct_size() helper instead of an open-coded version
-> in order to avoid any potential type mistakes.
-> 
-> So, replace the following form:
-> 
-> table->num * sizeof(table->offset[0]) + sizeof(struct resource_table)
-> 
-> with:
-> 
-> struct_size(table, offset, table->num)
-> 
-> This code was detected with the help of Coccinelle.
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
 
-Looks good, applied
+Applied with Suman's ack
 
 Thanks,
 Bjorn
 
 > ---
->  drivers/remoteproc/remoteproc_elf_loader.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> V2: use 'goto out' instead of 'return'
 > 
-> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
-> index 215a4400f21e..606aae166eba 100644
-> --- a/drivers/remoteproc/remoteproc_elf_loader.c
-> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
-> @@ -247,8 +247,7 @@ find_table(struct device *dev, struct elf32_hdr *ehdr, size_t fw_size)
->  		}
+>  drivers/hwspinlock/hwspinlock_core.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
+> index 2bad40d..d806307 100644
+> --- a/drivers/hwspinlock/hwspinlock_core.c
+> +++ b/drivers/hwspinlock/hwspinlock_core.c
+> @@ -333,6 +333,11 @@ int of_hwspin_lock_get_id(struct device_node *np, int index)
+>  	if (ret)
+>  		return ret;
 >  
->  		/* make sure the offsets array isn't truncated */
-> -		if (table->num * sizeof(table->offset[0]) +
-> -				sizeof(struct resource_table) > size) {
-> +		if (struct_size(table, offset, table->num) > size) {
->  			dev_err(dev, "resource table incomplete\n");
->  			return NULL;
->  		}
+> +	if (!of_device_is_available(args.np)) {
+> +		ret = -ENOENT;
+> +		goto out;
+> +	}
+> +
+>  	/* Find the hwspinlock device: we need its base_id */
+>  	ret = -EPROBE_DEFER;
+>  	rcu_read_lock();
 > -- 
-> 2.21.0
+> 2.7.4
 > 
