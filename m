@@ -2,190 +2,124 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3655B46F
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  1 Jul 2019 08:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE79C5B47F
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  1 Jul 2019 08:13:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727381AbfGAGAn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 1 Jul 2019 02:00:43 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:37883 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727142AbfGAGAn (ORCPT
+        id S1727280AbfGAGN6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 1 Jul 2019 02:13:58 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:36094 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727208AbfGAGN5 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 1 Jul 2019 02:00:43 -0400
-Received: by mail-pl1-f193.google.com with SMTP id bh12so6724392plb.4
-        for <linux-remoteproc@vger.kernel.org>; Sun, 30 Jun 2019 23:00:42 -0700 (PDT)
+        Mon, 1 Jul 2019 02:13:57 -0400
+Received: by mail-pg1-f193.google.com with SMTP id c13so5484615pgg.3
+        for <linux-remoteproc@vger.kernel.org>; Sun, 30 Jun 2019 23:13:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Sg6AW5CSqanpjYZH3U5Z/ukrtDxL0FdU1gA0efXYK0A=;
-        b=QTO2aEfzi+A3HebhY7g/ZgvkJUcXa3vAiESzBq8/GpxefC8hHHKW1weAYnL9RurIRC
-         eB4mQaIkZN8U+uCAHQ0gxKhc71mpoGo7tG9c5Z7UGTR76/w98eZqSjCsGP/qLMbt/pLp
-         JO93Yul0TEW/VhJv3oJSloY/mML5blyvDQ5XfXM/eXwXAlkhs6rGvdOtYJnsPpYQiOLE
-         zBT+aUk2/QPUk10GQs5Tea+BytLTgdOCje/6qslcdWzm4PJ4CBe/3qxU471pKpnjzQr4
-         yKUBfu2t50wT03EYggRyqXAmichUFKS97Yb67hprGOfAoJXSJ3uI5mbHn+yleb8Lttay
-         fgMw==
+        bh=D1O1X/cTjxSpLefdIwUl4AWn9m/5Z78Sy8Rbpsos6/M=;
+        b=iIFbBqyg8V2wneFFrpr2exGWqjbsn3ThWYCBhBhZRZ6ymKyyUZit3oLo0dOOvDCCil
+         RjmYVY7tNPApoNx4F61sVAQDeTq6q16CCYyL02sNMSaQweS38H4AqdWd7m3zkbz5lpA6
+         KkpiCTYtJKuLOWXsrMDh+B9tdkjIcISwbYhH1Ld+ZH22YTWzHxq+DOfHui/0lJhKU2aL
+         ypRIXEE3YVygNHOwWh+mlB/KaiLwE8HTZOLhFbJmNJ1u2uf3QKDzzAeTTpGleyxA662d
+         ifjW5GDFUl/BaZNwI88ziq0uUJVcFu4IC/0ZuIl6X0od1ncov7xvnNyUhBrPi2rCu9gN
+         FcBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Sg6AW5CSqanpjYZH3U5Z/ukrtDxL0FdU1gA0efXYK0A=;
-        b=pCwdauep/aA0TkAAE8M8rVe9mi2r1gSRt24pRK1DYCRUWV5s+BR08aEOvkN/WLzYyC
-         yUfcwenAAX6VEDJtK2KwWcJCf0mlH4K230W7FoIc+AQSx9Rp8j17hZPApx7u0Gm0BJuu
-         ik+EW9t/xdxLRcWS4/4GsZCWv2E7zrlg+SLBeDcdspBAFGR2SHYbWdzkEtN9lVwZJzBF
-         2t7Pzf2oI1ykXzOpXppjKY85tChbtplnoVhMnvoUQ8I8yzlu695SvvK/t6FvlfcVkq7t
-         FXQHi1UmYAEU0gl0Y+QhxNuWJdUMZr9rBEBx8wrxOUtq/x6BAVe/QmX8KNpkTVDWdetv
-         O4Mg==
-X-Gm-Message-State: APjAAAUMVOBHXR5hVFA1GBTPZ3yBmeVdZkpWZb2ujFi2XJj+zXNyJhw3
-        TaD6DHWWxfANNoIu/41rWUzqXETOkFg=
-X-Google-Smtp-Source: APXvYqxxnVbUx2Y7NhWR1fhPFR5nH7JgIMmZ37hT57LCoxkhPrg7BsR5QVJt+o8s1K3nGQKhB7uWUA==
-X-Received: by 2002:a17:902:246:: with SMTP id 64mr26301451plc.311.1561960842206;
-        Sun, 30 Jun 2019 23:00:42 -0700 (PDT)
+        bh=D1O1X/cTjxSpLefdIwUl4AWn9m/5Z78Sy8Rbpsos6/M=;
+        b=TOfjDXUVfMlKjHl/PW9QsRhEybPn3mItlBYhGD5asiHHsvJIiWOWxpWtYeGxnocLqN
+         eTuXIh+Wjr6+VQOc+IL39T68xpBoquWqSs7vlaiqt2X0twcJEOKn953cUGZ3Oj66qiEx
+         T+V0173tlPcHPYa8/8oYCPTrK3+IWA4BIVRtOwor4HmbC/FTbXRrPbsTKxrgGDm8zVmm
+         FNyWDGeNYMKui3JXTnjoGHnS0/76QvS0gCv1lyK2Or3eRL/huR4Wp6WAJZCikOZMg8sf
+         ++1btjYi22TUzAHT4Ymu+DenQm5w9a67hd7DQ0Zcy3bwhxKAscZzcokXNe5/55BpLVYB
+         D0Iw==
+X-Gm-Message-State: APjAAAUdeLeM7rsP0iePmkW5HJ51zpe/tv7QbBkL3hjljm6Sp8PpNZgi
+        ZR1rTOYTh3phgkWgDgkm8TuAdg==
+X-Google-Smtp-Source: APXvYqw7HLuQ5++wNVoa6Twp44LTfQ9finOPfEkCayL9iiS7L7GZKdW++Q+goB1qmibmWMRR81zVVw==
+X-Received: by 2002:a63:e40a:: with SMTP id a10mr22792178pgi.277.1561961636948;
+        Sun, 30 Jun 2019 23:13:56 -0700 (PDT)
 Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id f14sm9253392pfn.53.2019.06.30.23.00.40
+        by smtp.gmail.com with ESMTPSA id c10sm8513453pjq.14.2019.06.30.23.13.55
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 30 Jun 2019 23:00:41 -0700 (PDT)
-Date:   Sun, 30 Jun 2019 23:00:39 -0700
+        Sun, 30 Jun 2019 23:13:55 -0700 (PDT)
+Date:   Sun, 30 Jun 2019 23:13:53 -0700
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        xiang xiao <xiaoxiang781216@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Fabien DESSENNE <fabien.dessenne@st.com>
-Subject: Re: [PATCH v2 2/2] tty: add rpmsg driver
-Message-ID: <20190701060039.GD1263@builder>
-References: <1557500577-22366-1-git-send-email-arnaud.pouliquen@st.com>
- <1557500577-22366-3-git-send-email-arnaud.pouliquen@st.com>
+Cc:     Xiang Xiao <xiaoxiang781216@gmail.com>, ohad@wizery.com,
+        wendy.liang@xilinx.com, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Xiang Xiao <xiaoxiang@xiaomi.com>
+Subject: Re: [PATCH 0/3] Enhance virtio rpmsg bus driver buffer allocation
+Message-ID: <20190701061353.GE1263@builder>
+References: <1548949280-31794-1-git-send-email-xiaoxiang@xiaomi.com>
+ <20190605043452.GI22737@tuxbook-pro>
+ <2d60dd1e-f7a0-ea63-9fda-0ea97aab0406@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1557500577-22366-3-git-send-email-arnaud.pouliquen@st.com>
+In-Reply-To: <2d60dd1e-f7a0-ea63-9fda-0ea97aab0406@st.com>
 User-Agent: Mutt/1.10.0 (2018-05-17)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri 10 May 08:02 PDT 2019, Arnaud Pouliquen wrote:
+On Wed 05 Jun 00:33 PDT 2019, Arnaud Pouliquen wrote:
 
-> This driver exposes a standard tty interface on top of the rpmsg
-> framework through the "rpmsg-tty-channel" rpmsg service.
+> Hi Bjorn,
 > 
-> This driver supports multi-instances, offering a /dev/ttyRPMSGx entry
-> per rpmsg endpoint.
+> On 6/5/19 6:34 AM, Bjorn Andersson wrote:
+> > On Thu 31 Jan 07:41 PST 2019, Xiang Xiao wrote:
+> > 
+> >> Hi,
+> >> This series enhance the buffer allocation by:
+> >> 1.Support the different buffer number in rx/tx direction
+> >> 2.Get the individual rx/tx buffer size from config space
+> >>
+> >> Here is the related OpenAMP change:
+> >> https://github.com/OpenAMP/open-amp/pull/155
+> >>
+> > 
+> > This looks pretty reasonable, but can you confirm that it's possible to
+> > use new firmware with an old Linux kernel when introducing this?
+> > 
+> > 
+> > But ever since we discussed Loic's similar proposal earlier I've been
+> > questioning if the fixed buffer size isn't just an artifact of how we
+> > preallocate our buffers. The virtqueue seems to support arbitrary sizes
+> > of buffers and I see that the receive function in OpenAMP has been fixed
+> > to put back the buffer of the size that was received, rather than 512
+> > bytes. So it seems like Linux would be able to send whatever size
+> > messages to OpenAMP it would handle it.
+> > 
+> > The question is if we could do the same in the other direction, perhaps
+> > by letting the OpenAMP side do it's message allocation when it's
+> > sending, rather than Linux pushing inbufs to be filled by the remote.
 > 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
-> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
-> ---
->  Documentation/serial/tty_rpmsg.txt |  38 +++
->  drivers/tty/Kconfig                |   9 +
->  drivers/tty/Makefile               |   1 +
->  drivers/tty/rpmsg_tty.c            | 479 +++++++++++++++++++++++++++++++++++++
->  4 files changed, 527 insertions(+)
->  create mode 100644 Documentation/serial/tty_rpmsg.txt
->  create mode 100644 drivers/tty/rpmsg_tty.c
+> IMHO, both could be useful and could be not correlated.
+> On-the fly buffer allocation seems more efficient but needs an
+> allocator.This can be a generic allocator (with a va to da) for system
+> where large amount of memories are accessible from both side.
 > 
-> diff --git a/Documentation/serial/tty_rpmsg.txt b/Documentation/serial/tty_rpmsg.txt
-> new file mode 100644
-> index 000000000000..e069ed268a2b
-> --- /dev/null
-> +++ b/Documentation/serial/tty_rpmsg.txt
-> @@ -0,0 +1,38 @@
-> +
-> +			The rpmsg TTY
-> +
-> +The rpmsg tty driver implements a serial communication on the rpmsg bus,
-> +to communicate with a remote processor devices in asymmetric multiprocessing
-> +(AMP) configurations.
-> +
-> +The remote processor can instantiate a new tty by requesting a new "rpmsg-tty-channel" RPMsg service. Information related to the RPMsg and
-> +associated tty device is available in /sys/bus/rpmsg/devices/virtio0.rpmsg-tty-channel.-1.<X>, with
-> +<X> corresponding to the ttyRPMSG instance.
-> +
-> +RPMsg data/control structure
-> +----------------------------
-> +
-> +The RPMsg is used to send data or control messages. Differentiation between the
-> +stream and the control messages is done thanks to the first byte of the
-> +RPMsg payload:
-> +
-> +
-> +RPMSG_DATA	- rest of messages contains data
-> +
-> +RPMSG_CTRL 	- message contains control.
-> +
-> +
-> +To be compliant with this driver, the remote firmware has to respect this RPMsg
-> +payload structure. At least the RPMSG_DATA type has to be supported. The
-> +RPMSG_CTRL is optional.
-> +
+> Now what about system with small shared memory? In this case you have to
+> deal with a limited/optimized memory chunk. To avoid memory
+> fragmentation the allocator should have a pre-reserved buffers pool(so
+> similar to existing implementation). This serie seems useful to optimize
+> the size of the pre-reserved pool.
+> 
 
-This scheme prevents us from using this driver to expose any existing
-tty-like channels without having to modify such firmware.
+Having an implementation that uses small fixed size buffers seems very
+reasonable and I'm in favour of making the message size configurable.
 
-> +Flow control type
-> +-----------------
-> +
-> +A minimum flow control can be implemented to allow/block communication with the remote processor.
-> +
-> +DATA_TERM_READY	-	one parameter:
-> +			- u8 state
-> +				Set to indicate to remote side that terminal is
-> +				ready for communication.
-> +				Reset to block communication with remote side.
-
-And as shown in discussions following Qualcomm's proposed flow-control
-addition to the rpmsg API the need for flow control is not limited to
-this custom tty like interface. 
+I would however prefer to have this implemented in a way where the
+remote side should not be receiving messages in a way that's based on
+the remote side's allocation parameters.
 
 
-So I really would like to see an implementation of a side-band flow
-control mechanism in the virtio rpmsg bus.
-
-> diff --git a/drivers/tty/Kconfig b/drivers/tty/Kconfig
-> index e0a04bfc873e..d7b426939f69 100644
-> --- a/drivers/tty/Kconfig
-> +++ b/drivers/tty/Kconfig
-> @@ -442,6 +442,15 @@ config VCC
->  	help
->  	  Support for Sun logical domain consoles.
->  
-> +config RPMSG_TTY
-> +	tristate "RPMSG tty driver"
-> +	depends on RPMSG
-> +	help
-> +	  Say y here to export rpmsg endpoints as tty devices, usually found
-> +	  in /dev/ttyRPMSGx.
-> +	  This makes it possible for user-space programs to send and receive
-> +	  rpmsg messages as a standard tty protocol.
-> +
->  config LDISC_AUTOLOAD
->  	bool "Automatically load TTY Line Disciplines"
->  	default y
-> diff --git a/drivers/tty/Makefile b/drivers/tty/Makefile
-> index c72cafdf32b4..90a98a20714d 100644
-> --- a/drivers/tty/Makefile
-> +++ b/drivers/tty/Makefile
-> @@ -33,5 +33,6 @@ obj-$(CONFIG_PPC_EPAPR_HV_BYTECHAN) += ehv_bytechan.o
->  obj-$(CONFIG_GOLDFISH_TTY)	+= goldfish.o
->  obj-$(CONFIG_MIPS_EJTAG_FDC_TTY) += mips_ejtag_fdc.o
->  obj-$(CONFIG_VCC)		+= vcc.o
-> +obj-$(CONFIG_RPMSG_TTY)		+= rpmsg_tty.o
->  
->  obj-y += ipwireless/
-> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
-[..]
-> +static struct rpmsg_device_id rpmsg_driver_tty_id_table[] = {
-> +	{ .name	= "rpmsg-tty-channel" },
-
-I really would like a mechanism that does not depend on a fixed channel
-name, as this required that firmware is written specifically for being
-paired with this driver.
-
-In other words this is exactly the same problem that we worked around in
-rpmsg_char.
+I don't think this series prevents the introduction of such isolation,
+but it would render this code unnecessary.
 
 Regards,
 Bjorn
