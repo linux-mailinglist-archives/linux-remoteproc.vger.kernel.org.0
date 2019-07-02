@@ -2,43 +2,42 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DE85D20F
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  2 Jul 2019 16:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D1B5D234
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  2 Jul 2019 16:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbfGBOsf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 2 Jul 2019 10:48:35 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:1949 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726434AbfGBOse (ORCPT
+        id S1726434AbfGBO5S (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 2 Jul 2019 10:57:18 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:49504 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725981AbfGBO5S (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 2 Jul 2019 10:48:34 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x62EhXlI005738;
-        Tue, 2 Jul 2019 16:48:20 +0200
+        Tue, 2 Jul 2019 10:57:18 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x62Erf5J017648;
+        Tue, 2 Jul 2019 16:57:05 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=D7zgvjSLfqioMZan6qdNfokcmMkC9DF4WUgCZykLyz0=;
- b=a0RpyQJQ5gv/moPv1tZTyU7EnlOIDJoh+0uCM2M45OaDC042EU3GdKRHOdyI+Hke6Ti1
- qznbAY0X8lNomFhIXaeqvnNfndTsBeepMxoUJVL6cYU1zr726TZBN1XbfCnboDBhO3GU
- TBacoVzOiYSpzQMc9hRCMJIl40J6Gi8Ff8x9zukqqGMS87bfe0QSESxFoR68C/blGaH3
- z5VRBKBAK38pKaexMrtl04SF68ZnVyvQwAxK4GbJmrrYmJXrOn4BnC1c5HS6jFt+5Tb6
- v5asnWq05MJYbzSwKxNmI/LUiTrDHZgcZdqVGWRNsLpWWtkSePxOirXEbF22vVEI5Z1D RQ== 
+ bh=NUbU5Q6yEBQUCStYjxBrt6KQ8QWKe6FhU2+NRmbzbiQ=;
+ b=B2ypATqyrYb6oUh0fO7hB0NcUeGrJtmOvACzS8I4UN8OK/Rlqar2Q/lYpvB7i3ejFeoN
+ 2MIB0fNV4gOIHZkDwRNJAEfdN4ZlMRGNwlMo8tkemA4qL7JDM9o2EJBWzjSwNbJItDWw
+ l1RrdA2g/EIbzPt9ypsT66mH7heTdxa/mV6dw9ctgCXq+pFTPTWyDVeGPvZSiibAmeqM
+ 6jnQ2IPgd4533dQXSjU3ST8QZeeoA4X2lZyQ9QijBxZztGkRdT2zINHgS8fA2NFYyOns
+ w+KIS9TyqjMBBo3Vg5VF4oAw1sFndBJYMRrqbj2K9vBeKl4159SU3LHP5PVqxZ05WmS+ Hg== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2tdwruvqb2-1
+        by mx08-00178001.pphosted.com with ESMTP id 2tdxvhvrdy-1
         (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Tue, 02 Jul 2019 16:48:20 +0200
+        Tue, 02 Jul 2019 16:57:05 +0200
 Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3351731;
-        Tue,  2 Jul 2019 14:48:10 +0000 (GMT)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8A1D131;
+        Tue,  2 Jul 2019 14:56:57 +0000 (GMT)
 Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 05FB42C83;
-        Tue,  2 Jul 2019 14:48:10 +0000 (GMT)
+        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 5844C2CA0;
+        Tue,  2 Jul 2019 14:56:57 +0000 (GMT)
 Received: from [10.48.0.131] (10.75.127.51) by SFHDAG3NODE1.st.com
  (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Tue, 2 Jul
- 2019 16:48:09 +0200
-Subject: Re: [PATCH v2 1/2] rpmsg: core: add possibility to get message
- payload length
+ 2019 16:56:56 +0200
+Subject: Re: [PATCH v2 2/2] tty: add rpmsg driver
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 CC:     Ohad Ben-Cohen <ohad@wizery.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -47,8 +46,8 @@ CC:     Ohad Ben-Cohen <ohad@wizery.com>,
         <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
         Fabien DESSENNE <fabien.dessenne@st.com>
 References: <1557500577-22366-1-git-send-email-arnaud.pouliquen@st.com>
- <1557500577-22366-2-git-send-email-arnaud.pouliquen@st.com>
- <20190701053137.GC1263@builder>
+ <1557500577-22366-3-git-send-email-arnaud.pouliquen@st.com>
+ <20190701060039.GD1263@builder>
 From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=arnaud.pouliquen@st.com; prefer-encrypt=mutual; keydata=
@@ -94,12 +93,12 @@ Autocrypt: addr=arnaud.pouliquen@st.com; prefer-encrypt=mutual; keydata=
  36tfTyducLyZtGB3mbJYfWeI7aiFgYsd5ehov6OIBlOz5iOshd97+wbbmziYEp6jWMIMX+Em
  zqSvS5ETZydayO5JBbw7fFBd1nGVYk1WL6Ll72g+iEnqgIckMtxey1TgfT7GhPkR7hl54ZAe
  8mOik8I/F6EW8XyQAA2P
-Message-ID: <47f4ade7-1f9a-664e-1b6e-3c9f16df55d0@st.com>
-Date:   Tue, 2 Jul 2019 16:48:08 +0200
+Message-ID: <ed383111-01f7-21ac-4ec5-de80776394a4@st.com>
+Date:   Tue, 2 Jul 2019 16:56:56 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.1
 MIME-Version: 1.0
-In-Reply-To: <20190701053137.GC1263@builder>
+In-Reply-To: <20190701060039.GD1263@builder>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -113,179 +112,171 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Hi Bjorn,
 
-
-On 7/1/19 7:31 AM, Bjorn Andersson wrote:
+On 7/1/19 8:00 AM, Bjorn Andersson wrote:
 > On Fri 10 May 08:02 PDT 2019, Arnaud Pouliquen wrote:
 > 
->> Return the rpmsg buffer payload size for sending message, so rpmsg users
->> can split a long message in several sub rpmsg buffers.
+>> This driver exposes a standard tty interface on top of the rpmsg
+>> framework through the "rpmsg-tty-channel" rpmsg service.
+>>
+>> This driver supports multi-instances, offering a /dev/ttyRPMSGx entry
+>> per rpmsg endpoint.
 >>
 >> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 >> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
-> 
-> This should list each person who dealt with the patch. So the first
-> would be the author and the last would be the one that posted it on the
-> list.
-> 
-> If you both authored the patch then you should add Co-developed-by to
-> denote this.
-ok i will update it
-> 
 >> ---
->>  drivers/rpmsg/rpmsg_core.c       | 20 ++++++++++++++++++++
->>  drivers/rpmsg/rpmsg_internal.h   |  2 ++
->>  drivers/rpmsg/virtio_rpmsg_bus.c | 11 +++++++++++
->>  include/linux/rpmsg.h            | 10 ++++++++++
->>  4 files changed, 43 insertions(+)
+>>  Documentation/serial/tty_rpmsg.txt |  38 +++
+>>  drivers/tty/Kconfig                |   9 +
+>>  drivers/tty/Makefile               |   1 +
+>>  drivers/tty/rpmsg_tty.c            | 479 +++++++++++++++++++++++++++++++++++++
+>>  4 files changed, 527 insertions(+)
+>>  create mode 100644 Documentation/serial/tty_rpmsg.txt
+>>  create mode 100644 drivers/tty/rpmsg_tty.c
 >>
->> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
->> index 8122807db380..75c8c403ffe5 100644
->> --- a/drivers/rpmsg/rpmsg_core.c
->> +++ b/drivers/rpmsg/rpmsg_core.c
->> @@ -283,6 +283,26 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
->>  }
->>  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
->>  
->> +/**
->> + * rpmsg_get_buf_payload_size()
->> + * This function returns buffer payload size available for sending messages.
->> + *
->> + * @ept: the rpmsg endpoint
->> + *
->> + * Returns buffer payload size on success and an appropriate error value on
->> + * failure.
->> + */
+>> diff --git a/Documentation/serial/tty_rpmsg.txt b/Documentation/serial/tty_rpmsg.txt
+>> new file mode 100644
+>> index 000000000000..e069ed268a2b
+>> --- /dev/null
+>> +++ b/Documentation/serial/tty_rpmsg.txt
+>> @@ -0,0 +1,38 @@
+>> +
+>> +			The rpmsg TTY
+>> +
+>> +The rpmsg tty driver implements a serial communication on the rpmsg bus,
+>> +to communicate with a remote processor devices in asymmetric multiprocessing
+>> +(AMP) configurations.
+>> +
+>> +The remote processor can instantiate a new tty by requesting a new "rpmsg-tty-channel" RPMsg service. Information related to the RPMsg and
+>> +associated tty device is available in /sys/bus/rpmsg/devices/virtio0.rpmsg-tty-channel.-1.<X>, with
+>> +<X> corresponding to the ttyRPMSG instance.
+>> +
+>> +RPMsg data/control structure
+>> +----------------------------
+>> +
+>> +The RPMsg is used to send data or control messages. Differentiation between the
+>> +stream and the control messages is done thanks to the first byte of the
+>> +RPMsg payload:
+>> +
+>> +
+>> +RPMSG_DATA	- rest of messages contains data
+>> +
+>> +RPMSG_CTRL 	- message contains control.
+>> +
+>> +
+>> +To be compliant with this driver, the remote firmware has to respect this RPMsg
+>> +payload structure. At least the RPMSG_DATA type has to be supported. The
+>> +RPMSG_CTRL is optional.
+>> +
 > 
-> Please read
-> https://www.kernel.org/doc/Documentation/kernel-doc-nano-HOWTO.txt
-oops sorry for this dirty documentation.
-> 
->> +int rpmsg_get_buf_payload_size(struct rpmsg_endpoint *ept)
-> 
-> payload size can have many meanings and hopefully we'll end up in a
-> situation where its dynamic. But it could be considered useful to have a
-> way to query the maximum transmission size in such a setup.
-> 
-> So please rename this rpmsg_get_mtu() or something similar.
-> 
-> And I would prefer ssize_t as return type.
+> This scheme prevents us from using this driver to expose any existing
+> tty-like channels without having to modify such firmware.
 
-ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept) sounds good, ok for this
->> +{
->> +	if (WARN_ON(!ept))
->> +		return -EINVAL;
->> +	if (!ept->ops->get_buf_payload_size)
->> +		return -ENXIO;
->> +
->> +	return ept->ops->get_buf_payload_size(ept);
->> +}
->> +EXPORT_SYMBOL(rpmsg_get_buf_payload_size);
->> +
->>  /*
->>   * match an rpmsg channel with a channel info struct.
->>   * this is used to make sure we're not creating rpmsg devices for channels
->> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
->> index 0d791c30b7ea..6f733a556139 100644
->> --- a/drivers/rpmsg/rpmsg_internal.h
->> +++ b/drivers/rpmsg/rpmsg_internal.h
->> @@ -46,6 +46,7 @@ struct rpmsg_device_ops {
->>   * @trysend:		see @rpmsg_trysend(), required
->>   * @trysendto:		see @rpmsg_trysendto(), optional
->>   * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
->> + * @get_buf_payload_size: see @rpmsg_get_buf_payload_size(), optional
->>   *
->>   * Indirection table for the operations that a rpmsg backend should implement.
->>   * In addition to @destroy_ept, the backend must at least implement @send and
->> @@ -65,6 +66,7 @@ struct rpmsg_endpoint_ops {
->>  			     void *data, int len);
->>  	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
->>  			     poll_table *wait);
->> +	int (*get_buf_payload_size)(struct rpmsg_endpoint *ept);
->>  };
->>  
->>  int rpmsg_register_device(struct rpmsg_device *rpdev);
->> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
->> index 5d3685bd76a2..82753e76e377 100644
->> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
->> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
->> @@ -175,6 +175,7 @@ static int virtio_rpmsg_trysendto(struct rpmsg_endpoint *ept, void *data,
->>  				  int len, u32 dst);
->>  static int virtio_rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src,
->>  					   u32 dst, void *data, int len);
->> +static int virtio_get_buf_payload_size(struct rpmsg_endpoint *ept);
->>  
->>  static const struct rpmsg_endpoint_ops virtio_endpoint_ops = {
->>  	.destroy_ept = virtio_rpmsg_destroy_ept,
->> @@ -184,6 +185,7 @@ static const struct rpmsg_endpoint_ops virtio_endpoint_ops = {
->>  	.trysend = virtio_rpmsg_trysend,
->>  	.trysendto = virtio_rpmsg_trysendto,
->>  	.trysend_offchannel = virtio_rpmsg_trysend_offchannel,
->> +	.get_buf_payload_size = virtio_get_buf_payload_size,
->>  };
->>  
->>  /**
->> @@ -699,6 +701,15 @@ static int virtio_rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src,
->>  	return rpmsg_send_offchannel_raw(rpdev, src, dst, data, len, false);
->>  }
->>  
->> +static int virtio_get_buf_payload_size(struct rpmsg_endpoint *ept)
->> +{
->> +	struct rpmsg_device *rpdev = ept->rpdev;
->> +	struct virtio_rpmsg_channel *vch = to_virtio_rpmsg_channel(rpdev);
->> +	int size = vch->vrp->buf_size - sizeof(struct rpmsg_hdr);
->> +
->> +	return size < 0 ? -EMSGSIZE : size;
-> 
-> Seems that a rpmsg instance configured to not even have space for the
-> rpmsg_hdr in each message is rather broken. Shouldn't this be prohibited
-> elsewhere?
-yes seems that the are some useless check in code on buf_size, i will
-suppress the check here.
-there are some other instances in code...For time being the size is
-fixed, but good place seems to be in the rpmsg_probe probe function. i
-will propose a patch to clean this.
+An alternative could be to define a channel for the control and another
+for the data. This would avoid to reserved the first bytes for message type.
 
-Thanks,
+> 
+>> +Flow control type
+>> +-----------------
+>> +
+>> +A minimum flow control can be implemented to allow/block communication with the remote processor.
+>> +
+>> +DATA_TERM_READY	-	one parameter:
+>> +			- u8 state
+>> +				Set to indicate to remote side that terminal is
+>> +				ready for communication.
+>> +				Reset to block communication with remote side.
+> 
+> And as shown in discussions following Qualcomm's proposed flow-control
+> addition to the rpmsg API the need for flow control is not limited to
+> this custom tty like interface
+
+Yes i remember discussions around the flow control, how to set
+priorities, bandwidth, etc...
+Did you start something on Qualcomm side to support flow control?
+
+RPMsg flow control would also impact the remote side (a.e. OpenAMP).
+This subject can be quite extensive, so perhaps, it should be better to
+treat it in a separate thread to be sure that design integrate all
+requirements.
+
+What about integrating rpmsg tty in a first step (with flow control in
+rpmsg tty)? Then in a second step, adapt it on the rpmsg flow control,
+and so use it to validate the feature.
+This would avoid to block the rpmsg_tty integration... As you mention
+seems that several companies have already their own rpmsg tty
+implementation...
+
+> 
+> 
+> So I really would like to see an implementation of a side-band flow
+> control mechanism in the virtio rpmsg bus.
+> 
+>> diff --git a/drivers/tty/Kconfig b/drivers/tty/Kconfig
+>> index e0a04bfc873e..d7b426939f69 100644
+>> --- a/drivers/tty/Kconfig
+>> +++ b/drivers/tty/Kconfig
+>> @@ -442,6 +442,15 @@ config VCC
+>>  	help
+>>  	  Support for Sun logical domain consoles.
+>>  
+>> +config RPMSG_TTY
+>> +	tristate "RPMSG tty driver"
+>> +	depends on RPMSG
+>> +	help
+>> +	  Say y here to export rpmsg endpoints as tty devices, usually found
+>> +	  in /dev/ttyRPMSGx.
+>> +	  This makes it possible for user-space programs to send and receive
+>> +	  rpmsg messages as a standard tty protocol.
+>> +
+>>  config LDISC_AUTOLOAD
+>>  	bool "Automatically load TTY Line Disciplines"
+>>  	default y
+>> diff --git a/drivers/tty/Makefile b/drivers/tty/Makefile
+>> index c72cafdf32b4..90a98a20714d 100644
+>> --- a/drivers/tty/Makefile
+>> +++ b/drivers/tty/Makefile
+>> @@ -33,5 +33,6 @@ obj-$(CONFIG_PPC_EPAPR_HV_BYTECHAN) += ehv_bytechan.o
+>>  obj-$(CONFIG_GOLDFISH_TTY)	+= goldfish.o
+>>  obj-$(CONFIG_MIPS_EJTAG_FDC_TTY) += mips_ejtag_fdc.o
+>>  obj-$(CONFIG_VCC)		+= vcc.o
+>> +obj-$(CONFIG_RPMSG_TTY)		+= rpmsg_tty.o
+>>  
+>>  obj-y += ipwireless/
+>> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
+> [..]
+>> +static struct rpmsg_device_id rpmsg_driver_tty_id_table[] = {
+>> +	{ .name	= "rpmsg-tty-channel" },
+> 
+> I really would like a mechanism that does not depend on a fixed channel
+> name, as this required that firmware is written specifically for being
+> paired with this driver.
+> 
+> In other words this is exactly the same problem that we worked around in
+> rpmsg_charTo be sure... What you propose here is to implement an attribute for the
+channel (as rpmsg_eptdevd defined in rpmsg_char), allowing application
+could define the channel name?
+
+This point is similar to the one we discussed with Xiang. What should we
+consider: the tty service associated to a tty channel or the service on
+top of the tty which would be in this case based on rpmsg?
+
+I considered that the service is the tty, as we create a /dev/tty when
+service is requested by the remoteproc firmware, so that the service
+name is fixed in consequence.
+
+Using attribute for channel name would mean that user registers a
+service that will be on top of a tty. In this case, is the TTY is the
+good communication channel? why not directly use rpmsg_char?
+
+So perhaps could be better to extend the rpmsg char device for this kind
+of requirement, allowing to probe it without associate it to an existing
+rpmsg device...?
+
+Thank,
 Arnaud
 
 > 
 > Regards,
 > Bjorn
 > 
->> +}
->> +
->>  static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
->>  			     struct rpmsg_hdr *msg, unsigned int len)
->>  {
->> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
->> index 9fe156d1c018..250df2165086 100644
->> --- a/include/linux/rpmsg.h
->> +++ b/include/linux/rpmsg.h
->> @@ -135,6 +135,8 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
->>  __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
->>  			poll_table *wait);
->>  
->> +int rpmsg_get_buf_payload_size(struct rpmsg_endpoint *ept);
->> +
->>  #else
->>  
->>  static inline int register_rpmsg_device(struct rpmsg_device *dev)
->> @@ -242,6 +244,14 @@ static inline __poll_t rpmsg_poll(struct rpmsg_endpoint *ept,
->>  	return 0;
->>  }
->>  
->> +static int rpmsg_get_buf_payload_size(struct rpmsg_endpoint *ept)
->> +{
->> +	/* This shouldn't be possible */
->> +	WARN_ON(1);
->> +
->> +	return -ENXIO;
->> +}
->> +
->>  #endif /* IS_ENABLED(CONFIG_RPMSG) */
->>  
->>  /* use a macro to avoid include chaining to get THIS_MODULE */
->> -- 
->> 2.7.4
->>
