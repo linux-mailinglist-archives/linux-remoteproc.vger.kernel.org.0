@@ -2,115 +2,68 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0F55D2F8
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  2 Jul 2019 17:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148D55F311
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  4 Jul 2019 08:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725868AbfGBPhJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 2 Jul 2019 11:37:09 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:57128 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725858AbfGBPhJ (ORCPT
+        id S1726087AbfGDGrq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 4 Jul 2019 02:47:46 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:8694 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725879AbfGDGrq (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 2 Jul 2019 11:37:09 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x62FWPIc013470;
-        Tue, 2 Jul 2019 17:36:58 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=Jbd+t0wU2HM6+Xf25FXBNwZBmjBxyRZNxSWnnTH3u0s=;
- b=E/hGutcFgCtg9uPTe+fiAWBKFad0wJFbqBxSibJH0QZP+QvwZkFb273qX370RVBy3598
- v/vQ2d+wza167qXi/XIalBFqmoLR1HbbwKa+oUpNCoNAuPzQhC6KvdC5TIVL8AVpKmUc
- T5FZjVJSL8Uz1/7yBy+usER3f7pr4tTVpdbWIeuTDL3qCeTa0EoS+FU2OwL1pCq+xZfa
- X8CP41MMud1MO6PjdyyFQHf2DVumI/wn7ISi+1DfaJK9OweUPtFFnV+8V9jb5VsaHkLZ
- oxDu2zWb8rrNeagPVhFnXirhtCvxzrYVc1hx50L3NuQyj3Vt5hXCMR9IVX4G/CLdWxiC zg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2tdxvhvybs-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Tue, 02 Jul 2019 17:36:58 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C5AEC38;
-        Tue,  2 Jul 2019 15:36:56 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag7node2.st.com [10.75.127.20])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BA717447C;
-        Tue,  2 Jul 2019 15:36:56 +0000 (GMT)
-Received: from SFHDAG7NODE2.st.com (10.75.127.20) by SFHDAG7NODE2.st.com
- (10.75.127.20) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 2 Jul
- 2019 17:36:56 +0200
-Received: from SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090]) by
- SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090%20]) with mapi id
- 15.00.1473.003; Tue, 2 Jul 2019 17:36:56 +0200
-From:   Loic PALLARDY <loic.pallardy@st.com>
-To:     Christoph Hellwig <hch@infradead.org>,
-        Clement Leger <cleger@kalray.eu>
-CC:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] remoteproc: copy parent dma_pfn_offset for vdev
-Thread-Topic: [PATCH v2] remoteproc: copy parent dma_pfn_offset for vdev
-Thread-Index: AQHVL9sMjAFFqcSPYUOpD1xKQA9Tl6a3MSeAgAAqZ/A=
-Date:   Tue, 2 Jul 2019 15:36:56 +0000
-Message-ID: <58c8b8bd30a949678c027eb42a1b1bbb@SFHDAG7NODE2.st.com>
-References: <20190612095521.4703-1-cleger@kalray.eu>
- <20190701070245.32083-1-cleger@kalray.eu>
- <20190702132229.GA8100@infradead.org>
-In-Reply-To: <20190702132229.GA8100@infradead.org>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.48]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 4 Jul 2019 02:47:46 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 6DEB7E0C4A215B01883D;
+        Thu,  4 Jul 2019 14:47:42 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Thu, 4 Jul 2019
+ 14:47:31 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <ohad@wizery.com>, <bjorn.andersson@linaro.org>,
+        <jeffrey.l.hugo@gmail.com>, <agross@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH] remoteproc: qcom: q6v5-mss: Fix build error without QCOM_MDT_LOADER
+Date:   Thu, 4 Jul 2019 14:46:49 +0800
+Message-ID: <20190704064649.51748-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-02_08:,,
- signatures=0
+Content-Type: text/plain
+X-Originating-IP: [10.133.213.239]
+X-CFilter-Loop: Reflected
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Christoph,
+If QCOM_Q6V5_MSS is set but QCOM_MDT_LOADER is not,
+building will fails:
 
-> -----Original Message-----
-> From: Christoph Hellwig <hch@infradead.org>
-> Sent: mardi 2 juillet 2019 15:22
-> To: Clement Leger <cleger@kalray.eu>
-> Cc: Ohad Ben-Cohen <ohad@wizery.com>; Bjorn Andersson
-> <bjorn.andersson@linaro.org>; linux-remoteproc@vger.kernel.org; linux-
-> kernel@vger.kernel.org; Loic PALLARDY <loic.pallardy@st.com>
-> Subject: Re: [PATCH v2] remoteproc: copy parent dma_pfn_offset for vdev
->=20
-> This is just increasing the mess remoteproc has created with the vdev.
-> It is poking its nose way to deep into the DMA layer internals, and
-> creating massive problems that way.  Can we go back to the table
-> and figure out what the root problem even was?  To me it seems if you
-> clearly need separate devices they should be declared as such in the
-> device tree.
+drivers/remoteproc/qcom_q6v5_mss.o: In function `q6v5_start':
+qcom_q6v5_mss.c:(.text+0x3260): undefined reference to `qcom_mdt_read_metadata'
 
-Agree there is definitively an issue with the way virtio device are defined=
-.
-Today definition is based on rproc firmware ressource table and rproc=20
-framework is in charge of vdev creation.
-Device tree definition was discarded as vdev is not HW but SW definition.
-One solution would be to associate both resource table (which provides
-Firmware capabilities) and some virtio device tree nodes (declared as sub n=
-odes
-of remote processor with associated resources like memory carveout).
-When we have a match between resource table and rproc DT sub node, we
-can register virtio device via of_platform_populate.
-Then need to adapt virtio_rpmsg or to create a virtio_rproc to be DT probe =
-compliant
-like virtio_mmio is.
+Add QCOM_MDT_LOADER dependency for QCOM_Q6V5_MSS.
 
-But that's breaking legacy as all platforms will have to add a virtio devic=
-e node in
-their DT file...
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Fixes: f04b91383456 ("remoteproc: qcom: q6v5-mss: Support loading non-split images")
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/remoteproc/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Is it aligned with your view ?
+diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
+index 9b0f0cb..28ed306 100644
+--- a/drivers/remoteproc/Kconfig
++++ b/drivers/remoteproc/Kconfig
+@@ -116,6 +116,7 @@ config QCOM_Q6V5_MSS
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+ 	select MFD_SYSCON
++	select QCOM_MDT_LOADER
+ 	select QCOM_Q6V5_COMMON
+ 	select QCOM_RPROC_COMMON
+ 	select QCOM_SCM
+-- 
+2.7.4
 
-Regards,
-Loic
 
