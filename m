@@ -2,146 +2,90 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D7161D72
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  8 Jul 2019 13:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B8361EAC
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  8 Jul 2019 14:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725840AbfGHLCy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 8 Jul 2019 07:02:54 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:41665 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725836AbfGHLCy (ORCPT
+        id S1729145AbfGHMn0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 8 Jul 2019 08:43:26 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:44587 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727052AbfGHMn0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 8 Jul 2019 07:02:54 -0400
-Received: from soja.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:13da])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <o.rempel@pengutronix.de>)
-        id 1hkRPv-0005tn-2i; Mon, 08 Jul 2019 13:02:43 +0200
-Subject: Re: [EXT] Re: [RFC 2/2] rpmsg: imx: add the initial imx rpmsg support
-To:     Richard Zhu <hongxing.zhu@nxp.com>,
-        "ohad@wizery.com" <ohad@wizery.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>
-Cc:     "loic.pallardy@st.com" <loic.pallardy@st.com>,
-        "arnaud.pouliquen@st.com" <arnaud.pouliquen@st.com>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
-        "elder@linaro.org" <elder@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <1561968784-1124-1-git-send-email-hongxing.zhu@nxp.com>
- <1561968784-1124-3-git-send-email-hongxing.zhu@nxp.com>
- <3e0a061c-4f5e-ac32-031d-909a48644265@pengutronix.de>
- <AM0PR0402MB35706FFBFD76FF81BCF5E6018CF60@AM0PR0402MB3570.eurprd04.prod.outlook.com>
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-Message-ID: <e4629709-fbe7-6af9-3cee-309b2ec1892f@pengutronix.de>
-Date:   Mon, 8 Jul 2019 13:02:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 8 Jul 2019 08:43:26 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.145]) with ESMTPA (Nemesis) id
+ 1N9Mh8-1iY7ev3NFE-015Mij; Mon, 08 Jul 2019 14:43:13 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
+        Ludovic Barre <ludovic.barre@st.com>,
+        Loic Pallardy <loic.pallardy@st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        linux-remoteproc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] remoteproc: stm32: fix building without ARM SMCC
+Date:   Mon,  8 Jul 2019 14:42:51 +0200
+Message-Id: <20190708124311.3448056-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-In-Reply-To: <AM0PR0402MB35706FFBFD76FF81BCF5E6018CF60@AM0PR0402MB3570.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:13da
-X-SA-Exim-Mail-From: o.rempel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-remoteproc@vger.kernel.org
+X-Provags-ID: V03:K1:AkGDgfgp15g2CwVR7Facqvx2UQWGiD85o226q8pCrj+7T3ngYhv
+ IfLF3dxuiyn7foiSJbI+CjDMOWeNFw4kgugGEH9s7CEP/ITyLDc0js2XWpv06vcn8jwcVdi
+ htFSeTonIiSmWhiJ6NokkctrmpdXI6ajXctroI5KnraqIYGMuHO339AkvcR2SGhILxsSPPp
+ oXbARlZOVAkKCNuffxW2g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NOG3AWT7dhY=:I1yuk6/XhruMMQoRCnVKYH
+ Dprmazilp2kNoyya7NhsRMMlH3fEEHyN+t7vYmASH7wZsnO8z9QnyNDYZD8PoF3PYbRSudiJr
+ beYiBGXOaQDkiZAklGiIcNdrspzn35663iyk0GQfGE9iK7UrGgJIHznTWOtzrtjtNLGhAYLRr
+ vVp1P2qtvMpmIk01cKQUB4BMDTDMHGU7IkkZHt+PtfqbkJD4ZqaPyNwpAKBnnFtEHJThM/rOc
+ mTKdXDWuUc0e8XsvFrwD8FN+5L4eBVlO0fkt2Bj8deLez+mlSgC75Bk++RkbBTAXKgtqYwlj5
+ 4Ir7mGd2pIZRTZk1Hyb5EKQdvhWXWClUp2sRj1lKVTQ5wBq2zhdk63UKWUmr16rgK+CdZZteb
+ XEKXOIEAfhTry3H0vfA8bm8WyJy4ZaJF7vFLzmxLit52Lt73TE9XN6giBVvGYS+hdoNcbNm3C
+ GCDm3qZZYwx9kM2wq/NoJE3S7283goKM3I7NfeaNIzon+gR9SQCxDQIE1OJOvrIPulXpjd51R
+ 0tUD9uoBueidEyEuuoRo+70FeDZZgh+PxOSgJFtOFxfS25GLarZZN5Ezaq+wacrZQ4DVFqZ8S
+ kmm1yamO+hiwkGBvfEC17KEgSZoRmfRDrGYdwG1X842K8zQCkf/Yrxw5PaPEQMtlk28+F2Qie
+ Clb7hFMAFS8EayWbwBwUwmuGm8WCiTDZ+uff7WLeLLuCyLgm+yfCb2YL/PGJrq56E4kUi6UcY
+ asXjZrOREjS+2fK2M//YtVvqIQpUbo66EFHOQg==
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Richard,
+When compile testing this driver without SMCC support enabled,
+we get a link error:
 
-On 08.07.19 12:17, Richard Zhu wrote:
-> Hi Oleksij:
-> Thanks for your comments.
-> 
-> 
->> -----Original Message-----
->> From: Oleksij Rempel [mailto:o.rempel@pengutronix.de]
->> Sent: 2019年7月4日 17:36
->> To: Richard Zhu <hongxing.zhu@nxp.com>; ohad@wizery.com;
->> bjorn.andersson@linaro.org; linux-remoteproc@vger.kernel.org
->> Cc: linux-arm-kernel@lists.infradead.org; Fabien DESSENNE
->> <fabien.dessenne@st.com>; loic.pallardy@st.com; arnaud.pouliquen@st.com;
->> s-anna@ti.com; elder@linaro.org
->> Subject: [EXT] Re: [RFC 2/2] rpmsg: imx: add the initial imx rpmsg support
->>
->> Caution: EXT Email
->>
->> Hi Richard,
->>
->> On 01.07.19 10:34, Richard Zhu wrote:
->>> Based on "virtio_rpmsg_bus" driver, This patch-set is used to set up
->>> the communication mechanism between A core and M core on i.MX AMP
->> SOCs.
->>>
->>> Add the initial imx rpmsg support glue driver and one pingpong demo,
->>> demonstrated the data transactions between A core and remote M core.
->>> Distributed framework is used in IMX RPMSG implementation, refer to
->>> the following requirements:
->>>     - The CAN functions contained in M core and RTOS should be ready and
->>>       complete functional in 50ms after AMP system is turned on.
->>>     - Partition reset. System wouldn't be stalled by the exceptions (e.x
->>>       the reset triggered by the system hang) occurred at the other side.
->>>       And the RPMSG mechanism should be recovered automactilly after
->> the
->>>       partition reset is completed.
->>> In this scenario, the M core and RTOS would be kicked off by
->>> bootloader firstly, then A core and Linux would be loaded later. Both
->>> M core/RTOS and A core/Linux are running independly.
->>>
->>> One physical memory region used to store the vring is mandatory
->>> required to pre-reserved and well-knowned by both A core and M core
->>
->> I don't see any thing imx specific in this patch. We already have remoteproc
->> which would parse firmware header and create needed devices. This driver is
->> only needed for the case where firmware was stared by the bootloader.
->>
-> [Richard Zhu] Bootloader starts the firmware is mandatory required in these scenario
-> refer to the reasons listed in the commit.
-> Thus, the distributed framework has to be used, and both A core/Linux and remote core/RTOS
-> works independently.
-> 
->> I personally would prefer to have generic driver or extend the remoteproc
->> framework. So we can notify kernel about work already done by bootloader.
->>
-> [Richard Zhu] Thanks for your suggestions.
-> Regarding to my understand, it seems that master/slave mode is used in the remoteproc currently.
-> A core/Linux acts as master, to controls/manipulates remote core/RTOS.
-> It isn't applicable for the scenario described by this patch-set.
-> 
->> In general, some more issues should be solved:
->> - Handle or not touch idle clocks for different node used by M core and not
->> main system.
->> - pin control
->> - regulators
->>
->> ST devs already tried to solve this issues by creating "remoteproc: add system
->> resource manager device" patch. I don't know what is current state of it (/me
->> adding ST devs to CC).
->>
-> [Richard Zhu] Yes, it is. Many contributions have been made by Fabien.
-> IMHO, there are some different behaviors on iMX8QXP/QM platforms, the
->   resources (e.x IP modules) had been assigned and managed by the XRDC.
-> In the other words, the HW resources would be assigned and managed would
->   be transparent to SW.
-> 
-> Thus, both A core/Linux and M core/RTOS can work real independently.
-> System wouldn't be stalled by the exceptions (e.x the reset triggered by the
-> system hang) occurred at the other side. And the RPMSG mechanism should
->   be recovered automatically after the partition reset is completed.
+drivers/remoteproc/stm32_rproc.o: In function `stm32_rproc_start':
+stm32_rproc.c:(.text+0x776): undefined reference to `__arm_smccc_smc'
+drivers/remoteproc/stm32_rproc.o: In function `stm32_rproc_stop':
+stm32_rproc.c:(.text+0x92c): undefined reference to `__arm_smccc_smc'
 
-It is exactly the way I did understood it in the firs mail. Any way, i'm ok
-with this driver. Just rename imx to some thing generic. This driver can and will be 
-reused on other platforms as well.
+Make the actual call to arm_smccc_smc conditional on the Kconfig
+symbol controlling its implementation.
 
-Kind regards,
-Oleksij Rempel
+Fixes: 13140de09cc2 ("remoteproc: stm32: add an ST stm32_rproc driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/remoteproc/stm32_rproc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+index e83077b9ebf5..e2da7198b65f 100644
+--- a/drivers/remoteproc/stm32_rproc.c
++++ b/drivers/remoteproc/stm32_rproc.c
+@@ -344,7 +344,7 @@ static int stm32_rproc_set_hold_boot(struct rproc *rproc, bool hold)
+ 
+ 	val = hold ? HOLD_BOOT : RELEASE_BOOT;
+ 
+-	if (ddata->secured_soc) {
++	if (IS_ENABLED(CONFIG_HAVE_ARM_SMCCC) && ddata->secured_soc) {
+ 		arm_smccc_smc(STM32_SMC_RCC, STM32_SMC_REG_WRITE,
+ 			      hold_boot.reg, val, 0, 0, 0, 0, &smc_res);
+ 		err = smc_res.a0;
 -- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.20.0
+
