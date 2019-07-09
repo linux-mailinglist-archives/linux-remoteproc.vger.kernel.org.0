@@ -2,765 +2,277 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C306B631F9
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  9 Jul 2019 09:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A551B63222
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  9 Jul 2019 09:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726043AbfGIH0b (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 9 Jul 2019 03:26:31 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42293 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726813AbfGIH0a (ORCPT
+        id S1725965AbfGIHcd (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 9 Jul 2019 03:32:33 -0400
+Received: from mail-eopbgr140070.outbound.protection.outlook.com ([40.107.14.70]:49477
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725905AbfGIHcd (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 9 Jul 2019 03:26:30 -0400
-Received: by mail-pf1-f194.google.com with SMTP id q10so8839062pff.9
-        for <linux-remoteproc@vger.kernel.org>; Tue, 09 Jul 2019 00:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HgGCR3kIGWe0iJG3Wwe8zbuX4BpjvjxAyYTovM5kSzk=;
-        b=EWPL3CP3tL+DhwEstX0h11TZ5WKlS6NFcHvnBtC4oLETEyvCabnaSbBKBYgvKWAD/w
-         MEQbAXib9j1jb++K8hZQEw+VuLKRW1ohUQv+CAXhzw3FU4tipda/Cr4isPS+EQfVL56X
-         g9Jx0e/+s6/hUc5EP2oXLXPQB39JtlhHuzis8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HgGCR3kIGWe0iJG3Wwe8zbuX4BpjvjxAyYTovM5kSzk=;
-        b=qr2glEJpWNBQcudlTgRAjIo6ydU2HNLXrVoH+Z2ywlmj6VXfg6xdpUejQo8r9VTcAt
-         4OA8uLinecBUAY3z5nCM21zihnhqiyN7gk5DtNVoegz9E3sgzpYNWjNVqleqIHDAw3Z/
-         VX3y7pEaOgUNzAw68/V+cHVFcxVte4XHlJb88iUUepG8R0yAaAeEtxiLPJTWzppYz3jD
-         FI7h8HSnEVY5SkAXO+6oF1/YfCUreQxNcZrhL383SiZ0Y5cFU/fBA9n9iTi6in8O8eIk
-         NLPHkVcG6u84ROygf3AguVbznutkAy29owxQdNsZbv0mJG+vCVzoWxwhIucsIZX/HaWm
-         9WZg==
-X-Gm-Message-State: APjAAAWRoTZE8sskasW18lgFGWgU4sMACu6K+4P7kYFDKrczm0FTjHMa
-        CD4uk+HZDel8ewlomUiy5UzLdA==
-X-Google-Smtp-Source: APXvYqyZ9v6usx9KMvvKK7n34NwOrlCcoJMqCSkJGlLISUWGt9GGz5J8qlfQsrBqeZT/afu2EAbVZg==
-X-Received: by 2002:a17:90a:9b8a:: with SMTP id g10mr30340673pjp.66.1562657189779;
-        Tue, 09 Jul 2019 00:26:29 -0700 (PDT)
-Received: from pihsun-z840.tpe.corp.google.com ([2401:fa00:1:10:7889:7a43:f899:134c])
-        by smtp.googlemail.com with ESMTPSA id 81sm12738135pfx.111.2019.07.09.00.26.27
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 09 Jul 2019 00:26:29 -0700 (PDT)
-From:   Pi-Hsun Shih <pihsun@chromium.org>
-Cc:     Pi-Hsun Shih <pihsun@chromium.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Erin Lo <erin.lo@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR
-        (REMOTEPROC) SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support)
-Subject: [PATCH v13 4/5] rpmsg: add rpmsg support for mt8183 SCP.
-Date:   Tue,  9 Jul 2019 15:25:28 +0800
-Message-Id: <20190709072547.217957-5-pihsun@chromium.org>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-In-Reply-To: <20190709072547.217957-1-pihsun@chromium.org>
-References: <20190709072547.217957-1-pihsun@chromium.org>
+        Tue, 9 Jul 2019 03:32:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/h7R+Qo+a26UgqvKTCgvw/GiZKpwcJd/vOEPe1xEfVc=;
+ b=RPUoY77j1qmOg5YD+wcfagaStQXIpx7g/hrbenZhRnuHr85MPJRjIfeh42t2u+KlF0jbFy3oiw3De9e01xpJhXYndJynIBu8MK7lhheuIfOkDCPcUTKKZWzmKXUfBPnCL5v87RmY1OZjKviNuyrkH1Db9YFJ7fW0nwo4yYpGPp4=
+Received: from AM0PR0402MB3570.eurprd04.prod.outlook.com (52.133.46.11) by
+ AM0PR0402MB3780.eurprd04.prod.outlook.com (52.133.39.154) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2052.19; Tue, 9 Jul 2019 07:32:23 +0000
+Received: from AM0PR0402MB3570.eurprd04.prod.outlook.com
+ ([fe80::dd66:8e13:93f0:65eb]) by AM0PR0402MB3570.eurprd04.prod.outlook.com
+ ([fe80::dd66:8e13:93f0:65eb%7]) with mapi id 15.20.2052.020; Tue, 9 Jul 2019
+ 07:32:23 +0000
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        "ohad@wizery.com" <ohad@wizery.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>
+CC:     "loic.pallardy@st.com" <loic.pallardy@st.com>,
+        Fabien DESSENNE <fabien.dessenne@st.com>,
+        "elder@linaro.org" <elder@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [EXT] Re: [RFC 2/2] rpmsg: imx: add the initial imx rpmsg support
+Thread-Topic: [EXT] Re: [RFC 2/2] rpmsg: imx: add the initial imx rpmsg
+ support
+Thread-Index: AQHVL+e8AnKkQffEIE+CgEkyNPFBIaa6OA6AgAZHdqCAABn1gIAANMyAgADNQ/A=
+Date:   Tue, 9 Jul 2019 07:32:22 +0000
+Message-ID: <AM0PR0402MB3570CF963122A44DF2F049E88CF10@AM0PR0402MB3570.eurprd04.prod.outlook.com>
+References: <1561968784-1124-1-git-send-email-hongxing.zhu@nxp.com>
+ <1561968784-1124-3-git-send-email-hongxing.zhu@nxp.com>
+ <3e0a061c-4f5e-ac32-031d-909a48644265@pengutronix.de>
+ <AM0PR0402MB35706FFBFD76FF81BCF5E6018CF60@AM0PR0402MB3570.eurprd04.prod.outlook.com>
+ <e4629709-fbe7-6af9-3cee-309b2ec1892f@pengutronix.de>
+ <fcdd6392-75f4-716d-5dbd-1828a679b25f@st.com>
+In-Reply-To: <fcdd6392-75f4-716d-5dbd-1828a679b25f@st.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=hongxing.zhu@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3015c531-8f19-47ad-414c-08d7043f955b
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM0PR0402MB3780;
+x-ms-traffictypediagnostic: AM0PR0402MB3780:
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <AM0PR0402MB378055C12C57F458D5C6B2CB8CF10@AM0PR0402MB3780.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0093C80C01
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(366004)(136003)(39860400002)(346002)(376002)(199004)(189003)(13464003)(76116006)(68736007)(6436002)(52536014)(256004)(14444005)(73956011)(5024004)(14454004)(66476007)(64756008)(66556008)(4326008)(66946007)(2906002)(66446008)(6306002)(81166006)(8936002)(6246003)(81156014)(53936002)(9686003)(55016002)(3846002)(54906003)(110136005)(5660300002)(8676002)(316002)(74316002)(45080400002)(7696005)(478600001)(99286004)(26005)(186003)(71190400001)(2201001)(71200400001)(86362001)(6506007)(25786009)(53546011)(7736002)(305945005)(229853002)(446003)(486006)(33656002)(76176011)(966005)(102836004)(66066001)(2501003)(476003)(11346002)(6116002)(30864003);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR0402MB3780;H:AM0PR0402MB3570.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: TMt31tsDlCL5HeJtUTjHz2MbVOZMe0W+JKvyaVGeTnEncp9jmh1LeZSFrmHzZPoP3nnabFkt4OjJXcxVSnABLyOkMwogayES7hGiEJ388rXuKKQ23Jd7sRAL+B4AVZoxL/7Z/W5SUQ0NgdcC4muoaE1b2gai5Nc86GjaQcRjeAelTc0+kLtwA5aeH6Z/ifCwMaYXAYjDYY05OQPAdlRAa4RleIsA8qZBeZuyUfFabwQZKoCIhQrF0M94IrvKcbev0NgE/yjXEneFvKYBSf6NMGXM/6jDI1Y0E2WRF2qSV1eQrYASqOrvRJqpRLCaYOafd2n51bpbOZ60F/9B/k+Q0sCDVgP0GxKrxpee1uZJ4U5HSTzqmN29wkZFS9Pol0K361BdY6uwXcQ3oTiWpeoB7pC+aMx0aNOhGTKRfyN5kqM=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3015c531-8f19-47ad-414c-08d7043f955b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jul 2019 07:32:23.0381
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hongxing.zhu@nxp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3780
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add a simple rpmsg support for mt8183 SCP, that use IPI / IPC directly.
-
-Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
----
-Changes from v12:
- - Use strscpy instead of strncpy.
-
-Changes from v11:
- - Fix a bug that when rproc_boot fails, the ns_ept won't be properly
-   destroyed, causing memory leak.
- - Add documentation for mtk_rpmsg_info.
-
-Changes from v10, v9, v8, v7:
- - No change.
-
-Changes from v6:
- - Decouple mtk_rpmsg from mtk_scp by putting all necessary informations
-   (name service IPI id, register/unregister/send functions) into a
-   struct, and pass it to the mtk_rpmsg_create_rproc_subdev function.
-
-Changes from v5:
- - CONFIG_MTK_SCP now selects CONFIG_RPMSG_MTK_SCP, and the dummy
-   implementation for mtk_rpmsg_{create,destroy}_rproc_subdev when
-   CONFIG_RPMSG_MTK_SCP is not defined is removed.
-
-Changes from v4:
- - Match and fill the device tree node to the created rpmsg subdevice,
-   so the rpmsg subdevice can utilize the properties and subnodes on
-   device tree (This is similar to what drivers/rpmsg/qcom_smd.c does).
-
-Changes from v3:
- - Change from unprepare to stop, to stop the rpmsg driver before the
-   rproc is stopped, avoiding problem that some rpmsg would fail after
-   rproc is stopped.
- - Add missing spin_lock_init, and use destroy_ept instead of kref_put.
-
-Changes from v2:
- - Unregiser IPI handler on unprepare.
- - Lock the channel list on operations.
- - Move SCP_IPI_NS_SERVICE to 0xFF.
-
-Changes from v1:
- - Do cleanup properly in mtk_rpmsg.c, which also removes the problem of
-   short-lived work items.
- - Fix several issues checkpatch found.
----
- drivers/remoteproc/Kconfig            |   1 +
- drivers/remoteproc/mtk_common.h       |   2 +
- drivers/remoteproc/mtk_scp.c          |  38 ++-
- drivers/remoteproc/mtk_scp_ipi.c      |   1 +
- drivers/rpmsg/Kconfig                 |   9 +
- drivers/rpmsg/Makefile                |   1 +
- drivers/rpmsg/mtk_rpmsg.c             | 414 ++++++++++++++++++++++++++
- include/linux/platform_data/mtk_scp.h |   4 +-
- include/linux/rpmsg/mtk_rpmsg.h       |  38 +++
- 9 files changed, 503 insertions(+), 5 deletions(-)
- create mode 100644 drivers/rpmsg/mtk_rpmsg.c
- create mode 100644 include/linux/rpmsg/mtk_rpmsg.h
-
-diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index ea71cad399f7..cff3a9fa817b 100644
---- a/drivers/remoteproc/Kconfig
-+++ b/drivers/remoteproc/Kconfig
-@@ -26,6 +26,7 @@ config IMX_REMOTEPROC
- config MTK_SCP
- 	tristate "Mediatek SCP support"
- 	depends on ARCH_MEDIATEK
-+	select RPMSG_MTK_SCP
- 	help
- 	  Say y here to support Mediatek's System Companion Processor (SCP) via
- 	  the remote processor framework.
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index df918525da92..cdcdd7a0b078 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -59,6 +59,8 @@ struct mtk_scp {
- 	void __iomem *cpu_addr;
- 	phys_addr_t phys_addr;
- 	size_t dram_size;
-+
-+	struct rproc_subdev *rpmsg_subdev;
- };
- 
- /**
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index dec271f69423..77f30988c803 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -13,6 +13,7 @@
- #include <linux/platform_data/mtk_scp.h>
- #include <linux/platform_device.h>
- #include <linux/remoteproc.h>
-+#include <linux/rpmsg/mtk_rpmsg.h>
- 
- #include "mtk_common.h"
- #include "remoteproc_internal.h"
-@@ -524,6 +525,31 @@ static int scp_map_memory_region(struct mtk_scp *scp)
- 	return 0;
- }
- 
-+static struct mtk_rpmsg_info mtk_scp_rpmsg_info = {
-+	.send_ipi = scp_ipi_send,
-+	.register_ipi = scp_ipi_register,
-+	.unregister_ipi = scp_ipi_unregister,
-+	.ns_ipi_id = SCP_IPI_NS_SERVICE,
-+};
-+
-+static void scp_add_rpmsg_subdev(struct mtk_scp *scp)
-+{
-+	scp->rpmsg_subdev =
-+		mtk_rpmsg_create_rproc_subdev(to_platform_device(scp->dev),
-+					      &mtk_scp_rpmsg_info);
-+	if (scp->rpmsg_subdev)
-+		rproc_add_subdev(scp->rproc, scp->rpmsg_subdev);
-+}
-+
-+static void scp_remove_rpmsg_subdev(struct mtk_scp *scp)
-+{
-+	if (scp->rpmsg_subdev) {
-+		rproc_remove_subdev(scp->rproc, scp->rpmsg_subdev);
-+		mtk_rpmsg_destroy_rproc_subdev(scp->rpmsg_subdev);
-+		scp->rpmsg_subdev = NULL;
-+	}
-+}
-+
- static int scp_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -605,22 +631,25 @@ static int scp_probe(struct platform_device *pdev)
- 	init_waitqueue_head(&scp->run.wq);
- 	init_waitqueue_head(&scp->ack_wq);
- 
-+	scp_add_rpmsg_subdev(scp);
-+
- 	ret = devm_request_threaded_irq(dev, platform_get_irq(pdev, 0), NULL,
- 					scp_irq_handler, IRQF_ONESHOT,
- 					pdev->name, scp);
- 
- 	if (ret) {
- 		dev_err(dev, "failed to request irq\n");
--		goto destroy_mutex;
-+		goto remove_subdev;
- 	}
- 
- 	ret = rproc_add(rproc);
- 	if (ret)
--		goto destroy_mutex;
-+		goto remove_subdev;
- 
--	return ret;
-+	return 0;
- 
--destroy_mutex:
-+remove_subdev:
-+	scp_remove_rpmsg_subdev(scp);
- 	mutex_destroy(&scp->lock);
- free_rproc:
- 	rproc_free(rproc);
-@@ -632,6 +661,7 @@ static int scp_remove(struct platform_device *pdev)
- {
- 	struct mtk_scp *scp = platform_get_drvdata(pdev);
- 
-+	scp_remove_rpmsg_subdev(scp);
- 	rproc_del(scp->rproc);
- 	rproc_free(scp->rproc);
- 
-diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
-index f5d271c0f623..10b0cbda7aee 100644
---- a/drivers/remoteproc/mtk_scp_ipi.c
-+++ b/drivers/remoteproc/mtk_scp_ipi.c
-@@ -99,6 +99,7 @@ int scp_ipi_send(struct platform_device *pdev,
- 	int ret;
- 
- 	if (WARN_ON(id <= SCP_IPI_INIT) || WARN_ON(id >= SCP_IPI_MAX) ||
-+	    WARN_ON(id == SCP_IPI_NS_SERVICE) ||
- 	    WARN_ON(len > sizeof(send_obj->share_buf)) || WARN_ON(!buf))
- 		return -EINVAL;
- 
-diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
-index d0322b41eca5..85e3cc075cb4 100644
---- a/drivers/rpmsg/Kconfig
-+++ b/drivers/rpmsg/Kconfig
-@@ -15,6 +15,15 @@ config RPMSG_CHAR
- 	  in /dev. They make it possible for user-space programs to send and
- 	  receive rpmsg packets.
- 
-+config RPMSG_MTK_SCP
-+	tristate "MediaTek SCP"
-+	depends on MTK_SCP
-+	select RPMSG
-+	help
-+	  Say y here to enable support providing communication channels to
-+	  remote processors in MediaTek platforms.
-+	  This use IPI and IPC to communicate with remote processors.
-+
- config RPMSG_QCOM_GLINK_NATIVE
- 	tristate
- 	select RPMSG
-diff --git a/drivers/rpmsg/Makefile b/drivers/rpmsg/Makefile
-index 9aa859502d27..ae92a7fb08f6 100644
---- a/drivers/rpmsg/Makefile
-+++ b/drivers/rpmsg/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_RPMSG)		+= rpmsg_core.o
- obj-$(CONFIG_RPMSG_CHAR)	+= rpmsg_char.o
-+obj-$(CONFIG_RPMSG_MTK_SCP)	+= mtk_rpmsg.o
- obj-$(CONFIG_RPMSG_QCOM_GLINK_RPM) += qcom_glink_rpm.o
- obj-$(CONFIG_RPMSG_QCOM_GLINK_NATIVE) += qcom_glink_native.o
- obj-$(CONFIG_RPMSG_QCOM_GLINK_SMEM) += qcom_glink_smem.o
-diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
-new file mode 100644
-index 000000000000..34a384376f7d
---- /dev/null
-+++ b/drivers/rpmsg/mtk_rpmsg.c
-@@ -0,0 +1,414 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright 2018 Google LLC.
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/remoteproc.h>
-+#include <linux/rpmsg/mtk_rpmsg.h>
-+#include <linux/workqueue.h>
-+
-+#include "rpmsg_internal.h"
-+
-+struct mtk_rpmsg_rproc_subdev {
-+	struct platform_device *pdev;
-+	struct mtk_rpmsg_info *info;
-+	struct rpmsg_endpoint *ns_ept;
-+	struct rproc_subdev subdev;
-+
-+	struct work_struct register_work;
-+	struct list_head channels;
-+	struct mutex channels_lock;
-+};
-+
-+#define to_mtk_subdev(d) container_of(d, struct mtk_rpmsg_rproc_subdev, subdev)
-+
-+struct mtk_rpmsg_channel_info {
-+	struct rpmsg_channel_info info;
-+	bool registered;
-+	struct list_head list;
-+};
-+
-+/**
-+ * struct rpmsg_ns_msg - dynamic name service announcement message
-+ * @name: name of remote service that is published
-+ * @addr: address of remote service that is published
-+ *
-+ * This message is sent across to publish a new service. When we receive these
-+ * messages, an appropriate rpmsg channel (i.e device) is created. In turn, the
-+ * ->probe() handler of the appropriate rpmsg driver will be invoked
-+ *  (if/as-soon-as one is registered).
-+ */
-+struct rpmsg_ns_msg {
-+	char name[RPMSG_NAME_SIZE];
-+	u32 addr;
-+} __packed;
-+
-+struct mtk_rpmsg_device {
-+	struct rpmsg_device rpdev;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev;
-+};
-+
-+struct mtk_rpmsg_endpoint {
-+	struct rpmsg_endpoint ept;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev;
-+};
-+
-+#define to_mtk_rpmsg_device(r) container_of(r, struct mtk_rpmsg_device, rpdev)
-+#define to_mtk_rpmsg_endpoint(r) container_of(r, struct mtk_rpmsg_endpoint, ept)
-+
-+static const struct rpmsg_endpoint_ops mtk_rpmsg_endpoint_ops;
-+
-+static void __ept_release(struct kref *kref)
-+{
-+	struct rpmsg_endpoint *ept = container_of(kref, struct rpmsg_endpoint,
-+						  refcount);
-+	kfree(to_mtk_rpmsg_endpoint(ept));
-+}
-+
-+static void mtk_rpmsg_ipi_handler(void *data, unsigned int len, void *priv)
-+{
-+	struct mtk_rpmsg_endpoint *mept = priv;
-+	struct rpmsg_endpoint *ept = &mept->ept;
-+	int ret;
-+
-+	ret = (*ept->cb)(ept->rpdev, data, len, ept->priv, ept->addr);
-+	if (ret)
-+		dev_warn(&ept->rpdev->dev, "rpmsg handler return error = %d",
-+			 ret);
-+}
-+
-+static struct rpmsg_endpoint *
-+__rpmsg_create_ept(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-+		   struct rpmsg_device *rpdev, rpmsg_rx_cb_t cb, void *priv,
-+		   u32 id)
-+{
-+	struct mtk_rpmsg_endpoint *mept;
-+	struct rpmsg_endpoint *ept;
-+	struct platform_device *pdev = mtk_subdev->pdev;
-+	int ret;
-+
-+	mept = kzalloc(sizeof(*mept), GFP_KERNEL);
-+	if (!mept)
-+		return NULL;
-+	mept->mtk_subdev = mtk_subdev;
-+
-+	ept = &mept->ept;
-+	kref_init(&ept->refcount);
-+
-+	ept->rpdev = rpdev;
-+	ept->cb = cb;
-+	ept->priv = priv;
-+	ept->ops = &mtk_rpmsg_endpoint_ops;
-+	ept->addr = id;
-+
-+	ret = mtk_subdev->info->register_ipi(pdev, id, mtk_rpmsg_ipi_handler,
-+					     mept);
-+	if (ret) {
-+		dev_err(&pdev->dev, "IPI register failed, id = %d", id);
-+		kref_put(&ept->refcount, __ept_release);
-+		return NULL;
-+	}
-+
-+	return ept;
-+}
-+
-+static struct rpmsg_endpoint *
-+mtk_rpmsg_create_ept(struct rpmsg_device *rpdev, rpmsg_rx_cb_t cb, void *priv,
-+		     struct rpmsg_channel_info chinfo)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_device(rpdev)->mtk_subdev;
-+
-+	return __rpmsg_create_ept(mtk_subdev, rpdev, cb, priv, chinfo.src);
-+}
-+
-+static void mtk_rpmsg_destroy_ept(struct rpmsg_endpoint *ept)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_endpoint(ept)->mtk_subdev;
-+
-+	mtk_subdev->info->unregister_ipi(mtk_subdev->pdev, ept->addr);
-+	kref_put(&ept->refcount, __ept_release);
-+}
-+
-+static int mtk_rpmsg_send(struct rpmsg_endpoint *ept, void *data, int len)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_endpoint(ept)->mtk_subdev;
-+
-+	return mtk_subdev->info->send_ipi(mtk_subdev->pdev, ept->addr, data,
-+					  len, 0);
-+}
-+
-+static int mtk_rpmsg_trysend(struct rpmsg_endpoint *ept, void *data, int len)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_endpoint(ept)->mtk_subdev;
-+
-+	/*
-+	 * TODO: This currently is same as mtk_rpmsg_send, and wait until SCP
-+	 * received the last command.
-+	 */
-+	return mtk_subdev->info->send_ipi(mtk_subdev->pdev, ept->addr, data,
-+					  len, 0);
-+}
-+
-+static const struct rpmsg_endpoint_ops mtk_rpmsg_endpoint_ops = {
-+	.destroy_ept = mtk_rpmsg_destroy_ept,
-+	.send = mtk_rpmsg_send,
-+	.trysend = mtk_rpmsg_trysend,
-+};
-+
-+static void mtk_rpmsg_release_device(struct device *dev)
-+{
-+	struct rpmsg_device *rpdev = to_rpmsg_device(dev);
-+	struct mtk_rpmsg_device *mdev = to_mtk_rpmsg_device(rpdev);
-+
-+	kfree(mdev);
-+}
-+
-+static const struct rpmsg_device_ops mtk_rpmsg_device_ops = {
-+	.create_ept = mtk_rpmsg_create_ept,
-+};
-+
-+static struct device_node *
-+mtk_rpmsg_match_device_subnode(struct device_node *node, const char *channel)
-+{
-+	struct device_node *child;
-+	const char *name;
-+	int ret;
-+
-+	for_each_available_child_of_node(node, child) {
-+		ret = of_property_read_string(child, "mtk,rpmsg-name", &name);
-+		if (ret)
-+			continue;
-+
-+		if (strcmp(name, channel) == 0)
-+			return child;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int mtk_rpmsg_register_device(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-+				     struct rpmsg_channel_info *info)
-+{
-+	struct rpmsg_device *rpdev;
-+	struct mtk_rpmsg_device *mdev;
-+	struct platform_device *pdev = mtk_subdev->pdev;
-+	int ret;
-+
-+	mdev = kzalloc(sizeof(*mdev), GFP_KERNEL);
-+	if (!mdev)
-+		return -ENOMEM;
-+
-+	mdev->mtk_subdev = mtk_subdev;
-+
-+	rpdev = &mdev->rpdev;
-+	rpdev->ops = &mtk_rpmsg_device_ops;
-+	rpdev->src = info->src;
-+	rpdev->dst = info->dst;
-+	strscpy(rpdev->id.name, info->name, RPMSG_NAME_SIZE);
-+
-+	rpdev->dev.of_node =
-+		mtk_rpmsg_match_device_subnode(pdev->dev.of_node, info->name);
-+	rpdev->dev.parent = &pdev->dev;
-+	rpdev->dev.release = mtk_rpmsg_release_device;
-+
-+	ret = rpmsg_register_device(rpdev);
-+	if (ret) {
-+		kfree(mdev);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void mtk_register_device_work_function(struct work_struct *register_work)
-+{
-+	struct mtk_rpmsg_rproc_subdev *subdev = container_of(
-+		register_work, struct mtk_rpmsg_rproc_subdev, register_work);
-+	struct platform_device *pdev = subdev->pdev;
-+	struct mtk_rpmsg_channel_info *info;
-+	int ret;
-+
-+	mutex_lock(&subdev->channels_lock);
-+	list_for_each_entry(info, &subdev->channels, list) {
-+		if (info->registered)
-+			continue;
-+
-+		ret = mtk_rpmsg_register_device(subdev, &info->info);
-+		if (ret) {
-+			dev_err(&pdev->dev, "Can't create rpmsg_device\n");
-+			continue;
-+		}
-+
-+		info->registered = true;
-+	}
-+	mutex_unlock(&subdev->channels_lock);
-+}
-+
-+static int mtk_rpmsg_create_device(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-+				   char *name, u32 addr)
-+{
-+	struct mtk_rpmsg_channel_info *info;
-+
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	strscpy(info->info.name, name, RPMSG_NAME_SIZE);
-+	info->info.src = addr;
-+	info->info.dst = RPMSG_ADDR_ANY;
-+	mutex_lock(&mtk_subdev->channels_lock);
-+	list_add(&info->list, &mtk_subdev->channels);
-+	mutex_unlock(&mtk_subdev->channels_lock);
-+
-+	schedule_work(&mtk_subdev->register_work);
-+	return 0;
-+}
-+
-+static int mtk_rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
-+			   void *priv, u32 src)
-+{
-+	struct rpmsg_ns_msg *msg = data;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = priv;
-+	struct device *dev = &mtk_subdev->pdev->dev;
-+
-+	int ret;
-+
-+	if (len != sizeof(*msg)) {
-+		dev_err(dev, "malformed ns msg (%d)\n", len);
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * the name service ept does _not_ belong to a real rpmsg channel,
-+	 * and is handled by the rpmsg bus itself.
-+	 * for sanity reasons, make sure a valid rpdev has _not_ sneaked
-+	 * in somehow.
-+	 */
-+	if (rpdev) {
-+		dev_err(dev, "anomaly: ns ept has an rpdev handle\n");
-+		return -EINVAL;
-+	}
-+
-+	/* don't trust the remote processor for null terminating the name */
-+	msg->name[RPMSG_NAME_SIZE - 1] = '\0';
-+
-+	dev_info(dev, "creating channel %s addr 0x%x\n", msg->name, msg->addr);
-+
-+	ret = mtk_rpmsg_create_device(mtk_subdev, msg->name, msg->addr);
-+	if (ret) {
-+		dev_err(dev, "create rpmsg device failed\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+int mtk_rpmsg_prepare(struct rproc_subdev *subdev)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+
-+	/* a dedicated endpoint handles the name service msgs */
-+	if (mtk_subdev->info->ns_ipi_id >= 0) {
-+		mtk_subdev->ns_ept =
-+			__rpmsg_create_ept(mtk_subdev, NULL, mtk_rpmsg_ns_cb,
-+					   mtk_subdev,
-+					   mtk_subdev->info->ns_ipi_id);
-+		if (!mtk_subdev->ns_ept) {
-+			dev_err(&mtk_subdev->pdev->dev,
-+				"failed to create name service endpoint\n");
-+			return -ENOMEM;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+void mtk_rpmsg_unprepare(struct rproc_subdev *subdev)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+
-+	if (mtk_subdev->ns_ept) {
-+		mtk_rpmsg_destroy_ept(mtk_subdev->ns_ept);
-+		mtk_subdev->ns_ept = NULL;
-+	}
-+}
-+
-+void mtk_rpmsg_stop(struct rproc_subdev *subdev, bool crashed)
-+{
-+	struct mtk_rpmsg_channel_info *info, *next;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+	struct device *dev = &mtk_subdev->pdev->dev;
-+
-+	/*
-+	 * Destroy the name service endpoint here, to avoid new channel being
-+	 * created after the rpmsg_unregister_device loop below.
-+	 */
-+	if (mtk_subdev->ns_ept) {
-+		mtk_rpmsg_destroy_ept(mtk_subdev->ns_ept);
-+		mtk_subdev->ns_ept = NULL;
-+	}
-+
-+	cancel_work_sync(&mtk_subdev->register_work);
-+
-+	mutex_lock(&mtk_subdev->channels_lock);
-+	list_for_each_entry(info, &mtk_subdev->channels, list) {
-+		if (!info->registered)
-+			continue;
-+		if (rpmsg_unregister_device(dev, &info->info)) {
-+			dev_warn(
-+				dev,
-+				"rpmsg_unregister_device failed for %s.%d.%d\n",
-+				info->info.name, info->info.src,
-+				info->info.dst);
-+		}
-+	}
-+
-+	list_for_each_entry_safe(info, next,
-+				 &mtk_subdev->channels, list) {
-+		list_del(&info->list);
-+		kfree(info);
-+	}
-+	mutex_unlock(&mtk_subdev->channels_lock);
-+}
-+
-+struct rproc_subdev *
-+mtk_rpmsg_create_rproc_subdev(struct platform_device *pdev,
-+			      struct mtk_rpmsg_info *info)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev;
-+
-+	mtk_subdev = kzalloc(sizeof(*mtk_subdev), GFP_KERNEL);
-+	if (!mtk_subdev)
-+		return NULL;
-+
-+	mtk_subdev->pdev = pdev;
-+	mtk_subdev->subdev.prepare = mtk_rpmsg_prepare;
-+	mtk_subdev->subdev.stop = mtk_rpmsg_stop;
-+	mtk_subdev->subdev.unprepare = mtk_rpmsg_unprepare;
-+	mtk_subdev->info = info;
-+	INIT_LIST_HEAD(&mtk_subdev->channels);
-+	INIT_WORK(&mtk_subdev->register_work,
-+		  mtk_register_device_work_function);
-+	mutex_init(&mtk_subdev->channels_lock);
-+
-+	return &mtk_subdev->subdev;
-+}
-+EXPORT_SYMBOL_GPL(mtk_rpmsg_create_rproc_subdev);
-+
-+void mtk_rpmsg_destroy_rproc_subdev(struct rproc_subdev *subdev)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+
-+	kfree(mtk_subdev);
-+}
-+EXPORT_SYMBOL_GPL(mtk_rpmsg_destroy_rproc_subdev);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("MediaTek scp rpmsg driver");
-diff --git a/include/linux/platform_data/mtk_scp.h b/include/linux/platform_data/mtk_scp.h
-index 96e56fdd0917..0031e23695f1 100644
---- a/include/linux/platform_data/mtk_scp.h
-+++ b/include/linux/platform_data/mtk_scp.h
-@@ -40,9 +40,11 @@ enum scp_ipi_id {
- 	SCP_IPI_ISP_FRAME,
- 	SCP_IPI_FD_CMD,
- 	SCP_IPI_CROS_HOST_CMD,
--	SCP_IPI_MAX,
-+	SCP_IPI_NS_SERVICE = 0xFF,
-+	SCP_IPI_MAX = 0x100,
- };
- 
-+
- /**
-  * scp_ipi_register - register an ipi function
-  *
-diff --git a/include/linux/rpmsg/mtk_rpmsg.h b/include/linux/rpmsg/mtk_rpmsg.h
-new file mode 100644
-index 000000000000..861c1cbea523
---- /dev/null
-+++ b/include/linux/rpmsg/mtk_rpmsg.h
-@@ -0,0 +1,38 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright 2018 Google LLC.
-+ */
-+
-+#ifndef __LINUX_RPMSG_MTK_RPMSG_H
-+#define __LINUX_RPMSG_MTK_RPMSG_H
-+
-+#include <linux/device.h>
-+#include <linux/remoteproc.h>
-+
-+typedef void (*ipi_handler_t)(void *data, unsigned int len, void *priv);
-+
-+/*
-+ * struct mtk_rpmsg_info - IPI functions tied to the rpmsg device.
-+ * @register_ipi: register IPI handler for an IPI id.
-+ * @unregister_ipi: unregister IPI handler for a registered IPI id.
-+ * @send_ipi: send IPI to an IPI id. wait is the timeout (in msecs) to wait
-+ *            until response, or 0 if there's no timeout.
-+ * @ns_ipi_id: the IPI id used for name service, or -1 if name service isn't
-+ *             supported.
-+ */
-+struct mtk_rpmsg_info {
-+	int (*register_ipi)(struct platform_device *pdev, u32 id,
-+			    ipi_handler_t handler, void *priv);
-+	void (*unregister_ipi)(struct platform_device *pdev, u32 id);
-+	int (*send_ipi)(struct platform_device *pdev, u32 id,
-+			void *buf, unsigned int len, unsigned int wait);
-+	int ns_ipi_id;
-+};
-+
-+struct rproc_subdev *
-+mtk_rpmsg_create_rproc_subdev(struct platform_device *pdev,
-+			      struct mtk_rpmsg_info *info);
-+
-+void mtk_rpmsg_destroy_rproc_subdev(struct rproc_subdev *subdev);
-+
-+#endif
--- 
-2.22.0.410.gd8fdbe21b5-goog
-
+SGkgQXJuYXVkOg0KVGhhbmtzIGEgbG90IGZvciB5b3VyIGtpbmRseSBndWlkYW5jZSBhbmQgcmV2
+aWV3IGNvbW1lbnRzLg0KDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTog
+QXJuYXVkIFBvdWxpcXVlbiBbbWFpbHRvOmFybmF1ZC5wb3VsaXF1ZW5Ac3QuY29tXQ0KPiBTZW50
+OiAyMDE55bm0N+aciDjml6UgMjI6MTINCj4gVG86IE9sZWtzaWogUmVtcGVsIDxvLnJlbXBlbEBw
+ZW5ndXRyb25peC5kZT47IFJpY2hhcmQgWmh1DQo+IDxob25neGluZy56aHVAbnhwLmNvbT47IG9o
+YWRAd2l6ZXJ5LmNvbTsgYmpvcm4uYW5kZXJzc29uQGxpbmFyby5vcmc7DQo+IGxpbnV4LXJlbW90
+ZXByb2NAdmdlci5rZXJuZWwub3JnDQo+IENjOiBsb2ljLnBhbGxhcmR5QHN0LmNvbTsgRmFiaWVu
+IERFU1NFTk5FIDxmYWJpZW4uZGVzc2VubmVAc3QuY29tPjsNCj4gZWxkZXJAbGluYXJvLm9yZzsg
+bGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IFN1YmplY3Q6IFJlOiBbRVhU
+XSBSZTogW1JGQyAyLzJdIHJwbXNnOiBpbXg6IGFkZCB0aGUgaW5pdGlhbCBpbXggcnBtc2cgc3Vw
+cG9ydA0KPiANCj4gDQo+IEhlbGxvIFJpY2hhcmQsDQo+IA0KPiBPbiA3LzgvMTkgMTowMiBQTSwg
+T2xla3NpaiBSZW1wZWwgd3JvdGU6DQo+ID4gSGkgUmljaGFyZCwNCj4gPg0KPiA+IE9uIDA4LjA3
+LjE5IDEyOjE3LCBSaWNoYXJkIFpodSB3cm90ZToNCj4gPj4gSGkgT2xla3NpajoNCj4gPj4gVGhh
+bmtzIGZvciB5b3VyIGNvbW1lbnRzLg0KPiA+Pg0KPiA+Pg0KPiA+Pj4gLS0tLS1PcmlnaW5hbCBN
+ZXNzYWdlLS0tLS0NCj4gPj4+IEZyb206IE9sZWtzaWogUmVtcGVsIFttYWlsdG86by5yZW1wZWxA
+cGVuZ3V0cm9uaXguZGVdDQo+ID4+PiBTZW50OiAyMDE55bm0N+aciDTml6UgMTc6MzYNCj4gPj4+
+IFRvOiBSaWNoYXJkIFpodSA8aG9uZ3hpbmcuemh1QG54cC5jb20+OyBvaGFkQHdpemVyeS5jb207
+DQo+ID4+PiBiam9ybi5hbmRlcnNzb25AbGluYXJvLm9yZzsgbGludXgtcmVtb3RlcHJvY0B2Z2Vy
+Lmtlcm5lbC5vcmcNCj4gPj4+IENjOiBsaW51eC1hcm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5v
+cmc7IEZhYmllbiBERVNTRU5ORQ0KPiA+Pj4gPGZhYmllbi5kZXNzZW5uZUBzdC5jb20+OyBsb2lj
+LnBhbGxhcmR5QHN0LmNvbTsNCj4gPj4+IGFybmF1ZC5wb3VsaXF1ZW5Ac3QuY29tOyBzLWFubmFA
+dGkuY29tOyBlbGRlckBsaW5hcm8ub3JnDQo+ID4+PiBTdWJqZWN0OiBbRVhUXSBSZTogW1JGQyAy
+LzJdIHJwbXNnOiBpbXg6IGFkZCB0aGUgaW5pdGlhbCBpbXggcnBtc2cNCj4gPj4+IHN1cHBvcnQN
+Cj4gPj4+DQo+ID4+Pg0KPiA+Pj4gSGkgUmljaGFyZCwNCj4gPj4+DQo+ID4+PiBPbiAwMS4wNy4x
+OSAxMDozNCwgUmljaGFyZCBaaHUgd3JvdGU6DQo+ID4+Pj4gQmFzZWQgb24gInZpcnRpb19ycG1z
+Z19idXMiIGRyaXZlciwgVGhpcyBwYXRjaC1zZXQgaXMgdXNlZCB0byBzZXQNCj4gPj4+PiB1cCB0
+aGUgY29tbXVuaWNhdGlvbiBtZWNoYW5pc20gYmV0d2VlbiBBIGNvcmUgYW5kIE0gY29yZSBvbiBp
+Lk1YDQo+ID4+Pj4gQU1QDQo+ID4+PiBTT0NzLg0KPiA+Pj4+DQo+ID4+Pj4gQWRkIHRoZSBpbml0
+aWFsIGlteCBycG1zZyBzdXBwb3J0IGdsdWUgZHJpdmVyIGFuZCBvbmUgcGluZ3BvbmcNCj4gPj4+
+PiBkZW1vLCBkZW1vbnN0cmF0ZWQgdGhlIGRhdGEgdHJhbnNhY3Rpb25zIGJldHdlZW4gQSBjb3Jl
+IGFuZCByZW1vdGUNCj4gTSBjb3JlLg0KPiA+Pj4+IERpc3RyaWJ1dGVkIGZyYW1ld29yayBpcyB1
+c2VkIGluIElNWCBSUE1TRyBpbXBsZW1lbnRhdGlvbiwgcmVmZXIgdG8NCj4gPj4+PiB0aGUgZm9s
+bG93aW5nIHJlcXVpcmVtZW50czoNCj4gPj4+PiAgICAgLSBUaGUgQ0FOIGZ1bmN0aW9ucyBjb250
+YWluZWQgaW4gTSBjb3JlIGFuZCBSVE9TIHNob3VsZCBiZQ0KPiA+Pj4+IHJlYWR5IGFuZA0KPiA+
+Pj4+ICAgICAgIGNvbXBsZXRlIGZ1bmN0aW9uYWwgaW4gNTBtcyBhZnRlciBBTVAgc3lzdGVtIGlz
+IHR1cm5lZCBvbi4NCj4gPj4+PiAgICAgLSBQYXJ0aXRpb24gcmVzZXQuIFN5c3RlbSB3b3VsZG4n
+dCBiZSBzdGFsbGVkIGJ5IHRoZSBleGNlcHRpb25zDQo+ID4+Pj4gKGUueA0KPiA+Pj4+ICAgICAg
+IHRoZSByZXNldCB0cmlnZ2VyZWQgYnkgdGhlIHN5c3RlbSBoYW5nKSBvY2N1cnJlZCBhdCB0aGUg
+b3RoZXINCj4gPj4+PiBzaWRlLg0KPiA+Pj4+ICAgICAgIEFuZCB0aGUgUlBNU0cgbWVjaGFuaXNt
+IHNob3VsZCBiZSByZWNvdmVyZWQgYXV0b21hY3RpbGx5DQo+ID4+Pj4gYWZ0ZXINCj4gPj4+IHRo
+ZQ0KPiA+Pj4+ICAgICAgIHBhcnRpdGlvbiByZXNldCBpcyBjb21wbGV0ZWQuDQo+ID4+Pj4gSW4g
+dGhpcyBzY2VuYXJpbywgdGhlIE0gY29yZSBhbmQgUlRPUyB3b3VsZCBiZSBraWNrZWQgb2ZmIGJ5
+DQo+ID4+Pj4gYm9vdGxvYWRlciBmaXJzdGx5LCB0aGVuIEEgY29yZSBhbmQgTGludXggd291bGQg
+YmUgbG9hZGVkIGxhdGVyLg0KPiA+Pj4+IEJvdGggTSBjb3JlL1JUT1MgYW5kIEEgY29yZS9MaW51
+eCBhcmUgcnVubmluZyBpbmRlcGVuZGx5Lg0KPiA+Pj4+DQo+ID4+Pj4gT25lIHBoeXNpY2FsIG1l
+bW9yeSByZWdpb24gdXNlZCB0byBzdG9yZSB0aGUgdnJpbmcgaXMgbWFuZGF0b3J5DQo+ID4+Pj4g
+cmVxdWlyZWQgdG8gcHJlLXJlc2VydmVkIGFuZCB3ZWxsLWtub3duZWQgYnkgYm90aCBBIGNvcmUg
+YW5kIE0gY29yZQ0KPiA+Pj4NCj4gPj4+IEkgZG9uJ3Qgc2VlIGFueSB0aGluZyBpbXggc3BlY2lm
+aWMgaW4gdGhpcyBwYXRjaC4gV2UgYWxyZWFkeSBoYXZlDQo+ID4+PiByZW1vdGVwcm9jIHdoaWNo
+IHdvdWxkIHBhcnNlIGZpcm13YXJlIGhlYWRlciBhbmQgY3JlYXRlIG5lZWRlZA0KPiA+Pj4gZGV2
+aWNlcy4gVGhpcyBkcml2ZXIgaXMgb25seSBuZWVkZWQgZm9yIHRoZSBjYXNlIHdoZXJlIGZpcm13
+YXJlIHdhcw0KPiA+Pj4gc3RhcmVkIGJ5IHRoZSBib290bG9hZGVyLg0KPiA+Pj4NCj4gPj4gW1Jp
+Y2hhcmQgWmh1XSBCb290bG9hZGVyIHN0YXJ0cyB0aGUgZmlybXdhcmUgaXMgbWFuZGF0b3J5IHJl
+cXVpcmVkIGluDQo+ID4+IHRoZXNlIHNjZW5hcmlvIHJlZmVyIHRvIHRoZSByZWFzb25zIGxpc3Rl
+ZCBpbiB0aGUgY29tbWl0Lg0KPiA+PiBUaHVzLCB0aGUgZGlzdHJpYnV0ZWQgZnJhbWV3b3JrIGhh
+cyB0byBiZSB1c2VkLCBhbmQgYm90aCBBIGNvcmUvTGludXgNCj4gPj4gYW5kIHJlbW90ZSBjb3Jl
+L1JUT1Mgd29ya3MgaW5kZXBlbmRlbnRseS4NCj4gPj4NCj4gPj4+IEkgcGVyc29uYWxseSB3b3Vs
+ZCBwcmVmZXIgdG8gaGF2ZSBnZW5lcmljIGRyaXZlciBvciBleHRlbmQgdGhlDQo+ID4+PiByZW1v
+dGVwcm9jIGZyYW1ld29yay4gU28gd2UgY2FuIG5vdGlmeSBrZXJuZWwgYWJvdXQgd29yayBhbHJl
+YWR5DQo+ID4+PiBkb25lIGJ5IGJvb3Rsb2FkZXIuDQo+ID4+Pg0KPiA+PiBbUmljaGFyZCBaaHVd
+IFRoYW5rcyBmb3IgeW91ciBzdWdnZXN0aW9ucy4NCj4gPj4gUmVnYXJkaW5nIHRvIG15IHVuZGVy
+c3RhbmQsIGl0IHNlZW1zIHRoYXQgbWFzdGVyL3NsYXZlIG1vZGUgaXMgdXNlZA0KPiA+PiBpbiB0
+aGUgcmVtb3RlcHJvYyBjdXJyZW50bHkuDQo+ID4+IEEgY29yZS9MaW51eCBhY3RzIGFzIG1hc3Rl
+ciwgdG8gY29udHJvbHMvbWFuaXB1bGF0ZXMgcmVtb3RlIGNvcmUvUlRPUy4NCj4gPj4gSXQgaXNu
+J3QgYXBwbGljYWJsZSBmb3IgdGhlIHNjZW5hcmlvIGRlc2NyaWJlZCBieSB0aGlzIHBhdGNoLXNl
+dC4NCj4gPj4NCj4gPj4+IEluIGdlbmVyYWwsIHNvbWUgbW9yZSBpc3N1ZXMgc2hvdWxkIGJlIHNv
+bHZlZDoNCj4gPj4+IC0gSGFuZGxlIG9yIG5vdCB0b3VjaCBpZGxlIGNsb2NrcyBmb3IgZGlmZmVy
+ZW50IG5vZGUgdXNlZCBieSBNIGNvcmUNCj4gPj4+IGFuZCBub3QgbWFpbiBzeXN0ZW0uDQo+ID4+
+PiAtIHBpbiBjb250cm9sDQo+ID4+PiAtIHJlZ3VsYXRvcnMNCj4gPj4+DQo+ID4+PiBTVCBkZXZz
+IGFscmVhZHkgdHJpZWQgdG8gc29sdmUgdGhpcyBpc3N1ZXMgYnkgY3JlYXRpbmcgInJlbW90ZXBy
+b2M6DQo+ID4+PiBhZGQgc3lzdGVtDQo+ID4+PiByZXNvdXJjZSBtYW5hZ2VyIGRldmljZSIgcGF0
+Y2guIEkgZG9uJ3Qga25vdyB3aGF0IGlzIGN1cnJlbnQgc3RhdGUNCj4gPj4+IG9mIGl0ICgvbWUg
+YWRkaW5nIFNUIGRldnMgdG8gQ0MpLg0KPiBUaGUgcmVzb3VyY2UgbWFuYWdlciBpbXBsZW1lbnRh
+dGlvbiBhcyBiZWVuIHByb3Bvc2VkIGJ1dCBubyByZWFsDQo+IGFkaGVzaW9uIG9mIHRoZSBjb21t
+dW5pdHkgb24gaXQuLi4gUGVyaGFwcyBTQ01JIHNob3VsZCBiZSBhIGNhbmRpZGF0ZS4uLg0KPiAN
+Cj4gPj4+DQo+ID4+IFtSaWNoYXJkIFpodV0gWWVzLCBpdCBpcy4gTWFueSBjb250cmlidXRpb25z
+IGhhdmUgYmVlbiBtYWRlIGJ5IEZhYmllbi4NCj4gPj4gSU1ITywgdGhlcmUgYXJlIHNvbWUgZGlm
+ZmVyZW50IGJlaGF2aW9ycyBvbiBpTVg4UVhQL1FNIHBsYXRmb3JtcywgdGhlDQo+ID4+ICAgcmVz
+b3VyY2VzIChlLnggSVAgbW9kdWxlcykgaGFkIGJlZW4gYXNzaWduZWQgYW5kIG1hbmFnZWQgYnkg
+dGhlDQo+IFhSREMuDQo+ID4+IEluIHRoZSBvdGhlciB3b3JkcywgdGhlIEhXIHJlc291cmNlcyB3
+b3VsZCBiZSBhc3NpZ25lZCBhbmQgbWFuYWdlZA0KPiB3b3VsZA0KPiA+PiAgIGJlIHRyYW5zcGFy
+ZW50IHRvIFNXLg0KPiA+Pg0KPiA+PiBUaHVzLCBib3RoIEEgY29yZS9MaW51eCBhbmQgTSBjb3Jl
+L1JUT1MgY2FuIHdvcmsgcmVhbCBpbmRlcGVuZGVudGx5Lg0KPiA+PiBTeXN0ZW0gd291bGRuJ3Qg
+YmUgc3RhbGxlZCBieSB0aGUgZXhjZXB0aW9ucyAoZS54IHRoZSByZXNldCB0cmlnZ2VyZWQNCj4g
+Pj4gYnkgdGhlIHN5c3RlbSBoYW5nKSBvY2N1cnJlZCBhdCB0aGUgb3RoZXIgc2lkZS4gQW5kIHRo
+ZSBSUE1TRw0KPiA+PiBtZWNoYW5pc20gc2hvdWxkDQo+ID4+ICAgYmUgcmVjb3ZlcmVkIGF1dG9t
+YXRpY2FsbHkgYWZ0ZXIgdGhlIHBhcnRpdGlvbiByZXNldCBpcyBjb21wbGV0ZWQuDQo+ID4NCj4g
+PiBJdCBpcyBleGFjdGx5IHRoZSB3YXkgSSBkaWQgdW5kZXJzdG9vZCBpdCBpbiB0aGUgZmlycyBt
+YWlsLiBBbnkgd2F5LA0KPiA+IGknbSBvayB3aXRoIHRoaXMgZHJpdmVyLiBKdXN0IHJlbmFtZSBp
+bXggdG8gc29tZSB0aGluZyBnZW5lcmljLiBUaGlzDQo+ID4gZHJpdmVyIGNhbiBhbmQgd2lsbCBi
+ZSByZXVzZWQgb24gb3RoZXIgcGxhdGZvcm1zIGFzIHdlbGwuDQo+ID4NCj4gPiBLaW5kIHJlZ2Fy
+ZHMsDQo+ID4gT2xla3NpaiBSZW1wZWwNCj4gPg0KPiANCj4gSSdtIHRyeWluZyB0byBmaWd1cmUg
+b3V0IHdoYXQgaXMgdGhlIGludGVyZXN0IG9mIHRoZXNlIGRyaXZlcnMgdnMgZXhpc3Rpbmcgb25l
+cy4NCj4gUGxlYXNlIGZpbmQgYmVsb3cgYSBsaXN0IG9mIGZlYXR1cmVzIGkgbm90aWNlZCBpbiB5
+b3VyIGRyaXZlciAoZG9uJ3QgaGVzaXRhdGUgaWYgaQ0KPiBtaXNzZWQgc29tZSBvZiB0aGVtKSwg
+d2l0aCBzb21lIGNvbW1lbnRzL3F1ZXN0aW9ucy4NCj4gDQo+IDEpIFRoZSBjb3Byb2Nlc3NvciBp
+cyBzdGFydGVkIGJlZm9yZSB0aGUgb25lIHJ1bm5pbmcgTGludXggT1MuDQo+IEhhdmUgeW91IHRh
+a2VuIGEgbG9vayB0byB0aGlzIHNldCBvZiBwYXRjaGVzIHByb3Bvc2VkIGJ5IExvaWM6DQo+IGh0
+dHBzOi8vZXVyMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1odHRwcyUz
+QSUyRiUyRmxrbWwub3INCj4gZyUyRmxrbWwlMkYyMDE4JTJGMTElMkYzMCUyRjE1NyZhbXA7ZGF0
+YT0wMiU3QzAxJTdDaG9uZ3hpbmcueg0KPiBodSU0MG54cC5jb20lN0M2NzczOTk5YWM2Mzk0ZGZl
+MzdkMDA4ZDcwM2FlMzQ3NSU3QzY4NmVhMWQzYmMyDQo+IGI0YzZmYTkyY2Q5OWM1YzMwMTYzNSU3
+QzAlN0MwJTdDNjM2OTgxOTE5MDY0MTg2NjYwJmFtcDtzZGF0YT0NCj4gT1VvZ0lzMlM3Z0xSNDYl
+MkZOY0FVM09xRXRCNHJLM3NXMGdSS1JSU082eHBrJTNEJmFtcDtyZXNlcnZlZA0KPiA9MA0KPiB3
+aXRoIHRoaXMgcGF0Y2ggeW91IHNob3VsZCBiZSBhYmxlIHRvImF0dGFjaCIgb24gdGhlIGZseSBv
+biBhIHByZWxvYWRlZA0KPiBmaXJtd2FyZS4NCltSaWNoYXJkIFpodV0gWWVzLCB0aGlzIHBhdGNo
+LXNldCBlbmFibGUgdG8gcHJlLWxvYWQgdGhlIGZpcm13YXJlIGluIGJvb3Rsb2FkZXIuDQpUaGUg
+bW9zdCBkaWZmaWN1bHRpZXMgd2hlbiBJIHRyeSB0byB1c2UgdGhlIGN1cnJlbnQgbWFzdGVyL3Ns
+YXZlIG1vZGUgYXJlIHRoYXQNCiB0aGUgcmVtb3RlLXByb2MgY29udHJvbHMvbWFuYWdlbWVudCBt
+b2RlIGlzIG5vdCBhcHBsaWNhYmxlIHRvIHRoZSBzY2VuYXJpbywNCiBlc3BlY2lhbGx5IHRoZSBp
+TVg4UVhQL1FNIHBhcnRpdGlvbiByZXNldCB1c2FnZS4NCkJvdGggQSBjb3JlL0xpbnV4IGFuZCBN
+IGNvcmUvUlRPUyBhcmUgd29ya2luZyBpbmRlcGVuZGVudGx5Lg0KSFcgcmVzb3VyY2VzKGUueDog
+c29tZSBJUCBtb2R1bGVzLCBERFIgbWVtb3J5IHJlZ2lvbiwgcG93ZXIgZG9tYWlucywgY2xvY2tz
+IGFuZCBzbyBvbikNCiB3b3VsZCBiZSBwcmUtbWFuYWdlZCBhbmQgcHJlLWFzc2lnbmVkIHRvIEEg
+Y29yZSBvciBNIGNvcmUgYnkgU0NGVyB0aHJvdWdoIFhSREMgbW9kdWxlDQpyZWZlciB0byB0aGUg
+c2VjdXJpdHkgcmVhc29ucyBvciBzb21ldGhpbmcgZWxzZSBJIGRvbid0IGtub3cuDQoNCk0gY29y
+ZS9SVE9TIGluc2lzdHMgdG8gcnVuIGFuZCBtYW5hZ2UgaXRzIHJlc291cmNlcyBhc3NpZ25lZCBi
+eSBYUkRDIHN0YW5kYWxvbmUuDQpBbGwgdGhlIGludGVyYWN0aW9ucyBiZXR3ZWVuIEEgY29yZSBh
+bmQgTSBjb3JlIGFyZSB0cmFuc2ZlcnJlZCBvbiBSUE1TRyBjaGFubmVscy4NCkZvciBleGFtcGxl
+LCB0aGUgYXVkaW8gY29kZWMgY29uZmlndXJhdGlvbiBhbmQgc28gb24uDQpTbywgd2hhdCBJIGRv
+IGhlcmUgaXMganVzdCBzZXR1cCB0aGUgY29tbXVuaWNhdGlvbiBSUE1TRyBjaGFubmVscyBiZXR3
+ZWVuIEEgY29yZS9MaW51eA0KYW5kIE0gY29yZS9SVE9TLg0KDQpPbmUgbW9yZSBjb25jZXJuLCBJ
+J20gYWZyYWlkIHRoYXQgSSBtYXkgbWVzcyB1cCB0aGUgY3VycmVudCBzb2xpZCByZXByb2MgZmxv
+dyBhbmQgZnJhbWV3b3JrIGlmDQogSSBmb3JjZSB0aGlzIGltcGxlbWVudGF0aW9uIGludG8gdGhl
+IGN1cnJlbnQgcmVwcm9jIGRyaXZlcnMuIA0KU28sIEkgc3VtbWl0IHRoaXMgcGF0Y2gtc2V0IGlu
+IHRoZSBlbmQuIFByZS1yZXNlcnZlZCB2cmluZyBidWZmZXIsIHJlZ2lzdGVyIHZpcnRpb19kZXZp
+Y2UsIGVzdGFibGlzaA0KdGhlIFJQTVNHIGNoYW5uZWxzIGxldHMgQSBjb3JlL0xpbnV4IGFuZCBN
+IENvcmUvUlRPUyBjYW4gY29tbXVuaWNhdGUgd2l0aCBlYWNoIG90aGVyLg0KVGhhdCdzIGFsbC4N
+Cj4gDQo+IDIpIFJQTVNHIHJlY292ZXJ5DQo+IEFncmVlIHdpdGggeW91LCB0aGlzIGZlYXR1cmUg
+aXMgaW1wb3J0YW50IGluIEFNUCBzeXN0ZW1zLCBhcyBjb3JlcyBjYW4gaGF2ZQ0KPiB0aGVpciBv
+d24gbGl2ZSBjeWNsZS4NCj4gDQo+IEJ1dCBJIGNhbiBub3Qgc2VlIHJlbGF0ZWQgY29kZSwgY291
+bGQgeW91IHBvaW50IG91dCBpdCB0byBtZT8NCj4gDQpbUmljaGFyZCBaaHVdIFRoaXMgZmVhdHVy
+ZSBoYWQgYmVlbiB2YWxpZGF0ZWQgaW4gdGhlIGxvY2FsIHJlcG9zLg0KQnV0IHRoZXNlIGNvZGVz
+IGFyZSBub3QgY29udGFpbmVkIGluIHRoaXMgcGF0Y2gtc2V0LCBiZWNhdXNlIHRoaXMgZmVhdHVy
+ZSBpcw0KcmVsaWVkIG9uIHRoZSBTQ0ZXKHN5c3RlbSBjb250cm9sIGZpcm0gd2FyZSkgdXNlZCB0
+byBtb25pdG9yIHRoZSBzdGF0dXMgb2YNCiBib3RoIHNpZGUsIGFuZCB0cmlnZ2VyIG9uZSBpcnEg
+dG8gdGhlIG90aGVyIHNpZGUsIGlmIG9uZSBzaWRlIGlzIHN0YWxsLg0KVW5mb3J0dW5hdGVseSwg
+aXQgaXMgbm90IHVwIHN0cmVhbWVkIHlldC4gU28sIHRoZXNlIGNvZGVzIHdvdWxkIGJlIHVwZGF0
+ZWQgbGF0ZXINCklmIHRoZSBTQ0ZXIGlzIHJlYWR5Lg0KDQo+IENvdWxkIHlvdSBleHBsYWluIEhv
+dyBkbyB5b3UgcmVjb3ZlciB0aGUgcnBtc2cgY2hhbm5lbHMgdGhhdCBoYXMgYmVlbg0KPiBhbHJl
+YWR5IGVzdGFibGlzaGVkPw0KPiBGb3IgaW5zdGFuY2Ugd2hhdCBoYXBwZW4gaWYgeW91ciBjb3By
+b2Nlc3NvciBjcmFzaCBkdXJpbmcgdGhlIHJwbXNnDQo+IHBpbmdwb25nIGRlbW8/DQpbUmljaGFy
+ZCBaaHVdIFNDRlcgd291bGQgaW5mb3JtIHRoZSBvdGhlciBzaWRlLCBpZiBvbmUgY29yZS9PUyBp
+cyBjcmFzaGVkLg0KVGhlbiwgdGhlIFJQTVNHIHN0YWNrIHdvdWxkIGJlIHJlLWluaXRpYWxpemVk
+IGl0c2VsZiBvbiB0aGUgbGl2ZWQgY29yZS9PUywgYW5kIGNsYXJpZnkgdGhhdA0KSXQncyByZWFk
+eSB0byByZS1lc3RhYmxpc2ggdGhlIGNoYW5uZWxzIGFnYWluLg0KRm9yIGV4YW1wbGUsIE00L1JU
+T1MgaXMgY3Jhc2hlZCB3aGVuIHBpbmdwb25nIGRlbW8gaXMgcnVubmluZy4NCjEuIFBpbmdwb25n
+IGRlbW8gaXMgc3RvcHBlZC4NCjIuIExpdmVkIEEgY29yZS9MaW51eCB3b3VsZCByZWNlaXZlIG9u
+ZSBpcnEgZnJvbSBTQ0ZXIGluZGljYXRlZCB0aGF0IHJlbW90ZSBNNC9SVE9TIGlzDQogcmVzZXQs
+IHRoZW4gYWxsIHRoZSB2aXJ0aW9fZGV2aWNlIHJlZ2lzdGVyZWQgaW4gQSBjb3JlL0xpbnV4IHNp
+ZGUsIHdvdWxkIGJlIHVuLXJlZ2lzdGVyZWQsDQogYW5kIHRoZXNlIHZpcnRpb19kZXZpY2VzIHdv
+dWxkIGJlIHJlZ2lzdGVyZWQgYWdhaW4gYWZ0ZXIgcmVjZWl2ZSB0aGUgc2lnbmFsKGUueCB0aGUg
+bWFpbGJveCByZGIpDQogdGhhdCBNNC9SVE9TIFJQTVNHIHN0YWNrIGlzIHJlYWR5IGFnYWluLg0K
+My4gVGh1cyBSUE1TIGNoYW5uZWxzIGNhbiBiZSByZS1lc3RhYmxpc2hlZCBpbiB0aGlzIHNpdHVh
+dGlvbi4NCjQuIEFjY29yZGluZ2x5LCB0aGUgY29uc3VtZXIgb2YgdGhlIHJwbXNnIGdsdWUgZHJp
+dmVyIHNob3VsZCBiZSByZS1pbml0aWFsaXplZCB0b28uDQpGb3IgZXhhbXBsZSwgcmVtb3ZlIHRo
+ZSBwaW5ncG9uZCBkZW1vIG1vZHVsZSwgYW5kIGluc21vZCBpdCBhZ2Fpbi4NCg0KPiANCj4gMykg
+cGluZy1wb25nIGRlbW8gc2FtcGxlDQo+IFBlcmhhcHMgeW91IGNvdWxkIHJlLXVzZSB0aGUgcnBt
+c2cgc2FtcGxlIGF2YWlsYWJsZSBoZXJlOg0KPiBodHRwczovL2V1cjAxLnNhZmVsaW5rcy5wcm90
+ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMlM0ElMkYlMkZlbGl4aXIuYg0KPiBvb3RsaW4u
+Y29tJTJGbGludXglMkZ2NS4yJTJGc291cmNlJTJGc2FtcGxlcyUyRnJwbXNnJmFtcDtkYXRhPTAy
+DQo+ICU3QzAxJTdDaG9uZ3hpbmcuemh1JTQwbnhwLmNvbSU3QzY3NzM5OTlhYzYzOTRkZmUzN2Qw
+MDhkNzAzYWUzDQo+IDQ3NSU3QzY4NmVhMWQzYmMyYjRjNmZhOTJjZDk5YzVjMzAxNjM1JTdDMCU3
+QzAlN0M2MzY5ODE5MTkwNjQNCj4gMTg2NjYwJmFtcDtzZGF0YT1tU1YzWXNveWhBTyUyRlJPZldY
+NzlYMHdvR1FOM2p4JTJGdjRwTDhMUlVmDQo+IGJIVU0lM0QmYW1wO3Jlc2VydmVkPTANCltSaWNo
+YXJkIFpodV0gVGhhbmtzIGEgbG90Lg0KVGhpcyBkZW1vIHNhbXBsZSBjYW4gYmUgdXNlZC4gU29y
+cnkgYWJvdXQgdGhhdCBJIGRpZG4ndCBub3RpY2UgaXQgYmVmb3JlLg0KDQo+IA0KPiA0KSBObyB1
+c2Ugb2YgdGhlIHJlc291cmNlIHRhYmxlDQo+IElzIHRoZXJlIGEgcmVhc29uIHRvIG5vdCB1c2Ug
+dGhlIHJlc291cmNlIHRhYmxlIHRvIGRlY2xhcmUgdGhlIHRoZSB2cmluZ3M/IFlvdXINCj4gaW1w
+bGVtZW50YXRpb24gc2VlbXMgdG8gaW1wb3NlIHRoZSBzYW1lIGRlZmluaXRpb24gaW4gYm90aCBm
+aXJtd2FyZSB3aGlsZQ0KPiByZXNvdXJjZSB0YWJsZSBhbGxvdyB0byBzaGFyZSB0aGVtLg0KPiBG
+dXJ0aGVybW9yZSB0aGUgcmVzb3VyY2UgdGFibGUgY291bGQgYmUgdXBkYXRlZCBieSB0aGUgTGlu
+dXggYmVmb3JlIHRoZQ0KPiByZW1vdGUgcHJvYyBpcyBzdGFydGVkIChpbiBjYXNlIG9mIExpbnV4
+IGJvb3RpbmcgZmlyc3QpDQo+IA0KW1JpY2hhcmQgWmh1XSBSZWdhcmRpbmcgdG8gdGhlIGF1dG8g
+aW5kdXN0cnkgcmVxdWlyZW1lbnRzLCB0aGUgTSBjb3JlL1JUT1MgaXMgYWx3YXlzDQpzdGFydGVk
+IGZpcnN0bHksIGJlY2F1c2UgdGhhdCB0aGUgQ0FOIGZ1bmN0aW9ucyBzaG91bGQgYmUgcmVhZHkg
+aW4gNTBtcyBhZnRlciBzeXN0ZW0gaXMNCnBvd2VyIHVwLg0KQlRXLCByZXNvdXJjZSB0YWJsZSBp
+cyBhIGdyZWF0IGlkZWEgaW4gdGhlIGNhc2Ugd2hlbiBMaW51eCBpcyBib290aW5nIGZpcnN0bHku
+DQoNCj4gNSkgc2xhdmUgYW5kIG1hc3RlciBtb2RlIHN1cHBvcnQuDQo+IFNlZW1zIHRoYXQgdGhp
+cyBkcml2ZXJzIG5vdCBmdWxseSByZXNwZWN0IHRoZSB2aXJ0aW8gcHJvdG9jb2wgKGZvciBpbnN0
+YW5jZSBzdGF0dXMNCj4gZmllbGQpLiBJZiB5b3UgdXNlIGEgc3luY2hybyBtZWNoYW5pc20gKG1h
+aWxib3guLi4pIG5vdCBzdXJlIHRoYXQgeW91IHJlYWxseQ0KPiBuZWVkIHRvIGJlIHZpcnRpbyBz
+bGF2ZSBvbiBMaW51eC4NCltSaWNoYXJkIFpodV0gU29ycnkgYWJvdXQgdGhhdC4gSSB1c2VkIHRy
+eWluZyB0byBrZWVwIHRoaXMgZHJpdmVyIGNvbXBhdGlibGUgd2l0aA0KdGhlIGN1cnJlbnQgc2xh
+dmUtbWFzdGVyIG1vZGUsIGJ1dCBJJ20gZmFpbGVkIHRvIGFjaGlldmUgdGhhdC4g4pi5Lg0KLSBQ
+YXJ0aXRpb24gcmVzZXQgZmVhdHVyZSBpcyBtYW5kYXRvcnkgcmVxdWlyZWQuDQotIE00IHNpZGUg
+aW5zaXN0cyB0aGF0IHRoZXkgc2hvdWxkIHJ1biBhbmQgbWFuYWdlIGl0cyByZXNvdXJjZXMgc3Rh
+bmRhbG9uZS4NCg0KQmVzdCBSZWdhcmRzDQpSaWNoYXJkIFpodQ0KPiANCj4gVGhhbmtzLA0KPiBB
+cm5hdWQNCg==
