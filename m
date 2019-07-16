@@ -2,311 +2,91 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EEA6A9E6
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 16 Jul 2019 15:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68DA6AF6B
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 16 Jul 2019 20:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726997AbfGPNxn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 16 Jul 2019 09:53:43 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:48269 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726039AbfGPNxm (ORCPT
+        id S1728672AbfGPS7j (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 16 Jul 2019 14:59:39 -0400
+Received: from mail-pl1-f171.google.com ([209.85.214.171]:38146 "EHLO
+        mail-pl1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728190AbfGPS7j (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 16 Jul 2019 09:53:42 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6GDq8U6020278;
-        Tue, 16 Jul 2019 15:53:26 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=CHNA4tkvEu0cJ3QFC0kdm6/Gc6q8tsA6zYPTdJ9kyFw=;
- b=D0GHWmbzX5M8MFo6PO5H+w/kYFPTWz3hLphkHFFkQNhq6GfO8EZ6zWSQWCBQB80H1ECC
- 4QL18qn3kXYEvWhYcguizWm+6XKfETP2gpktd/gcwn/MDrLGLYRP7pF33NJC0ZPIqbBJ
- 188OwWcF17vPSdOTM6yt8AzDtePo/7BNZEt5+jo+VdQ5eTEngGHXG7UyG+73qOpy4JXK
- yctJ94C3tOuX0a42s2C6pAgVEwTtxD6MxnyOrO940GdsoUZCBbo0R7V6mNB/vBBYq+A+
- YteujFJRZiYwCqPLf74bPAWgbuc6O/83Muz8M3eSI0mC3pserBmeOxYI4VNFRfszFxBm qw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2tsdep8ukp-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Tue, 16 Jul 2019 15:53:26 +0200
-Received: from zeta.dmz-eu.st.com (zeta.dmz-eu.st.com [164.129.230.9])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6B8F834;
-        Tue, 16 Jul 2019 13:53:25 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by zeta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D4CA72CD1;
-        Tue, 16 Jul 2019 13:53:24 +0000 (GMT)
-Received: from [10.48.0.131] (10.75.127.49) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 16 Jul
- 2019 15:53:24 +0200
-Subject: Re: [EXT] Re: [RFC 2/2] rpmsg: imx: add the initial imx rpmsg support
-To:     Richard Zhu <hongxing.zhu@nxp.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        "ohad@wizery.com" <ohad@wizery.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>
-CC:     "loic.pallardy@st.com" <loic.pallardy@st.com>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
-        "elder@linaro.org" <elder@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <AM0PR0402MB3570E209B4940C3772D56AC98CCF0@AM0PR0402MB3570.eurprd04.prod.outlook.com>
- <03420f31-0982-4bd9-303a-60b787638775@st.com>
- <AM0PR0402MB357004D25FACA8C610F8E36C8CCE0@AM0PR0402MB3570.eurprd04.prod.outlook.com>
-From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Message-ID: <fa9b912a-43d3-5826-2bc2-9e62f77d3de8@st.com>
-Date:   Tue, 16 Jul 2019 15:53:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 16 Jul 2019 14:59:39 -0400
+Received: by mail-pl1-f171.google.com with SMTP id az7so10578537plb.5
+        for <linux-remoteproc@vger.kernel.org>; Tue, 16 Jul 2019 11:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=hBJsfG+kxvEykqFUPJPZgqlmTa9miwWtUSC2L+vLfP0=;
+        b=rTafQ1i3JELdrOWJ5WSPdSQQwWR9tojAgsl4geqBK2ZdDVwUPVO5YBRRdmHlAMJj8h
+         T3cIKg3ivUvNYeW+SQt5fcjPlhM6xsK84xL1NqIhkBoSy2h6a2RNvC4KTsY5ruB+TJPh
+         a6fSWDYUwWmjaJI+265DFaBcq14FLWh3XyX7CzhJ8qsiTs4K2qNpwP9B4/CX+HDSNua2
+         t+cuf4OmTC6gFXaAnM/QAwdfKPK8ire8G6YjF3jHdzA9TUSIrU3A/AcXiM9voIVS78Hn
+         t81Odf6StdnitZCOEhpJsq24DvZVwpJ99em5+JTs748nSoL1O4trtGWXzdZHhmi8nmkl
+         NE2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=hBJsfG+kxvEykqFUPJPZgqlmTa9miwWtUSC2L+vLfP0=;
+        b=EXsSChJmSg+73VnuqG7DwW0hUDRw1GsQJNchg+k91WzllXrp3WfDD62hrpWujAR3i+
+         JS7LUxmPXBgtTzgRVzUihMswTUvasX765DzUHz34kekn+DBpyXu4I5SS/vQjD3ZAuHh5
+         5ydg+32sqhJ5lAMQkAgxrngr9hj8tZDCyYk0xohD27AFXfGjArS4KEoCSMeoQ3X7pkaO
+         BZYth6+l18BV6gQmeBZSAQSkniuMeR3Dn8LRUrOwbTKiUHXT3gKV9PT9Jf9lf4ZjRF97
+         6G5fApk2rQkpnhUSXHTt0F/oO6axP68iK60tgvq1vVboI2nV3rw2pYiAC4VBRbOK+Jgy
+         NKeA==
+X-Gm-Message-State: APjAAAU3fiAwb/kGnPQHO1UZhNcxsy5pBUqw2iEgNn/IWMgunlbzxMSd
+        QlKA/n0MuDhjG6qqgdDOz1VCxg==
+X-Google-Smtp-Source: APXvYqxJBz67JnnuTcUz76s83oxJjhlbQ27GD9dFu8zmDsc8MA6X4i+IL4StramzuJafjdqHNn3w2Q==
+X-Received: by 2002:a17:902:2862:: with SMTP id e89mr38000072plb.258.1563303578543;
+        Tue, 16 Jul 2019 11:59:38 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id i124sm42317997pfe.61.2019.07.16.11.59.37
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 16 Jul 2019 11:59:37 -0700 (PDT)
+Date:   Tue, 16 Jul 2019 12:00:57 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pi-Hsun Shih <pihsun@chromium.org>,
+        Sibi Sankar <sibis@codeaurora.org>
+Subject: [GIT PULL] rpmsg updates for v5.3
+Message-ID: <20190716190057.GA8572@tuxbook-pro>
 MIME-Version: 1.0
-In-Reply-To: <AM0PR0402MB357004D25FACA8C610F8E36C8CCE0@AM0PR0402MB3570.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE1.st.com
- (10.75.127.7)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-16_04:,,
- signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+The following changes since commit a188339ca5a396acc588e5851ed7e19f66b0ebd9:
 
+  Linux 5.2-rc1 (2019-05-19 15:47:09 -0700)
 
-On 7/16/19 10:04 AM, Richard Zhu wrote:
->> -----Original Message-----
->> From: Arnaud Pouliquen <arnaud.pouliquen@st.com>
->> Sent: 2019年7月15日 20:16
->> To: Richard Zhu <hongxing.zhu@nxp.com>; Oleksij Rempel
->> <o.rempel@pengutronix.de>; ohad@wizery.com; bjorn.andersson@linaro.org;
->> linux-remoteproc@vger.kernel.org
->> Cc: loic.pallardy@st.com; Fabien DESSENNE <fabien.dessenne@st.com>;
->> elder@linaro.org; linux-arm-kernel@lists.infradead.org
->> Subject: [EXT] Re: [RFC 2/2] rpmsg: imx: add the initial imx rpmsg support
->>
->> On 7/15/19 10:22 AM, Richard Zhu wrote:
->>
->> <snip>
->>
->>>>>> sg693v6UjM%2BFEk7TYHxgg6RDX611%2FKfjqA%3D&amp;reserved=0
->>>>>>>
->>>>>>> M core/RTOS insists to run and manage its resources assigned by
->>>>>>> XRDC
->>>>>> standalone.
->>>>>>> All the interactions between A core and M core are transferred on
->>>>>>> RPMSG
->>>>>> channels.
->>>>>>> For example, the audio codec configuration and so on.
->>>>>>> So, what I do here is just setup the communication RPMSG channels
->>>>>>> between A core/Linux and M core/RTOS.
->>>>>>>
->>>>>>> One more concern, I'm afraid that I may mess up the current solid
->>>>>>> reproc flow and framework if  I force this implementation into the
->>>>>>> current
->>>>>> reproc drivers.
->>>>>>> So, I summit this patch-set in the end. Pre-reserved vring buffer,
->>>>>>> register virtio_device, establish the RPMSG channels lets A
->>>>>>> core/Linux and
->>>>>> M Core/RTOS can communicate with each other.
->>>>>>> That's all.
->>>>>> Your concern is valid, and as we have the same requirement, it
->>>>>> would be nice to find a common solution. That's why i propose this
->>>>>> alternative, which would have the advantage of reusing existing
->>>>>> rpmsg
->>>> implementation.
->>>>>>
->>>>>     [Richard Zhu] I looked through the codes briefly. Correct me if
->>>>> my
->>>> understand
->>>>>     is wrong.
->>>>> It seems that the A core side does a lot of manipulations to the
->>>>> remote M4
->>>> core
->>>>>     on ST32M.
->>>>> During the start/stop/recovery operations, M4 acted as slave and
->>>>> waiting
->>>> for the
->>>>>     control constructions sent from the master A core/Linux side
->>>>> although
->>>> the
->>>>>     early_boot is set.
->>>>>
->>>>> There are some differences in the relationship between A core and M
->> core.
->>>>> On ST32M: M4/RTOS would started/stopped/recovered by A core/Linux
->>>> side.
->>>>>
->>>>> In my purposed implementation, both A core/Linux and M core/RTOS
->>>> working in the real
->>>>>     independent mode.
->>>>> - M4/RTOS complete the start/stop/recovery and son on operations by
->>>>> itself,
->>>> it wouldn't
->>>>>     accept any start/stop/reset interactions from A core/Linux side.
->>>>> Same to
->>>> A core/Linux side.
->>>>> - SCFW monitors the running status of each side, would notify the
->>>>> other side,
->>>> if there is a
->>>>>     system stall at one side.
->>>>>     when the lived side receives the notification and know the other
->>>>> side is
->>>> reset,
->>>>>     It would only recover its own rpmsg stack, wait the rpmsg "ready"
->>>>> signal
->>>> of the opposite side,
->>>>>     then re-establish the rpmsg channels again.
->>>>>     A core/Linux or M core/RTOS wouldn't do the start/stop/recovery
->>>> operations on the opposite side.
->>>> On STM32MP1 we have not exactly the same strategy but it only a ST
->>>> design choice, implemented in our stm32 remoteproc driver. You should
->>>> be able to implement your expected behavior in your the imx remoteproc
->> driver.
->>>>
->>>> On STM32MP1 we manage the M4 preloaded firmware in this way:
->>>> -  On Linux stm32 remoteproc probe:
->>>>           We detect that the firmware is preloaded (early-booted filed
->>>> in DT) and set the earl_boot variable.
->>>>           we provide the resource table address to the remoteproc core
->>>> that parses it an call the stm32_rproc_start. here we do nothing as
->>>> M4 already started we just set the hold boot to freeze the M4 in case
->>>> of crash
->>>>
->>>> - On M4 crash we have not the same strategy as your one. We consider
->>>> that the M4 firmware can be corrupted and either we try to reload a
->>>> firmware which as been provided by application, or we don't let it
->>>> restarting (hold boot set on start).
->>>>
->>>> -We allow userland to stop the preloaded firmware to load and to run
->>>> a new one.
->>>>
->>>>>
->>>>> Anyway, let me do some more homework, and figure out that whether I
->>>>> can fit these into the existing remoteproc framework or not.
->>>> Sorry to give you homework... but seems (IMHO) possible to integrate
->>>> your constraint in rpmsg/remoteproc current design.
->>>>
->>> [Richard Zhu] Hi Arnaud, I still can't find a way to combine this patch-set
->> with the master/slave mode.
->>> Regarding to my understand, almost all the defined items of the struct rproc
->> is used by the master(A core/Linux) to control/manipulate the slave remote
->> slave processor.
->>> It's fine when the master(A core)/Slave(remote processor) mode is used.
->>>
->>> But it's too hard to apply the slave/master mode into this scenario.
->>> - M core/RTOS insists to run and manage its resources assigned by XRDC
->> standalone.
->> Please could you explain the dependency between XRDC management and
->> the RPMsg protocol, i don't figure out the blocking point here. So maybe i
->> missed something important.
-> [Richard Zhu] There are access control managements in this use case.
-> Regarding to the security reasons or something else, the XRDC arranges the HW access control managements.
-> It would assign the access capabilities of the HW resources to different domains.
-> Thus, the HW resource required by M4 can be reserved for M4 by XRDC.
-> Same to A core/Linux side.
-> Both of them, manipulate their HW resources independently, and wouldn't have the HW conflictions.
-> SCFW wouldn't allow the cross-the border access.
-> All of this is preconfigured in SCFW, one system control firmware on top of bootloader/Linux/and RTOS.
-> 
-> RPMSG protocol is used to setup the communication between A core/Linux and M core/RTOS,
-> when the A core/Linux wants to use some HW resources under controlled by M core/RTOS.
-> - A core/Linux would send the RPMSG to M core/RTOS.
-> - Receive the results after M core/RTOS finish the execution.
-> 
-Ok this similar to what we proposed and has been mentioned by Oleksij:
-"remoteproc: add system resource manager device" patch set
-So this is handled by a client on top of rpmsg, no impact on the rpmsg 
-vrings initialization and management.
+are available in the Git repository at:
 
->>> - M core/RTOS wouldn't accept the start/stop/recover/reset operations
->> issued from A core/Linux side.
->> in addition with the patch
->> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.or
->> g%2Flkml%2F2018%2F11%2F30%2F159&amp;data=02%7C01%7Chongxing.z
->> hu%40nxp.com%7C532e75444add4475036208d7091e426d%7C686ea1d3bc2
->> b4c6fa92cd99c5c301635%7C0%7C0%7C636987897883960797&amp;sdata=
->> Ht3%2BKbdqLn%2BIFUO8Qj23ev8uFAtd9FffOGkssm1QmlQ%3D&amp;reserv
->> ed=0 you can control this in your platform driver using the rproc->preloaded
->> variable
->>>
->>> So the parallel mode is used in my proposal, both A core/Linux and M
->> core/RTOS works in real independent mode. There is no slave/master in this
->> implementation.
->> They are independent in terms of live cycle but not in terms of communication.
->> So you still need synchronization.
->> For instance your implementation uses a mailbox to synchronize both
->> (mailbox rdb). In existing rpmsg/virtio driver similar synchronization is done
->> through a status register in the resource table plus an optional mailbox kick
->> from Linux to remote processor.
->>
->> In case the Cortex-M4 starts first:
->> - The M4 firmware starts first (managing CAN)
->> - The Linux OS starts: it just parses the resource table, creates/allocates virtio
->> rings and buffers, update the vdev status flag in the resource table and kick
->> the M4 via mailbox.
-> [Richard Zhu] The vring and buffer address are defined in the DTS files.
-> So, the resource table contains the clks/pwr or some other HW resources required by M4.
-> It seems that the resource table is not mandatory required in this scenario, because that all the HW resources are pre-assigned and managed by XRDC already.
-> 
-The resource table mainly contains definitions related to the shared 
-memories, no HW Peripheral (but could be used in future for this kind of 
-declaration should be possible soon; https://lkml.org/lkml/2019/6/29/187).
-Resource table is not mandatory, but it is the generic way to define 
-rpmsg memories and probe the rpmsg bus driver. Here is an exemple of 
-resource table:
-https://github.com/zephyrproject-rtos/open-amp/pull/2/files#diff-65def9751b4fbc10973e184b5daa80e9
+  git://github.com/andersson/remoteproc tags/rpmsg-v5.3
 
-kind regards
-Arnaud
-> The vdev status flag is an interesting synchronization mechanism in the resource table.
-> 
->> - The M4 receive the mailbox kick, checks the vdev status and start the rpmsg
->> communication.
->> This is what we have implemented on STM32MP1. And we are able to re-use
->> the same M4 firmware booted first (independent mode) or loaded by Linux.
->>
-> [Richard Zhu] Thanks a lot for your kindly clarification.
-> 
->>> All the items defined in the struct rproc can't be used in this scenario.
->> I would say can be ignored, but the idea is that same rproc manages both
->> scenarios.
->>> IMHO, this patch-set is just to setup one communication channel between A
->> core and M core.
->>> There are no salve remote processor instances at A core/Linux side, that can
->> be controlled and manipulated by A core/Linux.
->> Yes i agree with you, no need to manage the remote processor in your case.
->> But the goal of remoteproc is not only the management of the remote
->> processor but also the management of the shared resources (rpmsg, carveout,
->> remote processor traces...). My proposal is to bypass the management of the
->> remote processor live cycle using Loic's patches, but to keep the remoteproc
->> part handling the associated resources to be able to probe RPMsg bus driver.
->>
-> [Richard Zhu] Got that, would try to follow that direction.
-> Thanks.
-> 
->>>
->>> Is it possible to add another folder(e.x parallel_proc) under
->> drivers/remoteproc/ to extend the current remoteproc work mode?
->>> Then, the parallel work mode can be setup in it. And the original
->> master/slave mode wouldn't messed up by the parallel mode extension.
->>> Please to feel free to give the comments.
->>> Any comments and suggestions are appreciated.
->> IMHO, That's seems to be useless, if existing solution could be adapted.
->> But I'm not the maintainer... just a contributor.
->>
-> [Richard Zhu] Understand. Thanks. 😊
-> 
-> Best Regards
-> Richard
->>
->> Best Regards
->> Arnaud
->>
->>>
->>> Thanks in advanced.
->>>
->>> Best Regards
->>> Richard Zhu
->>>
->>
->> <Snip>
+for you to fetch changes up to 54119bc1110dab2fa389f45c73a0787b8e037e8b:
+
+  rpmsg: core: Make remove handler for rpmsg driver optional. (2019-05-21 23:54:06 -0700)
+
+----------------------------------------------------------------
+rpmsg updates for v5.3
+
+This contains a DT binding update and a change to make the remote
+function of rpmsg_devices optional.
+
+----------------------------------------------------------------
+Pi-Hsun Shih (1):
+      rpmsg: core: Make remove handler for rpmsg driver optional.
+
+Sibi Sankar (1):
+      dt-bindings: soc: qcom: Add remote-pid binding for GLINK SMEM
+
+ Documentation/devicetree/bindings/soc/qcom/qcom,glink.txt | 5 +++++
+ drivers/rpmsg/rpmsg_core.c                                | 3 ++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
