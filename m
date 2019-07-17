@@ -2,56 +2,57 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E04A56C1CE
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 17 Jul 2019 22:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D433E6C1E0
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 17 Jul 2019 22:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727543AbfGQUAW (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 17 Jul 2019 16:00:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51050 "EHLO mail.kernel.org"
+        id S1727356AbfGQUJA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 17 Jul 2019 16:09:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726063AbfGQUAU (ORCPT
+        id S1726598AbfGQUJA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 17 Jul 2019 16:00:20 -0400
-Subject: Re: [GIT PULL] hwspinlock updates for v5.3
+        Wed, 17 Jul 2019 16:09:00 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B655320880;
+        Wed, 17 Jul 2019 20:08:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563393619;
-        bh=sGAbsa4zJ1MTP4jiSF9JknkD1pQyq1NakdV9LUCf1a4=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=TQRTE+Asfj+M0t3rnlATWDNlWOZQQNvyKLgPxjMpbDpTN3IWSWSMoOymSZbr/dL3M
-         eJDR2w9azwgf3uX3rFKPsuk1ZWbqt4SpGIQf9k/YHQ0fTLzhEk7mxB0ZGXEENLFNDh
-         VB7rfQjYeIiAM6c+fM5xZeb4gwxRVZiWeMFOCHSs=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20190716190153.GC8572@tuxbook-pro>
-References: <20190716190153.GC8572@tuxbook-pro>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20190716190153.GC8572@tuxbook-pro>
-X-PR-Tracked-Remote: git://github.com/andersson/remoteproc tags/hwlock-v5.3
-X-PR-Tracked-Commit-Id: 360aa640a59f269b784848c0b2d6d462952750d9
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 57ab5f740202babe93c8796013c5cfdfd6d08d7d
-Message-Id: <156339361931.17916.16714713395709914592.pr-tracker-bot@kernel.org>
-Date:   Wed, 17 Jul 2019 20:00:19 +0000
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fabien Dessenne <fabien.dessenne@st.com>,
-        Suman Anna <s-anna@ti.com>
+        s=default; t=1563394138;
+        bh=FUl5oq5OLvGQbM0JREz7A+G6Gvt+zNX0Xe4vIIy0EJ8=;
+        h=In-Reply-To:References:Subject:To:From:Date:From;
+        b=tNPd9orqIA8RDTL00I+EhptK09h/kV4IRaoaLxwv3Gz7IIGp5GOcUehVAAt3dsBJe
+         diE8IDrWJ5U1dXv71OgGUAjhTkqcQasmsux2mDtRhYDaNU7BaXz6N9iGKxaau1E2HO
+         aA9dDRIjSVVKs846AtLVmdalf3h+bkpPTGdA6a+8=
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1562859668-14209-7-git-send-email-gokulsri@codeaurora.org>
+References: <1562859668-14209-1-git-send-email-gokulsri@codeaurora.org> <1562859668-14209-7-git-send-email-gokulsri@codeaurora.org>
+Subject: Re: [PATCH 06/12] dt-bindings: clock: qcom: Add reset for WCSSAON
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        david.brown@linaro.org, devicetree@vger.kernel.org,
+        gokulsri@codeaurora.org, jassisinghbrar@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        mark.rutland@arm.com, mturquette@baylibre.com, ohad@wizery.com,
+        robh+dt@kernel.org, sricharan@codeaurora.org
+From:   Stephen Boyd <sboyd@kernel.org>
+User-Agent: alot/0.8.1
+Date:   Wed, 17 Jul 2019 13:08:57 -0700
+Message-Id: <20190717200858.B655320880@mail.kernel.org>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The pull request you sent on Tue, 16 Jul 2019 12:01:53 -0700:
+Quoting Gokul Sriram Palanisamy (2019-07-11 08:41:02)
+> Add binding for WCSSAON reset required for Q6v5 reset on IPQ8074 SoC.
+>=20
+> Signed-off-by: Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
+> Signed-off-by: Sricharan R <sricharan@codeaurora.org>
+> Signed-off-by: Nikhil Prakash V <nprakash@codeaurora.org>
+> ---
 
-> git://github.com/andersson/remoteproc tags/hwlock-v5.3
+Acked-by: Stephen Boyd <sboyd@kernel.org>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/57ab5f740202babe93c8796013c5cfdfd6d08d7d
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
