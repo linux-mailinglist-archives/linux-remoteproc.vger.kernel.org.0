@@ -2,69 +2,95 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2A66E0FF
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 19 Jul 2019 08:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFAF6F724
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 22 Jul 2019 04:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbfGSGcz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 19 Jul 2019 02:32:55 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:34856 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbfGSGcz (ORCPT
+        id S1728572AbfGVCb6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 21 Jul 2019 22:31:58 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:37192 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726233AbfGVCb5 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 19 Jul 2019 02:32:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=WybkyjUrQ9N6AtNgh2oW7UCNiPMoPSi8Rfxq1jvS6sI=; b=sI6liOEo5b8ADps8vl/o0Syy8
-        IRtsJigw1mZ3TGwzhV3Mo4+PobAMJn7BFG4kNw8ZR/Utn9hfCbsnA0jjZJK0gmhlE9mUveuN38czV
-        lr+4yt3vvdA1F4U5Q8ExE+56LsR7ZwbWE4yJZ7lmUqNWMpKSdwUYeKdrmNRZlLmTRPmqhMO5HX+Hy
-        7HEW6dqLsqsULcNg9vxrXf9Kw5cNVY+cD0PJiExlMmthL+QB8S1UcWZj05QjHp9PVYdNv/6uoSYF9
-        w+LL9eBor/WycwceVOUeOu75klzOTzDwYMlDHW5gSVExKmz2b8UiUsal6AhCJDZwT8zrhKtZDt5ZG
-        g9tnU/6nw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hoMRm-0002gn-Ql; Fri, 19 Jul 2019 06:32:50 +0000
-Date:   Thu, 18 Jul 2019 23:32:50 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Loic PALLARDY <loic.pallardy@st.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Clement Leger <cleger@kalray.eu>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
+        Sun, 21 Jul 2019 22:31:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1563762715; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=W4Y3xNv8DzGeNbpxDkocLZEsOwkzbTg/G7OrEllTF/c=;
+        b=NLjOKntL3Kzim+iZ5XNGr5PfQ4EJPM51BlW52U9IuigpRFYVqe1BqnQNiq8qL5CeM3dl9e
+        dpaBULyfwAB58wkqpiBl2FuHOWkZUJNxjW6e7zrB8dDt4uIZZ4e1zPcjzCmvj86yahLtmy
+        WkhInAClnHeD1rz0icZzgsexKsGejBA=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] remoteproc: copy parent dma_pfn_offset for vdev
-Message-ID: <20190719063250.GA9545@infradead.org>
-References: <20190612095521.4703-1-cleger@kalray.eu>
- <20190701070245.32083-1-cleger@kalray.eu>
- <20190702132229.GA8100@infradead.org>
- <58c8b8bd30a949678c027eb42a1b1bbb@SFHDAG7NODE2.st.com>
- <20190708184546.GA20670@infradead.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, od@zcrc.me,
+        Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 1/3] dt-bindings: Document JZ47xx VPU auxiliary processor
+Date:   Sun, 21 Jul 2019 22:31:38 -0400
+Message-Id: <20190722023140.14701-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190708184546.GA20670@infradead.org>
-User-Agent: Mutt/1.11.4 (2019-03-13)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, Jul 08, 2019 at 11:45:46AM -0700, Christoph Hellwig wrote:
-> > But that's breaking legacy as all platforms will have to add a virtio device node in
-> > their DT file...
-> > 
-> > Is it aligned with your view ?
-> 
-> Yes, that is how I'd assume it works.  But given that until recently
-> you did now have these subdevices for dma coherent purposes we can't
-> really break anything older than that, so I might still be missing
-> something.
+Inside the Video Processing Unit (VPU) of the recent JZ47xx SoCs from
+Ingenic is a second Xburst MIPS CPU very similar to the main core.
+This document describes the devicetree bindings for this auxiliary
+processor.
 
-Any chance we could expedite this?  remoteproc is the only driver
-inheriting dma ops to subdevices, and the only one using
-dma_declare_coherent_memory.  I'd really like to clean this mess up
-rather sooner than later.
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ .../bindings/remoteproc/ingenic,vpu.txt       | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ingenic,vpu.txt
+
+diff --git a/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.txt b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.txt
+new file mode 100644
+index 000000000000..fde86ad5a008
+--- /dev/null
++++ b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.txt
+@@ -0,0 +1,36 @@
++* Ingenic JZ47xx auxiliary processor
++
++Inside the Video Processing Unit (VPU) of the recent JZ47xx SoCs from Ingenic
++is a second Xburst MIPS CPU very similar to the main core.
++This document describes the devicetree bindings for this auxiliary processor.
++
++Required properties:
++- compatible: Should be "ingenic,jz4770-vpu-rproc"
++- reg: Must contain the registers location and length for:
++  * the auxiliary processor,
++  * the Tightly Coupled Shared Memory 0 (TCSM0),
++  * the Tightly Coupled Shared Memory 1 (TCSM1),
++  * the shared SRAM.
++- reg-names: Must contain "aux", "tcsm0", "tcsm1", "sram".
++- clocks: Clock specifier for the AUX and VPU clocks.
++- clock-names: Must contain "aux", "vpu".
++- interrupts: Interrupt specifier for the VPU hardware block.
++
++Example:
++
++vpu: cpu@132a0000 {
++	compatible = "ingenic,jz4770-vpu-rproc";
++
++	reg = <0x132a0000 0x20 /* AUX */
++		   0xf4000000 0x4000 /* TCSM0 */
++		   0x132c0000 0xc000 /* TCSM1 */
++		   0x132f0000 0x7000 /* SRAM */
++	>;
++	reg-names = "aux", "tcsm0", "tcsm1", "sram";
++
++	clocks = <&cgu JZ4770_CLK_AUX>, <&cgu JZ4770_CLK_VPU>;
++	clock-names = "aux", "vpu";
++
++	interrupt-parent = <&cpuintc>;
++	interrupts = <3>;
++};
+-- 
+2.21.0.593.g511ec345e18
+
