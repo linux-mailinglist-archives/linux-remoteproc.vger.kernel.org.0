@@ -2,118 +2,70 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEEA7147F
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Jul 2019 11:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CA27401B
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Jul 2019 22:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387672AbfGWJAz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 23 Jul 2019 05:00:55 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:48808 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727748AbfGWJAz (ORCPT
+        id S2387708AbfGXUhk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 24 Jul 2019 16:37:40 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:42051 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727624AbfGXUhj (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 23 Jul 2019 05:00:55 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 0209561157; Tue, 23 Jul 2019 09:00:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1563872454;
-        bh=EVKnOWzRkie6voTuz/y+NN9iApwRNseO39HZ9ZaKztA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iu7/PaC6J/cQuDrieBBS2cua4nRXyV5klWe1RXJRLji2Um8rYBpk99MlHvC49XUDQ
-         7jPng3hAcfOQGDaaMrqDg6t6ML1ZmjKjofeMYdQxyWLtDJmwtHYbehUCdgPKsubiPx
-         pfnFWlk21nrSCFTP8mRgsZ+MfA7OIl05MKdMJ98g=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED autolearn=no autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.codeaurora.org (Postfix) with ESMTP id 49C1A60850;
-        Tue, 23 Jul 2019 09:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1563872453;
-        bh=EVKnOWzRkie6voTuz/y+NN9iApwRNseO39HZ9ZaKztA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=f7h8K/NXZds7GQUIs+jKmAA2h8iL4yr4lRdC+V4qjGHGWXw0VvECrsvNDsWId3+G6
-         ulKshuZncQcWC87abYZ9AzrF7r6uHyTrCP5E+ZkCM1FuAGtXOU6+Mzfl/KIwAP9ajN
-         yNFTL6WfS/lGUdL/GuGirdsDVtO2TV9geClo2koE=
+        Wed, 24 Jul 2019 16:37:39 -0400
+Received: by mail-io1-f65.google.com with SMTP id e20so62067789iob.9;
+        Wed, 24 Jul 2019 13:37:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=d4NY+Zoiq+xj4BLlyojFL41fph5cwqpn3LM6JI8x6A0=;
+        b=kIAI2nru5rHtIBKOoUwz36Wk+tEKSwSVe9DMlLSMXwwZaGhOnYr0VWPI4U0HV8iLn9
+         aFPzJ1lo4oFrDoxX3V9uN8D2eKQMXhrO1oTxeSgp7Y7ozYUDZd8NEOntZHu7tZaFuaNu
+         aquZZuMTpytT86gGyfBqYwoP01/afCRYynpDkklt1odwbQEEvKFAe01ti1WTyjk6rDdM
+         T9eombebpG3S1kifWIHRI9hMkH9J02bBIb0QMsF0HYIb5XkXuVsVFvp4rjePn7lYJIle
+         K2gpG0xqW+I4I5KFfPp2dAu3IpJnKnsmFzhdgI2MZA7WQEftIn7rXvZLZ3sCaKjGiekt
+         s/lQ==
+X-Gm-Message-State: APjAAAWKbM0tX2vkswHdVA90VTrtX5XiZFa95Ko56RVnB5Llc6dFYijx
+        LvZE2XvO/lkqIC8pCRtK1Q==
+X-Google-Smtp-Source: APXvYqyhpV3f2IHu4wbrNhH0RD6PhImD4v+i3f6JW3doG56hhB/77vFnVZDx/SMcwhFIB1N+Acceew==
+X-Received: by 2002:a02:ad15:: with SMTP id s21mr89937576jan.47.1564000658461;
+        Wed, 24 Jul 2019 13:37:38 -0700 (PDT)
+Received: from localhost ([64.188.179.254])
+        by smtp.gmail.com with ESMTPSA id b8sm38662840ioj.16.2019.07.24.13.37.37
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 24 Jul 2019 13:37:37 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 14:37:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
+Cc:     agross@kernel.org, david.brown@linaro.org, mark.rutland@arm.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        jassisinghbrar@gmail.com, ohad@wizery.com,
+        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        sricharan@codeaurora.org
+Subject: Re: [PATCH 06/12] dt-bindings: clock: qcom: Add reset for WCSSAON
+Message-ID: <20190724203737.GA27783@bogus>
+References: <1562859668-14209-1-git-send-email-gokulsri@codeaurora.org>
+ <1562859668-14209-7-git-send-email-gokulsri@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 23 Jul 2019 14:30:53 +0530
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arun Kumar Neelakantam <aneela@codeaurora.org>,
-        Chris Lew <clew@codeaurora.org>
-Subject: Re: [PATCH] remoteproc: qcom: Move glink_ssr notification after stop
-In-Reply-To: <20190716050327.8866-1-bjorn.andersson@linaro.org>
-References: <20190716050327.8866-1-bjorn.andersson@linaro.org>
-Message-ID: <6259ebabc6183efb0045f9f990747d5e@codeaurora.org>
-X-Sender: sibis@codeaurora.org
-User-Agent: Roundcube Webmail/1.2.5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1562859668-14209-7-git-send-email-gokulsri@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
-Tested-by: Sibi Sankar <sibis@codeaurora.org>
-
-On 2019-07-16 10:33, Bjorn Andersson wrote:
-> glink_ssr is used to signal a remote processor "A" about the stopping 
-> of
-> another remote processor "B", so that in the event that remote 
-> processor
-> B is ever booted again the fifos of the glink channel between A and B 
-> is
-> in a known state.
+On Thu, Jul 11, 2019 at 09:11:02PM +0530, Gokul Sriram Palanisamy wrote:
+> Add binding for WCSSAON reset required for Q6v5 reset on IPQ8074 SoC.
 > 
-> But if remote processor A receives this notification before B is
-> actually stopped the newly reset fifo indices will be interpreted as
-> there being "data" on the channel and either side of the channel will
-> enter a fatal error handler.
-> 
-> Move the glink_ssr notification to the "unprepare" state of the
-> rproc_subdev to avoid this issue.
-> 
-> This has the side effect of us not notifying the dying remote processor
-> itself about its fate, which has been seen to block in certain resource
-> constraint scenarios.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
+> Signed-off-by: Sricharan R <sricharan@codeaurora.org>
+> Signed-off-by: Nikhil Prakash V <nprakash@codeaurora.org>
 > ---
->  drivers/remoteproc/qcom_common.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_common.c 
-> b/drivers/remoteproc/qcom_common.c
-> index 6a448429f223..60650bcc8c67 100644
-> --- a/drivers/remoteproc/qcom_common.c
-> +++ b/drivers/remoteproc/qcom_common.c
-> @@ -200,7 +200,7 @@ void qcom_unregister_ssr_notifier(struct 
-> notifier_block *nb)
->  }
->  EXPORT_SYMBOL_GPL(qcom_unregister_ssr_notifier);
-> 
-> -static void ssr_notify_stop(struct rproc_subdev *subdev, bool crashed)
-> +static void ssr_notify_unprepare(struct rproc_subdev *subdev)
->  {
->  	struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
-> 
-> @@ -220,7 +220,7 @@ void qcom_add_ssr_subdev(struct rproc *rproc,
-> struct qcom_rproc_ssr *ssr,
->  			 const char *ssr_name)
->  {
->  	ssr->name = ssr_name;
-> -	ssr->subdev.stop = ssr_notify_stop;
-> +	ssr->subdev.unprepare = ssr_notify_unprepare;
-> 
->  	rproc_add_subdev(rproc, &ssr->subdev);
->  }
+>  include/dt-bindings/clock/qcom,gcc-ipq8074.h | 1 +
+>  1 file changed, 1 insertion(+)
 
--- 
--- Sibi Sankar --
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project.
+Acked-by: Rob Herring <robh@kernel.org>
