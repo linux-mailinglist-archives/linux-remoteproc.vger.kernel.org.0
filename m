@@ -2,103 +2,81 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F2A761EB
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 26 Jul 2019 11:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE9B76A8D
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 26 Jul 2019 15:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbfGZJYI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 26 Jul 2019 05:24:08 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:59446 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726527AbfGZJYH (ORCPT
+        id S1727321AbfGZN7b (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 26 Jul 2019 09:59:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46490 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387423AbfGZNk1 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 26 Jul 2019 05:24:07 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id AADD96192C; Fri, 26 Jul 2019 09:24:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564133046;
-        bh=xP6UNwG/IosfwSrscp1xWFAuEJXHy9xTR/aAp7folSs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZCDUTutg8M1tredKqRkdIzbOt929mA1Q1fKDTC17vfcaiMYKRB7TWeMilSYeoNwQ0
-         wH6Mju//HjkfopQV66WQRLYqmlgqIWNa7Dm0KGFdzyWQAiyDEtcUJwPzREgVrx6mdq
-         N8JwTqFFw11KhJmsqDtlKZl0E3Tdp+SCZoxa58t4=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from govinds-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        Fri, 26 Jul 2019 09:40:27 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: govinds@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8643B61893;
-        Fri, 26 Jul 2019 09:23:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1564133042;
-        bh=xP6UNwG/IosfwSrscp1xWFAuEJXHy9xTR/aAp7folSs=;
+        by mail.kernel.org (Postfix) with ESMTPSA id 93BAE22BE8;
+        Fri, 26 Jul 2019 13:40:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564148426;
+        bh=lT53jVn0x4o2nj7YOhRR5yqWqMQqPXBWboEqcOgNnb4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LFOAS/iyOTiRYrrMTsUqZ3Zg+Lpy8fFiWUuGM2uICoKb6HNcSnMuXofb1b60urBbs
-         KoIGlS/k7Wj+cAdY8aoui2PJGl0bp9OrrqjBKcVD7GSZA8jT/WnfED5KkrPBpau88G
-         1N5uhWAhiSSalDNgpnGv+XclN5evm8xEXwJspZY8=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 8643B61893
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=govinds@codeaurora.org
-From:   Govind Singh <govinds@codeaurora.org>
-To:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
-        sboyd@kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     andy.gross@linaro.org, linux-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, Govind Singh <govinds@codeaurora.org>
-Subject: [PATCH v5 7/7] remoteproc: qcom: wcss: explicitly request exclusive reset control
-Date:   Fri, 26 Jul 2019 14:53:32 +0530
-Message-Id: <20190726092332.25202-8-govinds@codeaurora.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190726092332.25202-1-govinds@codeaurora.org>
-References: <20190726092332.25202-1-govinds@codeaurora.org>
+        b=jg3B5WedHTAKoUQ0ScBeOq56eeLdYN3AhVQtnI2eAeE6NChXxYK6vv4Nk6awA3+U+
+         0rf+zCsjkK3s4+SUDvEurDyB08uyfnoiIekWhr0H/S01jb5i3OfBu7DY3l5txVy1KU
+         jSKUIBjrhTxIpByxAaDMp4AFss3/+WuY1T5YdF6I=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Clement Leger <cleger@kalray.eu>,
+        Loic Pallardy <loic.pallardy@st.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 29/85] remoteproc: copy parent dma_pfn_offset for vdev
+Date:   Fri, 26 Jul 2019 09:38:39 -0400
+Message-Id: <20190726133936.11177-29-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190726133936.11177-1-sashal@kernel.org>
+References: <20190726133936.11177-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Use request exclusive reset control for wcss reset controls.
+From: Clement Leger <cleger@kalray.eu>
 
-Signed-off-by: Govind Singh <govinds@codeaurora.org>
+[ Upstream commit 72f64cabc4bd6985c7355f5547bd3637c82762ac ]
+
+When preparing the subdevice for the vdev, also copy dma_pfn_offset
+since this is used for sub device dma allocations. Without that, there
+is incoherency between the parent dma settings and the childs one,
+potentially leading to dma_alloc_coherent failure (due to phys_to_dma
+using dma_pfn_offset for translation).
+
+Fixes: 086d08725d34 ("remoteproc: create vdev subdevice with specific dma memory pool")
+Signed-off-by: Clement Leger <cleger@kalray.eu>
+Acked-by: Loic Pallardy <loic.pallardy@st.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/remoteproc/qcom_q6v5_wcss.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/remoteproc/remoteproc_core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_wcss.c b/drivers/remoteproc/qcom_q6v5_wcss.c
-index c2e75f5b5737..a2671a19f2d0 100644
---- a/drivers/remoteproc/qcom_q6v5_wcss.c
-+++ b/drivers/remoteproc/qcom_q6v5_wcss.c
-@@ -781,21 +781,21 @@ static int q6v5_wcss_init_reset(struct q6v5_wcss *wcss,
- 	struct device *dev = wcss->dev;
- 
- 	if (desc->aon_reset_required) {
--		wcss->wcss_aon_reset = devm_reset_control_get(dev, "wcss_aon_reset");;
-+		wcss->wcss_aon_reset = devm_reset_control_get_exclusive(dev, "wcss_aon_reset");;
- 		if (IS_ERR(wcss->wcss_aon_reset)) {
- 			dev_err(wcss->dev, "fail to acquire wcss_aon_reset\n");
- 			return PTR_ERR(wcss->wcss_aon_reset);
- 		}
- 	}
- 
--	wcss->wcss_reset = devm_reset_control_get(dev, "wcss_reset");
-+	wcss->wcss_reset = devm_reset_control_get_exclusive(dev, "wcss_reset");
- 	if (IS_ERR(wcss->wcss_reset)) {
- 		dev_err(wcss->dev, "unable to acquire wcss_reset\n");
- 		return PTR_ERR(wcss->wcss_reset);
- 	}
- 
- 	if (desc->wcss_q6_reset_required) {
--		wcss->wcss_q6_reset = devm_reset_control_get(dev, "wcss_q6_reset");
-+		wcss->wcss_q6_reset = devm_reset_control_get_exclusive(dev, "wcss_q6_reset");
- 		if (IS_ERR(wcss->wcss_q6_reset)) {
- 			dev_err(wcss->dev, "unable to acquire wcss_q6_reset\n");
- 			return PTR_ERR(wcss->wcss_q6_reset);
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 8b5363223eaa..5031c6806908 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -512,6 +512,7 @@ static int rproc_handle_vdev(struct rproc *rproc, struct fw_rsc_vdev *rsc,
+ 	/* Initialise vdev subdevice */
+ 	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
+ 	rvdev->dev.parent = rproc->dev.parent;
++	rvdev->dev.dma_pfn_offset = rproc->dev.parent->dma_pfn_offset;
+ 	rvdev->dev.release = rproc_rvdev_release;
+ 	dev_set_name(&rvdev->dev, "%s#%s", dev_name(rvdev->dev.parent), name);
+ 	dev_set_drvdata(&rvdev->dev, rvdev);
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.20.1
 
