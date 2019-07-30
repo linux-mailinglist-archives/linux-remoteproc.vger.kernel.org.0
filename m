@@ -2,38 +2,58 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB4079319
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 29 Jul 2019 20:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39A07B196
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Jul 2019 20:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387899AbfG2Sbq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 29 Jul 2019 14:31:46 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:50224 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387397AbfG2Sbq (ORCPT
+        id S2388044AbfG3SSg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 30 Jul 2019 14:18:36 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:44708 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388036AbfG3SQa (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 29 Jul 2019 14:31:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1564425098; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zRgiwGElrD3GkNjgKUEcwA8NO9VsgpCuqJlhV/Snczk=;
-        b=dKqQyEjtH4/ay0KueeT1jPQFVkFg2CRfJMJXXPvYLbbUakh2AIzO4Fr0RNUuuVH4llRawq
-        c9/pzEDeLETSf+E1ZdgTpkDK5dBJQDsS6Tm85FkR++xM8Tv69AkeE3xFUUiwI9M7+nPjbn
-        L7BgqcCEIVcE7oam08eD6dzWYV+s5yc=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Tue, 30 Jul 2019 14:16:30 -0400
+Received: by mail-pg1-f195.google.com with SMTP id i18so30476835pgl.11
+        for <linux-remoteproc@vger.kernel.org>; Tue, 30 Jul 2019 11:16:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=R+LwxKh+rGV2TldYFaibsGc6jv64xvgd6qWUW7IJGL4=;
+        b=HzhzU7pWiJQ2/6+p2YWgzzRKNpggqYFIfL605hH5WJwJLsgD7Ez+gO9WjqY+/SZNCh
+         T8nZ/Jq8szKWQP0fpYpxOA/mwARN+o0iWnqFKKxI7Qv0+pc6INWmzOQQuxkkJMUbKC8Y
+         kNEPco6aVNnwmUazs+zmmcTNBV6vYXml1F/XA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=R+LwxKh+rGV2TldYFaibsGc6jv64xvgd6qWUW7IJGL4=;
+        b=HkA+ZUwFxD21jTJ2shyCy9LB6G32Q2s0/Bsa/LEUQNYByvsFzyJJsK2cZNvAJ0bpYl
+         GG9N4qH98GuTo2eZgdB6Wwqzc0GrKruXjQh1k+3U4/qbJSrS/ueHOZN2EEsXFdaF75lR
+         Tqx/QNfvCepT5NLr5Q+/QzOn2hp9tdrEOmygnDdUY0/9S9KxJWLWVN1Yxh9mLFsSAi1I
+         OLEfiizapgmxR78lmvnbW+EP/4uUVlgx9wvFZlsW9pPXz18jiAiBYwM6KWfVg/mPLZ6H
+         jvvyGdXCFuJEmPR6ooMjHwuh2OCFRmHo70aShPeAmglUKGOXeI8h5UOceCU/+/WHqJ+j
+         AOdQ==
+X-Gm-Message-State: APjAAAU75DKR+aCA4fdDa+7sEhlivINNfnN2imLLmtMuJTV7dPBclsln
+        H2T2i9DOQzhPNk9qa8smet23gw==
+X-Google-Smtp-Source: APXvYqwlugLrblhpkKg5MgH82DH3I2ZfTTIFs4nYin9BP3UU2LX7voVgbAYYN2JbqVBDzMxKaeAoGw==
+X-Received: by 2002:a62:642:: with SMTP id 63mr43464543pfg.257.1564510589976;
+        Tue, 30 Jul 2019 11:16:29 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id g1sm106744083pgg.27.2019.07.30.11.16.29
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 30 Jul 2019 11:16:29 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     Paul Burton <paul.burton@mips.com>, od@zcrc.me,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH v2 3/3] remoteproc: ingenic: Added remoteproc driver
-Date:   Mon, 29 Jul 2019 14:31:09 -0400
-Message-Id: <20190729183109.18283-3-paul@crapouillou.net>
-In-Reply-To: <20190729183109.18283-1-paul@crapouillou.net>
-References: <20190729183109.18283-1-paul@crapouillou.net>
+        linux-remoteproc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v6 38/57] remoteproc: Remove dev_err() usage after platform_get_irq()
+Date:   Tue, 30 Jul 2019 11:15:38 -0700
+Message-Id: <20190730181557.90391-39-swboyd@chromium.org>
+X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
+In-Reply-To: <20190730181557.90391-1-swboyd@chromium.org>
+References: <20190730181557.90391-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -41,344 +61,171 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-This driver is used to boot, communicate with and load firmwares to the
-MIPS co-processor found in the VPU hardware of the JZ47xx SoCs from
-Ingenic.
+We don't need dev_err() messages when platform_get_irq() fails now that
+platform_get_irq() prints an error message itself when something goes
+wrong. Let's remove these prints with a simple semantic patch.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+// <smpl>
+@@
+expression ret;
+struct platform_device *E;
+@@
+
+ret =
+(
+platform_get_irq(E, ...)
+|
+platform_get_irq_byname(E, ...)
+);
+
+if ( \( ret < 0 \| ret <= 0 \) )
+{
+(
+-if (ret != -EPROBE_DEFER)
+-{ ...
+-dev_err(...);
+-... }
+|
+...
+-dev_err(...);
+)
+...
+}
+// </smpl>
+
+While we're here, remove braces on if statements that only have one
+statement (manually).
+
+Cc: Ohad Ben-Cohen <ohad@wizery.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: linux-remoteproc@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 ---
 
-Notes:
-    v2: Remove exception for always-mapped memories
+Please apply directly to subsystem trees
 
- drivers/remoteproc/Kconfig         |   8 +
- drivers/remoteproc/Makefile        |   1 +
- drivers/remoteproc/ingenic_rproc.c | 285 +++++++++++++++++++++++++++++
- 3 files changed, 294 insertions(+)
- create mode 100644 drivers/remoteproc/ingenic_rproc.c
+ drivers/remoteproc/da8xx_remoteproc.c    |  4 +--
+ drivers/remoteproc/keystone_remoteproc.c |  4 ---
+ drivers/remoteproc/qcom_q6v5.c           | 35 ++++--------------------
+ 3 files changed, 6 insertions(+), 37 deletions(-)
 
-diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index 28ed306982f7..a0be40e2098d 100644
---- a/drivers/remoteproc/Kconfig
-+++ b/drivers/remoteproc/Kconfig
-@@ -214,6 +214,14 @@ config STM32_RPROC
+diff --git a/drivers/remoteproc/da8xx_remoteproc.c b/drivers/remoteproc/da8xx_remoteproc.c
+index b2c7af323ed1..98e0be9476a4 100644
+--- a/drivers/remoteproc/da8xx_remoteproc.c
++++ b/drivers/remoteproc/da8xx_remoteproc.c
+@@ -249,10 +249,8 @@ static int da8xx_rproc_probe(struct platform_device *pdev)
+ 	int ret;
  
- 	  This can be either built-in or a loadable module.
+ 	irq = platform_get_irq(pdev, 0);
+-	if (irq < 0) {
+-		dev_err(dev, "platform_get_irq(pdev, 0) error: %d\n", irq);
++	if (irq < 0)
+ 		return irq;
+-	}
  
-+config INGENIC_RPROC
-+	tristate "Ingenic JZ47xx VPU remoteproc support"
-+	depends on MIPS || COMPILE_TEST
-+	help
-+	  Say y or m here to support the VPU in the JZ47xx SoCs from Ingenic.
-+	  This can be either built-in or a loadable module.
-+	  If unsure say N.
-+
- endif # REMOTEPROC
+ 	irq_data = irq_get_irq_data(irq);
+ 	if (!irq_data) {
+diff --git a/drivers/remoteproc/keystone_remoteproc.c b/drivers/remoteproc/keystone_remoteproc.c
+index 4cb44017af8a..5c4658f00b3d 100644
+--- a/drivers/remoteproc/keystone_remoteproc.c
++++ b/drivers/remoteproc/keystone_remoteproc.c
+@@ -424,16 +424,12 @@ static int keystone_rproc_probe(struct platform_device *pdev)
+ 	ksproc->irq_ring = platform_get_irq_byname(pdev, "vring");
+ 	if (ksproc->irq_ring < 0) {
+ 		ret = ksproc->irq_ring;
+-		dev_err(dev, "failed to get vring interrupt, status = %d\n",
+-			ret);
+ 		goto disable_clk;
+ 	}
  
- endmenu
-diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index 00f09e658cb3..6eb0137abbc7 100644
---- a/drivers/remoteproc/Makefile
-+++ b/drivers/remoteproc/Makefile
-@@ -10,6 +10,7 @@ remoteproc-y				+= remoteproc_sysfs.o
- remoteproc-y				+= remoteproc_virtio.o
- remoteproc-y				+= remoteproc_elf_loader.o
- obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
-+obj-$(CONFIG_INGENIC_RPROC)			+= ingenic_rproc.o
- obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o
- obj-$(CONFIG_WKUP_M3_RPROC)		+= wkup_m3_rproc.o
- obj-$(CONFIG_DA8XX_REMOTEPROC)		+= da8xx_remoteproc.o
-diff --git a/drivers/remoteproc/ingenic_rproc.c b/drivers/remoteproc/ingenic_rproc.c
-new file mode 100644
-index 000000000000..6fe0530c83a6
---- /dev/null
-+++ b/drivers/remoteproc/ingenic_rproc.c
-@@ -0,0 +1,285 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Ingenic JZ47xx remoteproc driver
-+ * Copyright 2019, Paul Cercueil <paul@crapouillou.net>
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/clk.h>
-+#include <linux/err.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/remoteproc.h>
-+
-+#include "remoteproc_internal.h"
-+
-+#define REG_AUX_CTRL		0x0
-+#define REG_AUX_MSG_ACK		0x10
-+#define REG_AUX_MSG		0x14
-+#define REG_CORE_MSG_ACK	0x18
-+#define REG_CORE_MSG		0x1C
-+
-+#define AUX_CTRL_SLEEP		BIT(31)
-+#define AUX_CTRL_MSG_IRQ_EN	BIT(3)
-+#define AUX_CTRL_NMI_RESETS	BIT(2)
-+#define AUX_CTRL_NMI		BIT(1)
-+#define AUX_CTRL_SW_RESET	BIT(0)
-+
-+struct vpu_mem_map {
-+	const char *name;
-+	unsigned int da;
-+};
-+
-+struct vpu_mem_info {
-+	const struct vpu_mem_map *map;
-+	unsigned long len;
-+	void __iomem *base;
-+};
-+
-+static const struct vpu_mem_map vpu_mem_map[] = {
-+	{ "tcsm0", 0x132b0000 },
-+	{ "tcsm1", 0xf4000000 },
-+	{ "sram",  0x132f0000 },
-+};
-+
-+/* Device data */
-+struct vpu {
-+	int irq;
-+	struct clk *vpu_clk;
-+	struct clk *aux_clk;
-+	void __iomem *aux_base;
-+	struct vpu_mem_info mem_info[ARRAY_SIZE(vpu_mem_map)];
-+	struct device *dev;
-+};
-+
-+static int ingenic_rproc_prepare(struct rproc *rproc)
-+{
-+	struct vpu *vpu = rproc->priv;
-+	int ret;
-+
-+	ret = clk_prepare_enable(vpu->vpu_clk);
-+	if (ret) {
-+		dev_err(vpu->dev, "Unable to start VPU clock: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = clk_prepare_enable(vpu->aux_clk);
-+	if (ret) {
-+		dev_err(vpu->dev, "Unable to start AUX clock: %d\n", ret);
-+		goto err_disable_vpu_clk;
-+	}
-+
-+	return 0;
-+
-+err_disable_vpu_clk:
-+	clk_disable_unprepare(vpu->vpu_clk);
-+	return ret;
-+}
-+
-+static void ingenic_rproc_unprepare(struct rproc *rproc)
-+{
-+	struct vpu *vpu = rproc->priv;
-+
-+	clk_disable_unprepare(vpu->aux_clk);
-+	clk_disable_unprepare(vpu->vpu_clk);
-+}
-+
-+static int ingenic_rproc_start(struct rproc *rproc)
-+{
-+	struct vpu *vpu = rproc->priv;
-+	u32 ctrl;
-+
-+	enable_irq(vpu->irq);
-+
-+	/* Reset the AUX and enable message IRQ */
-+	ctrl = AUX_CTRL_NMI_RESETS | AUX_CTRL_NMI | AUX_CTRL_MSG_IRQ_EN;
-+	writel(ctrl, vpu->aux_base + REG_AUX_CTRL);
-+
-+	return 0;
-+}
-+
-+static int ingenic_rproc_stop(struct rproc *rproc)
-+{
-+	struct vpu *vpu = rproc->priv;
-+
-+	/* Keep AUX in reset mode */
-+	writel(AUX_CTRL_SW_RESET, vpu->aux_base + REG_AUX_CTRL);
-+
-+	disable_irq_nosync(vpu->irq);
-+
-+	return 0;
-+}
-+
-+static void ingenic_rproc_kick(struct rproc *rproc, int vqid)
-+{
-+	struct vpu *vpu = rproc->priv;
-+
-+	writel(vqid, vpu->aux_base + REG_CORE_MSG);
-+}
-+
-+static void *ingenic_rproc_da_to_va(struct rproc *rproc, u64 da, int len)
-+{
-+	struct vpu *vpu = rproc->priv;
-+	void __iomem *va = NULL;
-+	unsigned int i;
-+
-+	if (len <= 0)
-+		return NULL;
-+
-+	for (i = 0; i < ARRAY_SIZE(vpu_mem_map); i++) {
-+		const struct vpu_mem_info *info = &vpu->mem_info[i];
-+		const struct vpu_mem_map *map = info->map;
-+
-+		if (da >= map->da && (da + len) < (map->da + info->len)) {
-+			va = info->base + (da - map->da);
-+			break;
-+		}
-+	}
-+
-+	return (__force void *)va;
-+}
-+
-+static struct rproc_ops ingenic_rproc_ops = {
-+	.prepare = ingenic_rproc_prepare,
-+	.unprepare = ingenic_rproc_unprepare,
-+	.start = ingenic_rproc_start,
-+	.stop = ingenic_rproc_stop,
-+	.kick = ingenic_rproc_kick,
-+	.da_to_va = ingenic_rproc_da_to_va,
-+};
-+
-+static irqreturn_t vpu_interrupt(int irq, void *data)
-+{
-+	struct rproc *rproc = data;
-+	struct vpu *vpu = rproc->priv;
-+	u32 vring;
-+
-+	vring = readl(vpu->aux_base + REG_AUX_MSG);
-+
-+	/* Ack the interrupt */
-+	writel(0, vpu->aux_base + REG_AUX_MSG_ACK);
-+
-+	return rproc_vq_interrupt(rproc, vring);
-+}
-+
-+#ifdef CONFIG_OF
-+static const struct of_device_id ingenic_rproc_of_matches[] = {
-+	{ .compatible = "ingenic,jz4770-vpu-rproc", },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, ingenic_rproc_of_matches);
-+#endif
-+
-+static void ingenic_rproc_free(void *rproc)
-+{
-+	rproc_free(rproc);
-+}
-+
-+static void ingenic_rproc_unregister(void *rproc)
-+{
-+	rproc_del(rproc);
-+	rproc_shutdown(rproc);
-+}
-+
-+static int ingenic_rproc_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct resource *mem;
-+	struct rproc *rproc;
-+	struct vpu *vpu;
-+	unsigned int i;
-+	int ret;
-+
-+	rproc = rproc_alloc(dev, "ingenic-vpu",
-+			    &ingenic_rproc_ops, NULL, sizeof(*vpu));
-+	if (!rproc)
-+		return -ENOMEM;
-+
-+	ret = devm_add_action_or_reset(dev, ingenic_rproc_free, rproc);
-+	if (ret) {
-+		dev_err(dev, "Unable to add action");
-+		return ret;
-+	}
-+
-+	platform_set_drvdata(pdev, rproc);
-+	vpu = rproc->priv;
-+	vpu->dev = &pdev->dev;
-+
-+	mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "aux");
-+	vpu->aux_base = devm_ioremap_resource(dev, mem);
-+	if (IS_ERR(vpu->aux_base)) {
-+		dev_err(dev, "Failed to ioremap");
-+		return PTR_ERR(vpu->aux_base);
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(vpu_mem_map); i++) {
-+		mem = platform_get_resource_byname(pdev, IORESOURCE_MEM,
-+						   vpu_mem_map[i].name);
-+
-+		vpu->mem_info[i].base = devm_ioremap_resource(dev, mem);
-+		if (IS_ERR(vpu->mem_info[i].base)) {
-+			ret = PTR_ERR(vpu->mem_info[i].base);
-+			dev_err(dev, "Failed to ioremap");
-+			return ret;
-+		}
-+
-+		vpu->mem_info[i].len = resource_size(mem);
-+		vpu->mem_info[i].map = &vpu_mem_map[i];
-+	}
-+
-+	vpu->vpu_clk = devm_clk_get(dev, "vpu");
-+	if (IS_ERR(vpu->vpu_clk)) {
-+		dev_err(dev, "Failed to get VPU clock");
-+		return PTR_ERR(vpu->vpu_clk);
-+	}
-+
-+	vpu->aux_clk = devm_clk_get(dev, "aux");
-+	if (IS_ERR(vpu->aux_clk)) {
-+		dev_err(dev, "Failed to get AUX clock");
-+		return PTR_ERR(vpu->aux_clk);
-+	}
-+
-+	vpu->irq = platform_get_irq(pdev, 0);
-+	if (vpu->irq < 0) {
-+		dev_err(dev, "Failed to get platform IRQ");
-+		return vpu->irq;
-+	}
-+
-+	ret = devm_request_irq(dev, vpu->irq, vpu_interrupt, 0, "VPU", rproc);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to request IRQ");
-+		return ret;
-+	}
-+
-+	disable_irq_nosync(vpu->irq);
-+
-+	ret = rproc_add(rproc);
-+	if (ret) {
-+		dev_err(dev, "Failed to register remote processor");
-+		return ret;
-+	}
-+
-+	ret = devm_add_action_or_reset(dev, ingenic_rproc_unregister, rproc);
-+	if (ret) {
-+		dev_err(dev, "Unable to add action");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct platform_driver ingenic_rproc_driver = {
-+	.probe = ingenic_rproc_probe,
-+	.driver = {
-+		.name = "ingenic-vpu",
-+		.owner = THIS_MODULE,
-+		.of_match_table = of_match_ptr(ingenic_rproc_of_matches),
-+	},
-+};
-+module_platform_driver(ingenic_rproc_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
-+MODULE_DESCRIPTION("Ingenic JZ47xx Remote Processor control driver");
+ 	ksproc->irq_fault = platform_get_irq_byname(pdev, "exception");
+ 	if (ksproc->irq_fault < 0) {
+ 		ret = ksproc->irq_fault;
+-		dev_err(dev, "failed to get exception interrupt, status = %d\n",
+-			ret);
+ 		goto disable_clk;
+ 	}
+ 
+diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+index 0d33e3079f0d..cb0f4a0be032 100644
+--- a/drivers/remoteproc/qcom_q6v5.c
++++ b/drivers/remoteproc/qcom_q6v5.c
+@@ -187,13 +187,8 @@ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+ 	init_completion(&q6v5->stop_done);
+ 
+ 	q6v5->wdog_irq = platform_get_irq_byname(pdev, "wdog");
+-	if (q6v5->wdog_irq < 0) {
+-		if (q6v5->wdog_irq != -EPROBE_DEFER)
+-			dev_err(&pdev->dev,
+-				"failed to retrieve wdog IRQ: %d\n",
+-				q6v5->wdog_irq);
++	if (q6v5->wdog_irq < 0)
+ 		return q6v5->wdog_irq;
+-	}
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, q6v5->wdog_irq,
+ 					NULL, q6v5_wdog_interrupt,
+@@ -205,13 +200,8 @@ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+ 	}
+ 
+ 	q6v5->fatal_irq = platform_get_irq_byname(pdev, "fatal");
+-	if (q6v5->fatal_irq < 0) {
+-		if (q6v5->fatal_irq != -EPROBE_DEFER)
+-			dev_err(&pdev->dev,
+-				"failed to retrieve fatal IRQ: %d\n",
+-				q6v5->fatal_irq);
++	if (q6v5->fatal_irq < 0)
+ 		return q6v5->fatal_irq;
+-	}
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, q6v5->fatal_irq,
+ 					NULL, q6v5_fatal_interrupt,
+@@ -223,13 +213,8 @@ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+ 	}
+ 
+ 	q6v5->ready_irq = platform_get_irq_byname(pdev, "ready");
+-	if (q6v5->ready_irq < 0) {
+-		if (q6v5->ready_irq != -EPROBE_DEFER)
+-			dev_err(&pdev->dev,
+-				"failed to retrieve ready IRQ: %d\n",
+-				q6v5->ready_irq);
++	if (q6v5->ready_irq < 0)
+ 		return q6v5->ready_irq;
+-	}
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, q6v5->ready_irq,
+ 					NULL, q6v5_ready_interrupt,
+@@ -241,13 +226,8 @@ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+ 	}
+ 
+ 	q6v5->handover_irq = platform_get_irq_byname(pdev, "handover");
+-	if (q6v5->handover_irq < 0) {
+-		if (q6v5->handover_irq != -EPROBE_DEFER)
+-			dev_err(&pdev->dev,
+-				"failed to retrieve handover IRQ: %d\n",
+-				q6v5->handover_irq);
++	if (q6v5->handover_irq < 0)
+ 		return q6v5->handover_irq;
+-	}
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, q6v5->handover_irq,
+ 					NULL, q6v5_handover_interrupt,
+@@ -260,13 +240,8 @@ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+ 	disable_irq(q6v5->handover_irq);
+ 
+ 	q6v5->stop_irq = platform_get_irq_byname(pdev, "stop-ack");
+-	if (q6v5->stop_irq < 0) {
+-		if (q6v5->stop_irq != -EPROBE_DEFER)
+-			dev_err(&pdev->dev,
+-				"failed to retrieve stop-ack IRQ: %d\n",
+-				q6v5->stop_irq);
++	if (q6v5->stop_irq < 0)
+ 		return q6v5->stop_irq;
+-	}
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, q6v5->stop_irq,
+ 					NULL, q6v5_stop_interrupt,
 -- 
-2.21.0.593.g511ec345e18
+Sent by a computer through tubes
 
