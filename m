@@ -2,397 +2,140 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B12E7BCE9
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 31 Jul 2019 11:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD6F7E326
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  1 Aug 2019 21:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727555AbfGaJWi (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 31 Jul 2019 05:22:38 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:21954 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726664AbfGaJWi (ORCPT
+        id S2388540AbfHATMf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 1 Aug 2019 15:12:35 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:46916 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388407AbfHATMf (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 31 Jul 2019 05:22:38 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6V9LhQM018619;
-        Wed, 31 Jul 2019 11:22:18 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=0+TG/KmIfhy76AN65jf9ni8GDElR6aasDlbrUpq3UD8=;
- b=v/CbvhgoHC7bta5GYMBQKiRFk+0gYjrA3s754v+S/1+VzuOyruHIfVNz2ORfwNVeG95r
- 1CZrsv6GXZHUJpmgnvdFRCoswfmy96MSk81FNhuNX+UtXGgzrOKDWN86XzvT0mxMvbnj
- jT6n9DeF0c1HaP/9LPHYzSp9ZgNGMaD799bD2sjedbxEtsBeQV8tThC/AMd4SK58djSg
- GFoHpfKJMyetj1VJdHyS1AJps6QRW7vvwnmra4YruZ69FSx/flmCR5a/wWmMwOqsZPQA
- PZiwUNIraJUE9WXD9xkrErdzBdWi7bxWmhMrtqH9TvGtlt6Zwr7nGpE4OwS+UCbj8qEr yQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2u0ccwqefa-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Wed, 31 Jul 2019 11:22:18 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id CBDA63F;
-        Wed, 31 Jul 2019 09:22:17 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag5node2.st.com [10.75.127.14])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AB95DCC8DF;
-        Wed, 31 Jul 2019 11:22:17 +0200 (CEST)
-Received: from SFHDAG7NODE2.st.com (10.75.127.20) by SFHDAG5NODE2.st.com
- (10.75.127.14) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 31 Jul
- 2019 11:22:17 +0200
-Received: from SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090]) by
- SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090%20]) with mapi id
- 15.00.1473.003; Wed, 31 Jul 2019 11:22:17 +0200
-From:   Loic PALLARDY <loic.pallardy@st.com>
-To:     Fabien DESSENNE <fabien.dessenne@st.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Thu, 1 Aug 2019 15:12:35 -0400
+Received: by mail-pl1-f194.google.com with SMTP id c2so32593191plz.13
+        for <linux-remoteproc@vger.kernel.org>; Thu, 01 Aug 2019 12:12:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=u3M46kJjAPF4b1mqVIN/QqF1xk0nbqKlZydzEhZoL6s=;
+        b=Iu1CH4ToXYW90mTOdeHkqHqps0H4/Jt6nXnjawYRwpFRpCQ3R+FOjlvAHtsf0q+cca
+         g/GwPjYINrkuM0M27UfcxGN0Hpzq1z+zbIQRr9A8cLNBE6045TW8YO5B1jv+3zrSM+AI
+         RwmR2ijMX/YKSlorl4qZN6W9VRTC6OW7Mk6NYDrjpVniQ6cLad/+XzqpNwinuFtcNb6o
+         GTdsYR1aNvUhF9KHd0BLzgdnZis8Y+VjfG/T5HxcorMnvqNAW8q864HiIsdjCkh4XWvu
+         mGmSsJd4vy/0+OKrbqrS2lRjhwOvHCzqJiDH6nI0GAHQ2FHm8Lic/V7jrb83izS6/2/D
+         KuMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=u3M46kJjAPF4b1mqVIN/QqF1xk0nbqKlZydzEhZoL6s=;
+        b=EOo1oHlQDuzfcTE+czlyngQbOGdIo8gIGRZB+urELe7GOfya1UlW7gJk49cPcfmB3Q
+         7GHFJ0rUyOq7N232Ad44iNaT6Nm4+QRhNQCdT1TuBe/Hm4wdoL0TL9Wn4n7ZehHq4gFy
+         lkNUXnvQryZKt3rpjyL0CEUc6Hvp3QP7Q0GSz6mtEisUok5uswBkkNtC3pZ0DMvo5tQH
+         MDfsb8SYNjZCc4gqR1gfcm06mL6Tb6nZeEnK5oKicNUq+J8uZSE+ETpU1n4tDmCzn+Or
+         KIKjFnZouKCSDB16FrQjiZVF6G+A3E4G4tvzZPPFk+91sxAAYWf+dULPgMF7wS2VVVS7
+         ec7A==
+X-Gm-Message-State: APjAAAXyp3dnftjw5diOxtjtZRPEk+EXt/268K402DBIXtJNeeBoBaHu
+        w00QMTTrfJfoz4uFz1dMKLk/bQ==
+X-Google-Smtp-Source: APXvYqyXQfNjDuCkBrlF9sH4WaQpLYB6kh01jQJmr+SAa0EdEbp3B9CGOkSzrUP/hpK0bXspTKw35A==
+X-Received: by 2002:a17:902:d90a:: with SMTP id c10mr124505738plz.208.1564686753720;
+        Thu, 01 Aug 2019 12:12:33 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id q4sm5434151pjq.27.2019.08.01.12.12.32
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 01 Aug 2019 12:12:33 -0700 (PDT)
+Date:   Thu, 1 Aug 2019 12:14:03 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Fabien Dessenne <fabien.dessenne@st.com>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
         Jonathan Corbet <corbet@lwn.net>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-CC:     Fabien DESSENNE <fabien.dessenne@st.com>,
-        Benjamin GAIGNARD <benjamin.gaignard@st.com>
-Subject: RE: [PATCH 2/6] hwspinlock: allow sharing of hwspinlocks
-Thread-Topic: [PATCH 2/6] hwspinlock: allow sharing of hwspinlocks
-Thread-Index: AQHU2bS6L3QZamBVFkievfUMjcJ+56blTrKg
-Date:   Wed, 31 Jul 2019 09:22:17 +0000
-Message-ID: <3238562932094718b902ee0a2e3a3c8e@SFHDAG7NODE2.st.com>
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        Benjamin Gaignard <benjamin.gaignard@st.com>
+Subject: Re: [PATCH 0/6] hwspinlock: allow sharing of hwspinlocks
+Message-ID: <20190801191403.GA7234@tuxbook-pro>
 References: <1552492237-28810-1-git-send-email-fabien.dessenne@st.com>
- <1552492237-28810-3-git-send-email-fabien.dessenne@st.com>
-In-Reply-To: <1552492237-28810-3-git-send-email-fabien.dessenne@st.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.50]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-31_04:,,
- signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1552492237-28810-1-git-send-email-fabien.dessenne@st.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+On Wed 13 Mar 08:50 PDT 2019, Fabien Dessenne wrote:
 
+> The current implementation does not allow two different devices to use
+> a common hwspinlock. This patch set proposes to have, as an option, some
+> hwspinlocks shared between several users.
+> 
+> Below is an example that explain the need for this:
+> 	exti: interrupt-controller@5000d000 {
+> 		compatible = "st,stm32mp1-exti", "syscon";
+> 		interrupt-controller;
+> 		#interrupt-cells = <2>;
+> 		reg = <0x5000d000 0x400>;
+> 		hwlocks = <&hsem 1>;
+> 	};
+> The two drivers (stm32mp1-exti and syscon) refer to the same hwlock.
+> With the current hwspinlock implementation, only the first driver succeeds
+> in requesting (hwspin_lock_request_specific) the hwlock. The second request
+> fails.
+> 
+> 
+> The proposed approach does not modify the API, but extends the DT 'hwlocks'
+> property with a second optional parameter (the first one identifies an
+> hwlock) that specifies whether an hwlock is requested for exclusive usage
+> (current behavior) or can be shared between several users.
+> Examples:
+> 	hwlocks = <&hsem 8>;	Ref to hwlock #8 for exclusive usage
+> 	hwlocks = <&hsem 8 0>;	Ref to hwlock #8 for exclusive (0) usage
+> 	hwlocks = <&hsem 8 1>;	Ref to hwlock #8 for shared (1) usage
+> 
+> As a constraint, the #hwlock-cells value must be 1 or 2.
+> In the current implementation, this can have theorically any value but:
+> - all of the exisiting drivers use the same value : 1.
+> - the framework supports only one value : 1 (see implementation of
+>   of_hwspin_lock_simple_xlate())
+> Hence, it shall not be a problem to restrict this value to 1 or 2 since
+> it won't break any driver.
+> 
 
-> -----Original Message-----
-> From: linux-remoteproc-owner@vger.kernel.org <linux-remoteproc-
-> owner@vger.kernel.org> On Behalf Of Fabien Dessenne
-> Sent: mercredi 13 mars 2019 16:51
-> To: Ohad Ben-Cohen <ohad@wizery.com>; Bjorn Andersson
-> <bjorn.andersson@linaro.org>; Rob Herring <robh+dt@kernel.org>; Mark
-> Rutland <mark.rutland@arm.com>; Maxime Coquelin
-> <mcoquelin.stm32@gmail.com>; Alexandre TORGUE
-> <alexandre.torgue@st.com>; Jonathan Corbet <corbet@lwn.net>; linux-
-> remoteproc@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-stm32@st-md-mailman.stormreply.com;
-> linux-arm-kernel@lists.infradead.org; linux-doc@vger.kernel.org
-> Cc: Fabien DESSENNE <fabien.dessenne@st.com>; Benjamin GAIGNARD
-> <benjamin.gaignard@st.com>
-> Subject: [PATCH 2/6] hwspinlock: allow sharing of hwspinlocks
->=20
-> The current implementation does not allow different devices to use a
-> common hwspinlock. Offer the possibility to use the same hwspinlock by
-> several users.
-> If a device registers to the framework with #hwlock-cells =3D 2, then
-> the second parameter of the 'hwlocks' DeviceTree property defines
-> whether an hwlock is requested for an exclusive or a shared usage.
-> If a device registers with #hwlock-cells =3D 1, then all the hwlocks are
-> for an exclusive usage.
->=20
-> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
+Hi Fabien,
 
-Looks good for me.
-Acked-by: Loic Pallardy <loic.pallardy@st.com>
+Your series looks good, but it makes me wonder why the hardware locks
+should be an exclusive resource.
+
+How about just making all (specific) locks shared?
+
 Regards,
-Loic
+Bjorn
 
-> ---
->  Documentation/hwspinlock.txt             | 10 ++--
->  drivers/hwspinlock/hwspinlock_core.c     | 82
-> +++++++++++++++++++++++++-------
->  drivers/hwspinlock/hwspinlock_internal.h |  2 +
->  3 files changed, 73 insertions(+), 21 deletions(-)
->=20
-> diff --git a/Documentation/hwspinlock.txt b/Documentation/hwspinlock.txt
-> index ed640a2..e6ce2dd 100644
-> --- a/Documentation/hwspinlock.txt
-> +++ b/Documentation/hwspinlock.txt
-> @@ -54,9 +54,11 @@ Should be called from a process context (might sleep).
->    struct hwspinlock *hwspin_lock_request_specific(unsigned int id);
->=20
->  Assign a specific hwspinlock id and return its address, or NULL
-> -if that hwspinlock is already in use. Usually board code will
-> -be calling this function in order to reserve specific hwspinlock
-> -ids for predefined purposes.
-> +if that hwspinlock is already in use and not shared. If that specific
-> +hwspinlock is declared as shared, it can be requested and used by
-> +several users.
-> +Usually board code will be calling this function in order to reserve
-> +specific hwspinlock ids for predefined purposes.
->=20
->  Should be called from a process context (might sleep).
->=20
-> @@ -368,11 +370,13 @@ of which represents a single hardware lock::
->  	* struct hwspinlock - this struct represents a single hwspinlock
-> instance
->  	* @bank: the hwspinlock_device structure which owns this lock
->  	* @lock: initialized and used by hwspinlock core
-> +	* @refcount: number of users (when shared)
->  	* @priv: private data, owned by the underlying platform-specific
-> hwspinlock drv
->  	*/
->  	struct hwspinlock {
->  		struct hwspinlock_device *bank;
->  		spinlock_t lock;
-> +		unsigned int refcount;
->  		void *priv;
->  	};
->=20
-> diff --git a/drivers/hwspinlock/hwspinlock_core.c
-> b/drivers/hwspinlock/hwspinlock_core.c
-> index 2bad40d..53afdeb 100644
-> --- a/drivers/hwspinlock/hwspinlock_core.c
-> +++ b/drivers/hwspinlock/hwspinlock_core.c
-> @@ -25,6 +25,8 @@
->=20
->  /* radix tree tags */
->  #define HWSPINLOCK_UNUSED	(0) /* tags an hwspinlock as unused
-> */
-> +#define HWSPINLOCK_EXCLUSIVE	(1) /* tags an hwspinlock as exclusive
-> */
-> +#define HWSPINLOCK_SHARED	(2) /* tags an hwspinlock as shared */
->=20
->  /*
->   * A radix tree is used to maintain the available hwspinlock instances.
-> @@ -291,7 +293,7 @@ EXPORT_SYMBOL_GPL(__hwspin_unlock);
->   * @hwlock_spec: hwlock specifier as found in the device tree
->   *
->   * This is a simple translation function, suitable for hwspinlock platfo=
-rm
-> - * drivers that only has a lock specifier length of 1.
-> + * drivers that only has a lock specifier length of 1 or 2.
->   *
->   * Returns a relative index of the lock within a specified bank on succe=
-ss,
->   * or -EINVAL on invalid specifier cell count.
-> @@ -299,7 +301,8 @@ EXPORT_SYMBOL_GPL(__hwspin_unlock);
->  static inline int
->  of_hwspin_lock_simple_xlate(const struct of_phandle_args *hwlock_spec)
->  {
-> -	if (WARN_ON(hwlock_spec->args_count !=3D 1))
-> +	if (WARN_ON(hwlock_spec->args_count !=3D 1 &&
-> +		    hwlock_spec->args_count !=3D 2))
->  		return -EINVAL;
->=20
->  	return hwlock_spec->args[0];
-> @@ -322,11 +325,12 @@ of_hwspin_lock_simple_xlate(const struct
-> of_phandle_args *hwlock_spec)
->  int of_hwspin_lock_get_id(struct device_node *np, int index)
->  {
->  	struct of_phandle_args args;
-> -	struct hwspinlock *hwlock;
-> +	struct hwspinlock *hwlock, *tmp;
->  	struct radix_tree_iter iter;
->  	void **slot;
->  	int id;
->  	int ret;
-> +	unsigned int tag;
->=20
->  	ret =3D of_parse_phandle_with_args(np, "hwlocks", "#hwlock-cells",
-> index,
->  					 &args);
-> @@ -361,6 +365,37 @@ int of_hwspin_lock_get_id(struct device_node *np,
-> int index)
->  	}
->  	id +=3D hwlock->bank->base_id;
->=20
-> +	/* Set the EXCLUSIVE / SHARED tag */
-> +	if (args.args_count =3D=3D 2 && args.args[1]) {
-> +		/* Tag SHARED unless already tagged EXCLUSIVE */
-> +		if (radix_tree_tag_get(&hwspinlock_tree, id,
-> +				       HWSPINLOCK_EXCLUSIVE)) {
-> +			ret =3D -EINVAL;
-> +			goto out;
-> +		}
-> +		tag =3D HWSPINLOCK_SHARED;
-> +	} else {
-> +		/* Tag EXCLUSIVE unless already tagged SHARED */
-> +		if (radix_tree_tag_get(&hwspinlock_tree, id,
-> +				       HWSPINLOCK_SHARED)) {
-> +			ret =3D -EINVAL;
-> +			goto out;
-> +		}
-> +		tag =3D HWSPINLOCK_EXCLUSIVE;
-> +	}
-> +
-> +	/* mark this hwspinlock */
-> +	hwlock =3D radix_tree_lookup(&hwspinlock_tree, id);
-> +	if (!hwlock) {
-> +		ret =3D -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	tmp =3D radix_tree_tag_set(&hwspinlock_tree, id, tag);
-> +
-> +	/* self-sanity check which should never fail */
-> +	WARN_ON(tmp !=3D hwlock);
-> +
->  out:
->  	of_node_put(args.np);
->  	return ret ? ret : id;
-> @@ -483,6 +518,7 @@ int hwspin_lock_register(struct hwspinlock_device
-> *bank, struct device *dev,
->=20
->  		spin_lock_init(&hwlock->lock);
->  		hwlock->bank =3D bank;
-> +		hwlock->refcount =3D 0;
->=20
->  		ret =3D hwspin_lock_register_single(hwlock, base_id + i);
->  		if (ret)
-> @@ -625,7 +661,7 @@ static int __hwspin_lock_request(struct hwspinlock
-> *hwlock)
->  {
->  	struct device *dev =3D hwlock->bank->dev;
->  	struct hwspinlock *tmp;
-> -	int ret;
-> +	int ret, id;
->=20
->  	/* prevent underlying implementation from being removed */
->  	if (!try_module_get(dev->driver->owner)) {
-> @@ -642,13 +678,18 @@ static int __hwspin_lock_request(struct hwspinlock
-> *hwlock)
->  		return ret;
->  	}
->=20
-> +	/* update shareable refcount */
-> +	id =3D hwlock_to_id(hwlock);
-> +	if (radix_tree_tag_get(&hwspinlock_tree, id, HWSPINLOCK_SHARED)
-> &&
-> +	    hwlock->refcount++)
-> +		goto out;
-> +
->  	/* mark hwspinlock as used, should not fail */
-> -	tmp =3D radix_tree_tag_clear(&hwspinlock_tree,
-> hwlock_to_id(hwlock),
-> -
-> 	HWSPINLOCK_UNUSED);
-> +	tmp =3D radix_tree_tag_clear(&hwspinlock_tree, id,
-> HWSPINLOCK_UNUSED);
->=20
->  	/* self-sanity check that should never fail */
->  	WARN_ON(tmp !=3D hwlock);
-> -
-> +out:
->  	return ret;
->  }
->=20
-> @@ -742,9 +783,9 @@ struct hwspinlock
-> *hwspin_lock_request_specific(unsigned int id)
->  	/* sanity check (this shouldn't happen) */
->  	WARN_ON(hwlock_to_id(hwlock) !=3D id);
->=20
-> -	/* make sure this hwspinlock is unused */
-> -	ret =3D radix_tree_tag_get(&hwspinlock_tree, id,
-> HWSPINLOCK_UNUSED);
-> -	if (ret =3D=3D 0) {
-> +	/* make sure this hwspinlock is unused or shareable */
-> +	if (!radix_tree_tag_get(&hwspinlock_tree, id,
-> HWSPINLOCK_SHARED) &&
-> +	    !radix_tree_tag_get(&hwspinlock_tree, id,
-> HWSPINLOCK_UNUSED)) {
->  		pr_warn("hwspinlock %u is already in use\n", id);
->  		hwlock =3D NULL;
->  		goto out;
-> @@ -777,7 +818,7 @@ int hwspin_lock_free(struct hwspinlock *hwlock)
->  {
->  	struct device *dev;
->  	struct hwspinlock *tmp;
-> -	int ret;
-> +	int ret, id;
->=20
->  	if (!hwlock) {
->  		pr_err("invalid hwlock\n");
-> @@ -788,30 +829,35 @@ int hwspin_lock_free(struct hwspinlock *hwlock)
->  	mutex_lock(&hwspinlock_tree_lock);
->=20
->  	/* make sure the hwspinlock is used */
-> -	ret =3D radix_tree_tag_get(&hwspinlock_tree, hwlock_to_id(hwlock),
-> -
-> 	HWSPINLOCK_UNUSED);
-> +	id =3D hwlock_to_id(hwlock);
-> +	ret =3D radix_tree_tag_get(&hwspinlock_tree, id,
-> HWSPINLOCK_UNUSED);
->  	if (ret =3D=3D 1) {
->  		dev_err(dev, "%s: hwlock is already free\n", __func__);
->  		dump_stack();
->  		ret =3D -EINVAL;
-> -		goto out;
-> +		goto unlock;
->  	}
->=20
->  	/* notify the underlying device that power is not needed */
->  	ret =3D pm_runtime_put(dev);
->  	if (ret < 0)
-> -		goto out;
-> +		goto unlock;
-> +
-> +	/* update shareable refcount */
-> +	if (radix_tree_tag_get(&hwspinlock_tree, id, HWSPINLOCK_SHARED)
-> &&
-> +	    --hwlock->refcount)
-> +		goto put;
->=20
->  	/* mark this hwspinlock as available */
-> -	tmp =3D radix_tree_tag_set(&hwspinlock_tree, hwlock_to_id(hwlock),
-> -
-> 	HWSPINLOCK_UNUSED);
-> +	tmp =3D radix_tree_tag_set(&hwspinlock_tree, id,
-> HWSPINLOCK_UNUSED);
->=20
->  	/* sanity check (this shouldn't happen) */
->  	WARN_ON(tmp !=3D hwlock);
->=20
-> +put:
->  	module_put(dev->driver->owner);
->=20
-> -out:
-> +unlock:
->  	mutex_unlock(&hwspinlock_tree_lock);
->  	return ret;
->  }
-> diff --git a/drivers/hwspinlock/hwspinlock_internal.h
-> b/drivers/hwspinlock/hwspinlock_internal.h
-> index 9eb6bd0..c808e11 100644
-> --- a/drivers/hwspinlock/hwspinlock_internal.h
-> +++ b/drivers/hwspinlock/hwspinlock_internal.h
-> @@ -35,11 +35,13 @@ struct hwspinlock_ops {
->   * struct hwspinlock - this struct represents a single hwspinlock instan=
-ce
->   * @bank: the hwspinlock_device structure which owns this lock
->   * @lock: initialized and used by hwspinlock core
-> + * @refcount: number of users (when shared)
->   * @priv: private data, owned by the underlying platform-specific hwspin=
-lock
-> drv
->   */
->  struct hwspinlock {
->  	struct hwspinlock_device *bank;
->  	spinlock_t lock;
-> +	unsigned int refcount;
->  	void *priv;
->  };
->=20
-> --
+> Fabien Dessenne (6):
+>   dt-bindings: hwlock: add support of shared locks
+>   hwspinlock: allow sharing of hwspinlocks
+>   dt-bindings: hwlock: update STM32 #hwlock-cells value
+>   ARM: dts: stm32: Add hwspinlock node for stm32mp157 SoC
+>   ARM: dts: stm32: Add hwlock for irqchip on stm32mp157
+>   ARM: dts: stm32: hwlocks for GPIO for stm32mp157
+> 
+>  .../devicetree/bindings/hwlock/hwlock.txt          | 27 +++++--
+>  .../bindings/hwlock/st,stm32-hwspinlock.txt        |  6 +-
+>  Documentation/hwspinlock.txt                       | 10 ++-
+>  arch/arm/boot/dts/stm32mp157-pinctrl.dtsi          |  2 +
+>  arch/arm/boot/dts/stm32mp157c.dtsi                 | 10 +++
+>  drivers/hwspinlock/hwspinlock_core.c               | 82 +++++++++++++++++-----
+>  drivers/hwspinlock/hwspinlock_internal.h           |  2 +
+>  7 files changed, 108 insertions(+), 31 deletions(-)
+> 
+> -- 
 > 2.7.4
-
+> 
