@@ -2,766 +2,227 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56DF78177C
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  5 Aug 2019 12:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E7E8242A
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  5 Aug 2019 19:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728479AbfHEKuG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 5 Aug 2019 06:50:06 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:43517 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727357AbfHEKuG (ORCPT
+        id S1727830AbfHERp3 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 5 Aug 2019 13:45:29 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35568 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727328AbfHERp3 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 5 Aug 2019 06:50:06 -0400
-Received: by mail-pf1-f194.google.com with SMTP id i189so39450281pfg.10
-        for <linux-remoteproc@vger.kernel.org>; Mon, 05 Aug 2019 03:50:05 -0700 (PDT)
+        Mon, 5 Aug 2019 13:45:29 -0400
+Received: by mail-pl1-f195.google.com with SMTP id w24so36751703plp.2
+        for <linux-remoteproc@vger.kernel.org>; Mon, 05 Aug 2019 10:45:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aq3RwTlej3pDWlfuhazzm48JIG4F7fW/uTdW0+vOrxs=;
-        b=LzaLnGX347Njoly9uDpXiYX9bNQEzL9Q6D5txF7aXVwqyDsA7jDZ1Rdo38JixHck3X
-         TRw7MCe/43ICTJMd3IYnAZy2DHRwL7KbURTr2ujzXTvjbS8slvpKquQ+WvzI/PfFFzM1
-         C6zfJtPJqthU52MsjP4a8IYVdiDJF7KM0QqkI=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=yaMCm60MQbAiEe109hZbk3mz1nB4Kn7VLm+HH7rwTRQ=;
+        b=uILuQErqEj6dMFOf5SZh0i/b2tp5bwQfRZyTmmXbXwiJ905gJe7x+Y0F/LzIGf1GOM
+         dbAhNp1MwxulQi3XQYrmPEEMHTBx2zFans4TpSdPfRssyPvaP8pThH1p2vRyI+qyq0er
+         50z0RKVU3FWTZjDbrgC0275nB2kfXT95xJt6YA5QW/TQxFgtylRV5BLkD1bzZR9WxUjC
+         jsXt6K+hAn+ZyM5pE2UZNTsjqbgDaX6+CXW3zdlkIdtZaoJXr2Tr8NzTJnoyvm1PTMG+
+         cDsYIcu7PYHwyrBRenExj3UgjXocGhhCbvtc5z2de0yrPpz+BXVe4NgmA3lJMFHkwzCi
+         pEhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aq3RwTlej3pDWlfuhazzm48JIG4F7fW/uTdW0+vOrxs=;
-        b=hDexSC+ECpIzKPv7BSyc1FDNMn6W5oDvaUMaLFPig4Zvp/BfeNGbngTdKL1NG4x2w0
-         u/NV0J0STqEVkKrhPzUBF3sllTGURRAD5BBwG44fk62J62Fi6akVhCuIBUXh2TyWrLk1
-         2aJs6ZNzutjJ4S67+uIxnpE7hyCJXI6VMoUfaMDo7ZAjVz5Lb+KXPvWyqYAyxCfhr6e5
-         gGnrC/QypH1eyZzhhElPTcYRf0CDmpQQOS4VnjZkcFMo5z6hyLlSxkZfY+zQcDJPIi4B
-         YtBZN/wtQGC576RrqCsxb42Dx1Yct7VbLUzgcXdIsmaliI+nB7bGCt5xbEYH/OyoEyRQ
-         lGAg==
-X-Gm-Message-State: APjAAAX9sTiZj+HJzY8MjCCBPC0o1DQ73GppXXVYy6jY4SMGdaKvSYp1
-        igL0aqK7sAscyFhYgPDaFPkzoQ==
-X-Google-Smtp-Source: APXvYqyZ6wh47NGIF2kNjmBJopk08kvtnmRQKQcwQuqVUp9fDKDER5wqQgWo1ZkLELzNzMIVTcsfFA==
-X-Received: by 2002:a63:67c6:: with SMTP id b189mr45148879pgc.163.1565002204999;
-        Mon, 05 Aug 2019 03:50:04 -0700 (PDT)
-Received: from pihsun-z840.tpe.corp.google.com ([2401:fa00:1:10:7889:7a43:f899:134c])
-        by smtp.googlemail.com with ESMTPSA id 65sm88693864pgf.30.2019.08.05.03.50.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=yaMCm60MQbAiEe109hZbk3mz1nB4Kn7VLm+HH7rwTRQ=;
+        b=fihXQzkZsnDpLlavCqV3KyQANDI/B5l9q58WP6YUA1wOwvTARNA4x8z614cAzSrTGx
+         askMt+k9rhDKFTEeTEF0ESK/7TIIgp7JXxbuPsvtHwwPKFdQ6LouiaDYwCR7h3A1ZPOI
+         S4PH65xHR5b8jy7MwdmAiT1bKya/pEam8Jm8mnayGgz6u5gDbXv25jWCfe5pk09Hfv75
+         jKzWVh5pwg9EREAmhRCJx/wW+54oSOjzgxqFt9o9/UsfYgZE/bcedyUMH5KpmZEQ5AN+
+         lnZSIO49tIpe6w50EimX+xCQ2laUognO336uxapyIsrFaqwpF2ulqGV/QjOpwccBSQfK
+         L3xQ==
+X-Gm-Message-State: APjAAAUxuUkSDSf37ICCLduiC7gH9dfo32iwjEfPnjuXK0wVl1rdYDmx
+        gybg9uaHA515QmRSyZD1qDje9w==
+X-Google-Smtp-Source: APXvYqyXSBold9rTE84iJAtGLze32KZeXA3Zh9TxcfLV0XfYpUb8i/gYaAVGpQpEYjhS9ow7s7fROw==
+X-Received: by 2002:a17:902:9689:: with SMTP id n9mr147750614plp.241.1565027127918;
+        Mon, 05 Aug 2019 10:45:27 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id s20sm96177226pfe.169.2019.08.05.10.45.26
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 05 Aug 2019 03:50:04 -0700 (PDT)
-From:   Pi-Hsun Shih <pihsun@chromium.org>
-Cc:     Pi-Hsun Shih <pihsun@chromium.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR
-        (REMOTEPROC) SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support)
-Subject: [PATCH v14 4/5] rpmsg: add rpmsg support for mt8183 SCP.
-Date:   Mon,  5 Aug 2019 18:49:25 +0800
-Message-Id: <20190805104932.96745-5-pihsun@chromium.org>
-X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
-In-Reply-To: <20190805104932.96745-1-pihsun@chromium.org>
-References: <20190805104932.96745-1-pihsun@chromium.org>
+        Mon, 05 Aug 2019 10:45:27 -0700 (PDT)
+Date:   Mon, 5 Aug 2019 10:46:59 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Fabien DESSENNE <fabien.dessenne@st.com>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        Benjamin GAIGNARD <benjamin.gaignard@st.com>
+Subject: Re: [PATCH 0/6] hwspinlock: allow sharing of hwspinlocks
+Message-ID: <20190805174659.GA23928@tuxbook-pro>
+References: <1552492237-28810-1-git-send-email-fabien.dessenne@st.com>
+ <20190801191403.GA7234@tuxbook-pro>
+ <1a057176-81ab-e302-4375-2717ceef6924@st.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <1a057176-81ab-e302-4375-2717ceef6924@st.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add a simple rpmsg support for mt8183 SCP, that use IPI / IPC directly.
+On Mon 05 Aug 01:48 PDT 2019, Fabien DESSENNE wrote:
 
-Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
----
-Changes from v13:
- - No change.
+> 
+> On 01/08/2019 9:14 PM, Bjorn Andersson wrote:
+> > On Wed 13 Mar 08:50 PDT 2019, Fabien Dessenne wrote:
+> >
+> >> The current implementation does not allow two different devices to use
+> >> a common hwspinlock. This patch set proposes to have, as an option, some
+> >> hwspinlocks shared between several users.
+> >>
+> >> Below is an example that explain the need for this:
+> >> 	exti: interrupt-controller@5000d000 {
+> >> 		compatible = "st,stm32mp1-exti", "syscon";
+> >> 		interrupt-controller;
+> >> 		#interrupt-cells = <2>;
+> >> 		reg = <0x5000d000 0x400>;
+> >> 		hwlocks = <&hsem 1>;
+> >> 	};
+> >> The two drivers (stm32mp1-exti and syscon) refer to the same hwlock.
+> >> With the current hwspinlock implementation, only the first driver succeeds
+> >> in requesting (hwspin_lock_request_specific) the hwlock. The second request
+> >> fails.
+> >>
+> >>
+> >> The proposed approach does not modify the API, but extends the DT 'hwlocks'
+> >> property with a second optional parameter (the first one identifies an
+> >> hwlock) that specifies whether an hwlock is requested for exclusive usage
+> >> (current behavior) or can be shared between several users.
+> >> Examples:
+> >> 	hwlocks = <&hsem 8>;	Ref to hwlock #8 for exclusive usage
+> >> 	hwlocks = <&hsem 8 0>;	Ref to hwlock #8 for exclusive (0) usage
+> >> 	hwlocks = <&hsem 8 1>;	Ref to hwlock #8 for shared (1) usage
+> >>
+> >> As a constraint, the #hwlock-cells value must be 1 or 2.
+> >> In the current implementation, this can have theorically any value but:
+> >> - all of the exisiting drivers use the same value : 1.
+> >> - the framework supports only one value : 1 (see implementation of
+> >>    of_hwspin_lock_simple_xlate())
+> >> Hence, it shall not be a problem to restrict this value to 1 or 2 since
+> >> it won't break any driver.
+> >>
+> > Hi Fabien,
+> >
+> > Your series looks good, but it makes me wonder why the hardware locks
+> > should be an exclusive resource.
+> >
+> > How about just making all (specific) locks shared?
+> 
+> Hi Bjorn,
+> 
+> Making all locks shared is a possible implementation (my first 
+> implementation
+> was going this way) but there are some drawbacks we must be aware of:
+> 
+> A/ This theoretically break the legacy behavior (the legacy works with
+> exclusive (UNUSED radix tag) usage). As a consequence, an existing driver
+> that is currently failing to request a lock (already claimed by another
+> user) would now work fine. Not sure that there are such drivers, so this
+> point is probably not a real issue.
+> 
 
-Changes from v12:
- - Use strscpy instead of strncpy.
+Right, it's possible that a previously misconfigured system now
+successfully probes more than one device that uses a particular
+spinlock. But such system would be suffering from issues related to e.g.
+probe ordering.
 
-Changes from v11:
- - Fix a bug that when rproc_boot fails, the ns_ept won't be properly
-   destroyed, causing memory leak.
- - Add documentation for mtk_rpmsg_info.
+So I think we should ignore this issue.
 
-Changes from v10, v9, v8, v7:
- - No change.
+> B/ This would introduce some inconsistency between the two 'request' API
+> which are hwspin_lock_request() and hwspin_lock_request_specific().
+> hwspin_lock_request() looks for an unused lock, so requests for an exclusive
+> usage. On the other side, request_specific() would request shared locks.
+> Worst the following sequence can transform an exclusive usage into a shared
+> 
 
-Changes from v6:
- - Decouple mtk_rpmsg from mtk_scp by putting all necessary informations
-   (name service IPI id, register/unregister/send functions) into a
-   struct, and pass it to the mtk_rpmsg_create_rproc_subdev function.
+There is already an inconsistency in between these; as with above any
+system that uses both request() and request_specific() will be suffering
+from intermittent failures due to probe ordering.
 
-Changes from v5:
- - CONFIG_MTK_SCP now selects CONFIG_RPMSG_MTK_SCP, and the dummy
-   implementation for mtk_rpmsg_{create,destroy}_rproc_subdev when
-   CONFIG_RPMSG_MTK_SCP is not defined is removed.
+> one:
+>    -hwspin_lock_request() -> returns Id#0 (exclusive)
+>    -hwspin_lock_request() -> returns Id#1 (exclusive)
+>    -hwspin_lock_request_specific(0) -> returns Id#0 and makes Id#0 shared
+> Honestly I am not sure that this is a real issue, but it's better to have it
+> in mind before we take ay decision
 
-Changes from v4:
- - Match and fill the device tree node to the created rpmsg subdevice,
-   so the rpmsg subdevice can utilize the properties and subnodes on
-   device tree (This is similar to what drivers/rpmsg/qcom_smd.c does).
+The case where I can see a
+problem with this would be if the two clients somehow would nest their
+locking regions.
 
-Changes from v3:
- - Change from unprepare to stop, to stop the rpmsg driver before the
-   rproc is stopped, avoiding problem that some rpmsg would fail after
-   rproc is stopped.
- - Add missing spin_lock_init, and use destroy_ept instead of kref_put.
+But generally I think this could consider this an improvement, because
+the request_specific() would now be able to acquire its hwlock, with
+some additional contention due to the multiple use.
 
-Changes from v2:
- - Unregiser IPI handler on unprepare.
- - Lock the channel list on operations.
- - Move SCP_IPI_NS_SERVICE to 0xFF.
+> I could not find any driver using the hwspin_lock_request() API, we
+> may decide to remove (or to make deprecated) this API, having
+> everything 'shared without any conditions'.
+> 
 
-Changes from v1:
- - Do cleanup properly in mtk_rpmsg.c, which also removes the problem of
-   short-lived work items.
- - Fix several issues checkpatch found.
----
- drivers/remoteproc/Kconfig         |   1 +
- drivers/remoteproc/mtk_common.h    |   2 +
- drivers/remoteproc/mtk_scp.c       |  38 ++-
- drivers/remoteproc/mtk_scp_ipi.c   |   1 +
- drivers/rpmsg/Kconfig              |   9 +
- drivers/rpmsg/Makefile             |   1 +
- drivers/rpmsg/mtk_rpmsg.c          | 414 +++++++++++++++++++++++++++++
- include/linux/remoteproc/mtk_scp.h |   4 +-
- include/linux/rpmsg/mtk_rpmsg.h    |  38 +++
- 9 files changed, 503 insertions(+), 5 deletions(-)
- create mode 100644 drivers/rpmsg/mtk_rpmsg.c
- create mode 100644 include/linux/rpmsg/mtk_rpmsg.h
+It would be nice to have an upstream user of this API.
 
-diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index ea71cad399f7..cff3a9fa817b 100644
---- a/drivers/remoteproc/Kconfig
-+++ b/drivers/remoteproc/Kconfig
-@@ -26,6 +26,7 @@ config IMX_REMOTEPROC
- config MTK_SCP
- 	tristate "Mediatek SCP support"
- 	depends on ARCH_MEDIATEK
-+	select RPMSG_MTK_SCP
- 	help
- 	  Say y here to support Mediatek's System Companion Processor (SCP) via
- 	  the remote processor framework.
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index e213039543ec..dbf9b339a0b7 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -69,6 +69,8 @@ struct mtk_scp {
- 	void __iomem *cpu_addr;
- 	phys_addr_t phys_addr;
- 	size_t dram_size;
-+
-+	struct rproc_subdev *rpmsg_subdev;
- };
- 
- /**
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index ee28e761a82e..9e629274c240 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -13,6 +13,7 @@
- #include <linux/platform_device.h>
- #include <linux/remoteproc.h>
- #include <linux/remoteproc/mtk_scp.h>
-+#include <linux/rpmsg/mtk_rpmsg.h>
- 
- #include "mtk_common.h"
- #include "remoteproc_internal.h"
-@@ -541,6 +542,31 @@ static int scp_map_memory_region(struct mtk_scp *scp)
- 	return 0;
- }
- 
-+static struct mtk_rpmsg_info mtk_scp_rpmsg_info = {
-+	.send_ipi = scp_ipi_send,
-+	.register_ipi = scp_ipi_register,
-+	.unregister_ipi = scp_ipi_unregister,
-+	.ns_ipi_id = SCP_IPI_NS_SERVICE,
-+};
-+
-+static void scp_add_rpmsg_subdev(struct mtk_scp *scp)
-+{
-+	scp->rpmsg_subdev =
-+		mtk_rpmsg_create_rproc_subdev(to_platform_device(scp->dev),
-+					      &mtk_scp_rpmsg_info);
-+	if (scp->rpmsg_subdev)
-+		rproc_add_subdev(scp->rproc, scp->rpmsg_subdev);
-+}
-+
-+static void scp_remove_rpmsg_subdev(struct mtk_scp *scp)
-+{
-+	if (scp->rpmsg_subdev) {
-+		rproc_remove_subdev(scp->rproc, scp->rpmsg_subdev);
-+		mtk_rpmsg_destroy_rproc_subdev(scp->rpmsg_subdev);
-+		scp->rpmsg_subdev = NULL;
-+	}
-+}
-+
- static int scp_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -623,22 +649,25 @@ static int scp_probe(struct platform_device *pdev)
- 	init_waitqueue_head(&scp->run.wq);
- 	init_waitqueue_head(&scp->ack_wq);
- 
-+	scp_add_rpmsg_subdev(scp);
-+
- 	ret = devm_request_threaded_irq(dev, platform_get_irq(pdev, 0), NULL,
- 					scp_irq_handler, IRQF_ONESHOT,
- 					pdev->name, scp);
- 
- 	if (ret) {
- 		dev_err(dev, "failed to request irq\n");
--		goto destroy_mutex;
-+		goto remove_subdev;
- 	}
- 
- 	ret = rproc_add(rproc);
- 	if (ret)
--		goto destroy_mutex;
-+		goto remove_subdev;
- 
--	return ret;
-+	return 0;
- 
--destroy_mutex:
-+remove_subdev:
-+	scp_remove_rpmsg_subdev(scp);
- 	mutex_destroy(&scp->desc_lock);
- 	mutex_destroy(&scp->send_lock);
- free_rproc:
-@@ -651,6 +680,7 @@ static int scp_remove(struct platform_device *pdev)
- {
- 	struct mtk_scp *scp = platform_get_drvdata(pdev);
- 
-+	scp_remove_rpmsg_subdev(scp);
- 	mutex_destroy(&scp->desc_lock);
- 	mutex_destroy(&scp->send_lock);
- 	rproc_del(scp->rproc);
-diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
-index 59f797f9f007..a39458a0b788 100644
---- a/drivers/remoteproc/mtk_scp_ipi.c
-+++ b/drivers/remoteproc/mtk_scp_ipi.c
-@@ -99,6 +99,7 @@ int scp_ipi_send(struct platform_device *pdev,
- 	int ret;
- 
- 	if (WARN_ON(id <= SCP_IPI_INIT) || WARN_ON(id >= SCP_IPI_MAX) ||
-+	    WARN_ON(id == SCP_IPI_NS_SERVICE) ||
- 	    WARN_ON(len > sizeof(send_obj->share_buf)) || WARN_ON(!buf))
- 		return -EINVAL;
- 
-diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
-index d0322b41eca5..85e3cc075cb4 100644
---- a/drivers/rpmsg/Kconfig
-+++ b/drivers/rpmsg/Kconfig
-@@ -15,6 +15,15 @@ config RPMSG_CHAR
- 	  in /dev. They make it possible for user-space programs to send and
- 	  receive rpmsg packets.
- 
-+config RPMSG_MTK_SCP
-+	tristate "MediaTek SCP"
-+	depends on MTK_SCP
-+	select RPMSG
-+	help
-+	  Say y here to enable support providing communication channels to
-+	  remote processors in MediaTek platforms.
-+	  This use IPI and IPC to communicate with remote processors.
-+
- config RPMSG_QCOM_GLINK_NATIVE
- 	tristate
- 	select RPMSG
-diff --git a/drivers/rpmsg/Makefile b/drivers/rpmsg/Makefile
-index 9aa859502d27..ae92a7fb08f6 100644
---- a/drivers/rpmsg/Makefile
-+++ b/drivers/rpmsg/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_RPMSG)		+= rpmsg_core.o
- obj-$(CONFIG_RPMSG_CHAR)	+= rpmsg_char.o
-+obj-$(CONFIG_RPMSG_MTK_SCP)	+= mtk_rpmsg.o
- obj-$(CONFIG_RPMSG_QCOM_GLINK_RPM) += qcom_glink_rpm.o
- obj-$(CONFIG_RPMSG_QCOM_GLINK_NATIVE) += qcom_glink_native.o
- obj-$(CONFIG_RPMSG_QCOM_GLINK_SMEM) += qcom_glink_smem.o
-diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
-new file mode 100644
-index 000000000000..34a384376f7d
---- /dev/null
-+++ b/drivers/rpmsg/mtk_rpmsg.c
-@@ -0,0 +1,414 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Copyright 2018 Google LLC.
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/remoteproc.h>
-+#include <linux/rpmsg/mtk_rpmsg.h>
-+#include <linux/workqueue.h>
-+
-+#include "rpmsg_internal.h"
-+
-+struct mtk_rpmsg_rproc_subdev {
-+	struct platform_device *pdev;
-+	struct mtk_rpmsg_info *info;
-+	struct rpmsg_endpoint *ns_ept;
-+	struct rproc_subdev subdev;
-+
-+	struct work_struct register_work;
-+	struct list_head channels;
-+	struct mutex channels_lock;
-+};
-+
-+#define to_mtk_subdev(d) container_of(d, struct mtk_rpmsg_rproc_subdev, subdev)
-+
-+struct mtk_rpmsg_channel_info {
-+	struct rpmsg_channel_info info;
-+	bool registered;
-+	struct list_head list;
-+};
-+
-+/**
-+ * struct rpmsg_ns_msg - dynamic name service announcement message
-+ * @name: name of remote service that is published
-+ * @addr: address of remote service that is published
-+ *
-+ * This message is sent across to publish a new service. When we receive these
-+ * messages, an appropriate rpmsg channel (i.e device) is created. In turn, the
-+ * ->probe() handler of the appropriate rpmsg driver will be invoked
-+ *  (if/as-soon-as one is registered).
-+ */
-+struct rpmsg_ns_msg {
-+	char name[RPMSG_NAME_SIZE];
-+	u32 addr;
-+} __packed;
-+
-+struct mtk_rpmsg_device {
-+	struct rpmsg_device rpdev;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev;
-+};
-+
-+struct mtk_rpmsg_endpoint {
-+	struct rpmsg_endpoint ept;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev;
-+};
-+
-+#define to_mtk_rpmsg_device(r) container_of(r, struct mtk_rpmsg_device, rpdev)
-+#define to_mtk_rpmsg_endpoint(r) container_of(r, struct mtk_rpmsg_endpoint, ept)
-+
-+static const struct rpmsg_endpoint_ops mtk_rpmsg_endpoint_ops;
-+
-+static void __ept_release(struct kref *kref)
-+{
-+	struct rpmsg_endpoint *ept = container_of(kref, struct rpmsg_endpoint,
-+						  refcount);
-+	kfree(to_mtk_rpmsg_endpoint(ept));
-+}
-+
-+static void mtk_rpmsg_ipi_handler(void *data, unsigned int len, void *priv)
-+{
-+	struct mtk_rpmsg_endpoint *mept = priv;
-+	struct rpmsg_endpoint *ept = &mept->ept;
-+	int ret;
-+
-+	ret = (*ept->cb)(ept->rpdev, data, len, ept->priv, ept->addr);
-+	if (ret)
-+		dev_warn(&ept->rpdev->dev, "rpmsg handler return error = %d",
-+			 ret);
-+}
-+
-+static struct rpmsg_endpoint *
-+__rpmsg_create_ept(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-+		   struct rpmsg_device *rpdev, rpmsg_rx_cb_t cb, void *priv,
-+		   u32 id)
-+{
-+	struct mtk_rpmsg_endpoint *mept;
-+	struct rpmsg_endpoint *ept;
-+	struct platform_device *pdev = mtk_subdev->pdev;
-+	int ret;
-+
-+	mept = kzalloc(sizeof(*mept), GFP_KERNEL);
-+	if (!mept)
-+		return NULL;
-+	mept->mtk_subdev = mtk_subdev;
-+
-+	ept = &mept->ept;
-+	kref_init(&ept->refcount);
-+
-+	ept->rpdev = rpdev;
-+	ept->cb = cb;
-+	ept->priv = priv;
-+	ept->ops = &mtk_rpmsg_endpoint_ops;
-+	ept->addr = id;
-+
-+	ret = mtk_subdev->info->register_ipi(pdev, id, mtk_rpmsg_ipi_handler,
-+					     mept);
-+	if (ret) {
-+		dev_err(&pdev->dev, "IPI register failed, id = %d", id);
-+		kref_put(&ept->refcount, __ept_release);
-+		return NULL;
-+	}
-+
-+	return ept;
-+}
-+
-+static struct rpmsg_endpoint *
-+mtk_rpmsg_create_ept(struct rpmsg_device *rpdev, rpmsg_rx_cb_t cb, void *priv,
-+		     struct rpmsg_channel_info chinfo)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_device(rpdev)->mtk_subdev;
-+
-+	return __rpmsg_create_ept(mtk_subdev, rpdev, cb, priv, chinfo.src);
-+}
-+
-+static void mtk_rpmsg_destroy_ept(struct rpmsg_endpoint *ept)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_endpoint(ept)->mtk_subdev;
-+
-+	mtk_subdev->info->unregister_ipi(mtk_subdev->pdev, ept->addr);
-+	kref_put(&ept->refcount, __ept_release);
-+}
-+
-+static int mtk_rpmsg_send(struct rpmsg_endpoint *ept, void *data, int len)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_endpoint(ept)->mtk_subdev;
-+
-+	return mtk_subdev->info->send_ipi(mtk_subdev->pdev, ept->addr, data,
-+					  len, 0);
-+}
-+
-+static int mtk_rpmsg_trysend(struct rpmsg_endpoint *ept, void *data, int len)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev =
-+		to_mtk_rpmsg_endpoint(ept)->mtk_subdev;
-+
-+	/*
-+	 * TODO: This currently is same as mtk_rpmsg_send, and wait until SCP
-+	 * received the last command.
-+	 */
-+	return mtk_subdev->info->send_ipi(mtk_subdev->pdev, ept->addr, data,
-+					  len, 0);
-+}
-+
-+static const struct rpmsg_endpoint_ops mtk_rpmsg_endpoint_ops = {
-+	.destroy_ept = mtk_rpmsg_destroy_ept,
-+	.send = mtk_rpmsg_send,
-+	.trysend = mtk_rpmsg_trysend,
-+};
-+
-+static void mtk_rpmsg_release_device(struct device *dev)
-+{
-+	struct rpmsg_device *rpdev = to_rpmsg_device(dev);
-+	struct mtk_rpmsg_device *mdev = to_mtk_rpmsg_device(rpdev);
-+
-+	kfree(mdev);
-+}
-+
-+static const struct rpmsg_device_ops mtk_rpmsg_device_ops = {
-+	.create_ept = mtk_rpmsg_create_ept,
-+};
-+
-+static struct device_node *
-+mtk_rpmsg_match_device_subnode(struct device_node *node, const char *channel)
-+{
-+	struct device_node *child;
-+	const char *name;
-+	int ret;
-+
-+	for_each_available_child_of_node(node, child) {
-+		ret = of_property_read_string(child, "mtk,rpmsg-name", &name);
-+		if (ret)
-+			continue;
-+
-+		if (strcmp(name, channel) == 0)
-+			return child;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int mtk_rpmsg_register_device(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-+				     struct rpmsg_channel_info *info)
-+{
-+	struct rpmsg_device *rpdev;
-+	struct mtk_rpmsg_device *mdev;
-+	struct platform_device *pdev = mtk_subdev->pdev;
-+	int ret;
-+
-+	mdev = kzalloc(sizeof(*mdev), GFP_KERNEL);
-+	if (!mdev)
-+		return -ENOMEM;
-+
-+	mdev->mtk_subdev = mtk_subdev;
-+
-+	rpdev = &mdev->rpdev;
-+	rpdev->ops = &mtk_rpmsg_device_ops;
-+	rpdev->src = info->src;
-+	rpdev->dst = info->dst;
-+	strscpy(rpdev->id.name, info->name, RPMSG_NAME_SIZE);
-+
-+	rpdev->dev.of_node =
-+		mtk_rpmsg_match_device_subnode(pdev->dev.of_node, info->name);
-+	rpdev->dev.parent = &pdev->dev;
-+	rpdev->dev.release = mtk_rpmsg_release_device;
-+
-+	ret = rpmsg_register_device(rpdev);
-+	if (ret) {
-+		kfree(mdev);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void mtk_register_device_work_function(struct work_struct *register_work)
-+{
-+	struct mtk_rpmsg_rproc_subdev *subdev = container_of(
-+		register_work, struct mtk_rpmsg_rproc_subdev, register_work);
-+	struct platform_device *pdev = subdev->pdev;
-+	struct mtk_rpmsg_channel_info *info;
-+	int ret;
-+
-+	mutex_lock(&subdev->channels_lock);
-+	list_for_each_entry(info, &subdev->channels, list) {
-+		if (info->registered)
-+			continue;
-+
-+		ret = mtk_rpmsg_register_device(subdev, &info->info);
-+		if (ret) {
-+			dev_err(&pdev->dev, "Can't create rpmsg_device\n");
-+			continue;
-+		}
-+
-+		info->registered = true;
-+	}
-+	mutex_unlock(&subdev->channels_lock);
-+}
-+
-+static int mtk_rpmsg_create_device(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-+				   char *name, u32 addr)
-+{
-+	struct mtk_rpmsg_channel_info *info;
-+
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	strscpy(info->info.name, name, RPMSG_NAME_SIZE);
-+	info->info.src = addr;
-+	info->info.dst = RPMSG_ADDR_ANY;
-+	mutex_lock(&mtk_subdev->channels_lock);
-+	list_add(&info->list, &mtk_subdev->channels);
-+	mutex_unlock(&mtk_subdev->channels_lock);
-+
-+	schedule_work(&mtk_subdev->register_work);
-+	return 0;
-+}
-+
-+static int mtk_rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
-+			   void *priv, u32 src)
-+{
-+	struct rpmsg_ns_msg *msg = data;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = priv;
-+	struct device *dev = &mtk_subdev->pdev->dev;
-+
-+	int ret;
-+
-+	if (len != sizeof(*msg)) {
-+		dev_err(dev, "malformed ns msg (%d)\n", len);
-+		return -EINVAL;
-+	}
-+
-+	/*
-+	 * the name service ept does _not_ belong to a real rpmsg channel,
-+	 * and is handled by the rpmsg bus itself.
-+	 * for sanity reasons, make sure a valid rpdev has _not_ sneaked
-+	 * in somehow.
-+	 */
-+	if (rpdev) {
-+		dev_err(dev, "anomaly: ns ept has an rpdev handle\n");
-+		return -EINVAL;
-+	}
-+
-+	/* don't trust the remote processor for null terminating the name */
-+	msg->name[RPMSG_NAME_SIZE - 1] = '\0';
-+
-+	dev_info(dev, "creating channel %s addr 0x%x\n", msg->name, msg->addr);
-+
-+	ret = mtk_rpmsg_create_device(mtk_subdev, msg->name, msg->addr);
-+	if (ret) {
-+		dev_err(dev, "create rpmsg device failed\n");
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+int mtk_rpmsg_prepare(struct rproc_subdev *subdev)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+
-+	/* a dedicated endpoint handles the name service msgs */
-+	if (mtk_subdev->info->ns_ipi_id >= 0) {
-+		mtk_subdev->ns_ept =
-+			__rpmsg_create_ept(mtk_subdev, NULL, mtk_rpmsg_ns_cb,
-+					   mtk_subdev,
-+					   mtk_subdev->info->ns_ipi_id);
-+		if (!mtk_subdev->ns_ept) {
-+			dev_err(&mtk_subdev->pdev->dev,
-+				"failed to create name service endpoint\n");
-+			return -ENOMEM;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+void mtk_rpmsg_unprepare(struct rproc_subdev *subdev)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+
-+	if (mtk_subdev->ns_ept) {
-+		mtk_rpmsg_destroy_ept(mtk_subdev->ns_ept);
-+		mtk_subdev->ns_ept = NULL;
-+	}
-+}
-+
-+void mtk_rpmsg_stop(struct rproc_subdev *subdev, bool crashed)
-+{
-+	struct mtk_rpmsg_channel_info *info, *next;
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+	struct device *dev = &mtk_subdev->pdev->dev;
-+
-+	/*
-+	 * Destroy the name service endpoint here, to avoid new channel being
-+	 * created after the rpmsg_unregister_device loop below.
-+	 */
-+	if (mtk_subdev->ns_ept) {
-+		mtk_rpmsg_destroy_ept(mtk_subdev->ns_ept);
-+		mtk_subdev->ns_ept = NULL;
-+	}
-+
-+	cancel_work_sync(&mtk_subdev->register_work);
-+
-+	mutex_lock(&mtk_subdev->channels_lock);
-+	list_for_each_entry(info, &mtk_subdev->channels, list) {
-+		if (!info->registered)
-+			continue;
-+		if (rpmsg_unregister_device(dev, &info->info)) {
-+			dev_warn(
-+				dev,
-+				"rpmsg_unregister_device failed for %s.%d.%d\n",
-+				info->info.name, info->info.src,
-+				info->info.dst);
-+		}
-+	}
-+
-+	list_for_each_entry_safe(info, next,
-+				 &mtk_subdev->channels, list) {
-+		list_del(&info->list);
-+		kfree(info);
-+	}
-+	mutex_unlock(&mtk_subdev->channels_lock);
-+}
-+
-+struct rproc_subdev *
-+mtk_rpmsg_create_rproc_subdev(struct platform_device *pdev,
-+			      struct mtk_rpmsg_info *info)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev;
-+
-+	mtk_subdev = kzalloc(sizeof(*mtk_subdev), GFP_KERNEL);
-+	if (!mtk_subdev)
-+		return NULL;
-+
-+	mtk_subdev->pdev = pdev;
-+	mtk_subdev->subdev.prepare = mtk_rpmsg_prepare;
-+	mtk_subdev->subdev.stop = mtk_rpmsg_stop;
-+	mtk_subdev->subdev.unprepare = mtk_rpmsg_unprepare;
-+	mtk_subdev->info = info;
-+	INIT_LIST_HEAD(&mtk_subdev->channels);
-+	INIT_WORK(&mtk_subdev->register_work,
-+		  mtk_register_device_work_function);
-+	mutex_init(&mtk_subdev->channels_lock);
-+
-+	return &mtk_subdev->subdev;
-+}
-+EXPORT_SYMBOL_GPL(mtk_rpmsg_create_rproc_subdev);
-+
-+void mtk_rpmsg_destroy_rproc_subdev(struct rproc_subdev *subdev)
-+{
-+	struct mtk_rpmsg_rproc_subdev *mtk_subdev = to_mtk_subdev(subdev);
-+
-+	kfree(mtk_subdev);
-+}
-+EXPORT_SYMBOL_GPL(mtk_rpmsg_destroy_rproc_subdev);
-+
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("MediaTek scp rpmsg driver");
-diff --git a/include/linux/remoteproc/mtk_scp.h b/include/linux/remoteproc/mtk_scp.h
-index 707556f6b899..67ae6674397b 100644
---- a/include/linux/remoteproc/mtk_scp.h
-+++ b/include/linux/remoteproc/mtk_scp.h
-@@ -40,9 +40,11 @@ enum scp_ipi_id {
- 	SCP_IPI_ISP_FRAME,
- 	SCP_IPI_FD_CMD,
- 	SCP_IPI_CROS_HOST_CMD,
--	SCP_IPI_MAX,
-+	SCP_IPI_NS_SERVICE = 0xFF,
-+	SCP_IPI_MAX = 0x100,
- };
- 
-+
- /**
-  * scp_ipi_register - register an ipi function
-  *
-diff --git a/include/linux/rpmsg/mtk_rpmsg.h b/include/linux/rpmsg/mtk_rpmsg.h
-new file mode 100644
-index 000000000000..861c1cbea523
---- /dev/null
-+++ b/include/linux/rpmsg/mtk_rpmsg.h
-@@ -0,0 +1,38 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright 2018 Google LLC.
-+ */
-+
-+#ifndef __LINUX_RPMSG_MTK_RPMSG_H
-+#define __LINUX_RPMSG_MTK_RPMSG_H
-+
-+#include <linux/device.h>
-+#include <linux/remoteproc.h>
-+
-+typedef void (*ipi_handler_t)(void *data, unsigned int len, void *priv);
-+
-+/*
-+ * struct mtk_rpmsg_info - IPI functions tied to the rpmsg device.
-+ * @register_ipi: register IPI handler for an IPI id.
-+ * @unregister_ipi: unregister IPI handler for a registered IPI id.
-+ * @send_ipi: send IPI to an IPI id. wait is the timeout (in msecs) to wait
-+ *            until response, or 0 if there's no timeout.
-+ * @ns_ipi_id: the IPI id used for name service, or -1 if name service isn't
-+ *             supported.
-+ */
-+struct mtk_rpmsg_info {
-+	int (*register_ipi)(struct platform_device *pdev, u32 id,
-+			    ipi_handler_t handler, void *priv);
-+	void (*unregister_ipi)(struct platform_device *pdev, u32 id);
-+	int (*send_ipi)(struct platform_device *pdev, u32 id,
-+			void *buf, unsigned int len, unsigned int wait);
-+	int ns_ipi_id;
-+};
-+
-+struct rproc_subdev *
-+mtk_rpmsg_create_rproc_subdev(struct platform_device *pdev,
-+			      struct mtk_rpmsg_info *info);
-+
-+void mtk_rpmsg_destroy_rproc_subdev(struct rproc_subdev *subdev);
-+
-+#endif
--- 
-2.22.0.770.g0f2c4a37fd-goog
+> 
+> I can see three options:
+> 1- Keep my initial proposition
+> 2- Have hwspin_lock_request_specific() using shared locks and
+>     hwspin_lock_request() using unused (so 'initially' exclusive) locks.
+> 3- Have hwspin_lock_request_specific() using shared locks and
+>     remove/make deprecated hwspin_lock_request().
+> 
+> Just let me know what is your preference.
+> 
 
+I think we should start with #2 and would like input from e.g. Suman
+regarding #3.
+
+Regards,
+Bjorn
+
+> BR
+> 
+> Fabien
+> 
+> >
+> > Regards,
+> > Bjorn
+> >
+> >> Fabien Dessenne (6):
+> >>    dt-bindings: hwlock: add support of shared locks
+> >>    hwspinlock: allow sharing of hwspinlocks
+> >>    dt-bindings: hwlock: update STM32 #hwlock-cells value
+> >>    ARM: dts: stm32: Add hwspinlock node for stm32mp157 SoC
+> >>    ARM: dts: stm32: Add hwlock for irqchip on stm32mp157
+> >>    ARM: dts: stm32: hwlocks for GPIO for stm32mp157
+> >>
+> >>   .../devicetree/bindings/hwlock/hwlock.txt          | 27 +++++--
+> >>   .../bindings/hwlock/st,stm32-hwspinlock.txt        |  6 +-
+> >>   Documentation/hwspinlock.txt                       | 10 ++-
+> >>   arch/arm/boot/dts/stm32mp157-pinctrl.dtsi          |  2 +
+> >>   arch/arm/boot/dts/stm32mp157c.dtsi                 | 10 +++
+> >>   drivers/hwspinlock/hwspinlock_core.c               | 82 +++++++++++++++++-----
+> >>   drivers/hwspinlock/hwspinlock_internal.h           |  2 +
+> >>   7 files changed, 108 insertions(+), 31 deletions(-)
+> >>
+> >> -- 
+> >> 2.7.4
+> >>
