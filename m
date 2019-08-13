@@ -2,140 +2,55 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA7B8BA9D
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 13 Aug 2019 15:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C708C09B
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 13 Aug 2019 20:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729237AbfHMNnO (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 13 Aug 2019 09:43:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59676 "EHLO mail.kernel.org"
+        id S1726155AbfHMScW (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 13 Aug 2019 14:32:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34704 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728095AbfHMNnN (ORCPT
+        id S1726066AbfHMScW (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 13 Aug 2019 09:43:13 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 13 Aug 2019 14:32:22 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A97772084D;
-        Tue, 13 Aug 2019 13:43:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DFF1A20665;
+        Tue, 13 Aug 2019 18:32:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565703792;
-        bh=tGhuTi6i8q70RtL03QHsvQiJD0U0K5cLD/inwbsXYcc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Uo4UavNgFwTPrkrDxoQzIeexZ8KSCrVWgqozcIOdUTQaQijufQfVB2ixWpk9DEuUn
-         5e+wszlhwGOhVXV0p24BfuRUhhiNDlVRvQSFGwV/lc5gcy+idDp3GcQyqgmUm/gpDl
-         I+N5Xl39XMXX1aqi9llnNWdLstFASs7Sp7tR3oY4=
-Received: by mail-qk1-f174.google.com with SMTP id 201so79581358qkm.9;
-        Tue, 13 Aug 2019 06:43:12 -0700 (PDT)
-X-Gm-Message-State: APjAAAVCS/PKneNXjBJi7w6Mep/wDhudVlIcFnPmBwsZlJ6rtMDzYl8Z
-        y3ofMYECfigLgBTkZmoan1hL2ixA742nKAEqaw==
-X-Google-Smtp-Source: APXvYqyoMvVBG6NtFWAydUGiqe0lkRWftJ5OUD3LW861TSIDeNewDqAnlP+AxGAUPwMd7qokDO1L8NO/lTHTDeP0EKY=
-X-Received: by 2002:a37:d8f:: with SMTP id 137mr27142458qkn.254.1565703791883;
- Tue, 13 Aug 2019 06:43:11 -0700 (PDT)
+        s=default; t=1565721141;
+        bh=W4OBBaZc9LcvHS9HatCqQdN4d7XWyG+yszN82yTksxY=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=FQD5LQN17V27tvKt9Kd2arov/3UM0ptRAl2A2Z34C4HEHRpE22jmS9ClrwNULFS7W
+         UAiGNZMu/7r9e2T2n9uMB2Yy7wl+niqvujxoLu/IF2+fmti0jpAFInSYZ6Y/y/PWNn
+         QLLVW/+6ig3Qs2M8e2GY6aFik9Vb6CBtgQlrxwl8=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20190813130946.16448-1-govinds@codeaurora.org> <20190813130946.16448-2-govinds@codeaurora.org>
-In-Reply-To: <20190813130946.16448-2-govinds@codeaurora.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 13 Aug 2019 07:43:00 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqK-GK8arfRu6sqP9UjNrwc0=aUWXymMRF5fQhg+M2TNng@mail.gmail.com>
-Message-ID: <CAL_JsqK-GK8arfRu6sqP9UjNrwc0=aUWXymMRF5fQhg+M2TNng@mail.gmail.com>
-Subject: Re: [v2 1/2] dt-bindings: clock: qcom: Add QCOM Q6SSTOP clock
- controller bindings
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190813130946.16448-1-govinds@codeaurora.org>
+References: <20190813130946.16448-1-govinds@codeaurora.org>
+Subject: Re: [v2 0/2] Add Q6SSTOP clock controller for QCS404
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-soc@vger.kernel.org, andy.gross@linaro.org,
+        linux-remoteproc@vger.kernel.org,
+        Govind Singh <govinds@codeaurora.org>
 To:     Govind Singh <govinds@codeaurora.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-soc@vger.kernel.org>,
-        Andy Gross <andy.gross@linaro.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: alot/0.8.1
+Date:   Tue, 13 Aug 2019 11:32:20 -0700
+Message-Id: <20190813183220.DFF1A20665@mail.kernel.org>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 7:10 AM Govind Singh <govinds@codeaurora.org> wrote:
->
-> Add devicetree binding for the Q6SSTOP clock controller found in QCS404.
+Quoting Govind Singh (2019-08-13 06:09:44)
+> Add support for the Q6SSTOP clock control used on qcs404
+> based devices. This would allow wcss remoteproc driver to
+> control the required WCSS Q6SSTOP clock/reset controls to
+> bring the subsystem out of reset and shutdown the WCSS Q6DSP.
 
-You need to test this with 'make dt_binding_check' and fix the errors.
+What changed from v1? Please include a changelog so we know what
+happened.
 
->
-> Signed-off-by: Govind Singh <govinds@codeaurora.org>
-> ---
->  .../bindings/clock/qcom,q6sstopcc.yaml        | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
->
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml b/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
-> new file mode 100644
-> index 000000000000..861e9ba97ca3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
-> @@ -0,0 +1,45 @@
-> +# SPDX-License-Identifier: BSD-2-Clause
-
-GPL-2.0-only OR BSD-2-Clause
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,osm-l3.yaml#
-
-needs updating
-
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Q6SSTOP clock Controller
-> +
-> +maintainers:
-> +  - Govind Singh <govinds@codeaurora.org>
-> +
-> +description:
-> +   Q6SSTOP clock controller is used by WCSS remoteproc driver
-> +   to bring WDSP out of reset.
-> +
-> +properties:
-> +  compatible:
-> +    const: "qcom,qcs404-q6sstopcc"
-> +
-> +  reg:
-> +    maxItems: 2
-> +    description: Q6SSTOP clocks register region
-> +    description: Q6SSTOP_TCSR register region
-
-Not valid json-schema
-
-> +
-> +  clocks:
-> +    items:
-> +      - description: ahb clock for the q6sstopCC
-
-Single item just needs 'maxItems: 1'
-
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - '#clock-cells'
-
-Should have an 'additionalProperties: false' here.
-
-> +
-> +examples:
-> +  - |
-> +    q6sstopcc: clock-controller@7500000 {
-> +      compatible = "qcom,qcs404-q6sstopcc";
-> +      reg = <0x07500000 0x4e000>, <0x07550000 0x10000>;
-> +      clocks = <&gcc GCC_WCSS_Q6_AHB_CLK>;
-> +      #clock-cells = <1>;
-> +    };
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
