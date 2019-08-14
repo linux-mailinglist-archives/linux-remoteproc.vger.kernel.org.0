@@ -2,87 +2,102 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D908E082
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 15 Aug 2019 00:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F8C8E12F
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 15 Aug 2019 01:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728378AbfHNWO3 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 14 Aug 2019 18:14:29 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:34981 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729880AbfHNWOU (ORCPT
+        id S1729567AbfHNXRf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 14 Aug 2019 19:17:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44726 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726619AbfHNXRe (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 14 Aug 2019 18:14:20 -0400
-Received: by mail-qt1-f196.google.com with SMTP id u34so395941qte.2
-        for <linux-remoteproc@vger.kernel.org>; Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
-        b=l5PC+4msT+R1VOq1FIInu61dIh2STHPN9aSBt/Y5M3n644FfA169IT6wzP+sfbruwG
-         5vHd8QNfmmF7FOlV1OW4+1ls9+argQAW0MZ9696kjqRFjMtNiRxkPVvom8CpuMz6+P3J
-         lvnykAE+N5ClLjt8+21Oenlj55mmWn47h6bOufTUj3iAyACG+cL0ImoQgj5m6u3w1/lr
-         fVPm9fs++0X3Li7mpOQ13No26+jYpH9OobXYps5GGnrfpp0Xq6qTsPtsJRMHzlRsuSi2
-         Q5RuPSHMeFGhG1MzboDTj+tp2IBpQDy9TN5wUYjWC528WeGARQxpLHz2F9meUvIkEvkQ
-         sSPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=p6m83mGjllDiHyeRTSS1oVMHX5M/xE6ILn6PPhzsgs4=;
-        b=rSY1otsfXy7h3LV7zgzP1QTo/5OLAzO5mqdlOvxixc5KiHCbAweGK+cf5WVVA64Frc
-         /du9ighBEByyYkt3KHFy/dTE4V3qo1CCRW2kq4NQ4iJixBtjp6dbV58ygbDx4an8Ewa5
-         DlCoAazXQVgxXAxO/qfx+Ed4u4brC/iQAJoxhX0SkH3rp6KqMiCcwxvipzuyrguo1IEX
-         5yhTVNUQIEPDamp6aaBeu1fcwfzULIlPcI5Npn3ieu3pGRYjxAO2INAa//261HEIB1al
-         InXvICulFKI4ata+FTF2UxCEaYc4gfiqTff1NlYNVAdEdlNtF5lKZxrXmXzUzyEUHx79
-         wqqg==
-X-Gm-Message-State: APjAAAWCJrz2ME6HTrBUswJLqGykE6HdxLf1yMEGUyNh3xKe9o3NaXgo
-        x6liy7IwFiLWZvyBck4iWVQCh3uIEkrY/ztTbn8=
-X-Google-Smtp-Source: APXvYqwvEwq36YC/YcFdGthiFQqEswOUmu8y33AXL4ty34gsygcaTEjmhvj04/dFUfa1vFoE719aJcDSjuFoUwkSVes=
-X-Received: by 2002:aed:3826:: with SMTP id j35mr1333309qte.54.1565820860049;
- Wed, 14 Aug 2019 15:14:20 -0700 (PDT)
+        Wed, 14 Aug 2019 19:17:34 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A71602064A;
+        Wed, 14 Aug 2019 23:17:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565824653;
+        bh=BUMuEhOekuNlkYRAPWto4vz/PFkEh8/udVJlZ/2FMfQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TNIYJcpc9E5yZe+W8EW8pzrIUrTZdlNLcsF70EIrX66vuqM3DG3dqjSBKrSBDGaxI
+         V7pPWBS738oN4A1MkWBpvgFAkES64o2s6b8Rp7egXwEAeaScGzIwOdypEh6dbGj4f0
+         2aZO3wLGktmvbG7M8X6+Ts+zQJP8QlZS4GeAM9v4=
+Received: by mail-qt1-f175.google.com with SMTP id i4so510981qtj.8;
+        Wed, 14 Aug 2019 16:17:33 -0700 (PDT)
+X-Gm-Message-State: APjAAAXOhMvR1BaKiANCXD+EcE8Eowy/anxAUop+0GXmEqJO2e3xj3JR
+        O+GGn9t4wp/8hVMLOHdHds79u4i4TxjpXih76w==
+X-Google-Smtp-Source: APXvYqyqANOhCBTSqCHZQm3woQMeO+/sPNecgEttTGuUZUASkIbB6R5eX3jJtqE3kNGHnL1T4gxQb4JLTzhQA8pU+ck=
+X-Received: by 2002:ac8:44c4:: with SMTP id b4mr1565641qto.224.1565824652855;
+ Wed, 14 Aug 2019 16:17:32 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:aed:3544:0:0:0:0:0 with HTTP; Wed, 14 Aug 2019 15:14:19
- -0700 (PDT)
-Reply-To: Katerinejones19@gmail.com
-From:   "MS. MARYANNA B. THOMASON" <westernunion.benin982@gmail.com>
-Date:   Wed, 14 Aug 2019 23:14:19 +0100
-Message-ID: <CAP=nHB+U+By16HzeUHiDfPT5KNtemGam6gniZhL2s7_itZ3F8w@mail.gmail.com>
-Subject: TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
- THIS ATM CARD
-To:     undisclosed-recipients:;
+References: <20190813130946.16448-1-govinds@codeaurora.org>
+ <20190813130946.16448-2-govinds@codeaurora.org> <CAL_JsqK-GK8arfRu6sqP9UjNrwc0=aUWXymMRF5fQhg+M2TNng@mail.gmail.com>
+ <20190814064126.GV26807@tuxbook-pro>
+In-Reply-To: <20190814064126.GV26807@tuxbook-pro>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 14 Aug 2019 17:17:21 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKaZJ1asHynSJg45nJf8Jtj7MmC_OsVtPjNzf8nat1jrg@mail.gmail.com>
+Message-ID: <CAL_JsqKaZJ1asHynSJg45nJf8Jtj7MmC_OsVtPjNzf8nat1jrg@mail.gmail.com>
+Subject: Re: [v2 1/2] dt-bindings: clock: qcom: Add QCOM Q6SSTOP clock
+ controller bindings
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Govind Singh <govinds@codeaurora.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "open list:ARM/QUALCOMM SUPPORT" <linux-soc@vger.kernel.org>,
+        Andy Gross <andy.gross@linaro.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-ATTN DEAR PARCEL BENEFICIARY.
+On Wed, Aug 14, 2019 at 12:39 AM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Tue 13 Aug 06:43 PDT 2019, Rob Herring wrote:
+>
+> > On Tue, Aug 13, 2019 at 7:10 AM Govind Singh <govinds@codeaurora.org> wrote:
+> > >
+> > > Add devicetree binding for the Q6SSTOP clock controller found in QCS404.
+> >
+> > You need to test this with 'make dt_binding_check' and fix the errors.
+> >
+> > >
+> > > Signed-off-by: Govind Singh <govinds@codeaurora.org>
+> > > ---
+> > >  .../bindings/clock/qcom,q6sstopcc.yaml        | 45 +++++++++++++++++++
+> > >  1 file changed, 45 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml b/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
+> > > new file mode 100644
+> > > index 000000000000..861e9ba97ca3
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
+> > > @@ -0,0 +1,45 @@
+> > > +# SPDX-License-Identifier: BSD-2-Clause
+> >
+> > GPL-2.0-only OR BSD-2-Clause
+> >
+>
+> Is this a requirement of the devicetree project?
 
-I AM CATHY JONES,DIPLOMATIC AGENT ASIGNED ON THE DELIVERY OF YOUR ATM
-CARD THROUGH MS. MARYANNA B. THOMASON, DHL MANAGEMENT DIRECTOR NEW
-YORK.
-TODAY, Wed, Aug 14, 2019 I AM READY FOR COMING TO YOUR ADDRESS WITH
-THIS ATM CARD, So before i deliver I want you to send me.
-official diplomatic agent delivery fee sum of $150.00 us
- only. I am here at JFK Airport,Florida. USA
+More like my preference.
 
-SEND THIS FEE BY WESTERN UNION OR MONEY WITH RECEIVER'S NAME AND ADDRESS BELOW.
+> Wouldn't the BSD
+> license alone be sufficient for the type of interoperability that we're
+> striving for?
 
-RECEIVER'S NAME-----------------ERROL PRINGLE
-ADDRESS----------------3500 OLD DENTON RD APT 208; CARROLLTON, TEXAS 75007
-COUNTRY----------------USA
-AMOUNT--------------------$150.00 ONLY
-TEST QUESTION----------------WHO IS THE CREATOR
-ANSWER------------------GOD
- meanwhile this $150.00 is required by the Custom Service,USA Homeland
-Security,for protection of your delivery, it will make the ATM CARD
-and funds worth $15.8MILLION US DOLLARS secure, Beleiev me, this is my
-word, remark my word,you will receive your delivery from me, Mrs.
-Cathy Jones once you send this only $150.00 today.
-I WAIT ON YOUR PAYMENT CONFIRMATION, ONCE I GOT YOUR PAYMENT, I WILL
-FINALLY ARRIVE TO YOUR NEAREST ADDRESS. today
-THANKS AND MAY GOD BLESS  YOU
-CATHY JONES,DIPLOMATIC AGENT
-EMAIL; katerinejones19@gmail.com
-CALL OR TEXT ME, DIPLOMATIC AGENT MS. CATHY JONES
-Phone Number; (408) 650-6103,
+Yes. However, folks like to copy and paste and forget to pay attention
+to the license. So we'll end up with GPL licensed code copied into BSD
+licensed code. Dual license doesn't completely solve that, but helps
+somewhat IMO.
+
+Rob
