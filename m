@@ -2,131 +2,91 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC36C97788
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 21 Aug 2019 12:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B078B9824F
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 21 Aug 2019 20:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726845AbfHUKr7 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 21 Aug 2019 06:47:59 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:38820 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726227AbfHUKr7 (ORCPT
+        id S1727041AbfHUSGG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 21 Aug 2019 14:06:06 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:44670 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726252AbfHUSGG (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 21 Aug 2019 06:47:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1566384475; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bCAftt3lJ09+T5g6O8rgBlvklX6m4wsgkMOQe1tylGQ=;
-        b=etrBidu99dqcPni2DzX+1LekMpTbWLg2CzthJsiYXn5GFm0I9aILx7OGWMnWHW7FJFmVFU
-        s666lbabp6Q709Lxw4JvMVyeLtuFPnYNxhGOPayz1UhuvaCQkMAy7XSZPpWCG3S1DZtWbB
-        VPyMOdqq8827JcgFK5dPmMpdV0xicEQ=
-Date:   Wed, 21 Aug 2019 12:47:39 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 1/3] dt-bindings: Document JZ47xx VPU auxiliary
- processor
-To:     Rob Herring <robh@kernel.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Paul Burton <paul.burton@mips.com>, od@zcrc.me,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <1566384459.1884.0@crapouillou.net>
-In-Reply-To: <20190820205044.GA1223@bogus>
-References: <20190729183109.18283-1-paul@crapouillou.net>
-        <20190820205044.GA1223@bogus>
+        Wed, 21 Aug 2019 14:06:06 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 3BD7460DB4; Wed, 21 Aug 2019 18:06:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1566410766;
+        bh=CaM47E+jHxWdx1PakdsEDGXID3inWAqQsaFwjMJf4v0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=S+ugcXV59A0Tq0WoK+ytc/Vq0BdlyWOdm0Mx0CckJRHyhDjkDbIQw+hbV74rgNfh6
+         q1t3trCcr/x4eCwY2dmUR+eyYiCyu1aZqaHcjIeHvDU77c2OFLZuTiwLuztcWlg/Vm
+         NfPb//s7c8CxMOxh4oeIKFMg0ZPVZ6flsIlP2c3Y=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E177A608CC;
+        Wed, 21 Aug 2019 18:06:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1566410765;
+        bh=CaM47E+jHxWdx1PakdsEDGXID3inWAqQsaFwjMJf4v0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WK0jp5Zhu2nANQYLeEK7xT2m/qQZktsGf/NyHxylJkraBXhBiRwxdYL8GJIO24C9w
+         JgCnFEQMxqdSgIqw9T0Z6Ar96+PwGKmN+4sUGpsttNVC8QJ+fShqi2EVKQ/HfkNN5l
+         EoCE5YwxYk0u0NgPqn3+KoeBBy4sag54OxtMnb2w=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E177A608CC
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     bjorn.andersson@linaro.org
+Cc:     agross@kernel.org, ohad@wizery.com, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rnayak@codeaurora.org, Sibi Sankar <sibis@codeaurora.org>
+Subject: [PATCH] remoteproc: qcom: q6v5-mss: fixup q6v5_pds_enable error handling
+Date:   Wed, 21 Aug 2019 23:35:48 +0530
+Message-Id: <20190821180548.9458-1-sibis@codeaurora.org>
+X-Mailer: git-send-email 2.22.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Rob,
+dev_pm_domain_attach_by_name will return NULL if the requested
+power-domain is not a part device node. This could result in
+NULL pointer de-reference in q6v5_pds_enable. Fix this by
+checking for IS_ERR_OR_NULL and forward the appropriate error
+code.
 
+Fixes: 4760a896be88e ("remoteproc: q6v5-mss: Vote for rpmh power domains")
+Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+---
+ drivers/remoteproc/qcom_q6v5_mss.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Le mar. 20 ao=FBt 2019 =E0 22:50, Rob Herring <robh@kernel.org> a =E9crit :
-> On Mon, Jul 29, 2019 at 02:31:07PM -0400, Paul Cercueil wrote:
->>  Inside the Video Processing Unit (VPU) of the recent JZ47xx SoCs=20
->> from
->>  Ingenic is a second Xburst MIPS CPU very similar to the main core.
->>  This document describes the devicetree bindings for this auxiliary
->>  processor.
->>=20
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>=20
->>  Notes:
->>      v2: Update TCSM0 address in example
->>=20
->>   .../bindings/remoteproc/ingenic,vpu.txt       | 36=20
->> +++++++++++++++++++
->>   1 file changed, 36 insertions(+)
->>   create mode 100644=20
->> Documentation/devicetree/bindings/remoteproc/ingenic,vpu.txt
->>=20
->>  diff --git=20
->> a/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.txt=20
->> b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.txt
->>  new file mode 100644
->>  index 000000000000..576f9e582780
->>  --- /dev/null
->>  +++ b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.txt
->>  @@ -0,0 +1,36 @@
->>  +* Ingenic JZ47xx auxiliary processor
->>  +
->>  +Inside the Video Processing Unit (VPU) of the recent JZ47xx SoCs=20
->> from Ingenic
->>  +is a second Xburst MIPS CPU very similar to the main core.
->>  +This document describes the devicetree bindings for this auxiliary=20
->> processor.
->>  +
->>  +Required properties:
->>  +- compatible: Should be "ingenic,jz4770-vpu-rproc"
->>  +- reg: Must contain the registers location and length for:
->>  +  * the auxiliary processor,
->>  +  * the Tightly Coupled Shared Memory 0 (TCSM0),
->>  +  * the Tightly Coupled Shared Memory 1 (TCSM1),
->>  +  * the shared SRAM.
->>  +- reg-names: Must contain "aux", "tcsm0", "tcsm1", "sram".
->>  +- clocks: Clock specifier for the AUX and VPU clocks.
->>  +- clock-names: Must contain "aux", "vpu".
->>  +- interrupts: Interrupt specifier for the VPU hardware block.
->>  +
->>  +Example:
->>  +
->>  +vpu: cpu@132a0000 {
->=20
-> cpu is reserved for CPUs under /cpus/. Use video-codec or=20
-> video-decoder
-> or ?? It's not clear what type of video processing this does.
-
-Hardware decode and encode of mpeg-2 and h264. I guess I'll use=20
-'video-decoder' then.
-
-
->=20
->>  +	compatible =3D "ingenic,jz4770-vpu-rproc";
->>  +
->>  +	reg =3D <0x132a0000 0x20 /* AUX */
->>  +		   0x132b0000 0x4000 /* TCSM0 */
->>  +		   0x132c0000 0xc000 /* TCSM1 */
->>  +		   0x132f0000 0x7000 /* SRAM */
->>  +	>;
->>  +	reg-names =3D "aux", "tcsm0", "tcsm1", "sram";
->>  +
->>  +	clocks =3D <&cgu JZ4770_CLK_AUX>, <&cgu JZ4770_CLK_VPU>;
->>  +	clock-names =3D "aux", "vpu";
->>  +
->>  +	interrupt-parent =3D <&cpuintc>;
->>  +	interrupts =3D <3>;
->>  +};
->>  --
->>  2.21.0.593.g511ec345e18
->>=20
-
-=
+diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+index 8fcf9d28dd731..de919f2e8b949 100644
+--- a/drivers/remoteproc/qcom_q6v5_mss.c
++++ b/drivers/remoteproc/qcom_q6v5_mss.c
+@@ -1282,8 +1282,8 @@ static int q6v5_pds_attach(struct device *dev, struct device **devs,
+ 
+ 	for (i = 0; i < num_pds; i++) {
+ 		devs[i] = dev_pm_domain_attach_by_name(dev, pd_names[i]);
+-		if (IS_ERR(devs[i])) {
+-			ret = PTR_ERR(devs[i]);
++		if (IS_ERR_OR_NULL(devs[i])) {
++			ret = PTR_ERR(devs[i]) ? : -ENODATA;
+ 			goto unroll_attach;
+ 		}
+ 	}
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
