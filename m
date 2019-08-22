@@ -2,91 +2,92 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B078B9824F
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 21 Aug 2019 20:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88DB993A9
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 22 Aug 2019 14:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbfHUSGG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 21 Aug 2019 14:06:06 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:44670 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726252AbfHUSGG (ORCPT
+        id S2388609AbfHVMdS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 22 Aug 2019 08:33:18 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:37440 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388603AbfHVMdS (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 21 Aug 2019 14:06:06 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 3BD7460DB4; Wed, 21 Aug 2019 18:06:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1566410766;
-        bh=CaM47E+jHxWdx1PakdsEDGXID3inWAqQsaFwjMJf4v0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=S+ugcXV59A0Tq0WoK+ytc/Vq0BdlyWOdm0Mx0CckJRHyhDjkDbIQw+hbV74rgNfh6
-         q1t3trCcr/x4eCwY2dmUR+eyYiCyu1aZqaHcjIeHvDU77c2OFLZuTiwLuztcWlg/Vm
-         NfPb//s7c8CxMOxh4oeIKFMg0ZPVZ6flsIlP2c3Y=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E177A608CC;
-        Wed, 21 Aug 2019 18:06:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1566410765;
-        bh=CaM47E+jHxWdx1PakdsEDGXID3inWAqQsaFwjMJf4v0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WK0jp5Zhu2nANQYLeEK7xT2m/qQZktsGf/NyHxylJkraBXhBiRwxdYL8GJIO24C9w
-         JgCnFEQMxqdSgIqw9T0Z6Ar96+PwGKmN+4sUGpsttNVC8QJ+fShqi2EVKQ/HfkNN5l
-         EoCE5YwxYk0u0NgPqn3+KoeBBy4sag54OxtMnb2w=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E177A608CC
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     bjorn.andersson@linaro.org
-Cc:     agross@kernel.org, ohad@wizery.com, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rnayak@codeaurora.org, Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH] remoteproc: qcom: q6v5-mss: fixup q6v5_pds_enable error handling
-Date:   Wed, 21 Aug 2019 23:35:48 +0530
-Message-Id: <20190821180548.9458-1-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.22.1
+        Thu, 22 Aug 2019 08:33:18 -0400
+Received: by mail-lf1-f68.google.com with SMTP id c9so4417694lfh.4
+        for <linux-remoteproc@vger.kernel.org>; Thu, 22 Aug 2019 05:33:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=nfhgajuufA7rWI/YoBLFz2MWYaw/EzcvL2MRwGBVBXpJ+tHWl2GL+cxwap1G98IxOg
+         Ob8ehEbbgRZ3WBc6H6INDo6rFKWg1dShWne+N7WlaDMjxzobTy9bfGotsqwkLgth0oBn
+         aFRE9bDH3zL9ejw2DLDEghsx62j9+IoAMKFY7exQ52raYsJyqYnlEmgXZQ9/smkmqgEX
+         EQAP508jHUPPlenbqzaW7zl1nbW0QVhHxOtJ6BjCBPObzqbvZUQubv/1ZBGu34QxLlzr
+         g5VyuWeEvTh0mpgHHzh7oUHX6eiZr48bFwQE9pIAipVx1Ls3pv2tH/0wsMuzyRz0o8Dy
+         fVYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
+        b=sHiUq5XaZPnIjqJAj9XOFpOV9bzNH4sTmVzSIiPyzEZMcFx7VoG1FJianZ888geqS/
+         22Qpxue/wffpFahB7kjrtF2EfhJGNFS4BeMNby8H2dX0Bk3iXVZghKd1givgC3FBti85
+         YkJGRFKnSu6W0VJW4dUG3g9ITQQK006KNz/OLjhN6bJtti12dbq/qndhPKaODc7wfbIf
+         TkoX5q/+lvVOzr5SlkjNBosvR5mQmNpQjWvTaGKLx9uvsXGG7R1rc1nAMOHXngEPlHOP
+         ynigqx74skY6gDLdJzvr5+Xi6tUuTQOS3GNxlWLJhtTKl80RyctHqe00Eq9CW3vkaScN
+         VjmQ==
+X-Gm-Message-State: APjAAAW+eX/9EzpdtDg5/AaKwcRyKcSmNQzV0OXEuPyQFfRYeS1MYQQN
+        5G2wxQZ7ESG2P7h9o87HmPlkb38r7p3fhrJRTVo=
+X-Google-Smtp-Source: APXvYqxAIR78YU+T6kxFuF/fM9DMLrbHL7/RRwQn0EMggjH+Xv1U3mJHoN258ezWnIEWlEwEkubNeP3e4OaNpSk81nY=
+X-Received: by 2002:ac2:54bc:: with SMTP id w28mr222870lfk.17.1566477196677;
+ Thu, 22 Aug 2019 05:33:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:ab3:6a0f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:33:16
+ -0700 (PDT)
+Reply-To: eku.lawfirm@gmail.com
+From:   "Law firm(Eku and Associates)" <ezeobodo1@gmail.com>
+Date:   Thu, 22 Aug 2019 12:33:16 +0000
+Message-ID: <CAN-_bTYkX9Q_V1vycr99xF0J=w6om=+jKr8KLhHqjcjhJ7XE6A@mail.gmail.com>
+Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-dev_pm_domain_attach_by_name will return NULL if the requested
-power-domain is not a part device node. This could result in
-NULL pointer de-reference in q6v5_pds_enable. Fix this by
-checking for IS_ERR_OR_NULL and forward the appropriate error
-code.
+--=20
+Dear,
+With due respect this is not spam or Scam mail, because I have
+contacted you before and there was no response from you,I apologise if
+the contents of this mail are contrary to your moral ethics, which I
+feel may be of great disturbance to your person, but please treat this
+with absolute confidentiality, believing that this email reaches you
+in good faith. My contacting you is not a mistake or a coincidence
+because God can use any person known or unknown to accomplish great
+things.
+I am a lawyer and I have an investment business proposal to offer you.
+It is not official but should be considered as legal and confidential
+business. I have a customer's deposit of $US25 million dollars ready
+to be moved for investment if you can partner with us. We are ready to
+offer you 10% of this total amount as your compensation for supporting
+the transaction to completion. If you are interested to help me please
+reply me with your full details as stated below:
+(1) Your full names:
+(2) Your address:
+(3) Your occupation:
+(4) Your mobile telephone number:
+(5) Your nationality:
+(6) Your present location:
+(7) Your age:
+So that I will provide you more details on what to do and what is
+required for successful completion.
+Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
+MENTIONED DETAILS
 
-Fixes: 4760a896be88e ("remoteproc: q6v5-mss: Vote for rpmh power domains")
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
----
- drivers/remoteproc/qcom_q6v5_mss.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index 8fcf9d28dd731..de919f2e8b949 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -1282,8 +1282,8 @@ static int q6v5_pds_attach(struct device *dev, struct device **devs,
- 
- 	for (i = 0; i < num_pds; i++) {
- 		devs[i] = dev_pm_domain_attach_by_name(dev, pd_names[i]);
--		if (IS_ERR(devs[i])) {
--			ret = PTR_ERR(devs[i]);
-+		if (IS_ERR_OR_NULL(devs[i])) {
-+			ret = PTR_ERR(devs[i]) ? : -ENODATA;
- 			goto unroll_attach;
- 		}
- 	}
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Sinc=C3=A8rement v=C3=B4tre,
+Avocat Etienne Eku Esq.(Lawfirm)
+Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
+=E2=80=99ouest.
+Skype:westafricalawfirm
