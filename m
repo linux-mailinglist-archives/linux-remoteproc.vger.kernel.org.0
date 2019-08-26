@@ -2,57 +2,60 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7E09D317
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 26 Aug 2019 17:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DDC9D319
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 26 Aug 2019 17:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733190AbfHZPj3 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 26 Aug 2019 11:39:29 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:1355 "EHLO
+        id S1733203AbfHZPj5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 26 Aug 2019 11:39:57 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:53071 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733084AbfHZPjV (ORCPT
+        by vger.kernel.org with ESMTP id S1733196AbfHZPjc (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 26 Aug 2019 11:39:21 -0400
+        Mon, 26 Aug 2019 11:39:32 -0400
 Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7QFPrA8018373;
-        Mon, 26 Aug 2019 17:39:14 +0200
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7QFPrAV018373;
+        Mon, 26 Aug 2019 17:39:20 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
  : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=C0FjddlLz1tmGjWDBbox9NlNRBYo5AeX1gKNZtaLU5g=;
- b=Uy9YJ97HWifGqiNE2bZDoI7Goq6JnRM7BYzJuFG+KghxPxQpMXRocx54nTa7JjhnaXH9
- pPWn55lKtkr86gbQ0Q9xTfq9ue4Wjj5DBRFvLb27ZNa0aCBE5vLQSpdGoU60SWHC7SyC
- gs/+4Co71mrbqGPctuDkriAajhGNNVpk9F4B/x4ANnsPksHO8u/LErIQhrgi1ivgQF2r
- XUKzG4wyUm7W+TJra1/zVOWlAG4wmBJlFNv5hr8ScymlZn083D4mrfcRXizwk5EOwODd
- zxciaIIANo/FGysi1csooiGWhF0x27CYRUjUZgz4fXC6xHuItnr3v7GXNnUEfyz1+wJr KA== 
+ bh=H7DnCfFp0iZ60ErGpkBa9fhjxQJ8KQ0RkkUvFpbyyJE=;
+ b=0pEDxviXDpGIDzD4OPyXYWY7GFp4XjkoggbCd8Fbo1rkG20JDMTsOjlWWxakPE3kP3bB
+ 3vTeTWoBjJUPPDiNSNS/v3wWr4RJK8pnK5IUYBsEDmPPMLgZt8fHeQwHNK1M7OvXQ5aT
+ k6h55iqH2bjfVW28WNkGrP3rCbw2xTAt0W6oz/TGeMxh+L3qNEwzOp3o1uE0l0BUZI+7
+ FE0L0FpxveE0PufaVubCe7grXDgJlhaodk/Gxppje2FS0bAkM1hKKvamWDWiSpMDmSy3
+ vJ6y/qWUQrF+OtU9iuj2cRA+FVRqGnmzYemjYWoEM0JrgqQdWrge45wdRMllQLl9UUL3 6Q== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2uju0vmgf6-1
+        by mx07-00178001.pphosted.com with ESMTP id 2uju0vmgh6-1
         (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Mon, 26 Aug 2019 17:39:14 +0200
+        Mon, 26 Aug 2019 17:39:20 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 274E01D1;
-        Mon, 26 Aug 2019 15:38:42 +0000 (GMT)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 48F9886;
+        Mon, 26 Aug 2019 15:39:06 +0000 (GMT)
 Received: from Webmail-eu.st.com (Safex1hubcas23.st.com [10.75.90.46])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A29F52D3762;
-        Mon, 26 Aug 2019 17:38:25 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 912742BC1CA;
+        Mon, 26 Aug 2019 17:38:49 +0200 (CEST)
 Received: from SAFEX1HUBCAS21.st.com (10.75.90.45) by SAFEX1HUBCAS23.st.com
  (10.75.90.46) with Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 26 Aug
- 2019 17:38:25 +0200
+ 2019 17:38:49 +0200
 Received: from localhost (10.201.23.25) by Webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 26 Aug 2019 17:38:21
+ with Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 26 Aug 2019 17:38:48
  +0200
 From:   Fabien Dessenne <fabien.dessenne@st.com>
-To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Alexandre Torgue <alexandre.torgue@st.com>,
         Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <devicetree@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
 CC:     Fabien Dessenne <fabien.dessenne@st.com>,
         Loic Pallardy <loic.pallardy@st.com>,
         Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Subject: [PATCH] remoteproc: stm32: clear MCU PDDS at firmware start
-Date:   Mon, 26 Aug 2019 17:38:06 +0200
-Message-ID: <1566833886-16571-1-git-send-email-fabien.dessenne@st.com>
+Subject: [PATCH 0/2] remoteproc: stm32: allow wdg irq to be a wakeup source
+Date:   Mon, 26 Aug 2019 17:38:41 +0200
+Message-ID: <1566833923-16718-1-git-send-email-fabien.dessenne@st.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -64,43 +67,19 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-When remoteproc stops a firmware, it sets the MCU PDDS flag, allowing
-the platform to reach the Standby power mode if needed.
-Symmetrically, clear this flag before running a firmware.
-This fixes the issue where the system goes to Standby mode when the
-MCU crashes while MPU is in CSTOP mode.
+The watchdog IRQ which notifies the remote processor crash is used by the
+remoteproc framework to perform a recovery procedure.
+Since this IRQ may be fired when the Linux system is suspended, this IRQ may
+be configured to wake up the system.
 
-Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
----
- drivers/remoteproc/stm32_rproc.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Fabien Dessenne (2):
+  dt-bindings: remoteproc: stm32: add wakeup-source
+  remoteproc: stm32: wakeup the system by wdg irq
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index e2da719..1c95913 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -383,10 +383,21 @@ static void stm32_rproc_add_coredump_trace(struct rproc *rproc)
- 
- static int stm32_rproc_start(struct rproc *rproc)
- {
-+	struct stm32_rproc *ddata = rproc->priv;
- 	int err;
- 
- 	stm32_rproc_add_coredump_trace(rproc);
- 
-+	/* clear remote proc Deep Sleep */
-+	if (ddata->pdds.map) {
-+		err = regmap_update_bits(ddata->pdds.map, ddata->pdds.reg,
-+					 ddata->pdds.mask, 0);
-+		if (err) {
-+			dev_err(&rproc->dev, "failed to clear pdds\n");
-+			return err;
-+		}
-+	}
-+
- 	err = stm32_rproc_set_hold_boot(rproc, false);
- 	if (err)
- 		return err;
+ .../devicetree/bindings/remoteproc/stm32-rproc.txt |  3 ++
+ drivers/remoteproc/stm32_rproc.c                   | 47 ++++++++++++++++++++++
+ 2 files changed, 50 insertions(+)
+
 -- 
 2.7.4
 
