@@ -2,135 +2,127 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B859F00D
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 27 Aug 2019 18:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A31999F401
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 27 Aug 2019 22:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbfH0QWC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 27 Aug 2019 12:22:02 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:43743 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726621AbfH0QWC (ORCPT
+        id S1728233AbfH0UZQ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 27 Aug 2019 16:25:16 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:38032 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726871AbfH0UZP (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 27 Aug 2019 12:22:02 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7RGG0BV019934;
-        Tue, 27 Aug 2019 18:21:51 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=sTwTEKh7PY7xWSu6lXW3JPWtDKCZvlUhRrOtUzusNF0=;
- b=AJvYHzwFCR6O19zZZtRcXPFdYXbcTlO2jqn0zDfzYqbPiPAb7hAIgE9tSbq2GYy6IGVd
- jM+N40rxWGIA24TvZZcsJD53gP6dJz95i+vkp7JcQoVML4qSHRZaw6qPCjoJZhQcnp0m
- VoICawxzPl15pKMs4xWVmVxvE9BjmSCICDnujxoT46cglrloS4kS6n1B52E5NUdi5hCO
- cfaMMw50GuWtUR0pE15Cdoyxv4IMQ33npJak1UgZ8MeT83FImATZKCWxRuh4bdiFlPZx
- QBIynFMBi5Rh4WXTwUPeroFPun85W11NZO2q+u4A09+g+/9CZLGMGcMneN7Mx8ILYdO6 QA== 
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2uju0vthq6-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Tue, 27 Aug 2019 18:21:51 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 5BEDF4C;
-        Tue, 27 Aug 2019 16:21:47 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 900432B76DF;
-        Tue, 27 Aug 2019 18:21:46 +0200 (CEST)
-Received: from [10.48.0.131] (10.75.127.45) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 27 Aug
- 2019 18:21:46 +0200
-Subject: Re: [PATCH] remoteproc: Add a sysfs interface for name
-To:     Suman Anna <s-anna@ti.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Matt Redfearn <matt.redfearn@mips.com>,
+        Tue, 27 Aug 2019 16:25:15 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7RKP70B093527;
+        Tue, 27 Aug 2019 15:25:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1566937507;
+        bh=gEFdEpF3+WHvpWSJY5udGgk0X9B9uxOZiubUNpvloVw=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=gcOryOkGkUDvclbsETxSdDLvTp8FonXjm/u4yweBik1ycTS8nZcVasBirRn4DeKBN
+         4DFdcUTmNi8isNNyhJxCTXIirpZLs+VBkjAVsjsarVL93BGGH2IEHH1+IjQyuKEAty
+         jOs/TJeujygUh250pCOKKxZH7xsIXLHgtic7mSvY=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7RKP7RV064462
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 27 Aug 2019 15:25:07 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 27
+ Aug 2019 15:25:06 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 27 Aug 2019 15:25:06 -0500
+Received: from [128.247.58.153] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7RKP6DQ070466;
+        Tue, 27 Aug 2019 15:25:06 -0500
+Subject: Re: [PATCH] rpmsg: virtio_rpmsg_bus: replace "%p" with "%pK"
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>,
         Loic Pallardy <loic.pallardy@st.com>,
-        Fabien Dessenne <fabien.dessenne@st.com>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20190809222057.13924-1-s-anna@ti.com>
-From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Message-ID: <01cf27f8-c586-5a9e-c361-082bb1facbb4@st.com>
-Date:   Tue, 27 Aug 2019 18:21:45 +0200
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20181024011909.21674-1-s-anna@ti.com>
+ <40831f80-1e36-66ca-b8e5-684d46ba167e@ti.com> <20190827051007.GK1263@builder>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <8d36d695-dd66-c21f-f49e-f6dc3dbdfc5a@ti.com>
+Date:   Tue, 27 Aug 2019 15:25:06 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190809222057.13924-1-s-anna@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20190827051007.GK1263@builder>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG7NODE3.st.com (10.75.127.21) To SFHDAG3NODE1.st.com
- (10.75.127.7)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-27_03:,,
- signatures=0
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Suman,
+Hi Bjorn,
 
-Acked-by:Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+On 8/27/19 12:10 AM, Bjorn Andersson wrote:
+> On Fri 09 Aug 13:25 PDT 2019, Suman Anna wrote:
+> 
+>> Hi Bjorn,
+>>
+> 
+> Hi Suman
+> 
+>> On 10/23/18 8:19 PM, Suman Anna wrote:
+>>> The virtio_rpmsg_bus driver uses the "%p" format-specifier for
+>>> printing the vring buffer address. This prints only a hashed
+>>> pointer even for previliged users. Use "%pK" instead so that
+>>> the address can be printed during debug using kptr_restrict
+>>> sysctl.
+>>
+>> Seems to have been lost among the patches, can you pick up this trivial
+>> patch for 5.4? Should apply cleanly on the latest HEAD as well.
+>>
+> 
+> I share Andrew's question regarding what benefit you have from knowing
+> this value. Should we not just remove the va from the print? Or do you
+> actually have a use case for it?.
 
-Thanks,
-Arnaud
+I mainly use it during debug when comparing against kernel_page_tables
+and vmallocinfo. The pools that we use are not always guaranteed to be
+from linear memory, and behavior changes when using with CMA or DMA pools.
 
-On 8/10/19 12:20 AM, Suman Anna wrote:
-> This patch adds a sysfs interface that provides the name of the
-> remote processor to userspace. This allows the userspace to identify
-> a remote processor as the remoteproc devices themselves are created
-> based on probe order and can change from one boot to another or
-> at runtime.
+Note that usage of %pK does not leak the addresses automatically, but
+atleast enables me to get the values when needed. The changes also bring
+the usage in rpmsg core in sync with the remoteproc core.
+
+regards
+Suman
+
 > 
-> The name is made available in debugfs originally, and is being
-> retained for now. This can be cleaned up after couple of releases
-> once users get familiar with the new interface.
+> Regards,
+> Bjorn
 > 
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> ---
->   Documentation/ABI/testing/sysfs-class-remoteproc | 10 ++++++++++
->   drivers/remoteproc/remoteproc_sysfs.c            | 11 +++++++++++
->   2 files changed, 21 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-remoteproc b/Documentation/ABI/testing/sysfs-class-remoteproc
-> index c3afe9fab646..36094fbeb974 100644
-> --- a/Documentation/ABI/testing/sysfs-class-remoteproc
-> +++ b/Documentation/ABI/testing/sysfs-class-remoteproc
-> @@ -48,3 +48,13 @@ Description:	Remote processor state
->   
->   		Writing "stop" will attempt to halt the remote processor and
->   		return it to the "offline" state.
-> +
-> +What:		/sys/class/remoteproc/.../name
-> +Date:		August 2019
-> +KernelVersion:	5.4
-> +Contact:	Suman Anna <s-anna@ti.com>
-> +Description:	Remote processor name
-> +
-> +		Reports the name of the remote processor. This can be used by
-> +		userspace in exactly identifying a remote processor and ease
-> +		up the usage in modifying the 'firmware' or 'state' files.
-> diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
-> index fa4131930106..7f8536b73295 100644
-> --- a/drivers/remoteproc/remoteproc_sysfs.c
-> +++ b/drivers/remoteproc/remoteproc_sysfs.c
-> @@ -113,9 +113,20 @@ static ssize_t state_store(struct device *dev,
->   }
->   static DEVICE_ATTR_RW(state);
->   
-> +/* Expose the name of the remote processor via sysfs */
-> +static ssize_t name_show(struct device *dev, struct device_attribute *attr,
-> +			 char *buf)
-> +{
-> +	struct rproc *rproc = to_rproc(dev);
-> +
-> +	return sprintf(buf, "%s\n", rproc->name);
-> +}
-> +static DEVICE_ATTR_RO(name);
-> +
->   static struct attribute *rproc_attrs[] = {
->   	&dev_attr_firmware.attr,
->   	&dev_attr_state.attr,
-> +	&dev_attr_name.attr,
->   	NULL
->   };
->   
-> 
+>> regards
+>> Suman
+>>
+>>>
+>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>> ---
+>>>  drivers/rpmsg/virtio_rpmsg_bus.c | 2 +-
+>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+>>> index f29dee731026..1345f373a1a0 100644
+>>> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+>>> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+>>> @@ -950,7 +950,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
+>>>  		goto vqs_del;
+>>>  	}
+>>>  
+>>> -	dev_dbg(&vdev->dev, "buffers: va %p, dma %pad\n",
+>>> +	dev_dbg(&vdev->dev, "buffers: va %pK, dma %pad\n",
+>>>  		bufs_va, &vrp->bufs_dma);
+>>>  
+>>>  	/* half of the buffers is dedicated for RX */
+>>>
+>>
+
