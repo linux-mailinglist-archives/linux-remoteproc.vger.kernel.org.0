@@ -2,221 +2,87 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60620A0DA3
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 29 Aug 2019 00:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C8AA2621
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 29 Aug 2019 20:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726839AbfH1WeZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 28 Aug 2019 18:34:25 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:45336 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726794AbfH1WeZ (ORCPT
+        id S1726518AbfH2Sga (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 29 Aug 2019 14:36:30 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:45277 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727935AbfH2Sga (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 28 Aug 2019 18:34:25 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7SMYBl1106485;
-        Wed, 28 Aug 2019 17:34:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1567031651;
-        bh=rPfJs647r8tu9JLizOhutUCEdszVCPFTYnfNQOXTfAY=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=I6hEgJsGrjc0Netxqz6Viz0ZbPKEKVYy7ybF55382eywdIV7yA1JYKNgtjcoyI04u
-         1gyxjlfPD7tqzt2EVJzOkdBzB9mpeWeyWdwkVcsr+ylugnT9041fR0Nvru7QufLTRb
-         ExaOJvpjTR45ZnYnhvtA4gWCvvgciB9iO6gkYhfE=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7SMYBMX039415
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 28 Aug 2019 17:34:11 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 28
- Aug 2019 17:34:10 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 28 Aug 2019 17:34:10 -0500
-Received: from [128.247.58.153] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7SMYAhE024443;
-        Wed, 28 Aug 2019 17:34:10 -0500
-Subject: Re: [PATCH v5 1/2] rpmsg: core: add API to get message length
-To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
+        Thu, 29 Aug 2019 14:36:30 -0400
+Received: by mail-pf1-f196.google.com with SMTP id w26so2626740pfq.12
+        for <linux-remoteproc@vger.kernel.org>; Thu, 29 Aug 2019 11:36:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=KbKypMZEMo628Sx98GbFT2Lyxp3a3o8vbOSGro2hqs8=;
+        b=t3zQUyJMxStChnSzVBHngExmp8QsLonx59qyC0ffBqgubbjGeOyOFMOsHJf8uf6HkB
+         CojAknqMdbyB8D+o/RuZItXS57kNsGGjly1qq2ZpZ9joOvjLQ5RVfWeJcCMLtQBpw/zH
+         eepAT69hr+gc0hwxvBjbl90PN9iyk0QDzHp5MV7YLfKc5W0wOQ7zGHWbDhWf+GrfcdTh
+         wPK7Sxg25ZX5mWRup3BIgWX38rdvTV+rGjVQfpKopTCfmhGLIoh5TTogX8eiT9lPG+F4
+         t34bu1vWoK9BI1Ryd083tz1DsL+ZG6939oGqr1RuXw/GymWIu89dLRkNTx/6QIyGSRjj
+         NN8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=KbKypMZEMo628Sx98GbFT2Lyxp3a3o8vbOSGro2hqs8=;
+        b=Q65ALpBpVAH3YtxyRFaSDOOMz2SBRPyEY2Fv59p55tMQrFnHJ0Fyxv76cIMM3yO5Vh
+         ZzNK/iIIpTeCkV7MctoCtIDfEqo+EUjIxiKROxyvYlcgZIEBbpZNbqUxLSQGheXEeOSU
+         zCX0j4/UkzMUV7ZjFa9RfXUi3McmMxoJe2M+k5CSh8XwuO10n1m82NpTNQrTBQpdnkYY
+         gI51agEQsJ70yZWi2/KdNHedkVBJ2g6SPdrKoJaismVFE5xGwNVTYvakEr0lXnJnQ3P6
+         OQL/FExsOmF6kPOvIBjVAwVTm8b9hd91+RyZfbO5eEMAqXOWfAejmc0ixMXMFt0stXkU
+         xZlw==
+X-Gm-Message-State: APjAAAVL0gLBp6eRUpBDyzDXV8OGnBRD8CoQW8bbgw+3l2+zmndqm7qt
+        9p7+Q1slVdDHkZWQ3DFm7Cl3Y6BxHRw=
+X-Google-Smtp-Source: APXvYqxpv+GziRN1zBpbr421YfeGoyK+5VQeDsDe4w/JmyFKe9EoDJcwIteI02M7WGql0t//MIrfew==
+X-Received: by 2002:a62:5c5:: with SMTP id 188mr13311302pff.227.1567103789574;
+        Thu, 29 Aug 2019 11:36:29 -0700 (PDT)
+Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id ay7sm2840574pjb.4.2019.08.29.11.36.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 29 Aug 2019 11:36:28 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        xiang xiao <xiaoxiang781216@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-CC:     Fabien DESSENNE <fabien.dessenne@st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Alan Cox <gnomes@lxorguk.ukuu.org.uk>
-References: <1567005566-10986-1-git-send-email-arnaud.pouliquen@st.com>
- <1567005566-10986-2-git-send-email-arnaud.pouliquen@st.com>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <7dc4d1cf-4f15-19ab-b8dd-424175f2a11a@ti.com>
-Date:   Wed, 28 Aug 2019 17:34:10 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <1567005566-10986-2-git-send-email-arnaud.pouliquen@st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] rpmsg: glink-smem: Name the edge based on parent remoteproc
+Date:   Thu, 29 Aug 2019 11:36:25 -0700
+Message-Id: <20190829183625.32244-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.18.0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Arnaud,
+Naming the glink edge device on the parent of_node short name causes
+collisions when multiple remoteproc instances with only different unit
+address are described on the platform_bus in DeviceTree.
 
-On 8/28/19 10:19 AM, Arnaud Pouliquen wrote:
-> Return the rpmsg buffer size for sending message, so rpmsg users
-> can split a long message in several sub rpmsg buffers.
+Base the edge's name on the parent remoteproc's name instead, to ensure
+that it's unique.
 
-Thanks for the patch, I also have a need for the same to be able to
-compute permissible payload size. Minor comments below.
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ drivers/rpmsg/qcom_glink_smem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
-> ---
-> V4 to V5 :
->   - rename rpmsg_get_buf_payload_size to rpmsg_get_mtu
-> 
->  drivers/rpmsg/rpmsg_core.c       | 21 +++++++++++++++++++++
->  drivers/rpmsg/rpmsg_internal.h   |  2 ++
->  drivers/rpmsg/virtio_rpmsg_bus.c | 10 ++++++++++
->  include/linux/rpmsg.h            | 10 ++++++++++
->  4 files changed, 43 insertions(+)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index 8122807db380..daca2e24fc71 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -283,6 +283,27 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
->  }
->  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
->  
-> +/**
-> + * rpmsg_get_mtu() - get maximum transmission buffer size for sending message.
-> + * @ept: the rpmsg endpoint
-> + *
-> + * This function returns maximum buffer size available for a single message.
-> + *
-> + * Return: the maximum transmission size on success and an appropriate error
-> + * value on failure.
-> + */
-> +
-> +ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
-> +{
-> +	if (WARN_ON(!ept))
-> +		return -EINVAL;
-> +	if (!ept->ops->get_buf_mtu)
-
-How about calling the ops just get_mtu or rename the function to follow
-the ops name, like all the others.
-
-> +		return -ENXIO;
-
-Perhaps ENOTSUPP or EOPNOTSUPP.
-
-> +
-> +	return ept->ops->get_buf_mtu(ept);
-> +}
-> +EXPORT_SYMBOL(rpmsg_get_mtu);
-> +
->  /*
->   * match an rpmsg channel with a channel info struct.
->   * this is used to make sure we're not creating rpmsg devices for channels
-> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-> index 0d791c30b7ea..645c402569ac 100644
-> --- a/drivers/rpmsg/rpmsg_internal.h
-> +++ b/drivers/rpmsg/rpmsg_internal.h
-> @@ -46,6 +46,7 @@ struct rpmsg_device_ops {
->   * @trysend:		see @rpmsg_trysend(), required
->   * @trysendto:		see @rpmsg_trysendto(), optional
->   * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
-> + * @get_buf_payload_size: see @rpmsg_get_buf_payload_size(), optional
-
-Missed updating the kerneldoc to the new name.
-
->   *
->   * Indirection table for the operations that a rpmsg backend should implement.
->   * In addition to @destroy_ept, the backend must at least implement @send and
-> @@ -65,6 +66,7 @@ struct rpmsg_endpoint_ops {
->  			     void *data, int len);
->  	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
->  			     poll_table *wait);
-> +	ssize_t (*get_buf_mtu)(struct rpmsg_endpoint *ept);
->  };
->  
->  int rpmsg_register_device(struct rpmsg_device *rpdev);
-> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> index e757f0038a1c..f80b1ad23e7e 100644
-> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> @@ -178,6 +178,7 @@ static int virtio_rpmsg_trysendto(struct rpmsg_endpoint *ept, void *data,
->  				  int len, u32 dst);
->  static int virtio_rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src,
->  					   u32 dst, void *data, int len);
-> +static ssize_t virtio_get_buf_mtu(struct rpmsg_endpoint *ept);
-
-Minor nit, virtio_rpmsg_ prefix similar to all the other ops.
-
-regards
-Suman
-
->  
->  static const struct rpmsg_endpoint_ops virtio_endpoint_ops = {
->  	.destroy_ept = virtio_rpmsg_destroy_ept,
-> @@ -187,6 +188,7 @@ static const struct rpmsg_endpoint_ops virtio_endpoint_ops = {
->  	.trysend = virtio_rpmsg_trysend,
->  	.trysendto = virtio_rpmsg_trysendto,
->  	.trysend_offchannel = virtio_rpmsg_trysend_offchannel,
-> +	.get_buf_mtu = virtio_get_buf_mtu,
->  };
->  
->  /**
-> @@ -702,6 +704,14 @@ static int virtio_rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src,
->  	return rpmsg_send_offchannel_raw(rpdev, src, dst, data, len, false);
->  }
->  
-> +static ssize_t virtio_get_buf_mtu(struct rpmsg_endpoint *ept)
-> +{
-> +	struct rpmsg_device *rpdev = ept->rpdev;
-> +	struct virtio_rpmsg_channel *vch = to_virtio_rpmsg_channel(rpdev);
-> +
-> +	return vch->vrp->buf_size - sizeof(struct rpmsg_hdr);
-> +}
-> +
->  static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
->  			     struct rpmsg_hdr *msg, unsigned int len)
->  {
-> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-> index 9fe156d1c018..9d638bf2bdce 100644
-> --- a/include/linux/rpmsg.h
-> +++ b/include/linux/rpmsg.h
-> @@ -135,6 +135,8 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
->  __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
->  			poll_table *wait);
->  
-> +ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
-> +
->  #else
->  
->  static inline int register_rpmsg_device(struct rpmsg_device *dev)
-> @@ -242,6 +244,14 @@ static inline __poll_t rpmsg_poll(struct rpmsg_endpoint *ept,
->  	return 0;
->  }
->  
-> +static ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
-> +{
-> +	/* This shouldn't be possible */
-> +	WARN_ON(1);
-> +
-> +	return -ENXIO;
-> +}
-> +
->  #endif /* IS_ENABLED(CONFIG_RPMSG) */
->  
->  /* use a macro to avoid include chaining to get THIS_MODULE */
-> 
+diff --git a/drivers/rpmsg/qcom_glink_smem.c b/drivers/rpmsg/qcom_glink_smem.c
+index 64a5ce324c7f..4238383d8685 100644
+--- a/drivers/rpmsg/qcom_glink_smem.c
++++ b/drivers/rpmsg/qcom_glink_smem.c
+@@ -201,7 +201,7 @@ struct qcom_glink *qcom_glink_smem_register(struct device *parent,
+ 	dev->parent = parent;
+ 	dev->of_node = node;
+ 	dev->release = qcom_glink_smem_release;
+-	dev_set_name(dev, "%pOFn:%pOFn", node->parent, node);
++	dev_set_name(dev, "%s:%pOFn", dev_name(parent->parent), node);
+ 	ret = device_register(dev);
+ 	if (ret) {
+ 		pr_err("failed to register glink edge\n");
+-- 
+2.18.0
 
