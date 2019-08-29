@@ -2,115 +2,113 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D777BA26F0
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 29 Aug 2019 21:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6CEA2706
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 29 Aug 2019 21:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbfH2TEX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 29 Aug 2019 15:04:23 -0400
-Received: from gateway33.websitewelcome.com ([192.185.145.216]:16844 "EHLO
-        gateway33.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728643AbfH2TEU (ORCPT
+        id S1727894AbfH2TJ6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 29 Aug 2019 15:09:58 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:38658 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727146AbfH2TJ6 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 29 Aug 2019 15:04:20 -0400
-X-Greylist: delayed 1502 seconds by postgrey-1.27 at vger.kernel.org; Thu, 29 Aug 2019 15:04:20 EDT
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway33.websitewelcome.com (Postfix) with ESMTP id A604B697C65
-        for <linux-remoteproc@vger.kernel.org>; Thu, 29 Aug 2019 13:17:24 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id 3Oz6iTb8R2qH73Oz6iQCjh; Thu, 29 Aug 2019 13:17:24 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4R26aKYoB1gosSniDsCUeeu1fuM8QS65KD+ZkxX9Q0w=; b=HuIvn3lcsdwyR/f1i9X91ECcI9
-        31/RWsd7s3uQhgTA14Tk2hOiISCr68MOB/sPnDVZBFRVk7ZhdbPnUmNPQBn/RX1MwzfMMvuvXmwXY
-        LOyhitd3yDVcuPpPJgkW5TNZYUXcae/dAV453ICHa+Shpl74zx1QyPkWjiQNWwjw+hfgqzJEKNolc
-        CXQXym+S1+JHMlQDeG/HYmDt8TkndLmUo74cjz7aEhy8jjwxIK9/ARBqtSypvv8GQcAOBhG7cw2VP
-        tULZXU4OoaiYeovDoqTQJPv2hrXszkJvL+GN038uotf/P0FbaJzLxOo75iYb0W7D55TjlTSWDjIqC
-        iqQX6mBg==;
-Received: from [189.152.216.116] (port=42850 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1i3Oz5-001MoD-I0; Thu, 29 Aug 2019 13:17:23 -0500
-Date:   Thu, 29 Aug 2019 13:17:21 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Andy Gross <agross@kernel.org>, Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] rpmsg: glink: Use struct_size() helper
-Message-ID: <20190829181721.GA22554@embeddedor>
+        Thu, 29 Aug 2019 15:09:58 -0400
+Received: by mail-pf1-f193.google.com with SMTP id o70so2717170pfg.5
+        for <linux-remoteproc@vger.kernel.org>; Thu, 29 Aug 2019 12:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=REnHj/EWqJBFRPAqiny/Na+szdlJ2JK7cCM/8YDJ4Wc=;
+        b=MFWmCdLF+LwePY3Zth/JgwrB6iisib3W48GnTPFjr8rFBaiyaqlfqL664fwmmfrMar
+         UjFDKUDVtYc9Tr0x9PYJn2DlKlWeWu6qcpMz8QfbdRPiJEBOfRzfY/B3ZJZ9MYDQIj36
+         RTx5Lyz26OhXT2oFBeTNM5LY0x/fcQfTZAi+rAb8tCAZW9eVBsfO051/OHO1zCd2at80
+         qPgMx3f2IaNBnxbsmxOPBGlADw6HDFRWRc00Nzfuk282+DJqcGd43P/ImMY2A73C5ptP
+         XPn/JoznaW+iw/z2UK4e2QC4Ph6BTxsrocfXtiBrorLxkW4nc8vZo55adXGSuXCAc8h9
+         0vVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=REnHj/EWqJBFRPAqiny/Na+szdlJ2JK7cCM/8YDJ4Wc=;
+        b=V7Ky8fjA+rkLO+vNLEKIa8VbOmeshe8NU4bVK1JbZjCpEoaxO1+s3eLesKfFAvGH+1
+         Iv/7Kt6iKzvNmJGvMR1OBZVcWuas5Sv8fp8qESgFLheTz0SACuEa6Mv2PM7ITIqLpnQ4
+         JtBXSTL7FEGE+VqJx8+sApvj1za+CYcx97E/edml2iusfzy/vgVuQjx8YviUt1FMNh6Y
+         VGyyxmZSkQ3wM0bEpc1BKordHk7zHCnaXIavkZNGqzJCgxubgN0eX+TTU3QpIZgAhYOp
+         nMV/Zzrt4BsBmw9Ykank+i420T4ww2ejLl2bTgq51RSgVDq6KDGwfMNJL444ZbxtaV2O
+         vTwQ==
+X-Gm-Message-State: APjAAAXIgv+pyFcY1RRhIgAa6iZW07114tz/iLIDuNzwipZWhMMIJv5J
+        iBgiZMXkjX+1JsZhKFIw8IGUlg==
+X-Google-Smtp-Source: APXvYqxOlXUr8Ltf38dWyE0JRNEtXL3FY/R3/1FGtaqR11AgbcZU9BVM8q2BE+w45XKeozEms02+XA==
+X-Received: by 2002:a17:90a:f011:: with SMTP id bt17mr11500065pjb.21.1567105797871;
+        Thu, 29 Aug 2019 12:09:57 -0700 (PDT)
+Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id b24sm2710244pgw.66.2019.08.29.12.09.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2019 12:09:57 -0700 (PDT)
+Date:   Thu, 29 Aug 2019 12:09:55 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Andy Gross <agross@kernel.org>, Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rpmsg: glink: Use struct_size() helper
+Message-ID: <20190829190955.GP6167@minitux>
+References: <20190829181721.GA22554@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.152.216.116
-X-Source-L: No
-X-Exim-ID: 1i3Oz5-001MoD-I0
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [189.152.216.116]:42850
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 5
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+In-Reply-To: <20190829181721.GA22554@embeddedor>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-One of the more common cases of allocation size calculations is finding
-the size of a structure that has a zero-sized array at the end, along
-with memory for some number of elements for that array. For example:
+On Thu 29 Aug 11:17 PDT 2019, Gustavo A. R. Silva wrote:
 
-struct {
-	...
-	struct intent_pair intents[];
-} __packed * msg;
+> One of the more common cases of allocation size calculations is finding
+> the size of a structure that has a zero-sized array at the end, along
+> with memory for some number of elements for that array. For example:
+> 
+> struct {
+> 	...
+> 	struct intent_pair intents[];
+> } __packed * msg;
+> 
+> Make use of the struct_size() helper instead of an open-coded version
+> in order to avoid any potential type mistakes.
+> 
+> So, replace the following form:
+> 
+> sizeof(*msg) + sizeof(struct intent_pair) * count
+> 
+> with:
+> 
+> struct_size(msg, intents, count)
+> 
+> This code was detected with the help of Coccinelle.
+> 
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 
-Make use of the struct_size() helper instead of an open-coded version
-in order to avoid any potential type mistakes.
+Applied, thanks!
 
-So, replace the following form:
-
-sizeof(*msg) + sizeof(struct intent_pair) * count
-
-with:
-
-struct_size(msg, intents, count)
-
-This code was detected with the help of Coccinelle.
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/rpmsg/qcom_glink_native.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-index f46c787733e8..621f1afd4d6b 100644
---- a/drivers/rpmsg/qcom_glink_native.c
-+++ b/drivers/rpmsg/qcom_glink_native.c
-@@ -892,7 +892,7 @@ static void qcom_glink_handle_intent(struct qcom_glink *glink,
- 		struct intent_pair intents[];
- 	} __packed * msg;
- 
--	const size_t msglen = sizeof(*msg) + sizeof(struct intent_pair) * count;
-+	const size_t msglen = struct_size(msg, intents, count);
- 	int ret;
- 	int i;
- 	unsigned long flags;
--- 
-2.23.0
-
+> ---
+>  drivers/rpmsg/qcom_glink_native.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> index f46c787733e8..621f1afd4d6b 100644
+> --- a/drivers/rpmsg/qcom_glink_native.c
+> +++ b/drivers/rpmsg/qcom_glink_native.c
+> @@ -892,7 +892,7 @@ static void qcom_glink_handle_intent(struct qcom_glink *glink,
+>  		struct intent_pair intents[];
+>  	} __packed * msg;
+>  
+> -	const size_t msglen = sizeof(*msg) + sizeof(struct intent_pair) * count;
+> +	const size_t msglen = struct_size(msg, intents, count);
+>  	int ret;
+>  	int i;
+>  	unsigned long flags;
+> -- 
+> 2.23.0
+> 
