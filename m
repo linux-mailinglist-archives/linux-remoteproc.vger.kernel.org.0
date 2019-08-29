@@ -2,128 +2,75 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24CB8A28C9
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 29 Aug 2019 23:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 578B1A2A64
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 30 Aug 2019 00:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726944AbfH2VVi (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 29 Aug 2019 17:21:38 -0400
-Received: from mga18.intel.com ([134.134.136.126]:6003 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726526AbfH2VVi (ORCPT
+        id S1728023AbfH2W5V (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 29 Aug 2019 18:57:21 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:41850 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727907AbfH2W5V (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 29 Aug 2019 17:21:38 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Aug 2019 14:21:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,445,1559545200"; 
-   d="scan'208";a="175398465"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 29 Aug 2019 14:21:35 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1i3RrK-000DXD-Ot; Fri, 30 Aug 2019 05:21:34 +0800
-Date:   Fri, 30 Aug 2019 05:21:27 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Cc:     kbuild-all@01.org, Ohad Ben-Cohen <ohad@wizery.com>,
+        Thu, 29 Aug 2019 18:57:21 -0400
+Received: by mail-oi1-f194.google.com with SMTP id h4so490363oih.8;
+        Thu, 29 Aug 2019 15:57:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Tt59Vai4nKcFOlf3kuJu+36rcTwUnw+ESfP2cPA8a9w=;
+        b=oKu7R06QbsBdaT25B01CUIevRx3l72ZwMHS/TKYjkZJT3WSpPbOMimRBypIvIE/47B
+         pBWJk+Q5/+QEW5Wu89HzM9+AqLTwULx149VXKevVqlH4PsZygKEzWeicbAVChuTIc6K3
+         9R2IPuowovw26jmT6dTDph9MJeg9lGyiIC9SIVou0m3xoAHmlEln7pI8orOFcerKpdPi
+         SlxtwySB2ZZ8CxAxPGWoi5TmEFtE/GQ6tiks6/0CQKTtKJ0kO4NzBSvG5pz9qnzvHYPB
+         2FX0Y68noAKEpoGLOPxYmcMNuuizhcfXcwTWjBzQ2Ys17686ACJVUUeKarC4H/1sBMy5
+         zjiQ==
+X-Gm-Message-State: APjAAAVc8AFevI3Uo9Ri0hZ8Upd1cxHJjoS+JNV0kY7mSYJoCGYWTIwP
+        /H7hKGrT8gGbtcPL6RKVgQ==
+X-Google-Smtp-Source: APXvYqzNLJ5SnSm+nMCobpcQcc3WHBIxdaTxiYCSwEw6M9n03lmG7rmmrOA9SRGSrxwhdyGE3uk1qQ==
+X-Received: by 2002:aca:3909:: with SMTP id g9mr192281oia.158.1567119440204;
+        Thu, 29 Aug 2019 15:57:20 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id t21sm1026334oic.6.2019.08.29.15.57.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2019 15:57:19 -0700 (PDT)
+Date:   Thu, 29 Aug 2019 17:57:19 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Fabien Dessenne <fabien.dessenne@st.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        xiang xiao <xiaoxiang781216@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        arnaud.pouliquen@st.com, Suman Anna <s-anna@ti.com>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
+        devicetree@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
-        Alan Cox <gnomes@lxorguk.ukuu.org.uk>
-Subject: Re: [PATCH v5 2/2] tty: add rpmsg driver
-Message-ID: <201908300408.EJgy8luZ%lkp@intel.com>
-References: <1567005566-10986-3-git-send-email-arnaud.pouliquen@st.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        Fabien Dessenne <fabien.dessenne@st.com>,
+        Loic Pallardy <loic.pallardy@st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: stm32: add wakeup-source
+Message-ID: <20190829225719.GA21954@bogus>
+References: <1566833923-16718-1-git-send-email-fabien.dessenne@st.com>
+ <1566833923-16718-2-git-send-email-fabien.dessenne@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1567005566-10986-3-git-send-email-arnaud.pouliquen@st.com>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <1566833923-16718-2-git-send-email-fabien.dessenne@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Arnaud,
+On Mon, 26 Aug 2019 17:38:42 +0200, Fabien Dessenne wrote:
+> Add the "wakeup-source" property: if the optional wdg interrupt is
+> defined, then this property may be defined too.
+> 
+> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
+> ---
+>  Documentation/devicetree/bindings/remoteproc/stm32-rproc.txt | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on linus/master]
-[cannot apply to v5.3-rc6 next-20190829]
-[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
-
-url:    https://github.com/0day-ci/linux/commits/Arnaud-Pouliquen/rpmsg-core-add-API-to-get-message-length/20190829-222443
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.1-rc1-7-g2b96cd8-dirty
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
-
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
-
-
-sparse warnings: (new ones prefixed by >>)
-
-   include/linux/sched.h:609:43: sparse: sparse: bad integer constant expression
-   include/linux/sched.h:609:73: sparse: sparse: invalid named zero-width bitfield `value'
-   include/linux/sched.h:610:43: sparse: sparse: bad integer constant expression
-   include/linux/sched.h:610:67: sparse: sparse: invalid named zero-width bitfield `bucket_id'
->> drivers/tty/rpmsg_tty.c:152:20: sparse: sparse: incompatible types in comparison expression (different type sizes):
->> drivers/tty/rpmsg_tty.c:152:20: sparse:    int *
->> drivers/tty/rpmsg_tty.c:152:20: sparse:    long *
-
-vim +152 drivers/tty/rpmsg_tty.c
-
-   132	
-   133	static int rpmsg_tty_write(struct tty_struct *tty, const u8 *buf, int len)
-   134	{
-   135		struct rpmsg_tty_port *cport = tty->driver_data;
-   136		struct rpmsg_device *rpdev;
-   137		ssize_t msg_max_size, msg_size;
-   138		int ret;
-   139		u8 *tmpbuf;
-   140	
-   141		/* If cts not set, the message is not sent*/
-   142		if (!cport->cts)
-   143			return 0;
-   144	
-   145		rpdev = cport->rpdev;
-   146	
-   147		dev_dbg(&rpdev->dev, "%s: send msg from tty->index = %d, len = %d\n",
-   148			__func__, tty->index, len);
-   149	
-   150		msg_max_size = rpmsg_get_mtu(rpdev->ept);
-   151	
- > 152		msg_size = min(len, msg_max_size);
-   153		tmpbuf = kzalloc(msg_size, GFP_KERNEL);
-   154		if (!tmpbuf)
-   155			return -ENOMEM;
-   156	
-   157		memcpy(tmpbuf, buf, msg_size);
-   158	
-   159		/*
-   160		 * Try to send the message to remote processor, if failed return 0 as
-   161		 * no data sent
-   162		 */
-   163		ret = rpmsg_trysendto(cport->d_ept, tmpbuf, msg_size, cport->data_dst);
-   164		kfree(tmpbuf);
-   165		if (ret) {
-   166			dev_dbg(&rpdev->dev, "rpmsg_send failed: %d\n", ret);
-   167			return 0;
-   168		}
-   169	
-   170		return msg_size;
-   171	}
-   172	
-
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+Acked-by: Rob Herring <robh@kernel.org>
