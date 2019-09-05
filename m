@@ -2,97 +2,92 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1CACAA41F
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  5 Sep 2019 15:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E35ABAA5C9
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  5 Sep 2019 16:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388399AbfIENPG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 5 Sep 2019 09:15:06 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:33357 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388379AbfIENPB (ORCPT
+        id S2388965AbfIEO10 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 5 Sep 2019 10:27:26 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:33200 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726067AbfIEO10 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 5 Sep 2019 09:15:01 -0400
-Received: by mail-lf1-f68.google.com with SMTP id d10so2019858lfi.0
-        for <linux-remoteproc@vger.kernel.org>; Thu, 05 Sep 2019 06:14:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=X6liaIL8n/K+qZNHyRxBvsG3aE56VnalzfSINEJsXSQ=;
-        b=b+63NMLiO6uu9ngd3jzIr8Dsw188HJm9sNb07rlJMnX80r7/h5LUN3/Lpbh3bxpJ9z
-         xYJqjXXgagt+VDuvA3yKvH7qp7A2+W1iv5h1mRb24Jb2adl7EuLWgyNX1JPnrepTNa9Q
-         goCuPYhfmvTDmiz0qWuVckEjqgfqRDoltmXHgdBIf8vad80BD+OtqWFql1CSBxLD7jDL
-         PWs9E6CwQdu80zJAOHSJX+PJNszKu0Zwaywda1OI5fC9bc/t0il8d+aa4SI03VA65BG0
-         pqsIykPn5ko3cJwLwAXbf0ErZ98Dsu+DqnGqOb8fcfaBo5zLC2Uk4FyM9xYDgLnBUVyl
-         HiPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=X6liaIL8n/K+qZNHyRxBvsG3aE56VnalzfSINEJsXSQ=;
-        b=c8b7rPVVzonbnTVQnmzIpmCAVTlj2SFizP93Z7dgisxvRSHa71fTc3IZZvq4zg2F2j
-         fbEC0sfvsKx8hV6xERgboUP6ocP+Dhu3CaqP4FFBGEWpNLhmCh1u10oNRXtrXAk45Eu7
-         MlfzZlqV1NdE+1rHU9A3KoAVri4NMEamkQU6gX4umH/bYSXF5+TyNcTyLZF626Ihj7ID
-         5flUsOnTE6i1bKXAeTjaSxE8C9Uu15G1GnJq/PPYkHDQGaUvNKLmNyWpFT9jZcW/jZ0/
-         lEBS9Qz6a4LJ1eN9z1F1P5sT2kMEWEMBPS4mGDeuFUQ9/0c96mR+UVTZVb1J4nbgVtxs
-         RYNw==
-X-Gm-Message-State: APjAAAWCPddDwTn4BquoLiqOLV+rDN5e3/RcZQejYC9NoyN8tQVG3+Z2
-        tEOHY7h4+aUY0YoKjTFFFKR6CA==
-X-Google-Smtp-Source: APXvYqzbCMnjO//eiTEa0kZuQw26H3btOjLN9fQPzx/MdOvkhMnN7oM0V3sFQZMv6aa2tmtB3chimQ==
-X-Received: by 2002:a19:4912:: with SMTP id w18mr2283793lfa.93.1567689298714;
-        Thu, 05 Sep 2019 06:14:58 -0700 (PDT)
-Received: from centauri (ua-84-219-138-247.bbcust.telenor.se. [84.219.138.247])
-        by smtp.gmail.com with ESMTPSA id b25sm486140lfa.90.2019.09.05.06.14.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2019 06:14:58 -0700 (PDT)
-Date:   Thu, 5 Sep 2019 15:14:56 +0200
-From:   Niklas Cassel <niklas.cassel@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Subject: Re: [PATCH] rpmsg: glink-smem: Name the edge based on parent
- remoteproc
-Message-ID: <20190905131456.GA26674@centauri>
-References: <20190820041656.17197-1-bjorn.andersson@linaro.org>
+        Thu, 5 Sep 2019 10:27:26 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x85EQvpe009110;
+        Thu, 5 Sep 2019 16:27:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=uoKwd2sKUokpzjvmIx+s4ndk3AuSqJH8fupkyFjbnKM=;
+ b=V55pi+yFFLXvjUuC3KlOinawRLoOUuAvvh4mgsISkUH25s2Oc8bGwW8hfRH+DQvtNGRQ
+ 1eE+4AKpTjriXTyldLhijgZSfeo9O7yrUEG4aE4Pr/AAvvQuq0D+3tZNvFLLB4qdv/tT
+ fUGCia+nlDM+V/A/ZLnyfwuby+A/WYGeFBPMmr/jhD+Q+F4rNNj6RVueKnmF2c8GnRNO
+ /N9w/N3iks3MIO5lmntfZkLH4KowK/pmMEU+z38oA7GZUkW/MkBwLGPM1DNvdQSXZJqT
+ oLkqIL2PexAH57unA0jxgZbAPqJIRrNy7h9ICqY+vzKxoOCZiVe5pAOaLvdq5IGmjgBk Pw== 
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2uqfsj8h7k-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Thu, 05 Sep 2019 16:27:20 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 245C94B;
+        Thu,  5 Sep 2019 14:27:17 +0000 (GMT)
+Received: from Webmail-eu.st.com (Safex1hubcas24.st.com [10.75.90.94])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 7DE242D6C48;
+        Thu,  5 Sep 2019 16:27:16 +0200 (CEST)
+Received: from SAFEX1HUBCAS21.st.com (10.75.90.45) by Safex1hubcas24.st.com
+ (10.75.90.94) with Microsoft SMTP Server (TLS) id 14.3.439.0; Thu, 5 Sep 2019
+ 16:27:16 +0200
+Received: from localhost (10.48.0.131) by Webmail-ga.st.com (10.75.90.48) with
+ Microsoft SMTP Server (TLS) id 14.3.439.0; Thu, 5 Sep 2019 16:27:13 +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+CC:     <arnaud.pouliquen@st.com>, Suman Anna <s-anna@ti.com>,
+        Fabien DESSENNE <fabien.dessenne@st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: [PATCH 0/3] Add API to get rpmsg message max length
+Date:   Thu, 5 Sep 2019 16:27:07 +0200
+Message-ID: <1567693630-27544-1-git-send-email-arnaud.pouliquen@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190820041656.17197-1-bjorn.andersson@linaro.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
+X-Originating-IP: [10.48.0.131]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
+ definitions=2019-09-05_04:2019-09-04,2019-09-05 signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 09:16:56PM -0700, Bjorn Andersson wrote:
-> Naming the glink edge device on the parent of_node short name causes
-> collisions when multiple remoteproc instances with only different unit
-> address are described on the platform_bus in DeviceTree.
-> 
-> Base the edge's name on the parent remoteproc's name instead, to ensure
-> that it's unique.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  drivers/rpmsg/qcom_glink_smem.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rpmsg/qcom_glink_smem.c b/drivers/rpmsg/qcom_glink_smem.c
-> index 64a5ce324c7f..4238383d8685 100644
-> --- a/drivers/rpmsg/qcom_glink_smem.c
-> +++ b/drivers/rpmsg/qcom_glink_smem.c
-> @@ -201,7 +201,7 @@ struct qcom_glink *qcom_glink_smem_register(struct device *parent,
->  	dev->parent = parent;
->  	dev->of_node = node;
->  	dev->release = qcom_glink_smem_release;
-> -	dev_set_name(dev, "%pOFn:%pOFn", node->parent, node);
-> +	dev_set_name(dev, "%s:%pOFn", dev_name(parent->parent), node);
->  	ret = device_register(dev);
->  	if (ret) {
->  		pr_err("failed to register glink edge\n");
-> -- 
-> 2.18.0
-> 
+As introduction on the get_mtu api can impacts some rpmsg drivers,
+i propose to discuss it separately.
+The "rpmsg: core: add API to get message length" patch is extracted from
+https://lkml.org/lkml/2019/9/4/556
+In addition 2 patches implement the API for impacted rpmsg drivers.
+The rpmsg tty client driver will be resent in a second step.
 
-Reviewed-by: Niklas Cassel <niklas.cassel@linaro.org>
+In this patchset the get_mpu is considered mandatory. The main reason is
+that the rpmsg clients do not have access to the mtu information that is
+platform dependent.
+
+Notice that the GLINK and and SMD drivers have to be validated on target,
+I don't have device to validate by myself...
+Only a compilation check has been executed.
+
+Arnaud Pouliquen (3):
+  rpmsg: core: add API to get message length
+  rpmsg: glink: implement get_mtu ops
+  rpmsg: smd: implement get_mtu ops
+
+ drivers/rpmsg/qcom_glink_native.c | 24 ++++++++++++++++++++++++
+ drivers/rpmsg/qcom_smd.c          |  8 ++++++++
+ drivers/rpmsg/rpmsg_core.c        | 21 +++++++++++++++++++++
+ drivers/rpmsg/rpmsg_internal.h    |  2 ++
+ drivers/rpmsg/virtio_rpmsg_bus.c  | 10 ++++++++++
+ include/linux/rpmsg.h             | 10 ++++++++++
+ 6 files changed, 75 insertions(+)
+
+-- 
+2.7.4
+
