@@ -2,370 +2,507 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD2E5AFE2D
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 Sep 2019 15:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37710B1BDB
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Sep 2019 12:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726149AbfIKN5q (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 11 Sep 2019 09:57:46 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:35354 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725981AbfIKN5p (ORCPT
+        id S2387914AbfIMK6X (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 13 Sep 2019 06:58:23 -0400
+Received: from zimbra2.kalray.eu ([92.103.151.219]:51464 "EHLO
+        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387622AbfIMK6X (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 11 Sep 2019 09:57:45 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8BDtwkw031522;
-        Wed, 11 Sep 2019 15:57:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=LIPK+mmht7E3Mdg8xZ7l7TYgMgc8zT91Yzpj/CithUk=;
- b=sk4pwqlrLpyl+38JV1bjZthuj4I8wuM+xdwesG37RTHsBTbyLWDsnSnltU9E/3DzZlBs
- 47HF0avQv8Xb/cBqAF85UtRiQrMZ6z8OckwOpROanbu0J8FOIzeUvH4OK0MANtj/x6Eo
- DqqcFUWwW5piPtu+W3USZ1jAGawTIkD2O2lIAs+8znqcCbLwnlyjggytGO2bz4uRqFN3
- ZnzidwhM4LBDy62UdB5Mpuq8djCvzaouQB05vTwoTobuMCpVExWf7mwlNSH4pztHeWeC
- 9+ebsV8Rv2PhYEqAgeEBljEu4hIPNrlla+0KOMtyJfmE8idHWxOWNvd+FOxm/pT+8fvJ IA== 
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2uv212ud60-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Wed, 11 Sep 2019 15:57:34 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 622B624;
-        Wed, 11 Sep 2019 13:57:30 +0000 (GMT)
-Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B7C7A2C7F50;
-        Wed, 11 Sep 2019 15:57:29 +0200 (CEST)
-Received: from SAFEX1HUBCAS23.st.com (10.75.90.47) by SAFEX1HUBCAS21.st.com
- (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Wed, 11 Sep
- 2019 15:57:29 +0200
-Received: from localhost (10.201.23.25) by webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Wed, 11 Sep 2019 15:57:26
- +0200
-From:   Fabien Dessenne <fabien.dessenne@st.com>
+        Fri, 13 Sep 2019 06:58:23 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 1A81527E06A1;
+        Fri, 13 Sep 2019 12:58:21 +0200 (CEST)
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id CoOAh2-u1fmt; Fri, 13 Sep 2019 12:58:19 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 847F427E0E5F;
+        Fri, 13 Sep 2019 12:58:19 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 847F427E0E5F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1568372299;
+        bh=X1s3648SW2epU7YjCAkHJCaYDRb3T6ZNf7Tf/QJzTVM=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=aK5zqLJG/doj0kEmIhCNEaO06B/8VZCWheNe9Isw3Wb1mjYfqcWaNKbkIIEuI6uq2
+         PmhPlXGFj9f1PqZNdzxpFWql/P1CtocQYGdhvNMkw7cUpudDBlytXvP7s+jxJBWwQa
+         t6PWsHR9iGppvYNV/soq5UUFiEgKJT1iii48EbfM=
+X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id wj9bv6eGz1vh; Fri, 13 Sep 2019 12:58:19 +0200 (CEST)
+Received: from zimbra2.kalray.eu (zimbra2.kalray.eu [192.168.40.202])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 5E80F27E06A1;
+        Fri, 13 Sep 2019 12:58:19 +0200 (CEST)
+Date:   Fri, 13 Sep 2019 12:58:19 +0200 (CEST)
+From:   =?utf-8?Q?Cl=C3=A9ment?= Leger <cleger@kalray.eu>
 To:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Suman Anna <s-anna@ti.com>, Jonathan Corbet <corbet@lwn.net>,
-        <linux-remoteproc@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Fabien Dessenne <fabien.dessenne@st.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH v3] hwspinlock: allow sharing of hwspinlocks
-Date:   Wed, 11 Sep 2019 15:57:07 +0200
-Message-ID: <1568210227-32135-1-git-send-email-fabien.dessenne@st.com>
-X-Mailer: git-send-email 2.7.4
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Loic PALLARDY <loic.pallardy@st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Message-ID: <888841229.65143809.1568372299278.JavaMail.zimbra@kalray.eu>
+In-Reply-To: <20190819114516.28665-1-cleger@kalray.eu>
+References: <04be3345-698d-29b0-7b4b-7eed088e490d@st.com> <20190819114516.28665-1-cleger@kalray.eu>
+Subject: Re: [PATCH] rproc: Add elf64 support in elf loader
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.201.23.25]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
- definitions=2019-09-11_08:2019-09-11,2019-09-11 signatures=0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [192.168.40.202]
+X-Mailer: Zimbra 8.8.12_GA_3794 (ZimbraWebClient - GC75 (Linux)/8.8.12_GA_3794)
+Thread-Topic: rproc: Add elf64 support in elf loader
+Thread-Index: qYnAXEk8s9A0edtfgVQpSjpD3wixNA==
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Allow several clients to request (hwspin_lock_request_specific()) the
-same lock.
-In addition to that, protect a given lock from being locked
-(hwspin_trylock{_...}()) by more that one client at a time.
+Ping ?
 
-Since the RAW and IN_ATOMIC modes do not implement that protection
-(unlike the default, IRQ and IRQSTATE modes that make use of
-spin_lock{_irq, _irqsave}), protect __hwspin_trylock with the atomic
-bitop test_and_set_bit().
-This bitop is atomic (SMP-safe), does not disable neither preemption
-nor interrupts, hence it preserves the RAW and IN_ATOMIC modes
-constraints.
+----- On 19 Aug, 2019, at 13:45, Cl=C3=A9ment Leger cleger@kalray.eu wrote:
 
-Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
----
-Changes since v2:
-- Drop the DeviceTree-based implementation.
-- Do not let the choice between exclusive and shared usage : locks are
-  always shared.
-- Add a protection (atomic bitop) working in any modes to allow safe
-  sharing between clients.
-
-Changes since v1:
-- Removed useless 'status = "okay"' from stm32mp157c.dtsi
----
- Documentation/hwspinlock.txt             |  9 ++-
- drivers/hwspinlock/hwspinlock_core.c     | 98 +++++++++++++++++++++++---------
- drivers/hwspinlock/hwspinlock_internal.h |  4 ++
- 3 files changed, 81 insertions(+), 30 deletions(-)
-
-diff --git a/Documentation/hwspinlock.txt b/Documentation/hwspinlock.txt
-index 6f03713..5f6f660 100644
---- a/Documentation/hwspinlock.txt
-+++ b/Documentation/hwspinlock.txt
-@@ -53,9 +53,8 @@ Should be called from a process context (might sleep).
- 
-   struct hwspinlock *hwspin_lock_request_specific(unsigned int id);
- 
--Assign a specific hwspinlock id and return its address, or NULL
--if that hwspinlock is already in use. Usually board code will
--be calling this function in order to reserve specific hwspinlock
-+Assign a specific hwspinlock id and return its address. Usually board
-+code will be calling this function in order to reserve specific hwspinlock
- ids for predefined purposes.
- 
- Should be called from a process context (might sleep).
-@@ -449,11 +448,15 @@ of which represents a single hardware lock::
- 	* struct hwspinlock - this struct represents a single hwspinlock instance
- 	* @bank: the hwspinlock_device structure which owns this lock
- 	* @lock: initialized and used by hwspinlock core
-+	* @is_locked: whether this lock is currently locked
-+	* @reqcount: number of users having requested this lock
- 	* @priv: private data, owned by the underlying platform-specific hwspinlock drv
- 	*/
- 	struct hwspinlock {
- 		struct hwspinlock_device *bank;
- 		spinlock_t lock;
-+		unsigned long is_locked;
-+		unsigned int reqcount;
- 		void *priv;
- 	};
- 
-diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index 8862445..e9d3de10 100644
---- a/drivers/hwspinlock/hwspinlock_core.c
-+++ b/drivers/hwspinlock/hwspinlock_core.c
-@@ -29,6 +29,7 @@
- 
- /* radix tree tags */
- #define HWSPINLOCK_UNUSED	(0) /* tags an hwspinlock as unused */
-+#define HWSPINLOCK_DYN_ASSIGN	(1) /* dynamically assigned hwspinlock */
- 
- /*
-  * A radix tree is used to maintain the available hwspinlock instances.
-@@ -96,14 +97,25 @@ int __hwspin_trylock(struct hwspinlock *hwlock, int mode, unsigned long *flags)
- 	BUG_ON(!flags && mode == HWLOCK_IRQSTATE);
- 
- 	/*
-+	 * Check if the lock is already taken by another context on the local
-+	 * cpu.
-+	 * Calling atomic test_and_set_bit_lock() ensures that hwspinlock is
-+	 * SMP-safe (so we can take it from additional contexts on the local
-+	 * host) in any mode, even those where we do not make use of the local
-+	 * spinlock.
-+	 */
-+
-+	if (test_and_set_bit_lock(0, &hwlock->is_locked))
-+		return -EBUSY;
-+
-+	/*
- 	 * This spin_lock{_irq, _irqsave} serves three purposes:
- 	 *
- 	 * 1. Disable preemption, in order to minimize the period of time
- 	 *    in which the hwspinlock is taken. This is important in order
- 	 *    to minimize the possible polling on the hardware interconnect
- 	 *    by a remote user of this lock.
--	 * 2. Make the hwspinlock SMP-safe (so we can take it from
--	 *    additional contexts on the local host).
-+	 * 2. Make the hwspinlock SMP-safe.
- 	 * 3. Ensure that in_atomic/might_sleep checks catch potential
- 	 *    problems with hwspinlock usage (e.g. scheduler checks like
- 	 *    'scheduling while atomic' etc.)
-@@ -124,9 +136,9 @@ int __hwspin_trylock(struct hwspinlock *hwlock, int mode, unsigned long *flags)
- 		break;
- 	}
- 
--	/* is lock already taken by another context on the local cpu ? */
-+	/* sanity check (this shouldn't happen) */
- 	if (!ret)
--		return -EBUSY;
-+		goto clear;
- 
- 	/* try to take the hwspinlock device */
- 	ret = hwlock->bank->ops->trylock(hwlock);
-@@ -149,7 +161,7 @@ int __hwspin_trylock(struct hwspinlock *hwlock, int mode, unsigned long *flags)
- 			break;
- 		}
- 
--		return -EBUSY;
-+		goto clear;
- 	}
- 
- 	/*
-@@ -165,6 +177,11 @@ int __hwspin_trylock(struct hwspinlock *hwlock, int mode, unsigned long *flags)
- 	mb();
- 
- 	return 0;
-+
-+clear:
-+	/* Clear is_locked */
-+	clear_bit_unlock(0, &hwlock->is_locked);
-+	return -EBUSY;
- }
- EXPORT_SYMBOL_GPL(__hwspin_trylock);
- 
-@@ -299,6 +316,9 @@ void __hwspin_unlock(struct hwspinlock *hwlock, int mode, unsigned long *flags)
- 		spin_unlock(&hwlock->lock);
- 		break;
- 	}
-+
-+	/* Clear is_locked set while locking */
-+	clear_bit_unlock(0, &hwlock->is_locked);
- }
- EXPORT_SYMBOL_GPL(__hwspin_unlock);
- 
-@@ -504,7 +524,9 @@ int hwspin_lock_register(struct hwspinlock_device *bank, struct device *dev,
- 		hwlock = &bank->lock[i];
- 
- 		spin_lock_init(&hwlock->lock);
-+		clear_bit(0, &hwlock->is_locked);
- 		hwlock->bank = bank;
-+		hwlock->reqcount = 0;
- 
- 		ret = hwspin_lock_register_single(hwlock, base_id + i);
- 		if (ret)
-@@ -664,12 +686,16 @@ static int __hwspin_lock_request(struct hwspinlock *hwlock)
- 		return ret;
- 	}
- 
--	/* mark hwspinlock as used, should not fail */
--	tmp = radix_tree_tag_clear(&hwspinlock_tree, hwlock_to_id(hwlock),
--							HWSPINLOCK_UNUSED);
-+	/* update reqcount */
-+	if (!hwlock->reqcount++) {
-+		/* first request, mark hwspinlock as used, should not fail */
-+		tmp = radix_tree_tag_clear(&hwspinlock_tree,
-+					   hwlock_to_id(hwlock),
-+					   HWSPINLOCK_UNUSED);
- 
--	/* self-sanity check that should never fail */
--	WARN_ON(tmp != hwlock);
-+		/* self-sanity check that should never fail */
-+		WARN_ON(tmp != hwlock);
-+	}
- 
- 	return ret;
- }
-@@ -706,7 +732,7 @@ EXPORT_SYMBOL_GPL(hwspin_lock_get_id);
-  */
- struct hwspinlock *hwspin_lock_request(void)
- {
--	struct hwspinlock *hwlock;
-+	struct hwspinlock *hwlock, *tmp;
- 	int ret;
- 
- 	mutex_lock(&hwspinlock_tree_lock);
-@@ -728,6 +754,13 @@ struct hwspinlock *hwspin_lock_request(void)
- 	if (ret < 0)
- 		hwlock = NULL;
- 
-+	/* mark this hwspinlock as dynamically assigned */
-+	tmp = radix_tree_tag_set(&hwspinlock_tree, hwlock_to_id(hwlock),
-+				 HWSPINLOCK_DYN_ASSIGN);
-+
-+	/* self-sanity check which should never fail */
-+	WARN_ON(tmp != hwlock);
-+
- out:
- 	mutex_unlock(&hwspinlock_tree_lock);
- 	return hwlock;
-@@ -764,18 +797,19 @@ struct hwspinlock *hwspin_lock_request_specific(unsigned int id)
- 	/* sanity check (this shouldn't happen) */
- 	WARN_ON(hwlock_to_id(hwlock) != id);
- 
--	/* make sure this hwspinlock is unused */
--	ret = radix_tree_tag_get(&hwspinlock_tree, id, HWSPINLOCK_UNUSED);
--	if (ret == 0) {
--		pr_warn("hwspinlock %u is already in use\n", id);
-+	/* mark as used and power up */
-+	ret = __hwspin_lock_request(hwlock);
-+	if (ret < 0) {
- 		hwlock = NULL;
- 		goto out;
- 	}
- 
--	/* mark as used and power up */
--	ret = __hwspin_lock_request(hwlock);
--	if (ret < 0)
--		hwlock = NULL;
-+	/*
-+	 * warn if this lock is also used by another client which got this lock
-+	 * with dynamic assignment using the hwspin_lock_request() API
-+	 */
-+	if (radix_tree_tag_get(&hwspinlock_tree, id, HWSPINLOCK_DYN_ASSIGN))
-+		pr_warn("hwspinlock %u is shared with a 'dynamic' user\n", id);
- 
- out:
- 	mutex_unlock(&hwspinlock_tree_lock);
-@@ -799,7 +833,7 @@ int hwspin_lock_free(struct hwspinlock *hwlock)
- {
- 	struct device *dev;
- 	struct hwspinlock *tmp;
--	int ret;
-+	int ret, id;
- 
- 	if (!hwlock) {
- 		pr_err("invalid hwlock\n");
-@@ -810,30 +844,40 @@ int hwspin_lock_free(struct hwspinlock *hwlock)
- 	mutex_lock(&hwspinlock_tree_lock);
- 
- 	/* make sure the hwspinlock is used */
--	ret = radix_tree_tag_get(&hwspinlock_tree, hwlock_to_id(hwlock),
--							HWSPINLOCK_UNUSED);
-+	id = hwlock_to_id(hwlock);
-+	ret = radix_tree_tag_get(&hwspinlock_tree, id, HWSPINLOCK_UNUSED);
- 	if (ret == 1) {
- 		dev_err(dev, "%s: hwlock is already free\n", __func__);
- 		dump_stack();
- 		ret = -EINVAL;
--		goto out;
-+		goto out_unlock;
- 	}
- 
- 	/* notify the underlying device that power is not needed */
- 	ret = pm_runtime_put(dev);
- 	if (ret < 0)
--		goto out;
-+		goto out_unlock;
-+
-+	/* update reqcount */
-+	if (--hwlock->reqcount)
-+		goto out_put;
- 
- 	/* mark this hwspinlock as available */
--	tmp = radix_tree_tag_set(&hwspinlock_tree, hwlock_to_id(hwlock),
--							HWSPINLOCK_UNUSED);
-+	tmp = radix_tree_tag_set(&hwspinlock_tree, id, HWSPINLOCK_UNUSED);
- 
- 	/* sanity check (this shouldn't happen) */
- 	WARN_ON(tmp != hwlock);
- 
-+	/* clear the dynamically assigned tag */
-+	tmp = radix_tree_tag_clear(&hwspinlock_tree, id, HWSPINLOCK_DYN_ASSIGN);
-+
-+	/* self-sanity check which should never fail */
-+	WARN_ON(tmp != hwlock);
-+
-+out_put:
- 	module_put(dev->driver->owner);
- 
--out:
-+out_unlock:
- 	mutex_unlock(&hwspinlock_tree_lock);
- 	return ret;
- }
-diff --git a/drivers/hwspinlock/hwspinlock_internal.h b/drivers/hwspinlock/hwspinlock_internal.h
-index 9eb6bd0..a3aae55 100644
---- a/drivers/hwspinlock/hwspinlock_internal.h
-+++ b/drivers/hwspinlock/hwspinlock_internal.h
-@@ -35,11 +35,15 @@ struct hwspinlock_ops {
-  * struct hwspinlock - this struct represents a single hwspinlock instance
-  * @bank: the hwspinlock_device structure which owns this lock
-  * @lock: initialized and used by hwspinlock core
-+ * @is_locked: whether this lock is currently locked
-+ * @reqcount: number of users having requested this lock
-  * @priv: private data, owned by the underlying platform-specific hwspinlock drv
-  */
- struct hwspinlock {
- 	struct hwspinlock_device *bank;
- 	spinlock_t lock;
-+	unsigned long is_locked;
-+	unsigned int reqcount;
- 	void *priv;
- };
- 
--- 
-2.7.4
-
+> From: Cl=C3=A9ment Leger <cleger@kalray.eu>
+>=20
+> elf32 and elf64 mainly differ by their types. In order to avoid
+> copy/pasting the whole loader code, generate static inline functions
+> which will access values according to the elf class. It allows to keep a
+> common loader basis.
+> In order to accomodate both elf types sizes, the maximum size for a
+> elf header member is chosen using the maximum value of both elf class.
+>=20
+> Signed-off-by: Clement Leger <cleger@kalray.eu>
+> Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+> ---
+> drivers/remoteproc/remoteproc_elf_loader.c | 135 ++++++++++++++++++------=
+-----
+> drivers/remoteproc/remoteproc_elf_loader.h |  69 +++++++++++++++
+> drivers/remoteproc/remoteproc_internal.h   |   2 +-
+> drivers/remoteproc/st_remoteproc.c         |   2 +-
+> include/linux/remoteproc.h                 |   4 +-
+> 5 files changed, 156 insertions(+), 56 deletions(-)
+> create mode 100644 drivers/remoteproc/remoteproc_elf_loader.h
+>=20
+> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c
+> b/drivers/remoteproc/remoteproc_elf_loader.c
+> index b17d72ec8603..6a2d31d6092c 100644
+> --- a/drivers/remoteproc/remoteproc_elf_loader.c
+> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
+> @@ -31,6 +31,7 @@
+> #include <linux/elf.h>
+>=20
+> #include "remoteproc_internal.h"
+> +#include "remoteproc_elf_loader.h"
+>=20
+> /**
+>  * rproc_elf_sanity_check() - Sanity Check ELF firmware image
+> @@ -43,8 +44,16 @@ int rproc_elf_sanity_check(struct rproc *rproc, const =
+struct
+> firmware *fw)
+> {
+> =09const char *name =3D rproc->firmware;
+> =09struct device *dev =3D &rproc->dev;
+> +=09/*
+> +=09 * Elf files are beginning with the same structure. Thus, to simplify
+> +=09 * header parsing, we can use the elf32_hdr one for both elf64 and
+> +=09 * elf32.
+> +=09 */
+> =09struct elf32_hdr *ehdr;
+> +=09u32 elf_shdr_size;
+> +=09u64 phoff, shoff;
+> =09char class;
+> +=09u16 phnum;
+>=20
+> =09if (!fw) {
+> =09=09dev_err(dev, "failed to load %s\n", name);
+> @@ -58,9 +67,13 @@ int rproc_elf_sanity_check(struct rproc *rproc, const =
+struct
+> firmware *fw)
+>=20
+> =09ehdr =3D (struct elf32_hdr *)fw->data;
+>=20
+> -=09/* We only support ELF32 at this point */
+> +=09if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG)) {
+> +=09=09dev_err(dev, "Image is corrupted (bad magic)\n");
+> +=09=09return -EINVAL;
+> +=09}
+> +
+> =09class =3D ehdr->e_ident[EI_CLASS];
+> -=09if (class !=3D ELFCLASS32) {
+> +=09if (class !=3D ELFCLASS32 && class !=3D ELFCLASS64) {
+> =09=09dev_err(dev, "Unsupported class: %d\n", class);
+> =09=09return -EINVAL;
+> =09}
+> @@ -75,26 +88,29 @@ int rproc_elf_sanity_check(struct rproc *rproc, const=
+ struct
+> firmware *fw)
+> =09=09return -EINVAL;
+> =09}
+>=20
+> -=09if (fw->size < ehdr->e_shoff + sizeof(struct elf32_shdr)) {
+> -=09=09dev_err(dev, "Image is too small\n");
+> -=09=09return -EINVAL;
+> -=09}
+> +=09phoff =3D elf_hdr_e_phoff(class, fw->data);
+> +=09shoff =3D elf_hdr_e_shoff(class, fw->data);
+> +=09phnum =3D  elf_hdr_e_phnum(class, fw->data);
+> +=09elf_shdr_size =3D elf_size_of_shdr(class);
+>=20
+> -=09if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG)) {
+> -=09=09dev_err(dev, "Image is corrupted (bad magic)\n");
+> +=09if (fw->size < shoff + elf_shdr_size) {
+> +=09=09dev_err(dev, "Image is too small\n");
+> =09=09return -EINVAL;
+> =09}
+>=20
+> -=09if (ehdr->e_phnum =3D=3D 0) {
+> +=09if (phnum =3D=3D 0) {
+> =09=09dev_err(dev, "No loadable segments\n");
+> =09=09return -EINVAL;
+> =09}
+>=20
+> -=09if (ehdr->e_phoff > fw->size) {
+> +=09if (phoff > fw->size) {
+> =09=09dev_err(dev, "Firmware size is too small\n");
+> =09=09return -EINVAL;
+> =09}
+>=20
+> +=09dev_dbg(dev, "Firmware is an elf%d file\n",
+> +=09=09class =3D=3D ELFCLASS32 ? 32 : 64);
+> +
+> =09return 0;
+> }
+> EXPORT_SYMBOL(rproc_elf_sanity_check);
+> @@ -110,11 +126,9 @@ EXPORT_SYMBOL(rproc_elf_sanity_check);
+>  * Note that the boot address is not a configurable property of all remot=
+e
+>  * processors. Some will always boot at a specific hard-coded address.
+>  */
+> -u32 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *=
+fw)
+> +u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *=
+fw)
+> {
+> -=09struct elf32_hdr *ehdr  =3D (struct elf32_hdr *)fw->data;
+> -
+> -=09return ehdr->e_entry;
+> +=09return elf_hdr_e_entry(fw_elf_get_class(fw), fw->data);
+> }
+> EXPORT_SYMBOL(rproc_elf_get_boot_addr);
+>=20
+> @@ -145,37 +159,41 @@ EXPORT_SYMBOL(rproc_elf_get_boot_addr);
+> int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *f=
+w)
+> {
+> =09struct device *dev =3D &rproc->dev;
+> -=09struct elf32_hdr *ehdr;
+> -=09struct elf32_phdr *phdr;
+> +=09const void *ehdr, *phdr;
+> =09int i, ret =3D 0;
+> +=09u16 phnum;
+> =09const u8 *elf_data =3D fw->data;
+> +=09u8 class =3D fw_elf_get_class(fw);
+> +=09u32 elf_phdr_size =3D elf_size_of_phdr(class);
+>=20
+> -=09ehdr =3D (struct elf32_hdr *)elf_data;
+> -=09phdr =3D (struct elf32_phdr *)(elf_data + ehdr->e_phoff);
+> +=09ehdr =3D elf_data;
+> +=09phnum =3D elf_hdr_e_phnum(class, ehdr);
+> +=09phdr =3D elf_data + elf_hdr_e_phoff(class, ehdr);
+>=20
+> =09/* go through the available ELF segments */
+> -=09for (i =3D 0; i < ehdr->e_phnum; i++, phdr++) {
+> -=09=09u32 da =3D phdr->p_paddr;
+> -=09=09u32 memsz =3D phdr->p_memsz;
+> -=09=09u32 filesz =3D phdr->p_filesz;
+> -=09=09u32 offset =3D phdr->p_offset;
+> +=09for (i =3D 0; i < phnum; i++, phdr +=3D elf_phdr_size) {
+> +=09=09u64 da =3D elf_phdr_p_paddr(class, phdr);
+> +=09=09u64 memsz =3D elf_phdr_p_memsz(class, phdr);
+> +=09=09u64 filesz =3D elf_phdr_p_filesz(class, phdr);
+> +=09=09u64 offset =3D elf_phdr_p_offset(class, phdr);
+> +=09=09u32 type =3D elf_phdr_p_type(class, phdr);
+> =09=09void *ptr;
+>=20
+> -=09=09if (phdr->p_type !=3D PT_LOAD)
+> +=09=09if (type !=3D PT_LOAD)
+> =09=09=09continue;
+>=20
+> -=09=09dev_dbg(dev, "phdr: type %d da 0x%x memsz 0x%x filesz 0x%x\n",
+> -=09=09=09phdr->p_type, da, memsz, filesz);
+> +=09=09dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n=
+",
+> +=09=09=09type, da, memsz, filesz);
+>=20
+> =09=09if (filesz > memsz) {
+> -=09=09=09dev_err(dev, "bad phdr filesz 0x%x memsz 0x%x\n",
+> +=09=09=09dev_err(dev, "bad phdr filesz 0x%llx memsz 0x%llx\n",
+> =09=09=09=09filesz, memsz);
+> =09=09=09ret =3D -EINVAL;
+> =09=09=09break;
+> =09=09}
+>=20
+> =09=09if (offset + filesz > fw->size) {
+> -=09=09=09dev_err(dev, "truncated fw: need 0x%x avail 0x%zx\n",
+> +=09=09=09dev_err(dev, "truncated fw: need 0x%llx avail 0x%zx\n",
+> =09=09=09=09offset + filesz, fw->size);
+> =09=09=09ret =3D -EINVAL;
+> =09=09=09break;
+> @@ -184,14 +202,15 @@ int rproc_elf_load_segments(struct rproc *rproc, co=
+nst
+> struct firmware *fw)
+> =09=09/* grab the kernel address for this device address */
+> =09=09ptr =3D rproc_da_to_va(rproc, da, memsz);
+> =09=09if (!ptr) {
+> -=09=09=09dev_err(dev, "bad phdr da 0x%x mem 0x%x\n", da, memsz);
+> +=09=09=09dev_err(dev, "bad phdr da 0x%llx mem 0x%llx\n", da,
+> +=09=09=09=09memsz);
+> =09=09=09ret =3D -EINVAL;
+> =09=09=09break;
+> =09=09}
+>=20
+> =09=09/* put the segment where the remote processor expects it */
+> -=09=09if (phdr->p_filesz)
+> -=09=09=09memcpy(ptr, elf_data + phdr->p_offset, filesz);
+> +=09=09if (filesz)
+> +=09=09=09memcpy(ptr, elf_data + offset, filesz);
+>=20
+> =09=09/*
+> =09=09 * Zero out remaining memory for this segment.
+> @@ -208,24 +227,32 @@ int rproc_elf_load_segments(struct rproc *rproc, co=
+nst
+> struct firmware *fw)
+> }
+> EXPORT_SYMBOL(rproc_elf_load_segments);
+>=20
+> -static struct elf32_shdr *
+> -find_table(struct device *dev, struct elf32_hdr *ehdr, size_t fw_size)
+> +static const void *
+> +find_table(struct device *dev, const struct firmware *fw)
+> {
+> -=09struct elf32_shdr *shdr;
+> +=09const void *shdr, *name_table_shdr;
+> =09int i;
+> =09const char *name_table;
+> =09struct resource_table *table =3D NULL;
+> -=09const u8 *elf_data =3D (void *)ehdr;
+> +=09const u8 *elf_data =3D (void *)fw->data;
+> +=09u8 class =3D fw_elf_get_class(fw);
+> +=09size_t fw_size =3D fw->size;
+> +=09const void *ehdr =3D elf_data;
+> +=09u16 shnum =3D elf_hdr_e_shnum(class, ehdr);
+> +=09u32 elf_shdr_size =3D elf_size_of_shdr(class);
+> +=09u16 shstrndx =3D elf_hdr_e_shstrndx(class, ehdr);
+>=20
+> =09/* look for the resource table and handle it */
+> -=09shdr =3D (struct elf32_shdr *)(elf_data + ehdr->e_shoff);
+> -=09name_table =3D elf_data + shdr[ehdr->e_shstrndx].sh_offset;
+> +=09shdr =3D elf_data + elf_hdr_e_shoff(class, ehdr);
+> +=09name_table_shdr =3D shdr + (shstrndx * elf_shdr_size);
+> +=09name_table =3D elf_data + elf_shdr_sh_offset(class, name_table_shdr);
+>=20
+> -=09for (i =3D 0; i < ehdr->e_shnum; i++, shdr++) {
+> -=09=09u32 size =3D shdr->sh_size;
+> -=09=09u32 offset =3D shdr->sh_offset;
+> +=09for (i =3D 0; i < shnum; i++, shdr +=3D elf_shdr_size) {
+> +=09=09u64 size =3D elf_shdr_sh_size(class, shdr);
+> +=09=09u64 offset =3D elf_shdr_sh_offset(class, shdr);
+> +=09=09u32 name =3D elf_shdr_sh_name(class, shdr);
+>=20
+> -=09=09if (strcmp(name_table + shdr->sh_name, ".resource_table"))
+> +=09=09if (strcmp(name_table + name, ".resource_table"))
+> =09=09=09continue;
+>=20
+> =09=09table =3D (struct resource_table *)(elf_data + offset);
+> @@ -279,21 +306,21 @@ find_table(struct device *dev, struct elf32_hdr *eh=
+dr,
+> size_t fw_size)
+>  */
+> int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *=
+fw)
+> {
+> -=09struct elf32_hdr *ehdr;
+> -=09struct elf32_shdr *shdr;
+> +=09const void *shdr;
+> =09struct device *dev =3D &rproc->dev;
+> =09struct resource_table *table =3D NULL;
+> =09const u8 *elf_data =3D fw->data;
+> =09size_t tablesz;
+> +=09u8 class =3D fw_elf_get_class(fw);
+> +=09u64 sh_offset;
+>=20
+> -=09ehdr =3D (struct elf32_hdr *)elf_data;
+> -
+> -=09shdr =3D find_table(dev, ehdr, fw->size);
+> +=09shdr =3D find_table(dev, fw);
+> =09if (!shdr)
+> =09=09return -EINVAL;
+>=20
+> -=09table =3D (struct resource_table *)(elf_data + shdr->sh_offset);
+> -=09tablesz =3D shdr->sh_size;
+> +=09sh_offset =3D elf_shdr_sh_offset(class, shdr);
+> +=09table =3D (struct resource_table *)(elf_data + sh_offset);
+> +=09tablesz =3D elf_shdr_sh_size(class, shdr);
+>=20
+> =09/*
+> =09 * Create a copy of the resource table. When a virtio device starts
+> @@ -326,13 +353,17 @@ EXPORT_SYMBOL(rproc_elf_load_rsc_table);
+> struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rpro=
+c,
+> =09=09=09=09=09=09       const struct firmware *fw)
+> {
+> -=09struct elf32_hdr *ehdr =3D (struct elf32_hdr *)fw->data;
+> -=09struct elf32_shdr *shdr;
+> +=09const void *shdr;
+> +=09u64 sh_addr, sh_size;
+> +=09u8 class =3D fw_elf_get_class(fw);
+>=20
+> -=09shdr =3D find_table(&rproc->dev, ehdr, fw->size);
+> +=09shdr =3D find_table(&rproc->dev, fw);
+> =09if (!shdr)
+> =09=09return NULL;
+>=20
+> -=09return rproc_da_to_va(rproc, shdr->sh_addr, shdr->sh_size);
+> +=09sh_addr =3D elf_shdr_sh_addr(class, shdr);
+> +=09sh_size =3D elf_shdr_sh_size(class, shdr);
+> +
+> +=09return rproc_da_to_va(rproc, sh_addr, sh_size);
+> }
+> EXPORT_SYMBOL(rproc_elf_find_loaded_rsc_table);
+> diff --git a/drivers/remoteproc/remoteproc_elf_loader.h
+> b/drivers/remoteproc/remoteproc_elf_loader.h
+> new file mode 100644
+> index 000000000000..fac3565734f9
+> --- /dev/null
+> +++ b/drivers/remoteproc/remoteproc_elf_loader.h
+> @@ -0,0 +1,69 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Remote processor elf loader defines
+> + *
+> + * Copyright (C) 2019 Kalray, Inc.
+> + */
+> +
+> +#ifndef REMOTEPROC_ELF_LOADER_H
+> +#define REMOTEPROC_ELF_LOADER_H
+> +
+> +#include <linux/elf.h>
+> +#include <linux/types.h>
+> +
+> +/**
+> + * fw_elf_get_class - Get elf class
+> + * @fw: the ELF firmware image
+> + *
+> + * Note that we use and elf32_hdr to access the class since the start of=
+ the
+> + * struct is the same for both elf class
+> + *
+> + * Return: elf class of the firmware
+> + */
+> +static inline u8 fw_elf_get_class(const struct firmware *fw)
+> +{
+> +=09struct elf32_hdr *ehdr =3D (struct elf32_hdr *)fw->data;
+> +
+> +=09return ehdr->e_ident[EI_CLASS];
+> +}
+> +
+> +#define ELF_GET_FIELD(__s, __field, __type) \
+> +static inline __type elf_##__s##_##__field(u8 class, const void *arg) \
+> +{ \
+> +=09if (class =3D=3D ELFCLASS32) \
+> +=09=09return (__type) ((const struct elf32_##__s *) arg)->__field; \
+> +=09else \
+> +=09=09return (__type) ((const struct elf64_##__s *) arg)->__field; \
+> +}
+> +
+> +ELF_GET_FIELD(hdr, e_entry, u64)
+> +ELF_GET_FIELD(hdr, e_phnum, u16)
+> +ELF_GET_FIELD(hdr, e_shnum, u16)
+> +ELF_GET_FIELD(hdr, e_phoff, u64)
+> +ELF_GET_FIELD(hdr, e_shoff, u64)
+> +ELF_GET_FIELD(hdr, e_shstrndx, u16)
+> +
+> +ELF_GET_FIELD(phdr, p_paddr, u64)
+> +ELF_GET_FIELD(phdr, p_filesz, u64)
+> +ELF_GET_FIELD(phdr, p_memsz, u64)
+> +ELF_GET_FIELD(phdr, p_type, u32)
+> +ELF_GET_FIELD(phdr, p_offset, u64)
+> +
+> +ELF_GET_FIELD(shdr, sh_size, u64)
+> +ELF_GET_FIELD(shdr, sh_offset, u64)
+> +ELF_GET_FIELD(shdr, sh_name, u32)
+> +ELF_GET_FIELD(shdr, sh_addr, u64)
+> +
+> +#define ELF_STRUCT_SIZE(__s) \
+> +static inline unsigned long elf_size_of_##__s(u8 class) \
+> +{ \
+> +=09if (class =3D=3D ELFCLASS32)\
+> +=09=09return sizeof(struct elf32_##__s); \
+> +=09else \
+> +=09=09return sizeof(struct elf64_##__s); \
+> +}
+> +
+> +ELF_STRUCT_SIZE(shdr)
+> +ELF_STRUCT_SIZE(phdr)
+> +
+> +#endif /* REMOTEPROC_ELF_LOADER_H */
+> diff --git a/drivers/remoteproc/remoteproc_internal.h
+> b/drivers/remoteproc/remoteproc_internal.h
+> index 45ff76a06c72..4ef745e3a1bc 100644
+> --- a/drivers/remoteproc/remoteproc_internal.h
+> +++ b/drivers/remoteproc/remoteproc_internal.h
+> @@ -63,7 +63,7 @@ phys_addr_t rproc_va_to_pa(void *cpu_addr);
+> int rproc_trigger_recovery(struct rproc *rproc);
+>=20
+> int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw=
+);
+> -u32 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *=
+fw);
+> +u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *=
+fw);
+> int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *f=
+w);
+> int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *=
+fw);
+> struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rpro=
+c,
+> diff --git a/drivers/remoteproc/st_remoteproc.c
+> b/drivers/remoteproc/st_remoteproc.c
+> index 51049d17b1e5..e23abd8a96b0 100644
+> --- a/drivers/remoteproc/st_remoteproc.c
+> +++ b/drivers/remoteproc/st_remoteproc.c
+> @@ -193,7 +193,7 @@ static int st_rproc_start(struct rproc *rproc)
+> =09=09}
+> =09}
+>=20
+> -=09dev_info(&rproc->dev, "Started from 0x%x\n", rproc->bootaddr);
+> +=09dev_info(&rproc->dev, "Started from 0x%llx\n", rproc->bootaddr);
+>=20
+> =09return 0;
+>=20
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index 04d04709f2bd..512de9a2590c 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -362,7 +362,7 @@ struct rproc_ops {
+> =09=09=09=09struct rproc *rproc, const struct firmware *fw);
+> =09int (*load)(struct rproc *rproc, const struct firmware *fw);
+> =09int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
+> -=09u32 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
+> +=09u64 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
+> };
+>=20
+> /**
+> @@ -478,7 +478,7 @@ struct rproc {
+> =09int num_traces;
+> =09struct list_head carveouts;
+> =09struct list_head mappings;
+> -=09u32 bootaddr;
+> +=09u64 bootaddr;
+> =09struct list_head rvdevs;
+> =09struct list_head subdevs;
+> =09struct idr notifyids;
+> --
+> 2.15.0.276.g89ea799
