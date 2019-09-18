@@ -2,48 +2,48 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B69CB68E6
+	by mail.lfdr.de (Postfix) with ESMTP id 2C31FB68E5
 	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Sep 2019 19:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732112AbfIRRTb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 18 Sep 2019 13:19:31 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:45768 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732136AbfIRRT2 (ORCPT
+        id S1732149AbfIRRTa (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 18 Sep 2019 13:19:30 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40693 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732112AbfIRRTa (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 18 Sep 2019 13:19:28 -0400
-Received: by mail-pl1-f194.google.com with SMTP id u12so240598pls.12
-        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Sep 2019 10:19:26 -0700 (PDT)
+        Wed, 18 Sep 2019 13:19:30 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x127so409637pfb.7
+        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Sep 2019 10:19:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Zted6byoUjfvi72VSDIhM8pesVU1cPbkC92rYkmfs6k=;
-        b=rYhSObq4evGVg356bza5zIWCf7uvuBbpf4HCEDLaZ/lBqNwdVQZDZZoJiUCg5d1A6b
-         cmF677BmCdEDLLgmJKuII4SBexOEnJwmuqvItJo7DaeE8IDlhRrFU1xI9PNu54Am5Nsq
-         8O0JANibva5B7rlPn5iBN4STl/6PWnmXYTPwCkim8kiqhcs1bBXjWFga1BqcQvhJ+3jx
-         6H3jIg+C1VUq53LrNHDo9jwI4WZQH3nT2sDwFIIyNQGKmh9nDz2jmGUAUZmF6LsTpOp4
-         0UBsPBSdsE1TcqagQJhKslYjT7t1M6t8FJAsbCKRKUeRT04AaniPiAI5g229tX0I+wvt
-         tjtw==
+        bh=o8jBbFMTRVOLRjVfPalAAvaLLhvjkkI5HoxGIVyvU8o=;
+        b=S31B2pEsbk+z279WHVu2T3GrmYwNDVVVEi/rj5HIvyV6nVgECY/7RfHJ/xSGEt3k8s
+         xShPMHY9cudQDZP2dH2wQvi5BLCnKKfojyVvVTmE40etR2gvyyljlHoYoi6uumzoghtX
+         w9Z9vYHDU4Nr8o77x/MECD8F0zYjEGM0wGFN0W6SV4mPq4kePFnte+jMuBjO+V9Mk2y0
+         PAcA8IRjRYXTcc9rvtEv5ImAlwMDeEupI6jzInysqLqlG72aANz/bomMqQVVysMA8gZM
+         P5q4KvZmbHFyFK1W4gXjZrIhbNXctmumsmzN1F3DphKi2qR0jlIHMwLf4SO12NlkfTlY
+         7LCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Zted6byoUjfvi72VSDIhM8pesVU1cPbkC92rYkmfs6k=;
-        b=lE1qj2ixEuL0dmxOkv69UquJiSTk8Cfbm/xTysQArQEtgLj77XXFFMkvqpRitkeKl6
-         oijRH0dJq7GHrZyd+AmlgtkFb6xl0DjHV89wvNzaL4QrJAgdC4V0VqgCe5IrSCq3MDZ+
-         ngpU967OaAImd2sZy0MFlcuZArMiPi7aUP7t2RiWenq3nJMGGtdXXJ7X26sWi2dSUay7
-         JBC9pfkhmJ38ADvnBEIofQSjo2y4iveQgBEPTHvwDGvQjYcDQe6UsLdc7/GdvhXdQMSr
-         Asl4dbrJS/q1Ud8nNbYi5GQh+VT+pUlZ25y1Ew+vU3JxrRBK1p+gmPZZvm4FdmaLWpU0
-         PSmg==
-X-Gm-Message-State: APjAAAXqHpNzYo/ao1d2NRCy+zZGJ2NIOLpQrHTbyr8nW0r1avnI2j9x
-        LAMYU7fJAHDNh4fY0XlIohI+8A==
-X-Google-Smtp-Source: APXvYqw0iFqROo2OVRy0jIHEtn/M2cMt17ahjJ12kB01MygdAcnt0iw88YZq2uoIDfL3USxZjvrq+w==
-X-Received: by 2002:a17:902:b497:: with SMTP id y23mr5286203plr.201.1568827166359;
-        Wed, 18 Sep 2019 10:19:26 -0700 (PDT)
+        bh=o8jBbFMTRVOLRjVfPalAAvaLLhvjkkI5HoxGIVyvU8o=;
+        b=mUTLqCq20BXt6hNKf1thI/X6IA/hrgpnzXcIc7nH3CDvtZw/JXnaLV50FzsIvAU3W0
+         n66bdbtpInrZEPm7goGe5mnfCiEeMAWVwesLHKAEf5T1/ELShSMzlO2E925BEEUb3eDh
+         A38hgqT90u/DoznLcWKcbw5zFmUShv1edrLd2wkoMgFsmymQYzB22wFCIX6uKzr5RGta
+         clI9g1emELZI8tfyPD68FN+fEgmZa+y7c67B+lYMaKOT7RoUdJ3sZl8OX98sPwErKs1p
+         4/SXV3sqHTS6xeJj89DCJEj3/RDiemksQXIFt5w6yl5tLGk65ayIPgPpTfkulsxQUG1e
+         RFKg==
+X-Gm-Message-State: APjAAAUGIAuGsjwSHq0ZFgMyL+F7nvpdo7IEtCMVe7AnIyZUVqxklWN4
+        Kr7l8MmeHs8fV21xqxmsRustgQ==
+X-Google-Smtp-Source: APXvYqz2NwfyeZRXxm7dgiBTjnJCh8SRsdzqxi1i88kaJsXr+YupiSXjV/8iuycHgXoZ1FvOMMG8Fw==
+X-Received: by 2002:a63:34cb:: with SMTP id b194mr4926065pga.446.1568827167913;
+        Wed, 18 Sep 2019 10:19:27 -0700 (PDT)
 Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id y4sm2614981pjn.19.2019.09.18.10.19.25
+        by smtp.gmail.com with ESMTPSA id y4sm2614981pjn.19.2019.09.18.10.19.26
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Sep 2019 10:19:25 -0700 (PDT)
+        Wed, 18 Sep 2019 10:19:27 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -51,9 +51,9 @@ To:     Ohad Ben-Cohen <ohad@wizery.com>,
         Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH 5/6] rpmsg: glink: Don't send pending rx_done during remove
-Date:   Wed, 18 Sep 2019 10:19:15 -0700
-Message-Id: <20190918171916.4039-6-bjorn.andersson@linaro.org>
+Subject: [PATCH 6/6] rpmsg: glink: Free pending deferred work on remove
+Date:   Wed, 18 Sep 2019 10:19:16 -0700
+Message-Id: <20190918171916.4039-7-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20190918171916.4039-1-bjorn.andersson@linaro.org>
 References: <20190918171916.4039-1-bjorn.andersson@linaro.org>
@@ -62,45 +62,48 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Attempting to transmit rx_done messages after the GLINK instance is
-being torn down will cause use after free and memory leaks. So cancel
-the intent_work and free up the pending intents.
+By just cancelling the deferred rx worker during GLINK instance teardown
+any pending deferred commands are leaked, so free them.
 
-Fixes: 1d2ea36eead9 ("rpmsg: glink: Add rx done command")
+Fixes: b4f8e52b89f6 ("rpmsg: Introduce Qualcomm RPM glink driver")
 Cc: stable@vger.kernel.org
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/rpmsg/qcom_glink_native.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/rpmsg/qcom_glink_native.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-index 89e02baea2d0..0d7518a6ebf0 100644
+index 0d7518a6ebf0..5920432e697a 100644
 --- a/drivers/rpmsg/qcom_glink_native.c
 +++ b/drivers/rpmsg/qcom_glink_native.c
-@@ -241,11 +241,23 @@ static void qcom_glink_channel_release(struct kref *ref)
- {
- 	struct glink_channel *channel = container_of(ref, struct glink_channel,
- 						     refcount);
-+	struct glink_core_rx_intent *intent;
- 	struct glink_core_rx_intent *tmp;
- 	unsigned long flags;
- 	int iid;
+@@ -1562,6 +1562,18 @@ static void qcom_glink_work(struct work_struct *work)
+ 	}
+ }
  
-+	/* cancel pending rx_done work */
-+	cancel_work_sync(&channel->intent_work);
++static void qcom_glink_cancel_rx_work(struct qcom_glink *glink)
++{
++	struct glink_defer_cmd *dcmd;
++	struct glink_defer_cmd *tmp;
 +
- 	spin_lock_irqsave(&channel->intent_lock, flags);
-+	/* Free all non-reuse intents pending rx_done work */
-+	list_for_each_entry_safe(intent, tmp, &channel->done_intents, node) {
-+		if (!intent->reuse) {
-+			kfree(intent->data);
-+			kfree(intent);
-+		}
-+	}
++	/* cancel any pending deferred rx_work */
++	cancel_work_sync(&glink->rx_work);
 +
- 	idr_for_each_entry(&channel->liids, tmp, iid) {
- 		kfree(tmp->data);
- 		kfree(tmp);
++	list_for_each_entry_safe(dcmd, tmp, &glink->rx_queue, node)
++		kfree(dcmd);
++}
++
+ struct qcom_glink *qcom_glink_native_probe(struct device *dev,
+ 					   unsigned long features,
+ 					   struct qcom_glink_pipe *rx,
+@@ -1640,7 +1652,7 @@ void qcom_glink_native_remove(struct qcom_glink *glink)
+ 	unsigned long flags;
+ 
+ 	disable_irq(glink->irq);
+-	cancel_work_sync(&glink->rx_work);
++	qcom_glink_cancel_rx_work(glink);
+ 
+ 	ret = device_for_each_child(glink->dev, NULL, qcom_glink_remove_device);
+ 	if (ret)
 -- 
 2.18.0
 
