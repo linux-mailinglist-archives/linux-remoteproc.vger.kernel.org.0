@@ -2,127 +2,122 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F80FB89F1
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 20 Sep 2019 06:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF353B9EE8
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 21 Sep 2019 18:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437156AbfITESo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 20 Sep 2019 00:18:44 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45173 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437143AbfITESo (ORCPT
+        id S2407793AbfIUQ6u (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 21 Sep 2019 12:58:50 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:45610 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407789AbfIUQ6t (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 20 Sep 2019 00:18:44 -0400
-Received: by mail-pf1-f195.google.com with SMTP id y72so3625681pfb.12
-        for <linux-remoteproc@vger.kernel.org>; Thu, 19 Sep 2019 21:18:42 -0700 (PDT)
+        Sat, 21 Sep 2019 12:58:49 -0400
+Received: by mail-pf1-f196.google.com with SMTP id y72so6508579pfb.12
+        for <linux-remoteproc@vger.kernel.org>; Sat, 21 Sep 2019 09:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ru2v+D3BKbQXHdK6oP95hVcWGBqQtKaZoxkk1jRrl3c=;
-        b=ThCjkrH4kiDFaNcLiNv9F0iKG0xVuSZ5dPOxeJ12Zy9AY0v5Y9JcXLe2NoLcuXN1wG
-         YjKxU+pkNhMTdjdgtQDBl53PR9Z7SYZEnwrqHX4n9nwvXY87zGEdiPw6P7iet+aySL0K
-         iuWDRjO3p87DvY+s2FXSsiPLzUQvE18a1Rx19aGIohSyV0ZHzTdgiCEB/+GvYekjCoxt
-         Jf2vhgLxnbGpTWdGvNotMYAwah4YJMRZUU1f9XWFf3aZ2371urcOKgcVVY8HT5TLHYGt
-         RwVFQMRmvDeSpk4s70Ph61nTqHGZKp7qeaoXVd859t5emyIW7rJ3/kYwcVW/CZYSZCH5
-         OnvQ==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=q69Kv4s8NdbI7NNyGxPLpjBZIhyfFsGnwWZiB8RZWwo=;
+        b=vB3Xtmqp22xIsej92uD7rfQHDIfaHKAMsoZqfQ2q8dyQnJHlAflnDdUXOMe+PsJbna
+         okioIRakrgDGSOgub0SEh0r6noXIEehzdnXutxhOf4VsL986zIIck0RHIzYBRygb8ENq
+         acj+KSB1oRU+QfUl7L2ZlhQ41gCURQzl4V0wiiWIbXJvBnFHxY9CdmnSLMcnW7IGLLgT
+         yZDFVFE2iOYNVKDV/TS6L/9XWBKcBr7xqagUDNQNqzcAyP1nLAujv+Otlj13vfaHTX7g
+         mdpDuaqVEODe77OebYibAFxdJBYR7SZcHBkllCnRriCZQuZgnpY884/+F5bJNO95ufo2
+         C28Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ru2v+D3BKbQXHdK6oP95hVcWGBqQtKaZoxkk1jRrl3c=;
-        b=Je5Zi7zK15Bkzz2+j3bR6JOBv5VuLJ8IeUOR3t1TTjJly3seTjfgDn34jvBWjYCAAa
-         myjRQqZU5ZxRIky9Cg4cGw28PhsfUfHLo1M1T3cNcAICftpYq9/xms/RC4BWh2U+kOEM
-         7qeTLmaFjrEpf+vA9k/7I92lXX26sQr13vFxOewkXttvngxLClj7Qrqa5ennY5Y0nBil
-         vqcw+nSXv6wW4ghJYVEt2NPcqPPzKQ7XlIlfYPcOYVqp/FKvuAJcWGwrL7kUMMk1/mS0
-         cx6a+WL43BmeltDOcf/GxGU1c19iiVf2TmIRptMsDJFgcccPFQ6JAx1Rt4/r2yn6SVBW
-         Th+w==
-X-Gm-Message-State: APjAAAVw1A6Upijp2XTWlunGtLeiDHDtZ/vG3wHINWP4nmRtrNK5qooJ
-        LyZ0GxeRYHKZRi3j6nPGAo6OOQ==
-X-Google-Smtp-Source: APXvYqzC40kwIHyJCN0QeAIgIN72Gz3Na3N0346y1z8Cs+IkEP1lODWimL7yqyqRjtmUhUim2iD4Kg==
-X-Received: by 2002:a17:90a:ba94:: with SMTP id t20mr2124125pjr.8.1568953121564;
-        Thu, 19 Sep 2019 21:18:41 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=q69Kv4s8NdbI7NNyGxPLpjBZIhyfFsGnwWZiB8RZWwo=;
+        b=SJmEKstDJtN8G5h7xWQvB/nu2PjD1dgmWzvr2RrZgcBg6IXi9w8dpuGDULjYfkn3Mv
+         D4ocYX/8T0zXfwC6nJvWSY2j6ds+Hquy6Xcl2BaL6rpE9CB1PFqPSqk9Gc6NeTbcf3GJ
+         CMtEW8H+pm891WnVS/N1mxVPfQbul2Dnd6m1s+36Obw4cXggAvvIYRUVhIQ2Xr5ZFZNl
+         3zEzxpZg9UdmwFmC9TdDyU0nKt3fM/CmYZ7p9EVOH9+sQXgYBRt5Bl01z29r/QAcWwXG
+         th3fPSz7+q/reIG8Fjukz9h2i1EiKYNznF4n0wEphaJRbu7OzN0bGlmmIm8yywxGmhlQ
+         XRuw==
+X-Gm-Message-State: APjAAAXYu2tlCv7zk2tjEiZW0MWn40qCapR1Y/y08epjvS5DS9vK2lG9
+        JI4wbGTb3qv7TaYTKvqI/15BOw==
+X-Google-Smtp-Source: APXvYqwQPsLb3MLTmsb026IX+IZkqAVLtMHNy+kmWtQQyb/2p/fmJ12W753iNAi9Oe8BIWe2G3xjeA==
+X-Received: by 2002:a17:90a:5aa1:: with SMTP id n30mr10959977pji.82.1569085128882;
+        Sat, 21 Sep 2019 09:58:48 -0700 (PDT)
 Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id h6sm612459pfg.123.2019.09.19.21.18.40
+        by smtp.gmail.com with ESMTPSA id 16sm7362155pfn.35.2019.09.21.09.58.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Sep 2019 21:18:40 -0700 (PDT)
-Date:   Thu, 19 Sep 2019 21:18:38 -0700
+        Sat, 21 Sep 2019 09:58:48 -0700 (PDT)
+Date:   Sat, 21 Sep 2019 09:58:45 -0700
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     ohad@wizery.com, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rpmsg: glink: Fix channel memory leak
-Message-ID: <20190920041838.GE1746@tuxbook-pro>
-References: <20190919100540.28159-1-srinivas.kandagatla@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>, Suman Anna <s-anna@ti.com>
+Subject: [GIT PULL] remoteproc updates for v5.4
+Message-ID: <20190921165845.GA6693@tuxbook-pro>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190919100540.28159-1-srinivas.kandagatla@linaro.org>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu 19 Sep 03:05 PDT 2019, Srinivas Kandagatla wrote:
+Hi Linus,
 
-> If we stop and start the dsp while channel is open then there is a leak
-> in the driver as the refcount is not accounted for the open.
-> 
-> This patch checks if the channel is open while running cleanup code
-> and does an extra kref_put to account for open which would ensure
-> that channel does not leak.
-> 
-> Originally detected by kmemleak:
->   backtrace:
->     [<ffffff80088b74d8>] kmemleak_alloc+0x50/0x84
->     [<ffffff80081ddbc8>] kmem_cache_alloc_trace+0xd4/0x178
->     [<ffffff80086b8bd0>] qcom_glink_alloc_channel+0x34/0x148
->     [<ffffff80086b8038>] qcom_glink_work+0x3b0/0x664
->     [<ffffff80080c3da8>] process_one_work+0x160/0x2f8
->     [<ffffff80080c4198>] worker_thread+0x1e8/0x2d4
->     [<ffffff80080c8b24>] kthread+0x128/0x138
->     [<ffffff80080845b4>] ret_from_fork+0x10/0x18
->     [<ffffffffffffffff>] 0xffffffffffffffff
-> unreferenced object 0xffffffc02cf5ed80 (size 128):
-> 
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  drivers/rpmsg/qcom_glink_native.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-> index dc7d3d098fd3..38a10dcc2029 100644
-> --- a/drivers/rpmsg/qcom_glink_native.c
-> +++ b/drivers/rpmsg/qcom_glink_native.c
-> @@ -1660,8 +1660,13 @@ void qcom_glink_native_remove(struct qcom_glink *glink)
->  
->  	spin_lock_irqsave(&glink->idr_lock, flags);
->  	/* Release any defunct local channels, waiting for close-ack */
-> -	idr_for_each_entry(&glink->lcids, channel, cid)
-> +	idr_for_each_entry(&glink->lcids, channel, cid) {
-> +		if (channel->rcid)
-
-Thanks for the patch Srinivas! I looked at it in your tree as I was
-coming up with the fixes for the problems I hit in my testing the other
-day.
-
-But, there is a window between qcom_glink_rx_open() assigning
-channel->rcid and where rpmsg_dev_probe() will invoke
-qcom_glink_create_remote(), which adds the channel to lcids, i.e. where
-we would leak the channel. So I instead picked Chris' patch (3/6 in my
-series), which will clean up the channel in this case as well.
+I've finally moved my trees to kernel.org, please pull this and the
+coming rpmsg request from their new location.
 
 Regards,
 Bjorn
 
-> +			kref_put(&channel->refcount,
-> +				 qcom_glink_channel_release);
-> +
->  		kref_put(&channel->refcount, qcom_glink_channel_release);
-> +	}
->  
->  	/* Release any defunct local channels, waiting for close-req */
->  	idr_for_each_entry(&glink->rcids, channel, cid)
-> -- 
-> 2.21.0
-> 
+The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b:
+
+  Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc tags/rproc-v5.4
+
+for you to fetch changes up to 150997fac770c37b12459ec52fdf67a5dc1366f5:
+
+  MAINTAINERS: remoteproc: update git tree location (2019-08-26 23:16:44 -0700)
+
+----------------------------------------------------------------
+remoteproc updates for v5.4
+
+This exposes the remoteproc's name in sysfs, allows stm32 to enter
+platform standby and provides bug fixes for stm32 and Qualcomm's modem
+remoteproc drivers. Finally it updates MAINTAINERS to reflect the move
+to kernel.org.
+
+----------------------------------------------------------------
+Bjorn Andersson (2):
+      remoteproc: qcom: Move glink_ssr notification after stop
+      MAINTAINERS: remoteproc: update git tree location
+
+Fabien Dessenne (2):
+      remoteproc: stm32: clear MCU PDDS at firmware start
+      remoteproc: stm32: manage the get_irq probe defer case
+
+Sibi Sankar (1):
+      remoteproc: qcom: q6v5-mss: fixup q6v5_pds_enable error handling
+
+Stephen Boyd (1):
+      remoteproc: Remove dev_err() usage after platform_get_irq()
+
+Suman Anna (1):
+      remoteproc: Add a sysfs interface for name
+
+ Documentation/ABI/testing/sysfs-class-remoteproc | 10 +++++++
+ MAINTAINERS                                      |  2 +-
+ drivers/remoteproc/da8xx_remoteproc.c            |  4 +--
+ drivers/remoteproc/keystone_remoteproc.c         |  4 ---
+ drivers/remoteproc/qcom_common.c                 |  4 +--
+ drivers/remoteproc/qcom_q6v5.c                   | 35 ++++--------------------
+ drivers/remoteproc/qcom_q6v5_mss.c               |  4 +--
+ drivers/remoteproc/remoteproc_sysfs.c            | 11 ++++++++
+ drivers/remoteproc/stm32_rproc.c                 | 14 ++++++++++
+ 9 files changed, 46 insertions(+), 42 deletions(-)
