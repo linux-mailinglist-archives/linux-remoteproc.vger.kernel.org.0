@@ -2,59 +2,61 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92625BA896
-	for <lists+linux-remoteproc@lfdr.de>; Sun, 22 Sep 2019 21:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54A55BC09E
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Sep 2019 05:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730002AbfIVTFa (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sun, 22 Sep 2019 15:05:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730021AbfIVTF2 (ORCPT
+        id S2404843AbfIXDJE (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 23 Sep 2019 23:09:04 -0400
+Received: from cmccmta3.chinamobile.com ([221.176.66.81]:25080 "EHLO
+        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388763AbfIXDJE (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sun, 22 Sep 2019 15:05:28 -0400
-Subject: Re: [GIT PULL] rpmsg updates for v5.4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569179128;
-        bh=dnwM7XjZooR/q4G7qPNF5DV2oKs3nqYWtd6hsHVT8QU=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=0044Yp1HFI0mc1GAZEqH7sOQeE1n1xC0k96T6c2oleFfaijqYlAsw9F1szpGE10yj
-         d7JHSznKOcFxGJHd2hFB8JYlibw52kkb7rZECTgn1LD7I9BoE+SUc9+uS0IVoxTx9k
-         CS7SHwQngIaZZ0NuQA2jdkGiuCVn5QoywY2C1Hco=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20190921165912.GB6693@tuxbook-pro>
-References: <20190921165912.GB6693@tuxbook-pro>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20190921165912.GB6693@tuxbook-pro>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc
- tags/rpmsg-v5.4
-X-PR-Tracked-Commit-Id: 9fe69a725e238ac279027f0132e50617a63b847d
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 379bb045171dea3e2ee01b32fe88f2afe1fe2fa8
-Message-Id: <156917912820.24588.8130624863228290812.pr-tracker-bot@kernel.org>
-Date:   Sun, 22 Sep 2019 19:05:28 +0000
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Suman Anna <s-anna@ti.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+        Mon, 23 Sep 2019 23:09:04 -0400
+X-Greylist: delayed 557 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Sep 2019 23:09:04 EDT
+Received: from spf.mail.chinamobile.com (unknown[172.16.121.13]) by rmmx-syy-dmz-app11-12011 (RichMail) with SMTP id 2eeb5d898685fb4-ecbb4; Tue, 24 Sep 2019 10:59:17 +0800 (CST)
+X-RM-TRANSID: 2eeb5d898685fb4-ecbb4
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from localhost.localdomain (unknown[223.105.0.243])
+        by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee75d898681c29-75784;
+        Tue, 24 Sep 2019 10:59:16 +0800 (CST)
+X-RM-TRANSID: 2ee75d898681c29-75784
+From:   Ding Xiang <dingxiang@cmss.chinamobile.com>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] remoteproc: debug: Remove unneeded NULL check
+Date:   Tue, 24 Sep 2019 10:58:54 +0800
+Message-Id: <1569293934-31451-1-git-send-email-dingxiang@cmss.chinamobile.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The pull request you sent on Sat, 21 Sep 2019 09:59:12 -0700:
+debugfs_remove_recursive will do NULL check, so remove
+the redundant null check
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc tags/rpmsg-v5.4
+Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
+---
+ drivers/remoteproc/remoteproc_debugfs.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/379bb045171dea3e2ee01b32fe88f2afe1fe2fa8
-
-Thank you!
-
+diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
+index 8cd4a0a..dd93cf0 100644
+--- a/drivers/remoteproc/remoteproc_debugfs.c
++++ b/drivers/remoteproc/remoteproc_debugfs.c
+@@ -333,9 +333,6 @@ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
+ 
+ void rproc_delete_debug_dir(struct rproc *rproc)
+ {
+-	if (!rproc->dbg_dir)
+-		return;
+-
+ 	debugfs_remove_recursive(rproc->dbg_dir);
+ }
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+1.9.1
+
+
+
