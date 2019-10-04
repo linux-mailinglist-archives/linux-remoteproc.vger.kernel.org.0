@@ -2,53 +2,53 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0EACC4DD
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  4 Oct 2019 23:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85539CC4DF
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  4 Oct 2019 23:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725730AbfJDVhD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 4 Oct 2019 17:37:03 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:34297 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729291AbfJDVhC (ORCPT
+        id S1730325AbfJDViZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 4 Oct 2019 17:38:25 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:38051 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730298AbfJDViZ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 4 Oct 2019 17:37:02 -0400
-Received: by mail-lf1-f68.google.com with SMTP id r22so5470270lfm.1
-        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Oct 2019 14:37:00 -0700 (PDT)
+        Fri, 4 Oct 2019 17:38:25 -0400
+Received: by mail-lj1-f196.google.com with SMTP id b20so7918055ljj.5
+        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Oct 2019 14:38:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Ce3x7KSH0pYsuXm37iytKyn2HOMPOAXSnbAQ/QFaPBo=;
-        b=xk9x5ffabqWz4gnsopezWJWtbhnfmkRmyaoteqL0Tb3I0kpN2/0ShNyHmkYndvZ7td
-         j2frhivq4Mtp7ruUowc8Hm3Bm/OLGVdXO0NBH4Yrzrv7UQYtxITwYq3kt+t3Fv0XcY87
-         ljlrSQ05DQe9wts+tAnYm94cF4NUcOwrjMiIX1uBPL3tYreQukjNLl5naQSsJtb5+Trz
-         k5NBV3JBFdekRw8Ma6GEh1gZoXAXm7pDwmso7Yi3PkkByEut/1c0djfEKHMJ1l9REunq
-         N0wcHIizgSLdWl4VbUyXoL6Mf9zeMOdPp0AwmRPaBSps+FZwsRBZeSq90WGUVbB7mnQN
-         IMug==
+        bh=aRAc62gXtPBKRS38xYdigbDwlITW2b4WE0eT5kkYxq8=;
+        b=MO1o1GKZKe0wHXwuXT1J6brobS8MLc1iJ57iKwIs/hF317Z/7cQXPXf/ZOZTQnhyac
+         bpZ9LLIE7ndE5MG4snTxWYZCa7uyxqWNiwD72CZG2l+oCHbo70K2kyTaB/kASxIsdUIo
+         pignYGI7vksf894FIhQUunwDnaoMZNLFA05n0NGdHlJzasAuVTS4L+40RHiltmLQxhJa
+         0zbh7L9oItbK6G2NjV6888RSLghmQcMNhJem1cnTRr8djiHtQ/01LVvlYmOhViEC3Aer
+         3ZMtpKSbSBSEo8WJBTBkZhr6pt73NyshdSURD5I8gOa/ac4PUR4X/NsCHMMwRgcpiDjp
+         Pz5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Ce3x7KSH0pYsuXm37iytKyn2HOMPOAXSnbAQ/QFaPBo=;
-        b=TXtKs5LSTwzPy7eRdSijBv07pHV+eU5mBs/A6ew+IcY0nUH4rMoLsSrAn++VytVqSr
-         wpVRe9mZf9F+qZjZt97tynoDL8qFJj/N6BU2SLEuQJKVaLEmXkE5+4fW6A7jNtT00YXU
-         DjEiOZS1WJbVS5pZhnFBQ7EVHn5GhnuETG59MWK8RzIHA0hG4HKs2dAS/DUfEFvimCTz
-         eqe2I1rzuydLJ8xaLorf/sbYO9fF0/B9tdzseOzd+MkbXSgSRvBSUtSRN7F4CUrr3CWx
-         izyEdwQKjsO1W0jh3BRypNM+9WBd9/aiSDjEMuKV8hRBZmXxd1g7RjbkWlVDjmumZCNf
-         FT2A==
-X-Gm-Message-State: APjAAAWph8PdMfuwjQOLiBV47gLa993WhgbZmnId6kNrVYPFZY0+C1Nb
-        layCeBvAdCQ2Y8OQZiEhFfj6FzwpPC/0xjzy3xX95Q==
-X-Google-Smtp-Source: APXvYqy4xOAHwIaDtkz8jFtwY47sxQ2nokwcrjmKxbf0EZl8xzeuzKeGyjDOtURFQTzmmkuSB5zJlXy15mbRmL0oGYc=
-X-Received: by 2002:a19:48c3:: with SMTP id v186mr10152902lfa.141.1570225019432;
- Fri, 04 Oct 2019 14:36:59 -0700 (PDT)
+        bh=aRAc62gXtPBKRS38xYdigbDwlITW2b4WE0eT5kkYxq8=;
+        b=EyAEsqiQlUuM96NUVxMW8ciIkDPn3Wry1wpX7olrEo4OWrfaZNpyqd+BJ/LPjPguBF
+         gl9PNLRq7BcH56lCzh8ERWJSpYb5G5Z5B13I339oOtu+z1Nxnj8L1BLsqjCS3CweW0O+
+         wiVKUvNQBHfB722/FyHb3oBtiWg8afP9P6UBFrvHfs8VpyJpxvwnysI8y3vdpyrxhxbk
+         H9BcimszVBeYy/uMfGGOJtb6hfYBOr+mXPjtOlrqQH9VploIq411iZ+MJutiq7SdVut7
+         dBNrtE+1Nus/zTAmOBe72/PVaHhTzbRFIfEFKn9E+Y2uPGQbdzxOYTIYlpyrWFPV0WvF
+         6SVg==
+X-Gm-Message-State: APjAAAWVoOUUVUvDFsw5Fnrv6auKLy5mXR+wkZrNeONcQWD+0JDaLf9x
+        3TV5jLg8JhWvWysZ+5MgxV64zn3bPkhpHvdWKVP1cA==
+X-Google-Smtp-Source: APXvYqwVqa3ntHGFTJZakMoLSi/yRzk3PWsVbI/cLCjoEnPNVFZGy9RtSFmcdpmUA1Y9q+WNK2/Mv8JK1l9BXaYiT7I=
+X-Received: by 2002:a2e:894b:: with SMTP id b11mr10670560ljk.152.1570225103606;
+ Fri, 04 Oct 2019 14:38:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1569572448.git.baolin.wang@linaro.org> <c3070351e137bffd2b4b639fb14b1baa19df5641.1569572448.git.baolin.wang@linaro.org>
-In-Reply-To: <c3070351e137bffd2b4b639fb14b1baa19df5641.1569572448.git.baolin.wang@linaro.org>
+References: <cover.1569572448.git.baolin.wang@linaro.org> <a6b18f17b995bceaf2fc0129866301dd8f46bee4.1569572448.git.baolin.wang@linaro.org>
+In-Reply-To: <a6b18f17b995bceaf2fc0129866301dd8f46bee4.1569572448.git.baolin.wang@linaro.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 4 Oct 2019 23:36:48 +0200
-Message-ID: <CACRpkdYNXcL3StU4sX2Yyvz5zH1RFr5E6mvAm+1dJFOC5ophxg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] hwspinlock: u8500_hsem: Use devm_kzalloc() to
- allocate memory
+Date:   Fri, 4 Oct 2019 23:38:12 +0200
+Message-ID: <CACRpkdYF3hPit5EgWCXuM1exoWMFn_7k=OyM99ojS9WeJeMRFw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] hwspinlock: u8500_hsem: Use devm_hwspin_lock_register()
+ to register hwlock controller
 To:     Baolin Wang <baolin.wang@linaro.org>
 Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -63,7 +63,8 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 
 On Fri, Sep 27, 2019 at 10:28 AM Baolin Wang <baolin.wang@linaro.org> wrote:
 
-> Use devm_kzalloc() to allocate memory.
+> Use devm_hwspin_lock_register() to register the hwlock controller instead of
+> unregistering the hwlock controller explicitly when removing the device.
 >
 > Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
 
