@@ -2,111 +2,89 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 941F1CC5DD
-	for <lists+linux-remoteproc@lfdr.de>; Sat,  5 Oct 2019 00:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46FDCC797
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  5 Oct 2019 06:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388673AbfJDW1a (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 4 Oct 2019 18:27:30 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:37048 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388462AbfJDW1R (ORCPT
+        id S1725985AbfJEEBo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 5 Oct 2019 00:01:44 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:45559 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbfJEEBo (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 4 Oct 2019 18:27:17 -0400
-Received: by mail-pl1-f193.google.com with SMTP id u20so3766118plq.4
-        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Oct 2019 15:27:16 -0700 (PDT)
+        Sat, 5 Oct 2019 00:01:44 -0400
+Received: by mail-pl1-f194.google.com with SMTP id u12so4034628pls.12
+        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Oct 2019 21:01:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=GFLy/0NyLkAXTIQiU1ce2NkpxRNc39jMeEi2th9+Q/o=;
-        b=eMDlZ5C4geR0qxdtOA7FQXHpGKcU764pJI+ckB/wRPRbnEdzquTg+GeL1UgEUsmnk0
-         jeSsXMD1cn1W6BUxFWgqVS9IbdqQe/yRGbtgFA5kPzZh/c09SFslyvmFKvlSFAtnJUJK
-         yQ/O1ntAwl4AxLX/8GBUDX3qSznBkuf9hy9852LB2Bt34HdrHe1RPEMpTbLBJztA2Rwq
-         Bhkg8N5Ma4UtUDVaOJhBdTy/ZL+CSAMS0Vc4pJggWaKhY/7ZFA229MdQnDpH/vwvWnxs
-         5BIrmixZiqVBMO3Hcu29/Akw1P2MiGQvNo08ChJ61GndxQw8ivpAbbaUl7S5kVAuMM2a
-         gU0w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=x5hylgRMeRU8L9fHC/1Fb4E//rkwEdbksV9F9/mIRbA=;
+        b=ZL7XnJSQG3L3uQDFU4czS6QDWOm9UGODjWe8twIXjS5XOj1lqsERlLXOaoDIskWGHy
+         6z/Yzl09u40RoGg6/DCOkTTjF7lInbF2TxUcC+T5yOmiAEj5FKYFD/o/Qv9gQwrXS58k
+         JQgHmXH4W8zDjaGy8RSBw6Qc3w/bz/QINI7yzHkQJQ9loIb6Bhq7nWT77w/93ft2RKAf
+         2XeffjCIgE4yaQLDp3/l/RR/3gpii0MEEisdFjwkwaxU3g1fVr82cbaA+jZan2I57qNm
+         sMjR/wxk592/TM9Gkp4YJbWYbTizqQBa0gkDJKniwRn+wal86zZFwUemuzGKQ88QRnPC
+         dXSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=GFLy/0NyLkAXTIQiU1ce2NkpxRNc39jMeEi2th9+Q/o=;
-        b=XeDUnxBplELt3SukTJaLw77wfm1qYFBPiaJhKEbJQKNTobcC7pJw1onvSDOchIqhbI
-         FU2vKwIizXkrvSjnOxu4lUkxUZTQFc1yiOUdg17tMc5ncl4k9LTnNGMmCG8zQ/z7t2gk
-         g55Dxe3rvonXp4E2CP85lmmyiCQ0jMxxIiFFdzydAVNzuvPJGKHdCmK+5N2SxcfZPS+s
-         4/5K5dLluKSIZil+qJh4f2ZVryH58iS4NXDy+4kXpidyIVRkUqRyOLWc+IapllZLOGnf
-         QIbMnKL3q9PtHPDNkfmbZC2hi868YaF7/gQbRZXc2k/oHOC+KW6vTjihzwLxO3Dh4WkT
-         b65w==
-X-Gm-Message-State: APjAAAXqgut5+ze5Z/CYc7KPkvHeUlYrlxHnjs5iFYNRQUJL36qpINhO
-        upVB+QpzhU6aiRrcojnVKY+NCA==
-X-Google-Smtp-Source: APXvYqw1y1k1dQjfISY8Rlcv8/TXflrZEIvSua9hRpUEkHIzv5roMO4L0pRE+8eTT3CbNrOsb8lBCA==
-X-Received: by 2002:a17:902:d916:: with SMTP id c22mr17525848plz.101.1570228036266;
-        Fri, 04 Oct 2019 15:27:16 -0700 (PDT)
-Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id x37sm6328136pgl.18.2019.10.04.15.27.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Oct 2019 15:27:15 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=x5hylgRMeRU8L9fHC/1Fb4E//rkwEdbksV9F9/mIRbA=;
+        b=qZbLMA72M7+18h8evzr+XSfkw+TdREuTAxJ9tOWxwAdyp6PDKoWAvVd/8DdHShDpN1
+         lFDr91KBi7eVvdySwyKkBEEn/2/W2+cvDukNwHGs72qgQzH2Olsjv+rwrwAMX4dYDknr
+         XyX5OrQwBfsxm/AY2LnnmSbC3QNCRnZ8hQO/5JgyFWa2TRM9zO52sPD7PPofMrvxcXkc
+         WW/t8NqhFcQYMnNPb0TL5uvP7/DA/iD8PcgZM/48stRzj9kv0iz4Sf1Q+0PziCe/jznS
+         Ii/SZHnaCXJtaVfQUujrCyYyD2MskBspfAqhxzBQLHVpyn7+DOLXpRaDPBmpXp7QJVp7
+         XDSw==
+X-Gm-Message-State: APjAAAUYVS9iCU1ASwK6jS2iMw1g1d1561gdGrBn2s7b1TG0p6OOfIrS
+        XFKadHMNlX+TKCVNO6DO/Ohtzw==
+X-Google-Smtp-Source: APXvYqwtVfC9awsCX31ooNBVQ9ZPETZdMu5K40YYblKAeEdWHBXOtuqnI4Fa/lwyS5uv0R5M4KJ3+A==
+X-Received: by 2002:a17:902:bb89:: with SMTP id m9mr18180654pls.315.1570248102165;
+        Fri, 04 Oct 2019 21:01:42 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id f12sm6064016pgo.85.2019.10.04.21.01.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2019 21:01:41 -0700 (PDT)
+Date:   Fri, 4 Oct 2019 21:01:39 -0700
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH v2 6/6] rpmsg: glink: Free pending deferred work on remove
-Date:   Fri,  4 Oct 2019 15:27:02 -0700
-Message-Id: <20191004222702.8632-7-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20191004222702.8632-1-bjorn.andersson@linaro.org>
-References: <20191004222702.8632-1-bjorn.andersson@linaro.org>
+To:     Baolin Wang <baolin.wang@linaro.org>
+Cc:     linus.walleij@linaro.org, ohad@wizery.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] Optimize the u8500_hsem hwlock driver
+Message-ID: <20191005040139.GA5189@tuxbook-pro>
+References: <cover.1569572448.git.baolin.wang@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1569572448.git.baolin.wang@linaro.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-By just cancelling the deferred rx worker during GLINK instance teardown
-any pending deferred commands are leaked, so free them.
+On Fri 27 Sep 01:27 PDT 2019, Baolin Wang wrote:
 
-Fixes: b4f8e52b89f6 ("rpmsg: Introduce Qualcomm RPM glink driver")
-Cc: stable@vger.kernel.org
-Tested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
+> This patch set did some Optimization with changing to use devm_xxx()
+> APIs to simplify the code and make code more readable.
+> 
 
-Changes since v1:
-- None
+Applied, with Linus' r-b
 
- drivers/rpmsg/qcom_glink_native.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+Thanks,
+Bjorn
 
-diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-index 4117818db6a1..862f89c128a0 100644
---- a/drivers/rpmsg/qcom_glink_native.c
-+++ b/drivers/rpmsg/qcom_glink_native.c
-@@ -1562,6 +1562,18 @@ static void qcom_glink_work(struct work_struct *work)
- 	}
- }
- 
-+static void qcom_glink_cancel_rx_work(struct qcom_glink *glink)
-+{
-+	struct glink_defer_cmd *dcmd;
-+	struct glink_defer_cmd *tmp;
-+
-+	/* cancel any pending deferred rx_work */
-+	cancel_work_sync(&glink->rx_work);
-+
-+	list_for_each_entry_safe(dcmd, tmp, &glink->rx_queue, node)
-+		kfree(dcmd);
-+}
-+
- struct qcom_glink *qcom_glink_native_probe(struct device *dev,
- 					   unsigned long features,
- 					   struct qcom_glink_pipe *rx,
-@@ -1640,7 +1652,7 @@ void qcom_glink_native_remove(struct qcom_glink *glink)
- 	unsigned long flags;
- 
- 	disable_irq(glink->irq);
--	cancel_work_sync(&glink->rx_work);
-+	qcom_glink_cancel_rx_work(glink);
- 
- 	ret = device_for_each_child(glink->dev, NULL, qcom_glink_remove_device);
- 	if (ret)
--- 
-2.18.0
-
+> Baolin Wang (3):
+>   hwspinlock: u8500_hsem: Change to use
+>     devm_platform_ioremap_resource()
+>   hwspinlock: u8500_hsem: Use devm_kzalloc() to allocate memory
+>   hwspinlock: u8500_hsem: Use devm_hwspin_lock_register() to register
+>     hwlock controller
+> 
+>  drivers/hwspinlock/u8500_hsem.c |   46 +++++++++++----------------------------
+>  1 file changed, 13 insertions(+), 33 deletions(-)
+> 
+> -- 
+> 1.7.9.5
+> 
