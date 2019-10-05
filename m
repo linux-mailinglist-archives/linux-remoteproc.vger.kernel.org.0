@@ -2,95 +2,111 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D16CC79D
-	for <lists+linux-remoteproc@lfdr.de>; Sat,  5 Oct 2019 06:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9FCCC7A2
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  5 Oct 2019 06:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726308AbfJEEES (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 5 Oct 2019 00:04:18 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:46801 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726345AbfJEEES (ORCPT
+        id S1725901AbfJEELY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 5 Oct 2019 00:11:24 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35839 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725780AbfJEELY (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 5 Oct 2019 00:04:18 -0400
-Received: by mail-pl1-f196.google.com with SMTP id q24so4029522plr.13
-        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Oct 2019 21:04:18 -0700 (PDT)
+        Sat, 5 Oct 2019 00:11:24 -0400
+Received: by mail-pl1-f195.google.com with SMTP id c3so2587143plo.2
+        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Oct 2019 21:11:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=OjGNki1OtQEb9lfJ7oq86arnt9zKkyVmO56fkHyMMNA=;
-        b=Pp6cHGV1T9C8JGOPqZ5ZlA9zXuRKxXrYBXa6Q2bspKkZUoX386pJe8QJw46fHhziqm
-         8j/2teWNFBYM2iCiHz7ob8qRgIdwmV7GC3BZx3x69bactMZ8RjbBVdKIZPUo1w5m5ps4
-         ejo/g6edELC3BDyPX/gbtLItFz+PLvNDxaJu687yKIH4PJwSGkl6kFS4jDU14ykmX5nw
-         6APu1NGSXU+hNcwJXnyikT+VUBu06OGpl4nyvonvmsNDZsTVz2edgyqHWFT2TUzfqPgj
-         JFzpk626GQUK+YX/orjIwdxS80DqzXyIyuHerWR8I/nDx5vWN+mzZa8ki2K3ekV3nK/a
-         Wbag==
+        bh=t0KK5kDc3BGvKYa9NLsd7g6q4Th9UgAo7OcVPXPPYO4=;
+        b=dqyMZ2FtDdESvf1uGmYhkStDK+KlEYZpOVgofMrfaOM4jUYKePjP9qYp3llBEX5UhS
+         NySHtjJSP7Qpp7I2GGdFis+TE7L10nvOeImksy/suvcWAJeB9JhiwKP190GWrRr0eEa3
+         5s91lgT4qdRXTaaKOTjLOmpxoiPJdpJAm7mxCHcPIAVaMkROMpCL656h9Al41tGZUU7e
+         2PFkd9eGF4FnKxovQ0rHEG9xAzCNJBjyOyAu6b8vcE3l8E8GyYO9seW/vJJCa7U4dmtv
+         Lisfe3A0yM6cd5Gjh8HhlP65jOXPdXHUv4Yw379hErm77/HVNVov22uDZJJrBzaLFzdW
+         EEXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OjGNki1OtQEb9lfJ7oq86arnt9zKkyVmO56fkHyMMNA=;
-        b=potsPVCgZfk4IENsqOfX9EDo8vdwC/7x7nAfZqY6j+magyKlF2TaMeSolt1RQlcMYK
-         Eg1g/kAMdreJVQ5WVlWVuM8SkqlU/n1/9nNE6QT1hgUbSLRJ42tth6AXZpNDqLqPnCzS
-         lwETIgXL/XhcqXtNf9ZHREDeAPf1E1/oobH29H6fAiTNkwP+5q9K9UCuQ8jAmy6OTVkL
-         YGkEdn2xaj5iaSzzw9ZKcJhCA77hY8z17bDGgA58X3jTVgbenk9+pc+nJILPFRKsxLlq
-         VG5PmaLsF1Z1d5uUtYE26W2Ao4PZ2wvzxGG84jlW9KwOx0rK57QISU8rREddIsLMjj4a
-         CJ8Q==
-X-Gm-Message-State: APjAAAXMMI6PQj2o1/hDKh+k5Q2OpauVxKaomVyTxw6yAI2Fp+f77vui
-        8sVSPRPPTJ48jTTimEjBxgOP6uop4gs=
-X-Google-Smtp-Source: APXvYqzY08m6btRbimG2q898DgnjetYaB0eC4YSy8klHl9oR6CrMbJJ7A0hsMqeg/pYeKNIZosDu3g==
-X-Received: by 2002:a17:902:d896:: with SMTP id b22mr18251348plz.140.1570248257806;
-        Fri, 04 Oct 2019 21:04:17 -0700 (PDT)
+        bh=t0KK5kDc3BGvKYa9NLsd7g6q4Th9UgAo7OcVPXPPYO4=;
+        b=d/1SfCR9jAd2ZCdkcz+/3L99Gqit5Q3b8qS4Fusf4v8pZj8E9uWusPU26EDWWbml6e
+         sArPiTcFyX/MctreJa7fEMVwzPOSrqMeUSW3MQhNsuMoV3hPITPcbWAisPK5Yau8Pc/m
+         f0TX8Om0OSWX70/pdBsHHPym4hIstbh+3yTKk9mxG9rap6ZKwy40KSbwZVLdPygT/qg4
+         X0YaK3FpKDFWGmczKnU0zErv+ZNSMB6PX/10r7b2sw49kmn7wWyEvDFyfj7wvvNjd7rr
+         qXZ/6x55gwAVQyT4gDQPl1JrrwnjS8rLKVgjl1HwDEsOaQTqkkbIKE6VIB4qtX/LpcmF
+         Fu2A==
+X-Gm-Message-State: APjAAAWaSkLnzYhsN0Jw6DlKI5/DUZnU3pB3AiLg4oJRH2z37cd0QAzN
+        Ulvp9uKJNBFj+xp6Lc8H9F1VqA==
+X-Google-Smtp-Source: APXvYqzJ5RoSNwhtxPC9J1Ys7yTYGq1XbNqiQf5PeMcJF90tciZpgcs207IUEEzj0IhsIGfGbX10kQ==
+X-Received: by 2002:a17:902:be03:: with SMTP id r3mr17251748pls.99.1570248683083;
+        Fri, 04 Oct 2019 21:11:23 -0700 (PDT)
 Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id r24sm7824649pfh.69.2019.10.04.21.04.16
+        by smtp.gmail.com with ESMTPSA id y15sm7989127pfp.111.2019.10.04.21.11.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2019 21:04:17 -0700 (PDT)
-Date:   Fri, 4 Oct 2019 21:04:15 -0700
+        Fri, 04 Oct 2019 21:11:22 -0700 (PDT)
+Date:   Fri, 4 Oct 2019 21:11:20 -0700
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Clement Leger <cleger@kalray.eu>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] remoteproc: remove useless typedef
-Message-ID: <20191005040415.GC5189@tuxbook-pro>
-References: <20191004174424.21898-1-cleger@kalray.eu>
+To:     Baolin Wang <baolin.wang@linaro.org>
+Cc:     ohad@wizery.com, orsonzhai@gmail.com, zhang.lyra@gmail.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] hwspinlock: sprd: Use devm_hwspin_lock_register() to
+ register hwlock controller
+Message-ID: <20191005041120.GD5189@tuxbook-pro>
+References: <cover.1569567749.git.baolin.wang@linaro.org>
+ <e8f1db04571f62298c7a4f72be803b9b9974d12d.1569567749.git.baolin.wang@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191004174424.21898-1-cleger@kalray.eu>
+In-Reply-To: <e8f1db04571f62298c7a4f72be803b9b9974d12d.1569567749.git.baolin.wang@linaro.org>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri 04 Oct 10:44 PDT 2019, Clement Leger wrote:
+On Fri 27 Sep 00:10 PDT 2019, Baolin Wang wrote:
 
-> rproc_handle_resources_t is not used anymore, remove it.
+> Use devm_hwspin_lock_register() to register the hwlock controller instead of
+> unregistering the hwlock controller explicitly when removing the device.
 > 
-> Signed-off-by: Clement Leger <cleger@kalray.eu>
+> Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
 
-Applied
+Thanks Baolin, series applied.
 
-Thanks,
+Regards,
 Bjorn
 
 > ---
->  drivers/remoteproc/remoteproc_core.c | 2 --
->  1 file changed, 2 deletions(-)
+>  drivers/hwspinlock/sprd_hwspinlock.c |    8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 48feebd6d0a2..78e00194e72f 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -52,8 +52,6 @@
->  static DEFINE_MUTEX(rproc_list_mutex);
->  static LIST_HEAD(rproc_list);
+> diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
+> index e76c702..44d69db 100644
+> --- a/drivers/hwspinlock/sprd_hwspinlock.c
+> +++ b/drivers/hwspinlock/sprd_hwspinlock.c
+> @@ -135,8 +135,9 @@ static int sprd_hwspinlock_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, sprd_hwlock);
+>  	pm_runtime_enable(&pdev->dev);
 >  
-> -typedef int (*rproc_handle_resources_t)(struct rproc *rproc,
-> -				struct resource_table *table, int len);
->  typedef int (*rproc_handle_resource_t)(struct rproc *rproc,
->  				 void *, int offset, int avail);
+> -	ret = hwspin_lock_register(&sprd_hwlock->bank, &pdev->dev,
+> -				   &sprd_hwspinlock_ops, 0, SPRD_HWLOCKS_NUM);
+> +	ret = devm_hwspin_lock_register(&pdev->dev, &sprd_hwlock->bank,
+> +					&sprd_hwspinlock_ops, 0,
+> +					SPRD_HWLOCKS_NUM);
+>  	if (ret) {
+>  		pm_runtime_disable(&pdev->dev);
+>  		return ret;
+> @@ -147,9 +148,6 @@ static int sprd_hwspinlock_probe(struct platform_device *pdev)
 >  
+>  static int sprd_hwspinlock_remove(struct platform_device *pdev)
+>  {
+> -	struct sprd_hwspinlock_dev *sprd_hwlock = platform_get_drvdata(pdev);
+> -
+> -	hwspin_lock_unregister(&sprd_hwlock->bank);
+>  	pm_runtime_disable(&pdev->dev);
+>  	return 0;
+>  }
 > -- 
-> 2.15.0.276.g89ea799
+> 1.7.9.5
 > 
