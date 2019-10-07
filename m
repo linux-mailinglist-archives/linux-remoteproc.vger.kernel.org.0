@@ -2,99 +2,118 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F00CC7A3
-	for <lists+linux-remoteproc@lfdr.de>; Sat,  5 Oct 2019 06:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A543CCDC7C
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  7 Oct 2019 09:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbfJEEMM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 5 Oct 2019 00:12:12 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45971 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725270AbfJEEML (ORCPT
+        id S1727028AbfJGHkF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 7 Oct 2019 03:40:05 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:15466 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726202AbfJGHkF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 5 Oct 2019 00:12:11 -0400
-Received: by mail-pf1-f195.google.com with SMTP id y72so5046620pfb.12
-        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Oct 2019 21:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=tDHZY7i0iziEELzVvxjqEm4cMO1oJyX/TqJTG8MncDg=;
-        b=UPKPu6nDI5XZ9uTUtEwlP++RWapEu7sLryWy6tCdsxYHzissWIHoJvw7OunllnzsI0
-         Fes1SNsHRK6F9GjLIpw4lLQ+VViQOfjSP9+TFRXVEalhCzESQzgWXOH+RhP6TMQsYa33
-         DMZw6lwW6+r808ZXFPTdxFryomDOgv7XXRizBZ4h+kNoUM0JMfNkAeJ2JvKKs21sqCZU
-         ZJTfJtafPPkhdGM9AQegnQic+jFTqOHg30eUlNOyJuzEbLZymKwi4xDz3GqKmIeD4vbQ
-         U7hwDsxMDCp87jm1JNJ45UbYMJiaoACncCOriJh7PrThULEdhtneq3UmWJNowvu8N6KU
-         8Kiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tDHZY7i0iziEELzVvxjqEm4cMO1oJyX/TqJTG8MncDg=;
-        b=EQQiWIeTCXPfnBBGLuP0vulbp6r0nGmn+FhVvuFqFYR6IFvOBbOVwM/LZVxKgwScDx
-         WM7G1x08+Dj84O/V2vrynkI5f/KPKGhJ+IiMNkRm0SlmJ6FsQ9CAGAj9WBtZcW7MXGJj
-         GnbTNvxdJczFnCrJmX8zRYEViZ7aoC/YVHiDzYMMwjoKtp9mjP1d2GNAs6l6NajP05h+
-         bJHJ4AUceCj3f8+z25VgtPC/N8Qa7ZvJSL3uIAVgg+bWP2YICAnccmDcdsg9NBD+YnUI
-         8GHGqdqLj99cLOkl/zL/uVBq0PRjfO1TYA0kP5J+UG+O4+k/QnGFkyaDt1MuHyPiatzV
-         bghw==
-X-Gm-Message-State: APjAAAUkSsV4B62C1qsOaXFGNESlz4UNvKcyThmsMsuflHQw4WT/dFCT
-        VjSEdzYxpFVIdPopZTwNTWHzad3NHeI=
-X-Google-Smtp-Source: APXvYqwDeF6E+Fovx/kwk+nnBJeWviqZdubVrtEeOznS/FjWQiJA1r0rVtuOGIKn7exk+jjcR7Glhg==
-X-Received: by 2002:aa7:85d3:: with SMTP id z19mr20517130pfn.1.1570248731163;
-        Fri, 04 Oct 2019 21:12:11 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id e10sm9645914pfh.77.2019.10.04.21.12.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2019 21:12:10 -0700 (PDT)
-Date:   Fri, 4 Oct 2019 21:12:08 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ding Xiang <dingxiang@cmss.chinamobile.com>
-Cc:     ohad@wizery.com, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] remoteproc: debug: Remove unneeded NULL check
-Message-ID: <20191005041208.GE5189@tuxbook-pro>
-References: <1569293934-31451-1-git-send-email-dingxiang@cmss.chinamobile.com>
+        Mon, 7 Oct 2019 03:40:05 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x977aF2Y014406;
+        Mon, 7 Oct 2019 09:39:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=m3OyRh20IsuSdC821f/Laf3LJyFMmb9KB8SD6mKa7/I=;
+ b=u21KJqeQcMYLKZwGdKH1kTAjSD+wNxaCYw4DpIe0p15aUURCwUtaaDLsUB1jxz7HJ8da
+ XSc+TEKh6yPtZ120PI7zVpvnPww5Xy7ihjyyB1KgK0XRTCsTziuaUSyIh0kz0Oq9oC1p
+ unReVzEqGNoxED5BBmQB5ynF4YKYpVrG1IRYRBCZ6fcEEmFYFFYFabwuKyPwoGgEXQek
+ jmubxA7IcAmESJWc3PwMZPnkZ+LJcbHn0m7ex3m5modRhlmD1DlybuEuej2hI59Vlo65
+ 6KFHUZ++s/oZCBfR6H2mki2XI2boJYez94Jorqg9gbzdzaRxfMtucoMxaGSiDnvirl0J Ew== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2vegags6y9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Oct 2019 09:39:57 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 882F510002A;
+        Mon,  7 Oct 2019 09:39:56 +0200 (CEST)
+Received: from Webmail-eu.st.com (Safex1hubcas22.st.com [10.75.90.92])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 773FA2AECC6;
+        Mon,  7 Oct 2019 09:39:56 +0200 (CEST)
+Received: from SAFEX1HUBCAS23.st.com (10.75.90.46) by Safex1hubcas22.st.com
+ (10.75.90.92) with Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 7 Oct 2019
+ 09:39:56 +0200
+Received: from localhost (10.201.23.25) by webmail-ga.st.com (10.75.90.48)
+ with Microsoft SMTP Server (TLS) id 14.3.439.0; Mon, 7 Oct 2019 09:39:55
+ +0200
+From:   Fabien Dessenne <fabien.dessenne@st.com>
+To:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+CC:     Fabien Dessenne <fabien.dessenne@st.com>,
+        Loic Pallardy <loic.pallardy@st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Subject: [PATCH v2] remoteproc: stm32: fix probe error case
+Date:   Mon, 7 Oct 2019 09:39:51 +0200
+Message-ID: <1570433991-16353-1-git-send-email-fabien.dessenne@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1569293934-31451-1-git-send-email-dingxiang@cmss.chinamobile.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
+X-Originating-IP: [10.201.23.25]
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-07_01:2019-10-03,2019-10-07 signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon 23 Sep 19:58 PDT 2019, Ding Xiang wrote:
+If the rproc driver is probed before the mailbox driver and if the rproc
+Device Tree node has some mailbox properties, the rproc driver probe
+shall be deferred instead of being probed without mailbox support.
 
-> debugfs_remove_recursive will do NULL check, so remove
-> the redundant null check
-> 
+Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
+---
+Changes since v1: test IS_ERR() before checking PTR_ERR()
+---
+ drivers/remoteproc/stm32_rproc.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Nice, applied.
+diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+index 2cf4b29..a507332 100644
+--- a/drivers/remoteproc/stm32_rproc.c
++++ b/drivers/remoteproc/stm32_rproc.c
+@@ -310,7 +310,7 @@ static const struct stm32_mbox stm32_rproc_mbox[MBOX_NB_MBX] = {
+ 	}
+ };
+ 
+-static void stm32_rproc_request_mbox(struct rproc *rproc)
++static int stm32_rproc_request_mbox(struct rproc *rproc)
+ {
+ 	struct stm32_rproc *ddata = rproc->priv;
+ 	struct device *dev = &rproc->dev;
+@@ -329,10 +329,14 @@ static void stm32_rproc_request_mbox(struct rproc *rproc)
+ 
+ 		ddata->mb[i].chan = mbox_request_channel_byname(cl, name);
+ 		if (IS_ERR(ddata->mb[i].chan)) {
++			if (PTR_ERR(ddata->mb[i].chan) == -EPROBE_DEFER)
++				return -EPROBE_DEFER;
+ 			dev_warn(dev, "cannot get %s mbox\n", name);
+ 			ddata->mb[i].chan = NULL;
+ 		}
+ 	}
++
++	return 0;
+ }
+ 
+ static int stm32_rproc_set_hold_boot(struct rproc *rproc, bool hold)
+@@ -596,7 +600,9 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto free_rproc;
+ 
+-	stm32_rproc_request_mbox(rproc);
++	ret = stm32_rproc_request_mbox(rproc);
++	if (ret)
++		goto free_rproc;
+ 
+ 	ret = rproc_add(rproc);
+ 	if (ret)
+-- 
+2.7.4
 
-Regards,
-Bjorn
-
-> Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
-> ---
->  drivers/remoteproc/remoteproc_debugfs.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
-> index 8cd4a0a..dd93cf0 100644
-> --- a/drivers/remoteproc/remoteproc_debugfs.c
-> +++ b/drivers/remoteproc/remoteproc_debugfs.c
-> @@ -333,9 +333,6 @@ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
->  
->  void rproc_delete_debug_dir(struct rproc *rproc)
->  {
-> -	if (!rproc->dbg_dir)
-> -		return;
-> -
->  	debugfs_remove_recursive(rproc->dbg_dir);
->  }
->  
-> -- 
-> 1.9.1
-> 
-> 
-> 
