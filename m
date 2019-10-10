@@ -2,78 +2,123 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C661D2AE7
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 10 Oct 2019 15:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DE8D2D7E
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 10 Oct 2019 17:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388290AbfJJNRu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 10 Oct 2019 09:17:50 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:43994 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388292AbfJJNRo (ORCPT
+        id S1726083AbfJJPQo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 10 Oct 2019 11:16:44 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:52808 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725959AbfJJPQo (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 10 Oct 2019 09:17:44 -0400
-Received: by mail-ot1-f67.google.com with SMTP id o44so4795098ota.10
-        for <linux-remoteproc@vger.kernel.org>; Thu, 10 Oct 2019 06:17:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ub-ac-id.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
-        b=kbDD0ETnfb+9T5ky4afnuU19WL5B3TgSTtrvr8/78l52RfSJ/bD7cjcm8C45XsJ4wr
-         kY8zUv/ms1sLDr56E/0rqAcpldgbTirzVsO1TqrlTRt5AL5IhxusLfWbWkCQZqSDApog
-         xVZixZPZF5pv+wD9wYHHFszyBuRJ0Z0/71+2E/SGgHwnMzv66/86w9uplcX1z0grTv9p
-         1TYZ7MtIagYr+hnMPgyspL8CH18dkY1RexU6NSgr6L6/lGHi7jHNMmmGOoiBuh2azqNd
-         aWHFVXbx5cxjkbX5kJe7PAp4IU2wf06fogqa+YoO9ylF7jna+POCU+xNsHXT6R2wFQg9
-         YqYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
-        b=IZDs/vL3judsU5rstn8/uAdNDScBj7+g6n0YMBOWIdHCGDEgn36Igm4HhDLY5i7eVT
-         cI8w1d3zW9oXIzpVLuTRxhUxz91h5p5dG1nlUNzvh63FyB+n5j74nZErWQiZ4etFB1Gi
-         0grPlc82DqRwTNmzGeouI1IuhGCeyIX5Jw0RS0268NeNUwc+E86QB8aAOh9Ks+uKQCbL
-         O7M90B9kbysLE0pnkcLGMngeQvWLe2VT+HAJgacBENyV/7+3hD8g8MCzZ4VO3eIKWN6i
-         wuc0N/iSWGkkZY0ekaMOOjPd0eSopw761HBn3vmlgM53UOncX24eWGubHyLYNtc5a5/N
-         oazw==
-X-Gm-Message-State: APjAAAXxgYdRznF7MmOmbgNmm4ozjFVTAToXSqcub1V15Glw3Rk/Ommf
-        TU74smHzo4IIdrCsv3jKr1FD9SGaew33qSClF/BJ
-X-Google-Smtp-Source: APXvYqwe5B6z/3dUuNDQtQ0n2oQYOsdY3HQR3dkIin1gqVhu0NNteov05tKzv4DhJBBR4bjK2RG7Phnj6WUHoBrkRYc=
-X-Received: by 2002:a05:6830:1103:: with SMTP id w3mr7909437otq.312.1570713462861;
- Thu, 10 Oct 2019 06:17:42 -0700 (PDT)
+        Thu, 10 Oct 2019 11:16:44 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9AFBKhQ025036;
+        Thu, 10 Oct 2019 17:16:20 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=WdF442jlxXHtW99D7VXviowbwCBFKKqETJKUfQQ750w=;
+ b=mm2aIehas26Nib8HsLOMFdpsO23R7o8VnUJ+GWdEZjSLZR9ZOFAHky36iI4Br1lxJ3Sk
+ avwn9mmM/xIpqctgJhEm9dhtDoAAVur2AUA24mzmir1bc7GfdSSENlTsoxZSjM1Hwdhc
+ Y9/ElLzy6dDdBMiJdyB5L0mLKFzGbnEPa5jMvbKMsKX5r6+Bfg/UXc6AmbV6JqTQO4AY
+ 8Jklj38blZDBAAgFPOruDqxcjSdUcSJEi4/Uo81ZOOIsbQpsCxarYtqW4GV0lYAl2b/e
+ mDwA9H2Ajdi8ApxoA9I0ppL9aM69bXJCPv2By43adSY7PAYuJiqsDgbVSOi3MgUE7bl7 3g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2vej2pmt2t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Oct 2019 17:16:20 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 40B5A10002A;
+        Thu, 10 Oct 2019 17:16:19 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag7node2.st.com [10.75.127.20])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9391E2B433F;
+        Thu, 10 Oct 2019 17:16:19 +0200 (CEST)
+Received: from SFHDAG5NODE3.st.com (10.75.127.15) by SFHDAG7NODE2.st.com
+ (10.75.127.20) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 10 Oct
+ 2019 17:16:19 +0200
+Received: from SFHDAG5NODE3.st.com ([fe80::7c09:5d6b:d2c7:5f47]) by
+ SFHDAG5NODE3.st.com ([fe80::7c09:5d6b:d2c7:5f47%20]) with mapi id
+ 15.00.1473.003; Thu, 10 Oct 2019 17:16:19 +0200
+From:   Fabien DESSENNE <fabien.dessenne@st.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre TORGUE <alexandre.torgue@st.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-stm32@st-md-mailman.stormreply.com" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>
+CC:     Loic PALLARDY <loic.pallardy@st.com>,
+        Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Subject: RE: [PATCH 0/2] remoteproc: stm32: allow wdg irq to be a wakeup
+ source
+Thread-Topic: [PATCH 0/2] remoteproc: stm32: allow wdg irq to be a wakeup
+ source
+Thread-Index: AQHVXCRbzfqre7GQVUu6MRQERXnqfqdUQtwQ
+Date:   Thu, 10 Oct 2019 15:16:19 +0000
+Message-ID: <1bef12295e864dfa90edfa495803167f@SFHDAG5NODE3.st.com>
+References: <1566833923-16718-1-git-send-email-fabien.dessenne@st.com>
+In-Reply-To: <1566833923-16718-1-git-send-email-fabien.dessenne@st.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.51]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Received: by 2002:a4a:3346:0:0:0:0:0 with HTTP; Thu, 10 Oct 2019 06:17:41
- -0700 (PDT)
-Reply-To: sunrisefundingltd50@gmail.com
-From:   Valentina Yurina <v_yurina@ub.ac.id>
-Date:   Thu, 10 Oct 2019 14:17:41 +0100
-Message-ID: <CAKoEkvu4vc5Yn9-hzxQ5dYmUL=oO69=GSP0FC7O+CGz9Jni8+Q@mail.gmail.com>
-Subject: Apply For Financial investment at a lower rate 2%
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-10_05:2019-10-10,2019-10-10 signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
--- 
-Hello,
+Hi
 
-We are private lenders based in UK.
+I Got Rob's Reviewed-by for the bindings. Any further comments for the driv=
+er part?
 
-Do you need a loan (credit) as soon as possible. Are you in search of
-money to solve your personal needs or finance your business venture,
-then get Your desired loan today! Consult us at Sunrise Funding Ltd.
+Fabien
 
-* We offer personal loan & huge capital loan at 2% interest rate to
-the general public both locally and internationally.
-* Credit amount range from $5,000.00 -- $500,000.00 and above.
-* Special $10,000,000.00 Loan offer for huge project also available.
-* Loan period of 6 months -- 10 years.
-* Loan is granted 24 hours after approval and accredited, directly in
-hand or bank account.
+> -----Original Message-----
+> From: Fabien DESSENNE <fabien.dessenne@st.com>
+> Sent: lundi 26 ao=FBt 2019 17:39
+> To: Rob Herring <robh+dt@kernel.org>; Mark Rutland <mark.rutland@arm.com>=
+;
+> Maxime Coquelin <mcoquelin.stm32@gmail.com>; Alexandre TORGUE
+> <alexandre.torgue@st.com>; Ohad Ben-Cohen <ohad@wizery.com>; Bjorn
+> Andersson <bjorn.andersson@linaro.org>; devicetree@vger.kernel.org; linux=
+-
+> stm32@st-md-mailman.stormreply.com; linux-arm-kernel@lists.infradead.org;
+> linux-kernel@vger.kernel.org; linux-remoteproc@vger.kernel.org
+> Cc: Fabien DESSENNE <fabien.dessenne@st.com>; Loic PALLARDY
+> <loic.pallardy@st.com>; Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+> Subject: [PATCH 0/2] remoteproc: stm32: allow wdg irq to be a wakeup sour=
+ce
+>=20
+> The watchdog IRQ which notifies the remote processor crash is used by the
+> remoteproc framework to perform a recovery procedure.
+> Since this IRQ may be fired when the Linux system is suspended, this IRQ =
+may
+> be configured to wake up the system.
+>=20
+> Fabien Dessenne (2):
+>   dt-bindings: remoteproc: stm32: add wakeup-source
+>   remoteproc: stm32: wakeup the system by wdg irq
+>=20
+>  .../devicetree/bindings/remoteproc/stm32-rproc.txt |  3 ++
+>  drivers/remoteproc/stm32_rproc.c                   | 47 ++++++++++++++++=
+++++++
+>  2 files changed, 50 insertions(+)
+>=20
+> --
+> 2.7.4
 
-Please note that you are advised to contact us for more details via
-the following e-mail address below;
-
-EMAIL : sunrisefundingltd50@gmail.com
-FIRM : Sunrise Funding Ltd UK.
