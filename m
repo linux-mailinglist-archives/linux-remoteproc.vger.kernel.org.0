@@ -2,166 +2,93 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B90D40A8
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Oct 2019 15:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C437FD413D
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Oct 2019 15:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728187AbfJKNKf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 11 Oct 2019 09:10:35 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:58764 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728165AbfJKNKf (ORCPT
+        id S1728463AbfJKN3q (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 11 Oct 2019 09:29:46 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:39826 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728084AbfJKN3q (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 11 Oct 2019 09:10:35 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9BD1KxH020165;
-        Fri, 11 Oct 2019 15:10:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=emcJkbiLu3r2aJUJMXuk+JlPciuPhdB5hKbfL02U1Nw=;
- b=f5el+5Dnm2ccge2r0zqzQrevdggKEtx0JSrlGaI42QWQFiPxJMOZb+mqARdTA8Ut8ynW
- IijfneV6zar49/RLjzvLQSzKR4rvYDbKs7vWnU0CBbBMTlRVsPd7G9lZfj6EpyM8HIYd
- Ihl179sBI7mLxs+9mZpkBRJU2LN5OE8QLZrI8kPCjovO86/xSVoegwmf74tdmX+jrGM4
- 968JERZuYCRubMIczhNYzyQTt2lJg/JH4od0ccGvcr3FebH9MFnjyiSCcedwBNGbiXQZ
- 1EDW84PN7djfoiUwmz9jUh3msBCwbdyjRQTDOH6mwWbbYzGOHyzNw6x/8//srDjdY3z1 XQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2vegn19yt6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Oct 2019 15:10:23 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B7381100034;
-        Fri, 11 Oct 2019 15:10:22 +0200 (CEST)
-Received: from Webmail-eu.st.com (Safex1hubcas21.st.com [10.75.90.44])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9CAB12BEC48;
-        Fri, 11 Oct 2019 15:10:22 +0200 (CEST)
-Received: from SAFEX1HUBCAS24.st.com (10.75.90.95) by SAFEX1HUBCAS21.st.com
- (10.75.90.44) with Microsoft SMTP Server (TLS) id 14.3.439.0; Fri, 11 Oct
- 2019 15:10:22 +0200
-Received: from localhost (10.201.20.122) by webmail-ga.st.com (10.75.90.48)
- with Microsoft SMTP Server (TLS) id 14.3.439.0; Fri, 11 Oct 2019 15:10:21
- +0200
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <ohad@wizery.com>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <mark.rutland@arm.com>,
-        <alexandre.torgue@st.com>
-CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH v2] dt-bindings: hwlock: Convert stm32 hwspinlock bindings to json-schema
-Date:   Fri, 11 Oct 2019 15:10:18 +0200
-Message-ID: <20191011131018.24035-1-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
+        Fri, 11 Oct 2019 09:29:46 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 0C7CC60CEC; Fri, 11 Oct 2019 13:29:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1570800585;
+        bh=EiKwHSUKsiWiPgzLbx9dlHgg4p/n/0K08eF4zyOdz3Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=On8aAXdMUAmGLZN9xDkKDWMVurA8De4UyAnP88mQCUhJrwg/s3dRzXWpo3PtOHgDj
+         rVY8jWpnDCha6xiYZC614Mwikegk5sO8C0p5yWJTbsyR3Vx4NLjgPdx9GWtwA+8ozu
+         Ryh6749jW3cmExUdLA3Xm/cowhQIdXIBsN6Xf7bg=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from govinds-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: govinds@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1EF1F60CEC;
+        Fri, 11 Oct 2019 13:29:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1570800584;
+        bh=EiKwHSUKsiWiPgzLbx9dlHgg4p/n/0K08eF4zyOdz3Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cqyi5D2vOYDfBeI8RdS7x/Xuw02YQqL8uq6QceJO48/rVPB2ZNsACm8Ba0FMMPdZG
+         KSSJulDzoNVz4mqYC3W4lhxdw19yglJ/6KFzCPI6erRCKFm93lb3J0uCktqoaNO9v7
+         GKLR0unUkZ2v1Avtd3whOcnxrAOFDt3KXI5z6rss=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1EF1F60CEC
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=govinds@codeaurora.org
+From:   Govind Singh <govinds@codeaurora.org>
+To:     robh@kernel.org, sboyd@kernel.org
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-soc@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Govind Singh <govinds@codeaurora.org>
+Subject: [PATCH v4 0/2] Add Q6SSTOP clock controller for QCS404
+Date:   Fri, 11 Oct 2019 18:59:26 +0530
+Message-Id: <20191011132928.9388-1-govinds@codeaurora.org>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.201.20.122]
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-11_08:2019-10-10,2019-10-11 signatures=0
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Convert the STM32 hwspinlock binding to DT schema format using json-schema
+Add support for the Q6SSTOP clock control used on qcs404
+based devices. This would allow wcss remoteproc driver to
+control the required WCSS Q6SSTOP clock/reset controls to
+bring the subsystem out of reset and shutdown the WCSS Q6DSP.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
----
-change in v2:
-- use BSD-2-Clause license
-- use const for #hwlock-cells
-- add additionalProperties: false
+Changes in v4:
+    - changed binding doc license to (GPL-2.0-only OR BSD-2-Clause).
 
- .../bindings/hwlock/st,stm32-hwspinlock.txt        | 23 ----------
- .../bindings/hwlock/st,stm32-hwspinlock.yaml       | 50 ++++++++++++++++++++++
- 2 files changed, 50 insertions(+), 23 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.txt
- create mode 100644 Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
+Changes in v3:
+    - Fixed dt binding errors.
 
-diff --git a/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.txt b/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.txt
-deleted file mode 100644
-index adf4f000ea3d..000000000000
---- a/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.txt
-+++ /dev/null
-@@ -1,23 +0,0 @@
--STM32 Hardware Spinlock Device Binding
---------------------------------------
--
--Required properties :
--- compatible : should be "st,stm32-hwspinlock".
--- reg : the register address of hwspinlock.
--- #hwlock-cells : hwlock users only use the hwlock id to represent a specific
--	hwlock, so the number of cells should be <1> here.
--- clock-names : Must contain "hsem".
--- clocks : Must contain a phandle entry for the clock in clock-names, see the
--	common clock bindings.
--
--Please look at the generic hwlock binding for usage information for consumers,
--"Documentation/devicetree/bindings/hwlock/hwlock.txt"
--
--Example of hwlock provider:
--	hwspinlock@4c000000 {
--		compatible = "st,stm32-hwspinlock";
--		#hwlock-cells = <1>;
--		reg = <0x4c000000 0x400>;
--		clocks = <&rcc HSEM>;
--		clock-names = "hsem";
--	};
-diff --git a/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
-new file mode 100644
-index 000000000000..da4722bb8c38
---- /dev/null
-+++ b/Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/hwlock/st,stm32-hwspinlock.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics STM32 Hardware Spinlock bindings
-+
-+maintainers:
-+  - Benjamin Gaignard <benjamin.gaignard@st.com>
-+  - Fabien Dessenne <fabien.dessenne@st.com>
-+
-+properties:
-+  "#hwlock-cells":
-+    const: 1
-+
-+  compatible:
-+    const: st,stm32-hwspinlock
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: hsem
-+
-+required:
-+  - "#hwlock-cells"
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/stm32mp1-clks.h>
-+    hwspinlock@4c000000 {
-+        compatible = "st,stm32-hwspinlock";
-+        #hwlock-cells = <1>;
-+        reg = <0x4c000000 0x400>;
-+        clocks = <&rcc HSEM>;
-+        clock-names = "hsem";
-+    };
-+
-+...
+Changes in v2:
+    - changed binding doc to yaml format.
+    - Fixed alignment in q6sstop cc driver.
+
+Govind Singh (2):
+  dt-bindings: clock: qcom: Add QCOM Q6SSTOP clock controller bindings
+  clk: qcom: Add Q6SSTOP clock controller for QCS404
+
+ .../bindings/clock/qcom,q6sstopcc.yaml        |  43 ++++
+ drivers/clk/qcom/Kconfig                      |   8 +
+ drivers/clk/qcom/Makefile                     |   1 +
+ drivers/clk/qcom/q6sstop-qcs404.c             | 223 ++++++++++++++++++
+ .../dt-bindings/clock/qcom,q6sstopcc-qcs404.h |  18 ++
+ 5 files changed, 293 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
+ create mode 100644 drivers/clk/qcom/q6sstop-qcs404.c
+ create mode 100644 include/dt-bindings/clock/qcom,q6sstopcc-qcs404.h
+
 -- 
-2.15.0
+2.22.0
 
