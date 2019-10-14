@@ -2,95 +2,76 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB62FD47C8
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Oct 2019 20:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 539AED5BE1
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 14 Oct 2019 09:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728762AbfJKSn0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 11 Oct 2019 14:43:26 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:42596 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728738AbfJKSn0 (ORCPT
+        id S1730240AbfJNHIP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 14 Oct 2019 03:08:15 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:33742 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730076AbfJNHIP (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 11 Oct 2019 14:43:26 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 064A76087B; Fri, 11 Oct 2019 18:43:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1570819405;
-        bh=PO6K7o+DsxRU43RTbq143xfKRZDqFiQmwUR+pFtf6Mc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kW4j4zC2Brtfw4EfihPoZMqd3pSYxe9waBW8gzRMKhXfaD8xz5VUfBEnz483j2bt3
-         1hxWCAScdnnLdYDxC71wVmMoa/vehNvKdYR0vVW5g8SoAYOC4Rsj+zXBfH2vTZ8K13
-         HR0ZZYvipgkCRwv5Da2TFRJRQLLtO9KM8+ILn6Lw=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.142.6] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: clew@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 066726087B;
-        Fri, 11 Oct 2019 18:43:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1570819404;
-        bh=PO6K7o+DsxRU43RTbq143xfKRZDqFiQmwUR+pFtf6Mc=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=gCvE7juSqpjaMTNGF+MiaOuo4X8MKTx15Oaj1l1tENgDm7aPhfPc2u5QxnwpMe2DG
-         4pQZA0dz0SJ/s2Jrmr16I3+yEHlO9vlFiHo/oLAgk1ylhBg7TRwSYrifIEaKc7GZ55
-         2uJWO2sl4YvMzrWZ+7Yc79R2IKKN1wXyy4HQy0Rg=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 066726087B
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=clew@codeaurora.org
-Subject: Re: [PATCH] rpmsg: glink: Remove channel decouple from rpdev release
-To:     Stephen Boyd <swboyd@chromium.org>, bjorn.andersson@linaro.org,
-        ohad@wizery.com
-Cc:     aneela@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        Mon, 14 Oct 2019 03:08:15 -0400
+Received: by mail-pl1-f195.google.com with SMTP id d22so7614567pls.0
+        for <linux-remoteproc@vger.kernel.org>; Mon, 14 Oct 2019 00:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=NguePtiRLqxxPERuaTU6qYGHlLMZjTiDWKMVkMyftlI=;
+        b=pxXPOhc4f+9VgOl55DLeIiVMic5UpGOtXZyhX9MkkzluVA6Hb9lV7/dwJcIh4u9zy8
+         DDhzHzZmg3EfkwS0ZALwQlNWzvM5U9HLaIff2voswp0oRABMadlT8GEAnhxQC+y5OIqI
+         CNqnImA3S66tx/nFbxFvfKM2+t7ZNENG3hLw+1ZM0K3VvYlbpcNBPm8lelOFTh3bXhmM
+         gMwatu4vE8ZYstGm7fkMssvWoVHgkTQ8bPVXKeqK5HaLs2F/ulm/AW7Jneyb24PLF6Fu
+         mSz7/XLFsCEn38aKUkzyf4YkusQEDcWLNREJx9njDl3z9f93jsfexS4ZUlmeCJmzf8gy
+         fubA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=NguePtiRLqxxPERuaTU6qYGHlLMZjTiDWKMVkMyftlI=;
+        b=SlwOhb558OTv9gPkPcUXTAIY7GyWD2CUHpveM7km4EurDO8b4zie6lLcXRszUFVZNq
+         7NXpmBbLW77P/7ePur5H3KeOVXx0fIn0gLBeKixkEaObLnY5QSyIWToUTBwPJT4BMqhq
+         s+fyHBuYMwtlXT6oOZT0Emxn29xuUoj73IZuF8VEtIExMHAXXPT9GAYcX6KQTYvIeFqT
+         e1BdnZlxAg70BK/geYQKE80ronQePEZLlI55gikwVm2bH/e5FYoKmX/vDlOCQu9Qbw+Q
+         J/AZpb/dRcdvvzDzfncvLDb2LcdJyl544cj144fgTO7tpBsw/XbiqsyXXHVPrWYovFyA
+         CLrA==
+X-Gm-Message-State: APjAAAUTqCOn95KMfzlyuEdRi5lSiUAvi0pKcEnxiin0cGri31+B+8TJ
+        FzzKyUxHdX5wuwamc4p1/pzKrA==
+X-Google-Smtp-Source: APXvYqwejRJqYN+1PN+rmvhGFte4RQiA22AwEs1KXqwUn+eV0HR/gMGjIqh5w5+BnvYjRJHsoXZdvQ==
+X-Received: by 2002:a17:902:9696:: with SMTP id n22mr26782696plp.252.1571036894371;
+        Mon, 14 Oct 2019 00:08:14 -0700 (PDT)
+Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id p190sm20619948pfb.160.2019.10.14.00.08.10
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 14 Oct 2019 00:08:13 -0700 (PDT)
+From:   Baolin Wang <baolin.wang@linaro.org>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org
+Cc:     linus.walleij@linaro.org, orsonzhai@gmail.com,
+        zhang.lyra@gmail.com, baolin.wang@linaro.org,
+        linux-arm-kernel@lists.infradead.org,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191009013345.17192-1-clew@codeaurora.org>
- <5d9ebbc4.1c69fb81.b45e2.25ce@mx.google.com>
-From:   Chris Lew <clew@codeaurora.org>
-Message-ID: <4e0b199c-40d7-4222-f333-601134a817a1@codeaurora.org>
-Date:   Fri, 11 Oct 2019 11:43:23 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <5d9ebbc4.1c69fb81.b45e2.25ce@mx.google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH 0/4] Some improvements for hwspinlock
+Date:   Mon, 14 Oct 2019 15:07:42 +0800
+Message-Id: <cover.1571036463.git.baolin.wang@linaro.org>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+This patch set removes the BUG_ON() from hwspinlock core and changes the
+PM runtime support to be optional.
 
+Baolin Wang (4):
+  hwspinlock: Remove BUG_ON() from the hwspinlock core
+  hwspinlock: Let the PM runtime can be optional
+  hwspinlock: sprd: Remove redundant PM runtime implementation
+  hwspinlock: u8500_hsem: Remove redundant PM runtime implementation
 
-On 10/9/2019 10:04 PM, Stephen Boyd wrote:
-> Quoting Chris Lew (2019-10-08 18:33:45)
->> If a channel is being rapidly restarted and the kobj release worker is
->> busy, there is a chance the the rpdev_release function will run after
->> the channel struct itself has been released.
->>
->> There should not be a need to decouple the channel from rpdev in the
->> rpdev release since that should only happen from the channel close
->> commands.
->>
->> Signed-off-by: Chris Lew <clew@codeaurora.org>
-> 
-> Fixes tag? The whole thing sounds broken and probably is still racy in
-> the face of SMP given that channel->rpdev is tested for "published" or
-> not. Can you describe the race that you're closing more?
-> 
-
-Thanks Stephen, will add Fixes tag and try to describe the race better.
-
-I agree that the whole thing sounds broken, the glink channel cleanup 
-code has a couple bugs that need to be addressed in a more extensive 
-patch. This patch is more to address the immediate issue of a 
-use-after-free from one of the races.
+ drivers/hwspinlock/hwspinlock_core.c |   16 ++++++++--------
+ drivers/hwspinlock/sprd_hwspinlock.c |   21 +++------------------
+ drivers/hwspinlock/u8500_hsem.c      |   19 ++++---------------
+ 3 files changed, 15 insertions(+), 41 deletions(-)
 
 -- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+1.7.9.5
+
