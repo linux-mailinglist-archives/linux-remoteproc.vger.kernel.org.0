@@ -2,81 +2,74 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CAAD682D
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 14 Oct 2019 19:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5CCD91A3
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Oct 2019 14:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388391AbfJNRQt (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 14 Oct 2019 13:16:49 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:37998 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731347AbfJNRQs (ORCPT
+        id S1727881AbfJPMzu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 16 Oct 2019 08:55:50 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:39894 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391575AbfJPMzu (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 14 Oct 2019 13:16:48 -0400
-Received: by mail-oi1-f193.google.com with SMTP id m16so14378359oic.5;
-        Mon, 14 Oct 2019 10:16:46 -0700 (PDT)
+        Wed, 16 Oct 2019 08:55:50 -0400
+Received: by mail-qt1-f194.google.com with SMTP id n7so35871490qtb.6
+        for <linux-remoteproc@vger.kernel.org>; Wed, 16 Oct 2019 05:55:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hqxICMW7ss0cJCpXCjJH78wnrlmcwqNrZ/uPiVhGkkM=;
+        b=IxEjiKnpR3EAwPoByfW/OZrLpd19bspT+gTUCGnUW80EeuuPdpZRqreDbDpZch6gjh
+         2UsT5c44kBgXtYD0yyrrLUBcME6KZ9UAnsIGSS63oAoCPC4JQ8YNVtxKOXCLrMCCA73/
+         1uQIrb1Vu1i9W6DwGSI+b+rsQVP1DUrcyk/H0UyUx/1OpKVxCq6ozQE7t+pqdDkUL0sn
+         EY3w6X34DDQGKzfHwdSWRQ71+nCXj4FycpczO6kiDghGZfj/sJ+8EwzYRxAizI958o4R
+         HynQBp/BM/5tdTJgd+8CJzjA8auJ0h0fkSpoVTv7l/6JzFKR0UBivDwzUwBNh1q7l8cd
+         CKEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=a8hIcdl2e+um++/nUAcgtky3A53BnPYT6tM1T8gzirE=;
-        b=a5YY3un9uEsTMCl/kR36NUSzGiT/+e9QP3/dvH0dzeXeI4DiLFaVw1c+6SCVKn9bw3
-         2Xgzq97+n4h9b/lBs8mqeeB2tH478vaBY+H0K+Lria173U3G0Kvz7ohV6L/FPa7GDePR
-         uHh09V5MlYYgMOwSIDVTBtpzm0XaX0Q/KrBnd7UUhsWfob7MZq2F35teW9ReeYxquCw8
-         cV4qOcSVLkQIO+f3n54w9QbUwyEDKj4zDC6I93fn1fe/rOyrFbHGt8Vr92+XxzEzgZQN
-         lCKpBUvnnIA1Mn0rtEEkqC7w2IBxJ1YyZHRiuw7HGZkhupfZr38SGz3gK3Gbb2v6QoGV
-         x41Q==
-X-Gm-Message-State: APjAAAWSAHug4LTBFvrYrO9ozSG9d+ixwUnN5guIVWbYMnC29Gi0qcbL
-        8JyT7UShLDHDN2r7FdMnCW0c+uw=
-X-Google-Smtp-Source: APXvYqzQz9wZdnGUi/ME0QUo9eS9TqcibXX1bHdajNQOR2xvzskepx0v/CFKXkThQgariekycHrvyQ==
-X-Received: by 2002:aca:b841:: with SMTP id i62mr24164992oif.123.1571073405919;
-        Mon, 14 Oct 2019 10:16:45 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id z185sm5729184oia.50.2019.10.14.10.16.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 10:16:45 -0700 (PDT)
-Date:   Mon, 14 Oct 2019 12:16:44 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     ohad@wizery.com, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        mark.rutland@arm.com, alexandre.torgue@st.com,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: Re: [PATCH v3] dt-bindings: hwlock: Convert stm32 hwspinlock
- bindings to json-schema
-Message-ID: <20191014171644.GA4140@bogus>
-References: <20191014091756.23763-1-benjamin.gaignard@st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hqxICMW7ss0cJCpXCjJH78wnrlmcwqNrZ/uPiVhGkkM=;
+        b=AeBYpUvmSxcde/G7PvCs3b+M2gI4swEdtjxllvFbyi3FTItJAi8f8moXVKZD2bReCE
+         JWd73YzbWGE1NdlutblJwA9gBOgxlCphJBnDkAaowiIXUN2i/pXSjzBYo4/DvlomtoxV
+         EgWiChdLxRb7YiM9AWvTA3p0nlVsC3dg8MQ18PgS1UaIacbrsL5JQ+80jx79ngFgEQUW
+         dIwtxKNWhhW7mlqnmsLf0Ile8DcQwihjtJjNh6yymPGhkB2rxbclbfkPApalSMZjLdRZ
+         pqZSdZbnHQMZsJ3t38BWT7GiWiGazBfnz0h0pZvAd2iBkBuK4/Z0y6YhqYkECibRyquE
+         WlIA==
+X-Gm-Message-State: APjAAAW+FsVN7Ok1hEJPsdnC74lHiWZFgEjDlPyHjy9WdPbmYI30I75Q
+        sXWjCx7drb+EbDcs/mMhdvelnFQUIveTZ/GsbBT1XA==
+X-Google-Smtp-Source: APXvYqwsdZLOyx+1BewFpuZzO2wCBhNDd8cI1RDl+5ftGeKkSjmdr0lrNVyGucGuzJalkmgT4E+Zi8XEFdHBdIzSqJg=
+X-Received: by 2002:ac8:2f9b:: with SMTP id l27mr43783932qta.218.1571230549447;
+ Wed, 16 Oct 2019 05:55:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191014091756.23763-1-benjamin.gaignard@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cover.1571036463.git.baolin.wang@linaro.org> <45600b3601cbfe3685f4c9e088be9a30ae3eb8f2.1571036463.git.baolin.wang@linaro.org>
+In-Reply-To: <45600b3601cbfe3685f4c9e088be9a30ae3eb8f2.1571036463.git.baolin.wang@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 16 Oct 2019 14:55:38 +0200
+Message-ID: <CACRpkda6hT5Nma-vrtd3oxQ64QppwkmP75DJch2kMUUGpzDzZQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] hwspinlock: u8500_hsem: Remove redundant PM runtime implementation
+To:     Baolin Wang <baolin.wang@linaro.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Lyra Zhang <zhang.lyra@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-remoteproc@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, 14 Oct 2019 11:17:56 +0200, Benjamin Gaignard wrote:
-> Convert the STM32 hwspinlock binding to DT schema format using json-schema
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
-> ---
-> change in v3:
-> - use (GPL-2.0-only OR BSD-2-Clause)
-> 
-> change in v2:
-> - use BSD-2-Clause license
-> - use const for #hwlock-cells
-> - add additionalProperties: false
-> 
->  .../bindings/hwlock/st,stm32-hwspinlock.txt        | 23 ----------
->  .../bindings/hwlock/st,stm32-hwspinlock.yaml       | 50 ++++++++++++++++++++++
->  2 files changed, 50 insertions(+), 23 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.txt
->  create mode 100644 Documentation/devicetree/bindings/hwlock/st,stm32-hwspinlock.yaml
-> 
+On Mon, Oct 14, 2019 at 9:08 AM Baolin Wang <baolin.wang@linaro.org> wrote:
 
-Applied, thanks.
+> Since the hwspinlock core has changed the PM runtime to be optional, thus
+> remove the redundant PM runtime implementation in the u8500 HWSEM driver.
+>
+> Signed-off-by: Baolin Wang <baolin.wang@linaro.org>
 
-Rob
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
