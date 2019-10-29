@@ -2,96 +2,70 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D44EAE71DE
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 28 Oct 2019 13:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E627E8017
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 29 Oct 2019 07:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389459AbfJ1Mnc (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 28 Oct 2019 08:43:32 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:37336 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389444AbfJ1Mnb (ORCPT
+        id S1732157AbfJ2GJ0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 29 Oct 2019 02:09:26 -0400
+Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:25669 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730661AbfJ2GJ0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 28 Oct 2019 08:43:31 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9SChUE9034373;
-        Mon, 28 Oct 2019 07:43:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1572266610;
-        bh=RjOxaFJF9928MExwXsThcLzcc0mTulOCLUMie9VmrpA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=MSpMeR3C94Knhds1rQEhThX7xPi6ZtSwvVbqGp02NXI4Fkqcig9lrELGkDc6BgrFt
-         YszypclGnQOdKrcPhm05WLNYVy+qC9SmYK7CI+NnkhAB3h+gyxtX6Yr83kjP1WjV1T
-         eJwus7NTNAK391rb2ssBP+ud89SGvalyxKLEjxes=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9SChUEr075731
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 28 Oct 2019 07:43:30 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 28
- Oct 2019 07:43:17 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 28 Oct 2019 07:43:29 -0500
-Received: from sokoban.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9SCgoh9063574;
-        Mon, 28 Oct 2019 07:43:27 -0500
-From:   Tero Kristo <t-kristo@ti.com>
-To:     <bjorn.andersson@linaro.org>, <ohad@wizery.com>,
-        <linux-remoteproc@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <s-anna@ti.com>, Tero Kristo <t-kristo@ti.com>
-Subject: [PATCH 17/17] remoteproc/omap: fix auto-suspend failure warning during crashed state
-Date:   Mon, 28 Oct 2019 14:42:38 +0200
-Message-ID: <20191028124238.19224-18-t-kristo@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191028124238.19224-1-t-kristo@ti.com>
-References: <20191028124238.19224-1-t-kristo@ti.com>
+        Tue, 29 Oct 2019 02:09:26 -0400
+Received: from localhost.localdomain ([93.22.151.170])
+        by mwinf5d72 with ME
+        id KJ9N210043gq7t103J9N2i; Tue, 29 Oct 2019 07:09:23 +0100
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 29 Oct 2019 07:09:23 +0100
+X-ME-IP: 93.22.151.170
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] rpmsg: char: Simplify 'rpmsg_eptdev_release()'
+Date:   Tue, 29 Oct 2019 07:09:14 +0100
+Message-Id: <20191029060915.3650-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Suman Anna <s-anna@ti.com>
+Use 'skb_queue_purge()' instead of re-implementing it.
 
-The runtime autosuspend on a OMAP remoteproc device is attempted when
-the suspend timer expires (autosuspend delay elapsed since the last
-time the device is busy). This is the normal autosuspend scenario
-for a device functioning normally. This timer can also expire during
-the debugging of a remoteproc crash when the remoteproc recovery is
-disabled. This is an invalid pre-condition though, so check for the
-RPROC_CRASHED state and bail out before the actual check for the
-RPROC_RUNNING state. The auto-suspend is also not re-attempted until
-the remoteproc is recovered and restored to normal functional state.
-
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/remoteproc/omap_remoteproc.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/rpmsg/rpmsg_char.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
-index 2eb05d7a4dec..1dfac82224f7 100644
---- a/drivers/remoteproc/omap_remoteproc.c
-+++ b/drivers/remoteproc/omap_remoteproc.c
-@@ -945,6 +945,11 @@ static int omap_rproc_runtime_suspend(struct device *dev)
- 	struct omap_rproc *oproc = rproc->priv;
- 	int ret;
+diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+index 507bfe163883..0c3a340db7d1 100644
+--- a/drivers/rpmsg/rpmsg_char.c
++++ b/drivers/rpmsg/rpmsg_char.c
+@@ -146,7 +146,6 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
+ {
+ 	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
+ 	struct device *dev = &eptdev->dev;
+-	struct sk_buff *skb;
  
-+	if (rproc->state == RPROC_CRASHED) {
-+		dev_dbg(dev, "rproc cannot be runtime suspended when crashed!\n");
-+		return -EBUSY;
-+	}
-+
- 	if (WARN_ON(rproc->state != RPROC_RUNNING)) {
- 		dev_err(dev, "rproc cannot be runtime suspended when not running!\n");
- 		return -EBUSY;
+ 	/* Close the endpoint, if it's not already destroyed by the parent */
+ 	mutex_lock(&eptdev->ept_lock);
+@@ -157,10 +156,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
+ 	mutex_unlock(&eptdev->ept_lock);
+ 
+ 	/* Discard all SKBs */
+-	while (!skb_queue_empty(&eptdev->queue)) {
+-		skb = skb_dequeue(&eptdev->queue);
+-		kfree_skb(skb);
+-	}
++	skb_queue_purge(&eptdev->queue);
+ 
+ 	put_device(dev);
+ 
 -- 
-2.17.1
+2.20.1
 
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
