@@ -2,178 +2,75 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D05B6EBC0D
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  1 Nov 2019 03:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C276FEC627
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  1 Nov 2019 16:56:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729522AbfKACpG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 31 Oct 2019 22:45:06 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:46810 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726803AbfKACpG (ORCPT
+        id S1729352AbfKAP4L (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 1 Nov 2019 11:56:11 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:46496 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726757AbfKAP4K (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 31 Oct 2019 22:45:06 -0400
-Received: by mail-pl1-f195.google.com with SMTP id q21so3660314plr.13;
-        Thu, 31 Oct 2019 19:45:05 -0700 (PDT)
+        Fri, 1 Nov 2019 11:56:10 -0400
+Received: by mail-il1-f193.google.com with SMTP id m16so9023997iln.13
+        for <linux-remoteproc@vger.kernel.org>; Fri, 01 Nov 2019 08:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=2alu0Zc/ft6aP0mMKc3T9tiyxMrXfO91QDsxper6hEU=;
-        b=ehpdFbf9etA7HW62oqX1LZFKJYoVBbPQJudG07hAzBC8Og6HDH61qiMQ+BoApygcx7
-         k4M4QURpehSj5Bf6xW8xD0TR3ZveBXnF0CrejEW9xdyohY+Ct54ePpe4fTLWuL/PY8EZ
-         51aGcxxyFVTnM9L92Rkx6bUf2y0UWYrA0zztnFrwyy2jOzvAAnHUVAg3/9hXLFeansxV
-         fsHnL82XtkqpyvS8v8eVGOzZzDEg2kAk7xNZbc6VdBkNESHRj2flPiqtfybbwBWpK2+S
-         qESYgQCuX/I6AQZz4wDTI77agsVXerggJem0FahjKdWti7PNUOyWH5CZxkcn+gomZyt/
-         btHg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
+        b=jkikiuxKNQxBjumG32R/xAOzBpTQzIQOGlQ9PlZMzROUxuROhIRW7LOTcmmKqgHbY3
+         GOAi1JnMWEnE/cHrGKrepuphWKFno/pbedjX9XbUWfuIb71+aWSjlL5ZBdl2tkqhPPKE
+         upGJ5iT/1C19qe7FISRldhXG8lpP7RchXgCPpOby1LewLJ9oB1SrBH33yMLjEi7ivjNF
+         o703S5ww1Ql1WeM1aVK41ldtWwBkirNy1eGYI9RnsPVvXaYfqhEH77U0dn8RQUxe2Nnp
+         f+7QOSjXXt7VdhDDkepSvRzDGCUBO3iHq8K6k3uKK4gkq+wr+4nHyD89dMwGRy4pl6Pa
+         lYoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=2alu0Zc/ft6aP0mMKc3T9tiyxMrXfO91QDsxper6hEU=;
-        b=iP2MNpT7P7x57KkYLXFAo6AIcae9uIMVYWOBlr2FwfBJxFha03S5qA1QEDIP2Cu/GW
-         Ay4jKBnHJxON/fhMu+ACO48JbFl/biyfkBCVq40aoR8xS235PT2xrGTwadFYQZ9Ya3TD
-         L4dW4jl3iAiaoGEaXLuraCvYU1Uzn2x1oPlqHitHPg9RWugvvsutCflodA4pgNBiw1/p
-         nFKuZtdT8iRkZLW5BCMFW0eylgvmA8GFoR5RKBVtBtOplgYlimHKl+UtxX1sW9Sy1vl8
-         dYcfCksCD3OJQIhVWYEgL1dgoz3g1Tr8Rzsva8obUOvmmHYsYJBc8JZ/Wq7lf9+5ehxf
-         F0zg==
-X-Gm-Message-State: APjAAAWpyoFZrciEXkv4ydEJ5ynP2c2MwEXLHBNtwbIIre2LWynXGyDu
-        D87poF7hP5K0rtrWpKlh52w=
-X-Google-Smtp-Source: APXvYqwePioh5LZFvobRYjFvfwGYHFfaowQT003aLyNZ6K7yaoHsR9ZUDrhlk3TRnP0FADX8XNgH/Q==
-X-Received: by 2002:a17:902:6f01:: with SMTP id w1mr10214320plk.35.1572576305307;
-        Thu, 31 Oct 2019 19:45:05 -0700 (PDT)
-Received: from aw-bldr-10.qualcomm.com (i-global254.qualcomm.com. [199.106.103.254])
-        by smtp.gmail.com with ESMTPSA id e71sm6641948pgc.91.2019.10.31.19.45.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 31 Oct 2019 19:45:04 -0700 (PDT)
-From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-To:     agross@kernel.org, ohad@wizery.com, bjorn.andersson@linaro.org
-Cc:     robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-Subject: [PATCH 2/2] remoteproc: qcom_q6v5_mss: Add support for MSM8998
-Date:   Thu, 31 Oct 2019 19:45:01 -0700
-Message-Id: <20191101024501.22026-1-jeffrey.l.hugo@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191101024301.21919-1-jeffrey.l.hugo@gmail.com>
-References: <20191101024301.21919-1-jeffrey.l.hugo@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
+        b=glTQm8G1It+okIUTDOug41urzjGvn0KMvC/lWeepFr0A6f6O+yFpACj8LVjWhw1ZxT
+         EOjEJUOrOGkuQzMzLxv4MiPywaN/xJSAQR+r0YLEY9j5nM46Lxic3zGwdh0yML3qgTv4
+         M7cj+6DXkIFI+n/IOPb2B70k3grGjNKtpcIXt26NB3VygjfXKKdoOnRt55NuOX9NAcOG
+         6/iGqdoy1ldn/NcgcM1r1j7HoX5/fC8H5oi0CDBusItXFuf2p0z8Xo+SV3BFlxMXMnpM
+         4/AMwxtHIR66og3VEdffhTJnnEEx9w5t3+oFWeP5UL2FQMUrr9FDftYoaCQ3unRULpry
+         BorA==
+X-Gm-Message-State: APjAAAWK/AkAgvoOPo7KQinUX3Z3qye1JDj8zhjpKaCKLzbXdzNU4aOF
+        THnlxVhiET+3DSNChLnBCaw3oP0YjKM9aakgSQ==
+X-Google-Smtp-Source: APXvYqykJV+0/JwFtVH+nsMp7ykNvWlhcV0rRy9Az9oSoBx/tmbFcQXrrs+n9sPNEOpMU4VQknLk5nY+7hLQNduMfzM=
+X-Received: by 2002:a92:9ac2:: with SMTP id c63mr13404416ill.8.1572623769676;
+ Fri, 01 Nov 2019 08:56:09 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a02:7749:0:0:0:0:0 with HTTP; Fri, 1 Nov 2019 08:56:08 -0700 (PDT)
+Reply-To: moneygram.1820@outlook.fr
+From:   "Mary Coster, I.M.F director-Benin" 
+        <info.zennitbankplcnigerian@gmail.com>
+Date:   Fri, 1 Nov 2019 16:56:08 +0100
+Message-ID: <CABHzvrmbRd3tt-E2+9AO2XvrMQFKQcn+kao_7DN4rb=grxZAcA@mail.gmail.com>
+Subject: Contact Money Gram international service-Benin to receive your
+ payment funds US$2.500,000 Million
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-MSM8998 sits between MSM8996 and SDM845 in terms of functionality needed to
-boot the modem subsystem.  Booting mss allows for servicing the traditional
-cellular usecases along with the wireless usecases such as wifi.
-
-Signed-off-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
----
- drivers/remoteproc/qcom_q6v5_mss.c | 52 ++++++++++++++++++++++++++----
- 1 file changed, 46 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index bdf1dd00b89b..685182368aa7 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -61,6 +61,7 @@
- #define QDSP6SS_GFMUX_CTL_REG		0x020
- #define QDSP6SS_PWR_CTL_REG		0x030
- #define QDSP6SS_MEM_PWR_CTL		0x0B0
-+#define QDSP6V6SS_MEM_PWR_CTL		0x034
- #define QDSP6SS_STRAP_ACC		0x110
- 
- /* AXI Halt Register Offsets */
-@@ -196,6 +197,7 @@ enum {
- 	MSS_MSM8916,
- 	MSS_MSM8974,
- 	MSS_MSM8996,
-+	MSS_MSM8998,
- 	MSS_SDM845,
- };
- 
-@@ -504,7 +506,10 @@ static int q6v5proc_reset(struct q6v5 *qproc)
- 		}
- 
- 		goto pbl_wait;
--	} else if (qproc->version == MSS_MSM8996) {
-+	} else if (qproc->version == MSS_MSM8996 ||
-+		   qproc->version == MSS_MSM8998) {
-+		int mem_pwr_ctl;
-+
- 		/* Override the ACC value if required */
- 		writel(QDSP6SS_ACC_OVERRIDE_VAL,
- 		       qproc->reg_base + QDSP6SS_STRAP_ACC);
-@@ -549,17 +554,24 @@ static int q6v5proc_reset(struct q6v5 *qproc)
- 		writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
- 
- 		/* Turn on L1, L2, ETB and JU memories 1 at a time */
--		val = readl(qproc->reg_base + QDSP6SS_MEM_PWR_CTL);
--		for (i = 19; i >= 0; i--) {
-+		if (qproc->version == MSS_MSM8996) {
-+			mem_pwr_ctl = QDSP6SS_MEM_PWR_CTL;
-+			i = 19;
-+		} else {
-+			/* MSS_MSM8998 */
-+			mem_pwr_ctl = QDSP6V6SS_MEM_PWR_CTL;
-+			i = 28;
-+		}
-+		val = readl(qproc->reg_base + mem_pwr_ctl);
-+		for (; i >= 0; i--) {
- 			val |= BIT(i);
--			writel(val, qproc->reg_base +
--						QDSP6SS_MEM_PWR_CTL);
-+			writel(val, qproc->reg_base + mem_pwr_ctl);
- 			/*
- 			 * Read back value to ensure the write is done then
- 			 * wait for 1us for both memory peripheral and data
- 			 * array to turn on.
- 			 */
--			val |= readl(qproc->reg_base + QDSP6SS_MEM_PWR_CTL);
-+			val |= readl(qproc->reg_base + mem_pwr_ctl);
- 			udelay(1);
- 		}
- 		/* Remove word line clamp */
-@@ -1592,6 +1604,33 @@ static const struct rproc_hexagon_res sdm845_mss = {
- 	.version = MSS_SDM845,
- };
- 
-+static const struct rproc_hexagon_res msm8998_mss = {
-+	.hexagon_mba_image = "mba.mbn",
-+	.proxy_clk_names = (char*[]){
-+			"xo",
-+			"qdss",
-+			"mem",
-+			NULL
-+	},
-+	.active_clk_names = (char*[]){
-+			"iface",
-+			"bus",
-+			"mem",
-+			"gpll0_mss",
-+			"mnoc_axi",
-+			"snoc_axi",
-+			NULL
-+	},
-+	.proxy_pd_names = (char*[]){
-+			"cx",
-+			"mx",
-+			NULL
-+	},
-+	.need_mem_protection = true,
-+	.has_alt_reset = false,
-+	.version = MSS_MSM8998,
-+};
-+
- static const struct rproc_hexagon_res msm8996_mss = {
- 	.hexagon_mba_image = "mba.mbn",
- 	.proxy_supply = (struct qcom_mss_reg_res[]) {
-@@ -1698,6 +1737,7 @@ static const struct of_device_id q6v5_of_match[] = {
- 	{ .compatible = "qcom,msm8916-mss-pil", .data = &msm8916_mss},
- 	{ .compatible = "qcom,msm8974-mss-pil", .data = &msm8974_mss},
- 	{ .compatible = "qcom,msm8996-mss-pil", .data = &msm8996_mss},
-+	{ .compatible = "qcom,msm8998-mss-pil", .data = &msm8998_mss},
- 	{ .compatible = "qcom,sdm845-mss-pil", .data = &sdm845_mss},
- 	{ },
- };
--- 
-2.17.1
-
+Attn Dear,Funds Beneficiary.
+Contact Money Gram international service-Benin to receive your payment
+funds US$2.500,000 Million approved this morning through the UN
+payment settlement organization.
+Contact Person, Mr. John Dave.
+Official Director.Money Gram-Benin
+Email: moneygram.1820@outlook.fr
+Telephone +229 62619517
+Once you get intouch with Mr. John Dave, Money Gram Director, send to
+him your address including your phone numbers. He will be sending the
+transfer to you  $5000.00 USD daily until you received your complete
+payment $2.5m from the office.
+Note,I have paid the whole service fees for you but only small money
+you been required to send to this office is $23.00 only via Money Gram
+transfer.
+God bless
+Mary Coster, I.M.F director-Benin
+m.coster@aol.com
