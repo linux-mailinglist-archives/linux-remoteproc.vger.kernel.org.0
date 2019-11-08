@@ -2,56 +2,78 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9810EF38A7
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  7 Nov 2019 20:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AD9F4B34
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Nov 2019 13:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbfKGTce (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 7 Nov 2019 14:32:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38650 "EHLO mail.kernel.org"
+        id S1732457AbfKHMOG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 8 Nov 2019 07:14:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51154 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725785AbfKGTce (ORCPT
+        id S1732332AbfKHLiP (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 7 Nov 2019 14:32:34 -0500
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 8 Nov 2019 06:38:15 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5C6832087E;
-        Thu,  7 Nov 2019 19:32:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B9E1D20869;
+        Fri,  8 Nov 2019 11:38:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573155153;
-        bh=KnrB9jH8xxJGA6BBPG5vZtZ0+t6wCZSYeYgqwfk/5GM=;
-        h=In-Reply-To:References:From:To:Cc:Subject:Date:From;
-        b=c9HyN+7wlfxkFoBgze3aeUoNZDiu+stpGEn4lUKg0QiR486ffXgujnLtnu0UpC5wu
-         vkytEI+Bgzm0HsdZqxeeVjajV/S0DIIf6d5IalNtrT8W2Pg6KzJLXzyV8o+5LgAoC+
-         qD5sxryRwrjHuhcT4jK96npW4Sg/GggVEXGwfs6s=
-Content-Type: text/plain; charset="utf-8"
+        s=default; t=1573213094;
+        bh=OqJpgqnNucTIjc1sie5sJ+o2au5E86wgHQZUsNmr+LU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=xPaEt1KmPrV/x/pY3wv3nG5u7lpcf9qyrWgvM1uRk+nWN/LJk+5IoVOVTedpOFqsH
+         loHMPloEmm4s148EJHToNj4mIgcE0CSVQhqHSRcpX3wRK9FSZgJxWiktdhlCc1EhJ1
+         Upz4SuBxIN6f2idjurMBZjL5XIMLHrlK+Kg0Cua8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Suman Anna <s-anna@ti.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 019/205] remoteproc/davinci: Use %zx for formating size_t
+Date:   Fri,  8 Nov 2019 06:34:46 -0500
+Message-Id: <20191108113752.12502-19-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191108113752.12502-1-sashal@kernel.org>
+References: <20191108113752.12502-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20191011132928.9388-3-govinds@codeaurora.org>
-References: <20191011132928.9388-1-govinds@codeaurora.org> <20191011132928.9388-3-govinds@codeaurora.org>
-From:   Stephen Boyd <sboyd@kernel.org>
-To:     Govind Singh <govinds@codeaurora.org>, robh@kernel.org
-Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-soc@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Govind Singh <govinds@codeaurora.org>
-Subject: Re: [PATCH v4 2/2] clk: qcom: Add Q6SSTOP clock controller for QCS404
-User-Agent: alot/0.8.1
-Date:   Thu, 07 Nov 2019 11:32:32 -0800
-Message-Id: <20191107193233.5C6832087E@mail.kernel.org>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Quoting Govind Singh (2019-10-11 06:29:28)
-> Add support for the Q6SSTOP clock control used on qcs404
-> based devices. This would allow wcss remoteproc driver to
-> control the required WCSS Q6SSTOP clock/reset controls to
-> bring the subsystem out of reset and shutdown the WCSS Q6DSP.
->=20
-> Signed-off-by: Govind Singh <govinds@codeaurora.org>
-> ---
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Applied to clk-next
+[ Upstream commit 1e28dbbeced6152b9ea7c417ff8cef3f7dcf0f19 ]
+
+da8xx_rproc_mem size is of type size_t, so use %zx to format the debug
+print of it to avoid a compile warning.
+
+Acked-by: Suman Anna <s-anna@ti.com>
+Reviewed-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/remoteproc/da8xx_remoteproc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/da8xx_remoteproc.c b/drivers/remoteproc/da8xx_remoteproc.c
+index e230bef71be1c..d200334577f68 100644
+--- a/drivers/remoteproc/da8xx_remoteproc.c
++++ b/drivers/remoteproc/da8xx_remoteproc.c
+@@ -226,7 +226,7 @@ static int da8xx_rproc_get_internal_memories(struct platform_device *pdev,
+ 				res->start & DA8XX_RPROC_LOCAL_ADDRESS_MASK;
+ 		drproc->mem[i].size = resource_size(res);
+ 
+-		dev_dbg(dev, "memory %8s: bus addr %pa size 0x%x va %p da 0x%x\n",
++		dev_dbg(dev, "memory %8s: bus addr %pa size 0x%zx va %p da 0x%x\n",
+ 			mem_names[i], &drproc->mem[i].bus_addr,
+ 			drproc->mem[i].size, drproc->mem[i].cpu_addr,
+ 			drproc->mem[i].dev_addr);
+-- 
+2.20.1
 
