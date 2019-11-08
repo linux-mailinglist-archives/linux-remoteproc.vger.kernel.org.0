@@ -2,28 +2,28 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AD9F4B34
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Nov 2019 13:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB65F4951
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Nov 2019 13:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732457AbfKHMOG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 8 Nov 2019 07:14:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51154 "EHLO mail.kernel.org"
+        id S2390637AbfKHMCK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 8 Nov 2019 07:02:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57904 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732332AbfKHLiP (ORCPT
+        id S2390457AbfKHLn1 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 8 Nov 2019 06:38:15 -0500
+        Fri, 8 Nov 2019 06:43:27 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B9E1D20869;
-        Fri,  8 Nov 2019 11:38:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3F10422459;
+        Fri,  8 Nov 2019 11:43:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573213094;
-        bh=OqJpgqnNucTIjc1sie5sJ+o2au5E86wgHQZUsNmr+LU=;
+        s=default; t=1573213407;
+        bh=RvVTYuH6J/bWSf35l6x4RJtqEASHSYMDdLh47axTfxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xPaEt1KmPrV/x/pY3wv3nG5u7lpcf9qyrWgvM1uRk+nWN/LJk+5IoVOVTedpOFqsH
-         loHMPloEmm4s148EJHToNj4mIgcE0CSVQhqHSRcpX3wRK9FSZgJxWiktdhlCc1EhJ1
-         Upz4SuBxIN6f2idjurMBZjL5XIMLHrlK+Kg0Cua8=
+        b=cEL45Or2OHp/c4JdsM5t78cBiyHLaT4gVnHarKus8WhkXbxTJgkvpTWIVw2B5n+tH
+         7Pq3YriSIhstsDODG9XPjuANu/YhacLS8vpsNKfZycf9+EXWTQEAr3MBbTAKY/Fxze
+         0ljDVXB5Uf366O24FUd7KFvboWN/GGWbOpgRNXxk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -31,12 +31,12 @@ Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-remoteproc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 019/205] remoteproc/davinci: Use %zx for formating size_t
-Date:   Fri,  8 Nov 2019 06:34:46 -0500
-Message-Id: <20191108113752.12502-19-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 011/103] remoteproc/davinci: Use %zx for formating size_t
+Date:   Fri,  8 Nov 2019 06:41:36 -0500
+Message-Id: <20191108114310.14363-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191108113752.12502-1-sashal@kernel.org>
-References: <20191108113752.12502-1-sashal@kernel.org>
+In-Reply-To: <20191108114310.14363-1-sashal@kernel.org>
+References: <20191108114310.14363-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,10 +62,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/remoteproc/da8xx_remoteproc.c b/drivers/remoteproc/da8xx_remoteproc.c
-index e230bef71be1c..d200334577f68 100644
+index bf3b9034c319e..a127d2ccd7ca5 100644
 --- a/drivers/remoteproc/da8xx_remoteproc.c
 +++ b/drivers/remoteproc/da8xx_remoteproc.c
-@@ -226,7 +226,7 @@ static int da8xx_rproc_get_internal_memories(struct platform_device *pdev,
+@@ -207,7 +207,7 @@ static int da8xx_rproc_get_internal_memories(struct platform_device *pdev,
  				res->start & DA8XX_RPROC_LOCAL_ADDRESS_MASK;
  		drproc->mem[i].size = resource_size(res);
  
