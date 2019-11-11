@@ -2,55 +2,53 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5EFF831C
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 Nov 2019 23:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679FFF8342
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Nov 2019 00:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbfKKWxU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 11 Nov 2019 17:53:20 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35544 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727004AbfKKWxU (ORCPT
+        id S1726902AbfKKXK1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 11 Nov 2019 18:10:27 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:37632 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726834AbfKKXK1 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 11 Nov 2019 17:53:20 -0500
-Received: by mail-pg1-f196.google.com with SMTP id q22so10456406pgk.2
-        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Nov 2019 14:53:19 -0800 (PST)
+        Mon, 11 Nov 2019 18:10:27 -0500
+Received: by mail-pl1-f196.google.com with SMTP id bb5so151097plb.4
+        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Nov 2019 15:10:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=cF+kR6xsVwH35d1QqLaTXYy4+HEUDaOIESU4P7iHRtE=;
-        b=aO1pYj4MkHkxduoNCSqMXEfZxxhcUs1S8q6sUS/KJRCnHdOlHPlJdbHsNMKhKR6c7A
-         KkVSNrPIuDk6fpx3p/uux/iyZU0XJJqd8IVXCuA5pxd5F8gVJvAip6yi4P1yxxDdONnb
-         6/beBj5zXM6CovgLtxwrqTsNjW3o7J/Gv8tSZIWomWjXKxxNyWZJT5c4kjPHI+dbLOYW
-         JLpstynb4Ee4HTTUDOnIGk8Rfu4dWaeWDJmsN2UVAC31HR0+Xq0ZriLgJeW5Fqkjdn+j
-         9x7pTLDPtkChLGDLS/fylcPlXhRahfKFUEw0yc90UNkyaonc8jMvK0Tu5SPdB8BJQ++h
-         +o2g==
+        bh=tWeesDpDIKQpiy9KR8LKYyLg9H0SvGAo1V8+RtWjNIQ=;
+        b=rWtyLPCIGyCdKarivLzqhQAJ+Hfooyus39lh21jI8xk1IYdM21EMyAhyCiMAj6XU88
+         YHLkNv8fVvIZ3efdtCk8MC9ENjAuY75QGb92jJ9eWgZzeVmOmV6etIloPQOvhoKPytwU
+         tdOsNkLLNnRJK7Yn8Glfv43FVt5EhmxeNqWuKKWoAjcQdRMMcJbNiRh0EcraR6vw7s+i
+         KHwWFP2ROBBWbeDY/9Ub0aQ29J4YyF5s7sjGRMoHM4ItZh5loT9UqfcfTH1o7CLuFfzx
+         lTdWaY6ydbeL1yhm2XLyeaVjzDiaoTGPeIDVV/PMsf2zuXu1ITVhz4muProW2lYrqDPq
+         L1Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cF+kR6xsVwH35d1QqLaTXYy4+HEUDaOIESU4P7iHRtE=;
-        b=na8r6Arnfi1op+vq03zAl9wu7UvMUDoDhjf9voEYb2XGxGMaXwz3vExudzOKYGckX2
-         +9rZv58R3gO9G7ldvrTtpMieascA/lXB3JuvvwQVQlfRP94V+R7U+uyRWEUh3U4+VsCR
-         z/qp2TJHrg3XT0j2/CaRh+juyr0giK4JaGtnXdP4YPPAm+pRXF0D2YKydfKz+Nj2ouSF
-         Y2lIirP2BpdMObbEigGswdpsX3Pwy6WC+YOjS8ZNMfSfFRTa1Joa1sNAS8kJp17u5QUt
-         skw53UVexGvSVbYe7VWeb11eo83kyhLv7+MefAApQHsaHlWKbAwFVAhud6iyEMf9gpDA
-         VdiA==
-X-Gm-Message-State: APjAAAXznUVWjqP39iLbRem4iAONwL86lA+AQNB4B5sR8QVFO/35DYbx
-        Nm9mIpCBIPM+Km/wABoqoP3T1w==
-X-Google-Smtp-Source: APXvYqzxfZwwefoN4j1Y9CQYe+KLK1YaNyxodIP9nrACCgiBkSSCrDlh5D6SGNhfRTBYcFr2HBoD2w==
-X-Received: by 2002:a63:7247:: with SMTP id c7mr31695489pgn.311.1573512798854;
-        Mon, 11 Nov 2019 14:53:18 -0800 (PST)
+        bh=tWeesDpDIKQpiy9KR8LKYyLg9H0SvGAo1V8+RtWjNIQ=;
+        b=IEPBKpG5n/Dh1yjzYExi9uMeCvo+EQvzSimkbkDT0NJYeRU1/fjCT+FMFD1mU8z08J
+         KnkvlAltBOsbfXuA9m2J8dUeeCAJHc6tGHsr64f9rf50UsT2Q5rjW0RuwlcaRQYWdacl
+         6TLVRdMILZVv8+h4+93Daex1Xdz0stFAcRQaTILojeB/5JZqLsqUbtSFE5LdI2BquaBQ
+         SvCnx5umIilrTVbDBn45LwmfFPzABEo2rtdj0lghqOYoQZQIErhH1t6GtuRzrBCgCEEe
+         vS4syGxfQITN8rdRQw+qW098aral/LYuZQJR/ERSiOo8AektnMc3O9ga8qiIoep9LkDq
+         QLWQ==
+X-Gm-Message-State: APjAAAUE/VsYTmEWae/MRZ+aXdb4mdNTFwDqs5YFrrVE5RhcRAXGqFBq
+        UF4+E6RgZnSzkAQjV4WQDQGbDg==
+X-Google-Smtp-Source: APXvYqxVslTCSWygyPseQoAhgUug6WvxHkgXjnEMOZD0F6D5+Rt7ew8BNgRcm46QVtnCEjQ90fs3Mg==
+X-Received: by 2002:a17:902:bf4b:: with SMTP id u11mr2843807pls.40.1573513826584;
+        Mon, 11 Nov 2019 15:10:26 -0800 (PST)
 Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id j17sm4450041pfr.2.2019.11.11.14.53.17
+        by smtp.gmail.com with ESMTPSA id q4sm7296199pgp.30.2019.11.11.15.10.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 14:53:18 -0800 (PST)
-Date:   Mon, 11 Nov 2019 14:53:16 -0800
+        Mon, 11 Nov 2019 15:10:25 -0800 (PST)
+Date:   Mon, 11 Nov 2019 15:10:23 -0800
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Pi-Hsun Shih <pihsun@chromium.org>
-Cc:     Erin Lo <erin.lo@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
@@ -59,14 +57,14 @@ Cc:     Erin Lo <erin.lo@mediatek.com>,
         <linux-arm-kernel@lists.infradead.org>,
         "moderated list:ARM/Mediatek SoC support" 
         <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v20 2/4] remoteproc/mediatek: add SCP support for mt8183
-Message-ID: <20191111225316.GC3108315@builder>
+Subject: Re: [PATCH v20 3/4] rpmsg: add rpmsg support for mt8183 SCP.
+Message-ID: <20191111231023.GD3108315@builder>
 References: <20191014075812.181942-1-pihsun@chromium.org>
- <20191014075812.181942-3-pihsun@chromium.org>
+ <20191014075812.181942-4-pihsun@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191014075812.181942-3-pihsun@chromium.org>
+In-Reply-To: <20191014075812.181942-4-pihsun@chromium.org>
 User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
@@ -74,365 +72,79 @@ List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
 On Mon 14 Oct 00:58 PDT 2019, Pi-Hsun Shih wrote:
-> diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
+
+> Add a simple rpmsg support for mt8183 SCP, that use IPI / IPC directly.
+> 
+
+Hi Pi-Hsun,
+
+Sorry for not reviewing this in a timely manner! This looks good, just
+some very minor comments below.
+
+> Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
 [..]
-> +/**
-> + * struct share_obj - SRAM buffer shared with
-> + *		      AP and SCP
+> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> index f2e5e70a58f2..7896cefb2dc0 100644
+> --- a/drivers/remoteproc/mtk_scp.c
+> +++ b/drivers/remoteproc/mtk_scp.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/remoteproc.h>
+>  #include <linux/remoteproc/mtk_scp.h>
+> +#include <linux/rpmsg/mtk_rpmsg.h>
+>  
+>  #include "mtk_common.h"
+>  #include "remoteproc_internal.h"
+> @@ -407,6 +408,31 @@ static void scp_unmap_memory_region(struct mtk_scp *scp)
+>  	of_reserved_mem_device_release(scp->dev);
+>  }
+>  
+> +static struct mtk_rpmsg_info mtk_scp_rpmsg_info = {
+> +	.send_ipi = scp_ipi_send,
+> +	.register_ipi = scp_ipi_register,
+> +	.unregister_ipi = scp_ipi_unregister,
 
-Please unwrap this line
+These are exported symbols, so unless you see a need to support
+alternative implementations in the near future just skip the function
+pointers and call them directly.
 
-> + *
-> + * @id:		IPI id
-> + * @len:	share buffer length
-> + * @share_buf:	share buffer data
-> + */
-> +struct share_obj {
-
-Please make this struct name slightly less generic, e.g. mtk_share_obj
-should be fine.
-
-> +	u32 id;
-> +	u32 len;
-> +	u8 share_buf[SCP_SHARE_BUFFER_SIZE];
+> +	.ns_ipi_id = SCP_IPI_NS_SERVICE,
 > +};
 > +
-> +void scp_memcpy_aligned(void __iomem *dst, const void *src, unsigned int len);
-> +void scp_ipi_lock(struct mtk_scp *scp, u32 id);
-> +void scp_ipi_unlock(struct mtk_scp *scp, u32 id);
-> +
-> +#endif
-> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
 [..]
-> +struct platform_device *scp_get_pdev(struct platform_device *pdev)
+> diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
+[..]
+> +static void __ept_release(struct kref *kref)
 
-I'm unable to find a patch that calls this, but I assume you're only
-using the returned struct platform_device * in order to call the other
-exported functions in this driver.
-
-If this is the case I would suggest that you return a struct mtk_scp *
-instead, as this makes your API cleaner and prevents confusion about
-what platform_device could/should be passed in.
-
-Note that you don't need to disclose the struct mtk_scp to your clients,
-just add a "struct mtk_scp;" in include/remoteproc/mtk_scp.h and your
-clients can pass this pointer around.
+Please make this __mtk_ept_release() to make it clear that this is
+not a framework function.
 
 > +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *scp_node;
-> +	struct platform_device *scp_pdev;
-> +
-> +	scp_node = of_parse_phandle(dev->of_node, "mediatek,scp", 0);
-> +	if (!scp_node) {
-> +		dev_err(dev, "can't get SCP node\n");
-> +		return NULL;
-> +	}
-> +
-> +	scp_pdev = of_find_device_by_node(scp_node);
-> +	if (WARN_ON(!scp_pdev)) {
-> +		dev_err(dev, "SCP pdev failed\n");
-> +		of_node_put(scp_node);
-> +		return NULL;
-> +	}
-> +
-> +	return scp_pdev;
+> +	struct rpmsg_endpoint *ept = container_of(kref, struct rpmsg_endpoint,
+> +						  refcount);
+> +	kfree(to_mtk_rpmsg_endpoint(ept));
 > +}
-> +EXPORT_SYMBOL_GPL(scp_get_pdev);
-[..]
-> +static irqreturn_t scp_irq_handler(int irq, void *priv)
+> +
+> +static void mtk_rpmsg_ipi_handler(void *data, unsigned int len, void *priv)
 > +{
-> +	struct mtk_scp *scp = priv;
-> +	u32 scp_to_host;
+> +	struct mtk_rpmsg_endpoint *mept = priv;
+> +	struct rpmsg_endpoint *ept = &mept->ept;
 > +	int ret;
 > +
-> +	ret = clk_prepare_enable(scp->clk);
-> +	if (ret) {
-> +		dev_err(scp->dev, "failed to enable clocks\n");
-> +		return IRQ_NONE;
-> +	}
-> +
-> +	scp_to_host = readl(scp->reg_base + MT8183_SCP_TO_HOST);
-> +	if (scp_to_host & MT8183_SCP_IPC_INT_BIT)
-> +		scp_ipi_handler(scp);
-> +	else
-> +		scp_wdt_handler(scp, scp_to_host);
-> +
-> +	/*
-> +	 * Ensure that all writes to SRAM are committed before another
-> +	 * interrupt.
-> +	 */
-> +	mb();
-
-writel() should ensure the ordering, is this not sufficient?
-
-> +	/* SCP won't send another interrupt until we set SCP_TO_HOST to 0. */
-> +	writel(MT8183_SCP_IPC_INT_BIT | MT8183_SCP_WDT_INT_BIT,
-> +	       scp->reg_base + MT8183_SCP_TO_HOST);
-> +	clk_disable_unprepare(scp->clk);
-> +
-> +	return IRQ_HANDLED;
-> +}
-[..]
-> +static int scp_map_memory_region(struct mtk_scp *scp)
-> +{
-> +	int ret;
-> +
-> +	ret = of_reserved_mem_device_init_by_idx(scp->dev, scp->dev->of_node,
-> +						 0);
-
-As you're passing 0, just use of_reserved_mem_device_init().
-
-> +	if (ret) {
-> +		dev_err(scp->dev,
-> +			"%s:of_reserved_mem_device_init_by_idx(0) failed:(%d)",
-> +			__func__, ret);
-
-Please don't use __func__ in your error messages, make this "failed to
-assign memory-region: %d\n");
-
-> +		return -ENOMEM;
-> +	}
-> +
-> +	/* Reserved SCP code size */
-> +	scp->dram_size = MAX_CODE_SIZE;
-> +	scp->cpu_addr = dma_alloc_coherent(scp->dev, scp->dram_size,
-> +					   &scp->phys_addr, GFP_KERNEL);
-
-Don't you have a problem with that the reserved memory region must be
-8MB for this allocation to succeed? If so, consider using devm_ioremap
-or similar to map the region.
-
-> +	if (!scp->cpu_addr)
-> +		return -ENOMEM;
-> +
-> +	return 0;
-> +}
-> +
-> +static void scp_unmap_memory_region(struct mtk_scp *scp)
-> +{
-> +	dma_free_coherent(scp->dev, scp->dram_size, scp->cpu_addr,
-> +			  scp->phys_addr);
-> +	of_reserved_mem_device_release(scp->dev);
-> +}
-> +
-> +static int scp_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	struct mtk_scp *scp;
-> +	struct rproc *rproc;
-> +	struct resource *res;
-> +	char *fw_name = "scp.img";
-> +	int ret, i;
-> +
-> +	rproc = rproc_alloc(dev,
-> +			    np->name,
-> +			    &scp_ops,
-> +			    fw_name,
-> +			    sizeof(*scp));
-> +	if (!rproc) {
-> +		dev_err(dev, "unable to allocate remoteproc\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	scp = (struct mtk_scp *)rproc->priv;
-> +	scp->rproc = rproc;
-> +	scp->dev = dev;
-> +	platform_set_drvdata(pdev, scp);
-> +
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
-> +	scp->sram_base = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR((__force void *)scp->sram_base)) {
-> +		dev_err(dev, "Failed to parse and map sram memory\n");
-> +		ret = PTR_ERR((__force void *)scp->sram_base);
-> +		goto free_rproc;
-> +	}
-> +	scp->sram_size = resource_size(res);
-> +
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "cfg");
-> +	scp->reg_base = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR((__force void *)scp->reg_base)) {
-> +		dev_err(dev, "Failed to parse and map cfg memory\n");
-> +		ret = PTR_ERR((__force void *)scp->reg_base);
-> +		goto free_rproc;
-> +	}
-> +
-> +	ret = scp_map_memory_region(scp);
+> +	ret = (*ept->cb)(ept->rpdev, data, len, ept->priv, ept->addr);
 > +	if (ret)
-> +		goto free_rproc;
-> +
-> +	scp->clk = devm_clk_get(dev, "main");
-> +	if (IS_ERR(scp->clk)) {
-> +		dev_err(dev, "Failed to get clock\n");
-> +		ret = PTR_ERR(scp->clk);
-> +		goto release_dev_mem;
-> +	}
-> +
-> +	ret = clk_prepare_enable(scp->clk);
-> +	if (ret) {
-> +		dev_err(dev, "failed to enable clocks\n");
-> +		goto release_dev_mem;
-> +	}
-> +
-> +	mutex_init(&scp->send_lock);
-> +	for (i = 0; i < SCP_IPI_MAX; i++)
-> +		mutex_init(&scp->ipi_desc[i].lock);
-
-Move this chunk up above the platform_get_resource_byname(), so that
-it's clear that  clk_prepare_enable/clk_disable_unprepare() wraps the
-scp_ipi_init().
-
-Also double check that you're hitting destroy_mutex: when necessary.
-
-> +
-> +	ret = scp_ipi_init(scp);
-> +	clk_disable_unprepare(scp->clk);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to init ipi\n");
-> +		goto release_dev_mem;
-> +	}
-> +
-> +	/* register SCP initialization IPI */
-> +	ret = scp_ipi_register(pdev,
-> +			       SCP_IPI_INIT,
-> +			       scp_init_ipi_handler,
-> +			       scp);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to register IPI_SCP_INIT\n");
-> +		goto release_dev_mem;
-> +	}
-> +
-> +	init_waitqueue_head(&scp->run.wq);
-> +	init_waitqueue_head(&scp->ack_wq);
-> +
-> +	ret = devm_request_threaded_irq(dev, platform_get_irq(pdev, 0), NULL,
-> +					scp_irq_handler, IRQF_ONESHOT,
-> +					pdev->name, scp);
-> +
-> +	if (ret) {
-> +		dev_err(dev, "failed to request irq\n");
-> +		goto destroy_mutex;
-> +	}
-> +
-> +	ret = rproc_add(rproc);
-> +	if (ret)
-> +		goto destroy_mutex;
-> +
-> +	return ret;
-> +
-> +destroy_mutex:
-> +	for (i = 0; i < SCP_IPI_MAX; i++)
-> +		mutex_destroy(&scp->ipi_desc[i].lock);
-> +	mutex_destroy(&scp->send_lock);
-> +release_dev_mem:
-> +	scp_unmap_memory_region(scp);
-> +free_rproc:
-> +	rproc_free(rproc);
-> +
-> +	return ret;
+> +		dev_warn(&ept->rpdev->dev, "rpmsg handler return error = %d",
+> +			 ret);
 > +}
 > +
-> +static int scp_remove(struct platform_device *pdev)
+> +static struct rpmsg_endpoint *
+> +__rpmsg_create_ept(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
+
+__mtk_create_ept()
+
+> +		   struct rpmsg_device *rpdev, rpmsg_rx_cb_t cb, void *priv,
+> +		   u32 id)
 > +{
-> +	struct mtk_scp *scp = platform_get_drvdata(pdev);
-> +	int i;
-> +
-> +	for (i = 0; i < SCP_IPI_MAX; i++)
-> +		mutex_destroy(&scp->ipi_desc[i].lock);
-> +	mutex_destroy(&scp->send_lock);
-
-rproc_del() serves as a synchronization point for when callbacks
-shouldn't be called anymore, so destroy your mutexes after that.
-
-> +	rproc_del(scp->rproc);
-> +	rproc_free(scp->rproc);
-> +	scp_unmap_memory_region(scp);
-> +
-> +	return 0;
-> +}
-> +
-[..]
-> diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
-[..]
-> +/*
-> + * Copy src to dst, where dst is in SCP SRAM region.
-
-Please format this as kerneldoc.
-
-> + * Since AP access of SCP SRAM don't support byte write, this always write a
-> + * full word at a time, and may cause some extra bytes to be written at the
-> + * beginning & ending of dst.
-> + */
-> +void scp_memcpy_aligned(void __iomem *dst, const void *src, unsigned int len)
-> +{
-> +	void __iomem *ptr;
-> +	u32 val;
-> +	unsigned int i = 0;
-> +
-> +	if (!IS_ALIGNED((unsigned long)dst, 4)) {
-> +		ptr = (void __iomem *)ALIGN_DOWN((unsigned long)dst, 4);
-> +		i = 4 - (dst - ptr);
-> +		val = readl_relaxed(ptr);
-> +		memcpy((u8 *)&val + (4 - i), src, i);
-> +		writel_relaxed(val, ptr);
-> +	}
-> +
-> +	while (i + 4 <= len) {
-> +		val = *((u32 *)(src + i));
-> +		writel_relaxed(val, dst + i);
-> +		i += 4;
-> +	}
-
-Afaict above reimplements __iowrite32_copy().
-
-> +	if (i < len) {
-> +		val = readl_relaxed(dst + i);
-> +		memcpy(&val, src + i, len - i);
-> +		writel_relaxed(val, dst + i);
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(scp_memcpy_aligned);
-> +
-[..]
-> +int scp_ipi_send(struct platform_device *pdev,
-> +		 u32 id,
-> +		 void *buf,
-> +		 unsigned int len,
-> +		 unsigned int wait)
-> +{
-[..]
-> +	scp->ipi_id_ack[id] = false;
-> +	/*
-> +	 * Ensure that all writes to SRAM are committed before sending the
-> +	 * interrupt to SCP.
-> +	 */
-> +	mb();
-
-Again, isn't the implicit barrier in writel enough?
-
-> +	/* send the command to SCP */
-> +	writel(MT8183_HOST_IPC_INT_BIT, scp->reg_base + MT8183_HOST_TO_SCP);
-[..]
-> diff --git a/include/linux/remoteproc/mtk_scp.h b/include/linux/remoteproc/mtk_scp.h
-[..]
-> +/**
-> + * scp_ipi_register - register an ipi function
-
-Parenthesis on this, i.e. "scp_ipi_register() - register an ipi function"
-
-> + *
-> + * @pdev:	SCP platform device
-> + * @id:		IPI ID
-> + * @handler:	IPI handler
-> + * @priv:	private data for IPI handler
-> + *
-> + * Register an ipi function to receive ipi interrupt from SCP.
-> + *
-> + * Return: Return 0 if ipi registers successfully, otherwise it is failed.
-> + */
-
-Please move the kerneldoc to the implementation instead.
 
 Regards,
 Bjorn
