@@ -2,53 +2,54 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13903F8955
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Nov 2019 08:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 436EEF8A03
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Nov 2019 08:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725899AbfKLHIs (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 12 Nov 2019 02:08:48 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42754 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725781AbfKLHIs (ORCPT
+        id S1725853AbfKLH4P (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 12 Nov 2019 02:56:15 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:41059 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbfKLH4P (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 12 Nov 2019 02:08:48 -0500
-Received: by mail-pf1-f194.google.com with SMTP id s5so12666043pfh.9
-        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Nov 2019 23:08:48 -0800 (PST)
+        Tue, 12 Nov 2019 02:56:15 -0500
+Received: by mail-ed1-f66.google.com with SMTP id a21so14141228edj.8
+        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Nov 2019 23:56:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zK78FnAOmv3761AstDJXelt5t5xR2XRW77fvH5frBqE=;
-        b=EsEiW+5kyUCExkdffD7tH/HTw0VFRrIgj4HiXF8XKU+s8+YxXn15j5ZruCiQly6Mdb
-         q7GX8wD3efvZPwCoSj7sgXxq6EuWXVchXS2z7IqZ6Qo1NVyCKPGhME4O6BACvUwJRwkm
-         2N9+FGswolsCy1Dl5C1Xua2F9aQHKDYZEPwPr02tW8pUuelj9NQNUcZPBdofEnH1/bTo
-         t/3DrJ3shlpgHJGaMlcvL9OzVafIt6V5fKWM/ObUzBh08LU/lTr5ciKtaj0wtFx0hyhz
-         OvdFweNPtGmC0DTkjjKIXg3EFo4gDiMVrNmpQDThE8CG1+yZBKI7nLU7tAdZVnqhxFED
-         FQCQ==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d9CMSdwYc+0bvqNY3bj8MTiXUzC4S4T1DHmbw/hjbNU=;
+        b=WVdrF/LbuxNK+RZNB4qelNBp/e4iwRucvZrfay5MYioNfC69yEfkiq3mEKN7+QocMA
+         +ngIf7oLH3g4EnilEip1f0heRVINC3xqFE6iutRFJUMUuXRepN6qv6Ogb7eeXtq+437w
+         VySjdaJ+YGZ4xajTgloZcmw/30nVqMmAXL1jo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zK78FnAOmv3761AstDJXelt5t5xR2XRW77fvH5frBqE=;
-        b=jJUinq8zML4Y/o5OD+5xAMQegaDu60GdFjL9jefzto44cjMmLBqx33nzVHpcg2cISt
-         fxpPC5SsIOBr8pR15gXD4Mu+z/pNNRhRLckpMwp8v70+XVOaiOe7PLmCcj2YyiaL5Lr3
-         kyTS+TT4c6DHoZYDmK9RrkC6pSIM9SOsFvg9AT/9mlt4qrQSjWcMGWHccoCvS3paI3wg
-         npmQla//oCjt2DA5A2ey889l7Hnvo8OtrW255C89QqCF8q11Sxe4L9MoyfWV96VCIj5V
-         atvPD/5YMbku4LvzymNwRho1Y3JmGTBwDtajLCY9enLE3ByNmENKo3QeXCNZuio193QQ
-         0PLA==
-X-Gm-Message-State: APjAAAUatS45+ZRQOnSssyAeEdI/P5XWcv7h1GjgcHCqHnXaYDY1ZPYb
-        WKJcmObLeXlKLOsAfPs8u0fpkQ==
-X-Google-Smtp-Source: APXvYqwE4C2wT2seRucgaO6gP6vKq4NKee7ygjFHmTDw+i/soL0w6a48b/EcGkDtS6QcPMZ7gFUutg==
-X-Received: by 2002:a63:a05c:: with SMTP id u28mr35047901pgn.333.1573542527714;
-        Mon, 11 Nov 2019 23:08:47 -0800 (PST)
-Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id o1sm15092669pgm.1.2019.11.11.23.08.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 23:08:47 -0800 (PST)
-Date:   Mon, 11 Nov 2019 23:08:45 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Pi-Hsun Shih <pihsun@chromium.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d9CMSdwYc+0bvqNY3bj8MTiXUzC4S4T1DHmbw/hjbNU=;
+        b=HpFvRUL1XmFF35CwV6PRE3VFLmRj9CQQV6DbVNl5zUgNGelcd7zFcP9f/62VYTr8Ia
+         jFAw4cUoxCEPemc2juAab4ZK2QGjNFsOrCUeAJ6kv3iixuX/3jmaacMkNYWnGkcFn+7M
+         eSbWdnCl86fS5ipWbq+xMDRB9JHAfkJ3fMWuEwQXBnpH3yBjIm6e15hN6FyOrPB94Kn/
+         3KDRIXxbDjwJCCo0PjBMTjQ5wPxgZAdbmxTeah+CXn6YAZcx+9XbiHyhA4ah8SPrfaiM
+         cY5jsWDxXHUgZTzzS22PnbypsnpsKiMB/UbHVeHKfdWeAQxw63yyJCNunnH0kQQ/gmwd
+         g2Kw==
+X-Gm-Message-State: APjAAAV6Qb/3ALgw6lop0rz4xpw8jYzIHYN0yQ0R316Sv0YpsdLDvCml
+        j0kMnq0MBUFMcnch2w96bmXnL+st81HKt9Mxtwnp7g==
+X-Google-Smtp-Source: APXvYqykVU2DO/Wmg+8yGSGg8XpY3WapNGgB/334lOZGqtD4Ac7vjW8R99gzzSZakZJfvmlK2D1L57s3QPnfDwLf6zI=
+X-Received: by 2002:aa7:c694:: with SMTP id n20mr31255461edq.87.1573545374058;
+ Mon, 11 Nov 2019 23:56:14 -0800 (PST)
+MIME-Version: 1.0
+References: <20191014075812.181942-1-pihsun@chromium.org> <20191014075812.181942-3-pihsun@chromium.org>
+ <20191111225316.GC3108315@builder>
+In-Reply-To: <20191111225316.GC3108315@builder>
+From:   Pi-Hsun Shih <pihsun@chromium.org>
+Date:   Tue, 12 Nov 2019 15:55:38 +0800
+Message-ID: <CANdKZ0ecgLjhnL9CawW+pPerTtPhnMkaUSmjxcB10OoMBzQaGQ@mail.gmail.com>
+Subject: Re: [PATCH v20 2/4] remoteproc/mediatek: add SCP support for mt8183
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Erin Lo <erin.lo@mediatek.com>
+Cc:     Nicolas Boichat <drinkcat@chromium.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         open list <linux-kernel@vger.kernel.org>,
         "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
@@ -57,46 +58,83 @@ Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         <linux-arm-kernel@lists.infradead.org>,
         "moderated list:ARM/Mediatek SoC support" 
         <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v20 3/4] rpmsg: add rpmsg support for mt8183 SCP.
-Message-ID: <20191112070845.GR3108315@builder>
-References: <20191014075812.181942-1-pihsun@chromium.org>
- <20191014075812.181942-4-pihsun@chromium.org>
- <20191111231023.GD3108315@builder>
- <CANdKZ0frU9+dRYeMaJjjKm6emxj41c_jBk_RX3G7bXn_oXKp4g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANdKZ0frU9+dRYeMaJjjKm6emxj41c_jBk_RX3G7bXn_oXKp4g@mail.gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon 11 Nov 22:42 PST 2019, Pi-Hsun Shih wrote:
-> On Tue, Nov 12, 2019 at 7:10 AM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> > On Mon 14 Oct 00:58 PDT 2019, Pi-Hsun Shih wrote:
-> > > diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-[..]
-> > > +static struct mtk_rpmsg_info mtk_scp_rpmsg_info = {
-> > > +     .send_ipi = scp_ipi_send,
-> > > +     .register_ipi = scp_ipi_register,
-> > > +     .unregister_ipi = scp_ipi_unregister,
-> >
-> > These are exported symbols, so unless you see a need to support
-> > alternative implementations in the near future just skip the function
-> > pointers and call them directly.
-> >
-> 
-> Yes there is request from MTK that they do want to reuse the mtk_rpmsg
-> driver for things other than mtk_scp, so there's a need to support
-> alternative implementations for this.
-> 
+Hi,
+Thanks for the review, I'll address them in the next version. Some
+inline comment below.
 
-Fair enough, let's leave it like this for now!
+On Tue, Nov 12, 2019 at 6:53 AM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Mon 14 Oct 00:58 PDT 2019, Pi-Hsun Shih wrote:
+> > diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> [..]
+> > +struct platform_device *scp_get_pdev(struct platform_device *pdev)
+>
+> I'm unable to find a patch that calls this, but I assume you're only
+> using the returned struct platform_device * in order to call the other
+> exported functions in this driver.
 
-Looking forward to the next revision of the patches.
+Some more information:
 
-Regards,
-Bjorn
+Patches for drivers that are using this function includes:
+https://patchwork.kernel.org/patch/11126059/
+https://patchwork.kernel.org/patch/11134913/
+https://patchwork.kernel.org/patch/11135073/
+https://patchwork.kernel.org/patch/11138511/
+https://patchwork.kernel.org/patch/11140755/
+
+The returned platform_device are used either:
+* As a pointer passing back to the scp_ipi_{register,unregister,send} APIs
+  # This is the case above.
+* Use the ->dev field for either passing to dma_alloc_coherent
+(11134913, 11138511), or logging
+(https://patchwork.kernel.org/patch/11140755/ mdp_vpu_register).
+  # Probably would need to export another function for mtk_scp* ->
+device* if going for this change.
+
+A particular problematic patch for this change is
+https://patchwork.kernel.org/patch/11135073/, which stores both
+platform_device from SCP or VPU in the same field, but it can be
+changed to two different fields.
+
+>
+> If this is the case I would suggest that you return a struct mtk_scp *
+> instead, as this makes your API cleaner and prevents confusion about
+> what platform_device could/should be passed in.
+>
+> Note that you don't need to disclose the struct mtk_scp to your clients,
+> just add a "struct mtk_scp;" in include/remoteproc/mtk_scp.h and your
+> clients can pass this pointer around.
+
+Ok I'll change to this.
+
+> > +             return -ENOMEM;
+> > +     }
+> > +
+> > +     /* Reserved SCP code size */
+> > +     scp->dram_size = MAX_CODE_SIZE;
+> > +     scp->cpu_addr = dma_alloc_coherent(scp->dev, scp->dram_size,
+> > +                                        &scp->phys_addr, GFP_KERNEL);
+>
+> Don't you have a problem with that the reserved memory region must be
+> 8MB for this allocation to succeed? If so, consider using devm_ioremap
+> or similar to map the region.
+
+Yes the reserved memory need to be large enough.
+There are other drivers (https://patchwork.kernel.org/patch/11134913/,
+https://patchwork.kernel.org/patch/11138511/) that also use
+dma_alloc_coherent on the same reserved memory, so we need to use
+dma_alloc_coherent here too.
+
+It seems to be problematic if this dma_alloc_coherent is not called
+before the other two dma_alloc_coherent, I'll check this.
+
+> [...]
+> Regards,
+> Bjorn
