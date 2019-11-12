@@ -2,258 +2,465 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAACEF8AC9
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Nov 2019 09:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D913F8ADA
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Nov 2019 09:42:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725781AbfKLIkJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 12 Nov 2019 03:40:09 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:38844 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725775AbfKLIkJ (ORCPT
+        id S1725899AbfKLImv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 12 Nov 2019 03:42:51 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:44548 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725821AbfKLImv (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 12 Nov 2019 03:40:09 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAC8WZHP019861;
-        Tue, 12 Nov 2019 09:40:03 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=SyHfsyU4mqmWjJV92fBoe/VI3PmrduyqcBPRcoa5WLI=;
- b=GhvWRTv3m/rPOqxmoOF0DSLcOhPuV6Jw/tqyDfYdsHyg6qp3Qw7hboyTt7iPRDnOSWDc
- GTWe/E2aji3ViM+eArXfjpS3OSv+GGSBJ4QvO0DHEqz0Po3c8tjBGWWa8kQO96gPEDN/
- gwzvJtv/C8rPQFPLPJhSMViw7K2IMwBhS+iz2dEuzvKzAPWyRC8ea5J5iGxAqDu8NkT+
- R/DA+Q/+q80dxgibkJljXmNJTHwDgK+X1p31k8pfZ1Mhuro1La5QZbb6pXaY0Uy+hNlx
- lC9a28nU3iuuJxorf27nr2yR1wwlzuVCpgJQQUngJoU5PFkn7NZY36X3mf6rlTjhOeGP NA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2w7pstrsft-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Nov 2019 09:40:03 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 07103100038;
-        Tue, 12 Nov 2019 09:40:02 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E9AA92ADD47;
-        Tue, 12 Nov 2019 09:40:01 +0100 (CET)
-Received: from SFHDAG7NODE2.st.com (10.75.127.20) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 12 Nov
- 2019 09:40:01 +0100
-Received: from SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090]) by
- SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090%20]) with mapi id
- 15.00.1473.003; Tue, 12 Nov 2019 09:40:01 +0100
-From:   Loic PALLARDY <loic.pallardy@st.com>
+        Tue, 12 Nov 2019 03:42:51 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAC8gmB2119966;
+        Tue, 12 Nov 2019 02:42:48 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573548168;
+        bh=PhkLanO55KxXFQ31uGGptnN9kaMBpxFdTBxsxYBQM0Y=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=E4WEw2xFrkm0izhTpF89RgqxUAFcy0Dm45mC3C7wp+cosjrv5I8Q00O4y8+e0gLdg
+         kY58GVNCOxPLR7JIbNmyCW9OG+kzrhJm8XAFj81uAOjVZ2GuSNKD2nm7dkX1lIFj8m
+         jFPWfF0329f23lEfBoObYAPfS6kZUTZmC9uZLd0A=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xAC8gm2I115152
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Nov 2019 02:42:48 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 12
+ Nov 2019 02:42:30 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 12 Nov 2019 02:42:30 -0600
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAC8ghF6094614;
+        Tue, 12 Nov 2019 02:42:44 -0600
+Subject: Re: [PATCH 12/17] remoteproc/omap: Request a timer(s) for remoteproc
+ usage
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     "ohad@wizery.com" <ohad@wizery.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
-        "benjamin.gaignard@linaro.org" <benjamin.gaignard@linaro.org>,
-        "Fabien DESSENNE" <fabien.dessenne@st.com>,
-        "s-anna@ti.com" <s-anna@ti.com>
-Subject: RE: [PATCH v2 1/1] remoteproc: add support for co-processor booted
- before kernel
-Thread-Topic: [PATCH v2 1/1] remoteproc: add support for co-processor booted
- before kernel
-Thread-Index: AQHVkv2NUEsuP3FH4UGU8CGKAfhkTqeCAP2AgAU8NhA=
-Date:   Tue, 12 Nov 2019 08:40:01 +0000
-Message-ID: <9879473e5b91499eb3d6ddd11584af16@SFHDAG7NODE2.st.com>
-References: <1572864570-10131-1-git-send-email-loic.pallardy@st.com>
- <20191109012027.GC5662@tuxbook-pro>
-In-Reply-To: <20191109012027.GC5662@tuxbook-pro>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.47]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+CC:     <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <s-anna@ti.com>
+References: <20191028124238.19224-1-t-kristo@ti.com>
+ <20191028124238.19224-13-t-kristo@ti.com> <20191112041351.GN3108315@builder>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <db6acb22-1feb-b838-b950-98437ba27cb5@ti.com>
+Date:   Tue, 12 Nov 2019 10:42:42 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-12_02:2019-11-11,2019-11-12 signatures=0
+In-Reply-To: <20191112041351.GN3108315@builder>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Bjorn,
+On 12/11/2019 06:13, Bjorn Andersson wrote:
+> On Mon 28 Oct 05:42 PDT 2019, Tero Kristo wrote:
+> 
+>> From: Suman Anna <s-anna@ti.com>
+>>
+>> The remote processors in OMAP4+ SoCs are equipped with internal
+>> timers, like the internal SysTick timer in a Cortex M3/M4 NVIC or
+>> the CTM timer within Unicache in IPU & DSP. However, these timers
+>> are gated when the processor subsystem clock is gated, making
+>> them rather difficult to use as OS tick sources. They will not
+>> be able to wakeup the processor from any processor-sleep induced
+>> clock-gating states.
+>>
+>> This can be avoided by using an external timer as the tick source,
+>> which can be controlled independently by the OMAP remoteproc
+>> driver code, but still allowing the processor subsystem clock to
+>> be auto-gated when the remoteproc cores are idle.
+>>
+>> This patch adds the support for OMAP remote processors to request
+>> timer(s) to be used by the remoteproc. The timers are enabled and
+>> disabled in line with the enabling/disabling of the remoteproc.
+>> The timer data is not mandatory if the advanced device management
+>> features are not required.
+>>
+>> The core timer functionality is provided by the OMAP DMTimer
+>> clocksource driver, which does not export any API. The logic is
+>> implemented through the timer device's platform data ops. The OMAP
+>> remoteproc driver mainly requires ops to request/free a dmtimer,
+>> and to start/stop a timer. The split ops helps in controlling the
+>> timer state without having to request and release a timer everytime
+>> it needs to use the timer.
+>>
+>> NOTE: If the gptimer is already in use by the time IPU and/or
+>> DSP are loaded, the processors will fail to boot.
+>>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> ---
+>>   drivers/remoteproc/omap_remoteproc.c | 258 +++++++++++++++++++++++++++
+>>   1 file changed, 258 insertions(+)
+>>
+>> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+>> index 016d5beda195..8450dd79d391 100644
+>> --- a/drivers/remoteproc/omap_remoteproc.c
+>> +++ b/drivers/remoteproc/omap_remoteproc.c
+>> @@ -27,6 +27,9 @@
+>>   #include <linux/regmap.h>
+>>   #include <linux/mfd/syscon.h>
+>>   #include <linux/reset.h>
+>> +#include <clocksource/timer-ti-dm.h>
+>> +
+>> +#include <linux/platform_data/dmtimer-omap.h>
+>>   
+>>   #include "omap_remoteproc.h"
+>>   #include "remoteproc_internal.h"
+>> @@ -61,6 +64,16 @@ struct omap_rproc_mem {
+>>   	size_t size;
+>>   };
+>>   
+>> +/**
+>> + * struct omap_rproc_timer - data structure for a timer used by a omap rproc
+>> + * @odt: timer pointer
+>> + * @timer_ops: OMAP dmtimer ops for @odt timer
+>> + */
+>> +struct omap_rproc_timer {
+>> +	struct omap_dm_timer *odt;
+>> +	const struct omap_dm_timer_ops *timer_ops;
+>> +};
+>> +
+>>   /**
+>>    * struct omap_rproc - omap remote processor state
+>>    * @mbox: mailbox channel handle
+>> @@ -68,6 +81,8 @@ struct omap_rproc_mem {
+>>    * @boot_data: boot data structure for setting processor boot address
+>>    * @mem: internal memory regions data
+>>    * @num_mems: number of internal memory regions
+>> + * @num_timers: number of rproc timer(s)
+>> + * @timers: timer(s) info used by rproc
+>>    * @rproc: rproc handle
+>>    * @reset: reset handle
+>>    */
+>> @@ -77,6 +92,8 @@ struct omap_rproc {
+>>   	struct omap_rproc_boot_data *boot_data;
+>>   	struct omap_rproc_mem *mem;
+>>   	int num_mems;
+>> +	int num_timers;
+>> +	struct omap_rproc_timer *timers;
+>>   	struct rproc *rproc;
+>>   	struct reset_control *reset;
+>>   };
+>> @@ -91,6 +108,212 @@ struct omap_rproc_dev_data {
+>>   	const char *fw_name;
+>>   };
+>>   
+>> +/**
+>> + * omap_rproc_request_timer - request a timer for a remoteproc
+> 
+> Add parenthesis on functions in kerneldoc.
 
-Thanks for your review.
+Ok.
 
-> -----Original Message-----
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Sent: samedi 9 novembre 2019 02:20
-> To: Loic PALLARDY <loic.pallardy@st.com>
-> Cc: ohad@wizery.com; linux-remoteproc@vger.kernel.org; linux-
-> kernel@vger.kernel.org; Arnaud POULIQUEN <arnaud.pouliquen@st.com>;
-> benjamin.gaignard@linaro.org; Fabien DESSENNE
-> <fabien.dessenne@st.com>; s-anna@ti.com
-> Subject: Re: [PATCH v2 1/1] remoteproc: add support for co-processor
-> booted before kernel
->=20
-> On Mon 04 Nov 02:49 PST 2019, Loic Pallardy wrote:
->=20
-> > Remote processor could boot independently or be started before Linux
-> > kernel by bootloader or any firmware.
-> > This patch introduces a new property in rproc core, named preloaded,
-> > to be able to allocate resources and sub-devices like vdev and to
-> > synchronize with current state without loading firmware from file syste=
-m.
-> > It is platform driver responsibility to implement the right firmware
-> > load ops according to HW specificities.
-> >
->=20
-> Is it just preloaded or already started?
-At the beginning, this properties was indeed to support an already started =
-coprocessor, but discussing with Suman few months ago, we detected some cas=
-es for which firmware may be loaded before kernel start (firmware located i=
-n embedded flash or loaded by bootloaders) or may be loaded by a dedicated =
-driver interface before rproc framework be called.
-As rproc framework is mainly responsible for firmware loading and resource =
-allocation, I named this property preloaded to cover as much as possible al=
-l cases.
->=20
-> > Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
-> >
-> > ---
-> > Change from v1:
-> > - Keep bool in struct rproc
-> > ---
-> >  drivers/remoteproc/remoteproc_core.c | 37
-> +++++++++++++++++++++++++++---------
-> >  include/linux/remoteproc.h           |  2 ++
-> >  2 files changed, 30 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/drivers/remoteproc/remoteproc_core.c
-> b/drivers/remoteproc/remoteproc_core.c
-> > index 3c5fbbbfb0f1..7eaf0f949afa 100644
-> > --- a/drivers/remoteproc/remoteproc_core.c
-> > +++ b/drivers/remoteproc/remoteproc_core.c
-> > @@ -1372,7 +1372,11 @@ static int rproc_fw_boot(struct rproc *rproc,
-> const struct firmware *fw)
-> >  	if (ret)
-> >  		return ret;
-> >
-> > -	dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
-> > +	if (fw)
-> > +		dev_info(dev, "Booting fw image %s, size %zd\n", name,
-> > +			 fw->size);
-> > +	else
-> > +		dev_info(dev, "Synchronizing with preloaded co-
-> processor\n");
-> >
-> >  	/*
-> >  	 * if enabling an IOMMU isn't relevant for this rproc, this is
-> > @@ -1728,7 +1732,7 @@ static void rproc_crash_handler_work(struct
-> work_struct *work)
-> >   */
-> >  int rproc_boot(struct rproc *rproc)
-> >  {
-> > -	const struct firmware *firmware_p;
-> > +	const struct firmware *firmware_p =3D NULL;
-> >  	struct device *dev;
-> >  	int ret;
-> >
-> > @@ -1759,11 +1763,17 @@ int rproc_boot(struct rproc *rproc)
-> >
-> >  	dev_info(dev, "powering up %s\n", rproc->name);
-> >
-> > -	/* load firmware */
-> > -	ret =3D request_firmware(&firmware_p, rproc->firmware, dev);
-> > -	if (ret < 0) {
-> > -		dev_err(dev, "request_firmware failed: %d\n", ret);
-> > -		goto downref_rproc;
-> > +	if (!rproc->preloaded) {
-> > +		/* load firmware */
-> > +		ret =3D request_firmware(&firmware_p, rproc->firmware,
-> dev);
-> > +		if (ret < 0) {
-> > +			dev_err(dev, "request_firmware failed: %d\n", ret);
-> > +			goto downref_rproc;
-> > +		}
-> > +	} else {
-> > +		/* set firmware name to null as unknown */
-> > +		kfree(rproc->firmware);
-> > +		rproc->firmware =3D NULL;
->=20
-> What happens when the remoteproc crashes? What happens if I stop it and
-> try to start it again?
-Exactly, it should be stopped, then firmware should be provided and coproce=
-ssor restarted thanks to sysfs interface
+> 
+>> + * @np: device node pointer to the desired timer
+>> + * @timer: handle to a struct omap_rproc_timer to return the timer handle
+>> + *
+>> + * This helper function is used primarily to request a timer associated with
+>> + * a remoteproc. The returned handle is stored in the .odt field of the
+>> + * @timer structure passed in, and is used to invoke other timer specific
+>> + * ops (like starting a timer either during device initialization or during
+>> + * a resume operation, or for stopping/freeing a timer).
+>> + *
+>> + * Returns 0 on success, otherwise an appropriate failure
+>> + */
+>> +static int omap_rproc_request_timer(struct device_node *np,
+>> +				    struct omap_rproc_timer *timer)
+>> +{
+>> +	int ret = 0;
+>> +
+>> +	timer->odt = timer->timer_ops->request_by_node(np);
+>> +	if (!timer->odt) {
+>> +		pr_err("request for timer node %p failed\n", np);
+>> +		return -EBUSY;
+>> +	}
+>> +
+>> +	ret = timer->timer_ops->set_source(timer->odt, OMAP_TIMER_SRC_SYS_CLK);
+>> +	if (ret) {
+>> +		pr_err("error setting OMAP_TIMER_SRC_SYS_CLK as source for timer node %p\n",
+>> +		       np);
+> 
+> You could easily pass a struct device * from omap_rproc_enable_timers()
+> to make this a more useful dev_err()
 
->=20
-> >  	}
-> >
-> >  	ret =3D rproc_fw_boot(rproc, firmware_p);
-> > @@ -1917,8 +1927,17 @@ int rproc_add(struct rproc *rproc)
-> >  	/* create debugfs entries */
-> >  	rproc_create_debug_dir(rproc);
-> >
-> > -	/* if rproc is marked always-on, request it to boot */
-> > -	if (rproc->auto_boot) {
-> > +	if (rproc->preloaded) {
-> > +		/*
-> > +		 * If rproc is marked already booted, no need to wait
-> > +		 * for firmware.
-> > +		 * Just handle associated resources and start sub devices
-> > +		 */
-> > +		ret =3D rproc_boot(rproc);
->=20
-> This will trickle down to your remoteproc driver's start() callback. If
-> you really mean that "preloaded" means "already started", then I presume
-> you're having some logic in your start() to turn it into a nop?
-Yes it is the responsibility of the driver to know in which state coprocess=
-or is.
-Depending on the use case, driver could:
-- do nothing if coprocessor already running
-- boot coprocessor, if only firmware was preloaded
-- reboot coprocessor to restart its execution on the preloaded firmware
+True, let me fix that.
 
->=20
-> > +		if (ret < 0)
-> > +			return ret;
-> > +	} else if (rproc->auto_boot) {
-> > +		/* if rproc is marked always-on, request it to boot */
-> >  		ret =3D rproc_trigger_auto_boot(rproc);
-> >  		if (ret < 0)
-> >  			return ret;
-> > diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> > index 16ad66683ad0..b68fbd576a77 100644
-> > --- a/include/linux/remoteproc.h
-> > +++ b/include/linux/remoteproc.h
-> > @@ -479,6 +479,7 @@ struct rproc_dump_segment {
-> >   * @table_sz: size of @cached_table
-> >   * @has_iommu: flag to indicate if remote processor is behind an MMU
-> >   * @auto_boot: flag to indicate if remote processor should be auto-sta=
-rted
-> > + * @preloaded: remote processor has been preloaded before start
-> sequence
->=20
-> I think this should be "skip_firmware_load", or if you really mean that
-> the bootloader started the remote process perhaps this should be
-> "@fw_booted: remote processor was booted by firmware" (or something
-> similar).
-I'm fine with "skip_firmware_load" or "skip_fw_load" to have a shorter name=
-.
-I'll also add "preload" in patch title.
+> 
+>> +		timer->timer_ops->free(timer->odt);
+>> +		return ret;
+>> +	}
+>> +
+>> +	/* clean counter, remoteproc code will set the value */
+>> +	timer->timer_ops->set_load(timer->odt, 0, 0);
+>> +
+>> +	return ret;
+> 
+> ret is 0 here, so return 0;
 
-Regards,
-Loic
+Right, will fix.
 
->=20
+> 
+>> +}
+>> +
+>> +/**
+>> + * omap_rproc_start_timer - start a timer for a remoteproc
+>> + * @timer: handle to a OMAP rproc timer
+>> + *
+>> + * This helper function is used to start a timer associated with a remoteproc,
+>> + * obtained using the request_timer ops. The helper function needs to be
+>> + * invoked by the driver to start the timer (during device initialization)
+>> + * or to just resume the timer.
+>> + *
+>> + * Returns 0 on success, otherwise a failure as returned by DMTimer ops
+>> + */
+>> +static inline int omap_rproc_start_timer(struct omap_rproc_timer *timer)
+>> +{
+>> +	return timer->timer_ops->start(timer->odt);
+>> +}
+>> +
+>> +/**
+>> + * omap_rproc_stop_timer - stop a timer for a remoteproc
+>> + * @timer: handle to a OMAP rproc timer
+>> + *
+>> + * This helper function is used to disable a timer associated with a
+>> + * remoteproc, and needs to be called either during a device shutdown
+>> + * or suspend operation. The separate helper function allows the driver
+>> + * to just stop a timer without having to release the timer during a
+>> + * suspend operation.
+>> + *
+>> + * Returns 0 on success, otherwise a failure as returned by DMTimer ops
+>> + */
+>> +static inline int omap_rproc_stop_timer(struct omap_rproc_timer *timer)
+>> +{
+>> +	return timer->timer_ops->stop(timer->odt);
+>> +}
+>> +
+>> +/**
+>> + * omap_rproc_release_timer - release a timer for a remoteproc
+>> + * @timer: handle to a OMAP rproc timer
+>> + *
+>> + * This helper function is used primarily to release a timer associated
+>> + * with a remoteproc. The dmtimer will be available for other clients to
+>> + * use once released.
+>> + *
+>> + * Returns 0 on success, otherwise a failure as returned by DMTimer ops
+>> + */
+>> +static inline int omap_rproc_release_timer(struct omap_rproc_timer *timer)
+>> +{
+>> +	return timer->timer_ops->free(timer->odt);
+>> +}
+>> +
+>> +/**
+>> + * omap_rproc_enable_timers - enable the timers for a remoteproc
+>> + * @rproc: handle of a remote processor
+>> + * @configure: boolean flag used to acquire and configure the timer handle
+>> + *
+>> + * This function is used primarily to enable the timers associated with
+>> + * a remoteproc. The configure flag is provided to allow the driver to
+>> + * to either acquire and start a timer (during device initialization) or
+>> + * to just start a timer (during a resume operation).
+>> + */
+>> +static int omap_rproc_enable_timers(struct rproc *rproc, bool configure)
+>> +{
+>> +	int i;
+>> +	int ret = 0;
+>> +	struct platform_device *tpdev;
+>> +	struct dmtimer_platform_data *tpdata;
+>> +	const struct omap_dm_timer_ops *timer_ops;
+>> +	struct omap_rproc *oproc = rproc->priv;
+>> +	struct omap_rproc_timer *timers = oproc->timers;
+>> +	struct device *dev = rproc->dev.parent;
+>> +	struct device_node *np = NULL;
+>> +
+>> +	if (oproc->num_timers <= 0)
+>> +		return 0;
+>> +
+>> +	if (!configure)
+>> +		goto start_timers;
+>> +
+>> +	for (i = 0; i < oproc->num_timers; i++) {
+>> +		np = of_parse_phandle(dev->of_node, "timers", i);
+>> +		if (!np) {
+>> +			ret = -ENXIO;
+>> +			dev_err(dev, "device node lookup for timer at index %d failed: %d\n",
+>> +				i, ret);
+>> +			goto free_timers;
+>> +		}
+>> +
+>> +		tpdev = of_find_device_by_node(np);
+>> +		if (!tpdev) {
+>> +			ret = -ENODEV;
+>> +			dev_err(dev, "could not get timer platform device\n");
+>> +			goto put_node;
+>> +		}
+>> +
+>> +		tpdata = dev_get_platdata(&tpdev->dev);
+>> +		put_device(&tpdev->dev);
+>> +		if (!tpdata) {
+>> +			ret = -EINVAL;
+>> +			dev_err(dev, "dmtimer pdata structure NULL\n");
+>> +			goto put_node;
+>> +		}
+>> +
+>> +		timer_ops = tpdata->timer_ops;
+>> +		if (!timer_ops || !timer_ops->request_by_node ||
+>> +		    !timer_ops->set_source || !timer_ops->set_load ||
+>> +		    !timer_ops->free || !timer_ops->start ||
+>> +		    !timer_ops->stop) {
+>> +			ret = -EINVAL;
+>> +			dev_err(dev, "device does not have required timer ops\n");
+>> +			goto put_node;
+>> +		}
+>> +
+>> +		timers[i].timer_ops = timer_ops;
+>> +		ret = omap_rproc_request_timer(np, &timers[i]);
+>> +		if (ret) {
+>> +			dev_err(dev, "request for timer %p failed: %d\n", np,
+>> +				ret);
+>> +			goto put_node;
+>> +		}
+>> +		of_node_put(np);
+>> +	}
+>> +
+>> +start_timers:
+>> +	for (i = 0; i < oproc->num_timers; i++)
+>> +		omap_rproc_start_timer(&timers[i]);
+>> +	return 0;
+>> +
+>> +put_node:
+>> +	of_node_put(np);
+>> +free_timers:
+>> +	while (i--) {
+>> +		omap_rproc_release_timer(&timers[i]);
+>> +		timers[i].odt = NULL;
+>> +		timers[i].timer_ops = NULL;
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +/**
+>> + * omap_rproc_disable_timers - disable the timers for a remoteproc
+>> + * @rproc: handle of a remote processor
+>> + * @configure: boolean flag used to release the timer handle
+>> + *
+>> + * This function is used primarily to disable the timers associated with
+>> + * a remoteproc. The configure flag is provided to allow the driver to
+>> + * to either stop and release a timer (during device shutdown) or to just
+>> + * stop a timer (during a suspend operation).
+>> + */
+>> +static int omap_rproc_disable_timers(struct rproc *rproc, bool configure)
+>> +{
+>> +	int i;
+>> +	struct omap_rproc *oproc = rproc->priv;
+>> +	struct omap_rproc_timer *timers = oproc->timers;
+>> +
+>> +	if (oproc->num_timers <= 0)
+>> +		return 0;
+>> +
+>> +	for (i = 0; i < oproc->num_timers; i++) {
+>> +		omap_rproc_stop_timer(&timers[i]);
+>> +		if (configure) {
+>> +			omap_rproc_release_timer(&timers[i]);
+>> +			timers[i].odt = NULL;
+>> +			timers[i].timer_ops = NULL;
+>> +		}
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   /**
+>>    * omap_rproc_mbox_callback() - inbound mailbox message handler
+>>    * @client: mailbox client pointer used for requesting the mailbox channel
+>> @@ -226,6 +449,12 @@ static int omap_rproc_start(struct rproc *rproc)
+>>   		goto put_mbox;
+>>   	}
+>>   
+>> +	ret = omap_rproc_enable_timers(rproc, true);
+>> +	if (ret) {
+>> +		dev_err(dev, "omap_rproc_enable_timers failed: %d\n", ret);
+>> +		goto put_mbox;
+>> +	}
+>> +
+>>   	reset_control_deassert(oproc->reset);
+>>   
+>>   	return 0;
+>> @@ -239,9 +468,14 @@ static int omap_rproc_start(struct rproc *rproc)
+>>   static int omap_rproc_stop(struct rproc *rproc)
+>>   {
+>>   	struct omap_rproc *oproc = rproc->priv;
+>> +	int ret;
+>>   
+>>   	reset_control_assert(oproc->reset);
+>>   
+>> +	ret = omap_rproc_disable_timers(rproc, true);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>>   	mbox_free_channel(oproc->mbox);
+>>   
+>>   	return 0;
+>> @@ -548,6 +782,30 @@ static int omap_rproc_probe(struct platform_device *pdev)
+>>   	if (ret)
+>>   		goto free_rproc;
+>>   
+>> +	/*
+>> +	 * Timer nodes are directly used in client nodes as phandles, so
+>> +	 * retrieve the count using appropriate size
+>> +	 */
+>> +	oproc->num_timers = of_property_count_elems_of_size(np, "timers",
+> 
+> Didn't this get a ti, prefix?
+
+Yes, will change that.
+
+> And I think you should use of_count_phandle_with_args() instead.
+
+True, will fix that also.
+
+-Tero
+
+> 
 > Regards,
 > Bjorn
->=20
-> >   * @dump_segments: list of segments in the firmware
-> >   * @nb_vdev: number of vdev currently handled by rproc
-> >   */
-> > @@ -512,6 +513,7 @@ struct rproc {
-> >  	size_t table_sz;
-> >  	bool has_iommu;
-> >  	bool auto_boot;
-> > +	bool preloaded;
-> >  	struct list_head dump_segments;
-> >  	int nb_vdev;
-> >  };
-> > --
-> > 2.7.4
-> >
+> 
+>> +							    sizeof(phandle));
+>> +	if (oproc->num_timers <= 0) {
+>> +		dev_dbg(&pdev->dev, "device does not have timers, status = %d\n",
+>> +			oproc->num_timers);
+>> +		oproc->num_timers = 0;
+>> +	}
+>> +
+>> +	if (oproc->num_timers) {
+>> +		oproc->timers = devm_kzalloc(&pdev->dev, sizeof(*oproc->timers)
+>> +					     * oproc->num_timers, GFP_KERNEL);
+>> +		if (!oproc->timers) {
+>> +			ret = -ENOMEM;
+>> +			goto free_rproc;
+>> +		}
+>> +
+>> +		dev_dbg(&pdev->dev, "device has %d tick timers\n",
+>> +			oproc->num_timers);
+>> +	}
+>> +
+>>   	ret = of_reserved_mem_device_init(&pdev->dev);
+>>   	if (ret) {
+>>   		dev_err(&pdev->dev, "device does not have specific CMA pool\n");
+>> -- 
+>> 2.17.1
+>>
+>> --
+
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
