@@ -2,115 +2,121 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4015DF887D
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Nov 2019 07:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AE14F88A9
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Nov 2019 07:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725985AbfKLG2X (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 12 Nov 2019 01:28:23 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38853 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbfKLG2X (ORCPT
+        id S1725947AbfKLGnZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 12 Nov 2019 01:43:25 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:40765 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725944AbfKLGnZ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 12 Nov 2019 01:28:23 -0500
-Received: by mail-pf1-f195.google.com with SMTP id c13so12613152pfp.5
-        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Nov 2019 22:28:22 -0800 (PST)
+        Tue, 12 Nov 2019 01:43:25 -0500
+Received: by mail-ed1-f66.google.com with SMTP id p59so14016411edp.7
+        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Nov 2019 22:43:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=iAL+4Mb+bihLwcbbUJQManyIi0HMq8FS6irH7b5rRco=;
-        b=HR9AGHyYy2UyvvEwb96MgtYOJsg0vdjPcRAqywN8KNqqP4V6g+ZSCV/WD941rThPYl
-         MAiDAn47ObgTr175cJScgIpsBf9LZ8Bx5Jw4p5vr6HYg+i6En/TlpBsCZ05TjZTF3uQZ
-         xK5JAmH3TUZV7KekreIkJWeTAj+xuor82PCZc7LGvb3RT4fKF9OkaRA4wONEvhuPMnNS
-         Pi1qLSjmrTYGeu88D+mLRpoj3tmI8Bl+pai6mh2j8x32NyV2lfrb2b/NFo4a1+0ky8Bj
-         BfRHNloJSBoe2UUSJwEigmR8hfUfgqNIY2feikVGqCvlUUI3osAyerOOkNPGXm2KFIMv
-         ygkg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6gu94hk6ViXZU/1pF57c89Mz0JcKl1j3IzzPZmTPjtQ=;
+        b=LDDUyvLAAr/FgJFV0ODv1fscc3tceNs7i1JvEsFi9SbeCOxeMyJWafdRgYIlNqWV49
+         ro79eCq++su+3IaTvSt6MwgL4SEwWPUZp7cEzIY5lMEh0+Vi4K+fFmiFNMR56+eI/hDL
+         YUlIauWUKVBysNq/DieSbYjanJaQapqZXiAkA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iAL+4Mb+bihLwcbbUJQManyIi0HMq8FS6irH7b5rRco=;
-        b=Ibaj7V0tqkVdy4JZLLE/ieHt052WWGJod0DO1RQHamysyoTTkmtHcy9f/tFiCzj7G/
-         k5aUuzVBe5p3zDBU3knxaEIdwf5gf768MiPrOihauRqUtf3tsI1qYsnDj0JyYnzIa3va
-         3qZaA3oyrGKSkp9aJDepPYlAkt/ZquDsr1AquBwYmGzcgQqrhN0liFefnlqAI1oABLmy
-         zfDVn8JxYfiLOictDr2LjKQH9bhgbUL7FuOdFD0ZZP2oxHZCLWfU6QkdB4UOy+LYcn2I
-         v8rvWYd4/JoXLj9nUpmXRt6F99CxW5BdRpP2TVMYOhwhJjvxx7tYS+ct2YOSwDFYzGgW
-         Br+w==
-X-Gm-Message-State: APjAAAVnFw4rEg+H0HrcZZzy0Ezw5u0GcHgRPXddjO3s6eL+O75+0TJy
-        OjepyPsg4P39tJkT0f7GVK536UtKELU=
-X-Google-Smtp-Source: APXvYqwTFvsGpfht34NVHjjcAtJ51bzZyaVTKPPTGApX4yc+88RyqobogAUQBkRncC4z2VMigW6V2w==
-X-Received: by 2002:a63:cf45:: with SMTP id b5mr32848687pgj.36.1573540102283;
-        Mon, 11 Nov 2019 22:28:22 -0800 (PST)
-Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id j14sm15828464pfi.168.2019.11.11.22.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 22:28:21 -0800 (PST)
-Date:   Mon, 11 Nov 2019 22:28:19 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Tero Kristo <t-kristo@ti.com>
-Cc:     ohad@wizery.com, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        s-anna@ti.com
-Subject: Re: [PATCH 17/17] remoteproc/omap: fix auto-suspend failure warning
- during crashed state
-Message-ID: <20191112062819.GQ3108315@builder>
-References: <20191028124238.19224-1-t-kristo@ti.com>
- <20191028124238.19224-18-t-kristo@ti.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6gu94hk6ViXZU/1pF57c89Mz0JcKl1j3IzzPZmTPjtQ=;
+        b=YU4CFywrf0M4wRoz9JKkWUmdpVmav5VTNBvU5FGXGqYetmFDWjuB6Y7l91xLMor6c3
+         3tpbq89ySa0TCXMvSxVRqg9pk0lZilZxeOPpKz9OClnQHQYPJY4HCysQfqM9GyHm1R8o
+         aVa4JVKsuVBm/HHdOEIZaGEeSoIQpobRaUIBwPkwrAIwdJ7YW58jx8Db9yDoaUnvYNFX
+         5OhObtwF7EKV1pnbLLXqaP8G8vLjnj1VOVmeSfbto3e1IG2J/ygiRW5m/IBdo9/q5892
+         8h81sCTqT2IsK332eMNY6ucyBGA5ekcUSMRaL3f5O3t/mybJxMA+TJklaiTMD5EruUTo
+         Z2kQ==
+X-Gm-Message-State: APjAAAWFirGJOz3+TGNSuRmH7sIn0SQdlT1WQuppVRajiF6IjX6B9oMh
+        5QCSGlLyIPPL6hfwxgFVhXXEyDWMSduPkH0x5UpSfw==
+X-Google-Smtp-Source: APXvYqyMbA5YJasNK6lBrgNGRtM92Nacpnn0WpqptPvJ7NjQkzN/92o6yJP/Cb/7QkIhQbV5cTyTR309VkTgVeCpFuI=
+X-Received: by 2002:a17:906:1d19:: with SMTP id n25mr25947734ejh.151.1573541003705;
+ Mon, 11 Nov 2019 22:43:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191028124238.19224-18-t-kristo@ti.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <20191014075812.181942-1-pihsun@chromium.org> <20191014075812.181942-4-pihsun@chromium.org>
+ <20191111231023.GD3108315@builder>
+In-Reply-To: <20191111231023.GD3108315@builder>
+From:   Pi-Hsun Shih <pihsun@chromium.org>
+Date:   Tue, 12 Nov 2019 14:42:47 +0800
+Message-ID: <CANdKZ0frU9+dRYeMaJjjKm6emxj41c_jBk_RX3G7bXn_oXKp4g@mail.gmail.com>
+Subject: Re: [PATCH v20 3/4] rpmsg: add rpmsg support for mt8183 SCP.
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon 28 Oct 05:42 PDT 2019, Tero Kristo wrote:
+Hi,
+Thanks for the review, I'll address them in the next version. Some
+inline comment below.
 
-> From: Suman Anna <s-anna@ti.com>
-> 
-> The runtime autosuspend on a OMAP remoteproc device is attempted when
-> the suspend timer expires (autosuspend delay elapsed since the last
-> time the device is busy). This is the normal autosuspend scenario
-> for a device functioning normally. This timer can also expire during
-> the debugging of a remoteproc crash when the remoteproc recovery is
-> disabled. This is an invalid pre-condition though, so check for the
-> RPROC_CRASHED state and bail out before the actual check for the
-> RPROC_RUNNING state. The auto-suspend is also not re-attempted until
-> the remoteproc is recovered and restored to normal functional state.
-> 
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+On Tue, Nov 12, 2019 at 7:10 AM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Mon 14 Oct 00:58 PDT 2019, Pi-Hsun Shih wrote:
+>
+> > Add a simple rpmsg support for mt8183 SCP, that use IPI / IPC directly.
+> >
+>
+> Hi Pi-Hsun,
+>
+> Sorry for not reviewing this in a timely manner! This looks good, just
+> some very minor comments below.
+>
+> > Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
+> [..]
+> > diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> > index f2e5e70a58f2..7896cefb2dc0 100644
+> > --- a/drivers/remoteproc/mtk_scp.c
+> > +++ b/drivers/remoteproc/mtk_scp.c
+> > @@ -15,6 +15,7 @@
+> >  #include <linux/platform_device.h>
+> >  #include <linux/remoteproc.h>
+> >  #include <linux/remoteproc/mtk_scp.h>
+> > +#include <linux/rpmsg/mtk_rpmsg.h>
+> >
+> >  #include "mtk_common.h"
+> >  #include "remoteproc_internal.h"
+> > @@ -407,6 +408,31 @@ static void scp_unmap_memory_region(struct mtk_scp *scp)
+> >       of_reserved_mem_device_release(scp->dev);
+> >  }
+> >
+> > +static struct mtk_rpmsg_info mtk_scp_rpmsg_info = {
+> > +     .send_ipi = scp_ipi_send,
+> > +     .register_ipi = scp_ipi_register,
+> > +     .unregister_ipi = scp_ipi_unregister,
+>
+> These are exported symbols, so unless you see a need to support
+> alternative implementations in the near future just skip the function
+> pointers and call them directly.
+>
 
-This should be folded back into the previous patch (which I have yet to
-review).
+Yes there is request from MTK that they do want to reuse the mtk_rpmsg
+driver for things other than mtk_scp, so there's a need to support
+alternative implementations for this.
+
+> > +                struct rpmsg_device *rpdev, rpmsg_rx_cb_t cb, void *priv,
+> > +                u32 id)
+> > +{
+>
+> Regards,
+> Bjorn
 
 Regards,
-Bjorn
-
-> ---
->  drivers/remoteproc/omap_remoteproc.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
-> index 2eb05d7a4dec..1dfac82224f7 100644
-> --- a/drivers/remoteproc/omap_remoteproc.c
-> +++ b/drivers/remoteproc/omap_remoteproc.c
-> @@ -945,6 +945,11 @@ static int omap_rproc_runtime_suspend(struct device *dev)
->  	struct omap_rproc *oproc = rproc->priv;
->  	int ret;
->  
-> +	if (rproc->state == RPROC_CRASHED) {
-> +		dev_dbg(dev, "rproc cannot be runtime suspended when crashed!\n");
-> +		return -EBUSY;
-> +	}
-> +
->  	if (WARN_ON(rproc->state != RPROC_RUNNING)) {
->  		dev_err(dev, "rproc cannot be runtime suspended when not running!\n");
->  		return -EBUSY;
-> -- 
-> 2.17.1
-> 
-> --
-> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Pi-Hsun
