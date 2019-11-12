@@ -2,117 +2,223 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 994BDF8AF7
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Nov 2019 09:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD7FF8D76
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Nov 2019 12:04:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbfKLIqU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 12 Nov 2019 03:46:20 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:44510 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727104AbfKLIqU (ORCPT
+        id S1726973AbfKLLE1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 12 Nov 2019 06:04:27 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36697 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726949AbfKLLE0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 12 Nov 2019 03:46:20 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAC8kIw1036444;
-        Tue, 12 Nov 2019 02:46:18 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1573548378;
-        bh=9S71m+P+SRdK9ZGt27v5uyTLtc0HU6AoMGe9MRJaPfs=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=DNWZzD8E5IZIikaMVUUycYxhxAqrTRvboHwmx7YkYid1JUnSisuMHcDlamC69XpKi
-         nsJluBK5XYrqfM6IIlK3irMEkWSFL1UEYE+dB/TZpTOkvLsz90twMgoJqY+bQB0qPi
-         pHDz/ke0JKS+E5cBnkQJ8fApzasbTsgrt3Ef17zA=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAC8kIm7042462;
-        Tue, 12 Nov 2019 02:46:18 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 12
- Nov 2019 02:46:18 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 12 Nov 2019 02:46:00 -0600
-Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAC8kFTa118665;
-        Tue, 12 Nov 2019 02:46:16 -0600
-Subject: Re: [PATCH 15/17] remoteproc/omap: report device exceptions and
- trigger recovery
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <s-anna@ti.com>
-References: <20191028124238.19224-1-t-kristo@ti.com>
- <20191028124238.19224-16-t-kristo@ti.com> <20191112062642.GP3108315@builder>
-From:   Tero Kristo <t-kristo@ti.com>
-Message-ID: <a88ac4e2-ff00-f1d2-2339-72c3315687e4@ti.com>
-Date:   Tue, 12 Nov 2019 10:46:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Tue, 12 Nov 2019 06:04:26 -0500
+Received: by mail-pg1-f196.google.com with SMTP id k13so11631888pgh.3
+        for <linux-remoteproc@vger.kernel.org>; Tue, 12 Nov 2019 03:04:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uFhjUJFs5no4yiSlxY1BbjA9nXYA5kYuXUrDXqqyYHs=;
+        b=K8pqxR84jS9pwV24nmhOTvuCjxZjWeopPAXLjsU9s0DgZ27WLwSdic0hrUXkLpfPFK
+         nDx3fovBqn9s6Q8iMI4Xc5DnT4XL08sn5MySWYQPNvcV5a0xQfssVe8EnA0kXZ1W+3Qr
+         M7MwKlnaQYKVBY9FPsVZA2MmdoBrtU4Ac4wms=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uFhjUJFs5no4yiSlxY1BbjA9nXYA5kYuXUrDXqqyYHs=;
+        b=HJthzyO08PskEhx9ajDpjw5EhvDNxMmJiQfd+TkbCA5bOwpRNREtFBSALVzJgHw6uK
+         IyQQCipDnK1OtOttQ9tGyjT6ujYP3g0LDwAciEIK6HTqT5mdCPXQx9OV1g6sK/tqMRYu
+         OEuhUDMsL/WtJeJJyM7FnETk2xphp2Ht3rsFSfgaaQzUsl2ZrZEPHsDsodInAhIc6pcF
+         nzf5zLXvv0s6fg+zzTlyzGIntTclqF9T/xuuwNSkQgrUVnWkS9rt25iXTGC70Y/sYIFy
+         uVSkBpN92jYuGhRqG0oRbCoyayYRfSDSfjTGjaLmklaCVBWxhDEjLEIVWvhP9UGm/sSo
+         ax/Q==
+X-Gm-Message-State: APjAAAWAgPaVbmXYw7LqaWCHnq1GoflgkxU2CkoqS2WN10bJHJENsASE
+        a3Hr53sckopzPKrYD4uRciOmqg==
+X-Google-Smtp-Source: APXvYqyTQedqUkzhJsI4mPQBlLlsEJbFBlBQ4HI5KnQSbc/jCorqCINBQJyavGatvvs1sABtGK8maQ==
+X-Received: by 2002:a17:90a:1446:: with SMTP id j64mr5766266pja.142.1573556663436;
+        Tue, 12 Nov 2019 03:04:23 -0800 (PST)
+Received: from pihsun-z840.tpe.corp.google.com ([2401:fa00:1:10:7889:7a43:f899:134c])
+        by smtp.googlemail.com with ESMTPSA id 6sm21528389pfy.43.2019.11.12.03.04.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2019 03:04:22 -0800 (PST)
+From:   Pi-Hsun Shih <pihsun@chromium.org>
+Cc:     Pi-Hsun Shih <pihsun@chromium.org>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support), linux-kernel@vger.kernel.org (open list),
+        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support),
+        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR
+        (REMOTEPROC) SUBSYSTEM)
+Subject: [PATCH v21 0/4] Add support for mt8183 SCP.
+Date:   Tue, 12 Nov 2019 19:03:23 +0800
+Message-Id: <20191112110330.179649-1-pihsun@chromium.org>
+X-Mailer: git-send-email 2.24.0.rc1.363.gb1bccd3e3d-goog
 MIME-Version: 1.0
-In-Reply-To: <20191112062642.GP3108315@builder>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 12/11/2019 08:26, Bjorn Andersson wrote:
-> On Mon 28 Oct 05:42 PDT 2019, Tero Kristo wrote:
-> 
->> From: Suman Anna <s-anna@ti.com>
->>
->> The OMAP remote processors send a special mailbox message
->> (RP_MBOX_CRASH) when they crash and detect an internal device
->> exception.
->>
->> Add support to the mailbox handling function upon detection of
->> this special message to report this crash to the remoteproc core.
->> The remoteproc core can trigger a recovery using the prevailing
->> recovery mechanism, already in use for MMU Fault recovery.
->>
->> Signed-off-by: Subramaniam Chanderashekarapuram <subramaniam.ca@ti.com>
->> Signed-off-by: Suman Anna <s-anna@ti.com>
-> 
-> You're missing a Co-developed-by
+Add support for controlling and communicating with mt8183's system
+control processor (SCP), using the remoteproc & rpmsg framework.
+And also add a cros_ec driver for CrOS EC host command over rpmsg.
 
-Yep, let me fix that.
+The overall structure of the series is:
+* remoteproc/mtk_scp.c: Control the start / stop of SCP (Patch 2).
+* remoteproc/mtk_scp_ipi.c: Communicates to SCP using inter-processor
+  interrupt (IPI) and shared memory (Patch 2).
+* rpmsg/mtk_rpmsg.c: Wrapper to wrap the IPI communication into a rpmsg
+  device. Supports name service for SCP firmware to
+  announce channels (Patch 3).
+* add scp dts node to mt8183 platform (Patch 4).
 
--Tero
+Changes from v20:
+ - Change all public API usage of (struct platform_device *) to (struct
+   mtk_scp *).
+ - Rename some variables and functions to be more specific.
+ - Move docs to implementation, and improve docs.
+ - Address review comments.
 
-> 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
->> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->> ---
->>   drivers/remoteproc/omap_remoteproc.c | 6 +++++-
->>   1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
->> index 8bd415c8fc86..6f797025bb6b 100644
->> --- a/drivers/remoteproc/omap_remoteproc.c
->> +++ b/drivers/remoteproc/omap_remoteproc.c
->> @@ -360,8 +360,12 @@ static void omap_rproc_mbox_callback(struct mbox_client *client, void *data)
->>   
->>   	switch (msg) {
->>   	case RP_MBOX_CRASH:
->> -		/* just log this for now. later, we'll also do recovery */
->> +		/*
->> +		 * remoteproc detected an exception, notify the rproc core.
->> +		 * The remoteproc core will handle the recovery.
->> +		 */
->>   		dev_err(dev, "omap rproc %s crashed\n", name);
->> +		rproc_report_crash(oproc->rproc, RPROC_FATAL_ERROR);
->>   		break;
->>   	case RP_MBOX_ECHO_REPLY:
->>   		dev_info(dev, "received echo reply from %s\n", name);
->> -- 
->> 2.17.1
->>
->> --
+Changes from v19:
+ - Fix an incorrect include in mtk_rpmsg.h (linux/device.h ->
+   linux/platform_device.h)
 
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Changes from v18:
+ - Change the way shared memory is handled, and drop patch 3.
+
+Changes from v17:
+ - Fix mixture use of __iomem found by sparse.
+ - Change the ipi handler to take a u32 instead of enum scp_ipi_id.
+ - Mark mtk_rpmsg_{prepare,unprepare,stop} as static.
+
+Changes from v16:
+ - Change the desc_lock mutex to be a per-id lock.
+ - Put the execution of handler inside the per-id lock, to prevent race
+   between scp_ipi_unregister and handler being run.
+ - Move the initialization of mutex to before scp_ipi_register.
+
+Changes from v15:
+ - Fix a bug on incorrect usage of wait_event_timeout return value.
+
+Changes from v14:
+ - Fix a typo on variable in DEBUG section.
+
+Changes from v13:
+ - Move include/linux/platform_data/mtk_scp.h to
+   include/linux/remoteproc/mtk_scp.h.
+ - Rename scp_get_reserve_* to scp_get_reserved_*.
+ - Add lock for access of scp->ipi_desc.
+ - Lock the whole ipi_send function.
+ - Move more setting of cache size from SCP firmware to kernel driver,
+   to prevent problem while loading firmware onto DRAM.
+ - Minor fixes addressing comment.
+
+Changes from v12:
+ - Initialize cache before firmware load, to avoid problem while loading
+   large firmware.
+ - Disable watchdog before stopping SCP, to avoid extra warning message.
+ - Fix new warnings by checkpatch.
+
+Changes from v11:
+ - Fixed a bug that mtk_rpmsg_endpoint is not properly cleaned up if
+   rproc_boot fails.
+ - Add missing documentation in comment.
+
+Changes from v10:
+ - Drop applied cros_ec_rpmsg patches.
+ - Add clock reset before loading SCP firmware.
+ - Fix some type mismatch warnings when printing debug messages.
+
+Changes from v9:
+ - Remove reserve-memory-vpu_share node.
+ - Remove change to cros_ec_commands.h (That is already in
+   https://lore.kernel.org/lkml/20190518063949.GY4319@dell/T/)
+
+Changes from v8:
+ - Rebased onto https://patchwork.kernel.org/cover/10962385/.
+ - Drop merged cros_ec_rpmsg patch, and add scp dts node patch.
+ - Add more reserved memory region.
+
+Changes from v7:
+ - Rebase onto https://lore.kernel.org/patchwork/patch/1059196/.
+ - Fix clock enable/disable timing for SCP driver.
+ - Add more SCP IPI ID.
+
+Changes from v6:
+ - Decouple mtk_rpmsg from mtk_scp.
+ - Change data of EC response to be aligned to 4 bytes.
+
+Changes from v5:
+ - Add device tree binding document for cros_ec_rpmsg.
+ - Better document in comments for cros_ec_rpmsg.
+ - Remove dependency on CONFIG_ in binding tree document.
+
+Changes from v4:
+ - Merge patch 6 (Load ELF firmware) into patch 2, so the driver loads
+   ELF firmware by default, and no longer accept plain binary.
+ - rpmsg_device listed in device tree (as a child of the SCP node) would
+   have it's device tree node mapped to the rpmsg_device, so the rpmsg
+   driver can use the properties on device tree.
+
+Changes from v3:
+ - Make writing to SCP SRAM aligned.
+ - Add a new patch (Patch 6) to load ELF instead of bin firmware.
+ - Add host event support for EC driver.
+ - Fix some bugs found in testing (missing spin_lock_init,
+   rproc_subdev_unprepare to rproc_subdev_stop).
+ - Fix some coding style issue found by checkpatch.pl.
+
+Changes from v2:
+ - Fold patch 3 into patch 2 in v2.
+ - Move IPI id around to support cross-testing for old and new firmware.
+ - Finish more TODO items.
+
+Changes from v1:
+ - Extract functions and rename variables in mtk_scp.c.
+ - Do cleanup properly in mtk_rpmsg.c, which also removes the problem of
+   short-lived work items.
+ - Code format fix based on feedback for cros_ec_rpmsg.c.
+ - Extract feature detection for SCP into separate patch (Patch 6).
+
+Eddie Huang (1):
+  arm64: dts: mt8183: add scp node
+
+Erin Lo (2):
+  dt-bindings: Add a binding for Mediatek SCP
+  remoteproc/mediatek: add SCP support for mt8183
+
+Pi-Hsun Shih (1):
+  rpmsg: add rpmsg support for mt8183 SCP.
+
+ .../bindings/remoteproc/mtk,scp.txt           |  36 +
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  11 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  12 +
+ drivers/remoteproc/Kconfig                    |  10 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/mtk_common.h               |  94 +++
+ drivers/remoteproc/mtk_scp.c                  | 663 ++++++++++++++++++
+ drivers/remoteproc/mtk_scp_ipi.c              | 219 ++++++
+ drivers/rpmsg/Kconfig                         |   9 +
+ drivers/rpmsg/Makefile                        |   1 +
+ drivers/rpmsg/mtk_rpmsg.c                     | 414 +++++++++++
+ include/linux/remoteproc/mtk_scp.h            |  66 ++
+ include/linux/rpmsg/mtk_rpmsg.h               |  38 +
+ 13 files changed, 1574 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
+ create mode 100644 drivers/remoteproc/mtk_common.h
+ create mode 100644 drivers/remoteproc/mtk_scp.c
+ create mode 100644 drivers/remoteproc/mtk_scp_ipi.c
+ create mode 100644 drivers/rpmsg/mtk_rpmsg.c
+ create mode 100644 include/linux/remoteproc/mtk_scp.h
+ create mode 100644 include/linux/rpmsg/mtk_rpmsg.h
+
+
+base-commit: fc6d6db1df2cb11bbecc542d67885742e75b4b07
+-- 
+2.24.0.rc1.363.gb1bccd3e3d-goog
+
