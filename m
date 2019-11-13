@@ -2,165 +2,91 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C839AF9884
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Nov 2019 19:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DB2FA5A4
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 13 Nov 2019 03:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbfKLSWo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 12 Nov 2019 13:22:44 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:46445 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725997AbfKLSWn (ORCPT
+        id S1728214AbfKMCYC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 12 Nov 2019 21:24:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40812 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728185AbfKMBwO (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 12 Nov 2019 13:22:43 -0500
-Received: by mail-pf1-f196.google.com with SMTP id 193so13899796pfc.13
-        for <linux-remoteproc@vger.kernel.org>; Tue, 12 Nov 2019 10:22:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=eN2ydQIW1tC0Y5Z0139/3auQ6iVhazzk9qa2dg7E35A=;
-        b=MWBU2TrWEjnv7/l1uY+2LGCdf2/o3Ps8RrNThkke2K6F5E2Kd7kAIELZvATtRT5rpo
-         44FXpxsAjez8dSk53I99VA17eLO+/DHGY2TcyBtnlWFy55VrQ8bW5P4CmBQULXQ6Jyz/
-         qAVTlGOcsac833IhAMBPJ2Aj/vcOobVMXUx/Vl77MUJlBY7ePRdUfWqHzPb+odViVwwv
-         ILKi2oqNsZ+N92V9GB9awn5VUVN+kraXUpzEzLJQcj5osoE1MSaLog1Kqzec9YdnZSMj
-         aqNP8LjsnUfceLLGOd7VirMYcn8Yryhe5YAqX+dmewAnlGkPHMt11OrG/hihxNrexAme
-         4Yxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eN2ydQIW1tC0Y5Z0139/3auQ6iVhazzk9qa2dg7E35A=;
-        b=FUjaSw0wn2PPaU4Ck8M7cym0I9lhToWpTOF35Pj/h9KLsR5QwQ9J/SYfT+C3SZkG9w
-         ZhHG46X2NK4yzFGN/HHTcFZevE+m9m/QgqYmusy7frTtFk5jr+XPwCKHoSCzWCEONgl8
-         zWfT9SFToqANjHJrhMmBf3yCDeVRkGsHHxJrU4NNRIjEP604DSMgwRza/1jV3zN2/ONI
-         59OV6tXsBVqTJeOL/JLUncYv4AulBoEg+4eaTp8EQ4ardP4QybR+Oz8+WDgscMFA70Hw
-         2NRhfiXutDEHWREZxP04S3e30O6RrqDI/b15JMQhk2qA6zhAXJnpGmCMweHtnXOmeAK8
-         iwwQ==
-X-Gm-Message-State: APjAAAWjxWmEXAeqehPWV8IrL+VTtkYVcKwQueNjpvD7rym7rxldpKIN
-        aM2oOxd+sk8SpWRApb5ifbxBFA==
-X-Google-Smtp-Source: APXvYqyNFBPp/s1UwzZ90jSmHOfBQDutaWu+vqexmr5bu/ksMtz7nUUVT9E1TsDpGP8PNhA0IjGiIw==
-X-Received: by 2002:a17:90a:2470:: with SMTP id h103mr8728391pje.12.1573582962818;
-        Tue, 12 Nov 2019 10:22:42 -0800 (PST)
-Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id e24sm3139075pjt.18.2019.11.12.10.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2019 10:22:42 -0800 (PST)
-Date:   Tue, 12 Nov 2019 10:22:39 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Fabien DESSENNE <fabien.dessenne@st.com>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre TORGUE <alexandre.torgue@st.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        Loic PALLARDY <loic.pallardy@st.com>,
-        Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Subject: Re: [PATCH v2] remoteproc: stm32: fix probe error case
-Message-ID: <20191112182239.GA21530@yoga>
-References: <1570433991-16353-1-git-send-email-fabien.dessenne@st.com>
- <20191111220416.GB3108315@builder>
- <392808fa-1504-233f-234b-0cca21886c17@st.com>
+        Tue, 12 Nov 2019 20:52:14 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A5D4E222CE;
+        Wed, 13 Nov 2019 01:52:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573609933;
+        bh=/fUyGVnz4vUZV7QqWfrT9JvA8+OesvTPpl/KA51g0nE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vF2i8ldmfvVQirprQN2PW38v/4lQD5dFlF7ixj3QVAb0h4RB5Zr1geiezZIsQEN8J
+         ttqNCZhxaXaNUt6R38GSY6fRZ9Y4LPXnR/iDYgsHwvxkVXZdH/lyRMaKsubjj627wf
+         uyRviSqM8Qo1ueQr1wl3Jw7H12Of3UTaZgBtDvII=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Arun Kumar Neelakantam <aneela@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 078/209] rpmsg: glink: smem: Support rx peak for size less than 4 bytes
+Date:   Tue, 12 Nov 2019 20:48:14 -0500
+Message-Id: <20191113015025.9685-78-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
+References: <20191113015025.9685-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <392808fa-1504-233f-234b-0cca21886c17@st.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue 12 Nov 06:09 PST 2019, Fabien DESSENNE wrote:
+From: Arun Kumar Neelakantam <aneela@codeaurora.org>
 
-> Hi Bjorn,
-> 
-> 
-> On 11/11/2019 11:04 PM, Bjorn Andersson wrote:
-> > On Mon 07 Oct 00:39 PDT 2019, Fabien Dessenne wrote:
-> >
-> >> If the rproc driver is probed before the mailbox driver and if the rproc
-> >> Device Tree node has some mailbox properties, the rproc driver probe
-> >> shall be deferred instead of being probed without mailbox support.
-> >>
-> >> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
-> >> ---
-> >> Changes since v1: test IS_ERR() before checking PTR_ERR()
-> >> ---
-> >>   drivers/remoteproc/stm32_rproc.c | 10 ++++++++--
-> >>   1 file changed, 8 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-> >> index 2cf4b29..a507332 100644
-> >> --- a/drivers/remoteproc/stm32_rproc.c
-> >> +++ b/drivers/remoteproc/stm32_rproc.c
-> >> @@ -310,7 +310,7 @@ static const struct stm32_mbox stm32_rproc_mbox[MBOX_NB_MBX] = {
-> >>   	}
-> >>   };
-> >>   
-> >> -static void stm32_rproc_request_mbox(struct rproc *rproc)
-> >> +static int stm32_rproc_request_mbox(struct rproc *rproc)
-> >>   {
-> >>   	struct stm32_rproc *ddata = rproc->priv;
-> >>   	struct device *dev = &rproc->dev;
-> >> @@ -329,10 +329,14 @@ static void stm32_rproc_request_mbox(struct rproc *rproc)
-> >>   
-> >>   		ddata->mb[i].chan = mbox_request_channel_byname(cl, name);
-> >>   		if (IS_ERR(ddata->mb[i].chan)) {
-> >> +			if (PTR_ERR(ddata->mb[i].chan) == -EPROBE_DEFER)
-> >> +				return -EPROBE_DEFER;
-> > If for some reason you get EPROBE_DEFER when i > 0 you need to
-> > mbox_free_channel() channels [0..i) before returning.
-> 
-> The mailbox framework returns EPROBE_DIFFER to inform that the mailbox 
-> provider has not registered yet. I do not expected to have a success 
-> followed by a EPROBE_DEFER error.
-> 
-> But in the very special case where we use two different mailbox 
-> providers this may happen.
-> 
+[ Upstream commit 928002a5e9dab2ddc1a0fe3e00739e89be30dc6b ]
 
-I agree, it's unlikely to ever cause any problems...
+The current rx peak function fails to read the data if size is
+less than 4bytes.
 
-> I will send an updated version, thanks for pointing this.
-> 
+Use memcpy_fromio to support data reads of size less than 4 bytes.
 
-I appreciate that.
+Cc: stable@vger.kernel.org
+Fixes: f0beb4ba9b18 ("rpmsg: glink: Remove chunk size word align warning")
+Signed-off-by: Arun Kumar Neelakantam <aneela@codeaurora.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/rpmsg/qcom_glink_smem.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
-Thanks,
-Bjorn
+diff --git a/drivers/rpmsg/qcom_glink_smem.c b/drivers/rpmsg/qcom_glink_smem.c
+index 2b5cf27909540..7b6544348a3e0 100644
+--- a/drivers/rpmsg/qcom_glink_smem.c
++++ b/drivers/rpmsg/qcom_glink_smem.c
+@@ -89,15 +89,11 @@ static void glink_smem_rx_peak(struct qcom_glink_pipe *np,
+ 		tail -= pipe->native.length;
+ 
+ 	len = min_t(size_t, count, pipe->native.length - tail);
+-	if (len) {
+-		__ioread32_copy(data, pipe->fifo + tail,
+-				len / sizeof(u32));
+-	}
++	if (len)
++		memcpy_fromio(data, pipe->fifo + tail, len);
+ 
+-	if (len != count) {
+-		__ioread32_copy(data + len, pipe->fifo,
+-				(count - len) / sizeof(u32));
+-	}
++	if (len != count)
++		memcpy_fromio(data + len, pipe->fifo, (count - len));
+ }
+ 
+ static void glink_smem_rx_advance(struct qcom_glink_pipe *np,
+-- 
+2.20.1
 
-> BR
-> 
-> Fabien
-> 
-> >
-> > Regards,
-> > Bjorn
-> >
-> >>   			dev_warn(dev, "cannot get %s mbox\n", name);
-> >>   			ddata->mb[i].chan = NULL;
-> >>   		}
-> >>   	}
-> >> +
-> >> +	return 0;
-> >>   }
-> >>   
-> >>   static int stm32_rproc_set_hold_boot(struct rproc *rproc, bool hold)
-> >> @@ -596,7 +600,9 @@ static int stm32_rproc_probe(struct platform_device *pdev)
-> >>   	if (ret)
-> >>   		goto free_rproc;
-> >>   
-> >> -	stm32_rproc_request_mbox(rproc);
-> >> +	ret = stm32_rproc_request_mbox(rproc);
-> >> +	if (ret)
-> >> +		goto free_rproc;
-> >>   
-> >>   	ret = rproc_add(rproc);
-> >>   	if (ret)
-> >> -- 
-> >> 2.7.4
-> >>
