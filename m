@@ -2,157 +2,200 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3494FB6F8
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 13 Nov 2019 19:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 403ABFBAAF
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 13 Nov 2019 22:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727687AbfKMSDK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 13 Nov 2019 13:03:10 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:43053 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726120AbfKMSDJ (ORCPT
+        id S1726598AbfKMV3R (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 13 Nov 2019 16:29:17 -0500
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:59458 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726162AbfKMV3R (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 13 Nov 2019 13:03:09 -0500
-Received: by mail-il1-f194.google.com with SMTP id r9so2619071ilq.10;
-        Wed, 13 Nov 2019 10:03:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nkMxg4bs0DY+fIenh6frbtx62cRKfHn1vX+M8COZOOM=;
-        b=ZOJotr2theprfi37s1ZEIS5HHCaeL01Ab4HU5FUqizNaVMrYRTk4el/33r/GtMwgJx
-         gP9lK+Uj7/CPHrRUlpL34TEYUIqnW/WZ91lxe8yxHXCY7GPimgK5aaJVySsPdS5WP3Q9
-         MoPnQCkLJBQfX8K65SYN32vyf5T3XvKQ/iUxOeTRzOdo5lhvfot79VRaWgJfSVRsbAjY
-         6b93BTjyxUXfnT38ACpOPQSLCoQvPJBxcIAetT4unDApSPQSVWbNIG1UlWP1GBQn8fdN
-         f65KaOmfq+5w4Ao8GkocnWjJeAP98sXWLtoI5S1rsWMV469MzVHghhMcP0Jt6MxbHDbM
-         fkiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nkMxg4bs0DY+fIenh6frbtx62cRKfHn1vX+M8COZOOM=;
-        b=V/sKGFYQsBWnNbepsp6NpqM0VKBk0eB4VWKl76j2W5/TkOc0wrtwFN3bDVbdb0F3QY
-         Bn/RgJpTM60o+57s2UkECN/Xhsop2UwVXG9NsIhJJqelTkNyh6qDsvikx0WRccV19NGQ
-         SeLMN/A4OjQ3SVqntszssSIMclnnB+Cxv5jWudBErabu6xUDw450Ho39TV6D3I+N70+F
-         crICZ7iTQDK46XsDrdvRm+mOVBTHnmjzki7K7txWxunA2TsyCbu/aZKw9kPZmMBgir3E
-         DvY0t6VLuppuPHNUCoYvIXxV7XodHEh3lsLcNLAvKl6/toG1i+CQW9ikdsmG96x+fv7L
-         fe+A==
-X-Gm-Message-State: APjAAAUlV1anpTLXNVsCWGTexTqu7gEGglwSWWKKnlu2eYvlsEc7oPdk
-        aFszjKYcrzTlVk3iKA7FcoKDhamuZ+rrE0GsI4I=
-X-Google-Smtp-Source: APXvYqwv3ffUNkAkeZW/JhON9obx0IFBdDOnyhASnVKWZt22SwhgbxtOrGqRpWEjNjq1r4lCXRxECbyDTjz5rKC0CEo=
-X-Received: by 2002:a05:6e02:c91:: with SMTP id b17mr5199609ile.33.1573668188735;
- Wed, 13 Nov 2019 10:03:08 -0800 (PST)
+        Wed, 13 Nov 2019 16:29:17 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xADLRpxg019835;
+        Wed, 13 Nov 2019 22:29:10 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=UYdORNaeQGoQRwSYl88Q/xJPX8aHa8RKojqFS2T62x4=;
+ b=FIQeyhOXR32FbT/TSLLePxluV2Aj/rP86ZAP2GqOfXW6SIRCiu3Ta9jNGi0B/e8RFtkd
+ SPxgUtxZ950xGdx6+76ZNu7dCbpzODYKX/mPiAH359ZWXjcO7TQlbzC79qCR9W2a6sxe
+ jNVxuK1Wgjn5VLvvNf601JdK7Nb/EkH88ZEqNglTzHkIe4uKn3UWmQ2hwYTSkKEGnYDs
+ sFce304RlCmnotgx9yaUQDj/zRRKnVteK044C2LlQeW+5WTg09fpEO8C5R6hDR3egccg
+ 2HuLSijTjq5D2K67PpouesOyuVLL5VOpWyCCj3xzsSuS2rKkQz/ZLQXX5Gw4V9oaOGHY VA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2w7psjtbac-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Nov 2019 22:29:10 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3D21E10002A;
+        Wed, 13 Nov 2019 22:29:09 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag7node2.st.com [10.75.127.20])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 28C792062B8;
+        Wed, 13 Nov 2019 22:29:09 +0100 (CET)
+Received: from localhost (10.75.127.47) by SFHDAG7NODE2.st.com (10.75.127.20)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 13 Nov 2019 22:29:08
+ +0100
+From:   Loic Pallardy <loic.pallardy@st.com>
+To:     <bjorn.andersson@linaro.org>, <ohad@wizery.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <arnaud.pouliquen@st.com>, <benjamin.gaignard@linaro.org>,
+        <fabien.dessenne@st.com>, <s-anna@ti.com>,
+        Loic Pallardy <loic.pallardy@st.com>
+Subject: [PATCH v3 1/1] remoteproc: add support for co-processor loaded and booted before kernel
+Date:   Wed, 13 Nov 2019 22:29:03 +0100
+Message-ID: <1573680543-39086-1-git-send-email-loic.pallardy@st.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20191109004033.1496871-1-bjorn.andersson@linaro.org>
- <20191109004033.1496871-2-bjorn.andersson@linaro.org> <CAOCk7NrkpwyuZnq7C3CgLDBHoCXM=SMxvt_iv+nQzS9atT3B9A@mail.gmail.com>
-In-Reply-To: <CAOCk7NrkpwyuZnq7C3CgLDBHoCXM=SMxvt_iv+nQzS9atT3B9A@mail.gmail.com>
-From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-Date:   Wed, 13 Nov 2019 11:02:57 -0700
-Message-ID: <CAOCk7Nq4MgZ1ai6vu+hq3H8qu7P924JCsy1_ru7=5MCF2Z2nwg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] remoteproc: qcom_q6v5_mss: Don't reassign mpss
- region on shutdown
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Avaneesh Kumar Dwivedi <akdwived@codeaurora.org>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>,
-        Sibi Sankar <sibis@codeaurora.org>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG7NODE1.st.com (10.75.127.19) To SFHDAG7NODE2.st.com
+ (10.75.127.20)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-13_05:2019-11-13,2019-11-13 signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Nov 12, 2019 at 10:01 AM Jeffrey Hugo <jeffrey.l.hugo@gmail.com> wrote:
->
-> On Fri, Nov 8, 2019 at 5:40 PM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > Trying to reclaim mpss memory while the mba is not running causes the
-> > system to crash on devices with security fuses blown, so leave it
-> > assigned to the remote on shutdown and recover it on a subsequent boot.
-> >
-> > Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for mem ownership switch")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->
-> Stuff still works on the laptop, and I don't hit the access violation
-> with the crash dump scenario on the mtp.
->
-> Reviewed-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-> Tested-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Remote processor could boot independently or be loaded/started before
+Linux kernel by bootloader or any firmware.
+This patch introduces a new property in rproc core, named skip_fw_load,
+to be able to allocate resources and sub-devices like vdev and to
+synchronize with current state without loading firmware from file system.
+It is platform driver responsibility to implement the right firmware
+load ops according to HW specificities.
 
-Actually, nack that.  See comment below.
+Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
 
->
-> > ---
-> >
-> > Changes since v1:
-> > - Assign memory back to Linux in coredump case
-> >
-> >  drivers/remoteproc/qcom_q6v5_mss.c | 20 ++++++++++----------
-> >  1 file changed, 10 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-> > index de919f2e8b94..efab574b2e12 100644
-> > --- a/drivers/remoteproc/qcom_q6v5_mss.c
-> > +++ b/drivers/remoteproc/qcom_q6v5_mss.c
-> > @@ -875,11 +875,6 @@ static void q6v5_mba_reclaim(struct q6v5 *qproc)
-> >                 writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
-> >         }
-> >
-> > -       ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
-> > -                                     false, qproc->mpss_phys,
-> > -                                     qproc->mpss_size);
-> > -       WARN_ON(ret);
-> > -
-> >         q6v5_reset_assert(qproc);
-> >
-> >         q6v5_clk_disable(qproc->dev, qproc->reset_clks,
-> > @@ -969,6 +964,10 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
-> >                         max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
-> >         }
-> >
-> > +       /* Try to reset ownership back to Linux */
-> > +       q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false,
-> > +                               qproc->mpss_phys, qproc->mpss_size);
-> > +
-> >         mpss_reloc = relocate ? min_addr : qproc->mpss_phys;
-> >         qproc->mpss_reloc = mpss_reloc;
-> >         /* Load firmware segments */
-> > @@ -1058,9 +1057,14 @@ static void qcom_q6v5_dump_segment(struct rproc *rproc,
-> >         void *ptr = rproc_da_to_va(rproc, segment->da, segment->size);
-> >
-> >         /* Unlock mba before copying segments */
-> > -       if (!qproc->dump_mba_loaded)
-> > +       if (!qproc->dump_mba_loaded) {
-> >                 ret = q6v5_mba_load(qproc);
-> >
-> > +               /* Try to reset ownership back to Linux */
-> > +               q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false,
-> > +                                       qproc->mpss_phys, qproc->mpss_size);
+---
+Change from v2:
+- rename property into skip_fw_load
+- update rproc_boot and rproc_fw_boot description
+- update commit message
+Change from v1:
+- Keep bool in struct rproc
+---
+ drivers/remoteproc/remoteproc_core.c | 51 +++++++++++++++++++++++++++---------
+ include/linux/remoteproc.h           |  2 ++
+ 2 files changed, 40 insertions(+), 13 deletions(-)
 
-If the load fails, we can't pull the memory otherwise we'll hit the
-access violation (serror).  I happened to see this on a production
-device, where I think the load fails because crashdumps are not
-enabled.
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 3c5fbbbfb0f1..585cdca8b241 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -1360,7 +1360,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+ }
+ 
+ /*
+- * take a firmware and boot a remote processor with it.
++ * Handle resources defined in resource table and start a remote processor.
+  */
+ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
+ {
+@@ -1372,7 +1372,11 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
+ 	if (ret)
+ 		return ret;
+ 
+-	dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
++	if (fw)
++		dev_info(dev, "Booting fw image %s, size %zd\n", name,
++			 fw->size);
++	else
++		dev_info(dev, "Synchronizing with preloaded co-processor\n");
+ 
+ 	/*
+ 	 * if enabling an IOMMU isn't relevant for this rproc, this is
+@@ -1719,16 +1723,22 @@ static void rproc_crash_handler_work(struct work_struct *work)
+  * rproc_boot() - boot a remote processor
+  * @rproc: handle of a remote processor
+  *
+- * Boot a remote processor (i.e. load its firmware, power it on, ...).
++ * Boot a remote processor (i.e. load its firmware, power it on, ...) from
++ * different contexts:
++ * - power off
++ * - preloaded firmware
++ * - started before kernel execution
++ * The different operations are selected thanks to properties defined by
++ * platform driver.
+  *
+- * If the remote processor is already powered on, this function immediately
+- * returns (successfully).
++ * If the remote processor is already powered on at rproc level, this function
++ * immediately returns (successfully).
+  *
+  * Returns 0 on success, and an appropriate error value otherwise.
+  */
+ int rproc_boot(struct rproc *rproc)
+ {
+-	const struct firmware *firmware_p;
++	const struct firmware *firmware_p = NULL;
+ 	struct device *dev;
+ 	int ret;
+ 
+@@ -1759,11 +1769,17 @@ int rproc_boot(struct rproc *rproc)
+ 
+ 	dev_info(dev, "powering up %s\n", rproc->name);
+ 
+-	/* load firmware */
+-	ret = request_firmware(&firmware_p, rproc->firmware, dev);
+-	if (ret < 0) {
+-		dev_err(dev, "request_firmware failed: %d\n", ret);
+-		goto downref_rproc;
++	if (!rproc->skip_fw_load) {
++		/* load firmware */
++		ret = request_firmware(&firmware_p, rproc->firmware, dev);
++		if (ret < 0) {
++			dev_err(dev, "request_firmware failed: %d\n", ret);
++			goto downref_rproc;
++		}
++	} else {
++		/* set firmware name to null as unknown */
++		kfree(rproc->firmware);
++		rproc->firmware = NULL;
+ 	}
+ 
+ 	ret = rproc_fw_boot(rproc, firmware_p);
+@@ -1917,8 +1933,17 @@ int rproc_add(struct rproc *rproc)
+ 	/* create debugfs entries */
+ 	rproc_create_debug_dir(rproc);
+ 
+-	/* if rproc is marked always-on, request it to boot */
+-	if (rproc->auto_boot) {
++	if (rproc->skip_fw_load) {
++		/*
++		 * If rproc is marked already booted, no need to wait
++		 * for firmware.
++		 * Just handle associated resources and start sub devices
++		 */
++		ret = rproc_boot(rproc);
++		if (ret < 0)
++			return ret;
++	} else if (rproc->auto_boot) {
++		/* if rproc is marked always-on, request it to boot */
+ 		ret = rproc_trigger_auto_boot(rproc);
+ 		if (ret < 0)
+ 			return ret;
+diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+index 16ad66683ad0..4fd5bedab4fa 100644
+--- a/include/linux/remoteproc.h
++++ b/include/linux/remoteproc.h
+@@ -479,6 +479,7 @@ struct rproc_dump_segment {
+  * @table_sz: size of @cached_table
+  * @has_iommu: flag to indicate if remote processor is behind an MMU
+  * @auto_boot: flag to indicate if remote processor should be auto-started
++ * @skip_fw_load: remote processor has been preloaded before start sequence
+  * @dump_segments: list of segments in the firmware
+  * @nb_vdev: number of vdev currently handled by rproc
+  */
+@@ -512,6 +513,7 @@ struct rproc {
+ 	size_t table_sz;
+ 	bool has_iommu;
+ 	bool auto_boot;
++	bool skip_fw_load;
+ 	struct list_head dump_segments;
+ 	int nb_vdev;
+ };
+-- 
+2.7.4
 
-> > +       }
-> > +
-> >         if (!ptr || ret)
-> >                 memset(dest, 0xff, segment->size);
-> >         else
-> > @@ -1111,10 +1115,6 @@ static int q6v5_start(struct rproc *rproc)
-> >         return 0;
-> >
-> >  reclaim_mpss:
-> > -       xfermemop_ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
-> > -                                               false, qproc->mpss_phys,
-> > -                                               qproc->mpss_size);
-> > -       WARN_ON(xfermemop_ret);
-> >         q6v5_mba_reclaim(qproc);
-> >
-> >         return ret;
-> > --
-> > 2.23.0
-> >
