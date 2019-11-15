@@ -2,159 +2,303 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 819B1FE54D
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 15 Nov 2019 19:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70BCFE6EF
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 15 Nov 2019 22:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726365AbfKOSzx (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 15 Nov 2019 13:55:53 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:33583 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726308AbfKOSzx (ORCPT
+        id S1727295AbfKOVNB (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 15 Nov 2019 16:13:01 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:38344 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727183AbfKOVNB (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 15 Nov 2019 13:55:53 -0500
-Received: by mail-pg1-f195.google.com with SMTP id h27so6435274pgn.0
-        for <linux-remoteproc@vger.kernel.org>; Fri, 15 Nov 2019 10:55:53 -0800 (PST)
+        Fri, 15 Nov 2019 16:13:01 -0500
+Received: by mail-io1-f67.google.com with SMTP id i13so11955804ioj.5
+        for <linux-remoteproc@vger.kernel.org>; Fri, 15 Nov 2019 13:13:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=5/DV9l5vjoy566bD7j+28Px5X64vcSjdjpGgZ+iBNys=;
-        b=H/KXp98I7VNkHc8aGry+k4qMOXigEvqS5f48d8OiOYilQ4J2JwVhl6GgokzI6hyV62
-         XWkMKULwF03dKbwXHrV25fcvG4pFGGEMexDLJ+Yh3PK+hdPhnERKyqc4g3AzSJ3SGCJZ
-         OyCkTZIxlmqlvqF1t+Fnyrlxhd1HP2fIBp/M5NcGjSuffzdMZKMyUk70LicNWBtTC9KY
-         I3uBGnreTlwa5iuUJWIJvLlCr5Mbzk9WqyHIHjlGMetRB/9asxXqYDEDtQTGCPZIDZNb
-         QWoUp0LtC4qbXAZ+ZD7roicUqYHW05JcJu8W8RRz9Xo7s6emVbzQ9YdMKkWyU+qHPNTs
-         Oc1w==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K8qRRdDVOJ2xu8KBi98E5RGZhtFOj+R45HMgOd4adps=;
+        b=YTRt8W8RB+3JupukO1+edrrdO58VVKh3lYLrAE7eOWwNB4S199kLz8esoZpXiyzd61
+         /caciTK/qGbwnphEaxbyTjUREegWs/rU+oOA3brfEbLDzsubl9cNsjbEM1h1YUykwwAh
+         wTh9cxduLi20z2vlNj60xAF+zaWrEJ6v6hlVQPz+hvf6AH/QnN7YDttpJ0Wuk5NKhNfG
+         NX8MkhsDSKMH87PKdI4ZdKtayia3H+8mqxL7Nbvm86+VMKX5bAro8LfU93KVHmN0M6GW
+         gJ1fefJJ036dBLC3jcsrsLsCGtq0k38ANf2eY8A2t+mJas0WT75Eg7AH4LlS4eJ7iZbB
+         t9Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5/DV9l5vjoy566bD7j+28Px5X64vcSjdjpGgZ+iBNys=;
-        b=XdRtionKwPlU2wNhjr9yjJBdH2IYL8pWvFl44i3zMwOw3YCMDTfk+fwqs93x7YePOa
-         spgeSr5qBS2KHNNPkpAaoXfUNO78JczE9j2rf8kh3DJqiqdJNwYnvkrLygCRI1nVpM0B
-         LMu2t+tRizJOeJ3f6EnsccBqO+wMpo+Uj3NFAectbc73U1cQEkovy7/GQUlvwbx+PUep
-         9SrHQ7gR1h/GnTR6GPEJAeqDQ4GyE7YIknc9rC6H/8HTeBNgaTKLuf/YbHtL9TlL+lkw
-         baFZfU5o/TMQmFziZkHLdevSLGjJd7bEc6HvoOtpZOmbKcpTO0xo+3X4EimA6qPJglHW
-         qEpA==
-X-Gm-Message-State: APjAAAUR1VSR2PmFU4mWt0aVzBB4pA596tSkbRSOc0NjB5b4j5QOPkJM
-        FGRMDqA+bLbdt067cQtM6HCFeQ==
-X-Google-Smtp-Source: APXvYqxiuLVF6hREoHjpiqNAQJjrFwPI2aFPUGj4Kmc+5j35f5RvAklf22Il0U3b+Ud+37gdYfUmww==
-X-Received: by 2002:a63:d70e:: with SMTP id d14mr17742459pgg.10.1573844152375;
-        Fri, 15 Nov 2019 10:55:52 -0800 (PST)
-Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id l62sm10835645pgl.24.2019.11.15.10.55.50
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 15 Nov 2019 10:55:51 -0800 (PST)
-Date:   Fri, 15 Nov 2019 11:55:49 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Fabien Dessenne <fabien.dessenne@st.com>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Loic Pallardy <loic.pallardy@st.com>
-Subject: Re: [PATCH v4] remoteproc: stm32: fix probe error case
-Message-ID: <20191115185549.GA17332@xps15>
-References: <1573812188-19842-1-git-send-email-fabien.dessenne@st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K8qRRdDVOJ2xu8KBi98E5RGZhtFOj+R45HMgOd4adps=;
+        b=o4uWvDGf2Y++IOtawxdsDZ8SspcLs5j8owmRjaXiiMdZ7H2aLAt/MfkA7Tyn8SvIie
+         Mr1tlk5CZbvmhEZ4gYz/QSu4gi8Z1KdpNCMVFyUVr9Y3URvnsOWEI1lBd8jJv4+cswtC
+         ASvXv2AnMctC4jnuoKjoMwQFpfF04b5DVegwSegQWCS73wnL+oJERQkf6M75TH/X7E93
+         ZFGqcGF5M5b6EETvtWr4vU+7LM1UEyOsuGD0HS85vTXcq+93hqxpnCMrw32pGESReJw5
+         6IU9vyUoqo7G++SkT20lLmengS5xc0VoZWO+QgHtyhXUjNWCPHLvNx3YgNVegaRALbX+
+         ps7w==
+X-Gm-Message-State: APjAAAWTmN+tfEQGaxYspxy76MbMhU88PjRVHbRIz0QnHGHitTDV8Yxp
+        9oSjUHgE3qIorkdW9EmDiAcpccHJaAtefPWTT86e4g==
+X-Google-Smtp-Source: APXvYqySs2aNa6G3NRenBPFAfh2NsFHJFR8XK/T1zmoQ50FTrAJ3p44tWqAG8IvANXb7LyjFscytg1rxz+n6lLYwcqM=
+X-Received: by 2002:a5e:9608:: with SMTP id a8mr2594936ioq.58.1573852379871;
+ Fri, 15 Nov 2019 13:12:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1573812188-19842-1-git-send-email-fabien.dessenne@st.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <1573680543-39086-1-git-send-email-loic.pallardy@st.com>
+ <20191114181909.GA21402@xps15> <27c9d23478cf410481285182f9e42172@SFHDAG7NODE2.st.com>
+In-Reply-To: <27c9d23478cf410481285182f9e42172@SFHDAG7NODE2.st.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Fri, 15 Nov 2019 14:12:49 -0700
+Message-ID: <CANLsYkyahM0nfvb8B__TP_yNe1eNywpqf7tuBJGdmYBt4iS8aQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] remoteproc: add support for co-processor loaded
+ and booted before kernel
+To:     Loic PALLARDY <loic.pallardy@st.com>
+Cc:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "ohad@wizery.com" <ohad@wizery.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
+        "benjamin.gaignard@linaro.org" <benjamin.gaignard@linaro.org>,
+        Fabien DESSENNE <fabien.dessenne@st.com>,
+        "s-anna@ti.com" <s-anna@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Fabien,
+On Fri, 15 Nov 2019 at 08:27, Loic PALLARDY <loic.pallardy@st.com> wrote:
+>
+> Hi Mathieu,
+>
+> > -----Original Message-----
+> > From: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > Sent: jeudi 14 novembre 2019 19:19
+> > To: Loic PALLARDY <loic.pallardy@st.com>
+> > Cc: bjorn.andersson@linaro.org; ohad@wizery.com; linux-
+> > remoteproc@vger.kernel.org; linux-kernel@vger.kernel.org; Arnaud
+> > POULIQUEN <arnaud.pouliquen@st.com>; benjamin.gaignard@linaro.org;
+> > Fabien DESSENNE <fabien.dessenne@st.com>; s-anna@ti.com
+> > Subject: Re: [PATCH v3 1/1] remoteproc: add support for co-processor
+> > loaded and booted before kernel
+> >
+> > Hi Loic,
+> >
+> > On Wed, Nov 13, 2019 at 10:29:03PM +0100, Loic Pallardy wrote:
+> > > Remote processor could boot independently or be loaded/started before
+> > > Linux kernel by bootloader or any firmware.
+> > > This patch introduces a new property in rproc core, named skip_fw_load,
+> > > to be able to allocate resources and sub-devices like vdev and to
+> > > synchronize with current state without loading firmware from file system.
+> > > It is platform driver responsibility to implement the right firmware
+> > > load ops according to HW specificities.
+> > >
+> > > Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
+> > >
+> > > ---
+> > > Change from v2:
+> > > - rename property into skip_fw_load
+> > > - update rproc_boot and rproc_fw_boot description
+> > > - update commit message
+> > > Change from v1:
+> > > - Keep bool in struct rproc
+> > > ---
+> > >  drivers/remoteproc/remoteproc_core.c | 51
+> > +++++++++++++++++++++++++++---------
+> > >  include/linux/remoteproc.h           |  2 ++
+> > >  2 files changed, 40 insertions(+), 13 deletions(-)
+> > >
+> > > diff --git a/drivers/remoteproc/remoteproc_core.c
+> > b/drivers/remoteproc/remoteproc_core.c
+> > > index 3c5fbbbfb0f1..585cdca8b241 100644
+> > > --- a/drivers/remoteproc/remoteproc_core.c
+> > > +++ b/drivers/remoteproc/remoteproc_core.c
+> > > @@ -1360,7 +1360,7 @@ static int rproc_start(struct rproc *rproc, const
+> > struct firmware *fw)
+> > >  }
+> > >
+> > >  /*
+> > > - * take a firmware and boot a remote processor with it.
+> > > + * Handle resources defined in resource table and start a remote
+> > processor.
+> > >   */
+> > >  static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
+> > >  {
+> > > @@ -1372,7 +1372,11 @@ static int rproc_fw_boot(struct rproc *rproc,
+> > const struct firmware *fw)
+> > >     if (ret)
+> > >             return ret;
+> > >
+> > > -   dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
+> > > +   if (fw)
+> > > +           dev_info(dev, "Booting fw image %s, size %zd\n", name,
+> > > +                    fw->size);
+> > > +   else
+> > > +           dev_info(dev, "Synchronizing with preloaded co-
+> > processor\n");
+> >
+> > Here we assume that if @fw is NULL then the image is already loaded.  The
+> > first
+> > question that comes to mind is if that means the ELF image has already been
+> > copied to the coprocessor's boot address.  If that is the case it would be nice
+> > to make it explicit with a comment in the code.
+>
+> Yes, but will be better to test "skip_fw_load" properties to change display info message.
 
-On Fri, Nov 15, 2019 at 11:03:08AM +0100, Fabien Dessenne wrote:
-> If the rproc driver is probed before the mailbox driver and if the rproc
-> Device Tree node has some mailbox properties, the rproc driver probe
-> shall be deferred instead of being probed without mailbox support.
-> 
-> Signed-off-by: Fabien Dessenne <fabien.dessenne@st.com>
-> ---
-> Changes since v3: on error, free mailboxes from stm32_rproc_request_mbox()
-> Changes since v2: free other requested mailboxes after one request fails
-> Changes since v1: test IS_ERR() before checking PTR_ERR()
-> ---
->  drivers/remoteproc/stm32_rproc.c | 17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-> index 2cf4b29..bcebb78 100644
-> --- a/drivers/remoteproc/stm32_rproc.c
-> +++ b/drivers/remoteproc/stm32_rproc.c
-> @@ -310,11 +310,12 @@ static const struct stm32_mbox stm32_rproc_mbox[MBOX_NB_MBX] = {
->  	}
->  };
->  
-> -static void stm32_rproc_request_mbox(struct rproc *rproc)
-> +static int stm32_rproc_request_mbox(struct rproc *rproc)
->  {
->  	struct stm32_rproc *ddata = rproc->priv;
->  	struct device *dev = &rproc->dev;
->  	unsigned int i;
-> +	int j;
->  	const unsigned char *name;
->  	struct mbox_client *cl;
->  
-> @@ -329,10 +330,20 @@ static void stm32_rproc_request_mbox(struct rproc *rproc)
->  
->  		ddata->mb[i].chan = mbox_request_channel_byname(cl, name);
->  		if (IS_ERR(ddata->mb[i].chan)) {
-> +			if (PTR_ERR(ddata->mb[i].chan) == -EPROBE_DEFER)
-> +				goto err_probe;
->  			dev_warn(dev, "cannot get %s mbox\n", name);
->  			ddata->mb[i].chan = NULL;
->  		}
->  	}
-> +
-> +	return 0;
-> +
-> +err_probe:
-> +	for (j = i - 1; j >= 0; j--)
-> +		if (ddata->mb[j].chan)
-> +			mbox_free_channel(ddata->mb[j].chan);
+I am good with the different dev_info() based on the value of @fw.
 
-Do you need to set ddata->mb[i].chan to NULL as it is done in
-stm32_rproc_free_mbox?
+> Anyway, agree to mention that if @fw is NULL that means fw considered as already loaded.
 
-Also I'm wondering about the error path for this function.  If something goes
-wrong in mbox_request_channel_byname() none of the previously allocated channels
-are freed and no further actions is taken.  Should we simply abort the probing
-of the rproc if any of channels can't be probed?
+If you have to do a respin then a clear explanation would be
+appreciated, especially since this is core code.  If you don't go for
+a 4th iteration then leave it as is.
 
-Regardless of the above and without surprise:
+> >
+> > Following the earlier comments made on the thread for this serie, I
+> > understand
+> > the rproc_ops fed to the core should provision for @fw being NULL.  In
+> > this case though st_rproc_ops[1] reference a number of core operations that
+> > aren't tailored to handled a NULL @fw parameter.
+>
+> True, some patches will follow
+>
+> >
+> > I am pretty sure you're well aware of this and you have more patches to go
+> > with
+> > this one or said patches have already been published and I'm looking at the
+> > wrong tree. If that is the case would you mind making those patches public or
+> > pointing me to a repository somewhere?
+>
+> Please have a look here [1].
+> The properties is named preloaded instead of skip_fw_load, but that's the same.
 
-Tested-by: Mathieu Poirier <mathieu.poirier@linaro.org> 
+I saw rproc::early_boot but the end result is indeed the same.
 
-> +	return -EPROBE_DEFER;
->  }
->  
->  static int stm32_rproc_set_hold_boot(struct rproc *rproc, bool hold)
-> @@ -596,7 +607,9 @@ static int stm32_rproc_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto free_rproc;
->  
-> -	stm32_rproc_request_mbox(rproc);
-> +	ret = stm32_rproc_request_mbox(rproc);
-> +	if (ret)
-> +		goto free_rproc;
->  
->  	ret = rproc_add(rproc);
->  	if (ret)
-> -- 
-> 2.7.4
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> Impacted ops are working differently according to preloaded status.
+>
+> When skip_fw_load is true, no ELF image is used. Platform driver is in charge of providing resource table location somewhere in memory.
+> Somewhere is platform dependent.
 
+Thanks for letting me in on the bigger picture - things are much
+clearer now and I see where you're going.  How the resource table is
+handled in stm32_rproc_elf_load_rsc_table() also answers my questions
+in that area.
+
+Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+
+>
+> Regards,
+> Loic
+> [1] https://github.com/STMicroelectronics/linux/blob/v4.19-stm32mp/drivers/remoteproc/stm32_rproc.c
+>
+> >
+> > I have other concerns about the specifics shared between the application
+> > and co
+> > processors using the ELF image but I'll wait for your reply to the above before
+> > addressing those.
+> >
+> > Regards,
+> > Mathieu
+> >
+> > [1]. https://elixir.bootlin.com/linux/v5.4-
+> > rc7/source/drivers/remoteproc/stm32_rproc.c#L470
+> >
+> > >
+> > >     /*
+> > >      * if enabling an IOMMU isn't relevant for this rproc, this is
+> > > @@ -1719,16 +1723,22 @@ static void rproc_crash_handler_work(struct
+> > work_struct *work)
+> > >   * rproc_boot() - boot a remote processor
+> > >   * @rproc: handle of a remote processor
+> > >   *
+> > > - * Boot a remote processor (i.e. load its firmware, power it on, ...).
+> > > + * Boot a remote processor (i.e. load its firmware, power it on, ...) from
+> > > + * different contexts:
+> > > + * - power off
+> > > + * - preloaded firmware
+> > > + * - started before kernel execution
+> > > + * The different operations are selected thanks to properties defined by
+> > > + * platform driver.
+> > >   *
+> > > - * If the remote processor is already powered on, this function
+> > immediately
+> > > - * returns (successfully).
+> > > + * If the remote processor is already powered on at rproc level, this
+> > function
+> > > + * immediately returns (successfully).
+> > >   *
+> > >   * Returns 0 on success, and an appropriate error value otherwise.
+> > >   */
+> > >  int rproc_boot(struct rproc *rproc)
+> > >  {
+> > > -   const struct firmware *firmware_p;
+> > > +   const struct firmware *firmware_p = NULL;
+> > >     struct device *dev;
+> > >     int ret;
+> > >
+> > > @@ -1759,11 +1769,17 @@ int rproc_boot(struct rproc *rproc)
+> > >
+> > >     dev_info(dev, "powering up %s\n", rproc->name);
+> > >
+> > > -   /* load firmware */
+> > > -   ret = request_firmware(&firmware_p, rproc->firmware, dev);
+> > > -   if (ret < 0) {
+> > > -           dev_err(dev, "request_firmware failed: %d\n", ret);
+> > > -           goto downref_rproc;
+> > > +   if (!rproc->skip_fw_load) {
+> > > +           /* load firmware */
+> > > +           ret = request_firmware(&firmware_p, rproc->firmware,
+> > dev);
+> > > +           if (ret < 0) {
+> > > +                   dev_err(dev, "request_firmware failed: %d\n", ret);
+> > > +                   goto downref_rproc;
+> > > +           }
+> > > +   } else {
+> > > +           /* set firmware name to null as unknown */
+> > > +           kfree(rproc->firmware);
+> > > +           rproc->firmware = NULL;
+> > >     }
+> > >
+> > >     ret = rproc_fw_boot(rproc, firmware_p);
+> > > @@ -1917,8 +1933,17 @@ int rproc_add(struct rproc *rproc)
+> > >     /* create debugfs entries */
+> > >     rproc_create_debug_dir(rproc);
+> > >
+> > > -   /* if rproc is marked always-on, request it to boot */
+> > > -   if (rproc->auto_boot) {
+> > > +   if (rproc->skip_fw_load) {
+> > > +           /*
+> > > +            * If rproc is marked already booted, no need to wait
+> > > +            * for firmware.
+> > > +            * Just handle associated resources and start sub devices
+> > > +            */
+> > > +           ret = rproc_boot(rproc);
+> > > +           if (ret < 0)
+> > > +                   return ret;
+> > > +   } else if (rproc->auto_boot) {
+> > > +           /* if rproc is marked always-on, request it to boot */
+> > >             ret = rproc_trigger_auto_boot(rproc);
+> > >             if (ret < 0)
+> > >                     return ret;
+> > > diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> > > index 16ad66683ad0..4fd5bedab4fa 100644
+> > > --- a/include/linux/remoteproc.h
+> > > +++ b/include/linux/remoteproc.h
+> > > @@ -479,6 +479,7 @@ struct rproc_dump_segment {
+> > >   * @table_sz: size of @cached_table
+> > >   * @has_iommu: flag to indicate if remote processor is behind an MMU
+> > >   * @auto_boot: flag to indicate if remote processor should be auto-started
+> > > + * @skip_fw_load: remote processor has been preloaded before start
+> > sequence
+> > >   * @dump_segments: list of segments in the firmware
+> > >   * @nb_vdev: number of vdev currently handled by rproc
+> > >   */
+> > > @@ -512,6 +513,7 @@ struct rproc {
+> > >     size_t table_sz;
+> > >     bool has_iommu;
+> > >     bool auto_boot;
+> > > +   bool skip_fw_load;
+> > >     struct list_head dump_segments;
+> > >     int nb_vdev;
+> > >  };
+> > > --
+> > > 2.7.4
+> > >
