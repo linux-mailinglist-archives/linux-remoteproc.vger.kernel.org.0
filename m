@@ -2,243 +2,401 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86964100E96
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 18 Nov 2019 23:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8A4100F05
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 18 Nov 2019 23:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbfKRWHm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 18 Nov 2019 17:07:42 -0500
-Received: from mail-il1-f196.google.com ([209.85.166.196]:34815 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726647AbfKRWHm (ORCPT
+        id S1726910AbfKRW4d (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 18 Nov 2019 17:56:33 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:32784 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726830AbfKRW4c (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 18 Nov 2019 17:07:42 -0500
-Received: by mail-il1-f196.google.com with SMTP id p6so17578586ilp.1;
-        Mon, 18 Nov 2019 14:07:41 -0800 (PST)
+        Mon, 18 Nov 2019 17:56:32 -0500
+Received: by mail-pl1-f194.google.com with SMTP id ay6so10613991plb.0
+        for <linux-remoteproc@vger.kernel.org>; Mon, 18 Nov 2019 14:56:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O2vW9EdXLQKAp86+GJ5aL6mkzdl6pw5VOu+wcc7bk+g=;
-        b=otNs3IrlL1hNW2ttXl8Q3D4b01vgo3ImArlwnLHgHz6zbUwftwotfVtHtNtlyChyOu
-         R/0tcVkNQav/qO4tnqHZV8/Dvy5ULMY4/OOO713YxKfasV91Y2LFopT7O9t1Knx2tcD4
-         a2InYN/8GUBmM28uI3Mr3AwuZlckREuK+/p5BzTn2d0XLyLwrfVWhuLBFShbdbfuj0fT
-         Gde1XeQ1jLOITJ2vwimt2guhhNr/ektAxL2RiShuL41nL6jCj9k3jmpOWIZTOJsIufXb
-         Cm2mAtkcEM0qad61W0d61TeK/d4EOjyq78UE764/a/MEveABDA0qrAMytqeExmWtm9xH
-         YHxw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=VweJvPw9KXJliTxPoEDSfPBhjVqbH3eDBuR8yLkz1fQ=;
+        b=m2c5Q0c74gWhnvp4je3yqVZcm7DqVKA7jisqzl6wqj+KANRa+9gSEkePSx+qbZoaIq
+         R2c1K/fg1JRaP08zgUhVHsKc0UZenovlOMyQ1F2TrUrw6RR3kPVdEqoPCz/2/QV0ujBl
+         d0EYKzY0yKLJSxhzPstWXVbPrtYo9FEq/D4zp6Gzw1Tw6zo7oTYjN7gxJhq4Pn1qFRKo
+         VNPGFVlrlhX8jRdiH9N+9SvGBuJIl/CdyGNXCR4hKHsG2SR6zcgToLbfRJp/c3DjjAku
+         3vMG2cMRTOXpO3/7Vseils5w5rk2vECowKwc3l92CduNFz0rQAYdSzOTB69H2EDUVqjq
+         zavg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O2vW9EdXLQKAp86+GJ5aL6mkzdl6pw5VOu+wcc7bk+g=;
-        b=SDLgNsdan3adz5dXL0wot0lG1O39e1R2NbW7RgYaRhrfzPJb8SiPCx2Itzs+tXxk3O
-         OY1lubu0ZtLInB7lRB0d5j4DbwnzD6OSV4PMmdVpgF47kqDGL8OWFhYYK1wfXOYFNQ5I
-         CT2RmqPgf6Tz8LZjDoCh2QmwNaXwkdodZcrED3+WKKKYQN467mgIdfVt2EahOUsZv8UB
-         cjOaJN6FNpQELP2X5Nu6qJns3cNOenrHZvt9imdDQ4HBvEMjE6hlm13tGdCPpieJH/eO
-         dcnxAH76HGfs3f7wpdXr2jFT3Mvdhuo6rLrZGCKVDym14HJzkaSmtTSH8bPXAnP35boT
-         P0Og==
-X-Gm-Message-State: APjAAAV3hQRwXXy8G7iQgLBEv4T+PCvXYPObWRJ5dc0D8Gy2z4f7IRZa
-        AljrlwWqz18tE+T0Qjdj2aQdhxHBOA41rLAcU7o=
-X-Google-Smtp-Source: APXvYqwCZhmjWDwb1dbWvR3+vgKx3DK9s7HemQxsysKao8W/a9fGZyeGR1iVwx88GGU89CaxmPcdBXLEUm+X1K/+jGc=
-X-Received: by 2002:a92:1d51:: with SMTP id d78mr19083922ild.166.1574114861166;
- Mon, 18 Nov 2019 14:07:41 -0800 (PST)
-MIME-Version: 1.0
-References: <20191118214250.14002-1-sibis@codeaurora.org> <0101016e807934fa-4da223fb-1854-4a1e-a8ee-e088129c4812-000000@us-west-2.amazonses.com>
-In-Reply-To: <0101016e807934fa-4da223fb-1854-4a1e-a8ee-e088129c4812-000000@us-west-2.amazonses.com>
-From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-Date:   Mon, 18 Nov 2019 15:07:30 -0700
-Message-ID: <CAOCk7Nr=Up1LP+-XB7tnoM=XwK+YysDMq8EqyhCLx=WA+eW9PA@mail.gmail.com>
-Subject: Re: [PATCH 14/16] arm64: dts: qcom: msm8998: Add ADSP, MPSS and SLPI nodes
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jeffrey Hugo <jhugo@codeaurora.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=VweJvPw9KXJliTxPoEDSfPBhjVqbH3eDBuR8yLkz1fQ=;
+        b=WfrGkBHGGenYGVXUKWfDx+Uaar9IL4J8vRSOGkh75ts/94/nV+kH+xgKSZrScrcyLg
+         0pZlVQwIjzAPnwNho+hKj9CmYopyTNzOXiYUv6slB9JNQgdUOOb+yHtyIrJhy7xJXvOp
+         pseFl2oNqq6iCE46ESJAClDSfyu9zBJJ67dnCVCGQ5g4v4bGKWAISoO9N8rjOh+aLr51
+         LOIFvY7+w36sF81RuE9Zd49c9OHkgHZyu+dwf+kc/mujVsRLgFh2pjmIXk5koeYh15a0
+         KWARMW9BK4McgJN8NP0Df844r8UPdv52V+8MxsLuU4XhCtGvQhNKmpgJT1JKCWhwqrzQ
+         Edow==
+X-Gm-Message-State: APjAAAW7KtnyfDiAiSOh8flKSPNdofNgJoATINLY1G/5CP+rqHS2QDWH
+        Sg8L+pCHn4fcOsLmde3Z+IafncikboI=
+X-Google-Smtp-Source: APXvYqxPxXUh1fUDenKA7oTOOIicqOty+iYA7of050uUKhOw8y0cUSgnUpNevfVWnjpQcfqTd3YtVA==
+X-Received: by 2002:a17:90a:3746:: with SMTP id u64mr1928022pjb.4.1574117790803;
+        Mon, 18 Nov 2019 14:56:30 -0800 (PST)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id f35sm491856pje.32.2019.11.18.14.56.29
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 18 Nov 2019 14:56:30 -0800 (PST)
+Date:   Mon, 18 Nov 2019 15:56:28 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mark Rutland <mark.rutland@arm.com>, p.zabel@pengutronix.de,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        DTML <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Mark Rutland <mark.rutland@arm.com>, od@zcrc.me,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] remoteproc: ingenic: Added remoteproc driver
+Message-ID: <20191118225628.GA18243@xps15>
+References: <20191116170846.67220-1-paul@crapouillou.net>
+ <20191116170846.67220-4-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191116170846.67220-4-paul@crapouillou.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 2:45 PM Sibi Sankar <sibis@codeaurora.org> wrote:
->
-> This patch adds ADSP, MPSS and SLPI nodes for MSM8998 SoCs.
->
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+Hi Paul,
+
+On Sat, Nov 16, 2019 at 06:08:46PM +0100, Paul Cercueil wrote:
+> This driver is used to boot, communicate with and load firmwares to the
+> MIPS co-processor found in the VPU hardware of the JZ47xx SoCs from
+> Ingenic.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 > ---
->  arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi |   8 ++
->  arch/arm64/boot/dts/qcom/msm8998.dtsi     | 122 ++++++++++++++++++++++
->  2 files changed, 130 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi b/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
-> index 5f101a20a20a2..29e0c2e988e4b 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
-> @@ -23,6 +23,14 @@
->         };
->  };
->
-> +&adsp_pas {
-> +       status = "okay";
+> 
+> Notes:
+>     v2: Remove exception for always-mapped memories
+>     v3: - Use clk_bulk API
+>         - Move device-managed code to its own patch [3/4]
+>     	- Move devicetree table right above ingenic_rproc_driver
+>     	- Removed #ifdef CONFIG_OF around devicetree table
+>     	- Removed .owner = THIS_MODULE in ingenic_rproc_driver
+>     	- Removed useless platform_set_drvdata()
+> 
+>  drivers/remoteproc/Kconfig         |   8 +
+>  drivers/remoteproc/Makefile        |   1 +
+>  drivers/remoteproc/ingenic_rproc.c | 242 +++++++++++++++++++++++++++++
+>  3 files changed, 251 insertions(+)
+>  create mode 100644 drivers/remoteproc/ingenic_rproc.c
+> 
+> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
+> index 94afdde4bc9f..f7d4b183d152 100644
+> --- a/drivers/remoteproc/Kconfig
+> +++ b/drivers/remoteproc/Kconfig
+> @@ -214,6 +214,14 @@ config STM32_RPROC
+>  
+>  	  This can be either built-in or a loadable module.
+>  
+> +config INGENIC_RPROC
+
+Are you sure you don't want to make this something like
+INGENIC_RPROC_JZ47XX_VPU so that future remote proc system from Ingenic can be
+added easily?
+
+> +	tristate "Ingenic JZ47xx VPU remoteproc support"
+> +	depends on MIPS || COMPILE_TEST
+> +	help
+> +	  Say y or m here to support the VPU in the JZ47xx SoCs from Ingenic.
+> +	  This can be either built-in or a loadable module.
+> +	  If unsure say N.
+> +
+>  endif # REMOTEPROC
+>  
+>  endmenu
+> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
+> index 00f09e658cb3..6eb0137abbc7 100644
+> --- a/drivers/remoteproc/Makefile
+> +++ b/drivers/remoteproc/Makefile
+> @@ -10,6 +10,7 @@ remoteproc-y				+= remoteproc_sysfs.o
+>  remoteproc-y				+= remoteproc_virtio.o
+>  remoteproc-y				+= remoteproc_elf_loader.o
+>  obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
+> +obj-$(CONFIG_INGENIC_RPROC)			+= ingenic_rproc.a
+
+This comes out as one tab to many on my side.
+
+>  obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o
+>  obj-$(CONFIG_WKUP_M3_RPROC)		+= wkup_m3_rproc.o
+>  obj-$(CONFIG_DA8XX_REMOTEPROC)		+= da8xx_remoteproc.o
+> diff --git a/drivers/remoteproc/ingenic_rproc.c b/drivers/remoteproc/ingenic_rproc.c
+> new file mode 100644
+> index 000000000000..5a7c7d8d9a90
+> --- /dev/null
+> +++ b/drivers/remoteproc/ingenic_rproc.c
+> @@ -0,0 +1,242 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Ingenic JZ47xx remoteproc driver
+> + * Copyright 2019, Paul Cercueil <paul@crapouillou.net>
+> + */
+> +
+> +#include <linux/bitops.h>
+> +#include <linux/clk.h>
+> +#include <linux/err.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/remoteproc.h>
+> +
+> +#include "remoteproc_internal.h"
+> +
+> +#define REG_AUX_CTRL		0x0
+> +#define REG_AUX_MSG_ACK		0x10
+> +#define REG_AUX_MSG		0x14
+> +#define REG_CORE_MSG_ACK	0x18
+> +#define REG_CORE_MSG		0x1C
+> +
+> +#define AUX_CTRL_SLEEP		BIT(31)
+> +#define AUX_CTRL_MSG_IRQ_EN	BIT(3)
+> +#define AUX_CTRL_NMI_RESETS	BIT(2)
+> +#define AUX_CTRL_NMI		BIT(1)
+> +#define AUX_CTRL_SW_RESET	BIT(0)
+> +
+> +struct vpu_mem_map {
+> +	const char *name;
+> +	unsigned int da;
 > +};
 > +
-> +&slpi_pas {
-
-"b" comes before "s", no?
-
-> +       status = "okay";
+> +struct vpu_mem_info {
+> +	const struct vpu_mem_map *map;
+> +	unsigned long len;
+> +	void __iomem *base;
 > +};
 > +
->  &blsp1_uart3 {
->         status = "okay";
->
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> index 707673e3cf28a..dd1dc35e87b63 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
-> @@ -337,6 +337,73 @@
->                 };
->         };
->
-> +       adsp_pas: remoteproc-adsp {
-> +               compatible = "qcom,msm8998-adsp-pas";
+> +static const struct vpu_mem_map vpu_mem_map[] = {
+> +	{ "tcsm0", 0x132b0000 },
+> +	{ "tcsm1", 0xf4000000 },
+> +	{ "sram",  0x132f0000 },
+> +};
 > +
-> +               interrupts-extended = <&intc GIC_SPI 162 IRQ_TYPE_EDGE_RISING>,
-> +                                     <&adsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-> +                                     <&adsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-> +                                     <&adsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-> +                                     <&adsp_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
-> +               interrupt-names = "wdog", "fatal", "ready",
-> +                                 "handover", "stop-ack";
+> +/* Device data */
+> +struct vpu {
+> +	int irq;
+> +	struct clk_bulk_data clks[2];
+> +	void __iomem *aux_base;
+> +	struct vpu_mem_info mem_info[ARRAY_SIZE(vpu_mem_map)];
+> +	struct device *dev;
+> +};
+
+Documentation of structure fields is always appreciated but it is up to Bjorn to
+decide on this one.
+
 > +
-> +               clocks = <&xo>;
-> +               clock-names = "xo";
+> +static int ingenic_rproc_prepare(struct rproc *rproc)
+> +{
+> +	struct vpu *vpu = rproc->priv;
+> +	int ret;
 > +
-> +               memory-region = <&adsp_mem>;
+> +	/* The clocks must be enabled for the firmware to be loaded in TCSM */
+> +	ret = clk_bulk_prepare_enable(ARRAY_SIZE(vpu->clks), vpu->clks);
+> +	if (ret)
+> +		dev_err(vpu->dev, "Unable to start clocks: %d", ret);
 > +
-> +               qcom,smem-states = <&adsp_smp2p_out 0>;
-> +               qcom,smem-state-names = "stop";
+> +	return ret;
+> +}
 > +
-> +               power-domains = <&rpmpd MSM8998_VDDCX>;
-> +               power-domain-names = "cx";
+> +static void ingenic_rproc_unprepare(struct rproc *rproc)
+> +{
+> +	struct vpu *vpu = rproc->priv;
 > +
-> +               status = "disabled";
+> +	clk_bulk_disable_unprepare(ARRAY_SIZE(vpu->clks), vpu->clks);
+> +}
 > +
-> +               glink-edge {
-> +                       interrupts = <GIC_SPI 157 IRQ_TYPE_EDGE_RISING>;
-> +                       label = "lpass";
-> +                       qcom,remote-pid = <2>;
-> +                       mboxes = <&apcs_glb 9>;
-> +               };
-> +       };
+> +static int ingenic_rproc_start(struct rproc *rproc)
+> +{
+> +	struct vpu *vpu = rproc->priv;
+> +	u32 ctrl;
 > +
-> +       slpi_pas: remoteproc-slpi {
-> +               compatible = "qcom,msm8998-slpi-pas";
+> +	enable_irq(vpu->irq);
 > +
-> +               interrupts-extended = <&intc GIC_SPI 390 IRQ_TYPE_EDGE_RISING>,
-> +                                     <&slpi_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-> +                                     <&slpi_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-> +                                     <&slpi_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-> +                                     <&slpi_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
-> +               interrupt-names = "wdog", "fatal", "ready",
-> +                                 "handover", "stop-ack";
+> +	/* Reset the AUX and enable message IRQ */
+> +	ctrl = AUX_CTRL_NMI_RESETS | AUX_CTRL_NMI | AUX_CTRL_MSG_IRQ_EN;
+> +	writel(ctrl, vpu->aux_base + REG_AUX_CTRL);
+
+Out of curiosity, there is no power domain associated with this
+co-processor?  Clocks are all you need?
+
 > +
-> +               px-supply = <&vreg_lvs2a_1p8>;
+> +	return 0;
+> +}
 > +
-> +               clocks = <&xo>,
-> +                        <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
-> +               clock-names = "xo", "aggre2";
+> +static int ingenic_rproc_stop(struct rproc *rproc)
+> +{
+> +	struct vpu *vpu = rproc->priv;
 > +
-> +               memory-region = <&slpi_mem>;
+> +	/* Keep AUX in reset mode */
+> +	writel(AUX_CTRL_SW_RESET, vpu->aux_base + REG_AUX_CTRL);
 > +
-> +               qcom,smem-states = <&slpi_smp2p_out 0>;
-> +               qcom,smem-state-names = "stop";
+> +	disable_irq_nosync(vpu->irq);
+
+Also out of curiosity, why the need for _nosync()?
+
 > +
-> +               power-domains = <&rpmpd MSM8998_SSCCX>;
-> +               power-domain-names = "ssc_cx";
+> +	return 0;
+> +}
 > +
-> +               status = "disabled";
+> +static void ingenic_rproc_kick(struct rproc *rproc, int vqid)
+> +{
+> +	struct vpu *vpu = rproc->priv;
 > +
-> +               glink-edge {
-> +                       interrupts = <GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
-> +                       label = "dsps";
-> +                       qcom,remote-pid = <3>;
-> +                       mboxes = <&apcs_glb 27>;
-> +               };
-> +       };
+> +	writel(vqid, vpu->aux_base + REG_CORE_MSG);
+> +}
 > +
->         tcsr_mutex: hwlock {
->                 compatible = "qcom,tcsr-mutex";
->                 syscon = <&tcsr_mutex_regs 0 0x1000>;
-> @@ -1048,6 +1115,61 @@
->                         #interrupt-cells = <0x2>;
->                 };
->
-> +               mss_pil: remoteproc@4080000 {
-> +                       compatible = "qcom,msm8998-mss-pil";
-> +                       reg = <0x04080000 0x100>, <0x04180000 0x20>;
-> +                       reg-names = "qdsp6", "rmb";
+> +static void *ingenic_rproc_da_to_va(struct rproc *rproc, u64 da, int len)
+> +{
+> +	struct vpu *vpu = rproc->priv;
+> +	void __iomem *va = NULL;
+> +	unsigned int i;
 > +
-> +                       interrupts-extended =
-> +                               <&intc GIC_SPI 448 IRQ_TYPE_EDGE_RISING>,
-> +                               <&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-> +                               <&modem_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-> +                               <&modem_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-> +                               <&modem_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
-> +                               <&modem_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
-> +                       interrupt-names = "wdog", "fatal", "ready",
-> +                                         "handover", "stop-ack",
-> +                                         "shutdown-ack";
+> +	if (len <= 0)
+> +		return NULL;
 > +
-> +                       clocks = <&xo>,
-> +                                <&gcc GCC_MSS_CFG_AHB_CLK>,
-> +                                <&gcc GCC_BIMC_MSS_Q6_AXI_CLK>,
-> +                                <&gcc GCC_BOOT_ROM_AHB_CLK>,
-> +                                <&gcc GCC_MSS_GPLL0_DIV_CLK_SRC>,
-> +                                <&gcc GCC_MSS_SNOC_AXI_CLK>,
-> +                                <&gcc GCC_MSS_MNOC_BIMC_AXI_CLK>,
-> +                                <&rpmcc RPM_SMD_QDSS_CLK>;
-> +                       clock-names = "xo", "iface", "bus", "mem", "gpll0_mss",
-> +                                     "snoc_axi", "mnoc_axi", "qdss";
+> +	for (i = 0; i < ARRAY_SIZE(vpu_mem_map); i++) {
+> +		const struct vpu_mem_info *info = &vpu->mem_info[i];
+> +		const struct vpu_mem_map *map = info->map;
 > +
-> +                       qcom,smem-states = <&modem_smp2p_out 0>;
-> +                       qcom,smem-state-names = "stop";
+> +		if (da >= map->da && (da + len) < (map->da + info->len)) {
+> +			va = info->base + (da - map->da);
+> +			break;
+> +		}
+> +	}
 > +
-> +                       resets = <&gcc GCC_MSS_RESTART>;
-> +                       reset-names = "mss_restart";
+> +	return (__force void *)va;
+> +}
 > +
-> +                       qcom,halt-regs = <&tcsr_mutex_regs 0x23000 0x25000 0x24000>;
+> +static struct rproc_ops ingenic_rproc_ops = {
+> +	.prepare = ingenic_rproc_prepare,
+> +	.unprepare = ingenic_rproc_unprepare,
+> +	.start = ingenic_rproc_start,
+> +	.stop = ingenic_rproc_stop,
+> +	.kick = ingenic_rproc_kick,
+> +	.da_to_va = ingenic_rproc_da_to_va,
+> +};
 > +
-> +                       power-domains = <&rpmpd MSM8998_VDDCX>,
-> +                                       <&rpmpd MSM8998_VDDMX>;
-> +                       power-domain-names = "cx", "mx";
+> +static irqreturn_t vpu_interrupt(int irq, void *data)
+> +{
+> +	struct rproc *rproc = data;
+> +	struct vpu *vpu = rproc->priv;
+> +	u32 vring;
 > +
-> +                       mba {
-> +                               memory-region = <&mba_mem>;
-> +                       };
+> +	vring = readl(vpu->aux_base + REG_AUX_MSG);
 > +
-> +                       mpss {
-> +                               memory-region = <&mpss_mem>;
-> +                       };
+> +	/* Ack the interrupt */
+> +	writel(0, vpu->aux_base + REG_AUX_MSG_ACK);
 > +
-> +                       glink-edge {
-> +                               interrupts = <GIC_SPI 452 IRQ_TYPE_EDGE_RISING>;
-> +                               label = "modem";
-> +                               qcom,remote-pid = <1>;
-> +                               mboxes = <&apcs_glb 15>;
-> +                       };
-> +               };
+> +	return rproc_vq_interrupt(rproc, vring);
+> +}
 > +
->                 stm: stm@6002000 {
->                         compatible = "arm,coresight-stm", "arm,primecell";
->                         reg = <0x06002000 0x1000>,
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
+> +static int ingenic_rproc_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *mem;
+> +	struct rproc *rproc;
+> +	struct vpu *vpu;
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	rproc = devm_rproc_alloc(dev, "ingenic-vpu",
+> +				 &ingenic_rproc_ops, NULL, sizeof(*vpu));
+> +	if (!rproc)
+> +		return -ENOMEM;
+> +
+> +	vpu = rproc->priv;
+> +	vpu->dev = &pdev->dev;
+> +
+> +	mem = platform_get_resource_byname(pdev, IORESOURCE_MEM, "aux");
+> +	vpu->aux_base = devm_ioremap_resource(dev, mem);
+> +	if (IS_ERR(vpu->aux_base)) {
+> +		dev_err(dev, "Failed to ioremap");
+> +		return PTR_ERR(vpu->aux_base);
+> +	}
+> +
+> +	for (i = 0; i < ARRAY_SIZE(vpu_mem_map); i++) {
+> +		mem = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+> +						   vpu_mem_map[i].name);
+> +
+> +		vpu->mem_info[i].base = devm_ioremap_resource(dev, mem);
+> +		if (IS_ERR(vpu->mem_info[i].base)) {
+> +			ret = PTR_ERR(vpu->mem_info[i].base);
+> +			dev_err(dev, "Failed to ioremap");
+> +			return ret;
+> +		}
+> +
+> +		vpu->mem_info[i].len = resource_size(mem);
+> +		vpu->mem_info[i].map = &vpu_mem_map[i];
+> +	}
+> +
+> +	vpu->clks[0].id = "vpu";
+> +	vpu->clks[1].id = "aux";
+> +
+> +	ret = devm_clk_bulk_get(dev, ARRAY_SIZE(vpu->clks), vpu->clks);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to get clocks");
+> +		return ret;
+> +	}
+> +
+> +	vpu->irq = platform_get_irq(pdev, 0);
+> +	if (vpu->irq < 0) {
+> +		dev_err(dev, "Failed to get platform IRQ");
+> +		return vpu->irq;
+> +	}
+> +
+> +	ret = devm_request_irq(dev, vpu->irq, vpu_interrupt, 0, "VPU", rproc);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to request IRQ");
+> +		return ret;
+> +	}
+> +
+> +	disable_irq_nosync(vpu->irq);
+> +
+> +	ret = devm_rproc_add(dev, rproc);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to register remote processor");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id ingenic_rproc_of_matches[] = {
+> +	{ .compatible = "ingenic,jz4770-vpu-rproc", },
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, ingenic_rproc_of_matches);
+> +
+> +static struct platform_driver ingenic_rproc_driver = {
+> +	.probe = ingenic_rproc_probe,
+> +	.driver = {
+> +		.name = "ingenic-vpu",
+> +		.of_match_table = of_match_ptr(ingenic_rproc_of_matches),
+> +	},
+> +};
+> +module_platform_driver(ingenic_rproc_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
+> +MODULE_DESCRIPTION("Ingenic JZ47xx Remote Processor control driver");
+
+Nice, clean and simple driver.  With the above and after rolling in Julia's
+patch:
+
+Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+
+> -- 
+> 2.24.0
+> 
