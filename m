@@ -2,172 +2,214 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6866610220D
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 19 Nov 2019 11:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A41310245A
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 19 Nov 2019 13:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726590AbfKSKZm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 19 Nov 2019 05:25:42 -0500
-Received: from a27-10.smtp-out.us-west-2.amazonses.com ([54.240.27.10]:45794
-        "EHLO a27-10.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726000AbfKSKZm (ORCPT
+        id S1727896AbfKSM2a (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 19 Nov 2019 07:28:30 -0500
+Received: from a27-21.smtp-out.us-west-2.amazonses.com ([54.240.27.21]:51942
+        "EHLO a27-21.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726351AbfKSM2a (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 19 Nov 2019 05:25:42 -0500
+        Tue, 19 Nov 2019 07:28:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1574159141;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1574166509;
         h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID;
-        bh=9YsqeSDO02fgzsVWBF0WOrYBWmUnZE+aKHDib8MTuCU=;
-        b=oGT7QvMJEDaeEwQsN8dnEbdHeAtGwYHMkI/rG/QSExlTQyy0ec2yTsdTzcv+isNU
-        5D9OvPsMZE7QfHSy0gzibMTh6oVSi55wwq89FdUT6FYe+9oCRaGsvTDFps9ORUkD3xr
-        52L2spRTGSYn5S2qOpfHiaDaSoUXDFQjaaP9zPWw=
+        bh=xoQLRZCLDsBMqnDsNRCUgvBqNo28d18ZvpB3a0moVPk=;
+        b=XlWppwGSlVgsDXhMLFWelSGcZZqwH1eZVvLmNjOYn8GSRXHgssMMZqqBKjkf/m2V
+        aRHkpoK9a7cgvptGG9xGSSpqPiyraQClf2/wTjk9zksR7iKIo45c2SCxIjXjQqg96KS
+        wZ0/DcH1fS/np7x9GAmCRRvsw0MjZftQ9NQuY6Js=
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1574159141;
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1574166509;
         h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Feedback-ID;
-        bh=9YsqeSDO02fgzsVWBF0WOrYBWmUnZE+aKHDib8MTuCU=;
-        b=YCT9Vit3cRAX6HTOn/WeksC+LY+PImbaQ8YkO+zfvzCLEsNpXreuXtDzoZ1w4Lyk
-        sJruq9zXqo+mw2cPeC2LQTFBpOREHKi3vWZ5AQGlT8Vf554jAOOGg1oMxqWzOTIbkyq
-        Nm7Bp+zewsjprTIwcKh290cbfunD0ax91UhJ3L8Q=
+        bh=xoQLRZCLDsBMqnDsNRCUgvBqNo28d18ZvpB3a0moVPk=;
+        b=bUGAhwd9fxN24fAxEZsp07uihoX6f2nlakFMkFA8ly6AEk717ruvEsOSvbwS0Gsg
+        5y8bJkfQVORK2YTR//hFvkLl8/r8rPtPUcaYtJuoK68K2Awtm9wNOXL5/Dqk0HyeB7o
+        asdqALf5DQ7brSas5exF1PZvLaY0q789Ga24f17o=
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 19 Nov 2019 10:25:41 +0000
+Date:   Tue, 19 Nov 2019 12:28:29 +0000
 From:   sibis@codeaurora.org
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        tsoni@codeaurora.org, agross@kernel.org, mark.rutland@arm.com,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        rnayak@codeaurora.org
-Subject: Re: [PATCH 3/3] soc: qcom: apr: Add avs/audio tracking functionality
-In-Reply-To: <20191119065325.GF18024@yoga>
-References: <20191118142728.30187-1-sibis@codeaurora.org>
- <0101016e7ee9d8b5-9759d0ba-4acf-4fc4-a863-fac9c738397f-000000@us-west-2.amazonses.com>
- <20191119065325.GF18024@yoga>
-Message-ID: <0101016e83324a05-f96f3ec6-445f-413e-b67e-20a226b54673-000000@us-west-2.amazonses.com>
+To:     Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jeffrey Hugo <jhugo@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mark Rutland <mark.rutland@arm.com>, p.zabel@pengutronix.de,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        DTML <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        linux-remoteproc-owner@vger.kernel.org
+Subject: Re: [PATCH 13/16] arm64: dts: qcom: msm8998: Update reserved memory
+ map
+In-Reply-To: <CAOCk7NogQY3Vjo+cL5_0anVO=K1LfTqG69b8AGi9HQsTMEsCug@mail.gmail.com>
+References: <20191118214250.14002-1-sibis@codeaurora.org>
+ <0101016e807915dc-5f8701fd-5c4a-45a5-a9ee-9e4d8700a3fa-000000@us-west-2.amazonses.com>
+ <CAOCk7NogQY3Vjo+cL5_0anVO=K1LfTqG69b8AGi9HQsTMEsCug@mail.gmail.com>
+Message-ID: <0101016e83a2b64f-7d9f9170-7720-4198-adae-7f39a846c432-000000@us-west-2.amazonses.com>
 X-Sender: sibis@codeaurora.org
 User-Agent: Roundcube Webmail/1.3.9
-X-SES-Outgoing: 2019.11.19-54.240.27.10
+X-SES-Outgoing: 2019.11.19-54.240.27.21
 Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 2019-11-19 12:23, Bjorn Andersson wrote:
-> On Mon 18 Nov 06:28 PST 2019, Sibi Sankar wrote:
->> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> [..]
->> +static void of_register_apr_devices(struct device *dev, const char 
->> *svc_path)
->>  {
->>  	struct apr *apr = dev_get_drvdata(dev);
->>  	struct device_node *node;
->> +	const char *service_path;
->> +	int ret;
+Hey Jeff,
+Thanks for taking time to review
+the series.
+
+On 2019-11-19 03:34, Jeffrey Hugo wrote:
+> On Mon, Nov 18, 2019 at 2:45 PM Sibi Sankar <sibis@codeaurora.org> 
+> wrote:
 >> 
->>  	for_each_child_of_node(dev->of_node, node) {
->>  		struct apr_device_id id = { {0} };
+>> Update existing and add missing regions to the reserved memory map, as
+>> described in version 7.1
 >> 
->> +		ret = of_property_read_string_index(node, "qcom,protection-domain",
->> +						    1, &service_path);
->> +		if (svc_path) {
->> +			/* skip APR services that are PD independent */
->> +			if (ret)
->> +				continue;
->> +
->> +			/* skip APR services whose PD paths don't match */
->> +			if (strcmp(service_path, svc_path))
->> +				continue;
->> +		} else {
->> +			/* skip APR services whose PD lookups are registered*/
-> 
-> Missing space before */
-
-Thanks will add it
-
-> 
->> +			if (ret == 0)
->> +				continue;
->> +		}
->> +
->>  		if (of_property_read_u32(node, "reg", &id.svc_id))
->>  			continue;
+>> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+>> ---
+>>  arch/arm64/boot/dts/qcom/msm8998.dtsi | 62 
+>> ++++++++++++++++++++++++---
+>>  1 file changed, 55 insertions(+), 7 deletions(-)
 >> 
->> @@ -318,6 +365,37 @@ static void of_register_apr_devices(struct device 
->> *dev)
->>  	}
->>  }
+>> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi 
+>> b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+>> index fc7838ea9a010..707673e3cf28a 100644
+>> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+>> @@ -28,8 +28,13 @@
+>>                 #size-cells = <2>;
+>>                 ranges;
 >> 
->> +static int apr_remove_device(struct device *dev, void *svc_path)
->> +{
->> +	struct apr_device *adev = to_apr_device(dev);
+>> -               memory@85800000 {
+>> -                       reg = <0x0 0x85800000 0x0 0x800000>;
+>> +               hyp_mem: memory@85800000 {
+>> +                       reg = <0x0 0x85800000 0x0 0x600000>;
+>> +                       no-map;
+>> +               };
 >> +
->> +	if (svc_path) {
->> +		if (!strcmp(adev->service_path, (char *)svc_path))
->> +			device_unregister(&adev->dev);
->> +	} else {
->> +		device_unregister(&adev->dev);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int apr_pd_status(struct pdr_handle *pdr, struct pdr_service 
->> *pds)
+>> +               xbl_mem: memory@85e00000 {
 > 
-> Why is the pdr status function returning an int?
+> Are we ever going to use this label?
 
-yes since I am not using the
-return value in pdr_helpers
-will make it void.
+just leaving it here for info with the
+added benefit of being deleteable
+if MSM8998 uses a different boot chain
+where xbl_mem/tz_mem remains unused as
+in the case of Cheza
 
 > 
->> +{
->> +	struct apr *apr = container_of(pdr, struct apr, pdr);
->> +
->> +	switch (pds->state) {
->> +	case SERVREG_SERVICE_STATE_UP:
->> +		of_register_apr_devices(apr->dev, pds->service_path);
->> +		break;
->> +	case SERVREG_SERVICE_STATE_DOWN:
->> +		device_for_each_child(apr->dev, pds->service_path,
->> +				      apr_remove_device);
->> +		break;
->> +	}
->> +
->> +	return 0;
->> +}
-> [..]
->> @@ -343,20 +421,19 @@ static int apr_probe(struct rpmsg_device *rpdev)
->>  		return -ENOMEM;
->>  	}
->>  	INIT_WORK(&apr->rx_work, apr_rxwq);
->> +
->> +	ret = pdr_handle_init(&apr->pdr, apr_pd_status);
->> +	if (ret) {
->> +		dev_err(dev, "Failed to init PDR handle\n");
+>> +                       reg = <0x0 0x85e00000 0x0 0x100000>;
+>>                         no-map;
+>>                 };
+>> 
+>> @@ -38,21 +43,64 @@
+>>                         no-map;
+>>                 };
+>> 
+>> -               memory@86200000 {
+>> +               tz_mem: memory@86200000 {
 > 
-> You need to destroy apr->rxwq here as well.
+> Again, are we ever going to use this?
 
-sry missed this
+ditto
 
 > 
->> +		return ret;
->> +	}
->> +
->>  	INIT_LIST_HEAD(&apr->rx_list);
->>  	spin_lock_init(&apr->rx_lock);
->>  	spin_lock_init(&apr->svcs_lock);
->>  	idr_init(&apr->svcs_idr);
->> -	of_register_apr_devices(dev);
+>>                         reg = <0x0 0x86200000 0x0 0x2d00000>;
+>>                         no-map;
+>>                 };
+>> 
+>> -               rmtfs {
+>> +               rmtfs_mem: memory@88f00000 {
+>>                         compatible = "qcom,rmtfs-mem";
 >> -
->> -	return 0;
->> -}
+>> -                       size = <0x0 0x200000>;
+>> -                       alloc-ranges = <0x0 0xa0000000 0x0 0x2000000>;
+>> +                       reg = <0x0 0x88f00000 0x0 0x200000>;
 > 
-> Regards,
-> Bjorn
+> This seems to overlap with a defined region in the memory map.
+> 0x9fa00000 seems to be a better address.
+
+just following the what we did
+for SDM845 SoC 0x88f00000 should
+be safe to use.
+
+> 
+>>                         no-map;
+>> 
+>>                         qcom,client-id = <1>;
+>>                         qcom,vmid = <15>;
+>>                 };
+>> +
+>> +               spss_mem: memory@8ab00000 {
+>> +                       reg = <0x0 0x8ab00000 0x0 0x700000>;
+>> +                       no-map;
+>> +               };
+>> +
+>> +               adsp_mem: memory@8b200000 {
+>> +                       reg = <0x0 0x8b200000 0x0 0x1a00000>;
+>> +                       no-map;
+>> +               };
+>> +
+>> +               mpss_mem: memory@8cc00000 {
+>> +                       reg = <0x0 0x8cc00000 0x0 0x7000000>;
+>> +                       no-map;
+>> +               };
+>> +
+>> +               venus_mem: memory@93c00000 {
+>> +                       reg = <0x0 0x93c00000 0x0 0x500000>;
+>> +                       no-map;
+>> +               };
+>> +
+>> +               mba_mem: memory@94100000 {
+>> +                       reg = <0x0 0x94100000 0x0 0x200000>;
+>> +                       no-map;
+>> +               };
+>> +
+>> +               slpi_mem: memory@94300000 {
+>> +                       reg = <0x0 0x94300000 0x0 0xf00000>;
+>> +                       no-map;
+>> +               };
+>> +
+>> +               ipa_fw_mem: memory@95200000 {
+>> +                       reg = <0x0 0x95200000 0x0 0x10000>;
+>> +                       no-map;
+>> +               };
+>> +
+>> +               ipa_gsi_mem: memory@95210000 {
+>> +                       reg = <0x0 0x95210000 0x0 0x5000>;
+>> +                       no-map;
+>> +               };
+>> +
+>> +               gpu_mem: memory@95215000 {
+>> +                       reg = <0x0 0x95215000 0x0 0x1000>;
+> 
+> This is the wrong size for the zap region.
+
+double checked the memory maps,
+gpu mem size is mentioned as 4kb
+is that not the case?
+
+
+> 
+>> +                       no-map;
+>> +               };
+>>         };
+>> 
+>>         clocks {
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
+>> Forum,
+>> a Linux Foundation Collaborative Project
+>> 
