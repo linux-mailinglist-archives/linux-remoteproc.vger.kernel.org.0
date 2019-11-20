@@ -2,149 +2,142 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC89102FD3
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Nov 2019 00:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A281038B0
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Nov 2019 12:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727222AbfKSXRo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 19 Nov 2019 18:17:44 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:33976 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727038AbfKSXRo (ORCPT
+        id S1728536AbfKTL2O (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 20 Nov 2019 06:28:14 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:49302 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728376AbfKTL2O (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 19 Nov 2019 18:17:44 -0500
-Received: by mail-pl1-f195.google.com with SMTP id h13so12831278plr.1
-        for <linux-remoteproc@vger.kernel.org>; Tue, 19 Nov 2019 15:17:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NLNro2aJsK1LUFCNoxW5rybmY5DjiWvjZucyhp99xyI=;
-        b=fRUIAN1YyBz7e73JLtZkAsuUDLENde/5E/uXR9SB1H4O3kU7zX5itMeaqIyKFJSwUB
-         UyFD4RIdT3wiyzAKfQAY3YhZ4oG06rtH4bH9gQinMkEx/5xJ4y/VrD++rGKYceQqrc8c
-         gexXjtKMqEiQ50swWxq6u5kvhFOwjx6zzeFU+1mwqMM/z5lwQZRB5pDGw76VY7tQRxu+
-         CtLjMT7qnta6E24MY65B3C4eM5zjTFazFJK8axF9+76YE6kkVCxBs2Y/CZS2gNsakxIi
-         ffHMHdcvllp6yYnQTDa6VBv3XkDk6C44ujFPezP3ZLttvPh1yXyVOPVVl9nWiNhkEy7A
-         QX7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NLNro2aJsK1LUFCNoxW5rybmY5DjiWvjZucyhp99xyI=;
-        b=TFcGc3kPGEfGoQ1k6OkMaVZQp1qsPJ5NVl8gZS4tmB7bKxPC/TBuA0l/jzyH2VkL/G
-         +YWoDSalJz5BoypTGW/kcnhl9s+egXeRQ9N+4zbUosUHJVrs1aqDEHSg1RxJVAvjT12j
-         4aNTUdBidUg+9nLOxucGXyS4vaJ0XHgpRDTk0S6jqRmxLXxT9fl2cijmjaYEJvZ9l5FS
-         IJ0jPP1L8jAMC1zochhp5/FlukNLREgemzV4r+WxFCujlRAN70JmfYEQGWUavQAhlFNd
-         qsXzLD+0ymzm4bt0Rot5S4LZVDrCMdyZ3g3FwlmUt54Boa6TDFw9azpusH5gtwonrddI
-         09Ow==
-X-Gm-Message-State: APjAAAXvNHn6pNS5AAvetT7bc8qJ0wwWhEgsmttR0zDgA7Ss2ZD8DOZO
-        Wjny8I07EX9HL8Eaa9U8TfHbfL7qJ3A=
-X-Google-Smtp-Source: APXvYqyHr5KuTlMN2TairITHMhhhj+EOhIBslGVt5Xtnwg7XVWSi24joLT1jz9hxBU09Svl2DcM5CQ==
-X-Received: by 2002:a17:902:d708:: with SMTP id w8mr129181ply.280.1574205463469;
-        Tue, 19 Nov 2019 15:17:43 -0800 (PST)
-Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id g11sm4614217pjv.8.2019.11.19.15.17.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Nov 2019 15:17:42 -0800 (PST)
-Date:   Tue, 19 Nov 2019 15:17:40 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     sibis@codeaurora.org
-Cc:     srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        tsoni@codeaurora.org, agross@kernel.org, mark.rutland@arm.com,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        rnayak@codeaurora.org
-Subject: Re: [PATCH 1/3] soc: qcom: Introduce Protection Domain Restart
- helpers
-Message-ID: <20191119231740.GJ18024@yoga>
-References: <20191118142728.30187-1-sibis@codeaurora.org>
- <0101016e7ee9be5e-1d6bbe06-4bab-434d-9040-ebfa3918b213-000000@us-west-2.amazonses.com>
- <20191119064026.GE18024@yoga>
- <0101016e832bd54d-453473ee-c0fa-44f5-a873-55b97dff4a9a-000000@us-west-2.amazonses.com>
+        Wed, 20 Nov 2019 06:28:14 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAKBSCjM127927;
+        Wed, 20 Nov 2019 05:28:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1574249292;
+        bh=GUgrQ9YULe91DrXQ+8TwVYgwqoHl60RO9lw93hG44Sg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=TrpoXoSNzbYxsVLMTv9n/91H5MM22C8L8LNy0Up5WIbCqp4lBSNZEr61qNZaj7E0G
+         r53UsOr6VCKmXjiuu/GigqCbpbnTphnVMaHUGBw7QQUJ3UQd6IhTyRxXv/Lc72jq+j
+         ZgFYxhpJzn6l7xqxAemmuWppnWPTzSHZsTiHhrVM=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAKBSCC8047935;
+        Wed, 20 Nov 2019 05:28:12 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 20
+ Nov 2019 05:28:08 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 20 Nov 2019 05:28:08 -0600
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAKBS60F040774;
+        Wed, 20 Nov 2019 05:28:07 -0600
+Subject: Re: [PATCHv2 00/15] Remoteproc: updates for OMAP remoteproc support
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        <linux-remoteproc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>, Suman Anna <s-anna@ti.com>
+References: <20191119141645.19777-1-t-kristo@ti.com>
+ <CANLsYkwyLMHzKkm-6X+OgQ+khRYJshMJsxdst7+c7n+hX4nLpQ@mail.gmail.com>
+ <CANLsYkwcWDOPx_rpL5RkzsNLyw+ccPE0bNhar6xv1SZ1=R5xmA@mail.gmail.com>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <46a3bfb0-6bf1-b3d9-14a6-d2ed5b91c930@ti.com>
+Date:   Wed, 20 Nov 2019 13:28:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0101016e832bd54d-453473ee-c0fa-44f5-a873-55b97dff4a9a-000000@us-west-2.amazonses.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <CANLsYkwcWDOPx_rpL5RkzsNLyw+ccPE0bNhar6xv1SZ1=R5xmA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue 19 Nov 02:18 PST 2019, sibis@codeaurora.org wrote:
-
-> Hey Bjorn,
-> Thanks for taking the time to
-> review the series :)
+On 19/11/2019 20:07, Mathieu Poirier wrote:
+> On Tue, 19 Nov 2019 at 10:31, Mathieu Poirier
+> <mathieu.poirier@linaro.org> wrote:
+>>
+>> On Tue, 19 Nov 2019 at 07:17, Tero Kristo <t-kristo@ti.com> wrote:
+>>>
+>>> Hi,
+>>>
+>>> This is v2 of the series [1], addressing comments from Bjorn and Rob.
+>>> Bindings patch is funnily v2.5, as I posted v2 already and wanted to
+>>> keep this somehow in sync. Individual patches contain comments about the
+>>> changes, or Reviewed-by tags provided if there are no changes.
+>>>
+>>> I also dropped the conversion patch to SPDX licensing until I can
+>>> confirm the license we want to use. Lets just keep the existing in place
+>>> until that.
+>>>
+>>> This series still depends on the reset + clock patches posted earlier,
+>>> but both of those dependencies are in linux-next now.
+>>
+>> I tried to apply your set to today's linux-next (next-20191119) but it
+>> fails at patch 13.
 > 
-> On 2019-11-19 12:10, Bjorn Andersson wrote:
-> > On Mon 18 Nov 06:27 PST 2019, Sibi Sankar wrote:
-> > > diff --git a/drivers/soc/qcom/pdr_interface.c
-> > > b/drivers/soc/qcom/pdr_interface.c
-> > [..]
-> > > +static void pdr_indack_work(struct work_struct *work)
-> > > +{
-> > > +	struct pdr_handle *pdr = container_of(work, struct pdr_handle,
-> > > +					      indack_work);
-> > > +	struct pdr_list_node *ind, *tmp;
-> > > +	struct pdr_service *pds;
-> > > +
-> > > +	list_for_each_entry_safe(ind, tmp, &pdr->indack_list, node) {
-> > > +		pds = ind->pds;
-> > > +		pdr_send_indack_msg(pdr, pds, ind->transaction_id);
-> > 
-> > So when we et a ind_cb with the new status, we need to send an ack
-> > request, which will result in a response, just to confirm that we got
-> > the event?
-> > 
-> > Seems like we should fix the qmi code to make it possible to send a
-> > request from the indication handler and then we could simply ignore the
+> Digging further into this patch 12 is causing problem on next-20191119 (not 13):
 > 
-> yeah maybe having a provision to send custom requests back on
-> indication would be the way to go. Not all indication need to be
-> services with requests.
+> mpoirier@xps15:~/work/remoteproc/kernel-review$ git apply --reject
+> 0012-remoteproc-omap-add-support-for-system-suspend-resum.patch
+> Checking patch drivers/remoteproc/omap_remoteproc.c...
+> Hunk #3 succeeded at 85 (offset -1 lines).
+> Hunk #4 succeeded at 99 (offset -1 lines).
+> Hunk #5 succeeded at 359 (offset -1 lines).
+> Hunk #6 succeeded at 544 (offset -1 lines).
+> Hunk #7 succeeded at 952 (offset -1 lines).
+> Hunk #8 succeeded at 992 (offset -2 lines).
+> Checking patch drivers/remoteproc/omap_remoteproc.h...
+> error: while searching for:
+> /*
+>   * Remote processor messaging
+>   *
+>   * Copyright (C) 2011 Texas Instruments, Inc.
+>   * Copyright (C) 2011 Google, Inc.
+>   * All rights reserved.
+>   */
 > 
-
-Let's put this on the todo list.
-
-> > response. Or do we need to not pdr->status() until we get the response
-> > for some reason?
+> error: patch failed: drivers/remoteproc/omap_remoteproc.h:2
+> Hunk #2 succeeded at 57 (offset 25 lines).
+> Hunk #3 succeeded at 80 (offset 25 lines).
+> Applied patch drivers/remoteproc/omap_remoteproc.c cleanly.
+> Applying patch drivers/remoteproc/omap_remoteproc.h with 1 reject...
+> Rejected hunk #1.
+> Hunk #2 applied cleanly.
+> Hunk #3 applied cleanly.
 > 
-> adsp waits on the ack response for a fixed duration and seems to throw
-> a fatal err is the ack is not serviced. Hence holding back pd->status
-> till we service the ack here.
+> Your patch expects the last line of the first hunk to be '*/' but it
+> is '*' in linux-next.
+
+Hmm right, this seems my bad. This is caused by me dropping the SPDX 
+license conversion patch from the series, if that is applied, it goes 
+cleanly.
+
+Simple rebase of patch 12 is going to fix that though.
+
+-Tero
+
 > 
+>>
+>> Mathieu
+>>
+>>>
+>>> -Tero
+>>>
+>>> [1] https://patchwork.kernel.org/cover/11215421/
+>>>
+>>>
+>>>
+>>> --
 
-You mean to ensure that someone sleeping in pd->status() doesn't delay
-that until its too late?
-
-[..]
-> > > +int pdr_handle_init(struct pdr_handle *pdr,
-> > > +		    int (*status)(struct pdr_handle *pdr,
-> > > +				  struct pdr_service *pds))
-> > > +{
-> > [..]
-> > > +	pdr->servreg_wq = create_singlethread_workqueue("pdr_servreg_wq");
-> > > +	if (!pdr->servreg_wq)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	pdr->indack_wq = alloc_ordered_workqueue("pdr_indack_wq",
-> > > WQ_HIGHPRI);
-> > 
-> > The two workqueues means that we should be able to call pdr->status()
-> > rom two concurrent contexts, I don't think our clients will expect that.
-> > 
-> 
-> would creating another ordered wq to relay all the pd->status make
-> sense?
-> 
-
-I would prefer less work queues ;) But I presume you split out the
-indack_wq in order to improve the likelihood of meeting the latency
-requirements of the remote side.
-
-Perhaps just wrap the status() calls with a status-mutex and then remove
-that by reworking the QMI interface to allow us to remove the indack
-work?
-
-Regards,
-Bjorn
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
