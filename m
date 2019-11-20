@@ -2,30 +2,30 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD15103961
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Nov 2019 13:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D6D1039C1
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Nov 2019 13:13:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729037AbfKTMBd (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 20 Nov 2019 07:01:33 -0500
-Received: from a27-56.smtp-out.us-west-2.amazonses.com ([54.240.27.56]:37806
+        id S1729631AbfKTMMz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 20 Nov 2019 07:12:55 -0500
+Received: from a27-56.smtp-out.us-west-2.amazonses.com ([54.240.27.56]:43094
         "EHLO a27-56.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728728AbfKTMBd (ORCPT
+        by vger.kernel.org with ESMTP id S1729273AbfKTMMz (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 20 Nov 2019 07:01:33 -0500
+        Wed, 20 Nov 2019 07:12:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1574251292;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1574251974;
         h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID;
-        bh=El049u7tCGzDe5ipAq+bw8vZByg4+Fsfl1Rvr4xP2x8=;
-        b=dV4p6MhVGGACGz75mYFMnHRwBDcyoBx/VYRWPKm1rcN5I5OvPsO/uF5UikWAf1j+
-        VHzsC6bhfm/pyoo4CVHFa/aONfkteCwjylPfgMC80iOGkbyd5CG4ttTT64xcukaxo8q
-        Mw2im1fKn37vt9G1j4dxhrgowLLzDBo8AXDendiM=
+        bh=Mggx8pMu+6u7yoU5KugFafl4WYsd00aKUrPW0rMk5eQ=;
+        b=ali0RbgwfEO/ZA4sv9rX/aL0X++Hw6ZWs9pIel/kS8foRlEW7RWmQ4vaYpbrFZTV
+        npKtPjPdR2oX+Wgk+a6ne5Mw4FkbMqGFisumgRJ8bQ5NjHNJELlOTnN4ix/Fm5kEfjn
+        qzs6slzwAZPnwlnXJMD6yz3hWFggGoQFd67uT0v8=
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1574251292;
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1574251974;
         h=MIME-Version:Content-Type:Content-Transfer-Encoding:Date:From:To:Cc:Subject:In-Reply-To:References:Message-ID:Feedback-ID;
-        bh=El049u7tCGzDe5ipAq+bw8vZByg4+Fsfl1Rvr4xP2x8=;
-        b=VFGE5yrCv7KxegOW50Za6ItCaL9OYCZK7txENonLtiA2Bb9RJZJGoAthmSV6EqYV
-        NAALIzQ+Idoa1nmKJ9Koqb+kV11jU22zzqampgt/b7kXCxUgA8Z3lGwv9XVrGNXm8NU
-        SQOoU991hqbxsnTPtByQs0gtNboOOnW9w0Yj4Yd0=
+        bh=Mggx8pMu+6u7yoU5KugFafl4WYsd00aKUrPW0rMk5eQ=;
+        b=XEOD+GSwzMefz1l75Gi+43RwFVx2u6q0wqaLyuUMCJsuuCpQ/08JKqN4Mn+qd3M4
+        XvfvISKAiRt87ULL0pPiBAcMo4nUdgf3uTO7rTWehwkM/OsxeO9J5t2p/s4eb2u0fRe
+        X1F6DHn7m6nb4Bm7rZVUiPuSszlk4VqEB0l9Fvy0=
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -35,30 +35,23 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII;
  format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Wed, 20 Nov 2019 12:01:32 +0000
+Date:   Wed, 20 Nov 2019 12:12:54 +0000
 From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jeffrey Hugo <jhugo@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mark Rutland <mark.rutland@arm.com>, p.zabel@pengutronix.de,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        DTML <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        linux-remoteproc-owner@vger.kernel.org
-Subject: Re: [PATCH 01/16] remoteproc: q6v5-mss: fixup MSM8998 MSS out of
- reset sequence
-In-Reply-To: <CAOCk7NpVDNRxkPUTHbsG_WC4MrjU8_JcdgiuyYbb36RPTMrOWQ@mail.gmail.com>
-References: <20191118214250.14002-1-sibis@codeaurora.org>
- <0101016e80782dd7-2617455b-7d73-4e68-8a9a-b63c29e9ad76-000000@us-west-2.amazonses.com>
- <CAOCk7Nou94bxk_48JArrXhQw2KR+3bKanLe+hb2=d7_j6y3VbQ@mail.gmail.com>
- <0101016e844504f1-d8bd27a5-c0bf-4b0b-8301-7bd8a890be80-000000@us-west-2.amazonses.com>
- <CAOCk7NpVDNRxkPUTHbsG_WC4MrjU8_JcdgiuyYbb36RPTMrOWQ@mail.gmail.com>
-Message-ID: <0101016e88b065a2-7d2941bb-711f-460e-a7cd-84fdff7ba181-000000@us-west-2.amazonses.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        tsoni@codeaurora.org, agross@kernel.org, mark.rutland@arm.com,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        rnayak@codeaurora.org, linux-remoteproc-owner@vger.kernel.org
+Subject: Re: [PATCH 1/3] soc: qcom: Introduce Protection Domain Restart
+ helpers
+In-Reply-To: <20191119231740.GJ18024@yoga>
+References: <20191118142728.30187-1-sibis@codeaurora.org>
+ <0101016e7ee9be5e-1d6bbe06-4bab-434d-9040-ebfa3918b213-000000@us-west-2.amazonses.com>
+ <20191119064026.GE18024@yoga>
+ <0101016e832bd54d-453473ee-c0fa-44f5-a873-55b97dff4a9a-000000@us-west-2.amazonses.com>
+ <20191119231740.GJ18024@yoga>
+Message-ID: <0101016e88bacc9e-26ddd827-c0ff-497b-b327-d14dc8832d20-000000@us-west-2.amazonses.com>
 X-Sender: sibis@codeaurora.org
 User-Agent: Roundcube Webmail/1.3.9
 X-SES-Outgoing: 2019.11.20-54.240.27.56
@@ -68,114 +61,93 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 2019-11-19 21:13, Jeffrey Hugo wrote:
-> On Tue, Nov 19, 2019 at 8:25 AM Sibi Sankar <sibis@codeaurora.org> 
-> wrote:
+On 2019-11-20 04:47, Bjorn Andersson wrote:
+> On Tue 19 Nov 02:18 PST 2019, sibis@codeaurora.org wrote:
+> 
+>> Hey Bjorn,
+>> Thanks for taking the time to
+>> review the series :)
 >> 
->> Hey Jeff,
->> 
->> On 11/19/19 3:24 AM, Jeffrey Hugo wrote:
->> > On Mon, Nov 18, 2019 at 2:43 PM Sibi Sankar <sibis@codeaurora.org> wrote:
->> >>
->> >> Fixup the following in the MSS out of reset sequence on MSM8998:
->> >> * skip ACC override on MSM8998.
->> >> * wait for BHS_EN_REST_ACK to be set before setting the LDO to bypass.
->> >> * remove "mem" clock from the active pool.
+>> On 2019-11-19 12:10, Bjorn Andersson wrote:
+>> > On Mon 18 Nov 06:27 PST 2019, Sibi Sankar wrote:
+>> > > diff --git a/drivers/soc/qcom/pdr_interface.c
+>> > > b/drivers/soc/qcom/pdr_interface.c
+>> > [..]
+>> > > +static void pdr_indack_work(struct work_struct *work)
+>> > > +{
+>> > > +	struct pdr_handle *pdr = container_of(work, struct pdr_handle,
+>> > > +					      indack_work);
+>> > > +	struct pdr_list_node *ind, *tmp;
+>> > > +	struct pdr_service *pds;
+>> > > +
+>> > > +	list_for_each_entry_safe(ind, tmp, &pdr->indack_list, node) {
+>> > > +		pds = ind->pds;
+>> > > +		pdr_send_indack_msg(pdr, pds, ind->transaction_id);
 >> >
->> > Why any of this is necessary isn't explained.
+>> > So when we et a ind_cb with the new status, we need to send an ack
+>> > request, which will result in a response, just to confirm that we got
+>> > the event?
+>> >
+>> > Seems like we should fix the qmi code to make it possible to send a
+>> > request from the indication handler and then we could simply ignore the
 >> 
->> Honestly the above two fixes didn't seem to have any impact when I
->> tested it on MSM8998 MTP just making sure that we allign with the
->> out of reset sequence found on msm-4.4.
-> 
-> That should be mentioned in the commit text then.
-> 
+>> yeah maybe having a provision to send custom requests back on
+>> indication would be the way to go. Not all indication need to be
+>> services with requests.
 >> 
->> > Seems like it should be 3 separate patches.
->> > Regarding the mem clock change, wouldn't it be an issue if we don't
->> > vote for that?
->> 
->> we already proxy vote for it though.
 > 
-> Ah, so we do.  That should be mentioned in the commit text.
+> Let's put this on the todo list.
+> 
+>> > response. Or do we need to not pdr->status() until we get the response
+>> > for some reason?
+>> 
+>> adsp waits on the ack response for a fixed duration and seems to throw
+>> a fatal err is the ack is not serviced. Hence holding back pd->status
+>> till we service the ack here.
+>> 
+> 
+> You mean to ensure that someone sleeping in pd->status() doesn't delay
+> that until its too late?
 
-okay I'll add more details in the
-in the next-respin :)
+yes
 
 > 
->> 
+> [..]
+>> > > +int pdr_handle_init(struct pdr_handle *pdr,
+>> > > +		    int (*status)(struct pdr_handle *pdr,
+>> > > +				  struct pdr_service *pds))
+>> > > +{
+>> > [..]
+>> > > +	pdr->servreg_wq = create_singlethread_workqueue("pdr_servreg_wq");
+>> > > +	if (!pdr->servreg_wq)
+>> > > +		return -ENOMEM;
+>> > > +
+>> > > +	pdr->indack_wq = alloc_ordered_workqueue("pdr_indack_wq",
+>> > > WQ_HIGHPRI);
 >> >
->> >>
->> >> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
->> >> ---
->> >>   drivers/remoteproc/qcom_q6v5_mss.c | 23 ++++++++++++++++++++---
->> >>   1 file changed, 20 insertions(+), 3 deletions(-)
->> >>
->> >> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
->> >> index 471128a2e7239..2becf6dade936 100644
->> >> --- a/drivers/remoteproc/qcom_q6v5_mss.c
->> >> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
->> >> @@ -100,6 +100,11 @@
->> >>   #define QDSP6SS_XO_CBCR                0x0038
->> >>   #define QDSP6SS_ACC_OVERRIDE_VAL               0x20
->> >>
->> >> +/* QDSP6v62 parameters */
->> >> +#define QDSP6SS_BHS_EN_REST_ACK                BIT(0)
->> >> +#define BHS_CHECK_MAX_LOOPS            200
->> >> +#define QDSP6SS_BHS_STATUS             0x0C4
->> >> +
->> >>   /* QDSP6v65 parameters */
->> >>   #define QDSP6SS_SLEEP                   0x3C
->> >>   #define QDSP6SS_BOOT_CORE_START         0x400
->> >> @@ -505,8 +510,9 @@ static int q6v5proc_reset(struct q6v5 *qproc)
->> >>                  int mem_pwr_ctl;
->> >>
->> >>                  /* Override the ACC value if required */
->> >> -               writel(QDSP6SS_ACC_OVERRIDE_VAL,
->> >> -                      qproc->reg_base + QDSP6SS_STRAP_ACC);
->> >> +               if (qproc->version == MSS_MSM8996)
->> >> +                       writel(QDSP6SS_ACC_OVERRIDE_VAL,
->> >> +                              qproc->reg_base + QDSP6SS_STRAP_ACC);
->> >>
->> >>                  /* Assert resets, stop core */
->> >>                  val = readl(qproc->reg_base + QDSP6SS_RESET_REG);
->> >> @@ -534,6 +540,18 @@ static int q6v5proc_reset(struct q6v5 *qproc)
->> >>                  val |= readl(qproc->reg_base + QDSP6SS_PWR_CTL_REG);
->> >>                  udelay(1);
->> >>
->> >> +               /* wait for BHS_EN_REST_ACK to be set */
->> >> +               if (qproc->version == MSS_MSM8998) {
->> >> +                       ret = readl_poll_timeout(qproc->reg_base + QDSP6SS_BHS_STATUS,
->> >> +                                                val, (val & QDSP6SS_BHS_EN_REST_ACK),
->> >> +                                                1, BHS_CHECK_MAX_LOOPS);
->> >> +                       if (ret) {
->> >> +                               dev_err(qproc->dev,
->> >> +                                       "QDSP6SS_BHS_EN_REST_ACK timedout\n");
->> >> +                               return -ETIMEDOUT;
->> >> +                       }
->> >> +               }
->> >> +
->> >>                  /* Put LDO in bypass mode */
->> >>                  val |= QDSP6v56_LDO_BYP;
->> >>                  writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
->> >> @@ -1594,7 +1612,6 @@ static const struct rproc_hexagon_res msm8998_mss = {
->> >>          .active_clk_names = (char*[]){
->> >>                          "iface",
->> >>                          "bus",
->> >> -                       "mem",
->> >>                          "gpll0_mss",
->> >>                          "mnoc_axi",
->> >>                          "snoc_axi",
->> >> --
->> >> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> >> a Linux Foundation Collaborative Project
->> >>
+>> > The two workqueues means that we should be able to call pdr->status()
+>> > rom two concurrent contexts, I don't think our clients will expect that.
 >> >
 >> 
->> --
->> Qualcomm Innovation Center, Inc.
->> Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
->> a Linux Foundation Collaborative Project
+>> would creating another ordered wq to relay all the pd->status make
+>> sense?
+>> 
+> 
+> I would prefer less work queues ;) But I presume you split out the
+> indack_wq in order to improve the likelihood of meeting the latency
+> requirements of the remote side.
+> 
+> Perhaps just wrap the status() calls with a status-mutex and then 
+> remove
+> that by reworking the QMI interface to allow us to remove the indack
+> work?
+
+okay will fix it in the next
+re-spin.
+
+> 
+> Regards,
+> Bjorn
 
 -- 
 Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
