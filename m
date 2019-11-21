@@ -2,60 +2,100 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD2C105965
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 21 Nov 2019 19:20:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B00DB105967
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 21 Nov 2019 19:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726279AbfKUSUE (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 21 Nov 2019 13:20:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57810 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727156AbfKUSUE (ORCPT
+        id S1726279AbfKUSUb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 21 Nov 2019 13:20:31 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38380 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726762AbfKUSUb (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 21 Nov 2019 13:20:04 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574360404;
-        bh=6qCUYWh1eO40z78+vgUC6rz/VunqpJmeUoKQSPa1Nus=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=w+ZnD4C1FHoGtw9y6C4zVkiIL2PdqlvGfHDy7+nVbdrNGCIwfm9zcCJa64fYRzWUh
-         SqeaLTqHP59i4orXNF08ughIR8c/aoFem6sotA5IZFRBro83X4LcBgbFfwbHonxvJy
-         B2EtemgrjDeMWTlxBjrla1t07h9Bc1b5g12LqdYY=
+        Thu, 21 Nov 2019 13:20:31 -0500
+Received: by mail-ot1-f66.google.com with SMTP id z25so3810387oti.5;
+        Thu, 21 Nov 2019 10:20:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xCfUSv52eiUWMLPBJj0nq4OLtNTuDcv2jWsD2BjsB/0=;
+        b=e0R5gisyJgyLCnlMyn3O5/sxcDF1Sl0W+m4dNeuZ+h5YPQLfRdcDhVg7HEIBOYw/Zh
+         TurbJWrW98HX923BXWs7W+WFGC9OyKKVvUpb51OsadLDTTisPeiGHep1OrLJVz47b8XV
+         YOQPqHWGIeniJX7Nw52xExwjcrw2xkJ89gWVewkNjTSDNcO8BlHfkO1pQZR2Lbv1PBFt
+         p7EtCoAFrgrZTHq4HFH0YymK305y7G38XNuYMd37ePm70Fq8hbCKGL3uiMTXMuSGbg0c
+         AU5p/n88MKFgIBIAyQqvxdCCdqu+CEh9ertuuyEVz9DoToS7mmTQqiv+1r0GALQGNGgi
+         nZMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xCfUSv52eiUWMLPBJj0nq4OLtNTuDcv2jWsD2BjsB/0=;
+        b=oWuhMin8amA0o6CJVU3Lad1Raj/DYBVPttB+iAzCUj+BJrmyY4fVP0CuZOaV6IJRwa
+         28H8kx4XmoGgecZsZBZyDZo2Ow42nAftpn0F+uSubO46+dcsSaZQPf+O5Iw5I2HuKHBf
+         KG4uxEEEytFUP5N8jAYf/DBXVclTueRU4C5dHzaXNWACQ+VjlwBjFod55pTNCSe2zFRz
+         2PLmYBHHzvEIhzvyG7Z3R67MH6m0a2qRSmixA+K5No5GBYTa1d7508xRPWrVvydAD6W1
+         Z6IHlly6aPlb5XjMtIDm66uDyzDVVvkKbte+MD3GqK8NTKJjKQbEn6liwNPAmn7ZoErQ
+         tPmQ==
+X-Gm-Message-State: APjAAAWtSknnLV8NDWSasV/hMeYJJdKonhHBuQ670n6ZTrjhAE5bG+8U
+        pATU4z9cGzOJKp909PWIUrrARotp9YsE4kbDJp0=
+X-Google-Smtp-Source: APXvYqwwxt8Kw4oZIu6S9MIqgLS62/bLF1hm5c63BgX5cZ0Ls+JGbIgOWw5csfkjv7VRuwRR1m+IK8NbffniEhvZ+Z8=
+X-Received: by 2002:a9d:37f6:: with SMTP id x109mr7562136otb.165.1574360429958;
+ Thu, 21 Nov 2019 10:20:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] rpmsg: Fix Kconfig indentation
-From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <157436040403.16867.9406941033394425417.git-patchwork-notify@kernel.org>
-Date:   Thu, 21 Nov 2019 18:20:04 +0000
-References: <20191120133945.13938-1-krzk@kernel.org>
-In-Reply-To: <20191120133945.13938-1-krzk@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-remoteproc@vger.kernel.org
+References: <20190917033124.1077-1-navid.emamdoost@gmail.com>
+In-Reply-To: <20190917033124.1077-1-navid.emamdoost@gmail.com>
+From:   Navid Emamdoost <navid.emamdoost@gmail.com>
+Date:   Thu, 21 Nov 2019 12:20:19 -0600
+Message-ID: <CAEkB2EQTO3wtCrZgLv068xGpxJYwir_SuMUBK0jGaTU6KdCRNg@mail.gmail.com>
+Subject: Re: [PATCH] rpmsg: char: release allocated memory
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org
+Cc:     Navid Emamdoost <emamd001@umn.edu>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello:
+On Mon, Sep 16, 2019 at 10:31 PM Navid Emamdoost
+<navid.emamdoost@gmail.com> wrote:
+>
+> In rpmsg_eptdev_write_iter, if copy_from_iter_full fails the allocated
+> buffer needs to be released.
+>
+> Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
 
-This patch was applied to andersson/remoteproc.git (refs/heads/for-next).
+Would you please review this patch?
 
-On Wed, 20 Nov 2019 21:39:44 +0800 you wrote:
-> Adjust indentation from spaces to tab (+optional two spaces) as in
-> coding style with command like:
-> 	$ sed -e 's/^        /\t/' -i */Kconfig
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+Thank you,
+
 > ---
->  drivers/rpmsg/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/rpmsg/rpmsg_char.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index eea5ebbb5119..c655074c07c2 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -227,8 +227,10 @@ static ssize_t rpmsg_eptdev_write_iter(struct kiocb *iocb,
+>         if (!kbuf)
+>                 return -ENOMEM;
+>
+> -       if (!copy_from_iter_full(kbuf, len, from))
+> -               return -EFAULT;
+> +       if (!copy_from_iter_full(kbuf, len, from)) {
+> +               ret = -EFAULT;
+> +               goto free_kbuf;
+> +       }
+>
+>         if (mutex_lock_interruptible(&eptdev->ept_lock)) {
+>                 ret = -ERESTARTSYS;
+> --
+> 2.17.1
+>
 
-
-Here is a summary with links:
-  - rpmsg: Fix Kconfig indentation
-    https://git.kernel.org/andersson/remoteproc/c/8cf9b615653e40debdcf3b6f1d69e6b580d71173
-
-You are awesome, thank you!
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+Navid.
