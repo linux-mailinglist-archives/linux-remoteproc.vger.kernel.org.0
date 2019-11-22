@@ -2,122 +2,92 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74648105D6F
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 22 Nov 2019 00:54:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECEC106982
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 22 Nov 2019 11:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbfKUXyX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 21 Nov 2019 18:54:23 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:34564 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbfKUXyX (ORCPT
+        id S1726500AbfKVKFF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 22 Nov 2019 05:05:05 -0500
+Received: from a27-188.smtp-out.us-west-2.amazonses.com ([54.240.27.188]:58930
+        "EHLO a27-188.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726417AbfKVKFF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 21 Nov 2019 18:54:23 -0500
-Received: by mail-io1-f65.google.com with SMTP id z193so5852691iof.1;
-        Thu, 21 Nov 2019 15:54:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DyapT21g2Wp2Czfv/8wlid7Ppv2pGmOS7MkDneciDk0=;
-        b=Dhr8OW0+rXQ6hfoqwiFwuU2MXAN3Q9p9W3C8xMAP2hmHwpRF6mCcVE902BWmQcatrg
-         6w6Fa0+61ptq/6uzMmP07QH8PnaX9pUhcAB7Vo+dFyi+k/EaoHlQpXf6eZojJcB3vCvM
-         lpyAgiMpwpPScj9AJOAbuNBdLGBtdeBhTvwR284NyiSnuI1s/igjIhjp1UvlHK+kV++V
-         LDAWfNTSvlj/9ytLJyK9ZsylPZR1E47ndFxQGsSp3YZQ2ni9oqVfCT7AQ+ZPmkBwKqEU
-         7/XsAAYZo9/s8yE4cAO090hpVSft7MYF0ZCrvSsq7ADyqmV33tNXlIUNrtJnZF4/dUDL
-         AUuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DyapT21g2Wp2Czfv/8wlid7Ppv2pGmOS7MkDneciDk0=;
-        b=dGYGrJe7IYkS9KoLfWRrrsh6XQwliHQCyENEXET6I3Y2OXkIX5O3qwRW+hViI9ByX3
-         wZFT8ZxktKJMtVxLjLo0cbwe8R34QENlqAqFIb/7j0EE0ta69ijlSML1wzFoMMw5KSTP
-         GtlrkVGFavocFISlKXPt7cQDsxDNPuXu8ttm/rRFQTctsA9Qo5DsldqOMpNv+4GMJnOC
-         buqPbtk2/1pDatiji4rT7lx3VHwgCwhSpy1Q9U9vNsKb5+NLsXERnDmiki22KY4Zx1xe
-         C/todbzAyXU1xf/IevP0NUtBYceOc0lR8A253UgyHZvSi4M9wUcU8+zgUNpKe5DMdHFc
-         GPKQ==
-X-Gm-Message-State: APjAAAVUOY8Fs44whyhYmioas917QJXEzKXjzHPLGO8oGJPU9cn5t+yE
-        YU+gLryjczaORiYwnVZlcDjhKB+VKQpqj0hSzBsA1zdx
-X-Google-Smtp-Source: APXvYqzG6egS8+w1Kq3TxJBXfd2WNTwoJ/dmy4k1vmmgzoH2WGd8f5qke4NYjuXLMeERbYgmQ4yolyt5NV6VWaVyJV8=
-X-Received: by 2002:a6b:7614:: with SMTP id g20mr8134308iom.294.1574380462584;
- Thu, 21 Nov 2019 15:54:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20190917033124.1077-1-navid.emamdoost@gmail.com>
- <CAEkB2EQTO3wtCrZgLv068xGpxJYwir_SuMUBK0jGaTU6KdCRNg@mail.gmail.com> <20191121233535.GW18024@yoga>
-In-Reply-To: <20191121233535.GW18024@yoga>
-From:   Navid Emamdoost <navid.emamdoost@gmail.com>
-Date:   Thu, 21 Nov 2019 17:54:11 -0600
-Message-ID: <CAEkB2ERykJBh0V7vVVUtBT-yXpdvNap_NTAEuShDBb+hX69ObA@mail.gmail.com>
-Subject: Re: [PATCH] rpmsg: char: release allocated memory
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
-        Navid Emamdoost <emamd001@umn.edu>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 22 Nov 2019 05:05:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1574417104;
+        h=From:To:Cc:Subject:Date:Message-Id;
+        bh=gR/9H1H/ghs0meBZNJ1rxfiJMbYsOhQPMlG210KxbK8=;
+        b=GnFKOWzKP7mR9Kewh/aSh7P1T03nQ0zRAwu4+qShmGny+6LDyCxOJ1ZrYlAk1oAo
+        BQ5kL0LycIEpAYqoe/dpmiB3KGtTeEfr4QSXBuQ7JpPvEpQIE9KKZd3fO8y4k0J5omS
+        sAJeyZjssDoj1PAuajHvdkxmj4BN56HTIa3RDfB4=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1574417104;
+        h=From:To:Cc:Subject:Date:Message-Id:Feedback-ID;
+        bh=gR/9H1H/ghs0meBZNJ1rxfiJMbYsOhQPMlG210KxbK8=;
+        b=fGE9+aoWCRCJZGC/StMODwzUnP4CHLRwh+A8jF2x0NQboa7SOSc9DZP2/AjaVLKS
+        vumtPWzUIeNPS1eMi/Hcp7u8wEcCPg+oCLMn3Te8y611WoeQuoXcxobx36addizvLVc
+        FlhoqB0mBmjtNkgsjGEIkGutpj4cv4WBk330n+Kg=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E59E6C447BD
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=aneela@codeaurora.org
+From:   Arun Kumar Neelakantam <aneela@codeaurora.org>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org, clew@codeaurora.org,
+        sricharan@codeaurora.org
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arun Kumar Neelakantam <aneela@codeaurora.org>
+Subject: [PATCH V5 0/5] Add chrdev and name query support for GLINK
+Date:   Fri, 22 Nov 2019 10:05:04 +0000
+Message-ID: <0101016e92927c3a-ca9dda3b-35da-4104-bf52-d2839f18b8d5-000000@us-west-2.amazonses.com>
+X-Mailer: git-send-email 1.9.1
+X-SES-Outgoing: 2019.11.22-54.240.27.188
+Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Thanks for the update.
+Add support for the GLINK rpmsg transport to register a rpmsg chrdev.
+This will create the rpmsg_ctrl nodes for userspace clients to open 
+rpmsg epts. The rpmsg chrdev allocation is done by allocating a local
+channel which also allocates an ept. We need to add some guards against
+edge cases for this chrdev because it will never fully open.
 
-On Thu, Nov 21, 2019 at 5:35 PM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> On Thu 21 Nov 10:20 PST 2019, Navid Emamdoost wrote:
->
-> > On Mon, Sep 16, 2019 at 10:31 PM Navid Emamdoost
-> > <navid.emamdoost@gmail.com> wrote:
-> > >
-> > > In rpmsg_eptdev_write_iter, if copy_from_iter_full fails the allocated
-> > > buffer needs to be released.
-> > >
-> > > Signed-off-by: Navid Emamdoost <navid.emamdoost@gmail.com>
-> >
-> > Would you please review this patch?
-> >
->
-> I'm sorry, I must have missed to reply as I applied the patch. You can
-> find it in the rpmsg-next branch [1] and it will be part of the pull
-> request for v5.5
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git/log/?h=rpmsg-next
->
-> Regards,
-> Bjorn
->
-> > Thank you,
-> >
-> > > ---
-> > >  drivers/rpmsg/rpmsg_char.c | 6 ++++--
-> > >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> > > index eea5ebbb5119..c655074c07c2 100644
-> > > --- a/drivers/rpmsg/rpmsg_char.c
-> > > +++ b/drivers/rpmsg/rpmsg_char.c
-> > > @@ -227,8 +227,10 @@ static ssize_t rpmsg_eptdev_write_iter(struct kiocb *iocb,
-> > >         if (!kbuf)
-> > >                 return -ENOMEM;
-> > >
-> > > -       if (!copy_from_iter_full(kbuf, len, from))
-> > > -               return -EFAULT;
-> > > +       if (!copy_from_iter_full(kbuf, len, from)) {
-> > > +               ret = -EFAULT;
-> > > +               goto free_kbuf;
-> > > +       }
-> > >
-> > >         if (mutex_lock_interruptible(&eptdev->ept_lock)) {
-> > >                 ret = -ERESTARTSYS;
-> > > --
-> > > 2.17.1
-> > >
-> >
-> >
-> > --
-> > Navid.
+Changes since v4:
+- Resending by removing approved patches
+
+Changes since v3:
+- Change to device_add_group for rpmsg name attr
+- Add patch to unregister the rpmsg device
+- Add patch to support compat ioctl for rpmsg char driver
+
+Changes since v2:
+- Revert change to make glink attribute table const
+
+Changes since v1:
+- Add explanation to dt-bindings commit message
+- Add patch complete_all the open_req/ack variables
+- Add patch to prevent null pointer dereference in chrdev channel release
+- Change chrdev allocation to use glink channel allocation
+- Change glink attr struct to const
 
 
+Arun Kumar Neelakantam (1):
+  rpmsg: glink: unregister rpmsg device during endpoint destroy
+
+Chris Lew (4):
+  rpmsg: glink: Use complete_all for open states
+  rpmsg: Guard against null endpoint ops in destroy
+  rpmsg: glink: Add support for rpmsg glink chrdev
+  rpmsg: glink: Expose rpmsg name attr for glink
+
+ drivers/rpmsg/qcom_glink_native.c | 79 +++++++++++++++++++++++++++++++++++++--
+ drivers/rpmsg/rpmsg_core.c        |  2 +-
+ 2 files changed, 77 insertions(+), 4 deletions(-)
 
 -- 
-Navid.
+1.9.1
+
