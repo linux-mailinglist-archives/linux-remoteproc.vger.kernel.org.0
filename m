@@ -2,220 +2,120 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B840410C7FD
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 28 Nov 2019 12:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D4010DED0
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 30 Nov 2019 20:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbfK1LeX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 28 Nov 2019 06:34:23 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:22458 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726227AbfK1LeX (ORCPT
+        id S1727258AbfK3TNf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 30 Nov 2019 14:13:35 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:33881 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727236AbfK3TNf (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 28 Nov 2019 06:34:23 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xASBRQXs001753;
-        Thu, 28 Nov 2019 12:34:19 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=vcru8Yw5xoPG8rIOJUSk+LjLaSpyvHCsGnBcaiG0UXs=;
- b=BUmfz3aLsGtIMdxzjllOfORoAqCvdHX/pbe4Y9wp1txnkXB4v+FlmqmOSec+50gtVfxJ
- rr7QJzuM7iCp77a4vH062kg5Eg42MBxJVV7k9Yk0uoShOYtuBYcjHF0M0GtVOqz0NIxw
- fSiknbLvVPinYBn0TMy/I1aUenbESRFtQH2JNxv4WIF0gyrkKiKZXqE5JoxV5jdRF5ZO
- R36NN+KAEhKfLnVrAP9XQ4ygZCqNYYHZHhxnPdnFauMY1GwsushClUOW2KGQdcR/QOZ3
- wREuol3lx7/EG8o2L6hAmIm9jbDCfLIZn8s4c8oe2LDQunJjBYXKAMDi37SjATQfIy1X eQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2whcxshrhh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Nov 2019 12:34:19 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8131F100038;
-        Thu, 28 Nov 2019 12:34:18 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag7node2.st.com [10.75.127.20])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 72FC32B1882;
-        Thu, 28 Nov 2019 12:34:18 +0100 (CET)
-Received: from localhost (10.75.127.50) by SFHDAG7NODE2.st.com (10.75.127.20)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 28 Nov 2019 12:34:17
- +0100
-From:   Loic Pallardy <loic.pallardy@st.com>
-To:     <bjorn.andersson@linaro.org>, <ohad@wizery.com>
-CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <arnaud.pouliquen@st.com>, <benjamin.gaignard@linaro.org>,
-        <fabien.dessenne@st.com>, <s-anna@ti.com>,
-        Loic Pallardy <loic.pallardy@st.com>
-Subject: [PATCH v4 1/1] remoteproc: add support for co-processor loaded and booted before kernel
-Date:   Thu, 28 Nov 2019 12:33:51 +0100
-Message-ID: <1574940831-7433-1-git-send-email-loic.pallardy@st.com>
-X-Mailer: git-send-email 2.7.4
+        Sat, 30 Nov 2019 14:13:35 -0500
+Received: by mail-pj1-f65.google.com with SMTP id t21so2008417pjq.1
+        for <linux-remoteproc@vger.kernel.org>; Sat, 30 Nov 2019 11:13:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=slpAZDwZWDADlCMgH+Fw7mw8kHdwTXpWpj7pI/cHAUQ=;
+        b=vOTUyQCm+gKm5+qAR06wlEvjsIex8J6pFrkYRSXyaXbbWURPgmRn8nKex4bKSYKYmg
+         /vLdGKTROJvMc+R6stKoaxzk1RKIe04DJzEh+meNpKMmIqsA87iNbWolDW46dgzymWJn
+         4p533gtjGYp0BS1ZUvF5sN5y0jSIV6Ck3t1sIx50QDqy86Jl+W5m6885Eo24dIJ0bkWk
+         31qjefXJUs+tsdgcibzV35ZayvEOmlH/1HIbGDjU73MkLHh9xiXMsyoMwmgmBIaddZCI
+         tbJ0b+Kzn+xm2ooY3EGs56Gv9CKFVxXd/+lyrRh0cTqvq4gvfqqHR5U25cgGAuo3okG8
+         e6Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=slpAZDwZWDADlCMgH+Fw7mw8kHdwTXpWpj7pI/cHAUQ=;
+        b=bCxvsTq1vWu0wytXtofIvvjzxohx6iUzoY3KTZQnFhK6Jo0M36Zv3kI7PnkrRKhtwi
+         Nch8wi7rVgoMc/BHa+Y0m1UCj2gACCXNZ9G6U3JdH+UztzNhlXpYGQydbG1ErJm8IJ4w
+         Ynyp0CTUGsoaLROWqbzVOkcwc/wImTMpTXPN3iTiFleo7tQP6mh8vc4F8vTG2KQdvmpr
+         jYUhvuq5ca3AhgtsETCuGMNpnFqoNo3VrmToBuoe6ZcrTcP1a/s0V+kQgjEyRE5NcK7a
+         Rz89jaTu7w5a2yVDvpY/BvdjtZkvOLpsmZXr8V3CGz5Ons0VySxSARDCkMa7g2HBFtNf
+         lunw==
+X-Gm-Message-State: APjAAAWmfxZocx4I5mf2/kJbVy3+B7LyXAJVFZiZt+rX1BzV5iqpN0uV
+        BYg5hdm+5Q3FWVUQ2OdOnZxgK8K2DCg=
+X-Google-Smtp-Source: APXvYqx/SuxtuGn5asmfUmbqJ6ZWVISvGwOgHAfd8yZqXaGiHmw+kUvojW9ai9JY5NMQIJ9vw/FKnw==
+X-Received: by 2002:a17:90a:eac1:: with SMTP id ev1mr25527117pjb.66.1575141214204;
+        Sat, 30 Nov 2019 11:13:34 -0800 (PST)
+Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id x2sm27882492pge.76.2019.11.30.11.13.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Nov 2019 11:13:33 -0800 (PST)
+Date:   Sat, 30 Nov 2019 11:13:30 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Fabien Dessenne <fabien.dessenne@st.com>,
+        Clement Leger <cleger@kalray.eu>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Ben Dooks <ben.dooks@codethink.co.uk>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ding Xiang <dingxiang@cmss.chinamobile.com>
+Subject: [GIT PULL] remoteproc updates for v5.5
+Message-ID: <20191130191330.GA151303@yoga>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG5NODE2.st.com (10.75.127.14) To SFHDAG7NODE2.st.com
- (10.75.127.20)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-28_01:2019-11-28,2019-11-28 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Remote processor could boot independently or be loaded/started before
-Linux kernel by bootloader or any firmware.
-This patch introduces a new property in rproc core, named skip_fw_load,
-to be able to allocate resources and sub-devices like vdev and to
-synchronize with current state without loading firmware from file system.
-It is platform driver responsibility to implement the right firmware
-load ops according to HW specificities.
+The following changes since commit 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c:
 
-Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
-Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+  Linux 5.4-rc1 (2019-09-30 10:35:40 -0700)
 
----
-Change from v3:
-- add comment about firmware NULL pointer
-- add Mathieu Poirier Ack
-Change from v2:
-- rename property into skip_fw_load
-- update rproc_boot and rproc_fw_boot description
-- update commit message
-Change from v1:
-- Keep bool in struct rproc
----
- drivers/remoteproc/remoteproc_core.c | 67 ++++++++++++++++++++++++++++--------
- include/linux/remoteproc.h           |  2 ++
- 2 files changed, 55 insertions(+), 14 deletions(-)
+are available in the Git repository at:
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 307df98347ba..367a7929b7a0 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1358,8 +1358,19 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
- 	return ret;
- }
- 
--/*
-- * take a firmware and boot a remote processor with it.
-+/**
-+ * rproc_fw_boot() - boot specified remote processor according to specified
-+ * firmware
-+ * @rproc: handle of a remote processor
-+ * @fw: pointer on firmware to handle
-+ *
-+ * Handle resources defined in resource table, load firmware and
-+ * start remote processor.
-+ *
-+ * If firmware pointer fw is NULL, firmware is not handled by remoteproc
-+ * core, but under the responsibility of platform driver.
-+ *
-+ * Returns 0 on success, and an appropriate error value otherwise.
-  */
- static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
- {
-@@ -1371,7 +1382,11 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
- 	if (ret)
- 		return ret;
- 
--	dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
-+	if (fw)
-+		dev_info(dev, "Booting fw image %s, size %zd\n", name,
-+			 fw->size);
-+	else
-+		dev_info(dev, "Synchronizing with preloaded co-processor\n");
- 
- 	/*
- 	 * if enabling an IOMMU isn't relevant for this rproc, this is
-@@ -1718,16 +1733,22 @@ static void rproc_crash_handler_work(struct work_struct *work)
-  * rproc_boot() - boot a remote processor
-  * @rproc: handle of a remote processor
-  *
-- * Boot a remote processor (i.e. load its firmware, power it on, ...).
-+ * Boot a remote processor (i.e. load its firmware, power it on, ...) from
-+ * different contexts:
-+ * - power off
-+ * - preloaded firmware
-+ * - started before kernel execution
-+ * The different operations are selected thanks to properties defined by
-+ * platform driver.
-  *
-- * If the remote processor is already powered on, this function immediately
-- * returns (successfully).
-+ * If the remote processor is already powered on at rproc level, this function
-+ * immediately returns (successfully).
-  *
-  * Returns 0 on success, and an appropriate error value otherwise.
-  */
- int rproc_boot(struct rproc *rproc)
- {
--	const struct firmware *firmware_p;
-+	const struct firmware *firmware_p = NULL;
- 	struct device *dev;
- 	int ret;
- 
-@@ -1758,11 +1779,20 @@ int rproc_boot(struct rproc *rproc)
- 
- 	dev_info(dev, "powering up %s\n", rproc->name);
- 
--	/* load firmware */
--	ret = request_firmware(&firmware_p, rproc->firmware, dev);
--	if (ret < 0) {
--		dev_err(dev, "request_firmware failed: %d\n", ret);
--		goto downref_rproc;
-+	if (!rproc->skip_fw_load) {
-+		/* load firmware */
-+		ret = request_firmware(&firmware_p, rproc->firmware, dev);
-+		if (ret < 0) {
-+			dev_err(dev, "request_firmware failed: %d\n", ret);
-+			goto downref_rproc;
-+		}
-+	} else {
-+		/*
-+		 * Set firmware name pointer to null as remoteproc core is not
-+		 * in charge of firmware loading
-+		 */
-+		kfree(rproc->firmware);
-+		rproc->firmware = NULL;
- 	}
- 
- 	ret = rproc_fw_boot(rproc, firmware_p);
-@@ -1916,8 +1946,17 @@ int rproc_add(struct rproc *rproc)
- 	/* create debugfs entries */
- 	rproc_create_debug_dir(rproc);
- 
--	/* if rproc is marked always-on, request it to boot */
--	if (rproc->auto_boot) {
-+	if (rproc->skip_fw_load) {
-+		/*
-+		 * If rproc is marked already booted, no need to wait
-+		 * for firmware.
-+		 * Just handle associated resources and start sub devices
-+		 */
-+		ret = rproc_boot(rproc);
-+		if (ret < 0)
-+			return ret;
-+	} else if (rproc->auto_boot) {
-+		/* if rproc is marked always-on, request it to boot */
- 		ret = rproc_trigger_auto_boot(rproc);
- 		if (ret < 0)
- 			return ret;
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index 16ad66683ad0..4fd5bedab4fa 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -479,6 +479,7 @@ struct rproc_dump_segment {
-  * @table_sz: size of @cached_table
-  * @has_iommu: flag to indicate if remote processor is behind an MMU
-  * @auto_boot: flag to indicate if remote processor should be auto-started
-+ * @skip_fw_load: remote processor has been preloaded before start sequence
-  * @dump_segments: list of segments in the firmware
-  * @nb_vdev: number of vdev currently handled by rproc
-  */
-@@ -512,6 +513,7 @@ struct rproc {
- 	size_t table_sz;
- 	bool has_iommu;
- 	bool auto_boot;
-+	bool skip_fw_load;
- 	struct list_head dump_segments;
- 	int nb_vdev;
- };
--- 
-2.7.4
+  https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/rproc-v5.5
 
+for you to fetch changes up to e3cb40d4d80516a8f4e9afaebe4d672821a2c97b:
+
+  Revert "dt-bindings: remoteproc: stm32: add wakeup-source" (2019-11-30 10:41:03 -0800)
+
+----------------------------------------------------------------
+remoteproc updates for v5.5
+
+This adds support for booting the modem processor on Qualcomm MSM8998
+and carries some cleanup up and bug fixes to the framework and the stm32
+driver.
+
+----------------------------------------------------------------
+Arnaud Pouliquen (1):
+      remoteproc: stm32: use workqueue to treat mailbox callback
+
+Ben Dooks (Codethink) (1):
+      remoteproc: fix argument 2 of rproc_mem_entry_init
+
+Bjorn Andersson (1):
+      Revert "dt-bindings: remoteproc: stm32: add wakeup-source"
+
+Clement Leger (2):
+      remoteproc: remove useless typedef
+      remoteproc: Fix wrong rvring index computation
+
+Ding Xiang (1):
+      remoteproc: debug: Remove unneeded NULL check
+
+Fabien Dessenne (3):
+      dt-bindings: remoteproc: stm32: add wakeup-source
+      remoteproc: stm32: wakeup the system by wdg irq
+      remoteproc: stm32: fix probe error case
+
+Jeffrey Hugo (2):
+      dt-bindings: remoteproc: qcom: Add Q6v5 Modem PIL binding for MSM8998
+      remoteproc: qcom_q6v5_mss: Add support for MSM8998
+
+ .../devicetree/bindings/remoteproc/qcom,q6v5.txt   |   6 ++
+ drivers/remoteproc/qcom_q6v5_mss.c                 |  52 +++++++++--
+ drivers/remoteproc/remoteproc_core.c               |   9 +-
+ drivers/remoteproc/remoteproc_debugfs.c            |   3 -
+ drivers/remoteproc/stm32_rproc.c                   | 100 +++++++++++++++++++--
+ 5 files changed, 149 insertions(+), 21 deletions(-)
