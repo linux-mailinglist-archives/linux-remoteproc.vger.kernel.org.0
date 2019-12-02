@@ -2,57 +2,100 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE33D10E4B2
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 Dec 2019 03:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 965C710F2A8
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 Dec 2019 23:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727618AbfLBCuo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sun, 1 Dec 2019 21:50:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34226 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727563AbfLBCu0 (ORCPT
+        id S1727269AbfLBWFr (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 2 Dec 2019 17:05:47 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49118 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726443AbfLBWFr (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sun, 1 Dec 2019 21:50:26 -0500
-Subject: Re: [GIT PULL] hwspinlock updates for v5.5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575255025;
-        bh=36RyslkW61A04Bgfx/t9HsxNYAU+9E3zR0aRaeKOomY=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=YJkhILgN0aUtq90rFl7hU+6KDo8Oc0x2vh+gUyyTCxAqv1I6YEQ5cJaoUYpglpvMb
-         7j01M+pSaM+1jXNrDeef9i7X8teT6HRc5+ykinFofmoJlKtKQPBRPbGMibyMY+uwu7
-         YQKMQomkctCWXQFzNF7uApwuoaZxal21ZwlsVk2A=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20191130191448.GC151303@yoga>
-References: <20191130191448.GC151303@yoga>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20191130191448.GC151303@yoga>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git
- tags/hwlock-v5.5
-X-PR-Tracked-Commit-Id: 9d399f0c52951c1acf972bf98ea55ba8798fea7a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 454d9c4aa7d54fd4f15c1427fc4f51347f300262
-Message-Id: <157525502547.1709.7511129762810124596.pr-tracker-bot@kernel.org>
-Date:   Mon, 02 Dec 2019 02:50:25 +0000
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mon, 2 Dec 2019 17:05:47 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 3C093B2EC;
+        Mon,  2 Dec 2019 22:05:45 +0000 (UTC)
+From:   =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>
+To:     linux-realtek-soc@lists.infradead.org
+Cc:     Cheng-Yu Lee <cylee12@realtek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
         Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Baolin Wang <baolin.wang@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [RFC 1/5] dt-bindings: hwlock: Add Realtek RTD1195 SB2
+Date:   Mon,  2 Dec 2019 23:05:31 +0100
+Message-Id: <20191202220535.6208-2-afaerber@suse.de>
+X-Mailer: git-send-email 2.16.4
+In-Reply-To: <20191202220535.6208-1-afaerber@suse.de>
+References: <20191202220535.6208-1-afaerber@suse.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The pull request you sent on Sat, 30 Nov 2019 11:14:48 -0800:
+Define a binding for Realtek RTD1195 SoC's SB2 hardware semaphore.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/hwlock-v5.5
+Signed-off-by: Andreas Färber <afaerber@suse.de>
+---
+ .../bindings/hwlock/realtek,rtd1195-sb2-sem.yaml   | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwlock/realtek,rtd1195-sb2-sem.yaml
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/454d9c4aa7d54fd4f15c1427fc4f51347f300262
-
-Thank you!
-
+diff --git a/Documentation/devicetree/bindings/hwlock/realtek,rtd1195-sb2-sem.yaml b/Documentation/devicetree/bindings/hwlock/realtek,rtd1195-sb2-sem.yaml
+new file mode 100644
+index 000000000000..8035af02c667
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwlock/realtek,rtd1195-sb2-sem.yaml
+@@ -0,0 +1,42 @@
++# SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwlock/realtek,rtd1195-sb2-sem.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Realtek RTD1195 SB2 hardware semaphore device tree binding
++
++maintainers:
++  - Andreas Färber <afaerber@suse.de>
++
++properties:
++  compatible:
++    const: realtek,rtd1195-sb2-sem
++
++  reg:
++    maxItems: 1
++
++  "#hwlock-cells":
++    enum: [ 0, 1 ]
++
++required:
++  - compatible
++  - reg
++  - "#hwlock-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    hwspinlock@9801a000 {
++      compatible = "realtek,rtd1195-sb2-sem";
++      reg = <0x9801a000 0x4>;
++      #hwlock-cells = <0>;
++    };
++  - |
++    hwspinlock@9801a620 {
++      compatible = "realtek,rtd1195-sb2-sem";
++      reg = <0x9801a620 0x20>;
++      #hwlock-cells = <1>;
++    };
++...
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.16.4
+
