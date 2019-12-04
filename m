@@ -2,113 +2,125 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DC211289B
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Dec 2019 10:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BC3112904
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Dec 2019 11:11:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727009AbfLDJy2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 4 Dec 2019 04:54:28 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:34730 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726632AbfLDJyZ (ORCPT
+        id S1727597AbfLDKLX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Dec 2019 05:11:23 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:46552 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726893AbfLDKLX (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 4 Dec 2019 04:54:25 -0500
-Received: by mail-pg1-f195.google.com with SMTP id r11so3140563pgf.1;
-        Wed, 04 Dec 2019 01:54:25 -0800 (PST)
+        Wed, 4 Dec 2019 05:11:23 -0500
+Received: by mail-pf1-f194.google.com with SMTP id y14so2950378pfm.13;
+        Wed, 04 Dec 2019 02:11:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=lK0hzpi7lOKx/+vwwnIUmfL08coFZ79d+GQbKJpzbuw=;
-        b=CqEjAqBZI2DYUBa0fTauRtHIY9p7Cyi3RlaTmg430JUBYj9ae2a90oUMiq04AsaKEb
-         FJ/CvBZHMW0we9ND+ppTbh7a8jhOz8Ce6oowvzKhqXBTYcof1eDT4TYvV1G14vfnU+oF
-         jWagkHpYSNVBn0HFZNE778WdHRIYPIlM+zUQScXvOKqTc0LHMnjd+rP6uT/B5i6b6Rhx
-         vMlG2tNtuQ6idKDd4XOKTw2O42qnCff69KiICKuapSSsFi/5VciM+9Q1nVq5ui1yrKUg
-         D9hy4Ir9b3g/x/F8rpLcOagASOykjRa8emkQGiy02pA7bc+cTS9mGUHt8pcCXl1ZztgS
-         sydg==
+        h=from:to:cc:subject:date:message-id;
+        bh=X78/UEM1JDrsz2wbO1IYinDOnIrG936f4cZHAjiIgwM=;
+        b=mcc9/JwGLQwm7ZMNhOYcNdyWvi4LosHbEB0fgv3GqhEDPCaay5uNwBREPTBg07YQIz
+         qHnMQ92JxpZEGfkH162ZJj9Z+saw0h/pchkStOt9lIu9kziZWopAZbOcZwMyxCYlQarv
+         ZmsRJN158PNPPcdNxF9tpswG9cyhXDpe5p/5bsCFvuqeCzDRs/KQcSJzGafpisXqu41U
+         A9wbUDdNtbjrP9qLkHTsQgQH/mDuuexx/hLCz8bKoMgUJdAU1cfmLg7QHT74tu6mmVJc
+         vC+A/KeqBbIfSAk18SVw5KRc1OCoQGcUDPKEQ7RjhBYluUsVZhEI9NNT2YYg4KitrjgL
+         UEpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=lK0hzpi7lOKx/+vwwnIUmfL08coFZ79d+GQbKJpzbuw=;
-        b=Ur8sqivKB/M90qi4hWl7An6s9a+ZJjXsqzTPh4dgyL5jXCrHxnGStG8dK0B9EjdggB
-         jUJGE7+bEQjJhDhiyb4WdLMaaYcmvBJIzLX0uQQ86YnWoUmIfrid8mfkN+t7mu1m+Uh6
-         mFNhuZfZvDpaVwgiIejWOApDiabhNgwrhiLp33nKSRBUCVhkc98NaKN5FC1N0kAgM2XH
-         8j5UzDUIBKIj7aPUxJrCoRaUdvw16NcPquIQlyimQJsUsVmuyk132sIiKwOMx0Yvvt23
-         HoB4tMA4qZtbkLlwLcqXrhiLODASZtgOPlFC7WNmmLLvr4TFE6WI/KEngJ0U76aON23t
-         NWAw==
-X-Gm-Message-State: APjAAAWwWj3TagBi0Oj3sKskmpyxLLk6nnytkfnhgdwfF4vrUDkR6kMQ
-        8/OxbRwPleWTtEJ0s6b6BKg=
-X-Google-Smtp-Source: APXvYqwj9EAIod5rI0TjevWy7FOFw+DSgYt6tnRhZdS6CK05vlUb7uUJci/Lp8NvAuIprbHSMdUe1Q==
-X-Received: by 2002:a63:7d6:: with SMTP id 205mr2613550pgh.131.1575453264820;
-        Wed, 04 Dec 2019 01:54:24 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=X78/UEM1JDrsz2wbO1IYinDOnIrG936f4cZHAjiIgwM=;
+        b=Ns6MwYB8oL62VBX/CIfVZm8jwQfFptcB7Saoghbtwi086/7eS5r0ttqhzkHdAOo8YS
+         S7CcnHz+HEivXisSvYmLXMAhyBica1gKfSfE832LxUNc66uSAdXrPUVVnp3Zt6TTDQIi
+         +DnFQuTbiM6JAhcx5icpB1kkqxOjGOAbgsKLDTO5tCJjwa6uI3jf4IGEo311Hl+oBcgQ
+         M4blqSDgK6IHdnEPr50V0l3jLbRKQHOCyeepdxA2hToh/OamrDeZLXQuIRdEzW9zsrfB
+         +l9uMfr0Jwj+lxK8XAPtWG4yXZd5K2UXuLcOZATiHCL8MPR7+9fs9lbMUoJpR9Xytlxe
+         nhoQ==
+X-Gm-Message-State: APjAAAUCxoo9DuEh+yZlfNXSr29Eq7aXOoYtFuzoSA+ABLJmhSmFlDVb
+        S9eSwluvctJJsGDBnr2h+vQ=
+X-Google-Smtp-Source: APXvYqyQuejC9ZsUSUtbnXdBdGeaFPuJgXkyfY8REXrYqG3MRu37xdNd4frWw3z4ixxam7xsojBTqg==
+X-Received: by 2002:a63:5056:: with SMTP id q22mr2641312pgl.20.1575454282892;
+        Wed, 04 Dec 2019 02:11:22 -0800 (PST)
 Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id k101sm5941687pjb.5.2019.12.04.01.54.22
+        by smtp.gmail.com with ESMTPSA id 67sm7664259pfw.82.2019.12.04.02.11.20
         (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 04 Dec 2019 01:54:24 -0800 (PST)
+        Wed, 04 Dec 2019 02:11:22 -0800 (PST)
 From:   Baolin Wang <baolin.wang7@gmail.com>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org, baohua@kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, baolin.wang7@gmail.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] hwspinlock: sirf: Use devm_hwspin_lock_register() to register hwlock controller
-Date:   Wed,  4 Dec 2019 17:53:33 +0800
-Message-Id: <caedf84ddfe1d552af78ad84c6effc792838b1fa.1575452516.git.baolin.wang7@gmail.com>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org
+Cc:     baolin.wang7@gmail.com, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] hwspinlock: Allow drivers to be built with COMPILE_TEST
+Date:   Wed,  4 Dec 2019 18:10:40 +0800
+Message-Id: <808692052649aa2e80693a2734cb392e5eddd83c.1575454108.git.baolin.wang7@gmail.com>
 X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <cover.1575452516.git.baolin.wang7@gmail.com>
-References: <cover.1575452516.git.baolin.wang7@gmail.com>
-In-Reply-To: <cover.1575452516.git.baolin.wang7@gmail.com>
-References: <cover.1575452516.git.baolin.wang7@gmail.com>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Use devm_hwspin_lock_register() to register the hwlock controller instead of
-unregistering the hwlock controller explicitly when removing the device.
+Allow drivers to be built with COMPILE_TEST.
 
 Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
 ---
- drivers/hwspinlock/sirf_hwspinlock.c |   21 +++------------------
- 1 file changed, 3 insertions(+), 18 deletions(-)
+ drivers/hwspinlock/Kconfig |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwspinlock/sirf_hwspinlock.c b/drivers/hwspinlock/sirf_hwspinlock.c
-index d62462e..823d3c4 100644
---- a/drivers/hwspinlock/sirf_hwspinlock.c
-+++ b/drivers/hwspinlock/sirf_hwspinlock.c
-@@ -79,23 +79,9 @@ static int sirf_hwspinlock_probe(struct platform_device *pdev)
+diff --git a/drivers/hwspinlock/Kconfig b/drivers/hwspinlock/Kconfig
+index 37740e9..cefaa4f 100644
+--- a/drivers/hwspinlock/Kconfig
++++ b/drivers/hwspinlock/Kconfig
+@@ -9,7 +9,7 @@ menuconfig HWSPINLOCK
+ config HWSPINLOCK_OMAP
+ 	tristate "OMAP Hardware Spinlock device"
+ 	depends on HWSPINLOCK
+-	depends on ARCH_OMAP4 || SOC_OMAP5 || SOC_DRA7XX || SOC_AM33XX || SOC_AM43XX || ARCH_K3
++	depends on ARCH_OMAP4 || SOC_OMAP5 || SOC_DRA7XX || SOC_AM33XX || SOC_AM43XX || ARCH_K3 || COMPILE_TEST
+ 	help
+ 	  Say y here to support the OMAP Hardware Spinlock device (firstly
+ 	  introduced in OMAP4).
+@@ -19,7 +19,7 @@ config HWSPINLOCK_OMAP
+ config HWSPINLOCK_QCOM
+ 	tristate "Qualcomm Hardware Spinlock device"
+ 	depends on HWSPINLOCK
+-	depends on ARCH_QCOM
++	depends on ARCH_QCOM || COMPILE_TEST
+ 	select MFD_SYSCON
+ 	help
+ 	  Say y here to support the Qualcomm Hardware Mutex functionality, which
+@@ -31,7 +31,7 @@ config HWSPINLOCK_QCOM
+ config HWSPINLOCK_SIRF
+ 	tristate "SIRF Hardware Spinlock device"
+ 	depends on HWSPINLOCK
+-	depends on ARCH_SIRF
++	depends on ARCH_SIRF || COMPILE_TEST
+ 	help
+ 	  Say y here to support the SIRF Hardware Spinlock device, which
+ 	  provides a synchronisation mechanism for the various processors
+@@ -43,7 +43,7 @@ config HWSPINLOCK_SIRF
+ config HWSPINLOCK_SPRD
+ 	tristate "SPRD Hardware Spinlock device"
+ 	depends on ARCH_SPRD
+-	depends on HWSPINLOCK
++	depends on HWSPINLOCK || COMPILE_TEST
+ 	help
+ 	  Say y here to support the SPRD Hardware Spinlock device.
  
- 	platform_set_drvdata(pdev, hwspin);
+@@ -52,7 +52,7 @@ config HWSPINLOCK_SPRD
+ config HWSPINLOCK_STM32
+ 	tristate "STM32 Hardware Spinlock device"
+ 	depends on MACH_STM32MP157
+-	depends on HWSPINLOCK
++	depends on HWSPINLOCK || COMPILE_TEST
+ 	help
+ 	  Say y here to support the STM32 Hardware Spinlock device.
  
--	return hwspin_lock_register(&hwspin->bank, &pdev->dev,
--				    &sirf_hwspinlock_ops, 0,
--				    HW_SPINLOCK_NUMBER);
--}
--
--static int sirf_hwspinlock_remove(struct platform_device *pdev)
--{
--	struct sirf_hwspinlock *hwspin = platform_get_drvdata(pdev);
--	int ret;
--
--	ret = hwspin_lock_unregister(&hwspin->bank);
--	if (ret) {
--		dev_err(&pdev->dev, "%s failed: %d\n", __func__, ret);
--		return ret;
--	}
--
--	return 0;
-+	return devm_hwspin_lock_register(&pdev->dev, &hwspin->bank,
-+					 &sirf_hwspinlock_ops, 0,
-+					 HW_SPINLOCK_NUMBER);
- }
- 
- static const struct of_device_id sirf_hwpinlock_ids[] = {
-@@ -106,7 +92,6 @@ static int sirf_hwspinlock_remove(struct platform_device *pdev)
- 
- static struct platform_driver sirf_hwspinlock_driver = {
- 	.probe = sirf_hwspinlock_probe,
--	.remove = sirf_hwspinlock_remove,
- 	.driver = {
- 		.name = "atlas7_hwspinlock",
- 		.of_match_table = of_match_ptr(sirf_hwpinlock_ids),
+@@ -61,7 +61,7 @@ config HWSPINLOCK_STM32
+ config HSEM_U8500
+ 	tristate "STE Hardware Semaphore functionality"
+ 	depends on HWSPINLOCK
+-	depends on ARCH_U8500
++	depends on ARCH_U8500 || COMPILE_TEST
+ 	help
+ 	  Say y here to support the STE Hardware Semaphore functionality, which
+ 	  provides a synchronisation mechanism for the various processor on the
 -- 
 1.7.9.5
 
