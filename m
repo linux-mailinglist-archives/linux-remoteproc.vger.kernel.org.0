@@ -2,69 +2,72 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA225111B48
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Dec 2019 23:02:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DFF112707
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Dec 2019 10:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727537AbfLCWC2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 3 Dec 2019 17:02:28 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:37283 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727416AbfLCWC1 (ORCPT
+        id S1725994AbfLDJWi (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Dec 2019 04:22:38 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36691 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbfLDJWi (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 3 Dec 2019 17:02:27 -0500
-Received: by mail-oi1-f195.google.com with SMTP id x195so4887737oix.4;
-        Tue, 03 Dec 2019 14:02:27 -0800 (PST)
+        Wed, 4 Dec 2019 04:22:38 -0500
+Received: by mail-pg1-f196.google.com with SMTP id k13so3085403pgh.3;
+        Wed, 04 Dec 2019 01:22:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=IVKJwWRb799YarBjaEupV/+AZd6qpWqomZcRlxpziH4=;
+        b=WcX2X+21VXpOljUqhNxCeK46zXjLUo8kTGe5mIsfYZcHKvnEUoV1Txj7kPhsH0jdRA
+         OMpol0ZJqvrLXwqcorERMCCljtLzcOIVLfzwIemYM0Q/+70BkDafXtIF0uw6agGL4QxM
+         P4rlJpRK8FUO1hQU+Rdd2bdh3xey+Md2GBSlbSDlauUzRaI8pDt3TnCcq3dhMHL/BL/2
+         +oYR5VE6hO0OLhB/MWfGzs5AmHtPR40tQpyoq6Vp3v65CiaIicYd6Sgs2/5twTj5f4Uo
+         hwzbzWf/hqJ72PwfrBQxc3SxrP1zt6G2EQ2xi4BlzdY7OCKJTBtvZi6nhb//fjrHHSxy
+         uhZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=90kwbqDcp7UEOW069UgJZG7CeERSPfvM2e/4IVBQtmg=;
-        b=QYOlkSWRkkDvZ9P/VRtt/JhR9JZtVOp/Oy9BNK8f+3oG+/VvoqjVS1cFH4J56czoBw
-         se1VTkJ1ckCYzEF8FXXCb8WNC1NfOI3TTV4uAq4tF79jCdNaSVIIWbVXYIwH3EL6EIl7
-         Tfrxq2Ga4PJQxiQGCtgx0CQ4ODep6FutOqtwZVg3X35lZKN+7giRxkEzaECN8cjhWxJF
-         W4/Rbk0j0eoFi949WQ3lj7uixPCpC9w0BS6nbCbozQG7uHpFTG0thD44Xu2M2KzCPFib
-         Dp0LEC46i1jPaWXG6br5O6gInL5hsosOes/xyw00rCcDV8D/NOrQAfxxGzlwFe2cpgDq
-         mE8Q==
-X-Gm-Message-State: APjAAAUOcWkRkaV95NrGg6Isr+1Jx4SCbl8ZS0xlNbYLqbazlFCsXszi
-        MmNKx+M/cNfXKieV1d5T4g==
-X-Google-Smtp-Source: APXvYqxrRfI0UN95eqjO4C8gSA0I9sLWnVvsUts8X9Qr0NL09XMOoPTbWgGcEBLbzFgRiTnhvrIi8w==
-X-Received: by 2002:aca:5cc4:: with SMTP id q187mr155936oib.45.1575410546786;
-        Tue, 03 Dec 2019 14:02:26 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id n15sm1488396otr.67.2019.12.03.14.02.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2019 14:02:26 -0800 (PST)
-Date:   Tue, 3 Dec 2019 16:02:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     bjorn.andersson@linaro.org, jhugo@codeaurora.org,
-        robh+dt@kernel.org, jonathan@marek.ca, ohad@wizery.com,
-        mark.rutland@arm.com, p.zabel@pengutronix.de,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        agross@kernel.org, Sibi Sankar <sibis@codeaurora.org>
-Subject: Re: [PATCH 10/16] dt-bindings: remoteproc: qcom: SM8150 Add ADSP,
- CDSP, MPSS and SLPI support
-Message-ID: <20191203220225.GA22560@bogus>
-References: <20191118214250.14002-1-sibis@codeaurora.org>
- <0101016e8078dad4-458c8501-93fd-4daa-8938-d01027f248cb-000000@us-west-2.amazonses.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0101016e8078dad4-458c8501-93fd-4daa-8938-d01027f248cb-000000@us-west-2.amazonses.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=IVKJwWRb799YarBjaEupV/+AZd6qpWqomZcRlxpziH4=;
+        b=CoLz+3G4UnIF4D3OGIyRkNO8aQlxdVpbtVxZwBgJHLeh+M+LiFaTixmBDHgwUuze2L
+         nZ1FcnEiBuoyA6/XdkmOzgXDvQ4rh0dPWGwd8ssTi0NR3ZvkUWHeL5ZaJCMKy5v/sc5O
+         h9KEwWBOCjBNnoPdPG7qpmbvd1fxjy8scYP6j2QgfohnnWdxlyspnmGnTnnh6CmdcLei
+         THlGsXwOWP95LbXuceKeUIhfCu3XHsP/acaea/p390XMIWtlppsMEwuLe/hh0k5D2Aaa
+         Pif2pFjibLyPCQnZcee7Ni7wv0n2ew/aToWeuRPjWyn0cIHJCfjLJpnau7xBNVu2Ii40
+         E+dQ==
+X-Gm-Message-State: APjAAAWiw9VOZFUfVPQ6pndq8zs3mqaJbJ3GbnV/hDy2QEz4guCjxXmy
+        d2szDLd4cTDJ7rDkBIpyn9kugWbS
+X-Google-Smtp-Source: APXvYqzDQKWtWwDwenA6XL5voD+1UVsXLDOqKYG9pY5mybFX/4Na4qCmw0oIrmCasNztO6Mk5yIDzA==
+X-Received: by 2002:a62:1447:: with SMTP id 68mr2510205pfu.53.1575451357570;
+        Wed, 04 Dec 2019 01:22:37 -0800 (PST)
+Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id k21sm6482914pgt.22.2019.12.04.01.22.35
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 04 Dec 2019 01:22:37 -0800 (PST)
+From:   Baolin Wang <baolin.wang7@gmail.com>
+To:     agross@kernel.org, ohad@wizery.com, bjorn.andersson@linaro.org
+Cc:     baolin.wang7@gmail.com, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Some improvements for Qualcomm hwspinlock
+Date:   Wed,  4 Dec 2019 17:21:55 +0800
+Message-Id: <cover.1575450802.git.baolin.wang7@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, 18 Nov 2019 21:43:54 +0000, Sibi Sankar wrote:
-> Add ADSP, CDSP, MPSS and SLPI compatibles for SM8150 SoC.
-> 
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-> ---
->  .../devicetree/bindings/remoteproc/qcom,adsp.txt   | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
+This patch set did some optimization for Qualcomm hwlock controller,
+including using devm_hwspin_lock_register() API to simplify code and
+removing redundant pm runtime functions.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Baolin Wang (2):
+  hwspinlock: qcom: Remove redundant PM runtime functions
+  hwspinlock: qcom: Use devm_hwspin_lock_register() to register hwlock
+    controller
+
+ drivers/hwspinlock/qcom_hwspinlock.c |   28 ++--------------------------
+ 1 file changed, 2 insertions(+), 26 deletions(-)
+
+-- 
+1.7.9.5
+
