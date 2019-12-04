@@ -2,105 +2,73 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F38E111277F
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Dec 2019 10:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D1D112893
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Dec 2019 10:54:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727461AbfLDJcS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 4 Dec 2019 04:32:18 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:35186 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727454AbfLDJcS (ORCPT
+        id S1727009AbfLDJyR (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Dec 2019 04:54:17 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:37585 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726632AbfLDJyR (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 4 Dec 2019 04:32:18 -0500
-Received: by mail-pj1-f68.google.com with SMTP id w23so1678928pjd.2;
-        Wed, 04 Dec 2019 01:32:17 -0800 (PST)
+        Wed, 4 Dec 2019 04:54:17 -0500
+Received: by mail-pl1-f195.google.com with SMTP id bb5so2964869plb.4;
+        Wed, 04 Dec 2019 01:54:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=MEMVCvrI0WADDr1Rd4hdPFBKPBKqjIAdQ9vka/nhGK8=;
-        b=i5K8zGAUTIUpBxiaHwEGM4D2YvA7SW9lgKdvu84Kv7sk9nI3myu3aIGn9ByrlMTlGq
-         FHNTHz9+fW0MMiDYmfQ0pO5F2ByyZ/ILSGS4Te8JT4wi+HtMqTJaChN9dxO2yUZ+ZF3+
-         BFfEbVJRZaxq2gu17xlBlzbGYcJaAB69MnE6h1a9+jVrozrNN1LHCES+jB607D9sH2bZ
-         FxLAEVnunzUWzZrwaJAe8lzVT0dr2EUo8NHbdRLXjmryXoFR3fPPl93iG94yGs9MC5/f
-         mHHMs9sIO13RmpPCmWSACa1Wn9K1cTg0+W29WKz7PwPNNCV06oBUiuCZNQUkHfBNbwlN
-         KwjA==
+        h=from:to:cc:subject:date:message-id;
+        bh=sy0TPVo2jYoLirOgnD0I5TlsFYusUGHr86X3IrbRM40=;
+        b=jkobSOBwsTsp2VlFUJmtvhD8RQntjjl4FzcEViOOz1/cDyieTGtkwGd/ljvQH9vaRQ
+         4mpmbSOlS7RVfutVY5OB/EJFLV/Ca0P6LDC0J6nStZf0JMn0BD7FhBWxiiCH9he1NWvp
+         rdc8S0j8+qTa8+HCfQZOI3BoWy5lQB4lt/72qAiaJO14mt6HIdS2Ji2Bn0gD4iOwJbF1
+         UN3poic2F4bR+qxO7CLO3CjC+GEeMm4/osXgDX0gkVinxe/NvB6Cf30IH8C6FwlpamXv
+         mDDzjMAPHK92PMd1uvekFEad8qhtBbxvkqQy4xJ9ll6hUJTzRy3xN9j3Nu23kUFckVJj
+         OueA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=MEMVCvrI0WADDr1Rd4hdPFBKPBKqjIAdQ9vka/nhGK8=;
-        b=tXZ5ULq10iYH6VL4I+fAefzfaseml0nRvZbaPSwiJlUnELoPUU/krGlRdhld63Tlza
-         5+6AnPGZnabdEqMHdBs0ZVWAhU0ZaMZwq+co2uYjQHDr3bSWzOmIsUhWQUBy/hqaoEor
-         NM6EomdZdDiHVJO1L+Ton1D6n3yHHZiy7TCdztz01c6NCWIcV2qCoI1POIGXuKuM0z4R
-         7M3dY/7vxlTIIn5oIyiRNUKtjB6nu2N35PxHxR9awJOjH0pJrvD123cf/2qWi3AvdBM7
-         zavzgmNAajEP8WJ6BqBVDX35959haWzptaT5Xw7zK0DKzPAg231irZ6Ux72CHoO5++Gx
-         ROjA==
-X-Gm-Message-State: APjAAAVid3CHu29vcwhQI/IfZkF1tlN++mzWblYV3URZ700qSp1hcWR5
-        s3GrdtDhvPEsOx+TSAYfkwU=
-X-Google-Smtp-Source: APXvYqwplGcbAvZMr4HiumdgY+xYjz5z42ip0t5oJwiw7gz+o0Z5pkzcOfWT+VscRPzzsiws9aDzuw==
-X-Received: by 2002:a17:90a:94cc:: with SMTP id j12mr2206532pjw.3.1575451937556;
-        Wed, 04 Dec 2019 01:32:17 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=sy0TPVo2jYoLirOgnD0I5TlsFYusUGHr86X3IrbRM40=;
+        b=p7hii9u0BFFhCRrtQmypyA0kuSm8IlFjJneiEoG1xzMxl5xo0tqg2UDU9DOjR8d3Kp
+         ziYWUXWo6Z0KhvnsaZLsSJuTnVdG+9OVU7KO3CXzV0BaeMXsatd+7OfSKQg7e7ooLgVh
+         OSRfJj9Gu413NVdP+t/KIMNtmpeSU/jI4livQhxIJph6oAgS9MygxBwyKv2eV6ByiWof
+         Vs2EPIB5/kz0bfvn1+oaUdTOW4HMDTRBW2aCB+Vf4J0v5/xIl25BJCerdbtIsVG99JvR
+         dRDxPCMRNypQFr1p83rKNI6EcNKEreO7bYm2ONqSfuKlbzd6yA4yu7qo3PJl66DntBg5
+         4adQ==
+X-Gm-Message-State: APjAAAXtTa9cS1MLZJI543VL4CW3I9JH265g6u6l+KDRfJ5N6MfE55PI
+        k47T+kbp+BflaigK3WMbkNA=
+X-Google-Smtp-Source: APXvYqxo3ED3pddFuvzNz/kwQfbUAJnhiSak+AuYf3/mHFipcLJYTWEitA6+QsXxaIQk3P8mDxqRXw==
+X-Received: by 2002:a17:902:b48d:: with SMTP id y13mr2561717plr.195.1575453256706;
+        Wed, 04 Dec 2019 01:54:16 -0800 (PST)
 Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id 91sm2380086pjq.18.2019.12.04.01.32.15
+        by smtp.gmail.com with ESMTPSA id k101sm5941687pjb.5.2019.12.04.01.54.14
         (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 04 Dec 2019 01:32:17 -0800 (PST)
+        Wed, 04 Dec 2019 01:54:16 -0800 (PST)
 From:   Baolin Wang <baolin.wang7@gmail.com>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org
-Cc:     baolin.wang7@gmail.com, linux-omap@vger.kernel.org,
+To:     ohad@wizery.com, bjorn.andersson@linaro.org, baohua@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, baolin.wang7@gmail.com,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] hwspinlock: omap: Use devm_hwspin_lock_register() to register hwlock controller
-Date:   Wed,  4 Dec 2019 17:31:31 +0800
-Message-Id: <84ccc6ffd5269a725359ff42e131c5aedf087546.1575451463.git.baolin.wang7@gmail.com>
+Subject: [PATCH 0/3] Some improvements for SIRF hwspinlock
+Date:   Wed,  4 Dec 2019 17:53:30 +0800
+Message-Id: <cover.1575452516.git.baolin.wang7@gmail.com>
 X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <cover.1575451463.git.baolin.wang7@gmail.com>
-References: <cover.1575451463.git.baolin.wang7@gmail.com>
-In-Reply-To: <cover.1575451463.git.baolin.wang7@gmail.com>
-References: <cover.1575451463.git.baolin.wang7@gmail.com>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Use devm_hwspin_lock_register() to register the hwlock controller instead of
-unregistering the hwlock controller explicitly when removing the device.
+This patch set did some improvements for the SIRF hwspinlock driver,
+including changing to use devm_xxx APIs and removing some redundant
+pm runtime functions.
 
-Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
----
- drivers/hwspinlock/omap_hwspinlock.c |   13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+Baolin Wang (3):
+  hwspinlock: sirf: Change to use devm_platform_ioremap_resource()
+  hwspinlock: sirf: Remove redundant PM runtime functions
+  hwspinlock: sirf: Use devm_hwspin_lock_register() to register hwlock
+    controller
 
-diff --git a/drivers/hwspinlock/omap_hwspinlock.c b/drivers/hwspinlock/omap_hwspinlock.c
-index 3b05560..9e8a8c2 100644
---- a/drivers/hwspinlock/omap_hwspinlock.c
-+++ b/drivers/hwspinlock/omap_hwspinlock.c
-@@ -131,8 +131,8 @@ static int omap_hwspinlock_probe(struct platform_device *pdev)
- 	for (i = 0, hwlock = &bank->lock[0]; i < num_locks; i++, hwlock++)
- 		hwlock->priv = io_base + LOCK_BASE_OFFSET + sizeof(u32) * i;
- 
--	ret = hwspin_lock_register(bank, &pdev->dev, &omap_hwspinlock_ops,
--						base_id, num_locks);
-+	ret = devm_hwspin_lock_register(&pdev->dev, bank, &omap_hwspinlock_ops,
-+					base_id, num_locks);
- 	if (ret)
- 		goto runtime_err;
- 
-@@ -148,15 +148,6 @@ static int omap_hwspinlock_probe(struct platform_device *pdev)
- 
- static int omap_hwspinlock_remove(struct platform_device *pdev)
- {
--	struct hwspinlock_device *bank = platform_get_drvdata(pdev);
--	int ret;
--
--	ret = hwspin_lock_unregister(bank);
--	if (ret) {
--		dev_err(&pdev->dev, "%s failed: %d\n", __func__, ret);
--		return ret;
--	}
--
- 	pm_runtime_disable(&pdev->dev);
- 
- 	return 0;
+ drivers/hwspinlock/sirf_hwspinlock.c |   46 ++++++----------------------------
+ 1 file changed, 7 insertions(+), 39 deletions(-)
+
 -- 
 1.7.9.5
 
