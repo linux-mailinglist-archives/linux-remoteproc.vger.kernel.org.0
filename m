@@ -2,86 +2,111 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5B2112907
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Dec 2019 11:11:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B53112B5C
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Dec 2019 13:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727746AbfLDKL0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 4 Dec 2019 05:11:26 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39656 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726893AbfLDKLZ (ORCPT
+        id S1727852AbfLDMWZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Dec 2019 07:22:25 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:40286 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727815AbfLDMWS (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 4 Dec 2019 05:11:25 -0500
-Received: by mail-pf1-f193.google.com with SMTP id x28so3414871pfo.6;
-        Wed, 04 Dec 2019 02:11:25 -0800 (PST)
+        Wed, 4 Dec 2019 07:22:18 -0500
+Received: by mail-ed1-f67.google.com with SMTP id c93so5615864edf.7
+        for <linux-remoteproc@vger.kernel.org>; Wed, 04 Dec 2019 04:22:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=AGS9q87syTG/h/5Jp+lUoZikl7TZIXDyakUjgIECOMg=;
-        b=Nir7y0q96JoVJC2p7nFzB0rUwvv9vVYqzv0ZO6AYRqJbrGzhxAIbrgwZxqx8JlltWu
-         ckHbsEIG1xG0OxZxvznzLWIyBldX17e3p7o8/WvAHAoS+VQ+oGd8ecKYkWc1JDpvHOYQ
-         nVA/7rhDMUQv/N6Y+4/yKbBS98nokZsc+Pto2rgjIGfivGwYp/QRJ+NDrtx6FyNrCWx/
-         LVDoa0uVAihEp/wHo3GSCpTkkK8xxzhyrn4t1wOiM8nWtnVUnXtz8qZR1blrl/sdsdKW
-         iNPyilK06YjBPBD4EAFRffEpyyvBmYkmFs2WNJxtd9xFTTON+YAilPOanFNrWmRNnq/D
-         MjPQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=itksFv5A2JLOzo6XVqVzXmSzWKIpGqZTNHrb4xFvrqPmHJ7WwaeLkksg0/ZJSVtv31
+         pzvXZ3OHhHMsql2Vo9oheJQHErj5CDGd5ZvPVjxDn+I4JgVPrQl1nkJy5Nb7wvQoUvM+
+         46lpgbsOy0h7DJvRAy1OQQg0Oi/exT7Imiyfeu4Gtmu6VGYFysEjNlBfvwObnE6M1THW
+         GbhC/d5DVONSKdw6y/qH20L4wjeyxlxCBE+xa1i44NzWc0HgEODgSNCM/bGDvmjdXP55
+         pwYVn13D99Hhzzv+p4qHdhRZEM3zwIJF+S9QDszHcSxOoAqtygRSNU+xVzjWpE9QCD88
+         4SHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=AGS9q87syTG/h/5Jp+lUoZikl7TZIXDyakUjgIECOMg=;
-        b=GREoVVr1L0HYLmgj4WFbmOtDuQzEPFNL1UipfZr4EfobvD2HPIG5hegV3PPq3ZXSaA
-         2hB80UvSqqsJp6UbbnPOy+V31FMxwVGdCi1Pxv8FNv0cKEL8iEH7iKTXuQSuJSqpqO34
-         4byM1m9Z6MLg0tnZBpd1Zsg8/tZNs0cPR6xL7+K7ZBRaHdtfvQKtDssAWEnP84yRQHnk
-         XUatchkL0r6xviXKEtOgcsRaznBI6nsjKKL99QcFIghCJUNo5xfRLC76Gxd/IExj1gPL
-         7R8ZS5CZvUc+a9qHpvmi7qMQo7V/F8zq1HrB0p6THnJUxbJaiM42Ru4U6mvlKHEFk4vE
-         EpgA==
-X-Gm-Message-State: APjAAAUb1ZouRlBkr0+U49WuEOhekITLHSD7jFoCWRram+fqrEwnrZim
-        oJsYCzTjcHcLoq9m8Gz05Y4R5+Cr
-X-Google-Smtp-Source: APXvYqxr8tkwP4o8dBIsWZ9D5v+ZB2lmjogEymXMOHS7Js48JRyom4oRPJ0btznThpZgzyCuKWIhdg==
-X-Received: by 2002:a65:578e:: with SMTP id b14mr2657273pgr.444.1575454285180;
-        Wed, 04 Dec 2019 02:11:25 -0800 (PST)
-Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id 67sm7664259pfw.82.2019.12.04.02.11.23
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 04 Dec 2019 02:11:24 -0800 (PST)
-From:   Baolin Wang <baolin.wang7@gmail.com>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org
-Cc:     baolin.wang7@gmail.com, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] MAINTAINERS: Add myself as reviewer for the hwspinlock subsystem
-Date:   Wed,  4 Dec 2019 18:10:41 +0800
-Message-Id: <0a6d0c22100da5196f00dfe0eb431e5e6d6d8c65.1575454108.git.baolin.wang7@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <808692052649aa2e80693a2734cb392e5eddd83c.1575454108.git.baolin.wang7@gmail.com>
-References: <808692052649aa2e80693a2734cb392e5eddd83c.1575454108.git.baolin.wang7@gmail.com>
-In-Reply-To: <808692052649aa2e80693a2734cb392e5eddd83c.1575454108.git.baolin.wang7@gmail.com>
-References: <808692052649aa2e80693a2734cb392e5eddd83c.1575454108.git.baolin.wang7@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=TeGcdbYy1smeMB+m5yZ2TUi3kizXMzxF2tyXJZGQ8aqc6HsnI2zmFynEidCbTDMTM3
+         MMezw9unfmk8O8X15twsIx+xWj9z+WA87G9o56MqFxxAy89gTGYg+s3LTI/KM+lo07WC
+         IdjCEG1TobJ0FqunD4b+FF15WIizUjoD42uHHleTNjPI9ZOxsMluuM2zI1hG8kFScNUU
+         gQxkjy7o6g5+YFouhO6i67r9GRF7w+ifY/KT+RYf1jlnAQGTwDOppPgFIjo9yzBEQrbK
+         F7Y8osxHD0uzWsTdEOJsCJ/+7xWb/ckHBr78/UrJ1UqSqEG18giiBMCjFbmInjJmEqjB
+         1e4w==
+X-Gm-Message-State: APjAAAWPjH8rzuIiwTrnazyxDygsTtxL7VmLVSgPRgu9Df6inevvn+2b
+        jS55BW8cjtJGbgM10ZmJWu03Vfd6a41lunApjs0=
+X-Google-Smtp-Source: APXvYqwlH4d/NgUk6+TTgeshJl/W0Z846j+vPwdmJMmvDKA5s5alEIOymc5OFboGvVzTvSBGNMpJNF0KpHbTN+gxpY4=
+X-Received: by 2002:aa7:d84b:: with SMTP id f11mr3689948eds.96.1575462136339;
+ Wed, 04 Dec 2019 04:22:16 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:22:15
+ -0800 (PST)
+Reply-To: moneygram.1820@outlook.fr
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" <eco.bank1204@gmail.com>
+Date:   Wed, 4 Dec 2019 13:22:15 +0100
+Message-ID: <CAOE+jABwsq4QTifFZJGuzmZ8p9kMY_tMmS5N39hvEALE6d=OJw@mail.gmail.com>
+Subject: God has remembered your prayers I have already sent you Money Gram
+ payment of $5000.00 today, MG 1029-8096
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-I spend some time to do some optimization for the hwspinlock subsystem
-in the nearest past, and I am willing to be a reviewer.
+Attn, dear Beneficiary.
 
-Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
----
- MAINTAINERS |    1 +
- 1 file changed, 1 insertion(+)
+God has remembered your prayers
+I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
+This is because we have finally concluded to effect your transfer
+funds of $4.8,000.000usd
+through MONEY GRAM International Fund transfer Service
+Each payment will be sending to you by $5000.00 daily until the
+($4.8,000.000usd) is completely transferred
+we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
+So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 061d59a..c2bd3e8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7284,6 +7284,7 @@ F:	drivers/hwtracing/
- HARDWARE SPINLOCK CORE
- M:	Ohad Ben-Cohen <ohad@wizery.com>
- M:	Bjorn Andersson <bjorn.andersson@linaro.org>
-+R:	Baolin Wang <baolin.wang7@gmail.com>
- L:	linux-remoteproc@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git hwspinlock-next
--- 
-1.7.9.5
+Contact person Mrs. Alan Ude
+Dir. MONEY GRAM Service,Benin
+Phone number: +229 98856728
+E-mail: moneygram.1820@outlook.fr
 
+Ask him to give you the complete mtcn, sender name, question and
+answer to enable you
+pick up the $5000.00 sent today,
+Also you are instructed to re-confirm your information's
+to Mrs.Alan Ude as listed below to avoid wrong transactions.
+
+(1Your Full name:............................................
+(2 Phone number.....................................................
+(3 Contact address:.....................................
+(4 Age:..................................................................
+(5 Country..............................................
+(6) Sex .................................................................
+(7) your occupation...........................................
+
+(8)Passport/By Attach or Drivers License Number:
+Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
+Note please: I have paid service fees for you but the only money you
+are required
+to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
+pick up your transfer today.
+
+Send it to via Money Gram
+Receiver's Name-----Alan Ude
+Country----------Benin
+Address-----------Cotonou
+Quest--------Honest
+Ans-----------Trust
+
+I done all my best for you to receive your transfer now ok.
+We need your urgent reply
+Best Regards
+Rev.Dr Emmanuel Okoye
+CEO Ecobank-benin
+
+If we did not receive it urgent from you today,
+I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
+representative.
