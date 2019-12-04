@@ -2,108 +2,72 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DE511270E
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Dec 2019 10:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8146C112775
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Dec 2019 10:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727299AbfLDJWp (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 4 Dec 2019 04:22:45 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:41706 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725922AbfLDJWn (ORCPT
+        id S1725994AbfLDJcK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Dec 2019 04:32:10 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:41602 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbfLDJcK (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 4 Dec 2019 04:22:43 -0500
-Received: by mail-pl1-f196.google.com with SMTP id bd4so2917975plb.8;
-        Wed, 04 Dec 2019 01:22:43 -0800 (PST)
+        Wed, 4 Dec 2019 04:32:10 -0500
+Received: by mail-pl1-f193.google.com with SMTP id bd4so2928719plb.8;
+        Wed, 04 Dec 2019 01:32:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=hZU5YxHkU3BPXm/EGoWnc2P2DRdz8maIfOi1+S2ITKQ=;
-        b=SJQU3xhDgVQLlqA2PNtmG0PvjtPCUUFyIjwfkUQwJg5y6Fl0apVSgQohqruxl80yaA
-         NacX44nKHdGBRWHkNNaneKAV4PnO+SJTAafIId/KbpgyqXo80LHYLyXBIw63Yr7x+gHK
-         HD1IQot5k1EHAs8UY1vJJHSEbmazKaoWAvOwd7ukxsb+HUfx+Ou1ZggyA13Z9dO07PRy
-         B2hGCqKEjrQ4Gxwsey6NMhd33mkrPBZUsIhFJMYatvKVpescHhkzXJLJq4Sw55z8vgEL
-         CDNTul6c6XPKAzzstA7BfEMYZD1QPZSeFagu620532gYaqEg9tfFvVCZb2Ty07wSAhVN
-         ySTw==
+        h=from:to:cc:subject:date:message-id;
+        bh=wapcydPDKs4ATem7apogb2hwKUnmiMIRnx3wrHpv2Vc=;
+        b=ezOeH3YYam2iUzv7wncBkreQa5cVfhsq88wp5aX7kHDawBuYAyk02wiajKY/a3tYZf
+         nqZH5CS0cD5Z9XL9uyNsr4SONOZaqWfYHBI+5ds/PXu/WEqRaFSMxWXiY2UkFaQiDPv2
+         WyxMGf8e6L4nnM0SYrLWDlP+NkhLChoNycut0X5Eh1rNsAr7Cx4pkelmwJ6bTKm6I4ew
+         Gus02MFRm/t8pyNWchfUL+2CaaEJJrxrbbma1XmKuk3Le94kxxHm+WUk62zmp9goiF43
+         MqaVirKdj2CV9KSVKJYb027BHx01/jnolBp60CX66F/6sC+Lehn0fovuCV2TZ/2ualxl
+         wq+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=hZU5YxHkU3BPXm/EGoWnc2P2DRdz8maIfOi1+S2ITKQ=;
-        b=ivP1dZRfGmDxnhoTg6p7dJeLygml8ECqLneeZWdWMX5yOJFp+O1qJaQaXmSJmGAKXL
-         Ie2ZhBae7m+ClSU232KG2PJAM9t+x8tH4aojrSwlowBfLZkvQ9pOw6xpVQpt2WD7d9c1
-         1bqUrGx+kRi/hfawW1EuTIXWyPTN/zHUgciSFBX0zjlCJ/Y5OaqugkuVoYLAOn40f24w
-         36Uaq4slMJVOJG0gbxjX0zdLigBfBNyyDpkr8NFUtJAwNuQlxKpfc/ueGyu/4Ss8H59I
-         cQX2upS1wijn+LD1QhnHHpxaNqKkbjPLAcO+KvVeTddFA804oh1ryd9V6K8yGy6CRnXM
-         oaYw==
-X-Gm-Message-State: APjAAAUfnZhte2wan2T/q/ESFMjuh0Ae7Mc7jprUBLdU3AesP1YVzQAx
-        wfq3X0oV4YXEjRNfr7hxEWY=
-X-Google-Smtp-Source: APXvYqwtJxyIzM+0Lur95xbbn08J833jO87snr2ayTE6zkLZjZzC/85XdLOqOU6pNai9yJyCEFTX1w==
-X-Received: by 2002:a17:902:968b:: with SMTP id n11mr125690plp.120.1575451362767;
-        Wed, 04 Dec 2019 01:22:42 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=wapcydPDKs4ATem7apogb2hwKUnmiMIRnx3wrHpv2Vc=;
+        b=l4CCM3q7zyGKo5Cpiooy6zsmbEBCYK3pX90vP3WhE1t3Lpp5qmNx3e5CM9ACbuhNFb
+         snme/a/Q81cVgcFx9KrNZmkpfzojzRC+06czvEJbgADPWXI5zAxuXK+F2jatXreK3tDt
+         7N9i+t8fSgV0UIxwTwIRX5mXqP/0uo5RMlT7qmOnr7v8rcXt/ykRC5A7mtIowcD9UKSg
+         XoA0E+zlulamCQXw6IpGtVHlKttnXid/TzNz8bXmS61Onv1Kx5Z+m5U16eT2SgDwFUO0
+         tUhcksLrbq6m9wDUxsgQOXFus3fiO8HFMF7gHaBVEXlQ0SBWKGRSAMdns/9EAyrLFobO
+         6rBA==
+X-Gm-Message-State: APjAAAUxxtlvIrQl5WBVqr54z0P6UYnJiLZT3V5vhBwlNEHGD3NNmFau
+        9bP8XqvwEOAgQ0LWkFjywD0=
+X-Google-Smtp-Source: APXvYqyNYdgVXBoEpnbiHKkCqyjVhkl9ihFNqVY0Nj8cxidpirtNd/dNbz+JiJz5+xZEBMaslDtqsw==
+X-Received: by 2002:a17:902:fe98:: with SMTP id x24mr2471710plm.155.1575451929660;
+        Wed, 04 Dec 2019 01:32:09 -0800 (PST)
 Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id k21sm6482914pgt.22.2019.12.04.01.22.40
+        by smtp.gmail.com with ESMTPSA id 91sm2380086pjq.18.2019.12.04.01.32.07
         (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 04 Dec 2019 01:22:42 -0800 (PST)
+        Wed, 04 Dec 2019 01:32:09 -0800 (PST)
 From:   Baolin Wang <baolin.wang7@gmail.com>
-To:     agross@kernel.org, ohad@wizery.com, bjorn.andersson@linaro.org
-Cc:     baolin.wang7@gmail.com, linux-arm-msm@vger.kernel.org,
+To:     ohad@wizery.com, bjorn.andersson@linaro.org
+Cc:     baolin.wang7@gmail.com, linux-omap@vger.kernel.org,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] hwspinlock: qcom: Use devm_hwspin_lock_register() to register hwlock controller
-Date:   Wed,  4 Dec 2019 17:21:57 +0800
-Message-Id: <b75f06a1a9d91762cbeb041203d47f1ffc2f8204.1575450802.git.baolin.wang7@gmail.com>
+Subject: [PATCH 0/3] Some improvements for OMAP hwspinlock
+Date:   Wed,  4 Dec 2019 17:31:28 +0800
+Message-Id: <cover.1575451463.git.baolin.wang7@gmail.com>
 X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <cover.1575450802.git.baolin.wang7@gmail.com>
-References: <cover.1575450802.git.baolin.wang7@gmail.com>
-In-Reply-To: <cover.1575450802.git.baolin.wang7@gmail.com>
-References: <cover.1575450802.git.baolin.wang7@gmail.com>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Use devm_hwspin_lock_register() to register the hwlock controller instead of
-unregistering the hwlock controller explicitly when removing the device.
+This patch set did some optimization for OMAP hwlock controller with
+changing to use some devm_xxx APIs to simplify code.
 
-Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
----
- drivers/hwspinlock/qcom_hwspinlock.c |   19 ++-----------------
- 1 file changed, 2 insertions(+), 17 deletions(-)
+Baolin Wang (3):
+  hwspinlock: omap: Change to use devm_platform_ioremap_resource()
+  hwspinlock: omap: Use devm_kzalloc() to allocate memory
+  hwspinlock: omap: Use devm_hwspin_lock_register() to register hwlock
+    controller
 
-diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
-index 5a736b0..f0da544 100644
---- a/drivers/hwspinlock/qcom_hwspinlock.c
-+++ b/drivers/hwspinlock/qcom_hwspinlock.c
-@@ -121,27 +121,12 @@ static int qcom_hwspinlock_probe(struct platform_device *pdev)
- 							     regmap, field);
- 	}
- 
--	return hwspin_lock_register(bank, &pdev->dev, &qcom_hwspinlock_ops,
--				    0, QCOM_MUTEX_NUM_LOCKS);
--}
--
--static int qcom_hwspinlock_remove(struct platform_device *pdev)
--{
--	struct hwspinlock_device *bank = platform_get_drvdata(pdev);
--	int ret;
--
--	ret = hwspin_lock_unregister(bank);
--	if (ret) {
--		dev_err(&pdev->dev, "%s failed: %d\n", __func__, ret);
--		return ret;
--	}
--
--	return 0;
-+	return devm_hwspin_lock_register(&pdev->dev, bank, &qcom_hwspinlock_ops,
-+					 0, QCOM_MUTEX_NUM_LOCKS);
- }
- 
- static struct platform_driver qcom_hwspinlock_driver = {
- 	.probe		= qcom_hwspinlock_probe,
--	.remove		= qcom_hwspinlock_remove,
- 	.driver		= {
- 		.name	= "qcom_hwspinlock",
- 		.of_match_table = qcom_hwspinlock_of_match,
+ drivers/hwspinlock/omap_hwspinlock.c |   45 ++++++++++------------------------
+ 1 file changed, 13 insertions(+), 32 deletions(-)
+
 -- 
 1.7.9.5
 
