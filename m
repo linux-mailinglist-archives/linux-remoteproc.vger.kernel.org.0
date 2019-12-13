@@ -2,181 +2,73 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC31511ECDC
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Dec 2019 22:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E2E11EEA6
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Dec 2019 00:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbfLMV1v (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 13 Dec 2019 16:27:51 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:50664 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbfLMV1v (ORCPT
+        id S1726404AbfLMXkp (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 13 Dec 2019 18:40:45 -0500
+Received: from mail-oi1-f169.google.com ([209.85.167.169]:37683 "EHLO
+        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726345AbfLMXkp (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 13 Dec 2019 16:27:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1576272468; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B87WmKoBPFu2Odj1rZgXnJF/hh74OP8To16AjhM4gEs=;
-        b=S/u7q0cZey8t0mX3IWoQ6L1CNL9zSiXDJyUiXBOI0DV8iQC/G1125BRG2SoAqYgAPH1HQ0
-        fXQngvZwyZciGJYiLdDaJDiE87ftc1ZHip/uI/nPVKGMPiqWMjLLBuXKP5ObbufH3Fem7Y
-        QKiLN9O8+xeDT23IiKmCBR30+GmFytE=
-Date:   Fri, 13 Dec 2019 22:27:38 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 1/5] dt-bindings: Document JZ47xx VPU auxiliary
- processor
-To:     Rob Herring <robh@kernel.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Fri, 13 Dec 2019 18:40:45 -0500
+Received: by mail-oi1-f169.google.com with SMTP id x195so2093506oix.4;
+        Fri, 13 Dec 2019 15:40:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=V1Ed3iKuAEKRicl1Uhv8QMMK9/aCmbB5pf5+U5ktoAA=;
+        b=OcPgPejhHY/17XerQ7eiJue/Dsqd3KbXDEoDmCBK+XW23aMkEQkseXd17exf3J5rCO
+         OLfGTh53WdGxjWzGNsn7k8xrnHm123/bCKWWHZsHh/hRM5KF4nH+WDt+62G5uB4Nzzyr
+         2NkBuuWIwtrZWoKcEk+koN01WCOlXlbpJ+EF4ZxvGv0mj15D/cLyWqJIJmN2wae9RMpz
+         4+ue+Y2kxNwkFvt+53pe3zzRROcJw9/xU/AibLDC0kIkZgZM6+c4Om83Pc0vD/XKIsC/
+         GeUF3Ltr5bjPBmj4X8n4GwBsZDZw0N1IIFBBpcVwb6o1Xbz/OeLIrdebYMmgadQUMBdv
+         QTAA==
+X-Gm-Message-State: APjAAAUVPtrZCDzpazL2DoJ/KjdJ/VQlykuviTnKVPFZUdM6iQbJpWDd
+        XZFfEpdySw0IejibAZgr8g==
+X-Google-Smtp-Source: APXvYqz+NOAXhdTyQjzYrG1tX1ZLVPt0E11C9lVHD0ublsOoZdAE1KxyBBW1Tj/oYQr9n/u9irlxwA==
+X-Received: by 2002:a05:6808:4cc:: with SMTP id a12mr8415822oie.115.1576280444026;
+        Fri, 13 Dec 2019 15:40:44 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id i7sm3825068oib.42.2019.12.13.15.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2019 15:40:43 -0800 (PST)
+Date:   Fri, 13 Dec 2019 17:40:42 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>
+Cc:     linux-realtek-soc@lists.infradead.org,
+        Cheng-Yu Lee <cylee12@realtek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>, od@zcrc.me,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <1576272458.3.4@crapouillou.net>
-In-Reply-To: <20191213190200.GA11267@bogus>
-References: <20191210164014.50739-1-paul@crapouillou.net>
-        <20191213190200.GA11267@bogus>
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [RFC 1/5] dt-bindings: hwlock: Add Realtek RTD1195 SB2
+Message-ID: <20191213234042.GA9835@bogus>
+References: <20191202220535.6208-1-afaerber@suse.de>
+ <20191202220535.6208-2-afaerber@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191202220535.6208-2-afaerber@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Rob,
+On Mon,  2 Dec 2019 23:05:31 +0100, =?UTF-8?q?Andreas=20F=C3=A4rber?= wrote:
+> Define a binding for Realtek RTD1195 SoC's SB2 hardware semaphore.
+> 
+> Signed-off-by: Andreas Färber <afaerber@suse.de>
+> ---
+>  .../bindings/hwlock/realtek,rtd1195-sb2-sem.yaml   | 42 ++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/hwlock/realtek,rtd1195-sb2-sem.yaml
+> 
 
-
-Le ven., d=E9c. 13, 2019 at 13:02, Rob Herring <robh@kernel.org> a=20
-=E9crit :
-> On Tue, Dec 10, 2019 at 05:40:10PM +0100, Paul Cercueil wrote:
->>  Inside the Video Processing Unit (VPU) of the recent JZ47xx SoCs=20
->> from
->>  Ingenic is a second Xburst MIPS CPU very similar to the main core.
->>  This document describes the devicetree bindings for this auxiliary
->>  processor.
->>=20
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>=20
->>  Notes:
->>      v2: Update TCSM0 address in example
->>      v3: Change node name to 'video-decoder'
->>      v4: Convert to YAML. I didn't add Rob's Ack on v3 because of=20
->> that (sorry Rob)
->>=20
->>   .../bindings/remoteproc/ingenic,vpu.yaml      | 76=20
->> +++++++++++++++++++
->>   1 file changed, 76 insertions(+)
->>   create mode 100644=20
->> Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
->>=20
->>  diff --git=20
->> a/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml=20
->> b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
->>  new file mode 100644
->>  index 000000000000..9f876d16a5a6
->>  --- /dev/null
->>  +++ b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
->>  @@ -0,0 +1,76 @@
->>  +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>  +%YAML 1.2
->>  +---
->>  +$id: "http://devicetree.org/schemas/remoteproc/ingenic,vpu.yaml#"
->>  +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->>  +
->>  +title: Ingenic Video Processing Unit bindings
->>  +
->>  +description:
->>  +  Inside the Video Processing Unit (VPU) of the recent JZ47xx SoCs=20
->> from
->>  +  Ingenic is a second Xburst MIPS CPU very similar to the main=20
->> core.
->>  +  This document describes the devicetree bindings for this=20
->> auxiliary
->>  +  processor.
->>  +
->>  +maintainers:
->>  +  - Paul Cercueil <paul@crapouillou.net>
->>  +
->>  +properties:
->>  +  compatible:
->>  +    const: ingenic,jz4770-vpu-rproc
->>  +
->>  +  reg:
->>  +    items:
->>  +      - description: aux registers
->>  +      - description: tcsm0 registers
->>  +      - description: tcsm1 registers
->>  +      - description: sram registers
->>  +
->>  +  reg-names:
->>  +    items:
->>  +      - const: aux
->>  +      - const: tcsm0
->>  +      - const: tcsm1
->>  +      - const: sram
->>  +
->>  +  clocks:
->>  +    items:
->>  +      - description: aux clock
->>  +      - description: vpu clock
->>  +
->>  +  clock-names:
->>  +    items:
->>  +      - const: aux
->>  +      - const: vpu
->>  +
->>  +  interrupts:
->>  +    description: VPU hardware interrupt
->>  +
->>  +required:
->>  +  - compatible
->>  +  - reg
->>  +  - reg-names
->>  +  - clocks
->>  +  - clock-names
->>  +  - interrupts
->>  +
->>  +additionalProperties: false
->>  +
->>  +examples:
->>  +  - |
->>  +    vpu: video-decoder@132a0000 {
->>  +      compatible =3D "ingenic,jz4770-vpu-rproc";
->>  +
->>  +      reg =3D <0x132a0000 0x20 /* AUX */
->>  +           0x132b0000 0x4000 /* TCSM0 */
->>  +           0x132c0000 0xc000 /* TCSM1 */
->>  +           0x132f0000 0x7000 /* SRAM */
->>  +      >;
->>  +      reg-names =3D "aux", "tcsm0", "tcsm1", "sram";
->>  +
->>  +      clocks =3D <&cgu JZ4770_CLK_AUX>, <&cgu JZ4770_CLK_VPU>;
->=20
-> Examples are built now by 'make dt_binding_check' and this fails. You
-> need to add the include for these defines.
-
-Strange, "make dt_binding_check" does not complain here about this file=20
-with your latest dt-schema tool and Linux 5.5-rc1.
-
->=20
-> Also, the schema should complain after that on 'reg'. You need to <>
-> each entry (addr and size).
-
-Ok.
-
--Paul
-
->=20
->>  +      clock-names =3D "aux", "vpu";
->>  +
->>  +      interrupt-parent =3D <&cpuintc>;
->>  +      interrupts =3D <3>;
->>  +    };
->>  --
->>  2.24.0
->>=20
-
-=
-
+Reviewed-by: Rob Herring <robh@kernel.org>
