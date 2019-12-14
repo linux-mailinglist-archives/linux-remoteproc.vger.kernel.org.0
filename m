@@ -2,73 +2,220 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E2E11EEA6
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Dec 2019 00:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D612411F4E0
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Dec 2019 23:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726404AbfLMXkp (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 13 Dec 2019 18:40:45 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:37683 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726345AbfLMXkp (ORCPT
+        id S1726783AbfLNW2G (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 14 Dec 2019 17:28:06 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:40884 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726687AbfLNW2F (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 13 Dec 2019 18:40:45 -0500
-Received: by mail-oi1-f169.google.com with SMTP id x195so2093506oix.4;
-        Fri, 13 Dec 2019 15:40:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=V1Ed3iKuAEKRicl1Uhv8QMMK9/aCmbB5pf5+U5ktoAA=;
-        b=OcPgPejhHY/17XerQ7eiJue/Dsqd3KbXDEoDmCBK+XW23aMkEQkseXd17exf3J5rCO
-         OLfGTh53WdGxjWzGNsn7k8xrnHm123/bCKWWHZsHh/hRM5KF4nH+WDt+62G5uB4Nzzyr
-         2NkBuuWIwtrZWoKcEk+koN01WCOlXlbpJ+EF4ZxvGv0mj15D/cLyWqJIJmN2wae9RMpz
-         4+ue+Y2kxNwkFvt+53pe3zzRROcJw9/xU/AibLDC0kIkZgZM6+c4Om83Pc0vD/XKIsC/
-         GeUF3Ltr5bjPBmj4X8n4GwBsZDZw0N1IIFBBpcVwb6o1Xbz/OeLIrdebYMmgadQUMBdv
-         QTAA==
-X-Gm-Message-State: APjAAAUVPtrZCDzpazL2DoJ/KjdJ/VQlykuviTnKVPFZUdM6iQbJpWDd
-        XZFfEpdySw0IejibAZgr8g==
-X-Google-Smtp-Source: APXvYqz+NOAXhdTyQjzYrG1tX1ZLVPt0E11C9lVHD0ublsOoZdAE1KxyBBW1Tj/oYQr9n/u9irlxwA==
-X-Received: by 2002:a05:6808:4cc:: with SMTP id a12mr8415822oie.115.1576280444026;
-        Fri, 13 Dec 2019 15:40:44 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id i7sm3825068oib.42.2019.12.13.15.40.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2019 15:40:43 -0800 (PST)
-Date:   Fri, 13 Dec 2019 17:40:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>
-Cc:     linux-realtek-soc@lists.infradead.org,
-        Cheng-Yu Lee <cylee12@realtek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
+        Sat, 14 Dec 2019 17:28:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1576362483; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vkyNSdZg4kfbaq1R2dOR/fJNQfzwkysyQhkhXjiurGE=;
+        b=k3Wr0qSCNDiVPoB699vi5kHG7olQz7GQXV8W7sMgHj8W9/Qh1ke2RxmAK9T/68K/pdKkWU
+        XTjeLHsu4YENIsnve24tzceAbbKZbDjMgNP7bLENPaF5nwkU5a7kaRRkvmiQymDWyt5X0h
+        BhX12+Y3hh4c5z13Q2w8ZvOl5I51cMo=
+Date:   Sat, 14 Dec 2019 23:27:58 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v4 2/5] remoteproc: Add device-managed variants of
+ rproc_alloc/rproc_add
+To:     Fabien DESSENNE <fabien.dessenne@st.com>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [RFC 1/5] dt-bindings: hwlock: Add Realtek RTD1195 SB2
-Message-ID: <20191213234042.GA9835@bogus>
-References: <20191202220535.6208-1-afaerber@suse.de>
- <20191202220535.6208-2-afaerber@suse.de>
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, od@zcrc.me,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Message-Id: <1576362478.3.4@crapouillou.net>
+In-Reply-To: <6fff431f-dd3f-a67e-e40b-8cee4060c37a@st.com>
+References: <20191210164014.50739-1-paul@crapouillou.net>
+        <20191210164014.50739-2-paul@crapouillou.net>
+        <6fff431f-dd3f-a67e-e40b-8cee4060c37a@st.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191202220535.6208-2-afaerber@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon,  2 Dec 2019 23:05:31 +0100, =?UTF-8?q?Andreas=20F=C3=A4rber?= wrote:
-> Define a binding for Realtek RTD1195 SoC's SB2 hardware semaphore.
-> 
-> Signed-off-by: Andreas Färber <afaerber@suse.de>
-> ---
->  .../bindings/hwlock/realtek,rtd1195-sb2-sem.yaml   | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwlock/realtek,rtd1195-sb2-sem.yaml
-> 
+Hi Fabien,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+
+Le jeu., d=E9c. 12, 2019 at 09:43, Fabien DESSENNE=20
+<fabien.dessenne@st.com> a =E9crit :
+> Hi Paul,
+>=20
+>=20
+> Good initiative! See me remarks below.
+>=20
+>=20
+> On 10/12/2019 5:40 PM, Paul Cercueil wrote:
+>>  Add API functions devm_rproc_alloc() and devm_rproc_add(), which=20
+>> behave
+>>  like rproc_alloc() and rproc_add() respectively, but register their
+>>  respective cleanup function to be called on driver detach.
+>>=20
+>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+>>  ---
+>>=20
+>>  Notes:
+>>       v3: New patch
+>>       v4: No change
+>>=20
+>>    drivers/remoteproc/remoteproc_core.c | 67=20
+>> ++++++++++++++++++++++++++++
+>>    include/linux/remoteproc.h           |  5 +++
+>>    2 files changed, 72 insertions(+)
+>>=20
+>>  diff --git a/drivers/remoteproc/remoteproc_core.c=20
+>> b/drivers/remoteproc/remoteproc_core.c
+>>  index 307df98347ba..0a9fc7fdd1c3 100644
+>>  --- a/drivers/remoteproc/remoteproc_core.c
+>>  +++ b/drivers/remoteproc/remoteproc_core.c
+>=20
+>=20
+> Maybe these devm function shall be defined in a new=20
+> remoteproc/devres.c
+> file. Although it seems to be a common usage I don't know if there is=20
+> a
+> rule for that.
+
+It's not a rule, more like a good practice. I'll do that.
+
+
+>=20
+>>  @@ -1932,6 +1932,33 @@ int rproc_add(struct rproc *rproc)
+>>    }
+>>    EXPORT_SYMBOL(rproc_add);
+>>=20
+>>  +static void devm_rproc_remove(void *rproc)
+>>  +{
+>>  +	rproc_del(rproc);
+>>  +}
+>>  +
+>>  +/**
+>>  + * devm_rproc_add() - resource managed rproc_add()
+>>  + * @dev: the underlying device
+>>  + * @rproc: the remote processor handle to register
+>>  + *
+>>  + * This function performs like rproc_add() but the registered=20
+>> rproc device will
+>>  + * automatically be removed on driver detach.
+>>  + *
+>>  + * Returns 0 on success and an appropriate error code otherwise.
+>>  + */
+>>  +int devm_rproc_add(struct device *dev, struct rproc *rproc)
+>>  +{
+>>  +	int err;
+>>  +
+>>  +	err =3D rproc_add(rproc);
+>>  +	if (err)
+>>  +		return err;
+>>  +
+>>  +	return devm_add_action_or_reset(dev, devm_rproc_remove, rproc);
+>>  +}
+>>  +EXPORT_SYMBOL(devm_rproc_add);
+>>  +
+>>    /**
+>>     * rproc_type_release() - release a remote processor instance
+>>     * @dev: the rproc's device
+>>  @@ -2149,6 +2176,46 @@ int rproc_del(struct rproc *rproc)
+>>    }
+>>    EXPORT_SYMBOL(rproc_del);
+>>=20
+>>  +static void devm_rproc_free(struct device *dev, void *res)
+>>  +{
+>>  +	rproc_free(*(struct rproc **)res);
+>>  +}
+>>  +
+>>  +/**
+>>  + * devm_rproc_alloc() - resource managed rproc_alloc()
+>>  + * @dev: the underlying device
+>>  + * @name: name of this remote processor
+>>  + * @ops: platform-specific handlers (mainly start/stop)
+>>  + * @firmware: name of firmware file to load, can be NULL
+>>  + * @len: length of private data needed by the rproc driver (in=20
+>> bytes)
+>>  + *
+>>  + * This function performs like rproc_alloc() but the acuired rproc=20
+>> device will
+>=20
+>=20
+> typo: s/acuired/acquired
+>=20
+>=20
+>>  + * automatically be released on driver detach.
+>>  + *
+>>  + * On success the new rproc is returned, and on failure, NULL.
+>>  + */
+>>  +struct rproc *devm_rproc_alloc(struct device *dev, const char=20
+>> *name,
+>>  +			       const struct rproc_ops *ops,
+>>  +			       const char *firmware, int len)
+>>  +{
+>>  +	struct rproc **ptr, *rproc;
+>>  +
+>>  +	ptr =3D devres_alloc(devm_rproc_free, sizeof(*ptr), GFP_KERNEL);
+>>  +	if (!ptr)
+>>  +		return ERR_PTR(-ENOMEM);
+>>  +
+>>  +	rproc =3D rproc_alloc(dev, name, ops, firmware, len);
+>>  +	if (rproc) {
+>>  +		*ptr =3D rproc;
+>>  +		devres_add(dev, ptr);
+>>  +	} else {
+>>  +		devres_free(ptr);
+>>  +	}
+>>  +
+>>  +	return rproc;
+>=20
+>=20
+> Can't you use devm_add_action_or_reset() here too?
+
+Yes, I guess that will make things simpler.
+
+Thanks,
+-Paul
+
+
+>=20
+>>  +}
+>>  +EXPORT_SYMBOL(devm_rproc_alloc);
+>>  +
+>>    /**
+>>     * rproc_add_subdev() - add a subdevice to a remoteproc
+>>     * @rproc: rproc handle to add the subdevice to
+>>  diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+>>  index 16ad66683ad0..5f201f0c86c3 100644
+>>  --- a/include/linux/remoteproc.h
+>>  +++ b/include/linux/remoteproc.h
+>>  @@ -595,6 +595,11 @@ int rproc_add(struct rproc *rproc);
+>>    int rproc_del(struct rproc *rproc);
+>>    void rproc_free(struct rproc *rproc);
+>>=20
+>>  +struct rproc *devm_rproc_alloc(struct device *dev, const char=20
+>> *name,
+>>  +			       const struct rproc_ops *ops,
+>>  +			       const char *firmware, int len);
+>>  +int devm_rproc_add(struct device *dev, struct rproc *rproc);
+>>  +
+>>    void rproc_add_carveout(struct rproc *rproc, struct=20
+>> rproc_mem_entry *mem);
+>>=20
+>>    struct rproc_mem_entry *
+>=20
+>=20
+> BR
+>=20
+> Fabien
+
+=
+
