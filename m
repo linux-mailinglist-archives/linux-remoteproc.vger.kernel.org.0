@@ -2,200 +2,199 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F5C120012
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Dec 2019 09:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A1F1202DB
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Dec 2019 11:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbfLPImz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 16 Dec 2019 03:42:55 -0500
-Received: from zimbra2.kalray.eu ([92.103.151.219]:55486 "EHLO
+        id S1727453AbfLPKqQ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 16 Dec 2019 05:46:16 -0500
+Received: from zimbra2.kalray.eu ([92.103.151.219]:36816 "EHLO
         zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726891AbfLPImz (ORCPT
+        with ESMTP id S1727099AbfLPKqP (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 16 Dec 2019 03:42:55 -0500
+        Mon, 16 Dec 2019 05:46:15 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 7EEE827E06A1;
-        Mon, 16 Dec 2019 09:42:52 +0100 (CET)
+        by zimbra2.kalray.eu (Postfix) with ESMTP id BF31D27E038D;
+        Mon, 16 Dec 2019 11:46:13 +0100 (CET)
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id NQCUBw1mJnlk; Mon, 16 Dec 2019 09:42:52 +0100 (CET)
+        with ESMTP id dL9Pma99PY6C; Mon, 16 Dec 2019 11:46:13 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id E710F27E06A4;
-        Mon, 16 Dec 2019 09:42:51 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu E710F27E06A4
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 2643327E0650;
+        Mon, 16 Dec 2019 11:46:13 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 2643327E0650
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1576485772;
-        bh=gR7DBMPuqguujsqKIqRecEZSem6IJvNPYFmN412TxpE=;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1576493173;
+        bh=Q3J3IGqUHa44cwERxlcia+XQrwcBXBAjLyRwd25v6zc=;
         h=Date:From:To:Message-ID:MIME-Version;
-        b=jbh0NrtOycOeLM+mv/6Qm0MWzA3LsgKaAoDSSzCTSuBJuLPu4hyxbyDzv4+u2dAqd
-         Ut/+P9QcfH1yqk208VSPQ/f42Me7Iazu7MYNL3ZLD/8/rUFa3Y2IcYUfZape/+Au4P
-         55rQF+HRulYfMLAvhF2py1Q8opFZfxQvN/I3+628=
+        b=pT2UXCEyjDQxsTkin3laAuvBsQyHND9Gfas+cElTO7ssTizN/EkZrv6VMlF2kL3ZR
+         s/xVZXjP2UAdijixv0utsaSxxj4CdrLqrfkch9XgvqLxWxZYRziSAcjEwERXbnNZkX
+         b1/Cj/AS9UPWkiScCZgWahq81mKrErpyqph4px6Q=
 X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
 Received: from zimbra2.kalray.eu ([127.0.0.1])
         by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id JDFXdj145mgC; Mon, 16 Dec 2019 09:42:51 +0100 (CET)
+        with ESMTP id CyTpA5Zjb0LS; Mon, 16 Dec 2019 11:46:13 +0100 (CET)
 Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id C66D827E0650;
-        Mon, 16 Dec 2019 09:42:51 +0100 (CET)
-Date:   Mon, 16 Dec 2019 09:42:51 +0100 (CET)
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 0ABF727E038D;
+        Mon, 16 Dec 2019 11:46:13 +0100 (CET)
+Date:   Mon, 16 Dec 2019 11:46:12 +0100 (CET)
 From:   =?utf-8?Q?Cl=C3=A9ment?= Leger <cleger@kalray.eu>
 To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Fabien DESSENNE <fabien.dessenne@st.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, od@zcrc.me,
+        Mark Rutland <mark.rutland@arm.com>, od <od@zcrc.me>,
         linux-remoteproc <linux-remoteproc@vger.kernel.org>,
         devicetree <devicetree@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <1428337657.96784882.1576485771590.JavaMail.zimbra@kalray.eu>
-In-Reply-To: <1576362603.3.5@crapouillou.net>
-References: <20191210164014.50739-1-paul@crapouillou.net> <20191210164014.50739-3-paul@crapouillou.net> <f25180f2-7c6d-0022-12b2-cd9c202f39d3@st.com> <1576362603.3.5@crapouillou.net>
-Subject: Re: [PATCH v4 3/5] remoteproc: Add prepare/unprepare callbacks
+Message-ID: <340758118.96812669.1576493172804.JavaMail.zimbra@kalray.eu>
+In-Reply-To: <20191210164014.50739-2-paul@crapouillou.net>
+References: <20191210164014.50739-1-paul@crapouillou.net> <20191210164014.50739-2-paul@crapouillou.net>
+Subject: Re: [PATCH v4 2/5] remoteproc: Add device-managed variants of
+ rproc_alloc/rproc_add
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Originating-IP: [192.168.40.202]
 X-Mailer: Zimbra 8.8.12_GA_3794 (ZimbraWebClient - GC75 (Linux)/8.8.12_GA_3794)
-Thread-Topic: remoteproc: Add prepare/unprepare callbacks
-Thread-Index: uueckZt7bHlt5Prq/c0hmSkfQsRjRg==
+Thread-Topic: remoteproc: Add device-managed variants of rproc_alloc/rproc_add
+Thread-Index: A1lvR1ZnQGMreymAk0HLkaguiV5GCQ==
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Paul
+Hi Paul,
 
------ On 14 Dec, 2019, at 23:30, Paul Cercueil paul@crapouillou.net wrote:
+I tested it on our driver and freeing/remove are called correctly on probe =
+error and on module removal.
 
-> Hi Fabien,
->=20
->=20
-> Le jeu., d=C3=A9c. 12, 2019 at 10:03, Fabien DESSENNE
-> <fabien.dessenne@st.com> a =C3=A9crit :
->> Hi Paul
->>=20
->>=20
->> On 10/12/2019 5:40 PM, Paul Cercueil wrote:
->>>  The .prepare() callback is called before the firmware is loaded to
->>>  memory. This is useful for instance in the case where some setup is
->>>  required for the memory to be accessible.
->>=20
->>=20
->> I am trying to figure out what king of 'setup' may be required. From
->> the
->> ingenic driver I understand that you need to enable clocks to allow
->> some
->> memory access.
->>=20
->> Instead of adding this new ops, why not enabling clocks in probe()?
->=20
-> Enabling the clocks in the probe means that the clocks will be
-> unconditionally enabled until the driver is removed, even if the remote
-> processor end up being unused. That would be a waste of power.
-
-We have the same kind of "problem" for k1c remoteproc driver (not yet
-upstream, depends on new arch). We need to enable clocks to load code
-into remote processor memory and currently we do that in probe.
-However, as you stated, we would like to enable them as late as possible
-(just before loading code) to avoid wasting power unnecessarily. So the
-"prepare" callback totally makes sense.
+Tested-By: Clement Leger <cleger@kalray.eu>
 
 Regards,
 
 Cl=C3=A9ment
 
+----- On 10 Dec, 2019, at 17:40, Paul Cercueil paul@crapouillou.net wrote:
+
+> Add API functions devm_rproc_alloc() and devm_rproc_add(), which behave
+> like rproc_alloc() and rproc_add() respectively, but register their
+> respective cleanup function to be called on driver detach.
 >=20
-> Cheers,
-> -Paul
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
 >=20
+> Notes:
+>    v3: New patch
+>    v4: No change
 >=20
->>=20
->> BR
->>=20
->> Fabien
->>=20
->>=20
->>>=20
->>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>>  ---
->>>=20
->>>  Notes:
->>>       v2-v4: No change
->>>=20
->>>    drivers/remoteproc/remoteproc_core.c | 16 +++++++++++++++-
->>>    include/linux/remoteproc.h           |  4 ++++
->>>    2 files changed, 19 insertions(+), 1 deletion(-)
->>>=20
->>>  diff --git a/drivers/remoteproc/remoteproc_core.c
->>> b/drivers/remoteproc/remoteproc_core.c
->>>  index 0a9fc7fdd1c3..3ea5f675a148 100644
->>>  --- a/drivers/remoteproc/remoteproc_core.c
->>>  +++ b/drivers/remoteproc/remoteproc_core.c
->>>  @@ -1299,11 +1299,19 @@ static int rproc_start(struct rproc *rproc,
->>> const struct firmware *fw)
->>>    =09struct device *dev =3D &rproc->dev;
->>>    =09int ret;
->>>=20
->>>  +=09if (rproc->ops->prepare) {
->>>  +=09=09ret =3D rproc->ops->prepare(rproc);
->>>  +=09=09if (ret) {
->>>  +=09=09=09dev_err(dev, "Failed to prepare rproc: %d\n", ret);
->>>  +=09=09=09return ret;
->>>  +=09=09}
->>>  +=09}
->>>  +
->>>    =09/* load the ELF segments to memory */
->>>    =09ret =3D rproc_load_segments(rproc, fw);
->>>    =09if (ret) {
->>>    =09=09dev_err(dev, "Failed to load program segments: %d\n", ret);
->>>  -=09=09return ret;
->>>  +=09=09goto unprepare_rproc;
->>>    =09}
->>>=20
->>>    =09/*
->>>  @@ -1354,6 +1362,9 @@ static int rproc_start(struct rproc *rproc,
->>> const struct firmware *fw)
->>>    =09rproc_unprepare_subdevices(rproc);
->>>    reset_table_ptr:
->>>    =09rproc->table_ptr =3D rproc->cached_table;
->>>  +unprepare_rproc:
->>>  +=09if (rproc->ops->unprepare)
->>>  +=09=09rproc->ops->unprepare(rproc);
->>>=20
->>>    =09return ret;
->>>    }
->>>  @@ -1483,6 +1494,9 @@ static int rproc_stop(struct rproc *rproc,
->>> bool crashed)
->>>=20
->>>    =09rproc->state =3D RPROC_OFFLINE;
->>>=20
->>>  +=09if (rproc->ops->unprepare)
->>>  +=09=09rproc->ops->unprepare(rproc);
->>>  +
->>>    =09dev_info(dev, "stopped remote processor %s\n", rproc->name);
->>>=20
->>>    =09return 0;
->>>  diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->>>  index 5f201f0c86c3..a6272d1ba384 100644
->>>  --- a/include/linux/remoteproc.h
->>>  +++ b/include/linux/remoteproc.h
->>>  @@ -355,6 +355,8 @@ enum rsc_handling_status {
->>>=20
->>>    /**
->>>     * struct rproc_ops - platform-specific device handlers
->>>  + * @prepare:=09prepare the device for power up (before the firmware
->>> is loaded)
->>>  + * @unprepare:=09unprepare the device after it is stopped
->>>     * @start:=09power on the device and boot it
->>>     * @stop:=09power off the device
->>>     * @kick:=09kick a virtqueue (virtqueue id given as a parameter)
->>>  @@ -371,6 +373,8 @@ enum rsc_handling_status {
->>>     * @get_boot_addr:=09get boot address to entry point specified in
->>> firmware
->>>     */
->>>    struct rproc_ops {
->>>  +=09int (*prepare)(struct rproc *rproc);
->>>  +=09void (*unprepare)(struct rproc *rproc);
->>>    =09int (*start)(struct rproc *rproc);
->>>    =09int (*stop)(struct rproc *rproc);
-> >>    =09void (*kick)(struct rproc *rproc, int vqid);
+> drivers/remoteproc/remoteproc_core.c | 67 ++++++++++++++++++++++++++++
+> include/linux/remoteproc.h           |  5 +++
+> 2 files changed, 72 insertions(+)
+>=20
+> diff --git a/drivers/remoteproc/remoteproc_core.c
+> b/drivers/remoteproc/remoteproc_core.c
+> index 307df98347ba..0a9fc7fdd1c3 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -1932,6 +1932,33 @@ int rproc_add(struct rproc *rproc)
+> }
+> EXPORT_SYMBOL(rproc_add);
+>=20
+> +static void devm_rproc_remove(void *rproc)
+> +{
+> +=09rproc_del(rproc);
+> +}
+> +
+> +/**
+> + * devm_rproc_add() - resource managed rproc_add()
+> + * @dev: the underlying device
+> + * @rproc: the remote processor handle to register
+> + *
+> + * This function performs like rproc_add() but the registered rproc devi=
+ce will
+> + * automatically be removed on driver detach.
+> + *
+> + * Returns 0 on success and an appropriate error code otherwise.
+> + */
+> +int devm_rproc_add(struct device *dev, struct rproc *rproc)
+> +{
+> +=09int err;
+> +
+> +=09err =3D rproc_add(rproc);
+> +=09if (err)
+> +=09=09return err;
+> +
+> +=09return devm_add_action_or_reset(dev, devm_rproc_remove, rproc);
+> +}
+> +EXPORT_SYMBOL(devm_rproc_add);
+> +
+> /**
+>  * rproc_type_release() - release a remote processor instance
+>  * @dev: the rproc's device
+> @@ -2149,6 +2176,46 @@ int rproc_del(struct rproc *rproc)
+> }
+> EXPORT_SYMBOL(rproc_del);
+>=20
+> +static void devm_rproc_free(struct device *dev, void *res)
+> +{
+> +=09rproc_free(*(struct rproc **)res);
+> +}
+> +
+> +/**
+> + * devm_rproc_alloc() - resource managed rproc_alloc()
+> + * @dev: the underlying device
+> + * @name: name of this remote processor
+> + * @ops: platform-specific handlers (mainly start/stop)
+> + * @firmware: name of firmware file to load, can be NULL
+> + * @len: length of private data needed by the rproc driver (in bytes)
+> + *
+> + * This function performs like rproc_alloc() but the acuired rproc devic=
+e will
+> + * automatically be released on driver detach.
+> + *
+> + * On success the new rproc is returned, and on failure, NULL.
+> + */
+> +struct rproc *devm_rproc_alloc(struct device *dev, const char *name,
+> +=09=09=09       const struct rproc_ops *ops,
+> +=09=09=09       const char *firmware, int len)
+> +{
+> +=09struct rproc **ptr, *rproc;
+> +
+> +=09ptr =3D devres_alloc(devm_rproc_free, sizeof(*ptr), GFP_KERNEL);
+> +=09if (!ptr)
+> +=09=09return ERR_PTR(-ENOMEM);
+> +
+> +=09rproc =3D rproc_alloc(dev, name, ops, firmware, len);
+> +=09if (rproc) {
+> +=09=09*ptr =3D rproc;
+> +=09=09devres_add(dev, ptr);
+> +=09} else {
+> +=09=09devres_free(ptr);
+> +=09}
+> +
+> +=09return rproc;
+> +}
+> +EXPORT_SYMBOL(devm_rproc_alloc);
+> +
+> /**
+>  * rproc_add_subdev() - add a subdevice to a remoteproc
+>  * @rproc: rproc handle to add the subdevice to
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index 16ad66683ad0..5f201f0c86c3 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -595,6 +595,11 @@ int rproc_add(struct rproc *rproc);
+> int rproc_del(struct rproc *rproc);
+> void rproc_free(struct rproc *rproc);
+>=20
+> +struct rproc *devm_rproc_alloc(struct device *dev, const char *name,
+> +=09=09=09       const struct rproc_ops *ops,
+> +=09=09=09       const char *firmware, int len);
+> +int devm_rproc_add(struct device *dev, struct rproc *rproc);
+> +
+> void rproc_add_carveout(struct rproc *rproc, struct rproc_mem_entry *mem)=
+;
+>=20
+> struct rproc_mem_entry *
+> --
+> 2.24.0
