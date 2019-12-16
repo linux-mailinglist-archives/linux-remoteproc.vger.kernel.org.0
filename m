@@ -2,222 +2,184 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0321B120F26
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Dec 2019 17:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FDA121914
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Dec 2019 19:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbfLPQQw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 16 Dec 2019 11:16:52 -0500
-Received: from zimbra2.kalray.eu ([92.103.151.219]:37848 "EHLO
-        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbfLPQQw (ORCPT
+        id S1726141AbfLPRv1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 16 Dec 2019 12:51:27 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:24333 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726877AbfLPRv1 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 16 Dec 2019 11:16:52 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 6B3DC27E071F;
-        Mon, 16 Dec 2019 17:16:50 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id AP85RCpn7i6n; Mon, 16 Dec 2019 17:16:49 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 407CC27E0BD7;
-        Mon, 16 Dec 2019 17:16:49 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 407CC27E0BD7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1576513009;
-        bh=KR939lExQcRXFUHVUhpJ/ZllnQWAxZq25C9GZNkR76U=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=gJ68o9f/e8oFmWIH5unONRa2aEajhIPONxIGQK7Y7vK/b87SpQ/Y6aaAPSrYCG2EE
-         9pMx+CZOtCmNUACqRWsjg2muWJeLoTo5Ts7SFDVHGHKC2bls/VgsAU8t4az2ITGpx2
-         FqeCz12tAfoCC9QY6wj3XVCKu9Lu9GDpVHPVI72w=
-X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vxr3CEuQAYvY; Mon, 16 Dec 2019 17:16:49 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 225B127E071F;
-        Mon, 16 Dec 2019 17:16:49 +0100 (CET)
-Date:   Mon, 16 Dec 2019 17:16:48 +0100 (CET)
-From:   =?utf-8?Q?Cl=C3=A9ment?= Leger <cleger@kalray.eu>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Fabien DESSENNE <fabien.dessenne@st.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, od <od@zcrc.me>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Message-ID: <1421722418.96878492.1576513008758.JavaMail.zimbra@kalray.eu>
-In-Reply-To: <1428337657.96784882.1576485771590.JavaMail.zimbra@kalray.eu>
-References: <20191210164014.50739-1-paul@crapouillou.net> <20191210164014.50739-3-paul@crapouillou.net> <f25180f2-7c6d-0022-12b2-cd9c202f39d3@st.com> <1576362603.3.5@crapouillou.net> <1428337657.96784882.1576485771590.JavaMail.zimbra@kalray.eu>
-Subject: Re: [PATCH v4 3/5] remoteproc: Add prepare/unprepare callbacks
+        Mon, 16 Dec 2019 12:51:27 -0500
+X-Greylist: delayed 302 seconds by postgrey-1.27 at vger.kernel.org; Mon, 16 Dec 2019 12:51:25 EST
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1576518686; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=rzuAqWFdTzrWO4clWvy7mwhpSIFXq93mC1ouQT7d0SU=; b=kplqaydXEaKTihPBN1hBo58+hObf7EiUkGEQthbvfKYYduoNs4yc2mT2YrKIfspNkWQeQ/nX
+ 8ZJINDIK8WtzBU4aBzpOWjmid+RxSj7Arw0rMd2n+cjRyWtinirMsJBkzXDL1NzJETosvfX2
+ S0NPbkEnR9PI3j/fU4E/wVT4cIg=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5df7c2ee.7f4ad81ac420-smtp-out-n02;
+ Mon, 16 Dec 2019 17:46:22 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 0A126C447A2; Mon, 16 Dec 2019 17:46:22 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.79.43.230] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5C946C433A2;
+        Mon, 16 Dec 2019 17:46:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5C946C433A2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+Subject: Re: [PATCH 2/3] dt-bindings: soc: qcom: apr: Add protection domain
+ bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     bjorn.andersson@linaro.org, srinivas.kandagatla@linaro.org,
+        tsoni@codeaurora.org, agross@kernel.org, mark.rutland@arm.com,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        rnayak@codeaurora.org
+References: <20191118142728.30187-1-sibis@codeaurora.org>
+ <0101016e7ee9c591-d04928e8-6440-488c-a956-3b5c9b8988bf-000000@us-west-2.amazonses.com>
+ <20191203215248.GA1688@bogus>
+From:   Sibi Sankar <sibis@codeaurora.org>
+Message-ID: <a19623d4-ab33-d87e-5925-d0411d7479dd@codeaurora.org>
+Date:   Mon, 16 Dec 2019 23:16:10 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.168.40.202]
-X-Mailer: Zimbra 8.8.12_GA_3794 (ZimbraWebClient - GC75 (Linux)/8.8.12_GA_3794)
-Thread-Topic: remoteproc: Add prepare/unprepare callbacks
-Thread-Index: uueckZt7bHlt5Prq/c0hmSkfQsRjRiJ9Kq+O
+In-Reply-To: <20191203215248.GA1688@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Paul,
+Hey Rob,
+Thanks for the review :)
 
-I tested your patch and implemented the prepare callback only.
-This is working correctly and the callback is correctly called
-to enable clocks right before loading code into memory.
+On 12/4/19 3:22 AM, Rob Herring wrote:
+> On Mon, Nov 18, 2019 at 02:28:00PM +0000, Sibi Sankar wrote:
+>> Add optional "qcom,protection-domain" bindings for APR services. This
+>> helps to capture the dependencies between APR services and the PD on
+>> which each apr service run.
+>>
+>> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+>> ---
+>>   .../devicetree/bindings/soc/qcom/qcom,apr.txt | 59 +++++++++++++++++++
+>>   1 file changed, 59 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.txt
+>> index db501269f47b8..f87c0b2a48de4 100644
+>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.txt
+>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.txt
+>> @@ -45,6 +45,12 @@ by the individual bindings for the specific service
+>>   			12 - Ultrasound stream manager.
+>>   			13 - Listen stream manager.
+>>   
+>> +- qcom,protection-domain
+>> +	Usage: optional
+>> +	Value type: <stringlist>
+>> +	Definition: Must list the protection domain service name and path
+>> +		    that the particular apr service has a dependency on.
+> 
+> Is name and path 2 values? Length is always 2?
 
-Regarding unprepare, I have no usecase for this since clocks
-disabling and resetting is done in rproc_stop. Thus, I did not
-tested this part. Did you add it to be called after the subdevices
-unprepare call ? If not, what is the use case for this ?
-ie, what are you doing in unprepare that you don't do in stop ?
+Yes the length is always 2 values i.e service name and the path where
+the service is hosted.
 
-Obviously it should work but I can't say I tested it completely !
+> 
+> You've got the same values for every case in the example. Is there a
+> defined list of possible values?
 
-Regards,
+apr bus is expected to track just the "avs/audio" running on
+msm/adsp/audio_pd on msm8998 and sdm845 SoCs. So shouldn't
+make much sense to list all possible service names:paths here.
 
-Cl=C3=A9ment
+However the qcom,protection-domain is expected to be used
+on fastrpc compute bank nodes as well, where they track other
+services:paths. I'll make sure to include all the possible
+values that fastrpc cb nodes depend on.
 
+> 
+>> +
+>>   = EXAMPLE
+>>   The following example represents a QDSP based sound card on a MSM8996 device
+>>   which uses apr as communication between Apps and QDSP.
+>> @@ -82,3 +88,56 @@ which uses apr as communication between Apps and QDSP.
+>>   			...
+>>   		};
+>>   	};
+>> +
+>> += EXAMPLE 2
+>> +The following example represents a QDSP based sound card on SDM845 device.
+>> +Here the apr services are dependent on "avs/audio" service running on AUDIO
+>> +Protection Domain hosted on ADSP remote processor.
+>> +
+>> +	apr {
+>> +		compatible = "qcom,apr-v2";
+>> +		qcom,glink-channels = "apr_audio_svc";
+>> +		qcom,apr-domain = <APR_DOMAIN_ADSP>;
+>> +
+>> +		q6core {
+>> +			compatible = "qcom,q6core";
+>> +			reg = <APR_SVC_ADSP_CORE>;
+>> +			qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+>> +		};
+>> +
+>> +		q6afe: q6afe {
+>> +			compatible = "qcom,q6afe";
+>> +			reg = <APR_SVC_AFE>;
+>> +			qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+>> +			q6afedai: dais {
+>> +				compatible = "qcom,q6afe-dais";
+>> +				#sound-dai-cells = <1>;
+>> +
+>> +				qi2s@22 {
+>> +					reg = <22>;
+>> +					qcom,sd-lines = <3>;
+>> +				};
+>> +			};
+>> +		};
+>> +
+>> +		q6asm: q6asm {
+>> +			compatible = "qcom,q6asm";
+>> +			reg = <APR_SVC_ASM>;
+>> +			qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+>> +			q6asmdai: dais {
+>> +				compatible = "qcom,q6asm-dais";
+>> +				#sound-dai-cells = <1>;
+>> +				iommus = <&apps_smmu 0x1821 0x0>;
+>> +			};
+>> +		};
+>> +
+>> +		q6adm: q6adm {
+>> +			compatible = "qcom,q6adm";
+>> +			reg = <APR_SVC_ADM>;
+>> +			qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+>> +			q6routing: routing {
+>> +				compatible = "qcom,q6adm-routing";
+>> +				#sound-dai-cells = <0>;
+>> +			};
+>> +		};
+>> +	};
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
 
------ On 16 Dec, 2019, at 09:42, Cl=C3=A9ment Leger cleger@kalray.eu wrote:
-
-> Hi Paul
->=20
-> ----- On 14 Dec, 2019, at 23:30, Paul Cercueil paul@crapouillou.net wrote=
-:
->=20
->> Hi Fabien,
->>=20
->>=20
->> Le jeu., d=C3=A9c. 12, 2019 at 10:03, Fabien DESSENNE
->> <fabien.dessenne@st.com> a =C3=A9crit :
->>> Hi Paul
->>>=20
->>>=20
->>> On 10/12/2019 5:40 PM, Paul Cercueil wrote:
->>>>  The .prepare() callback is called before the firmware is loaded to
->>>>  memory. This is useful for instance in the case where some setup is
->>>>  required for the memory to be accessible.
->>>=20
->>>=20
->>> I am trying to figure out what king of 'setup' may be required. From
->>> the
->>> ingenic driver I understand that you need to enable clocks to allow
->>> some
->>> memory access.
->>>=20
->>> Instead of adding this new ops, why not enabling clocks in probe()?
->>=20
->> Enabling the clocks in the probe means that the clocks will be
->> unconditionally enabled until the driver is removed, even if the remote
->> processor end up being unused. That would be a waste of power.
->=20
-> We have the same kind of "problem" for k1c remoteproc driver (not yet
-> upstream, depends on new arch). We need to enable clocks to load code
-> into remote processor memory and currently we do that in probe.
-> However, as you stated, we would like to enable them as late as possible
-> (just before loading code) to avoid wasting power unnecessarily. So the
-> "prepare" callback totally makes sense.
->=20
-> Regards,
->=20
-> Cl=C3=A9ment
->=20
->>=20
->> Cheers,
->> -Paul
->>=20
->>=20
->>>=20
->>> BR
->>>=20
->>> Fabien
->>>=20
->>>=20
->>>>=20
->>>>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>>>  ---
->>>>=20
->>>>  Notes:
->>>>       v2-v4: No change
->>>>=20
->>>>    drivers/remoteproc/remoteproc_core.c | 16 +++++++++++++++-
->>>>    include/linux/remoteproc.h           |  4 ++++
->>>>    2 files changed, 19 insertions(+), 1 deletion(-)
->>>>=20
->>>>  diff --git a/drivers/remoteproc/remoteproc_core.c
->>>> b/drivers/remoteproc/remoteproc_core.c
->>>>  index 0a9fc7fdd1c3..3ea5f675a148 100644
->>>>  --- a/drivers/remoteproc/remoteproc_core.c
->>>>  +++ b/drivers/remoteproc/remoteproc_core.c
->>>>  @@ -1299,11 +1299,19 @@ static int rproc_start(struct rproc *rproc,
->>>> const struct firmware *fw)
->>>>    =09struct device *dev =3D &rproc->dev;
->>>>    =09int ret;
->>>>=20
->>>>  +=09if (rproc->ops->prepare) {
->>>>  +=09=09ret =3D rproc->ops->prepare(rproc);
->>>>  +=09=09if (ret) {
->>>>  +=09=09=09dev_err(dev, "Failed to prepare rproc: %d\n", ret);
->>>>  +=09=09=09return ret;
->>>>  +=09=09}
->>>>  +=09}
->>>>  +
->>>>    =09/* load the ELF segments to memory */
->>>>    =09ret =3D rproc_load_segments(rproc, fw);
->>>>    =09if (ret) {
->>>>    =09=09dev_err(dev, "Failed to load program segments: %d\n", ret);
->>>>  -=09=09return ret;
->>>>  +=09=09goto unprepare_rproc;
->>>>    =09}
->>>>=20
->>>>    =09/*
->>>>  @@ -1354,6 +1362,9 @@ static int rproc_start(struct rproc *rproc,
->>>> const struct firmware *fw)
->>>>    =09rproc_unprepare_subdevices(rproc);
->>>>    reset_table_ptr:
->>>>    =09rproc->table_ptr =3D rproc->cached_table;
->>>>  +unprepare_rproc:
->>>>  +=09if (rproc->ops->unprepare)
->>>>  +=09=09rproc->ops->unprepare(rproc);
->>>>=20
->>>>    =09return ret;
->>>>    }
->>>>  @@ -1483,6 +1494,9 @@ static int rproc_stop(struct rproc *rproc,
->>>> bool crashed)
->>>>=20
->>>>    =09rproc->state =3D RPROC_OFFLINE;
->>>>=20
->>>>  +=09if (rproc->ops->unprepare)
->>>>  +=09=09rproc->ops->unprepare(rproc);
->>>>  +
->>>>    =09dev_info(dev, "stopped remote processor %s\n", rproc->name);
->>>>=20
->>>>    =09return 0;
->>>>  diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->>>>  index 5f201f0c86c3..a6272d1ba384 100644
->>>>  --- a/include/linux/remoteproc.h
->>>>  +++ b/include/linux/remoteproc.h
->>>>  @@ -355,6 +355,8 @@ enum rsc_handling_status {
->>>>=20
->>>>    /**
->>>>     * struct rproc_ops - platform-specific device handlers
->>>>  + * @prepare:=09prepare the device for power up (before the firmware
->>>> is loaded)
->>>>  + * @unprepare:=09unprepare the device after it is stopped
->>>>     * @start:=09power on the device and boot it
->>>>     * @stop:=09power off the device
->>>>     * @kick:=09kick a virtqueue (virtqueue id given as a parameter)
->>>>  @@ -371,6 +373,8 @@ enum rsc_handling_status {
->>>>     * @get_boot_addr:=09get boot address to entry point specified in
->>>> firmware
->>>>     */
->>>>    struct rproc_ops {
->>>>  +=09int (*prepare)(struct rproc *rproc);
->>>>  +=09void (*unprepare)(struct rproc *rproc);
->>>>    =09int (*start)(struct rproc *rproc);
->>>>    =09int (*stop)(struct rproc *rproc);
-> > >>    =09void (*kick)(struct rproc *rproc, int vqid);
+-- 
+Qualcomm Innovation Center, Inc.
+Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
