@@ -2,165 +2,417 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FD912288C
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 17 Dec 2019 11:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25510123A6E
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Dec 2019 00:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726933AbfLQKWP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 17 Dec 2019 05:22:15 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:1984 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726401AbfLQKWP (ORCPT
+        id S1726463AbfLQXBp (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 17 Dec 2019 18:01:45 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:39726 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726512AbfLQXBp (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 17 Dec 2019 05:22:15 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBHA8Tf2013901;
-        Tue, 17 Dec 2019 11:22:06 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=Cb/tDPl2HQwN1b/zcPQrK850sACKfnslSiYb6ZuPhcQ=;
- b=QCZBynWwNYgO+OFQltp2W4e0lVRuMW0IBO+vUxTp9vwjBifAbDfzE/dJvlttwR6UDicZ
- VexGPMP7QqUZhyEWsKkzEWl1opLk6Rx44qnC2a29ymJqaOlmhsn7tl8+uO4ADCVHjiSE
- 8889Sm7yL6YMVQGGO+CcHaBPRPZA7LaAW+FfxxBxDj73NgmPcvBIIoEDedBtIZBNbfUS
- M5vclofQoejGJMyM2UPBsq+cTIyU140/YHw/fWcR/5fUoJijWBXx+RKpVvrLqndQ59lM
- uECbtRCaykB7kaQRxVsakBHbE+EHK+GyMI4SkB5McpACrGNhVH2P8gopen9PJl7IgTSA mw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx08-00178001.pphosted.com with ESMTP id 2wvnree9dm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 17 Dec 2019 11:22:06 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 43F3310003A;
-        Tue, 17 Dec 2019 11:21:58 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2928D2AA04D;
-        Tue, 17 Dec 2019 11:21:58 +0100 (CET)
-Received: from SFHDAG5NODE3.st.com (10.75.127.15) by SFHDAG5NODE3.st.com
- (10.75.127.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 17 Dec
- 2019 11:21:57 +0100
-Received: from SFHDAG5NODE3.st.com ([fe80::7c09:5d6b:d2c7:5f47]) by
- SFHDAG5NODE3.st.com ([fe80::7c09:5d6b:d2c7:5f47%20]) with mapi id
- 15.00.1473.003; Tue, 17 Dec 2019 11:21:57 +0100
-From:   Fabien DESSENNE <fabien.dessenne@st.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, "od@zcrc.me" <od@zcrc.me>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 3/5] remoteproc: Add prepare/unprepare callbacks
-Thread-Topic: [PATCH v4 3/5] remoteproc: Add prepare/unprepare callbacks
-Thread-Index: AQHVr3iM0Th6FxYEikio3vlP+UikqKe2NxmAgAP1QICAA+uHgA==
-Date:   Tue, 17 Dec 2019 10:21:57 +0000
-Message-ID: <ac16c0ee-0dd1-d383-14ed-13b360e3e79d@st.com>
-References: <20191210164014.50739-1-paul@crapouillou.net>
- <20191210164014.50739-3-paul@crapouillou.net>
- <f25180f2-7c6d-0022-12b2-cd9c202f39d3@st.com>
- <1576362603.3.5@crapouillou.net>
-In-Reply-To: <1576362603.3.5@crapouillou.net>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.46]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <908073462757134794BFB627F5122D0F@st.com>
-Content-Transfer-Encoding: base64
+        Tue, 17 Dec 2019 18:01:45 -0500
+Received: by mail-pj1-f67.google.com with SMTP id t101so40955pjb.4
+        for <linux-remoteproc@vger.kernel.org>; Tue, 17 Dec 2019 15:01:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9/bxN0bRFRR/QTP2svMUw13wA1wgJhDJ8iPExzbFY3Y=;
+        b=xRJJ0KW16PuQrCf5NDKl43Q9ox4draKweBzzmBiN2ATz/+PsMjqObM10AuxbcgYESL
+         QOHgCQjmjQoNN9P5bSp8cOPWbmssD+JkmEM7+hvuYR1NYplo+1c0FvnKj4iFGoDGh0Z0
+         Z5HIVOT+jq4eZj9H6GuFnPCnY/eWqBoaoWJ/XLf+WIkvXV4MzVxKoZWf3BlbzSJlDzdb
+         U3Do4QwrfhlgAA0XIZ6meO3zJzYHyhd66uLfn9/kp9OY8tlIXmBFDc4+Ful48f1yleFM
+         g+vZGD/KXQgrEssga4SLUaXVSHZrXbHWFrbEZDEWodrxaq7VylEWczUmZg1DRbMdxbEf
+         r2Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9/bxN0bRFRR/QTP2svMUw13wA1wgJhDJ8iPExzbFY3Y=;
+        b=A45e6ST6aZbLFAKM2W5X0XyYK3kB8iAHp/FhOBGVqvpo6qqwVPpaFR1S84paB59Obr
+         1+nFE7C7znvZVx1TLwdzTLV4cQBWuYlmkuYrOEbeHlENTZtullV/to81+kaUrEGipYia
+         zrHuBdIQPZmVYJx4ODg9FfJmLDPp+tqrccSYEmCtF1k7f6GhaYA9qGXEyUk+pr3LimSV
+         caz4qM1PLnbFbEJHXOoJBfvZ/tYW/ANqAalfURzbFTSztHEhafzyjxNum+62xNjIqUMz
+         Twi21I76TbI6lNup2Va8YgUtPeEPIUdtDhGJuDEc8hNHDKJHbwQwuuRlXNaGrFicDx/p
+         MK6A==
+X-Gm-Message-State: APjAAAX0o3hmowNeoJOJNYlQfv+Z8uJZKB6HgUKkyU+v3kV5UlSWNj6K
+        uHpQ0r5wBrpAaoFI3jk3EJTiNQ==
+X-Google-Smtp-Source: APXvYqxTyA4ZmFXWBanDuFIaCUVKJHO7d4y5NcO/12xWXcRI/u3c/4xK4400qt3A4qgDMtlAgY0yKg==
+X-Received: by 2002:a17:90a:30a4:: with SMTP id h33mr9357963pjb.50.1576623704711;
+        Tue, 17 Dec 2019 15:01:44 -0800 (PST)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id f7sm56977pfk.183.2019.12.17.15.01.43
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 17 Dec 2019 15:01:44 -0800 (PST)
+Date:   Tue, 17 Dec 2019 16:01:41 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tero Kristo <t-kristo@ti.com>
+Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, Suman Anna <s-anna@ti.com>,
+        Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCHv3 02/15] remoteproc/omap: Add device tree support
+Message-ID: <20191217230141.GA16271@xps15>
+References: <20191213125537.11509-1-t-kristo@ti.com>
+ <20191213125537.11509-3-t-kristo@ti.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-17_01:2019-12-16,2019-12-16 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191213125537.11509-3-t-kristo@ti.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-SGkgUGF1bA0KDQoNCk9uIDE0LzEyLzIwMTkgMTE6MzAgUE0sIFBhdWwgQ2VyY3VlaWwgd3JvdGU6
-DQo+IEhpIEZhYmllbiwNCj4NCj4NCj4gTGUgamV1LiwgZMOpYy4gMTIsIDIwMTkgYXQgMTA6MDMs
-IEZhYmllbiBERVNTRU5ORSANCj4gPGZhYmllbi5kZXNzZW5uZUBzdC5jb20+IGEgw6ljcml0IDoN
-Cj4+IEhpIFBhdWwNCj4+DQo+Pg0KPj4gT24gMTAvMTIvMjAxOSA1OjQwIFBNLCBQYXVsIENlcmN1
-ZWlsIHdyb3RlOg0KPj4+IMKgVGhlIC5wcmVwYXJlKCkgY2FsbGJhY2sgaXMgY2FsbGVkIGJlZm9y
-ZSB0aGUgZmlybXdhcmUgaXMgbG9hZGVkIHRvDQo+Pj4gwqBtZW1vcnkuIFRoaXMgaXMgdXNlZnVs
-IGZvciBpbnN0YW5jZSBpbiB0aGUgY2FzZSB3aGVyZSBzb21lIHNldHVwIGlzDQo+Pj4gwqByZXF1
-aXJlZCBmb3IgdGhlIG1lbW9yeSB0byBiZSBhY2Nlc3NpYmxlLg0KPj4NCj4+DQo+PiBJIGFtIHRy
-eWluZyB0byBmaWd1cmUgb3V0IHdoYXQga2luZyBvZiAnc2V0dXAnIG1heSBiZSByZXF1aXJlZC4g
-RnJvbSB0aGUNCj4+IGluZ2VuaWMgZHJpdmVyIEkgdW5kZXJzdGFuZCB0aGF0IHlvdSBuZWVkIHRv
-IGVuYWJsZSBjbG9ja3MgdG8gYWxsb3cgc29tZQ0KPj4gbWVtb3J5IGFjY2Vzcy4NCj4+DQo+PiBJ
-bnN0ZWFkIG9mIGFkZGluZyB0aGlzIG5ldyBvcHMsIHdoeSBub3QgZW5hYmxpbmcgY2xvY2tzIGlu
-IHByb2JlKCk/DQo+DQo+IEVuYWJsaW5nIHRoZSBjbG9ja3MgaW4gdGhlIHByb2JlIG1lYW5zIHRo
-YXQgdGhlIGNsb2NrcyB3aWxsIGJlIA0KPiB1bmNvbmRpdGlvbmFsbHkgZW5hYmxlZCB1bnRpbCB0
-aGUgZHJpdmVyIGlzIHJlbW92ZWQsIGV2ZW4gaWYgdGhlIA0KPiByZW1vdGUgcHJvY2Vzc29yIGVu
-ZCB1cCBiZWluZyB1bnVzZWQuIFRoYXQgd291bGQgYmUgYSB3YXN0ZSBvZiBwb3dlci4NCg0KDQpP
-SyBJIHVuZGVyc3RhbmQuDQoNCk5ldmVydGhlbGVzcyBJIHRoaW5rIHRoYXQgeW91IG1heSBuZWVk
-IHRvIGNhbGwgLnByZXBhcmUoKSBmcm9tIA0KcnByb2NfZndfYm9vdCgpIHNpbmNlIHlvdSBtYXkg
-bmVlZCB0byBhY2Nlc3Mgc29tZSBtZW1vcmllcyBmcm9tIHRoZSANCnBvaW50IHJwcm9jX2hhbmRs
-ZV9yZXNvdXJjZXMoKSBpcyBjYWxsZWQgKHRoaXMgc2V0cyB1cCB2aXJ0aW8gd2hpY2ggaXMgDQp1
-c2VkIGlmIHlvdSBoYXZlIGEgcmVzb3VyY2UgdGFibGUgZGVmaW5pbmcgdmRldikuDQoNCkFuZCBy
-cHJvY19md19ib290KCkgY2FsbHMgcnByb2NfZW5hYmxlX2lvbW11KCksIHdoaWNoIHNvdW5kcyBs
-aWtlIA0KInByZXBhcmUgbWVtb3J5Iiwgc28gdGhpcyBtYXkgYmUgdGhlIHJpZ2h0IHBsYWNlIHRv
-IGNhbGwgLnByZXBhcmUoKQ0KDQoNCkJSDQoNCkZhYmllbg0KDQoNCj4NCj4gQ2hlZXJzLA0KPiAt
-UGF1bA0KPg0KPg0KPj4NCj4+IEJSDQo+Pg0KPj4gRmFiaWVuDQo+Pg0KPj4NCj4+Pg0KPj4+IMKg
-U2lnbmVkLW9mZi1ieTogUGF1bCBDZXJjdWVpbCA8cGF1bEBjcmFwb3VpbGxvdS5uZXQ+DQo+Pj4g
-wqAtLS0NCj4+Pg0KPj4+IMKgTm90ZXM6DQo+Pj4gwqDCoMKgwqDCoCB2Mi12NDogTm8gY2hhbmdl
-DQo+Pj4NCj4+PiDCoMKgIGRyaXZlcnMvcmVtb3RlcHJvYy9yZW1vdGVwcm9jX2NvcmUuYyB8IDE2
-ICsrKysrKysrKysrKysrKy0NCj4+PiDCoMKgIGluY2x1ZGUvbGludXgvcmVtb3RlcHJvYy5owqDC
-oMKgwqDCoMKgwqDCoMKgwqAgfMKgIDQgKysrKw0KPj4+IMKgwqAgMiBmaWxlcyBjaGFuZ2VkLCAx
-OSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+Pj4NCj4+PiDCoGRpZmYgLS1naXQgYS9k
-cml2ZXJzL3JlbW90ZXByb2MvcmVtb3RlcHJvY19jb3JlLmMgDQo+Pj4gYi9kcml2ZXJzL3JlbW90
-ZXByb2MvcmVtb3RlcHJvY19jb3JlLmMNCj4+PiDCoGluZGV4IDBhOWZjN2ZkZDFjMy4uM2VhNWY2
-NzVhMTQ4IDEwMDY0NA0KPj4+IMKgLS0tIGEvZHJpdmVycy9yZW1vdGVwcm9jL3JlbW90ZXByb2Nf
-Y29yZS5jDQo+Pj4gwqArKysgYi9kcml2ZXJzL3JlbW90ZXByb2MvcmVtb3RlcHJvY19jb3JlLmMN
-Cj4+PiDCoEBAIC0xMjk5LDExICsxMjk5LDE5IEBAIHN0YXRpYyBpbnQgcnByb2Nfc3RhcnQoc3Ry
-dWN0IHJwcm9jICpycHJvYywgDQo+Pj4gY29uc3Qgc3RydWN0IGZpcm13YXJlICpmdykNCj4+PiDC
-oMKgwqDCoMKgwqAgc3RydWN0IGRldmljZSAqZGV2ID0gJnJwcm9jLT5kZXY7DQo+Pj4gwqDCoMKg
-wqDCoMKgIGludCByZXQ7DQo+Pj4NCj4+PiDCoCvCoMKgwqAgaWYgKHJwcm9jLT5vcHMtPnByZXBh
-cmUpIHsNCj4+PiDCoCvCoMKgwqDCoMKgwqDCoCByZXQgPSBycHJvYy0+b3BzLT5wcmVwYXJlKHJw
-cm9jKTsNCj4+PiDCoCvCoMKgwqDCoMKgwqDCoCBpZiAocmV0KSB7DQo+Pj4gwqArwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBkZXZfZXJyKGRldiwgIkZhaWxlZCB0byBwcmVwYXJlIHJwcm9jOiAlZFxu
-IiwgcmV0KTsNCj4+PiDCoCvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHJldHVybiByZXQ7DQo+Pj4g
-wqArwqDCoMKgwqDCoMKgwqAgfQ0KPj4+IMKgK8KgwqDCoCB9DQo+Pj4gwqArDQo+Pj4gwqDCoMKg
-wqDCoMKgIC8qIGxvYWQgdGhlIEVMRiBzZWdtZW50cyB0byBtZW1vcnkgKi8NCj4+PiDCoMKgwqDC
-oMKgwqAgcmV0ID0gcnByb2NfbG9hZF9zZWdtZW50cyhycHJvYywgZncpOw0KPj4+IMKgwqDCoMKg
-wqDCoCBpZiAocmV0KSB7DQo+Pj4gwqDCoMKgwqDCoMKgwqDCoMKgwqAgZGV2X2VycihkZXYsICJG
-YWlsZWQgdG8gbG9hZCBwcm9ncmFtIHNlZ21lbnRzOiAlZFxuIiwgcmV0KTsNCj4+PiDCoC3CoMKg
-wqDCoMKgwqDCoCByZXR1cm4gcmV0Ow0KPj4+IMKgK8KgwqDCoMKgwqDCoMKgIGdvdG8gdW5wcmVw
-YXJlX3Jwcm9jOw0KPj4+IMKgwqDCoMKgwqDCoCB9DQo+Pj4NCj4+PiDCoMKgwqDCoMKgwqAgLyoN
-Cj4+PiDCoEBAIC0xMzU0LDYgKzEzNjIsOSBAQCBzdGF0aWMgaW50IHJwcm9jX3N0YXJ0KHN0cnVj
-dCBycHJvYyAqcnByb2MsIA0KPj4+IGNvbnN0IHN0cnVjdCBmaXJtd2FyZSAqZncpDQo+Pj4gwqDC
-oMKgwqDCoMKgIHJwcm9jX3VucHJlcGFyZV9zdWJkZXZpY2VzKHJwcm9jKTsNCj4+PiDCoMKgIHJl
-c2V0X3RhYmxlX3B0cjoNCj4+PiDCoMKgwqDCoMKgwqAgcnByb2MtPnRhYmxlX3B0ciA9IHJwcm9j
-LT5jYWNoZWRfdGFibGU7DQo+Pj4gwqArdW5wcmVwYXJlX3Jwcm9jOg0KPj4+IMKgK8KgwqDCoCBp
-ZiAocnByb2MtPm9wcy0+dW5wcmVwYXJlKQ0KPj4+IMKgK8KgwqDCoMKgwqDCoMKgIHJwcm9jLT5v
-cHMtPnVucHJlcGFyZShycHJvYyk7DQo+Pj4NCj4+PiDCoMKgwqDCoMKgwqAgcmV0dXJuIHJldDsN
-Cj4+PiDCoMKgIH0NCj4+PiDCoEBAIC0xNDgzLDYgKzE0OTQsOSBAQCBzdGF0aWMgaW50IHJwcm9j
-X3N0b3Aoc3RydWN0IHJwcm9jICpycHJvYywgDQo+Pj4gYm9vbCBjcmFzaGVkKQ0KPj4+DQo+Pj4g
-wqDCoMKgwqDCoMKgIHJwcm9jLT5zdGF0ZSA9IFJQUk9DX09GRkxJTkU7DQo+Pj4NCj4+PiDCoCvC
-oMKgwqAgaWYgKHJwcm9jLT5vcHMtPnVucHJlcGFyZSkNCj4+PiDCoCvCoMKgwqDCoMKgwqDCoCBy
-cHJvYy0+b3BzLT51bnByZXBhcmUocnByb2MpOw0KPj4+IMKgKw0KPj4+IMKgwqDCoMKgwqDCoCBk
-ZXZfaW5mbyhkZXYsICJzdG9wcGVkIHJlbW90ZSBwcm9jZXNzb3IgJXNcbiIsIHJwcm9jLT5uYW1l
-KTsNCj4+Pg0KPj4+IMKgwqDCoMKgwqDCoCByZXR1cm4gMDsNCj4+PiDCoGRpZmYgLS1naXQgYS9p
-bmNsdWRlL2xpbnV4L3JlbW90ZXByb2MuaCBiL2luY2x1ZGUvbGludXgvcmVtb3RlcHJvYy5oDQo+
-Pj4gwqBpbmRleCA1ZjIwMWYwYzg2YzMuLmE2MjcyZDFiYTM4NCAxMDA2NDQNCj4+PiDCoC0tLSBh
-L2luY2x1ZGUvbGludXgvcmVtb3RlcHJvYy5oDQo+Pj4gwqArKysgYi9pbmNsdWRlL2xpbnV4L3Jl
-bW90ZXByb2MuaA0KPj4+IMKgQEAgLTM1NSw2ICszNTUsOCBAQCBlbnVtIHJzY19oYW5kbGluZ19z
-dGF0dXMgew0KPj4+DQo+Pj4gwqDCoCAvKioNCj4+PiDCoMKgwqAgKiBzdHJ1Y3QgcnByb2Nfb3Bz
-IC0gcGxhdGZvcm0tc3BlY2lmaWMgZGV2aWNlIGhhbmRsZXJzDQo+Pj4gwqArICogQHByZXBhcmU6
-wqDCoMKgIHByZXBhcmUgdGhlIGRldmljZSBmb3IgcG93ZXIgdXAgKGJlZm9yZSB0aGUgDQo+Pj4g
-ZmlybXdhcmUgaXMgbG9hZGVkKQ0KPj4+IMKgKyAqIEB1bnByZXBhcmU6wqDCoMKgIHVucHJlcGFy
-ZSB0aGUgZGV2aWNlIGFmdGVyIGl0IGlzIHN0b3BwZWQNCj4+PiDCoMKgwqAgKiBAc3RhcnQ6wqDC
-oMKgIHBvd2VyIG9uIHRoZSBkZXZpY2UgYW5kIGJvb3QgaXQNCj4+PiDCoMKgwqAgKiBAc3RvcDrC
-oMKgwqAgcG93ZXIgb2ZmIHRoZSBkZXZpY2UNCj4+PiDCoMKgwqAgKiBAa2ljazrCoMKgwqAga2lj
-ayBhIHZpcnRxdWV1ZSAodmlydHF1ZXVlIGlkIGdpdmVuIGFzIGEgcGFyYW1ldGVyKQ0KPj4+IMKg
-QEAgLTM3MSw2ICszNzMsOCBAQCBlbnVtIHJzY19oYW5kbGluZ19zdGF0dXMgew0KPj4+IMKgwqDC
-oCAqIEBnZXRfYm9vdF9hZGRyOsKgwqDCoCBnZXQgYm9vdCBhZGRyZXNzIHRvIGVudHJ5IHBvaW50
-IHNwZWNpZmllZCANCj4+PiBpbiBmaXJtd2FyZQ0KPj4+IMKgwqDCoCAqLw0KPj4+IMKgwqAgc3Ry
-dWN0IHJwcm9jX29wcyB7DQo+Pj4gwqArwqDCoMKgIGludCAoKnByZXBhcmUpKHN0cnVjdCBycHJv
-YyAqcnByb2MpOw0KPj4+IMKgK8KgwqDCoCB2b2lkICgqdW5wcmVwYXJlKShzdHJ1Y3QgcnByb2Mg
-KnJwcm9jKTsNCj4+PiDCoMKgwqDCoMKgwqAgaW50ICgqc3RhcnQpKHN0cnVjdCBycHJvYyAqcnBy
-b2MpOw0KPj4+IMKgwqDCoMKgwqDCoCBpbnQgKCpzdG9wKShzdHJ1Y3QgcnByb2MgKnJwcm9jKTsN
-Cj4+PiDCoMKgwqDCoMKgwqAgdm9pZCAoKmtpY2spKHN0cnVjdCBycHJvYyAqcnByb2MsIGludCB2
-cWlkKTsNCj4NCj4=
+Hi Tero,
+
+On Fri, Dec 13, 2019 at 02:55:24PM +0200, Tero Kristo wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> OMAP4+ SoCs support device tree boot only. The OMAP remoteproc
+> driver is enhanced to support remoteproc devices created through
+> Device Tree, support for legacy platform devices has been
+> deprecated. The current DT support handles the IPU and DSP
+> processor subsystems on OMAP4 and OMAP5 SoCs.
+> 
+> The OMAP remoteproc driver relies on the ti-sysc, reset, and
+> syscon layers for performing clock, reset and boot vector
+> management (DSP remoteprocs only) of the devices, but some of
+> these are limited only to the machine-specific layers
+> in arch/arm. The dependency against control module API for boot
+> vector management of the DSP remoteprocs has now been removed
+> with added logic to parse the boot register from the DT node
+> and program it appropriately directly within the driver.
+> 
+> The OMAP remoteproc driver expects the firmware names to be
+> provided via device tree entries (firmware-name.) These are used
+> to load the proper firmware during boot of the remote processor.
+> 
+> Cc: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> [t-kristo@ti.com: converted to use ti-sysc framework]
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> ---
+>  drivers/remoteproc/omap_remoteproc.c | 191 +++++++++++++++++++++++----
+>  1 file changed, 168 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+> index 6398194075aa..558634624590 100644
+> --- a/drivers/remoteproc/omap_remoteproc.c
+> +++ b/drivers/remoteproc/omap_remoteproc.c
+> @@ -2,7 +2,7 @@
+>  /*
+>   * OMAP Remote Processor driver
+>   *
+> - * Copyright (C) 2011 Texas Instruments, Inc.
+> + * Copyright (C) 2011-2019 Texas Instruments Incorporated - http://www.ti.com/
+>   * Copyright (C) 2011 Google, Inc.
+>   *
+>   * Ohad Ben-Cohen <ohad@wizery.com>
+> @@ -16,27 +16,53 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/err.h>
+> +#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/remoteproc.h>
+>  #include <linux/mailbox_client.h>
+>  #include <linux/omap-mailbox.h>
+> -
+> -#include <linux/platform_data/remoteproc-omap.h>
+> +#include <linux/regmap.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/reset.h>
+>  
+>  #include "omap_remoteproc.h"
+>  #include "remoteproc_internal.h"
+>  
+> +/**
+> + * struct omap_rproc_boot_data - boot data structure for the DSP omap rprocs
+> + * @syscon: regmap handle for the system control configuration module
+> + * @boot_reg: boot register offset within the @syscon regmap
+> + */
+> +struct omap_rproc_boot_data {
+> +	struct regmap *syscon;
+> +	unsigned int boot_reg;
+> +};
+> +
+>  /**
+>   * struct omap_rproc - omap remote processor state
+>   * @mbox: mailbox channel handle
+>   * @client: mailbox client to request the mailbox channel
+> + * @boot_data: boot data structure for setting processor boot address
+>   * @rproc: rproc handle
+> + * @reset: reset handle
+>   */
+>  struct omap_rproc {
+>  	struct mbox_chan *mbox;
+>  	struct mbox_client client;
+> +	struct omap_rproc_boot_data *boot_data;
+>  	struct rproc *rproc;
+> +	struct reset_control *reset;
+> +};
+> +
+> +/**
+> + * struct omap_rproc_dev_data - device data for the omap remote processor
+> + * @device_name: device name of the remote processor
+> + * @has_bootreg: true if this remote processor has boot register
+> + */
+> +struct omap_rproc_dev_data {
+> +	const char *device_name;
+> +	bool has_bootreg;
+>  };
+>  
+>  /**
+> @@ -92,6 +118,21 @@ static void omap_rproc_kick(struct rproc *rproc, int vqid)
+>  			ret);
+>  }
+>  
+> +/**
+> + * omap_rproc_write_dsp_boot_addr - set boot address for a DSP remote processor
+> + * @rproc: handle of a remote processor
+> + *
+> + * Set boot address for a supported DSP remote processor.
+> + */
+> +static void omap_rproc_write_dsp_boot_addr(struct rproc *rproc)
+> +{
+> +	struct omap_rproc *oproc = rproc->priv;
+> +	struct omap_rproc_boot_data *bdata = oproc->boot_data;
+> +	u32 offset = bdata->boot_reg;
+> +
+> +	regmap_write(bdata->syscon, offset, rproc->bootaddr);
+> +}
+> +
+>  /*
+>   * Power up the remote processor.
+>   *
+> @@ -103,13 +144,11 @@ static int omap_rproc_start(struct rproc *rproc)
+>  {
+>  	struct omap_rproc *oproc = rproc->priv;
+>  	struct device *dev = rproc->dev.parent;
+> -	struct platform_device *pdev = to_platform_device(dev);
+> -	struct omap_rproc_pdata *pdata = pdev->dev.platform_data;
+>  	int ret;
+>  	struct mbox_client *client = &oproc->client;
+>  
+> -	if (pdata->set_bootaddr)
+> -		pdata->set_bootaddr(rproc->bootaddr);
+> +	if (oproc->boot_data)
+> +		omap_rproc_write_dsp_boot_addr(rproc);
+>  
+>  	client->dev = dev;
+>  	client->tx_done = NULL;
+> @@ -117,7 +156,7 @@ static int omap_rproc_start(struct rproc *rproc)
+>  	client->tx_block = false;
+>  	client->knows_txdone = false;
+>  
+> -	oproc->mbox = omap_mbox_request_channel(client, pdata->mbox_name);
+> +	oproc->mbox = mbox_request_channel(client, 0);
+>  	if (IS_ERR(oproc->mbox)) {
+>  		ret = -EBUSY;
+>  		dev_err(dev, "mbox_request_channel failed: %ld\n",
+> @@ -138,11 +177,7 @@ static int omap_rproc_start(struct rproc *rproc)
+>  		goto put_mbox;
+>  	}
+>  
+> -	ret = pdata->device_enable(pdev);
+> -	if (ret) {
+> -		dev_err(dev, "omap_device_enable failed: %d\n", ret);
+> -		goto put_mbox;
+> -	}
+> +	reset_control_deassert(oproc->reset);
+>  
+>  	return 0;
+>  
+> @@ -154,15 +189,9 @@ static int omap_rproc_start(struct rproc *rproc)
+>  /* power off the remote processor */
+>  static int omap_rproc_stop(struct rproc *rproc)
+>  {
+> -	struct device *dev = rproc->dev.parent;
+> -	struct platform_device *pdev = to_platform_device(dev);
+> -	struct omap_rproc_pdata *pdata = pdev->dev.platform_data;
+>  	struct omap_rproc *oproc = rproc->priv;
+> -	int ret;
+>  
+> -	ret = pdata->device_shutdown(pdev);
+> -	if (ret)
+> -		return ret;
+> +	reset_control_assert(oproc->reset);
+>  
+>  	mbox_free_channel(oproc->mbox);
+>  
+> @@ -175,12 +204,122 @@ static const struct rproc_ops omap_rproc_ops = {
+>  	.kick		= omap_rproc_kick,
+>  };
+>  
+> +static const struct omap_rproc_dev_data omap4_dsp_dev_data = {
+> +	.device_name	= "dsp",
+> +	.has_bootreg	= true,
+> +};
+> +
+> +static const struct omap_rproc_dev_data omap4_ipu_dev_data = {
+> +	.device_name	= "ipu",
+> +};
+> +
+> +static const struct omap_rproc_dev_data omap5_dsp_dev_data = {
+> +	.device_name	= "dsp",
+> +	.has_bootreg	= true,
+> +};
+> +
+> +static const struct omap_rproc_dev_data omap5_ipu_dev_data = {
+> +	.device_name	= "ipu",
+> +};
+> +
+> +static const struct of_device_id omap_rproc_of_match[] = {
+> +	{
+> +		.compatible     = "ti,omap4-dsp",
+> +		.data           = &omap4_dsp_dev_data,
+> +	},
+> +	{
+> +		.compatible     = "ti,omap4-ipu",
+> +		.data           = &omap4_ipu_dev_data,
+> +	},
+> +	{
+> +		.compatible     = "ti,omap5-dsp",
+> +		.data           = &omap5_dsp_dev_data,
+> +	},
+> +	{
+> +		.compatible     = "ti,omap5-ipu",
+> +		.data           = &omap5_ipu_dev_data,
+> +	},
+> +	{
+> +		/* end */
+> +	},
+> +};
+> +MODULE_DEVICE_TABLE(of, omap_rproc_of_match);
+> +
+> +static const char *omap_rproc_get_firmware(struct platform_device *pdev)
+> +{
+> +	const char *fw_name;
+> +	int ret;
+> +
+> +	ret = of_property_read_string(pdev->dev.of_node, "firmware-name",
+> +				      &fw_name);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	return fw_name;
+> +}
+> +
+> +static int omap_rproc_get_boot_data(struct platform_device *pdev,
+> +				    struct rproc *rproc)
+> +{
+> +	struct device_node *np = pdev->dev.of_node;
+> +	struct omap_rproc *oproc = rproc->priv;
+> +	const struct omap_rproc_dev_data *data;
+> +	int ret;
+> +
+> +	data = of_device_get_match_data(&pdev->dev);
+> +	if (!data)
+> +		return -ENODEV;
+> +
+> +	if (!data->has_bootreg)
+> +		return 0;
+> +
+> +	oproc->boot_data = devm_kzalloc(&pdev->dev, sizeof(*oproc->boot_data),
+> +					GFP_KERNEL);
+> +	if (!oproc->boot_data)
+> +		return -ENOMEM;
+> +
+> +	if (!of_property_read_bool(np, "ti,bootreg")) {
+> +		dev_err(&pdev->dev, "ti,bootreg property is missing\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	oproc->boot_data->syscon =
+> +			syscon_regmap_lookup_by_phandle(np, "ti,bootreg");
+> +	if (IS_ERR(oproc->boot_data->syscon)) {
+> +		ret = PTR_ERR(oproc->boot_data->syscon);
+> +		return ret;
+> +	}
+> +
+> +	if (of_property_read_u32_index(np, "ti,bootreg", 1,
+> +				       &oproc->boot_data->boot_reg)) {
+> +		dev_err(&pdev->dev, "couldn't get the boot register\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int omap_rproc_probe(struct platform_device *pdev)
+>  {
+> -	struct omap_rproc_pdata *pdata = pdev->dev.platform_data;
+> +	struct device_node *np = pdev->dev.of_node;
+>  	struct omap_rproc *oproc;
+>  	struct rproc *rproc;
+> +	const char *firmware;
+>  	int ret;
+> +	struct reset_control *reset;
+> +
+> +	if (!np) {
+> +		dev_err(&pdev->dev, "only DT-based devices are supported\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	reset = devm_reset_control_array_get_optional_exclusive(&pdev->dev);
+> +	if (IS_ERR(reset))
+> +		return PTR_ERR(reset);
+
+Definition of a reset is listed as "required" in the bindings but here it is
+optional.  If this is really what you want then adding a comment to exlain your
+choice is probably a good idea.
+
+> +
+> +	firmware = omap_rproc_get_firmware(pdev);
+> +	if (IS_ERR(firmware))
+> +		return PTR_ERR(firmware);
+>  
+>  	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
+>  	if (ret) {
+> @@ -188,16 +327,21 @@ static int omap_rproc_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	rproc = rproc_alloc(&pdev->dev, pdata->name, &omap_rproc_ops,
+> -			    pdata->firmware, sizeof(*oproc));
+> +	rproc = rproc_alloc(&pdev->dev, dev_name(&pdev->dev), &omap_rproc_ops,
+> +			    firmware, sizeof(*oproc));
+>  	if (!rproc)
+>  		return -ENOMEM;
+>  
+>  	oproc = rproc->priv;
+>  	oproc->rproc = rproc;
+> +	oproc->reset = reset;
+>  	/* All existing OMAP IPU and DSP processors have an MMU */
+>  	rproc->has_iommu = true;
+>  
+> +	ret = omap_rproc_get_boot_data(pdev, rproc);
+> +	if (ret)
+> +		goto free_rproc;
+> +
+>  	platform_set_drvdata(pdev, rproc);
+>  
+>  	ret = rproc_add(rproc);
+> @@ -226,6 +370,7 @@ static struct platform_driver omap_rproc_driver = {
+>  	.remove = omap_rproc_remove,
+>  	.driver = {
+>  		.name = "omap-rproc",
+> +		.of_match_table = omap_rproc_of_match,
+
+                .of_match_table = of_match_ptr(omap_rproc_of_match),
+
+Thanks,
+Mathieu
+
+>  	},
+>  };
+>  
+> -- 
+> 2.17.1
+> 
+> --
+> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
