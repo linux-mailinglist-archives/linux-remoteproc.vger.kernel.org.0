@@ -2,95 +2,80 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90B6E124B3D
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Dec 2019 16:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8A4124C7B
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Dec 2019 17:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbfLRPOP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 18 Dec 2019 10:14:15 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:39939 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727377AbfLRPOE (ORCPT
+        id S1727185AbfLRQGV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 18 Dec 2019 11:06:21 -0500
+Received: from alexa-out-blr-01.qualcomm.com ([103.229.18.197]:63168 "EHLO
+        alexa-out-blr-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727121AbfLRQGV (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 18 Dec 2019 10:14:04 -0500
-Received: by mail-io1-f66.google.com with SMTP id x1so2326826iop.7
-        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Dec 2019 07:14:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
-        b=RfaUJbE64AqObBUWyZFAX00yFzfv+PMQBeMlfEbyOTSSIZSlP9dNPzblRe9C4/Xp5G
-         OOrfzjlEIPRCszaxaclLviha/Gl6J+8MNE2wJIlQr3g8uWJn+m5NNx6dyOIWXJDzHKAu
-         CFfw6ayoPSChbR+RAE0+B68G/pEf5o1uZqam8GCW/DM3JVJn1rrKg09G5nyaA4x8K46C
-         DidFmOGbhUnnebgzWtKvL2IYqcm0dJ4hRYsroJX5h4wZl5ygcdMBOrPylnEG0iZgtaC4
-         tctA6UVKTV1ZO7eaOpJeM3zJ9lY8Otzi6Az77Sm1wv6CYLTS/yvcKPbBaIHIL7wY9gk+
-         23sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
-        b=mE5gAqb8aRMu+AVrxprEV3c+IuwGUiSfIobVoL3KoNqhxTwXRWESVsyZWlDbCGq+Gp
-         vL9LZ6dRF4sLr0M3pe9fzjhHTwiShYrwVBbdsyUYN0eXo4tsCH7DY/UddcibaK+oqxoW
-         GD8tGAK25NbowumVUjLynH9WBySJwFI7w1OzEKY8wudOryxUGMwrEdoLJ6KU9xHCrBGh
-         tjMG2U3OkvMYGp5LIHKBlnW5h+5Nuta46OtzMzyzSUbyxbTHnysQWmn2BoiP/xu8UPDv
-         dYMQw+++Gl1k3l+Ms78WvHeICkFpTsaZdx6Uid4x1d1je260vydIxjUSixjoy4QPCli9
-         7WQQ==
-X-Gm-Message-State: APjAAAWErD4wUKw27I6ZQZsZs+lYMo1OBjNY80HDonVmnNs64B3IiaTT
-        MCsEP0mjktcgJsGBslMUB4bKvMttp0/PnfMjXg==
-X-Google-Smtp-Source: APXvYqyIz9CrpHcrXivylieLEiE1VxRyGUw+E9DXz6VIYz+kYlOCef915g/qsmML8+OoqrwbsBK3G0eW6o6RBALrF/E=
-X-Received: by 2002:a05:6638:950:: with SMTP id f16mr2789501jad.107.1576682043767;
- Wed, 18 Dec 2019 07:14:03 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a02:6603:0:0:0:0:0 with HTTP; Wed, 18 Dec 2019 07:14:03
- -0800 (PST)
-Reply-To: dhl.expresscourier102156@outlook.fr
-From:   "MS. MARYANNA B. THOMASON" <info.zennitbankplcnigerian@gmail.com>
-Date:   Wed, 18 Dec 2019 16:14:03 +0100
-Message-ID: <CABHzvr=Pq7-TqhY8TPvFCsr+5-DhDQy=XOg-TM13qqbFWeemfQ@mail.gmail.com>
-Subject: =?UTF-8?Q?Urgent_delivery_Notification_of_your_ATM_MASTER_CARD?=
-        =?UTF-8?Q?_Amount=2C=2415=2E800=E2=80=99000=E2=80=9900=2C?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 18 Dec 2019 11:06:21 -0500
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by alexa-out-blr-01.qualcomm.com with ESMTP/TLS/AES256-SHA; 18 Dec 2019 21:36:17 +0530
+Received: from gokulsri-linux.qualcomm.com ([10.201.2.207])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 18 Dec 2019 21:35:48 +0530
+Received: by gokulsri-linux.qualcomm.com (Postfix, from userid 432570)
+        id A895E3C50; Wed, 18 Dec 2019 21:35:46 +0530 (IST)
+From:   Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
+To:     gokulsri@codeaurora.org, sboyd@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, david.brown@linaro.org,
+        devicetree@vger.kernel.org, jassisinghbrar@gmail.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        mark.rutland@arm.com, mturquette@baylibre.com, ohad@wizery.com,
+        robh+dt@kernel.org, sricharan@codeaurora.org,
+        nprakash@codeaurora.org
+Subject: [PATCH V4 00/10] remoteproc: qcom: q6v5-wcss: Add support for secure pil
+Date:   Wed, 18 Dec 2019 21:35:36 +0530
+Message-Id: <1576685146-17135-1-git-send-email-gokulsri@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Attn Dear.
+IPQ8074 needs support for secure pil as well.
+Also, currently only unified firmware is supported.
+IPQ8074 supports split firmware for q6 and m3, so
+adding support for that.
 
-Urgent delivery Notification of your ATM MASTER CARD, Dhl-Benin is
-ready for delivery of your ATM Master card worth $15.800=E2=80=99000=E2=80=
-=9900, as
-approved this morning, Date, 18/12/2019. Through the Intruction from
-INTERNATIONAL MONETARY FUNDS, I.M.F official Directors.
+This series is based on Govind's
+"[v5] Add non PAS wcss Q6 support for QCS404"
 
-REGISTRATION NO :EG58945
-PARCEL NUMBER: 140479
-Delivery Schuleded now,
-Finally all we required from you is your ATM Card Proccessing Delivery
-fees $19.00 only which you must send to this DHL service to enable us
-dispatch the parcel to your destination today.
+changes since v3:
+ - In patch 10, Added release_firmware to free up
+   memory requested for m3 firmware.
 
-Here is our receiving payment details.
-You are advised to send it Via Money Gram Service.
+changes since v2:
+ - In patch 5, Added a driver data 'bcr_reset_required'
+   to select if bcr reset is required
+ - In patch 10, Removed syscon implementation and moved
+   to mailbox framework to access APCS IPC
 
-Receiver's Name--------Alan Ude
-Country-------Benin Republic.
-City/ Address--------Cotonou
-Test Question--------In God
-Answer-------We Trust
-Amount------------$US19.00 only
-Mtcn-------------
-Sender's Name-------
+changes since v1:
+ - In patch 10, Addressed minor review comments.
 
-Your delivery  ATM card worth $15.800=E2=80=99000=E2=80=9900,
-Is Due for delivery to your address today upon confirmation of
-required fee from you asap.
+Gokul Sriram Palanisamy (10):
+  remoteproc: qcom: Add PRNG proxy clock
+  remoteproc: qcom: Add secure PIL support
+  remoteproc: qcom: Add support for split q6 + m3 wlan firmware
+  remoteproc: qcom: Add ssr subdevice identifier
+  remoteproc: qcom: Update regmap offsets for halt register
+  dt-bindings: clock: qcom: Add reset for WCSSAON
+  clk: qcom: Add WCSSAON reset
+  dt-bindings: firmware: qcom: Add compatible for IPQ8074 SoC
+  arm64: dts: Add support for scm on IPQ8074 SoCs
+  arm64: dts: qcom: Enable Q6v5 WCSS for ipq8074 SoC
 
-Call us on this phone number for any inquiry. +229 62819378
-Awaiting your urgent response.
+ .../devicetree/bindings/firmware/qcom,scm.txt      |   1 +
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi              | 127 +++++++++++++++++
+ drivers/clk/qcom/gcc-ipq8074.c                     |   1 +
+ drivers/remoteproc/qcom_q6v5_wcss.c                | 157 +++++++++++++++++----
+ include/dt-bindings/clock/qcom,gcc-ipq8074.h       |   1 +
+ 5 files changed, 258 insertions(+), 29 deletions(-)
 
-MS. MARYANNA B. THOMASON, Shipment director, DHL Express
-Courier Company-Benin
+-- 
+1.9.1
+
