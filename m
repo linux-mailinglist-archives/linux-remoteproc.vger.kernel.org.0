@@ -2,155 +2,87 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DAA3123BB0
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Dec 2019 01:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5CCC124811
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Dec 2019 14:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbfLRAiT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 17 Dec 2019 19:38:19 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:41807 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726141AbfLRAiT (ORCPT
+        id S1726969AbfLRNWl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 18 Dec 2019 08:22:41 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:12441 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726902AbfLRNWk (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 17 Dec 2019 19:38:19 -0500
-Received: by mail-pf1-f193.google.com with SMTP id w62so186544pfw.8
-        for <linux-remoteproc@vger.kernel.org>; Tue, 17 Dec 2019 16:38:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=O9LKmCrSfekDRKRmwYMDfwn6SO/uEcONKVfMOLd0LkI=;
-        b=mQD2jRcxk81WP9PHEab5PH8OdOP3Rfgoe4rGhUnly8thYDvAUfYl7NyJ+/OIh6TdpK
-         hDXW8sWAmg+ZMFpKT/+igrEtlVUIT/lfldNMZ6/Qpp8CJ47XNdHiXu8Ri4IrX18n+eTN
-         cBClbAz4QPkbqNWHfs1Skk/OYoqhzanuqXchaqjsxWXzcqwp6HbXRHNFoCyw5eRrjvgD
-         tb0ofqNt0MKaaYzbijywqibF8fW90mDBoigSdKq/WjuHO+7YeRPQj4UX9twm3tVKa90O
-         NtswaA6n4kZL+eNT+UhfPgW6iOntUlvNOgIpV+RfgraiI1lfQ/3TDuOHDqMaMJi6A470
-         8zZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=O9LKmCrSfekDRKRmwYMDfwn6SO/uEcONKVfMOLd0LkI=;
-        b=i+OGGOHQm1hUyOOK2Pkl9ET1OET8nWZuGvVf4g/zJU9tdqKjtOHb8D0MusU+Vy8fpr
-         w6tF38T8j/bpHV1jlxAcpJROk3OFygULV0iEYoMm5sko0L3A57GfrnpG2CiKRYlheOtn
-         IimJ779oJ6L8n4Nq0iKVkcpzaLhmwCxdyPMcvSm6ygpOOfvOTZVWPZVdIfjBi7JoX+vK
-         wDQerXVekojietiravKQ/OINbV6poZECzc2Rd45BbA/8zFIw4lKQ5qlVolJpk0JaCMwO
-         nj/mHpAkWlHU+p9XMxGGMfynpA4kvJ2vNPs+tQpBUCVHM3oEhNE+pKOJ3ElBirzZc77l
-         fEPA==
-X-Gm-Message-State: APjAAAWrO9nv0l8oV3Y+1URDusPOF2tsIGCj11R2LX2VEj15TRnNbXb9
-        Gw82S3QI+kphBN7FDKdgWBFRGg==
-X-Google-Smtp-Source: APXvYqzmNrwOOON/i4tkQmY/ZlIS1dGrOqEzBVCgMVWSZVnbpPqDbCrh3XO2sWRSEsZQUx1LzO4M9Q==
-X-Received: by 2002:a62:1cd6:: with SMTP id c205mr605856pfc.179.1576629498300;
-        Tue, 17 Dec 2019 16:38:18 -0800 (PST)
-Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id q21sm235110pff.105.2019.12.17.16.38.17
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 17 Dec 2019 16:38:17 -0800 (PST)
-Date:   Tue, 17 Dec 2019 17:38:15 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tero Kristo <t-kristo@ti.com>
-Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, Suman Anna <s-anna@ti.com>
-Subject: Re: [PATCHv3 05/15] remoteproc/omap: Add the rproc ops .da_to_va()
- implementation
-Message-ID: <20191218003815.GC16271@xps15>
-References: <20191213125537.11509-1-t-kristo@ti.com>
- <20191213125537.11509-6-t-kristo@ti.com>
+        Wed, 18 Dec 2019 08:22:40 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1576675360; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=gJteFETaOrkhNWBbzpOZWWr+q40zt1FuW5gOqxEFqQM=; b=TZSjbtrHeJniXdjldojlqdNslVDS68OtYiO51S81Vn9ftogitWtNFxEJ46e90MN7YmET9XW6
+ bF1Vxr2ye65Upwjqur54vKMg5seGp1SErKBtoHEEWqRqaIGqLXc7H483dnrIipUtuFk4L1Uu
+ JT98BFYBqa/M+YPkT4zNhQ10n50=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5dfa2818.7f0ba9d43848-smtp-out-n01;
+ Wed, 18 Dec 2019 13:22:32 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 1F196C4479D; Wed, 18 Dec 2019 13:22:31 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6E683C433A2;
+        Wed, 18 Dec 2019 13:22:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6E683C433A2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     bjorn.andersson@linaro.org, jhugo@codeaurora.org,
+        robh+dt@kernel.org
+Cc:     ohad@wizery.com, mark.rutland@arm.com,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        agross@kernel.org, Sibi Sankar <sibis@codeaurora.org>
+Subject: [PATCH v2 0/5] Add the missing remoteprocs on MSM8998
+Date:   Wed, 18 Dec 2019 18:52:12 +0530
+Message-Id: <20191218132217.28141-1-sibis@codeaurora.org>
+X-Mailer: git-send-email 2.22.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191213125537.11509-6-t-kristo@ti.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, Dec 13, 2019 at 02:55:27PM +0200, Tero Kristo wrote:
-> From: Suman Anna <s-anna@ti.com>
-> 
-> An implementation for the rproc ops .da_to_va() has been added
-> that provides the address translation between device addresses
-> to kernel virtual addresses for internal RAMs present on that
-> particular remote processor device. The implementation provides
-> the translations based on the addresses parsed and stored during
-> the probe.
-> 
-> This ops gets invoked by the exported rproc_da_to_va() function
-> and allows the remoteproc core's ELF loader to be able to load
-> program data directly into the internal memories.
-> 
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> ---
->  drivers/remoteproc/omap_remoteproc.c | 39 ++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
-> index 844703507a74..28f14e24b389 100644
-> --- a/drivers/remoteproc/omap_remoteproc.c
-> +++ b/drivers/remoteproc/omap_remoteproc.c
-> @@ -232,10 +232,49 @@ static int omap_rproc_stop(struct rproc *rproc)
->  	return 0;
->  }
->  
-> +/**
-> + * omap_rproc_da_to_va() - internal memory translation helper
-> + * @rproc: remote processor to apply the address translation for
-> + * @da: device address to translate
-> + * @len: length of the memory buffer
-> + *
-> + * Custom function implementing the rproc .da_to_va ops to provide address
-> + * translation (device address to kernel virtual address) for internal RAMs
-> + * present in a DSP or IPU device). The translated addresses can be used
-> + * either by the remoteproc core for loading, or by any rpmsg bus drivers.
-> + * Returns the translated virtual address in kernel memory space, or NULL
-> + * in failure.
-> + */
-> +static void *omap_rproc_da_to_va(struct rproc *rproc, u64 da, int len)
-> +{
-> +	struct omap_rproc *oproc = rproc->priv;
-> +	int i;
-> +	u32 offset;
-> +
-> +	if (len <= 0)
-> +		return NULL;
-> +
-> +	if (!oproc->num_mems)
-> +		return NULL;
-> +
-> +	for (i = 0; i < oproc->num_mems; i++) {
-> +		if (da >= oproc->mem[i].dev_addr && da + len <=
+This patch series adds support for booting the Audio, Modem and Sensor
+DSPs found in Qualcomm's MSM8998 SoCs.
 
-Shouldn't this be '<' rather than '<=' ?
+Patch 5: arm64: dts: qcom: msm8998: Add ADSP, MPSS and SLPI
+depends on RPM_SMD_XO_CLK_SRC
 
-> +		    oproc->mem[i].dev_addr +  oproc->mem[i].size) {
+V2:
+ * split the series according to SoC
+ * gpu reserved memory size is now updated
+ * addressed review comments from Jeff
 
-One space too many after the '+' .
+Sibi Sankar (5):
+  remoteproc: q6v5-mss: Remove mem clk from the active pool
+  dt-bindings: remoteproc: qcom: Add ADSP and SLPI support for MSM8998
+    SoC
+  remoteproc: qcom: pas: Add MSM8998 ADSP and SLPI support
+  arm64: dts: qcom: msm8998: Update reserved memory map
+  arm64: dts: qcom: msm8998: Add ADSP, MPSS and SLPI nodes
 
-> +			offset = da -  oproc->mem[i].dev_addr;
+ .../bindings/remoteproc/qcom,adsp.txt         |   7 +
+ arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi     |   8 +
+ arch/arm64/boot/dts/qcom/msm8998.dtsi         | 194 +++++++++++++++++-
+ drivers/remoteproc/qcom_q6v5_mss.c            |   1 -
+ drivers/remoteproc/qcom_q6v5_pas.c            |  32 +++
+ 5 files changed, 230 insertions(+), 12 deletions(-)
 
-One space too many after then '-' .
-
-> +			/* __force to make sparse happy with type conversion */
-> +			return (__force void *)(oproc->mem[i].cpu_addr +
-> +						offset);
-> +		}
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
->  static const struct rproc_ops omap_rproc_ops = {
->  	.start		= omap_rproc_start,
->  	.stop		= omap_rproc_stop,
->  	.kick		= omap_rproc_kick,
-> +	.da_to_va	= omap_rproc_da_to_va,
->  };
->  
->  static const char * const ipu_mem_names[] = {
-> -- 
-> 2.17.1
-> 
-> --
-> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
