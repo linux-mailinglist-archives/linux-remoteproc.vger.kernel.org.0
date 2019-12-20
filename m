@@ -2,405 +2,266 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9158127407
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 20 Dec 2019 04:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A24127604
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 20 Dec 2019 08:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbfLTDiU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 19 Dec 2019 22:38:20 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:43158 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726986AbfLTDiU (ORCPT
+        id S1727165AbfLTHAF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 20 Dec 2019 02:00:05 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:33631 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725965AbfLTHAF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 19 Dec 2019 22:38:20 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBK3cIKM036248;
-        Thu, 19 Dec 2019 21:38:18 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1576813098;
-        bh=kytTfq4zJPIUUmZj5LU8lqCzqKd1h5uVUXLWjCh/l7E=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Bfej4B/SiyFNveLbd/4iIU86BZIiZbb3yOr7k3fPp3CsQGzkAH/+1GFIlDPQ/nYtq
-         zSNUp4LOtS2xhmAs/S1SC/yvbPGcp7ci+AXjwncvDiDIg0RuUBIgQpIL2vt+86BgdJ
-         3E1zxNlZt/eqp/pEeqLxV/CynBg9InRF1DtcXuAg=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBK3cI5s102103
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 19 Dec 2019 21:38:18 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 19
- Dec 2019 21:38:18 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 19 Dec 2019 21:38:18 -0600
-Received: from [128.247.58.153] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBK3cII0069444;
-        Thu, 19 Dec 2019 21:38:18 -0600
-Subject: Re: [PATCHv3 01/15] dt-bindings: remoteproc: Add OMAP remoteproc
- bindings
-To:     Tero Kristo <t-kristo@ti.com>, <bjorn.andersson@linaro.org>,
-        <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
-        <linux-omap@vger.kernel.org>
-References: <20191213125537.11509-1-t-kristo@ti.com>
- <20191213125537.11509-2-t-kristo@ti.com>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <883310e6-8703-3cbc-9f08-54bad365d31d@ti.com>
-Date:   Thu, 19 Dec 2019 21:38:18 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Fri, 20 Dec 2019 02:00:05 -0500
+Received: by mail-pl1-f196.google.com with SMTP id c13so3700257pls.0
+        for <linux-remoteproc@vger.kernel.org>; Thu, 19 Dec 2019 23:00:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fC3JoLkbnwXvlpi7t/a7WSOC0sr7d5AZj1xh2J+UQWc=;
+        b=fgUzCoxZIrK8T+zhBZBxenZpkETpNWuij5YvgiDRqexvZ6DuCnw1A5aHv48ouQ77ib
+         CtIfZpOF1PzVz0Ozn9aVjnmio8aK2cITR3+NmlKwRzHxk3SV/A4tUMcWEKWON5GHCFCV
+         xBCpkJb17a3FBh88qlrJmml4whEOSaX4p4BxufL66ZLSqT2Cjy5aLgp5so+es+pM6Duu
+         VPEKZOxMj5VnJllBsku7+B26djfOC4Qx+xfNGAp5l+ZQGmEVsie1Fd1WEZFHYCjVYPOT
+         Qi+DwE7kqGOpvV6VIxgnQPRa6Rchh/wS6XogUPvc3JpRVNMShUwgK9VdXy7g6gqRqSjP
+         3oWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fC3JoLkbnwXvlpi7t/a7WSOC0sr7d5AZj1xh2J+UQWc=;
+        b=C3TRFSxNnMg6o4y4caRtI+mQdAr2hh24a/CH7i9WiXL8ikHX74jy7E2ylu55S3F06Y
+         lw4z5XK65ahVi9aXGrb7q28++TEwBgMrFhaCZf4bXyj+Ex+8NRnW7H24jY55iREtbTX6
+         PZZN3U7X9cFMB6fj93ezSLe2TkRwBCw0jtQuxFLvWKb0RfickkOCqt+drKQh/GdbCBkr
+         YPWmU2I0/zG+02OKYkajFfDHD2nuPbC1tW6+EfhWJx+e0JojCtFzQ687kKx39uHinxtw
+         7jlqF4sO7sS4Qx2AP3TEqEwiZYcvincdlE7lFAJomuRr7xZg5UASIWq/yiAl1XxNOCTJ
+         xJ7Q==
+X-Gm-Message-State: APjAAAWvwkVLK3EwV+cR4wpJpoDTcq5LCEvTbPLqo+mrXwKCCH5XqGys
+        IAuJMCQylnjhEUr7pY8zVrw2UaMF+sA=
+X-Google-Smtp-Source: APXvYqyvF8WqOEnDOKkQl2mto0QI+sqGXOJYxmZaqRoa8Klu1NtQWWmTfOdd/Szh3Agx5Dhifxokrw==
+X-Received: by 2002:a17:90a:2467:: with SMTP id h94mr6695795pje.79.1576825204473;
+        Thu, 19 Dec 2019 23:00:04 -0800 (PST)
+Received: from ripper (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id v4sm11046290pgo.63.2019.12.19.23.00.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2019 23:00:03 -0800 (PST)
+Date:   Thu, 19 Dec 2019 22:59:54 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     jhugo@codeaurora.org, robh+dt@kernel.org, ohad@wizery.com,
+        mark.rutland@arm.com, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, agross@kernel.org
+Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: msm8998: Add ADSP, MPSS and
+ SLPI nodes
+Message-ID: <20191220065954.GA1908628@ripper>
+References: <20191218132217.28141-1-sibis@codeaurora.org>
+ <20191218132217.28141-6-sibis@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <20191213125537.11509-2-t-kristo@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191218132217.28141-6-sibis@codeaurora.org>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 12/13/19 6:55 AM, Tero Kristo wrote:
-> From: Suman Anna <s-anna@ti.com>
+On Wed 18 Dec 05:22 PST 2019, Sibi Sankar wrote:
+
+> This patch adds ADSP, MPSS and SLPI nodes for MSM8998 SoCs.
 > 
-> Add the device tree bindings document for the IPU and DSP
-> remote processor devices on OMAP4+ SoCs.
-> 
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> [t-kristo@ti.com: converted to schema]
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
 > ---
->  .../remoteproc/ti,omap-remoteproc.yaml        | 315 ++++++++++++++++++
->  1 file changed, 315 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+>  arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi |   8 ++
+>  arch/arm64/boot/dts/qcom/msm8998.dtsi     | 124 ++++++++++++++++++++++
+>  2 files changed, 132 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> new file mode 100644
-> index 000000000000..c87dda0a6559
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> @@ -0,0 +1,315 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/ti,omap-remoteproc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi b/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
+> index 6db3f9e0344d1..e87094665c52c 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
+> @@ -312,6 +312,14 @@
+>  	};
+>  };
+>  
+> +&remoteproc_adsp {
+> +	status = "okay";
+> +};
 > +
-> +title: OMAP4+ Remoteproc Devices
+> +&remoteproc_slpi {
+> +	status = "okay";
+> +};
 > +
-> +maintainers:
-> +  - Suman Anna <s-anna@ti.com>
+>  &tlmm {
+>  	gpio-reserved-ranges = <0 4>, <81 4>;
+>  };
+> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> index 8d799e868a5d3..014127700afb0 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> @@ -1075,6 +1075,61 @@
+>  			#interrupt-cells = <0x2>;
+>  		};
+>  
+> +		remoteproc_mss: remoteproc@4080000 {
+> +			compatible = "qcom,msm8998-mss-pil";
+> +			reg = <0x04080000 0x100>, <0x04180000 0x20>;
+> +			reg-names = "qdsp6", "rmb";
 > +
-> +description:
-> +  The OMAP family of SoCs usually have one or more slave processor sub-systems
-> +  that are used to offload some of the processor-intensive tasks, or to manage
-> +  other hardware accelerators, for achieving various system level goals.
+> +			interrupts-extended =
+> +				<&intc GIC_SPI 448 IRQ_TYPE_EDGE_RISING>,
+> +				<&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+> +				<&modem_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
+> +				<&modem_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
+> +				<&modem_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
+> +				<&modem_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "wdog", "fatal", "ready",
+> +					  "handover", "stop-ack",
+> +					  "shutdown-ack";
 > +
-> +  The processor cores in the sub-system are usually behind an IOMMU, and may
-> +  contain additional sub-modules like Internal RAM and/or ROMs, L1 and/or L2
-> +  caches, an Interrupt Controller, a Cache Controller etc.
-> +
-> +  The OMAP SoCs usually have a DSP processor sub-system and/or an IPU processor
-> +  sub-system. The DSP processor sub-system can contain any of the TI's C64x,
-> +  C66x or C67x family of DSP cores as the main execution unit. The IPU processor
-> +  sub-system usually contains either a Dual-Core Cortex-M3 or Dual-Core
-> +  Cortex-M4 processors.
-> +
-> +  Each remote processor sub-system is represented as a single DT node. Each node
-> +  has a number of required or optional properties that enable the OS running on
-> +  the host processor (MPU) to perform the device management of the remote
-> +  processor and to communicate with the remote processor. The various properties
-> +  can be classified as constant or variable. The constant properties are
-> +  dictated by the SoC and does not change from one board to another having the
-> +  same SoC. Examples of constant properties include 'iommus', 'reg'. The
-> +  variable properties are dictated by the system integration aspects such as
-> +  memory on the board, or configuration used within the corresponding firmware
-> +  image. Examples of variable properties include 'mboxes', 'memory-region',
-> +  'timers', 'watchdog-timers' etc.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,omap4-dsp
-> +      - ti,omap5-dsp
-> +      - ti,dra7-dsp
-> +      - ti,omap4-ipu
-> +      - ti,omap5-ipu
-> +      - ti,dra7-ipu
-> +
-> +  iommus:
-> +    minItems: 1
-> +    maxItems: 2
-> +    description: |
-> +      phandles to OMAP IOMMU nodes, that need to be programmed
-> +      for this remote processor to access any external RAM memory or
-> +      other peripheral device address spaces. This property usually
-> +      has only a single phandle. Multiple phandles are used only in
-> +      cases where the sub-system has different ports for different
-> +      sub-modules within the processor sub-system (eg: DRA7 DSPs),
-> +      and need the same programming in both the MMUs.
-> +
-> +  mboxes:
-> +    minItems: 1
-> +    maxItems: 2
-> +    description: |
-> +      OMAP Mailbox specifier denoting the sub-mailbox, to be used for
-> +      communication with the remote processor. The specifier format is
-> +      as per the bindings,
-> +      Documentation/devicetree/bindings/mailbox/omap-mailbox.txt
-> +      This property should match with the sub-mailbox node used in
-> +      the firmware image.
-> +
-> +  clocks:
-> +    description: |
-> +      Main functional clock for the remote processor
-> +
-> +  resets:
-> +    description: |
-> +      Reset handles for the remote processor
-> +
-> +  memory-region:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: |
-> +      phandle to the reserved memory node to be associated
-> +      with the remoteproc device. The reserved memory node
-> +      can be a CMA memory node, and should be defined as
-> +      per the bindings,
-> +      Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt
-> +
-> +  firmware-name:
-> +    description: |
-> +      Default name of the firmware to load to the remote processor.
-> +
-> +# Optional properties:
-> +# --------------------
-> +# Some of these properties are mandatory on some SoCs, and some are optional
-> +# depending on the configuration of the firmware image to be executed on the
-> +# remote processor. The conditions are mentioned for each property.
-> +#
-> +# The following are the optional properties:
-> +
-> +  reg:
-> +    description: |
-> +      Address space for any remoteproc memories present on
-> +      the SoC. Should contain an entry for each value in
-> +      'reg-names'. These are mandatory for all DSP and IPU
-> +      processors that have them (OMAP4/OMAP5 DSPs do not have
-> +      any RAMs)
-> +
-> +  reg-names:
-> +    description: |
-> +      Required names for each of the address spaces defined in
-> +      the 'reg' property. Should contain a string from among
-> +      the following names, each representing the corresponding
-> +      internal RAM memory region.
-> +    minItems: 1
-> +    maxItems: 3
-> +    items:
-> +      - const: l2ram
-> +      - const: l1pram
-> +      - const: l1dram
-> +
-> +  ti,bootreg:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: |
-> +      Should be a pair of the phandle to the System Control
-> +      Configuration region that contains the boot address
-> +      register, and the register offset of the boot address
-> +      register within the System Control module. This property
-> +      is required for all the DSP instances on OMAP4, OMAP5
-> +      and DRA7xx SoCs.
-> +
-> +  ti,timers:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: |
-> +      One or more phandles to OMAP DMTimer nodes, that serve
-> +      as System/Tick timers for the OS running on the remote
-> +      processors. This will usually be a single timer if the
-> +      processor sub-system is running in SMP mode, or one per
-> +      core in the processor sub-system. This can also be used
-> +      to reserve specific timers to be dedicated to the
-> +      remote processors.
-> +
-> +      This property is mandatory on remote processors requiring
-> +      external tick wakeup, and to support Power Management
-> +      features. The timers to be used should match with the
-> +      timers used in the firmware image.
-> +
-> +  ti,watchdog-timers:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: |
-> +      One or more phandles to OMAP DMTimer nodes, used to
-> +      serve as Watchdog timers for the processor cores. This
-> +      will usually be one per executing processor core, even
-> +      if the processor sub-system is running a SMP OS.
-> +
-> +      The timers to be used should match with the watchdog
-> +      timers used in the firmware image.
-> +
-> +if:
-> +  properties:
-> +    compatible:
-> +      enum:
-> +        - ti,dra7-dsp
-> +then:
-> +  properties:
-> +    reg:
-> +      minItems: 3
-> +      maxItems: 3
-> +    ti,bootreg:
-> +      minItems: 1
-> +      maxItems: 1
-> +
-> +else:
-> +  if:
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - ti,omap4-ipu
-> +          - ti,omap5-ipu
-> +          - ti,dra7-ipu
-> +  then:
-> +    properties:
-> +      reg:
-> +        minItems: 1
-> +        maxItems: 1
-> +
-> +  else:
-> +    properties:
-> +      reg:
-> +        maxItems: 0
-> +      ti,bootreg:
-> +        minItems: 1
-> +        maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - iommus
-> +  - mboxes
-> +  - memory-region
-> +  - clocks
-> +  - resets
-> +  - firmware-name
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +
-> +    //Example 1: OMAP4 DSP
-> +
-> +    /* DSP Reserved Memory node */
-> +    #include <dt-bindings/clock/omap4.h>
-> +    reserved-memory {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        dsp_memory_region: dsp-memory@98000000 {
-> +            compatible = "shared-dma-pool";
-> +            reg = <0x98000000 0x800000>;
-> +            reusable;
-> +        };
-> +    };
-> +
-> +    /* DSP node */
-> +    ocp {
-> +        dsp: dsp {
-> +            compatible = "ti,omap4-dsp";
-> +            ti,bootreg = <&scm_conf 0x304>;
-> +            iommus = <&mmu_dsp>;
-> +            mboxes = <&mailbox &mbox_dsp>;
-> +            memory-region = <&dsp_memory_region>;
-> +            ti,timers = <&timer5>;
-> +            ti,watchdog-timers = <&timer6>;
-> +            clocks = <&tesla_clkctrl OMAP4_DSP_CLKCTRL 0>;
-> +            resets = <&prm_tesla 0>, <&prm_tesla 1>;
-> +            firmware-name = "omap4-dsp-fw.xe64T";
-> +        };
-> +    };
-> +
-> +  - |+
-> +
-> +    //Example 2: OMAP5 IPU
-> +
-> +    /* IPU Reserved Memory node */
-> +    #include <dt-bindings/clock/omap5.h>
-> +    reserved-memory {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        ipu_memory_region: ipu-memory@95800000 {
-> +            compatible = "shared-dma-pool";
-> +            reg = <0 0x95800000 0 0x3800000>;
-> +            reusable;
-> +        };
-> +    };
-> +
-> +    /* IPU node */
-> +    ocp {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        ipu: ipu@55020000 {
-> +            compatible = "ti,omap5-ipu";
-> +            reg = <0x55020000 0x10000>;
-> +            reg-names = "l2ram";
-> +            iommus = <&mmu_ipu>;
-> +            mboxes = <&mailbox &mbox_ipu>;
-> +            memory-region = <&ipu_memory_region>;
-> +            ti,timers = <&timer3>, <&timer4>;
-> +            ti,watchdog-timers = <&timer9>, <&timer11>;
-> +            clocks = <&ipu_clkctrl OMAP5_MMU_IPU_CLKCTRL 0>;
-> +            resets = <&prm_core 2>;
-> +            firmware-name = "omap5-ipu-fw.xem";
+> +			clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
+> +				 <&gcc GCC_BIMC_MSS_Q6_AXI_CLK>,
+> +				 <&gcc GCC_BOOT_ROM_AHB_CLK>,
+> +				 <&gcc GCC_MSS_GPLL0_DIV_CLK_SRC>,
+> +				 <&gcc GCC_MSS_SNOC_AXI_CLK>,
+> +				 <&gcc GCC_MSS_MNOC_BIMC_AXI_CLK>,
+> +				 <&rpmcc RPM_SMD_QDSS_CLK>,
+> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
 
-Minor typo here, compared to the actual name we use.
+RPM_SMD_XO_CLK_SRC doesn't seem to be implemented...
 
-regards
-Suman
+I did pull in a patch from Jeff that defines it, but when I boot the
+modem I see the following error repeatedly:
 
-> +        };
-> +    };
-> +
-> +  - |+
-> +
-> +    //Example 3: DRA7xx/AM57xx DSP
-> +
-> +    /* DSP1 Reserved Memory node */
-> +    #include <dt-bindings/clock/dra7.h>
-> +    reserved-memory {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        dsp1_memory_region: dsp1-memory@99000000 {
-> +            compatible = "shared-dma-pool";
-> +            reg = <0x0 0x99000000 0x0 0x4000000>;
-> +            reusable;
-> +        };
-> +    };
-> +
-> +    /* DSP1 node */
-> +    ocp {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        dsp1: dsp@40800000 {
-> +            compatible = "ti,dra7-dsp";
-> +            reg = <0x40800000 0x48000>,
-> +                  <0x40e00000 0x8000>,
-> +                  <0x40f00000 0x8000>;
-> +            reg-names = "l2ram", "l1pram", "l1dram";
-> +            ti,bootreg = <&scm_conf 0x55c>;
-> +            iommus = <&mmu0_dsp1>, <&mmu1_dsp1>;
-> +            mboxes = <&mailbox5 &mbox_dsp1_ipc3x>;
-> +            memory-region = <&dsp1_memory_region>;
-> +            ti,timers = <&timer5>;
-> +            ti,watchdog-timers = <&timer10>;
-> +            resets = <&prm_dsp1 0>;
-> +            clocks = <&dsp1_clkctrl DRA7_DSP1_MMU0_DSP1_CLKCTRL 0>;
-> +            firmware-name = "dra7-dsp1-fw.xe66";
-> +        };
-> +    };
-> 
+[  616.632227] qcom-q6v5-mss 4080000.remoteproc: fatal error received: dog_hb.c:266:DOG_HB detects starvation of task 0xda172640, triage with its own
 
+
+
+All the qrtr services seems registered nicely, so the remote does come
+up before it goes down.
+
+Also, adsp comes up nicely.
+
+Regards,
+Bjorn
+
+> +			clock-names = "iface", "bus", "mem", "gpll0_mss",
+> +				      "snoc_axi", "mnoc_axi", "qdss", "xo";
+> +
+> +			qcom,smem-states = <&modem_smp2p_out 0>;
+> +			qcom,smem-state-names = "stop";
+> +
+> +			resets = <&gcc GCC_MSS_RESTART>;
+> +			reset-names = "mss_restart";
+> +
+> +			qcom,halt-regs = <&tcsr_mutex_regs 0x23000 0x25000 0x24000>;
+> +
+> +			power-domains = <&rpmpd MSM8998_VDDCX>,
+> +					<&rpmpd MSM8998_VDDMX>;
+> +			power-domain-names = "cx", "mx";
+> +
+> +			mba {
+> +				memory-region = <&mba_mem>;
+> +			};
+> +
+> +			mpss {
+> +				memory-region = <&mpss_mem>;
+> +			};
+> +
+> +			glink-edge {
+> +				interrupts = <GIC_SPI 452 IRQ_TYPE_EDGE_RISING>;
+> +				label = "modem";
+> +				qcom,remote-pid = <1>;
+> +				mboxes = <&apcs_glb 15>;
+> +			};
+> +		};
+> +
+>  		gpucc: clock-controller@5065000 {
+>  			compatible = "qcom,msm8998-gpucc";
+>  			#clock-cells = <1>;
+> @@ -1088,6 +1143,42 @@
+>  				      "gpll0";
+>  		};
+>  
+> +		remoteproc_slpi: remoteproc@5800000 {
+> +			compatible = "qcom,msm8998-slpi-pas";
+> +			reg = <0x05800000 0x4040>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 390 IRQ_TYPE_EDGE_RISING>,
+> +					      <&slpi_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+> +					      <&slpi_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
+> +					      <&slpi_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
+> +					      <&slpi_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "wdog", "fatal", "ready",
+> +					  "handover", "stop-ack";
+> +
+> +			px-supply = <&vreg_lvs2a_1p8>;
+> +
+> +			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
+> +				 <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
+> +			clock-names = "xo", "aggre2";
+> +
+> +			memory-region = <&slpi_mem>;
+> +
+> +			qcom,smem-states = <&slpi_smp2p_out 0>;
+> +			qcom,smem-state-names = "stop";
+> +
+> +			power-domains = <&rpmpd MSM8998_SSCCX>;
+> +			power-domain-names = "ssc_cx";
+> +
+> +			status = "disabled";
+> +
+> +			glink-edge {
+> +				interrupts = <GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
+> +				label = "dsps";
+> +				qcom,remote-pid = <3>;
+> +				mboxes = <&apcs_glb 27>;
+> +			};
+> +		};
+> +
+>  		stm: stm@6002000 {
+>  			compatible = "arm,coresight-stm", "arm,primecell";
+>  			reg = <0x06002000 0x1000>,
+> @@ -1880,6 +1971,39 @@
+>  			#size-cells = <0>;
+>  		};
+>  
+> +		remoteproc_adsp: remoteproc@17300000 {
+> +			compatible = "qcom,msm8998-adsp-pas";
+> +			reg = <0x17300000 0x4040>;
+> +
+> +			interrupts-extended = <&intc GIC_SPI 162 IRQ_TYPE_EDGE_RISING>,
+> +					      <&adsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+> +					      <&adsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
+> +					      <&adsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
+> +					      <&adsp_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "wdog", "fatal", "ready",
+> +					  "handover", "stop-ack";
+> +
+> +			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>;
+> +			clock-names = "xo";
+> +
+> +			memory-region = <&adsp_mem>;
+> +
+> +			qcom,smem-states = <&adsp_smp2p_out 0>;
+> +			qcom,smem-state-names = "stop";
+> +
+> +			power-domains = <&rpmpd MSM8998_VDDCX>;
+> +			power-domain-names = "cx";
+> +
+> +			status = "disabled";
+> +
+> +			glink-edge {
+> +				interrupts = <GIC_SPI 157 IRQ_TYPE_EDGE_RISING>;
+> +				label = "lpass";
+> +				qcom,remote-pid = <2>;
+> +				mboxes = <&apcs_glb 9>;
+> +			};
+> +		};
+> +
+>  		apcs_glb: mailbox@17911000 {
+>  			compatible = "qcom,msm8998-apcs-hmss-global";
+>  			reg = <0x17911000 0x1000>;
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
