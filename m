@@ -2,268 +2,352 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F8F12814B
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 20 Dec 2019 18:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0601281CB
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 20 Dec 2019 19:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727517AbfLTRUu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 20 Dec 2019 12:20:50 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:17550 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727512AbfLTRUu (ORCPT
+        id S1727391AbfLTSCW (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 20 Dec 2019 13:02:22 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:54039 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727417AbfLTSCW (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 20 Dec 2019 12:20:50 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1576862450; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=vuuqJ73RYNPZB5++9ydg1fEs2W+tW/hjcTRH47X7J18=; b=MKLjL5gnb4yCODhJNs2srj+QWMjMY5P0ZzBXxdzX3+0Airek6qZ1Ev6Du+xrlEYZCmQgA9dD
- R8i0uEQotPaP+z6tgI1ZsAoyw8EFNYlihLzBi2q3WB4RPuZDNH14ck21NTjUS2OSAs5+9YwF
- QUQrcY0HJx/RI2IEBdoK7EE+1yo=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5dfd02f0.7f0165577068-smtp-out-n02;
- Fri, 20 Dec 2019 17:20:48 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id AEA20C447A3; Fri, 20 Dec 2019 17:20:47 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4DAAAC433CB;
-        Fri, 20 Dec 2019 17:20:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4DAAAC433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     bjorn.andersson@linaro.org, srinivas.kandagatla@linaro.org,
-        robh+dt@kernel.org, tsoni@codeaurora.org
-Cc:     agross@kernel.org, mark.rutland@arm.com,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH v2 3/3] soc: qcom: apr: Add avs/audio tracking functionality
-Date:   Fri, 20 Dec 2019 22:50:19 +0530
-Message-Id: <20191220172019.11774-4-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.22.1
-In-Reply-To: <20191220172019.11774-1-sibis@codeaurora.org>
-References: <20191220172019.11774-1-sibis@codeaurora.org>
+        Fri, 20 Dec 2019 13:02:22 -0500
+Received: by mail-pj1-f65.google.com with SMTP id n96so4431045pjc.3
+        for <linux-remoteproc@vger.kernel.org>; Fri, 20 Dec 2019 10:02:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=15PN4V+zSlwzXPA/wIz+83Cjw2lOO0ahfJ6vikM1dYA=;
+        b=PNtYpA5uJqiOnEOFzl2qaca0PjL3paxpnCNqQF3tRb+UloPGpFPWHG8qhSHH/btBqc
+         SvONhUW6QBPVXpkqZdFCbPZHUg73+hkb2gj8hXRbIWlLyFTmsmdxUo4PBgR6xDS9cf2o
+         ZPLWrUf5hM4FpJM95ju0m1v2Sk+uoovXH/NN7bupJSvV6m0M5XKFfj6Odm1HGc5P4Yqx
+         +CMulGZ0FKEEGZCmkYU5+QVahORmq6NqzI0ptTAnnckLLWvcb28UGtGN54KYiwEcrVrV
+         CvHepGq/cYVUFJ8NocJ2NjGPjzBvk+qYkOE8UIHS4z16X6WpjpwhTSHzyFMFYZCcNJ6I
+         catA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=15PN4V+zSlwzXPA/wIz+83Cjw2lOO0ahfJ6vikM1dYA=;
+        b=DhOwjqmOdw8dJljAg3Z4fSm6VB+dJbhKgy2NDnxyvmiSYLCPgUkSO21qdXINZeHqvL
+         eV8TscoSSYV/vFZMDRWfmtc9Zm21/SkqmLFnTF14HykmIkWN9YB8GxflYo4IaeAlg7mm
+         hiJqbwBzDyJiyQB+KPnIOB1t2KOCljVxKDiSTHo3siBH/CbuOoimGlK7kGTB6EtQHL3w
+         xCWcxWFa9ZVgWOOHKQ+BR/ayH0dTfXq4dCmz0SWdZXM3DBgfllpa8UrSALQzaVpU7uQc
+         i82SA8zxXsyxmRPTb44CVwrWrfGwjlbK9VnAtH1XJnfjPz4bSIXKSdaWoIBb0NqNvoVr
+         EdiA==
+X-Gm-Message-State: APjAAAVczoBqdZlTLKPo4vjJxflMKsYJ6a8SvKAhQfHnhd0cV6hX1hEG
+        Php15FAfZyz/NCGZV4aIKyP5RQ==
+X-Google-Smtp-Source: APXvYqyvZeCeMQLi4pnx3i/2qKQTPUClIuNtr/g438GM/OLkjyf8Qr5KP3yzznXPUlBF6KZu4n6NMQ==
+X-Received: by 2002:a17:902:7b8c:: with SMTP id w12mr7952531pll.30.1576864940848;
+        Fri, 20 Dec 2019 10:02:20 -0800 (PST)
+Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id y6sm6062175pjy.1.2019.12.20.10.02.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2019 10:02:20 -0800 (PST)
+Date:   Fri, 20 Dec 2019 10:02:17 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Cc:     Sibi Sankar <sibis@codeaurora.org>,
+        Jeffrey Hugo <jhugo@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        DTML <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v2 5/5] arm64: dts: qcom: msm8998: Add ADSP, MPSS and
+ SLPI nodes
+Message-ID: <20191220180217.GF3755841@builder>
+References: <20191218132217.28141-1-sibis@codeaurora.org>
+ <20191218132217.28141-6-sibis@codeaurora.org>
+ <20191220065954.GA1908628@ripper>
+ <CAOCk7NoaWw8Tor-P02SESztWEGpGMK6GbRNG45yMVYhMdDCEnQ@mail.gmail.com>
+ <20191220170525.GC549437@yoga>
+ <CAOCk7Nr3vMRpC6QQ21HCrd9B=PFo4D=-yQ196YnsP_0jBV3RCQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOCk7Nr3vMRpC6QQ21HCrd9B=PFo4D=-yQ196YnsP_0jBV3RCQ@mail.gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Use PDR helper functions to track the protection domains that the apr
-services are dependent upon on SDM845 SoC, specifically the "avs/audio"
-service running on ADSP Q6.
+On Fri 20 Dec 09:10 PST 2019, Jeffrey Hugo wrote:
 
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
----
- drivers/soc/qcom/Kconfig     |   1 +
- drivers/soc/qcom/apr.c       | 100 +++++++++++++++++++++++++++++++----
- include/linux/soc/qcom/apr.h |   1 +
- 3 files changed, 91 insertions(+), 11 deletions(-)
+> On Fri, Dec 20, 2019 at 10:05 AM Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
+> >
+> > On Fri 20 Dec 06:33 PST 2019, Jeffrey Hugo wrote:
+> >
+> > > On Fri, Dec 20, 2019 at 12:00 AM Bjorn Andersson
+> > > <bjorn.andersson@linaro.org> wrote:
+> > > >
+> > > > On Wed 18 Dec 05:22 PST 2019, Sibi Sankar wrote:
+> > > >
+> > > > > This patch adds ADSP, MPSS and SLPI nodes for MSM8998 SoCs.
+> > > > >
+> > > > > Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+> > > > > ---
+> > > > >  arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi |   8 ++
+> > > > >  arch/arm64/boot/dts/qcom/msm8998.dtsi     | 124 ++++++++++++++++++++++
+> > > > >  2 files changed, 132 insertions(+)
+> > > > >
+> > > > > diff --git a/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi b/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
+> > > > > index 6db3f9e0344d1..e87094665c52c 100644
+> > > > > --- a/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
+> > > > > +++ b/arch/arm64/boot/dts/qcom/msm8998-mtp.dtsi
+> > > > > @@ -312,6 +312,14 @@
+> > > > >       };
+> > > > >  };
+> > > > >
+> > > > > +&remoteproc_adsp {
+> > > > > +     status = "okay";
+> > > > > +};
+> > > > > +
+> > > > > +&remoteproc_slpi {
+> > > > > +     status = "okay";
+> > > > > +};
+> > > > > +
+> > > > >  &tlmm {
+> > > > >       gpio-reserved-ranges = <0 4>, <81 4>;
+> > > > >  };
+> > > > > diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> > > > > index 8d799e868a5d3..014127700afb0 100644
+> > > > > --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> > > > > +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> > > > > @@ -1075,6 +1075,61 @@
+> > > > >                       #interrupt-cells = <0x2>;
+> > > > >               };
+> > > > >
+> > > > > +             remoteproc_mss: remoteproc@4080000 {
+> > > > > +                     compatible = "qcom,msm8998-mss-pil";
+> > > > > +                     reg = <0x04080000 0x100>, <0x04180000 0x20>;
+> > > > > +                     reg-names = "qdsp6", "rmb";
+> > > > > +
+> > > > > +                     interrupts-extended =
+> > > > > +                             <&intc GIC_SPI 448 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                             <&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                             <&modem_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                             <&modem_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                             <&modem_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                             <&modem_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
+> > > > > +                     interrupt-names = "wdog", "fatal", "ready",
+> > > > > +                                       "handover", "stop-ack",
+> > > > > +                                       "shutdown-ack";
+> > > > > +
+> > > > > +                     clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
+> > > > > +                              <&gcc GCC_BIMC_MSS_Q6_AXI_CLK>,
+> > > > > +                              <&gcc GCC_BOOT_ROM_AHB_CLK>,
+> > > > > +                              <&gcc GCC_MSS_GPLL0_DIV_CLK_SRC>,
+> > > > > +                              <&gcc GCC_MSS_SNOC_AXI_CLK>,
+> > > > > +                              <&gcc GCC_MSS_MNOC_BIMC_AXI_CLK>,
+> > > > > +                              <&rpmcc RPM_SMD_QDSS_CLK>,
+> > > > > +                              <&rpmcc RPM_SMD_XO_CLK_SRC>;
+> > > >
+> > > > RPM_SMD_XO_CLK_SRC doesn't seem to be implemented...
+> > > >
+> > > > I did pull in a patch from Jeff that defines it, but when I boot the
+> > > > modem I see the following error repeatedly:
+> > >
+> > > Yeah, we need to figure out a solution for rpmcc to actually provide
+> > > this since the previous N solutions were not acceptable.  Its on my
+> > > todo list to look into in Jan.  However, I really think the DT should
+> > > be defined this way, since it replicates the hardware config.
+> > >
+> >
+> > I presume you can't rely on parent_data due to issues before rpmcc has
+> > probed properly?
+> 
+> I don't think so, but I need to circle back on that.
+> 
+> >
+> > Not sure what to do about that, perhaps we can stop-gap by adding the
+> > new clock and setting up the DT, and then swing back to wiring it up
+> > internally in gcc later?
+> 
+> The define should be there.  The DT should compile.  The issue will be
+> that the driver will not get the clock at runtime, which is
+> functionally equivalent to what we have now (in the end, modem doesnt
+> boot with or without this change, will boot with an out of tree
+> patch).  Adding the clock to rpmcc without coordinating with gcc will
+> cause issues in the clock framework with multiple defines of the same
+> clock.
+> 
 
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index 5c4e76837f59b..cacfed945b275 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -202,6 +202,7 @@ config QCOM_APR
- 	tristate "Qualcomm APR Bus (Asynchronous Packet Router)"
- 	depends on ARCH_QCOM || COMPILE_TEST
- 	depends on RPMSG
-+	select QCOM_PDR_HELPERS
- 	help
-           Enable APR IPC protocol support between
-           application processor and QDSP6. APR is
-diff --git a/drivers/soc/qcom/apr.c b/drivers/soc/qcom/apr.c
-index 4fcc32420c474..5234426718e88 100644
---- a/drivers/soc/qcom/apr.c
-+++ b/drivers/soc/qcom/apr.c
-@@ -11,6 +11,7 @@
- #include <linux/workqueue.h>
- #include <linux/of_device.h>
- #include <linux/soc/qcom/apr.h>
-+#include <linux/soc/qcom/pdr.h>
- #include <linux/rpmsg.h>
- #include <linux/of.h>
- 
-@@ -21,6 +22,7 @@ struct apr {
- 	spinlock_t rx_lock;
- 	struct idr svcs_idr;
- 	int dest_domain_id;
-+	struct pdr_handle pdr;
- 	struct workqueue_struct *rxwq;
- 	struct work_struct rx_work;
- 	struct list_head rx_list;
-@@ -289,6 +291,9 @@ static int apr_add_device(struct device *dev, struct device_node *np,
- 		  id->svc_id + 1, GFP_ATOMIC);
- 	spin_unlock(&apr->svcs_lock);
- 
-+	of_property_read_string_index(np, "qcom,protection-domain",
-+				      1, &adev->service_path);
-+
- 	dev_info(dev, "Adding APR dev: %s\n", dev_name(&adev->dev));
- 
- 	ret = device_register(&adev->dev);
-@@ -300,14 +305,56 @@ static int apr_add_device(struct device *dev, struct device_node *np,
- 	return ret;
- }
- 
--static void of_register_apr_devices(struct device *dev)
-+static void of_apr_add_pd_lookups(struct device *dev)
- {
-+	const char *service_name, *service_path;
- 	struct apr *apr = dev_get_drvdata(dev);
- 	struct device_node *node;
-+	int ret;
-+
-+	for_each_child_of_node(dev->of_node, node) {
-+		ret = of_property_read_string_index(node, "qcom,protection-domain",
-+						    0, &service_name);
-+		if (ret < 0)
-+			continue;
-+
-+		ret = of_property_read_string_index(node, "qcom,protection-domain",
-+						    1, &service_path);
-+		if (ret < 0)
-+			continue;
-+
-+		ret = pdr_add_lookup(&apr->pdr, service_name, service_path);
-+		if (ret && ret != -EALREADY)
-+			dev_err(dev, "pdr add lookup failed: %d\n", ret);
-+	}
-+}
-+
-+static void of_register_apr_devices(struct device *dev, const char *svc_path)
-+{
-+	struct apr *apr = dev_get_drvdata(dev);
-+	struct device_node *node;
-+	const char *service_path;
-+	int ret;
- 
- 	for_each_child_of_node(dev->of_node, node) {
- 		struct apr_device_id id = { {0} };
- 
-+		ret = of_property_read_string_index(node, "qcom,protection-domain",
-+						    1, &service_path);
-+		if (svc_path) {
-+			/* skip APR services that are PD independent */
-+			if (ret)
-+				continue;
-+
-+			/* skip APR services whose PD paths don't match */
-+			if (strcmp(service_path, svc_path))
-+				continue;
-+		} else {
-+			/* skip APR services whose PD lookups are registered */
-+			if (ret == 0)
-+				continue;
-+		}
-+
- 		if (of_property_read_u32(node, "reg", &id.svc_id))
- 			continue;
- 
-@@ -318,6 +365,35 @@ static void of_register_apr_devices(struct device *dev)
- 	}
- }
- 
-+static int apr_remove_device(struct device *dev, void *svc_path)
-+{
-+	struct apr_device *adev = to_apr_device(dev);
-+
-+	if (svc_path) {
-+		if (!strcmp(adev->service_path, (char *)svc_path))
-+			device_unregister(&adev->dev);
-+	} else {
-+		device_unregister(&adev->dev);
-+	}
-+
-+	return 0;
-+}
-+
-+static void apr_pd_status(struct pdr_handle *pdr, struct pdr_service *pds)
-+{
-+	struct apr *apr = container_of(pdr, struct apr, pdr);
-+
-+	switch (pds->state) {
-+	case SERVREG_SERVICE_STATE_UP:
-+		of_register_apr_devices(apr->dev, pds->service_path);
-+		break;
-+	case SERVREG_SERVICE_STATE_DOWN:
-+		device_for_each_child(apr->dev, pds->service_path,
-+				      apr_remove_device);
-+		break;
-+	}
-+}
-+
- static int apr_probe(struct rpmsg_device *rpdev)
- {
- 	struct device *dev = &rpdev->dev;
-@@ -337,26 +413,27 @@ static int apr_probe(struct rpmsg_device *rpdev)
- 	dev_set_drvdata(dev, apr);
- 	apr->ch = rpdev->ept;
- 	apr->dev = dev;
-+
- 	apr->rxwq = create_singlethread_workqueue("qcom_apr_rx");
- 	if (!apr->rxwq) {
- 		dev_err(apr->dev, "Failed to start Rx WQ\n");
- 		return -ENOMEM;
- 	}
- 	INIT_WORK(&apr->rx_work, apr_rxwq);
-+
-+	ret = pdr_handle_init(&apr->pdr, apr_pd_status);
-+	if (ret) {
-+		dev_err(dev, "Failed to init PDR handle\n");
-+		destroy_workqueue(apr->rxwq);
-+		return ret;
-+	}
-+
- 	INIT_LIST_HEAD(&apr->rx_list);
- 	spin_lock_init(&apr->rx_lock);
- 	spin_lock_init(&apr->svcs_lock);
- 	idr_init(&apr->svcs_idr);
--	of_register_apr_devices(dev);
--
--	return 0;
--}
--
--static int apr_remove_device(struct device *dev, void *null)
--{
--	struct apr_device *adev = to_apr_device(dev);
--
--	device_unregister(&adev->dev);
-+	of_apr_add_pd_lookups(dev);
-+	of_register_apr_devices(dev, NULL);
- 
- 	return 0;
- }
-@@ -365,6 +442,7 @@ static void apr_remove(struct rpmsg_device *rpdev)
- {
- 	struct apr *apr = dev_get_drvdata(&rpdev->dev);
- 
-+	pdr_handle_release(&apr->pdr);
- 	device_for_each_child(&rpdev->dev, NULL, apr_remove_device);
- 	flush_workqueue(apr->rxwq);
- 	destroy_workqueue(apr->rxwq);
-diff --git a/include/linux/soc/qcom/apr.h b/include/linux/soc/qcom/apr.h
-index c5d52e2cb275f..7f0bc3cf4d610 100644
---- a/include/linux/soc/qcom/apr.h
-+++ b/include/linux/soc/qcom/apr.h
-@@ -85,6 +85,7 @@ struct apr_device {
- 	uint16_t	domain_id;
- 	uint32_t	version;
- 	char name[APR_NAME_SIZE];
-+	const char *service_path;
- 	spinlock_t	lock;
- 	struct list_head node;
- };
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Yeah, it compiles and boots. I just wasn't able to conclude that the
+patches where working properly.
+
+But, I found another email from Sibi regarding the starvation reported,
+it turns out that this version of the modem firmware requires diag to be
+present. So after launching diag-router the modem is up and running.
+
+
+As such, I've merged the series. Let's try to figure out the clock
+situation to make it functional out of the box.
+
+Regards,
+Bjorn
+
+> >
+> > > >
+> > > > [  616.632227] qcom-q6v5-mss 4080000.remoteproc: fatal error received: dog_hb.c:266:DOG_HB detects starvation of task 0xda172640, triage with its own
+> > >
+> > > Maybe the BIMC fix will address this?
+> > >
+> >
+> > Just applying "clk: qcom: smd: Add missing bimc clock" did not change
+> > things.
+> >
+> > So just to be clear, I'm testing this with the following patches on top
+> > of linux-next:
+> >
+> > clk: qcom: smd: Add missing bimc clock
+> > clk: qcom: smd: Add XO clock for MSM8998
+> > arm64: dts: msm8998: Add xo clock to gcc node
+> > arm64: dts: qcom: msm8998: Add ADSP, MPSS and SLPI nodes
+> > arm64: dts: qcom: msm8998: Update reserved memory map
+> > remoteproc: qcom: pas: Add MSM8998 ADSP and SLPI support
+> > dt-bindings: remoteproc: qcom: Add ADSP and SLPI support for MSM8998 SoC
+> > remoteproc: q6v5-mss: Remove mem clk from the active pool
+> > phy: qcom-qmp: Add optional SW reset
+> > phy: qcom-qmp: Increase the phy init timeout
+> >
+> > Regards,
+> > Bjorn
+> >
+> > > >
+> > > >
+> > > >
+> > > > All the qrtr services seems registered nicely, so the remote does come
+> > > > up before it goes down.
+> > > >
+> > > > Also, adsp comes up nicely.
+> > > >
+> > > > Regards,
+> > > > Bjorn
+> > > >
+> > > > > +                     clock-names = "iface", "bus", "mem", "gpll0_mss",
+> > > > > +                                   "snoc_axi", "mnoc_axi", "qdss", "xo";
+> > > > > +
+> > > > > +                     qcom,smem-states = <&modem_smp2p_out 0>;
+> > > > > +                     qcom,smem-state-names = "stop";
+> > > > > +
+> > > > > +                     resets = <&gcc GCC_MSS_RESTART>;
+> > > > > +                     reset-names = "mss_restart";
+> > > > > +
+> > > > > +                     qcom,halt-regs = <&tcsr_mutex_regs 0x23000 0x25000 0x24000>;
+> > > > > +
+> > > > > +                     power-domains = <&rpmpd MSM8998_VDDCX>,
+> > > > > +                                     <&rpmpd MSM8998_VDDMX>;
+> > > > > +                     power-domain-names = "cx", "mx";
+> > > > > +
+> > > > > +                     mba {
+> > > > > +                             memory-region = <&mba_mem>;
+> > > > > +                     };
+> > > > > +
+> > > > > +                     mpss {
+> > > > > +                             memory-region = <&mpss_mem>;
+> > > > > +                     };
+> > > > > +
+> > > > > +                     glink-edge {
+> > > > > +                             interrupts = <GIC_SPI 452 IRQ_TYPE_EDGE_RISING>;
+> > > > > +                             label = "modem";
+> > > > > +                             qcom,remote-pid = <1>;
+> > > > > +                             mboxes = <&apcs_glb 15>;
+> > > > > +                     };
+> > > > > +             };
+> > > > > +
+> > > > >               gpucc: clock-controller@5065000 {
+> > > > >                       compatible = "qcom,msm8998-gpucc";
+> > > > >                       #clock-cells = <1>;
+> > > > > @@ -1088,6 +1143,42 @@
+> > > > >                                     "gpll0";
+> > > > >               };
+> > > > >
+> > > > > +             remoteproc_slpi: remoteproc@5800000 {
+> > > > > +                     compatible = "qcom,msm8998-slpi-pas";
+> > > > > +                     reg = <0x05800000 0x4040>;
+> > > > > +
+> > > > > +                     interrupts-extended = <&intc GIC_SPI 390 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                                           <&slpi_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                                           <&slpi_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                                           <&slpi_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                                           <&slpi_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
+> > > > > +                     interrupt-names = "wdog", "fatal", "ready",
+> > > > > +                                       "handover", "stop-ack";
+> > > > > +
+> > > > > +                     px-supply = <&vreg_lvs2a_1p8>;
+> > > > > +
+> > > > > +                     clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
+> > > > > +                              <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
+> > > > > +                     clock-names = "xo", "aggre2";
+> > > > > +
+> > > > > +                     memory-region = <&slpi_mem>;
+> > > > > +
+> > > > > +                     qcom,smem-states = <&slpi_smp2p_out 0>;
+> > > > > +                     qcom,smem-state-names = "stop";
+> > > > > +
+> > > > > +                     power-domains = <&rpmpd MSM8998_SSCCX>;
+> > > > > +                     power-domain-names = "ssc_cx";
+> > > > > +
+> > > > > +                     status = "disabled";
+> > > > > +
+> > > > > +                     glink-edge {
+> > > > > +                             interrupts = <GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
+> > > > > +                             label = "dsps";
+> > > > > +                             qcom,remote-pid = <3>;
+> > > > > +                             mboxes = <&apcs_glb 27>;
+> > > > > +                     };
+> > > > > +             };
+> > > > > +
+> > > > >               stm: stm@6002000 {
+> > > > >                       compatible = "arm,coresight-stm", "arm,primecell";
+> > > > >                       reg = <0x06002000 0x1000>,
+> > > > > @@ -1880,6 +1971,39 @@
+> > > > >                       #size-cells = <0>;
+> > > > >               };
+> > > > >
+> > > > > +             remoteproc_adsp: remoteproc@17300000 {
+> > > > > +                     compatible = "qcom,msm8998-adsp-pas";
+> > > > > +                     reg = <0x17300000 0x4040>;
+> > > > > +
+> > > > > +                     interrupts-extended = <&intc GIC_SPI 162 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                                           <&adsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                                           <&adsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                                           <&adsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
+> > > > > +                                           <&adsp_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
+> > > > > +                     interrupt-names = "wdog", "fatal", "ready",
+> > > > > +                                       "handover", "stop-ack";
+> > > > > +
+> > > > > +                     clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>;
+> > > > > +                     clock-names = "xo";
+> > > > > +
+> > > > > +                     memory-region = <&adsp_mem>;
+> > > > > +
+> > > > > +                     qcom,smem-states = <&adsp_smp2p_out 0>;
+> > > > > +                     qcom,smem-state-names = "stop";
+> > > > > +
+> > > > > +                     power-domains = <&rpmpd MSM8998_VDDCX>;
+> > > > > +                     power-domain-names = "cx";
+> > > > > +
+> > > > > +                     status = "disabled";
+> > > > > +
+> > > > > +                     glink-edge {
+> > > > > +                             interrupts = <GIC_SPI 157 IRQ_TYPE_EDGE_RISING>;
+> > > > > +                             label = "lpass";
+> > > > > +                             qcom,remote-pid = <2>;
+> > > > > +                             mboxes = <&apcs_glb 9>;
+> > > > > +                     };
+> > > > > +             };
+> > > > > +
+> > > > >               apcs_glb: mailbox@17911000 {
+> > > > >                       compatible = "qcom,msm8998-apcs-hmss-global";
+> > > > >                       reg = <0x17911000 0x1000>;
+> > > > > --
+> > > > > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> > > > > a Linux Foundation Collaborative Project
