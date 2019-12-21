@@ -2,202 +2,160 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 355F212847A
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 20 Dec 2019 23:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3EA3128B77
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 21 Dec 2019 21:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727509AbfLTWQA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 20 Dec 2019 17:16:00 -0500
-Received: from mail-il1-f196.google.com ([209.85.166.196]:38246 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727413AbfLTWQA (ORCPT
+        id S1727425AbfLUUUn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 21 Dec 2019 15:20:43 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:45978 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726842AbfLUUUn (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 20 Dec 2019 17:16:00 -0500
-Received: by mail-il1-f196.google.com with SMTP id f5so9242399ilq.5
-        for <linux-remoteproc@vger.kernel.org>; Fri, 20 Dec 2019 14:15:59 -0800 (PST)
+        Sat, 21 Dec 2019 15:20:43 -0500
+Received: by mail-pl1-f193.google.com with SMTP id b22so5549126pls.12
+        for <linux-remoteproc@vger.kernel.org>; Sat, 21 Dec 2019 12:20:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PvWa7xcnllmgFIQc5TjQdgByUUuzYx3n1hiBZ4AYta4=;
-        b=hrMufeuc588g/HgbK0LCytUMm0WsbqweLxtriW77oNbPiw/MmW29qb3nVIlxDJYmNj
-         oinggwU2fJ8dyX+5eQo1i7w7GQFvuelA6PS2q1+kh3lLOq19/+76Ob3Pkj4qmOz8q+wq
-         k6pHEcSy/GQDx0MuWS0zlnUWE/W0OJMwhZ411utN6dsp1N9D0b/NW0j0cAZauMWvOa1M
-         GshDLEwzCJIiB04QNgJmUHXVXawziFsB+laAsNfFpObfxHZsTf1AwBNZc03+Jdmg6La+
-         0EtE1ODpS+JmqAcUi8sMZtWzOFynmvQH1S861bJXgG6gq9M5r34155lAP8LchHweDmnW
-         ly5Q==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Hlfv7lgkbhZZ3SIc3UgNPE6Boampe7OtyYVE0MQkMSA=;
+        b=a5NTEAngDx1EoqJzthzVt4uROhz0Vyn8HAS8ScRGRkah+cuhPoYbuGVHLgoGj/Kxw/
+         ER3N84SQvXHcpZaTMmPY9o0SoIGsgVuvGbG2IbqVB+0YsxlwU0rvcHVznDRh8y14Kw5h
+         oPDRhUfuGDQG6e4tuEXp5bpInZReAGQ1QQcIMWv+80EpgS1gNQFPVWRmcMnL/L7S+pYF
+         JnUTw86bn2OflW+M8U5hmhRKQq7Ghw3w1C5OkSnpITAFkEJABmnuyNU7qHIgXd2o8EGn
+         Ux5+sGiWJndyi3NX19arm4VFRiy6+xNNPlqH6oU91vI4Kva5xe/qS9+AAaohc3N2lmys
+         yu+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PvWa7xcnllmgFIQc5TjQdgByUUuzYx3n1hiBZ4AYta4=;
-        b=BZIC//hy3NH89gmHNGM42QbsRkOW1KUf90LSDLzx6xz0cXXuESeLsnPrMYGCnOndEu
-         ApS6rCm1TSRsUL5crNw80I9nwz2+SeLWNid93BuBoL7xXqiycFleuvJQiKloG+w82RIC
-         Bj8sL6wNU+eu4MA2nQDO8FiqhWV3ivi5vms/JOQ85N7R5pr86wFLX0RBp2pJ7YckjjRE
-         +5rWOZNAqYC3VShlsL6OeJvD1+GARBKpzukHd7rsqva0euRs+L0aZLXo2e6Fu1ttlkwi
-         kBaOxj0X/DfbL2mKYRX8gu900dyUbsu8ggE9wwYiqHs0i2UlX2Q59skI0fXKfiww5vFv
-         Gd2A==
-X-Gm-Message-State: APjAAAWxb9sHUPzultYo6hMKWt7hao43WkWRTeCOUrufQt3l+u4sqUn4
-        qgEpIQGO1UrEZP44PnuIGdMsA4uKxuRwLIjHXFxpug==
-X-Google-Smtp-Source: APXvYqycc4aG9E6Qvaovr1YS1bIlYsuAdbLtDOGwS/ZRPnzwsubrAWHafZ0QFTre+brJ0Nd4jVeBIE1d4omx9cD33So=
-X-Received: by 2002:a92:1547:: with SMTP id v68mr13877236ilk.58.1576880159104;
- Fri, 20 Dec 2019 14:15:59 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Hlfv7lgkbhZZ3SIc3UgNPE6Boampe7OtyYVE0MQkMSA=;
+        b=rqF158uwr1MEVcR+Elcev5mrd5DwcLy3UToNy6vee/iwtcC787Nq5CM58kvSaKydu4
+         VY4bO31mVnCzJ7oHYhKkrTzOzcj+HDGPmoDnAW8ftBsMLrL3RMjyO82J8fzuw5o7q+q9
+         oXEfwlHoEfJE3Ivpun1i7iYqAf0iJULXYnUAQu9mNR5wXIHq9EepXCVnKRBUaYkqEvnZ
+         485K0t1ehiRs/UapySI9RW9PQpA2cEyyvYyWNCkKpqqUh9hXfFh0zrVg1cJQJO4Xxxm4
+         50bmosOXiOAlREsqTvbPgtgM9L/COfSh7pmWTqcmS7UFKeWugXdhVhUTVL6f3imVb7EK
+         8+RQ==
+X-Gm-Message-State: APjAAAVSCvhAu4w/trGg0+jAE/B+dYZQI6Xh1LYxxRQQqWeCpq+N7JLL
+        Rx5QxLe10ffXrIkYpcRo0JEJww==
+X-Google-Smtp-Source: APXvYqyQX0g/TRTJDsUTfUwZCKafU5aMcUF3r0SEXFOfDSiADSPnB2M6SwfytxMAz834jQERA25NCA==
+X-Received: by 2002:a17:90a:d682:: with SMTP id x2mr24626885pju.44.1576959642249;
+        Sat, 21 Dec 2019 12:20:42 -0800 (PST)
+Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id a13sm17946953pfc.40.2019.12.21.12.20.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Dec 2019 12:20:41 -0800 (PST)
+Date:   Sat, 21 Dec 2019 12:20:39 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, od@zcrc.me,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/5] remoteproc: Add prepare/unprepare callbacks
+Message-ID: <20191221202039.GG549437@yoga>
+References: <20191210164014.50739-1-paul@crapouillou.net>
+ <20191210164014.50739-3-paul@crapouillou.net>
 MIME-Version: 1.0
-References: <20191213125537.11509-1-t-kristo@ti.com> <20191213125537.11509-6-t-kristo@ti.com>
- <20191218003815.GC16271@xps15> <5869498f-086c-cea4-edcf-1b75fb22cf22@ti.com>
- <CANLsYkz=ZV-AABXq2mSdwKkcdkQgFwStepteFnMBc4j=ahe4Dw@mail.gmail.com> <bd76da62-c9ad-2284-cf4b-8b0f02ed3e66@ti.com>
-In-Reply-To: <bd76da62-c9ad-2284-cf4b-8b0f02ed3e66@ti.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Fri, 20 Dec 2019 15:15:48 -0700
-Message-ID: <CANLsYkz1iJJP-SqkUqH64xqWKKF6m5=k=tZ16wiKEjTir4diAg@mail.gmail.com>
-Subject: Re: [PATCHv3 05/15] remoteproc/omap: Add the rproc ops .da_to_va() implementation
-To:     Suman Anna <s-anna@ti.com>
-Cc:     Tero Kristo <t-kristo@ti.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191210164014.50739-3-paul@crapouillou.net>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu, 19 Dec 2019 at 19:34, Suman Anna <s-anna@ti.com> wrote:
->
-> On 12/19/19 6:12 PM, Mathieu Poirier wrote:
-> > On Thu, 19 Dec 2019 at 06:18, Tero Kristo <t-kristo@ti.com> wrote:
-> >>
-> >> On 18/12/2019 02:38, Mathieu Poirier wrote:
-> >>> On Fri, Dec 13, 2019 at 02:55:27PM +0200, Tero Kristo wrote:
-> >>>> From: Suman Anna <s-anna@ti.com>
-> >>>>
-> >>>> An implementation for the rproc ops .da_to_va() has been added
-> >>>> that provides the address translation between device addresses
-> >>>> to kernel virtual addresses for internal RAMs present on that
-> >>>> particular remote processor device. The implementation provides
-> >>>> the translations based on the addresses parsed and stored during
-> >>>> the probe.
-> >>>>
-> >>>> This ops gets invoked by the exported rproc_da_to_va() function
-> >>>> and allows the remoteproc core's ELF loader to be able to load
-> >>>> program data directly into the internal memories.
-> >>>>
-> >>>> Signed-off-by: Suman Anna <s-anna@ti.com>
-> >>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> >>>> ---
-> >>>>   drivers/remoteproc/omap_remoteproc.c | 39 ++++++++++++++++++++++++++++
-> >>>>   1 file changed, 39 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
-> >>>> index 844703507a74..28f14e24b389 100644
-> >>>> --- a/drivers/remoteproc/omap_remoteproc.c
-> >>>> +++ b/drivers/remoteproc/omap_remoteproc.c
-> >>>> @@ -232,10 +232,49 @@ static int omap_rproc_stop(struct rproc *rproc)
-> >>>>      return 0;
-> >>>>   }
-> >>>>
-> >>>> +/**
-> >>>> + * omap_rproc_da_to_va() - internal memory translation helper
-> >>>> + * @rproc: remote processor to apply the address translation for
-> >>>> + * @da: device address to translate
-> >>>> + * @len: length of the memory buffer
-> >>>> + *
-> >>>> + * Custom function implementing the rproc .da_to_va ops to provide address
-> >>>> + * translation (device address to kernel virtual address) for internal RAMs
-> >>>> + * present in a DSP or IPU device). The translated addresses can be used
-> >>>> + * either by the remoteproc core for loading, or by any rpmsg bus drivers.
-> >>>> + * Returns the translated virtual address in kernel memory space, or NULL
-> >>>> + * in failure.
-> >>>> + */
-> >>>> +static void *omap_rproc_da_to_va(struct rproc *rproc, u64 da, int len)
-> >>>> +{
-> >>>> +    struct omap_rproc *oproc = rproc->priv;
-> >>>> +    int i;
-> >>>> +    u32 offset;
-> >>>> +
-> >>>> +    if (len <= 0)
-> >>>> +            return NULL;
-> >>>> +
-> >>>> +    if (!oproc->num_mems)
-> >>>> +            return NULL;
-> >>>> +
-> >>>> +    for (i = 0; i < oproc->num_mems; i++) {
-> >>>> +            if (da >= oproc->mem[i].dev_addr && da + len <=
-> >>>
-> >>> Shouldn't this be '<' rather than '<=' ?
-> >>
-> >> No, I think <= is correct. You need to consider the initial byte in the
-> >> range also. Consider a simple case where you provide the exact da + len
-> >> corresponding to a specific memory range.
-> >
-> > For that specific case you are correct.  On the flip side if @da falls
-> > somewhere after @mem[i].dev_addr, there is a possibility to clobber
-> > the first byte of the next range if <= is used.
->
-> Not really, you will miss out on the last byte actually if you use just
-> <. This is just address range check, any memcpy would actually end one
-> byte before.
+On Tue 10 Dec 08:40 PST 2019, Paul Cercueil wrote:
 
-I am indeed worried about actual memory accesses but rproc_da_to_va()
-is using the same logic as you are when circling through carveouts.
-As such you can forget about my comment.
+> The .prepare() callback is called before the firmware is loaded to
+> memory. This is useful for instance in the case where some setup is
+> required for the memory to be accessible.
+> 
 
-Thanks,
-Mathieu
+Would it make sense to somehow tie this prepare/unprepare to the actual
+struct rproc_mem_entry that needs the resource enabled?
 
->
-> Eg: 0x80000 of len 0x10000. I should perfectly be able to copy 0x1000
-> bytes at 0x8f000.
->
-> regards
-> Suman
->
->
-> >
-> > Thanks,
-> > Mathieu
-> >
-> >>
-> >>>
-> >>>> +                oproc->mem[i].dev_addr +  oproc->mem[i].size) {
-> >>>
-> >>> One space too many after the '+' .
-> >>
-> >> True, I wonder why checkpatch did not catch this.
-> >>
-> >>>
-> >>>> +                    offset = da -  oproc->mem[i].dev_addr;
-> >>>
-> >>> One space too many after then '-' .
-> >>
-> >> Same, will fix these two.
-> >>
-> >> -Tero
-> >>
-> >>>
-> >>>> +                    /* __force to make sparse happy with type conversion */
-> >>>> +                    return (__force void *)(oproc->mem[i].cpu_addr +
-> >>>> +                                            offset);
-> >>>> +            }
-> >>>> +    }
-> >>>> +
-> >>>> +    return NULL;
-> >>>> +}
-> >>>> +
-> >>>>   static const struct rproc_ops omap_rproc_ops = {
-> >>>>      .start          = omap_rproc_start,
-> >>>>      .stop           = omap_rproc_stop,
-> >>>>      .kick           = omap_rproc_kick,
-> >>>> +    .da_to_va       = omap_rproc_da_to_va,
-> >>>>   };
-> >>>>
-> >>>>   static const char * const ipu_mem_names[] = {
-> >>>> --
-> >>>> 2.17.1
-> >>>>
-> >>>> --
-> >>
-> >> --
-> >> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
->
+Regards,
+Bjorn
+
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+> 
+> Notes:
+>     v2-v4: No change
+> 
+>  drivers/remoteproc/remoteproc_core.c | 16 +++++++++++++++-
+>  include/linux/remoteproc.h           |  4 ++++
+>  2 files changed, 19 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 0a9fc7fdd1c3..3ea5f675a148 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -1299,11 +1299,19 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+>  	struct device *dev = &rproc->dev;
+>  	int ret;
+>  
+> +	if (rproc->ops->prepare) {
+> +		ret = rproc->ops->prepare(rproc);
+> +		if (ret) {
+> +			dev_err(dev, "Failed to prepare rproc: %d\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+>  	/* load the ELF segments to memory */
+>  	ret = rproc_load_segments(rproc, fw);
+>  	if (ret) {
+>  		dev_err(dev, "Failed to load program segments: %d\n", ret);
+> -		return ret;
+> +		goto unprepare_rproc;
+>  	}
+>  
+>  	/*
+> @@ -1354,6 +1362,9 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+>  	rproc_unprepare_subdevices(rproc);
+>  reset_table_ptr:
+>  	rproc->table_ptr = rproc->cached_table;
+> +unprepare_rproc:
+> +	if (rproc->ops->unprepare)
+> +		rproc->ops->unprepare(rproc);
+>  
+>  	return ret;
+>  }
+> @@ -1483,6 +1494,9 @@ static int rproc_stop(struct rproc *rproc, bool crashed)
+>  
+>  	rproc->state = RPROC_OFFLINE;
+>  
+> +	if (rproc->ops->unprepare)
+> +		rproc->ops->unprepare(rproc);
+> +
+>  	dev_info(dev, "stopped remote processor %s\n", rproc->name);
+>  
+>  	return 0;
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index 5f201f0c86c3..a6272d1ba384 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -355,6 +355,8 @@ enum rsc_handling_status {
+>  
+>  /**
+>   * struct rproc_ops - platform-specific device handlers
+> + * @prepare:	prepare the device for power up (before the firmware is loaded)
+> + * @unprepare:	unprepare the device after it is stopped
+>   * @start:	power on the device and boot it
+>   * @stop:	power off the device
+>   * @kick:	kick a virtqueue (virtqueue id given as a parameter)
+> @@ -371,6 +373,8 @@ enum rsc_handling_status {
+>   * @get_boot_addr:	get boot address to entry point specified in firmware
+>   */
+>  struct rproc_ops {
+> +	int (*prepare)(struct rproc *rproc);
+> +	void (*unprepare)(struct rproc *rproc);
+>  	int (*start)(struct rproc *rproc);
+>  	int (*stop)(struct rproc *rproc);
+>  	void (*kick)(struct rproc *rproc, int vqid);
+> -- 
+> 2.24.0
+> 
