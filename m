@@ -2,59 +2,105 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB4A129F6C
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Dec 2019 09:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB66912B157
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Dec 2019 06:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726116AbfLXIrT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 24 Dec 2019 03:47:19 -0500
-Received: from mail-qv1-f65.google.com ([209.85.219.65]:43159 "EHLO
-        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726124AbfLXIrN (ORCPT
+        id S1726293AbfL0Fcw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 Dec 2019 00:32:52 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:42986 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726270AbfL0Fcv (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 24 Dec 2019 03:47:13 -0500
-Received: by mail-qv1-f65.google.com with SMTP id p2so7241627qvo.10
-        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Dec 2019 00:47:12 -0800 (PST)
+        Fri, 27 Dec 2019 00:32:51 -0500
+Received: by mail-pg1-f193.google.com with SMTP id s64so13906721pgb.9
+        for <linux-remoteproc@vger.kernel.org>; Thu, 26 Dec 2019 21:32:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
-        b=PQC8SYLCXx+8aDuDCLCwJgk2oQh3fLzHmMXwhB5xY3bef3Vo9nrhk4Yg6HHmflz15A
-         odr7sEsXszk5IefLinD2h+1zq4e88FBObg36SZAuPRqSewet3Ta9S7nYrpgVd56Fd7Nn
-         pF4UOpFqHS/vFlCYHvNiKKET749oMuh6ba4SGm84XHPjlJH1jZ6bNkVeqECOxLVvUm4D
-         QLX5/qOjMF+sSc2kOy8uf2Xg/YtEl3CfJAdSFbQYNBLHe5VpSisBe2Vhsy7I7HtuscWQ
-         RrXf3skZb21QSlq2mtaYGqsirOIfAXY2wSc5lCy61V/R0NEOho5Faf+a1vRLR5TL05Tc
-         J2BQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DNsQCo6LXJC8qwpw5lLZyTWBH87Wonp/iNPumYIBIeA=;
+        b=uHM3rh/xMixeEdGho0V1/5lGpU6VG1/HH/T6XemIFGYsnmrcrteFrw0IqAZHxYaJ0s
+         uNH8CHUWtdchxN+9CaSvyP4gXsrwdWe5QWtZNR3X8fWzCS5363hiy/T7wGE1m5YhV7hh
+         bdVN3ByBeY5QKvpS0R+p7Ide7Z+12wWKvfXDZogvdyH0CbVBSWFMATsbGFSVU72Kd6iX
+         e15T15UJuA5cfgx8ukGCXiiJ23SCniTp/ZhcZRjBy3ceBSLc2xlxrBfDwuASiTVF8bBu
+         F9qAHVK2fMH8EJY77plt5xiTpdRMF6kdWJ/uZffL1tnkM+Uw8nhwi73WfNGTRPQipUwT
+         eOGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=LcGU1mt+nAQIi3eKcWZpiy7DqrkNG23tK1MNYV9CB+M=;
-        b=RnxWMFOpK0hdONR119EerQpJJzgWnVmBOFk2k0E4vnEY94+M+Hoz/LZAy7lqwybGHl
-         fmzVUdZCDxuo/r2en7TJW+RUA9YE4UJgFHOBih9N78KTXkTymGucj7wJGrAFWhOViCla
-         pq/IQfbQrHWZPA/AYZmAMhHV5DSRI5Sw3Z/Z6xA8xaHN5erZ4FJkN01fmtpEP8+Y+L1H
-         WrWoZOvOZH77/paXERtT/GcHXkY7aE2dGVo+Z4pXiZtEj/5gRIt4gPFqzU9Nqbc4Xf6t
-         YyoV9ImpeRtDJQyRd2DbpFFdT95tO/K/a8hzrJ0I6E/VNbLCOVZmlPXbcdRbonyhYiz2
-         P/JA==
-X-Gm-Message-State: APjAAAUkTBKwoxt6mrimMjJWqJL+Dh39I8lwQWQ57sKYluTkVDkZyBWu
-        BDKt+TAgu2yy/KV4iUg0HRJs+FzPR3ntDDQovlk=
-X-Google-Smtp-Source: APXvYqzaLbNYw7chXTk9TUUPs6B60DWqUF5k2s4P095bxLhv0swSj+2PMPeIkcEn8uNvF34hBR2yK95ka1103zSo7Q4=
-X-Received: by 2002:a0c:f24a:: with SMTP id z10mr28100861qvl.33.1577177231005;
- Tue, 24 Dec 2019 00:47:11 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DNsQCo6LXJC8qwpw5lLZyTWBH87Wonp/iNPumYIBIeA=;
+        b=p8zMTqGQTDT/bBixDC5VXX101FbPG5AMZ0onIhht73avD+e78tcHhLnb3w/vR7Tny2
+         oWoy4QEtn4V5rMldhM88vVbeBlVOMBNCy4uqPmafMZni/cFPRkCFybiUNCAJzHtANFi9
+         hpf0EcsEINPBOtXV8D2pDCUaCkm3XN6UMQD8LTp7NNyXKtKn10LOrO7e+z6NBSD6CWTq
+         Phm/HqoayoNY6ZTKvCpQs7VeRDQawOHVFnn0aK+L20ASIsLOKrtqcaetvWcxFn8T2d43
+         F0b4OzalwLapNq4lVKf89FurPPGdBV1BS3e+BrjHenFShkcUnbES3T7f1IHqDWR/+Xzt
+         GhuA==
+X-Gm-Message-State: APjAAAUCMXyG/yc/T4IwPibgqjw+n+fupupf2xQUVgFmXJrk1/TDtAWY
+        YIBKgFGknhNllEAUSLoOFnrd7w==
+X-Google-Smtp-Source: APXvYqyiRlqXJsIiwAETAxfq+/5jWNahW0z2oKyFwzUy1QxniQMUf9zzQ7/zUYDe5YgBzNLcYZsDkg==
+X-Received: by 2002:a63:d54f:: with SMTP id v15mr54357940pgi.64.1577424770892;
+        Thu, 26 Dec 2019 21:32:50 -0800 (PST)
+Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id c22sm16789196pfo.50.2019.12.26.21.32.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Dec 2019 21:32:50 -0800 (PST)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Subject: [PATCH v2 0/8] remoteproc: qcom: post mortem debug support
+Date:   Thu, 26 Dec 2019 21:32:07 -0800
+Message-Id: <20191227053215.423811-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Received: by 2002:ad4:530a:0:0:0:0:0 with HTTP; Tue, 24 Dec 2019 00:47:10
- -0800 (PST)
-Reply-To: bethnatividad9@gmail.com
-From:   Beth Nat <anthonymoore105@gmail.com>
-Date:   Tue, 24 Dec 2019 08:47:10 +0000
-Message-ID: <CAKqrdYCjdg7tKr1Bgbtcoo-HGDCypDL8xnV8R2ZpiJxfRimm-A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-How are you today my dear? i saw your profile and it interests me, i
-am a Military nurse from USA. Can we be friend? I want to know more
-about you.
+The following series introduces two components that aids in post mortem
+debugging of Qualcomm systems. The first part is used to store information
+about loaded images in IMEM, for post mortem tools to know where the kernel
+loaded the remoteproc firmware. The second part invokes a stop operation on the
+remoteprocs during a kernel panic, in order to trigger them to flush caches
+etc.
+
+Bjorn Andersson (8):
+  dt-bindings: remoteproc: Add Qualcomm PIL info binding
+  remoteproc: qcom: Introduce driver to store pil info in IMEM
+  remoteproc: qcom: Update IMEM PIL info on load
+  arm64: dts: qcom: qcs404: Add IMEM and PIL info region
+  arm64: dts: qcom: sdm845: Add IMEM and PIL info region
+  remoteproc: Introduce "panic" callback in ops
+  remoteproc: qcom: q6v5: Add common panic handler
+  remoteproc: qcom: Introduce panic handler for PAS and ADSP
+
+ .../bindings/remoteproc/qcom,pil-info.yaml    |  35 ++++
+ arch/arm64/boot/dts/qcom/qcs404.dtsi          |  10 ++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  10 ++
+ drivers/remoteproc/Kconfig                    |   6 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/qcom_pil_info.c            | 150 ++++++++++++++++++
+ drivers/remoteproc/qcom_pil_info.h            |   8 +
+ drivers/remoteproc/qcom_q6v5.c                |  19 +++
+ drivers/remoteproc/qcom_q6v5.h                |   1 +
+ drivers/remoteproc/qcom_q6v5_adsp.c           |  27 +++-
+ drivers/remoteproc/qcom_q6v5_mss.c            |   6 +
+ drivers/remoteproc/qcom_q6v5_pas.c            |  26 ++-
+ drivers/remoteproc/qcom_wcnss.c               |  17 +-
+ drivers/remoteproc/remoteproc_core.c          |  17 ++
+ include/linux/remoteproc.h                    |   4 +
+ 15 files changed, 328 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml
+ create mode 100644 drivers/remoteproc/qcom_pil_info.c
+ create mode 100644 drivers/remoteproc/qcom_pil_info.h
+
+-- 
+2.24.0
+
