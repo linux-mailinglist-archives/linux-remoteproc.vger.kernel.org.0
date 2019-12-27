@@ -2,49 +2,49 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2A912B169
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Dec 2019 06:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC2812B164
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Dec 2019 06:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727122AbfL0FdM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 Dec 2019 00:33:12 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34462 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727011AbfL0Fc7 (ORCPT
+        id S1727130AbfL0FdC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 Dec 2019 00:33:02 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41161 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727092AbfL0FdA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 27 Dec 2019 00:32:59 -0500
-Received: by mail-pf1-f195.google.com with SMTP id i6so7377574pfc.1
-        for <linux-remoteproc@vger.kernel.org>; Thu, 26 Dec 2019 21:32:59 -0800 (PST)
+        Fri, 27 Dec 2019 00:33:00 -0500
+Received: by mail-pf1-f193.google.com with SMTP id w62so14224717pfw.8
+        for <linux-remoteproc@vger.kernel.org>; Thu, 26 Dec 2019 21:33:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=F+FUx/nQYrrbDRHZLQaTu/i+aQlt0vK55dtnLQtWHsk=;
-        b=s6aKJcPRJJGJbAml1ppgcXP7+X6cEcYvzbj5ZikmJLvE3xgaWOn8GBSNOF5+7cHUCD
-         rSnvHuQMXXh06FEmihaYw24TBbiL0golafHaL3KOQ9wDhVG4YnBl+qrQ9uqgI4oiO2Oy
-         nlzmQYHupUoiGCbMJ6PVO3PGj8HbG7meLWVw4Tc3YaQPIpnRJabfQpPSVIVGhr+lp2Xf
-         cZjlsOodS5bv8pzEbU2KYJ5EkiAFF6PZxddVspdtnTqd+jhfb73q462eNxfySeHeBkh4
-         mvYoXfWG1tLYdvXEt1TIQtIapnW/dZfC5d7wdyA3nZm5muq+Qi4AoqBEApa1SnAdcMdq
-         0GsA==
+        bh=CeCsCjetYaq9WLaLyz0l/vASvwsTn/rJXzj0Xq2S4N0=;
+        b=nLUHfY3E5pMaN/KibvmuXbNaq42aQuxH65u3ZO17PcOn2YXEXNxWwRZ1Uwshnr2S+A
+         lVYJhmM9SL4UeG2a1yWFvttGr1Wo/xmIAbIq9BLzf6o6geguJVWtrYcCgOC4gSvhQpHi
+         lf6+PG0dZwBXVEwwPMZAuVTtW9W4YxRzxMV/4x5w1NklBDocWivYi6fgJHI4brndU4xN
+         MMPqLAFb5AwBy+Jk9GUrwJ9qzXxszrZlwXCmLp7l/OP8g0O36xOlipenlvdtD6k2JdK8
+         w2z42alR2lXpGiTRg4hUQl3IAkxVa0wtJWqfuNGJsWeCJElbo7fX2MvECQw3E+b2U2nW
+         O47w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=F+FUx/nQYrrbDRHZLQaTu/i+aQlt0vK55dtnLQtWHsk=;
-        b=ZO5G+6sBcIvTo0LO4coRIqSWk/F3yn2DfnQMqnybJmgaL1HLgbzult/N20Bz56H4M5
-         xzmwdHcniIKUFSMi/Eb2YlIAbJvDWUkogXnHPm07j1h3E5HXxKQk0FRlGktxXJ2kjS+4
-         ulpVzaev97/nO6+wqH6c1FlDA1yfPm325jmKgjfGwr5LK/h7j+REonESgwcbax/nSgf2
-         briMNz6bT6b612o1Gpxok6z389TGFDloy0DLaPrPC9K7KTrPBZfD9g3yi2p9HeKp9n92
-         YPGbEhy+0GrQtM8s+/xAwzEShZ+wxDhQdWDSplFMM2TnZB/2dMYGD0BojdVqIu6TxtO6
-         SXxQ==
-X-Gm-Message-State: APjAAAVxJp2s1fNLNkN5pvF71WYdKTKgqrOFWFo6xpXrMbbCL/aP60ri
-        M63J4W45Dca8UviqXwLxOpS0rA==
-X-Google-Smtp-Source: APXvYqykVB6Sg275XYpp8OaYtFdA2J8FU9hIotZAajx009lRzRW7ol3l0HL7rchypMnYR7aapuCG7A==
-X-Received: by 2002:a63:d906:: with SMTP id r6mr52775727pgg.440.1577424778722;
-        Thu, 26 Dec 2019 21:32:58 -0800 (PST)
+        bh=CeCsCjetYaq9WLaLyz0l/vASvwsTn/rJXzj0Xq2S4N0=;
+        b=cO3D6cRdO4lDNyJhhTnipFuDhfcPPG5OJr8ABOP2fuGo6ElbUo5AZIz64b/axCHoe7
+         WtAbfMn31q9zwVf2t+yeQYX4JU1CWW5ngAIlDF3KHqx5Y+8+EX/G4uj6XqxkWD9Nogaf
+         HXb4qRcbqsW56ytszJRXyUhiLPGSEKwFhJ+jZ7OM9yXZoBlXrmdsdaC0s3eWriE8rwlC
+         AB46YriKp4NcScKdOzzf9GMQ+516OZMrSvZ6fHVDlY1JEoWWBClWWWLoOiPQLL2aS9lU
+         tczN5+jOXlY3dAyFs9iB0rJAIvP4XYKLmfYvsLkwJdBllwGSDstQ0ZiSHNtLLe4gHMwC
+         8lpg==
+X-Gm-Message-State: APjAAAUw8L1geXqgLrgs2ok2qyqfQf2fBY/lu2+pgnbbp1C9Dqb4/HuH
+        11Ne6f3f3TKENSRUk6gWunXsSw==
+X-Google-Smtp-Source: APXvYqxzJpBIHGrECrk/Sj1WJfPavf8d17nw7NaVwsIPGGgf0uM1/ScPyfybxlPjCI6MxIUQVcd6NQ==
+X-Received: by 2002:a63:1210:: with SMTP id h16mr51989473pgl.171.1577424779986;
+        Thu, 26 Dec 2019 21:32:59 -0800 (PST)
 Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id c22sm16789196pfo.50.2019.12.26.21.32.57
+        by smtp.gmail.com with ESMTPSA id c22sm16789196pfo.50.2019.12.26.21.32.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Dec 2019 21:32:58 -0800 (PST)
+        Thu, 26 Dec 2019 21:32:59 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -53,9 +53,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         Sibi Sankar <sibis@codeaurora.org>,
         Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Subject: [PATCH v2 6/8] remoteproc: Introduce "panic" callback in ops
-Date:   Thu, 26 Dec 2019 21:32:13 -0800
-Message-Id: <20191227053215.423811-7-bjorn.andersson@linaro.org>
+Subject: [PATCH v2 7/8] remoteproc: qcom: q6v5: Add common panic handler
+Date:   Thu, 26 Dec 2019 21:32:14 -0800
+Message-Id: <20191227053215.423811-8-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191227053215.423811-1-bjorn.andersson@linaro.org>
 References: <20191227053215.423811-1-bjorn.andersson@linaro.org>
@@ -66,10 +66,9 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Introduce a "panic" function in the remoteproc ops table, to allow
-remoteproc instances to perform operations needed in order to aid in
-post mortem system debugging, such as flushing caches etc, when the
-kernel panics.
+Add a common panic handler that invokes a stop request and sleep enough
+to let the remoteproc flush it's caches etc in order to aid post mortem
+debugging.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
@@ -77,81 +76,65 @@ Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Changes since v1:
 - None
 
- drivers/remoteproc/remoteproc_core.c | 17 +++++++++++++++++
- include/linux/remoteproc.h           |  4 ++++
- 2 files changed, 21 insertions(+)
+ drivers/remoteproc/qcom_q6v5.c | 19 +++++++++++++++++++
+ drivers/remoteproc/qcom_q6v5.h |  1 +
+ 2 files changed, 20 insertions(+)
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 307df98347ba..779f19d6d8e7 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1832,6 +1832,17 @@ void rproc_shutdown(struct rproc *rproc)
+diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+index cb0f4a0be032..17167c980e02 100644
+--- a/drivers/remoteproc/qcom_q6v5.c
++++ b/drivers/remoteproc/qcom_q6v5.c
+@@ -6,6 +6,7 @@
+  * Copyright (C) 2014 Sony Mobile Communications AB
+  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+  */
++#include <linux/delay.h>
+ #include <linux/kernel.h>
+ #include <linux/platform_device.h>
+ #include <linux/interrupt.h>
+@@ -15,6 +16,8 @@
+ #include <linux/remoteproc.h>
+ #include "qcom_q6v5.h"
+ 
++#define Q6V5_PANIC_DELAY_MS	200
++
+ /**
+  * qcom_q6v5_prepare() - reinitialize the qcom_q6v5 context before start
+  * @q6v5:	reference to qcom_q6v5 context to be reinitialized
+@@ -162,6 +165,22 @@ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5)
  }
- EXPORT_SYMBOL(rproc_shutdown);
+ EXPORT_SYMBOL_GPL(qcom_q6v5_request_stop);
  
-+static int rproc_panic_handler(struct notifier_block *nb, unsigned long event,
-+			       void *ptr)
++/**
++ * qcom_q6v5_panic() - panic handler to invoke a stop on the remote
++ * @q6v5:	reference to qcom_q6v5 context
++ *
++ * Set the stop bit and sleep in order to allow the remote processor to flush
++ * its caches etc for post mortem debugging.
++ */
++void qcom_q6v5_panic(struct qcom_q6v5 *q6v5)
 +{
-+	struct rproc *rproc = container_of(nb, struct rproc, panic_nb);
++	qcom_smem_state_update_bits(q6v5->state,
++				    BIT(q6v5->stop_bit), BIT(q6v5->stop_bit));
 +
-+	if (rproc->state == RPROC_RUNNING)
-+		rproc->ops->panic(rproc);
-+
-+	return NOTIFY_DONE;
++	mdelay(Q6V5_PANIC_DELAY_MS);
 +}
++EXPORT_SYMBOL_GPL(qcom_q6v5_panic);
 +
  /**
-  * rproc_get_by_phandle() - find a remote processor by phandle
-  * @phandle: phandle to the rproc
-@@ -2057,6 +2068,12 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
- 		rproc->ops->get_boot_addr = rproc_elf_get_boot_addr;
- 	}
+  * qcom_q6v5_init() - initializer of the q6v5 common struct
+  * @q6v5:	handle to be initialized
+diff --git a/drivers/remoteproc/qcom_q6v5.h b/drivers/remoteproc/qcom_q6v5.h
+index 7ac92c1e0f49..c37e6fd063e4 100644
+--- a/drivers/remoteproc/qcom_q6v5.h
++++ b/drivers/remoteproc/qcom_q6v5.h
+@@ -42,5 +42,6 @@ int qcom_q6v5_prepare(struct qcom_q6v5 *q6v5);
+ int qcom_q6v5_unprepare(struct qcom_q6v5 *q6v5);
+ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5);
+ int qcom_q6v5_wait_for_start(struct qcom_q6v5 *q6v5, int timeout);
++void qcom_q6v5_panic(struct qcom_q6v5 *q6v5);
  
-+	/* Register panic notifier for remoteprocs with "panic" callback */
-+	if (rproc->ops->panic) {
-+		rproc->panic_nb.notifier_call = rproc_panic_handler;
-+		atomic_notifier_chain_register(&panic_notifier_list, &rproc->panic_nb);
-+	}
-+
- 	mutex_init(&rproc->lock);
- 
- 	idr_init(&rproc->notifyids);
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index 16ad66683ad0..7836c528d309 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -369,6 +369,7 @@ enum rsc_handling_status {
-  *			expects to find it
-  * @sanity_check:	sanity check the fw image
-  * @get_boot_addr:	get boot address to entry point specified in firmware
-+ * @panic:	optional callback to react to system panic
-  */
- struct rproc_ops {
- 	int (*start)(struct rproc *rproc);
-@@ -383,6 +384,7 @@ struct rproc_ops {
- 	int (*load)(struct rproc *rproc, const struct firmware *fw);
- 	int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
- 	u32 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
-+	void (*panic)(struct rproc *rproc);
- };
- 
- /**
-@@ -481,6 +483,7 @@ struct rproc_dump_segment {
-  * @auto_boot: flag to indicate if remote processor should be auto-started
-  * @dump_segments: list of segments in the firmware
-  * @nb_vdev: number of vdev currently handled by rproc
-+ * @panic_nb: notifier_block for remoteproc's panic handler
-  */
- struct rproc {
- 	struct list_head node;
-@@ -514,6 +517,7 @@ struct rproc {
- 	bool auto_boot;
- 	struct list_head dump_segments;
- 	int nb_vdev;
-+	struct notifier_block panic_nb;
- };
- 
- /**
+ #endif
 -- 
 2.24.0
 
