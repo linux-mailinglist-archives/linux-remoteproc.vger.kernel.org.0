@@ -2,111 +2,79 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94597132A67
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Jan 2020 16:49:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC25132FE5
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Jan 2020 20:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728399AbgAGPsv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 7 Jan 2020 10:48:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38408 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727559AbgAGPsv (ORCPT
+        id S1728369AbgAGTyV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 7 Jan 2020 14:54:21 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:37675 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728619AbgAGTyV (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 7 Jan 2020 10:48:51 -0500
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2808B208C4;
-        Tue,  7 Jan 2020 15:48:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578412130;
-        bh=m8JJwNYYUN0cI55b1bIkcqX+lHoyiGdFR/bK6o9/YMk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ELXoZKRxKo7R5r0mofZ53Y2FWh9zmTp8Em7ycLJvHJf4OqA5sB+SWyYHMx6PYHiW8
-         1SdZWYOp5ry24NfKanSDjxT+3mJwXwoHZzoLNzGatOug0DNWynZwYyxrwPvimiJC43
-         tqXQBu1Ql2Xbt7AXCx8y8V88zAKKdEfCG1CZV4Bg=
-Received: by mail-qk1-f177.google.com with SMTP id x1so42991749qkl.12;
-        Tue, 07 Jan 2020 07:48:50 -0800 (PST)
-X-Gm-Message-State: APjAAAXcYavMc5KQwjAZ1UVHcMY2HSzyFsBoRb8ipZJRgAu9RoXk8Hcu
-        frfxC9G5U8zzawvv/jur1dK9PZ8Proswwbc57Q==
-X-Google-Smtp-Source: APXvYqw42izep83otEMcE93AOoYtZ0fOAGbAAx5hxU3nM1+/TcTF1GLkofhxJo86KQeQJMXepNDVqz6q6bljFjDWx4M=
-X-Received: by 2002:ae9:f205:: with SMTP id m5mr89412395qkg.152.1578412129283;
- Tue, 07 Jan 2020 07:48:49 -0800 (PST)
+        Tue, 7 Jan 2020 14:54:21 -0500
+Received: by mail-ed1-f68.google.com with SMTP id cy15so629875edb.4
+        for <linux-remoteproc@vger.kernel.org>; Tue, 07 Jan 2020 11:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
+        b=rePy6dvW+ZH47h+1V5ZzhOdHt3hyIpKxcBqRG6Yxugb8Ug55qYyaTQK4+wINdwq55f
+         jyS7yVvOQ5iMzNISAd+yiqtmzzFVbayzDS39QWeF/dmepISKDIrC01/Pyd16Jkxknswo
+         ZxY/mmXagT/Q6hX/41m7OLd2SMfr8CZO7Ci1IzWbi02KR9YYzIjtqbyhfstjO3po9RzC
+         tRdf7rgiUAYJtfRgzdFxSV7Qq5Jehd/t/PYuqt0rxIFlDCGzailtByweOtMj5bqBnwVk
+         IjZK4uPjcTNDDRooC9FKrWtSPPIiz9LQ6akzqbAN2ioBe4cx30eADGCJ98dfGgAz0k84
+         86YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Pi/olKLeaBrqhttAwoMGSoT+Sxp+y5xY3PQr7eygtLM=;
+        b=cblbTvxNBrnPkqpyU8IRakLFXYw8bWM7odBBaf6jvbkdGiyK2gsMVmpfijsTmr7nHW
+         4YOKkuDnEOHJqsxX55swadgPUmEcSqVq2O75a+hGBS/9qzCoGpPAfmR3mqxLuBlzScqK
+         5o6A2vKZbIRM9lOJ6CA7H92Xe5Drmaw+tE/kjpr2cdCON9OoZIqk3avLUI/aHZlPGxfA
+         Vwpxi4mEcC01aBv3PUzuC114MgMy78BHix5GYhQahgCVGPDe7tsRVEVp9eneZjzE6DDk
+         q8Sa8/xxoDpPaDWBgsNITQeENhD4zRgFPsA2vbK1/ZW7QHRUa9c9TJjRGvcHc5C4PjQ3
+         B6TQ==
+X-Gm-Message-State: APjAAAVz0MkmSNQq4pTcm4gU78WV45/ySFUg3K30FhbZDedlVTZ9LKJJ
+        3z911FIJa8dQ9A3ezYkp3DTrbvdKFD6rLbluh2g=
+X-Google-Smtp-Source: APXvYqx1uh7JY9TsleWmDC3UVv1ETHY9DfduKRb8/JpOu+/AEBPnllkLYgtKF65Y7XFrgtyDYVY72zE2SUwJXZDirUk=
+X-Received: by 2002:a17:906:2894:: with SMTP id o20mr1108577ejd.199.1578426859045;
+ Tue, 07 Jan 2020 11:54:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20200102131845.12992-2-t-kristo@ti.com> <20200102132512.13248-1-t-kristo@ti.com>
- <20200103233855.GA19897@bogus> <358abb44-7724-4e25-6a3d-6939ec82386a@ti.com>
-In-Reply-To: <358abb44-7724-4e25-6a3d-6939ec82386a@ti.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 7 Jan 2020 09:48:36 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJY8fzQ8=e=RHrtq1huucx6msqXJ+C6EcoaofBqRf9yLQ@mail.gmail.com>
-Message-ID: <CAL_JsqJY8fzQ8=e=RHrtq1huucx6msqXJ+C6EcoaofBqRf9yLQ@mail.gmail.com>
-Subject: Re: [RESEND PATCHv4 01/14] dt-bindings: remoteproc: Add OMAP
- remoteproc bindings
-To:     Tero Kristo <t-kristo@ti.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        Suman Anna <s-anna@ti.com>, devicetree@vger.kernel.org
+Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:54:18
+ -0800 (PST)
+Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
+From:   "Dr. William Johnson" <currency1000000@gmail.com>
+Date:   Tue, 7 Jan 2020 20:54:18 +0100
+Message-ID: <CAPqfnSFyOwF0m-QsrOdcFV_PCC3TSBr=YQHoQHvH0baKHfeF6Q@mail.gmail.com>
+Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
+ worth $15.8Million US DOLLARS now.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Jan 7, 2020 at 5:01 AM Tero Kristo <t-kristo@ti.com> wrote:
->
-> On 04/01/2020 01:38, Rob Herring wrote:
-> > On Thu, Jan 02, 2020 at 03:25:12PM +0200, Tero Kristo wrote:
-> >> From: Suman Anna <s-anna@ti.com>
-> >>
-> >> Add the device tree bindings document for the IPU and DSP
-> >> remote processor devices on OMAP4+ SoCs.
-> >>
-> >> Cc: Rob Herring <robh@kernel.org>
-> >> Cc: devicetree@vger.kernel.org
-> >> Signed-off-by: Suman Anna <s-anna@ti.com>
-> >> [t-kristo@ti.com: converted to schema]
-> >> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> >> ---
-> >> v4: added ti,bootreg-shift and ti,autosuspend-delay properties
-> >>
-> >>   .../remoteproc/ti,omap-remoteproc.yaml        | 329 ++++++++++++++++++
-> >>   1 file changed, 329 insertions(+)
-> >>   create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-
-
-> >> +  reg:
-> >> +    description: |
-> >> +      Address space for any remoteproc memories present on
-> >> +      the SoC. Should contain an entry for each value in
-> >> +      'reg-names'. These are mandatory for all DSP and IPU
-> >> +      processors that have them (OMAP4/OMAP5 DSPs do not have
-> >> +      any RAMs)
-> >> +
-> >> +  reg-names:
-> >> +    description: |
-> >> +      Required names for each of the address spaces defined in
-> >> +      the 'reg' property. Should contain a string from among
-> >> +      the following names, each representing the corresponding
-> >> +      internal RAM memory region.
-> >
-> > The schema is more constrained than 'a string from among the following
-> > names'. 'l2ram' is the only valid 1st entry for example.
->
-> Right, I wasn't able to figure out a way to make the schema more
-> flexible, so I will just modify the description above.
-
-The goal is somewhat to not be flexible as we want the possible
-combinations defined. If it is a manageable number of combinations,
-just list them out under a 'oneOf'.
-
-Not encouraged, but it is possible to define any length and order of
-values (note 'items' is not a list here):
-
-items:
-  enum: [ ... ]
-
-Rob
+ATTN Dear Beneficiary.
+Goodnews
+I have Registered your Prepaid ATM Master Card
+worth $15.800,000.00 US DOLLARS Courier company asigned to deliver it
+to you today.
+So contact Dhl office New York to receive your Prepaid ATM Master Card
+worth $15.8Million US DOLLARS now.
+Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
+Email. dhlexpresscouriercompany.nyusa@gmail.com
+Call the office +(202) 890-8752
+Rec-Confirmed your mailing address to the office as I listed below.
+Your Full Name--------------
+House Address-----------
+Your working Phone Number----------------
+ID copy-------------------------
+Sex-----------------------------
+Note,delivery fee to your address is only $50.00. send it to this
+company urgent on itunes card today so that DHL will deliver this
+Prepaid ATM Master Card to you today according to our finally
+agreement.
+Thanks for coperations,
+Dr. William Johnson
