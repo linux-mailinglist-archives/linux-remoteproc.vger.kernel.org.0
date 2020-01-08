@@ -2,121 +2,134 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD5FD133B72
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  8 Jan 2020 06:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1AD013486F
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  8 Jan 2020 17:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbgAHFxh (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 8 Jan 2020 00:53:37 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41140 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbgAHFxg (ORCPT
+        id S1729449AbgAHQtZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 8 Jan 2020 11:49:25 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:40494 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726401AbgAHQtY (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 8 Jan 2020 00:53:36 -0500
-Received: by mail-pg1-f196.google.com with SMTP id x8so1002636pgk.8
-        for <linux-remoteproc@vger.kernel.org>; Tue, 07 Jan 2020 21:53:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YoB041Qi6gAAsKDfeXTiJLvWYKMaZ3RNSLAQlXIIIG0=;
-        b=rmY/HpS/mbpy6xWHZc+XG8LDePEJw8nEDOE0yYUwMpcMbWnwWD4ibVlbu0EtJt9XGY
-         WTpuQENnkbkloGePmvTrH2uDl2i4ocs//5xYYKO8sKEFe0NOUpPL4H9cv36+Fa8Wv+o8
-         73u1xiZnqzTqz5nGn/h2l3h++gMTHvf/Qtf1wA3lblGcMZ9vIHGoEvJhTiocXpKJ45Ma
-         qGZTgblO1msz7vOzp8YrREaSyZ+2UCokkTEp7+vGdJIBFAnzrJfwO1K1VOYPbogtinNp
-         8LCL2gseqtHo1MnNLTdgnZ1qS+wMFzm8MCoHr2YBTHVLTj0+yQg+Qs3d5+d/U5ZDryb0
-         ptVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YoB041Qi6gAAsKDfeXTiJLvWYKMaZ3RNSLAQlXIIIG0=;
-        b=d2cImAl6RcsnHPA3l/qbroTNknMVfIM81jFD72wFRgKVg/oEy/yPUc6ShPDQt0VNDE
-         +oVB/nJQ8NJt7Agis1QNHkg6/W7/UiAqCZ72Hv1JN//5nS7zKvf5+17UYwWu5QxhNl22
-         R8jl2dov2gCjlo3VWY0u7SljwVfZc+EEnjQdJH3IpF6QQ5B8/U6g7dZbtKkBkkUrv1L4
-         jiPQGhq9hKIuu6ctcxs+wnhbMVifWfkWeqsJv4/0LAH6k1w/Zo0HDawtQkGhQdG0UYrc
-         WJXxJQ3jkEObzPrbfI0Dcy2+2T1s6AiQqxTNcps2b60d7kU2oaWsEswM++4TMnIe54L1
-         KARA==
-X-Gm-Message-State: APjAAAWYxjY00hm3WLvNLWIa3+D3fdWQIJk2mVPhS2aANVcjVf7fbiv0
-        M6sQi0/D++/4dG8rPNNS46qCnQ==
-X-Google-Smtp-Source: APXvYqzw6INjJz8mKK7BZ2+aIxdsMGb+ExuIJpa29ybtjU6VtPqSIZdlwTCJ4IiEtL1Rb8g/wUwGUA==
-X-Received: by 2002:a65:5786:: with SMTP id b6mr3555590pgr.316.1578462816142;
-        Tue, 07 Jan 2020 21:53:36 -0800 (PST)
-Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id b8sm1643971pff.114.2020.01.07.21.53.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2020 21:53:35 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] remoteproc: qcom: wcnss: Allow specifying firmware-name
-Date:   Tue,  7 Jan 2020 21:52:52 -0800
-Message-Id: <20200108055252.639791-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.24.0
+        Wed, 8 Jan 2020 11:49:24 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 008GnMhY098921;
+        Wed, 8 Jan 2020 10:49:22 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1578502162;
+        bh=RY2+pDL0Ybn6SAoSKXqWNf7C7aZKNuQoq94KgJgydn8=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=wIZ1auYOr+n4ggCmZNifI8nsb48C1L9mnN2DQVRkJMsPVsSN7e/QL2D2eWefDDcW1
+         6tqiTiStWi10VoCUOlBunkyrkDNAr6fPX5tllbRYCXtG1CLotXIGkSRl9kFNNd4eVX
+         2PZGWoOpc8Vw2NuQOqjUNe2+Fa30e5CCFyhIBfpk=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 008GnMrN021268
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 8 Jan 2020 10:49:22 -0600
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 8 Jan
+ 2020 10:49:21 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 8 Jan 2020 10:49:21 -0600
+Received: from [128.247.58.153] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 008GnLfN077466;
+        Wed, 8 Jan 2020 10:49:21 -0600
+Subject: Re: [RESEND PATCHv4 01/14] dt-bindings: remoteproc: Add OMAP
+ remoteproc bindings
+To:     Tero Kristo <t-kristo@ti.com>, <bjorn.andersson@linaro.org>,
+        <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
+        <linux-omap@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20200102131845.12992-2-t-kristo@ti.com>
+ <20200102132512.13248-1-t-kristo@ti.com>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <f4ac066a-e5ee-f888-42bb-3f6d444747ee@ti.com>
+Date:   Wed, 8 Jan 2020 10:49:21 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200102132512.13248-1-t-kristo@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Introduce a firmware-name property, in order to be able to support
-device/platform specific firmware for the wireless connectivity
-subsystem; in line with other Qualcomm remoteproc drivers.
+Hi Tero,
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- .../devicetree/bindings/remoteproc/qcom,wcnss-pil.txt     | 6 ++++++
- drivers/remoteproc/qcom_wcnss.c                           | 8 +++++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+On 1/2/20 7:25 AM, Tero Kristo wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> Add the device tree bindings document for the IPU and DSP
+> remote processor devices on OMAP4+ SoCs.
+> 
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> [t-kristo@ti.com: converted to schema]
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> ---
+> v4: added ti,bootreg-shift and ti,autosuspend-delay properties
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.txt b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.txt
-index d420f84ddfb0..00844a5d2ccf 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.txt
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,wcnss-pil.txt
-@@ -34,6 +34,12 @@ on the Qualcomm WCNSS core.
- 	Definition: should be "wdog", "fatal", optionally followed by "ready",
- 		    "handover", "stop-ack"
- 
-+- firmware-name:
-+	Usage: optional
-+	Value type: <string>
-+	Definition: must list the relative firmware image path for the
-+		    WCNSS core.
-+
- - vddmx-supply:
- - vddcx-supply:
- - vddpx-supply:
-diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
-index dc135754bb9c..a0468b3cc76f 100644
---- a/drivers/remoteproc/qcom_wcnss.c
-+++ b/drivers/remoteproc/qcom_wcnss.c
-@@ -457,6 +457,7 @@ static int wcnss_alloc_memory_region(struct qcom_wcnss *wcnss)
- 
- static int wcnss_probe(struct platform_device *pdev)
- {
-+	const char *fw_name = WCNSS_FIRMWARE_NAME;
- 	const struct wcnss_data *data;
- 	struct qcom_wcnss *wcnss;
- 	struct resource *res;
-@@ -474,8 +475,13 @@ static int wcnss_probe(struct platform_device *pdev)
- 		return -ENXIO;
- 	}
- 
-+	ret = of_property_read_string(pdev->dev.of_node, "firmware-name",
-+				      &fw_name);
-+	if (ret < 0 && ret != -EINVAL)
-+		return ret;
-+
- 	rproc = rproc_alloc(&pdev->dev, pdev->name, &wcnss_ops,
--			    WCNSS_FIRMWARE_NAME, sizeof(*wcnss));
-+			    fw_name, sizeof(*wcnss));
- 	if (!rproc) {
- 		dev_err(&pdev->dev, "unable to allocate remoteproc\n");
- 		return -ENOMEM;
--- 
-2.24.0
+You missed out on my v3 comment on the firmware-name on Example 2. Can
+you please address it when you post the next version?
 
+> 
+>  .../remoteproc/ti,omap-remoteproc.yaml        | 329 ++++++++++++++++++
+>  1 file changed, 329 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+> new file mode 100644
+> index 000000000000..f53d58efaae3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+
+[snip]
+
+> +  - |+
+> +
+> +    //Example 2: OMAP5 IPU
+> +
+> +    /* IPU Reserved Memory node */
+> +    #include <dt-bindings/clock/omap5.h>
+> +    reserved-memory {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        ipu_memory_region: ipu-memory@95800000 {
+> +            compatible = "shared-dma-pool";
+> +            reg = <0 0x95800000 0 0x3800000>;
+> +            reusable;
+> +        };
+> +    };
+> +
+> +    /* IPU node */
+> +    ocp {
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        ipu: ipu@55020000 {
+> +            compatible = "ti,omap5-ipu";
+> +            reg = <0x55020000 0x10000>;
+> +            reg-names = "l2ram";
+> +            iommus = <&mmu_ipu>;
+> +            mboxes = <&mailbox &mbox_ipu>;
+> +            memory-region = <&ipu_memory_region>;
+> +            ti,timers = <&timer3>, <&timer4>;
+> +            ti,watchdog-timers = <&timer9>, <&timer11>;
+> +            clocks = <&ipu_clkctrl OMAP5_MMU_IPU_CLKCTRL 0>;
+> +            resets = <&prm_core 2>;
+> +            firmware-name = "omap5-ipu-fw.xem";
+> +        };
+> +    };
+
+regards
+Suman
