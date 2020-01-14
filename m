@@ -2,133 +2,574 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AA1139796
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Jan 2020 18:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26AB013A14F
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 Jan 2020 08:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728689AbgAMRY6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 Jan 2020 12:24:58 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46469 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728670AbgAMRY5 (ORCPT
+        id S1728820AbgANHG0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 14 Jan 2020 02:06:26 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:51880 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728848AbgANHGW (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 Jan 2020 12:24:57 -0500
-Received: by mail-pg1-f194.google.com with SMTP id z124so4989083pgb.13
-        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Jan 2020 09:24:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=U2PWwEEnO5+ksSRfTkvVAkgMJvekPPQPvk+J1MXkAKA=;
-        b=fIDSBdAgWDIiMm+DJrGSk8SNVlkqqoJ/XOYER2KVMmFc85XBWE4fErM4MFi85PEx2h
-         2Igm5N9Sw8crh8PmobTPG1r0fpWIz9heb2tmNk/Svm2Hxp7Nb47ZngRKZ0JeD+DCJpYe
-         WIFC61PxN+EIo3zyUbdFykkit80459ecCP/nPUpBTdSqPxMwyduO8/ncgNndqrYsbPC1
-         NoLgWSqo7mDBTDKENNorvGv4h6vVDgJzKAoIMXvIQgn83zmsnj5pMW78uCuKA/TW3tI6
-         vhcDzEa+PHR4GKZ+CfD6TDAsfauhcAox/mVJ9fH0mfHAYHRllagoSZJb+h8uqcj5WtVS
-         7f6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=U2PWwEEnO5+ksSRfTkvVAkgMJvekPPQPvk+J1MXkAKA=;
-        b=aH8WjfaNm5cqnkBzQdKCqVBZySqF0o9QXSagaoSkbzv/B5ViyjLiLHkB4jkEn/xjlh
-         2rNNs2kRvwIHGv+eGRCYT/ML1FPpzUwWdUjai3RNFo+Z6FOq7QyelSvhYpvjo3RfEpDV
-         qZbPjz3INgsO1ypX0Gvp0BJ/XpHTAMheg4juXxNepr3l422UEXRdPNr1D2CbIoHyJAWc
-         mCiNYiEKRQ7UahC7B/cAOD2SNKSvQ5B9bcFO33T9uPOFLKn35xYxDHr+pHjohPgEtoWG
-         5dTwlEg1jFFu3XVaIVTUv/rskJCVnu7NlfqTHYWrzS/6Ko5EC0P1dVCQyxbzfpd2+iDT
-         dG8w==
-X-Gm-Message-State: APjAAAWFEBKeHJmznmlw5BBdrzB/EOXNb8Xj2aXj8jsDzWSM/pSFYP3h
-        TX9pOX97nKnpEklKGZFpTzWn9g==
-X-Google-Smtp-Source: APXvYqw80f6wRiRP9Dwvx/NTeGY9Bf9oleVCbpo6cpd3kqWBdbqpjm+tTzcPB06sPHd1+r+7vplIzg==
-X-Received: by 2002:aa7:8b17:: with SMTP id f23mr20824919pfd.197.1578936297041;
-        Mon, 13 Jan 2020 09:24:57 -0800 (PST)
-Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id d26sm13917312pgv.66.2020.01.13.09.24.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2020 09:24:56 -0800 (PST)
-Date:   Mon, 13 Jan 2020 09:24:53 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Suman Anna <s-anna@ti.com>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v2] rpmsg: core: add API to get MTU
-Message-ID: <20200113172453.GQ738324@yoga>
-References: <20191113172249.32412-1-arnaud.pouliquen@st.com>
+        Tue, 14 Jan 2020 02:06:22 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1578985581; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=WWozYwzV8wpxXTXDNMKUiypi+fLPiDmlCGXOZnnyItM=;
+ b=BonLgupJQp+vSy3ttPUP+1wa/izWNzcoQdhqgRybgV3w6DEXhrWJAwpNjrcGsIVc6OsbCJcU
+ rmeyqt547BgGG1TQpYl93A2q9KWH3akrZrFh8E0+6Ib6Xh0DCcDYJ8CshmwWeN1TYK/IFtbi
+ UXAye9a3ihRWOzmzYeLFHoYx7DY=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e1d686b.7f62d87e4960-smtp-out-n02;
+ Tue, 14 Jan 2020 07:06:19 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 807C4C4479F; Tue, 14 Jan 2020 07:06:19 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id EF682C43383;
+        Tue, 14 Jan 2020 07:06:17 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191113172249.32412-1-arnaud.pouliquen@st.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 14 Jan 2020 12:36:17 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, ohad@wizery.com,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v2 2/2] remoteproc: mss: q6v5-mss: Add modem support on
+ SC7180
+In-Reply-To: <CAE=gft56MhTCBX+EQt8=DMdK96Wj8Kg4ww7TbLjj_oON0zbKyw@mail.gmail.com>
+References: <20191219054506.20565-1-sibis@codeaurora.org>
+ <20191219054506.20565-3-sibis@codeaurora.org>
+ <CAE=gft56MhTCBX+EQt8=DMdK96Wj8Kg4ww7TbLjj_oON0zbKyw@mail.gmail.com>
+Message-ID: <4a72f7691f9ee1d887bca9b1109da6df@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed 13 Nov 09:22 PST 2019, Arnaud Pouliquen wrote:
+Hey Evan,
 
-> Return the rpmsg buffer MTU for sending message, so rpmsg users
-> can split a long message in several sub rpmsg buffers.
+Thanks for the review!
+sry for the delayed response
+
+On 2020-01-08 02:51, Evan Green wrote:
+> On Wed, Dec 18, 2019 at 9:45 PM Sibi Sankar <sibis@codeaurora.org> 
+> wrote:
+>> 
+>> Add the out of reset sequence support for modem sub-system on SC7180
+>> SoCs. It requires access to an additional halt nav register to put
+>> the modem back into reset.
+>> 
+>> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+>> ---
+>>  drivers/remoteproc/qcom_q6v5_mss.c | 199 
+>> ++++++++++++++++++++++++++++-
+>>  1 file changed, 198 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c 
+>> b/drivers/remoteproc/qcom_q6v5_mss.c
+>> index 164fc2a53ef11..51f451311f5fc 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+>> @@ -68,6 +68,9 @@
+>>  #define AXI_HALTREQ_REG                        0x0
+>>  #define AXI_HALTACK_REG                        0x4
+>>  #define AXI_IDLE_REG                   0x8
+>> +#define NAV_AXI_HALTREQ_BIT            BIT(0)
+>> +#define NAV_AXI_HALTACK_BIT            BIT(1)
+>> +#define NAV_AXI_IDLE_BIT               BIT(2)
+>> 
+>>  #define HALT_ACK_TIMEOUT_MS            100
+>> 
+>> @@ -101,9 +104,11 @@
+>>  #define QDSP6SS_ACC_OVERRIDE_VAL               0x20
+>> 
+>>  /* QDSP6v65 parameters */
+>> +#define QDSP6SS_CORE_CBCR              0x20
+>>  #define QDSP6SS_SLEEP                   0x3C
+>>  #define QDSP6SS_BOOT_CORE_START         0x400
+>>  #define QDSP6SS_BOOT_CMD                0x404
+>> +#define QDSP6SS_BOOT_STATUS            0x408
+>>  #define SLEEP_CHECK_MAX_LOOPS           200
+>>  #define BOOT_FSM_TIMEOUT                10000
+>> 
+>> @@ -131,6 +136,7 @@ struct rproc_hexagon_res {
+>>         int version;
+>>         bool need_mem_protection;
+>>         bool has_alt_reset;
+>> +       bool has_halt_nav;
+>>  };
+>> 
+>>  struct q6v5 {
+>> @@ -141,9 +147,14 @@ struct q6v5 {
+>>         void __iomem *rmb_base;
+>> 
+>>         struct regmap *halt_map;
+>> +       struct regmap *halt_nav_map;
+>> +       struct regmap *conn_map;
+>> +
+>>         u32 halt_q6;
+>>         u32 halt_modem;
+>>         u32 halt_nc;
+>> +       u32 halt_nav;
+>> +       u32 conn_box;
+>> 
+>>         struct reset_control *mss_restart;
+>>         struct reset_control *pdc_reset;
+>> @@ -187,6 +198,7 @@ struct q6v5 {
+>>         struct qcom_sysmon *sysmon;
+>>         bool need_mem_protection;
+>>         bool has_alt_reset;
+>> +       bool has_halt_nav;
+>>         int mpss_perm;
+>>         int mba_perm;
+>>         const char *hexagon_mdt_image;
+>> @@ -198,6 +210,7 @@ enum {
+>>         MSS_MSM8974,
+>>         MSS_MSM8996,
+>>         MSS_MSM8998,
+>> +       MSS_SC7180,
+>>         MSS_SDM845,
+>>  };
+>> 
+>> @@ -396,6 +409,18 @@ static int q6v5_reset_assert(struct q6v5 *qproc)
+>>                 reset_control_assert(qproc->pdc_reset);
+>>                 ret = reset_control_reset(qproc->mss_restart);
+>>                 reset_control_deassert(qproc->pdc_reset);
+>> +       } else if (qproc->has_halt_nav) {
+>> +               /* SWAR using CONN_BOX_SPARE_0 for pipeline glitch 
+>> issue */
 > 
+> Can you elaborate more in this comment, or remove it? Right now it
+> doesn't help me since I don't know what SWAR is, I don't see a
 
-I won't merge this new api without a client, and I'm still concerned
-about the details.
+SWAR -> software work around
 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
-> ---
->  V1 to V2
+I'll have to stop with the dumb
+abbreviations
+
+> reference to CONN_BOX_SPARE_0 in the code, I don't know what a
+
+conn_box_spare_0 is at an offset
+0xb3e4 in the conn_map which is
+described in the bindings.
+
+> CONN_BOX is, and I don't know any details about the glitch issue :)
+
+lol, yes I get that the comment does
+not give details on the glitch. It
+was targeted towards explaining why
+there is a deviation in the reset_
+assert sequence from the other SoCs.
+If you still feel the comment does
+not add any value I can get it
+removed.
+
 > 
->   V1 patch:https://lore.kernel.org/patchwork/patch/1124684/
->   - Change patch title,
->   - as not solution today to support MTU on GLINK make ops optional,
->     RPMsg client API returns -ENOTSUPP in this case,
->   - suppress smd and glink patches.
-
-That's ok.
-
-> ---
->  drivers/rpmsg/rpmsg_core.c       | 21 +++++++++++++++++++++
->  drivers/rpmsg/rpmsg_internal.h   |  2 ++
->  drivers/rpmsg/virtio_rpmsg_bus.c | 10 ++++++++++
->  include/linux/rpmsg.h            | 10 ++++++++++
->  4 files changed, 43 insertions(+)
+>> +               reset_control_assert(qproc->pdc_reset);
+>> +               regmap_update_bits(qproc->conn_map, qproc->conn_box,
+>> +                                  BIT(0), BIT(0));
 > 
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index e330ec4dfc33..a6ef54c4779a 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -283,6 +283,27 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
->  }
->  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
->  
-> +/**
-> + * rpmsg_get_mtu() - get maximum transmission buffer size for sending message.
-> + * @ept: the rpmsg endpoint
-> + *
-> + * This function returns maximum buffer size available for a single message.
-> + *
-> + * Return: the maximum transmission size on success and an appropriate error
-> + * value on failure.
+> Make a register name #define for this bit?
 
-Is the expectation that a call to rpmsg_send() with this size will
-eventually succeed?
+we'll have to make one up for it
+since conn_box_spare_0 does not
+have any predefined bits and seems
+to be used to implement some missing
+functionality.
 
-> + */
-[..]
-> +static ssize_t virtio_rpmsg_get_mtu(struct rpmsg_endpoint *ept)
-> +{
-> +	struct rpmsg_device *rpdev = ept->rpdev;
-> +	struct virtio_rpmsg_channel *vch = to_virtio_rpmsg_channel(rpdev);
-> +
-> +	return vch->vrp->buf_size - sizeof(struct rpmsg_hdr);
+> 
+>> +               regmap_update_bits(qproc->halt_nav_map, 
+>> qproc->halt_nav,
+>> +                                  NAV_AXI_HALTREQ_BIT, 0);
+>> +               reset_control_assert(qproc->mss_restart);
+>> +               reset_control_deassert(qproc->pdc_reset);
+>> +               regmap_update_bits(qproc->conn_map, qproc->conn_box,
+>> +                                  BIT(0), 0);
+>> +               ret = reset_control_deassert(qproc->mss_restart);
+>>         } else {
+>>                 ret = reset_control_assert(qproc->mss_restart);
+>>         }
+>> @@ -413,6 +438,8 @@ static int q6v5_reset_deassert(struct q6v5 *qproc)
+>>                 ret = reset_control_reset(qproc->mss_restart);
+>>                 writel(0, qproc->rmb_base + RMB_MBA_ALT_RESET);
+>>                 reset_control_deassert(qproc->pdc_reset);
+>> +       } else if (qproc->has_halt_nav) {
+>> +               ret = reset_control_reset(qproc->mss_restart);
+>>         } else {
+>>                 ret = reset_control_deassert(qproc->mss_restart);
+>>         }
+>> @@ -499,6 +526,54 @@ static int q6v5proc_reset(struct q6v5 *qproc)
+>>                         return ret;
+>>                 }
+>> 
+>> +               goto pbl_wait;
+> 
+> Ick, this could benefit from a refactor that pulls those sorta-common
+> steps "Remove IO clamp" through "Start core execution" into a helper
+> function and then calls the new function from each case that needs it.
+> 
+>> +       } else if (qproc->version == MSS_SC7180) {
+>> +               val = readl(qproc->reg_base + QDSP6SS_SLEEP);
+>> +               val |= 0x1;
+> 
+> It'd be nice if there were defines for these magic 0x1 values in this 
+> hunk too.
+> 
+>> +               writel(val, qproc->reg_base + QDSP6SS_SLEEP);
+>> +
+>> +               ret = readl_poll_timeout(qproc->reg_base + 
+>> QDSP6SS_SLEEP,
+>> +                                        val, !(val & BIT(31)), 1,
+>> +                                        SLEEP_CHECK_MAX_LOOPS);
+>> +               if (ret) {
+>> +                       dev_err(qproc->dev, "QDSP6SS Sleep clock timed 
+>> out\n");
+>> +                       return -ETIMEDOUT;
+>> +               }
+> 
+> This toggling of the sleep bit is the same as sdm845, it could also be
+> put into a helper function.
 
-I'm still under the impression that the rpmsg protocol doesn't have to
-operate on fixed size messages. Would this then return vrp->num_bufs *
-vrp->buf_size / 2 - sizeof(rpmsg_hdr)?
+https://patchwork.kernel.org/patch/11250301/
+https://patchwork.kernel.org/patch/11250317/
 
-> +}
-> +
+I did club ^^ a portion of the out of
+reset sequence together reducing
+code duplication initially but that
+made the entire thing unreadable.
 
-Regards,
-Bjorn
+The general consensus at that time
+was to introduce a patch for sc7180
+that is most readable and have a
+cleanup later with a lot of helper
+functions and less branching like
+you suggested.
+
+> 
+>> +
+>> +               /* Turn on the XO clock needed for PLL setup */
+>> +               val = readl(qproc->reg_base + QDSP6SS_XO_CBCR);
+>> +               val |= 0x1;
+>> +               writel(val, qproc->reg_base + QDSP6SS_XO_CBCR);
+>> +
+>> +               ret = readl_poll_timeout(qproc->reg_base + 
+>> QDSP6SS_XO_CBCR,
+>> +                                        val, !(val & BIT(31)), 1,
+>> +                                        SLEEP_CHECK_MAX_LOOPS);
+> 
+> Nit: SLEEP_CHECK_MAX_LOOPS isn't a loop count, it should really have
+> been named something like SLEEP_CHECK_TIMEOUT_US. Could be done in a
+> separate change.
+
+I'll skip this for now. I'll
+make sure that this gets named
+appropriately during the
+planned refactor.
+
+> 
+>> +               if (ret) {
+>> +                       dev_err(qproc->dev, "QDSP6SS XO clock timed 
+>> out\n");
+>> +                       return -ETIMEDOUT;
+>> +               }
+>> +
+>> +               /* Configure Q6 core CBCR to auto-enable after reset 
+>> sequence */
+>> +               val = readl(qproc->reg_base + QDSP6SS_CORE_CBCR);
+>> +               val |= 0x1;
+>> +               writel(val, qproc->reg_base + QDSP6SS_CORE_CBCR);
+>> +
+>> +               /* De-assert the Q6 stop core signal */
+>> +               writel(1, qproc->reg_base + QDSP6SS_BOOT_CORE_START);
+>> +
+>> +               /* Trigger the boot FSM to start the Q6 out-of-reset 
+>> sequence */
+>> +               writel(1, qproc->reg_base + QDSP6SS_BOOT_CMD);
+>> +
+>> +               /* Poll the QDSP6SS_BOOT_STATUS for FSM completion */
+>> +               ret = readl_poll_timeout(qproc->reg_base + 
+>> QDSP6SS_BOOT_STATUS,
+>> +                                        val, (val & BIT(0)) != 0, 1,
+>> +                                        SLEEP_CHECK_MAX_LOOPS);
+>> +               if (ret) {
+>> +                       dev_err(qproc->dev, "Boot FSM failed to 
+>> complete.\n");
+>> +                       /* Reset the modem so that boot FSM is in 
+>> reset state */
+>> +                       q6v5_reset_deassert(qproc);
+>> +                       return ret;
+>> +               }
+>>                 goto pbl_wait;
+>>         } else if (qproc->version == MSS_MSM8996 ||
+>>                    qproc->version == MSS_MSM8998) {
+>> @@ -667,6 +742,39 @@ static void q6v5proc_halt_axi_port(struct q6v5 
+>> *qproc,
+>>         regmap_write(halt_map, offset + AXI_HALTREQ_REG, 0);
+>>  }
+>> 
+>> +static void q6v5proc_halt_nav_axi_port(struct q6v5 *qproc,
+>> +                                      struct regmap *halt_map,
+>> +                                      u32 offset)
+>> +{
+>> +       unsigned long timeout;
+>> +       unsigned int val;
+>> +       int ret;
+>> +
+>> +       /* Check if we're already idle */
+>> +       ret = regmap_read(halt_map, offset, &val);
+>> +       if (!ret && (val & NAV_AXI_IDLE_BIT))
+>> +               return;
+>> +
+>> +       /* Assert halt request */
+>> +       regmap_update_bits(halt_map, offset, NAV_AXI_HALTREQ_BIT,
+>> +                          NAV_AXI_HALTREQ_BIT);
+>> +
+>> +       /* Wait for halt ack*/
+>> +       timeout = jiffies + msecs_to_jiffies(HALT_ACK_TIMEOUT_MS);
+>> +       for (;;) {
+>> +               ret = regmap_read(halt_map, offset, &val);
+>> +               if (ret || (val & NAV_AXI_HALTACK_BIT) ||
+>> +                   time_after(jiffies, timeout))
+>> +                       break;
+>> +
+>> +               udelay(5);
+>> +       }
+>> +
+>> +       ret = regmap_read(halt_map, offset, &val);
+>> +       if (ret || !(val & NAV_AXI_IDLE_BIT))
+>> +               dev_err(qproc->dev, "port failed halt\n");
+>> +}
+>> +
+>>  static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct 
+>> firmware *fw)
+>>  {
+>>         unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS;
+>> @@ -829,6 +937,9 @@ static int q6v5_mba_load(struct q6v5 *qproc)
+>>  halt_axi_ports:
+>>         q6v5proc_halt_axi_port(qproc, qproc->halt_map, 
+>> qproc->halt_q6);
+>>         q6v5proc_halt_axi_port(qproc, qproc->halt_map, 
+>> qproc->halt_modem);
+>> +       if (qproc->has_halt_nav)
+>> +               q6v5proc_halt_nav_axi_port(qproc, qproc->halt_nav_map,
+>> +                                          qproc->halt_nav);
+>>         q6v5proc_halt_axi_port(qproc, qproc->halt_map, 
+>> qproc->halt_nc);
+>> 
+>>  reclaim_mba:
+>> @@ -876,6 +987,9 @@ static void q6v5_mba_reclaim(struct q6v5 *qproc)
+>> 
+>>         q6v5proc_halt_axi_port(qproc, qproc->halt_map, 
+>> qproc->halt_q6);
+>>         q6v5proc_halt_axi_port(qproc, qproc->halt_map, 
+>> qproc->halt_modem);
+>> +       if (qproc->has_halt_nav)
+>> +               q6v5proc_halt_nav_axi_port(qproc, qproc->halt_nav_map,
+>> +                                          qproc->halt_nav);
+>>         q6v5proc_halt_axi_port(qproc, qproc->halt_map, 
+>> qproc->halt_nc);
+>>         if (qproc->version == MSS_MSM8996) {
+>>                 /*
+>> @@ -1253,6 +1367,47 @@ static int q6v5_init_mem(struct q6v5 *qproc, 
+>> struct platform_device *pdev)
+>>         qproc->halt_modem = args.args[1];
+>>         qproc->halt_nc = args.args[2];
+>> 
+>> +       if (qproc->has_halt_nav) {
+>> +               struct platform_device *nav_pdev;
+>> +
+>> +               ret = 
+>> of_parse_phandle_with_fixed_args(pdev->dev.of_node,
+>> +                                                      
+>> "qcom,halt-nav-regs",
+>> +                                                      1, 0, &args);
+>> +               if (ret < 0) {
+>> +                       dev_err(&pdev->dev, "failed to parse 
+>> halt-nav-regs\n");
+>> +                       return -EINVAL;
+>> +               }
+>> +
+>> +               nav_pdev = of_find_device_by_node(args.np);
+>> +               of_node_put(args.np);
+>> +               if (!nav_pdev) {
+>> +                       dev_err(&pdev->dev, "failed to get mss clock 
+>> device\n");
+>> +                       return -EPROBE_DEFER;
+>> +               }
+>> +
+>> +               qproc->halt_nav_map = dev_get_regmap(&nav_pdev->dev, 
+>> NULL);
+>> +               if (!qproc->halt_nav_map) {
+>> +                       dev_err(&pdev->dev, "failed to get map from 
+>> device\n");
+>> +                       return -EINVAL;
+>> +               }
+>> +               qproc->halt_nav = args.args[0];
+>> +
+>> +               ret = 
+>> of_parse_phandle_with_fixed_args(pdev->dev.of_node,
+>> +                                                      
+>> "qcom,halt-nav-regs",
+>> +                                                      1, 1, &args);
+>> +               if (ret < 0) {
+>> +                       dev_err(&pdev->dev, "failed to parse 
+>> halt-nav-regs\n");
+>> +                       return -EINVAL;
+>> +               }
+>> +
+>> +               qproc->conn_map = syscon_node_to_regmap(args.np);
+>> +               of_node_put(args.np);
+>> +               if (IS_ERR(qproc->conn_map))
+>> +                       return PTR_ERR(qproc->conn_map);
+>> +
+>> +               qproc->conn_box = args.args[0];
+>> +       }
+>> +
+>>         return 0;
+>>  }
+>> 
+>> @@ -1327,7 +1482,7 @@ static int q6v5_init_reset(struct q6v5 *qproc)
+>>                 return PTR_ERR(qproc->mss_restart);
+>>         }
+>> 
+>> -       if (qproc->has_alt_reset) {
+>> +       if (qproc->has_alt_reset || qproc->has_halt_nav) {
+>>                 qproc->pdc_reset = 
+>> devm_reset_control_get_exclusive(qproc->dev,
+>>                                                                     
+>> "pdc_reset");
+>>                 if (IS_ERR(qproc->pdc_reset)) {
+>> @@ -1426,6 +1581,7 @@ static int q6v5_probe(struct platform_device 
+>> *pdev)
+>> 
+>>         platform_set_drvdata(pdev, qproc);
+>> 
+>> +       qproc->has_halt_nav = desc->has_halt_nav;
+>>         ret = q6v5_init_mem(qproc, pdev);
+>>         if (ret)
+>>                 goto free_rproc;
+>> @@ -1549,6 +1705,41 @@ static int q6v5_remove(struct platform_device 
+>> *pdev)
+>>         return 0;
+>>  }
+>> 
+>> +static const struct rproc_hexagon_res sc7180_mss = {
+>> +       .hexagon_mba_image = "mba.mbn",
+>> +       .proxy_clk_names = (char*[]){
+>> +               "xo",
+>> +               NULL
+>> +       },
+>> +       .reset_clk_names = (char*[]){
+>> +               "iface",
+>> +               "bus",
+>> +               "snoc_axi",
+>> +               NULL
+>> +       },
+>> +       .active_clk_names = (char*[]){
+>> +               "mnoc_axi",
+>> +               "nav",
+>> +               "mss_nav",
+>> +               "mss_crypto",
+>> +               NULL
+>> +       },
+>> +       .active_pd_names = (char*[]){
+>> +               "load_state",
+>> +               NULL
+>> +       },
+>> +       .proxy_pd_names = (char*[]){
+>> +               "cx",
+>> +               "mx",
+>> +               "mss",
+>> +               NULL
+>> +       },
+>> +       .need_mem_protection = true,
+>> +       .has_alt_reset = false,
+>> +       .has_halt_nav = true,
+>> +       .version = MSS_SC7180,
+>> +};
+>> +
+>>  static const struct rproc_hexagon_res sdm845_mss = {
+>>         .hexagon_mba_image = "mba.mbn",
+>>         .proxy_clk_names = (char*[]){
+>> @@ -1580,6 +1771,7 @@ static const struct rproc_hexagon_res sdm845_mss 
+>> = {
+>>         },
+>>         .need_mem_protection = true,
+>>         .has_alt_reset = true,
+>> +       .has_halt_nav = false,
+>>         .version = MSS_SDM845,
+>>  };
+>> 
+>> @@ -1606,6 +1798,7 @@ static const struct rproc_hexagon_res 
+>> msm8998_mss = {
+>>         },
+>>         .need_mem_protection = true,
+>>         .has_alt_reset = false,
+>> +       .has_halt_nav = false,
+>>         .version = MSS_MSM8998,
+>>  };
+>> 
+>> @@ -1635,6 +1828,7 @@ static const struct rproc_hexagon_res 
+>> msm8996_mss = {
+>>         },
+>>         .need_mem_protection = true,
+>>         .has_alt_reset = false,
+>> +       .has_halt_nav = false,
+>>         .version = MSS_MSM8996,
+>>  };
+>> 
+>> @@ -1667,6 +1861,7 @@ static const struct rproc_hexagon_res 
+>> msm8916_mss = {
+>>         },
+>>         .need_mem_protection = false,
+>>         .has_alt_reset = false,
+>> +       .has_halt_nav = false,
+>>         .version = MSS_MSM8916,
+>>  };
+>> 
+>> @@ -1707,6 +1902,7 @@ static const struct rproc_hexagon_res 
+>> msm8974_mss = {
+>>         },
+>>         .need_mem_protection = false,
+>>         .has_alt_reset = false,
+>> +       .has_halt_nav = false,
+>>         .version = MSS_MSM8974,
+>>  };
+>> 
+>> @@ -1716,6 +1912,7 @@ static const struct of_device_id q6v5_of_match[] 
+>> = {
+>>         { .compatible = "qcom,msm8974-mss-pil", .data = &msm8974_mss},
+>>         { .compatible = "qcom,msm8996-mss-pil", .data = &msm8996_mss},
+>>         { .compatible = "qcom,msm8998-mss-pil", .data = &msm8998_mss},
+>> +       { .compatible = "qcom,sc7180-mss-pil", .data = &sc7180_mss},
+>>         { .compatible = "qcom,sdm845-mss-pil", .data = &sdm845_mss},
+>>         { },
+>>  };
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
+>> Forum,
+>> a Linux Foundation Collaborative Project
+
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
