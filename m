@@ -2,156 +2,146 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B34D13CEAB
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 15 Jan 2020 22:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEF813D55F
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Jan 2020 08:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729661AbgAOVQK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 15 Jan 2020 16:16:10 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:59982 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729134AbgAOVQK (ORCPT
+        id S1726903AbgAPHv0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 16 Jan 2020 02:51:26 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:52126 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726369AbgAPHv0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 15 Jan 2020 16:16:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1579122967; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jKAektEMk3dDvQFgHsowwSKIu5ew5qUHWRblTQXzHFw=;
-        b=Zni2LUe8aCzgd+JjU/p68g5Vnt8ezP3ky8vYPVLMTdje6sEpYv118/+EzsMcBHF+3x09PG
-        AQoYRruV4gmCmlEBP4vEdNaRoIv030EFNfnDuKSegIPBUgOVdxx4nIsV8s/WXj+mMZGKhq
-        GZwqCMna33m+D4kXeSOoMm5VX3LSsV4=
-Date:   Wed, 15 Jan 2020 18:15:51 -0300
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v4 3/5] remoteproc: Add prepare/unprepare callbacks
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, od@zcrc.me,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Message-Id: <1579122951.3.2@crapouillou.net>
-In-Reply-To: <20191221202039.GG549437@yoga>
-References: <20191210164014.50739-1-paul@crapouillou.net>
-        <20191210164014.50739-3-paul@crapouillou.net> <20191221202039.GG549437@yoga>
+        Thu, 16 Jan 2020 02:51:26 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 00G7pNCX119651;
+        Thu, 16 Jan 2020 01:51:23 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1579161083;
+        bh=w7vzdMvfFmc+atK4e4y3iJy2N7LLIkGApbrMpU6UVFE=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Lxq5C+DdEA/XuOwf4RaExziSKgDJfXAENoWcLnK7o/ah6Xpw/kK3jWnYjEu5GYa3B
+         FA29RAFWQZh3vAsMRahdLXkJ8RnsaTT/CkJ8WB/lj5bNJGpiGrwB+apotDmtKHdD+g
+         7OrUmbp8q1eDnDd39B/toxJ+joMr9oh+khQcTpP0=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00G7pNhd077404;
+        Thu, 16 Jan 2020 01:51:23 -0600
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 16
+ Jan 2020 01:51:21 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 16 Jan 2020 01:51:21 -0600
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00G7pJhg111677;
+        Thu, 16 Jan 2020 01:51:19 -0600
+Subject: Re: [RESEND PATCHv4 01/14] dt-bindings: remoteproc: Add OMAP
+ remoteproc bindings
+To:     Suman Anna <s-anna@ti.com>, <bjorn.andersson@linaro.org>,
+        <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
+        <linux-omap@vger.kernel.org>, Rob Herring <robh@kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20200102131845.12992-2-t-kristo@ti.com>
+ <20200102132512.13248-1-t-kristo@ti.com>
+ <f4ac066a-e5ee-f888-42bb-3f6d444747ee@ti.com>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <1d4597f7-9e28-8b16-7679-c8abd291346d@ti.com>
+Date:   Thu, 16 Jan 2020 09:51:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <f4ac066a-e5ee-f888-42bb-3f6d444747ee@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Bjorn,
+On 08/01/2020 18:49, Suman Anna wrote:
+> Hi Tero,
+> 
+> On 1/2/20 7:25 AM, Tero Kristo wrote:
+>> From: Suman Anna <s-anna@ti.com>
+>>
+>> Add the device tree bindings document for the IPU and DSP
+>> remote processor devices on OMAP4+ SoCs.
+>>
+>> Cc: Rob Herring <robh@kernel.org>
+>> Cc: devicetree@vger.kernel.org
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> [t-kristo@ti.com: converted to schema]
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> ---
+>> v4: added ti,bootreg-shift and ti,autosuspend-delay properties
+> 
+> You missed out on my v3 comment on the firmware-name on Example 2. Can
+> you please address it when you post the next version?
 
+I don't think I missed it, but you never told what is the actual name to 
+use there. Firmware name generally does not matter, as user can provide 
+whatever he wants via DT now.
 
-Le sam., d=E9c. 21, 2019 at 12:20, Bjorn Andersson=20
-<bjorn.andersson@linaro.org> a =E9crit :
-> On Tue 10 Dec 08:40 PST 2019, Paul Cercueil wrote:
->=20
->>  The .prepare() callback is called before the firmware is loaded to
->>  memory. This is useful for instance in the case where some setup is
->>  required for the memory to be accessible.
->>=20
->=20
-> Would it make sense to somehow tie this prepare/unprepare to the=20
-> actual
-> struct rproc_mem_entry that needs the resource enabled?
+-Tero
 
-Do you need such granularity?
+> 
+>>
+>>   .../remoteproc/ti,omap-remoteproc.yaml        | 329 ++++++++++++++++++
+>>   1 file changed, 329 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+>> new file mode 100644
+>> index 000000000000..f53d58efaae3
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
+> 
+> [snip]
+> 
+>> +  - |+
+>> +
+>> +    //Example 2: OMAP5 IPU
+>> +
+>> +    /* IPU Reserved Memory node */
+>> +    #include <dt-bindings/clock/omap5.h>
+>> +    reserved-memory {
+>> +        #address-cells = <2>;
+>> +        #size-cells = <2>;
+>> +
+>> +        ipu_memory_region: ipu-memory@95800000 {
+>> +            compatible = "shared-dma-pool";
+>> +            reg = <0 0x95800000 0 0x3800000>;
+>> +            reusable;
+>> +        };
+>> +    };
+>> +
+>> +    /* IPU node */
+>> +    ocp {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <1>;
+>> +
+>> +        ipu: ipu@55020000 {
+>> +            compatible = "ti,omap5-ipu";
+>> +            reg = <0x55020000 0x10000>;
+>> +            reg-names = "l2ram";
+>> +            iommus = <&mmu_ipu>;
+>> +            mboxes = <&mailbox &mbox_ipu>;
+>> +            memory-region = <&ipu_memory_region>;
+>> +            ti,timers = <&timer3>, <&timer4>;
+>> +            ti,watchdog-timers = <&timer9>, <&timer11>;
+>> +            clocks = <&ipu_clkctrl OMAP5_MMU_IPU_CLKCTRL 0>;
+>> +            resets = <&prm_core 2>;
+>> +            firmware-name = "omap5-ipu-fw.xem";
+>> +        };
+>> +    };
+> 
+> regards
+> Suman
+> 
 
-In my case, the three memories need the same clock to be enabled.
-
--Paul
-
-
->=20
->>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  ---
->>=20
->>  Notes:
->>      v2-v4: No change
->>=20
->>   drivers/remoteproc/remoteproc_core.c | 16 +++++++++++++++-
->>   include/linux/remoteproc.h           |  4 ++++
->>   2 files changed, 19 insertions(+), 1 deletion(-)
->>=20
->>  diff --git a/drivers/remoteproc/remoteproc_core.c=20
->> b/drivers/remoteproc/remoteproc_core.c
->>  index 0a9fc7fdd1c3..3ea5f675a148 100644
->>  --- a/drivers/remoteproc/remoteproc_core.c
->>  +++ b/drivers/remoteproc/remoteproc_core.c
->>  @@ -1299,11 +1299,19 @@ static int rproc_start(struct rproc *rproc,=20
->> const struct firmware *fw)
->>   	struct device *dev =3D &rproc->dev;
->>   	int ret;
->>=20
->>  +	if (rproc->ops->prepare) {
->>  +		ret =3D rproc->ops->prepare(rproc);
->>  +		if (ret) {
->>  +			dev_err(dev, "Failed to prepare rproc: %d\n", ret);
->>  +			return ret;
->>  +		}
->>  +	}
->>  +
->>   	/* load the ELF segments to memory */
->>   	ret =3D rproc_load_segments(rproc, fw);
->>   	if (ret) {
->>   		dev_err(dev, "Failed to load program segments: %d\n", ret);
->>  -		return ret;
->>  +		goto unprepare_rproc;
->>   	}
->>=20
->>   	/*
->>  @@ -1354,6 +1362,9 @@ static int rproc_start(struct rproc *rproc,=20
->> const struct firmware *fw)
->>   	rproc_unprepare_subdevices(rproc);
->>   reset_table_ptr:
->>   	rproc->table_ptr =3D rproc->cached_table;
->>  +unprepare_rproc:
->>  +	if (rproc->ops->unprepare)
->>  +		rproc->ops->unprepare(rproc);
->>=20
->>   	return ret;
->>   }
->>  @@ -1483,6 +1494,9 @@ static int rproc_stop(struct rproc *rproc,=20
->> bool crashed)
->>=20
->>   	rproc->state =3D RPROC_OFFLINE;
->>=20
->>  +	if (rproc->ops->unprepare)
->>  +		rproc->ops->unprepare(rproc);
->>  +
->>   	dev_info(dev, "stopped remote processor %s\n", rproc->name);
->>=20
->>   	return 0;
->>  diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->>  index 5f201f0c86c3..a6272d1ba384 100644
->>  --- a/include/linux/remoteproc.h
->>  +++ b/include/linux/remoteproc.h
->>  @@ -355,6 +355,8 @@ enum rsc_handling_status {
->>=20
->>   /**
->>    * struct rproc_ops - platform-specific device handlers
->>  + * @prepare:	prepare the device for power up (before the firmware=20
->> is loaded)
->>  + * @unprepare:	unprepare the device after it is stopped
->>    * @start:	power on the device and boot it
->>    * @stop:	power off the device
->>    * @kick:	kick a virtqueue (virtqueue id given as a parameter)
->>  @@ -371,6 +373,8 @@ enum rsc_handling_status {
->>    * @get_boot_addr:	get boot address to entry point specified in=20
->> firmware
->>    */
->>   struct rproc_ops {
->>  +	int (*prepare)(struct rproc *rproc);
->>  +	void (*unprepare)(struct rproc *rproc);
->>   	int (*start)(struct rproc *rproc);
->>   	int (*stop)(struct rproc *rproc);
->>   	void (*kick)(struct rproc *rproc, int vqid);
->>  --
->>  2.24.0
->>=20
-
-=
-
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
