@@ -2,158 +2,88 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C9713DCD0
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Jan 2020 15:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D166C13E2EC
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Jan 2020 17:59:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbgAPOAP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 16 Jan 2020 09:00:15 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:36926 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728931AbgAPOAP (ORCPT
+        id S2387501AbgAPQ5a (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 16 Jan 2020 11:57:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44688 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733228AbgAPQ53 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 16 Jan 2020 09:00:15 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 00GE0Dsg107367;
-        Thu, 16 Jan 2020 08:00:13 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1579183213;
-        bh=NTqfS5sg3qR7NGf7hi8wt6YM0bTdrvxo4J0eeuaTUDY=;
-        h=Subject:From:To:CC:References:Date:In-Reply-To;
-        b=SvPv2bfAXk5qNECkzp6FgJVXH85hJ75RGdiqgfQWV0z26MDcuL0N7K4e3oU9okd5a
-         nQk2wRI3w9vwOZuPFYEWJzF34BeVm5k0pcBCTMZgVA9J8xVotEtuf476MQQelMmA93
-         f6cbwIbg0hl78JS+Vub975zBsBZMTDk71sfK+SOQ=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 00GE0Dqq030954
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 16 Jan 2020 08:00:13 -0600
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 16
- Jan 2020 08:00:12 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 16 Jan 2020 08:00:12 -0600
-Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00GE0AtA029619;
-        Thu, 16 Jan 2020 08:00:10 -0600
-Subject: Re: [RESEND PATCHv4 01/14] dt-bindings: remoteproc: Add OMAP
- remoteproc bindings
-From:   Tero Kristo <t-kristo@ti.com>
-To:     Suman Anna <s-anna@ti.com>, <bjorn.andersson@linaro.org>,
-        <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
-        <linux-omap@vger.kernel.org>, Rob Herring <robh@kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20200102131845.12992-2-t-kristo@ti.com>
- <20200102132512.13248-1-t-kristo@ti.com>
- <f4ac066a-e5ee-f888-42bb-3f6d444747ee@ti.com>
- <1d4597f7-9e28-8b16-7679-c8abd291346d@ti.com>
-Message-ID: <47ece31c-53d5-2ec8-8047-86f6ad532c37@ti.com>
-Date:   Thu, 16 Jan 2020 16:00:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Thu, 16 Jan 2020 11:57:29 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0DAF121582;
+        Thu, 16 Jan 2020 16:57:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579193848;
+        bh=57e9JMOh/+P+iNeORr19G0sF5KFEp/5BykYmob0hcZc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VrgI9tN4WDQ70CJEca31vIbMx88cVWY4OOj4DDa38dzEWDuTeogoOeJ0adzEQUBRA
+         /+hJ9p/PdW4AOFNDj537NY6FOi7Tz5MvXj7hSbsdWFVIkCoIU0QiwP6QU8w/7WB7+n
+         BngZDAZLnrH5OIQu3LqEpqz3mZdapzxbY+OiuhSY=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Sibi Sankar <sibis@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 100/671] remoteproc: qcom: q6v5-mss: Add missing clocks for MSM8996
+Date:   Thu, 16 Jan 2020 11:45:31 -0500
+Message-Id: <20200116165502.8838-100-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200116165502.8838-1-sashal@kernel.org>
+References: <20200116165502.8838-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <1d4597f7-9e28-8b16-7679-c8abd291346d@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 16/01/2020 09:51, Tero Kristo wrote:
-> On 08/01/2020 18:49, Suman Anna wrote:
->> Hi Tero,
->>
->> On 1/2/20 7:25 AM, Tero Kristo wrote:
->>> From: Suman Anna <s-anna@ti.com>
->>>
->>> Add the device tree bindings document for the IPU and DSP
->>> remote processor devices on OMAP4+ SoCs.
->>>
->>> Cc: Rob Herring <robh@kernel.org>
->>> Cc: devicetree@vger.kernel.org
->>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>> [t-kristo@ti.com: converted to schema]
->>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->>> ---
->>> v4: added ti,bootreg-shift and ti,autosuspend-delay properties
->>
->> You missed out on my v3 comment on the firmware-name on Example 2. Can
->> you please address it when you post the next version?
-> 
-> I don't think I missed it, but you never told what is the actual name to 
-> use there. Firmware name generally does not matter, as user can provide 
-> whatever he wants via DT now.
+From: Sibi Sankar <sibis@codeaurora.org>
 
-Just to close on this, so the issue was file extension for the firmware 
-name being .xem when it should have been .xem4. Fixed in v5 now.
+[ Upstream commit 80ec419c3404106c563aaf56aa6b516a59c4cdfb ]
 
--Tero
+Proxy vote for QDSS clock and remove vote on handover interrupt
+to provide MSS PBL with access to STM hardware registers during
+boot. Add "snoc_axi" and "mnoc_axi" to the active clock list.
+Rename "gpll0_mss_clk" to "gpll0_mss" for consistency across SoCs.
 
-> 
->>
->>>
->>>   .../remoteproc/ti,omap-remoteproc.yaml        | 329 ++++++++++++++++++
->>>   1 file changed, 329 insertions(+)
->>>   create mode 100644 
->>> Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
->>>
->>> diff --git 
->>> a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml 
->>>
->>> new file mode 100644
->>> index 000000000000..f53d58efaae3
->>> --- /dev/null
->>> +++ 
->>> b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
->>
->> [snip]
->>
->>> +  - |+
->>> +
->>> +    //Example 2: OMAP5 IPU
->>> +
->>> +    /* IPU Reserved Memory node */
->>> +    #include <dt-bindings/clock/omap5.h>
->>> +    reserved-memory {
->>> +        #address-cells = <2>;
->>> +        #size-cells = <2>;
->>> +
->>> +        ipu_memory_region: ipu-memory@95800000 {
->>> +            compatible = "shared-dma-pool";
->>> +            reg = <0 0x95800000 0 0x3800000>;
->>> +            reusable;
->>> +        };
->>> +    };
->>> +
->>> +    /* IPU node */
->>> +    ocp {
->>> +        #address-cells = <1>;
->>> +        #size-cells = <1>;
->>> +
->>> +        ipu: ipu@55020000 {
->>> +            compatible = "ti,omap5-ipu";
->>> +            reg = <0x55020000 0x10000>;
->>> +            reg-names = "l2ram";
->>> +            iommus = <&mmu_ipu>;
->>> +            mboxes = <&mailbox &mbox_ipu>;
->>> +            memory-region = <&ipu_memory_region>;
->>> +            ti,timers = <&timer3>, <&timer4>;
->>> +            ti,watchdog-timers = <&timer9>, <&timer11>;
->>> +            clocks = <&ipu_clkctrl OMAP5_MMU_IPU_CLKCTRL 0>;
->>> +            resets = <&prm_core 2>;
->>> +            firmware-name = "omap5-ipu-fw.xem";
->>> +        };
->>> +    };
->>
->> regards
->> Suman
->>
-> 
+Fixes: 9f058fa2efb1 ("remoteproc: qcom: Add support for mss remoteproc on msm8996")
+Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/remoteproc/qcom_q6v5_pil.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+diff --git a/drivers/remoteproc/qcom_q6v5_pil.c b/drivers/remoteproc/qcom_q6v5_pil.c
+index 6a84b6372897..073747ba8000 100644
+--- a/drivers/remoteproc/qcom_q6v5_pil.c
++++ b/drivers/remoteproc/qcom_q6v5_pil.c
+@@ -1271,13 +1271,16 @@ static const struct rproc_hexagon_res msm8996_mss = {
+ 	.proxy_clk_names = (char*[]){
+ 			"xo",
+ 			"pnoc",
++			"qdss",
+ 			NULL
+ 	},
+ 	.active_clk_names = (char*[]){
+ 			"iface",
+ 			"bus",
+ 			"mem",
+-			"gpll0_mss_clk",
++			"gpll0_mss",
++			"snoc_axi",
++			"mnoc_axi",
+ 			NULL
+ 	},
+ 	.need_mem_protection = true,
+-- 
+2.20.1
+
