@@ -2,81 +2,72 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5132D13E2ED
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Jan 2020 17:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8FD140BA3
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 17 Jan 2020 14:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387472AbgAPQ5a (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 16 Jan 2020 11:57:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44708 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729290AbgAPQ53 (ORCPT
+        id S1728794AbgAQNvt (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 17 Jan 2020 08:51:49 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:18438 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728755AbgAQNvt (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:57:29 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Fri, 17 Jan 2020 08:51:49 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1579269108; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=69k9DR17sNPfrI1O1H7UPJ9rZN1wXwjUe6sDIdpAqPg=; b=rFSxx4nLKWNryrQ2BeXxYj/oKYw8Sx+KcCmkss/LHv29zDjRCTKBHJwLBVk85U0g7YHuGUiL
+ XLfmKoh5RoNo6uR42qZyDhMUBEUrlYieQXhKdABNVo2OZQYS3jqNeBQaEncm/ayltB5JAO72
+ fkOcRWgdig3ViXrjrp+swBiREDM=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e21bbf0.7f9299b69f10-smtp-out-n03;
+ Fri, 17 Jan 2020 13:51:44 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id DA135C447A2; Fri, 17 Jan 2020 13:51:44 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8C0C620730;
-        Thu, 16 Jan 2020 16:57:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193849;
-        bh=jcUO4aiGzaGJ0ae33gdIpJzoUiIP1myn1aets66c0us=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l3t1t2Cyo5PvWh41o1h8u/hb61U54iYEFY0WQW1gK2WEz8bpJShDbO+/T7hVHgiiS
-         AcKku1iQyWyFQL6yOxyed2SAkCpaRUsMKPtRHtAVzuJrdedIGWk1PMVMXr9LJWrUEC
-         HDaYRmLSbb9fb4Dk4MMTe5RJUvgcqgnYCLHxlZ2E=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sibi Sankar <sibis@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 101/671] remoteproc: qcom: q6v5-mss: Add missing regulator for MSM8996
-Date:   Thu, 16 Jan 2020 11:45:32 -0500
-Message-Id: <20200116165502.8838-101-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116165502.8838-1-sashal@kernel.org>
-References: <20200116165502.8838-1-sashal@kernel.org>
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AB030C447A6;
+        Fri, 17 Jan 2020 13:51:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org AB030C447A6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     bjorn.andersson@linaro.org, evgreen@chromium.org,
+        p.zabel@pengutronix.de
+Cc:     ohad@wizery.com, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        agross@kernel.org, Sibi Sankar <sibis@codeaurora.org>
+Subject: [PATCH 0/4] Improve general readability of MSS on SC7180
+Date:   Fri, 17 Jan 2020 19:21:26 +0530
+Message-Id: <20200117135130.3605-1-sibis@codeaurora.org>
+X-Mailer: git-send-email 2.22.1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Sibi Sankar <sibis@codeaurora.org>
+This series aims to improve the general readability of the mss reset
+sequence on SC7180 SoCs. No functional change intended.
 
-[ Upstream commit 47b874748d500020026ee43b386b5598e20f3a68 ]
+Sibi Sankar (4):
+  remoteproc: qcom: q6v5-mss: Use regmap_read_poll_timeout
+  remoteproc: qcom: q6v5-mss: Improve readability across clk handling
+  remoteproc: qcom: q6v5-mss: Rename boot status timeout
+  remoteproc: qcom: q6v5-mss: Improve readability of reset_assert
 
-Add proxy vote for pll supply on MSM8996 SoC.
+ drivers/remoteproc/qcom_q6v5_mss.c | 69 +++++++++++++++++-------------
+ 1 file changed, 40 insertions(+), 29 deletions(-)
 
-Fixes: 9f058fa2efb1 ("remoteproc: qcom: Add support for mss remoteproc on msm8996")
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/remoteproc/qcom_q6v5_pil.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_pil.c b/drivers/remoteproc/qcom_q6v5_pil.c
-index 073747ba8000..cc475dcbf27f 100644
---- a/drivers/remoteproc/qcom_q6v5_pil.c
-+++ b/drivers/remoteproc/qcom_q6v5_pil.c
-@@ -1268,6 +1268,13 @@ static const struct rproc_hexagon_res sdm845_mss = {
- 
- static const struct rproc_hexagon_res msm8996_mss = {
- 	.hexagon_mba_image = "mba.mbn",
-+	.proxy_supply = (struct qcom_mss_reg_res[]) {
-+		{
-+			.supply = "pll",
-+			.uA = 100000,
-+		},
-+		{}
-+	},
- 	.proxy_clk_names = (char*[]){
- 			"xo",
- 			"pnoc",
 -- 
-2.20.1
-
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
