@@ -2,63 +2,263 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E1A141F6D
-	for <lists+linux-remoteproc@lfdr.de>; Sun, 19 Jan 2020 19:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDAA0141FCF
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 19 Jan 2020 20:40:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728819AbgASSoU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sun, 19 Jan 2020 13:44:20 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:38392 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727372AbgASSoT (ORCPT
+        id S1727144AbgASTki (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 19 Jan 2020 14:40:38 -0500
+Received: from zimbra2.kalray.eu ([92.103.151.219]:49162 "EHLO
+        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727138AbgASTki (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sun, 19 Jan 2020 13:44:19 -0500
-Received: by mail-il1-f194.google.com with SMTP id f5so25479487ilq.5
-        for <linux-remoteproc@vger.kernel.org>; Sun, 19 Jan 2020 10:44:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=MveYcniUJUB532f0dlOoihdmkjAHV60cDj8LBHI8M4h+3H+egt8ZCsWSnQoG7CEhld
-         h286H+k74rDzfRQOoY/f9M81WRQr88YRuubiH3HanhIDyXki4cyulA7bNdgdh/npcklQ
-         CvJo43u8PBPBkMgEH5HatRsI+u5tlB3wEJ1Th3FBUvpApZQxsvg7pL4HfvgLhjM/SAbt
-         Wln7BJPpvNYZtoiRQX3zkLZKrm4kgBMldFao5RktgQ8gLQFv0TsxI7xopop5Q61lnjsD
-         O+Nqof9tzp5qXVHsDImBQ0OOhN8D0ZvK4JC9Zw+KV08LpajVcASte5dFUKOIeqnCFHwC
-         Gp1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=bVorcGB2FlJC/NA431Bmjhq6sja9hpTpT9sHsskCFQn9vG4pvdPha9PjWlxvKZNqHd
-         04e3P9eWR1kkNBTxh5Ps09nMdAVb7NUIYc6/J9AFeTFTdTjTgPqaBaO5uJip751N3gap
-         DFafbIRI6wY/XQ8oWMLb7eUKBpXvDrS6AX4vyVdQwbJIFmA4mg3L9DZokjhkot/iTELZ
-         9lRB/TutU44fcWF0lP0XQC1crzWY/MhxLdVyyDldTseYUuxucSYvDzANRTr7z+3wpYC1
-         lnWuwOvJab6QEFXBASQk6EFJvN4VLTVPHdshi5Vh0DENxx/kCCP6SJW7IKH+8lGTSyyS
-         /LSg==
-X-Gm-Message-State: APjAAAU6P/rs9aObnIL9w520yjthPnKl5k0dQrQCkkeJVNZbeKPqEYyo
-        g+VbtooQLb7q5iTXk9gyPgJGW3SfIgMpwH0Xv3w=
-X-Google-Smtp-Source: APXvYqzrfoOpFYdPx6ke6uIX585SnMDBN6pXKvD7iN8x9MT//+KimK2aFC33ps3ZC6gjq3Pi1pIlacgfKiFCQZrpYZA=
-X-Received: by 2002:a92:d1c1:: with SMTP id u1mr7477573ilg.66.1579459459106;
- Sun, 19 Jan 2020 10:44:19 -0800 (PST)
+        Sun, 19 Jan 2020 14:40:38 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 91C0A27E035B;
+        Sun, 19 Jan 2020 20:40:36 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id GyLYaULQNz-p; Sun, 19 Jan 2020 20:40:35 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id A8A0927E042C;
+        Sun, 19 Jan 2020 20:40:35 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu A8A0927E042C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1579462835;
+        bh=+Dw4xA8XmHbVQGDb8Mm1lLiccd7uTZJOTM5WDY6aBls=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=qvp1ZBtHXDm6McP6/UhrIbtFBirp3Dt5xwo49BIEXXUu5o8osyrOhfnIEXd8YpT2M
+         q6Hrry3Y96cn+YsPtWjKQWqGjwvWp2/MXxWMxVUW/SpRjEOeG59+BiuwkbWwawsGr3
+         3Pjg6GRt308ZlW6CmyLkSq5LANQJw02TfiZrTZsg=
+X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id m0jOuxyfYuI2; Sun, 19 Jan 2020 20:40:35 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 88DB627E035B;
+        Sun, 19 Jan 2020 20:40:35 +0100 (CET)
+Date:   Sun, 19 Jan 2020 20:40:34 +0100 (CET)
+From:   =?utf-8?Q?Cl=C3=A9ment?= Leger <cleger@kalray.eu>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Message-ID: <377421261.12898679.1579462834671.JavaMail.zimbra@kalray.eu>
+In-Reply-To: <20200117225217.GA27535@xps15>
+References: <20200115102142.11229-1-cleger@kalray.eu> <088ceab9-f135-6e70-dcf6-f75ec46110b1@st.com> <79048597.12371594.1579098506802.JavaMail.zimbra@kalray.eu> <a1116656-cf2e-c1a1-7cc3-0fe2a79f076e@st.com> <612100872.12377996.1579101063237.JavaMail.zimbra@kalray.eu> <20200117225217.GA27535@xps15>
+Subject: Re: [PATCH] remoteproc: Add support for predefined notifyids
 MIME-Version: 1.0
-Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:18
- -0800 (PST)
-Reply-To: favordens@email.com
-From:   Favor Desmond <contecindy5@gmail.com>
-Date:   Sun, 19 Jan 2020 18:44:18 +0000
-Message-ID: <CAOfCPNxgSoAU_ns0j9jYL-ArKfcD=i8NkJvHsR4-OGvFBVDMZg@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [192.168.40.202]
+X-Mailer: Zimbra 8.8.12_GA_3794 (ZimbraWebClient - GC79 (Linux)/8.8.12_GA_3794)
+Thread-Topic: remoteproc: Add support for predefined notifyids
+Thread-Index: XQPBHwr8ohCZhap5WEAs2EU5X1XMwA==
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello Dear
-Greetings to you,I am Favor Desmond from Ivory coast currently living
-in  Togo Republic,I would like to know you more, so that i can tell
-you little amount myself and my photo, email address is
-favordens@email.com
-Thanks
-Favor
+Hi Mathieu,
+
+----- On 17 Jan, 2020, at 23:52, Mathieu Poirier mathieu.poirier@linaro.org=
+ wrote:
+
+> Hey guys,
+>=20
+> On Wed, Jan 15, 2020 at 04:11:03PM +0100, Cl=C3=A9ment Leger wrote:
+>>=20
+>>=20
+>> ----- On 15 Jan, 2020, at 16:09, Arnaud Pouliquen arnaud.pouliquen@st.co=
+m wrote:
+>>=20
+>> > On 1/15/20 3:28 PM, Cl=C3=A9ment Leger wrote:
+>> >> Hi Arnaud,
+>> >>=20
+>> >> ----- On 15 Jan, 2020, at 15:06, Arnaud Pouliquen arnaud.pouliquen@st=
+.com wrote:
+>> >>=20
+>> >>> Hi Cl=C3=A9ment,
+>> >>>
+>> >>> On 1/15/20 11:21 AM, Clement Leger wrote:
+>> >>>> In order to support preallocated notify ids, if their value is
+>> >>>> equal to FW_RSC_NOTIFY_ID_ANY, then do no allocate a notify id
+>> >>>> dynamically but try to allocate the requested one. This is useful w=
+hen
+>> >>>> using custom ids to bind them to custom vendor resources. For insta=
+nce,
+>> >>>> it allow to assign a group of queues to a specific interrupti in or=
+der
+>> >>>> to dispatch notifications.
+>> >>>>
+>> >>>> Signed-off-by: Clement Leger <cleger@kalray.eu>
+>> >>>> ---
+>> >>>>  drivers/remoteproc/remoteproc_core.c | 27 +++++++++++++++++++-----=
+---
+>> >>>>  include/linux/remoteproc.h           |  1 +
+>> >>>>  2 files changed, 20 insertions(+), 8 deletions(-)
+>> >>>>
+>> >>>> diff --git a/drivers/remoteproc/remoteproc_core.c
+>> >>>> b/drivers/remoteproc/remoteproc_core.c
+>> >>>> index 307df98347ba..b1485fcd0f11 100644
+>> >>>> --- a/drivers/remoteproc/remoteproc_core.c
+>> >>>> +++ b/drivers/remoteproc/remoteproc_core.c
+>> >>>> @@ -351,14 +351,27 @@ int rproc_alloc_vring(struct rproc_vdev *rvde=
+v, int i)
+>> >>>>  =09/*
+>> >>>>  =09 * Assign an rproc-wide unique index for this vring
+>> >>>>  =09 * TODO: assign a notifyid for rvdev updates as well
+>> >>>> -=09 * TODO: support predefined notifyids (via resource table)
+>> >>>>  =09 */
+>> >>>> -=09ret =3D idr_alloc(&rproc->notifyids, rvring, 0, 0, GFP_KERNEL);
+>> >>>> -=09if (ret < 0) {
+>> >>>> -=09=09dev_err(dev, "idr_alloc failed: %d\n", ret);
+>> >>>> -=09=09return ret;
+>> >>>> +=09if (rsc->vring[i].notifyid =3D=3D FW_RSC_NOTIFY_ID_ANY) {
+>> >>>> +=09=09ret =3D idr_alloc(&rproc->notifyids, rvring, 0, 0, GFP_KERNE=
+L);
+>> >>>> +=09=09if (ret < 0) {
+>> >>>> +=09=09=09dev_err(dev, "idr_alloc failed: %d\n", ret);
+>> >>>> +=09=09=09return ret;
+>> >>>> +=09=09}
+>> >>>> +=09=09notifyid =3D ret;
+>> >>>> +
+>> >>>> +=09=09/* Let the rproc know the notifyid of this vring.*/
+>> >>>> +=09=09rsc->vring[i].notifyid =3D notifyid;
+>> >>>> +=09} else {
+>> >>>> +=09=09/* Reserve requested notify_id */
+>> >>>> +=09=09notifyid =3D rsc->vring[i].notifyid;
+>> >>>> +=09=09ret =3D idr_alloc(&rproc->notifyids, rvring, notifyid,
+>> >>>> +=09=09=09=09notifyid + 1, GFP_KERNEL);
+>> >>>> +=09=09if (ret < 0) {
+>> >>>> +=09=09=09dev_err(dev, "idr_alloc failed: %d\n", ret);
+>> >>>> +=09=09=09return ret;
+>> >>>> +=09=09}
+>> >>>>  =09}
+>> >>>> -=09notifyid =3D ret;
+>> >>>> =20
+>> >>>>  =09/* Potentially bump max_notifyid */
+>> >>>>  =09if (notifyid > rproc->max_notifyid)
+>> >>>> @@ -366,8 +379,6 @@ int rproc_alloc_vring(struct rproc_vdev *rvdev,=
+ int i)
+>> >>>> =20
+>> >>>>  =09rvring->notifyid =3D notifyid;
+>> >>>> =20
+>> >>>> -=09/* Let the rproc know the notifyid of this vring.*/
+>> >>>> -=09rsc->vring[i].notifyid =3D notifyid;
+>> >>>>  =09return 0;
+>> >>>>  }
+>> >>> The rproc_free_vring function resets the notifyid to -1 on free.
+>> >>> This could generate a side effect if the resource table is not reloa=
+ded.
+>> >>=20
+>> >> Oh indeed, I did not thought of that. What would you recommend ?
+>> >> If using -1 in free vring, notify ids will be reallocated at next
+>> >> round.
+>> > Regarding the code i'm not sure that it is useful to reset the notifyI=
+D to -1 on
+>> > free.
+>=20
+> I'm not sure setting notifyid to -1 in rproc_free_vring() is such a big p=
+roblem.
+> No matter the code path I look at, if rproc_free_vring() is called someth=
+ing
+> serious has happened and the resource table will be reloaded if another a=
+ttempt
+> at booting the remote processor is done.  It can also be that a graceful
+> shutdown is underway, in which case the resource table will be reloaded a=
+nyway
+> if/when the slave is brought back in service.
+>=20
+> Let me know if I'm missing a scenario.
+
+No, you are actually right
+
+>=20
+> To me the real problem is if a FW image has set the notifyids in the reso=
+urce
+> table to 0xffffffff, thinking they will be overwritten.  In that case thi=
+ngs
+> will really south.
+
+Hum, if set to 0xFFFFFFFF, then they will be assigned dynamically and updat=
+ed
+in the resource table (with this patch). But your probably mean existing co=
+de,
+right ?
+
+>=20
+>> > In current version, on alloc, the notifyID is overwriten without check=
+.
+>> > And as vdev status is updated, vring struct in resource table should b=
+e
+>> > considered as invalid
+>> > Except if i missed a usecase/race condition...
+>> >=20
+>> >>=20
+>> >> I was also worried that it would break some existing user application=
+s
+>> >> which uses "0" as a notify id in vring but expect the id to be
+>> >> allocated dynamically. With my modification, it means it will try to
+>> >> use "0" as a predefined id, leading to allocation failure.
+>=20
+> From my point of view they will have been lucky for all this time.  Even =
+with
+> a new version of the resource table (which I think is the right way go)
+> cases like this will break.
+
+Agreed, and actually, I may have missread some code. I can't find were I re=
+ad
+that. By the way, is there any documentation which state the allowed values=
+ of
+notify ids ?
+
+>=20
+> Thanks,
+> Mathieu
+>=20
+>> >>=20
+>> > Yes this could introduce regression for firmware that sets 0 as defaul=
+t value.
+>> > Probably better to introduce this patch with a new version of the reso=
+urce table
+>> > :)
+>>=20
+>> Understood ;)
+>>=20
+>> Regards,
+>>=20
+>> Cl=C3=A9ment
+>>=20
+>> >=20
+>> > Regards
+>> > Arnaud
+>> >>>
+>> >>>> =20
+>> >>>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.=
+h
+>> >>>> index 16ad66683ad0..dcae3394243e 100644
+>> >>>> --- a/include/linux/remoteproc.h
+>> >>>> +++ b/include/linux/remoteproc.h
+>> >>>> @@ -123,6 +123,7 @@ enum fw_resource_type {
+>> >>>>  };
+>> >>>> =20
+>> >>>>  #define FW_RSC_ADDR_ANY (-1)
+>> >>>> +#define FW_RSC_NOTIFY_ID_ANY (-1)This define can also be used in
+>> >>>> rproc_free_vring
+>> >>=20
+>> >> Indeed.
+>> >>=20
+>> >> Thanks for your review.
+>> >>=20
+>> >> Regards,
+>> >>=20
+>> >> Cl=C3=A9ment
+>> >>=20
+>> >>>
+>> >>> Regards,
+>> >>> Arnaud
+>> >>>> =20
+>> >>>>  /**
+> > > >>>   * struct fw_rsc_carveout - physically contiguous memory request
