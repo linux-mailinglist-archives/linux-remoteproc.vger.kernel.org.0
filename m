@@ -2,131 +2,95 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B10014321F
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 20 Jan 2020 20:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BEB14325F
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 20 Jan 2020 20:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbgATTYg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 20 Jan 2020 14:24:36 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38094 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726780AbgATTYg (ORCPT
+        id S1727312AbgATTcr (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 20 Jan 2020 14:32:47 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:46800 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727766AbgATTcn (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 20 Jan 2020 14:24:36 -0500
-Received: by mail-pg1-f196.google.com with SMTP id a33so154289pgm.5
-        for <linux-remoteproc@vger.kernel.org>; Mon, 20 Jan 2020 11:24:36 -0800 (PST)
+        Mon, 20 Jan 2020 14:32:43 -0500
+Received: by mail-ed1-f68.google.com with SMTP id m8so545483edi.13
+        for <linux-remoteproc@vger.kernel.org>; Mon, 20 Jan 2020 11:32:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4BImEj4H53pDmcZg2F5mDuPA97CrTOZdicbRO7KXC2w=;
-        b=SJXgIfvyWUbFDJRJHMl3vakHhpmRchRQnb/4moM5JQQNLQ8WkBRrzsNXOXT3g1+9f3
-         Dil/2snqAtHl+dbIl3dIxmRxJlCT/J3ncCcVoBxSHMv+sGcHeJdWM27DorO68WKGUw3q
-         3IvLHQvLgfHLXf+ZqDOdQ0rDSUMPN1cGv3c0lpq64Bme3saRnIJwJyqVsKxeUKQrVtey
-         8GRoPXQC8glf9a3CT9Loj91qVEq9F3l62U93f6STPGDmhGPEimnpRhFCh/iTtwclzeqr
-         pL9Ww0Bwu3FOv1vKFLRYJVrZS/eu+XLR7jkBoTKFR5eua4hHnWQtEUWSsTusCmfthx79
-         gCvQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
+        b=I1roYPqxBJzWtUK/EbeI6Kt4sZi+JdSJm6qJbGHrPRZYvHUSh5jIrCeNC6L/G/f0o1
+         SOUBr7y32ZptFoyqXLV46mqkCVXIPksz6dHNenBfKH5ZmZaxgtbXfnD4DPiQngFU9XCO
+         yyR3xavKr41v/xLWwuSw91WJb2uX+wjZFxyyrAuDZ+hvXvCheAMdiLqD+HrlaysRfXCL
+         GNNQRcxyOsqzXo4wRH2J/upuPpeDO5ZRhzNY4HfuYgHfElCshp5fZYHSWkrBX0jAzQvX
+         wM9NfRj8QHz6JxUFOI+rZ3wcUi7Ikp+pHr28kaxr4n7py/KC1H5pYclpR4JTvoTIZ7Jv
+         h8rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4BImEj4H53pDmcZg2F5mDuPA97CrTOZdicbRO7KXC2w=;
-        b=gXkUMsRgWWIW677dl2274Q8RHtq1mJYHtiLnOxKofLgpWBU6R4Mu8xY6rA4iy/BKgH
-         HaGE8caILGcfJsOlYwO8aF3O7N5n/hdwX9yviPljlYrI04s7Nv23s2fmh8PfbtYfqP2m
-         l/RP38nf90Pu+vj5/dxveN9l2Fq5HBuhPn9cxiG5R9g49djMiaeWPNnVs69hOs8qyGEs
-         MmffdzJkkiUXik1w4waDUJEuOWrpAz0CyIckeEKpjgpPTmH4ElLyqPLgZK2SdrdFW6f5
-         mQJZ7cWPnYIRmCrIksrquUK4pNDcCfaGKrBOh7SM6isEszjUlaHD31JkAszjlPxdLbsa
-         MUyw==
-X-Gm-Message-State: APjAAAURjzN167LN3LUEtLr+oxLO181udI764bIk5+213SS5gRXqJ9AG
-        GIkZ6ZtZ/ZSA0QUluJVfidvLSw==
-X-Google-Smtp-Source: APXvYqwTpbmTC0/4YIYnBfzFSfiJW1OAQ4LFl8vJvbkCRR0WIbfjOsKAg8PEOBfPpe2u1BHUXs04OQ==
-X-Received: by 2002:a63:1346:: with SMTP id 6mr1251849pgt.111.1579548275691;
-        Mon, 20 Jan 2020 11:24:35 -0800 (PST)
-Received: from yoga (wsip-184-181-24-67.sd.sd.cox.net. [184.181.24.67])
-        by smtp.gmail.com with ESMTPSA id u127sm41991223pfc.95.2020.01.20.11.24.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2020 11:24:35 -0800 (PST)
-Date:   Mon, 20 Jan 2020 11:24:32 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     evgreen@chromium.org, p.zabel@pengutronix.de, ohad@wizery.com,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, agross@kernel.org
-Subject: Re: [PATCH 1/4] remoteproc: qcom: q6v5-mss: Use
- regmap_read_poll_timeout
-Message-ID: <20200120192432.GJ1511@yoga>
-References: <20200117135130.3605-1-sibis@codeaurora.org>
- <20200117135130.3605-2-sibis@codeaurora.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
+        b=FxW5uuuZy8jHgmElu6T1JbSpiV9GNZ34wWdeJ1+V7ZC6TQBVkKVIMtPSZZGlNvGcLG
+         1M6aAyVk0l4jXJPBKj0SVcEuJrw7+6fI2gt3KoYvYn95K/yUBsYnaNFnJ1jHDeFhFKPt
+         CG8paPzEIIiwNAHM87dq1+ENxawvNId8fqk+0QDy7kk/6w0geL+Xcp1nESNk/n0EzdsC
+         GPQSTMa7haBvLa0/HjElWxfhl0ae7SXgYUesltntPM2/VVf7pWystWUxOagJ+uXRRxuh
+         Biqx7nEQ/CtUzUFdngdrrwb3jzon4JGl/n8Beskzg0Yv8zLr1uBQDEtB5h6Dr2P+sY2E
+         EKRA==
+X-Gm-Message-State: APjAAAUPTV3urABxyursWG0rqh1YcwoRxD584wd5WYmE+LuR5h3ma6Ob
+        AewuWmChZU7i7EyFLApZ1EUmEp0W/NluBl0Qwig=
+X-Google-Smtp-Source: APXvYqwKjCT5QnfvXWtJkO29cRmoOGR1uhIhw9Ol6eYz9VuYzVaqX/o8Ejt2WLDxZ+bl2CebXLO8AWZ4Emn93SBTQws=
+X-Received: by 2002:a17:906:1fcd:: with SMTP id e13mr898516ejt.333.1579548761316;
+ Mon, 20 Jan 2020 11:32:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200117135130.3605-2-sibis@codeaurora.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Mon, 20 Jan 2020 11:32:40
+ -0800 (PST)
+Reply-To: mcclainejohn.13@gmail.com
+From:   "Prof, William Roberts" <eco.bank1204@gmail.com>
+Date:   Mon, 20 Jan 2020 20:32:40 +0100
+Message-ID: <CAOE+jABpcHQWZWhtskhDFbtTqfBe7h065WE2kC1G+jQD+tQiTA@mail.gmail.com>
+Subject: Contact Diplomatic Agent, Mr. Mcclaine John to receive your ATM CARD
+ valued the sum of $12.8Million United States Dollars
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri 17 Jan 05:51 PST 2020, Sibi Sankar wrote:
+Attn: Dear Beneficiary,
 
-> Replace the loop for HALT_ACK detection with regmap_read_poll_timeout.
-> 
+I wish to inform you that the diplomatic agent conveying your ATM CARD
+valued the sum of $12.8Million United States Dollars has misplaced
+your address and he is currently stranded at (George Bush
+International Airport) Houston Texas USA now
+We required you to reconfirm the following information's below to him
+so that he can deliver your Payment CARD to you today or tomorrow
+morning as information provided with open communications via email and
+telephone for security reasons.
+HERE IS THE DETAILS  HE NEED FROM YOU URGENT
+YOUR FULL NAME:========
+ADDRESS:========
+MOBILE NO:========
+NAME OF YOUR NEAREST AIRPORT:========
+A COPY OF YOUR IDENTIFICATION :========
 
-Nice, but we should be able to do the same in q6v5proc_halt_axi_port()?
+Note; do contact the diplomatic agent immediately through the
+information's listed below
+Contact Person: Diplomatic Agent, Mr. Mcclaine John
+EMAIL: mcclainejohn.13@gmail.com
+Tel:(223) 777-7518
 
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-> ---
->  drivers/remoteproc/qcom_q6v5_mss.c | 16 ++++++----------
->  1 file changed, 6 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-> index 51f451311f5fc..f20b39c6ff0ed 100644
-> --- a/drivers/remoteproc/qcom_q6v5_mss.c
-> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
-> @@ -73,6 +73,7 @@
->  #define NAV_AXI_IDLE_BIT		BIT(2)
->  
->  #define HALT_ACK_TIMEOUT_MS		100
-> +#define NAV_HALT_ACK_TIMEOUT_US		200
->  
->  /* QDSP6SS_RESET */
->  #define Q6SS_STOP_CORE			BIT(0)
-> @@ -746,7 +747,6 @@ static void q6v5proc_halt_nav_axi_port(struct q6v5 *qproc,
->  				       struct regmap *halt_map,
->  				       u32 offset)
->  {
-> -	unsigned long timeout;
->  	unsigned int val;
->  	int ret;
->  
-> @@ -760,15 +760,11 @@ static void q6v5proc_halt_nav_axi_port(struct q6v5 *qproc,
->  			   NAV_AXI_HALTREQ_BIT);
->  
->  	/* Wait for halt ack*/
-> -	timeout = jiffies + msecs_to_jiffies(HALT_ACK_TIMEOUT_MS);
-> -	for (;;) {
-> -		ret = regmap_read(halt_map, offset, &val);
-> -		if (ret || (val & NAV_AXI_HALTACK_BIT) ||
-> -		    time_after(jiffies, timeout))
-> -			break;
-> -
-> -		udelay(5);
-> -	}
-> +	ret = regmap_read_poll_timeout(halt_map, offset, val,
-> +				       (val & NAV_AXI_HALTACK_BIT),
-> +				       5, NAV_HALT_ACK_TIMEOUT_US);
-> +	if (ret)
-> +		dev_err(qproc->dev, "nav halt ack timeout\n");
+Contact the diplomatic agent immediately
+because he is waiting to hear from you today with the needed information's.
 
-Is there a case where this new print adds value beyond the printout we
-already have for the case of IDLE_BIT not going high? Can we simply
-ignore the return value and skip the print?
+NOTE: The Diplomatic agent does not know that the content of the
+consignment box is $12.800,000,00 Million United States Dollars and on
+no circumstances should you let him know the content. The consignment
+was moved from here as family treasures, so never allow him to open
+the box. Please I have paid delivery fees for you but the only money
+you must send to Mcclaine John is your ATM CARD delivery fee $25.00
+only. text Him as you contact Him Immediately
 
-Regards,
-Bjorn
-
->  
->  	ret = regmap_read(halt_map, offset, &val);
->  	if (ret || !(val & NAV_AXI_IDLE_BIT))
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
+Thanks,
+with Regards.
+Prof, William Roberts
+Director DHL COURIER SERVICES-Benin
