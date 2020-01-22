@@ -2,86 +2,146 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C8C1449DD
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jan 2020 03:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F39144BA9
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jan 2020 07:18:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727816AbgAVCe5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 21 Jan 2020 21:34:57 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:37203 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727590AbgAVCe5 (ORCPT
+        id S1726083AbgAVGSd (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 22 Jan 2020 01:18:33 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:15491 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726118AbgAVGSc (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 21 Jan 2020 21:34:57 -0500
-Received: by mail-oi1-f196.google.com with SMTP id z64so4724857oia.4;
-        Tue, 21 Jan 2020 18:34:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xu4UVbzw5q/AJ/ohJxRSgN5x13BSP7On39rYAJwa4OE=;
-        b=rTTjT29rH51bRmWAXHjdC6SzAt/gCK4fHBxnCkftaAmZq0EDxxQLR3P4rTP6VjOw+n
-         n0z/FERX9ZAeela3QXRysG9Ob+pbc3xkdC8QSCtu8a8BjrrNDSCYpCW3bgIaoqq5PoQI
-         JhcVGywv1kfgRIv3LjWX9ARFXWchAe/L0h10XqAHymDHmFQ5zN4D3nC73iKnhEgzXS8H
-         B0yyFF2w4CJ9uhp21/uFkLnVSqqk6t9FCcaGmDjcAYMsDH3DCXZb7I4lfmuEpAsmri5y
-         QyM9ox5BQQS81lCjkYGO7uNh4S+6OmlW4wKhafpERtBgcEKXugn00CnhkYaVU3o4+7MI
-         jrxg==
-X-Gm-Message-State: APjAAAW96IHbNq7bwD4f08lvTH89//W2A4/GBzqFYQddn5V6tyy3IJmx
-        mWIIYxh2HFHKsIGJyL6SRQ==
-X-Google-Smtp-Source: APXvYqylhydEC5uYb2bBmyRcNJOYN2sHqUGX2MwoudpWA/8T3mi+kOtVZXjHOXNvoIp4vEhhVVyHpg==
-X-Received: by 2002:a05:6808:486:: with SMTP id z6mr5503344oid.117.1579660496379;
-        Tue, 21 Jan 2020 18:34:56 -0800 (PST)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id j10sm14215256otr.64.2020.01.21.18.34.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jan 2020 18:34:55 -0800 (PST)
-Received: (nullmailer pid 5877 invoked by uid 1000);
-        Wed, 22 Jan 2020 02:34:54 -0000
-Date:   Tue, 21 Jan 2020 20:34:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Tero Kristo <t-kristo@ti.com>
-Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mathieu.poirier@linaro.org, s-anna@ti.com,
-        linux-omap@vger.kernel.org, devicetree@vger.kernel.org,
-        Tero Kristo <t-kristo@ti.com>
-Subject: Re: [PATCHv5 01/14] dt-bindings: remoteproc: Add OMAP remoteproc
- bindings
-Message-ID: <20200122023454.GA5809@bogus>
-References: <20200116135332.7819-1-t-kristo@ti.com>
- <20200116135332.7819-2-t-kristo@ti.com>
+        Wed, 22 Jan 2020 01:18:32 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1579673912; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=0+6tDurQN9muJjME2SB8JDmDEo2i43PbGdo2TM5ZOM0=;
+ b=uanwc39EhL1KQRzGLPzEETbHN6R+fs8B1Xaw8wQWzpQD1GOLJI7sEbOAn1vUhAr+TKaKzXet
+ KkPE5X+hhQzSm4FGi/dtShLOvAZUhhG0w3dAvoOLGyM5rRl73rrsvY9ruFzk/aMxe+eL+ImH
+ oENs5TfsEZMrCOoTqT6NxHyydAU=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e27e936.7fd4bfa57928-smtp-out-n01;
+ Wed, 22 Jan 2020 06:18:30 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id A7D16C447A4; Wed, 22 Jan 2020 06:18:29 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E2A53C43383;
+        Wed, 22 Jan 2020 06:18:28 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200116135332.7819-2-t-kristo@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 22 Jan 2020 11:48:28 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     evgreen@chromium.org, p.zabel@pengutronix.de, ohad@wizery.com,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, agross@kernel.org,
+        linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [PATCH 1/4] remoteproc: qcom: q6v5-mss: Use
+ regmap_read_poll_timeout
+In-Reply-To: <20200120192432.GJ1511@yoga>
+References: <20200117135130.3605-1-sibis@codeaurora.org>
+ <20200117135130.3605-2-sibis@codeaurora.org> <20200120192432.GJ1511@yoga>
+Message-ID: <ff6e50e7ab706dcab05d579df8201864@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu, 16 Jan 2020 15:53:19 +0200, Tero Kristo wrote:
-> From: Suman Anna <s-anna@ti.com>
-> 
-> Add the device tree bindings document for the IPU and DSP
-> remote processor devices on OMAP4+ SoCs.
-> 
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> [t-kristo@ti.com: converted to schema]
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> ---
-> v5:
->   - enforced ordering of reg-names
->   - removed ti,bootreg-shift, instead added this under ti,bootreg
->     property
->   - renamed ti,autosuspend-delay to ti,autosuspend-delay-ms
->   - fixed required property handling
->   - fixed the omap5 ipu example firmware name extension
->   
->  .../remoteproc/ti,omap-remoteproc.yaml        | 322 ++++++++++++++++++
->  1 file changed, 322 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> 
+Hey Bjorn,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thanks for the review!
+
+On 2020-01-21 00:54, Bjorn Andersson wrote:
+> On Fri 17 Jan 05:51 PST 2020, Sibi Sankar wrote:
+> 
+>> Replace the loop for HALT_ACK detection with regmap_read_poll_timeout.
+
+sry missed it, will include it
+in the next re-spin
+
+>> 
+> 
+> Nice, but we should be able to do the same in q6v5proc_halt_axi_port()?
+> 
+>> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+>> ---
+>>  drivers/remoteproc/qcom_q6v5_mss.c | 16 ++++++----------
+>>  1 file changed, 6 insertions(+), 10 deletions(-)
+>> 
+>> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c 
+>> b/drivers/remoteproc/qcom_q6v5_mss.c
+>> index 51f451311f5fc..f20b39c6ff0ed 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+>> @@ -73,6 +73,7 @@
+>>  #define NAV_AXI_IDLE_BIT		BIT(2)
+>> 
+>>  #define HALT_ACK_TIMEOUT_MS		100
+>> +#define NAV_HALT_ACK_TIMEOUT_US		200
+>> 
+>>  /* QDSP6SS_RESET */
+>>  #define Q6SS_STOP_CORE			BIT(0)
+>> @@ -746,7 +747,6 @@ static void q6v5proc_halt_nav_axi_port(struct q6v5 
+>> *qproc,
+>>  				       struct regmap *halt_map,
+>>  				       u32 offset)
+>>  {
+>> -	unsigned long timeout;
+>>  	unsigned int val;
+>>  	int ret;
+>> 
+>> @@ -760,15 +760,11 @@ static void q6v5proc_halt_nav_axi_port(struct 
+>> q6v5 *qproc,
+>>  			   NAV_AXI_HALTREQ_BIT);
+>> 
+>>  	/* Wait for halt ack*/
+>> -	timeout = jiffies + msecs_to_jiffies(HALT_ACK_TIMEOUT_MS);
+>> -	for (;;) {
+>> -		ret = regmap_read(halt_map, offset, &val);
+>> -		if (ret || (val & NAV_AXI_HALTACK_BIT) ||
+>> -		    time_after(jiffies, timeout))
+>> -			break;
+>> -
+>> -		udelay(5);
+>> -	}
+>> +	ret = regmap_read_poll_timeout(halt_map, offset, val,
+>> +				       (val & NAV_AXI_HALTACK_BIT),
+>> +				       5, NAV_HALT_ACK_TIMEOUT_US);
+>> +	if (ret)
+>> +		dev_err(qproc->dev, "nav halt ack timeout\n");
+> 
+> Is there a case where this new print adds value beyond the printout we
+> already have for the case of IDLE_BIT not going high? Can we simply
+> ignore the return value and skip the print?
+
+yes we can skip the print
+
+> 
+> Regards,
+> Bjorn
+> 
+>> 
+>>  	ret = regmap_read(halt_map, offset, &val);
+>>  	if (ret || !(val & NAV_AXI_IDLE_BIT))
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
+>> Forum,
+>> a Linux Foundation Collaborative Project
+
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
