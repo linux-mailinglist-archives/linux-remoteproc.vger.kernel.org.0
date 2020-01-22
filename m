@@ -2,90 +2,67 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E65311448D4
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jan 2020 01:17:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51025144904
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jan 2020 01:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728750AbgAVARG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 21 Jan 2020 19:17:06 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:35998 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727969AbgAVARG (ORCPT
+        id S1729014AbgAVAkI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 21 Jan 2020 19:40:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50364 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728665AbgAVAkI (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 21 Jan 2020 19:17:06 -0500
-Received: by mail-pj1-f67.google.com with SMTP id n59so2468147pjb.1
-        for <linux-remoteproc@vger.kernel.org>; Tue, 21 Jan 2020 16:17:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mjGh2rwq9I3yBu9wgudpicRsuc9hY6/QsJSVCCsHLPM=;
-        b=B6nm8z1qqVez+oK+7yTJg6sszlYC6O9kGXtD5kpfkQk4qprMXwbCnzzyrMZ8b8VVx3
-         SHIkF9fmKCI0p/graxqyCJRTBihfEu//EO1/xJEcZjUSgKMnTJuQLcW6BZjAMKuUZ+Jp
-         pE5+i3MEJk3lQKsPBbCwM3FJ4eCbwBAClDdfcNMqcnGo9kiuCxzQu9FcJzyVkfcU0z97
-         gDwCHMFjaBf3tvXU4QUSQCklUtXkVlZimYkHOsFKJZNraUM1fcb6jFVOdXbg0fDKE/7A
-         OkBfHAPAH+QLZKROd1JavsL4P8fV9e7QF/OjVY34cciN6Cs6Y9sm1fa1ZCaqzSvW9PRt
-         HYUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mjGh2rwq9I3yBu9wgudpicRsuc9hY6/QsJSVCCsHLPM=;
-        b=humPBjDo8q98buuwSauHtLfCQxKdTS5bNRt7D0xwN8Pluj6BFwaKIRlRnT2avK73zo
-         otVf4ev/0GQOG+HY5OdTcofEjddso51HnKkWwpWctDToItXaDW6VuL2QyfLuC0RtbtGI
-         PNcWtfPO6KL93WhP5jie1OBKavozzIuqRtUSce/Y2JmDlZVPn854Tbk01ZvY9eyINFTo
-         B7T0jkj9JI9Wip82BPzJCD5Y0vLE5WfVrIOtsxTvwiP712qApImOxSOu4mJTpmYzPA8K
-         z9PvXf+2EYzGiFxdezftgavbbLCLzbg67jfw7LMeZznLzKbOvjEmiw3RR+YqkLXDq1yR
-         HUiw==
-X-Gm-Message-State: APjAAAX8ORNhhsoo6Kf7AuqtBzmb1LD0BQKVIMqJPR8TI3DFxw8N/GMw
-        etDSFutMu0r7ORrCwsyepOhAVw==
-X-Google-Smtp-Source: APXvYqww213yTfxwe2vax3fLM8dUAmMVmaR3lFSYn8kc8oBNqMcgFYUTNCt8/44plN/68lG27aYtAg==
-X-Received: by 2002:a17:902:9a90:: with SMTP id w16mr7975360plp.93.1579652225779;
-        Tue, 21 Jan 2020 16:17:05 -0800 (PST)
-Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id q8sm43284302pgg.92.2020.01.21.16.17.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jan 2020 16:17:05 -0800 (PST)
-Date:   Tue, 21 Jan 2020 16:17:03 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Baolin Wang <baolin.wang7@gmail.com>
-Cc:     ohad@wizery.com, baohua@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 0/3] Some improvements for SIRF hwspinlock
-Message-ID: <20200122001703.GD14744@builder>
-References: <cover.1578453662.git.baolin.wang7@gmail.com>
+        Tue, 21 Jan 2020 19:40:08 -0500
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579653607;
+        bh=ymQcS6DfZiqj1NvnkmaQtFN/fRhawulq0nXxhYn2e+M=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=0vULyEWtbhCFuPwNVvxeHm+dSgOTgr6+XpCRnxB0d5iyDkgm7fPW+jkWeMg+WcF2d
+         +Jejfx0vmVCNLMbDua87Xif5Ia8YL980HwgfYwOk/FBA8DM/74WWZkvgZAN3gYk9uu
+         Aj/oc87wI6WCJp1cpqOiNOcZ4pqsIGJA8Rbb9I/k=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH RESEND 0/3] Some improvements for SIRF hwspinlock
+From:   patchwork-bot+linux-remoteproc@kernel.org
+Message-Id: <157965360765.2917.18165267937126479853.git-patchwork-notify@kernel.org>
+Date:   Wed, 22 Jan 2020 00:40:07 +0000
+References: <cover.1578453662.git.baolin.wang7@gmail.com>
 In-Reply-To: <cover.1578453662.git.baolin.wang7@gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+To:     Baolin Wang <baolin.wang7@gmail.com>
+Cc:     linux-remoteproc@vger.kernel.org
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue 07 Jan 19:23 PST 2020, Baolin Wang wrote:
+Hello:
 
+This series was applied to andersson/remoteproc.git (refs/heads/for-next).
+
+On Wed,  8 Jan 2020 11:23:43 +0800 you wrote:
 > This patch set did some improvements for the SIRF hwspinlock driver,
 > including changing to use devm_xxx APIs and removing some redundant
 > pm runtime functions.
 > 
-
-Thanks for resending the three series' Baolin! I've applied this as
-well.
-
-Regards,
-Bjorn
-
 > Baolin Wang (3):
 >   hwspinlock: sirf: Change to use devm_platform_ioremap_resource()
 >   hwspinlock: sirf: Remove redundant PM runtime functions
 >   hwspinlock: sirf: Use devm_hwspin_lock_register() to register hwlock
 >     controller
 > 
->  drivers/hwspinlock/sirf_hwspinlock.c |   46 ++++++----------------------------
->  1 file changed, 7 insertions(+), 39 deletions(-)
-> 
-> -- 
-> 1.7.9.5
-> 
+> [...]
+
+
+Here is a summary with links:
+  - [RESEND,1/3] hwspinlock: sirf: Change to use devm_platform_ioremap_resource()
+    https://git.kernel.org/andersson/remoteproc/c/77d99a6a9df2ac3d1832b408123e48549d1e01fd
+  - [RESEND,2/3] hwspinlock: sirf: Remove redundant PM runtime functions
+    https://git.kernel.org/andersson/remoteproc/c/8f2a0dc87dad7f5c644fc9210a1efb4617acd6a1
+  - [RESEND,3/3] hwspinlock: sirf: Use devm_hwspin_lock_register() to register hwlock controller
+    https://git.kernel.org/andersson/remoteproc/c/cb36017a8b1b582bcb7063e44c598c3e36aa0228
+
+You are awesome, thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/pwbot
