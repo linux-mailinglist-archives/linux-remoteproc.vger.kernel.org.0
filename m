@@ -2,183 +2,174 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 289C0145C5B
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jan 2020 20:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EF7145C91
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jan 2020 20:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbgAVTUV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 22 Jan 2020 14:20:21 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:40043 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726135AbgAVTUV (ORCPT
+        id S1726194AbgAVTkL (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 22 Jan 2020 14:40:11 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:38965 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726204AbgAVTkK (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 22 Jan 2020 14:20:21 -0500
-Received: by mail-pl1-f194.google.com with SMTP id s21so189783plr.7
-        for <linux-remoteproc@vger.kernel.org>; Wed, 22 Jan 2020 11:20:20 -0800 (PST)
+        Wed, 22 Jan 2020 14:40:10 -0500
+Received: by mail-pj1-f67.google.com with SMTP id e11so404842pjt.4
+        for <linux-remoteproc@vger.kernel.org>; Wed, 22 Jan 2020 11:40:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=mpnp2dBUwgiSXJqBkhUdFPkzPC82dAX2Dn/bzDab9OI=;
-        b=TwoKubR7jNDC4FclY67lUleRt7BkY0+OB6iyNEzor/uNZSPiIrXIXbVINxc/qzjB2/
-         orFLFxkbQBij/x+q2bSzp8dFpk6zF/y2rOm3kjZKMPKMe9foOSjjaogA/6DtOoLLoPDo
-         CfJcIuhiXScG3eQdaxDxRwz8XaAJgBAUkgMuvw3WKcPAzFEzATmkX+2hI57agzEyDhYe
-         Zl7X2nlFkxbyzB3rhlRCBTg24HqN6LGz740918w1ctTE460zXSILedH6AE2gmqgvj0md
-         42Ihe9mcJaSvEd0ZCW01Xs7bOgTgfuvM03QU36WVyywF3QvGmk6wgRAZsqc98UC63LXM
-         d2iA==
+        bh=HtkbmR8fmtnktqo3yHC3XtDswDNTkwK2QM7gBaKydjo=;
+        b=LeYeH8PJOdf0UULN0/CxInW7FJi07Sm9Up0Ar6Q60ZzC2HZAIMmrlzUhhT49ZV4HhR
+         uHk+Rhe04vMUWG4wKoDXHqHfvHYhuSkur3fvP9ubsuO7qrTOroxwHjtZ2gtI08bYl1+e
+         RfCnHgW20nX0aRlZYfzwOZcGnpWo83M5+lS82TrsmEoGqv6koy/K3QgZIZ7PqPib4weT
+         MVY0zuhLIqcehSAkwrBcjtGCfeecyudS5Ae6UkO6DfnkUrznAiCTJ+InoYHt7MLXQySb
+         cQKPgu8cE9uivRq5C1dm6MGOHSmr8lMw+zRLs3mK7QaWn0mItWF3h426tUKW65vXygO0
+         JZmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=mpnp2dBUwgiSXJqBkhUdFPkzPC82dAX2Dn/bzDab9OI=;
-        b=TGodVm9JXZDSj2SbEe9CP1WsEdNZYtVluUn9ooBI5P8dTtA5PNqw3VPWH+corkgXb0
-         aE/I72TXXK/aYsroX3nna/+Epi1zjcZ7JCM/Yb6+wF+vX8mkbRDIzgZeHGNKJ3KRboCh
-         tnIrHMg8sVtTtq3j8RqwgqWkenBD3ZaV3Xvx+Ighur4+bLzf6I7RSsb613OCDhWTLtyt
-         u933OzuSQo6TiqAgDsZ6NNh3M1JHjRtZjIpgNNsBvctkrlUP6+j+9RnAQONTKMTtfBvk
-         QhlIUK2Ey6jBMpqIGE9wwjQIBG+zH2AP3fIwpNR1IqfKoV4KXUMbyFK7DrtQZDQb+HkC
-         TB4w==
-X-Gm-Message-State: APjAAAVHR0Yc1HGGcokcpXQhYfkinQ3geTG4kj+FVKfxEpqJlbUM9KQo
-        f4O2fUD5BtHliuHyPEb9XOeQeQ==
-X-Google-Smtp-Source: APXvYqxspwypdYRSl7cOxJoNSmsNgl+draPEhXEg+oHAk4xjoVtPB+jwjiWlRB4uz0kbtwFrb1BI9Q==
-X-Received: by 2002:a17:902:7291:: with SMTP id d17mr12134051pll.227.1579720820090;
-        Wed, 22 Jan 2020 11:20:20 -0800 (PST)
+        bh=HtkbmR8fmtnktqo3yHC3XtDswDNTkwK2QM7gBaKydjo=;
+        b=hXSfnZHeauPpu73bkwlO3g1N8Qxk6jZHcQCIq0EntuSRRlzGxz0mVKNoaYFQBIMnHE
+         Re8Yb6w6LGa2QJtX3CC3j/WuShmrtvSGvwL6EGHq9lq8TLSMV7nvHWz65x+Z/OUz895w
+         /Grfvm9l8Ci09Z8mwC40R6s+DxvLoNA0xCedXgiKdUYHX8UJgJcHGMrj/RS5XzQ9aaH7
+         XklIruyO0X0h4V1ItoJgNbnIdzPalRVmt3sSMMwlQtvdhjpFDbwpHVE98Xze4GxaflAk
+         h0M+kcvwOqeLEfwi6+/SkTTBGQ6IOmWyF/zZmfrGcLaZznqxK7DzDNJn8ac00A158b0f
+         7lcg==
+X-Gm-Message-State: APjAAAURmhJSrHrMgnNG48AWSh5rls8a2V6L9AG/dxpTXyH6TPB6sCAN
+        AXitXPt8HvzNN0YKJvFm9pczPQ==
+X-Google-Smtp-Source: APXvYqy6Xx25rSNmn3eFN/R4xRV4MH8bPvbJcz7qvBnLurst5BIrH6pj/V2mfhcUMR5YRqEXSf7fOQ==
+X-Received: by 2002:a17:902:9042:: with SMTP id w2mr12495147plz.269.1579722009787;
+        Wed, 22 Jan 2020 11:40:09 -0800 (PST)
 Received: from ripper (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id a15sm49191872pfh.169.2020.01.22.11.20.18
+        by smtp.gmail.com with ESMTPSA id w8sm45848542pfn.186.2020.01.22.11.40.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2020 11:20:19 -0800 (PST)
-Date:   Wed, 22 Jan 2020 11:19:46 -0800
+        Wed, 22 Jan 2020 11:40:09 -0800 (PST)
+Date:   Wed, 22 Jan 2020 11:39:36 -0800
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         Sibi Sankar <sibis@codeaurora.org>,
         Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Subject: Re: [PATCH v2 2/8] remoteproc: qcom: Introduce driver to store pil
- info in IMEM
-Message-ID: <20200122191946.GA3261042@ripper>
+Subject: Re: [PATCH v2 7/8] remoteproc: qcom: q6v5: Add common panic handler
+Message-ID: <20200122193936.GB3261042@ripper>
 References: <20191227053215.423811-1-bjorn.andersson@linaro.org>
- <20191227053215.423811-3-bjorn.andersson@linaro.org>
- <20200110211846.GA11555@xps15>
- <20200122020234.GT1511@yoga>
- <CANLsYkykgpLAQqG3Tk73HFR9+Uadr2caiBx-6op5Cyv4BBcPFA@mail.gmail.com>
+ <20191227053215.423811-8-bjorn.andersson@linaro.org>
+ <20200110212806.GD11555@xps15>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANLsYkykgpLAQqG3Tk73HFR9+Uadr2caiBx-6op5Cyv4BBcPFA@mail.gmail.com>
+In-Reply-To: <20200110212806.GD11555@xps15>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed 22 Jan 11:04 PST 2020, Mathieu Poirier wrote:
+On Fri 10 Jan 13:28 PST 2020, Mathieu Poirier wrote:
 
-> On Tue, 21 Jan 2020 at 19:02, Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > On Fri 10 Jan 13:18 PST 2020, Mathieu Poirier wrote:
-> > > On Thu, Dec 26, 2019 at 09:32:09PM -0800, Bjorn Andersson wrote:
-> > [..]
-> > > > diff --git a/drivers/remoteproc/qcom_pil_info.c b/drivers/remoteproc/qcom_pil_info.c
-> > > > new file mode 100644
-> > > > index 000000000000..b0897ae9eae5
-> > > > --- /dev/null
-> > > > +++ b/drivers/remoteproc/qcom_pil_info.c
-> > > > @@ -0,0 +1,150 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > +/*
-> > > > + * Copyright (c) 2019 Linaro Ltd.
-> > > > + */
-> > > > +#include <linux/module.h>
-> > > > +#include <linux/kernel.h>
-> > > > +#include <linux/of.h>
-> > > > +#include <linux/platform_device.h>
-> > > > +#include <linux/mutex.h>
-> > > > +#include <linux/regmap.h>
-> > > > +#include <linux/mfd/syscon.h>
-> > > > +#include <linux/slab.h>
-> > >
-> > > These should be in alphabetical order if there is no depencencies
-> > > between them, something checkpatch complains about.
-> > >
-> >
-> > Of course.
-> >
-> > > > +
-> > > > +struct pil_reloc_entry {
-> > > > +   char name[8];
-> > >
-> > > Please add a #define for the name length and reuse it in qcom_pil_info_store()
-> > >
-> >
-> > Ok
-> >
-> > [..]
-> > > > +void qcom_pil_info_store(const char *image, phys_addr_t base, size_t size)
-> > > > +{
-> > > > +   struct pil_reloc_entry *entry;
-> > > > +   int idx = -1;
-> > > > +   int i;
-> > > > +
-> > > > +   mutex_lock(&reloc_mutex);
-> > > > +   if (!_reloc)
-> > >
-> > > Since it is available, I would use function qcom_pil_info_available().  Also
-> > > checkpatch complains about indentation problems related to the 'if' condition
-> > > but I can't see what makes it angry.
-> > >
-> >
-> > Sure thing, and I'll double check the indentation.
-> >
-> > > > +           goto unlock;
-> > > > +
-> > > > +   for (i = 0; i < PIL_INFO_ENTRIES; i++) {
-> > > > +           if (!_reloc->entries[i].name[0]) {
-> > > > +                   if (idx == -1)
-> > > > +                           idx = i;
-> > > > +                   continue;
-> > > > +           }
-> > > > +
-> > > > +           if (!strncmp(_reloc->entries[i].name, image, 8)) {
-> > > > +                   idx = i;
-> > > > +                   goto found;
-> > > > +           }
-> > > > +   }
-> > > > +
-> > > > +   if (idx == -1) {
-> > > > +           dev_warn(_reloc->dev, "insufficient PIL info slots\n");
-> > > > +           goto unlock;
-> > >
-> > > Given how this function is used in the next patch I think an error should be
-> > > reported to the caller.
-> > >
-> >
-> > Just to clarify, certain global errors will cause the entire device to
-> > be reset and allow memory contents to be extracted for analysis in post
-> > mortem tools. This patch ensures that this information contains
-> > (structured) information about where each remote processor is loaded.
-> > Afaict the purpose of propagating errors from this function would be for
-> > the caller to abort the launching of a remote processor.
-> >
-> > I think it's better to take the risk of having insufficient data for the
-> > post mortem tools than to fail booting a remote processor for a reason
-> > that won't affect normal operation.
+> On Thu, Dec 26, 2019 at 09:32:14PM -0800, Bjorn Andersson wrote:
+> > Add a common panic handler that invokes a stop request and sleep enough
+> > to let the remoteproc flush it's caches etc in order to aid post mortem
+> > debugging.
+> > 
+> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > ---
+> > 
+> > Changes since v1:
+> > - None
+> > 
+> >  drivers/remoteproc/qcom_q6v5.c | 19 +++++++++++++++++++
+> >  drivers/remoteproc/qcom_q6v5.h |  1 +
+> >  2 files changed, 20 insertions(+)
+> > 
+> > diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+> > index cb0f4a0be032..17167c980e02 100644
+> > --- a/drivers/remoteproc/qcom_q6v5.c
+> > +++ b/drivers/remoteproc/qcom_q6v5.c
+> > @@ -6,6 +6,7 @@
+> >   * Copyright (C) 2014 Sony Mobile Communications AB
+> >   * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+> >   */
+> > +#include <linux/delay.h>
+> >  #include <linux/kernel.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/interrupt.h>
+> > @@ -15,6 +16,8 @@
+> >  #include <linux/remoteproc.h>
+> >  #include "qcom_q6v5.h"
+> >  
+> > +#define Q6V5_PANIC_DELAY_MS	200
+> > +
+> >  /**
+> >   * qcom_q6v5_prepare() - reinitialize the qcom_q6v5 context before start
+> >   * @q6v5:	reference to qcom_q6v5 context to be reinitialized
+> > @@ -162,6 +165,22 @@ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5)
+> >  }
+> >  EXPORT_SYMBOL_GPL(qcom_q6v5_request_stop);
+> >  
+> > +/**
+> > + * qcom_q6v5_panic() - panic handler to invoke a stop on the remote
+> > + * @q6v5:	reference to qcom_q6v5 context
+> > + *
+> > + * Set the stop bit and sleep in order to allow the remote processor to flush
+> > + * its caches etc for post mortem debugging.
+> > + */
+> > +void qcom_q6v5_panic(struct qcom_q6v5 *q6v5)
+> > +{
+> > +	qcom_smem_state_update_bits(q6v5->state,
+> > +				    BIT(q6v5->stop_bit), BIT(q6v5->stop_bit));
+> > +
+> > +	mdelay(Q6V5_PANIC_DELAY_MS);
 > 
-> I understand the reasoning.  In that case it is probably best to let
-> the caller decide what to do with the returned error than deal with it
-> locally, especially since this is an exported function.  When using
-> qcom_pil_info_store(), I would write a comment that justifies the
-> reason for ignoring the return value (what you have above is quite
-> good).  Otherwise it is just a matter of time before automated tools
-> pickup on the anomaly and send patches to fix it.
+> I really wonder if the delay should be part of the remoteproc core and
+> configurable via device tree.  Wanting the remote processor to flush its caches
+> is likely something other vendors will want when dealing with a kernel panic.
+> It would be nice to see if other people have an opinion on this topic.  If not
+> then we can keep the delay here and move it to the core if need be.
 > 
 
-You're right, moving the decision to the remoteproc drivers will result
-in the decision being implemented in the right place. I will respin it
-accordingly.
+I gave this some more thought and what we're trying to achieve is to
+signal the remote processors about the panic and then give them time to
+react, but per the proposal (and Qualcomm downstream iirc) we will do
+this for each remote processor, one by one.
 
-Thanks!
+So in the typical case of a Qualcomm platform with 4-5 remoteprocs we'll
+end up giving the first one a whole second to react and the last one
+"only" 200ms.
+
+Moving the delay to the core by iterating over rproc_list calling
+panic() and then delaying would be cleaner imo.
+
+It might be nice to make this configurable in DT, but I agree that it
+would be nice to hear from others if this would be useful.
+
+Regards,
 Bjorn
+
+> Thanks,
+> Mathieu
+> 
+> > +}
+> > +EXPORT_SYMBOL_GPL(qcom_q6v5_panic);
+> > +
+> >  /**
+> >   * qcom_q6v5_init() - initializer of the q6v5 common struct
+> >   * @q6v5:	handle to be initialized
+> > diff --git a/drivers/remoteproc/qcom_q6v5.h b/drivers/remoteproc/qcom_q6v5.h
+> > index 7ac92c1e0f49..c37e6fd063e4 100644
+> > --- a/drivers/remoteproc/qcom_q6v5.h
+> > +++ b/drivers/remoteproc/qcom_q6v5.h
+> > @@ -42,5 +42,6 @@ int qcom_q6v5_prepare(struct qcom_q6v5 *q6v5);
+> >  int qcom_q6v5_unprepare(struct qcom_q6v5 *q6v5);
+> >  int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5);
+> >  int qcom_q6v5_wait_for_start(struct qcom_q6v5 *q6v5, int timeout);
+> > +void qcom_q6v5_panic(struct qcom_q6v5 *q6v5);
+> >  
+> >  #endif
+> > -- 
+> > 2.24.0
+> > 
