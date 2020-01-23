@@ -2,116 +2,77 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E131B147393
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 23 Jan 2020 23:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E6914740E
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 23 Jan 2020 23:54:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728665AbgAWWHw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 23 Jan 2020 17:07:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52962 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726232AbgAWWHw (ORCPT
+        id S1729503AbgAWWyV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 23 Jan 2020 17:54:21 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:45450 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729208AbgAWWyV (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 23 Jan 2020 17:07:52 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 792EB21734;
-        Thu, 23 Jan 2020 22:07:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579817270;
-        bh=QlwrFB/8SQuEz72x5eJ/IwwmULMw3LNCA6dsBx7N75U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JLUm1d1nZ3Ot8n7cZT2wO+oEqAb8ecDHj+2YmMHmDw461svQo2lhvJ8Uie/M/2Ehu
-         +Y3C5f3ghUA5lmBaBkWnqUrJX1zjMmBmygXBa4uk6NeZgnanX2J0A4u+9eLTLJ1dbJ
-         XVTjHfUYxMyDGpA8yfTM9lNlWLjr1lGuHwZxSzd4=
-Received: by mail-qt1-f182.google.com with SMTP id e12so22326qto.2;
-        Thu, 23 Jan 2020 14:07:50 -0800 (PST)
-X-Gm-Message-State: APjAAAXC71H3286DlFJoP8L+yz9WmJl21/aiFDKE47olirPLj933HVxe
-        v+nS8TU9T9ukTSDxyGqDklCi0rwaJeJ4EXib9Q==
-X-Google-Smtp-Source: APXvYqxzfWxfFKwXzKXbl8qhH8ZiP9eveL4Sd9dFSyn/yz3xnENA89DFYjvHnIiSUkXEweXnfPoeCbjrCT3FHrpjlZI=
-X-Received: by 2002:ac8:59:: with SMTP id i25mr419976qtg.110.1579817269622;
- Thu, 23 Jan 2020 14:07:49 -0800 (PST)
+        Thu, 23 Jan 2020 17:54:21 -0500
+Received: by mail-lj1-f196.google.com with SMTP id j26so167686ljc.12
+        for <linux-remoteproc@vger.kernel.org>; Thu, 23 Jan 2020 14:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4i0xRegMdNqxOxG+y1FBl3qD0d4qg24N4qcbY2rQ3vQ=;
+        b=h6fTyk31IwwLg8KNhheI3woUC/D2zkf8XziVhs7JXsImTaRLC2DXm9BJAE6u+BMgjK
+         73MNy0gWxtpbOyDwxzvluEvf+NqpO/USzFZ726Oz2yVqZNBJk/Lpps9OfFcYEj6AfB9L
+         o1Gs5eQMBdoRwGanZpLB0BWUuybs52+Nj83ZM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4i0xRegMdNqxOxG+y1FBl3qD0d4qg24N4qcbY2rQ3vQ=;
+        b=HTo6+0OMd6Ev8P1hb6Vip+ls8xQ1OuvCNps18MUy4sahURbCdsAI5PamymAeD+v+5D
+         rGCHohOretzKpy02O4KeweeXUseqmKjCvnFo5/JrJGfSfQ0r4QEd6cHotv/TnghB5AwP
+         +ewW06TZK7Y5p1Ls64dOZXb3UYIL9cyQl9sDeIH3nsEN5OIXhVT4nfsjrfQNGvOl4Ee9
+         kUZUiASSXEFjXr9ee7/leq08YNRUhi7pAd/41JL9v6ftt9E1ALCqtGJT5PiMmqL3T9zr
+         MFuC2fKAKr8bkpnuJ1FWbTLl5l12YwZrl90s4NkhnnS0SmcTiXVziaP9/OpmtnWmtJax
+         g5TQ==
+X-Gm-Message-State: APjAAAXpuChazpbWAA1Xb6aRu+fxPXOZV4xuN9A9cZPhTQ1YPgvFfKfh
+        rNDQdet88zUADoZPDSqqOkMghQ+jRZA=
+X-Google-Smtp-Source: APXvYqz86CUKw6gRfxkwwpYbBfOdmdHIhXt4VfqkNm9yZCNcpT7X7Q0Tq/xuUC/B5HBY2CbJu7sUZQ==
+X-Received: by 2002:a2e:6f19:: with SMTP id k25mr420851ljc.84.1579820058925;
+        Thu, 23 Jan 2020 14:54:18 -0800 (PST)
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com. [209.85.167.50])
+        by smtp.gmail.com with ESMTPSA id l7sm1730349lfc.80.2020.01.23.14.54.17
+        for <linux-remoteproc@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jan 2020 14:54:18 -0800 (PST)
+Received: by mail-lf1-f50.google.com with SMTP id b15so3592213lfc.4
+        for <linux-remoteproc@vger.kernel.org>; Thu, 23 Jan 2020 14:54:17 -0800 (PST)
+X-Received: by 2002:a05:6512:2035:: with SMTP id s21mr31943lfs.99.1579820057323;
+ Thu, 23 Jan 2020 14:54:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20191227053215.423811-1-bjorn.andersson@linaro.org>
- <20191227053215.423811-2-bjorn.andersson@linaro.org> <20200104213804.GA30385@bogus>
- <20200104221752.GW549437@yoga>
-In-Reply-To: <20200104221752.GW549437@yoga>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 23 Jan 2020 16:07:38 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJEq-eX-LoRiHHot8De4RbRS4-Np+hisTk4TWpehqsRwg@mail.gmail.com>
-Message-ID: <CAL_JsqJEq-eX-LoRiHHot8De4RbRS4-Np+hisTk4TWpehqsRwg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] dt-bindings: remoteproc: Add Qualcomm PIL info binding
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
+References: <20200123131236.1078-1-sibis@codeaurora.org> <20200123131236.1078-2-sibis@codeaurora.org>
+In-Reply-To: <20200123131236.1078-2-sibis@codeaurora.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Thu, 23 Jan 2020 14:53:41 -0800
+X-Gmail-Original-Message-ID: <CAE=gft7sztBTs4mhF2X0eKnjJNBBRxXP5VOr4rsAw=SOYDi4jg@mail.gmail.com>
+Message-ID: <CAE=gft7sztBTs4mhF2X0eKnjJNBBRxXP5VOr4rsAw=SOYDi4jg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] remoteproc: qcom: q6v5-mss: Use regmap_read_poll_timeout
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ohad Ben Cohen <ohad@wizery.com>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>
+        linux-remoteproc@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Gross <agross@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Sat, Jan 4, 2020 at 3:17 PM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
+On Thu, Jan 23, 2020 at 5:13 AM Sibi Sankar <sibis@codeaurora.org> wrote:
 >
-> On Sat 04 Jan 13:38 PST 2020, Rob Herring wrote:
+> Replace the loop for HALT_ACK detection with regmap_read_poll_timeout.
 >
-> > On Thu, Dec 26, 2019 at 09:32:08PM -0800, Bjorn Andersson wrote:
-> > > Add a devicetree binding for the Qualcomm periperal image loader
-> > > relocation info region found in the IMEM.
-> > >
-> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > ---
-> > >
-> > > Changes since v1:
-> > > - New patch
-> > >
-> > >  .../bindings/remoteproc/qcom,pil-info.yaml    | 35 +++++++++++++++++++
-> > >  1 file changed, 35 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml
-> > > new file mode 100644
-> > > index 000000000000..715945c683ed
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml
-> > > @@ -0,0 +1,35 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: "http://devicetree.org/schemas/remoteproc/qcom,pil-info.yaml#"
-> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > > +
-> > > +title: Qualcomm peripheral image loader relocation info binding
-> > > +
-> > > +description:
-> > > +  This document defines the binding for describing the Qualcomm peripheral
-> > > +  image loader relocation memory region, in IMEM, which is used for post mortem
-> > > +  debugging of remoteprocs.
-> > > +
-> > > +maintainers:
-> > > +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: qcom,pil-reloc-info
-> > > +
-> > > +  offset:
-> > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > +    description: Offset in the register map for the memory region
-> >
-> > Why not use 'reg' instead?
-> >
->
-> Because we have one prior example of subdevice of "imem", which is
-> compatible "syscon-reboot-mode" and that binding uses "offset".
+> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
 
-Not that I'm proposing this, but nothing should prevent both from coexisting.
-
-Rob
+Reviewed-by: Evan Green <evgreen@chromium.org>
