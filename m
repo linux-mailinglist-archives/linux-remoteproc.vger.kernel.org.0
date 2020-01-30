@@ -2,171 +2,145 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 749E414D8A7
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 30 Jan 2020 11:07:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1797E14E092
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 30 Jan 2020 19:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726922AbgA3KHe (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 30 Jan 2020 05:07:34 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:16452 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726873AbgA3KHd (ORCPT
+        id S1728369AbgA3SLo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 30 Jan 2020 13:11:44 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:40990 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727729AbgA3SLo (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 30 Jan 2020 05:07:33 -0500
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00UA3B3E002101;
-        Thu, 30 Jan 2020 11:07:23 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=xOteWNZ7Ff6UQHGiM84pJCDWGQlrerPhvDSeyaQw1Zg=;
- b=SdLDJbRfmL9Bc9ZSiIQ0ciEft4U2nTsDCp7HurExOwkdCIXtagWov7RuIDvGRaZd201t
- 6K0ODT7sXhlhXZgt4osag/yhxURD05kbvimjNldtLF2Zc2C+M//LEqDTDuaczQV87Blt
- Yvw2qHsxzdNKLS/BIkTaVB7gyVHJYAcSSrhDUVtY+Euxg7PiV7PLl/y+zIQyNfBGmM6p
- XuEzTSkaIYJGfOh7pbRyi8y6L3wHE0mQdLLUkLZLVXODCe2YwRh/aDrKsw2ECqtYYtL8
- UyZCsk+wUQgNlqayeRyx2HBq1ZMEF+noPCyHpnO0A8R9ereVaO4KpYLkcSRzZIBf4Vg5 DQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2xrcay7hct-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 30 Jan 2020 11:07:23 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DC03210003A;
-        Thu, 30 Jan 2020 11:07:22 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C443B2B1872;
-        Thu, 30 Jan 2020 11:07:22 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.44) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 30 Jan
- 2020 11:07:22 +0100
-Subject: Re: [PATCH v2 6/8] remoteproc: Introduce "panic" callback in ops
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>
-References: <20191227053215.423811-1-bjorn.andersson@linaro.org>
- <20191227053215.423811-7-bjorn.andersson@linaro.org>
- <20200110212307.GC11555@xps15>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Message-ID: <13ea6f8e-c017-d4b3-6658-c193cb4d18f1@st.com>
-Date:   Thu, 30 Jan 2020 11:07:21 +0100
+        Thu, 30 Jan 2020 13:11:44 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 00UIBhI8005214;
+        Thu, 30 Jan 2020 12:11:43 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1580407903;
+        bh=h+G3LYU16aiLuWdXeyIlXaOLzpHdez77njrJFeFbZgc=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=VB4nECyOLcYrKZ2Lwg0Fj+3Ce9RxR92ut+kqcss4ZGQole0jHQD4F83kbFT3VsQ6e
+         Sl6M5vgI7GTndGQmKueITUkH87KvfPbkxq3Yia2UmyDKelAwLP3vAd8ONUdLp5F2fY
+         M6sxxx7TfHtNKY9M3WIz+MbuVAq7shX/5O2ABcwk=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 00UIBhX6046863
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 30 Jan 2020 12:11:43 -0600
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 30
+ Jan 2020 12:11:42 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 30 Jan 2020 12:11:43 -0600
+Received: from [10.250.70.160] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 00UIBfRd064578;
+        Thu, 30 Jan 2020 12:11:42 -0600
+Subject: Re: [PATCHv5 06/14] remoteproc/omap: Initialize and assign reserved
+ memory node
+To:     Tero Kristo <t-kristo@ti.com>, <bjorn.andersson@linaro.org>,
+        <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
+        <s-anna@ti.com>, <linux-omap@vger.kernel.org>
+References: <20200116135332.7819-1-t-kristo@ti.com>
+ <20200116135332.7819-7-t-kristo@ti.com>
+From:   "Andrew F. Davis" <afd@ti.com>
+Message-ID: <249c293c-6a23-165f-1df5-4859ee47658a@ti.com>
+Date:   Thu, 30 Jan 2020 13:11:41 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200110212307.GC11555@xps15>
+In-Reply-To: <20200116135332.7819-7-t-kristo@ti.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE1.st.com
- (10.75.127.7)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-30_02:2020-01-28,2020-01-30 signatures=0
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Bjorn,
-
-On 1/10/20 10:23 PM, Mathieu Poirier wrote:
-> On Thu, Dec 26, 2019 at 09:32:13PM -0800, Bjorn Andersson wrote:
->> Introduce a "panic" function in the remoteproc ops table, to allow
->> remoteproc instances to perform operations needed in order to aid in
->> post mortem system debugging, such as flushing caches etc, when the
->> kernel panics.
->>
->> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->> ---
->>
->> Changes since v1:
->> - None
->>
->>  drivers/remoteproc/remoteproc_core.c | 17 +++++++++++++++++
->>  include/linux/remoteproc.h           |  4 ++++
->>  2 files changed, 21 insertions(+)
->>
->> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
->> index 307df98347ba..779f19d6d8e7 100644
->> --- a/drivers/remoteproc/remoteproc_core.c
->> +++ b/drivers/remoteproc/remoteproc_core.c
->> @@ -1832,6 +1832,17 @@ void rproc_shutdown(struct rproc *rproc)
->>  }
->>  EXPORT_SYMBOL(rproc_shutdown);
->>  
->> +static int rproc_panic_handler(struct notifier_block *nb, unsigned long event,
->> +			       void *ptr)
->> +{
->> +	struct rproc *rproc = container_of(nb, struct rproc, panic_nb);
->> +
->> +	if (rproc->state == RPROC_RUNNING)
->> +		rproc->ops->panic(rproc);
->> +
->> +	return NOTIFY_DONE;
->> +}
->> +
->>  /**
->>   * rproc_get_by_phandle() - find a remote processor by phandle
->>   * @phandle: phandle to the rproc
->> @@ -2057,6 +2068,12 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
->>  		rproc->ops->get_boot_addr = rproc_elf_get_boot_addr;
->>  	}
->>  
->> +	/* Register panic notifier for remoteprocs with "panic" callback */
->> +	if (rproc->ops->panic) {
->> +		rproc->panic_nb.notifier_call = rproc_panic_handler;
->> +		atomic_notifier_chain_register(&panic_notifier_list, &rproc->panic_nb);
+On 1/16/20 8:53 AM, Tero Kristo wrote:
+> From: Suman Anna <s-anna@ti.com>
 > 
-> Line over 80 characters.
-atomic_notifier_chain_unregister should be added in rproc_del.
-
-Regards,
-Arnaud
+> The reserved memory nodes are not assigned to platform devices by
+> default in the driver core to avoid the lookup for every platform
+> device and incur a penalty as the real users are expected to be
+> only a few devices.
 > 
->> +	}
->> +
->>  	mutex_init(&rproc->lock);
->>  
->>  	idr_init(&rproc->notifyids);
->> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->> index 16ad66683ad0..7836c528d309 100644
->> --- a/include/linux/remoteproc.h
->> +++ b/include/linux/remoteproc.h
->> @@ -369,6 +369,7 @@ enum rsc_handling_status {
->>   *			expects to find it
->>   * @sanity_check:	sanity check the fw image
->>   * @get_boot_addr:	get boot address to entry point specified in firmware
->> + * @panic:	optional callback to react to system panic
->>   */
->>  struct rproc_ops {
->>  	int (*start)(struct rproc *rproc);
->> @@ -383,6 +384,7 @@ struct rproc_ops {
->>  	int (*load)(struct rproc *rproc, const struct firmware *fw);
->>  	int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
->>  	u32 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
->> +	void (*panic)(struct rproc *rproc);
->>  };
->>  
->>  /**
->> @@ -481,6 +483,7 @@ struct rproc_dump_segment {
->>   * @auto_boot: flag to indicate if remote processor should be auto-started
->>   * @dump_segments: list of segments in the firmware
->>   * @nb_vdev: number of vdev currently handled by rproc
->> + * @panic_nb: notifier_block for remoteproc's panic handler
->>   */
->>  struct rproc {
->>  	struct list_head node;
->> @@ -514,6 +517,7 @@ struct rproc {
->>  	bool auto_boot;
->>  	struct list_head dump_segments;
->>  	int nb_vdev;
->> +	struct notifier_block panic_nb;
->>  };
->>  
->>  /**
->> -- 
->> 2.24.0
->>
+> OMAP remoteproc devices fall into the above category and the OMAP
+> remoteproc driver _requires_ specific CMA pools to be assigned
+> for each device at the moment to align on the location of the
+> vrings and vring buffers in the RTOS-side firmware images. So,
+
+
+Same comment as before, this is a firmware issue for only some firmwares
+that do not handle being assigned vring locations correctly and instead
+hard-code them.
+
+This is not a requirement of the remote processor itself and so it
+should not fail to probe if a specific memory carveout isn't given.
+
+Andrew
+
+
+> use the of_reserved_mem_device_init/release() API appropriately
+> to assign the corresponding reserved memory region to the OMAP
+> remoteproc device. Note that only one region per device is
+> allowed by the framework.
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+> v5: no changes
+> 
+>  drivers/remoteproc/omap_remoteproc.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+> index 0846839b2c97..194303b860b2 100644
+> --- a/drivers/remoteproc/omap_remoteproc.c
+> +++ b/drivers/remoteproc/omap_remoteproc.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/module.h>
+>  #include <linux/err.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_reserved_mem.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/remoteproc.h>
+> @@ -480,14 +481,22 @@ static int omap_rproc_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto free_rproc;
+>  
+> +	ret = of_reserved_mem_device_init(&pdev->dev);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "device does not have specific CMA pool\n");
+> +		goto free_rproc;
+> +	}
+> +
+>  	platform_set_drvdata(pdev, rproc);
+>  
+>  	ret = rproc_add(rproc);
+>  	if (ret)
+> -		goto free_rproc;
+> +		goto release_mem;
+>  
+>  	return 0;
+>  
+> +release_mem:
+> +	of_reserved_mem_device_release(&pdev->dev);
+>  free_rproc:
+>  	rproc_free(rproc);
+>  	return ret;
+> @@ -499,6 +508,7 @@ static int omap_rproc_remove(struct platform_device *pdev)
+>  
+>  	rproc_del(rproc);
+>  	rproc_free(rproc);
+> +	of_reserved_mem_device_release(&pdev->dev);
+>  
+>  	return 0;
+>  }
+> 
