@@ -2,59 +2,61 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F0D1515F7
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Feb 2020 07:27:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C9C1515F5
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Feb 2020 07:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727201AbgBDG0s (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        id S1727240AbgBDG0s (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
         Tue, 4 Feb 2020 01:26:48 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:39765 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726981AbgBDG0r (ORCPT
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:50822 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726220AbgBDG0s (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 4 Feb 2020 01:26:47 -0500
-Received: by mail-pf1-f195.google.com with SMTP id 84so8912919pfy.6
-        for <linux-remoteproc@vger.kernel.org>; Mon, 03 Feb 2020 22:26:45 -0800 (PST)
+        Tue, 4 Feb 2020 01:26:48 -0500
+Received: by mail-pj1-f68.google.com with SMTP id r67so891553pjb.0
+        for <linux-remoteproc@vger.kernel.org>; Mon, 03 Feb 2020 22:26:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UAbfKGPHFp5dpRo9OZT4gAhZKpnQ/tm30dsERIZmLtY=;
-        b=DV7FYFA2zBtXcTFpKCZDOUo3/HxELPWgA+S/mT54nl7QsTiXhHGgURm3VYtveFUo11
-         ugOwDhpr0mzpA1VVN8VABVuM/l0cY6+AooZ5Lwof2mdePv9dA1Gn+d3CG0TkRtAwegeE
-         SrH8WppssxK7l8z6QIjBzaCrQ8uYxARt0YE3DNjW02z6Ix2panbgKJwAixdOPD3FTRtA
-         Q7fJ5OwZgkMrwfROygPTiEVCs/uyeQPRoxnLgw++QTw0HfmsIVCiJuzfjsEyP468HHNP
-         ZGo5Feeuzh/YqEoWfIWGwVvjp8bblLsJnI/Z/D/lOCRb3yeu1+rJ0QLIPclkbScg7FQY
-         wJzQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9n+iEilQgwgwE8JFMeVrbJ2CZ9pJDHx5XtxEK2zVKro=;
+        b=u6GrVEIG8+UBR2o/8hky44AtgWEJu/hSWHE6UO+Bo2wzW17lOk6Vm0IvB/k2xNmvUk
+         z+5st6uz8ehnPkjJQwZYTB3CSzu+Z3oJQCazJWCes3PuRy4iD4AV0ec+fDyQEfKNCYMt
+         a888D7r3Wu/QCu8D2P7f3eqUHkv/O/KhBV0NqLqYvagFwqgm4FbyLkfCe2yH9Vag2tZ7
+         BHEQ97bOwhV7Y5B5ELu1XAjMKOmpohF2Th2i5rhVKfYQ5H0cm7rQqq/8yEMcua+LtGfL
+         8jgWHab7K+n29et5+fhNtUpEEIeFmx0axqq2nNdne7CKNJAUU8t4OtY2gt3oGZZxYW/w
+         XFDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UAbfKGPHFp5dpRo9OZT4gAhZKpnQ/tm30dsERIZmLtY=;
-        b=oLv8cJpom6bV6fbLGD+VEY2DfOCTh6gQRrIfhzQTF4OHpEFQC+pwarSkQ+Bv39/p6x
-         59F+syJBU2bUBsuUGOxW6FIuDZKPxHcKgYzvCJQ022f/2JCSXAW2yL/n7BjFk3A72A0y
-         7hRVMhNrPBgh/mHLopXeBHKPMXwVITfDf+xYSyNMne71uiu1TJadNbEe3g9ZT3Bbo+XG
-         DATdXlpq8UKnXkAnmfjKLHuY50UfZUXM8lN9Qh612DXba1ai8Wf/BJ+wnlFN7SBF6tLJ
-         VXCF2PqOg2FwphqUgCKv9Yr+riyYGqAPjjfSNNR5as5+OlvXzYNdJDgsFZEYVkDOQ//w
-         1xYg==
-X-Gm-Message-State: APjAAAWQw80aLyIviqACT3Im0olkaNy5zLea+yemVSv2yANgrXNfHaw0
-        xafqfPqvGv2HADL/Wb1x1UHgXZ3EmEQ=
-X-Google-Smtp-Source: APXvYqznRtyL0JVHhck6+gFYGWEaG3OcRjT8/aSbV6eXxQXW03/6Bi4PbIcny8W7vDKPM4kYe+O+fQ==
-X-Received: by 2002:a62:4ecc:: with SMTP id c195mr29519240pfb.158.1580797605299;
-        Mon, 03 Feb 2020 22:26:45 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9n+iEilQgwgwE8JFMeVrbJ2CZ9pJDHx5XtxEK2zVKro=;
+        b=Jo0C6NTNOxO3jy/7izMIfhL9ODQWd+9Vl5JUnJa1+aaur1dQUOidGI4+UlgV1IA6Qk
+         s+/K1hpo14t91qslhlhXIhDGzUerNbiRWmPbqUXFf4FCBjOTHZHZdVXjJKwlibYmI0ee
+         DlToPaU/hafwAjTZhcf545DJ4N9nscB74YsE18JFFvJ8KBhmkW+iX+wh0wn2P8HJJtDT
+         g/iB6X529+HFlI5RRJv53bMDbkF/qhF2VRjm76dgD+gZTqRjSp5/5aofuc/zpK2Nlkha
+         zBqrjnYRqv/TzcRDIhDkZA/8yxzp83g4rpMqR3Gk3DJdCq3fcXG0l+QgOQ440xXzbK2w
+         hV6w==
+X-Gm-Message-State: APjAAAXVH8pNq7vYvY/ZOHHJDqLDcZ3C3j9MZmTvBHuzaXUHKNOTry0C
+        QAaLjLaQsE73DBMh6ZZXXEHOrw==
+X-Google-Smtp-Source: APXvYqzlDyVn6Ye4duFE46q2xndT/Npv5RabzJq8m523NGOTCYL9sgiqsz+ngJOvLV+HIedeJyfA6A==
+X-Received: by 2002:a17:90a:c78b:: with SMTP id gn11mr4266519pjb.97.1580797606636;
+        Mon, 03 Feb 2020 22:26:46 -0800 (PST)
 Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id l69sm6901897pgd.1.2020.02.03.22.26.44
+        by smtp.gmail.com with ESMTPSA id l69sm6901897pgd.1.2020.02.03.22.26.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2020 22:26:44 -0800 (PST)
+        Mon, 03 Feb 2020 22:26:46 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Ohad Ben-Cohen <ohad@wizery.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org, Sibi Sankar <sibis@codeaurora.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-Subject: [PATCH v3 0/2] remoteproc: mss: Improve mem_assign and firmware load
-Date:   Mon,  3 Feb 2020 22:26:39 -0800
-Message-Id: <20200204062641.393949-1-bjorn.andersson@linaro.org>
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH v3 1/2] remoteproc: qcom_q6v5_mss: Don't reassign mpss region on shutdown
+Date:   Mon,  3 Feb 2020 22:26:40 -0800
+Message-Id: <20200204062641.393949-2-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20200204062641.393949-1-bjorn.andersson@linaro.org>
+References: <20200204062641.393949-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -62,21 +64,79 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Two things came up in the effort of figuring out why the modem crashed the
-entire system when being restarted; the first one solves the actual problem, in
-that it's not possible to reclaim the main modem firmware region unless the
-modem subsystem is running - causing the crash.
+Trying to reclaim mpss memory while the mba is not running causes the
+system to crash on devices with security fuses blown, so leave it
+assigned to the remote on shutdown and recover it on a subsequent boot.
 
-The second patch aligns the firmware loading process to that of the downstream
-driver, which seems to be a requirement in 8974 as well.
+Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for mem ownership switch")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
 
-Bjorn Andersson (2):
-  remoteproc: qcom_q6v5_mss: Don't reassign mpss region on shutdown
-  remoteproc: qcom_q6v5_mss: Validate each segment during loading
+Changes since v2:
+- The assignment of mpss memory back to Linux is rejected in the coredump case
+  on production devices, so check the return value of q6v5_xfer_mem_ownership()
+  before attempting to memcpy() the data.
 
- drivers/remoteproc/qcom_q6v5_mss.c | 95 +++++++++++++++++++-----------
- 1 file changed, 62 insertions(+), 33 deletions(-)
+ drivers/remoteproc/qcom_q6v5_mss.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
+diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+index 471128a2e723..25c03a26bf88 100644
+--- a/drivers/remoteproc/qcom_q6v5_mss.c
++++ b/drivers/remoteproc/qcom_q6v5_mss.c
+@@ -887,11 +887,6 @@ static void q6v5_mba_reclaim(struct q6v5 *qproc)
+ 		writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
+ 	}
+ 
+-	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
+-				      false, qproc->mpss_phys,
+-				      qproc->mpss_size);
+-	WARN_ON(ret);
+-
+ 	q6v5_reset_assert(qproc);
+ 
+ 	q6v5_clk_disable(qproc->dev, qproc->reset_clks,
+@@ -981,6 +976,10 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
+ 			max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
+ 	}
+ 
++	/* Try to reset ownership back to Linux */
++	q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false,
++				qproc->mpss_phys, qproc->mpss_size);
++
+ 	mpss_reloc = relocate ? min_addr : qproc->mpss_phys;
+ 	qproc->mpss_reloc = mpss_reloc;
+ 	/* Load firmware segments */
+@@ -1070,8 +1069,16 @@ static void qcom_q6v5_dump_segment(struct rproc *rproc,
+ 	void *ptr = rproc_da_to_va(rproc, segment->da, segment->size);
+ 
+ 	/* Unlock mba before copying segments */
+-	if (!qproc->dump_mba_loaded)
++	if (!qproc->dump_mba_loaded) {
+ 		ret = q6v5_mba_load(qproc);
++		if (!ret) {
++			/* Try to reset ownership back to Linux */
++			ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
++						      false,
++						      qproc->mpss_phys,
++						      qproc->mpss_size);
++		}
++	}
+ 
+ 	if (!ptr || ret)
+ 		memset(dest, 0xff, segment->size);
+@@ -1123,10 +1130,6 @@ static int q6v5_start(struct rproc *rproc)
+ 	return 0;
+ 
+ reclaim_mpss:
+-	xfermemop_ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
+-						false, qproc->mpss_phys,
+-						qproc->mpss_size);
+-	WARN_ON(xfermemop_ret);
+ 	q6v5_mba_reclaim(qproc);
+ 
+ 	return ret;
 -- 
 2.23.0
 
