@@ -2,262 +2,57 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 155791515F9
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Feb 2020 07:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40750151764
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Feb 2020 10:10:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727308AbgBDG0u (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 4 Feb 2020 01:26:50 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:42588 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727256AbgBDG0t (ORCPT
+        id S1726566AbgBDJKO (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 4 Feb 2020 04:10:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52792 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726631AbgBDJKO (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 4 Feb 2020 01:26:49 -0500
-Received: by mail-pl1-f196.google.com with SMTP id e8so4231089plt.9
-        for <linux-remoteproc@vger.kernel.org>; Mon, 03 Feb 2020 22:26:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/MsxSmnO7M1aByaqdtSVpeD8wIEt+sQjjgWd9Bkhj/g=;
-        b=S6Q0CQKR3fVspRKvuT2ptfzz6GbxzKVj0PKG68oupJtciOGMUNudcyHDhv7cj30l1j
-         bF93mn58x6pBBjRx0NQkrW9bQk2ldum33amfgyU0R1qyiqAbKSbrXBWa24idtumn83bT
-         37ZxLM5/m+LGiNh4kJE1LWtKmeopmiuVz6oBbmIw+KfJB8s/KxuKub/0+oQ9tYEe+eBL
-         vYRNTff02LCAZn09D+YsuhEZnGC6zSiBR8GIWlwEk4kBRHMBqcgDn6dRMulbuoyx575Q
-         CAyHaRaQSBbDmkELf+AZPswoP2lk5Xm0DQJmXFLy6IBG6Sfp9ZYcPQ/r0QMINaDnoEzt
-         X/bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/MsxSmnO7M1aByaqdtSVpeD8wIEt+sQjjgWd9Bkhj/g=;
-        b=TpRaKdzi6pvyglUKOyRh6oSYGG9W3ks49AUoj/F+Qbbpn4SYVLro+9L2vU8GhVF3Zv
-         iizRlXdWO3FnXAqtgGeFo3t3GQQYXyxyJoDJ/Gv7T8HkTM9zM7BzNic/VOZ4M7yKAvJ1
-         hmXDNEND4ZV6GXLXCoqXXukQIXYO2l7aAR8TCYVbDgJRX+bOJEsptrAfp6b3RrRYdEJO
-         MY9bG9y+/qKy1hbdZ6On4QgFhPDkBdt9sGIsUvtyKZodmVmvbHX3BK+I+Xbfe74v6fpz
-         6GYddEAR3joJTPdIEBJmvCKr2ZsbP7r2JRq7zlz6XHtB+TEgU/gQyUcNDMUbhsgLG8AI
-         eGlg==
-X-Gm-Message-State: APjAAAWXcRUOILaywEFFp+gpMwgrdGbTFOF4TmGKHtGFqoeBg01hPi/Z
-        rGtW+rOKa908rb4TR8UFUwG5VQ==
-X-Google-Smtp-Source: APXvYqxKkro5twpTQ9itRoSve2PlhishCNJxxMdJWRAsjZZmKPt5Q4nhB9pYJ2/ctSPWS2471D1lmA==
-X-Received: by 2002:a17:90a:8001:: with SMTP id b1mr4211344pjn.39.1580797607810;
-        Mon, 03 Feb 2020 22:26:47 -0800 (PST)
-Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id l69sm6901897pgd.1.2020.02.03.22.26.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2020 22:26:47 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sibi Sankar <sibis@codeaurora.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>
-Subject: [PATCH v3 2/2] remoteproc: qcom_q6v5_mss: Validate each segment during loading
-Date:   Mon,  3 Feb 2020 22:26:41 -0800
-Message-Id: <20200204062641.393949-3-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200204062641.393949-1-bjorn.andersson@linaro.org>
-References: <20200204062641.393949-1-bjorn.andersson@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Tue, 4 Feb 2020 04:10:14 -0500
+Subject: Re: [GIT PULL] hwspinlock updates for v5.6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580807413;
+        bh=JJsb9eI1dQTdWc7HbQyRaae7q5zuD0cLaFBTy0E5wL8=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=t0ZFG58yJAeaPoRNQsX4/D6S2F13aatL0ebfnAtj46ovoiEO3hXfpxtZ5bwy4lwLo
+         raY3ZKjx7FnJio95NfHEWL0daRwomAvXZ1rIBcu5HSIBtgDtMHcT79v3YWLy7Wm5mJ
+         HKIic/L6CClQ64SQihh2Ps7yCBUiH3VD/vxw4aDU=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200204053455.GA130281@yoga>
+References: <20200204053455.GA130281@yoga>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200204053455.GA130281@yoga>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git
+ tags/hwlock-v5.6
+X-PR-Tracked-Commit-Id: cb36017a8b1b582bcb7063e44c598c3e36aa0228
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 685097986b5ef8b8c4b19dbb6a1d6069c3626ba2
+Message-Id: <158080741383.26461.13348108129703323259.pr-tracker-bot@kernel.org>
+Date:   Tue, 04 Feb 2020 09:10:13 +0000
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The code used to sync with the MBA after each segment loaded and this is
-still what's done downstream. So reduce the delta towards downstream by
-switching to a model where the content is iteratively validated.
+The pull request you sent on Mon, 3 Feb 2020 21:34:55 -0800:
 
-Reviewed-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-Tested-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
-Tested-by: Luca Weiss <luca@z3ntu.xyz>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
+> https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/hwlock-v5.6
 
-Changes since v2:
-- Picked up Luca's t-b
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/685097986b5ef8b8c4b19dbb6a1d6069c3626ba2
 
- drivers/remoteproc/qcom_q6v5_mss.c | 76 ++++++++++++++++++++----------
- 1 file changed, 51 insertions(+), 25 deletions(-)
+Thank you!
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index 25c03a26bf88..5eb154f221a4 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -360,23 +360,29 @@ static void q6v5_pds_disable(struct q6v5 *qproc, struct device **pds,
- }
- 
- static int q6v5_xfer_mem_ownership(struct q6v5 *qproc, int *current_perm,
--				   bool remote_owner, phys_addr_t addr,
-+				   bool local, bool remote, phys_addr_t addr,
- 				   size_t size)
- {
--	struct qcom_scm_vmperm next;
-+	struct qcom_scm_vmperm next[2];
-+	int perms = 0;
- 
- 	if (!qproc->need_mem_protection)
- 		return 0;
--	if (remote_owner && *current_perm == BIT(QCOM_SCM_VMID_MSS_MSA))
--		return 0;
--	if (!remote_owner && *current_perm == BIT(QCOM_SCM_VMID_HLOS))
--		return 0;
- 
--	next.vmid = remote_owner ? QCOM_SCM_VMID_MSS_MSA : QCOM_SCM_VMID_HLOS;
--	next.perm = remote_owner ? QCOM_SCM_PERM_RW : QCOM_SCM_PERM_RWX;
-+	if (local) {
-+		next[perms].vmid = QCOM_SCM_VMID_HLOS;
-+		next[perms].perm = QCOM_SCM_PERM_RWX;
-+		perms++;
-+	}
-+
-+	if (remote) {
-+		next[perms].vmid = QCOM_SCM_VMID_MSS_MSA;
-+		next[perms].perm = QCOM_SCM_PERM_RW;
-+		perms++;
-+	}
- 
- 	return qcom_scm_assign_mem(addr, ALIGN(size, SZ_4K),
--				   current_perm, &next, 1);
-+				   current_perm, next, perms);
- }
- 
- static int q6v5_load(struct rproc *rproc, const struct firmware *fw)
-@@ -693,7 +699,7 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw)
- 
- 	/* Hypervisor mapping to access metadata by modem */
- 	mdata_perm = BIT(QCOM_SCM_VMID_HLOS);
--	ret = q6v5_xfer_mem_ownership(qproc, &mdata_perm, true, phys, size);
-+	ret = q6v5_xfer_mem_ownership(qproc, &mdata_perm, false, true, phys, size);
- 	if (ret) {
- 		dev_err(qproc->dev,
- 			"assigning Q6 access to metadata failed: %d\n", ret);
-@@ -711,7 +717,7 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw)
- 		dev_err(qproc->dev, "MPSS header authentication failed: %d\n", ret);
- 
- 	/* Metadata authentication done, remove modem access */
--	xferop_ret = q6v5_xfer_mem_ownership(qproc, &mdata_perm, false, phys, size);
-+	xferop_ret = q6v5_xfer_mem_ownership(qproc, &mdata_perm, true, false, phys, size);
- 	if (xferop_ret)
- 		dev_warn(qproc->dev,
- 			 "mdt buffer not reclaimed system may become unstable\n");
-@@ -798,7 +804,7 @@ static int q6v5_mba_load(struct q6v5 *qproc)
- 	}
- 
- 	/* Assign MBA image access in DDR to q6 */
--	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mba_perm, true,
-+	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mba_perm, false, true,
- 				      qproc->mba_phys, qproc->mba_size);
- 	if (ret) {
- 		dev_err(qproc->dev,
-@@ -832,8 +838,8 @@ static int q6v5_mba_load(struct q6v5 *qproc)
- 	q6v5proc_halt_axi_port(qproc, qproc->halt_map, qproc->halt_nc);
- 
- reclaim_mba:
--	xfermemop_ret = q6v5_xfer_mem_ownership(qproc, &qproc->mba_perm, false,
--						qproc->mba_phys,
-+	xfermemop_ret = q6v5_xfer_mem_ownership(qproc, &qproc->mba_perm, true,
-+						false, qproc->mba_phys,
- 						qproc->mba_size);
- 	if (xfermemop_ret) {
- 		dev_err(qproc->dev,
-@@ -900,7 +906,7 @@ static void q6v5_mba_reclaim(struct q6v5 *qproc)
- 	/* In case of failure or coredump scenario where reclaiming MBA memory
- 	 * could not happen reclaim it here.
- 	 */
--	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mba_perm, false,
-+	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mba_perm, true, false,
- 				      qproc->mba_phys,
- 				      qproc->mba_size);
- 	WARN_ON(ret);
-@@ -927,6 +933,7 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 	phys_addr_t boot_addr;
- 	phys_addr_t min_addr = PHYS_ADDR_MAX;
- 	phys_addr_t max_addr = 0;
-+	u32 code_length;
- 	bool relocate = false;
- 	char *fw_name;
- 	size_t fw_name_len;
-@@ -977,9 +984,19 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 	}
- 
- 	/* Try to reset ownership back to Linux */
--	q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false,
-+	q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, true, false,
- 				qproc->mpss_phys, qproc->mpss_size);
- 
-+	/* Share ownership between Linux and MSS, during segment loading */
-+	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, true, true,
-+				      qproc->mpss_phys, qproc->mpss_size);
-+	if (ret) {
-+		dev_err(qproc->dev,
-+			"assigning Q6 access to mpss memory failed: %d\n", ret);
-+		ret = -EAGAIN;
-+		goto release_firmware;
-+	}
-+
- 	mpss_reloc = relocate ? min_addr : qproc->mpss_phys;
- 	qproc->mpss_reloc = mpss_reloc;
- 	/* Load firmware segments */
-@@ -1028,10 +1045,24 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 			       phdr->p_memsz - phdr->p_filesz);
- 		}
- 		size += phdr->p_memsz;
-+
-+		code_length = readl(qproc->rmb_base + RMB_PMI_CODE_LENGTH_REG);
-+		if (!code_length) {
-+			boot_addr = relocate ? qproc->mpss_phys : min_addr;
-+			writel(boot_addr, qproc->rmb_base + RMB_PMI_CODE_START_REG);
-+			writel(RMB_CMD_LOAD_READY, qproc->rmb_base + RMB_MBA_COMMAND_REG);
-+		}
-+		writel(size, qproc->rmb_base + RMB_PMI_CODE_LENGTH_REG);
-+
-+		ret = readl(qproc->rmb_base + RMB_MBA_STATUS_REG);
-+		if (ret < 0) {
-+			dev_err(qproc->dev, "MPSS authentication failed: %d\n", ret);
-+			goto release_firmware;
-+		}
- 	}
- 
- 	/* Transfer ownership of modem ddr region to q6 */
--	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, true,
-+	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false, true,
- 				      qproc->mpss_phys, qproc->mpss_size);
- 	if (ret) {
- 		dev_err(qproc->dev,
-@@ -1040,11 +1071,6 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 		goto release_firmware;
- 	}
- 
--	boot_addr = relocate ? qproc->mpss_phys : min_addr;
--	writel(boot_addr, qproc->rmb_base + RMB_PMI_CODE_START_REG);
--	writel(RMB_CMD_LOAD_READY, qproc->rmb_base + RMB_MBA_COMMAND_REG);
--	writel(size, qproc->rmb_base + RMB_PMI_CODE_LENGTH_REG);
--
- 	ret = q6v5_rmb_mba_wait(qproc, RMB_MBA_AUTH_COMPLETE, 10000);
- 	if (ret == -ETIMEDOUT)
- 		dev_err(qproc->dev, "MPSS authentication timed out\n");
-@@ -1074,7 +1100,7 @@ static void qcom_q6v5_dump_segment(struct rproc *rproc,
- 		if (!ret) {
- 			/* Try to reset ownership back to Linux */
- 			ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
--						      false,
-+						      true, false,
- 						      qproc->mpss_phys,
- 						      qproc->mpss_size);
- 		}
-@@ -1116,8 +1142,8 @@ static int q6v5_start(struct rproc *rproc)
- 		goto reclaim_mpss;
- 	}
- 
--	xfermemop_ret = q6v5_xfer_mem_ownership(qproc, &qproc->mba_perm, false,
--						qproc->mba_phys,
-+	xfermemop_ret = q6v5_xfer_mem_ownership(qproc, &qproc->mba_perm, true,
-+						false, qproc->mba_phys,
- 						qproc->mba_size);
- 	if (xfermemop_ret)
- 		dev_err(qproc->dev,
 -- 
-2.23.0
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
