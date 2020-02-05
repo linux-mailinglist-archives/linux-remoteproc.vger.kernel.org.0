@@ -2,506 +2,369 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66038151FCA
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Feb 2020 18:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFAD1527A7
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  5 Feb 2020 09:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727565AbgBDRo3 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 4 Feb 2020 12:44:29 -0500
-Received: from zimbra2.kalray.eu ([92.103.151.219]:55374 "EHLO
-        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727392AbgBDRo2 (ORCPT
+        id S1728034AbgBEIvk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 5 Feb 2020 03:51:40 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:38898 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727231AbgBEIvk (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 4 Feb 2020 12:44:28 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id C903727E058F;
-        Tue,  4 Feb 2020 18:44:25 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 4WGLBfY4YjDl; Tue,  4 Feb 2020 18:44:25 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id E84D327E167F;
-        Tue,  4 Feb 2020 18:44:24 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu E84D327E167F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1580838264;
-        bh=8wiJQBti4vPAr2jhTr5E2seOWp5XeIkMbSxfFO5TqVI=;
-        h=From:To:Date:Message-Id;
-        b=P0YqHFmaJNA5Mma8FNfbnyy7NMhawB6Ddl71Y3sVRzw7AFeI5qLDyGyTEnXeffqpA
-         aD/MNv2IuvLqzvlMUccBp7RwUdsCfHvfyX9/BP6IjSxzf6y9DgugTidFvgkwlZSD+M
-         3Kfn8W7nrXlDvOQ69Rbs+qIQo8OIME6dzWjTaaXM=
-X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id OMRxddzq87Ep; Tue,  4 Feb 2020 18:44:24 +0100 (CET)
-Received: from triton.lin.mbt.kalray.eu (unknown [192.168.37.25])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id C231127E1660;
-        Tue,  4 Feb 2020 18:44:24 +0100 (CET)
-From:   Clement Leger <cleger@kalray.eu>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-remoteproc@vger.kernel.org
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Loic PALLARDY <loic.pallardy@st.com>, s-anna <s-anna@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Clement Leger <cleger@kalray.eu>
-Subject: [PATCH v3 2/2] remoteproc: Add elf64 support in elf loader
-Date:   Tue,  4 Feb 2020 18:44:12 +0100
-Message-Id: <20200204174412.16814-3-cleger@kalray.eu>
-X-Mailer: git-send-email 2.15.0.276.g89ea799
-In-Reply-To: <20200204174412.16814-1-cleger@kalray.eu>
-References: <20200129163013.GA16538@xps15>
- <20200204174412.16814-1-cleger@kalray.eu>
+        Wed, 5 Feb 2020 03:51:40 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0158pcm6023014;
+        Wed, 5 Feb 2020 02:51:38 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1580892698;
+        bh=yTfHSsngy81/FiSFeYlD8zOqhz6ygnQhzG6oRut5CFk=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=PHV3PEpvJmR+alFcltgLrgbEd7WTAVuKpE3Kr8P1mf2+r0qHLz3Mlc1VEnYZQ9gs5
+         fRevF1GkW2WlLl0eZZJG2gPse6pQp4a18AiMRsEEwJZNet6mfH2E1j3gKm3jrdLMYz
+         OJUT7nywDR57KbkGXW6AxUG0om92I2iNfNlcnbgQ=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0158pceH088997
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 5 Feb 2020 02:51:38 -0600
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 5 Feb
+ 2020 02:51:37 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 5 Feb 2020 02:51:37 -0600
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0158pYar028735;
+        Wed, 5 Feb 2020 02:51:35 -0600
+Subject: Re: [PATCHv5 06/14] remoteproc/omap: Initialize and assign reserved
+ memory node
+To:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        <bjorn.andersson@linaro.org>, <ohad@wizery.com>,
+        <linux-remoteproc@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
+        <linux-omap@vger.kernel.org>
+References: <20200116135332.7819-1-t-kristo@ti.com>
+ <20200116135332.7819-7-t-kristo@ti.com>
+ <249c293c-6a23-165f-1df5-4859ee47658a@ti.com>
+ <37db5d57-b1cd-1cec-2c9b-31c49e3bdc10@ti.com>
+ <a0e85451-7c05-884c-4997-b4e8c5684c3e@ti.com>
+ <2aaa4024-1e2c-5cab-c9f3-3be59c57e9ac@ti.com>
+ <be337641-b4ac-d2be-b814-55b7681cb91a@ti.com>
+ <7aed7a9f-3546-f622-37ac-34d33ddb4298@ti.com>
+ <50c69e97-034b-3160-e95e-97aec2e75cc6@ti.com>
+ <cf6fff1c-fde9-67b0-3173-7e019ce587cb@ti.com>
+ <127eff13-cc16-2b59-d8ce-06e61bb910bc@ti.com>
+ <39b3e536-26a9-e7da-a39a-db2853e0fe04@ti.com>
+ <a92ab534-1525-f7d6-d29b-361809e0cae1@ti.com>
+ <279b6f35-a316-94dd-af62-2891815cf453@ti.com>
+ <2d7eeb94-ecb8-1e88-412b-215125c594fc@ti.com>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <df565e1e-662a-86d2-1120-dfc437fe42d4@ti.com>
+Date:   Wed, 5 Feb 2020 10:51:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <2d7eeb94-ecb8-1e88-412b-215125c594fc@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-elf32 and elf64 mainly differ by their types. In order to avoid
-copy/pasting the whole loader code, generate static inline functions
-which will access values according to the elf class. It allows to keep a
-common loader basis.
-In order to accommodate both elf types sizes, the maximum size for a
-elf header member is chosen using the maximum value of both elf class.
+On 31/01/2020 01:04, Andrew F. Davis wrote:
+> On 1/30/20 5:06 PM, Suman Anna wrote:
+>> On 1/30/20 3:57 PM, Suman Anna wrote:
+>>> On 1/30/20 3:50 PM, Andrew F. Davis wrote:
+>>>> On 1/30/20 4:39 PM, Suman Anna wrote:
+>>>>> On 1/30/20 3:19 PM, Andrew F. Davis wrote:
+>>>>>> On 1/30/20 3:39 PM, Suman Anna wrote:
+>>>>>>> On 1/30/20 2:22 PM, Andrew F. Davis wrote:
+>>>>>>>> On 1/30/20 2:55 PM, Suman Anna wrote:
+>>>>>>>>> On 1/30/20 1:42 PM, Tero Kristo wrote:
+>>>>>>>>>> On 30/01/2020 21:20, Andrew F. Davis wrote:
+>>>>>>>>>>> On 1/30/20 2:18 PM, Tero Kristo wrote:
+>>>>>>>>>>>> On 30/01/2020 20:11, Andrew F. Davis wrote:
+>>>>>>>>>>>>> On 1/16/20 8:53 AM, Tero Kristo wrote:
+>>>>>>>>>>>>>> From: Suman Anna <s-anna@ti.com>
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> The reserved memory nodes are not assigned to platform devices by
+>>>>>>>>>>>>>> default in the driver core to avoid the lookup for every platform
+>>>>>>>>>>>>>> device and incur a penalty as the real users are expected to be
+>>>>>>>>>>>>>> only a few devices.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> OMAP remoteproc devices fall into the above category and the OMAP
+>>>>>>>>>>>>>> remoteproc driver _requires_ specific CMA pools to be assigned
+>>>>>>>>>>>>>> for each device at the moment to align on the location of the
+>>>>>>>>>>>>>> vrings and vring buffers in the RTOS-side firmware images. So,
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Same comment as before, this is a firmware issue for only some
+>>>>>>>>>>>>> firmwares
+>>>>>>>>>>>>> that do not handle being assigned vring locations correctly and instead
+>>>>>>>>>>>>> hard-code them.
+>>>>>>>>>
+>>>>>>>>> As for this statement, this can do with some updating. Post 4.20,
+>>>>>>>>> because of the lazy allocation scheme used for carveouts including the
+>>>>>>>>> vrings, the resource tables now have to use FW_RSC_ADDR_ANY and will
+>>>>>>>>> have to wait for the vdev synchronization to happen.
+>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>> I believe we discussed this topic in length in previous version but
+>>>>>>>>>>>> there was no conclusion on it.
+>>>>>>>>>>>>
+>>>>>>>>>>>> The commit desc might be a bit misleading, we are not actually forced to
+>>>>>>>>>>>> use specific CMA buffers, as we use IOMMU to map these to device
+>>>>>>>>>>>> addresses. For example IPU1/IPU2 use internally exact same memory
+>>>>>>>>>>>> addresses, iommu is used to map these to specific CMA buffer.
+>>>>>>>>>>>>
+>>>>>>>>>>>> CMA buffers are mostly used so that we get aligned large chunk of memory
+>>>>>>>>>>>> which can be mapped properly with the limited IOMMU OMAP family of chips
+>>>>>>>>>>>> have. Not sure if there is any sane way to get this done in any other
+>>>>>>>>>>>> manner.
+>>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> Why not use the default CMA area?
+>>>>>>>>>>
+>>>>>>>>>> I think using default CMA area getting the actual memory block is not
+>>>>>>>>>> guaranteed and might fail. There are other users for the memory, and it
+>>>>>>>>>> might get fragmented at the very late phase we are grabbing the memory
+>>>>>>>>>> (omap remoteproc driver probe time.) Some chunks we need are pretty large.
+>>>>>>>>>>
+>>>>>>>>>> I believe I could experiment with this a bit though and see, or Suman
+>>>>>>>>>> could maybe provide feedback why this was designed initially like this
+>>>>>>>>>> and why this would not be a good idea.
+>>>>>>>>>
+>>>>>>>>> I have given some explanation on this on v4 as well, but if it is not
+>>>>>>>>> clear, there are restrictions with using default CMA. Default CMA has
+>>>>>>>>> switched to be assigned from the top of the memory (higher addresses,
+>>>>>>>>> since 3.18 IIRC), and the MMUs on IPUs and DSPs can only address
+>>>>>>>>> 32-bits. So, we cannot blindly use the default CMA pool, and this will
+>>>>>>>>> definitely not work on boards > 2 GB RAM. And, if you want to add in any
+>>>>>>>>> firewall capability, then specific physical addresses becomes mandatory.
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> If you need 32bit range allocations then
+>>>>>>>> dma_set_mask(dev, DMA_BIT_MASK(32));
+>>>>>>>>
+>>>>>>>> I'm not saying don't have support for carveouts, just make them
+>>>>>>>> optional, keystone_remoteproc.c does this:
+>>>>>>>>
+>>>>>>>> if (of_reserved_mem_device_init(dev))
+>>>>>>>> 	dev_warn(dev, "device does not have specific CMA pool\n");
+>>>>>>>>
+>>>>>>>> There doesn't even needs to be a warning but that is up to you.
+>>>>>>>
+>>>>>>> It is not exactly an apples to apples comparison. K2s do not have MMUs,
+>>>>>>> and most of our firmware images on K2 are actually running out of the
+>>>>>>> DSP internal memory.
+>>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> So again we circle back to it being a firmware issue, if K2 can get away
+>>>>>> without needing carveouts and it doesn't even have an MMU then certainly
+>>>>>> OMAP/DRA7x class devices can handle it even better given they *do* have
+>>>>>> an IOMMU. Unless someone is hard-coding the IOMMU configuration.. In
+>>>>>> which case we are still just hacking around the problem here with
+>>>>>> mandatory specific address memory carveouts.
+>>>>>
+>>>>> Optional carveouts on OMAP remoteprocs can be an enhancement in the
+>>>>> future, but at the moment, we won't be able to run use-cases without
+>>>>> this. And I have already given some of the reasons for the same here and
+>>>>> on v4.
+>>>>>
+>>>>
+>>>>
+>>>> No reason to be dismissive, my questions are valid.
+>>>>
+>>>> What "use-cases" are we talking about, I have firmware that doesn't need
+>>>> specific carved-out addresses.
+>>>
+>>> I think you are well aware of all the usecases we provide with the TI
+>>> SDKs with IPUs and DSPs. And what is the firmware that you have and what
+>>> do you use it for?
+>>>
+> 
+> 
+> Yes I know exactly the pieces of TI firmware we are talking about and
+> why it they still need carveouts. That's not the point, our firmware may
+> have issues and hard-coding, but we need to allow for correctly built
+> firmware that doesn't need carveouts also. This driver should not fail
+> if a carveout is not provided. The remoteproc can run fine without a
+> carveout, only some firmwares cannot, so it should be optional and not
+> forced in DT on everyone using our DSP/IPU.
+> 
+> 
+>>> If you have misbehaving firmware that
+>>>> needs statically carved out memory addresses then you can have carveouts
+>>>> if you want, but it should be optional.
+>>> If I don't want to pollute my
+>>>> system's memory space with a bunch of carveout holes then I shouldn't
+>>>> have to just because your specific firmware needs them.
+>>>
+>>> Further follow-up series like early-boot and late-attach will mandate
+>>> fixed carveouts actually. You cannot just run out of any random memory.
+>>
+> 
+> 
+> Those are different, the location of the loaded firmware in memory will
+> need to be carved out if it is in use by a remote core before Linux
+> boots. This carveout is for Linux to allocate from to load the Vrings
+> and other memory it may need. When late-attach shows up then we can
+> think about how to handle those.
+> 
+> 
+>> Also, these are CMA pools ("reusable"), so they are not actual carveout
+>> holes ("no-map"). This is the preferred method in remoteproc mode so
+>> that the memory is available for kernel when remoteprocs are not in use.
+>> Customers can always choose to make these carveouts so that they do not
+>> run into memory allocation issues when changing firmwares and under
+>> stress conditions. These will have to be carveouts for early-boot usecases.
+>>
+> 
+> 
+> Even "reusable" carveouts can only be used by re-locateable memory
+> (caches and such) so still not a good thing to have your memory space
+> full of them.
+> 
+>> Customers can always choose to make these carveouts
+> 
+> That is exactly what I am saying, they can choose, but it should be
+> optional, the current binding and driver make them mandatory or the
+> driver will not probe.
 
-Signed-off-by: Clement Leger <cleger@kalray.eu>
-Tested-by: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
----
- Documentation/remoteproc.txt               |   2 +-
- drivers/remoteproc/remoteproc_elf_loader.c | 147 ++++++++++++++++++-----------
- drivers/remoteproc/remoteproc_elf_loader.h |  69 ++++++++++++++
- drivers/remoteproc/remoteproc_internal.h   |   2 +-
- drivers/remoteproc/st_remoteproc.c         |   2 +-
- include/linux/remoteproc.h                 |   4 +-
- 6 files changed, 167 insertions(+), 59 deletions(-)
- create mode 100644 drivers/remoteproc/remoteproc_elf_loader.h
+Ok, so just to re-cap here, we (me + Suman + Andrew) aligned offline on 
+this and the plan from our side is to:
 
-diff --git a/Documentation/remoteproc.txt b/Documentation/remoteproc.txt
-index 03c3d2e568b0..2be1147256e0 100644
---- a/Documentation/remoteproc.txt
-+++ b/Documentation/remoteproc.txt
-@@ -230,7 +230,7 @@ in the used rings.
- Binary Firmware Structure
- =========================
- 
--At this point remoteproc only supports ELF32 firmware binaries. However,
-+At this point remoteproc supports ELF32 and ELF64 firmware binaries. However,
- it is quite expected that other platforms/devices which we'd want to
- support with this framework will be based on different binary formats.
- 
-diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
-index 606aae166eba..21fd2b2fe5ae 100644
---- a/drivers/remoteproc/remoteproc_elf_loader.c
-+++ b/drivers/remoteproc/remoteproc_elf_loader.c
-@@ -23,6 +23,7 @@
- #include <linux/elf.h>
- 
- #include "remoteproc_internal.h"
-+#include "remoteproc_elf_loader.h"
- 
- /**
-  * rproc_elf_sanity_check() - Sanity Check ELF firmware image
-@@ -35,8 +36,16 @@ int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw)
- {
- 	const char *name = rproc->firmware;
- 	struct device *dev = &rproc->dev;
-+	/*
-+	 * Elf files are beginning with the same structure. Thus, to simplify
-+	 * header parsing, we can use the elf32_hdr one for both elf64 and
-+	 * elf32.
-+	 */
- 	struct elf32_hdr *ehdr;
-+	u32 elf_shdr_size;
-+	u64 phoff, shoff;
- 	char class;
-+	u16 phnum;
- 
- 	if (!fw) {
- 		dev_err(dev, "failed to load %s\n", name);
-@@ -50,13 +59,22 @@ int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw)
- 
- 	ehdr = (struct elf32_hdr *)fw->data;
- 
--	/* We only support ELF32 at this point */
-+	if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG)) {
-+		dev_err(dev, "Image is corrupted (bad magic)\n");
-+		return -EINVAL;
-+	}
-+
- 	class = ehdr->e_ident[EI_CLASS];
--	if (class != ELFCLASS32) {
-+	if (class != ELFCLASS32 && class != ELFCLASS64) {
- 		dev_err(dev, "Unsupported class: %d\n", class);
- 		return -EINVAL;
- 	}
- 
-+	if (class == ELFCLASS64 && fw->size < sizeof(struct elf64_hdr)) {
-+		dev_err(dev, "elf64 header is too small\n");
-+		return -EINVAL;
-+	}
-+
- 	/* We assume the firmware has the same endianness as the host */
- # ifdef __LITTLE_ENDIAN
- 	if (ehdr->e_ident[EI_DATA] != ELFDATA2LSB) {
-@@ -67,26 +85,29 @@ int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw)
- 		return -EINVAL;
- 	}
- 
--	if (fw->size < ehdr->e_shoff + sizeof(struct elf32_shdr)) {
--		dev_err(dev, "Image is too small\n");
--		return -EINVAL;
--	}
-+	phoff = elf_hdr_e_phoff(class, fw->data);
-+	shoff = elf_hdr_e_shoff(class, fw->data);
-+	phnum =  elf_hdr_e_phnum(class, fw->data);
-+	elf_shdr_size = elf_size_of_shdr(class);
- 
--	if (memcmp(ehdr->e_ident, ELFMAG, SELFMAG)) {
--		dev_err(dev, "Image is corrupted (bad magic)\n");
-+	if (fw->size < shoff + elf_shdr_size) {
-+		dev_err(dev, "Image is too small\n");
- 		return -EINVAL;
- 	}
- 
--	if (ehdr->e_phnum == 0) {
-+	if (phnum == 0) {
- 		dev_err(dev, "No loadable segments\n");
- 		return -EINVAL;
- 	}
- 
--	if (ehdr->e_phoff > fw->size) {
-+	if (phoff > fw->size) {
- 		dev_err(dev, "Firmware size is too small\n");
- 		return -EINVAL;
- 	}
- 
-+	dev_dbg(dev, "Firmware is an elf%d file\n",
-+		class == ELFCLASS32 ? 32 : 64);
-+
- 	return 0;
- }
- EXPORT_SYMBOL(rproc_elf_sanity_check);
-@@ -102,11 +123,9 @@ EXPORT_SYMBOL(rproc_elf_sanity_check);
-  * Note that the boot address is not a configurable property of all remote
-  * processors. Some will always boot at a specific hard-coded address.
-  */
--u32 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw)
-+u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw)
- {
--	struct elf32_hdr *ehdr  = (struct elf32_hdr *)fw->data;
--
--	return ehdr->e_entry;
-+	return elf_hdr_e_entry(fw_elf_get_class(fw), fw->data);
- }
- EXPORT_SYMBOL(rproc_elf_get_boot_addr);
- 
-@@ -137,37 +156,41 @@ EXPORT_SYMBOL(rproc_elf_get_boot_addr);
- int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
- {
- 	struct device *dev = &rproc->dev;
--	struct elf32_hdr *ehdr;
--	struct elf32_phdr *phdr;
-+	const void *ehdr, *phdr;
- 	int i, ret = 0;
-+	u16 phnum;
- 	const u8 *elf_data = fw->data;
-+	u8 class = fw_elf_get_class(fw);
-+	u32 elf_phdr_size = elf_size_of_phdr(class);
- 
--	ehdr = (struct elf32_hdr *)elf_data;
--	phdr = (struct elf32_phdr *)(elf_data + ehdr->e_phoff);
-+	ehdr = elf_data;
-+	phnum = elf_hdr_e_phnum(class, ehdr);
-+	phdr = elf_data + elf_hdr_e_phoff(class, ehdr);
- 
- 	/* go through the available ELF segments */
--	for (i = 0; i < ehdr->e_phnum; i++, phdr++) {
--		u32 da = phdr->p_paddr;
--		u32 memsz = phdr->p_memsz;
--		u32 filesz = phdr->p_filesz;
--		u32 offset = phdr->p_offset;
-+	for (i = 0; i < phnum; i++, phdr += elf_phdr_size) {
-+		u64 da = elf_phdr_p_paddr(class, phdr);
-+		u64 memsz = elf_phdr_p_memsz(class, phdr);
-+		u64 filesz = elf_phdr_p_filesz(class, phdr);
-+		u64 offset = elf_phdr_p_offset(class, phdr);
-+		u32 type = elf_phdr_p_type(class, phdr);
- 		void *ptr;
- 
--		if (phdr->p_type != PT_LOAD)
-+		if (type != PT_LOAD)
- 			continue;
- 
--		dev_dbg(dev, "phdr: type %d da 0x%x memsz 0x%x filesz 0x%x\n",
--			phdr->p_type, da, memsz, filesz);
-+		dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
-+			type, da, memsz, filesz);
- 
- 		if (filesz > memsz) {
--			dev_err(dev, "bad phdr filesz 0x%x memsz 0x%x\n",
-+			dev_err(dev, "bad phdr filesz 0x%llx memsz 0x%llx\n",
- 				filesz, memsz);
- 			ret = -EINVAL;
- 			break;
- 		}
- 
- 		if (offset + filesz > fw->size) {
--			dev_err(dev, "truncated fw: need 0x%x avail 0x%zx\n",
-+			dev_err(dev, "truncated fw: need 0x%llx avail 0x%zx\n",
- 				offset + filesz, fw->size);
- 			ret = -EINVAL;
- 			break;
-@@ -176,14 +199,15 @@ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
- 		/* grab the kernel address for this device address */
- 		ptr = rproc_da_to_va(rproc, da, memsz);
- 		if (!ptr) {
--			dev_err(dev, "bad phdr da 0x%x mem 0x%x\n", da, memsz);
-+			dev_err(dev, "bad phdr da 0x%llx mem 0x%llx\n", da,
-+				memsz);
- 			ret = -EINVAL;
- 			break;
- 		}
- 
- 		/* put the segment where the remote processor expects it */
--		if (phdr->p_filesz)
--			memcpy(ptr, elf_data + phdr->p_offset, filesz);
-+		if (filesz)
-+			memcpy(ptr, elf_data + offset, filesz);
- 
- 		/*
- 		 * Zero out remaining memory for this segment.
-@@ -200,24 +224,35 @@ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
- }
- EXPORT_SYMBOL(rproc_elf_load_segments);
- 
--static struct elf32_shdr *
--find_table(struct device *dev, struct elf32_hdr *ehdr, size_t fw_size)
-+static const void *
-+find_table(struct device *dev, const struct firmware *fw)
- {
--	struct elf32_shdr *shdr;
-+	const void *shdr, *name_table_shdr;
- 	int i;
- 	const char *name_table;
- 	struct resource_table *table = NULL;
--	const u8 *elf_data = (void *)ehdr;
-+	const u8 *elf_data = (void *)fw->data;
-+	u8 class = fw_elf_get_class(fw);
-+	size_t fw_size = fw->size;
-+	const void *ehdr = elf_data;
-+	u16 shnum = elf_hdr_e_shnum(class, ehdr);
-+	u32 elf_shdr_size = elf_size_of_shdr(class);
-+	u16 shstrndx = elf_hdr_e_shstrndx(class, ehdr);
- 
- 	/* look for the resource table and handle it */
--	shdr = (struct elf32_shdr *)(elf_data + ehdr->e_shoff);
--	name_table = elf_data + shdr[ehdr->e_shstrndx].sh_offset;
--
--	for (i = 0; i < ehdr->e_shnum; i++, shdr++) {
--		u32 size = shdr->sh_size;
--		u32 offset = shdr->sh_offset;
--
--		if (strcmp(name_table + shdr->sh_name, ".resource_table"))
-+	/* First, get the section header according to the elf class */
-+	shdr = elf_data + elf_hdr_e_shoff(class, ehdr);
-+	/* Compute name table section header entry in shdr array */
-+	name_table_shdr = shdr + (shstrndx * elf_shdr_size);
-+	/* Finally, compute the name table section address in elf */
-+	name_table = elf_data + elf_shdr_sh_offset(class, name_table_shdr);
-+
-+	for (i = 0; i < shnum; i++, shdr += elf_shdr_size) {
-+		u64 size = elf_shdr_sh_size(class, shdr);
-+		u64 offset = elf_shdr_sh_offset(class, shdr);
-+		u32 name = elf_shdr_sh_name(class, shdr);
-+
-+		if (strcmp(name_table + name, ".resource_table"))
- 			continue;
- 
- 		table = (struct resource_table *)(elf_data + offset);
-@@ -270,21 +305,21 @@ find_table(struct device *dev, struct elf32_hdr *ehdr, size_t fw_size)
-  */
- int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *fw)
- {
--	struct elf32_hdr *ehdr;
--	struct elf32_shdr *shdr;
-+	const void *shdr;
- 	struct device *dev = &rproc->dev;
- 	struct resource_table *table = NULL;
- 	const u8 *elf_data = fw->data;
- 	size_t tablesz;
-+	u8 class = fw_elf_get_class(fw);
-+	u64 sh_offset;
- 
--	ehdr = (struct elf32_hdr *)elf_data;
--
--	shdr = find_table(dev, ehdr, fw->size);
-+	shdr = find_table(dev, fw);
- 	if (!shdr)
- 		return -EINVAL;
- 
--	table = (struct resource_table *)(elf_data + shdr->sh_offset);
--	tablesz = shdr->sh_size;
-+	sh_offset = elf_shdr_sh_offset(class, shdr);
-+	table = (struct resource_table *)(elf_data + sh_offset);
-+	tablesz = elf_shdr_sh_size(class, shdr);
- 
- 	/*
- 	 * Create a copy of the resource table. When a virtio device starts
-@@ -317,13 +352,17 @@ EXPORT_SYMBOL(rproc_elf_load_rsc_table);
- struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
- 						       const struct firmware *fw)
- {
--	struct elf32_hdr *ehdr = (struct elf32_hdr *)fw->data;
--	struct elf32_shdr *shdr;
-+	const void *shdr;
-+	u64 sh_addr, sh_size;
-+	u8 class = fw_elf_get_class(fw);
- 
--	shdr = find_table(&rproc->dev, ehdr, fw->size);
-+	shdr = find_table(&rproc->dev, fw);
- 	if (!shdr)
- 		return NULL;
- 
--	return rproc_da_to_va(rproc, shdr->sh_addr, shdr->sh_size);
-+	sh_addr = elf_shdr_sh_addr(class, shdr);
-+	sh_size = elf_shdr_sh_size(class, shdr);
-+
-+	return rproc_da_to_va(rproc, sh_addr, sh_size);
- }
- EXPORT_SYMBOL(rproc_elf_find_loaded_rsc_table);
-diff --git a/drivers/remoteproc/remoteproc_elf_loader.h b/drivers/remoteproc/remoteproc_elf_loader.h
-new file mode 100644
-index 000000000000..fac3565734f9
---- /dev/null
-+++ b/drivers/remoteproc/remoteproc_elf_loader.h
-@@ -0,0 +1,69 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Remote processor elf loader defines
-+ *
-+ * Copyright (C) 2019 Kalray, Inc.
-+ */
-+
-+#ifndef REMOTEPROC_ELF_LOADER_H
-+#define REMOTEPROC_ELF_LOADER_H
-+
-+#include <linux/elf.h>
-+#include <linux/types.h>
-+
-+/**
-+ * fw_elf_get_class - Get elf class
-+ * @fw: the ELF firmware image
-+ *
-+ * Note that we use and elf32_hdr to access the class since the start of the
-+ * struct is the same for both elf class
-+ *
-+ * Return: elf class of the firmware
-+ */
-+static inline u8 fw_elf_get_class(const struct firmware *fw)
-+{
-+	struct elf32_hdr *ehdr = (struct elf32_hdr *)fw->data;
-+
-+	return ehdr->e_ident[EI_CLASS];
-+}
-+
-+#define ELF_GET_FIELD(__s, __field, __type) \
-+static inline __type elf_##__s##_##__field(u8 class, const void *arg) \
-+{ \
-+	if (class == ELFCLASS32) \
-+		return (__type) ((const struct elf32_##__s *) arg)->__field; \
-+	else \
-+		return (__type) ((const struct elf64_##__s *) arg)->__field; \
-+}
-+
-+ELF_GET_FIELD(hdr, e_entry, u64)
-+ELF_GET_FIELD(hdr, e_phnum, u16)
-+ELF_GET_FIELD(hdr, e_shnum, u16)
-+ELF_GET_FIELD(hdr, e_phoff, u64)
-+ELF_GET_FIELD(hdr, e_shoff, u64)
-+ELF_GET_FIELD(hdr, e_shstrndx, u16)
-+
-+ELF_GET_FIELD(phdr, p_paddr, u64)
-+ELF_GET_FIELD(phdr, p_filesz, u64)
-+ELF_GET_FIELD(phdr, p_memsz, u64)
-+ELF_GET_FIELD(phdr, p_type, u32)
-+ELF_GET_FIELD(phdr, p_offset, u64)
-+
-+ELF_GET_FIELD(shdr, sh_size, u64)
-+ELF_GET_FIELD(shdr, sh_offset, u64)
-+ELF_GET_FIELD(shdr, sh_name, u32)
-+ELF_GET_FIELD(shdr, sh_addr, u64)
-+
-+#define ELF_STRUCT_SIZE(__s) \
-+static inline unsigned long elf_size_of_##__s(u8 class) \
-+{ \
-+	if (class == ELFCLASS32)\
-+		return sizeof(struct elf32_##__s); \
-+	else \
-+		return sizeof(struct elf64_##__s); \
-+}
-+
-+ELF_STRUCT_SIZE(shdr)
-+ELF_STRUCT_SIZE(phdr)
-+
-+#endif /* REMOTEPROC_ELF_LOADER_H */
-diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-index 004867061721..eeb26434220e 100644
---- a/drivers/remoteproc/remoteproc_internal.h
-+++ b/drivers/remoteproc/remoteproc_internal.h
-@@ -55,7 +55,7 @@ phys_addr_t rproc_va_to_pa(void *cpu_addr);
- int rproc_trigger_recovery(struct rproc *rproc);
- 
- int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw);
--u32 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw);
-+u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw);
- int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw);
- int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *fw);
- struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
-diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_remoteproc.c
-index ee13d23b43a9..a3268d95a50e 100644
---- a/drivers/remoteproc/st_remoteproc.c
-+++ b/drivers/remoteproc/st_remoteproc.c
-@@ -190,7 +190,7 @@ static int st_rproc_start(struct rproc *rproc)
- 		}
- 	}
- 
--	dev_info(&rproc->dev, "Started from 0x%x\n", rproc->bootaddr);
-+	dev_info(&rproc->dev, "Started from 0x%llx\n", rproc->bootaddr);
- 
- 	return 0;
- 
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index f84bd5fe0211..82cebca9344c 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -382,7 +382,7 @@ struct rproc_ops {
- 				struct rproc *rproc, const struct firmware *fw);
- 	int (*load)(struct rproc *rproc, const struct firmware *fw);
- 	int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
--	u32 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
-+	u64 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
- };
- 
- /**
-@@ -498,7 +498,7 @@ struct rproc {
- 	int num_traces;
- 	struct list_head carveouts;
- 	struct list_head mappings;
--	u32 bootaddr;
-+	u64 bootaddr;
- 	struct list_head rvdevs;
- 	struct list_head subdevs;
- 	struct idr notifyids;
--- 
-2.15.0.276.g89ea799
+- Make the memory-regions part of the binding optional, not mandatory
+- Make the omap remoteproc driver portion for the memory-regions also 
+optional, not fail to probe
+- Print a warning from the omap driver if memory regions are not in 
+place, claiming user knows what he is doing, as right now nothing works 
+without the memory regions defined.
 
+I'll post v6 against -rc1 with these changes once it is available.
+
+-Tero
+
+
+> 
+> Andrew
+> 
+> 
+>> regards
+>> Suman
+>>
+>>>
+>>> regards
+>>> Suman
+>>>
+>>>>
+>>>> Andrew
+>>>>
+>>>>
+>>>>> regards
+>>>>> Suman
+>>>>>
+>>>>>>
+>>>>>> Andrew
+>>>>>>
+>>>>>>
+>>>>>>> regards
+>>>>>>> Suman
+>>>>>>>
+>>>>>>>>
+>>>>>>>> Andrew
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>> regards
+>>>>>>>>> Suman
+>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> -Tero
+>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> Andrew
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>> -Tero
+>>>>>>>>>>>>
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> This is not a requirement of the remote processor itself and so it
+>>>>>>>>>>>>> should not fail to probe if a specific memory carveout isn't given.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>> use the of_reserved_mem_device_init/release() API appropriately
+>>>>>>>>>>>>>> to assign the corresponding reserved memory region to the OMAP
+>>>>>>>>>>>>>> remoteproc device. Note that only one region per device is
+>>>>>>>>>>>>>> allowed by the framework.
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>>>>>>>>>>>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>>>>>>>>>>>>>> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>>>>>>>>>>>>>> ---
+>>>>>>>>>>>>>> v5: no changes
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>     drivers/remoteproc/omap_remoteproc.c | 12 +++++++++++-
+>>>>>>>>>>>>>>     1 file changed, 11 insertions(+), 1 deletion(-)
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> diff --git a/drivers/remoteproc/omap_remoteproc.c
+>>>>>>>>>>>>>> b/drivers/remoteproc/omap_remoteproc.c
+>>>>>>>>>>>>>> index 0846839b2c97..194303b860b2 100644
+>>>>>>>>>>>>>> --- a/drivers/remoteproc/omap_remoteproc.c
+>>>>>>>>>>>>>> +++ b/drivers/remoteproc/omap_remoteproc.c
+>>>>>>>>>>>>>> @@ -17,6 +17,7 @@
+>>>>>>>>>>>>>>     #include <linux/module.h>
+>>>>>>>>>>>>>>     #include <linux/err.h>
+>>>>>>>>>>>>>>     #include <linux/of_device.h>
+>>>>>>>>>>>>>> +#include <linux/of_reserved_mem.h>
+>>>>>>>>>>>>>>     #include <linux/platform_device.h>
+>>>>>>>>>>>>>>     #include <linux/dma-mapping.h>
+>>>>>>>>>>>>>>     #include <linux/remoteproc.h>
+>>>>>>>>>>>>>> @@ -480,14 +481,22 @@ static int omap_rproc_probe(struct
+>>>>>>>>>>>>>> platform_device *pdev)
+>>>>>>>>>>>>>>         if (ret)
+>>>>>>>>>>>>>>             goto free_rproc;
+>>>>>>>>>>>>>>     +    ret = of_reserved_mem_device_init(&pdev->dev);
+>>>>>>>>>>>>>> +    if (ret) {
+>>>>>>>>>>>>>> +        dev_err(&pdev->dev, "device does not have specific CMA
+>>>>>>>>>>>>>> pool\n");
+>>>>>>>>>>>>>> +        goto free_rproc;
+>>>>>>>>>>>>>> +    }
+>>>>>>>>>>>>>> +
+>>>>>>>>>>>>>>         platform_set_drvdata(pdev, rproc);
+>>>>>>>>>>>>>>           ret = rproc_add(rproc);
+>>>>>>>>>>>>>>         if (ret)
+>>>>>>>>>>>>>> -        goto free_rproc;
+>>>>>>>>>>>>>> +        goto release_mem;
+>>>>>>>>>>>>>>           return 0;
+>>>>>>>>>>>>>>     +release_mem:
+>>>>>>>>>>>>>> +    of_reserved_mem_device_release(&pdev->dev);
+>>>>>>>>>>>>>>     free_rproc:
+>>>>>>>>>>>>>>         rproc_free(rproc);
+>>>>>>>>>>>>>>         return ret;
+>>>>>>>>>>>>>> @@ -499,6 +508,7 @@ static int omap_rproc_remove(struct
+>>>>>>>>>>>>>> platform_device *pdev)
+>>>>>>>>>>>>>>           rproc_del(rproc);
+>>>>>>>>>>>>>>         rproc_free(rproc);
+>>>>>>>>>>>>>> +    of_reserved_mem_device_release(&pdev->dev);
+>>>>>>>>>>>>>>           return 0;
+>>>>>>>>>>>>>>     }
+>>>>>>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>> -- 
+>>>>>>>>>>
+>>>>>>>>>> -- 
+>>>>>>>>>
+>>>>>>>
+>>>>>
+>>>
+>>
+
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
