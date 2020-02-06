@@ -2,115 +2,127 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E18153C7D
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  6 Feb 2020 02:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E00153E63
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  6 Feb 2020 06:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727550AbgBFBQt (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 5 Feb 2020 20:16:49 -0500
-Received: from wsip-184-185-158-229.sd.sd.cox.net ([184.185.158.229]:46199
-        "EHLO s0-postfix.allcaps.org" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727170AbgBFBQt (ORCPT
+        id S1725895AbgBFFxq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 6 Feb 2020 00:53:46 -0500
+Received: from mail-bn8nam12on2059.outbound.protection.outlook.com ([40.107.237.59]:6105
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725809AbgBFFxq (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 5 Feb 2020 20:16:49 -0500
-Received: from MacBook-Pro.local (unknown [12.197.118.92])
-        by s0-postfix.allcaps.org (Postfix) with ESMTPSA id 98E071C64048;
-        Wed,  5 Feb 2020 16:06:23 -0800 (PST)
-Subject: Re: How to get src and dst for pru_rpmsg_send?
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     linux-remoteproc@vger.kernel.org
-References: <f22d9305-326f-f584-4480-9509c5f903fb@allcaps.org>
- <20200205232148.GC25901@xps15>
-From:   "Andrew P. Lentvorski" <bsder@allcaps.org>
-Autocrypt: addr=bsder@allcaps.org; prefer-encrypt=mutual; keydata=
- mQINBFjdhcgBEAC3F/rb3hyz6lzw2H6wVAFYkhCdO2jyPGaS04X//ZyHo3csYmtSuPYoOlhU
- EGvx+6AzaAP3+FY1pbx01Djk9rnv/YIWx27h97MiImZRPS31q9OgNTRplcltEVN68cWoSkTE
- AbZpoY5loz2wX4FUELoOO52ewO0iDai+2M27w3Fg0WsLMJoAke8UbXRXBNk7la2p34Sy9bak
- mJqTuQ8I5SPYrHU6FSjyn5f0gPGTVLFBZrbbiKGOee50ZvPUPMnqP0kruwP9ff/7NCODECJ0
- o2joNlXyHnwBUIsDhw+MttPB3a4vw0nQ78QaNh/WJbETj6x0O7EGfTgraMgyU+LHvXjDiOLn
- vExkTnaiRZtyQt5gUf0yR/Qi3hekAeCkC4sd5g8LZl5ewOYq4gJXwNsYBuS34XeulvYV6fbe
- u9mTuyS5z770tY1AxO9SReB71P82ZGDbbWWAMdEfAtQ+YnQn536wgsqcAEcbufn1oYK1ER/8
- UzR4ohDzDUtY/s2LX37yORsprR9u/ftJ+THdrtefOaCE0nwIWNGHrOTgGgfgNPCc+OIbm998
- /joxal7UeXseBuFkoEMyJU1b5IQBLmwF8eAt53k1oenZ80qiX5nViVCR1YKD9diXo1CVWWPU
- 5JvX1pCs49t79b4fajTSPPz3wLdxeJrRYKn44u0ETA84sJk2eQARAQABuQINBFjdhcgBEADG
- 3HvvaWLaK4PVjfPp7nnv4ZsCuP1L6k7/kDOg8p6vuBskP59L95AbKs8fqpKn8XQdqRaSO14x
- EcOFhzCXkEatkHKb97hSjACZYxNJBDd63LHNy0eBLk8oyE5tbIEbKn3s0+vks5qzHxMbL2hn
- RPdVW9WPeCLTIltHCnOoJ3QNQFcskfqRcMKLUMnjjdezVVidWbapu+cruYFOE4ezJn2KnvMd
- e+SDOPU0HSXvYfMFpVqGtKZbquMg3m7N/2Ngl6JbP/UI5nZbIL4ipCRIg0bW0kIdMfsoeAJu
- CoVIaN5crcjzr+O1RkJ17u5ma/0xriVb8w8UljnLiP6hgqsAu2e7Cy7Kqr6ROBR5Jg+TeYOt
- OQYI8y3740Ah2LdylC29oLQyA0sNOHXUJSSiBexY8QRQ/e8b8J0Oy/dnWqCjrvZMxst5PzGD
- F9RAWFnEEEhBn0MjIyFPQ34mp+2rmk97O6Qp8OBLFhz4VB4IUKlV6il0k/zap1zQw2X2FN0n
- lzpD0OljW2JPmCjdBi8RHP1b7vfyY/8vk2KODkVjLyPlbv6GAM7cqrQNV6aOaMHJ87VYJHXx
- Kw7beSqsK3hLLWfC08bsU5Kq21mfMzC3mZF3ACI+DIPW3rOAs9LeiNu3vwaRUMM4w+Q+svJ+
- 2tqK322KSm6avhUwZjzrdgznvCm+zwM0iwARAQABiQIlBBgBCAAPBQJY3YXIAhsMBQkHhh+A
- AAoJEOxfC5wlhRqh4P8P/0Vn0bKAPy0RKLEWM/aMF019mbRwbts9FmYtH/9MhNr7v0+fral+
- ItWDbBIdJ2CQ26J0sf5oJUFfBeFin6xWkVF6HIn67CWcP+2aKY30sctSnS712BWzropJ3/qt
- hewRLOexsyQMOfPxld6Ab9hQpFLPrBMDyT855u4/51fe4QptqrTa7mrqqS1Jof5jsimb0/MW
- kMr7stFAldC0JqrWi9UJ4KwODH4MuZczScYErD0d1tMpABsdDW/UjAsjbpO38vm+7Ajebbe1
- i0kac5KAXATa3YcFiM2f28KlE2trNefryxaKSWa72sPZKg2azWOJzNIYPBMNZ2nGjnlwjQ8O
- dfHGypFU0f3vbQZCmoPCjYwr13X2oQg+s9LXIr8r41y860N6Yjn5sRMA1QmpSHNFmM/cdsvv
- wnwctJd5+V/Eqe6i9+uRzjQpLRbv/FjDq2447hESqHpnRpCy6oCE1q+ptYLDk1eU884Xrvai
- PZBx9WXjFWQyTiiksFLuyKg9aAGa8NrmGafzMSMw4YqBDhtoM1pRsrHK9XzyO5XiMt0A5FVL
- tkGSONPs9kuXHIwjMF5hV5glq24dirM+PZDj0mr/CcJi13ZON6UkSk9oA2DZvdq1GkXN1l2n
- xKVtYViCt3l4RKWCy3MZbiVPjrTFFZrgUp/iD2IHgDMIt6PwvTnA0lT0
-Message-ID: <49d5fcdb-e51e-f289-15fb-eea2efdcf477@allcaps.org>
-Date:   Wed, 5 Feb 2020 17:16:47 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
- Gecko/20100101 Thunderbird/68.4.1
+        Thu, 6 Feb 2020 00:53:46 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S0BBjdo+cnJhHo+IWE/SMUPms0sEZP7z5i61NsCeJWNeYzY+SEh4HXmv3WraT1sXc8QmqHx6/L7ft8LVZ8H3Ty1KQdJLA+GTh3PIVgLISWDiJk0WcyujMvWb39DI+DjRbZcEQvuyFyAvRBwDdDPBwX9u/pNU8FBvTXSg0bBYtwTKass/NS/RTG9jDgnorUFZzIklF3pZ6FiBFgYUTEGwBztr6vOoHV9wPCo2kUY7ICNe9+1YOBOl+KIO1ns98lvlWmzAYhElFfaY5IUe7R5BE6DDqAzBrJYEj8B+r8z4Q/TdMLKAidkfjJrbtikONZ9qLbSMw2774wc+6hxzFuGzUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p+jYRfZj/dIXmloAFTj7QBnotoIT1ICWjxySZYiP+fE=;
+ b=nlvqYSyZDDzGG3dsVDHrs2zMjDCIhja0rgX+57jdeqPqBMvqAUUxq3G/8jUjVOSIxNzE5PWf65Tx0X0jV/ZOcaXe8f3l8Ol2pMxIMj12THUjMno4akPgdZYce6ydnS77fogmqiwT5I8Ssmr5gATmDsldhhY87kgRuQIDtTdhy4Yf+LYULMMiQ3+3muzid/fHcdEVLOcGecE4yILJrBW2Y6GISdmPdwI21yJeaQn9K39tfheeKW9WPlIYKlBAjL5APel58LtOkSU+PMun+DaZdk8t8Qj5gcZ2zCn+iImvwW7d8gJHJhSukpglMOjdcJ0Lsvvi9SmTsbr2Z9jAyPBYEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=topcon.com; dmarc=pass action=none header.from=topcon.com;
+ dkim=pass header.d=topcon.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Topcon.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p+jYRfZj/dIXmloAFTj7QBnotoIT1ICWjxySZYiP+fE=;
+ b=cn6tL8rVrVYe5dtz9FffL+Q9bnZ4nATzgBu2KIi3JaxnaoQu9Spk/SyuXZLRjy1m9vLTZr6340Gvpvs8lVlFnEivRU691cy2ZyY/f3RI6muSYhlCANmVw3T3LT39O56FvE0vlhaI1TPJieTsfUGc7OVApP/Vhjmxld6tDAj8EHM=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=NShubin@topcon.com; 
+Received: from MN2PR06MB5742.namprd06.prod.outlook.com (20.179.148.96) by
+ MN2PR06MB6128.namprd06.prod.outlook.com (20.178.245.144) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2707.21; Thu, 6 Feb 2020 05:53:40 +0000
+Received: from MN2PR06MB5742.namprd06.prod.outlook.com
+ ([fe80::9405:d1a5:a151:b165]) by MN2PR06MB5742.namprd06.prod.outlook.com
+ ([fe80::9405:d1a5:a151:b165%6]) with mapi id 15.20.2707.020; Thu, 6 Feb 2020
+ 05:53:40 +0000
+From:   Nikita Shubin <NShubin@topcon.com>
+Cc:     NShubin@topcon.com, Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] remoteproc: warn on kick missing
+Date:   Thu,  6 Feb 2020 08:54:19 +0300
+Message-Id: <20200206055419.15897-1-NShubin@topcon.com>
+X-Mailer: git-send-email 2.24.1
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: FR2P281CA0022.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:14::9) To MN2PR06MB5742.namprd06.prod.outlook.com
+ (2603:10b6:208:131::32)
 MIME-Version: 1.0
-In-Reply-To: <20200205232148.GC25901@xps15>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: from NShubin.TOPCON.COM (193.232.110.5) by FR2P281CA0022.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:14::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2707.21 via Frontend Transport; Thu, 6 Feb 2020 05:53:38 +0000
+X-Mailer: git-send-email 2.24.1
+X-Originating-IP: [193.232.110.5]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 20085c89-d4f6-4aa9-fd4e-08d7aac8ea5b
+X-MS-TrafficTypeDiagnostic: MN2PR06MB6128:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <MN2PR06MB61289BC810E8205C048A6AD5D91D0@MN2PR06MB6128.namprd06.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-Forefront-PRVS: 0305463112
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(346002)(136003)(366004)(396003)(39860400002)(376002)(199004)(189003)(6486002)(36756003)(2616005)(52116002)(956004)(7696005)(66556008)(4326008)(66946007)(66476007)(86362001)(5660300002)(478600001)(316002)(26005)(8936002)(81156014)(81166006)(8676002)(2906002)(6666004)(1076003)(186003)(16526019)(54906003)(109986005)(266003);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR06MB6128;H:MN2PR06MB5742.namprd06.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+Received-SPF: None (protection.outlook.com: topcon.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Hd+Bg4GSbx/65fNvt9vXIY0bWOPrB/1qpSSQC+/Mcl7oJLMAZLBn5A9B25ufVsI/mBSQND2pBCbvKHmqvSEa52Ixa7YkMkB182wYjVzgGcWxxo34ceDd2SEu6wApPezlhME8drKLLilUgQQrAa2uLwMwFHdRPIAc/gRLPXFld3hzcmTayfqCE69u7+REdMld+gP/MieBkzcBzzfzyzJfLQAZ3uX34OCME8xeE7OFKGl0wlNs4dUySgvNvwLvNwe9i0Y0vLaBctICPZC8bAqVPOo0lJzaTqDkKo5miyCKN6GayOdCO/vAgty8Y+fwG0ddRw2gxqTPGN603GuCNkUulvRdt6kAEwtreiRPibyEMi3oycCp3nSWncVm8fgSARb9n1CbnNHuws9aPAZpTWBM4yWWnnGEkP9mDHQy20EyL4/+UH2EdC383sU8GdFBJ39yGwY1y4pQE2+mPXjWTJWFNmkx9bcRZqJGf1Y0bmn6yJk=
+X-MS-Exchange-AntiSpam-MessageData: 13hzBTKZdpWPsIVjivBB+wUZUPITF0V2UVi37JX9/MEUIkOrNvFy8DYkWfQrqB8eSX0i4c7QQjpotVwkjgSnMdECExbcl2vESlPmZtEzO3v+wifVnPfzMaboWHCUTblwd7swlEyGTxy+rGGOsZzJmQ==
+X-OriginatorOrg: Topcon.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20085c89-d4f6-4aa9-fd4e-08d7aac8ea5b
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2020 05:53:40.1341
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 96c2c3ba-19d3-47b6-ba0b-8f7471bd1f14
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y/6DcAlTv+7x6iTfv5zbXJwgFemfWDFE4m10oo8h7I2Mb+hHG6nrwpst1vvhqRrrHQ5Te0HoLUcbcaDfRwQoGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR06MB6128
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi, Mathieu,
+.kick method not set in rproc_ops will result in:
 
-On 2/5/20 3:21 PM, Mathieu Poirier wrote:
-> Hi Andrew,
-> 
-> On Wed, Feb 05, 2020 at 02:24:07AM -0800, Andrew P. Lentvorski wrote:
->> I seem to be missing something obvious: Where do I get the values for
->> src and dst in the pru_rpmsg_send() function?
->>
->> The TI examples do a pru_rpmsg_receive() first and then echo back to the
->> same src and dst.  That seems ... odd.  What's the point of having a
->> variable src and dst if they are effectively hardwired to a single
->> communication channel?
-> 
-> Since pru_rpmsg_send/receive() don't exist in the mainline kernel you will have
-> to be more specific... What TI examples are you referring to?  Where can we find
-> them? 
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference
 
-TI keeps the examples here:
-https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/
+in rproc_virtio_notify, after firmware loading.
 
-This is a good example of the rpmsg system being used with the echo I
-talked about:
-https://git.ti.com/cgit/pru-software-support-package/pru-software-support-package/tree/examples/am335x/PRU_RPMsg_Echo_Interrupt1
+At least a warning needed on attempt to call missing method.
 
-That example works on the Beaglebone Black (an am3359 based Linux board).
+Signed-off-by: Nikita Shubin <NShubin@topcon.com>
+---
+ drivers/remoteproc/remoteproc_virtio.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> There are other rpmsg_sendxyz() functions that allow you to send messages to
-> different addresses[1].  Given the amount of information, I'm afraid there isn't
-> much else I can add at this time.
-> 
-> Thanks,
-> Mathieu  
-> 
-> [1]. https://elixir.bootlin.com/linux/latest/source/include/linux/rpmsg.h#L125
+diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/re=
+moteproc_virtio.c
+index 8c07cb2ca8ba..77a81f331e3f 100644
+--- a/drivers/remoteproc/remoteproc_virtio.c
++++ b/drivers/remoteproc/remoteproc_virtio.c
+@@ -32,6 +32,12 @@ static bool rproc_virtio_notify(struct virtqueue *vq)
 
-Thanks for the pointers.
+        dev_dbg(&rproc->dev, "kicking vq index: %d\n", notifyid);
 
-It looks like I need to drag the src/dst out of the rpmsg_device or
-rpmsg_channel_info on the Linux side and then pass it to the PRU side by
-some method.  An initial message is as good as any and better than most.
++       if (unlikely(rproc->ops->kick =3D=3D NULL)) {
++               WARN_ONCE(rproc->ops->kick =3D=3D NULL, ".kick method not d=
+efined for %s",
++                       rproc->name);
++               return false;
++       }
++
+        rproc->ops->kick(rproc, notifyid);
+        return true;
+ }
+--
+2.24.1
 
-I completely flaked that this wouldn't be in mainline.  Even a simple
-thought about the name "*pru*_rpmsg_send" should have set off alarm
-bells.  Sorry about that.
-
-Thanks for the help,
--a
+Confidentiality Notice: This message (including attachments) is a private c=
+ommunication solely for use of the intended recipient(s). If you are not th=
+e intended recipient(s) or believe you received this message in error, noti=
+fy the sender immediately and then delete this message. Any other use, rete=
+ntion, dissemination or copying is prohibited and may be a violation of law=
+, including the Electronic Communication Privacy Act of 1986.   =AD=AD
