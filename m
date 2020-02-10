@@ -2,72 +2,125 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3954C15600A
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  7 Feb 2020 21:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734DF157160
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Feb 2020 10:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727478AbgBGUoJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 7 Feb 2020 15:44:09 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:42575 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727075AbgBGUoJ (ORCPT
+        id S1727477AbgBJJB6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 10 Feb 2020 04:01:58 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:42459 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726968AbgBJJB6 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 7 Feb 2020 15:44:09 -0500
-Received: by mail-ot1-f67.google.com with SMTP id 66so577214otd.9
-        for <linux-remoteproc@vger.kernel.org>; Fri, 07 Feb 2020 12:44:09 -0800 (PST)
+        Mon, 10 Feb 2020 04:01:58 -0500
+Received: by mail-pg1-f193.google.com with SMTP id w21so3552257pgl.9;
+        Mon, 10 Feb 2020 01:01:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
-        b=WJgFJ9PR0yBQ+ciD08Pby60OVZzn3dTgtieZ17slfRQssKmPnwQmAwZPgDIpR6heck
-         dDY9m0nAiR73dL1CtCDLlqWI9lV6barO9i6phYUUcmMyI9lhyUunotwwGjtLNjZZXHps
-         B+ZJy7kS8IDHqb+LatDXLkBcGkPTiMku+kX9Fb92ZmFsnK1n3liOHkc4TmrSz2VBzqpm
-         gOXxQUuwBna/l8aq9nu864h1RGE/T5vMQdJwoV4IagKfmqrsTX7n4WpDLnLJobosvK0X
-         9Z7fBUirFx02ZREq+PBFhuGxFcksAi/eOnsjoHpvtfcuXe3k+tw0qtyYWnKvHtkX+Drl
-         CMWw==
+        h=from:to:cc:subject:date:message-id;
+        bh=K/pRvxA36An+Rl1ZwAdNT+xdUuhMMDvr3Oav2x/KizU=;
+        b=UszE7ICQpQdfWSHopva4WlhnC6fZuKAudkGJ4nWwZ+ffHqgeC46FOiLAjm+u0NkWwH
+         El2ZnlxU6aN73wPFpI7dLvjFtMbhXpSFVWO0gC3+i5JFQQSsxsUlkKMav1uasAq5ZNWU
+         b31dGaMVj6Ks72kIkmIvtQ85TgVFRXdHlODXfOgs+bPW2skrdIFUksPneON6xcjl6uco
+         BXeEU7jzg+3tLAhGb/ayVw73RfVq8BgujarmUCdEUkmhbhP75yl9bohDKcCRDJ5Bv+jU
+         CUSBfEzVEZUI6oELz94/xB2X0eeGKDmsMK8q5hWD6SvUm5DRxIVbSD+TWlqzbquAVXLX
+         Oaxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=8cDRXBFOpE9J1p6S5H+HXSQg9q3m7pUJ3iUuQ5MPcDc=;
-        b=BnG56ixy1eXF/UCqAjjxciPR8e3y2xVtHSGX5GzfUaWkaY1ny7DJfFQMpc3scIgS1V
-         X1eiq5t+7cz0Hq4HMQRcB3ycoX9+DLQ+b4Um+8AJfyrG22DpoB8kPZp8/zjO1i7zNt1f
-         BMaNiizawFGz6jaoDwPdy5jJYNxVE3lOMr+LNSFYyXWJd6BnPsZtuBYZIF25MVy1jal0
-         ag37X2JG0dC5bKN0eXDN/dwRpVNRpmIfFZNHMWFpzD2aZRbBzk29YJoJn85rqF+cML8c
-         Nc/qxFCgqOPRyBIXGTVbpOd/1SrpQQAYVtl+OtXyOYmxQjRj5RgGgQIKli2Fg+Cx2tZV
-         PHXA==
-X-Gm-Message-State: APjAAAVkb2r/lZhcRDIVVo1551DE4SbSpab/fAgDdN5lAm+Vj/duL/cW
-        HwRM5YmKrJZIn/KWFgiNVY2a0VEy4tksWehq/iA=
-X-Google-Smtp-Source: APXvYqxZ0BHxezvYatUCwR5ujJY2IO6fZCUlpHww8WEnDHAAAY+0VvtiMdEe6JnWZWwDRH8AP8uVvx3q0Y+IviYPdhQ=
-X-Received: by 2002:a9d:7305:: with SMTP id e5mr948882otk.64.1581108248790;
- Fri, 07 Feb 2020 12:44:08 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a4a:d508:0:0:0:0:0 with HTTP; Fri, 7 Feb 2020 12:44:08 -0800 (PST)
-Reply-To: auch197722@gmail.com
-From:   "Mr. Theophilus Odadudu" <cristinamedina0010@gmail.com>
-Date:   Fri, 7 Feb 2020 15:44:08 -0500
-Message-ID: <CAPNvSTj-8q7w5QPmnH26+_3xCKjEWyE+9xcb8QyQs9Xie+iYgg@mail.gmail.com>
-Subject: LETTER OF INQUIRY
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=K/pRvxA36An+Rl1ZwAdNT+xdUuhMMDvr3Oav2x/KizU=;
+        b=rHtFbkGCT925DjdPTg08co+MfZfbkEL0HH/uWHUWSGQLuZlcImoKaaQpsuS/D/uVLg
+         40Z44W/lmpeCwIuNCfM2gXwCNMNFYdbU11boby+I7t8qNHn+hRI3ZDCw830Ae0fBnSIp
+         4BCyrjerVsZlRFZJYP5DTDi29GhesQZNaDao8Q1z8/rJvYH7E9wZQ6tPDlHgsahLXc4Q
+         2/sJ/v8L3u8PNMXo28c6XLM4jFFVW+dOKv5HAbo+6lPCOhAk5fB8jU1QdyWP2ThUaQdj
+         U1TTsu8O1spqLK/C5JD3qVzWu8YdpFJsCf5CbNDnktoHR6tvdFF2WQwCA8ybJQJr4L6O
+         813Q==
+X-Gm-Message-State: APjAAAU3O5BgclgQI2quXwC7YONHpkfz+5puOMfGSnTjz6fbEWcu/uW+
+        z9nxAH3NiICklRNXKU+culQ=
+X-Google-Smtp-Source: APXvYqy7dvivVB5cTr39/nXlMeb1apwvCx28InCMFND9wVG6borIFs5tJ8degoQ0THQyYJ+1yka0lg==
+X-Received: by 2002:aa7:8191:: with SMTP id g17mr202075pfi.25.1581325317718;
+        Mon, 10 Feb 2020 01:01:57 -0800 (PST)
+Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
+        by smtp.gmail.com with ESMTPSA id g2sm11963516pgn.59.2020.02.10.01.01.55
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 10 Feb 2020 01:01:57 -0800 (PST)
+From:   Baolin Wang <baolin.wang7@gmail.com>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        baolin.wang7@gmail.com
+Subject: [RESEND PATCH] hwspinlock: Allow drivers to be built with COMPILE_TEST
+Date:   Mon, 10 Feb 2020 17:01:07 +0800
+Message-Id: <5a95c3de07ef020a4e2f2776fa5adb00637ee387.1581324976.git.baolin.wang7@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Good Day,
+Allow drivers to be built with COMPILE_TEST.
 
-I work as a clerk in a Bank here in Nigeria, I have a very
-confidential Business Proposition for you. There is a said amount of
-money floating in the bank unclaimed, belonging to the bank Foreign
-customer who die with his family in the Ethiopian Airline crash of
-March 11, 2019.
+Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
+---
+ drivers/hwspinlock/Kconfig |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-I seek your good collaboration to move the fund for our benefit. we
-have agreed that 40% be yours once you help claim.
+diff --git a/drivers/hwspinlock/Kconfig b/drivers/hwspinlock/Kconfig
+index 37740e9..826a105 100644
+--- a/drivers/hwspinlock/Kconfig
++++ b/drivers/hwspinlock/Kconfig
+@@ -9,7 +9,7 @@ menuconfig HWSPINLOCK
+ config HWSPINLOCK_OMAP
+ 	tristate "OMAP Hardware Spinlock device"
+ 	depends on HWSPINLOCK
+-	depends on ARCH_OMAP4 || SOC_OMAP5 || SOC_DRA7XX || SOC_AM33XX || SOC_AM43XX || ARCH_K3
++	depends on ARCH_OMAP4 || SOC_OMAP5 || SOC_DRA7XX || SOC_AM33XX || SOC_AM43XX || ARCH_K3 || COMPILE_TEST
+ 	help
+ 	  Say y here to support the OMAP Hardware Spinlock device (firstly
+ 	  introduced in OMAP4).
+@@ -19,7 +19,7 @@ config HWSPINLOCK_OMAP
+ config HWSPINLOCK_QCOM
+ 	tristate "Qualcomm Hardware Spinlock device"
+ 	depends on HWSPINLOCK
+-	depends on ARCH_QCOM
++	depends on ARCH_QCOM || COMPILE_TEST
+ 	select MFD_SYSCON
+ 	help
+ 	  Say y here to support the Qualcomm Hardware Mutex functionality, which
+@@ -31,7 +31,7 @@ config HWSPINLOCK_QCOM
+ config HWSPINLOCK_SIRF
+ 	tristate "SIRF Hardware Spinlock device"
+ 	depends on HWSPINLOCK
+-	depends on ARCH_SIRF
++	depends on ARCH_SIRF || COMPILE_TEST
+ 	help
+ 	  Say y here to support the SIRF Hardware Spinlock device, which
+ 	  provides a synchronisation mechanism for the various processors
+@@ -42,7 +42,7 @@ config HWSPINLOCK_SIRF
+ 
+ config HWSPINLOCK_SPRD
+ 	tristate "SPRD Hardware Spinlock device"
+-	depends on ARCH_SPRD
++	depends on ARCH_SPRD || COMPILE_TEST
+ 	depends on HWSPINLOCK
+ 	help
+ 	  Say y here to support the SPRD Hardware Spinlock device.
+@@ -51,7 +51,7 @@ config HWSPINLOCK_SPRD
+ 
+ config HWSPINLOCK_STM32
+ 	tristate "STM32 Hardware Spinlock device"
+-	depends on MACH_STM32MP157
++	depends on MACH_STM32MP157 || COMPILE_TEST
+ 	depends on HWSPINLOCK
+ 	help
+ 	  Say y here to support the STM32 Hardware Spinlock device.
+@@ -61,7 +61,7 @@ config HWSPINLOCK_STM32
+ config HSEM_U8500
+ 	tristate "STE Hardware Semaphore functionality"
+ 	depends on HWSPINLOCK
+-	depends on ARCH_U8500
++	depends on ARCH_U8500 || COMPILE_TEST
+ 	help
+ 	  Say y here to support the STE Hardware Semaphore functionality, which
+ 	  provides a synchronisation mechanism for the various processor on the
+-- 
+1.7.9.5
 
-Do get back to with 1) Your Full Name: (2) Residential Address: (3)
-Phone, Mobile  (4) Scan Copy of Your ID. to apply for claims of the
-funds.
-
-Regards
-Theophilus Odadudu
