@@ -2,125 +2,115 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 734DF157160
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Feb 2020 10:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED444157F9B
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Feb 2020 17:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727477AbgBJJB6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 10 Feb 2020 04:01:58 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:42459 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726968AbgBJJB6 (ORCPT
+        id S1727896AbgBJQX6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 10 Feb 2020 11:23:58 -0500
+Received: from zimbra2.kalray.eu ([92.103.151.219]:58604 "EHLO
+        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727579AbgBJQX6 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 10 Feb 2020 04:01:58 -0500
-Received: by mail-pg1-f193.google.com with SMTP id w21so3552257pgl.9;
-        Mon, 10 Feb 2020 01:01:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=K/pRvxA36An+Rl1ZwAdNT+xdUuhMMDvr3Oav2x/KizU=;
-        b=UszE7ICQpQdfWSHopva4WlhnC6fZuKAudkGJ4nWwZ+ffHqgeC46FOiLAjm+u0NkWwH
-         El2ZnlxU6aN73wPFpI7dLvjFtMbhXpSFVWO0gC3+i5JFQQSsxsUlkKMav1uasAq5ZNWU
-         b31dGaMVj6Ks72kIkmIvtQ85TgVFRXdHlODXfOgs+bPW2skrdIFUksPneON6xcjl6uco
-         BXeEU7jzg+3tLAhGb/ayVw73RfVq8BgujarmUCdEUkmhbhP75yl9bohDKcCRDJ5Bv+jU
-         CUSBfEzVEZUI6oELz94/xB2X0eeGKDmsMK8q5hWD6SvUm5DRxIVbSD+TWlqzbquAVXLX
-         Oaxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=K/pRvxA36An+Rl1ZwAdNT+xdUuhMMDvr3Oav2x/KizU=;
-        b=rHtFbkGCT925DjdPTg08co+MfZfbkEL0HH/uWHUWSGQLuZlcImoKaaQpsuS/D/uVLg
-         40Z44W/lmpeCwIuNCfM2gXwCNMNFYdbU11boby+I7t8qNHn+hRI3ZDCw830Ae0fBnSIp
-         4BCyrjerVsZlRFZJYP5DTDi29GhesQZNaDao8Q1z8/rJvYH7E9wZQ6tPDlHgsahLXc4Q
-         2/sJ/v8L3u8PNMXo28c6XLM4jFFVW+dOKv5HAbo+6lPCOhAk5fB8jU1QdyWP2ThUaQdj
-         U1TTsu8O1spqLK/C5JD3qVzWu8YdpFJsCf5CbNDnktoHR6tvdFF2WQwCA8ybJQJr4L6O
-         813Q==
-X-Gm-Message-State: APjAAAU3O5BgclgQI2quXwC7YONHpkfz+5puOMfGSnTjz6fbEWcu/uW+
-        z9nxAH3NiICklRNXKU+culQ=
-X-Google-Smtp-Source: APXvYqy7dvivVB5cTr39/nXlMeb1apwvCx28InCMFND9wVG6borIFs5tJ8degoQ0THQyYJ+1yka0lg==
-X-Received: by 2002:aa7:8191:: with SMTP id g17mr202075pfi.25.1581325317718;
-        Mon, 10 Feb 2020 01:01:57 -0800 (PST)
-Received: from baolinwangubtpc.spreadtrum.com ([117.18.48.82])
-        by smtp.gmail.com with ESMTPSA id g2sm11963516pgn.59.2020.02.10.01.01.55
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 10 Feb 2020 01:01:57 -0800 (PST)
-From:   Baolin Wang <baolin.wang7@gmail.com>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baolin.wang7@gmail.com
-Subject: [RESEND PATCH] hwspinlock: Allow drivers to be built with COMPILE_TEST
-Date:   Mon, 10 Feb 2020 17:01:07 +0800
-Message-Id: <5a95c3de07ef020a4e2f2776fa5adb00637ee387.1581324976.git.baolin.wang7@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Mon, 10 Feb 2020 11:23:58 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 4F5FD27E0658;
+        Mon, 10 Feb 2020 17:23:56 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ibnmg7bxNp1D; Mon, 10 Feb 2020 17:23:56 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id F170F27E079C;
+        Mon, 10 Feb 2020 17:23:55 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu F170F27E079C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1581351836;
+        bh=7i8uswkEMsftUzWNZaWpKTwl9chv4VQD7b+VNxGWpY0=;
+        h=From:To:Date:Message-Id;
+        b=qAhbOVR6uHF47yqt08wvNxUitSKT79LG9tDghJ9PGjGXVx3jVvVxOAH2ZwRgwnwbA
+         7EMOxbbTOFsmJeca9Y+WZvQMqlik1PegV/cQQ/QWC3rZggzSuWNKYpE0sgf6jIqecm
+         kOKedq+2K+ZoRRbJnzTPriuK0W/FKDPrBL0OAiaI=
+X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id yPulY8mreZhE; Mon, 10 Feb 2020 17:23:55 +0100 (CET)
+Received: from triton.lin.mbt.kalray.eu (unknown [192.168.37.25])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id D1B4627E0658;
+        Mon, 10 Feb 2020 17:23:55 +0100 (CET)
+From:   Clement Leger <cleger@kalray.eu>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-remoteproc@vger.kernel.org
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Loic PALLARDY <loic.pallardy@st.com>, s-anna <s-anna@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Clement Leger <cleger@kalray.eu>
+Subject: [PATCH v4 0/5] remoteproc: Add elf64 support
+Date:   Mon, 10 Feb 2020 17:22:04 +0100
+Message-Id: <20200210162209.23149-1-cleger@kalray.eu>
+X-Mailer: git-send-email 2.15.0.276.g89ea799
+In-Reply-To: <527785289.2852303.1581062223707.JavaMail.zimbra@kalray.eu>
+References: <527785289.2852303.1581062223707.JavaMail.zimbra@kalray.eu>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Allow drivers to be built with COMPILE_TEST.
+This serie add support for elf64 in remoteproc (elf loader, coredump). 
+First two patches modifies the type of len argument (in da_to_va) and
+boot_addr in order to allow loading elf64 segment with a u64 size
+and a u64 entry point.
+Next patch introduce a set of macros to access elf64 and elf32
+transparently.
+Last two patches are the actual modification in the elf loader and
+remoteproc coredump support to add elf64 support.
 
-Signed-off-by: Baolin Wang <baolin.wang7@gmail.com>
----
- drivers/hwspinlock/Kconfig |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Changes from V3:
+ - Adapt coredump to elf64 file format
+ - Rename remoteproc_elf_loader.h to remoteproc_elf_helpers.h
+ - Update copyright year in remoteproc_elf_helpers.h
+ - Rename macros elf_hdr_* to elf_get_hdr_* for coherency with elf_hdr_set_*
+ - Split elf64 loader patch in 3:
+   - boot_addr u64 change
+   - remoteproc_elf_helpers.h creation
+   - elf64 loading
 
-diff --git a/drivers/hwspinlock/Kconfig b/drivers/hwspinlock/Kconfig
-index 37740e9..826a105 100644
---- a/drivers/hwspinlock/Kconfig
-+++ b/drivers/hwspinlock/Kconfig
-@@ -9,7 +9,7 @@ menuconfig HWSPINLOCK
- config HWSPINLOCK_OMAP
- 	tristate "OMAP Hardware Spinlock device"
- 	depends on HWSPINLOCK
--	depends on ARCH_OMAP4 || SOC_OMAP5 || SOC_DRA7XX || SOC_AM33XX || SOC_AM43XX || ARCH_K3
-+	depends on ARCH_OMAP4 || SOC_OMAP5 || SOC_DRA7XX || SOC_AM33XX || SOC_AM43XX || ARCH_K3 || COMPILE_TEST
- 	help
- 	  Say y here to support the OMAP Hardware Spinlock device (firstly
- 	  introduced in OMAP4).
-@@ -19,7 +19,7 @@ config HWSPINLOCK_OMAP
- config HWSPINLOCK_QCOM
- 	tristate "Qualcomm Hardware Spinlock device"
- 	depends on HWSPINLOCK
--	depends on ARCH_QCOM
-+	depends on ARCH_QCOM || COMPILE_TEST
- 	select MFD_SYSCON
- 	help
- 	  Say y here to support the Qualcomm Hardware Mutex functionality, which
-@@ -31,7 +31,7 @@ config HWSPINLOCK_QCOM
- config HWSPINLOCK_SIRF
- 	tristate "SIRF Hardware Spinlock device"
- 	depends on HWSPINLOCK
--	depends on ARCH_SIRF
-+	depends on ARCH_SIRF || COMPILE_TEST
- 	help
- 	  Say y here to support the SIRF Hardware Spinlock device, which
- 	  provides a synchronisation mechanism for the various processors
-@@ -42,7 +42,7 @@ config HWSPINLOCK_SIRF
- 
- config HWSPINLOCK_SPRD
- 	tristate "SPRD Hardware Spinlock device"
--	depends on ARCH_SPRD
-+	depends on ARCH_SPRD || COMPILE_TEST
- 	depends on HWSPINLOCK
- 	help
- 	  Say y here to support the SPRD Hardware Spinlock device.
-@@ -51,7 +51,7 @@ config HWSPINLOCK_SPRD
- 
- config HWSPINLOCK_STM32
- 	tristate "STM32 Hardware Spinlock device"
--	depends on MACH_STM32MP157
-+	depends on MACH_STM32MP157 || COMPILE_TEST
- 	depends on HWSPINLOCK
- 	help
- 	  Say y here to support the STM32 Hardware Spinlock device.
-@@ -61,7 +61,7 @@ config HWSPINLOCK_STM32
- config HSEM_U8500
- 	tristate "STE Hardware Semaphore functionality"
- 	depends on HWSPINLOCK
--	depends on ARCH_U8500
-+	depends on ARCH_U8500 || COMPILE_TEST
- 	help
- 	  Say y here to support the STE Hardware Semaphore functionality, which
- 	  provides a synchronisation mechanism for the various processor on the
+Clement Leger (5):
+  remoteproc: Use u64 len for da_to_va
+  remoteproc: Use u64 type for boot_addr
+  remoteproc: Add elf helpers to access elf64 and elf32 fields
+  remoteproc: Add elf64 support in elf loader
+  remoteproc: Adapt coredump to generate correct elf type
+
+ Documentation/remoteproc.txt                |   2 +-
+ drivers/remoteproc/imx_rproc.c              |  11 +-
+ drivers/remoteproc/keystone_remoteproc.c    |   4 +-
+ drivers/remoteproc/qcom_q6v5_adsp.c         |   2 +-
+ drivers/remoteproc/qcom_q6v5_mss.c          |   2 +-
+ drivers/remoteproc/qcom_q6v5_pas.c          |   2 +-
+ drivers/remoteproc/qcom_q6v5_wcss.c         |   2 +-
+ drivers/remoteproc/qcom_wcnss.c             |   2 +-
+ drivers/remoteproc/remoteproc_core.c        |  69 +++++++------
+ drivers/remoteproc/remoteproc_elf_helpers.h |  95 ++++++++++++++++++
+ drivers/remoteproc/remoteproc_elf_loader.c  | 150 ++++++++++++++++++----------
+ drivers/remoteproc/remoteproc_internal.h    |   4 +-
+ drivers/remoteproc/st_remoteproc.c          |   2 +-
+ drivers/remoteproc/st_slim_rproc.c          |   4 +-
+ drivers/remoteproc/wkup_m3_rproc.c          |   4 +-
+ include/linux/remoteproc.h                  |   7 +-
+ 16 files changed, 252 insertions(+), 110 deletions(-)
+ create mode 100644 drivers/remoteproc/remoteproc_elf_helpers.h
+
 -- 
-1.7.9.5
+2.15.0.276.g89ea799
 
