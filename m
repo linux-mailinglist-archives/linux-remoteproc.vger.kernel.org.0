@@ -2,228 +2,168 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9BE157FB2
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Feb 2020 17:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E94931585E6
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 11 Feb 2020 00:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727986AbgBJQYE (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 10 Feb 2020 11:24:04 -0500
-Received: from zimbra2.kalray.eu ([92.103.151.219]:58898 "EHLO
-        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727942AbgBJQYB (ORCPT
+        id S1727555AbgBJXFz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 10 Feb 2020 18:05:55 -0500
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:34278 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727505AbgBJXFz (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 10 Feb 2020 11:24:01 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 26B4627E081F;
-        Mon, 10 Feb 2020 17:24:00 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id ka-xYB4Qjh8D; Mon, 10 Feb 2020 17:23:59 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id A3D3127E082F;
-        Mon, 10 Feb 2020 17:23:59 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu A3D3127E082F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1581351839;
-        bh=z6MmYl/QLmO+1QqqDgCxFlby/GTqJm7qWVYW4F1t4MI=;
-        h=From:To:Date:Message-Id;
-        b=BKKqKiRwIB/AH5bPU9pVOJNsbBNTy4KJ42FxZX5KPMEbO7Q2Zv2ZUW49vkG+RryUx
-         ayxhRlIGgJFWKOuZZfNMtMUsKZayZJaNQU+HAjEmkV6CcFff5iBXEHESY298cTR58G
-         hRfrJmpdZJw6m3U5vVVsbNP6r59m/xJLm5gzIfyQ=
-X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id TUIlXYFIWjcm; Mon, 10 Feb 2020 17:23:59 +0100 (CET)
-Received: from triton.lin.mbt.kalray.eu (unknown [192.168.37.25])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id 85BDD27E07D3;
-        Mon, 10 Feb 2020 17:23:59 +0100 (CET)
-From:   Clement Leger <cleger@kalray.eu>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-remoteproc@vger.kernel.org
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Loic PALLARDY <loic.pallardy@st.com>, s-anna <s-anna@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Clement Leger <cleger@kalray.eu>
-Subject: [PATCH v4 5/5] remoteproc: Adapt coredump to generate correct elf type
-Date:   Mon, 10 Feb 2020 17:22:09 +0100
-Message-Id: <20200210162209.23149-6-cleger@kalray.eu>
-X-Mailer: git-send-email 2.15.0.276.g89ea799
-In-Reply-To: <20200210162209.23149-1-cleger@kalray.eu>
-References: <527785289.2852303.1581062223707.JavaMail.zimbra@kalray.eu>
- <20200210162209.23149-1-cleger@kalray.eu>
+        Mon, 10 Feb 2020 18:05:55 -0500
+Received: by mail-yw1-f68.google.com with SMTP id b186so4303744ywc.1
+        for <linux-remoteproc@vger.kernel.org>; Mon, 10 Feb 2020 15:05:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Q5PXlpwVvi6saWkvSQji3GnNIe//3e8V+lTRQXOS/Es=;
+        b=wvXw1Ql4U47cssGBa5B+/tRZizPR+KTJga7oifGQfeIljgVqNyFRBbuBpAVgGDS+CV
+         8dO//dTJGHC3H3VmbTbHA2AorvuL3a9L4zallLsIiTZEjjaozDaRePUr0f8jQi/QSoVB
+         7Qz34RDyHKVOOoVDhDv3jV/yq1oYS4YGtMZDFBophPIJ34DLh+l0aV6Ri/0Wjca7GiWh
+         UafavllHoDLnIuNbHVEMg1ruP4vleNWhgzT0vGfKsbsivu/Asx7u/BkZON0IOXt3hycN
+         WIf8YfrhV8YRvHyqYX8Dqqbrfuw+EulslCzCVqBeNdEo4I+xe28LXGEuBBSJbXpgyHnI
+         wibg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Q5PXlpwVvi6saWkvSQji3GnNIe//3e8V+lTRQXOS/Es=;
+        b=OMhP1P+MTynHoYPzrO8M+MQlofeeKCi27avieQbn6qNISWhGVLXy91U4KiUHVGyOSS
+         lDv+hJMY0SrmM/+YWoXHkdjAJItj7adDpSzlhIyjaAb0HhPrk53lhn0jPT2on7JlZCu4
+         NmEh0SgpYbAooXIS3XsRlpaPYURM2UtZZxFCqH826WKfUPa/20xlBOkmJcdoYoWU9RpX
+         126JgsrV9X0un7iWPr28gVuhLrpDpkHu+WVhXQqL7WQyUpnktVne6AqKDVUNHpjffg2E
+         Bq4CdRUCjl1CC50gp8ZD7tQCQIqti/Mv49J6HMFi6lkerf68WmpTd2F9G2rdKbKZTZoE
+         Pg3g==
+X-Gm-Message-State: APjAAAWcO9UYfY4Ywr9yzh45TSNgyCPvYLAsWYVUnMk3NeGiSVObm+tg
+        ZwMPKq3BthgDMMQAL0wf2QLzIg==
+X-Google-Smtp-Source: APXvYqypoygAH8SSKndH7IUhnMK1woOlF1wvNP+ub43POcE2aD4Va7DiD4+547eOi1gEIopJzS7+UQ==
+X-Received: by 2002:a0d:ed45:: with SMTP id w66mr3164581ywe.183.1581375951475;
+        Mon, 10 Feb 2020 15:05:51 -0800 (PST)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id q16sm935897ywa.110.2020.02.10.15.05.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2020 15:05:51 -0800 (PST)
+Date:   Mon, 10 Feb 2020 16:05:48 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] remoteproc: qcom_q6v5_mss: Don't reassign mpss
+ region on shutdown
+Message-ID: <20200210230548.GA20652@xps15>
+References: <20200204062641.393949-1-bjorn.andersson@linaro.org>
+ <20200204062641.393949-2-bjorn.andersson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200204062641.393949-2-bjorn.andersson@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Now that remoteproc can load an elf64, coredump elf class should be
-the same as the loaded elf class. In order to do that, add a
-elf_class field to rproc with default values. If an elf is loaded
-successfully, these fields will be updated with the loaded elf class.
-Then, the coredump core code has been modified to use the generic elf
-macro in order to create an elf file with correct class.
+Hi Bjorn,
 
-Signed-off-by: Clement Leger <cleger@kalray.eu>
----
- drivers/remoteproc/remoteproc_core.c       | 67 ++++++++++++++++--------------
- drivers/remoteproc/remoteproc_elf_loader.c |  3 ++
- include/linux/remoteproc.h                 |  1 +
- 3 files changed, 39 insertions(+), 32 deletions(-)
+On Mon, Feb 03, 2020 at 10:26:40PM -0800, Bjorn Andersson wrote:
+> Trying to reclaim mpss memory while the mba is not running causes the
+> system to crash on devices with security fuses blown, so leave it
+> assigned to the remote on shutdown and recover it on a subsequent boot.
+> 
+> Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for mem ownership switch")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+> 
+> Changes since v2:
+> - The assignment of mpss memory back to Linux is rejected in the coredump case
+>   on production devices, so check the return value of q6v5_xfer_mem_ownership()
+>   before attempting to memcpy() the data.
+> 
+>  drivers/remoteproc/qcom_q6v5_mss.c | 23 +++++++++++++----------
+>  1 file changed, 13 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+> index 471128a2e723..25c03a26bf88 100644
+> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> @@ -887,11 +887,6 @@ static void q6v5_mba_reclaim(struct q6v5 *qproc)
+>  		writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
+>  	}
+>  
+> -	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
+> -				      false, qproc->mpss_phys,
+> -				      qproc->mpss_size);
+> -	WARN_ON(ret);
+> -
+>  	q6v5_reset_assert(qproc);
+>  
+>  	q6v5_clk_disable(qproc->dev, qproc->reset_clks,
+> @@ -981,6 +976,10 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
+>  			max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
+>  	}
+>  
+> +	/* Try to reset ownership back to Linux */
+> +	q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false,
+> +				qproc->mpss_phys, qproc->mpss_size);
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 9e6d3c6a60ee..ce70656ae150 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -38,6 +38,7 @@
- #include <linux/platform_device.h>
- 
- #include "remoteproc_internal.h"
-+#include "remoteproc_elf_helpers.h"
- 
- #define HIGH_BITS_MASK 0xFFFFFFFF00000000ULL
- 
-@@ -1564,20 +1565,21 @@ EXPORT_SYMBOL(rproc_coredump_add_custom_segment);
- static void rproc_coredump(struct rproc *rproc)
- {
- 	struct rproc_dump_segment *segment;
--	struct elf32_phdr *phdr;
--	struct elf32_hdr *ehdr;
-+	void *phdr;
-+	void *ehdr;
- 	size_t data_size;
- 	size_t offset;
- 	void *data;
- 	void *ptr;
-+	u8 class = rproc->elf_class;
- 	int phnum = 0;
- 
- 	if (list_empty(&rproc->dump_segments))
- 		return;
- 
--	data_size = sizeof(*ehdr);
-+	data_size = elf_size_of_hdr(class);
- 	list_for_each_entry(segment, &rproc->dump_segments, node) {
--		data_size += sizeof(*phdr) + segment->size;
-+		data_size += elf_size_of_phdr(class) + segment->size;
- 
- 		phnum++;
- 	}
-@@ -1588,33 +1590,33 @@ static void rproc_coredump(struct rproc *rproc)
- 
- 	ehdr = data;
- 
--	memset(ehdr, 0, sizeof(*ehdr));
--	memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
--	ehdr->e_ident[EI_CLASS] = ELFCLASS32;
--	ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
--	ehdr->e_ident[EI_VERSION] = EV_CURRENT;
--	ehdr->e_ident[EI_OSABI] = ELFOSABI_NONE;
--	ehdr->e_type = ET_CORE;
--	ehdr->e_machine = EM_NONE;
--	ehdr->e_version = EV_CURRENT;
--	ehdr->e_entry = rproc->bootaddr;
--	ehdr->e_phoff = sizeof(*ehdr);
--	ehdr->e_ehsize = sizeof(*ehdr);
--	ehdr->e_phentsize = sizeof(*phdr);
--	ehdr->e_phnum = phnum;
--
--	phdr = data + ehdr->e_phoff;
--	offset = ehdr->e_phoff + sizeof(*phdr) * ehdr->e_phnum;
-+	memset(ehdr, 0, elf_size_of_hdr(class));
-+	/* e_ident field is common for both elf32 and elf64 */
-+	elf_hdr_init_ident(ehdr, class);
-+
-+	elf_hdr_set_e_type(class, ehdr, ET_CORE);
-+	elf_hdr_set_e_machine(class, ehdr, EM_NONE);
-+	elf_hdr_set_e_version(class, ehdr, EV_CURRENT);
-+	elf_hdr_set_e_entry(class, ehdr, rproc->bootaddr);
-+	elf_hdr_set_e_phoff(class, ehdr, elf_size_of_hdr(class));
-+	elf_hdr_set_e_ehsize(class, ehdr, elf_size_of_hdr(class));
-+	elf_hdr_set_e_phentsize(class, ehdr, elf_size_of_phdr(class));
-+	elf_hdr_set_e_phnum(class, ehdr, phnum);
-+
-+	phdr = data + elf_hdr_get_e_phoff(class, ehdr);
-+	offset = elf_hdr_get_e_phoff(class, ehdr);
-+	offset += elf_size_of_phdr(class) * elf_hdr_get_e_phnum(class, ehdr);
-+
- 	list_for_each_entry(segment, &rproc->dump_segments, node) {
--		memset(phdr, 0, sizeof(*phdr));
--		phdr->p_type = PT_LOAD;
--		phdr->p_offset = offset;
--		phdr->p_vaddr = segment->da;
--		phdr->p_paddr = segment->da;
--		phdr->p_filesz = segment->size;
--		phdr->p_memsz = segment->size;
--		phdr->p_flags = PF_R | PF_W | PF_X;
--		phdr->p_align = 0;
-+		memset(phdr, 0, elf_size_of_phdr(class));
-+		elf_phdr_set_p_type(class, phdr, PT_LOAD);
-+		elf_phdr_set_p_offset(class, phdr, offset);
-+		elf_phdr_set_p_vaddr(class, phdr, segment->da);
-+		elf_phdr_set_p_paddr(class, phdr, segment->da);
-+		elf_phdr_set_p_filesz(class, phdr, segment->size);
-+		elf_phdr_set_p_memsz(class, phdr, segment->size);
-+		elf_phdr_set_p_flags(class, phdr, PF_R | PF_W | PF_X);
-+		elf_phdr_set_p_align(class, phdr, 0);
- 
- 		if (segment->dump) {
- 			segment->dump(rproc, segment, data + offset);
-@@ -1630,8 +1632,8 @@ static void rproc_coredump(struct rproc *rproc)
- 			}
- 		}
- 
--		offset += phdr->p_filesz;
--		phdr++;
-+		offset += elf_phdr_get_p_filesz(class, phdr);
-+		phdr += elf_size_of_phdr(class);
- 	}
- 
- 	dev_coredumpv(&rproc->dev, data, data_size, GFP_KERNEL);
-@@ -2029,6 +2031,7 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
- 	rproc->name = name;
- 	rproc->priv = &rproc[1];
- 	rproc->auto_boot = true;
-+	rproc->elf_class = ELFCLASS32;
- 
- 	device_initialize(&rproc->dev);
- 	rproc->dev.parent = dev;
-diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
-index 2ffb02a2ee36..07712a541ea6 100644
---- a/drivers/remoteproc/remoteproc_elf_loader.c
-+++ b/drivers/remoteproc/remoteproc_elf_loader.c
-@@ -220,6 +220,9 @@ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
- 			memset(ptr + filesz, 0, memsz - filesz);
- 	}
- 
-+	if (ret == 0)
-+		rproc->elf_class = class;
-+
- 	return ret;
- }
- EXPORT_SYMBOL(rproc_elf_load_segments);
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index 82cebca9344c..113e356ce56a 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -514,6 +514,7 @@ struct rproc {
- 	bool auto_boot;
- 	struct list_head dump_segments;
- 	int nb_vdev;
-+	int elf_class;
- };
- 
- /**
--- 
-2.15.0.276.g89ea799
+Would you mind adding more chatter here, something like what is mentioned in the
+changelog?  That way I anyone trying to review this code doesn't have to suffer
+through the same mental gymnastic. 
 
+> +
+>  	mpss_reloc = relocate ? min_addr : qproc->mpss_phys;
+>  	qproc->mpss_reloc = mpss_reloc;
+>  	/* Load firmware segments */
+> @@ -1070,8 +1069,16 @@ static void qcom_q6v5_dump_segment(struct rproc *rproc,
+>  	void *ptr = rproc_da_to_va(rproc, segment->da, segment->size);
+>  
+>  	/* Unlock mba before copying segments */
+> -	if (!qproc->dump_mba_loaded)
+> +	if (!qproc->dump_mba_loaded) {
+>  		ret = q6v5_mba_load(qproc);
+> +		if (!ret) {
+> +			/* Try to reset ownership back to Linux */
+> +			ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
+> +						      false,
+> +						      qproc->mpss_phys,
+> +						      qproc->mpss_size);
+> +		}
+
+I'm a bit puzzled here as to why a different reclaim strategy is needed.  It is
+clear to me that if q6v5_mba_load() returns 0 then the MBA is running and we can
+safely reclaim ownership of the memory.  But is it absolutely needed when we
+know that 1) the MCU has crashed and 2) said memory will be reclaimed in
+q6v5_mpss_load()?
+
+If so I think an explanation in the code is needed.
+
+I also assume there is no way to know if the mba is running, hence not taking
+any chance.  If that's the case it would be nice to add that to the comment in
+q6v5_mpss_load().
+
+Thanks,
+Mathieu
+
+> +	}
+>  
+>  	if (!ptr || ret)
+>  		memset(dest, 0xff, segment->size);
+> @@ -1123,10 +1130,6 @@ static int q6v5_start(struct rproc *rproc)
+>  	return 0;
+>  
+>  reclaim_mpss:
+> -	xfermemop_ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
+> -						false, qproc->mpss_phys,
+> -						qproc->mpss_size);
+> -	WARN_ON(xfermemop_ret);
+>  	q6v5_mba_reclaim(qproc);
+>  
+>  	return ret;
+> -- 
+> 2.23.0
+> 
