@@ -2,111 +2,218 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 510CF159669
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 11 Feb 2020 18:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CA41598E7
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 11 Feb 2020 19:42:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729941AbgBKRmz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 11 Feb 2020 12:42:55 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:34180 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729747AbgBKRmz (ORCPT
+        id S1730579AbgBKSmj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 11 Feb 2020 13:42:39 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:44005 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729326AbgBKSmj (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 11 Feb 2020 12:42:55 -0500
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01BHgTGa007804;
-        Tue, 11 Feb 2020 18:42:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=5FnBHOfltD6Qnn+JdMECbmym6xkAwyRT+poCX9qSXpk=;
- b=EfWDfiF2Z1twdIY3AZEm6D9aTwLRMg+NxwTPBNDzh9vWp/ZdDSc7LC1HbG21PVKhB/qQ
- ii6H9nSA+CxHHtE4GByDod87XtScWCoVevrJGMIg+RayuXku5CoB51L4ytAIScjPfAKW
- 9xxxKsULZgXGJM52FG7tOP4o7r3ymCAHAWZTqDFO47pwCWwq4WTuH5O7aHUs27MKfnG/
- aZ1NMKL5A8pVI5p8vkuW/mHMigdYJybHP0jTWPrq/tJyqTicQiYE2TdQ2uOEPIl3N5O2
- X4mNyuxIzS273RmHF30imWpaVeI2kudBVug3Ge6SSgB0McdShgN00dLY80DLR2jGrvqe Ig== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2y1ufh7pk7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 11 Feb 2020 18:42:44 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 02B3F10002A;
-        Tue, 11 Feb 2020 18:42:40 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E8D322C8E8C;
-        Tue, 11 Feb 2020 18:42:39 +0100 (CET)
-Received: from localhost (10.75.127.44) by SFHDAG3NODE1.st.com (10.75.127.7)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 11 Feb 2020 18:42:39
- +0100
-From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Loic PALLARDY <loic.pallardy@st.com>,
-        <arnaud.pouliquen@st.com>, Suman Anna <s-anna@ti.com>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH v5 3/3] dt-bindings: remoteproc: stm32: add syscon bindings preloaded fw support
-Date:   Tue, 11 Feb 2020 18:42:05 +0100
-Message-ID: <20200211174205.22247-4-arnaud.pouliquen@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200211174205.22247-1-arnaud.pouliquen@st.com>
-References: <20200211174205.22247-1-arnaud.pouliquen@st.com>
+        Tue, 11 Feb 2020 13:42:39 -0500
+Received: by mail-io1-f68.google.com with SMTP id n21so12919299ioo.10
+        for <linux-remoteproc@vger.kernel.org>; Tue, 11 Feb 2020 10:42:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Tb6kXJT2IPt0OzdthJIyzIwD+V8Zde13ETSgdH0IZ40=;
+        b=zQBE1Fk+YV6ZOEET9w+OD3R7NhX3F43AMNwTH3W4y72xDmECkuQrSvqQj5gWLm5NRJ
+         ba61XeL5xmSzXqBz+u4El1iNtDATvmwfAnV7g0MA9asd4/ET4MQCQoQSJq6e8jHRDqBO
+         o/8t16A73pSr813cJ8lHzakkPwNqn7bUKyTI6rhFojrYMzsTsu+SIN8tJXGuh3wR+TpA
+         NMg1g9zy7/Ek+Cw2iF48WNVEsUUSgOcmDeosaUegjmWowtZDxU56TCiwwNsyctpk0DJa
+         fCEAoi4FYx7wMvIBlyFm5VP+S32fy9h9m1COnI8sh305XvseBd6OXIvJBWkWJpiCEpAK
+         6wig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Tb6kXJT2IPt0OzdthJIyzIwD+V8Zde13ETSgdH0IZ40=;
+        b=TPG7QzA/u+lkyt3qaK3ZCLTFDDPqCCz/c7h1mzoGs86fhmMyorhTVFKrg4jf6KMi4E
+         osMotYAeam4ZwBuyKYJ/HSba5WaKLcUXKAOunT572RBqlP11lqTLidV2p1PaanrXSJZM
+         wg83ubVPeWELJTfbZy2S2T64Ef+4kYYB20phm1seu1AucWs8OklN90CzTEAgkadlic2k
+         gz8JcWYlLtrwCLY0sTjeIvYSKFVM0D+Clp1xTvNiChQryyVv3yDtFNtTQc7nzI1qY8ls
+         pDAFD+F+mt1W/KcV+k/TBismN5I3ixK11oVNnIP2h1d5LIPwCZMyZGiCnkGpz2Rc5RSd
+         gblA==
+X-Gm-Message-State: APjAAAXZ3L/i8SlO87r4JiMAoBYhlEH9kl369SAJG1Lhwn3scDTOQTeZ
+        5cYr/jZRrsl+UshOUyrs2O3UEbMlCX3wFVpTn9NEFQ==
+X-Google-Smtp-Source: APXvYqye9IvbqDD5VFHUvUHHYimyx5TYHJqSTs2p4McDlYyzMSbvgCTZJANcgR4hgrFbeGHQEL0LI+OvORy5yN2Z4x0=
+X-Received: by 2002:a02:cc41:: with SMTP id i1mr15412023jaq.71.1581446558643;
+ Tue, 11 Feb 2020 10:42:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG7NODE3.st.com (10.75.127.21) To SFHDAG3NODE1.st.com
- (10.75.127.7)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-11_05:2020-02-10,2020-02-11 signatures=0
+References: <20200204062641.393949-1-bjorn.andersson@linaro.org>
+ <20200204062641.393949-2-bjorn.andersson@linaro.org> <20200210230548.GA20652@xps15>
+ <20200211011601.GD3261042@ripper>
+In-Reply-To: <20200211011601.GD3261042@ripper>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Tue, 11 Feb 2020 11:42:27 -0700
+Message-ID: <CANLsYkzzxW46Kawx2LcDbqD2A_bXXf6bJTkYA7=V37E-3p4Row@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] remoteproc: qcom_q6v5_mss: Don't reassign mpss
+ region on shutdown
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
+        "# 4 . 7" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add the optional syscon property that points to the resource table
-address and the state of the Cortex-M4 firmware loaded by the bootloader.
+On Mon, 10 Feb 2020 at 18:16, Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Mon 10 Feb 15:05 PST 2020, Mathieu Poirier wrote:
+>
+> > Hi Bjorn,
+> >
+> > On Mon, Feb 03, 2020 at 10:26:40PM -0800, Bjorn Andersson wrote:
+> > > Trying to reclaim mpss memory while the mba is not running causes the
+> > > system to crash on devices with security fuses blown, so leave it
+> > > assigned to the remote on shutdown and recover it on a subsequent boot.
+> > >
+> > > Fixes: 6c5a9dc2481b ("remoteproc: qcom: Make secure world call for mem ownership switch")
+> > > Cc: stable@vger.kernel.org
+> > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > > ---
+> > >
+> > > Changes since v2:
+> > > - The assignment of mpss memory back to Linux is rejected in the coredump case
+> > >   on production devices, so check the return value of q6v5_xfer_mem_ownership()
+> > >   before attempting to memcpy() the data.
+> > >
+> > >  drivers/remoteproc/qcom_q6v5_mss.c | 23 +++++++++++++----------
+> > >  1 file changed, 13 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+> > > index 471128a2e723..25c03a26bf88 100644
+> > > --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> > > +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> > > @@ -887,11 +887,6 @@ static void q6v5_mba_reclaim(struct q6v5 *qproc)
+> > >             writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
+> > >     }
+> > >
+> > > -   ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
+> > > -                                 false, qproc->mpss_phys,
+> > > -                                 qproc->mpss_size);
+> > > -   WARN_ON(ret);
+> > > -
+> > >     q6v5_reset_assert(qproc);
+> > >
+> > >     q6v5_clk_disable(qproc->dev, qproc->reset_clks,
+> > > @@ -981,6 +976,10 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
+> > >                     max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
+> > >     }
+> > >
+> > > +   /* Try to reset ownership back to Linux */
+> > > +   q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false,
+> > > +                           qproc->mpss_phys, qproc->mpss_size);
+> >
+> > Would you mind adding more chatter here, something like what is mentioned in the
+> > changelog?  That way I anyone trying to review this code doesn't have to suffer
+> > through the same mental gymnastic.
+> >
+>
+> Sure thing, as this patch shows this dynamic wasn't clear - and this
+> patch is based on my observations. With it we no longer crash the entire
+> system by hitting a security violation during a crash, but there's still
+> some details that I'm uncertain about.
+>
+> > > +
+> > >     mpss_reloc = relocate ? min_addr : qproc->mpss_phys;
+> > >     qproc->mpss_reloc = mpss_reloc;
+> > >     /* Load firmware segments */
+> > > @@ -1070,8 +1069,16 @@ static void qcom_q6v5_dump_segment(struct rproc *rproc,
+> > >     void *ptr = rproc_da_to_va(rproc, segment->da, segment->size);
+> > >
+> > >     /* Unlock mba before copying segments */
+> > > -   if (!qproc->dump_mba_loaded)
+> > > +   if (!qproc->dump_mba_loaded) {
+> > >             ret = q6v5_mba_load(qproc);
+> > > +           if (!ret) {
+> > > +                   /* Try to reset ownership back to Linux */
+> > > +                   ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
+> > > +                                                 false,
+> > > +                                                 qproc->mpss_phys,
+> > > +                                                 qproc->mpss_size);
+> > > +           }
+> >
+> > I'm a bit puzzled here as to why a different reclaim strategy is needed.  It is
+> > clear to me that if q6v5_mba_load() returns 0 then the MBA is running and we can
+> > safely reclaim ownership of the memory.  But is it absolutely needed when we
+> > know that 1) the MCU has crashed and 2) said memory will be reclaimed in
+> > q6v5_mpss_load()?
+> >
+>
+> The ownership transfer here is a jump into secure world, which somehow
+> together with the firmware running on the modem processor will update
+> the access permissions for the mpss memory region.
+>
+> As we enter this function the recovery handling in the core has just
+> stopped the remote processor, so we know it's off. As such we must first
+> boot the remote processor again, in order to reclaim the access to the
+> mpss memory region.
+>
+> New in this revision is the fact that this operation might actually be
+> rejected (e.g. on end-user hardware).
+>
+> So we need to guard the memcpy below on either of these cases, as unless
+> we've successfully booted the modem processor and gotten permission to
+> read the mpss memory this operation will trigger a security violation
+> and the device will reboot.
+>
+> > If so I think an explanation in the code is needed.
+> >
+>
+> Makes sense, I will formulate above explanation into a comment. As well
+> as review the other callers of q6v5_xfer_mem_ownership().
+>
+> > I also assume there is no way to know if the mba is running, hence not taking
+> > any chance.  If that's the case it would be nice to add that to the comment in
+> > q6v5_mpss_load().
+> >
+>
+> We know that we enter q6v5_mpss_load() with the modem processor just
+> booted, but the memory assignment is there to handle the case where the
+> mpss memory region for some reason was left in the hands on the modem.
+> I will have to do some more digging to figure out if this is a valid
+> scenario or not.
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
----
- .../bindings/remoteproc/st,stm32-rproc.yaml   | 21 +++++++++++++++++++
- 1 file changed, 21 insertions(+)
+I'm really happy that you're also not sure about this patch... I spent
+hours (no joke) trying to figure out the workflow and logic of using
+q6v5_xfer_mem_ownership() and even then I'm ambivalent...  Carefully
+understanding and documenting the scenarios we trying to handle will
+go a long way in terms of future stability of the system.
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-index c0d83865e933..3947ddaca891 100644
---- a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc.yaml
-@@ -46,6 +46,27 @@ properties:
-       - The field mask of the RCC trust zone mode.
-     maxItems: 1
- 
-+  st,syscfg-copro-state:
-+    allOf:
-+      - $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+    description:
-+      Reference to the system configuration which returns the coprocessor state.
-+      - Phandle of syscon block.
-+      - The offset containing the coprocessor state.
-+      - The field mask of bitmask for the coprocessor state.
-+    maxItems: 1
-+
-+  st,syscfg-rsc-tbl:
-+    allOf:
-+      - $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+    description:
-+      Reference to the system configuration controlling the
-+      resource table address loaded by the bootloader
-+      - Phandle to syscon block.
-+      - The offset of the register containing the resource table address.
-+      - The field mask for the resource table address.
-+    maxItems: 1
-+
-   interrupts:
-     description: Should contain the WWDG1 watchdog reset interrupt
-     maxItems: 1
--- 
-2.17.1
-
+>
+> Thanks for your review Mathieu!
+>
+> Regards,
+> Bjorn
+>
+> > Thanks,
+> > Mathieu
+> >
+> > > +   }
+> > >
+> > >     if (!ptr || ret)
+> > >             memset(dest, 0xff, segment->size);
+> > > @@ -1123,10 +1130,6 @@ static int q6v5_start(struct rproc *rproc)
+> > >     return 0;
+> > >
+> > >  reclaim_mpss:
+> > > -   xfermemop_ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm,
+> > > -                                           false, qproc->mpss_phys,
+> > > -                                           qproc->mpss_size);
+> > > -   WARN_ON(xfermemop_ret);
+> > >     q6v5_mba_reclaim(qproc);
+> > >
+> > >     return ret;
+> > > --
+> > > 2.23.0
+> > >
