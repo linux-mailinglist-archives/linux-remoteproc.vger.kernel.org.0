@@ -2,420 +2,407 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E0C1594DB
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 11 Feb 2020 17:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EED86159525
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 11 Feb 2020 17:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730279AbgBKQZl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 11 Feb 2020 11:25:41 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:49850 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730009AbgBKQZk (ORCPT
+        id S1730145AbgBKQj0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 11 Feb 2020 11:39:26 -0500
+Received: from zimbra2.kalray.eu ([92.103.151.219]:45940 "EHLO
+        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728049AbgBKQj0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 11 Feb 2020 11:25:40 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01BGPbrP048453;
-        Tue, 11 Feb 2020 10:25:37 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1581438337;
-        bh=uPyutyQcwVZgqBZYo8e/CGfyIz1+gBQ6R+oTlJOVyZY=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=b40OUcc1+QDOUm5SEOosY1AgOMmene2mnGV+9ignvF/jjECKpSbWpDJRaU2xeFRw+
-         zdByCAQmvVN8yv8QzM9Rc0qnfVakWEUxZPlzRV8LOlTgUQ0I6Cli3FKUankfor6kv3
-         0trfIbT4lXzuTjw1wjqxPfS1oBgO218x0rXVCFhs=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01BGPb86067866
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 11 Feb 2020 10:25:37 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 11
- Feb 2020 10:25:37 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 11 Feb 2020 10:25:36 -0600
-Received: from [10.250.73.201] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01BGPZqI029716;
-        Tue, 11 Feb 2020 10:25:36 -0600
-Subject: Re: [PATCHv6 RESEND 01/14] dt-bindings: remoteproc: Add OMAP
- remoteproc bindings
-To:     Tero Kristo <t-kristo@ti.com>, <bjorn.andersson@linaro.org>,
-        <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
-        <linux-omap@vger.kernel.org>, Suman Anna <s-anna@ti.com>,
-        Rob Herring <robh@kernel.org>, <devicetree@vger.kernel.org>
-References: <20200211152125.23819-2-t-kristo@ti.com>
- <20200211153313.24072-1-t-kristo@ti.com>
-From:   "Andrew F. Davis" <afd@ti.com>
-Message-ID: <906a74f9-6728-abb5-f475-ca3ab5c45eff@ti.com>
-Date:   Tue, 11 Feb 2020 11:25:35 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 11 Feb 2020 11:39:26 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 1106B27E03A0;
+        Tue, 11 Feb 2020 17:39:23 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id x5g-CL3ZOOOs; Tue, 11 Feb 2020 17:39:22 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 3B38227E1003;
+        Tue, 11 Feb 2020 17:39:22 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 3B38227E1003
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1581439162;
+        bh=8/HJBOOSglzCp3HuPAJfL4hVUnBGD/cVbGlSIGBH1CE=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=CeMaUaM2PpTqglaFJW0OQBKWUDhJqCRb0aCthjAd0iqU3gzh+C6Nz7lxk74XXUAgG
+         SZ7ck1Z6md4fW4hMY6LSV1gq1Mu21JE927hjphQr949o7ia9A+217qLAebO8kGzVDq
+         OdzRpviVw9dglWJuB38eY5Pb10J9tGW4RnxbgTk4=
+X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Td__kMPthJ66; Tue, 11 Feb 2020 17:39:22 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 1CEA627E03A0;
+        Tue, 11 Feb 2020 17:39:22 +0100 (CET)
+Date:   Tue, 11 Feb 2020 17:39:21 +0100 (CET)
+From:   =?utf-8?Q?Cl=C3=A9ment?= Leger <cleger@kalray.eu>
+To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        linux-doc <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Loic PALLARDY <loic.pallardy@st.com>, s-anna <s-anna@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Message-ID: <884697376.3644142.1581439161953.JavaMail.zimbra@kalray.eu>
+In-Reply-To: <4465bade-e3de-88b8-63a5-e5410de9adc0@st.com>
+References: <527785289.2852303.1581062223707.JavaMail.zimbra@kalray.eu> <20200210162209.23149-1-cleger@kalray.eu> <20200210162209.23149-2-cleger@kalray.eu> <4465bade-e3de-88b8-63a5-e5410de9adc0@st.com>
+Subject: Re: [PATCH v4 1/5] remoteproc: Use u64 len for da_to_va
 MIME-Version: 1.0
-In-Reply-To: <20200211153313.24072-1-t-kristo@ti.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Originating-IP: [192.168.40.202]
+X-Mailer: Zimbra 8.8.15_GA_3895 (ZimbraWebClient - GC75 (Linux)/8.8.15_GA_3895)
+Thread-Topic: remoteproc: Use u64 len for da_to_va
+Thread-Index: /D6a0TgT7qxVtvc7mnAdJNBR4bQtYw==
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 2/11/20 10:33 AM, Tero Kristo wrote:
-> From: Suman Anna <s-anna@ti.com>
-> 
-> Add the device tree bindings document for the IPU and DSP
-> remote processor devices on OMAP4+ SoCs.
-> 
-> Cc: Rob Herring <robh@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> [t-kristo@ti.com: converted to schema]
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> ---
-> Quick resend. Missed adding Rob+DT list in CC, git is too clever to get rid of
-> CC fields automatically...
-> 
-> v6: made memory-regions property optional
-> 
+Hi Arnaud,
 
+----- On 11 Feb, 2020, at 16:53, Arnaud Pouliquen arnaud.pouliquen@st.com w=
+rote:
 
-Thanks for that, should make this more future proof. For this and the
-rest of the series:
+> On 2/10/20 5:22 PM, Clement Leger wrote:
+>> With upcoming changes in elf loader for elf64 support, section size will
+>> be a u64. When used with da_to_va, this will potentially lead to
+>> overflow if using the current "int" type for len argument. Change
+>> da_to_va prototype to use a u64 for len and fix all users of this
+>> function.
+>>=20
+>> Signed-off-by: Clement Leger <cleger@kalray.eu>
+>> ---
+>>  drivers/remoteproc/imx_rproc.c           | 11 ++++++-----
+>>  drivers/remoteproc/keystone_remoteproc.c |  4 ++--
+>>  drivers/remoteproc/qcom_q6v5_adsp.c      |  2 +-
+>>  drivers/remoteproc/qcom_q6v5_mss.c       |  2 +-
+>>  drivers/remoteproc/qcom_q6v5_pas.c       |  2 +-
+>>  drivers/remoteproc/qcom_q6v5_wcss.c      |  2 +-
+>>  drivers/remoteproc/qcom_wcnss.c          |  2 +-
+>>  drivers/remoteproc/remoteproc_core.c     |  2 +-
+>>  drivers/remoteproc/remoteproc_internal.h |  2 +-
+>>  drivers/remoteproc/st_slim_rproc.c       |  4 ++--
+>>  drivers/remoteproc/wkup_m3_rproc.c       |  4 ++--
+>>  include/linux/remoteproc.h               |  2 +-
+>>  12 files changed, 20 insertions(+), 19 deletions(-)
+>>=20
+>> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rpr=
+oc.c
+>> index 3e72b6f38d4b..f497f5b49b18 100644
+>> --- a/drivers/remoteproc/imx_rproc.c
+>> +++ b/drivers/remoteproc/imx_rproc.c
+>> @@ -186,7 +186,7 @@ static int imx_rproc_stop(struct rproc *rproc)
+>>  }
+>> =20
+>>  static int imx_rproc_da_to_sys(struct imx_rproc *priv, u64 da,
+>> -=09=09=09       int len, u64 *sys)
+>> +=09=09=09       u64 len, u64 *sys)
+>>  {
+>>  =09const struct imx_rproc_dcfg *dcfg =3D priv->dcfg;
+>>  =09int i;
+>> @@ -203,19 +203,19 @@ static int imx_rproc_da_to_sys(struct imx_rproc *p=
+riv, u64
+>> da,
+>>  =09=09}
+>>  =09}
+>> =20
+>> -=09dev_warn(priv->dev, "Translation failed: da =3D 0x%llx len =3D 0x%x\=
+n",
+>> +=09dev_warn(priv->dev, "Translation failed: da =3D 0x%llx len =3D 0x%ll=
+x\n",
+>>  =09=09 da, len);
+>>  =09return -ENOENT;
+>>  }
+>> =20
+>> -static void *imx_rproc_da_to_va(struct rproc *rproc, u64 da, int len)
+>> +static void *imx_rproc_da_to_va(struct rproc *rproc, u64 da, u64 len)
+>>  {
+>>  =09struct imx_rproc *priv =3D rproc->priv;
+>>  =09void *va =3D NULL;
+>>  =09u64 sys;
+>>  =09int i;
+>> =20
+>> -=09if (len <=3D 0)
+>> +=09if (len =3D=3D 0)
+>>  =09=09return NULL;
+>> =20
+>>  =09/*
+>> @@ -235,7 +235,8 @@ static void *imx_rproc_da_to_va(struct rproc *rproc,=
+ u64 da,
+>> int len)
+>>  =09=09}
+>>  =09}
+>> =20
+>> -=09dev_dbg(&rproc->dev, "da =3D 0x%llx len =3D 0x%x va =3D 0x%p\n", da,=
+ len, va);
+>> +=09dev_dbg(&rproc->dev, "da =3D 0x%llx len =3D 0x%llx va =3D 0x%p\n",
+>> +=09=09da, len, va);
+>> =20
+>>  =09return va;
+>>  }
+>> diff --git a/drivers/remoteproc/keystone_remoteproc.c
+>> b/drivers/remoteproc/keystone_remoteproc.c
+>> index 5c4658f00b3d..466093f48814 100644
+>> --- a/drivers/remoteproc/keystone_remoteproc.c
+>> +++ b/drivers/remoteproc/keystone_remoteproc.c
+>> @@ -246,7 +246,7 @@ static void keystone_rproc_kick(struct rproc *rproc,=
+ int
+>> vqid)
+>>   * can be used either by the remoteproc core for loading (when using ke=
+rnel
+>>   * remoteproc loader), or by any rpmsg bus drivers.
+>>   */
+>> -static void *keystone_rproc_da_to_va(struct rproc *rproc, u64 da, int l=
+en)
+>> +static void *keystone_rproc_da_to_va(struct rproc *rproc, u64 da, u64 l=
+en)
+>>  {
+>>  =09struct keystone_rproc *ksproc =3D rproc->priv;
+>>  =09void __iomem *va =3D NULL;
+>> @@ -255,7 +255,7 @@ static void *keystone_rproc_da_to_va(struct rproc *r=
+proc,
+>> u64 da, int len)
+>>  =09size_t size;
+>>  =09int i;
+>> =20
+>> -=09if (len <=3D 0)
+>> +=09if (len =3D=3D 0)
+>>  =09=09return NULL;
+>> =20
+>>  =09for (i =3D 0; i < ksproc->num_mems; i++) {
+>> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c
+>> b/drivers/remoteproc/qcom_q6v5_adsp.c
+>> index e953886b2eb7..7518e67a49e5 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+>> @@ -270,7 +270,7 @@ static int adsp_stop(struct rproc *rproc)
+>>  =09return ret;
+>>  }
+>> =20
+>> -static void *adsp_da_to_va(struct rproc *rproc, u64 da, int len)
+>> +static void *adsp_da_to_va(struct rproc *rproc, u64 da, u64 len)
+>>  {
+>>  =09struct qcom_adsp *adsp =3D (struct qcom_adsp *)rproc->priv;
+>>  =09int offset;
+>> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c
+>> b/drivers/remoteproc/qcom_q6v5_mss.c
+>> index 471128a2e723..248febde6fc1 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+>> @@ -1148,7 +1148,7 @@ static int q6v5_stop(struct rproc *rproc)
+>>  =09return 0;
+>>  }
+>> =20
+>> -static void *q6v5_da_to_va(struct rproc *rproc, u64 da, int len)
+>> +static void *q6v5_da_to_va(struct rproc *rproc, u64 da, u64 len)
+>>  {
+>>  =09struct q6v5 *qproc =3D rproc->priv;
+>>  =09int offset;
+>> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c
+>> b/drivers/remoteproc/qcom_q6v5_pas.c
+>> index db4b3c4bacd7..cf2cd609c90d 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+>> @@ -159,7 +159,7 @@ static int adsp_stop(struct rproc *rproc)
+>>  =09return ret;
+>>  }
+>> =20
+>> -static void *adsp_da_to_va(struct rproc *rproc, u64 da, int len)
+>> +static void *adsp_da_to_va(struct rproc *rproc, u64 da, u64 len)
+>>  {
+>>  =09struct qcom_adsp *adsp =3D (struct qcom_adsp *)rproc->priv;
+>>  =09int offset;
+>> diff --git a/drivers/remoteproc/qcom_q6v5_wcss.c
+>> b/drivers/remoteproc/qcom_q6v5_wcss.c
+>> index f93e1e4a1cc0..3a6b82a16961 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_wcss.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_wcss.c
+>> @@ -406,7 +406,7 @@ static int q6v5_wcss_stop(struct rproc *rproc)
+>>  =09return 0;
+>>  }
+>> =20
+>> -static void *q6v5_wcss_da_to_va(struct rproc *rproc, u64 da, int len)
+>> +static void *q6v5_wcss_da_to_va(struct rproc *rproc, u64 da, u64 len)
+>>  {
+>>  =09struct q6v5_wcss *wcss =3D rproc->priv;
+>>  =09int offset;
+>> diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_w=
+cnss.c
+>> index dc135754bb9c..f893219e45a8 100644
+>> --- a/drivers/remoteproc/qcom_wcnss.c
+>> +++ b/drivers/remoteproc/qcom_wcnss.c
+>> @@ -287,7 +287,7 @@ static int wcnss_stop(struct rproc *rproc)
+>>  =09return ret;
+>>  }
+>> =20
+>> -static void *wcnss_da_to_va(struct rproc *rproc, u64 da, int len)
+>> +static void *wcnss_da_to_va(struct rproc *rproc, u64 da, u64 len)
+>>  {
+>>  =09struct qcom_wcnss *wcnss =3D (struct qcom_wcnss *)rproc->priv;
+>>  =09int offset;
+>> diff --git a/drivers/remoteproc/remoteproc_core.c
+>> b/drivers/remoteproc/remoteproc_core.c
+>> index 307df98347ba..9e6d3c6a60ee 100644
+>> --- a/drivers/remoteproc/remoteproc_core.c
+>> +++ b/drivers/remoteproc/remoteproc_core.c
+>> @@ -185,7 +185,7 @@ EXPORT_SYMBOL(rproc_va_to_pa);
+>>   * here the output of the DMA API for the carveouts, which should be mo=
+re
+>>   * correct.
+>>   */
+>> -void *rproc_da_to_va(struct rproc *rproc, u64 da, int len)
+>> +void *rproc_da_to_va(struct rproc *rproc, u64 da, u64 len)
+>=20
+> This function is exported, don't see any update in consequence...
+> references:
+> https://elixir.bootlin.com/linux/v5.6-rc1/ident/rproc_da_to_va
+> For instance the function rproc_trace_read use it. it quite strange that =
+my gcc
+> does not warns for the cast but i suppose that some could.
 
-Acked-by: Andrew F. Davis <afd@ti.com>
+Agreed, even if len should never have been a signed type since it can't be
+negative. I will try to fix all callers.
 
+> An indirect consequence is that the len field in rproc_mem_entry struct s=
+hould
+> probably been updated to u64 to be aligned.
 
->  .../remoteproc/ti,omap-remoteproc.yaml        | 321 ++++++++++++++++++
->  1 file changed, 321 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> new file mode 100644
-> index 000000000000..6ad5de899911
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml
-> @@ -0,0 +1,321 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/ti,omap-remoteproc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: OMAP4+ Remoteproc Devices
-> +
-> +maintainers:
-> +  - Suman Anna <s-anna@ti.com>
-> +
-> +description:
-> +  The OMAP family of SoCs usually have one or more slave processor sub-systems
-> +  that are used to offload some of the processor-intensive tasks, or to manage
-> +  other hardware accelerators, for achieving various system level goals.
-> +
-> +  The processor cores in the sub-system are usually behind an IOMMU, and may
-> +  contain additional sub-modules like Internal RAM and/or ROMs, L1 and/or L2
-> +  caches, an Interrupt Controller, a Cache Controller etc.
-> +
-> +  The OMAP SoCs usually have a DSP processor sub-system and/or an IPU processor
-> +  sub-system. The DSP processor sub-system can contain any of the TI's C64x,
-> +  C66x or C67x family of DSP cores as the main execution unit. The IPU processor
-> +  sub-system usually contains either a Dual-Core Cortex-M3 or Dual-Core
-> +  Cortex-M4 processors.
-> +
-> +  Each remote processor sub-system is represented as a single DT node. Each node
-> +  has a number of required or optional properties that enable the OS running on
-> +  the host processor (MPU) to perform the device management of the remote
-> +  processor and to communicate with the remote processor. The various properties
-> +  can be classified as constant or variable. The constant properties are
-> +  dictated by the SoC and does not change from one board to another having the
-> +  same SoC. Examples of constant properties include 'iommus', 'reg'. The
-> +  variable properties are dictated by the system integration aspects such as
-> +  memory on the board, or configuration used within the corresponding firmware
-> +  image. Examples of variable properties include 'mboxes', 'memory-region',
-> +  'timers', 'watchdog-timers' etc.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - ti,omap4-dsp
-> +      - ti,omap5-dsp
-> +      - ti,dra7-dsp
-> +      - ti,omap4-ipu
-> +      - ti,omap5-ipu
-> +      - ti,dra7-ipu
-> +
-> +  iommus:
-> +    minItems: 1
-> +    maxItems: 2
-> +    description: |
-> +      phandles to OMAP IOMMU nodes, that need to be programmed
-> +      for this remote processor to access any external RAM memory or
-> +      other peripheral device address spaces. This property usually
-> +      has only a single phandle. Multiple phandles are used only in
-> +      cases where the sub-system has different ports for different
-> +      sub-modules within the processor sub-system (eg: DRA7 DSPs),
-> +      and need the same programming in both the MMUs.
-> +
-> +  mboxes:
-> +    minItems: 1
-> +    maxItems: 2
-> +    description: |
-> +      OMAP Mailbox specifier denoting the sub-mailbox, to be used for
-> +      communication with the remote processor. The specifier format is
-> +      as per the bindings,
-> +      Documentation/devicetree/bindings/mailbox/omap-mailbox.txt
-> +      This property should match with the sub-mailbox node used in
-> +      the firmware image.
-> +
-> +  clocks:
-> +    description: |
-> +      Main functional clock for the remote processor
-> +
-> +  resets:
-> +    description: |
-> +      Reset handles for the remote processor
-> +
-> +  firmware-name:
-> +    description: |
-> +      Default name of the firmware to load to the remote processor.
-> +
-> +# Optional properties:
-> +# --------------------
-> +# Some of these properties are mandatory on some SoCs, and some are optional
-> +# depending on the configuration of the firmware image to be executed on the
-> +# remote processor. The conditions are mentioned for each property.
-> +#
-> +# The following are the optional properties:
-> +
-> +  memory-region:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: |
-> +      phandle to the reserved memory node to be associated
-> +      with the remoteproc device. The reserved memory node
-> +      can be a CMA memory node, and should be defined as
-> +      per the bindings,
-> +      Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt
-> +
-> +  reg:
-> +    description: |
-> +      Address space for any remoteproc memories present on
-> +      the SoC. Should contain an entry for each value in
-> +      'reg-names'. These are mandatory for all DSP and IPU
-> +      processors that have them (OMAP4/OMAP5 DSPs do not have
-> +      any RAMs)
-> +
-> +  reg-names:
-> +    description: |
-> +      Required names for each of the address spaces defined in
-> +      the 'reg' property. Expects the names from the following
-> +      list, in the specified order, each representing the corresponding
-> +      internal RAM memory region.
-> +    minItems: 1
-> +    maxItems: 3
-> +    items:
-> +      - const: l2ram
-> +      - const: l1pram
-> +      - const: l1dram
-> +
-> +  ti,bootreg:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: |
-> +      Should be a triple of the phandle to the System Control
-> +      Configuration region that contains the boot address
-> +      register, the register offset of the boot address
-> +      register within the System Control module, and the bit
-> +      shift within the register. This property is required for
-> +      all the DSP instances on OMAP4, OMAP5 and DRA7xx SoCs.
-> +
-> +  ti,autosuspend-delay-ms:
-> +    description: |
-> +      Custom autosuspend delay for the remoteproc in milliseconds.
-> +
-> +  ti,timers:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: |
-> +      One or more phandles to OMAP DMTimer nodes, that serve
-> +      as System/Tick timers for the OS running on the remote
-> +      processors. This will usually be a single timer if the
-> +      processor sub-system is running in SMP mode, or one per
-> +      core in the processor sub-system. This can also be used
-> +      to reserve specific timers to be dedicated to the
-> +      remote processors.
-> +
-> +      This property is mandatory on remote processors requiring
-> +      external tick wakeup, and to support Power Management
-> +      features. The timers to be used should match with the
-> +      timers used in the firmware image.
-> +
-> +  ti,watchdog-timers:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: |
-> +      One or more phandles to OMAP DMTimer nodes, used to
-> +      serve as Watchdog timers for the processor cores. This
-> +      will usually be one per executing processor core, even
-> +      if the processor sub-system is running a SMP OS.
-> +
-> +      The timers to be used should match with the watchdog
-> +      timers used in the firmware image.
-> +
-> +if:
-> +  properties:
-> +    compatible:
-> +      enum:
-> +        - ti,dra7-dsp
-> +then:
-> +  properties:
-> +    reg:
-> +      minItems: 3
-> +      maxItems: 3
-> +  required:
-> +    - reg
-> +    - reg-names
-> +    - ti,bootreg
-> +
-> +else:
-> +  if:
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - ti,omap4-ipu
-> +          - ti,omap5-ipu
-> +          - ti,dra7-ipu
-> +  then:
-> +    properties:
-> +      reg:
-> +        minItems: 1
-> +        maxItems: 1
-> +      ti,bootreg: false
-> +    required:
-> +      - reg
-> +      - reg-names
-> +
-> +  else:
-> +    properties:
-> +      reg: false
-> +    required:
-> +      - ti,bootreg
-> +
-> +required:
-> +  - compatible
-> +  - iommus
-> +  - mboxes
-> +  - clocks
-> +  - resets
-> +  - firmware-name
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +
-> +    //Example 1: OMAP4 DSP
-> +
-> +    /* DSP Reserved Memory node */
-> +    #include <dt-bindings/clock/omap4.h>
-> +    reserved-memory {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        dsp_memory_region: dsp-memory@98000000 {
-> +            compatible = "shared-dma-pool";
-> +            reg = <0x98000000 0x800000>;
-> +            reusable;
-> +        };
-> +    };
-> +
-> +    /* DSP node */
-> +    ocp {
-> +        dsp: dsp {
-> +            compatible = "ti,omap4-dsp";
-> +            ti,bootreg = <&scm_conf 0x304 0>;
-> +            iommus = <&mmu_dsp>;
-> +            mboxes = <&mailbox &mbox_dsp>;
-> +            memory-region = <&dsp_memory_region>;
-> +            ti,timers = <&timer5>;
-> +            ti,watchdog-timers = <&timer6>;
-> +            clocks = <&tesla_clkctrl OMAP4_DSP_CLKCTRL 0>;
-> +            resets = <&prm_tesla 0>, <&prm_tesla 1>;
-> +            firmware-name = "omap4-dsp-fw.xe64T";
-> +        };
-> +    };
-> +
-> +  - |+
-> +
-> +    //Example 2: OMAP5 IPU
-> +
-> +    /* IPU Reserved Memory node */
-> +    #include <dt-bindings/clock/omap5.h>
-> +    reserved-memory {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        ipu_memory_region: ipu-memory@95800000 {
-> +            compatible = "shared-dma-pool";
-> +            reg = <0 0x95800000 0 0x3800000>;
-> +            reusable;
-> +        };
-> +    };
-> +
-> +    /* IPU node */
-> +    ocp {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        ipu: ipu@55020000 {
-> +            compatible = "ti,omap5-ipu";
-> +            reg = <0x55020000 0x10000>;
-> +            reg-names = "l2ram";
-> +            iommus = <&mmu_ipu>;
-> +            mboxes = <&mailbox &mbox_ipu>;
-> +            memory-region = <&ipu_memory_region>;
-> +            ti,timers = <&timer3>, <&timer4>;
-> +            ti,watchdog-timers = <&timer9>, <&timer11>;
-> +            clocks = <&ipu_clkctrl OMAP5_MMU_IPU_CLKCTRL 0>;
-> +            resets = <&prm_core 2>;
-> +            firmware-name = "omap5-ipu-fw.xem";
-> +        };
-> +    };
-> +
-> +  - |+
-> +
-> +    //Example 3: DRA7xx/AM57xx DSP
-> +
-> +    /* DSP1 Reserved Memory node */
-> +    #include <dt-bindings/clock/dra7.h>
-> +    reserved-memory {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        dsp1_memory_region: dsp1-memory@99000000 {
-> +            compatible = "shared-dma-pool";
-> +            reg = <0x0 0x99000000 0x0 0x4000000>;
-> +            reusable;
-> +        };
-> +    };
-> +
-> +    /* DSP1 node */
-> +    ocp {
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +
-> +        dsp1: dsp@40800000 {
-> +            compatible = "ti,dra7-dsp";
-> +            reg = <0x40800000 0x48000>,
-> +                  <0x40e00000 0x8000>,
-> +                  <0x40f00000 0x8000>;
-> +            reg-names = "l2ram", "l1pram", "l1dram";
-> +            ti,bootreg = <&scm_conf 0x55c 0>;
-> +            iommus = <&mmu0_dsp1>, <&mmu1_dsp1>;
-> +            mboxes = <&mailbox5 &mbox_dsp1_ipc3x>;
-> +            memory-region = <&dsp1_memory_region>;
-> +            ti,timers = <&timer5>;
-> +            ti,watchdog-timers = <&timer10>;
-> +            resets = <&prm_dsp1 0>;
-> +            clocks = <&dsp1_clkctrl DRA7_DSP1_MMU0_DSP1_CLKCTRL 0>;
-> +            firmware-name = "dra7-dsp1-fw.xe66";
-> +        };
-> +    };
-> 
+Ok, I will do that once we settle on the type of len.
+
+>=20
+> I'm still wondering about the use of size_t instead,which seems more rati=
+onal
+> from my window.
+> So i you or Mathieu remember it was decided to use u64, please could remi=
+nd me
+> the arguments?
+
+I tried to find the notes of a meeting we had for OpenAMP but I did not fou=
+nd
+them. Anyway, the argument was coming from Tomas or someone else, (I can't
+remember) talking about a 32 bits CPU executing code on a 64 bits accelerat=
+or.
+In that case, the size_t type could fail due to being only 32bits on the ho=
+st
+CPU but larger than 4G.
+
+However, I can't say if it's a real usecase or not... All I can say is
+that keeping it open is probably better if one day somebody comes with such
+architecture.
+
+> As an alternative a check should be added for 32 bits processors to ensur=
+e that
+> the size is not higher than
+> its address range capability...
+
+Agreed.
+I was even thinking about a mecanism for remoteproc drivers to declare the =
+type
+of supported elfs files (such as EM_*, ELFCLASS* and other needed thing).
+Or should it be supported by overriding .sanity_check in drivers  to reject
+elf64 for instance ?
+
+Since elf is a "specific format" and that rproc can support other formats,
+I did not want to add a specific elf_sanity_check field to rproc ops.
+
+Regards,
+
+Cl=C3=A9ment
+
+>=20
+> Regards
+> Arnaud
+>=20
+>>  {
+>>  =09struct rproc_mem_entry *carveout;
+>>  =09void *ptr =3D NULL;
+>> diff --git a/drivers/remoteproc/remoteproc_internal.h
+>> b/drivers/remoteproc/remoteproc_internal.h
+>> index 493ef9262411..004867061721 100644
+>> --- a/drivers/remoteproc/remoteproc_internal.h
+>> +++ b/drivers/remoteproc/remoteproc_internal.h
+>> @@ -50,7 +50,7 @@ void rproc_exit_sysfs(void);
+>>  void rproc_free_vring(struct rproc_vring *rvring);
+>>  int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
+>> =20
+>> -void *rproc_da_to_va(struct rproc *rproc, u64 da, int len);
+>> +void *rproc_da_to_va(struct rproc *rproc, u64 da, u64 len);
+>>  phys_addr_t rproc_va_to_pa(void *cpu_addr);
+>>  int rproc_trigger_recovery(struct rproc *rproc);
+>> =20
+>> diff --git a/drivers/remoteproc/st_slim_rproc.c
+>> b/drivers/remoteproc/st_slim_rproc.c
+>> index 04492fead3c8..fc01cd879b60 100644
+>> --- a/drivers/remoteproc/st_slim_rproc.c
+>> +++ b/drivers/remoteproc/st_slim_rproc.c
+>> @@ -174,7 +174,7 @@ static int slim_rproc_stop(struct rproc *rproc)
+>>  =09return 0;
+>>  }
+>> =20
+>> -static void *slim_rproc_da_to_va(struct rproc *rproc, u64 da, int len)
+>> +static void *slim_rproc_da_to_va(struct rproc *rproc, u64 da, u64 len)
+>>  {
+>>  =09struct st_slim_rproc *slim_rproc =3D rproc->priv;
+>>  =09void *va =3D NULL;
+>> @@ -191,7 +191,7 @@ static void *slim_rproc_da_to_va(struct rproc *rproc=
+, u64
+>> da, int len)
+>>  =09=09}
+>>  =09}
+>> =20
+>> -=09dev_dbg(&rproc->dev, "da =3D 0x%llx len =3D 0x%x va =3D 0x%pK\n",
+>> +=09dev_dbg(&rproc->dev, "da =3D 0x%llx len =3D 0x%llx va =3D 0x%pK\n",
+>>  =09=09da, len, va);
+>> =20
+>>  =09return va;
+>> diff --git a/drivers/remoteproc/wkup_m3_rproc.c
+>> b/drivers/remoteproc/wkup_m3_rproc.c
+>> index 3984e585c847..91485b467407 100644
+>> --- a/drivers/remoteproc/wkup_m3_rproc.c
+>> +++ b/drivers/remoteproc/wkup_m3_rproc.c
+>> @@ -80,14 +80,14 @@ static int wkup_m3_rproc_stop(struct rproc *rproc)
+>>  =09return 0;
+>>  }
+>> =20
+>> -static void *wkup_m3_rproc_da_to_va(struct rproc *rproc, u64 da, int le=
+n)
+>> +static void *wkup_m3_rproc_da_to_va(struct rproc *rproc, u64 da, u64 le=
+n)
+>>  {
+>>  =09struct wkup_m3_rproc *wkupm3 =3D rproc->priv;
+>>  =09void *va =3D NULL;
+>>  =09int i;
+>>  =09u32 offset;
+>> =20
+>> -=09if (len <=3D 0)
+>> +=09if (len =3D=3D 0)
+>>  =09=09return NULL;
+>> =20
+>>  =09for (i =3D 0; i < WKUPM3_MEM_MAX; i++) {
+>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+>> index 16ad66683ad0..f84bd5fe0211 100644
+>> --- a/include/linux/remoteproc.h
+>> +++ b/include/linux/remoteproc.h
+>> @@ -374,7 +374,7 @@ struct rproc_ops {
+>>  =09int (*start)(struct rproc *rproc);
+>>  =09int (*stop)(struct rproc *rproc);
+>>  =09void (*kick)(struct rproc *rproc, int vqid);
+>> -=09void * (*da_to_va)(struct rproc *rproc, u64 da, int len);
+>> +=09void * (*da_to_va)(struct rproc *rproc, u64 da, u64 len);
+>>  =09int (*parse_fw)(struct rproc *rproc, const struct firmware *fw);
+>>  =09int (*handle_rsc)(struct rproc *rproc, u32 rsc_type, void *rsc,
+>>  =09=09=09  int offset, int avail);
