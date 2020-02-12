@@ -2,147 +2,161 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8A715A30E
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Feb 2020 09:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F098C15A4D9
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Feb 2020 10:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728287AbgBLIPk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 12 Feb 2020 03:15:40 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:4542 "EHLO
+        id S1728595AbgBLJdK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 12 Feb 2020 04:33:10 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:54404 "EHLO
         mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728109AbgBLIPk (ORCPT
+        by vger.kernel.org with ESMTP id S1728530AbgBLJdK (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 12 Feb 2020 03:15:40 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01C8E565008026;
-        Wed, 12 Feb 2020 09:15:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=PtC6MNcf5VPs91Jldvobvz5GRjrwYDD84llnPUFRTL0=;
- b=fLOmkqx94vwZALx+mLsgvtHIr0HUe1cy2XPFcoRq/OGj8RfZPNe/0NtjNzT7mjnPzGKs
- fYiiua5hrBMKV3MUONUDB+gRAg6EkgbcQNJ5wTLQ0iQFHIGPILin7PC3at4HRHN1Yyhi
- R3dCv/56cWP8qThjbbPC94tDPiUVPiwPYlKpFK7mK5hI2p8bVd0PENBEDarz8UL2tF9V
- yjHpWrHLGZRq6C7bBBdFJrJACXi+OCwx1pXQfk2MjTS57fxsJxaKNx6XhMG9FWO4w/kN
- P0BGAkLLjJNkC/JNq2XzpInfWM02EPZoXtyEbvcQfOEETYFSgMgDqqFv2KE8PD65eqoJ Tw== 
+        Wed, 12 Feb 2020 04:33:10 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01C9SWFU022722;
+        Wed, 12 Feb 2020 10:33:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=DdUVEUrGvs+eS9mQ0fJ6sl1yRqM3pA5qY8qcjwzMC3Q=;
+ b=qnn4pYZSTAtJJHIPupe6LnSrYjYngNXXAt1qJqS0WOsKcLRqOEvmAefhH/Xd7yf8H9at
+ HqcAuVIT15hQi2gdQ77zCQD0KtX2EvaaFyobFcugbKWhT6jQ9ZBkb3xs4UwnQQ4jZO0I
+ g241kwa+IFGKjZd0HCJwfIHgEKU8sbT5id604e1f5wXdABUMyXNnu6bDq5S2gRq/dg6S
+ t7xckYO00+VhxdcL141dud7I2D6KJbdnOgPMXSri1KMDrih4j/DzCNg+NtVdzLLgbz/Q
+ eDovpO/bqzKR1jjBbyARRt3+/2TmmOnuQqQvHMf/KsJMPyvw9EccEb04CVFskBVkcW09 oQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2y1uvdmhmx-1
+        by mx07-00178001.pphosted.com with ESMTP id 2y1ud9w7ny-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Feb 2020 09:15:22 +0100
+        Wed, 12 Feb 2020 10:33:06 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DCCAE10002A;
-        Wed, 12 Feb 2020 09:15:21 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0CFDD10002A;
+        Wed, 12 Feb 2020 10:33:06 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BFBE3220BCC;
-        Wed, 12 Feb 2020 09:15:21 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.46) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 12 Feb
- 2020 09:15:20 +0100
-Subject: Re: [PATCH v4 0/5] remoteproc: Add elf64 support
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Clement Leger <cleger@kalray.eu>, Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        <linux-remoteproc@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        Loic PALLARDY <loic.pallardy@st.com>, s-anna <s-anna@ti.com>
-References: <527785289.2852303.1581062223707.JavaMail.zimbra@kalray.eu>
- <20200210162209.23149-1-cleger@kalray.eu>
- <5b8045be-0942-2ecf-5dba-dad58071f6af@st.com> <20200211231253.GC27770@xps15>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Message-ID: <8fa9ed3c-240f-1b82-913e-a4393013d333@st.com>
-Date:   Wed, 12 Feb 2020 09:15:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E8E542A667F;
+        Wed, 12 Feb 2020 10:33:05 +0100 (CET)
+Received: from localhost (10.75.127.46) by SFHDAG3NODE1.st.com (10.75.127.7)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 12 Feb 2020 10:33:05
+ +0100
+From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <arnaud.pouliquen@st.com>
+Subject: [PATCH] remoteproc: fix kernel-doc warnings
+Date:   Wed, 12 Feb 2020 10:32:11 +0100
+Message-ID: <20200212093211.15270-1-arnaud.pouliquen@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20200211231253.GC27770@xps15>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG3NODE1.st.com
+X-ClientProxiedBy: SFHDAG8NODE2.st.com (10.75.127.23) To SFHDAG3NODE1.st.com
  (10.75.127.7)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-12_02:2020-02-11,2020-02-12 signatures=0
+ definitions=2020-02-12_04:2020-02-11,2020-02-12 signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Fix the following warnings when documentation is built:
+drivers/remoteproc/remoteproc_virtio.c:330: warning: Function parameter
+or member 'id' not described in 'rproc_add_virtio_dev'
+drivers/remoteproc/remoteproc_core.c:243: warning: Function parameter
+or member 'name' not described in 'rproc_find_carveout_by_name'
+drivers/remoteproc/remoteproc_core.c:473: warning: Function parameter
+or member 'offset' not described in 'rproc_handle_vdev'
+drivers/remoteproc/remoteproc_core.c:604: warning: Function parameter
+or member 'offset' not described in 'rproc_handle_trace'
+drivers/remoteproc/remoteproc_core.c:678: warning: Function parameter
+or member 'offset' not described in 'rproc_handle_devmem'
+drivers/remoteproc/remoteproc_core.c:873: warning: Function parameter
+or member 'offset' not described in 'rproc_handle_carveout'
+drivers/remoteproc/remoteproc_core.c:1029: warning: cannot understand function
+prototype: 'rproc_handle_resource_t rproc_loading_handlers[RSC_LAST] = '
+drivers/remoteproc/remoteproc_core.c:1693: warning: Function parameter
+or member 'work' not described in 'rproc_crash_handler_work'
 
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
+---
+ drivers/remoteproc/remoteproc_core.c   | 9 +++++++--
+ drivers/remoteproc/remoteproc_virtio.c | 1 +
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-On 2/12/20 12:12 AM, Mathieu Poirier wrote:
-> On Tue, Feb 11, 2020 at 04:57:18PM +0100, Arnaud POULIQUEN wrote:
->> Hi Clement,
->>
->> I tested the series on the stm32 platform for remote proc firmwre load: no regression found.
->> I do not test the da_to_va feature as not implemented on stm32 platform.
-> 
-> It would be very interesting if you could test the coredump, that would give us
-> a lot more confidence in the implementation.
-I also tested the coredump generation. LGTM
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 097f33e4f1f3..5f9a5812505c 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -224,7 +224,7 @@ EXPORT_SYMBOL(rproc_da_to_va);
+ /**
+  * rproc_find_carveout_by_name() - lookup the carveout region by a name
+  * @rproc: handle of a remote processor
+- * @name,..: carveout name to find (standard printf format)
++ * @name: carveout name to find (standard printf format)
+  *
+  * Platform driver has the capability to register some pre-allacoted carveout
+  * (physically contiguous memory regions) before rproc firmware loading and
+@@ -445,6 +445,7 @@ static void rproc_rvdev_release(struct device *dev)
+  * rproc_handle_vdev() - handle a vdev fw resource
+  * @rproc: the remote processor
+  * @rsc: the vring resource descriptor
++ * @offset: offset of the resource entry
+  * @avail: size of available data (for sanity checking the image)
+  *
+  * This resource entry requests the host to statically register a virtio
+@@ -587,6 +588,7 @@ void rproc_vdev_release(struct kref *ref)
+  * rproc_handle_trace() - handle a shared trace buffer resource
+  * @rproc: the remote processor
+  * @rsc: the trace resource descriptor
++ * @offset: offset of the resource entry
+  * @avail: size of available data (for sanity checking the image)
+  *
+  * In case the remote processor dumps trace logs into memory,
+@@ -652,6 +654,7 @@ static int rproc_handle_trace(struct rproc *rproc, struct fw_rsc_trace *rsc,
+  * rproc_handle_devmem() - handle devmem resource entry
+  * @rproc: remote processor handle
+  * @rsc: the devmem resource entry
++ * @offset: offset of the resource entry
+  * @avail: size of available data (for sanity checking the image)
+  *
+  * Remote processors commonly need to access certain on-chip peripherals.
+@@ -853,6 +856,7 @@ static int rproc_release_carveout(struct rproc *rproc,
+  * rproc_handle_carveout() - handle phys contig memory allocation requests
+  * @rproc: rproc handle
+  * @rsc: the resource entry
++ * @offset: offset of the resource entry
+  * @avail: size of available data (for image validation)
+  *
+  * This function will handle firmware requests for allocation of physically
+@@ -1022,7 +1026,7 @@ rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, int len,
+ }
+ EXPORT_SYMBOL(rproc_of_resm_mem_entry_init);
+ 
+-/**
++/*
+  * A lookup table for resource handlers. The indices are defined in
+  * enum fw_resource_type.
+  */
+@@ -1685,6 +1689,7 @@ int rproc_trigger_recovery(struct rproc *rproc)
+ 
+ /**
+  * rproc_crash_handler_work() - handle a crash
++ * @work: work treating the crash
+  *
+  * This function needs to handle everything related to a crash, like cpu
+  * registers and stack dump, information to help to debug the fatal error, etc.
+diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+index 8c07cb2ca8ba..eb817132bc5f 100644
+--- a/drivers/remoteproc/remoteproc_virtio.c
++++ b/drivers/remoteproc/remoteproc_virtio.c
+@@ -320,6 +320,7 @@ static void rproc_virtio_dev_release(struct device *dev)
+ /**
+  * rproc_add_virtio_dev() - register an rproc-induced virtio device
+  * @rvdev: the remote vdev
++ * @id: the device type identification (used to match it with a driver).
+  *
+  * This function registers a virtio device. This vdev's partent is
+  * the rproc device.
+-- 
+2.17.1
 
-> 
-> Thanks,
-> Mathieu
-> 
->>
->> Regards,
->> Arnaud
->>
->>
->>
->> On 2/10/20 5:22 PM, Clement Leger wrote:
->>> This serie add support for elf64 in remoteproc (elf loader, coredump). 
->>> First two patches modifies the type of len argument (in da_to_va) and
->>> boot_addr in order to allow loading elf64 segment with a u64 size
->>> and a u64 entry point.
->>> Next patch introduce a set of macros to access elf64 and elf32
->>> transparently.
->>> Last two patches are the actual modification in the elf loader and
->>> remoteproc coredump support to add elf64 support.
->>>
->>> Changes from V3:
->>>  - Adapt coredump to elf64 file format
->>>  - Rename remoteproc_elf_loader.h to remoteproc_elf_helpers.h
->>>  - Update copyright year in remoteproc_elf_helpers.h
->>>  - Rename macros elf_hdr_* to elf_get_hdr_* for coherency with elf_hdr_set_*
->>>  - Split elf64 loader patch in 3:
->>>    - boot_addr u64 change
->>>    - remoteproc_elf_helpers.h creation
->>>    - elf64 loading
->>>
->>> Clement Leger (5):
->>>   remoteproc: Use u64 len for da_to_va
->>>   remoteproc: Use u64 type for boot_addr
->>>   remoteproc: Add elf helpers to access elf64 and elf32 fields
->>>   remoteproc: Add elf64 support in elf loader
->>>   remoteproc: Adapt coredump to generate correct elf type
->>>
->>>  Documentation/remoteproc.txt                |   2 +-
->>>  drivers/remoteproc/imx_rproc.c              |  11 +-
->>>  drivers/remoteproc/keystone_remoteproc.c    |   4 +-
->>>  drivers/remoteproc/qcom_q6v5_adsp.c         |   2 +-
->>>  drivers/remoteproc/qcom_q6v5_mss.c          |   2 +-
->>>  drivers/remoteproc/qcom_q6v5_pas.c          |   2 +-
->>>  drivers/remoteproc/qcom_q6v5_wcss.c         |   2 +-
->>>  drivers/remoteproc/qcom_wcnss.c             |   2 +-
->>>  drivers/remoteproc/remoteproc_core.c        |  69 +++++++------
->>>  drivers/remoteproc/remoteproc_elf_helpers.h |  95 ++++++++++++++++++
->>>  drivers/remoteproc/remoteproc_elf_loader.c  | 150 ++++++++++++++++++----------
->>>  drivers/remoteproc/remoteproc_internal.h    |   4 +-
->>>  drivers/remoteproc/st_remoteproc.c          |   2 +-
->>>  drivers/remoteproc/st_slim_rproc.c          |   4 +-
->>>  drivers/remoteproc/wkup_m3_rproc.c          |   4 +-
->>>  include/linux/remoteproc.h                  |   7 +-
->>>  16 files changed, 252 insertions(+), 110 deletions(-)
->>>  create mode 100644 drivers/remoteproc/remoteproc_elf_helpers.h
->>>
