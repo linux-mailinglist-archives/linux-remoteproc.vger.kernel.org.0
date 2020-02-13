@@ -2,198 +2,243 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF8915C673
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 13 Feb 2020 17:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B466815CBAC
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 13 Feb 2020 21:08:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728853AbgBMQAu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 13 Feb 2020 11:00:50 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:35790 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729065AbgBMQAt (ORCPT
+        id S1728195AbgBMUIU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 13 Feb 2020 15:08:20 -0500
+Received: from mail-yb1-f193.google.com ([209.85.219.193]:36630 "EHLO
+        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728258AbgBMUIU (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 13 Feb 2020 11:00:49 -0500
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01DFmigN024413;
-        Thu, 13 Feb 2020 17:00:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=DYnVX283FjeehaiMYw7D2LGyBDeji4OjGpp51jTXiO4=;
- b=S/8jWHIUylpqJEa1qXlj6F2AcCbNxY15hZ1G7c+8gejvbkbJG7D+dNDLMyoCN+cnymgH
- pz2TzUc21fvajmkGbLuVoBcJ45xUdslz88swYSif12pr81hnMAU386FFq1gx/9QSUcC4
- oYG3+WRMUv+J9FJ/OPfbSvPt9PgPpm4Tr5f1V7s8RdkFdVAY/6Z9ZYhYyM77+/iCw+FX
- YuAzQX2efOZHkbjqDz0/FRADmazI2FMKxKMIf22tGvFW06yP970g8wSECrjEYNZOMEJL
- hHxqAAi2DCbWN7e/m8PoEUIehy8QFOIIkT9y6ItZwmCfaamD7PKYMTrY3oZwKzWBBLvm OQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2y1ufhpae8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Feb 2020 17:00:38 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8CDAB100034;
-        Thu, 13 Feb 2020 17:00:37 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 714FE2BAEF4;
-        Thu, 13 Feb 2020 17:00:37 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.46) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 13 Feb
- 2020 17:00:36 +0100
-Subject: Re: [PATCH v3 6/8] remoteproc: Introduce "panic" callback in ops
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>
-CC:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Thu, 13 Feb 2020 15:08:20 -0500
+Received: by mail-yb1-f193.google.com with SMTP id u26so33830ybd.3
+        for <linux-remoteproc@vger.kernel.org>; Thu, 13 Feb 2020 12:08:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=GJxkwq8/D+o8z2hOcO4GUN34L77pUJGhVsXqvKjTQDQ=;
+        b=Of24hL8aXheNsVDZUzZ55pcCK7OV3KGqYupe+ZmKgcaybTpcTuLLCFOBzep889PXDx
+         J+eAybQltBvRNx+rC00KxKZ6Y43l2FU3nKu+C/RnUCK3ddDYM9vVTy+bMBkWpY5vu5WF
+         QlfAxAfK47jlmX+uMTeg2ejqopLS8w++OdbPVQA9N6DBNmm9LTfnm+opqtV/Qo8c6X0k
+         HAwlNxDZOg9MuRnC6QClbINsPO6ujRAyIEGWd7jUkv7Ts3JOuFGo5OjdfXRPEvaZ0gau
+         4adIDoTsbq5Si9VYH0hwR723QfUMHdk8RNUp6oH6SKMhjMMdUNhtQrq2loUk0lhPOAVZ
+         RJ0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GJxkwq8/D+o8z2hOcO4GUN34L77pUJGhVsXqvKjTQDQ=;
+        b=VzsCZJ9YNvAKBNnU4WJSU+PpmZkOI7GFeRuAIQyZ3+nt5Y+Mae2dracBljc2sLhtGe
+         eosh2FmL/zyS45r7qb7lLFMiDSGSD2EMTEm7qrivfaehrKOeGGmI+vGqCvT0afJi49zY
+         nlW7qZW+R5HoQK+Luk0SJaQaPzqBRJfxwA291GxkIg4QVSfeRaH0xlyd8LvRxHlhTMOJ
+         HpLnUPK2VDr1NsfNZD2izZM2kdVF+12EGbTdxRgQVPdpwoiD9ZR8dvsjQV5RUSGigwJh
+         IgAjPNLkEMMRnvDvFH8X07Ws+YMEGaXTTOECdAd5N/fC4I64+PvViWz/+DG45UxGvsoN
+         B4wg==
+X-Gm-Message-State: APjAAAWTl9KejmXFYb3u4piRVYu2dHZEm8V/4MpvLpvswobRMMom57Bh
+        M65gPiEouhiUrA8jm1Qu0K/fHw==
+X-Google-Smtp-Source: APXvYqwlrZYVi0V2hI3T0AESbnztZSJUg9sdbeYCbuUGNhwLIhR6i/8KC0vw9CwxnN8O7tJmwxSwVg==
+X-Received: by 2002:a25:d9cc:: with SMTP id q195mr8640124ybg.126.1581624497107;
+        Thu, 13 Feb 2020 12:08:17 -0800 (PST)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id w132sm1424354ywc.51.2020.02.13.12.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2020 12:08:16 -0800 (PST)
+Date:   Thu, 13 Feb 2020 13:08:13 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Sibi Sankar <sibis@codeaurora.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>
-References: <20200211005059.1377279-1-bjorn.andersson@linaro.org>
- <20200211005059.1377279-7-bjorn.andersson@linaro.org>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Message-ID: <d40e2d7a-19ae-0acf-dc73-f2edb8cb3c32@st.com>
-Date:   Thu, 13 Feb 2020 17:00:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Loic PALLARDY <loic.pallardy@st.com>,
+        Suman Anna <s-anna@ti.com>,
+        Fabien DESSENNE <fabien.dessenne@st.com>,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v5 1/3] remoteproc: add support for co-processor loaded
+ and booted before kernel
+Message-ID: <20200213200813.GA14415@xps15>
+References: <20200211174205.22247-1-arnaud.pouliquen@st.com>
+ <20200211174205.22247-2-arnaud.pouliquen@st.com>
 MIME-Version: 1.0
-In-Reply-To: <20200211005059.1377279-7-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG3NODE1.st.com
- (10.75.127.7)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-13_05:2020-02-12,2020-02-13 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200211174205.22247-2-arnaud.pouliquen@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Good day,
 
-On 2/11/20 1:50 AM, Bjorn Andersson wrote:
-> Introduce a "panic" function in the remoteproc ops table, to allow
-> remoteproc instances to perform operations needed in order to aid in
-> post mortem system debugging, such as flushing caches etc, when the
-> kernel panics. The function can return a number of milliseconds needed
-> by the remote to "settle" and the core will wait the longest returned
-> duration before returning from the panic handler.
+On Tue, Feb 11, 2020 at 06:42:03PM +0100, Arnaud Pouliquen wrote:
+> From: Loic Pallardy <loic.pallardy@st.com>
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Remote processor could boot independently or be loaded/started before
+> Linux kernel by bootloader or any firmware.
+> This patch introduces a new property in rproc core, named skip_fw_load,
+> to be able to allocate resources and sub-devices like vdev and to
+> synchronize with current state without loading firmware from file system.
+> It is platform driver responsibility to implement the right firmware
+> load ops according to HW specificities.
+> 
+> Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
+> Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 > ---
-> 
-> Changes since v2:
-> - Replace per-rproc notifier callback with one generic
-> - Move the mdelay() from the individual drivers to the core and sleep the
->   longest returned duration. Drivers that doesn't need a delay can return 0.
-> - Unregister the notifier on exit
-> 
->  drivers/remoteproc/remoteproc_core.c | 46 ++++++++++++++++++++++++++++
->  include/linux/remoteproc.h           |  3 ++
->  2 files changed, 49 insertions(+)
+>  drivers/remoteproc/remoteproc_core.c | 67 ++++++++++++++++++++++------
+>  include/linux/remoteproc.h           |  2 +
+>  2 files changed, 55 insertions(+), 14 deletions(-)
 > 
 > diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 097f33e4f1f3..8b6932027d36 100644
+> index 097f33e4f1f3..876b5420a32b 100644
 > --- a/drivers/remoteproc/remoteproc_core.c
 > +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -16,6 +16,7 @@
->  
->  #define pr_fmt(fmt)    "%s: " fmt, __func__
->  
-> +#include <linux/delay.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/device.h>
-> @@ -43,6 +44,7 @@
->  
->  static DEFINE_MUTEX(rproc_list_mutex);
->  static LIST_HEAD(rproc_list);
-> +static struct notifier_block rproc_panic_nb;
->  
->  typedef int (*rproc_handle_resource_t)(struct rproc *rproc,
->  				 void *, int offset, int avail);
-> @@ -2216,10 +2218,53 @@ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type)
+> @@ -1358,8 +1358,19 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+>  	return ret;
 >  }
->  EXPORT_SYMBOL(rproc_report_crash);
 >  
-> +static int rproc_panic_handler(struct notifier_block *nb, unsigned long event,
-> +			       void *ptr)
-> +{
-> +	unsigned int longest = 0;
-> +	struct rproc *rproc;
-> +	unsigned int d;
-> +	int locked;
-> +
-> +	locked = mutex_trylock(&rproc_list_mutex);
-> +	if (!locked) {
-> +		pr_err("Failed to acquire rproc list lock, won't call panic functions\n");
-> +		return NOTIFY_DONE;
-> +	}
-As consequence the panic is not handled for all rproc instance if the mutex is locked.
-it seems to me that the first solution with the delay side effect is more safety...
+> -/*
+> - * take a firmware and boot a remote processor with it.
+> +/**
+> + * rproc_fw_boot() - boot specified remote processor according to specified
+> + * firmware
+> + * @rproc: handle of a remote processor
+> + * @fw: pointer on firmware to handle
+> + *
+> + * Handle resources defined in resource table, load firmware and
+> + * start remote processor.
+> + *
+> + * If firmware pointer fw is NULL, firmware is not handled by remoteproc
+> + * core, but under the responsibility of platform driver.
+> + *
+> + * Returns 0 on success, and an appropriate error value otherwise.
+>   */
+>  static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
+>  {
+> @@ -1371,7 +1382,11 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
+>  	if (ret)
+>  		return ret;
+>  
+> -	dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
+> +	if (fw)
+> +		dev_info(dev, "Booting fw image %s, size %zd\n", name,
+> +			 fw->size);
+> +	else
+> +		dev_info(dev, "Synchronizing with preloaded co-processor\n");
+>  
+>  	/*
+>  	 * if enabling an IOMMU isn't relevant for this rproc, this is
+> @@ -1718,16 +1733,22 @@ static void rproc_crash_handler_work(struct work_struct *work)
+>   * rproc_boot() - boot a remote processor
+>   * @rproc: handle of a remote processor
+>   *
+> - * Boot a remote processor (i.e. load its firmware, power it on, ...).
+> + * Boot a remote processor (i.e. load its firmware, power it on, ...) from
+> + * different contexts:
+> + * - power off
+> + * - preloaded firmware
+> + * - started before kernel execution
+> + * The different operations are selected thanks to properties defined by
+> + * platform driver.
+>   *
+> - * If the remote processor is already powered on, this function immediately
+> - * returns (successfully).
+> + * If the remote processor is already powered on at rproc level, this function
+> + * immediately returns (successfully).
+>   *
+>   * Returns 0 on success, and an appropriate error value otherwise.
+>   */
+>  int rproc_boot(struct rproc *rproc)
+>  {
+> -	const struct firmware *firmware_p;
+> +	const struct firmware *firmware_p = NULL;
+>  	struct device *dev;
+>  	int ret;
+>  
+> @@ -1758,11 +1779,20 @@ int rproc_boot(struct rproc *rproc)
+>  
+>  	dev_info(dev, "powering up %s\n", rproc->name);
+>  
+> -	/* load firmware */
+> -	ret = request_firmware(&firmware_p, rproc->firmware, dev);
+> -	if (ret < 0) {
+> -		dev_err(dev, "request_firmware failed: %d\n", ret);
+> -		goto downref_rproc;
+> +	if (!rproc->skip_fw_load) {
+> +		/* load firmware */
+> +		ret = request_firmware(&firmware_p, rproc->firmware, dev);
+> +		if (ret < 0) {
+> +			dev_err(dev, "request_firmware failed: %d\n", ret);
+> +			goto downref_rproc;
+> +		}
+> +	} else {
+> +		/*
+> +		 * Set firmware name pointer to null as remoteproc core is not
+> +		 * in charge of firmware loading
+> +		 */
+> +		kfree(rproc->firmware);
+> +		rproc->firmware = NULL;
 
-> +
-> +	list_for_each_entry(rproc, &rproc_list, node) {
-> +		if (!rproc->ops->panic || rproc->state != RPROC_RUNNING)
-> +			continue;
-> +
-> +		d = rproc->ops->panic(rproc);
-> +		if (d > longest)
-> +			longest = d;
-> +	}
-> +
-> +	mutex_unlock(&rproc_list_mutex);
-> +
-> +	/* Delay panic for the longest requested duration */
-> +	mdelay(longest);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static void __init rproc_init_panic(void)
-> +{
-> +	rproc_panic_nb.notifier_call = rproc_panic_handler;
-> +	atomic_notifier_chain_register(&panic_notifier_list, &rproc_panic_nb);
-> +}
-> +
-> +static void __exit rproc_exit_panic(void)
-> +{
-> +	atomic_notifier_chain_unregister(&panic_notifier_list, &rproc_panic_nb);
-> +}
-> +
->  static int __init remoteproc_init(void)
->  {
->  	rproc_init_sysfs();
->  	rproc_init_debugfs();
-> +	rproc_init_panic();
+If the MCU with pre-loaded FW crashes request_firmware() in
+rproc_trigger_recovery() will return an error and rproc_start()
+never called.
+
+>  	}
 >  
->  	return 0;
->  }
-> @@ -2229,6 +2274,7 @@ static void __exit remoteproc_exit(void)
->  {
->  	ida_destroy(&rproc_dev_index);
+>  	ret = rproc_fw_boot(rproc, firmware_p);
+> @@ -1916,8 +1946,17 @@ int rproc_add(struct rproc *rproc)
+>  	/* create debugfs entries */
+>  	rproc_create_debug_dir(rproc);
 >  
-> +	rproc_exit_panic();
->  	rproc_exit_debugfs();
->  	rproc_exit_sysfs();
->  }
+> -	/* if rproc is marked always-on, request it to boot */
+> -	if (rproc->auto_boot) {
+> +	if (rproc->skip_fw_load) {
+> +		/*
+> +		 * If rproc is marked already booted, no need to wait
+> +		 * for firmware.
+> +		 * Just handle associated resources and start sub devices
+> +		 */
+> +		ret = rproc_boot(rproc);
+> +		if (ret < 0)
+> +			return ret;
+> +	} else if (rproc->auto_boot) {
+> +		/* if rproc is marked always-on, request it to boot */
+
+I spent way too much time staring at this modification...  I can't decide if a
+system where the FW has been pre-loaded should be considered "auto_boot".
+Indeed the result is the same, i.e the MCU is started at boot time without user
+intervention.
+
+I'd welcome other people's opinion on this.
+
+>  		ret = rproc_trigger_auto_boot(rproc);
+>  		if (ret < 0)
+>  			return ret;
 > diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> index 16ad66683ad0..14f05f26cbcd 100644
+> index 16ad66683ad0..4fd5bedab4fa 100644
 > --- a/include/linux/remoteproc.h
 > +++ b/include/linux/remoteproc.h
-> @@ -369,6 +369,8 @@ enum rsc_handling_status {
->   *			expects to find it
->   * @sanity_check:	sanity check the fw image
->   * @get_boot_addr:	get boot address to entry point specified in firmware
-> + * @panic:	optional callback to react to system panic, core will delay
-> + *		panic at least the returned number of milliseconds
+> @@ -479,6 +479,7 @@ struct rproc_dump_segment {
+>   * @table_sz: size of @cached_table
+>   * @has_iommu: flag to indicate if remote processor is behind an MMU
+>   * @auto_boot: flag to indicate if remote processor should be auto-started
+> + * @skip_fw_load: remote processor has been preloaded before start sequence
+>   * @dump_segments: list of segments in the firmware
+>   * @nb_vdev: number of vdev currently handled by rproc
 >   */
->  struct rproc_ops {
->  	int (*start)(struct rproc *rproc);
-> @@ -383,6 +385,7 @@ struct rproc_ops {
->  	int (*load)(struct rproc *rproc, const struct firmware *fw);
->  	int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
->  	u32 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
-> +	unsigned int (*panic)(struct rproc *rproc);
+> @@ -512,6 +513,7 @@ struct rproc {
+>  	size_t table_sz;
+>  	bool has_iommu;
+>  	bool auto_boot;
+> +	bool skip_fw_load;
+>  	struct list_head dump_segments;
+>  	int nb_vdev;
 >  };
->  
->  /**
+> -- 
+> 2.17.1
 > 
