@@ -2,78 +2,139 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EFA15F24E
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 14 Feb 2020 19:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F73815F7F0
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 14 Feb 2020 21:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731466AbgBNPyS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 14 Feb 2020 10:54:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34142 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731464AbgBNPyR (ORCPT
+        id S1730148AbgBNUqb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 14 Feb 2020 15:46:31 -0500
+Received: from mail-yb1-f196.google.com ([209.85.219.196]:34651 "EHLO
+        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727742AbgBNUqb (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:54:17 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 069632465D;
-        Fri, 14 Feb 2020 15:54:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695656;
-        bh=EcjME5a/kKnsZfGwBPvbPAcvIOwyEdwgkxBUW8N6TEA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f3BXpMX6+Zzj8Ul7Ln4/5xMkQQ6UmayCTBuZBGrVqkIskLdziBkhQ1TzkwH3EwMu5
-         VcI1VGVrqMGFQTVP7Tkf8XEuCar/ah5cq83C6xwcxrfRa4ZnRH3oPHNE24IzQxAIU4
-         Au/gDq1koGxsC8YNmV+PrXhQrLNP2qkSsK3f2qmQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sibi Sankar <sibis@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 248/542] remoteproc: q6v5-mss: Remove mem clk from the active pool
-Date:   Fri, 14 Feb 2020 10:44:00 -0500
-Message-Id: <20200214154854.6746-248-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
-References: <20200214154854.6746-1-sashal@kernel.org>
+        Fri, 14 Feb 2020 15:46:31 -0500
+Received: by mail-yb1-f196.google.com with SMTP id w17so5435738ybm.1
+        for <linux-remoteproc@vger.kernel.org>; Fri, 14 Feb 2020 12:46:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=RHUTZjwrI6vyJPU7Cd6NMy2222aPRYqDwkoKG9dpivU=;
+        b=mR/7BlbbaPcm1TFrio9KZZVGbZenxL86ZeoD/IhmxSTrZTU/uPFHBdUzG6uOtw4Cyy
+         8Dix5y9Clp+bxiLggGMBZYGSeKBMFCHlWPgI/Xq6aZsYpXAXYHvP0OKB3nuDIWpxPg6i
+         2oDkE7waN/xjrcQOv8gRw3V45XF4cYD8//Qp0sPtE35+R137ilSQBQzZ8226RPDQyj7V
+         BLiuDlgJYDHK4wxjxId1pdJNSRgTkJgLNA0DNqHQLUTfQxdNsnY2Z3+ZmLJm1pezXb6B
+         54sYZs1LDs6A3oEdKr908SjvXYH0Hp24JoPNiqMUZY/TZ8M86c+g1hBfGgUaElV6RkJq
+         S/CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=RHUTZjwrI6vyJPU7Cd6NMy2222aPRYqDwkoKG9dpivU=;
+        b=NxQK5UgUW79WXzda47BBzU99mFJRV7N0lelqrcnTpSjaNOHYnDVMT8g+NzuI8Fbcwt
+         BU2p9erVX9AQmBhsIfU7jDFAClGYdU91t3v8kvFlQGy02564nCPoiNHsVYgO/W8rTn8p
+         GG8/gWnw2/EMIUufggnoaumtIiGe7BUr0vTMrVWDIR1yVpAlTdv5m434WgH7aMR22LGP
+         cqOZtwhhLjSJPlr3B+P0SF+/CJuxMO2h4KqgZVaeJJv9K7X2z+ts5BJOVDZ7tuLvXG1a
+         hgTLecBjpNONvS42fVryDpj1MsGyqLr2HwCJtTk3EMqLdUebbOLRVme1JEYeVJnasPAr
+         XvOA==
+X-Gm-Message-State: APjAAAVgKNAF9I2Nspa1fBO92C5mhdPFC1VGwsGvbC+f2TNniWiTHXUU
+        22SVLJnzMuefR7TqaQWoHAKB4w==
+X-Google-Smtp-Source: APXvYqzWrX92zq0OET7I04H3pFyNlAlJFnTJp+CnMdzXK1ZjaRPkGfu48U51xoK9TR8fB+x2/utopQ==
+X-Received: by 2002:a5b:d07:: with SMTP id y7mr4491691ybp.96.1581713190209;
+        Fri, 14 Feb 2020 12:46:30 -0800 (PST)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id 124sm2999657ywm.25.2020.02.14.12.46.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2020 12:46:29 -0800 (PST)
+Date:   Fri, 14 Feb 2020 13:46:27 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Loic Poulain <loic.poulain@linaro.org>
+Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, anibal.limon@linaro.org
+Subject: Re: [PATCH] remoteproc: qcom: wcnss: Add iris completion barrier
+Message-ID: <20200214204627.GA10464@xps15>
+References: <1581530043-12112-1-git-send-email-loic.poulain@linaro.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1581530043-12112-1-git-send-email-loic.poulain@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Sibi Sankar <sibis@codeaurora.org>
+On Wed, Feb 12, 2020 at 06:54:03PM +0100, Loic Poulain wrote:
+> There is no guarantee that the iris pointer will be assigned before
+> remoteproc subsystem starts the wcnss rproc, actually it depends how
+> fast rproc subsystem is able to get the firmware to trigger the start.
+> 
+> This leads to sporadic wifi/bluetooth initialization issue on db410c
+> with the following output:
+>  remoteproc remoteproc1: powering up a204000.wcnss
+>  remoteproc remoteproc1: Booting fw image qcom/msm8916/wcnss.mdt...
+>  qcom-wcnss-pil a204000.wcnss: no iris registered
+>  remoteproc remoteproc1: can't start rproc a204000.wcnss: -22
+> 
+> This patch introduces a 'iris_assigned' completion barrier to fix
+> this issue. Maybe not the most elegant way, but it does the trick.
+> 
+> Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+> ---
+>  drivers/remoteproc/qcom_wcnss.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
+> index a0468b3..c888282 100644
+> --- a/drivers/remoteproc/qcom_wcnss.c
+> +++ b/drivers/remoteproc/qcom_wcnss.c
+> @@ -84,6 +84,7 @@ struct qcom_wcnss {
+>  
+>  	struct completion start_done;
+>  	struct completion stop_done;
+> +	struct completion iris_assigned;
+>  
+>  	phys_addr_t mem_phys;
+>  	phys_addr_t mem_reloc;
+> @@ -138,6 +139,7 @@ void qcom_wcnss_assign_iris(struct qcom_wcnss *wcnss,
+>  
+>  	wcnss->iris = iris;
+>  	wcnss->use_48mhz_xo = use_48mhz_xo;
+> +	complete(&wcnss->iris_assigned);
+>  
+>  	mutex_unlock(&wcnss->iris_lock);
+>  }
+> @@ -213,6 +215,10 @@ static int wcnss_start(struct rproc *rproc)
+>  	struct qcom_wcnss *wcnss = (struct qcom_wcnss *)rproc->priv;
+>  	int ret;
+>  
+> +	/* Grant some time for iris registration */
+> +	wait_for_completion_timeout(&wcnss->iris_assigned,
+> +				    msecs_to_jiffies(5000));
+> +
+>  	mutex_lock(&wcnss->iris_lock);
+>  	if (!wcnss->iris) {
+>  		dev_err(wcnss->dev, "no iris registered\n");
+> @@ -494,6 +500,7 @@ static int wcnss_probe(struct platform_device *pdev)
+>  
+>  	init_completion(&wcnss->start_done);
+>  	init_completion(&wcnss->stop_done);
+> +	init_completion(&wcnss->iris_assigned);
+>  
+>  	mutex_init(&wcnss->iris_lock);
 
-[ Upstream commit 6ba519aa13758dd55248f3a6f939536656df2661 ]
+If I understand the problem correctly, if loading the fw image takes long enough,
+qcom_iris_probe() that is triggered by of_platform_populate() has time to
+complete and call qcom_wcnss_assign_iris().  Otherwise the remoteproc core calls
+wcnss_start() before qcom_wcnss_assign_iris() had the opportunity to run.
 
-Currently the mem clk is voted upon from both the active and proxy pool on
-MSM8998 SoCs where only a proxy vote should suffice. Fix this by removing
-mem clk from the active pool.
+If I am correct, would it be possible to call of_platform_populate() before
+calling rproc_add()?  There might be some refactoring to do but that's probably
+better than introducing a delay...
 
-Fixes: 1665cbd5731fa ("remoteproc: qcom_q6v5_mss: Add support for MSM8998")
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-Link: https://lore.kernel.org/r/20191218132217.28141-2-sibis@codeaurora.org
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/remoteproc/qcom_q6v5_mss.c | 1 -
- 1 file changed, 1 deletion(-)
+Thanks,
+Mathieu
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index 471128a2e7239..164fc2a53ef11 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -1594,7 +1594,6 @@ static const struct rproc_hexagon_res msm8998_mss = {
- 	.active_clk_names = (char*[]){
- 			"iface",
- 			"bus",
--			"mem",
- 			"gpll0_mss",
- 			"mnoc_axi",
- 			"snoc_axi",
--- 
-2.20.1
-
+>  
+> -- 
+> 2.7.4
+> 
