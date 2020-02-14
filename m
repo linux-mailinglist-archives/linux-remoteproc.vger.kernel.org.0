@@ -2,137 +2,114 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A1A15D149
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 14 Feb 2020 05:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC13115DF9A
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 14 Feb 2020 17:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728767AbgBNE6T (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 13 Feb 2020 23:58:19 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:55968 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728762AbgBNE6T (ORCPT
+        id S2391315AbgBNQJf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 14 Feb 2020 11:09:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34144 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391308AbgBNQJf (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 13 Feb 2020 23:58:19 -0500
-Received: by mail-pj1-f65.google.com with SMTP id d5so3345720pjz.5
-        for <linux-remoteproc@vger.kernel.org>; Thu, 13 Feb 2020 20:58:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PKVY1vLFLeMqrxzisPDGi9WSqjXkmoLHrmJtuhSeWpA=;
-        b=MKa4T1e2BYLw/Ugb3oAmoOd2/+jxBGU41Nm0g2vInEcGYPpAVF4qjcghbG3fkw0HXN
-         B8DztKpHj8V6pZpHQYtyOIIrsJjCaE41e1kJW6DZWot3yv33XpMaDhJJYgKnZiTeDeqX
-         9lhaDMVq4ps4dz1y5d1jLUP4gervls7YSjpNd5WTZAWENA13FnBpMtV3n7mm2DtQPZJS
-         E+KE9/BAMpJZm741V0hwE6uCsNJYKEByXbqrXPw1LSoSDMn8bdWu52TpIGL4csxp77Ub
-         tHY9EzmdRmSEUhMeV6RKEX4BiRH4F+rJ6+bcxuVYAdVDe0iUA/S/rGGKUekxwRq7mZEk
-         2vHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PKVY1vLFLeMqrxzisPDGi9WSqjXkmoLHrmJtuhSeWpA=;
-        b=fPcF98g9lqjS1O7Y5ao5S+gA3x8/WUsQKCtUIjXqDxnH38DL1qpzggEpRVXTywu9M6
-         sjB3WM/Vcjm63C+XiRRi/0lHcOWfMypXwGm1Lw4FazbhcGsxTLoS0bz0TsK1pW1/CPdz
-         UHuwD5eM1r8KVSsP4JPkRRdMykneu/qLOyqntw0DPncFuKreDI1qXwajRXT73WvVEzPJ
-         Pn6WlXK2VHLz03SdMVG63ZuQEOiBR82xDdYu/aMgZXrLFfnnmq4WJZwX++aTxIKS9bsw
-         hDcBL4CBPjx261KLQMUw2KnrOmfxpZ47nwB4sw6NWFzT4TThdb7MckPMUzBeKw2LlCu5
-         SEhw==
-X-Gm-Message-State: APjAAAU3avMlCbZRzySR5ksNpFTwtrhZAIq+yQE3VMEYQv+P1Nq5kFDL
-        qfhvNprp5Jknk8fJHReCejF/gQ==
-X-Google-Smtp-Source: APXvYqxkZrLSarCDLnWJ9dsKIOTgEPrBqxnrfmJEwDBKM4wR5889OJKHFcPcKBnjFWQUIaFaaOLQog==
-X-Received: by 2002:a17:902:426:: with SMTP id 35mr1467333ple.302.1581656298355;
-        Thu, 13 Feb 2020 20:58:18 -0800 (PST)
-Received: from builder (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id a21sm4992409pgd.12.2020.02.13.20.58.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2020 20:58:17 -0800 (PST)
-Date:   Thu, 13 Feb 2020 20:58:15 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sibi Sankar <sibis@codeaurora.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Subject: Re: [PATCH v3 1/8] dt-bindings: remoteproc: Add Qualcomm PIL info
- binding
-Message-ID: <20200214045815.GU3948@builder>
-References: <20200211005059.1377279-1-bjorn.andersson@linaro.org>
- <20200211005059.1377279-2-bjorn.andersson@linaro.org>
- <158164708228.184098.14137448846934888082@swboyd.mtv.corp.google.com>
+        Fri, 14 Feb 2020 11:09:35 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7B86E24685;
+        Fri, 14 Feb 2020 16:09:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581696574;
+        bh=Pp4ZrR/m1W7SeYzzjTvC8bs5kKe2Stp9EV7keNr9wpQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hdcKtt9JN7LPdJLSDpRSGhhp9gIFr2CwF+QqEd/iC8DmzbRDFIrff/tj9U/caJcgA
+         gMQr3eLpDVKNjrP+keYOrEeZk74ua5O6DuOV4zft3czpPFyEBLh3iH4/jVWkbdp8hn
+         8SFMHwjHNAg65z+93OmBhTnMmQjQEc5OjqoA1ol8=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Brandon Maier <brandon.maier@rockwellcollins.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 363/459] remoteproc: Initialize rproc_class before use
+Date:   Fri, 14 Feb 2020 11:00:13 -0500
+Message-Id: <20200214160149.11681-363-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
+References: <20200214160149.11681-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <158164708228.184098.14137448846934888082@swboyd.mtv.corp.google.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu 13 Feb 18:24 PST 2020, Stephen Boyd wrote:
+From: Brandon Maier <brandon.maier@rockwellcollins.com>
 
-> Quoting Bjorn Andersson (2020-02-10 16:50:52)
-> > diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml
-> > new file mode 100644
-> > index 000000000000..8386a4da6030
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/remoteproc/qcom,pil-info.yaml
-> > @@ -0,0 +1,42 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/remoteproc/qcom,pil-info.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Qualcomm peripheral image loader relocation info binding
-> > +
-> > +maintainers:
-> > +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> > +
-> > +description:
-> > +  This document defines the binding for describing the Qualcomm peripheral
-> 
-> Maybe drop "This document defines the binding for describing".
-> 
+[ Upstream commit a8f40111d184098cd2b3dc0c7170c42250a5fa09 ]
 
-Sounds reasonable.
+The remoteproc_core and remoteproc drivers all initialize with module_init().
+However remoteproc drivers need the rproc_class during their probe. If one of
+the remoteproc drivers runs init and gets through probe before
+remoteproc_init() runs, a NULL pointer access of rproc_class's `glue_dirs`
+spinlock occurs.
 
-> > +  image loader relocation memory region, in IMEM, which is used for post mortem
-> > +  debugging of remoteprocs.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: qcom,pil-reloc-info
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +examples:
-> > +  - |
-> > +    imem@146bf000 {
-> > +      compatible = "syscon", "simple-mfd";
-> > +      reg = <0 0x146bf000 0 0x1000>;
-> > +
-> > +      #address-cells = <1>;
-> > +      #size-cells = <1>;
-> > +
-> > +      pil-reloc {
-> 
-> Should that be pil-reloc@94c?
-> 
+> Unable to handle kernel NULL pointer dereference at virtual address 000000dc
+> pgd = c0004000
+> [000000dc] *pgd=00000000
+> Internal error: Oops: 5 [#1] PREEMPT ARM
+> Modules linked in:
+> CPU: 0 PID: 1 Comm: swapper Tainted: G        W       4.14.106-rt56 #1
+> Hardware name: Generic OMAP36xx (Flattened Device Tree)
+> task: c6050000 task.stack: c604a000
+> PC is at rt_spin_lock+0x40/0x6c
+> LR is at rt_spin_lock+0x28/0x6c
+> pc : [<c0523c90>]    lr : [<c0523c78>]    psr: 60000013
+> sp : c604bdc0  ip : 00000000  fp : 00000000
+> r10: 00000000  r9 : c61c7c10  r8 : c6269c20
+> r7 : c0905888  r6 : c6269c20  r5 : 00000000  r4 : 000000d4
+> r3 : 000000dc  r2 : c6050000  r1 : 00000002  r0 : 000000d4
+> Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+...
+> [<c0523c90>] (rt_spin_lock) from [<c03b65a4>] (get_device_parent+0x54/0x17c)
+> [<c03b65a4>] (get_device_parent) from [<c03b6bec>] (device_add+0xe0/0x5b4)
+> [<c03b6bec>] (device_add) from [<c042adf4>] (rproc_add+0x18/0xd8)
+> [<c042adf4>] (rproc_add) from [<c01110e4>] (my_rproc_probe+0x158/0x204)
+> [<c01110e4>] (my_rproc_probe) from [<c03bb6b8>] (platform_drv_probe+0x34/0x70)
+> [<c03bb6b8>] (platform_drv_probe) from [<c03b9dd4>] (driver_probe_device+0x2c8/0x420)
+> [<c03b9dd4>] (driver_probe_device) from [<c03ba02c>] (__driver_attach+0x100/0x11c)
+> [<c03ba02c>] (__driver_attach) from [<c03b7d08>] (bus_for_each_dev+0x7c/0xc0)
+> [<c03b7d08>] (bus_for_each_dev) from [<c03b910c>] (bus_add_driver+0x1cc/0x264)
+> [<c03b910c>] (bus_add_driver) from [<c03ba714>] (driver_register+0x78/0xf8)
+> [<c03ba714>] (driver_register) from [<c010181c>] (do_one_initcall+0x100/0x190)
+> [<c010181c>] (do_one_initcall) from [<c0800de8>] (kernel_init_freeable+0x130/0x1d0)
+> [<c0800de8>] (kernel_init_freeable) from [<c051eee8>] (kernel_init+0x8/0x114)
+> [<c051eee8>] (kernel_init) from [<c01175b0>] (ret_from_fork+0x14/0x24)
+> Code: e2843008 e3c2203f f5d3f000 e5922010 (e193cf9f)
+> ---[ end trace 0000000000000002 ]---
 
-Yes it should.
+Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+Link: https://lore.kernel.org/r/20190530225223.136420-1-brandon.maier@rockwellcollins.com
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/remoteproc/remoteproc_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Bjorn
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 3c5fbbbfb0f17..b542debbc6f03 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -2224,7 +2224,7 @@ static int __init remoteproc_init(void)
+ 
+ 	return 0;
+ }
+-module_init(remoteproc_init);
++subsys_initcall(remoteproc_init);
+ 
+ static void __exit remoteproc_exit(void)
+ {
+-- 
+2.20.1
 
-> > +        compatible ="qcom,pil-reloc-info";
-> > +        reg = <0x94c 200>;
-> > +      };
-> > +    };
