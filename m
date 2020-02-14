@@ -2,69 +2,68 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 347C215E537
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 14 Feb 2020 17:41:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E0B15E6C0
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 14 Feb 2020 17:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403746AbgBNQju (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 14 Feb 2020 11:39:50 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:8552 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2393476AbgBNQjs (ORCPT
+        id S2391254AbgBNQt7 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 14 Feb 2020 11:49:59 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:5730 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2392431AbgBNQt4 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:39:48 -0500
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01EGd2aP024218;
-        Fri, 14 Feb 2020 17:39:35 +0100
+        Fri, 14 Feb 2020 11:49:56 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01EGgTmP009207;
+        Fri, 14 Feb 2020 17:49:44 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=Fanz5J4UkbruWRn4f0AcOtpaEdYDTKPCnL0XHg1X6XI=;
- b=JNYmwBHcOZ2vwgXv45MC9BbCbCeRZE6iBRkUaUjWy1srDGVvbU68l3SqqemxFzS92Yz8
- tzf6wCDmhxLpSp0vYu/X/XodHH2x/1a90AXRr6tSTASy4URasqBRY5ASpN4fD3jVfLRs
- XI808ZcaTQdrQtZ85ZEk78xRHHi0EzVek721iwc9xZ5QaGhSR7hm3O0P44yXPqb3LHUA
- 9KUUjUxFADjBlCrNFdqX2EbYZVxDlTwhHithfJLwy17FZiOXpKOXXDPBm4Yd2TTED5d6
- CpdQUatE55mueMgkmxBU+xlCG4hPJL6LnRdNkzWDHK/WDsBLOq7h1KO+8e8dyfu8NGKt 1Q== 
+ bh=Yj2a7IFHSnPDZ3WYLP65fPO1wS3+vJNQmMzo6fKB96w=;
+ b=R1ydfZblboptgDoUuJwZYy73sl+TVqTgOZ9Gp8NcEjdGcHAkPY0hf2XZMtNkhFOY9zB+
+ Ky2KwMRJ9vGf6LOh7C/njUHF144wF/y5YhVWOQsSWLzlRxobfpb3X17o4c0i/tkwxzjT
+ y9G092v5JArbREH2RDdIjvx6dyXs1k+LHNgKS1O1gkonNaing+rBwMwEqp7nRooS46Ur
+ LhJkXDntY99SyUjmhudEDOwIZqeEBqijp1DT5FXlo0AS+Z1Cm0XPFzbfcGKU5eiPtnKO
+ TDskgjjIkKHcy387EbJeyMxYrfMNnAZmq7gE91NcrO1Zh9m3GWiRBsBBHHHSG4otwBEY Mw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2y1urhw0c1-1
+        by mx07-00178001.pphosted.com with ESMTP id 2y1uve4sae-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Feb 2020 17:39:35 +0100
+        Fri, 14 Feb 2020 17:49:44 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4140D100038;
-        Fri, 14 Feb 2020 17:39:32 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0FC5A10002A;
+        Fri, 14 Feb 2020 17:49:40 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 277A22BF9CC;
-        Fri, 14 Feb 2020 17:39:32 +0100 (CET)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E526D2C0972;
+        Fri, 14 Feb 2020 17:49:39 +0100 (CET)
 Received: from lmecxl0889.lme.st.com (10.75.127.45) by SFHDAG3NODE1.st.com
  (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 14 Feb
- 2020 17:39:31 +0100
+ 2020 17:49:39 +0100
 Subject: Re: [PATCH v5 2/3] remoteproc: stm32: add support for co-processor
  booted before kernel
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Loic PALLARDY <loic.pallardy@st.com>,
         Suman Anna <s-anna@ti.com>,
         Fabien DESSENNE <fabien.dessenne@st.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>
 References: <20200211174205.22247-1-arnaud.pouliquen@st.com>
- <20200211174205.22247-3-arnaud.pouliquen@st.com>
- <20200213203425.GB14415@xps15>
+ <20200211174205.22247-3-arnaud.pouliquen@st.com> <20200214033837.GR1443@yoga>
 From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Message-ID: <e3059122-6d69-d893-5093-bca590f5448b@st.com>
-Date:   Fri, 14 Feb 2020 17:39:31 +0100
+Message-ID: <dfe0b740-c701-00f6-405d-c1808a146093@st.com>
+Date:   Fri, 14 Feb 2020 17:49:38 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200213203425.GB14415@xps15>
+In-Reply-To: <20200214033837.GR1443@yoga>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG3NODE1.st.com
+X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG3NODE1.st.com
  (10.75.127.7)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
  definitions=2020-02-14_05:2020-02-12,2020-02-14 signatures=0
@@ -73,13 +72,19 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Mathieu,
+Hi Bjorn,
 
-On 2/13/20 9:34 PM, Mathieu Poirier wrote:
-> On Tue, Feb 11, 2020 at 06:42:04PM +0100, Arnaud Pouliquen wrote:
+On 2/14/20 4:38 AM, Bjorn Andersson wrote:
+> On Tue 11 Feb 09:42 PST 2020, Arnaud Pouliquen wrote:
+> 
 >> From: Fabien Dessenne <fabien.dessenne@st.com>
 >>
 >> Add support of a remote firmware, preloaded by the boot loader.
+> 
+> This again describes what Loic was describing, a remote processor with
+> persistent or already loaded firmware, not an already booted remote
+> processor.
+> 
 >> Two backup registers are used to retrieve the state of the remote
 >> firmware and to get the optional resource table address.
 >>
@@ -105,21 +110,19 @@ On 2/13/20 9:34 PM, Mathieu Poirier wrote:
 >> +#define COPRO_STATE_CSTOP	3
 >> +#define COPRO_STATE_STANDBY	4
 >> +#define COPRO_STATE_CRASH	5
->> +
 > 
-> At this time only COPRO_STATE_OFF and COPRO_STATE_CRUN are used.  I also looked
-> on github[1] but couldn't find where the rest of the defines come in.
-> 
-> [1]. https://github.com/STMicroelectronics/linux/blob/v4.19-stm32mp/drivers/remoteproc/stm32_rproc.c
+> What does the states INIT and CSTOP represent and how would you deal
+> with these and STANDBY/CRASH? Or will this only ever be OFF or CRUN?
 
-This comes from stm32 code that has been upstreamed in U-boot 
-These definition match with the u-boot definitions available here:
+I will add references in commit message, information is missing.
+This come from stm32 code that has been upstreamed in U-boot.
+These definitions match with the u-boot definitions available here:
 https://gitlab.denx.de/u-boot/u-boot/blob/master/arch/arm/mach-stm32mp/include/mach/stm32.h
-the U-boot source code related to the preloaded is available here:
-https://gitlab.denx.de/u-boot/u-boot/blob/master/drivers/remoteproc/stm32_copro.c 
-to add reference at least in commit message.
+The U-boot source code related to the preloaded is available here:
+https://gitlab.denx.de/u-boot/u-boot/blob/master/drivers/remoteproc/stm32_copro.c  
 
 > 
+>> +
 >>  struct stm32_syscon {
 >>  	struct regmap *map;
 >>  	u32 reg;
@@ -156,6 +159,13 @@ to add reference at least in commit message.
 >> +			continue;
 >> +		*pa = da - p_mem->dev_addr + p_mem->bus_addr;
 >> +		dev_dbg(rproc->dev.parent, "da %llx to pa %#x\n", da, *pa);
+> 
+> I think it would look better to move this and below prints to the
+> caller (you print in the other cases there).
+
+Ok
+
+> 
 >> +		return 0;
 >> +	}
 >> +
@@ -175,18 +185,16 @@ to add reference at least in commit message.
 >> +					 const struct firmware *fw)
 >> +{
 >> +	if (!rproc->skip_fw_load)
+> 
+> This indicates that the core's support for skip_fw_load isn't
+> sufficient, let's ensure that the necessary core support is in place to
+> make the drivers pretty.
+
+I did not find in patch history the reason of this call, but yes seems that this ops should not be called
+i will crosscheck this point.
+
+> 
 >> +		return rproc_elf_load_segments(rproc, fw);
-> 
-> Is it possible that the image loaded by the boot loader be also present in
-> lib/firmware?  If so the segment from the image could be added to the
-> ->dump_segments so that if a crash occurs before the MCU is rebooted, some
-> information is available.  But that is just a thought...  Nothing specific to
-> change if you don't feel the need to.
-
-It could be possible. But i think there are several constraints to take into account such as file matching with the remote FW that is running, memory accesses right...
-I would prefer to address this in a separate thread if needed. 
-
-> 
 >> +
 >> +	return 0;
 >> +}
@@ -214,6 +222,14 @@ I would prefer to address this in a separate thread if needed.
 >> +		table = (struct resource_table *)ddata->rsc_va;
 >> +		/* Assuming that the resource table fits in 1kB is fair */
 >> +		rproc->cached_table = kmemdup(table, RSC_TBL_SIZE, GFP_KERNEL);
+> 
+> If we properly support skipping the booting/setup phase of a remoteproc
+> driver in the core, then I don't see a reason why you can't do this
+> directly in your probe function.
+
+The hypothesis is that the resource table can be decorrelated from the firmware, that why this ops has to be called for preloaded and none-preloded FWs. In this case does it usefull to move it in probe function?
+
+> 
 >> +		if (!rproc->cached_table)
 >> +			return -ENOMEM;
 >> +
@@ -276,20 +292,6 @@ I would prefer to address this in a separate thread if needed.
 >> +	if (ddata->pdds.map && !rproc->skip_fw_load) {
 >>  		err = regmap_update_bits(ddata->pdds.map, ddata->pdds.reg,
 >>  					 ddata->pdds.mask, 0);
-> 
-> Because this is platform code it is really hard to understand what is going on
-> and why this change is needed.  As such it is hard to do a meticulous review of
-> the code and find problems.  Ideally reviewers should only have to look at the
-> code and read the comments to understand the logic.
-> 
-> There is probably nothing wrong with the above, I just don't have enough
-> information to understand it. 
-
-You are right, this requests more comment to be readable. PDDS prevents to put platform in standby
-when Linux starts a remoteproc firmware. In case of preloaded firmware, decision is taken by U-boot.
-i will add comments in next version.
- 
-> 
 >>  		if (err) {
 >> @@ -429,9 +526,15 @@ static int stm32_rproc_start(struct rproc *rproc)
 >>  		}
@@ -302,14 +304,19 @@ i will add comments in next version.
 >> +	 * If M4 previously started by bootloader, just guarantee holdboot
 >> +	 * is set to catch any crash.
 >> +	 */
+> 
+> If the bootloader started the M4, why do we call start()?
+
+The bootloader starts the firmware with "hold boot" disabled.
+In case of crash the firmware automatically reboots, during the Linux kernel boot.
+Then when Linux "attaches" to the remote firmware, and reconfigures the hold boot to freeze the remote processor on crash, 
+
+> 
 >> +	if (!rproc->skip_fw_load) {
 >> +		err = stm32_rproc_set_hold_boot(rproc, false);
 >> +		if (err)
 >> +			return err;
 >> +	}
-> 
-> Same here. 
-> 
 >>  
 >>  	return stm32_rproc_set_hold_boot(rproc, true);
 >>  }
@@ -318,6 +325,12 @@ i will add comments in next version.
 >>  	}
 >>  
 >> +	/* update copro state to OFF */
+> 
+> Please spell out "coprocessor"
+
+ok
+
+> 
 >> +	if (ddata->copro_state.map) {
 >> +		err = regmap_update_bits(ddata->copro_state.map,
 >> +					 ddata->copro_state.reg,
@@ -331,6 +344,15 @@ i will add comments in next version.
 >> +
 >> +	/* Reset skip_fw_load state as we stop the co-processor */
 >> +	rproc->skip_fw_load = false;
+> 
+> Now that's a hack...
+
+This allows to support 2 use cases:
+- crash recovery ( not able to ensure the integrity of the code in RAM)
+- allows application to change the preloaded firmware.
+As these use cases depend on the platform hw, how do you suggest to manage it?
+ 
+> 
 >> +
 >>  	return 0;
 >>  }
@@ -370,6 +392,12 @@ i will add comments in next version.
 >>  	if (err)
 >> -		dev_warn(dev, "failed to get pdds\n");
 >> +		dev_warn(dev, "pdds not supported\n");
+> 
+> Unrelated change?
+
+yes to clean up in this patchset
+
+> 
 >>  
 >>  	rproc->auto_boot = of_property_read_bool(np, "st,auto-boot");
 >>  
@@ -385,28 +413,43 @@ i will add comments in next version.
 >> +		/* no copro_state syscon (optional) */
 >> +		dev_warn(dev, "copro_state not supported\n");
 >> +		goto bail;
+> 
+> return 0;
+
+ok
+
+> 
 >> +	}
 >> +
 >> +	err = regmap_read(ddata->copro_state.map, ddata->copro_state.reg,
 >> +			  &state);
+> 
+> Per the name of this function I think it should parse the dt, not figure
+> out if the processor is booted already. Please parse things here and
+> then read out the state and handle the absence of the "optional"
+> properties depending on the state.
+
+I will reorder the sequence.
+
+> 
 >> +	if (err) {
 >> +		dev_err(&rproc->dev, "failed to read copro state\n");
 >> +		return err;
 >> +	}
 >> +
-> 
->         if (state != COPRO_STATE_CRUN)
->                 goto bail;
-
-yes and as mentioned by Bjorn return 0 instead of goto
-
->>> +	if (state == COPRO_STATE_CRUN) {
+>> +	if (state == COPRO_STATE_CRUN) {
 >> +		rproc->skip_fw_load = true;
 >> +
 >> +		if (stm32_rproc_get_syscon(np, "st,syscfg-rsc-tbl", &rsctbl)) {
 >> +			/* no rsc table syscon (optional) */
 >> +			dev_warn(dev, "rsc tbl syscon not supported\n");
 >> +			goto bail;
+> 
+> But you're still going to skip_fw_load?
+
+Yes the DT property is optional, as the resource table is optional. So if not present, we consider that it is a preloaded firmware without resource table.
+
+> 
 >> +		}
 >> +
 >> +		err = regmap_read(rsctbl.map, rsctbl.reg, &rsc_da);
@@ -424,6 +467,12 @@ yes and as mentioned by Bjorn return 0 instead of goto
 >> +
 >> +		ddata->rsc_va = devm_ioremap_wc(dev, rsc_pa, RSC_TBL_SIZE);
 >> +		if (IS_ERR_OR_NULL(ddata->rsc_va)) {
+> 
+> Shouldn't this be just !ddata->rsc_va?
+
+Right, i will fix it.
+
+> 
 >> +			dev_err(dev, "Unable to map memory region: %pa+%zx\n",
 >> +				&rsc_pa, RSC_TBL_SIZE);
 >> +			ddata->rsc_va = NULL;
@@ -440,28 +489,45 @@ yes and as mentioned by Bjorn return 0 instead of goto
 >>  		goto free_wkq;
 >>  
 >> +	if (!rproc->skip_fw_load) {
+> 
+> So you read from the state map that the processor is not booted, why do
+> you need to stop it?
+
+This is done as values of the M4 are not at expected state on reset. For instance 
+the PDDS value is not set to 1. As consequence the platform can not
+go in standby mode. 
+
+> 
 >> +		ret = stm32_rproc_stop(rproc);
 >> +		if (ret)
 >> +			goto free_rproc;
 >> +	}
 >> +
-> 
-> I'm very puzzled here, especially since it deals with the case where FW is
-> loaded by the framework.  Do you think you could add a (lengthy) comment to
-> explain what is going on?
-
-Sure, i will improve comments in code, and commit message.
-
-Thanks,
-Arnaud
-
-> 
-> Thanks,
-> Mathieu
-> 
 >>  	ret = stm32_rproc_request_mbox(rproc);
 >>  	if (ret)
 >>  		goto free_rproc;
->> -- 
->> 2.17.1
->>
+> 
+> Thanks for including this patch in the series. After reading this patch
+> I no longer think that patch 1 implements the proper support for what
+> you need.
+
+Please could you explain what exactly does not fit from your point of view?
+
+> 
+> The one piece I'm uncertain of is how are you dealing with the firmware
+> during a restart or do you simply not support restarts without user
+> space selecting new firmware?
+
+Yes we do not support the restart without user space action.
+If code is in ROM you can ensure the integrity of the code, but our code is in
+RAM. And as RAM can be isolated we potentially don't have access to the code space.
+Reseting rproc->skip_fw_load to 0 allows this choice.
+So from our point of view delegate the behavior to the user space makes sense as 
+depending on hardware but also on project itself.
+
+Thanks,
+Arnaud
+> 
+> Regards,
+> Bjorn
+> 
