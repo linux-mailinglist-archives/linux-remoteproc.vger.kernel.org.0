@@ -2,40 +2,40 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC13115DF9A
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 14 Feb 2020 17:10:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E9715E6AD
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 14 Feb 2020 17:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391315AbgBNQJf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 14 Feb 2020 11:09:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34144 "EHLO mail.kernel.org"
+        id S2392845AbgBNQU0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 14 Feb 2020 11:20:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54064 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391308AbgBNQJf (ORCPT
+        id S2405202AbgBNQUZ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:09:35 -0500
+        Fri, 14 Feb 2020 11:20:25 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7B86E24685;
-        Fri, 14 Feb 2020 16:09:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B397F2472D;
+        Fri, 14 Feb 2020 16:20:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696574;
-        bh=Pp4ZrR/m1W7SeYzzjTvC8bs5kKe2Stp9EV7keNr9wpQ=;
+        s=default; t=1581697224;
+        bh=MeKY8lI/niWeXOK3SeS9BHyT0CXImgk8ZHTdiX98WcE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hdcKtt9JN7LPdJLSDpRSGhhp9gIFr2CwF+QqEd/iC8DmzbRDFIrff/tj9U/caJcgA
-         gMQr3eLpDVKNjrP+keYOrEeZk74ua5O6DuOV4zft3czpPFyEBLh3iH4/jVWkbdp8hn
-         8SFMHwjHNAg65z+93OmBhTnMmQjQEc5OjqoA1ol8=
+        b=pYRQYVbsCbOhWhD8ZemRM8gai5RB9atC2A1iQidxQLSYFC5JXnRAkM8k8I1l+gqRz
+         1RmG/XYeRhiHiLtLBdhjKAap6PUYcnQGw0qE6kOR5H6Hsw0sOOs1CEpvGr8SRI/Vhx
+         P4uAAFXVwN3b6K2wszjXi1dly0cN+CXNEivWa9ZU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Brandon Maier <brandon.maier@rockwellcollins.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-remoteproc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 363/459] remoteproc: Initialize rproc_class before use
-Date:   Fri, 14 Feb 2020 11:00:13 -0500
-Message-Id: <20200214160149.11681-363-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 147/186] remoteproc: Initialize rproc_class before use
+Date:   Fri, 14 Feb 2020 11:16:36 -0500
+Message-Id: <20200214161715.18113-147-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
-References: <20200214160149.11681-1-sashal@kernel.org>
+In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
+References: <20200214161715.18113-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -98,10 +98,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 3c5fbbbfb0f17..b542debbc6f03 100644
+index eab14b414bf0d..cc733b89560a1 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
-@@ -2224,7 +2224,7 @@ static int __init remoteproc_init(void)
+@@ -1620,7 +1620,7 @@ static int __init remoteproc_init(void)
  
  	return 0;
  }
