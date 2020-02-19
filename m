@@ -2,566 +2,326 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 596DE164E75
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 19 Feb 2020 20:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77B82165057
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 19 Feb 2020 21:56:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726638AbgBSTHg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 19 Feb 2020 14:07:36 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:34460 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726613AbgBSTHg (ORCPT
+        id S1727648AbgBSU4j (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 19 Feb 2020 15:56:39 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:36149 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727295AbgBSU4j (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 19 Feb 2020 14:07:36 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01JJ7Y7h105670;
-        Wed, 19 Feb 2020 13:07:34 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1582139254;
-        bh=zQdEbz3wumRC2QX3gZBHgXXQQejFmvah8W+M7fvrW4E=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=x+w2giEqrcLI4JMMYuXyI25REdyASZ8UVN01yH0aLI1X2H2lEpM8Byk6FVqgBZU4+
-         iNc13HSFsGGJxL2+nbVa0GRjEvEDcn9+XN3UVkVrt0a27aZbNkEasDzSpuoZYJp4qf
-         gj0nu7ES+wpreJoXJkqQMJNt/fw0grFEoftC9vIo=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01JJ7Ygu003917
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 19 Feb 2020 13:07:34 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 19
- Feb 2020 13:07:33 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 19 Feb 2020 13:07:33 -0600
-Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01JJ7Usd124772;
-        Wed, 19 Feb 2020 13:07:31 -0600
-Subject: Re: [PATCHv6 12/14] remoteproc/omap: add support for runtime
- auto-suspend/resume
-To:     Suman Anna <s-anna@ti.com>, <bjorn.andersson@linaro.org>,
-        <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>, <afd@ti.com>
-CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
-        <linux-omap@vger.kernel.org>
-References: <20200211152125.23819-1-t-kristo@ti.com>
- <20200211152125.23819-13-t-kristo@ti.com>
- <d1c9c28d-c35f-1011-4938-6f42977a090f@ti.com>
-From:   Tero Kristo <t-kristo@ti.com>
-Message-ID: <5f2dbcac-2f6f-b8ed-dced-a2a64fceb75a@ti.com>
-Date:   Wed, 19 Feb 2020 21:07:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Wed, 19 Feb 2020 15:56:39 -0500
+Received: by mail-io1-f67.google.com with SMTP id d15so2161221iog.3
+        for <linux-remoteproc@vger.kernel.org>; Wed, 19 Feb 2020 12:56:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BXtUYAMk2yypjpr2fiXAWRzmutEB5OJ96VfTvfe+/6c=;
+        b=AmGex7EwESJoGdxW/IK7RUt6DGyfpn9qvcWIBv9ejozvqo1awYekRr/sUSbXHAJZds
+         gvoKJSwsCWNdl18wq5WRb94mDmtvp47TpLG2/5Mala4om3G+9O4TvRx5UQXU+K7jaoxM
+         Un5HR8Yuzv3g17d1n3SfkNqqYZrWJQsH8AWJGebHrEB/vMcUoG5XPV1ohv1br3Hk9sXD
+         tSYamsf5SsI28O2RV6klxBb5vENMnfcLIOvGsuKRXVl4CPIgOJ4PpaSCTgBNb85ioQ3S
+         +RBsspW71MhyarciJf9fWRYrJ5jGP1nVXrVZ0pBI7XjzZGI+T88wHhNi7QGXTZi3QpTy
+         LGLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BXtUYAMk2yypjpr2fiXAWRzmutEB5OJ96VfTvfe+/6c=;
+        b=hzDWZp9wfMsvrtQUJq6AVMUzyB1cuxPXYqJSnFTYwWoMfk4CGQRgkSXi301ok8245o
+         ikIGdM005Ao2cms3jAc+xGWl4qgKLTVQujOxy8j8A94JoD/IS0MO4ZDePOqHeA8+m2Hw
+         vQhinaZeTZWxUGQUO0t9Y5TKJw7HRPzuSW0s+rMtPWt+U1kUKzHGMccf1oz63nbBUxoV
+         LRTrPLu9NtzVgFLa7cSQNiyvRjADfpv0yI8FTfZaWiq2tK9bIYGbddvdOxrIKkTzvLh1
+         +dBVUmLnMYgqV8pRurjCGwB0A2x/IeYm0edH0Wjq0WZtnCkkgFrh2KpXZuOLjF9evk2M
+         4DUw==
+X-Gm-Message-State: APjAAAXhE5mHDxdPAHIGbOStqf0iv5EmRiz4h5ppTtRByqqND6+CmbXt
+        8irxH0Oq8mhGoohwCPyWfW7MP2riNcDNC9MO0yKMZA==
+X-Google-Smtp-Source: APXvYqyrfEJ75AkhgQEHrQ7440cuVEkH4ehytEjs4RWSvQcSM27eEcC9Sbt5xvxu/vjhwPrzEfjtBsP9MAIbTuE7ezI=
+X-Received: by 2002:a5e:d616:: with SMTP id w22mr20390545iom.57.1582145798058;
+ Wed, 19 Feb 2020 12:56:38 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <d1c9c28d-c35f-1011-4938-6f42977a090f@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20200211174205.22247-1-arnaud.pouliquen@st.com>
+ <20200211174205.22247-2-arnaud.pouliquen@st.com> <20200213200813.GA14415@xps15>
+ <24947b31-bef6-cfb3-686e-80bef6f974e3@st.com> <CANLsYkxhWWgVFVe3=5WOYkYGQgV7g+3FvDKRDKi7y9kuk4_G8w@mail.gmail.com>
+ <d6e09b93-f287-78a0-a6d9-3d9ea0a5f3d7@st.com>
+In-Reply-To: <d6e09b93-f287-78a0-a6d9-3d9ea0a5f3d7@st.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Wed, 19 Feb 2020 13:56:27 -0700
+Message-ID: <CANLsYkzQz5yyu+KViEL8GwWtp7cfBotS8Fuvs1MJzvYq4LxOig@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] remoteproc: add support for co-processor loaded
+ and booted before kernel
+To:     Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        devicetree@vger.kernel.org, Ohad Ben-Cohen <ohad@wizery.com>,
+        Loic PALLARDY <loic.pallardy@st.com>,
+        Suman Anna <s-anna@ti.com>,
+        Fabien DESSENNE <fabien.dessenne@st.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 18/02/2020 00:18, Suman Anna wrote:
-> Hi Tero,
-> 
-> On 2/11/20 9:21 AM, Tero Kristo wrote:
->> From: Suman Anna <s-anna@ti.com>
->>
->> This patch enhances the PM support in the OMAP remoteproc driver to
->> support the runtime auto-suspend. A remoteproc may not be required to
->> be running all the time, and typically will need to be active only
->> during certain usecases. As such, to save power, it should be turned
->> off during potential long periods of inactivity between usecases.
->> This suspend and resume of the device is a relatively heavy process
->> in terms of latencies, so a remoteproc should be suspended only after
->> a certain period of prolonged inactivity. The OMAP remoteproc driver
->> leverages the runtime pm framework's auto_suspend feature to accomplish
->> this functionality. This feature is automatically enabled when a remote
->> processor has successfully booted. The 'autosuspend_delay_ms' for each
->> device dictates the inactivity period/time to wait for before
->> suspending the device.
->>
->> The runtime auto-suspend design relies on marking the last busy time
->> on every communication (virtqueue kick) to and from the remote processor.
->> When there has been no activity for 'autosuspend_delay_ms' time, the
->> runtime PM framework invokes the driver's runtime pm suspend callback
->> to suspend the device. The remote processor will be woken up on the
->> initiation of the next communication message through the runtime pm
->> resume callback. The current auto-suspend design also allows a remote
->> processor to deny a auto-suspend attempt, if it wishes to, by sending a
->> NACK response to the initial suspend request message sent to the remote
->> processor as part of the suspend process. The auto-suspend request is
->> also only attempted if the remote processor is idled and in standby at
->> the time of inactivity timer expiry. This choice is made to avoid
->> unnecessary messaging, and the auto-suspend is simply rescheduled to
->> be attempted again after a further lapse of autosuspend_delay_ms.
->>
->> The runtime pm callbacks functionality in this patch reuses most of the
->> core logic from the suspend/resume support code, and make use of an
->> additional auto_suspend flag to differentiate the logic in common code
->> from system suspend. The system suspend/resume sequences are also updated
->> to reflect the proper pm_runtime statuses, and also to really perform a
->> suspend/resume only if the remoteproc has not been auto-suspended at the
->> time of request. The remote processor is left in suspended state on a
->> system resume if it has been auto-suspended before, and will be woken up
->> only when a usecase needs to run.
->>
->> The OMAP remoteproc driver currently uses a default value of 10 seconds
->> for all OMAP remoteprocs, and a different value can be chosen either by
->> choosing a positive value for the 'ti,autosuspend-delay' under DT or by
-> 
-> This is now ti,autosuspend-delay-ms.
+Hey Arnaud,
 
-Right, can update that one.
+On Tue, 18 Feb 2020 at 10:31, Arnaud POULIQUEN <arnaud.pouliquen@st.com> wrote:
+>
+> Hi Mathieu, Bjorn,
+>
+> On 2/17/20 7:40 PM, Mathieu Poirier wrote:
+> > On Fri, 14 Feb 2020 at 09:33, Arnaud POULIQUEN <arnaud.pouliquen@st.com> wrote:
+> >>
+> >> Hi Mathieu,
+> >>
+> >> On 2/13/20 9:08 PM, Mathieu Poirier wrote:
+> >>> Good day,
+> >>>
+> >>> On Tue, Feb 11, 2020 at 06:42:03PM +0100, Arnaud Pouliquen wrote:
+> >>>> From: Loic Pallardy <loic.pallardy@st.com>
+> >>>>
+> >>>> Remote processor could boot independently or be loaded/started before
+> >>>> Linux kernel by bootloader or any firmware.
+> >>>> This patch introduces a new property in rproc core, named skip_fw_load,
+> >>>> to be able to allocate resources and sub-devices like vdev and to
+> >>>> synchronize with current state without loading firmware from file system.
+> >>>> It is platform driver responsibility to implement the right firmware
+> >>>> load ops according to HW specificities.
+> >>>>
+> >>>> Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
+> >>>> Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> >>>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
+> >>>> ---
+> >>>>  drivers/remoteproc/remoteproc_core.c | 67 ++++++++++++++++++++++------
+> >>>>  include/linux/remoteproc.h           |  2 +
+> >>>>  2 files changed, 55 insertions(+), 14 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> >>>> index 097f33e4f1f3..876b5420a32b 100644
+> >>>> --- a/drivers/remoteproc/remoteproc_core.c
+> >>>> +++ b/drivers/remoteproc/remoteproc_core.c
+> >>>> @@ -1358,8 +1358,19 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+> >>>>      return ret;
+> >>>>  }
+> >>>>
+> >>>> -/*
+> >>>> - * take a firmware and boot a remote processor with it.
+> >>>> +/**
+> >>>> + * rproc_fw_boot() - boot specified remote processor according to specified
+> >>>> + * firmware
+> >>>> + * @rproc: handle of a remote processor
+> >>>> + * @fw: pointer on firmware to handle
+> >>>> + *
+> >>>> + * Handle resources defined in resource table, load firmware and
+> >>>> + * start remote processor.
+> >>>> + *
+> >>>> + * If firmware pointer fw is NULL, firmware is not handled by remoteproc
+> >>>> + * core, but under the responsibility of platform driver.
+> >>>> + *
+> >>>> + * Returns 0 on success, and an appropriate error value otherwise.
+> >>>>   */
+> >>>>  static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
+> >>>>  {
+> >>>> @@ -1371,7 +1382,11 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
+> >>>>      if (ret)
+> >>>>              return ret;
+> >>>>
+> >>>> -    dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
+> >>>> +    if (fw)
+> >>>> +            dev_info(dev, "Booting fw image %s, size %zd\n", name,
+> >>>> +                     fw->size);
+> >>>> +    else
+> >>>> +            dev_info(dev, "Synchronizing with preloaded co-processor\n");
+> >>>>
+> >>>>      /*
+> >>>>       * if enabling an IOMMU isn't relevant for this rproc, this is
+> >>>> @@ -1718,16 +1733,22 @@ static void rproc_crash_handler_work(struct work_struct *work)
+> >>>>   * rproc_boot() - boot a remote processor
+> >>>>   * @rproc: handle of a remote processor
+> >>>>   *
+> >>>> - * Boot a remote processor (i.e. load its firmware, power it on, ...).
+> >>>> + * Boot a remote processor (i.e. load its firmware, power it on, ...) from
+> >>>> + * different contexts:
+> >>>> + * - power off
+> >>>> + * - preloaded firmware
+> >>>> + * - started before kernel execution
+> >>>> + * The different operations are selected thanks to properties defined by
+> >>>> + * platform driver.
+> >>>>   *
+> >>>> - * If the remote processor is already powered on, this function immediately
+> >>>> - * returns (successfully).
+> >>>> + * If the remote processor is already powered on at rproc level, this function
+> >>>> + * immediately returns (successfully).
+> >>>>   *
+> >>>>   * Returns 0 on success, and an appropriate error value otherwise.
+> >>>>   */
+> >>>>  int rproc_boot(struct rproc *rproc)
+> >>>>  {
+> >>>> -    const struct firmware *firmware_p;
+> >>>> +    const struct firmware *firmware_p = NULL;
+> >>>>      struct device *dev;
+> >>>>      int ret;
+> >>>>
+> >>>> @@ -1758,11 +1779,20 @@ int rproc_boot(struct rproc *rproc)
+> >>>>
+> >>>>      dev_info(dev, "powering up %s\n", rproc->name);
+> >>>>
+> >>>> -    /* load firmware */
+> >>>> -    ret = request_firmware(&firmware_p, rproc->firmware, dev);
+> >>>> -    if (ret < 0) {
+> >>>> -            dev_err(dev, "request_firmware failed: %d\n", ret);
+> >>>> -            goto downref_rproc;
+> >>>> +    if (!rproc->skip_fw_load) {
+> >>>> +            /* load firmware */
+> >>>> +            ret = request_firmware(&firmware_p, rproc->firmware, dev);
+> >>>> +            if (ret < 0) {
+> >>>> +                    dev_err(dev, "request_firmware failed: %d\n", ret);
+> >>>> +                    goto downref_rproc;
+> >>>> +            }
+> >>>> +    } else {
+> >>>> +            /*
+> >>>> +             * Set firmware name pointer to null as remoteproc core is not
+> >>>> +             * in charge of firmware loading
+> >>>> +             */
+> >>>> +            kfree(rproc->firmware);
+> >>>> +            rproc->firmware = NULL;
+> >>>
+> >>> If the MCU with pre-loaded FW crashes request_firmware() in
+> >>> rproc_trigger_recovery() will return an error and rproc_start()
+> >>> never called.
+> >>
+> >> Right, something is missing in the recovery function to prevent request_firmware call if skip_fw_load is set
+> >>
+> >> We also identify an issue if recovery fails:
+> >> In case of recovery issue the rproc state is RPROC_CRASHED, so that it is no more possible to load a new firmware from
+> >> user space.
+> >> This issue is not linked to this patchset. We have patches on our shelves for this.
+> >>
+> >>>>      }
+> >>>>
+> >>>>      ret = rproc_fw_boot(rproc, firmware_p);
+> >>>> @@ -1916,8 +1946,17 @@ int rproc_add(struct rproc *rproc)
+> >>>>      /* create debugfs entries */
+> >>>>      rproc_create_debug_dir(rproc);
+> >>>>
+> >>>> -    /* if rproc is marked always-on, request it to boot */
+> >>>> -    if (rproc->auto_boot) {
+> >>>> +    if (rproc->skip_fw_load) {
+> >>>> +            /*
+> >>>> +             * If rproc is marked already booted, no need to wait
+> >>>> +             * for firmware.
+> >>>> +             * Just handle associated resources and start sub devices
+> >>>> +             */
+> >>>> +            ret = rproc_boot(rproc);
+> >>>> +            if (ret < 0)
+> >>>> +                    return ret;
+> >>>> +    } else if (rproc->auto_boot) {
+> >>>> +            /* if rproc is marked always-on, request it to boot */
+> >>>
+> >>> I spent way too much time staring at this modification...  I can't decide if a
+> >>> system where the FW has been pre-loaded should be considered "auto_boot".
+> >>> Indeed the result is the same, i.e the MCU is started at boot time without user
+> >>> intervention.
+> >>
+> >> The main difference is that the firmware is loaded by the Linux remote proc in case of auto-boot.
+> >> In auto-boot mode the remoteproc loads a firmware, on probe, with a specified name without any request from user space.
+> >> One constraint of this mode is that the file system has to be accessible before the rproc probe.
+> >
+> > Indeed, but in both cases the MCU is booted automatically.  In one
+> > case the FW is loaded by the framework and in the other it is not.  As
+> > such both scenarios are "auto_boot", they simply have different
+> > flavours.
+> Regarding your concerns i would like to propose an alternative that will answer to following use cases:
+>
+> In term of use cases we can start the remote proc firmware in following modes:
+> - auto boot with FW loading, resource table parsing and FW start/stop
+> - auto boot without FW loading, with FW resource table parsing and FW start/stop
+> - auto boot with FW attachment and  resource table parsing
+> - boot on userspace request with FW loading, resource table parsing and FW start/stop
+> - boot on userspace request without FW loading, with FW resource table parsing and FW start/stop
+> - boot on userspace request with FW attachment and  resource table parsing
+>
+> I considered the recovery covered by these use cases...
+>
+> I tried to concatenate all use case to determine the behavior of the core and platform driver:
+> - "auto-boot" used to decide if boot is from driver or user space request (independently from fw loading and live cycle management)
+> - "skip_fw_load" allows to determine if a firmware has to be loaded or not.
+> - remote Firmware live cycle (start,stop,...) are managed by the platform driver, it would have to determine the manage the remote proc depending on the mode detected.
+>
+> If i apply this for stm32mp1 driver:
+> normal boot( FW started on user space request):
+>   - auto-boot = 0
+>   - skip_fw_load = 0
+> FW loaded and started by the bootloader
+>   - auto-boot = 1
+>   - skip_firmware = 1;
+>
+> => on a stop: the "auto-boot" and "skip_firmware flag will be reset by the stm32rproc driver, to allow user space to load a new firmware or reste the system.
+> this is considered as a ack by Bjorn today, if you have an alternative please share.
 
-> 
->> updating the 'autosuspend_delay_ms' field at runtime through the sysfs
->> interface.
->>      Eg: To use 25 seconds for IPU2 on DRA7xx,
->>        echo 25000 > /sys/bus/platform/devices/55020000.ipu/power/autosuspend_delay_ms
->>
->> The runtime suspend feature can also be similarly enabled or disabled by
->> writing 'auto' or 'on' to the device's 'control' power field. The default
->> is enabled.
->>      Eg: To disable auto-suspend for IPU2 on DRA7xx SoC,
->>        echo on > /sys/bus/platform/devices/55020000.ipu/power/control
->>
->> Signed-off-by: Suman Anna <s-anna@ti.com>
->> [t-kristo@ti.com: converted to use ti-sysc instead of hwmod]
->> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->> ---
->>   drivers/remoteproc/omap_remoteproc.c | 189 +++++++++++++++++++++++++--
->>   1 file changed, 178 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
->> index e8d3520493e1..490a242130f9 100644
->> --- a/drivers/remoteproc/omap_remoteproc.c
->> +++ b/drivers/remoteproc/omap_remoteproc.c
->> @@ -22,6 +22,7 @@
->>   #include <linux/of_device.h>
->>   #include <linux/of_reserved_mem.h>
->>   #include <linux/platform_device.h>
->> +#include <linux/pm_runtime.h>
->>   #include <linux/dma-mapping.h>
->>   #include <linux/remoteproc.h>
->>   #include <linux/mailbox_client.h>
->> @@ -37,6 +38,9 @@
->>   #include "omap_remoteproc.h"
->>   #include "remoteproc_internal.h"
->>   
->> +/* default auto-suspend delay (ms) */
->> +#define DEFAULT_AUTOSUSPEND_DELAY		10000
->> +
->>   /**
->>    * struct omap_rproc_boot_data - boot data structure for the DSP omap rprocs
->>    * @syscon: regmap handle for the system control configuration module
->> @@ -83,11 +87,14 @@ struct omap_rproc_timer {
->>    * @num_mems: number of internal memory regions
->>    * @num_timers: number of rproc timer(s)
->>    * @timers: timer(s) info used by rproc
->> + * @autosuspend_delay: auto-suspend delay value to be used for runtime pm
->> + * @need_resume: if true a resume is needed in the system resume callback
->>    * @rproc: rproc handle
->>    * @reset: reset handle
->>    * @pm_comp: completion primitive to sync for suspend response
->>    * @fck: functional clock for the remoteproc
->>    * @suspend_acked: state machine flag to store the suspend request ack
->> + * @in_reset: if remoteproc is in reset or not
->>    */
->>   struct omap_rproc {
->>   	struct mbox_chan *mbox;
->> @@ -97,11 +104,14 @@ struct omap_rproc {
->>   	int num_mems;
->>   	int num_timers;
->>   	struct omap_rproc_timer *timers;
->> +	int autosuspend_delay;
->> +	bool need_resume;
->>   	struct rproc *rproc;
->>   	struct reset_control *reset;
->>   	struct completion pm_comp;
->>   	struct clk *fck;
->>   	bool suspend_acked;
->> +	bool in_reset;
->>   };
->>   
->>   /**
->> @@ -403,11 +413,23 @@ static void omap_rproc_kick(struct rproc *rproc, int vqid)
->>   	struct device *dev = rproc->dev.parent;
->>   	int ret;
->>   
->> +	/* wake up the rproc before kicking it */
->> +	ret = pm_runtime_get_sync(dev);
->> +	if (WARN_ON(ret < 0)) {
->> +		dev_err(dev, "pm_runtime_get_sync() failed during kick, ret = %d\n",
->> +			ret);
->> +		pm_runtime_put_noidle(dev);
->> +		return;
->> +	}
->> +
->>   	/* send the index of the triggered virtqueue in the mailbox payload */
->>   	ret = mbox_send_message(oproc->mbox, (void *)vqid);
->>   	if (ret < 0)
->>   		dev_err(dev, "failed to send mailbox message, status = %d\n",
->>   			ret);
->> +
->> +	pm_runtime_mark_last_busy(dev);
->> +	pm_runtime_put_autosuspend(dev);
->>   }
->>   
->>   /**
->> @@ -498,6 +520,12 @@ static int omap_rproc_start(struct rproc *rproc)
->>   		goto disable_timers;
->>   	}
->>   
->> +	oproc->in_reset = false;
->> +
->> +	pm_runtime_get_sync(dev);
-> 
-> There are still some issues with this patch, namely the timers are not
-> shut down cleanly. I also prefer to keep the pm_runtime API usage
-> symmetric between start() and stop() and not use two different styles
-> (essentially follow the style from the downstream version). This should
-> help us in eliminating the in_reset variable
+I wonder if we can achieve the same results without needing
+rproc::skip_fw_load...  For cases where the FW would have been loaded
+and the MCU started by another entity we could simply set rproc->state
+= RPROC_RUNNING in the platform driver.  That way when the MCU is
+stopped or crashes, there is no flag to reset, rproc->state is simply
+set correctly by the current code.
 
-For timers, I did craft the internal patch fixing the runtime handling 
-couple of days back, so I can squash that into this one and post v7.
+I would also set auto_boot =1 in order to start the AP synchronisation
+as quickly as possible and add a check in rproc_trigger_auto_boot() to
+see if rproc->state == RPROC_RUNNING.  If so simply call rproc_boot()
+where platform specific rproc_ops would be tailored to handle a
+running processor.
 
-I don't quite get what you mean by the different styles / symmetricity 
-of the pm_runtime API usage, but it seems impossible to get rid of the 
-in_reset variable. Reset core does not have usecounting if the 
-reset_control_*_get_*_exclusive() variant is used, so we must handle the 
-usecounting of it internally within driver; otherwise we get timeouts. 
-Also, another issue is that driver removal calls pm_runtime_get() and 
-that causes a crash with omap_rproc_remove (rproc keep running while we 
-kill iommu etc.)
+In my opinion the above would represent the state of the MCU rather
+than the state of the FW used by the MCU.  It would also provide an
+opening for supporting systems where the MCU is not the life cycle
+manager.
 
-> 
->> +	pm_runtime_mark_last_busy(dev);
->> +	pm_runtime_put_autosuspend(dev);
->> +
->>   	return 0;
->>   
->>   disable_timers:
->> @@ -510,6 +538,7 @@ static int omap_rproc_start(struct rproc *rproc)
->>   /* power off the remote processor */
->>   static int omap_rproc_stop(struct rproc *rproc)
->>   {
->> +	struct device *dev = rproc->dev.parent;
->>   	struct omap_rproc *oproc = rproc->priv;
->>   	int ret;
->>   
->> @@ -517,12 +546,20 @@ static int omap_rproc_stop(struct rproc *rproc)
->>   	if (ret)
->>   		return ret;
->>   
->> +	oproc->in_reset = true;
->> +
->>   	ret = omap_rproc_disable_timers(rproc, true);
->>   	if (ret)
->>   		return ret;
->>   
->>   	mbox_free_channel(oproc->mbox);
->>   
->> +	/*
->> +	 * update the runtime pm states and status now that the remoteproc
->> +	 * has stopped
->> +	 */
->> +	pm_runtime_put_noidle(dev);
->> +
->>   	return 0;
->>   }
->>   
->> @@ -579,17 +616,19 @@ static bool _is_rproc_in_standby(struct omap_rproc *oproc)
->>   
->>   /* 1 sec is long enough time to let the remoteproc side suspend the device */
->>   #define DEF_SUSPEND_TIMEOUT 1000
->> -static int _omap_rproc_suspend(struct rproc *rproc)
->> +static int _omap_rproc_suspend(struct rproc *rproc, bool auto_suspend)
->>   {
->>   	struct device *dev = rproc->dev.parent;
->>   	struct omap_rproc *oproc = rproc->priv;
->>   	unsigned long to = msecs_to_jiffies(DEF_SUSPEND_TIMEOUT);
->>   	unsigned long ta = jiffies + to;
->> +	u32 suspend_msg = auto_suspend ?
->> +				RP_MBOX_SUSPEND_AUTO : RP_MBOX_SUSPEND_SYSTEM;
->>   	int ret;
->>   
->>   	reinit_completion(&oproc->pm_comp);
->>   	oproc->suspend_acked = false;
->> -	ret = mbox_send_message(oproc->mbox, (void *)RP_MBOX_SUSPEND_SYSTEM);
->> +	ret = mbox_send_message(oproc->mbox, (void *)suspend_msg);
->>   	if (ret < 0) {
->>   		dev_err(dev, "PM mbox_send_message failed: %d\n", ret);
->>   		return ret;
->> @@ -622,6 +661,8 @@ static int _omap_rproc_suspend(struct rproc *rproc)
->>   
->>   	reset_control_assert(oproc->reset);
->>   
->> +	oproc->in_reset = true;
->> +
->>   	ret = omap_rproc_disable_timers(rproc, false);
->>   	if (ret) {
->>   		dev_err(dev, "disabling timers during suspend failed %d\n",
->> @@ -629,42 +670,79 @@ static int _omap_rproc_suspend(struct rproc *rproc)
->>   		goto enable_device;
->>   	}
->>   
->> +	/*
->> +	 * IOMMUs would have to be disabled specifically for runtime suspend.
->> +	 * They are handled automatically through System PM callbacks for
->> +	 * regular system suspend
->> +	 */
->> +	if (auto_suspend) {
->> +		ret = omap_iommu_domain_deactivate(rproc->domain);
->> +		if (ret) {
->> +			dev_err(dev, "iommu domain deactivate failed %d\n",
->> +				ret);
->> +			goto enable_timers;
->> +		}
->> +	}
->> +
->>   	return 0;
->>   
->> +enable_timers:
->> +	/* ignore errors on re-enabling code */
->> +	omap_rproc_enable_timers(rproc, false);
->>   enable_device:
->>   	reset_control_deassert(oproc->reset);
->>   	return ret;
->>   }
->>   
->> -static int _omap_rproc_resume(struct rproc *rproc)
->> +static int _omap_rproc_resume(struct rproc *rproc, bool auto_suspend)
->>   {
->>   	struct device *dev = rproc->dev.parent;
->>   	struct omap_rproc *oproc = rproc->priv;
->>   	int ret;
->>   
->> +	/*
->> +	 * IOMMUs would have to be enabled specifically for runtime resume.
->> +	 * They would have been already enabled automatically through System
->> +	 * PM callbacks for regular system resume
->> +	 */
->> +	if (auto_suspend) {
->> +		ret = omap_iommu_domain_activate(rproc->domain);
->> +		if (ret) {
->> +			dev_err(dev, "omap_iommu activate failed %d\n", ret);
->> +			goto out;
->> +		}
->> +	}
->> +
->>   	/* boot address could be lost after suspend, so restore it */
->>   	if (oproc->boot_data) {
->>   		ret = omap_rproc_write_dsp_boot_addr(rproc);
->>   		if (ret) {
->>   			dev_err(dev, "boot address restore failed %d\n", ret);
->> -			goto out;
->> +			goto suspend_iommu;
->>   		}
->>   	}
->>   
->>   	ret = omap_rproc_enable_timers(rproc, false);
->>   	if (ret) {
->>   		dev_err(dev, "enabling timers during resume failed %d\n", ret);
->> -		goto out;
->> +		goto suspend_iommu;
->>   	}
->>   
->> -	ret = reset_control_deassert(oproc->reset);
->> -	if (ret) {
->> -		dev_err(dev, "reset deassert failed %d\n", ret);
->> -		goto disable_timers;
->> +	if (oproc->in_reset) {
->> +		ret = reset_control_deassert(oproc->reset);
->> +		if (ret) {
->> +			dev_err(dev, "reset deassert failed %d\n", ret);
->> +			goto disable_timers;
->> +		}
->> +
->> +		oproc->in_reset = false;
->>   	}
->>   
->>   	return 0;
->>   
->> +suspend_iommu:
->> +	if (auto_suspend)
->> +		omap_iommu_domain_deactivate(rproc->domain);
->>   disable_timers:
->>   	omap_rproc_disable_timers(rproc, false);
->>   
->> @@ -676,6 +754,7 @@ static int __maybe_unused omap_rproc_suspend(struct device *dev)
->>   {
->>   	struct platform_device *pdev = to_platform_device(dev);
->>   	struct rproc *rproc = platform_get_drvdata(pdev);
->> +	struct omap_rproc *oproc = rproc->priv;
->>   	int ret = 0;
->>   
->>   	mutex_lock(&rproc->lock);
->> @@ -690,13 +769,19 @@ static int __maybe_unused omap_rproc_suspend(struct device *dev)
->>   		goto out;
->>   	}
->>   
->> -	ret = _omap_rproc_suspend(rproc);
->> +	ret = _omap_rproc_suspend(rproc, false);
->>   	if (ret) {
->>   		dev_err(dev, "suspend failed %d\n", ret);
->>   		goto out;
->>   	}
->>   
->> +	/*
->> +	 * remoteproc is running at the time of system suspend, so remember
->> +	 * it so as to wake it up during system resume
->> +	 */
->> +	oproc->need_resume = true;
->>   	rproc->state = RPROC_SUSPENDED;
->> +
->>   out:
->>   	mutex_unlock(&rproc->lock);
->>   	return ret;
->> @@ -706,6 +791,7 @@ static int __maybe_unused omap_rproc_resume(struct device *dev)
->>   {
->>   	struct platform_device *pdev = to_platform_device(dev);
->>   	struct rproc *rproc = platform_get_drvdata(pdev);
->> +	struct omap_rproc *oproc = rproc->priv;
->>   	int ret = 0;
->>   
->>   	mutex_lock(&rproc->lock);
->> @@ -717,17 +803,87 @@ static int __maybe_unused omap_rproc_resume(struct device *dev)
->>   		goto out;
->>   	}
->>   
->> -	ret = _omap_rproc_resume(rproc);
->> +	/*
->> +	 * remoteproc was auto-suspended at the time of system suspend,
->> +	 * so no need to wake-up the processor (leave it in suspended
->> +	 * state, will be woken up during a subsequent runtime_resume)
->> +	 */
->> +	if (!oproc->need_resume)
->> +		goto out;
->> +
->> +	ret = _omap_rproc_resume(rproc, false);
->>   	if (ret) {
->>   		dev_err(dev, "resume failed %d\n", ret);
->>   		goto out;
->>   	}
->>   
->> +	oproc->need_resume = false;
->>   	rproc->state = RPROC_RUNNING;
->> +
->> +	pm_runtime_mark_last_busy(dev);
->>   out:
->>   	mutex_unlock(&rproc->lock);
->>   	return ret;
->>   }
->> +
->> +static int omap_rproc_runtime_suspend(struct device *dev)
->> +{
->> +	struct rproc *rproc = dev_get_drvdata(dev);
->> +	struct omap_rproc *oproc = rproc->priv;
->> +	int ret;
->> +
->> +	if (rproc->state == RPROC_CRASHED) {
->> +		dev_dbg(dev, "rproc cannot be runtime suspended when crashed!\n");
->> +		return -EBUSY;
->> +	}
->> +
->> +	if (WARN_ON(rproc->state != RPROC_RUNNING)) {
->> +		dev_err(dev, "rproc cannot be runtime suspended when not running!\n");
->> +		return -EBUSY;
->> +	}
->> +
->> +	/*
->> +	 * do not even attempt suspend if the remote processor is not
->> +	 * idled for runtime auto-suspend
->> +	 */
->> +	if (!_is_rproc_in_standby(oproc)) {
->> +		ret = -EBUSY;
->> +		goto abort;
->> +	}
->> +
->> +	ret = _omap_rproc_suspend(rproc, true);
->> +	if (ret)
->> +		goto abort;
->> +
->> +	rproc->state = RPROC_SUSPENDED;
->> +	return 0;
->> +
->> +abort:
->> +	pm_runtime_mark_last_busy(dev);
->> +	return ret;
->> +}
->> +
->> +static int omap_rproc_runtime_resume(struct device *dev)
->> +{
->> +	struct rproc *rproc = dev_get_drvdata(dev);
->> +	int ret;
->> +
->> +	if (WARN_ON(rproc->state != RPROC_SUSPENDED &&
->> +		    rproc->state != RPROC_OFFLINE)) {
->> +		dev_err(dev, "rproc cannot be runtime resumed if not suspended! state=%d\n", rproc->state);
->> +		return -EBUSY;
->> +	}
->> +
->> +	ret = _omap_rproc_resume(rproc, rproc->state == RPROC_SUSPENDED);
->> +	if (ret) {
->> +		dev_err(dev, "runtime resume failed %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	rproc->state = RPROC_RUNNING;
->> +
->> +	return 0;
->> +}
->>   #endif /* CONFIG_PM */
->>   
->>   static const struct omap_rproc_mem_data ipu_mems[] = {
->> @@ -973,6 +1129,14 @@ static int omap_rproc_probe(struct platform_device *pdev)
->>   	}
->>   
->>   	init_completion(&oproc->pm_comp);
->> +	oproc->autosuspend_delay = DEFAULT_AUTOSUSPEND_DELAY;
->> +
->> +	of_property_read_u32(pdev->dev.of_node, "ti,autosuspend-delay-ms",
->> +			     &oproc->autosuspend_delay);
->> +
->> +	pm_runtime_set_autosuspend_delay(&pdev->dev, oproc->autosuspend_delay);
->> +	pm_runtime_use_autosuspend(&pdev->dev);
->> +	pm_runtime_enable(&pdev->dev);
-> 
-> These are not unwound if there were failures in the code paths below.
-> Also, this gives a false status in sysfs as "suspended" in the case
-> where firmware is missing from the FS, and the device is never started.
+Let me know what you think...
 
-This should be possible to fix.
-
--Tero
-
-> 
-> regards
-> Suman
-> 
->>   
->>   	oproc->fck = devm_clk_get(&pdev->dev, 0);
->>   	if (IS_ERR(oproc->fck)) {
->> @@ -1009,12 +1173,15 @@ static int omap_rproc_remove(struct platform_device *pdev)
->>   	rproc_del(rproc);
->>   	rproc_free(rproc);
->>   	of_reserved_mem_device_release(&pdev->dev);
->> +	pm_runtime_disable(&pdev->dev);
->>   
->>   	return 0;
->>   }
->>   
->>   static const struct dev_pm_ops omap_rproc_pm_ops = {
->>   	SET_SYSTEM_SLEEP_PM_OPS(omap_rproc_suspend, omap_rproc_resume)
->> +	SET_RUNTIME_PM_OPS(omap_rproc_runtime_suspend,
->> +			   omap_rproc_runtime_resume, NULL)
->>   };
->>   
->>   static struct platform_driver omap_rproc_driver = {
->>
-> 
-
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+>
+> I need to rework the patchset in consequence but i would appreciate your feedback on this proposal before, to be sure that i well interpreted your concerns...
+>
+> Regards,
+> Arnaud
+>
+> >
+> >> This is not necessary the case, even if EPROBE_DEFER is used. In this case the driver has to be build as kernel module.
+> >>
+> >> Thanks,
+> >> Arnaud
+> >>>
+> >>> I'd welcome other people's opinion on this.
+> >>>
+> >>>>              ret = rproc_trigger_auto_boot(rproc);
+> >>>>              if (ret < 0)
+> >>>>                      return ret;
+> >>>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> >>>> index 16ad66683ad0..4fd5bedab4fa 100644
+> >>>> --- a/include/linux/remoteproc.h
+> >>>> +++ b/include/linux/remoteproc.h
+> >>>> @@ -479,6 +479,7 @@ struct rproc_dump_segment {
+> >>>>   * @table_sz: size of @cached_table
+> >>>>   * @has_iommu: flag to indicate if remote processor is behind an MMU
+> >>>>   * @auto_boot: flag to indicate if remote processor should be auto-started
+> >>>> + * @skip_fw_load: remote processor has been preloaded before start sequence
+> >>>>   * @dump_segments: list of segments in the firmware
+> >>>>   * @nb_vdev: number of vdev currently handled by rproc
+> >>>>   */
+> >>>> @@ -512,6 +513,7 @@ struct rproc {
+> >>>>      size_t table_sz;
+> >>>>      bool has_iommu;
+> >>>>      bool auto_boot;
+> >>>> +    bool skip_fw_load;
+> >>>>      struct list_head dump_segments;
+> >>>>      int nb_vdev;
+> >>>>  };
+> >>>> --
+> >>>> 2.17.1
+> >>>>
