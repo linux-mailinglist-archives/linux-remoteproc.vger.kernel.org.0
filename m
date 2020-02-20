@@ -2,92 +2,84 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F781654D8
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 20 Feb 2020 03:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 420B716555F
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 20 Feb 2020 03:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727877AbgBTCMN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 19 Feb 2020 21:12:13 -0500
-Received: from mail27.static.mailgun.info ([104.130.122.27]:29724 "EHLO
+        id S1727506AbgBTC60 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 19 Feb 2020 21:58:26 -0500
+Received: from mail27.static.mailgun.info ([104.130.122.27]:13921 "EHLO
         mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727668AbgBTCMN (ORCPT
+        by vger.kernel.org with ESMTP id S1727370AbgBTC6D (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 19 Feb 2020 21:12:13 -0500
+        Wed, 19 Feb 2020 21:58:03 -0500
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1582164733; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=t15n6yBKLX2ibvF8ZHGW5Z7Dt9gbYeMrwtq2d0/Wg3w=; b=r/Yxe+YR4GyO4nxX3jhh/GcPMI0V+CCJ7nGDvDih4rCY/oIQaxaYfxxM3S8fPr6NRCRuFW9Y
- 3RBgByAYpiHKb3hQLGxNee8K+wHSIfkNGdCM65Lulk407OeZ8m3t2I8rrIiBPUn11+0A5wnG
- hu+NUTytJEUOZ+dRmQPeMIhx6g0=
+ s=smtp; t=1582167482; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=maU3Pns7JRQnq6kS3D6USOvQxwO2Ev/vCO5JSfnzuSw=; b=VXWavmUjmGd9P95w33cJX+PB5tbwmzPd046PJTytTdfA5Zj8XR+C70gz13u5mzZh0rWl74/2
+ 6OSNwkxp9gKoBXjUVVVOfMA9PaOMFGzrsJuumNjydvIi+x5J+GPiRttEB6276nAc7cDF6A4E
+ tUZ9gftS+9L3GgcFiMQVfSGlZfI=
 X-Mailgun-Sending-Ip: 104.130.122.27
 X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e4deaf3.7fc9a66a80a0-smtp-out-n02;
- Thu, 20 Feb 2020 02:12:03 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5e4df5b1.7fe9c18b85e0-smtp-out-n02;
+ Thu, 20 Feb 2020 02:57:53 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 9BC86C447A3; Thu, 20 Feb 2020 02:12:02 +0000 (UTC)
+        id 4A4FBC447A0; Thu, 20 Feb 2020 02:57:53 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from sidgup-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: sidgup)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E5DE5C447A2;
-        Thu, 20 Feb 2020 02:12:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E5DE5C447A2
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 55CF4C43383;
+        Thu, 20 Feb 2020 02:57:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 55CF4C43383
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sidgup@codeaurora.org
 From:   Siddharth Gupta <sidgup@codeaurora.org>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org
+To:     agross@kernel.org, bjorn.andersson@linaro.org, ohad@wizery.com
 Cc:     Siddharth Gupta <sidgup@codeaurora.org>,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, tsoni@codeaurora.org,
         psodagud@codeaurora.org, rishabhb@codeaurora.org
-Subject: [PATCH 2/2] remoteproc: core: Prevent sleep when rproc crashes
-Date:   Wed, 19 Feb 2020 18:11:53 -0800
-Message-Id: <1582164713-6413-3-git-send-email-sidgup@codeaurora.org>
+Subject: [PATCH 0/6] remoteproc: qcom: Add callbacks for remoteproc events
+Date:   Wed, 19 Feb 2020 18:57:39 -0800
+Message-Id: <1582167465-2549-1-git-send-email-sidgup@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1582164713-6413-1-git-send-email-sidgup@codeaurora.org>
-References: <1582164713-6413-1-git-send-email-sidgup@codeaurora.org>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Remoteproc recovery should be fast and any delay will have an impact on the
-user-experience. Use power management APIs (pm_stay_awake and pm_relax) to
-ensure that the system does not go to sleep.
+This patch series adds the usecases for SSR and Sysmon subdevices which are
+used by remoteprocs and kernel client drivers relying on those remoteprocs.
 
-Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
----
- drivers/remoteproc/remoteproc_core.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Patch 1-3 adds callbacks for prepare, start and unprepare events, and also type
+          of sysmon notification.
+Patch 4-6 adds a per subsystem notifier chain, callbacks for prepare, start
+          and stop events for ssr subdevice.
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 5ab65a4..52e318c 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1712,6 +1712,8 @@ static void rproc_crash_handler_work(struct work_struct *work)
- 
- 	if (!rproc->recovery_disabled)
- 		rproc_trigger_recovery(rproc);
-+
-+	pm_relax(&rproc->dev);
- }
- 
- /**
-@@ -2242,6 +2244,8 @@ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type)
- 		return;
- 	}
- 
-+	pm_stay_awake(&rproc->dev);
-+
- 	dev_err(&rproc->dev, "crash detected in %s: type %s\n",
- 		rproc->name, rproc_crash_to_string(type));
- 
+Rishabh Bhatnagar (1):
+  drivers: remoteproc: Add name field for every subdevice
+
+Siddharth Gupta (5):
+  remoteproc: sysmon: Add ability to send type of notification
+  remoteproc: sysmon: Add notifications for events
+  remoteproc: sysmon: Inform current rproc about all active rprocs
+  remoteproc: qcom: Add per subsystem SSR notification
+  remoteproc: qcom: Add notification types to SSR
+
+ drivers/remoteproc/qcom_common.c      |  86 ++++++++++++++++++++++++----
+ drivers/remoteproc/qcom_common.h      |   1 +
+ drivers/remoteproc/qcom_sysmon.c      | 103 ++++++++++++++++++++++++++++------
+ drivers/soc/qcom/glink_ssr.c          |  20 ++++++-
+ include/linux/remoteproc.h            |  17 ++++++
+ include/linux/remoteproc/qcom_rproc.h |  17 ++++--
+ 6 files changed, 209 insertions(+), 35 deletions(-)
+
 -- 
 Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
 a Linux Foundation Collaborative Project
