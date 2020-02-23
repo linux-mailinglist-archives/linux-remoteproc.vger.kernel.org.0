@@ -2,127 +2,197 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8103716899F
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 21 Feb 2020 22:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D4916926C
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 23 Feb 2020 01:01:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbgBUV4I (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 21 Feb 2020 16:56:08 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:46715 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726731AbgBUV4I (ORCPT
+        id S1726912AbgBWABo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 22 Feb 2020 19:01:44 -0500
+Received: from mail-eopbgr130054.outbound.protection.outlook.com ([40.107.13.54]:22401
+        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726881AbgBWABn (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 21 Feb 2020 16:56:08 -0500
-Received: by mail-pl1-f194.google.com with SMTP id y8so1417660pll.13
-        for <linux-remoteproc@vger.kernel.org>; Fri, 21 Feb 2020 13:56:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4R75gLHGBZqI7rZdCrlVgn8bgkA+VU53aPQUf73iw7U=;
-        b=I+k7ayqyClm2D7rCoFnih/D2ZbHNrdAKdYMiZsgvr3/8YQ/PswRNV+Ag8sRHA13Fl8
-         5GG8QlXX8xyyeg5ZjML/PN3ZnZkcLGTfRc/qeTqLurZJVoPF9IvmFmBJjKScrnuS1Zmg
-         Hu9BLmU8x4oXbNU9LW3fVSWW2PSr2sv8KWZRRwkrq0WsIuz8/eHaMACRA9dYAeoldwrV
-         QbfLzPGYYw37ekbgDnKPEDSezIlGU0+4XzToj6Be+f0qtzwzMxZvnjLwVQS8sh9Osuoq
-         eE7m4SGh5fiyElgoHNhVF1/uU3j79QFd6L0vzHwZjGLSRbvCdZz6xHq1invHhlCy+Nsj
-         vpbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4R75gLHGBZqI7rZdCrlVgn8bgkA+VU53aPQUf73iw7U=;
-        b=oS/D6O+6eGQljv23kSWUzcqA+kfYEbMFrCHOZ1VBV1aZYrwuocxR202gHo+RSob5vU
-         ca9mesoTtRV9bhOFa5tvAF67Y5eIZ3HXZlNgjLYPCrEsgupvUwnnOLNakL0DePk0gZOf
-         T2cKHLFuBTRCipEXNcyf8D1SR1jC05xUbcGKEynvKwZ6juZP/YxO3PgRxjMEM/krGdi4
-         9ok1zlu3EwZByljM/HIxHqU9TNrjwZLjtLSjadb3BM+XzVClX1kpJT64V7BK60qlcAIc
-         nxqLGQiE+h0BsWfu+pnW4uC1Ha4taUXTk2V/X/btYMfNn7PlI33ypEMd8fTSFwbaRtLx
-         2CRw==
-X-Gm-Message-State: APjAAAVdVEGB53MsEAG6jgczb6W4LSxuRQKgblMx9hJq0os6X4I99Q7M
-        JVrTU/3pB0ddheFb+bEdsOBsBA==
-X-Google-Smtp-Source: APXvYqzBIUmw7IC4MYwzkgRvIoSRfaSA2ePp8ibxXugv7bCVL8F2ywUMJumZw5ngey7+HU21z3EjsA==
-X-Received: by 2002:a17:902:8545:: with SMTP id d5mr36651230plo.116.1582322167908;
-        Fri, 21 Feb 2020 13:56:07 -0800 (PST)
-Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id h26sm3931993pfr.9.2020.02.21.13.56.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2020 13:56:07 -0800 (PST)
-Date:   Fri, 21 Feb 2020 14:56:05 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     peng.fan@nxp.com
-Cc:     ohad@wizery.com, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/9] remoteproc: imx_rproc: parse early-booted property
-Message-ID: <20200221215605.GC10368@xps15>
+        Sat, 22 Feb 2020 19:01:43 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q1Ocl/eyCAo0o4avnpq5ecN9yDL5TH6E/hiMP/5DbZF+YGW7BstieX6zdsk/8U1EbXRko4CZ+tLJX5jRSTXRWIrWGfHrG/zyXiWuVJOwrCCUEGY+twpykwcqPzKo2PqgaUfqLYiiVaGwy42ViWuKIRHwrMn4GbphD6wA4ZdwH7eYx8QEmj8Hp60mVzugAcfW9gWTA4LKzKYwI61QcFb2TZPj/LnvY5VhkAIGxEJKQpvzhD2PF2EK2L5BRxR88jL2FL+GSr/F7J4DyTJs9k44g7qIfVSPiy+m0Wnci6fLRFf2YWoY4KiLTptB9lyD1H+xcP0WXsCP4ozoDS58GaIGBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZwE/mmrHGrzg8quN3M2ttt3p23R1oFXKNG8rqxD47jc=;
+ b=IpJzCqIBUppgbM25LZVVgxrpblhCjrPV2oHwEIaT21dhyDvZEZmFwAFgENdWlfVL4h0XyWaSpM8YrO14und9UwIVCre4oKFfVcownIoS36/SfGoi4k+Pto4t/JnziQwH5d2t2VAbsvF/QHZilzkYcPvyh2xM7xiu0q0epnEW+JTdMCCLcnfEJlnL5TP6mwNilQpzcZobi+d2H794PE0tkmJV4bThHqNECgpUGD2PRkVEPLzCwA9Rq5/BwPJFAGcOXxmtaCNiCpJLlF3AAFIj3dbP3ifMiZONi859hhq4KmTbp6hZZoRnkZ4ksyVu+yfLghYk+jKfxP6vubNXbWQKcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZwE/mmrHGrzg8quN3M2ttt3p23R1oFXKNG8rqxD47jc=;
+ b=jnTHWOW50KqeAYMTaqgRSDXaVXQB2Ha7VGyde68zB7xvyByZP/FCb40GIDpF8hGqX5A0Vx78AsIRPF1SAWpmnMpXZG7+VyJGEFghposRuv0W504oh6QSCVY4XevLRpIPzP1+IPWXF8OEe0ZPc5Pg8noyRm6h8qIxnF2IyqRe8P8=
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
+ AM0PR04MB4785.eurprd04.prod.outlook.com (20.176.215.18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2750.21; Sun, 23 Feb 2020 00:01:38 +0000
+Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::91e2:17:b3f4:d422]) by AM0PR04MB4481.eurprd04.prod.outlook.com
+ ([fe80::91e2:17:b3f4:d422%3]) with mapi id 15.20.2729.033; Sun, 23 Feb 2020
+ 00:01:38 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     "ohad@wizery.com" <ohad@wizery.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 3/9] remoteproc: add support to skip firmware load when
+ recovery
+Thread-Topic: [PATCH 3/9] remoteproc: add support to skip firmware load when
+ recovery
+Thread-Index: AQHV5vbtBcsi7uUDB0+hcFvNM8RaVqgl/3AAgAHq/5A=
+Date:   Sun, 23 Feb 2020 00:01:38 +0000
+Message-ID: <AM0PR04MB44810B020E8C4F099D8F47A588EF0@AM0PR04MB4481.eurprd04.prod.outlook.com>
 References: <1582097265-20170-1-git-send-email-peng.fan@nxp.com>
- <1582097265-20170-6-git-send-email-peng.fan@nxp.com>
+ <1582097265-20170-4-git-send-email-peng.fan@nxp.com>
+ <20200221184236.GA10368@xps15>
+In-Reply-To: <20200221184236.GA10368@xps15>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peng.fan@nxp.com; 
+x-originating-ip: [117.82.241.14]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 458ee98e-6f4e-45c7-31d9-08d7b7f38e25
+x-ms-traffictypediagnostic: AM0PR04MB4785:|AM0PR04MB4785:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB478503D2AC58297EB7CA7D2188EF0@AM0PR04MB4785.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2331;
+x-forefront-prvs: 0322B4EDE1
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(366004)(396003)(346002)(39860400002)(136003)(189003)(199004)(86362001)(52536014)(81166006)(8676002)(81156014)(8936002)(6916009)(7696005)(4326008)(54906003)(76116006)(66476007)(66946007)(66556008)(7416002)(5660300002)(71200400001)(316002)(64756008)(66446008)(6506007)(44832011)(26005)(186003)(2906002)(33656002)(55016002)(9686003)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB4785;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: L2LsAKB3OMKFCfMX60UD+S3ROmC8lelaat7eu1NAJaE1hWPznZMAajG5yag9iKpZT5j5MDoqQr/lC6WfyfIbQ3PkBDF4hyohUgiEPxsW9yvhGXSEtgHhWhMEuN+JVZltwVCdlyrHFwLqg5k41wWPL6hU+I/2RaZNRtLVU9o7cLzcvtsSpxEHqhq055o/BGyb0H3AmleZtoJ7Uhof9LZhL7bFPfszkk+vaCQz1o0GfVspsVnXPFYgRDp5tqPvN0ZIKx2xZUhmvjNc4bGlWkkfliGaztBL8xGL2pYwMMVNRSl6UTTpVHxjwFyYFDb4rR2Y7CX9O2x0BEGAxsqvhnNkixaXTLM1dkV8e/w0LpsErs3/Utt/Y/LgG4/q6BC4NPOPjjb2S8K7n8k3N1xi7DCunfA3oMAufuAsFX/cf1awoWZZw00MACjUY01boDm+ZmBX
+x-ms-exchange-antispam-messagedata: MF6f8pFJx4pAbTJ8sRbTCfGVGfkmTA6zqNG1sgfFzQbxT0wMoU/51bppjga26axigMQiMwfROJDzrQl985Vb7mt/f6SKxA5lZov6uvqOQCRaw2MJtY0Dlx2YGNHJxsyP+me2YqxiWKgJkJ7JwYKeHA==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1582097265-20170-6-git-send-email-peng.fan@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 458ee98e-6f4e-45c7-31d9-08d7b7f38e25
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2020 00:01:38.5073
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GJovSucEXBk3laAdehfJbRjMtt0TrC5vFmIHN9HbTfPnHJTtrD9RDpkDGWg1YpoH94i3CGPPozgqLdHDRvx/SA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4785
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 03:27:41PM +0800, peng.fan@nxp.com wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> If early-property exists, there is no need to check syscon.
-> Just mark early_boot as true.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/remoteproc/imx_rproc.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> index b9fabe269fd2..e31ea1090cf3 100644
-> --- a/drivers/remoteproc/imx_rproc.c
-> +++ b/drivers/remoteproc/imx_rproc.c
-> @@ -483,7 +483,9 @@ static int imx_rproc_configure_mode(struct imx_rproc *priv)
->  	int ret;
->  	u32 val;
->  
-> -	if (of_get_property(dev->of_node, "early-booted", NULL)) {
-> +	if (dcfg->variants == IMX7ULP) {
+Hi Mathieu,
 
-Where does dcfg->variants comes from?  
+> Subject: Re: [PATCH 3/9] remoteproc: add support to skip firmware load wh=
+en
+> recovery
+>=20
+> Hi Peng,
+>=20
+> On Wed, Feb 19, 2020 at 03:27:39PM +0800, peng.fan@nxp.com wrote:
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > Remote processor such as M4 inside i.MX8QXP is not handled by Linux
+> > when it is configured to run inside its own hardware partition by
+> > system control unit(SCU). So even remote processor crash reset, it is
+> > handled by SCU, not linux. To such case, firmware load should be
+> > ignored, So introduce skip_fw_load_recovery and platform driver should
+> > set it if needed.
+>=20
+> For now I will not comment on the code - I just need clarifications on th=
+e
+> scenario.
+>=20
+> In the specific case you are trying to address here, I understand that wh=
+en the
+> M4 crashes, the SCU will recognize that and reload the MCU firmware. Does
+> the SCU also start the MCU or is that left to the remoteproc subsystem?
 
-This patch doesn't compile, nor does the one before it.  I will not review
-another patchset like that. 
+SCU starts M4. Linux has no permission to start/stop M4 from hardware
+perspective with hardware partition feature enabled.
 
-> +		priv->early_boot = true;
-> +	} else if (of_get_property(dev->of_node, "early-booted", NULL)) {
->  		priv->early_boot = true;
->  	} else {
->  		ret = regmap_read(priv->regmap, dcfg->src_reg, &val);
-> @@ -509,15 +511,17 @@ static int imx_rproc_probe(struct platform_device *pdev)
->  	struct rproc *rproc;
->  	struct regmap_config config = { .name = "imx-rproc" };
->  	const struct imx_rproc_dcfg *dcfg;
-> -	struct regmap *regmap;
-> +	struct regmap *regmap = NULL;
->  	int ret;
->  
-> -	regmap = syscon_regmap_lookup_by_phandle(np, "syscon");
-> -	if (IS_ERR(regmap)) {
-> -		dev_err(dev, "failed to find syscon\n");
-> -		return PTR_ERR(regmap);
-> +	if (!of_get_property(np, "early-booted", NULL)) {
-> +		regmap = syscon_regmap_lookup_by_phandle(np, "syscon");
-> +		if (IS_ERR(regmap)) {
-> +			dev_err(dev, "failed to find syscon\n");
-> +			return PTR_ERR(regmap);
-> +		}
-> +		regmap_attach_dev(dev, regmap, &config);
->  	}
-> -	regmap_attach_dev(dev, regmap, &config);
->  
->  	/* set some other name then imx */
->  	rproc = rproc_alloc(dev, "imx-rproc", &imx_rproc_ops,
-> -- 
-> 2.16.4
-> 
+Regards,
+Peng.
+
+>=20
+> Thanks,
+> Mathieu
+>=20
+> >
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > ---
+> >  drivers/remoteproc/remoteproc_core.c | 19 +++++++++++--------
+> >  include/linux/remoteproc.h           |  1 +
+> >  2 files changed, 12 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/remoteproc/remoteproc_core.c
+> > b/drivers/remoteproc/remoteproc_core.c
+> > index 876b5420a32b..ca310e3582bf 100644
+> > --- a/drivers/remoteproc/remoteproc_core.c
+> > +++ b/drivers/remoteproc/remoteproc_core.c
+> > @@ -1678,20 +1678,23 @@ int rproc_trigger_recovery(struct rproc *rproc)
+> >  	if (ret)
+> >  		goto unlock_mutex;
+> >
+> > -	/* generate coredump */
+> > -	rproc_coredump(rproc);
+> > +	if (!rproc->skip_fw_load_recovery) {
+> > +		/* generate coredump */
+> > +		rproc_coredump(rproc);
+> >
+> > -	/* load firmware */
+> > -	ret =3D request_firmware(&firmware_p, rproc->firmware, dev);
+> > -	if (ret < 0) {
+> > -		dev_err(dev, "request_firmware failed: %d\n", ret);
+> > -		goto unlock_mutex;
+> > +		/* load firmware */
+> > +		ret =3D request_firmware(&firmware_p, rproc->firmware, dev);
+> > +		if (ret < 0) {
+> > +			dev_err(dev, "request_firmware failed: %d\n", ret);
+> > +			goto unlock_mutex;
+> > +		}
+> >  	}
+> >
+> >  	/* boot the remote processor up again */
+> >  	ret =3D rproc_start(rproc, firmware_p);
+> >
+> > -	release_firmware(firmware_p);
+> > +	if (!rproc->skip_fw_load_recovery)
+> > +		release_firmware(firmware_p);
+> >
+> >  unlock_mutex:
+> >  	mutex_unlock(&rproc->lock);
+> > diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> > index 4fd5bedab4fa..fe6ee253b385 100644
+> > --- a/include/linux/remoteproc.h
+> > +++ b/include/linux/remoteproc.h
+> > @@ -514,6 +514,7 @@ struct rproc {
+> >  	bool has_iommu;
+> >  	bool auto_boot;
+> >  	bool skip_fw_load;
+> > +	bool skip_fw_load_recovery;
+> >  	struct list_head dump_segments;
+> >  	int nb_vdev;
+> >  };
+> > --
+> > 2.16.4
+> >
