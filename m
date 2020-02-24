@@ -2,50 +2,50 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8BB16AF2A
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 24 Feb 2020 19:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE91C16AFB7
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 24 Feb 2020 19:53:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbgBXSau (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 24 Feb 2020 13:30:50 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:54032 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727980AbgBXSar (ORCPT
+        id S1727736AbgBXSxi (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 24 Feb 2020 13:53:38 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45672 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727709AbgBXSxh (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 24 Feb 2020 13:30:47 -0500
-Received: by mail-pj1-f65.google.com with SMTP id n96so117068pjc.3
-        for <linux-remoteproc@vger.kernel.org>; Mon, 24 Feb 2020 10:30:46 -0800 (PST)
+        Mon, 24 Feb 2020 13:53:37 -0500
+Received: by mail-pf1-f195.google.com with SMTP id 2so5787271pfg.12
+        for <linux-remoteproc@vger.kernel.org>; Mon, 24 Feb 2020 10:53:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=eB+RF5Mh4FenHE6w3IEcxS14k96bS8yZIKZCBidnPPI=;
-        b=J38ofieDuZwieGmCqkTF7yAGdU9ZfG6J4h1Oex9EJi2MJ7UiXHedPEZIWhorABF9w1
-         4LjBAflwCt5SlXeCaH6i5WilMtAyA6OV/uYRzixRdSSUTOzx6mnQgRWR4HMbDigZPqzn
-         TFC07Pp933b4ftOkv9QPDT7GtUKAVRlKgyHDA4mw/6HVEeKspQjfkn5RzIqTCcdYIKPw
-         diVTC03tNk5VYl0qckRql0EFXLRnSwMQ/ecb+6mEDjIWOsELPf61faJslWaJBAEE6ZO1
-         e2MzZ/CTAAZ8wNUNAsYLwhXhxMZhXhkPw9ZC+f2YHLq/tRNNOyT8lwq3Ec3miG2/kYqJ
-         CffA==
+        bh=5o+NRLE+XeQOQqO+QGCBe9virQiAW2Yqk+LqPr6RM+k=;
+        b=zlXKmr/tXaX2hjWqTpQ2njtzL2v39uLcpNTrh6YWx5o5mRLOnjMG0dB9wXvhmk4/QP
+         mszWYPx63JNQ0rNx9QhLrp2Ty2oJ62q/wHOeDBTmyJcxFUC2gD/GsB94xMpHsLz+SIJo
+         oaU2MtzeREnx5KcWl+gpwnp9dGoL2pvM6cwAVb26fFIAjgMLcUidsFJSrGce6IY2ddtH
+         DHHkfjIClkjdJ9Ksj84wcjHPezT++M655R7NO5VWHNuSwIANqs/8bQtR2iHA5Av/beM6
+         Yt9YlYL4zMXwazL8tbEG1TVgex9D/w4/dlMdEuSmroq2NvA+xmREquf6s839RLDJS8GH
+         gQSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eB+RF5Mh4FenHE6w3IEcxS14k96bS8yZIKZCBidnPPI=;
-        b=oTrRZjkJLZKMQ8Aw8C7I0JdIckJYL8BhukwqkYb3lUG1Dll3sn36vfUzHWNv38QrN8
-         MWBfNoZUKyk7/LIXtcPqOwZAwdUZVFdsipJ68tASdWdNGCMsXa+uikRiuLBtJci34lUJ
-         rVSQV0p9JBDowcwPbsi3TnHEaDqkr9QermH/hibKrkw4s4jfoaUIJJ5/ot5SBHgN35MI
-         vpx6Yp4BgQopUJ0pc9l29hh1gaykN6138Hd/iGS7YQ57F4q8PYHfMea9jXtuiBpzS8Hl
-         BUt4Ro4ueQhJ0Iy2tmUeTmschuSjMyiqYwUQRzaG17M4YZavdFesR65flolOwenmq1Wj
-         RPcg==
-X-Gm-Message-State: APjAAAWpFFiAroCfaEZjULNHzEC4X3sfCAAv0eCAib9BJsiey2qeQbNq
-        z2UW2x2iCAYnI+TVviDb7dXUmw==
-X-Google-Smtp-Source: APXvYqzGmaiP+bNpfJzHNfdIjk0x3NvdHLNFE+Z3xk6uvxo4EuiAxTQRcX9CZ1rdWNGXWJprqyebRQ==
-X-Received: by 2002:a17:902:401:: with SMTP id 1mr50094099ple.177.1582569046452;
-        Mon, 24 Feb 2020 10:30:46 -0800 (PST)
+        bh=5o+NRLE+XeQOQqO+QGCBe9virQiAW2Yqk+LqPr6RM+k=;
+        b=m0T9wVKMHrLFsstDSBrLLJhY/O/OJOqATKDw7wazHiihYENDd0X/36jcUhNwEBKrsh
+         S7tq67LP3OcXfAtBIqvMuvXvaf5JNUYbbbhq+qfkbcI4Coyjgkl/8P2uQxPcUV8RDoey
+         hkz+TSGI9yGpoeWgEpYHhQgX57Pd0+92jPrdB6dhVrLyyaMwgrP17Vo7u6RzT4hBcy+d
+         XlLQzQ68NkyaNO2OUoqKMbBrA4m+Y/uAEaFAG66xcmQ7Hxs9o3ulYGGNS3QzBXrioBoB
+         xO8sA9PneL7+410s43bjkaadCYBjIRWQqR3aZLIJmMqjWV/fb5wVrDd4YVPeFwPRhaeU
+         dKng==
+X-Gm-Message-State: APjAAAWnbN62JszIe70mqjca7vOWR+22gbuiskwG4bXaQPwr5O/Efx3V
+        SnKlbE8qG5NZkaHFXXFDAj8VBsxDVbY=
+X-Google-Smtp-Source: APXvYqxlG79nw9hdnewWjUWulRuruSK0ApRJJQ/cb+aNxOv7rQwCZTRuCo/oWDO8TH8Xl6qVAeD9iw==
+X-Received: by 2002:a63:7ce:: with SMTP id 197mr44461643pgh.429.1582570417176;
+        Mon, 24 Feb 2020 10:53:37 -0800 (PST)
 Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id q7sm13363109pgk.62.2020.02.24.10.30.45
+        by smtp.gmail.com with ESMTPSA id j4sm13931577pfh.152.2020.02.24.10.53.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2020 10:30:45 -0800 (PST)
-Date:   Mon, 24 Feb 2020 11:30:43 -0700
+        Mon, 24 Feb 2020 10:53:36 -0800 (PST)
+Date:   Mon, 24 Feb 2020 11:53:34 -0700
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     Siddharth Gupta <sidgup@codeaurora.org>
 Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
@@ -53,117 +53,64 @@ Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
         linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, tsoni@codeaurora.org,
         psodagud@codeaurora.org, rishabhb@codeaurora.org
-Subject: Re: [PATCH 1/2] remoteproc: core: Add an API for booting with
- firmware name
-Message-ID: <20200224183043.GA9477@xps15>
+Subject: Re: [PATCH 2/2] remoteproc: core: Prevent sleep when rproc crashes
+Message-ID: <20200224185334.GB9477@xps15>
 References: <1582164713-6413-1-git-send-email-sidgup@codeaurora.org>
- <1582164713-6413-2-git-send-email-sidgup@codeaurora.org>
+ <1582164713-6413-3-git-send-email-sidgup@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1582164713-6413-2-git-send-email-sidgup@codeaurora.org>
+In-Reply-To: <1582164713-6413-3-git-send-email-sidgup@codeaurora.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Siddharth,
+On Wed, Feb 19, 2020 at 06:11:53PM -0800, Siddharth Gupta wrote:
+> Remoteproc recovery should be fast and any delay will have an impact on the
+> user-experience. Use power management APIs (pm_stay_awake and pm_relax) to
+> ensure that the system does not go to sleep.
 
-On Wed, Feb 19, 2020 at 06:11:52PM -0800, Siddharth Gupta wrote:
-> Add an API which allows to change the name of the firmware to be booted on
-> the specified rproc. This change gives us the flixibility to change the
-> firmware at run-time depending on the usecase. Some remoteprocs might use
-> a different firmware for testing, production and development purposes,
-> which may be selected based on the fuse settings during bootup.
+When you say "ensure the system does not go to sleep", you're referring to the
+system going idle from the CPUidle subsystem? 
+
 > 
 > Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
 > ---
->  drivers/remoteproc/remoteproc_core.c | 34 ++++++++++++++++++++++++++++++++++
->  include/linux/remoteproc.h           |  1 +
->  2 files changed, 35 insertions(+)
+>  drivers/remoteproc/remoteproc_core.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
 > diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 097f33e..5ab65a4 100644
+> index 5ab65a4..52e318c 100644
 > --- a/drivers/remoteproc/remoteproc_core.c
 > +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -1779,6 +1779,40 @@ int rproc_boot(struct rproc *rproc)
->  EXPORT_SYMBOL(rproc_boot);
+> @@ -1712,6 +1712,8 @@ static void rproc_crash_handler_work(struct work_struct *work)
+>  
+>  	if (!rproc->recovery_disabled)
+>  		rproc_trigger_recovery(rproc);
+> +
+> +	pm_relax(&rproc->dev);
+>  }
 >  
 >  /**
-> + * rproc_boot_with_fw() - boot a remote processor with the specified firmware
-> + * @rproc: handle of a remote processor
-> + * @firmware: name of the firmware to boot with
-> + *
-> + * Change the name of the firmware to be loaded to @firmware in the rproc
-> + * structure, and call rproc_boot().
-> + *
-> + * Returns 0 on success, and an appropriate error value otherwise.
-> + */
-> +int rproc_boot_with_fw(struct rproc *rproc, const char *firmware)
-> +{
-> +	char *p;
-> +
-> +	if (!rproc) {
-> +		pr_err("invalid rproc handle\n");
-> +		return -EINVAL;
-> +	}
-
-        if (!rproc || !firmware)
-                return -EINVAL;
-
-There is no user involved here so no point in printing anything.  If @rproc or
-@firmware is NULL than callers should be smart enough to figure it out from the
-error code.
-
-> +
-> +	if (firmware) {
-> +		p = kstrdup(firmware, GFP_KERNEL);
-> +		if (!p)
-> +			return -ENOMEM;
-
-As in firmware_store() I think it is a good idea to mandate the MCU be offline
-before changing the firmware name.  That way we avoid situations where what is
-running on the MCU is not what gets reported in sysfs.
-
-> +
-> +		mutex_lock(&rproc->lock);
-> +		kfree(rproc->firmware);
-> +		rproc->firmware = p;
-
-> +		mutex_unlock(&rproc->lock);
-> +	}
-> +
-> +	return rproc_boot(rproc);
-
-Function rproc_boot() is also an exported symbol and belongs in the caller -
-please move it out of here.  When that is done rproc_boot_with_fw() can become
-rproc_set_firmware_name() and concentrate on doing just that.
-
-> +}
-> +EXPORT_SYMBOL(rproc_boot_with_fw);
-
-Although choosing the firmware image to boot without user involvement seems like
-a valid scenario to me, this can't be added until there is an actual user of
-this API.
-
-> +
-> +/**
->   * rproc_shutdown() - power off the remote processor
->   * @rproc: the remote processor
->   *
-> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> index 16ad666..e2eaba9 100644
-> --- a/include/linux/remoteproc.h
-> +++ b/include/linux/remoteproc.h
-> @@ -609,6 +609,7 @@ rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, int len,
->  			     u32 da, const char *name, ...);
+> @@ -2242,6 +2244,8 @@ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type)
+>  		return;
+>  	}
 >  
->  int rproc_boot(struct rproc *rproc);
-> +int rproc_boot_with_fw(struct rproc *rproc, const char *firmware);
->  void rproc_shutdown(struct rproc *rproc);
->  void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type);
->  int rproc_coredump_add_segment(struct rproc *rproc, dma_addr_t da, size_t size);
+> +	pm_stay_awake(&rproc->dev);
+> +
+
+I fail to understand how this can be useful since there is no HW associted to
+rproc->dev...  Is it possible for you to elaborate more on the problem you're
+trying to fix?
+
+Thanks,
+Mathieu
+
+>  	dev_err(&rproc->dev, "crash detected in %s: type %s\n",
+>  		rproc->name, rproc_crash_to_string(type));
+>  
 > -- 
 > Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
 > a Linux Foundation Collaborative Project
