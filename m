@@ -2,173 +2,270 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B14E169273
-	for <lists+linux-remoteproc@lfdr.de>; Sun, 23 Feb 2020 01:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6FC16A81A
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 24 Feb 2020 15:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726912AbgBWAL4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 22 Feb 2020 19:11:56 -0500
-Received: from mail-db8eur05on2067.outbound.protection.outlook.com ([40.107.20.67]:27277
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726895AbgBWAL4 (ORCPT
+        id S1727718AbgBXOPZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 24 Feb 2020 09:15:25 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:53484 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727489AbgBXOPZ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 22 Feb 2020 19:11:56 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jVhy7TZ1Uc3XTmv3kKGI/xxykR2PzYOw02Ltb8BNsdpaMtW177uFwMJE2oqtCZCUwGELPZDhcPbtYq6I2UwyneUPqt8WY2hfhCRtEzuDR2CSjCFcZTljZ34XjVyb5Tw3N4acgQow+ZZ36CZmyug4EbIOkHU9kLht6kou0Wiy837JW1JM3ibVpUg/0+hjX/FGD5+xWfyaUnl24AVyQ3iTU7rAqBCzMTg/eU58xMaa7p3bArYdlHG1ANob9foVN0QUCzbaYAWcE/Q0mQYnOrBjLiDjMzceIQiSQSDOvHLVkYCvERtwve+ifbKd8clJ/HIS5hE71GioQQf1Rsal4VoKpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B4o+r2wDMxw3rW5ZvK8Q/Cj6vGlgk5qpR0cj3XmRMLQ=;
- b=My7mTYnuhfdxbMW3ja+EZ9HM1zIlB/34Qwsinb/HXu+LZeFmCZz16azw/3tDokKDV+ZP2aFw16TSfB/IvTpBbljL1iI6uzpqsFCh4IRFeK4nBu3xtBga3LHaXEnAQhgb1KXZFwl1DMModFPws1QkcxXc9Z1hPOIf10KG5TjjDzpOCluR6ZnoetHxhYTvwetv/HhHByeTojdXUiNwHLru95lf9WDK10F1urGxLAlWcLvbhNPNen+KmS2zDDLPScrePK5YRxhTuZXxTkcYHS5FonqzCGJhdAcGpOJYjj5+xjSbep54MErBFyBXwMQ/zFbrTn0fGA/CQmSMWpDXx5yR3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B4o+r2wDMxw3rW5ZvK8Q/Cj6vGlgk5qpR0cj3XmRMLQ=;
- b=PtMT/NNyooJUFBuUZtNOJDOoZ79IhqsUMDhyGPtBN1UhPnVKEVZgca+iT0qsM3A+/lK9wZMCF1Ru9lppR2IYR3Op+LhVoJMTC5xuQr0hvGbw9Jl45JfRgTLCWo8Rf63kMN4fi5kiN1mFcV/Bboz/wUWAJaXUIsjPt5xcWwrKXCs=
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com (52.135.147.15) by
- AM0PR04MB7090.eurprd04.prod.outlook.com (10.186.131.79) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2750.21; Sun, 23 Feb 2020 00:11:51 +0000
-Received: from AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::91e2:17:b3f4:d422]) by AM0PR04MB4481.eurprd04.prod.outlook.com
- ([fe80::91e2:17:b3f4:d422%3]) with mapi id 15.20.2729.033; Sun, 23 Feb 2020
- 00:11:51 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     "ohad@wizery.com" <ohad@wizery.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 5/9] remoteproc: imx_rproc: parse early-booted property
-Thread-Topic: [PATCH 5/9] remoteproc: imx_rproc: parse early-booted property
-Thread-Index: AQHV5vbyD0uyt2f6hkqWNb+JRXycMagmNX+AgAG3jNA=
-Date:   Sun, 23 Feb 2020 00:11:51 +0000
-Message-ID: <AM0PR04MB4481882E603D1C83C637183788EF0@AM0PR04MB4481.eurprd04.prod.outlook.com>
-References: <1582097265-20170-1-git-send-email-peng.fan@nxp.com>
- <1582097265-20170-6-git-send-email-peng.fan@nxp.com>
- <20200221215605.GC10368@xps15>
-In-Reply-To: <20200221215605.GC10368@xps15>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peng.fan@nxp.com; 
-x-originating-ip: [117.82.241.14]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: c536a0fe-03fb-48a8-f797-08d7b7f4fb7e
-x-ms-traffictypediagnostic: AM0PR04MB7090:|AM0PR04MB7090:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR04MB7090B6C2F6A9B86CDABB36D788EF0@AM0PR04MB7090.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 0322B4EDE1
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(376002)(346002)(136003)(396003)(366004)(199004)(189003)(2906002)(86362001)(71200400001)(54906003)(55016002)(316002)(33656002)(4326008)(7416002)(966005)(76116006)(478600001)(186003)(66476007)(6916009)(66446008)(66556008)(64756008)(9686003)(52536014)(66946007)(5660300002)(7696005)(26005)(81156014)(81166006)(44832011)(8936002)(8676002)(6506007);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB7090;H:AM0PR04MB4481.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: K2VUt0n4TGNql8wH54NmGE3OjzTOfogIxn7gehC8my6tVn5rEjbty8aDLiopnOkcN9xofsraS3RMcjqPg9eNsPexAjVTjJa7FZlcizo7Bg3f2JsvMWuDfCG4rXJsZ9ME/eHsslsxfjDuXxEAUUIpeolP7KNZGM754jK2F4ZmZ/9JdlK5Ar+ZrtdfxoDQqragLXpFezlmjnDpynRlEbnTfGcNT49vG20L2iZnYg4ulwB5NwkoDY4QksTVMGmGOhaDDUBImFYSuj+4Qn13chsYCHmyksZMDkYInWgHG+TGle/3sfeT/qh3x9WtXqo7E+lPG62P9Qir9+Lul8achEJrNobLO9HRLlsu2gqsItBgVTGFlnYHiOFgRRi01quU3DU93evvfznJpxnQ/ICx4sP8HYpx0SIaRsESn4QIQBofkZ1ngTB7fTBz7N0iVcK5YIZh8QaaKHoctLTk0PdtCe0ABls6weBE4S8e/LbslGusmHmcGLTCYvPPLz7d0NHVANv64/xBNkSIYaoM3n+rpPznPg==
-x-ms-exchange-antispam-messagedata: zATgaAsMxHfe9CMz+YiogORXbaGMR2qNq3q9bP7o9IEV2txzgBnIN8JFKPFOfpklbBU1wTlEmxeqylPAu9l6nNWKUwku/i9lJGFeqNdRwVmCQ4GuRJRA60dN4n8Gkb4D8uR3rNO1wIe718V6q6n/QA==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 24 Feb 2020 09:15:25 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01OEFNq1097309;
+        Mon, 24 Feb 2020 08:15:23 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1582553723;
+        bh=ichIEIUq04C6mrjG/Wgqy3ZY1uj0LzsxVmdbEqXNaxA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=gSbmxsj0XbjIcynO7WKdmhAb9jaiM0I3JxaLKE0cuO3n6K71W11AxdEnyxiCtYu7t
+         ufAam7z24UGfsHf/T4v4LZBjAA4BT9Fz9NEmOi2lSrvznkNqEpcXfQJUKnrl4R1Bst
+         0L/dGNiM5iDF6MjlnaDArBHFK2rT0GYOH3xFZfoM=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01OEFNEU085157;
+        Mon, 24 Feb 2020 08:15:23 -0600
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 24
+ Feb 2020 08:15:23 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Mon, 24 Feb 2020 08:15:23 -0600
+Received: from [10.250.77.18] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01OEFMAN036321;
+        Mon, 24 Feb 2020 08:15:22 -0600
+Subject: Re: [PATCHv7 04/15] remoteproc/omap: Add support to parse internal
+ memories from DT
+To:     Tero Kristo <t-kristo@ti.com>, <bjorn.andersson@linaro.org>,
+        <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>,
+        <s-anna@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
+        <linux-omap@vger.kernel.org>
+References: <20200221101936.16833-1-t-kristo@ti.com>
+ <20200221101936.16833-5-t-kristo@ti.com>
+From:   "Andrew F. Davis" <afd@ti.com>
+Message-ID: <7de4914a-a5c6-b108-af10-45283aabddc7@ti.com>
+Date:   Mon, 24 Feb 2020 09:15:22 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c536a0fe-03fb-48a8-f797-08d7b7f4fb7e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Feb 2020 00:11:51.4200
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tXA0K82kth63PuivgoP6OuawyHMeLoraxNO+gemvnRkVVtCuSiBOoRXCmKxuUqxNqlwtWOi4QwAzHiAM7SARQQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7090
+In-Reply-To: <20200221101936.16833-5-t-kristo@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-> Subject: Re: [PATCH 5/9] remoteproc: imx_rproc: parse early-booted proper=
-ty
->=20
-> On Wed, Feb 19, 2020 at 03:27:41PM +0800, peng.fan@nxp.com wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > If early-property exists, there is no need to check syscon.
-> > Just mark early_boot as true.
-> >
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  drivers/remoteproc/imx_rproc.c | 18 +++++++++++-------
-> >  1 file changed, 11 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/remoteproc/imx_rproc.c
-> > b/drivers/remoteproc/imx_rproc.c index b9fabe269fd2..e31ea1090cf3
-> > 100644
-> > --- a/drivers/remoteproc/imx_rproc.c
-> > +++ b/drivers/remoteproc/imx_rproc.c
-> > @@ -483,7 +483,9 @@ static int imx_rproc_configure_mode(struct
-> imx_rproc *priv)
-> >  	int ret;
-> >  	u32 val;
-> >
-> > -	if (of_get_property(dev->of_node, "early-booted", NULL)) {
-> > +	if (dcfg->variants =3D=3D IMX7ULP) {
->=20
-> Where does dcfg->variants comes from?
->=20
-> This patch doesn't compile, nor does the one before it.  I will not revie=
-w
-> another patchset like that.
+On 2/21/20 5:19 AM, Tero Kristo wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> The OMAP remoteproc driver has been enhanced to parse and store
+> the kernel mappings for different internal RAM memories that may
+> be present within each remote processor IP subsystem. Different
+> devices have varying memories present on current SoCs. The current
+> support handles the L2RAM for all IPU devices on OMAP4+ SoCs. The
+> DSPs on OMAP4/OMAP5 only have Unicaches and do not have any L1 or
+> L2 RAM memories.
+> 
+> IPUs are expected to have the L2RAM at a fixed device address of
+> 0x20000000, based on the current limitations on Attribute MMU
+> configurations.
+> 
+> NOTE:
+> The current logic doesn't handle the parsing of memories for DRA7
+> remoteproc devices, and will be added alongside the DRA7 support.
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> [t-kristo: converted to parse mem names / device addresses from pdata]
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> ---
+>  drivers/remoteproc/omap_remoteproc.c | 89 ++++++++++++++++++++++++++++
+>  1 file changed, 89 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+> index 64b559caadff..4f92b069f5d0 100644
+> --- a/drivers/remoteproc/omap_remoteproc.c
+> +++ b/drivers/remoteproc/omap_remoteproc.c
+> @@ -39,11 +39,27 @@ struct omap_rproc_boot_data {
+>  	unsigned int boot_reg;
+>  };
+>  
+> +/**
+> + * struct omap_rproc_mem - internal memory structure
+> + * @cpu_addr: MPU virtual address of the memory region
+> + * @bus_addr: bus address used to access the memory region
+> + * @dev_addr: device address of the memory region from DSP view
+> + * @size: size of the memory region
+> + */
+> +struct omap_rproc_mem {
+> +	void __iomem *cpu_addr;
+> +	phys_addr_t bus_addr;
+> +	u32 dev_addr;
+> +	size_t size;
+> +};
+> +
+>  /**
+>   * struct omap_rproc - omap remote processor state
+>   * @mbox: mailbox channel handle
+>   * @client: mailbox client to request the mailbox channel
+>   * @boot_data: boot data structure for setting processor boot address
+> + * @mem: internal memory regions data
+> + * @num_mems: number of internal memory regions
+>   * @rproc: rproc handle
+>   * @reset: reset handle
+>   */
+> @@ -51,16 +67,30 @@ struct omap_rproc {
+>  	struct mbox_chan *mbox;
+>  	struct mbox_client client;
+>  	struct omap_rproc_boot_data *boot_data;
+> +	struct omap_rproc_mem *mem;
+> +	int num_mems;
+>  	struct rproc *rproc;
+>  	struct reset_control *reset;
+>  };
+>  
+> +/**
+> + * struct omap_rproc_mem_data - memory definitions for an omap remote processor
+> + * @name: name for this memory entry
+> + * @dev_addr: device address for the memory entry
+> + */
+> +struct omap_rproc_mem_data {
+> +	const char *name;
+> +	const u32 dev_addr;
+> +};
+> +
+>  /**
+>   * struct omap_rproc_dev_data - device data for the omap remote processor
+>   * @device_name: device name of the remote processor
+> + * @mems: memory definitions for this remote processor
+>   */
+>  struct omap_rproc_dev_data {
+>  	const char *device_name;
+> +	const struct omap_rproc_mem_data *mems;
+>  };
+>  
+>  /**
+> @@ -223,12 +253,18 @@ static const struct rproc_ops omap_rproc_ops = {
+>  	.kick		= omap_rproc_kick,
+>  };
+>  
+> +static const struct omap_rproc_mem_data ipu_mems[] = {
+> +	{ .name = "l2ram", .dev_addr = 0x20000000 },
+> +	{ },
+> +};
+> +
+>  static const struct omap_rproc_dev_data omap4_dsp_dev_data = {
+>  	.device_name	= "dsp",
+>  };
+>  
+>  static const struct omap_rproc_dev_data omap4_ipu_dev_data = {
+>  	.device_name	= "ipu",
+> +	.mems		= ipu_mems,
+>  };
+>  
+>  static const struct omap_rproc_dev_data omap5_dsp_dev_data = {
+> @@ -237,6 +273,7 @@ static const struct omap_rproc_dev_data omap5_dsp_dev_data = {
+>  
+>  static const struct omap_rproc_dev_data omap5_ipu_dev_data = {
+>  	.device_name	= "ipu",
+> +	.mems		= ipu_mems,
+>  };
+>  
+>  static const struct of_device_id omap_rproc_of_match[] = {
+> @@ -311,6 +348,54 @@ static int omap_rproc_get_boot_data(struct platform_device *pdev,
+>  	return 0;
+>  }
+>  
+> +static int omap_rproc_of_get_internal_memories(struct platform_device *pdev,
+> +					       struct rproc *rproc)
+> +{
+> +	struct omap_rproc *oproc = rproc->priv;
 
-Ah. Weird. variants should be variant.=20
-See https://patchwork.kernel.org/patch/11390559/
 
-I need wait early boot related functions in
-remoteproc-core.c ready, then post v2.
+'rproc' is only used to get 'oproc', why not just pass in 'oproc'?
 
-Thanks,
-Peng.
->=20
-> > +		priv->early_boot =3D true;
-> > +	} else if (of_get_property(dev->of_node, "early-booted", NULL)) {
-> >  		priv->early_boot =3D true;
-> >  	} else {
-> >  		ret =3D regmap_read(priv->regmap, dcfg->src_reg, &val); @@ -509,15
-> > +511,17 @@ static int imx_rproc_probe(struct platform_device *pdev)
-> >  	struct rproc *rproc;
-> >  	struct regmap_config config =3D { .name =3D "imx-rproc" };
-> >  	const struct imx_rproc_dcfg *dcfg;
-> > -	struct regmap *regmap;
-> > +	struct regmap *regmap =3D NULL;
-> >  	int ret;
-> >
-> > -	regmap =3D syscon_regmap_lookup_by_phandle(np, "syscon");
-> > -	if (IS_ERR(regmap)) {
-> > -		dev_err(dev, "failed to find syscon\n");
-> > -		return PTR_ERR(regmap);
-> > +	if (!of_get_property(np, "early-booted", NULL)) {
-> > +		regmap =3D syscon_regmap_lookup_by_phandle(np, "syscon");
-> > +		if (IS_ERR(regmap)) {
-> > +			dev_err(dev, "failed to find syscon\n");
-> > +			return PTR_ERR(regmap);
-> > +		}
-> > +		regmap_attach_dev(dev, regmap, &config);
-> >  	}
-> > -	regmap_attach_dev(dev, regmap, &config);
-> >
-> >  	/* set some other name then imx */
-> >  	rproc =3D rproc_alloc(dev, "imx-rproc", &imx_rproc_ops,
-> > --
-> > 2.16.4
-> >
+
+> +	struct device *dev = &pdev->dev;
+> +	const struct omap_rproc_dev_data *data;
+> +	struct resource *res;
+> +	int num_mems;
+> +	int i;
+> +
+> +	data = of_device_get_match_data(&pdev->dev);
+
+
+just use 'dev'
+
+
+> +	if (!data)
+> +		return -ENODEV;
+> +
+> +	if (!data->mems)
+> +		return 0;
+> +
+> +	for (num_mems = 0; data->mems[num_mems].name; num_mems++)
+> +		;
+> +
+> +	oproc->mem = devm_kcalloc(dev, num_mems, sizeof(*oproc->mem),
+> +				  GFP_KERNEL);
+> +	if (!oproc->mem)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < num_mems; i++) {
+> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+> +						   data->mems[i].name);
+> +		oproc->mem[i].cpu_addr = devm_ioremap_resource(dev, res);
+> +		if (IS_ERR(oproc->mem[i].cpu_addr)) {
+> +			dev_err(dev, "failed to parse and map %s memory\n",
+> +				data->mems[i].name);
+> +			return PTR_ERR(oproc->mem[i].cpu_addr);
+> +		}
+> +		oproc->mem[i].bus_addr = res->start;
+> +		oproc->mem[i].dev_addr = data->mems[i].dev_addr;
+> +		oproc->mem[i].size = resource_size(res);
+> +
+> +		dev_dbg(dev, "memory %8s: bus addr %pa size 0x%x va %pK da 0x%x\n",
+> +			data->mems[i].name, &oproc->mem[i].bus_addr,
+> +			oproc->mem[i].size, oproc->mem[i].cpu_addr,
+
+
+I'm not a fan of printing kernel virtual addresses, but not a blocker.
+
+
+> +			oproc->mem[i].dev_addr);
+> +	}
+> +	oproc->num_mems = num_mems;
+> +
+> +	return 0;
+> +}
+> +
+>  static int omap_rproc_probe(struct platform_device *pdev)
+>  {
+>  	struct device_node *np = pdev->dev.of_node;
+> @@ -350,6 +435,10 @@ static int omap_rproc_probe(struct platform_device *pdev)
+>  	/* All existing OMAP IPU and DSP processors have an MMU */
+>  	rproc->has_iommu = true;
+>  
+> +	ret = omap_rproc_of_get_internal_memories(pdev, rproc);
+
+
+This only looks to be used for the da_to_va() in the next patch, could
+these be combined?
+
+As above not a big deal, so for this patch and the whole series:
+
+Reviewed-by: Andrew F. Davis <afd@ti.com>
+
+
+> +	if (ret)
+> +		goto free_rproc;
+> +
+>  	ret = omap_rproc_get_boot_data(pdev, rproc);
+>  	if (ret)
+>  		goto free_rproc;
+> 
