@@ -2,135 +2,293 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9C616F600
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 26 Feb 2020 04:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EAF16F8C1
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 26 Feb 2020 08:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727880AbgBZDOU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 25 Feb 2020 22:14:20 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:35748 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729652AbgBZDOT (ORCPT
+        id S1727252AbgBZHsv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 26 Feb 2020 02:48:51 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:55582 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727223AbgBZHsu (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 25 Feb 2020 22:14:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1582686858;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zPO9Q4VBlPr6ggd2qAuWkleMNlATunLXOSzyCdyykww=;
-        b=CFOu0bY/IzaIL39WpkVkv9r8D1ez5cPo8qoRZ0W/GYxFPb2NY+plgNc14jES21D5rSvCde
-        zX91IIH949TFVTCz6hkmcZpXMGW3f/mn6ufOnPxGDJ53WyXIVs0yMvpaMROioOR6JrLxUJ
-        /tXFpsB8XtFdHX0onvffSKmNhu6bgfA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-354-DyPfyrCDO6K9EjXf8mESqA-1; Tue, 25 Feb 2020 22:14:14 -0500
-X-MC-Unique: DyPfyrCDO6K9EjXf8mESqA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 11C7E1034B20;
-        Wed, 26 Feb 2020 03:14:13 +0000 (UTC)
-Received: from [10.72.13.217] (ovpn-13-217.pek2.redhat.com [10.72.13.217])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AC1435C13D;
-        Wed, 26 Feb 2020 03:14:00 +0000 (UTC)
-Subject: Re: [PATCH] virtio_ring: Fix mem leak with vring_new_virtqueue()
-To:     Suman Anna <s-anna@ti.com>, "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Tiwei Bie <tiwei.bie@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-References: <20200224212643.30672-1-s-anna@ti.com>
- <b622c831-9adb-b9af-dd4a-21605bc124a8@redhat.com>
- <0ace3a3b-cf2f-7977-5337-f74f530afbe1@ti.com>
-From:   Jason Wang <jasowang@redhat.com>
-Message-ID: <1ce2bee4-64ed-f630-2695-8e8b9b8e27c1@redhat.com>
-Date:   Wed, 26 Feb 2020 11:13:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 26 Feb 2020 02:48:50 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01Q7mmql058259;
+        Wed, 26 Feb 2020 01:48:48 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1582703328;
+        bh=6XZF2kozMX2IRgvS1AiatX1S6WIW//4tM8Ve7tdXOB8=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=ZUNb/YBubV/HQF3FFYmRDnGM8MH9tGsb5OZeCoQRz2J0m9Y1c5dFzXfmQv5bb/PyR
+         pnojAHbMZ2wOwfkCzgqJE0T2n//gPrvky6M9CpVnRP7oz4ja/QIYwSwt+zu7xeeyc/
+         t7rDMVwsOM4lYmIGMdCGBUSn9ZkBBOFj6f2Brr2o=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01Q7mmb8090023
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Feb 2020 01:48:48 -0600
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 26
+ Feb 2020 01:48:48 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 26 Feb 2020 01:48:47 -0600
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01Q7mjXY082769;
+        Wed, 26 Feb 2020 01:48:46 -0600
+Subject: Re: [PATCHv7 04/15] remoteproc/omap: Add support to parse internal
+ memories from DT
+To:     "Andrew F. Davis" <afd@ti.com>, <bjorn.andersson@linaro.org>,
+        <ohad@wizery.com>, <linux-remoteproc@vger.kernel.org>,
+        <s-anna@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
+        <linux-omap@vger.kernel.org>
+References: <20200221101936.16833-1-t-kristo@ti.com>
+ <20200221101936.16833-5-t-kristo@ti.com>
+ <7de4914a-a5c6-b108-af10-45283aabddc7@ti.com>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <64429c91-cb80-52ce-0906-180ad109d5fb@ti.com>
+Date:   Wed, 26 Feb 2020 09:48:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <0ace3a3b-cf2f-7977-5337-f74f530afbe1@ti.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <7de4914a-a5c6-b108-af10-45283aabddc7@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+On 24/02/2020 16:15, Andrew F. Davis wrote:
+> On 2/21/20 5:19 AM, Tero Kristo wrote:
+>> From: Suman Anna <s-anna@ti.com>
+>>
+>> The OMAP remoteproc driver has been enhanced to parse and store
+>> the kernel mappings for different internal RAM memories that may
+>> be present within each remote processor IP subsystem. Different
+>> devices have varying memories present on current SoCs. The current
+>> support handles the L2RAM for all IPU devices on OMAP4+ SoCs. The
+>> DSPs on OMAP4/OMAP5 only have Unicaches and do not have any L1 or
+>> L2 RAM memories.
+>>
+>> IPUs are expected to have the L2RAM at a fixed device address of
+>> 0x20000000, based on the current limitations on Attribute MMU
+>> configurations.
+>>
+>> NOTE:
+>> The current logic doesn't handle the parsing of memories for DRA7
+>> remoteproc devices, and will be added alongside the DRA7 support.
+>>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> [t-kristo: converted to parse mem names / device addresses from pdata]
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> ---
+>>   drivers/remoteproc/omap_remoteproc.c | 89 ++++++++++++++++++++++++++++
+>>   1 file changed, 89 insertions(+)
+>>
+>> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+>> index 64b559caadff..4f92b069f5d0 100644
+>> --- a/drivers/remoteproc/omap_remoteproc.c
+>> +++ b/drivers/remoteproc/omap_remoteproc.c
+>> @@ -39,11 +39,27 @@ struct omap_rproc_boot_data {
+>>   	unsigned int boot_reg;
+>>   };
+>>   
+>> +/**
+>> + * struct omap_rproc_mem - internal memory structure
+>> + * @cpu_addr: MPU virtual address of the memory region
+>> + * @bus_addr: bus address used to access the memory region
+>> + * @dev_addr: device address of the memory region from DSP view
+>> + * @size: size of the memory region
+>> + */
+>> +struct omap_rproc_mem {
+>> +	void __iomem *cpu_addr;
+>> +	phys_addr_t bus_addr;
+>> +	u32 dev_addr;
+>> +	size_t size;
+>> +};
+>> +
+>>   /**
+>>    * struct omap_rproc - omap remote processor state
+>>    * @mbox: mailbox channel handle
+>>    * @client: mailbox client to request the mailbox channel
+>>    * @boot_data: boot data structure for setting processor boot address
+>> + * @mem: internal memory regions data
+>> + * @num_mems: number of internal memory regions
+>>    * @rproc: rproc handle
+>>    * @reset: reset handle
+>>    */
+>> @@ -51,16 +67,30 @@ struct omap_rproc {
+>>   	struct mbox_chan *mbox;
+>>   	struct mbox_client client;
+>>   	struct omap_rproc_boot_data *boot_data;
+>> +	struct omap_rproc_mem *mem;
+>> +	int num_mems;
+>>   	struct rproc *rproc;
+>>   	struct reset_control *reset;
+>>   };
+>>   
+>> +/**
+>> + * struct omap_rproc_mem_data - memory definitions for an omap remote processor
+>> + * @name: name for this memory entry
+>> + * @dev_addr: device address for the memory entry
+>> + */
+>> +struct omap_rproc_mem_data {
+>> +	const char *name;
+>> +	const u32 dev_addr;
+>> +};
+>> +
+>>   /**
+>>    * struct omap_rproc_dev_data - device data for the omap remote processor
+>>    * @device_name: device name of the remote processor
+>> + * @mems: memory definitions for this remote processor
+>>    */
+>>   struct omap_rproc_dev_data {
+>>   	const char *device_name;
+>> +	const struct omap_rproc_mem_data *mems;
+>>   };
+>>   
+>>   /**
+>> @@ -223,12 +253,18 @@ static const struct rproc_ops omap_rproc_ops = {
+>>   	.kick		= omap_rproc_kick,
+>>   };
+>>   
+>> +static const struct omap_rproc_mem_data ipu_mems[] = {
+>> +	{ .name = "l2ram", .dev_addr = 0x20000000 },
+>> +	{ },
+>> +};
+>> +
+>>   static const struct omap_rproc_dev_data omap4_dsp_dev_data = {
+>>   	.device_name	= "dsp",
+>>   };
+>>   
+>>   static const struct omap_rproc_dev_data omap4_ipu_dev_data = {
+>>   	.device_name	= "ipu",
+>> +	.mems		= ipu_mems,
+>>   };
+>>   
+>>   static const struct omap_rproc_dev_data omap5_dsp_dev_data = {
+>> @@ -237,6 +273,7 @@ static const struct omap_rproc_dev_data omap5_dsp_dev_data = {
+>>   
+>>   static const struct omap_rproc_dev_data omap5_ipu_dev_data = {
+>>   	.device_name	= "ipu",
+>> +	.mems		= ipu_mems,
+>>   };
+>>   
+>>   static const struct of_device_id omap_rproc_of_match[] = {
+>> @@ -311,6 +348,54 @@ static int omap_rproc_get_boot_data(struct platform_device *pdev,
+>>   	return 0;
+>>   }
+>>   
+>> +static int omap_rproc_of_get_internal_memories(struct platform_device *pdev,
+>> +					       struct rproc *rproc)
+>> +{
+>> +	struct omap_rproc *oproc = rproc->priv;
+> 
+> 
+> 'rproc' is only used to get 'oproc', why not just pass in 'oproc'?
 
-On 2020/2/26 =E4=B8=8A=E5=8D=8812:51, Suman Anna wrote:
-> Hi Jason,
->
-> On 2/24/20 11:39 PM, Jason Wang wrote:
->> On 2020/2/25 =E4=B8=8A=E5=8D=885:26, Suman Anna wrote:
->>> The functions vring_new_virtqueue() and __vring_new_virtqueue() are u=
-sed
->>> with split rings, and any allocations within these functions are mana=
-ged
->>> outside of the .we_own_ring flag. The commit cbeedb72b97a ("virtio_ri=
-ng:
->>> allocate desc state for split ring separately") allocates the desc st=
-ate
->>> within the __vring_new_virtqueue() but frees it only when the
->>> .we_own_ring
->>> flag is set. This leads to a memory leak when freeing such allocated
->>> virtqueues with the vring_del_virtqueue() function.
->>>
->>> Fix this by moving the desc_state free code outside the flag and only
->>> for split rings. Issue was discovered during testing with remoteproc
->>> and virtio_rpmsg.
->>>
->>> Fixes: cbeedb72b97a ("virtio_ring: allocate desc state for split ring
->>> separately")
->>> Signed-off-by: Suman Anna<s-anna@ti.com>
->>> ---
->>>  =C2=A0 drivers/virtio/virtio_ring.c | 4 ++--
->>>  =C2=A0 1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_rin=
-g.c
->>> index 867c7ebd3f10..58b96baa8d48 100644
->>> --- a/drivers/virtio/virtio_ring.c
->>> +++ b/drivers/virtio/virtio_ring.c
->>> @@ -2203,10 +2203,10 @@ void vring_del_virtqueue(struct virtqueue *_v=
-q)
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vq->split=
-.queue_size_in_bytes,
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vq->split=
-.vring.desc,
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vq->split=
-.queue_dma_addr);
->>> -
->>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 k=
-free(vq->split.desc_state);
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->>> +=C2=A0=C2=A0=C2=A0 if (!vq->packed_ring)
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kfree(vq->split.desc_stat=
-e);
->> Nitpick, it looks to me it would be more clear if we just free
->> desc_state unconditionally here (and remove the kfree for packed above=
-).
-> OK, are you sure you want that to be folded into this patch? It looks t=
-o
-> me a separate cleanup/consolidation patch, and packed desc_state does
-> not suffer this memleak, and need not be backported into stable kernels=
-.
->
-> regards
-> Suman
+This is mostly to keep the driver internal APIs homogenous, nothing much 
+else passes oproc directly (just the standby status API.) If you pass 
+oproc in some and rproc in others, you get confused really easily.
 
+> 
+> 
+>> +	struct device *dev = &pdev->dev;
+>> +	const struct omap_rproc_dev_data *data;
+>> +	struct resource *res;
+>> +	int num_mems;
+>> +	int i;
+>> +
+>> +	data = of_device_get_match_data(&pdev->dev);
+> 
+> 
+> just use 'dev'
 
-Though it's just a small tweak, I'm fine for leaving it for future.
+Heh, valid cosmetic change, I would not want to re-post the patch just 
+because of this though.
 
-So
+> 
+>> +	if (!data)
+>> +		return -ENODEV;
+>> +
+>> +	if (!data->mems)
+>> +		return 0;
+>> +
+>> +	for (num_mems = 0; data->mems[num_mems].name; num_mems++)
+>> +		;
+>> +
+>> +	oproc->mem = devm_kcalloc(dev, num_mems, sizeof(*oproc->mem),
+>> +				  GFP_KERNEL);
+>> +	if (!oproc->mem)
+>> +		return -ENOMEM;
+>> +
+>> +	for (i = 0; i < num_mems; i++) {
+>> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+>> +						   data->mems[i].name);
+>> +		oproc->mem[i].cpu_addr = devm_ioremap_resource(dev, res);
+>> +		if (IS_ERR(oproc->mem[i].cpu_addr)) {
+>> +			dev_err(dev, "failed to parse and map %s memory\n",
+>> +				data->mems[i].name);
+>> +			return PTR_ERR(oproc->mem[i].cpu_addr);
+>> +		}
+>> +		oproc->mem[i].bus_addr = res->start;
+>> +		oproc->mem[i].dev_addr = data->mems[i].dev_addr;
+>> +		oproc->mem[i].size = resource_size(res);
+>> +
+>> +		dev_dbg(dev, "memory %8s: bus addr %pa size 0x%x va %pK da 0x%x\n",
+>> +			data->mems[i].name, &oproc->mem[i].bus_addr,
+>> +			oproc->mem[i].size, oproc->mem[i].cpu_addr,
+> 
+> 
+> I'm not a fan of printing kernel virtual addresses, but not a blocker.
+> 
+> 
+>> +			oproc->mem[i].dev_addr);
+>> +	}
+>> +	oproc->num_mems = num_mems;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int omap_rproc_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device_node *np = pdev->dev.of_node;
+>> @@ -350,6 +435,10 @@ static int omap_rproc_probe(struct platform_device *pdev)
+>>   	/* All existing OMAP IPU and DSP processors have an MMU */
+>>   	rproc->has_iommu = true;
+>>   
+>> +	ret = omap_rproc_of_get_internal_memories(pdev, rproc);
+> 
+> 
+> This only looks to be used for the da_to_va() in the next patch, could
+> these be combined?
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+Well, they are kinda separate entities, but potentially could be 
+squashed if someone really wants it done.
 
-Thanks
+> 
+> As above not a big deal, so for this patch and the whole series:
+> 
+> Reviewed-by: Andrew F. Davis <afd@ti.com>
 
+Thanks Andrew.
+
+-Tero
+
+> 
+> 
+>> +	if (ret)
+>> +		goto free_rproc;
+>> +
+>>   	ret = omap_rproc_get_boot_data(pdev, rproc);
+>>   	if (ret)
+>>   		goto free_rproc;
+>>
+
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
