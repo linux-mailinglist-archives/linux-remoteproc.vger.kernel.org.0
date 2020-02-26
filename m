@@ -2,131 +2,181 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5253C17054B
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 26 Feb 2020 18:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F0D170C5C
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 27 Feb 2020 00:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726214AbgBZRBw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 26 Feb 2020 12:01:52 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:32782 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728073AbgBZRBw (ORCPT
+        id S1727749AbgBZXKu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 26 Feb 2020 18:10:50 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:41225 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727867AbgBZXKu (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 26 Feb 2020 12:01:52 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01QH1VWD001892;
-        Wed, 26 Feb 2020 11:01:31 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1582736491;
-        bh=CZdphqXj3swfr3rshZA/0w1MD1hpzkcAcBfN76SapQ8=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=SNNkUAvXoggAOVNecqUg9xSNEJYjzrLU6umWjXK4EPh0R4/cJ/S47rUlRWY1b9T+P
-         QDhnsksn0ISK030JdOaEcCRXcUbbV17LamWBReCcdX8mRyEN9OyLX+FQAd/jH99MMd
-         UVOujwFW11cmasY9pEYlXh6M9mCuqTTCNzmHbROg=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01QH1V69116205
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 26 Feb 2020 11:01:31 -0600
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 26
- Feb 2020 11:01:30 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 26 Feb 2020 11:01:31 -0600
-Received: from [128.247.58.153] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 01QH1Ukv121969;
-        Wed, 26 Feb 2020 11:01:30 -0600
-Subject: Re: [PATCH] virtio_ring: Fix mem leak with vring_new_virtqueue()
-To:     Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-CC:     Tiwei Bie <tiwei.bie@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        <virtualization@lists.linux-foundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-References: <20200224212643.30672-1-s-anna@ti.com>
- <b622c831-9adb-b9af-dd4a-21605bc124a8@redhat.com>
- <0ace3a3b-cf2f-7977-5337-f74f530afbe1@ti.com>
- <1ce2bee4-64ed-f630-2695-8e8b9b8e27c1@redhat.com>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <90f85329-9bec-1204-6a0d-892c92219eb1@ti.com>
-Date:   Wed, 26 Feb 2020 11:01:30 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Wed, 26 Feb 2020 18:10:50 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1582758649; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=LwIg2ej0qktnR5lwlPkQCTHuArHrJYoONAMEHJ0gpmM=; b=iel21p3cj9DVCxBiS1A/Jx/2uGrbwSwRSyjuU1ZBVWeyGSmGIYqblQas1BwrQtrfjqtDFMjE
+ qhqD2nCRnZvBrKsg5LDziqvc1cd5P2GQl2HH8N78DUn/rWR3SgF0Ij5sYrn5FVZXi/zmoZWz
+ iVqbHLHTEGzY+tX2vWgtlbnBpNQ=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e56faea.7f5a86ee0a40-smtp-out-n01;
+ Wed, 26 Feb 2020 23:10:34 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E62BFC433A2; Wed, 26 Feb 2020 23:10:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.0
+Received: from [10.134.64.128] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sidgup)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 12203C43383;
+        Wed, 26 Feb 2020 23:10:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 12203C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sidgup@codeaurora.org
+Subject: Re: [PATCH 1/2] remoteproc: core: Add an API for booting with
+ firmware name
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, rishabhb@codeaurora.org
+References: <1582164713-6413-1-git-send-email-sidgup@codeaurora.org>
+ <1582164713-6413-2-git-send-email-sidgup@codeaurora.org>
+ <20200224183043.GA9477@xps15>
+From:   Siddharth Gupta <sidgup@codeaurora.org>
+Message-ID: <bbccf58a-2c3a-38f3-bd63-e7aeb8213b34@codeaurora.org>
+Date:   Wed, 26 Feb 2020 15:10:31 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <1ce2bee4-64ed-f630-2695-8e8b9b8e27c1@redhat.com>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20200224183043.GA9477@xps15>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 2/25/20 9:13 PM, Jason Wang wrote:
-> 
-> On 2020/2/26 上午12:51, Suman Anna wrote:
->> Hi Jason,
->>
->> On 2/24/20 11:39 PM, Jason Wang wrote:
->>> On 2020/2/25 上午5:26, Suman Anna wrote:
->>>> The functions vring_new_virtqueue() and __vring_new_virtqueue() are
->>>> used
->>>> with split rings, and any allocations within these functions are
->>>> managed
->>>> outside of the .we_own_ring flag. The commit cbeedb72b97a
->>>> ("virtio_ring:
->>>> allocate desc state for split ring separately") allocates the desc
->>>> state
->>>> within the __vring_new_virtqueue() but frees it only when the
->>>> .we_own_ring
->>>> flag is set. This leads to a memory leak when freeing such allocated
->>>> virtqueues with the vring_del_virtqueue() function.
->>>>
->>>> Fix this by moving the desc_state free code outside the flag and only
->>>> for split rings. Issue was discovered during testing with remoteproc
->>>> and virtio_rpmsg.
->>>>
->>>> Fixes: cbeedb72b97a ("virtio_ring: allocate desc state for split ring
->>>> separately")
->>>> Signed-off-by: Suman Anna<s-anna@ti.com>
->>>> ---
->>>>    drivers/virtio/virtio_ring.c | 4 ++--
->>>>    1 file changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/virtio/virtio_ring.c
->>>> b/drivers/virtio/virtio_ring.c
->>>> index 867c7ebd3f10..58b96baa8d48 100644
->>>> --- a/drivers/virtio/virtio_ring.c
->>>> +++ b/drivers/virtio/virtio_ring.c
->>>> @@ -2203,10 +2203,10 @@ void vring_del_virtqueue(struct virtqueue *_vq)
->>>>                         vq->split.queue_size_in_bytes,
->>>>                         vq->split.vring.desc,
->>>>                         vq->split.queue_dma_addr);
->>>> -
->>>> -            kfree(vq->split.desc_state);
->>>>            }
->>>>        }
->>>> +    if (!vq->packed_ring)
->>>> +        kfree(vq->split.desc_state);
->>> Nitpick, it looks to me it would be more clear if we just free
->>> desc_state unconditionally here (and remove the kfree for packed above).
->> OK, are you sure you want that to be folded into this patch? It looks to
->> me a separate cleanup/consolidation patch, and packed desc_state does
->> not suffer this memleak, and need not be backported into stable kernels.
->>
->> regards
->> Suman
-> 
-> 
-> Though it's just a small tweak, I'm fine for leaving it for future.
-> 
-> So
-> 
-> Acked-by: Jason Wang <jasowang@redhat.com>
+Hey Mathieu,
 
-Thanks Jason, will post a patch for the same once this is merged.
+On 2/24/2020 10:30 AM, Mathieu Poirier wrote:
 
-regards
-Suman
+> Hi Siddharth,
+>
+> On Wed, Feb 19, 2020 at 06:11:52PM -0800, Siddharth Gupta wrote:
+>> Add an API which allows to change the name of the firmware to be booted on
+>> the specified rproc. This change gives us the flixibility to change the
+>> firmware at run-time depending on the usecase. Some remoteprocs might use
+>> a different firmware for testing, production and development purposes,
+>> which may be selected based on the fuse settings during bootup.
+>>
+>> Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
+>> ---
+>>   drivers/remoteproc/remoteproc_core.c | 34 ++++++++++++++++++++++++++++++++++
+>>   include/linux/remoteproc.h           |  1 +
+>>   2 files changed, 35 insertions(+)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+>> index 097f33e..5ab65a4 100644
+>> --- a/drivers/remoteproc/remoteproc_core.c
+>> +++ b/drivers/remoteproc/remoteproc_core.c
+>> @@ -1779,6 +1779,40 @@ int rproc_boot(struct rproc *rproc)
+>>   EXPORT_SYMBOL(rproc_boot);
+>>   
+>>   /**
+>> + * rproc_boot_with_fw() - boot a remote processor with the specified firmware
+>> + * @rproc: handle of a remote processor
+>> + * @firmware: name of the firmware to boot with
+>> + *
+>> + * Change the name of the firmware to be loaded to @firmware in the rproc
+>> + * structure, and call rproc_boot().
+>> + *
+>> + * Returns 0 on success, and an appropriate error value otherwise.
+>> + */
+>> +int rproc_boot_with_fw(struct rproc *rproc, const char *firmware)
+>> +{
+>> +	char *p;
+>> +
+>> +	if (!rproc) {
+>> +		pr_err("invalid rproc handle\n");
+>> +		return -EINVAL;
+>> +	}
+>          if (!rproc || !firmware)
+>                  return -EINVAL;
+>
+> There is no user involved here so no point in printing anything.  If @rproc or
+> @firmware is NULL than callers should be smart enough to figure it out from the
+> error code.
+
+I was trying to mimic the behaviour of rproc_boot here actually, since 
+we were trying to make this
+an API for users to directly boot with firmware name.
+
+>
+>> +
+>> +	if (firmware) {
+>> +		p = kstrdup(firmware, GFP_KERNEL);
+>> +		if (!p)
+>> +			return -ENOMEM;
+> As in firmware_store() I think it is a good idea to mandate the MCU be offline
+> before changing the firmware name.  That way we avoid situations where what is
+> running on the MCU is not what gets reported in sysfs.
+
+Sure, that makes sense.
+
+>> +
+>> +		mutex_lock(&rproc->lock);
+>> +		kfree(rproc->firmware);
+>> +		rproc->firmware = p;
+>> +		mutex_unlock(&rproc->lock);
+>> +	}
+>> +
+>> +	return rproc_boot(rproc);
+> Function rproc_boot() is also an exported symbol and belongs in the caller -
+> please move it out of here.  When that is done rproc_boot_with_fw() can become
+> rproc_set_firmware_name() and concentrate on doing just that.
+
+Okay sounds good.
+
+>
+>> +}
+>> +EXPORT_SYMBOL(rproc_boot_with_fw);
+> Although choosing the firmware image to boot without user involvement seems like
+> a valid scenario to me, this can't be added until there is an actual user of
+> this API.
+That's true. We have a few cases downstream where we need this 
+functionality. We were wondering
+if anyone else might have use of such functionality, and create an 
+upstream API in that case. Your
+suggestion of creating rproc_set_firmware_name() is a better approach 
+for sure though. We're looking
+at creating a new remoteproc (platform) driver which will need this 
+functionality.
+>> +
+>> +/**
+>>    * rproc_shutdown() - power off the remote processor
+>>    * @rproc: the remote processor
+>>    *
+>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+>> index 16ad666..e2eaba9 100644
+>> --- a/include/linux/remoteproc.h
+>> +++ b/include/linux/remoteproc.h
+>> @@ -609,6 +609,7 @@ rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, int len,
+>>   			     u32 da, const char *name, ...);
+>>   
+>>   int rproc_boot(struct rproc *rproc);
+>> +int rproc_boot_with_fw(struct rproc *rproc, const char *firmware);
+>>   void rproc_shutdown(struct rproc *rproc);
+>>   void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type);
+>>   int rproc_coredump_add_segment(struct rproc *rproc, dma_addr_t da, size_t size);
+>> -- 
+>> Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
