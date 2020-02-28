@@ -2,50 +2,50 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C0C17307D
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Feb 2020 06:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B692173084
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Feb 2020 06:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725805AbgB1Fe1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 28 Feb 2020 00:34:27 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:38055 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbgB1Fe1 (ORCPT
+        id S1726579AbgB1Ff5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 28 Feb 2020 00:35:57 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:33504 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726583AbgB1Ff4 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 28 Feb 2020 00:34:27 -0500
-Received: by mail-pj1-f68.google.com with SMTP id a16so485182pju.3
-        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Feb 2020 21:34:25 -0800 (PST)
+        Fri, 28 Feb 2020 00:35:56 -0500
+Received: by mail-pl1-f195.google.com with SMTP id ay11so804251plb.0
+        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Feb 2020 21:35:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ABqkN8aqbIHHq6CJCYzSzg/UYqF9PzEXTXmM8ircYdE=;
-        b=iXGNUb/uZGGZqE9qRVAQdGFZFVitoGfbTVoTeXp/0CB2r/Z0qwh/bwxklZ8Q7cYuYu
-         2RvKwC+gehTtiwjrX9jbCYozOL3ChBhd1Kk3XsFae6+/t1mv1cuKZaxn0SHr35igPDM0
-         iD5x2VXAOPlIZRmR7UOjDeRw2xcQ08RE5Yxos0yuMbCP3QTNw13nVM5uGGN6Xfd1lah3
-         0/zD5Ld7dZHKAMnYLF1TTkaiei2a+VS3yzeHB5RQBu+io9m5rPvEqKUk1XoMAhTvvpvG
-         skvYMD5yyrwEzGpvtm9J/S1H/8xBe7TmBoTUK4kDL95kYI2r0OhDV676MwAPh+B+ptvn
-         Svbg==
+        bh=0GJyp688+zVIA9RAELyTu++JtY5GE6ftYiBpGjoOZZA=;
+        b=QTqAFVL1XB04RNS9sYNDcXXmTzRL0jvx5CqJkfHED/y2rrNKqqBI13hdy1qaJdy3L5
+         k5kOmFqOU8Z3xr3nm1CLYXHU4nsb4gJkZ4Dh6hejVHLLbutYSAMw6q7Ae/XWkdhjCVf+
+         Scv/Pq7ujo+FCvmb5+uuXlI6fsUAocqPgctrNWHJMlVgfziVP8yz3bJR7VGTdpXXYCKT
+         9tVrxbdeKTCmHeUhjwaqiTmbVNFceFz/p9WoTlnwexSbFBTuQM8VJECJfi8NWdu3dWxU
+         PIyYveKVYmnXplQ/NfxEdOBTxkILtiDDNIULSYfQ9sgU1eOY+RYieTlZalYJ0XIYq8GV
+         zBGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ABqkN8aqbIHHq6CJCYzSzg/UYqF9PzEXTXmM8ircYdE=;
-        b=s+bRUX1eQmHm08SjyDEPBcKDrDipB8b8jO2Og8zzzy4MtbsiVsKFPubT8tJcdTNEyr
-         fQccAdI3Rozq28dyF/Na82XulIXrigKK4POmiWEF7vjO34VRDC8m4pOQnm90KVsUYtfY
-         l/ZksUWVqwQ+i4bN4pywBY4xmDhBifnNZrKZ4ysMihLpMZ1pg+h5kZU4u1Wr/myp1Ec1
-         f5/2AtlDMysuUi3yBTWUCJrMkOZbllNH0E96RlmDTNer2bwiAHF+DVOU6MhxxNlvg6EY
-         M55rkPJhSkhS3whyUGuf1x+JfML039A0le3M/nu0TrT4BVy0mUU0TtPFeVn2xFx7V8Fs
-         bfYg==
-X-Gm-Message-State: APjAAAXhVhKvKalUTZnLPVRvzTzFLMFscGJinI9HyuVDR1NV44OTPiWI
-        HEaV/3KCTotz3XjruwbrAOXOXg==
-X-Google-Smtp-Source: APXvYqwCds92WSgOcATJjPe5GOxHNR3RIEXkjbscjsxcH0l7rplY2Ca6nLAzVaRD/jXZ+Ny7BqZg2w==
-X-Received: by 2002:a17:902:61:: with SMTP id 88mr2408012pla.17.1582868064152;
-        Thu, 27 Feb 2020 21:34:24 -0800 (PST)
+        bh=0GJyp688+zVIA9RAELyTu++JtY5GE6ftYiBpGjoOZZA=;
+        b=rqYKTDyDPkX5TYgdIjnyyN9Mtlqk+uOiMqOGS+GOVp1SlBI5dJSeFOeZehtWXGK8/Z
+         KuppifUqE+Iq+uX3t/LwA1I95qGvNgFfZuxKOALRWd2sUr3x4HieUFGhNqI9/lHd7QFU
+         7J6jnudsX4LX5pZ0zkcJ4ZUYaYFpqxNoDd3egvEVUX7gmxJthJiTuQZJAq2ughQH4Hmz
+         d9okNYR2VllCY2ZCmC3WqzwS6e+9FAGmQDsabobjxy6U3oCuMR0qoCihfT+49RFFNmh+
+         49DCNwP6tGuOznrRgb6lN6TKabDAlLjioPsRXd1vrkWAZgjajesl3/w44mDEvE1nsuMa
+         Tbpw==
+X-Gm-Message-State: APjAAAWdZfBELP7Z3dkMdaPL49sMJgHzEV1SIZj4XcWw4Tgq/vdd3fRs
+        jsNqk5EMEb3UGXNp/83rPwkc7w==
+X-Google-Smtp-Source: APXvYqyirMSHVRjCCxcV5wU5H0zwkMqjx2vvSv6NAvs47VYPqge4V0xBX7vOP9O+r+1Rl3LwTeBXUQ==
+X-Received: by 2002:a17:902:502:: with SMTP id 2mr2382085plf.151.1582868153642;
+        Thu, 27 Feb 2020 21:35:53 -0800 (PST)
 Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id q13sm8659550pgh.30.2020.02.27.21.34.22
+        by smtp.gmail.com with ESMTPSA id v29sm8277892pgc.72.2020.02.27.21.35.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2020 21:34:23 -0800 (PST)
-Date:   Thu, 27 Feb 2020 21:34:20 -0800
+        Thu, 27 Feb 2020 21:35:52 -0800 (PST)
+Date:   Thu, 27 Feb 2020 21:35:50 -0800
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Sibi Sankar <sibis@codeaurora.org>
 Cc:     srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
@@ -53,146 +53,102 @@ Cc:     srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         tsoni@codeaurora.org, vnkgutta@codeaurora.org
-Subject: Re: [PATCH v4 1/3] soc: qcom: Introduce Protection Domain Restart
- helpers
-Message-ID: <20200228053420.GC210720@yoga>
+Subject: Re: [PATCH v4 2/3] dt-bindings: soc: qcom: apr: Add protection
+ domain bindings
+Message-ID: <20200228053550.GD210720@yoga>
 References: <20200226170001.24234-1-sibis@codeaurora.org>
- <20200226170001.24234-2-sibis@codeaurora.org>
+ <20200226170001.24234-3-sibis@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200226170001.24234-2-sibis@codeaurora.org>
+In-Reply-To: <20200226170001.24234-3-sibis@codeaurora.org>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed 26 Feb 08:59 PST 2020, Sibi Sankar wrote:
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-[..]
-> +config QCOM_PDR_HELPERS
-> +	tristate
-> +	depends on ARCH_QCOM || COMPILE_TEST
+On Wed 26 Feb 09:00 PST 2020, Sibi Sankar wrote:
 
-As discussed on one of you other patches, please omit the depends on for
-Kconfig entries that are not user selectable. Presumably anyone
-selecting this option will have ARCH_QCOM met already.
+> Qualcomm SoCs (starting with MSM8998) allow for multiple protection
+> domains (PDs) to run on the same Q6 sub-system. This allows for
+> services like AVS AUDIO to have their own separate address space and
+> crash/recover without disrupting the other PDs running on the same Q6
+> ADSP. Add "qcom,protection-domain" bindings to capture the dependencies
+> between the APR service and the PD on which the apr service runs.
+> 
 
-> +	select QCOM_QMI_HELPERS
-[..]
-> diff --git a/drivers/soc/qcom/pdr_interface.c b/drivers/soc/qcom/pdr_interface.c
-[..]
-> +static void pdr_locator_work(struct work_struct *work)
-> +{
-> +	struct pdr_handle *pdr = container_of(work, struct pdr_handle,
-> +					      locator_work);
-> +	struct pdr_service *pds;
-> +	int ret = 0;
-> +
-> +	/* Bail out early if the SERVREG LOCATOR QMI service is not up */
-> +	mutex_lock(&pdr->lock);
-> +	if (!pdr->locator_init_complete) {
-> +		mutex_unlock(&pdr->lock);
-> +		pr_debug("PDR: SERVICE LOCATOR service not available\n");
-> +		return;
-> +	}
-> +	mutex_unlock(&pdr->lock);
-> +
-> +	mutex_lock(&pdr->list_lock);
-> +	list_for_each_entry(pds, &pdr->lookups, node) {
-> +		if (!pds->need_locator_lookup)
-> +			continue;
-> +
-> +		pds->need_locator_lookup = false;
-> +		mutex_unlock(&pdr->list_lock);
-> +
-> +		ret = pdr_locate_service(pdr, pds);
-> +		if (ret < 0)
-> +			goto exit;
-> +
-> +		/* Initialize notifier QMI handle */
-> +		mutex_lock(&pdr->lock);
-> +		if (!pdr->notifier_init_complete) {
-> +			ret = qmi_handle_init(&pdr->notifier_hdl,
-> +					      SERVREG_STATE_UPDATED_IND_MAX_LEN,
-> +					      &pdr_notifier_ops,
-> +					      qmi_indication_handler);
-> +			if (ret < 0) {
-> +				mutex_unlock(&pdr->lock);
-> +				goto exit;
-> +			}
-> +			pdr->notifier_init_complete = true;
-> +		}
-> +		mutex_unlock(&pdr->lock);
-> +
-> +		ret = qmi_add_lookup(&pdr->notifier_hdl, pds->service, 1,
-> +				     pds->instance);
-> +		if (ret < 0)
-> +			goto exit;
-> +
-> +		return;
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-If the caller calls pdr_add_lookup() multiple times in quick succession
-wouldn't it be possile to get the worker scheduled with multiple entries
-in &pdr->lookups with need_locator_lookup set?
-
-If so I think it makes sense to break the content of this loop, and the
-error handling under exit out into a separate function.
-
-And even if this would not be the case, breaking this out in a separate
-function would allow you to change the loop to:
-
-	list_for_each_entry() {
-		if (pdr->need_locator_lookup) {
-			do_the_lookup();
-			break;
-		}
-	}
-
-Which I think is easier to reason about than the loop with a return at
-the end.
-
-> +	}
-> +	mutex_unlock(&pdr->list_lock);
-> +exit:
-> +	if (ret < 0) {
-> +		/* Notify lookup failed */
-> +		mutex_lock(&pdr->list_lock);
-> +		list_del(&pds->node);
-> +		mutex_unlock(&pdr->list_lock);
+> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+> ---
+>  .../devicetree/bindings/soc/qcom/qcom,apr.txt | 50 +++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.txt b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.txt
+> index db501269f47b8..f8fa71f5d84ba 100644
+> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,apr.txt
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,apr.txt
+> @@ -45,6 +45,18 @@ by the individual bindings for the specific service
+>  			12 - Ultrasound stream manager.
+>  			13 - Listen stream manager.
+>  
+> +- qcom,protection-domain
+> +	Usage: optional
+> +	Value type: <stringlist>
+> +	Definition: Must list the protection domain service name and path
+> +		    that the particular apr service has a dependency on.
+> +	Possible values are :
+> +			"avs/audio", "msm/adsp/audio_pd".
+> +			"kernel/elf_loader", "msm/modem/wlan_pd".
+> +			"tms/servreg", "msm/adsp/audio_pd".
+> +			"tms/servreg", "msm/modem/wlan_pd".
+> +			"tms/servreg", "msm/slpi/sensor_pd".
 > +
-> +		if (ret == -ENXIO)
-> +			pds->state = SERVREG_LOCATOR_UNKNOWN_SERVICE;
-> +		else
-> +			pds->state = SERVREG_LOCATOR_ERR;
+>  = EXAMPLE
+>  The following example represents a QDSP based sound card on a MSM8996 device
+>  which uses apr as communication between Apps and QDSP.
+> @@ -82,3 +94,41 @@ which uses apr as communication between Apps and QDSP.
+>  			...
+>  		};
+>  	};
 > +
-> +		pr_err("PDR: service lookup for %s failed: %d\n",
-> +		       pds->service_name, ret);
+> += EXAMPLE 2
+> +The following example represents a QDSP based sound card with protection domain
+> +dependencies specified. Here some of the apr services are dependent on services
+> +running on protection domain hosted on ADSP/SLPI remote processors while others
+> +have no such dependency.
 > +
-> +		mutex_lock(&pdr->status_lock);
-> +		pdr->status(pds->state, pds->service_path, pdr->priv);
-> +		mutex_unlock(&pdr->status_lock);
-> +		kfree(pds);
-> +	}
-> +}
-[..]
-> +struct pdr_handle *pdr_handle_alloc(void (*status)(int state,
-> +						   char *service_path,
-> +						   void *priv), void *priv)
-> +{
-> +	struct pdr_handle *pdr;
-> +	int ret;
+> +	apr {
+> +		compatible = "qcom,apr-v2";
+> +		qcom,glink-channels = "apr_audio_svc";
+> +		qcom,apr-domain = <APR_DOMAIN_ADSP>;
 > +
-> +	if (!status)
-> +		return ERR_PTR(-EINVAL);
+> +		q6core {
+> +			compatible = "qcom,q6core";
+> +			reg = <APR_SVC_ADSP_CORE>;
+> +		};
 > +
-> +	pdr = kzalloc(sizeof(*pdr), GFP_KERNEL);
-> +	if (!pdr)
-> +		return ERR_PTR(-ENOMEM);
+> +		q6afe: q6afe {
+> +			compatible = "qcom,q6afe";
+> +			reg = <APR_SVC_AFE>;
+> +			qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+> +			...
+> +		};
 > +
-> +	pdr->status = *status;
-
-Please omit the * here.
-
-Regards,
-Bjorn
+> +		q6asm: q6asm {
+> +			compatible = "qcom,q6asm";
+> +			reg = <APR_SVC_ASM>;
+> +			qcom,protection-domain = "tms/servreg", "msm/slpi/sensor_pd";
+> +			...
+> +		};
+> +
+> +		q6adm: q6adm {
+> +			compatible = "qcom,q6adm";
+> +			reg = <APR_SVC_ADM>;
+> +			qcom,protection-domain = "avs/audio", "msm/adsp/audio_pd";
+> +			...
+> +		};
+> +	};
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
