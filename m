@@ -2,154 +2,88 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C85AF173353
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Feb 2020 09:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0E01735D0
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Feb 2020 12:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726626AbgB1Iw0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 28 Feb 2020 03:52:26 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:48562 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726005AbgB1Iw0 (ORCPT
+        id S1726810AbgB1LHK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 28 Feb 2020 06:07:10 -0500
+Received: from forward101p.mail.yandex.net ([77.88.28.101]:46378 "EHLO
+        forward101p.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726778AbgB1LHK (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 28 Feb 2020 03:52:26 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id 96CD9292A95
-Subject: Re: [PATCH] platform/chrome: cros_ec_rpmsg: Fix race with host event.
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     Pi-Hsun Shih <pihsun@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>, ohad@wizery.com,
+        Fri, 28 Feb 2020 06:07:10 -0500
+Received: from forward100q.mail.yandex.net (forward100q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb97])
+        by forward101p.mail.yandex.net (Yandex) with ESMTP id D97A73281116;
+        Fri, 28 Feb 2020 14:07:06 +0300 (MSK)
+Received: from mxback9q.mail.yandex.net (mxback9q.mail.yandex.net [IPv6:2a02:6b8:c0e:6b:0:640:b813:52e4])
+        by forward100q.mail.yandex.net (Yandex) with ESMTP id D719A7080009;
+        Fri, 28 Feb 2020 14:07:06 +0300 (MSK)
+Received: from vla1-61ce7aa04735.qloud-c.yandex.net (vla1-61ce7aa04735.qloud-c.yandex.net [2a02:6b8:c0d:3e86:0:640:61ce:7aa0])
+        by mxback9q.mail.yandex.net (mxback/Yandex) with ESMTP id hroNpCvPZS-76FGlZsk;
+        Fri, 28 Feb 2020 14:07:06 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1582888026;
+        bh=6ZttMXpzkKUkjq7swchhjpIOghz2F5MHQ3V90TIxyaQ=;
+        h=Subject:To:From:Cc:Date:Message-Id;
+        b=SLMoxyyBKbppGva2H1uPKFfEtfRMT9Hvem6U0fMqdOPxpsfVWbcY4PClFQHmO1dBl
+         1R5vBbFSPMvP/3XbvwnQXVHqlioZ9j2axyxqPe/i5jqAJMT7cTcBhznj/gATBl8NZM
+         EPslYk56AhFKSaKpr6zVt/6sJHtA2ZEjqTbeTkEo=
+Authentication-Results: mxback9q.mail.yandex.net; dkim=pass header.i=@maquefel.me
+Received: by vla1-61ce7aa04735.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id bXDf96qZCu-75IiPKaY;
+        Fri, 28 Feb 2020 14:07:05 +0300
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client certificate not present)
+From:   nikita.shubin@maquefel.me
+Cc:     nikita.shubin@maquefel.me, Nikita Shubin <NShubin@topcon.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-remoteproc@vger.kernel.org
-References: <20200214082638.92070-1-pihsun@chromium.org>
- <83b03af1-5518-599a-3f82-ee204992edbf@collabora.com>
- <CANdKZ0fuK1Nm_fPNKAss29pqghCcwjN3acYHi6Ez5==envgKgA@mail.gmail.com>
- <84a66ac1-c36a-fa72-a406-9c3396c1bdf2@collabora.com>
-Message-ID: <6c78727d-8a65-097d-224d-48d93f6ceaa7@collabora.com>
-Date:   Fri, 28 Feb 2020 09:52:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] remoteproc: error on kick missing
+Date:   Fri, 28 Feb 2020 14:08:04 +0300
+Message-Id: <20200228110804.25822-1-nikita.shubin@maquefel.me>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-In-Reply-To: <84a66ac1-c36a-fa72-a406-9c3396c1bdf2@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Pi-Hsun,
+From: Nikita Shubin <NShubin@topcon.com>
 
-On 17/2/20 16:55, Enric Balletbo i Serra wrote:
-> Dear remoteproc experts,
-> 
-> cc'ing you for if we can have your feedback on this change.
-> 
-> Thanks Pi-Hsun, for your quick answer, makes sense but I'm still feeling that I
-> miss something (probably because I'm not a remoteproc expert), so I added the
-> Remoteproc people for if they can comment this patch. We have time as we're in
-> rc2 only, so I'd like to wait a bit in case they can take a look.
-> 
-> If no answer is received I'll take a second look and apply the patch.
-> 
+.kick method not set in rproc_ops will result in:
 
-I'll pick this patch, just I want to request a minor change.
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference
 
-> Thanks,
->  Enric
-> 
-> On 15/2/20 4:56, Pi-Hsun Shih wrote:
->> Hi Enric,
->>
->> On Fri, Feb 14, 2020 at 11:10 PM Enric Balletbo i Serra
->> <enric.balletbo@collabora.com> wrote:
->>>
->>> Hi Pi-Hsun,
->>>
->>> On 14/2/20 9:26, Pi-Hsun Shih wrote:
->>>> Host event can be sent by remoteproc by any time, and
->>>> cros_ec_rpmsg_callback would be called after cros_ec_rpmsg_create_ept.
->>>> But the cros_ec_device is initialized after that, which cause host event
->>>> handler to use cros_ec_device that are not initialized properly yet.
->>>>
->>>
->>> I don't have the hardware to test but, can't we call first cros_ec_register and
->>> then cros_ec_rpmsg_create_ept?
->>>
->>> Start receiving driver callbacks before finishing to probe the drivers itself
->>> sounds weird to me.
->>>
->>> Thanks,
->>>  Enric
->>
->> Since cros_ec_register calls cros_ec_query_all, which sends message to
->> remoteproc using cros_ec_pkt_xfer_rpmsg (to query protocol version),
->> the ec_rpmsg->ept need to be ready before calling cros_ec_register.
->>
->>>
->>>> Fix this by don't schedule host event handler before cros_ec_register
->>>> returns. Instead, remember that we have a pending host event, and
->>>> schedule host event handler after cros_ec_register.
->>>>
->>>> Fixes: 71cddb7097e2 ("platform/chrome: cros_ec_rpmsg: Fix race with host command when probe failed.")
->>>> Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
->>>> ---
->>>>  drivers/platform/chrome/cros_ec_rpmsg.c | 16 +++++++++++++++-
->>>>  1 file changed, 15 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/platform/chrome/cros_ec_rpmsg.c b/drivers/platform/chrome/cros_ec_rpmsg.c
->>>> index dbc3f5523b83..7e8629e3db74 100644
->>>> --- a/drivers/platform/chrome/cros_ec_rpmsg.c
->>>> +++ b/drivers/platform/chrome/cros_ec_rpmsg.c
->>>> @@ -44,6 +44,8 @@ struct cros_ec_rpmsg {
->>>>       struct completion xfer_ack;
->>>>       struct work_struct host_event_work;
->>>>       struct rpmsg_endpoint *ept;
->>>> +     bool has_pending_host_event;
->>>> +     bool probe_done;
+in rproc_virtio_notify, after firmware loading.
 
+refuse to register an rproc-induced virtio device if no kick method was
+defined for rproc.
 
-Could you try if just calling driver_probe_done() when needed works, so we don't
-need to add a new boolean flag for this?
+Signed-off-by: Nikita Shubin <NShubin@topcon.com>
+---
+ drivers/remoteproc/remoteproc_virtio.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Thanks,
- Enric
+diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+index 8c07cb2ca8ba..31a62a0b470e 100644
+--- a/drivers/remoteproc/remoteproc_virtio.c
++++ b/drivers/remoteproc/remoteproc_virtio.c
+@@ -334,6 +334,13 @@ int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
+ 	struct rproc_mem_entry *mem;
+ 	int ret;
+ 
++	if (rproc->ops->kick == NULL) {
++		ret = -EINVAL;
++		dev_err(dev, ".kick method not defined for %s",
++				rproc->name);
++		goto out;
++	}
++
+ 	/* Try to find dedicated vdev buffer carveout */
+ 	mem = rproc_find_carveout_by_name(rproc, "vdev%dbuffer", rvdev->index);
+ 	if (mem) {
+-- 
+2.24.1
 
->>>>  };
->>>>
->>>>  /**
->>>> @@ -177,7 +179,14 @@ static int cros_ec_rpmsg_callback(struct rpmsg_device *rpdev, void *data,
->>>>               memcpy(ec_dev->din, resp->data, len);
->>>>               complete(&ec_rpmsg->xfer_ack);
->>>>       } else if (resp->type == HOST_EVENT_MARK) {
->>>> -             schedule_work(&ec_rpmsg->host_event_work);
->>>> +             /*
->>>> +              * If the host event is sent before cros_ec_register is
->>>> +              * finished, queue the host event.
->>>> +              */
->>>> +             if (ec_rpmsg->probe_done)
->>>> +                     schedule_work(&ec_rpmsg->host_event_work);
->>>> +             else
->>>> +                     ec_rpmsg->has_pending_host_event = true;
->>>>       } else {
->>>>               dev_warn(ec_dev->dev, "rpmsg received invalid type = %d",
->>>>                        resp->type);
->>>> @@ -240,6 +249,11 @@ static int cros_ec_rpmsg_probe(struct rpmsg_device *rpdev)
->>>>               return ret;
->>>>       }
->>>>
->>>> +     ec_rpmsg->probe_done = true;
->>>> +
->>>> +     if (ec_rpmsg->has_pending_host_event)
->>>> +             schedule_work(&ec_rpmsg->host_event_work);
->>>> +
->>>>       return 0;
->>>>  }
->>>>
->>>>
->>>> base-commit: b19e8c68470385dd2c5440876591fddb02c8c402
->>>>
