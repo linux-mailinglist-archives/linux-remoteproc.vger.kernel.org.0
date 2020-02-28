@@ -2,232 +2,283 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D170172C9E
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Feb 2020 01:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C66172F7B
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Feb 2020 04:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729987AbgB1AA4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 27 Feb 2020 19:00:56 -0500
-Received: from mail27.static.mailgun.info ([104.130.122.27]:24721 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729960AbgB1AA4 (ORCPT
+        id S1730672AbgB1Dk7 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 27 Feb 2020 22:40:59 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:34170 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730638AbgB1Dk7 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 27 Feb 2020 19:00:56 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1582848055; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=sxdjaXAFvzStZVWpkXqd8Oa4CInabS6KmEzidWgB4u4=;
- b=Xlnbk3wCWvxcz0Hn72wiUEjlitfGUG0DuRcW18rRvnruU31mwv/aBh5g7vo0tRAsLqSYFQkM
- B+RzTOYbmW7q+GhJNbaHWz66o7skqVqlo+AoSQ3Sw3XwJ1BblaNI7FsjQnlBGlJT9UGGzE6X
- 3OFDulFkTT0YreT9Wgi1mMbvI/g=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e585816.7fa3af2da5e0-smtp-out-n02;
- Fri, 28 Feb 2020 00:00:22 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 8EFB3C447A2; Fri, 28 Feb 2020 00:00:22 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: rishabhb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6B74AC43383;
-        Fri, 28 Feb 2020 00:00:21 +0000 (UTC)
+        Thu, 27 Feb 2020 22:40:59 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 01S3em9f024433;
+        Thu, 27 Feb 2020 21:40:48 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1582861248;
+        bh=nFHa3nPck9OMXyJJrWEfYBYfsZn16z2PgDyatq9xoXs=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=sPuGsD1isLJOejYNCqmSS9rULVfhxpM8DxiVWUP+jeuRiyRxw0faahFqHm6/6VgBX
+         oRYin1xWqYnk73WK8eZJJvhMTZ1uEysnFISDbHjpZ2sZxJPiPOJfOHT/gekpfFP8LC
+         vX5pREEtm4HvKOnAEh6odAkPy/2yXAxsLEGp/Nuw=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 01S3emtI117655
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 27 Feb 2020 21:40:48 -0600
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 27
+ Feb 2020 21:40:47 -0600
+Received: from localhost.localdomain (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 27 Feb 2020 21:40:47 -0600
+Received: from [128.247.58.153] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by localhost.localdomain (8.15.2/8.15.2) with ESMTP id 01S3ell0119905;
+        Thu, 27 Feb 2020 21:40:47 -0600
+Subject: Re: [PATCH v5 1/3] remoteproc: add support for co-processor loaded
+ and booted before kernel
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Loic PALLARDY <loic.pallardy@st.com>,
+        Fabien DESSENNE <fabien.dessenne@st.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20200211174205.22247-1-arnaud.pouliquen@st.com>
+ <20200211174205.22247-2-arnaud.pouliquen@st.com>
+ <20200213200813.GA14415@xps15>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <1c259bf8-6cfa-c9b3-4707-e4d67a5e4483@ti.com>
+Date:   Thu, 27 Feb 2020 21:40:47 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <20200213200813.GA14415@xps15>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 27 Feb 2020 16:00:21 -0800
-From:   rishabhb@codeaurora.org
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Siddharth Gupta <sidgup@codeaurora.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, ohad@wizery.com, tsoni@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, psodagud@codeaurora.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 6/6] remoteproc: qcom: Add notification types to SSR
-In-Reply-To: <20200227215940.GC20116@xps15>
-References: <1582167465-2549-1-git-send-email-sidgup@codeaurora.org>
- <1582167465-2549-7-git-send-email-sidgup@codeaurora.org>
- <20200227215940.GC20116@xps15>
-Message-ID: <1a615fcd5a5c435d1d8babe8d5c3f8c3@codeaurora.org>
-X-Sender: rishabhb@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 2020-02-27 13:59, Mathieu Poirier wrote:
-> On Wed, Feb 19, 2020 at 06:57:45PM -0800, Siddharth Gupta wrote:
->> The SSR subdevice only adds callback for the unprepare event. Add 
->> callbacks
->> for unprepare, start and prepare events. The client driver for a 
->> particular
->> remoteproc might be interested in knowing the status of the remoteproc
->> while undergoing SSR, not just when the remoteproc has finished 
->> shutting
->> down.
->> 
->> Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
+Hi All,
+
+On 2/13/20 2:08 PM, Mathieu Poirier wrote:
+> Good day,
+> 
+> On Tue, Feb 11, 2020 at 06:42:03PM +0100, Arnaud Pouliquen wrote:
+>> From: Loic Pallardy <loic.pallardy@st.com>
+>>
+>> Remote processor could boot independently or be loaded/started before
+>> Linux kernel by bootloader or any firmware.
+>> This patch introduces a new property in rproc core, named skip_fw_load,
+>> to be able to allocate resources and sub-devices like vdev and to
+>> synchronize with current state without loading firmware from file system.
+>> It is platform driver responsibility to implement the right firmware
+>> load ops according to HW specificities.
+>>
+>> Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
+>> Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 >> ---
->>  drivers/remoteproc/qcom_common.c | 39 
->> +++++++++++++++++++++++++++++++++++----
->>  include/linux/remoteproc.h       | 15 +++++++++++++++
->>  2 files changed, 50 insertions(+), 4 deletions(-)
->> 
->> diff --git a/drivers/remoteproc/qcom_common.c 
->> b/drivers/remoteproc/qcom_common.c
->> index 6714f27..6f04a5b 100644
->> --- a/drivers/remoteproc/qcom_common.c
->> +++ b/drivers/remoteproc/qcom_common.c
->> @@ -183,9 +183,9 @@ EXPORT_SYMBOL_GPL(qcom_remove_smd_subdev);
->>   *
->>   * Returns pointer to srcu notifier head on success, ERR_PTR on 
->> failure.
->>   *
->> - * This registers the @notify function as handler for restart 
->> notifications. As
->> - * remote processors are stopped this function will be called, with 
->> the rproc
->> - * pointer passed as a parameter.
->> + * This registers the @notify function as handler for 
->> powerup/shutdown
->> + * notifications. This function will be invoked inside the callbacks 
->> registered
->> + * for the ssr subdevice, with the rproc pointer passed as a 
->> parameter.
+>>  drivers/remoteproc/remoteproc_core.c | 67 ++++++++++++++++++++++------
+>>  include/linux/remoteproc.h           |  2 +
+>>  2 files changed, 55 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+>> index 097f33e4f1f3..876b5420a32b 100644
+>> --- a/drivers/remoteproc/remoteproc_core.c
+>> +++ b/drivers/remoteproc/remoteproc_core.c
+>> @@ -1358,8 +1358,19 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+>>  	return ret;
+>>  }
+>>  
+>> -/*
+>> - * take a firmware and boot a remote processor with it.
+>> +/**
+>> + * rproc_fw_boot() - boot specified remote processor according to specified
+>> + * firmware
+>> + * @rproc: handle of a remote processor
+>> + * @fw: pointer on firmware to handle
+>> + *
+>> + * Handle resources defined in resource table, load firmware and
+>> + * start remote processor.
+>> + *
+>> + * If firmware pointer fw is NULL, firmware is not handled by remoteproc
+>> + * core, but under the responsibility of platform driver.
+>> + *
+>> + * Returns 0 on success, and an appropriate error value otherwise.
 >>   */
->>  void *qcom_register_ssr_notifier(struct rproc *rproc, struct 
->> notifier_block *nb)
+>>  static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
 >>  {
->> @@ -227,11 +227,39 @@ int qcom_unregister_ssr_notifier(void *notify, 
->> struct notifier_block *nb)
->>  }
->>  EXPORT_SYMBOL_GPL(qcom_unregister_ssr_notifier);
->> 
->> +static int ssr_notify_prepare(struct rproc_subdev *subdev)
->> +{
->> +	struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
->> +
->> +	srcu_notifier_call_chain(ssr->rproc_notif_list,
->> +				 RPROC_BEFORE_POWERUP, (void *)ssr->name);
->> +	return 0;
->> +}
->> +
->> +static int ssr_notify_start(struct rproc_subdev *subdev)
->> +{
->> +	struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
->> +
->> +	srcu_notifier_call_chain(ssr->rproc_notif_list,
->> +				 RPROC_AFTER_POWERUP, (void *)ssr->name);
->> +	return 0;
->> +}
->> +
->> +static void ssr_notify_stop(struct rproc_subdev *subdev, bool 
->> crashed)
->> +{
->> +	struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
->> +
->> +	srcu_notifier_call_chain(ssr->rproc_notif_list,
->> +				 RPROC_BEFORE_SHUTDOWN, (void *)ssr->name);
->> +}
->> +
->> +
->>  static void ssr_notify_unprepare(struct rproc_subdev *subdev)
+>> @@ -1371,7 +1382,11 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
+>>  	if (ret)
+>>  		return ret;
+>>  
+>> -	dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
+>> +	if (fw)
+>> +		dev_info(dev, "Booting fw image %s, size %zd\n", name,
+>> +			 fw->size);
+>> +	else
+>> +		dev_info(dev, "Synchronizing with preloaded co-processor\n");
+>>  
+>>  	/*
+>>  	 * if enabling an IOMMU isn't relevant for this rproc, this is
+>> @@ -1718,16 +1733,22 @@ static void rproc_crash_handler_work(struct work_struct *work)
+>>   * rproc_boot() - boot a remote processor
+>>   * @rproc: handle of a remote processor
+>>   *
+>> - * Boot a remote processor (i.e. load its firmware, power it on, ...).
+>> + * Boot a remote processor (i.e. load its firmware, power it on, ...) from
+>> + * different contexts:
+>> + * - power off
+>> + * - preloaded firmware
+>> + * - started before kernel execution
+>> + * The different operations are selected thanks to properties defined by
+>> + * platform driver.
+>>   *
+>> - * If the remote processor is already powered on, this function immediately
+>> - * returns (successfully).
+>> + * If the remote processor is already powered on at rproc level, this function
+>> + * immediately returns (successfully).
+>>   *
+>>   * Returns 0 on success, and an appropriate error value otherwise.
+>>   */
+>>  int rproc_boot(struct rproc *rproc)
 >>  {
->>  	struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
->> 
->> -	srcu_notifier_call_chain(ssr->rproc_notif_list, 0, (void 
->> *)ssr->name);
->> +	srcu_notifier_call_chain(ssr->rproc_notif_list,
->> +				 RPROC_AFTER_SHUTDOWN, (void *)ssr->name);
->>  }
->> 
->>  /**
->> @@ -248,6 +276,9 @@ void qcom_add_ssr_subdev(struct rproc *rproc, 
->> struct qcom_rproc_ssr *ssr,
->>  {
->>  	ssr->name = ssr_name;
->>  	ssr->subdev.name = kstrdup("ssr_notifs", GFP_KERNEL);
->> +	ssr->subdev.prepare = ssr_notify_prepare;
->> +	ssr->subdev.start = ssr_notify_start;
->> +	ssr->subdev.stop = ssr_notify_stop;
+>> -	const struct firmware *firmware_p;
+>> +	const struct firmware *firmware_p = NULL;
+>>  	struct device *dev;
+>>  	int ret;
+>>  
+>> @@ -1758,11 +1779,20 @@ int rproc_boot(struct rproc *rproc)
+>>  
+>>  	dev_info(dev, "powering up %s\n", rproc->name);
+>>  
+>> -	/* load firmware */
+>> -	ret = request_firmware(&firmware_p, rproc->firmware, dev);
+>> -	if (ret < 0) {
+>> -		dev_err(dev, "request_firmware failed: %d\n", ret);
+>> -		goto downref_rproc;
+>> +	if (!rproc->skip_fw_load) {
+>> +		/* load firmware */
+>> +		ret = request_firmware(&firmware_p, rproc->firmware, dev);
+>> +		if (ret < 0) {
+>> +			dev_err(dev, "request_firmware failed: %d\n", ret);
+>> +			goto downref_rproc;
+>> +		}
+>> +	} else {
+>> +		/*
+>> +		 * Set firmware name pointer to null as remoteproc core is not
+>> +		 * in charge of firmware loading
+>> +		 */
+>> +		kfree(rproc->firmware);
+>> +		rproc->firmware = NULL;
 > 
-> Now that I have a better understanding of what this patchset is doing, 
-> I realise
-> my comments in patch 04 won't work.  To differentiate the subdevs of an 
-> rproc I
-> suggest to wrap them in a generic structure with a type and an enum.  
-> That way
-> you can differenciate between subdevices without having to add to the 
-> core.
-Ok. I can try that.
+> If the MCU with pre-loaded FW crashes request_firmware() in
+> rproc_trigger_recovery() will return an error and rproc_start()
+> never called.
 > 
-> That being said, I don't understand what patches 5 and 6 are doing...
-> Registering with the global ssr_notifiers allowed to gracefully 
-> shutdown all the
-> MCUs in the system when one of them would go down.  But now that we are 
-> using
-> the notifier on a per MCU, I really don't see why each subdev couldn't 
-> implement
-> the right prepare/start/stop functions.
+>>  	}
+>>  
+>>  	ret = rproc_fw_boot(rproc, firmware_p);
+>> @@ -1916,8 +1946,17 @@ int rproc_add(struct rproc *rproc)
+>>  	/* create debugfs entries */
+>>  	rproc_create_debug_dir(rproc);
+>>  
+>> -	/* if rproc is marked always-on, request it to boot */
+>> -	if (rproc->auto_boot) {
+>> +	if (rproc->skip_fw_load) {
+>> +		/*
+>> +		 * If rproc is marked already booted, no need to wait
+>> +		 * for firmware.
+>> +		 * Just handle associated resources and start sub devices
+>> +		 */
+>> +		ret = rproc_boot(rproc);
+>> +		if (ret < 0)
+>> +			return ret;
+
+I am still catching up on all the various responses on this particular
+thread, but this particular path will have an issue for one of the
+usecases (#2 below) that I have for TI drivers.
+
+We have couple of use-cases for TI drivers:
+1. The regular early-boot & late-attach case, where the processor is
+booted earlier by a bootloader, and we establish the virtio stack in
+kernel. We do want to support the regular remoteproc operations
+thereafter - stop the remoteproc using sysfs (userspace control to be
+able to stop, change firmware and boot the new firmware), support
+error-recovery (using the same firmware).
+2. Support a userspace loader with the kernel only providing the hooks
+for actually processing the vrings, and starting the processor (the boot
+control registers are not exposed). We support this by enhancing our
+platform driver to provide some ioctl support, and set skip_fw_load and
+clear auto_boot for this, but the above path takes will fail this.
+3. A third subset usecase of #1, where kernel is only responsible for
+establishing the the IPC. Linux won't be able to stop and/or start the
+processors, and perform any error recovery either. I use a combination
+of above flags + recovery_disabled + platform driver support + an
+additional flag where I do not allow any userspace start/stop that I
+have posted a while ago [1].
+
+>> +	} else if (rproc->auto_boot) {
+>> +		/* if rproc is marked always-on, request it to boot */
 > 
-> Am I missing something here?
-We only want kernel clients to be notified when the Remoteproc they are 
-interested
-in changes state. For e.g. audio kernel driver should be notified when 
-audio
-processor goes down but it does not care about any other remoteproc.
-If you are suggesting that these kernel clients be added as subdevices 
-then
-we will end up having many subdevices registered to each remoteproc. So 
-we
-implemented a notifier chain per Remoteproc. This keeps the SSR 
-notifications as
-the subdevice per remoteproc, and all interested clients can register to 
-it.
+> I spent way too much time staring at this modification...  I can't decide if a
+> system where the FW has been pre-loaded should be considered "auto_boot".
+> Indeed the result is the same, i.e the MCU is started at boot time without user
+> intervention.
+
+Yeah, #2 usecase falls in this category where it is not auto_boot.
+
+FYI, [2] is the patch that I was using on downstream TI kernels that
+looks slightly different to this patch - it uses two flags instead for
+skip_fw_load and skip_fw_request instead of clearing the fw, but even
+that one probably doesn't cater to all the combinations being discussed
+in this thread.
+
+regards
+Suman
+
+[1] https://patchwork.kernel.org/patch/10601325/
+[2]
+https://git.ti.com/gitweb?p=rpmsg/remoteproc.git;a=commitdiff;h=c1a632fc83e364aa8fd82e949b47b36db64523c5
+
 > 
+> I'd welcome other people's opinion on this.
 > 
->>  	ssr->subdev.unprepare = ssr_notify_unprepare;
->>  	ssr->rproc_notif_list = kzalloc(sizeof(struct srcu_notifier_head),
->>  								GFP_KERNEL);
+>>  		ret = rproc_trigger_auto_boot(rproc);
+>>  		if (ret < 0)
+>>  			return ret;
 >> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->> index e2f60cc..4be4478 100644
+>> index 16ad66683ad0..4fd5bedab4fa 100644
 >> --- a/include/linux/remoteproc.h
 >> +++ b/include/linux/remoteproc.h
->> @@ -449,6 +449,21 @@ struct rproc_dump_segment {
+>> @@ -479,6 +479,7 @@ struct rproc_dump_segment {
+>>   * @table_sz: size of @cached_table
+>>   * @has_iommu: flag to indicate if remote processor is behind an MMU
+>>   * @auto_boot: flag to indicate if remote processor should be auto-started
+>> + * @skip_fw_load: remote processor has been preloaded before start sequence
+>>   * @dump_segments: list of segments in the firmware
+>>   * @nb_vdev: number of vdev currently handled by rproc
+>>   */
+>> @@ -512,6 +513,7 @@ struct rproc {
+>>  	size_t table_sz;
+>>  	bool has_iommu;
+>>  	bool auto_boot;
+>> +	bool skip_fw_load;
+>>  	struct list_head dump_segments;
+>>  	int nb_vdev;
 >>  };
->> 
->>  /**
->> + * enum rproc_notif_type - Different stages of remoteproc 
->> notifications
->> + * @RPROC_BEFORE_SHUTDOWN:	unprepare stage of  remoteproc
->> + * @RPROC_AFTER_SHUTDOWN:	stop stage of  remoteproc
->> + * @RPROC_BEFORE_POWERUP:	prepare stage of  remoteproc
->> + * @RPROC_AFTER_POWERUP:	start stage of  remoteproc
->> + */
->> +enum rproc_notif_type {
->> +	RPROC_BEFORE_SHUTDOWN,
->> +	RPROC_AFTER_SHUTDOWN,
->> +	RPROC_BEFORE_POWERUP,
->> +	RPROC_AFTER_POWERUP,
->> +	RPROC_MAX
->> +};
->> +
->> +/**
->>   * struct rproc - represents a physical remote processor device
->>   * @node: list node of this rproc object
->>   * @domain: iommu domain
->> --
->> Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->> 
->> _______________________________________________
->> linux-arm-kernel mailing list
->> linux-arm-kernel@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>> -- 
+>> 2.17.1
+>>
+
