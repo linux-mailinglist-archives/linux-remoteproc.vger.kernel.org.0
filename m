@@ -2,307 +2,154 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DEF7173088
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Feb 2020 06:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C85AF173353
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Feb 2020 09:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726016AbgB1Fih (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 28 Feb 2020 00:38:37 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:34246 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbgB1Fih (ORCPT
+        id S1726626AbgB1Iw0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 28 Feb 2020 03:52:26 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:48562 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726005AbgB1Iw0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 28 Feb 2020 00:38:37 -0500
-Received: by mail-pj1-f65.google.com with SMTP id f2so3997525pjq.1
-        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Feb 2020 21:38:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cmj60uSH7xooz04S/6FkeWZRv3V/9gwpZ+q8SsW3lxE=;
-        b=bA8OKIcVfhBiK6Aq9uQYGtGH+W7HI16uTIMyyh6hpXdM9ZFivv06m7GsVJ6161JiV0
-         XFT4Z1Cr9RM+Rpyt4Q0hNW7JUjJZU1BCwYzcwivSX81Fqob1PlYi533yFxrwgPMAjRTO
-         5UdOYdwko1KS2foSQAqWnZbHjzSHOMAanpTK+nVaTd7QfpSbDE8BXirACDHVUZkwCzre
-         78oKnKIxQHVO5umOFqScZThByfwCPijKdbEXHOZ4OoO9vwr7nIvS8NwBqQnPGhZvH5Ah
-         tFiScBpxGcPQQ0uLgT6VKPdq4zUk/mXfzx7nPT5ofLctVQiBoX7XVxsKhf1w44Bb14FP
-         7ZqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cmj60uSH7xooz04S/6FkeWZRv3V/9gwpZ+q8SsW3lxE=;
-        b=C4s/7daba0YspCpoK7yv+bAI3RwHNahE4jYeHEzGvv9z/bdmS7xtMI+JYvoOgeoqPQ
-         WXYETS6H9TFjD0Naaogu54oug3PzXGgzqOF9Y6gjZ47XVwC+618391pCFWoNYg66esOC
-         IcA6+ilmqtRHVFJ+exmyeRFVIcKw3r0PK5Oe/yNC9/LVlmth3OL4FaijLpUNRzxD+Mv9
-         mlb5H7o3ayeCsE2GoOBGhByKaJnFXjnww1xB1jPdEtZjnXIAIS+G6VRvHl8b4Dk4/OM0
-         itVxOQpiu9FSS1uoHLiXFfC3PxdB9lCtWXTVIhxyckdSjNZFe6XT9SrxeN985OVAt2Bu
-         LoSA==
-X-Gm-Message-State: APjAAAXgiBnMdMP53pfgq+pLc9BzvPf120woOB2siIluxoQzjrHVQ19g
-        66mqbLnESTtUrr9ANTSrjahjaQ==
-X-Google-Smtp-Source: APXvYqyfpfd4TEeeIVODb74++OYHjVe30yswx8ej5H3IfT1zlKHQXtdE20LLh4hOMRcKr5An7L+WwQ==
-X-Received: by 2002:a17:90a:cc10:: with SMTP id b16mr2664623pju.55.1582868315988;
-        Thu, 27 Feb 2020 21:38:35 -0800 (PST)
-Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id v22sm5150896pfe.49.2020.02.27.21.38.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2020 21:38:35 -0800 (PST)
-Date:   Thu, 27 Feb 2020 21:38:32 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        agross@kernel.org, mark.rutland@arm.com,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        tsoni@codeaurora.org, vnkgutta@codeaurora.org
-Subject: Re: [PATCH v4 3/3] soc: qcom: apr: Add avs/audio tracking
- functionality
-Message-ID: <20200228053832.GE210720@yoga>
-References: <20200226170001.24234-1-sibis@codeaurora.org>
- <20200226170001.24234-4-sibis@codeaurora.org>
+        Fri, 28 Feb 2020 03:52:26 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id 96CD9292A95
+Subject: Re: [PATCH] platform/chrome: cros_ec_rpmsg: Fix race with host event.
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+To:     Pi-Hsun Shih <pihsun@chromium.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>, ohad@wizery.com,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-remoteproc@vger.kernel.org
+References: <20200214082638.92070-1-pihsun@chromium.org>
+ <83b03af1-5518-599a-3f82-ee204992edbf@collabora.com>
+ <CANdKZ0fuK1Nm_fPNKAss29pqghCcwjN3acYHi6Ez5==envgKgA@mail.gmail.com>
+ <84a66ac1-c36a-fa72-a406-9c3396c1bdf2@collabora.com>
+Message-ID: <6c78727d-8a65-097d-224d-48d93f6ceaa7@collabora.com>
+Date:   Fri, 28 Feb 2020 09:52:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200226170001.24234-4-sibis@codeaurora.org>
+In-Reply-To: <84a66ac1-c36a-fa72-a406-9c3396c1bdf2@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed 26 Feb 09:00 PST 2020, Sibi Sankar wrote:
+Hi Pi-Hsun,
 
-> Use PDR helper functions to track the protection domains that the apr
-> services are dependent upon on SDM845 SoC, specifically the "avs/audio"
-> service running on ADSP Q6.
+On 17/2/20 16:55, Enric Balletbo i Serra wrote:
+> Dear remoteproc experts,
 > 
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-> ---
-
-Please do include a changelog as you respin your patches.
-
-Regards,
-Bjorn
-
->  drivers/soc/qcom/Kconfig     |   1 +
->  drivers/soc/qcom/apr.c       | 123 ++++++++++++++++++++++++++++++++---
->  include/linux/soc/qcom/apr.h |   1 +
->  3 files changed, 116 insertions(+), 9 deletions(-)
+> cc'ing you for if we can have your feedback on this change.
 > 
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index cca6a43e771d9..57000f1615ada 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -202,6 +202,7 @@ config QCOM_APR
->  	tristate "Qualcomm APR Bus (Asynchronous Packet Router)"
->  	depends on ARCH_QCOM || COMPILE_TEST
->  	depends on RPMSG
-> +	select QCOM_PDR_HELPERS
->  	help
->  	  Enable APR IPC protocol support between
->  	  application processor and QDSP6. APR is
-> diff --git a/drivers/soc/qcom/apr.c b/drivers/soc/qcom/apr.c
-> index 4fcc32420c474..1f35b097c6356 100644
-> --- a/drivers/soc/qcom/apr.c
-> +++ b/drivers/soc/qcom/apr.c
-> @@ -11,6 +11,7 @@
->  #include <linux/workqueue.h>
->  #include <linux/of_device.h>
->  #include <linux/soc/qcom/apr.h>
-> +#include <linux/soc/qcom/pdr.h>
->  #include <linux/rpmsg.h>
->  #include <linux/of.h>
->  
-> @@ -21,6 +22,7 @@ struct apr {
->  	spinlock_t rx_lock;
->  	struct idr svcs_idr;
->  	int dest_domain_id;
-> +	struct pdr_handle *pdr;
->  	struct workqueue_struct *rxwq;
->  	struct work_struct rx_work;
->  	struct list_head rx_list;
-> @@ -289,6 +291,9 @@ static int apr_add_device(struct device *dev, struct device_node *np,
->  		  id->svc_id + 1, GFP_ATOMIC);
->  	spin_unlock(&apr->svcs_lock);
->  
-> +	of_property_read_string_index(np, "qcom,protection-domain",
-> +				      1, &adev->service_path);
-> +
->  	dev_info(dev, "Adding APR dev: %s\n", dev_name(&adev->dev));
->  
->  	ret = device_register(&adev->dev);
-> @@ -300,14 +305,75 @@ static int apr_add_device(struct device *dev, struct device_node *np,
->  	return ret;
->  }
->  
-> -static void of_register_apr_devices(struct device *dev)
-> +static int of_apr_add_pd_lookups(struct device *dev)
-> +{
-> +	const char *service_name, *service_path;
-> +	struct apr *apr = dev_get_drvdata(dev);
-> +	struct device_node *node;
-> +	struct pdr_service *pds;
-> +	int ret;
-> +
-> +	for_each_child_of_node(dev->of_node, node) {
-> +		ret = of_property_read_string_index(node, "qcom,protection-domain",
-> +						    0, &service_name);
-> +		if (ret < 0)
-> +			continue;
-> +
-> +		ret = of_property_read_string_index(node, "qcom,protection-domain",
-> +						    1, &service_path);
-> +		if (ret < 0) {
-> +			dev_err(dev, "pdr service path missing: %d\n", ret);
-> +			return ret;
-> +		}
-> +
-> +		pds = pdr_add_lookup(apr->pdr, service_name, service_path);
-> +		if (IS_ERR(pds) && PTR_ERR(pds) != -EALREADY) {
-> +			dev_err(dev, "pdr add lookup failed: %d\n", ret);
-> +			return PTR_ERR(pds);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void of_register_apr_devices(struct device *dev, const char *svc_path)
->  {
->  	struct apr *apr = dev_get_drvdata(dev);
->  	struct device_node *node;
-> +	const char *service_path;
-> +	int ret;
->  
->  	for_each_child_of_node(dev->of_node, node) {
->  		struct apr_device_id id = { {0} };
->  
-> +		/*
-> +		 * This function is called with svc_path NULL during
-> +		 * apr_probe(), in which case we register any apr devices
-> +		 * without a qcom,protection-domain specified.
-> +		 *
-> +		 * Then as the protection domains becomes available
-> +		 * (if applicable) this function is again called, but with
-> +		 * svc_path representing the service becoming available. In
-> +		 * this case we register any apr devices with a matching
-> +		 * qcom,protection-domain.
-> +		 */
-> +
-> +		ret = of_property_read_string_index(node, "qcom,protection-domain",
-> +						    1, &service_path);
-> +		if (svc_path) {
-> +			/* skip APR services that are PD independent */
-> +			if (ret)
-> +				continue;
-> +
-> +			/* skip APR services whose PD paths don't match */
-> +			if (strcmp(service_path, svc_path))
-> +				continue;
-> +		} else {
-> +			/* skip APR services whose PD lookups are registered */
-> +			if (ret == 0)
-> +				continue;
-> +		}
-> +
->  		if (of_property_read_u32(node, "reg", &id.svc_id))
->  			continue;
->  
-> @@ -318,6 +384,34 @@ static void of_register_apr_devices(struct device *dev)
->  	}
->  }
->  
-> +static int apr_remove_device(struct device *dev, void *svc_path)
-> +{
-> +	struct apr_device *adev = to_apr_device(dev);
-> +
-> +	if (svc_path && adev->service_path) {
-> +		if (!strcmp(adev->service_path, (char *)svc_path))
-> +			device_unregister(&adev->dev);
-> +	} else {
-> +		device_unregister(&adev->dev);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void apr_pd_status(int state, char *svc_path, void *priv)
-> +{
-> +	struct apr *apr = (struct apr *)priv;
-> +
-> +	switch (state) {
-> +	case SERVREG_SERVICE_STATE_UP:
-> +		of_register_apr_devices(apr->dev, svc_path);
-> +		break;
-> +	case SERVREG_SERVICE_STATE_DOWN:
-> +		device_for_each_child(apr->dev, svc_path, apr_remove_device);
-> +		break;
-> +	}
-> +}
-> +
->  static int apr_probe(struct rpmsg_device *rpdev)
->  {
->  	struct device *dev = &rpdev->dev;
-> @@ -343,28 +437,39 @@ static int apr_probe(struct rpmsg_device *rpdev)
->  		return -ENOMEM;
->  	}
->  	INIT_WORK(&apr->rx_work, apr_rxwq);
-> +
-> +	apr->pdr = pdr_handle_alloc(apr_pd_status, apr);
-> +	if (IS_ERR(apr->pdr)) {
-> +		dev_err(dev, "Failed to init PDR handle\n");
-> +		ret = PTR_ERR(apr->pdr);
-> +		goto destroy_wq;
-> +	}
-> +
->  	INIT_LIST_HEAD(&apr->rx_list);
->  	spin_lock_init(&apr->rx_lock);
->  	spin_lock_init(&apr->svcs_lock);
->  	idr_init(&apr->svcs_idr);
-> -	of_register_apr_devices(dev);
-> -
-> -	return 0;
-> -}
->  
-> -static int apr_remove_device(struct device *dev, void *null)
-> -{
-> -	struct apr_device *adev = to_apr_device(dev);
-> +	ret = of_apr_add_pd_lookups(dev);
-> +	if (ret)
-> +		goto handle_release;
->  
-> -	device_unregister(&adev->dev);
-> +	of_register_apr_devices(dev, NULL);
->  
->  	return 0;
-> +
-> +handle_release:
-> +	pdr_handle_release(apr->pdr);
-> +destroy_wq:
-> +	destroy_workqueue(apr->rxwq);
-> +	return ret;
->  }
->  
->  static void apr_remove(struct rpmsg_device *rpdev)
->  {
->  	struct apr *apr = dev_get_drvdata(&rpdev->dev);
->  
-> +	pdr_handle_release(apr->pdr);
->  	device_for_each_child(&rpdev->dev, NULL, apr_remove_device);
->  	flush_workqueue(apr->rxwq);
->  	destroy_workqueue(apr->rxwq);
-> diff --git a/include/linux/soc/qcom/apr.h b/include/linux/soc/qcom/apr.h
-> index c5d52e2cb275f..7f0bc3cf4d610 100644
-> --- a/include/linux/soc/qcom/apr.h
-> +++ b/include/linux/soc/qcom/apr.h
-> @@ -85,6 +85,7 @@ struct apr_device {
->  	uint16_t	domain_id;
->  	uint32_t	version;
->  	char name[APR_NAME_SIZE];
-> +	const char *service_path;
->  	spinlock_t	lock;
->  	struct list_head node;
->  };
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
+> Thanks Pi-Hsun, for your quick answer, makes sense but I'm still feeling that I
+> miss something (probably because I'm not a remoteproc expert), so I added the
+> Remoteproc people for if they can comment this patch. We have time as we're in
+> rc2 only, so I'd like to wait a bit in case they can take a look.
+> 
+> If no answer is received I'll take a second look and apply the patch.
+> 
+
+I'll pick this patch, just I want to request a minor change.
+
+> Thanks,
+>  Enric
+> 
+> On 15/2/20 4:56, Pi-Hsun Shih wrote:
+>> Hi Enric,
+>>
+>> On Fri, Feb 14, 2020 at 11:10 PM Enric Balletbo i Serra
+>> <enric.balletbo@collabora.com> wrote:
+>>>
+>>> Hi Pi-Hsun,
+>>>
+>>> On 14/2/20 9:26, Pi-Hsun Shih wrote:
+>>>> Host event can be sent by remoteproc by any time, and
+>>>> cros_ec_rpmsg_callback would be called after cros_ec_rpmsg_create_ept.
+>>>> But the cros_ec_device is initialized after that, which cause host event
+>>>> handler to use cros_ec_device that are not initialized properly yet.
+>>>>
+>>>
+>>> I don't have the hardware to test but, can't we call first cros_ec_register and
+>>> then cros_ec_rpmsg_create_ept?
+>>>
+>>> Start receiving driver callbacks before finishing to probe the drivers itself
+>>> sounds weird to me.
+>>>
+>>> Thanks,
+>>>  Enric
+>>
+>> Since cros_ec_register calls cros_ec_query_all, which sends message to
+>> remoteproc using cros_ec_pkt_xfer_rpmsg (to query protocol version),
+>> the ec_rpmsg->ept need to be ready before calling cros_ec_register.
+>>
+>>>
+>>>> Fix this by don't schedule host event handler before cros_ec_register
+>>>> returns. Instead, remember that we have a pending host event, and
+>>>> schedule host event handler after cros_ec_register.
+>>>>
+>>>> Fixes: 71cddb7097e2 ("platform/chrome: cros_ec_rpmsg: Fix race with host command when probe failed.")
+>>>> Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
+>>>> ---
+>>>>  drivers/platform/chrome/cros_ec_rpmsg.c | 16 +++++++++++++++-
+>>>>  1 file changed, 15 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/platform/chrome/cros_ec_rpmsg.c b/drivers/platform/chrome/cros_ec_rpmsg.c
+>>>> index dbc3f5523b83..7e8629e3db74 100644
+>>>> --- a/drivers/platform/chrome/cros_ec_rpmsg.c
+>>>> +++ b/drivers/platform/chrome/cros_ec_rpmsg.c
+>>>> @@ -44,6 +44,8 @@ struct cros_ec_rpmsg {
+>>>>       struct completion xfer_ack;
+>>>>       struct work_struct host_event_work;
+>>>>       struct rpmsg_endpoint *ept;
+>>>> +     bool has_pending_host_event;
+>>>> +     bool probe_done;
+
+
+Could you try if just calling driver_probe_done() when needed works, so we don't
+need to add a new boolean flag for this?
+
+Thanks,
+ Enric
+
+>>>>  };
+>>>>
+>>>>  /**
+>>>> @@ -177,7 +179,14 @@ static int cros_ec_rpmsg_callback(struct rpmsg_device *rpdev, void *data,
+>>>>               memcpy(ec_dev->din, resp->data, len);
+>>>>               complete(&ec_rpmsg->xfer_ack);
+>>>>       } else if (resp->type == HOST_EVENT_MARK) {
+>>>> -             schedule_work(&ec_rpmsg->host_event_work);
+>>>> +             /*
+>>>> +              * If the host event is sent before cros_ec_register is
+>>>> +              * finished, queue the host event.
+>>>> +              */
+>>>> +             if (ec_rpmsg->probe_done)
+>>>> +                     schedule_work(&ec_rpmsg->host_event_work);
+>>>> +             else
+>>>> +                     ec_rpmsg->has_pending_host_event = true;
+>>>>       } else {
+>>>>               dev_warn(ec_dev->dev, "rpmsg received invalid type = %d",
+>>>>                        resp->type);
+>>>> @@ -240,6 +249,11 @@ static int cros_ec_rpmsg_probe(struct rpmsg_device *rpdev)
+>>>>               return ret;
+>>>>       }
+>>>>
+>>>> +     ec_rpmsg->probe_done = true;
+>>>> +
+>>>> +     if (ec_rpmsg->has_pending_host_event)
+>>>> +             schedule_work(&ec_rpmsg->host_event_work);
+>>>> +
+>>>>       return 0;
+>>>>  }
+>>>>
+>>>>
+>>>> base-commit: b19e8c68470385dd2c5440876591fddb02c8c402
+>>>>
