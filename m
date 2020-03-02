@@ -2,247 +2,194 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5818173FBE
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Feb 2020 19:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F245175380
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 Mar 2020 07:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbgB1Sih (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 28 Feb 2020 13:38:37 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:39319 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbgB1Sig (ORCPT
+        id S1725446AbgCBGAh (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 2 Mar 2020 01:00:37 -0500
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:35838 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726030AbgCBGAg (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 28 Feb 2020 13:38:36 -0500
-Received: by mail-pg1-f195.google.com with SMTP id s2so1084628pgv.6
-        for <linux-remoteproc@vger.kernel.org>; Fri, 28 Feb 2020 10:38:36 -0800 (PST)
+        Mon, 2 Mar 2020 01:00:36 -0500
+Received: by mail-ed1-f68.google.com with SMTP id c7so11879182edu.2
+        for <linux-remoteproc@vger.kernel.org>; Sun, 01 Mar 2020 22:00:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7Mj1CM/WyswvfaSTAEBfuMjiDk0djmCwfBfsrA3O5uc=;
-        b=BlVt49tTxtV5Bde7kV6ngAmWl7rEt0i8rqnv7INClnaweok4PqrcznuNCW7HcNzaMz
-         ljc/q6AvcKzmdVCiDy4mi/v6PxO5RTRYkjOyXw5URocA2fEmZot5OKlRsYrfCz1vr0Tr
-         RsNIX1ns65INwth6gEZOzYmbcEj/+XiOKypop7ME4vEVgDxTX3ollzeTpmVQxpRxJv0X
-         /f9kAtJPxHFCCepDzwCCSd5UGFFO6tSkCboCfPFaMPlHAray9Z33GJ47Z3UhzQO0TsU5
-         /D6aHhSxntnh8253NMf8uOkRBZ8QW46dl6etIkJ5EVG25OheZVCPdehinVQiV/l1UVPZ
-         LChw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=b65o4uogATjrw8/GyC+v0wLM9MZOYS7Mnz1iwDvvMyw=;
+        b=S3k4A2r7I9b3h6d7tXnS0nqsU5i5vnL8F1HIg955wg3T+MenThPx76f9zVkGKpOo/P
+         2T3PM/56pZWDRDh6RhYVXY/kr3IcK6Vm15vJWGwtylfNrxvibnebMJ8DbqZKQ3gWy8rh
+         qy1Zpmw0IIs8HL8gry9DbOU//PV8BjhGf2PGM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7Mj1CM/WyswvfaSTAEBfuMjiDk0djmCwfBfsrA3O5uc=;
-        b=KNJXEuoy+Xm65igr4MsI09a1KKER1b6/FrbYsjgDNddu+k0+VKZrOhloyMNyLR7v8j
-         WbDULzmC6Bn3jqh/xxPLb3pNBe18zBtrKvJc/amEjgD5aUFtq0hY4BDjWtDxkY6ELvbx
-         /rR+T4srI1MabhvE/qIamphHunQJQQsdTnlIWY699e6NlnNZQb4FieGyfuDWaVSAHpI1
-         mKl+YvY3tCTK0mOSmi+UJn/1UXgmyieMwUo4TQIDzGShYX63WcUoxOPdYRnFZKOCPiKZ
-         jJdGIwUt+nGVqilNN4/WkMk7vRXR73M/PRYQ6mNp5ejbOBE0vSuRzCGVisLqYuk44eAC
-         vcHA==
-X-Gm-Message-State: APjAAAXm/w2uktxpTH9zvpEs/iVJHxRHnTW2+o9J7Nd/tsV52IiOGQXW
-        S9A1RmKMhgCzl5r95LxpZSKtxA==
-X-Google-Smtp-Source: APXvYqwU0KE04kKPdLTj115noM9yxYuTjDpZIVSW/jvVwAsLLZopU3CtFzW4tbOFtdfVVt7ikP16Ow==
-X-Received: by 2002:a62:ce8b:: with SMTP id y133mr5773442pfg.172.1582915115515;
-        Fri, 28 Feb 2020 10:38:35 -0800 (PST)
-Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id b5sm12301691pfb.179.2020.02.28.10.38.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2020 10:38:34 -0800 (PST)
-Date:   Fri, 28 Feb 2020 11:38:32 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     rishabhb@codeaurora.org
-Cc:     Siddharth Gupta <sidgup@codeaurora.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, ohad@wizery.com, tsoni@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, psodagud@codeaurora.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 6/6] remoteproc: qcom: Add notification types to SSR
-Message-ID: <20200228183832.GA23026@xps15>
-References: <1582167465-2549-1-git-send-email-sidgup@codeaurora.org>
- <1582167465-2549-7-git-send-email-sidgup@codeaurora.org>
- <20200227215940.GC20116@xps15>
- <1a615fcd5a5c435d1d8babe8d5c3f8c3@codeaurora.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=b65o4uogATjrw8/GyC+v0wLM9MZOYS7Mnz1iwDvvMyw=;
+        b=tCOPTjQ+XUfmbDLubulX0ymZYkS1SPLwb7zf++SRJpGPYow/MOTgxblYAJAY+p6pub
+         l8M7TcxaTnv86Xd97oHsyU5/ZjfNRQxkehuFPpCLgPPHqgTaLlS7nipKfJsYdUn6DXJN
+         GnVq1frGrv7lGUL5FxdjZfffpDezfJ6HJlL4Y2hgnTLmd4oFcR6YAlmX6kq6S5g3P7V4
+         r1FfXChZ54FtHPKAt3k9oVVadrgN9t/XA1Yzj+Z0F2Q2fUFWpeubPoPzgKlmvqVwXtrp
+         ap0hXM7tXpJRM9VlY1isMyS2DN/b3PVB6BADluSVvb+T6BCDOSNJDvUpRDD37eUxh3ty
+         kaTg==
+X-Gm-Message-State: APjAAAXCN7YYykOC7LUfiyPIEYNGrP4EjCAnmvrQNXjeqieHgiMCHhXH
+        TaxFg6dPfcLbSU6OdaFUeFE68MqZiXbXHJWqc+Mj5A==
+X-Google-Smtp-Source: APXvYqzyYK9j0pVYN56K+luH6+BpIZCzBuLPWpS7r2qTYvVjXzklmvSJ6eTBiJfMXh2D47t6+2GwPxGVEnAD4va9lTU=
+X-Received: by 2002:a05:6402:125a:: with SMTP id l26mr14716694edw.315.1583128832706;
+ Sun, 01 Mar 2020 22:00:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1a615fcd5a5c435d1d8babe8d5c3f8c3@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200214082638.92070-1-pihsun@chromium.org> <83b03af1-5518-599a-3f82-ee204992edbf@collabora.com>
+ <CANdKZ0fuK1Nm_fPNKAss29pqghCcwjN3acYHi6Ez5==envgKgA@mail.gmail.com>
+ <84a66ac1-c36a-fa72-a406-9c3396c1bdf2@collabora.com> <6c78727d-8a65-097d-224d-48d93f6ceaa7@collabora.com>
+In-Reply-To: <6c78727d-8a65-097d-224d-48d93f6ceaa7@collabora.com>
+From:   Pi-Hsun Shih <pihsun@chromium.org>
+Date:   Mon, 2 Mar 2020 13:59:56 +0800
+Message-ID: <CANdKZ0dkAcgWLEc6_k9gXWv53Cm-FV0bZdTiRjws8L6S9w-Tcw@mail.gmail.com>
+Subject: Re: [PATCH] platform/chrome: cros_ec_rpmsg: Fix race with host event.
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu, Feb 27, 2020 at 04:00:21PM -0800, rishabhb@codeaurora.org wrote:
-> On 2020-02-27 13:59, Mathieu Poirier wrote:
-> > On Wed, Feb 19, 2020 at 06:57:45PM -0800, Siddharth Gupta wrote:
-> > > The SSR subdevice only adds callback for the unprepare event. Add
-> > > callbacks
-> > > for unprepare, start and prepare events. The client driver for a
-> > > particular
-> > > remoteproc might be interested in knowing the status of the remoteproc
-> > > while undergoing SSR, not just when the remoteproc has finished
-> > > shutting
-> > > down.
-> > > 
-> > > Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
-> > > ---
-> > >  drivers/remoteproc/qcom_common.c | 39
-> > > +++++++++++++++++++++++++++++++++++----
-> > >  include/linux/remoteproc.h       | 15 +++++++++++++++
-> > >  2 files changed, 50 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/remoteproc/qcom_common.c
-> > > b/drivers/remoteproc/qcom_common.c
-> > > index 6714f27..6f04a5b 100644
-> > > --- a/drivers/remoteproc/qcom_common.c
-> > > +++ b/drivers/remoteproc/qcom_common.c
-> > > @@ -183,9 +183,9 @@ EXPORT_SYMBOL_GPL(qcom_remove_smd_subdev);
-> > >   *
-> > >   * Returns pointer to srcu notifier head on success, ERR_PTR on
-> > > failure.
-> > >   *
-> > > - * This registers the @notify function as handler for restart
-> > > notifications. As
-> > > - * remote processors are stopped this function will be called, with
-> > > the rproc
-> > > - * pointer passed as a parameter.
-> > > + * This registers the @notify function as handler for
-> > > powerup/shutdown
-> > > + * notifications. This function will be invoked inside the
-> > > callbacks registered
-> > > + * for the ssr subdevice, with the rproc pointer passed as a
-> > > parameter.
-> > >   */
-> > >  void *qcom_register_ssr_notifier(struct rproc *rproc, struct
-> > > notifier_block *nb)
-> > >  {
-> > > @@ -227,11 +227,39 @@ int qcom_unregister_ssr_notifier(void *notify,
-> > > struct notifier_block *nb)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(qcom_unregister_ssr_notifier);
-> > > 
-> > > +static int ssr_notify_prepare(struct rproc_subdev *subdev)
-> > > +{
-> > > +	struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
-> > > +
-> > > +	srcu_notifier_call_chain(ssr->rproc_notif_list,
-> > > +				 RPROC_BEFORE_POWERUP, (void *)ssr->name);
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static int ssr_notify_start(struct rproc_subdev *subdev)
-> > > +{
-> > > +	struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
-> > > +
-> > > +	srcu_notifier_call_chain(ssr->rproc_notif_list,
-> > > +				 RPROC_AFTER_POWERUP, (void *)ssr->name);
-> > > +	return 0;
-> > > +}
-> > > +
-> > > +static void ssr_notify_stop(struct rproc_subdev *subdev, bool
-> > > crashed)
-> > > +{
-> > > +	struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
-> > > +
-> > > +	srcu_notifier_call_chain(ssr->rproc_notif_list,
-> > > +				 RPROC_BEFORE_SHUTDOWN, (void *)ssr->name);
-> > > +}
-> > > +
-> > > +
-> > >  static void ssr_notify_unprepare(struct rproc_subdev *subdev)
-> > >  {
-> > >  	struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
-> > > 
-> > > -	srcu_notifier_call_chain(ssr->rproc_notif_list, 0, (void
-> > > *)ssr->name);
-> > > +	srcu_notifier_call_chain(ssr->rproc_notif_list,
-> > > +				 RPROC_AFTER_SHUTDOWN, (void *)ssr->name);
-> > >  }
-> > > 
-> > >  /**
-> > > @@ -248,6 +276,9 @@ void qcom_add_ssr_subdev(struct rproc *rproc,
-> > > struct qcom_rproc_ssr *ssr,
-> > >  {
-> > >  	ssr->name = ssr_name;
-> > >  	ssr->subdev.name = kstrdup("ssr_notifs", GFP_KERNEL);
-> > > +	ssr->subdev.prepare = ssr_notify_prepare;
-> > > +	ssr->subdev.start = ssr_notify_start;
-> > > +	ssr->subdev.stop = ssr_notify_stop;
-> > 
-> > Now that I have a better understanding of what this patchset is doing, I
-> > realise
-> > my comments in patch 04 won't work.  To differentiate the subdevs of an
-> > rproc I
-> > suggest to wrap them in a generic structure with a type and an enum.
-> > That way
-> > you can differenciate between subdevices without having to add to the
-> > core.
-> Ok. I can try that.
-> > 
-> > That being said, I don't understand what patches 5 and 6 are doing...
-> > Registering with the global ssr_notifiers allowed to gracefully shutdown
-> > all the
-> > MCUs in the system when one of them would go down.  But now that we are
-> > using
-> > the notifier on a per MCU, I really don't see why each subdev couldn't
-> > implement
-> > the right prepare/start/stop functions.
-> > 
-> > Am I missing something here?
-> We only want kernel clients to be notified when the Remoteproc they are
-> interested
-> in changes state. For e.g. audio kernel driver should be notified when audio
-> processor goes down but it does not care about any other remoteproc.
-> If you are suggesting that these kernel clients be added as subdevices then
-> we will end up having many subdevices registered to each remoteproc. So we
-> implemented a notifier chain per Remoteproc. This keeps the SSR
-> notifications as
-> the subdevice per remoteproc, and all interested clients can register to it.
+(Resending since I forgot to use plain text mode in the previous mail,
+and got blocked by mailing lists. Sorry for the duplicate email.)
 
-It seems like I am missing information...  Your are referring to "kernel
-clients" and as such I must assume some drivers that are not part of the 
-remoteproc/rpmsg subsystems are calling qcom_register_ssr_notifier().  I must
-also assume these drivers (or that functionality) are not yet upsream because
-all I can see calling qcom_register_ssr_notifier() is qcom_glink_ssr_probe(). 
+Hi Enric,
 
-Speaking of which, what is the role of the qcom_glink_ssr_driver?  Is the glink
-device that driver is handling the same as the glink device registed in
-adsp_probe() and q6v5_probe()? 
+On Fri, Feb 28, 2020 at 4:52 PM Enric Balletbo i Serra
+<enric.balletbo@collabora.com> wrote:
+>
+> Hi Pi-Hsun,
+>
+> On 17/2/20 16:55, Enric Balletbo i Serra wrote:
+> > Dear remoteproc experts,
+> >
+> > cc'ing you for if we can have your feedback on this change.
+> >
+> > Thanks Pi-Hsun, for your quick answer, makes sense but I'm still feeling that I
+> > miss something (probably because I'm not a remoteproc expert), so I added the
+> > Remoteproc people for if they can comment this patch. We have time as we're in
+> > rc2 only, so I'd like to wait a bit in case they can take a look.
+> >
+> > If no answer is received I'll take a second look and apply the patch.
+> >
+>
+> I'll pick this patch, just I want to request a minor change.
+>
+> > Thanks,
+> >  Enric
+> >
+> > On 15/2/20 4:56, Pi-Hsun Shih wrote:
+> >> Hi Enric,
+> >>
+> >> On Fri, Feb 14, 2020 at 11:10 PM Enric Balletbo i Serra
+> >> <enric.balletbo@collabora.com> wrote:
+> >>>
+> >>> Hi Pi-Hsun,
+> >>>
+> >>> On 14/2/20 9:26, Pi-Hsun Shih wrote:
+> >>>> Host event can be sent by remoteproc by any time, and
+> >>>> cros_ec_rpmsg_callback would be called after cros_ec_rpmsg_create_ept.
+> >>>> But the cros_ec_device is initialized after that, which cause host event
+> >>>> handler to use cros_ec_device that are not initialized properly yet.
+> >>>>
+> >>>
+> >>> I don't have the hardware to test but, can't we call first cros_ec_register and
+> >>> then cros_ec_rpmsg_create_ept?
+> >>>
+> >>> Start receiving driver callbacks before finishing to probe the drivers itself
+> >>> sounds weird to me.
+> >>>
+> >>> Thanks,
+> >>>  Enric
+> >>
+> >> Since cros_ec_register calls cros_ec_query_all, which sends message to
+> >> remoteproc using cros_ec_pkt_xfer_rpmsg (to query protocol version),
+> >> the ec_rpmsg->ept need to be ready before calling cros_ec_register.
+> >>
+> >>>
+> >>>> Fix this by don't schedule host event handler before cros_ec_register
+> >>>> returns. Instead, remember that we have a pending host event, and
+> >>>> schedule host event handler after cros_ec_register.
+> >>>>
+> >>>> Fixes: 71cddb7097e2 ("platform/chrome: cros_ec_rpmsg: Fix race with host command when probe failed.")
+> >>>> Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
+> >>>> ---
+> >>>>  drivers/platform/chrome/cros_ec_rpmsg.c | 16 +++++++++++++++-
+> >>>>  1 file changed, 15 insertions(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/drivers/platform/chrome/cros_ec_rpmsg.c b/drivers/platform/chrome/cros_ec_rpmsg.c
+> >>>> index dbc3f5523b83..7e8629e3db74 100644
+> >>>> --- a/drivers/platform/chrome/cros_ec_rpmsg.c
+> >>>> +++ b/drivers/platform/chrome/cros_ec_rpmsg.c
+> >>>> @@ -44,6 +44,8 @@ struct cros_ec_rpmsg {
+> >>>>       struct completion xfer_ack;
+> >>>>       struct work_struct host_event_work;
+> >>>>       struct rpmsg_endpoint *ept;
+> >>>> +     bool has_pending_host_event;
+> >>>> +     bool probe_done;
+>
+>
+> Could you try if just calling driver_probe_done() when needed works, so we don't
+> need to add a new boolean flag for this?
 
-> > 
-> > 
-> > >  	ssr->subdev.unprepare = ssr_notify_unprepare;
-> > >  	ssr->rproc_notif_list = kzalloc(sizeof(struct srcu_notifier_head),
-> > >  								GFP_KERNEL);
-> > > diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> > > index e2f60cc..4be4478 100644
-> > > --- a/include/linux/remoteproc.h
-> > > +++ b/include/linux/remoteproc.h
-> > > @@ -449,6 +449,21 @@ struct rproc_dump_segment {
-> > >  };
-> > > 
-> > >  /**
-> > > + * enum rproc_notif_type - Different stages of remoteproc
-> > > notifications
-> > > + * @RPROC_BEFORE_SHUTDOWN:	unprepare stage of  remoteproc
-> > > + * @RPROC_AFTER_SHUTDOWN:	stop stage of  remoteproc
-> > > + * @RPROC_BEFORE_POWERUP:	prepare stage of  remoteproc
-> > > + * @RPROC_AFTER_POWERUP:	start stage of  remoteproc
-> > > + */
-> > > +enum rproc_notif_type {
-> > > +	RPROC_BEFORE_SHUTDOWN,
-> > > +	RPROC_AFTER_SHUTDOWN,
-> > > +	RPROC_BEFORE_POWERUP,
-> > > +	RPROC_AFTER_POWERUP,
-> > > +	RPROC_MAX
-> > > +};
-> > > +
-> > > +/**
-> > >   * struct rproc - represents a physical remote processor device
-> > >   * @node: list node of this rproc object
-> > >   * @domain: iommu domain
-> > > --
-> > > Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> > > a Linux Foundation Collaborative Project
-> > > 
-> > > _______________________________________________
-> > > linux-arm-kernel mailing list
-> > > linux-arm-kernel@lists.infradead.org
-> > > http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Changing from "if (ec_rpmsg->probe_done)" to "if (driver_probe_done()
+== 0)" works in my testing.
+
+But since driver_probe_done() returns 0 after all driver probes are
+done, not after the probe of cros_ec_rpmsg driver, I think it's
+possible that we got a host event after the cros_ec_rpmsg driver probe
+is done (ec_rpmsg->probe_done is true), but before all driver probe
+done (driver_probe_done() is still -EBUSY). In this case the host
+event would be lost since we would set the has_pending_host_event flag
+but no one would be processing it.
+
+>
+> Thanks,
+>  Enric
+>
+> >>>>  };
+> >>>>
+> >>>>  /**
+> >>>> @@ -177,7 +179,14 @@ static int cros_ec_rpmsg_callback(struct rpmsg_device *rpdev, void *data,
+> >>>>               memcpy(ec_dev->din, resp->data, len);
+> >>>>               complete(&ec_rpmsg->xfer_ack);
+> >>>>       } else if (resp->type == HOST_EVENT_MARK) {
+> >>>> -             schedule_work(&ec_rpmsg->host_event_work);
+> >>>> +             /*
+> >>>> +              * If the host event is sent before cros_ec_register is
+> >>>> +              * finished, queue the host event.
+> >>>> +              */
+> >>>> +             if (ec_rpmsg->probe_done)
+> >>>> +                     schedule_work(&ec_rpmsg->host_event_work);
+> >>>> +             else
+> >>>> +                     ec_rpmsg->has_pending_host_event = true;
+> >>>>       } else {
+> >>>>               dev_warn(ec_dev->dev, "rpmsg received invalid type = %d",
+> >>>>                        resp->type);
+> >>>> @@ -240,6 +249,11 @@ static int cros_ec_rpmsg_probe(struct rpmsg_device *rpdev)
+> >>>>               return ret;
+> >>>>       }
+> >>>>
+> >>>> +     ec_rpmsg->probe_done = true;
+> >>>> +
+> >>>> +     if (ec_rpmsg->has_pending_host_event)
+> >>>> +             schedule_work(&ec_rpmsg->host_event_work);
+> >>>> +
+> >>>>       return 0;
+> >>>>  }
+> >>>>
+> >>>>
+> >>>> base-commit: b19e8c68470385dd2c5440876591fddb02c8c402
+> >>>>
