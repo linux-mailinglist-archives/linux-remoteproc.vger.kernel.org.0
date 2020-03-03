@@ -2,245 +2,401 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A7C17852A
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Mar 2020 23:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A8B1785F7
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Mar 2020 23:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727192AbgCCWBs (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 3 Mar 2020 17:01:48 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35838 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726982AbgCCWBs (ORCPT
+        id S1728174AbgCCWxn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 3 Mar 2020 17:53:43 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:46051 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727978AbgCCWxn (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 3 Mar 2020 17:01:48 -0500
-Received: by mail-pf1-f196.google.com with SMTP id i19so2194511pfa.2
-        for <linux-remoteproc@vger.kernel.org>; Tue, 03 Mar 2020 14:01:46 -0800 (PST)
+        Tue, 3 Mar 2020 17:53:43 -0500
+Received: by mail-pg1-f193.google.com with SMTP id m15so2228752pgv.12
+        for <linux-remoteproc@vger.kernel.org>; Tue, 03 Mar 2020 14:53:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=rWUW/hFw9l9361bhE4imeaEyL7jHn9L6GXzM5ESAseU=;
-        b=BhVxK+/LHYafxOQAfuMTX9d/TRms7HTjQhUgidQSpDOh3ucN0yhwgG0GsR08VaGqe0
-         p1rUfVpFAaPgmoZck/OAGk2CoNPI1Y3b+68nSVd5nPpHFc/O55nkwEB9c9/gEjh7S5qs
-         nBGJ/2dqPhhvdC3KJfeWbrkVaGXje+y9JxV/bVIoy6u9P88L181uPzNtb45O2Al29D/W
-         ukEjGV9OazJXP9shM9rlBFZZ7Hz8U7deISs7AzcO/Pp0mst4G0D88hbAuWUmSU94hP/t
-         puyyPjM6DLwJMJW9HG1C6KF5RditipoQDM1oz6sPzZKFzEo5w23TwVwIdGbecoujEfua
-         Y8DQ==
+        bh=SvxL76OkKxx/CITQQ//NKETlacz4QbQGNu1eK0rJXHM=;
+        b=AiLnYiOYYfS7E/nZJ4/KXjGk/VpZwWWz2pYEjXt0wK1oX4nBIPTMybTolnogsCkiD9
+         nbSFUuHzpqOJHSeUSWefq6uWqmpe86d30bh9wJnPBzaWwUiigs2XqKLnub0VIrGzduw7
+         idfy+pd0Ea/HYg79rCE5cLtx3z8DYEhqKCdLLcuho4IU9kvFIWDJ4nPZ+iB4G0py0dnB
+         AKgDTlL1Vu/BNtVmCxpPLSZvx7hL9uGx+wfQsvAOqTLbqj24LOwvnCjWjjYE81juD1ud
+         v9HJT3yPmCplfEopLVEptksU594BB6Q6Ohpc3KJgMUh3JIAeE7oAe2yuTgVQh2DLkAc2
+         +TDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rWUW/hFw9l9361bhE4imeaEyL7jHn9L6GXzM5ESAseU=;
-        b=gB953JlCYHq3j3V6Xw5dnqOecUsUfcYNwnTZq0OQqy1iBSbFFgouKwyyvZTZCsMO3X
-         skxQEaCY5oMrKZnSO0AahAQ9d0zLrosjY0GK7VHl5CpdLN36ktPRYXbE7AaZ1VxFT0PT
-         0LoMKegJYfgLrvRlj8I3ZFnI6I+xYmdXp/qA1SEp0LVNbhY6Cb7f9dB86EuiWQaWNORS
-         oqShNAOgDxeeBdauDvUSksDb94Zrq1YKA5PbeOl6AircpDbg+K/NUfPzZhI+Cjg4seqd
-         6+Id+nkhe9Zo9v20hKwagTevC4PXjjlQCjID0paeYMV/B7c3aeqJdSiw4JvWIm/nae8x
-         MLkg==
-X-Gm-Message-State: ANhLgQ3Llwj040EhwfoxeqHburPH8GfL3sMeReNVP8F4++7QCunFJDYj
-        ha4JF83dmfnQEBgxYfozDdVoXA==
-X-Google-Smtp-Source: ADFU+vtbmNdboXaJVKJCCWsPJHhUQwS37qhm8rMETgAhfI6yoRx8bCGHJ6YZpsQW8cVKZNiK3wY79Q==
-X-Received: by 2002:a63:e803:: with SMTP id s3mr5803839pgh.237.1583272906003;
-        Tue, 03 Mar 2020 14:01:46 -0800 (PST)
-Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id x12sm16305062pfi.122.2020.03.03.14.01.44
+        bh=SvxL76OkKxx/CITQQ//NKETlacz4QbQGNu1eK0rJXHM=;
+        b=aXSyRUBUxbGyO+Us7LvXetcFumkxJGKIGgnkge1ScqCpLlGLqr1X2GLuzCCZdktjF2
+         dokKj/1U0cXtrSPrc+FZzKlFzx84k9DwhS8u4MHmxy94EkJ5wkUtpJYxG+i4mR4WWFhe
+         aNVXBUJ1GEon4cb0ojL7FPgiE5E3UvSav7O6xUhqAEIIm19rp6YluSvxnkIRSxUM261N
+         4sAWFXE5HDAhL3k5+ZKi1lfHUQI4JZOMiAXWsktua2DISdTfMSweetuKIhWCx+dCRgkI
+         S3n58NZNsOa5xkK7Zs0oaP5WEwdsC16ONEzJ8MSqJhLHn4Zmfxm9fC+F56plpKLvJrve
+         +5SQ==
+X-Gm-Message-State: ANhLgQ0E2gmgMFOWPemH2tljq7L1uHZXe6pe2wq+w70OFY9sYJv6YFi2
+        ZVGDonsTyIp0iafmsKxJsCIsLg==
+X-Google-Smtp-Source: ADFU+vtGIz0aFnODJ6lgCG5v83AqUBLU0HpOEsNtO3HCBvd8tjwGUlW5EKTAKHVDpwGprnZAt24mEg==
+X-Received: by 2002:a63:c00a:: with SMTP id h10mr5914350pgg.31.1583276021045;
+        Tue, 03 Mar 2020 14:53:41 -0800 (PST)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id m128sm26421170pfm.183.2020.03.03.14.53.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2020 14:01:45 -0800 (PST)
-Date:   Tue, 3 Mar 2020 14:01:42 -0800
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Clement Leger <cleger@kalray.eu>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, Jonathan Corbet <corbet@lwn.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-remoteproc@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Loic PALLARDY <loic.pallardy@st.com>, s-anna <s-anna@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: Re: [PATCH v5 8/8] remoteproc: Adapt coredump to generate correct
- elf type
-Message-ID: <20200303220142.GU1214176@minitux>
-References: <20200210162209.23149-1-cleger@kalray.eu>
- <20200302093902.27849-1-cleger@kalray.eu>
- <20200302093902.27849-9-cleger@kalray.eu>
+        Tue, 03 Mar 2020 14:53:40 -0800 (PST)
+Date:   Tue, 3 Mar 2020 15:53:38 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tero Kristo <t-kristo@ti.com>
+Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
+        linux-remoteproc@vger.kernel.org, afd@ti.com, s-anna@ti.com,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCHv7 02/15] remoteproc/omap: Add device tree support
+Message-ID: <20200303225338.GA8197@xps15>
+References: <20200221101936.16833-1-t-kristo@ti.com>
+ <20200221101936.16833-3-t-kristo@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200302093902.27849-9-cleger@kalray.eu>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20200221101936.16833-3-t-kristo@ti.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon 02 Mar 01:39 PST 2020, Clement Leger wrote:
-
-> Now that remoteproc can load an elf64, coredump elf class should be
-> the same as the loaded elf class. In order to do that, add a
-> elf_class field to rproc with default values. If an elf is loaded
-> successfully, this field will be updated with the loaded elf class.
-> Then, the coredump core code has been modified to use the generic elf
-> macro in order to create an elf file with correct class.
+On Fri, Feb 21, 2020 at 12:19:23PM +0200, Tero Kristo wrote:
+> From: Suman Anna <s-anna@ti.com>
 > 
-> Signed-off-by: Clement Leger <cleger@kalray.eu>
-
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
+> OMAP4+ SoCs support device tree boot only. The OMAP remoteproc
+> driver is enhanced to support remoteproc devices created through
+> Device Tree, support for legacy platform devices has been
+> deprecated. The current DT support handles the IPU and DSP
+> processor subsystems on OMAP4 and OMAP5 SoCs.
+> 
+> The OMAP remoteproc driver relies on the ti-sysc, reset, and
+> syscon layers for performing clock, reset and boot vector
+> management (DSP remoteprocs only) of the devices, but some of
+> these are limited only to the machine-specific layers
+> in arch/arm. The dependency against control module API for boot
+> vector management of the DSP remoteprocs has now been removed
+> with added logic to parse the boot register from the DT node
+> and program it appropriately directly within the driver.
+> 
+> The OMAP remoteproc driver expects the firmware names to be
+> provided via device tree entries (firmware-name.) These are used
+> to load the proper firmware during boot of the remote processor.
+> 
+> Cc: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> [t-kristo@ti.com: converted to use ti-sysc framework]
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
 > ---
->  drivers/remoteproc/remoteproc_core.c       | 67 ++++++++++++++++--------------
->  drivers/remoteproc/remoteproc_elf_loader.c |  3 ++
->  include/linux/remoteproc.h                 |  1 +
->  3 files changed, 39 insertions(+), 32 deletions(-)
+> v7:
+>   - some minor kerneldoc updates
 > 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index b932a64a2be2..f923355aa3f9 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -38,6 +38,7 @@
+>  drivers/remoteproc/omap_remoteproc.c | 177 ++++++++++++++++++++++++---
+>  1 file changed, 160 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+> index 6398194075aa..d47d5ded651a 100644
+> --- a/drivers/remoteproc/omap_remoteproc.c
+> +++ b/drivers/remoteproc/omap_remoteproc.c
+> @@ -2,7 +2,7 @@
+>  /*
+>   * OMAP Remote Processor driver
+>   *
+> - * Copyright (C) 2011 Texas Instruments, Inc.
+> + * Copyright (C) 2011-2020 Texas Instruments Incorporated - http://www.ti.com/
+>   * Copyright (C) 2011 Google, Inc.
+>   *
+>   * Ohad Ben-Cohen <ohad@wizery.com>
+> @@ -16,27 +16,51 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/err.h>
+> +#include <linux/of_device.h>
 >  #include <linux/platform_device.h>
->  
->  #include "remoteproc_internal.h"
-> +#include "remoteproc_elf_helpers.h"
->  
->  #define HIGH_BITS_MASK 0xFFFFFFFF00000000ULL
->  
-> @@ -1566,20 +1567,21 @@ EXPORT_SYMBOL(rproc_coredump_add_custom_segment);
->  static void rproc_coredump(struct rproc *rproc)
->  {
->  	struct rproc_dump_segment *segment;
-> -	struct elf32_phdr *phdr;
-> -	struct elf32_hdr *ehdr;
-> +	void *phdr;
-> +	void *ehdr;
->  	size_t data_size;
->  	size_t offset;
->  	void *data;
->  	void *ptr;
-> +	u8 class = rproc->elf_class;
->  	int phnum = 0;
->  
->  	if (list_empty(&rproc->dump_segments))
->  		return;
->  
-> -	data_size = sizeof(*ehdr);
-> +	data_size = elf_size_of_hdr(class);
->  	list_for_each_entry(segment, &rproc->dump_segments, node) {
-> -		data_size += sizeof(*phdr) + segment->size;
-> +		data_size += elf_size_of_phdr(class) + segment->size;
->  
->  		phnum++;
->  	}
-> @@ -1590,33 +1592,33 @@ static void rproc_coredump(struct rproc *rproc)
->  
->  	ehdr = data;
->  
-> -	memset(ehdr, 0, sizeof(*ehdr));
-> -	memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
-> -	ehdr->e_ident[EI_CLASS] = ELFCLASS32;
-> -	ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
-> -	ehdr->e_ident[EI_VERSION] = EV_CURRENT;
-> -	ehdr->e_ident[EI_OSABI] = ELFOSABI_NONE;
-> -	ehdr->e_type = ET_CORE;
-> -	ehdr->e_machine = EM_NONE;
-> -	ehdr->e_version = EV_CURRENT;
-> -	ehdr->e_entry = rproc->bootaddr;
-> -	ehdr->e_phoff = sizeof(*ehdr);
-> -	ehdr->e_ehsize = sizeof(*ehdr);
-> -	ehdr->e_phentsize = sizeof(*phdr);
-> -	ehdr->e_phnum = phnum;
+>  #include <linux/dma-mapping.h>
+>  #include <linux/remoteproc.h>
+>  #include <linux/mailbox_client.h>
+>  #include <linux/omap-mailbox.h>
 > -
-> -	phdr = data + ehdr->e_phoff;
-> -	offset = ehdr->e_phoff + sizeof(*phdr) * ehdr->e_phnum;
-> +	memset(ehdr, 0, elf_size_of_hdr(class));
-> +	/* e_ident field is common for both elf32 and elf64 */
-> +	elf_hdr_init_ident(ehdr, class);
+> -#include <linux/platform_data/remoteproc-omap.h>
+> +#include <linux/regmap.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/reset.h>
+>  
+>  #include "omap_remoteproc.h"
+>  #include "remoteproc_internal.h"
+>  
+> +/**
+> + * struct omap_rproc_boot_data - boot data structure for the DSP omap rprocs
+> + * @syscon: regmap handle for the system control configuration module
+> + * @boot_reg: boot register offset within the @syscon regmap
+> + */
+> +struct omap_rproc_boot_data {
+> +	struct regmap *syscon;
+> +	unsigned int boot_reg;
+> +};
 > +
-> +	elf_hdr_set_e_type(class, ehdr, ET_CORE);
-> +	elf_hdr_set_e_machine(class, ehdr, EM_NONE);
-> +	elf_hdr_set_e_version(class, ehdr, EV_CURRENT);
-> +	elf_hdr_set_e_entry(class, ehdr, rproc->bootaddr);
-> +	elf_hdr_set_e_phoff(class, ehdr, elf_size_of_hdr(class));
-> +	elf_hdr_set_e_ehsize(class, ehdr, elf_size_of_hdr(class));
-> +	elf_hdr_set_e_phentsize(class, ehdr, elf_size_of_phdr(class));
-> +	elf_hdr_set_e_phnum(class, ehdr, phnum);
+>  /**
+>   * struct omap_rproc - omap remote processor state
+>   * @mbox: mailbox channel handle
+>   * @client: mailbox client to request the mailbox channel
+> + * @boot_data: boot data structure for setting processor boot address
+>   * @rproc: rproc handle
+> + * @reset: reset handle
+>   */
+>  struct omap_rproc {
+>  	struct mbox_chan *mbox;
+>  	struct mbox_client client;
+> +	struct omap_rproc_boot_data *boot_data;
+>  	struct rproc *rproc;
+> +	struct reset_control *reset;
+> +};
 > +
-> +	phdr = data + elf_hdr_get_e_phoff(class, ehdr);
-> +	offset = elf_hdr_get_e_phoff(class, ehdr);
-> +	offset += elf_size_of_phdr(class) * elf_hdr_get_e_phnum(class, ehdr);
-> +
->  	list_for_each_entry(segment, &rproc->dump_segments, node) {
-> -		memset(phdr, 0, sizeof(*phdr));
-> -		phdr->p_type = PT_LOAD;
-> -		phdr->p_offset = offset;
-> -		phdr->p_vaddr = segment->da;
-> -		phdr->p_paddr = segment->da;
-> -		phdr->p_filesz = segment->size;
-> -		phdr->p_memsz = segment->size;
-> -		phdr->p_flags = PF_R | PF_W | PF_X;
-> -		phdr->p_align = 0;
-> +		memset(phdr, 0, elf_size_of_phdr(class));
-> +		elf_phdr_set_p_type(class, phdr, PT_LOAD);
-> +		elf_phdr_set_p_offset(class, phdr, offset);
-> +		elf_phdr_set_p_vaddr(class, phdr, segment->da);
-> +		elf_phdr_set_p_paddr(class, phdr, segment->da);
-> +		elf_phdr_set_p_filesz(class, phdr, segment->size);
-> +		elf_phdr_set_p_memsz(class, phdr, segment->size);
-> +		elf_phdr_set_p_flags(class, phdr, PF_R | PF_W | PF_X);
-> +		elf_phdr_set_p_align(class, phdr, 0);
->  
->  		if (segment->dump) {
->  			segment->dump(rproc, segment, data + offset);
-> @@ -1632,8 +1634,8 @@ static void rproc_coredump(struct rproc *rproc)
->  			}
->  		}
->  
-> -		offset += phdr->p_filesz;
-> -		phdr++;
-> +		offset += elf_phdr_get_p_filesz(class, phdr);
-> +		phdr += elf_size_of_phdr(class);
->  	}
->  
->  	dev_coredumpv(&rproc->dev, data, data_size, GFP_KERNEL);
-> @@ -2031,6 +2033,7 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
->  	rproc->name = name;
->  	rproc->priv = &rproc[1];
->  	rproc->auto_boot = true;
-> +	rproc->elf_class = ELFCLASS32;
->  
->  	device_initialize(&rproc->dev);
->  	rproc->dev.parent = dev;
-> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
-> index 4869fb7d8fe4..16e2c496fd45 100644
-> --- a/drivers/remoteproc/remoteproc_elf_loader.c
-> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
-> @@ -248,6 +248,9 @@ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
->  			memset(ptr + filesz, 0, memsz - filesz);
->  	}
->  
-> +	if (ret == 0)
-> +		rproc->elf_class = class;
-> +
->  	return ret;
->  }
->  EXPORT_SYMBOL(rproc_elf_load_segments);
-> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> index 1683d6c386a6..ed127b2d35ca 100644
-> --- a/include/linux/remoteproc.h
-> +++ b/include/linux/remoteproc.h
-> @@ -514,6 +514,7 @@ struct rproc {
->  	bool auto_boot;
->  	struct list_head dump_segments;
->  	int nb_vdev;
-> +	u8 elf_class;
+> +/**
+> + * struct omap_rproc_dev_data - device data for the omap remote processor
+> + * @device_name: device name of the remote processor
+> + */
+> +struct omap_rproc_dev_data {
+> +	const char *device_name;
 >  };
 >  
 >  /**
+> @@ -92,6 +116,21 @@ static void omap_rproc_kick(struct rproc *rproc, int vqid)
+>  			ret);
+>  }
+>  
+> +/**
+> + * omap_rproc_write_dsp_boot_addr() - set boot address for DSP remote processor
+> + * @rproc: handle of a remote processor
+> + *
+> + * Set boot address for a supported DSP remote processor.
+> + */
+> +static void omap_rproc_write_dsp_boot_addr(struct rproc *rproc)
+> +{
+> +	struct omap_rproc *oproc = rproc->priv;
+> +	struct omap_rproc_boot_data *bdata = oproc->boot_data;
+> +	u32 offset = bdata->boot_reg;
+> +
+> +	regmap_write(bdata->syscon, offset, rproc->bootaddr);
+
+I always get wary when a return code is ignored but it's being added in the next
+patch.  As such:
+
+Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+
+> +}
+> +
+>  /*
+>   * Power up the remote processor.
+>   *
+> @@ -103,13 +142,11 @@ static int omap_rproc_start(struct rproc *rproc)
+>  {
+>  	struct omap_rproc *oproc = rproc->priv;
+>  	struct device *dev = rproc->dev.parent;
+> -	struct platform_device *pdev = to_platform_device(dev);
+> -	struct omap_rproc_pdata *pdata = pdev->dev.platform_data;
+>  	int ret;
+>  	struct mbox_client *client = &oproc->client;
+>  
+> -	if (pdata->set_bootaddr)
+> -		pdata->set_bootaddr(rproc->bootaddr);
+> +	if (oproc->boot_data)
+> +		omap_rproc_write_dsp_boot_addr(rproc);
+>  
+>  	client->dev = dev;
+>  	client->tx_done = NULL;
+> @@ -117,7 +154,7 @@ static int omap_rproc_start(struct rproc *rproc)
+>  	client->tx_block = false;
+>  	client->knows_txdone = false;
+>  
+> -	oproc->mbox = omap_mbox_request_channel(client, pdata->mbox_name);
+> +	oproc->mbox = mbox_request_channel(client, 0);
+>  	if (IS_ERR(oproc->mbox)) {
+>  		ret = -EBUSY;
+>  		dev_err(dev, "mbox_request_channel failed: %ld\n",
+> @@ -138,9 +175,9 @@ static int omap_rproc_start(struct rproc *rproc)
+>  		goto put_mbox;
+>  	}
+>  
+> -	ret = pdata->device_enable(pdev);
+> +	ret = reset_control_deassert(oproc->reset);
+>  	if (ret) {
+> -		dev_err(dev, "omap_device_enable failed: %d\n", ret);
+> +		dev_err(dev, "reset control deassert failed: %d\n", ret);
+>  		goto put_mbox;
+>  	}
+>  
+> @@ -154,13 +191,10 @@ static int omap_rproc_start(struct rproc *rproc)
+>  /* power off the remote processor */
+>  static int omap_rproc_stop(struct rproc *rproc)
+>  {
+> -	struct device *dev = rproc->dev.parent;
+> -	struct platform_device *pdev = to_platform_device(dev);
+> -	struct omap_rproc_pdata *pdata = pdev->dev.platform_data;
+>  	struct omap_rproc *oproc = rproc->priv;
+>  	int ret;
+>  
+> -	ret = pdata->device_shutdown(pdev);
+> +	ret = reset_control_assert(oproc->reset);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -175,12 +209,115 @@ static const struct rproc_ops omap_rproc_ops = {
+>  	.kick		= omap_rproc_kick,
+>  };
+>  
+> +static const struct omap_rproc_dev_data omap4_dsp_dev_data = {
+> +	.device_name	= "dsp",
+> +};
+> +
+> +static const struct omap_rproc_dev_data omap4_ipu_dev_data = {
+> +	.device_name	= "ipu",
+> +};
+> +
+> +static const struct omap_rproc_dev_data omap5_dsp_dev_data = {
+> +	.device_name	= "dsp",
+> +};
+> +
+> +static const struct omap_rproc_dev_data omap5_ipu_dev_data = {
+> +	.device_name	= "ipu",
+> +};
+> +
+> +static const struct of_device_id omap_rproc_of_match[] = {
+> +	{
+> +		.compatible     = "ti,omap4-dsp",
+> +		.data           = &omap4_dsp_dev_data,
+> +	},
+> +	{
+> +		.compatible     = "ti,omap4-ipu",
+> +		.data           = &omap4_ipu_dev_data,
+> +	},
+> +	{
+> +		.compatible     = "ti,omap5-dsp",
+> +		.data           = &omap5_dsp_dev_data,
+> +	},
+> +	{
+> +		.compatible     = "ti,omap5-ipu",
+> +		.data           = &omap5_ipu_dev_data,
+> +	},
+> +	{
+> +		/* end */
+> +	},
+> +};
+> +MODULE_DEVICE_TABLE(of, omap_rproc_of_match);
+> +
+> +static const char *omap_rproc_get_firmware(struct platform_device *pdev)
+> +{
+> +	const char *fw_name;
+> +	int ret;
+> +
+> +	ret = of_property_read_string(pdev->dev.of_node, "firmware-name",
+> +				      &fw_name);
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	return fw_name;
+> +}
+> +
+> +static int omap_rproc_get_boot_data(struct platform_device *pdev,
+> +				    struct rproc *rproc)
+> +{
+> +	struct device_node *np = pdev->dev.of_node;
+> +	struct omap_rproc *oproc = rproc->priv;
+> +	const struct omap_rproc_dev_data *data;
+> +	int ret;
+> +
+> +	data = of_device_get_match_data(&pdev->dev);
+> +	if (!data)
+> +		return -ENODEV;
+> +
+> +	if (!of_property_read_bool(np, "ti,bootreg"))
+> +		return 0;
+> +
+> +	oproc->boot_data = devm_kzalloc(&pdev->dev, sizeof(*oproc->boot_data),
+> +					GFP_KERNEL);
+> +	if (!oproc->boot_data)
+> +		return -ENOMEM;
+> +
+> +	oproc->boot_data->syscon =
+> +			syscon_regmap_lookup_by_phandle(np, "ti,bootreg");
+> +	if (IS_ERR(oproc->boot_data->syscon)) {
+> +		ret = PTR_ERR(oproc->boot_data->syscon);
+> +		return ret;
+> +	}
+> +
+> +	if (of_property_read_u32_index(np, "ti,bootreg", 1,
+> +				       &oproc->boot_data->boot_reg)) {
+> +		dev_err(&pdev->dev, "couldn't get the boot register\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int omap_rproc_probe(struct platform_device *pdev)
+>  {
+> -	struct omap_rproc_pdata *pdata = pdev->dev.platform_data;
+> +	struct device_node *np = pdev->dev.of_node;
+>  	struct omap_rproc *oproc;
+>  	struct rproc *rproc;
+> +	const char *firmware;
+>  	int ret;
+> +	struct reset_control *reset;
+> +
+> +	if (!np) {
+> +		dev_err(&pdev->dev, "only DT-based devices are supported\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	reset = devm_reset_control_array_get_exclusive(&pdev->dev);
+> +	if (IS_ERR(reset))
+> +		return PTR_ERR(reset);
+> +
+> +	firmware = omap_rproc_get_firmware(pdev);
+> +	if (IS_ERR(firmware))
+> +		return PTR_ERR(firmware);
+>  
+>  	ret = dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32));
+>  	if (ret) {
+> @@ -188,16 +325,21 @@ static int omap_rproc_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	rproc = rproc_alloc(&pdev->dev, pdata->name, &omap_rproc_ops,
+> -			    pdata->firmware, sizeof(*oproc));
+> +	rproc = rproc_alloc(&pdev->dev, dev_name(&pdev->dev), &omap_rproc_ops,
+> +			    firmware, sizeof(*oproc));
+>  	if (!rproc)
+>  		return -ENOMEM;
+>  
+>  	oproc = rproc->priv;
+>  	oproc->rproc = rproc;
+> +	oproc->reset = reset;
+>  	/* All existing OMAP IPU and DSP processors have an MMU */
+>  	rproc->has_iommu = true;
+>  
+> +	ret = omap_rproc_get_boot_data(pdev, rproc);
+> +	if (ret)
+> +		goto free_rproc;
+> +
+>  	platform_set_drvdata(pdev, rproc);
+>  
+>  	ret = rproc_add(rproc);
+> @@ -226,6 +368,7 @@ static struct platform_driver omap_rproc_driver = {
+>  	.remove = omap_rproc_remove,
+>  	.driver = {
+>  		.name = "omap-rproc",
+> +		.of_match_table = omap_rproc_of_match,
+>  	},
+>  };
+>  
 > -- 
-> 2.15.0.276.g89ea799
+> 2.17.1
 > 
+> --
+> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
