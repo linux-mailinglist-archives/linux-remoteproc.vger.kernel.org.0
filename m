@@ -2,262 +2,151 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF5F1796BA
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Mar 2020 18:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB041796D6
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Mar 2020 18:36:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729849AbgCDRcO (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 4 Mar 2020 12:32:14 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44347 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726748AbgCDRcN (ORCPT
+        id S1730004AbgCDRgO (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Mar 2020 12:36:14 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:32940 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729962AbgCDRgO (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 4 Mar 2020 12:32:13 -0500
-Received: by mail-pf1-f193.google.com with SMTP id y26so1283379pfn.11
-        for <linux-remoteproc@vger.kernel.org>; Wed, 04 Mar 2020 09:32:10 -0800 (PST)
+        Wed, 4 Mar 2020 12:36:14 -0500
+Received: by mail-pl1-f194.google.com with SMTP id ay11so1323203plb.0
+        for <linux-remoteproc@vger.kernel.org>; Wed, 04 Mar 2020 09:36:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=XxZlqqlCmIcmcwRPZy44+g7+kuroIm3/xUjzgcqkWoY=;
-        b=g1He9zWVV3d2m4PLkXHEuRaahqoX7savFamz+P+aPqs/KA4r/UV4MXPf++NkC2PI3l
-         LFH90aM6cVN0QhN7+GjOBFGlR81xLViGqbk4eWEVHawnd55aMluley5ANrLXJd6R2N4W
-         fjemSV18pHaRc/E6ad3qgx7O1PUnpxAYYkYHfQ9CnLRYGtSiZ6RHrsQr1DzY4A6yLnFT
-         LmqOm7q9bFEC5Lp5dPse7e89aBCC35D7xal6zpK7yKsfrIvgKrORPMxHaqIQ3mz2jYuz
-         UYbBo44BIXXAiHUkiSeTc93cGPxDYhvJ0oE1nI0UqWBxmFyV+jWW/ahi7IJKokIQx9gD
-         CaIA==
+        bh=QrJxdbOnNZQkUCbcHyqB8Pb9/DfQrvf2TdO8mKqjW4I=;
+        b=ijo4XnWvpQaY54mRLbblHOY36CYeFGkOHJZtWRmV8zaBa9Iz6X4pPbjq96ZOJ17wGV
+         lcrfMDqeX+Z/YvHBO9AXG600hmOIbcEB04RR7ANRk38lrSrVmtPg2dgSE6uYA1T/bXAg
+         iBRNsVwPlAjFjxgYVk6wfqEqd3nDiJ48UV3O0oz2E2Z/8Nk65AdCAGTpRmR8R7NCpKwI
+         FvYSjGVXZJ7WyhluHH0M9GbCdDRinP+EidIwkTn8qg9RnUuD6Qw66QE7R/BV7i6MD0bP
+         LhD90lNNYi4xw1aa6CptGyXaPdD38CpaxGwG6L2fkXAW5qjqeoo2EYWYTuZ+8lodcOpa
+         B7ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XxZlqqlCmIcmcwRPZy44+g7+kuroIm3/xUjzgcqkWoY=;
-        b=Irsq7HmMSJSPEADvxte5qKZaj6eb9ewVZdYFGENbiHVXYnxJZv3qodG4HD5j5qs/qe
-         QgsaoTzMQEISxmNAJG4lTZlYCHseJO6mlXcUmbVmzNDNGOnlT4qXJecW6ZI17geUfxS2
-         bqhrixl4lrpU4pmSaBzqSMMdjVigq0MZXx7jAROj8kb62ZRyytvPI/d3MXkuJXfE0NEU
-         S7k3XIYSTK6/d5gIopUEaOkIvEcY4fGt93clRStTSUcVAR1PNrMLctgGc2HazGM/PMlf
-         n9hvkHSzWNGYSStTM4FJQtMTM8Wyv3xiRYTH3gthB6AsYsx9c1V8Q8C4NpRCPJmQYUQ3
-         YcJQ==
-X-Gm-Message-State: ANhLgQ3LNgyjKXSvJf2+JsocoHfUe0p1MiBCdaHfWp4oAzhE7fLKkPWS
-        1rdykqrjarCY8cSkLqN9SjJy2Q==
-X-Google-Smtp-Source: ADFU+vsZzuIuPXq3pjPPTjcxEyOl1G7dvC2hJV+qL6QN0e5k4mr6yTmIBA/Mll8oR/YikpRkYonPzw==
-X-Received: by 2002:a63:309:: with SMTP id 9mr3489772pgd.193.1583343130281;
-        Wed, 04 Mar 2020 09:32:10 -0800 (PST)
+        bh=QrJxdbOnNZQkUCbcHyqB8Pb9/DfQrvf2TdO8mKqjW4I=;
+        b=mgduEmIMWs0hzj+EUWykArvVlYqA+MxiIGGuQwpBSOFxhNItEpkMF837+hO9bpbdc5
+         cihyPgBfsmyMnvYoT8411Yol1vNl0OlK/NWqQWUmdtdpJy/1ZkvzD3rlXT4Ef3OZmDa2
+         GWRes17IdXhNCFSR8AeKzED6H/Qxmj5a88fy/yTX4Lj+7MmiFwxzDs1XpJ/HZnZoqymH
+         26dMf9mjbdUkmU4F93lxRvpgaAxsPSLzopYzVfR5H0kaq41ETVyMOvgdYCuNNcExdar2
+         RRWE1qjS3XR/2b02jgNdDS4XEzivDcp0TuFcN608ugoRNZvpPHLlcccvfC5JSiLrXJ/N
+         vkAQ==
+X-Gm-Message-State: ANhLgQ1ebJ+YsiknSr9rxd2xtrh/OA9Dul9BL50lBD1SYpAzltIFz76X
+        nhvj2H95j1MXxf3q/JwwOP15gA==
+X-Google-Smtp-Source: ADFU+vvH+MCkVHYATZMbJIq3ReP5FwZr7d9jdDgS+R4WZY6ij4Cu0Jn7a6n1bTLFofJy56VxsXNmWg==
+X-Received: by 2002:a17:902:bf08:: with SMTP id bi8mr3964580plb.305.1583343373255;
+        Wed, 04 Mar 2020 09:36:13 -0800 (PST)
 Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id b3sm29688555pft.73.2020.03.04.09.32.09
+        by smtp.gmail.com with ESMTPSA id m20sm7061044pff.172.2020.03.04.09.36.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Mar 2020 09:32:09 -0800 (PST)
-Date:   Wed, 4 Mar 2020 10:32:07 -0700
+        Wed, 04 Mar 2020 09:36:12 -0800 (PST)
+Date:   Wed, 4 Mar 2020 10:36:10 -0700
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     Tero Kristo <t-kristo@ti.com>
 Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
         linux-remoteproc@vger.kernel.org, afd@ti.com, s-anna@ti.com,
         linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
-Subject: Re: [PATCHv7 04/15] remoteproc/omap: Add support to parse internal
- memories from DT
-Message-ID: <20200304173207.GC8197@xps15>
+Subject: Re: [PATCHv7 05/15] remoteproc/omap: Add the rproc ops .da_to_va()
+ implementation
+Message-ID: <20200304173610.GD8197@xps15>
 References: <20200221101936.16833-1-t-kristo@ti.com>
- <20200221101936.16833-5-t-kristo@ti.com>
+ <20200221101936.16833-6-t-kristo@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200221101936.16833-5-t-kristo@ti.com>
+In-Reply-To: <20200221101936.16833-6-t-kristo@ti.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 12:19:25PM +0200, Tero Kristo wrote:
+On Fri, Feb 21, 2020 at 12:19:26PM +0200, Tero Kristo wrote:
 > From: Suman Anna <s-anna@ti.com>
 > 
-> The OMAP remoteproc driver has been enhanced to parse and store
-> the kernel mappings for different internal RAM memories that may
-> be present within each remote processor IP subsystem. Different
-> devices have varying memories present on current SoCs. The current
-> support handles the L2RAM for all IPU devices on OMAP4+ SoCs. The
-> DSPs on OMAP4/OMAP5 only have Unicaches and do not have any L1 or
-> L2 RAM memories.
+> An implementation for the rproc ops .da_to_va() has been added
+> that provides the address translation between device addresses
+> to kernel virtual addresses for internal RAMs present on that
+> particular remote processor device. The implementation provides
+> the translations based on the addresses parsed and stored during
+> the probe.
 > 
-> IPUs are expected to have the L2RAM at a fixed device address of
-> 0x20000000, based on the current limitations on Attribute MMU
-> configurations.
-> 
-> NOTE:
-> The current logic doesn't handle the parsing of memories for DRA7
-> remoteproc devices, and will be added alongside the DRA7 support.
+> This ops gets invoked by the exported rproc_da_to_va() function
+> and allows the remoteproc core's ELF loader to be able to load
+> program data directly into the internal memories.
 > 
 > Signed-off-by: Suman Anna <s-anna@ti.com>
-> [t-kristo: converted to parse mem names / device addresses from pdata]
 > Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> ---
->  drivers/remoteproc/omap_remoteproc.c | 89 ++++++++++++++++++++++++++++
->  1 file changed, 89 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
-> index 64b559caadff..4f92b069f5d0 100644
-> --- a/drivers/remoteproc/omap_remoteproc.c
-> +++ b/drivers/remoteproc/omap_remoteproc.c
-> @@ -39,11 +39,27 @@ struct omap_rproc_boot_data {
->  	unsigned int boot_reg;
->  };
->  
-> +/**
-> + * struct omap_rproc_mem - internal memory structure
-> + * @cpu_addr: MPU virtual address of the memory region
-> + * @bus_addr: bus address used to access the memory region
-> + * @dev_addr: device address of the memory region from DSP view
-> + * @size: size of the memory region
-> + */
-> +struct omap_rproc_mem {
-> +	void __iomem *cpu_addr;
-> +	phys_addr_t bus_addr;
-> +	u32 dev_addr;
-> +	size_t size;
-> +};
-> +
->  /**
->   * struct omap_rproc - omap remote processor state
->   * @mbox: mailbox channel handle
->   * @client: mailbox client to request the mailbox channel
->   * @boot_data: boot data structure for setting processor boot address
-> + * @mem: internal memory regions data
-> + * @num_mems: number of internal memory regions
->   * @rproc: rproc handle
->   * @reset: reset handle
->   */
-> @@ -51,16 +67,30 @@ struct omap_rproc {
->  	struct mbox_chan *mbox;
->  	struct mbox_client client;
->  	struct omap_rproc_boot_data *boot_data;
-> +	struct omap_rproc_mem *mem;
-> +	int num_mems;
->  	struct rproc *rproc;
->  	struct reset_control *reset;
->  };
->  
-> +/**
-> + * struct omap_rproc_mem_data - memory definitions for an omap remote processor
-> + * @name: name for this memory entry
-> + * @dev_addr: device address for the memory entry
-> + */
-> +struct omap_rproc_mem_data {
-> +	const char *name;
-> +	const u32 dev_addr;
-> +};
-> +
->  /**
->   * struct omap_rproc_dev_data - device data for the omap remote processor
->   * @device_name: device name of the remote processor
-> + * @mems: memory definitions for this remote processor
->   */
->  struct omap_rproc_dev_data {
->  	const char *device_name;
-> +	const struct omap_rproc_mem_data *mems;
->  };
->  
->  /**
-> @@ -223,12 +253,18 @@ static const struct rproc_ops omap_rproc_ops = {
->  	.kick		= omap_rproc_kick,
->  };
->  
-> +static const struct omap_rproc_mem_data ipu_mems[] = {
-> +	{ .name = "l2ram", .dev_addr = 0x20000000 },
-> +	{ },
-> +};
-> +
->  static const struct omap_rproc_dev_data omap4_dsp_dev_data = {
->  	.device_name	= "dsp",
->  };
->  
->  static const struct omap_rproc_dev_data omap4_ipu_dev_data = {
->  	.device_name	= "ipu",
-> +	.mems		= ipu_mems,
->  };
->  
->  static const struct omap_rproc_dev_data omap5_dsp_dev_data = {
-> @@ -237,6 +273,7 @@ static const struct omap_rproc_dev_data omap5_dsp_dev_data = {
->  
->  static const struct omap_rproc_dev_data omap5_ipu_dev_data = {
->  	.device_name	= "ipu",
-> +	.mems		= ipu_mems,
->  };
->  
->  static const struct of_device_id omap_rproc_of_match[] = {
-> @@ -311,6 +348,54 @@ static int omap_rproc_get_boot_data(struct platform_device *pdev,
->  	return 0;
->  }
->  
-> +static int omap_rproc_of_get_internal_memories(struct platform_device *pdev,
-> +					       struct rproc *rproc)
-> +{
-> +	struct omap_rproc *oproc = rproc->priv;
-> +	struct device *dev = &pdev->dev;
-> +	const struct omap_rproc_dev_data *data;
-> +	struct resource *res;
-> +	int num_mems;
-> +	int i;
-> +
-> +	data = of_device_get_match_data(&pdev->dev);
-> +	if (!data)
-> +		return -ENODEV;
-> +
-> +	if (!data->mems)
-> +		return 0;
-> +
-> +	for (num_mems = 0; data->mems[num_mems].name; num_mems++)
-> +		;
-
-Please use of_property_count_elems_of_size() as it was done in omap_hwmod.c [1]
-
-[1]. https://elixir.bootlin.com/linux/v5.6-rc4/source/arch/arm/mach-omap2/omap_hwmod.c#L717
-
-With the above:
 
 Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-
+> ---
+> v7:
+>   - minor kerneldoc updates
+> 
+>  drivers/remoteproc/omap_remoteproc.c | 40 ++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+> index 4f92b069f5d0..89084dd919ba 100644
+> --- a/drivers/remoteproc/omap_remoteproc.c
+> +++ b/drivers/remoteproc/omap_remoteproc.c
+> @@ -247,10 +247,50 @@ static int omap_rproc_stop(struct rproc *rproc)
+>  	return 0;
+>  }
+>  
+> +/**
+> + * omap_rproc_da_to_va() - internal memory translation helper
+> + * @rproc: remote processor to apply the address translation for
+> + * @da: device address to translate
+> + * @len: length of the memory buffer
+> + *
+> + * Custom function implementing the rproc .da_to_va ops to provide address
+> + * translation (device address to kernel virtual address) for internal RAMs
+> + * present in a DSP or IPU device). The translated addresses can be used
+> + * either by the remoteproc core for loading, or by any rpmsg bus drivers.
+> + *
+> + * Return: translated virtual address in kernel memory space on success,
+> + *         or NULL on failure.
+> + */
+> +static void *omap_rproc_da_to_va(struct rproc *rproc, u64 da, int len)
+> +{
+> +	struct omap_rproc *oproc = rproc->priv;
+> +	int i;
+> +	u32 offset;
 > +
-> +	oproc->mem = devm_kcalloc(dev, num_mems, sizeof(*oproc->mem),
-> +				  GFP_KERNEL);
-> +	if (!oproc->mem)
-> +		return -ENOMEM;
+> +	if (len <= 0)
+> +		return NULL;
 > +
-> +	for (i = 0; i < num_mems; i++) {
-> +		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
-> +						   data->mems[i].name);
-> +		oproc->mem[i].cpu_addr = devm_ioremap_resource(dev, res);
-> +		if (IS_ERR(oproc->mem[i].cpu_addr)) {
-> +			dev_err(dev, "failed to parse and map %s memory\n",
-> +				data->mems[i].name);
-> +			return PTR_ERR(oproc->mem[i].cpu_addr);
+> +	if (!oproc->num_mems)
+> +		return NULL;
+> +
+> +	for (i = 0; i < oproc->num_mems; i++) {
+> +		if (da >= oproc->mem[i].dev_addr && da + len <=
+> +		    oproc->mem[i].dev_addr + oproc->mem[i].size) {
+> +			offset = da - oproc->mem[i].dev_addr;
+> +			/* __force to make sparse happy with type conversion */
+> +			return (__force void *)(oproc->mem[i].cpu_addr +
+> +						offset);
 > +		}
-> +		oproc->mem[i].bus_addr = res->start;
-> +		oproc->mem[i].dev_addr = data->mems[i].dev_addr;
-> +		oproc->mem[i].size = resource_size(res);
-> +
-> +		dev_dbg(dev, "memory %8s: bus addr %pa size 0x%x va %pK da 0x%x\n",
-> +			data->mems[i].name, &oproc->mem[i].bus_addr,
-> +			oproc->mem[i].size, oproc->mem[i].cpu_addr,
-> +			oproc->mem[i].dev_addr);
 > +	}
-> +	oproc->num_mems = num_mems;
 > +
-> +	return 0;
+> +	return NULL;
 > +}
 > +
->  static int omap_rproc_probe(struct platform_device *pdev)
->  {
->  	struct device_node *np = pdev->dev.of_node;
-> @@ -350,6 +435,10 @@ static int omap_rproc_probe(struct platform_device *pdev)
->  	/* All existing OMAP IPU and DSP processors have an MMU */
->  	rproc->has_iommu = true;
+>  static const struct rproc_ops omap_rproc_ops = {
+>  	.start		= omap_rproc_start,
+>  	.stop		= omap_rproc_stop,
+>  	.kick		= omap_rproc_kick,
+> +	.da_to_va	= omap_rproc_da_to_va,
+>  };
 >  
-> +	ret = omap_rproc_of_get_internal_memories(pdev, rproc);
-> +	if (ret)
-> +		goto free_rproc;
-> +
->  	ret = omap_rproc_get_boot_data(pdev, rproc);
->  	if (ret)
->  		goto free_rproc;
+>  static const struct omap_rproc_mem_data ipu_mems[] = {
 > -- 
 > 2.17.1
 > 
