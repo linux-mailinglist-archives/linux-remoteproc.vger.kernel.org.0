@@ -2,296 +2,431 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94402179982
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Mar 2020 21:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 635F21799AA
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Mar 2020 21:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728278AbgCDUJy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 4 Mar 2020 15:09:54 -0500
-Received: from mail26.static.mailgun.info ([104.130.122.26]:31558 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727835AbgCDUJx (ORCPT
+        id S1728642AbgCDUYb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Mar 2020 15:24:31 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34852 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728614AbgCDUYb (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 4 Mar 2020 15:09:53 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1583352592; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=/RCgoyhHvf5S+/RouyAbpWlCuHMv+v5tq6A3J7daPyw=; b=G9pkHkvwyTxuoL0uxB5FtO+bZv7ja/+TIev/0rOlrtufEi1n8AVmYq2O9fffovisEjxyKoX2
- N9QM9Gd6XyVSe0+PuuhL/A67BX3FQlJdTqZivwMOL35HSIF/5MqYGnv6McVlbRClOms3TfhC
- MMXY9avrq83rPKUGJ8nQg59W0s0=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e600b07.7ffa0b0d23e8-smtp-out-n02;
- Wed, 04 Mar 2020 20:09:43 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 59104C447A0; Wed,  4 Mar 2020 20:09:42 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 07CE1C4479D;
-        Wed,  4 Mar 2020 20:09:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 07CE1C4479D
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     bjorn.andersson@linaro.org, srinivas.kandagatla@linaro.org
-Cc:     agross@kernel.org, robh+dt@kernel.org, mark.rutland@arm.com,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        tsoni@codeaurora.org, vnkgutta@codeaurora.org,
-        Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH v6 3/3] soc: qcom: apr: Add avs/audio tracking functionality
-Date:   Thu,  5 Mar 2020 01:39:11 +0530
-Message-Id: <20200304200911.15415-4-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200304200911.15415-1-sibis@codeaurora.org>
-References: <20200304200911.15415-1-sibis@codeaurora.org>
+        Wed, 4 Mar 2020 15:24:31 -0500
+Received: by mail-pf1-f193.google.com with SMTP id i19so1537556pfa.2
+        for <linux-remoteproc@vger.kernel.org>; Wed, 04 Mar 2020 12:24:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tPhxJRQEDfC+ycctJKnUONogvExY0vwhGDzHUA4kHyo=;
+        b=GWQ8fn7Y1XV3ERi08K3HEG/O0eITnwPEx7hR3rUtjDB+9AZtgcXAbw4e6g+kwoj4+/
+         yNvsHziZ1jlsOl51XnHBuRolNDArvSmO/VcYGZA7P4ShtLVwDqWHh2KW1cHSiUQ96BXu
+         43BioQkNrs9gIlQaFOwsrsdq5QEqq1SZCszKQumsFf5B+zOggKmEt+YsNhS2NFHF7GPd
+         dqhjYsisBOeBPFYuZcuub/R3mEfLNQPQG+zGLZBsuf1rwTYGR/Y3K9I1mFLyHbS0RPux
+         LK6C9uWqtsORigmQ94zyuFWK/ArW8H/4IKg/M7JYgmk/5vV2XtJArg1hxCwOO/he6/MT
+         kvRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tPhxJRQEDfC+ycctJKnUONogvExY0vwhGDzHUA4kHyo=;
+        b=SlUz2DmC7J8Y72Xi43NxSodb6TN0PXY58amCmvKCscp7uaVj/6v21KV3DYAn8Bqqt4
+         6abesgs2ogBypAADeFRJfCEqYgmZKzXVYqGLJXBXeut6GQtxYEhDdgAf0B3lpAz6t+FY
+         DJJ/1NInIQuNeq6JARUpuV1HtIYl5thbKNQcwlxZrXY40HRQ9dzgJ5FfsJAVOC/+Cbss
+         egAtdyLcTEsLiYoEOj2682xpI05C/UttBE3URxSYswTGp/LlnzxaYdYtmu4zZwmiFVUV
+         1hxneFcEPHy3ygo9QN1qIldAaDdQ5ckLXM86pnaFweFmNg35B39+YWqYA7HZd/XbxJBh
+         w3Nw==
+X-Gm-Message-State: ANhLgQ19GOVHgsLjkIwJyXLfCzC2VnTgttceies2UbfvH/5dhw/gtLGK
+        yCCHhbjfZLxTaE+PtKiEF6NmTQ==
+X-Google-Smtp-Source: ADFU+vv4ZmEGbj95iisHk7uUIWuGNBrMkEiChffe4nMDlrfUQoXmd/KFj4r7ARWQcAgF0UVRB27nKw==
+X-Received: by 2002:a62:5c2:: with SMTP id 185mr4678906pff.175.1583353469720;
+        Wed, 04 Mar 2020 12:24:29 -0800 (PST)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id w19sm21698539pgm.27.2020.03.04.12.24.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Mar 2020 12:24:29 -0800 (PST)
+Date:   Wed, 4 Mar 2020 13:24:26 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tero Kristo <t-kristo@ti.com>
+Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
+        linux-remoteproc@vger.kernel.org, afd@ti.com, s-anna@ti.com,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: Re: [PATCHv7 11/15] remoteproc/omap: Add support for system
+ suspend/resume
+Message-ID: <20200304202426.GJ8197@xps15>
+References: <20200221101936.16833-1-t-kristo@ti.com>
+ <20200221101936.16833-12-t-kristo@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200221101936.16833-12-t-kristo@ti.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Use PDR helper functions to track the protection domains that the apr
-services are dependent upon on SDM845 SoC, specifically the "avs/audio"
-service running on ADSP Q6.
+On Fri, Feb 21, 2020 at 12:19:32PM +0200, Tero Kristo wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> This patch adds the support for system suspend/resume to the
+> OMAP remoteproc driver so that the OMAP remoteproc devices can
+> be suspended/resumed during a system suspend/resume. The support
+> is added through the driver PM .suspend/.resume callbacks, and
+> requires appropriate support from the OS running on the remote
+> processors.
+> 
+> The IPU & DSP remote processors typically have their own private
+> modules like registers, internal memories, caches etc. The context
+> of these modules need to be saved and restored properly for a
+> suspend/resume to work. These are in general not accessible from
+> the MPU, so the remote processors themselves have to implement
+> the logic for the context save & restore of these modules.
+> 
+> The OMAP remoteproc driver initiates a suspend by sending a mailbox
+> message requesting the remote processor to save its context and
+> enter into an idle/standby state. The remote processor should
+> usually stop whatever processing it is doing to switch to a context
+> save mode. The OMAP remoteproc driver detects the completion of
+> the context save by checking the module standby status for the
+> remoteproc device. It also stops any resources used by the remote
+> processors like the timers. The timers need to be running only
+> when the processor is active and executing, and need to be stopped
+> otherwise to allow the timer driver to reach low-power states. The
+> IOMMUs are automatically suspended by the PM core during the late
+> suspend stage, after the remoteproc suspend process is completed by
+> putting the remote processor cores into reset. Thereafter, the Linux
+> kernel can put the domain into further lower power states as possible.
+> 
+> The resume sequence undoes the operations performed in the PM suspend
+> callback, by starting the timers and finally releasing the processors
+> from reset. This requires that the remote processor side OS be able to
+> distinguish a power-resume boot from a power-on/cold boot, restore the
+> context of its private modules saved during the suspend phase, and
+> resume executing code from where it was suspended. The IOMMUs would
+> have been resumed by the PM core during early resume, so they are
+> already enabled by the time remoteproc resume callback gets invoked.
+> 
+> The remote processors should save their context into System RAM (DDR),
+> as any internal memories are not guaranteed to retain context as it
+> depends on the lowest power domain that the remote processor device
+> is put into. The management of the DDR contents will be managed by
+> the Linux kernel.
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> [t-kristo@ti.com: converted to use ti-sysc instead of hwmod]
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
 
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
----
+Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-V6:
- * No change
-
-V5:
- * Picked up Bjorn's R-b
-
- drivers/soc/qcom/Kconfig     |   1 +
- drivers/soc/qcom/apr.c       | 123 ++++++++++++++++++++++++++++++++---
- include/linux/soc/qcom/apr.h |   1 +
- 3 files changed, 116 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-index 945609005cedd..e2c364d86a838 100644
---- a/drivers/soc/qcom/Kconfig
-+++ b/drivers/soc/qcom/Kconfig
-@@ -201,6 +201,7 @@ config QCOM_APR
- 	tristate "Qualcomm APR Bus (Asynchronous Packet Router)"
- 	depends on ARCH_QCOM || COMPILE_TEST
- 	depends on RPMSG
-+	select QCOM_PDR_HELPERS
- 	help
- 	  Enable APR IPC protocol support between
- 	  application processor and QDSP6. APR is
-diff --git a/drivers/soc/qcom/apr.c b/drivers/soc/qcom/apr.c
-index 4fcc32420c474..1f35b097c6356 100644
---- a/drivers/soc/qcom/apr.c
-+++ b/drivers/soc/qcom/apr.c
-@@ -11,6 +11,7 @@
- #include <linux/workqueue.h>
- #include <linux/of_device.h>
- #include <linux/soc/qcom/apr.h>
-+#include <linux/soc/qcom/pdr.h>
- #include <linux/rpmsg.h>
- #include <linux/of.h>
- 
-@@ -21,6 +22,7 @@ struct apr {
- 	spinlock_t rx_lock;
- 	struct idr svcs_idr;
- 	int dest_domain_id;
-+	struct pdr_handle *pdr;
- 	struct workqueue_struct *rxwq;
- 	struct work_struct rx_work;
- 	struct list_head rx_list;
-@@ -289,6 +291,9 @@ static int apr_add_device(struct device *dev, struct device_node *np,
- 		  id->svc_id + 1, GFP_ATOMIC);
- 	spin_unlock(&apr->svcs_lock);
- 
-+	of_property_read_string_index(np, "qcom,protection-domain",
-+				      1, &adev->service_path);
-+
- 	dev_info(dev, "Adding APR dev: %s\n", dev_name(&adev->dev));
- 
- 	ret = device_register(&adev->dev);
-@@ -300,14 +305,75 @@ static int apr_add_device(struct device *dev, struct device_node *np,
- 	return ret;
- }
- 
--static void of_register_apr_devices(struct device *dev)
-+static int of_apr_add_pd_lookups(struct device *dev)
-+{
-+	const char *service_name, *service_path;
-+	struct apr *apr = dev_get_drvdata(dev);
-+	struct device_node *node;
-+	struct pdr_service *pds;
-+	int ret;
-+
-+	for_each_child_of_node(dev->of_node, node) {
-+		ret = of_property_read_string_index(node, "qcom,protection-domain",
-+						    0, &service_name);
-+		if (ret < 0)
-+			continue;
-+
-+		ret = of_property_read_string_index(node, "qcom,protection-domain",
-+						    1, &service_path);
-+		if (ret < 0) {
-+			dev_err(dev, "pdr service path missing: %d\n", ret);
-+			return ret;
-+		}
-+
-+		pds = pdr_add_lookup(apr->pdr, service_name, service_path);
-+		if (IS_ERR(pds) && PTR_ERR(pds) != -EALREADY) {
-+			dev_err(dev, "pdr add lookup failed: %d\n", ret);
-+			return PTR_ERR(pds);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static void of_register_apr_devices(struct device *dev, const char *svc_path)
- {
- 	struct apr *apr = dev_get_drvdata(dev);
- 	struct device_node *node;
-+	const char *service_path;
-+	int ret;
- 
- 	for_each_child_of_node(dev->of_node, node) {
- 		struct apr_device_id id = { {0} };
- 
-+		/*
-+		 * This function is called with svc_path NULL during
-+		 * apr_probe(), in which case we register any apr devices
-+		 * without a qcom,protection-domain specified.
-+		 *
-+		 * Then as the protection domains becomes available
-+		 * (if applicable) this function is again called, but with
-+		 * svc_path representing the service becoming available. In
-+		 * this case we register any apr devices with a matching
-+		 * qcom,protection-domain.
-+		 */
-+
-+		ret = of_property_read_string_index(node, "qcom,protection-domain",
-+						    1, &service_path);
-+		if (svc_path) {
-+			/* skip APR services that are PD independent */
-+			if (ret)
-+				continue;
-+
-+			/* skip APR services whose PD paths don't match */
-+			if (strcmp(service_path, svc_path))
-+				continue;
-+		} else {
-+			/* skip APR services whose PD lookups are registered */
-+			if (ret == 0)
-+				continue;
-+		}
-+
- 		if (of_property_read_u32(node, "reg", &id.svc_id))
- 			continue;
- 
-@@ -318,6 +384,34 @@ static void of_register_apr_devices(struct device *dev)
- 	}
- }
- 
-+static int apr_remove_device(struct device *dev, void *svc_path)
-+{
-+	struct apr_device *adev = to_apr_device(dev);
-+
-+	if (svc_path && adev->service_path) {
-+		if (!strcmp(adev->service_path, (char *)svc_path))
-+			device_unregister(&adev->dev);
-+	} else {
-+		device_unregister(&adev->dev);
-+	}
-+
-+	return 0;
-+}
-+
-+static void apr_pd_status(int state, char *svc_path, void *priv)
-+{
-+	struct apr *apr = (struct apr *)priv;
-+
-+	switch (state) {
-+	case SERVREG_SERVICE_STATE_UP:
-+		of_register_apr_devices(apr->dev, svc_path);
-+		break;
-+	case SERVREG_SERVICE_STATE_DOWN:
-+		device_for_each_child(apr->dev, svc_path, apr_remove_device);
-+		break;
-+	}
-+}
-+
- static int apr_probe(struct rpmsg_device *rpdev)
- {
- 	struct device *dev = &rpdev->dev;
-@@ -343,28 +437,39 @@ static int apr_probe(struct rpmsg_device *rpdev)
- 		return -ENOMEM;
- 	}
- 	INIT_WORK(&apr->rx_work, apr_rxwq);
-+
-+	apr->pdr = pdr_handle_alloc(apr_pd_status, apr);
-+	if (IS_ERR(apr->pdr)) {
-+		dev_err(dev, "Failed to init PDR handle\n");
-+		ret = PTR_ERR(apr->pdr);
-+		goto destroy_wq;
-+	}
-+
- 	INIT_LIST_HEAD(&apr->rx_list);
- 	spin_lock_init(&apr->rx_lock);
- 	spin_lock_init(&apr->svcs_lock);
- 	idr_init(&apr->svcs_idr);
--	of_register_apr_devices(dev);
--
--	return 0;
--}
- 
--static int apr_remove_device(struct device *dev, void *null)
--{
--	struct apr_device *adev = to_apr_device(dev);
-+	ret = of_apr_add_pd_lookups(dev);
-+	if (ret)
-+		goto handle_release;
- 
--	device_unregister(&adev->dev);
-+	of_register_apr_devices(dev, NULL);
- 
- 	return 0;
-+
-+handle_release:
-+	pdr_handle_release(apr->pdr);
-+destroy_wq:
-+	destroy_workqueue(apr->rxwq);
-+	return ret;
- }
- 
- static void apr_remove(struct rpmsg_device *rpdev)
- {
- 	struct apr *apr = dev_get_drvdata(&rpdev->dev);
- 
-+	pdr_handle_release(apr->pdr);
- 	device_for_each_child(&rpdev->dev, NULL, apr_remove_device);
- 	flush_workqueue(apr->rxwq);
- 	destroy_workqueue(apr->rxwq);
-diff --git a/include/linux/soc/qcom/apr.h b/include/linux/soc/qcom/apr.h
-index c5d52e2cb275f..7f0bc3cf4d610 100644
---- a/include/linux/soc/qcom/apr.h
-+++ b/include/linux/soc/qcom/apr.h
-@@ -85,6 +85,7 @@ struct apr_device {
- 	uint16_t	domain_id;
- 	uint32_t	version;
- 	char name[APR_NAME_SIZE];
-+	const char *service_path;
- 	spinlock_t	lock;
- 	struct list_head node;
- };
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> ---
+> v7: couple of cosmetic fixes
+> 
+>  drivers/remoteproc/omap_remoteproc.c | 191 +++++++++++++++++++++++++++
+>  drivers/remoteproc/omap_remoteproc.h |  18 ++-
+>  2 files changed, 207 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+> index b44b470d570b..0d45af1fb0e3 100644
+> --- a/drivers/remoteproc/omap_remoteproc.c
+> +++ b/drivers/remoteproc/omap_remoteproc.c
+> @@ -15,13 +15,17 @@
+>  
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <linux/clk.h>
+> +#include <linux/clk/ti.h>
+>  #include <linux/err.h>
+> +#include <linux/io.h>
+>  #include <linux/of_device.h>
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/remoteproc.h>
+>  #include <linux/mailbox_client.h>
+> +#include <linux/omap-iommu.h>
+>  #include <linux/omap-mailbox.h>
+>  #include <linux/regmap.h>
+>  #include <linux/mfd/syscon.h>
+> @@ -81,6 +85,9 @@ struct omap_rproc_timer {
+>   * @timers: timer(s) info used by rproc
+>   * @rproc: rproc handle
+>   * @reset: reset handle
+> + * @pm_comp: completion primitive to sync for suspend response
+> + * @fck: functional clock for the remoteproc
+> + * @suspend_acked: state machine flag to store the suspend request ack
+>   */
+>  struct omap_rproc {
+>  	struct mbox_chan *mbox;
+> @@ -92,6 +99,9 @@ struct omap_rproc {
+>  	struct omap_rproc_timer *timers;
+>  	struct rproc *rproc;
+>  	struct reset_control *reset;
+> +	struct completion pm_comp;
+> +	struct clk *fck;
+> +	bool suspend_acked;
+>  };
+>  
+>  /**
+> @@ -371,6 +381,12 @@ static void omap_rproc_mbox_callback(struct mbox_client *client, void *data)
+>  	case RP_MBOX_ECHO_REPLY:
+>  		dev_info(dev, "received echo reply from %s\n", name);
+>  		break;
+> +	case RP_MBOX_SUSPEND_ACK:
+> +		/* Fall through */
+> +	case RP_MBOX_SUSPEND_CANCEL:
+> +		oproc->suspend_acked = msg == RP_MBOX_SUSPEND_ACK;
+> +		complete(&oproc->pm_comp);
+> +		break;
+>  	default:
+>  		if (msg >= RP_MBOX_READY && msg < RP_MBOX_END_MSG)
+>  			return;
+> @@ -562,6 +578,168 @@ static const struct rproc_ops omap_rproc_ops = {
+>  	.da_to_va	= omap_rproc_da_to_va,
+>  };
+>  
+> +#ifdef CONFIG_PM
+> +static bool _is_rproc_in_standby(struct omap_rproc *oproc)
+> +{
+> +	return ti_clk_is_in_standby(oproc->fck);
+> +}
+> +
+> +/* 1 sec is long enough time to let the remoteproc side suspend the device */
+> +#define DEF_SUSPEND_TIMEOUT 1000
+> +static int _omap_rproc_suspend(struct rproc *rproc)
+> +{
+> +	struct device *dev = rproc->dev.parent;
+> +	struct omap_rproc *oproc = rproc->priv;
+> +	unsigned long to = msecs_to_jiffies(DEF_SUSPEND_TIMEOUT);
+> +	unsigned long ta = jiffies + to;
+> +	int ret;
+> +
+> +	reinit_completion(&oproc->pm_comp);
+> +	oproc->suspend_acked = false;
+> +	ret = mbox_send_message(oproc->mbox, (void *)RP_MBOX_SUSPEND_SYSTEM);
+> +	if (ret < 0) {
+> +		dev_err(dev, "PM mbox_send_message failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = wait_for_completion_timeout(&oproc->pm_comp, to);
+> +	if (!oproc->suspend_acked)
+> +		return -EBUSY;
+> +
+> +	/*
+> +	 * The remoteproc side is returning the ACK message before saving the
+> +	 * context, because the context saving is performed within a SYS/BIOS
+> +	 * function, and it cannot have any inter-dependencies against the IPC
+> +	 * layer. Also, as the SYS/BIOS needs to preserve properly the processor
+> +	 * register set, sending this ACK or signalling the completion of the
+> +	 * context save through a shared memory variable can never be the
+> +	 * absolute last thing to be executed on the remoteproc side, and the
+> +	 * MPU cannot use the ACK message as a sync point to put the remoteproc
+> +	 * into reset. The only way to ensure that the remote processor has
+> +	 * completed saving the context is to check that the module has reached
+> +	 * STANDBY state (after saving the context, the SYS/BIOS executes the
+> +	 * appropriate target-specific WFI instruction causing the module to
+> +	 * enter STANDBY).
+> +	 */
+> +	while (!_is_rproc_in_standby(oproc)) {
+> +		if (time_after(jiffies, ta))
+> +			return -ETIME;
+> +		schedule();
+> +	}
+> +
+> +	ret = reset_control_assert(oproc->reset);
+> +	if (ret) {
+> +		dev_err(dev, "reset assert during suspend failed %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = omap_rproc_disable_timers(rproc, false);
+> +	if (ret) {
+> +		dev_err(dev, "disabling timers during suspend failed %d\n",
+> +			ret);
+> +		goto enable_device;
+> +	}
+> +
+> +	return 0;
+> +
+> +enable_device:
+> +	reset_control_deassert(oproc->reset);
+> +	return ret;
+> +}
+> +
+> +static int _omap_rproc_resume(struct rproc *rproc)
+> +{
+> +	struct device *dev = rproc->dev.parent;
+> +	struct omap_rproc *oproc = rproc->priv;
+> +	int ret;
+> +
+> +	/* boot address could be lost after suspend, so restore it */
+> +	if (oproc->boot_data) {
+> +		ret = omap_rproc_write_dsp_boot_addr(rproc);
+> +		if (ret) {
+> +			dev_err(dev, "boot address restore failed %d\n", ret);
+> +			goto out;
+> +		}
+> +	}
+> +
+> +	ret = omap_rproc_enable_timers(rproc, false);
+> +	if (ret) {
+> +		dev_err(dev, "enabling timers during resume failed %d\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	ret = reset_control_deassert(oproc->reset);
+> +	if (ret) {
+> +		dev_err(dev, "reset deassert during resume failed %d\n", ret);
+> +		goto disable_timers;
+> +	}
+> +
+> +	return 0;
+> +
+> +disable_timers:
+> +	omap_rproc_disable_timers(rproc, false);
+> +out:
+> +	return ret;
+> +}
+> +
+> +static int __maybe_unused omap_rproc_suspend(struct device *dev)
+> +{
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct rproc *rproc = platform_get_drvdata(pdev);
+> +	int ret = 0;
+> +
+> +	mutex_lock(&rproc->lock);
+> +	if (rproc->state == RPROC_OFFLINE)
+> +		goto out;
+> +
+> +	if (rproc->state == RPROC_SUSPENDED)
+> +		goto out;
+> +
+> +	if (rproc->state != RPROC_RUNNING) {
+> +		ret = -EBUSY;
+> +		goto out;
+> +	}
+> +
+> +	ret = _omap_rproc_suspend(rproc);
+> +	if (ret) {
+> +		dev_err(dev, "suspend failed %d\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	rproc->state = RPROC_SUSPENDED;
+> +out:
+> +	mutex_unlock(&rproc->lock);
+> +	return ret;
+> +}
+> +
+> +static int __maybe_unused omap_rproc_resume(struct device *dev)
+> +{
+> +	struct platform_device *pdev = to_platform_device(dev);
+> +	struct rproc *rproc = platform_get_drvdata(pdev);
+> +	int ret = 0;
+> +
+> +	mutex_lock(&rproc->lock);
+> +	if (rproc->state == RPROC_OFFLINE)
+> +		goto out;
+> +
+> +	if (rproc->state != RPROC_SUSPENDED) {
+> +		ret = -EBUSY;
+> +		goto out;
+> +	}
+> +
+> +	ret = _omap_rproc_resume(rproc);
+> +	if (ret) {
+> +		dev_err(dev, "resume failed %d\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	rproc->state = RPROC_RUNNING;
+> +out:
+> +	mutex_unlock(&rproc->lock);
+> +	return ret;
+> +}
+> +#endif /* CONFIG_PM */
+> +
+>  static const struct omap_rproc_mem_data ipu_mems[] = {
+>  	{ .name = "l2ram", .dev_addr = 0x20000000 },
+>  	{ },
+> @@ -804,6 +982,14 @@ static int omap_rproc_probe(struct platform_device *pdev)
+>  			oproc->num_timers);
+>  	}
+>  
+> +	init_completion(&oproc->pm_comp);
+> +
+> +	oproc->fck = devm_clk_get(&pdev->dev, 0);
+> +	if (IS_ERR(oproc->fck)) {
+> +		ret = PTR_ERR(oproc->fck);
+> +		goto free_rproc;
+> +	}
+> +
+>  	ret = of_reserved_mem_device_init(&pdev->dev);
+>  	if (ret) {
+>  		dev_warn(&pdev->dev, "device does not have specific CMA pool.\n");
+> @@ -837,11 +1023,16 @@ static int omap_rproc_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> +static const struct dev_pm_ops omap_rproc_pm_ops = {
+> +	SET_SYSTEM_SLEEP_PM_OPS(omap_rproc_suspend, omap_rproc_resume)
+> +};
+> +
+>  static struct platform_driver omap_rproc_driver = {
+>  	.probe = omap_rproc_probe,
+>  	.remove = omap_rproc_remove,
+>  	.driver = {
+>  		.name = "omap-rproc",
+> +		.pm = &omap_rproc_pm_ops,
+>  		.of_match_table = omap_rproc_of_match,
+>  	},
+>  };
+> diff --git a/drivers/remoteproc/omap_remoteproc.h b/drivers/remoteproc/omap_remoteproc.h
+> index 72f656c93caa..13f17d9135c0 100644
+> --- a/drivers/remoteproc/omap_remoteproc.h
+> +++ b/drivers/remoteproc/omap_remoteproc.h
+> @@ -1,7 +1,7 @@
+>  /*
+>   * Remote processor messaging
+>   *
+> - * Copyright (C) 2011 Texas Instruments, Inc.
+> + * Copyright (C) 2011-2020 Texas Instruments, Inc.
+>   * Copyright (C) 2011 Google, Inc.
+>   * All rights reserved.
+>   *
+> @@ -57,6 +57,16 @@
+>   * @RP_MBOX_ABORT_REQUEST: a "please crash" request, used for testing the
+>   * recovery mechanism (to some extent).
+>   *
+> + * @RP_MBOX_SUSPEND_AUTO: auto suspend request for the remote processor
+> + *
+> + * @RP_MBOX_SUSPEND_SYSTEM: system suspend request for the remote processor
+> + *
+> + * @RP_MBOX_SUSPEND_ACK: successful response from remote processor for a
+> + * suspend request
+> + *
+> + * @RP_MBOX_SUSPEND_CANCEL: a cancel suspend response from a remote processor
+> + * on a suspend request
+> + *
+>   * Introduce new message definitions if any here.
+>   *
+>   * @RP_MBOX_END_MSG: Indicates end of known/defined messages from remote core
+> @@ -70,7 +80,11 @@ enum omap_rp_mbox_messages {
+>  	RP_MBOX_ECHO_REQUEST	= 0xFFFFFF03,
+>  	RP_MBOX_ECHO_REPLY	= 0xFFFFFF04,
+>  	RP_MBOX_ABORT_REQUEST	= 0xFFFFFF05,
+> -	RP_MBOX_END_MSG		= 0xFFFFFF06,
+> +	RP_MBOX_SUSPEND_AUTO	= 0xFFFFFF10,
+> +	RP_MBOX_SUSPEND_SYSTEM	= 0xFFFFFF11,
+> +	RP_MBOX_SUSPEND_ACK	= 0xFFFFFF12,
+> +	RP_MBOX_SUSPEND_CANCEL	= 0xFFFFFF13,
+> +	RP_MBOX_END_MSG		= 0xFFFFFF14,
+>  };
+>  
+>  #endif /* _OMAP_RPMSG_H */
+> -- 
+> 2.17.1
+> 
+> --
+> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
