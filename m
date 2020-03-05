@@ -2,149 +2,103 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3381B17AB9B
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  5 Mar 2020 18:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACC117AD43
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  5 Mar 2020 18:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727201AbgCERPN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 5 Mar 2020 12:15:13 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:33737 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727986AbgCERPM (ORCPT
+        id S1725990AbgCER3z (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 5 Mar 2020 12:29:55 -0500
+Received: from forward501j.mail.yandex.net ([5.45.198.251]:51114 "EHLO
+        forward501j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726183AbgCER3z (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 5 Mar 2020 12:15:12 -0500
-Received: by mail-io1-f65.google.com with SMTP id r15so7348993iog.0
-        for <linux-remoteproc@vger.kernel.org>; Thu, 05 Mar 2020 09:15:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bLVc72+NvHbHflO1/mhElGn5mslbixEGyqtU22wNbzY=;
-        b=BQufJX3zg+gQzLw25jvC+wiv8qKJlzqGMQwSX/omduYNht7JYBotYPuk8BMzUHJsai
-         +bof1wzwev80VmQzxXBx80uOrRkIYRbZgwiAYDG2h9x5ap/t/00Rrq47r9AyxQLIdlOu
-         UUvRD+R8Pe1l5xhuaw7JfIQ94SuWG0lTvOP4gEj3TDbLdK+gG7s3SrVsqVHn2hvmh4rg
-         HSq4JSqtAa9ULRPAFOl0qS24pqOVRuxNB0f9Qts5KqCeYKCNq9hI06D1pCWrzkuoZoRQ
-         7MEIU4+Qr1U7zR5cAINsOrJTi/f+MFURPhxPwOOwjJNvgNtfuNy1nKSCP/Y78bheVS01
-         ZniA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bLVc72+NvHbHflO1/mhElGn5mslbixEGyqtU22wNbzY=;
-        b=GOwwkYvM9ydYnJrUuRgk8kVVatOzXNDpDNhWS3LXkzmxli1Zv7MkKIeyhypT1I6fvS
-         ZMlIrPYto1bksx1Q+FDwNP1z5YejwF4WqqhoEkWBG3lLgnODh1mU5wHcrXS6YHNGK3yo
-         pH5JbrkONasMJrMmZTO6ZrSs6ZKhkaEXE3HKiK7Z/hDekJGqtSXlBWBrt5xCmyupYQU6
-         53iIzwcTLrwknm9hpY8cnX4Xo0n2apexoSri6UE1DYeCoLMzuZ/3fK+P1qrIrbyi8gph
-         AC+6PjHupl38wFWis2kmdQhaY3pdDDwijLYM3DH4FCKiRXN4kjezA1ojwZd373Ph4fas
-         v+/A==
-X-Gm-Message-State: ANhLgQ3lTvtyvX2ySckmUaY50IUfnwZak4KGdtZy1gVfLtM0OT71dioo
-        0iPEyn7koAbVmkeWLE0OmmRv2er/jabLTvGZgSY31w==
-X-Google-Smtp-Source: ADFU+vt+cTzF+W4m9ZuLrugVE31A2dI3lE2J9BIpQq/GwEAFV9ZK8xkEnolSrCBv/dwQ0MPPETibjSvK5e83+lwRFIU=
-X-Received: by 2002:a6b:dc05:: with SMTP id s5mr86042ioc.72.1583428511510;
- Thu, 05 Mar 2020 09:15:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20200221101936.16833-1-t-kristo@ti.com> <20200221101936.16833-16-t-kristo@ti.com>
- <20200304224220.GC2799@xps15> <28ab188e-9e6e-35dd-c423-30aaa80afb90@ti.com>
-In-Reply-To: <28ab188e-9e6e-35dd-c423-30aaa80afb90@ti.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Thu, 5 Mar 2020 10:15:00 -0700
-Message-ID: <CANLsYkwKUQZ=xxG5Xox7G+7J6VYDriJAUckY3WH56pQRtwE=Rw@mail.gmail.com>
-Subject: Re: [PATCHv7 15/15] remoteproc/omap: Switch to SPDX license identifiers
-To:     Suman Anna <s-anna@ti.com>
-Cc:     Tero Kristo <t-kristo@ti.com>,
+        Thu, 5 Mar 2020 12:29:55 -0500
+Received: from mxback3g.mail.yandex.net (mxback3g.mail.yandex.net [IPv6:2a02:6b8:0:1472:2741:0:8b7:164])
+        by forward501j.mail.yandex.net (Yandex) with ESMTP id 47FD13380051;
+        Thu,  5 Mar 2020 20:29:52 +0300 (MSK)
+Received: from localhost (localhost [::1])
+        by mxback3g.mail.yandex.net (mxback/Yandex) with ESMTP id MSMUb1R6XH-To1Kctjv;
+        Thu, 05 Mar 2020 20:29:51 +0300
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1583429391;
+        bh=bzehxGVvj/LyLAppmVIllXOgGQfOzRvhMGVzevTZoaY=;
+        h=Message-Id:Cc:Subject:In-Reply-To:Date:References:To:From;
+        b=dz5+1NfKzDi9mR+LNugi6IsIemk1dqfOLKIx1P3mYRMOdyoDld2YKstHLEjOrU1NZ
+         QjfNzxNJH19/4M8voas1Xu9axKNUuC052zkURdyxi2+NO15r09XicBWn+K2xnhJTMA
+         dsVnQcdEPN/DSfjciOA2w0gv77o/aWK9kqj0xOTw=
+Authentication-Results: mxback3g.mail.yandex.net; dkim=pass header.i=@maquefel.me
+Received: by sas8-b090c2642e35.qloud-c.yandex.net with HTTP;
+        Thu, 05 Mar 2020 20:29:50 +0300
+From:   nikita.shubin@maquefel.me
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Nikita Shubin <nshubin@topcon.com>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
         linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        "Andrew F. Davis" <afd@ti.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+In-Reply-To: <CANLsYkzPROdphvmtpZ6YiajZ2dYLrojC-rGYkq4jK2yzTnAJ5A@mail.gmail.com>
+References: <20200304142628.8471-1-NShubin@topcon.com> <CANLsYkzPROdphvmtpZ6YiajZ2dYLrojC-rGYkq4jK2yzTnAJ5A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] remoteproc: imx_rproc: dummy kick method
+MIME-Version: 1.0
+X-Mailer: Yamail [ http://yandex.ru ] 5.0
+Date:   Thu, 05 Mar 2020 20:29:50 +0300
+Message-Id: <264561583429111@sas1-438a02fc058e.qloud-c.yandex.net>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed, 4 Mar 2020 at 17:24, Suman Anna <s-anna@ti.com> wrote:
->
-> Hi Mathieu,
->
-> On 3/4/20 4:42 PM, Mathieu Poirier wrote:
-> > On Fri, Feb 21, 2020 at 12:19:36PM +0200, Tero Kristo wrote:
-> >> From: Suman Anna <s-anna@ti.com>
-> >>
-> >> Use the appropriate SPDX license identifiers in various OMAP remoteproc
-> >> source files and drop the previous boilerplate license text.
-> >>
-> >> Signed-off-by: Suman Anna <s-anna@ti.com>
-> >> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> >> ---
-> >>  drivers/remoteproc/omap_remoteproc.h | 27 +--------------------------
-> >>  1 file changed, 1 insertion(+), 26 deletions(-)
-> >>
-> >> diff --git a/drivers/remoteproc/omap_remoteproc.h b/drivers/remoteproc/omap_remoteproc.h
-> >> index 13f17d9135c0..828e13256c02 100644
-> >> --- a/drivers/remoteproc/omap_remoteproc.h
-> >> +++ b/drivers/remoteproc/omap_remoteproc.h
-> >> @@ -1,35 +1,10 @@
-> >> +/* SPDX-License-Identifier: BSD-3-Clause */
-> >
-> > This is odd considering omap_remoteproc.c is GPL-2.0-only
->
-> We were using these enums on the firmware-side as well. The first
-> version of this in v1 [1] is actually using Dual BSD and GPL-2.0-only,
-> but even that one had posed some questions, so just converting to use
-> the SPDX for the original license text.
 
-Very well.
 
-Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+05.03.2020, 19:17, "Mathieu Poirier" <mathieu.poirier@linaro.org>:
+> On Wed, 4 Mar 2020 at 07:25, Nikita Shubin <NShubin@topcon.com> wrote:
+>>  add kick method that does nothing, to avoid errors in rproc_virtio_notify.
+>>
+>>  Signed-off-by: Nikita Shubin <NShubin@topcon.com>
+>>  ---
+>>   drivers/remoteproc/imx_rproc.c | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>>  diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+>>  index 3e72b6f38d4b..796b6b86550a 100644
+>>  --- a/drivers/remoteproc/imx_rproc.c
+>>  +++ b/drivers/remoteproc/imx_rproc.c
+>>  @@ -240,9 +240,15 @@ static void *imx_rproc_da_to_va(struct rproc *rproc, u64 da, int len)
+>>          return va;
+>>   }
+>>
+>>  +static void imx_rproc_kick(struct rproc *rproc, int vqid)
+>>  +{
+>>  +
+>>  +}
+>>  +
+>
+> If rproc::kick() is empty, how does the MCU know there is packets to
+> fetch in the virtio queues?
+
+Well, of course it doesn't i understand this perfectly - just following documentation citing:
+
+| Every remoteproc implementation should at least provide the ->start and ->stop
+| handlers. If rpmsg/virtio functionality is also desired, then the ->kick handler
+| should be provided as well.
+
+But i as i mentioned in "remoteproc: Fix NULL pointer dereference in rproc_virtio_notify" kick method will be called if 
+"resource_table exists in firmware and has "Virtio device entry" defined" anyway, the imx_rproc is not in control of what 
+exactly it is booting, so such situation can occur.
 
 >
-> regards
-> Suman
->
-> [1] https://patchwork.kernel.org/patch/11215415/
-> >
-> > Thanks,
-> > Mathieu
-> >
-> >>  /*
-> >>   * Remote processor messaging
-> >>   *
-> >>   * Copyright (C) 2011-2020 Texas Instruments, Inc.
-> >>   * Copyright (C) 2011 Google, Inc.
-> >>   * All rights reserved.
-> >> - *
-> >> - * Redistribution and use in source and binary forms, with or without
-> >> - * modification, are permitted provided that the following conditions
-> >> - * are met:
-> >> - *
-> >> - * * Redistributions of source code must retain the above copyright
-> >> - *   notice, this list of conditions and the following disclaimer.
-> >> - * * Redistributions in binary form must reproduce the above copyright
-> >> - *   notice, this list of conditions and the following disclaimer in
-> >> - *   the documentation and/or other materials provided with the
-> >> - *   distribution.
-> >> - * * Neither the name Texas Instruments nor the names of its
-> >> - *   contributors may be used to endorse or promote products derived
-> >> - *   from this software without specific prior written permission.
-> >> - *
-> >> - * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-> >> - * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-> >> - * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-> >> - * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-> >> - * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-> >> - * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-> >> - * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-> >> - * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-> >> - * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-> >> - * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-> >> - * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-> >>   */
-> >>
-> >>  #ifndef _OMAP_RPMSG_H
-> >> --
-> >> 2.17.1
-> >>
-> >> --
-> >> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
->
+>>   static const struct rproc_ops imx_rproc_ops = {
+>>          .start = imx_rproc_start,
+>>          .stop = imx_rproc_stop,
+>>  + .kick = imx_rproc_kick,
+>>          .da_to_va = imx_rproc_da_to_va,
+>>   };
+>>
+>>  --
+>>  2.24.1
