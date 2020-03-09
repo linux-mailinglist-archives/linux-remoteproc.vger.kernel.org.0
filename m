@@ -2,50 +2,50 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAD617E830
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  9 Mar 2020 20:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7270117E94A
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  9 Mar 2020 20:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725956AbgCITVU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 9 Mar 2020 15:21:20 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38464 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726199AbgCITVU (ORCPT
+        id S1725992AbgCITwy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 9 Mar 2020 15:52:54 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:46429 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726551AbgCITwx (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 9 Mar 2020 15:21:20 -0400
-Received: by mail-pf1-f194.google.com with SMTP id z5so393115pfn.5
-        for <linux-remoteproc@vger.kernel.org>; Mon, 09 Mar 2020 12:21:19 -0700 (PDT)
+        Mon, 9 Mar 2020 15:52:53 -0400
+Received: by mail-pf1-f196.google.com with SMTP id c19so3010816pfo.13
+        for <linux-remoteproc@vger.kernel.org>; Mon, 09 Mar 2020 12:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=/Ve3mrSvm1dOHAsegEEjiuaMrFQOijqF+lr2yreUyLE=;
-        b=PKCtKC7uyC8i/DN0MO+jBy7A9dYjm0BvRQHCcABOBfgDupKb+axXLHJ1pIr5+0N6v+
-         EOZwJYSIfs2miXWm90Qjb6yE5EBWGSBAsw/IRyuFapS9v6j5tiHTfsj8sy8fndA4ooO9
-         UKs1UUhQk1xKwDJGKHHRiGZ4SR4ShkUpFn6QuntqJF3mhLrBK3keXR9SOUl0Epx2yryK
-         dqYB3wkDKVT3frMmHokgUdQyCvgwBogJgN9Hy0rbNBvNYsfsuDcnCMas98lYqxyv775v
-         T7xrFLTYcuTQgavNN3+2Qvly5vFOFiA8Upap+DllXIKkLvxGERM74sfSGkAAiWy7yk2p
-         JNtQ==
+        bh=Z6CzFVUTmbba/AoB85RS3nr6uH+MlqeQEe/r4/Zh99Y=;
+        b=wDLkXcCbKfKQ/LaQ5JGk5OZxyZO0H8nu//+GoeXir5ZiBfMnciqCXYux/Vo34z4LmU
+         Fy8MlfSucuT3hu0Omzu6/gRcWm5AvUkPq6LbBftR/hYYC+jXHJEF2WxlSZ7RWplDkcXi
+         GddHkakFvne0aQuHyp2kJ1WIYU9xNMMG7IMNTUmSVOoM9wnf2sTxT+0gRYfKWHEuLI+s
+         y+7jWnzY6CwjezEo6zFvqwWO60jVqzgyT+caE60jXlyfuYxeRe0HCLlWPeceIIAXaAXq
+         M5XHHt3Km4pVGbRBbYKUsc80Vo69UevSO0VutCg8Dy4Kn+O4y26Xjg/GeGlYFvGm/5Ar
+         3Lsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/Ve3mrSvm1dOHAsegEEjiuaMrFQOijqF+lr2yreUyLE=;
-        b=IOhAWmBcBsXrVa8w2tAZ4EqjYf88XAOqznrg28+9wtvgEdWcjyPPMG35F0mstPDblW
-         Jc4m5Q6lX0IEA3stKd2UwKBpCSJhGBp3IEHF+LSQr17Mgivz8prFW80jXmJ0yJ+zVaRD
-         kedx1+EKgolAj+oyxpRQ41/yTkg5S/Ed1X8nMqj+DMtXysoUyz7adrJNpbEe7nH1Kd3j
-         nyu7lo/+73sShInLp/AuINVJxr/9i0H9XBD6q8cpX+b2iAtFnPz9NCYj7h+VbHpjyjpd
-         lIBnhUQlDZVa6fQuL447hKgH+kaU6x7/VhbvwMKiQ9/9OC21fvXSOoRGO87gfHoxIWFZ
-         GA6g==
-X-Gm-Message-State: ANhLgQ3a7gafZJU6XD4CwVjXq1Viw+Iph/Qy/gYdqqY6MZ/zBuQlYCK0
-        MAtE4zPEwTpQBfKArCjyCmWgGw==
-X-Google-Smtp-Source: ADFU+vv4DHskMayr9V263F+RoX6mwXATWLbep1JlrTDrd3s5h6v5M8VMmhrUgv94rrg0OOERe/5wyg==
-X-Received: by 2002:a62:25c3:: with SMTP id l186mr18053778pfl.52.1583781678971;
-        Mon, 09 Mar 2020 12:21:18 -0700 (PDT)
+        bh=Z6CzFVUTmbba/AoB85RS3nr6uH+MlqeQEe/r4/Zh99Y=;
+        b=hr/AhrvJYJsknBWdUkZSLz7Bg+McXAuQM/jH2MsOv9b2NammaVa9EI+7BoU1p/WxPn
+         ytRx9uQxr3sZIxn4+G+RYr/FQNRthyUa49qZKd30hu65allmqi5H1MLba6iz9AWFa30a
+         RWUh9s5tGPeHiNMJkNNp9z8oXrB0PhQAKE/aFcMpPTfenopcYszCvTb5zDumqLTr0YZa
+         8buzVLSwv/yYwhUgz3EoBO0OUfgN00bAsFLNHus+DPFHNSmBWEam2yMlCTxQwX+gkGak
+         aV5Lg2rBO8NlbO7ZN+ff3ITPT1i6v2Dx+kj2l1DwmNwmKj/Oz+WvdEE7/JKpUBb7NVro
+         dxHQ==
+X-Gm-Message-State: ANhLgQ0SPN9knSyu+ixtf62bTDjqW+Te3+b6bVLM54QaGvEHHZPOo0j1
+        U3xPkDlI2G5Jt0RCdRm+lODt+g==
+X-Google-Smtp-Source: ADFU+vtu9bX5XLEjumqvL1lZkx/1YphlPxprCuGo9T4TyenxyJr/YDNRk6Asdhf/m59YPzBjgDvlcQ==
+X-Received: by 2002:aa7:953b:: with SMTP id c27mr5965025pfp.201.1583783570743;
+        Mon, 09 Mar 2020 12:52:50 -0700 (PDT)
 Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id u14sm27167815pgg.67.2020.03.09.12.21.17
+        by smtp.gmail.com with ESMTPSA id c17sm24619108pfo.71.2020.03.09.12.52.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 12:21:18 -0700 (PDT)
-Date:   Mon, 9 Mar 2020 13:21:15 -0600
+        Mon, 09 Mar 2020 12:52:50 -0700 (PDT)
+Date:   Mon, 9 Mar 2020 13:52:47 -0600
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     Clement Leger <cleger@kalray.eu>
 Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
@@ -64,138 +64,100 @@ Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         linux-arm-msm@vger.kernel.org,
         Arnaud Pouliquen <arnaud.pouliquen@st.com>,
         Loic PALLARDY <loic.pallardy@st.com>, s-anna <s-anna@ti.com>
-Subject: Re: [PATCH v5 2/8] remoteproc: Use size_t instead of int for
- rproc_mem_entry len
-Message-ID: <20200309192115.GB1399@xps15>
+Subject: Re: [PATCH v5 3/8] remoteproc: Use u64 type for boot_addr
+Message-ID: <20200309195247.GC1399@xps15>
 References: <20200210162209.23149-1-cleger@kalray.eu>
  <20200302093902.27849-1-cleger@kalray.eu>
- <20200302093902.27849-3-cleger@kalray.eu>
+ <20200302093902.27849-4-cleger@kalray.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200302093902.27849-3-cleger@kalray.eu>
+In-Reply-To: <20200302093902.27849-4-cleger@kalray.eu>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, Mar 02, 2020 at 10:38:56AM +0100, Clement Leger wrote:
-> Now that rproc_da_to_va uses a size_t for length, use a size_t for len field
-> of rproc_mem_entry. Function used to create such structures now takes
-> a size_t instead of int to allow full size range to be handled.
+On Mon, Mar 02, 2020 at 10:38:57AM +0100, Clement Leger wrote:
+> elf64 entry is defined as a u64. Since boot_addr is used to store the
+> elf entry point, change boot_addr type to u64 to support both elf32
+> and elf64. In the same time, fix users that were using this variable.
 > 
 > Signed-off-by: Clement Leger <cleger@kalray.eu>
-
-With the checkpatch warning fixed:
-
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-
 > ---
->  drivers/remoteproc/remoteproc_core.c    | 14 ++++++++------
->  drivers/remoteproc/remoteproc_debugfs.c |  2 +-
->  include/linux/remoteproc.h              |  6 +++---
->  3 files changed, 12 insertions(+), 10 deletions(-)
+>  drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
+>  drivers/remoteproc/remoteproc_internal.h   | 2 +-
+>  drivers/remoteproc/st_remoteproc.c         | 2 +-
+>  include/linux/remoteproc.h                 | 4 ++--
+>  4 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 5ab094fc1b55..4bfaf4a3c4a3 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -318,8 +318,9 @@ int rproc_alloc_vring(struct rproc_vdev *rvdev, int i)
->  	struct device *dev = &rproc->dev;
->  	struct rproc_vring *rvring = &rvdev->vring[i];
->  	struct fw_rsc_vdev *rsc;
-> -	int ret, size, notifyid;
-> +	int ret, notifyid;
->  	struct rproc_mem_entry *mem;
-> +	size_t size;
->  
->  	/* actual size of vring (in bytes) */
->  	size = PAGE_ALIGN(vring_size(rvring->len, rvring->align));
-> @@ -746,11 +747,12 @@ static int rproc_alloc_carveout(struct rproc *rproc,
->  	va = dma_alloc_coherent(dev->parent, mem->len, &dma, GFP_KERNEL);
->  	if (!va) {
->  		dev_err(dev->parent,
-> -			"failed to allocate dma memory: len 0x%x\n", mem->len);
-> +			"failed to allocate dma memory: len 0x%zx\n",
-> +			mem->len);
->  		return -ENOMEM;
->  	}
->  
-> -	dev_dbg(dev, "carveout va %pK, dma %pad, len 0x%x\n",
-> +	dev_dbg(dev, "carveout va %pK, dma %pad, len 0x%zx\n",
->  		va, &dma, mem->len);
->  
->  	if (mem->da != FW_RSC_ADDR_ANY && !rproc->domain) {
-> @@ -957,7 +959,7 @@ EXPORT_SYMBOL(rproc_add_carveout);
+> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
+> index 606aae166eba..c2a9783cfb9a 100644
+> --- a/drivers/remoteproc/remoteproc_elf_loader.c
+> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
+> @@ -102,7 +102,7 @@ EXPORT_SYMBOL(rproc_elf_sanity_check);
+>   * Note that the boot address is not a configurable property of all remote
+>   * processors. Some will always boot at a specific hard-coded address.
 >   */
->  struct rproc_mem_entry *
->  rproc_mem_entry_init(struct device *dev,
-> -		     void *va, dma_addr_t dma, int len, u32 da,
-> +		     void *va, dma_addr_t dma, size_t len, u32 da,
->  		     int (*alloc)(struct rproc *, struct rproc_mem_entry *),
->  		     int (*release)(struct rproc *, struct rproc_mem_entry *),
->  		     const char *name, ...)
-> @@ -999,7 +1001,7 @@ EXPORT_SYMBOL(rproc_mem_entry_init);
->   * provided by client.
->   */
->  struct rproc_mem_entry *
-> -rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, int len,
-> +rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, size_t len,
->  			     u32 da, const char *name, ...)
+> -u32 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw)
+> +u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw)
 >  {
->  	struct rproc_mem_entry *mem;
-> @@ -1270,7 +1272,7 @@ static void rproc_resource_cleanup(struct rproc *rproc)
->  		unmapped = iommu_unmap(rproc->domain, entry->da, entry->len);
->  		if (unmapped != entry->len) {
->  			/* nothing much to do besides complaining */
-> -			dev_err(dev, "failed to unmap %u/%zu\n", entry->len,
-> +			dev_err(dev, "failed to unmap %zx/%zu\n", entry->len,
->  				unmapped);
->  		}
+>  	struct elf32_hdr *ehdr  = (struct elf32_hdr *)fw->data;
 >  
-> diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
-> index dd93cf04e17f..82dc34b819df 100644
-> --- a/drivers/remoteproc/remoteproc_debugfs.c
-> +++ b/drivers/remoteproc/remoteproc_debugfs.c
-> @@ -293,7 +293,7 @@ static int rproc_carveouts_show(struct seq_file *seq, void *p)
->  		seq_printf(seq, "\tVirtual address: %pK\n", carveout->va);
->  		seq_printf(seq, "\tDMA address: %pad\n", &carveout->dma);
->  		seq_printf(seq, "\tDevice address: 0x%x\n", carveout->da);
-> -		seq_printf(seq, "\tLength: 0x%x Bytes\n\n", carveout->len);
-> +		seq_printf(seq, "\tLength: 0x%zx Bytes\n\n", carveout->len);
+> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+> index 58580210575c..0deae5f237b8 100644
+> --- a/drivers/remoteproc/remoteproc_internal.h
+> +++ b/drivers/remoteproc/remoteproc_internal.h
+> @@ -55,7 +55,7 @@ phys_addr_t rproc_va_to_pa(void *cpu_addr);
+>  int rproc_trigger_recovery(struct rproc *rproc);
+>  
+>  int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw);
+> -u32 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw);
+> +u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw);
+>  int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw);
+>  int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *fw);
+>  struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
+
+The return type of function rproc_get_boot_addr() should also be changed from
+u32 to u64.  Or perhaps this is intentional to make sure rproc->bootaddr never
+occupies more than 32bit?
+
+> diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_remoteproc.c
+> index ee13d23b43a9..a3268d95a50e 100644
+> --- a/drivers/remoteproc/st_remoteproc.c
+> +++ b/drivers/remoteproc/st_remoteproc.c
+> @@ -190,7 +190,7 @@ static int st_rproc_start(struct rproc *rproc)
+>  		}
 >  	}
+>  
+> -	dev_info(&rproc->dev, "Started from 0x%x\n", rproc->bootaddr);
+> +	dev_info(&rproc->dev, "Started from 0x%llx\n", rproc->bootaddr);
 >  
 >  	return 0;
+>  
 > diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> index 89215798eaea..bee559330204 100644
+> index bee559330204..1683d6c386a6 100644
 > --- a/include/linux/remoteproc.h
 > +++ b/include/linux/remoteproc.h
-> @@ -329,7 +329,7 @@ struct rproc;
->  struct rproc_mem_entry {
->  	void *va;
->  	dma_addr_t dma;
-> -	int len;
-> +	size_t len;
->  	u32 da;
->  	void *priv;
->  	char name[32];
-> @@ -599,13 +599,13 @@ void rproc_add_carveout(struct rproc *rproc, struct rproc_mem_entry *mem);
+> @@ -382,7 +382,7 @@ struct rproc_ops {
+>  				struct rproc *rproc, const struct firmware *fw);
+>  	int (*load)(struct rproc *rproc, const struct firmware *fw);
+>  	int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
+> -	u32 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
+> +	u64 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
+>  };
 >  
->  struct rproc_mem_entry *
->  rproc_mem_entry_init(struct device *dev,
-> -		     void *va, dma_addr_t dma, int len, u32 da,
-> +		     void *va, dma_addr_t dma, size_t len, u32 da,
->  		     int (*alloc)(struct rproc *, struct rproc_mem_entry *),
->  		     int (*release)(struct rproc *, struct rproc_mem_entry *),
->  		     const char *name, ...);
->  
->  struct rproc_mem_entry *
-> -rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, int len,
-> +rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, size_t len,
->  			     u32 da, const char *name, ...);
->  
->  int rproc_boot(struct rproc *rproc);
+>  /**
+> @@ -498,7 +498,7 @@ struct rproc {
+>  	int num_traces;
+>  	struct list_head carveouts;
+>  	struct list_head mappings;
+> -	u32 bootaddr;
+> +	u64 bootaddr;
+>  	struct list_head rvdevs;
+>  	struct list_head subdevs;
+>  	struct idr notifyids;
 > -- 
 > 2.15.0.276.g89ea799
 > 
