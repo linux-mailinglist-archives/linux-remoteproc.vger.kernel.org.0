@@ -2,181 +2,200 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE6E17E702
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  9 Mar 2020 19:24:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAD617E830
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  9 Mar 2020 20:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727518AbgCISXj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 9 Mar 2020 14:23:39 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:57235 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727473AbgCISXi (ORCPT
+        id S1725956AbgCITVU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 9 Mar 2020 15:21:20 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38464 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726199AbgCITVU (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 9 Mar 2020 14:23:38 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1583778217; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=oXtyD64Mkp4ykU5HU0PK0xoug9dx6XnlZHC0tqZFXR8=; b=f+lh+3B0sHgI/cWs8S6Za2iODjNoJwnx+OKYj7peGgC/lZnKeQ+uXFopsz6QkKa36VZnwANj
- ziwuU17xFkyBsA2f+Hu83PQ3sPYegYZC5hvUgSxMO272Gji324rXx+XNUtPky/yWWQ7PGEeF
- VjkPHyl+zIDGr9CxFUtFEDMgrD4=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e6689a6.7f2cf01a2180-smtp-out-n02;
- Mon, 09 Mar 2020 18:23:34 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B6A80C433D2; Mon,  9 Mar 2020 18:23:33 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4282BC43636;
-        Mon,  9 Mar 2020 18:23:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4282BC43636
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     bjorn.andersson@linaro.org, robh+dt@kernel.org, joro@8bytes.org
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-remoteproc@vger.kernel.org, ohad@wizery.com,
-        agross@kernel.org, Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH 3/3] remoteproc: qcom_q6v5_mss: Request direct mapping for firmware subdevice
-Date:   Mon,  9 Mar 2020 23:52:55 +0530
-Message-Id: <20200309182255.20142-4-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200309182255.20142-1-sibis@codeaurora.org>
-References: <20200309182255.20142-1-sibis@codeaurora.org>
+        Mon, 9 Mar 2020 15:21:20 -0400
+Received: by mail-pf1-f194.google.com with SMTP id z5so393115pfn.5
+        for <linux-remoteproc@vger.kernel.org>; Mon, 09 Mar 2020 12:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=/Ve3mrSvm1dOHAsegEEjiuaMrFQOijqF+lr2yreUyLE=;
+        b=PKCtKC7uyC8i/DN0MO+jBy7A9dYjm0BvRQHCcABOBfgDupKb+axXLHJ1pIr5+0N6v+
+         EOZwJYSIfs2miXWm90Qjb6yE5EBWGSBAsw/IRyuFapS9v6j5tiHTfsj8sy8fndA4ooO9
+         UKs1UUhQk1xKwDJGKHHRiGZ4SR4ShkUpFn6QuntqJF3mhLrBK3keXR9SOUl0Epx2yryK
+         dqYB3wkDKVT3frMmHokgUdQyCvgwBogJgN9Hy0rbNBvNYsfsuDcnCMas98lYqxyv775v
+         T7xrFLTYcuTQgavNN3+2Qvly5vFOFiA8Upap+DllXIKkLvxGERM74sfSGkAAiWy7yk2p
+         JNtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/Ve3mrSvm1dOHAsegEEjiuaMrFQOijqF+lr2yreUyLE=;
+        b=IOhAWmBcBsXrVa8w2tAZ4EqjYf88XAOqznrg28+9wtvgEdWcjyPPMG35F0mstPDblW
+         Jc4m5Q6lX0IEA3stKd2UwKBpCSJhGBp3IEHF+LSQr17Mgivz8prFW80jXmJ0yJ+zVaRD
+         kedx1+EKgolAj+oyxpRQ41/yTkg5S/Ed1X8nMqj+DMtXysoUyz7adrJNpbEe7nH1Kd3j
+         nyu7lo/+73sShInLp/AuINVJxr/9i0H9XBD6q8cpX+b2iAtFnPz9NCYj7h+VbHpjyjpd
+         lIBnhUQlDZVa6fQuL447hKgH+kaU6x7/VhbvwMKiQ9/9OC21fvXSOoRGO87gfHoxIWFZ
+         GA6g==
+X-Gm-Message-State: ANhLgQ3a7gafZJU6XD4CwVjXq1Viw+Iph/Qy/gYdqqY6MZ/zBuQlYCK0
+        MAtE4zPEwTpQBfKArCjyCmWgGw==
+X-Google-Smtp-Source: ADFU+vv4DHskMayr9V263F+RoX6mwXATWLbep1JlrTDrd3s5h6v5M8VMmhrUgv94rrg0OOERe/5wyg==
+X-Received: by 2002:a62:25c3:: with SMTP id l186mr18053778pfl.52.1583781678971;
+        Mon, 09 Mar 2020 12:21:18 -0700 (PDT)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id u14sm27167815pgg.67.2020.03.09.12.21.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Mar 2020 12:21:18 -0700 (PDT)
+Date:   Mon, 9 Mar 2020 13:21:15 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Clement Leger <cleger@kalray.eu>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-remoteproc@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Loic PALLARDY <loic.pallardy@st.com>, s-anna <s-anna@ti.com>
+Subject: Re: [PATCH v5 2/8] remoteproc: Use size_t instead of int for
+ rproc_mem_entry len
+Message-ID: <20200309192115.GB1399@xps15>
+References: <20200210162209.23149-1-cleger@kalray.eu>
+ <20200302093902.27849-1-cleger@kalray.eu>
+ <20200302093902.27849-3-cleger@kalray.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200302093902.27849-3-cleger@kalray.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The Q6 modem sub-system has direct access to DDR through memnoc and
-an indirect access routed through a SMMU which MSS CE (crypto engine
-sub-component of MSS) uses during out of reset sequence. Request direct
-mapping for the modem-firmware subdevice since smmu is not expected
-to provide access control/translation for these SIDs (sandboxing of the
-modem is achieved through XPUs engaged using SMC calls).
+On Mon, Mar 02, 2020 at 10:38:56AM +0100, Clement Leger wrote:
+> Now that rproc_da_to_va uses a size_t for length, use a size_t for len field
+> of rproc_mem_entry. Function used to create such structures now takes
+> a size_t instead of int to allow full size range to be handled.
+> 
+> Signed-off-by: Clement Leger <cleger@kalray.eu>
 
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
----
- drivers/remoteproc/qcom_q6v5_mss.c | 68 ++++++++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+With the checkpatch warning fixed:
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index d7667418a62f4..ceb7f71dd17df 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -10,6 +10,7 @@
- #include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
-+#include <linux/iommu.h>
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
- #include <linux/mfd/syscon.h>
-@@ -202,6 +203,7 @@ struct q6v5 {
- 	struct qcom_rproc_subdev smd_subdev;
- 	struct qcom_rproc_ssr ssr_subdev;
- 	struct qcom_sysmon *sysmon;
-+	struct device *fw_subdev;
- 	bool need_mem_protection;
- 	bool has_alt_reset;
- 	bool has_halt_nav;
-@@ -378,6 +380,67 @@ static void q6v5_pds_disable(struct q6v5 *qproc, struct device **pds,
- 	}
- }
- 
-+static int qcom_init_firmware(struct q6v5 *qproc)
-+{
-+	struct platform_device_info info;
-+	struct platform_device *pdev;
-+	struct device_node *np;
-+	int ret;
-+
-+	np = of_get_child_by_name(qproc->dev->of_node, "modem-firmware");
-+	if (!np)
-+		return 0;
-+
-+	memset(&info, 0, sizeof(info));
-+	info.fwnode = &np->fwnode;
-+	info.parent = qproc->dev;
-+	info.name = np->name;
-+
-+	pdev = platform_device_register_full(&info);
-+	if (IS_ERR(pdev)) {
-+		of_node_put(np);
-+		return PTR_ERR(pdev);
-+	}
-+
-+	pdev->dev.of_node = np;
-+	ret = of_dma_configure(&pdev->dev, np, true);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to configure DMA\n");
-+		goto err_unregister;
-+	}
-+
-+	ret = iommu_request_dm_for_dev(&pdev->dev);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to request direct mapping\n");
-+		goto err_unregister;
-+	}
-+
-+	qproc->fw_subdev = &pdev->dev;
-+	of_node_put(np);
-+	return 0;
-+
-+err_unregister:
-+	platform_device_unregister(pdev);
-+	of_node_put(np);
-+	return ret;
-+}
-+
-+static void qcom_remove_firmware(struct q6v5 *qproc)
-+{
-+	struct iommu_domain *iommu;
-+
-+	if (!qproc->fw_subdev)
-+		return;
-+
-+	iommu = iommu_get_domain_for_dev(qproc->fw_subdev);
-+	if (!iommu)
-+		return;
-+
-+	iommu_detach_device(iommu, qproc->fw_subdev);
-+	iommu_domain_free(iommu);
-+	platform_device_unregister(to_platform_device(qproc->fw_subdev));
-+}
-+
- static int q6v5_xfer_mem_ownership(struct q6v5 *qproc, int *current_perm,
- 				   bool local, bool remote, phys_addr_t addr,
- 				   size_t size)
-@@ -1722,6 +1785,10 @@ static int q6v5_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto detach_proxy_pds;
- 
-+	ret = qcom_init_firmware(qproc);
-+	if (ret)
-+		goto detach_proxy_pds;
-+
- 	qproc->mpss_perm = BIT(QCOM_SCM_VMID_HLOS);
- 	qproc->mba_perm = BIT(QCOM_SCM_VMID_HLOS);
- 	qcom_add_glink_subdev(rproc, &qproc->glink_subdev);
-@@ -1759,6 +1826,7 @@ static int q6v5_remove(struct platform_device *pdev)
- 	qcom_remove_glink_subdev(qproc->rproc, &qproc->glink_subdev);
- 	qcom_remove_smd_subdev(qproc->rproc, &qproc->smd_subdev);
- 	qcom_remove_ssr_subdev(qproc->rproc, &qproc->ssr_subdev);
-+	qcom_remove_firmware(qproc);
- 
- 	q6v5_pds_detach(qproc, qproc->active_pds, qproc->active_pd_count);
- 	q6v5_pds_detach(qproc, qproc->proxy_pds, qproc->proxy_pd_count);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+
+> ---
+>  drivers/remoteproc/remoteproc_core.c    | 14 ++++++++------
+>  drivers/remoteproc/remoteproc_debugfs.c |  2 +-
+>  include/linux/remoteproc.h              |  6 +++---
+>  3 files changed, 12 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 5ab094fc1b55..4bfaf4a3c4a3 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -318,8 +318,9 @@ int rproc_alloc_vring(struct rproc_vdev *rvdev, int i)
+>  	struct device *dev = &rproc->dev;
+>  	struct rproc_vring *rvring = &rvdev->vring[i];
+>  	struct fw_rsc_vdev *rsc;
+> -	int ret, size, notifyid;
+> +	int ret, notifyid;
+>  	struct rproc_mem_entry *mem;
+> +	size_t size;
+>  
+>  	/* actual size of vring (in bytes) */
+>  	size = PAGE_ALIGN(vring_size(rvring->len, rvring->align));
+> @@ -746,11 +747,12 @@ static int rproc_alloc_carveout(struct rproc *rproc,
+>  	va = dma_alloc_coherent(dev->parent, mem->len, &dma, GFP_KERNEL);
+>  	if (!va) {
+>  		dev_err(dev->parent,
+> -			"failed to allocate dma memory: len 0x%x\n", mem->len);
+> +			"failed to allocate dma memory: len 0x%zx\n",
+> +			mem->len);
+>  		return -ENOMEM;
+>  	}
+>  
+> -	dev_dbg(dev, "carveout va %pK, dma %pad, len 0x%x\n",
+> +	dev_dbg(dev, "carveout va %pK, dma %pad, len 0x%zx\n",
+>  		va, &dma, mem->len);
+>  
+>  	if (mem->da != FW_RSC_ADDR_ANY && !rproc->domain) {
+> @@ -957,7 +959,7 @@ EXPORT_SYMBOL(rproc_add_carveout);
+>   */
+>  struct rproc_mem_entry *
+>  rproc_mem_entry_init(struct device *dev,
+> -		     void *va, dma_addr_t dma, int len, u32 da,
+> +		     void *va, dma_addr_t dma, size_t len, u32 da,
+>  		     int (*alloc)(struct rproc *, struct rproc_mem_entry *),
+>  		     int (*release)(struct rproc *, struct rproc_mem_entry *),
+>  		     const char *name, ...)
+> @@ -999,7 +1001,7 @@ EXPORT_SYMBOL(rproc_mem_entry_init);
+>   * provided by client.
+>   */
+>  struct rproc_mem_entry *
+> -rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, int len,
+> +rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, size_t len,
+>  			     u32 da, const char *name, ...)
+>  {
+>  	struct rproc_mem_entry *mem;
+> @@ -1270,7 +1272,7 @@ static void rproc_resource_cleanup(struct rproc *rproc)
+>  		unmapped = iommu_unmap(rproc->domain, entry->da, entry->len);
+>  		if (unmapped != entry->len) {
+>  			/* nothing much to do besides complaining */
+> -			dev_err(dev, "failed to unmap %u/%zu\n", entry->len,
+> +			dev_err(dev, "failed to unmap %zx/%zu\n", entry->len,
+>  				unmapped);
+>  		}
+>  
+> diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
+> index dd93cf04e17f..82dc34b819df 100644
+> --- a/drivers/remoteproc/remoteproc_debugfs.c
+> +++ b/drivers/remoteproc/remoteproc_debugfs.c
+> @@ -293,7 +293,7 @@ static int rproc_carveouts_show(struct seq_file *seq, void *p)
+>  		seq_printf(seq, "\tVirtual address: %pK\n", carveout->va);
+>  		seq_printf(seq, "\tDMA address: %pad\n", &carveout->dma);
+>  		seq_printf(seq, "\tDevice address: 0x%x\n", carveout->da);
+> -		seq_printf(seq, "\tLength: 0x%x Bytes\n\n", carveout->len);
+> +		seq_printf(seq, "\tLength: 0x%zx Bytes\n\n", carveout->len);
+>  	}
+>  
+>  	return 0;
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index 89215798eaea..bee559330204 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -329,7 +329,7 @@ struct rproc;
+>  struct rproc_mem_entry {
+>  	void *va;
+>  	dma_addr_t dma;
+> -	int len;
+> +	size_t len;
+>  	u32 da;
+>  	void *priv;
+>  	char name[32];
+> @@ -599,13 +599,13 @@ void rproc_add_carveout(struct rproc *rproc, struct rproc_mem_entry *mem);
+>  
+>  struct rproc_mem_entry *
+>  rproc_mem_entry_init(struct device *dev,
+> -		     void *va, dma_addr_t dma, int len, u32 da,
+> +		     void *va, dma_addr_t dma, size_t len, u32 da,
+>  		     int (*alloc)(struct rproc *, struct rproc_mem_entry *),
+>  		     int (*release)(struct rproc *, struct rproc_mem_entry *),
+>  		     const char *name, ...);
+>  
+>  struct rproc_mem_entry *
+> -rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, int len,
+> +rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, size_t len,
+>  			     u32 da, const char *name, ...);
+>  
+>  int rproc_boot(struct rproc *rproc);
+> -- 
+> 2.15.0.276.g89ea799
+> 
