@@ -2,185 +2,324 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE287180824
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2020 20:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0A1180920
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2020 21:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727451AbgCJTc6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 10 Mar 2020 15:32:58 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:35771 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726604AbgCJTc6 (ORCPT
+        id S1726307AbgCJU3F (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 10 Mar 2020 16:29:05 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:40190 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726283AbgCJU3F (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 10 Mar 2020 15:32:58 -0400
-Received: by mail-pf1-f194.google.com with SMTP id u68so6254049pfb.2
-        for <linux-remoteproc@vger.kernel.org>; Tue, 10 Mar 2020 12:32:57 -0700 (PDT)
+        Tue, 10 Mar 2020 16:29:05 -0400
+Received: by mail-pj1-f65.google.com with SMTP id gv19so919356pjb.5
+        for <linux-remoteproc@vger.kernel.org>; Tue, 10 Mar 2020 13:29:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qMuGgR0+CRDM0BuHZ2Ae6KXyGRvF/Wi0RAPV3JkXST8=;
-        b=O7XNI6K/jach7eBMD0zokAVd37z8MwdLv7WqFDGJUXpzEHJv/6LF5IM1MssL5NHx69
-         sERBdH0/wvxJRbfXc8ZfBW6WmU/BI5HjmYU5Pwy6aJgYPsoC/QOCaZUUfklrPzeM+LmE
-         PliHwz3PwFW+ET0WFX++nrj0fUsGiY5wb79UMhnPsZ4NSU56/TwfJhVBhRED1eo7IZvY
-         tSQ6LFPA1n/cAURoK6zJWkEVSXYiL6y+KiwY8l+yxV5JDY+n10m2MA3KzHqx7bRV4sL6
-         CAx0URzemFt5ihkASDeSRezGbX69RIjNEsoJ9YZzp9qrBY5Pp5i1yewl1O6hD70yt0SH
-         wjTg==
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=GMuYDMQptT1n1uJsZIzgAcIkITwsd6hqzDFmp4rEPRE=;
+        b=JeYo3SmdY6UxY4FgcPu7B+OoZgo3hnnVSr6PZBMNBtFWHKglByULsKeeb/caAjP4jJ
+         jLJRrzzJGRr6T4Yrlck9Obyx5RovU5Ncve8AeGBizYahB+RuF4+LwpC1MOREIrrM6a0J
+         GTGGWzZX+8xImif3vrWHhXBsgG8uJ5oS7z4jo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qMuGgR0+CRDM0BuHZ2Ae6KXyGRvF/Wi0RAPV3JkXST8=;
-        b=EFdZu0iMeEoMCbBlkGNnR6t2VMa8PAuIKrWnfduSP8ZO4yRY/QnZ7RwlbIil/DL3UK
-         7Yc5J2z4Un1QgQSa4XZFQ9wXgcAmkdhHEGVa+zwvh1cB0KLFqjdPQ2M6SSs0M3cFjqBw
-         jSU1ehJBou4IXpVkCNELN9D+YxniMIAHtSa4ub9JUhkwwwr1r8xRVjtsgPtJ7xt1lZiQ
-         Lq7AZK6NyfjTB5tOwug0Jh2H5bXG+FUX9qDfpLIX+7f3MM+A73Zw2GdeSJL6ZsDwnTqK
-         5e+2WyvDl7lanx1X8/yi7WFYvreSI16Iq0/cikwH73wQ9z5siTEr92aj8KR3BhsSdPE/
-         q/7g==
-X-Gm-Message-State: ANhLgQ12OK0Y7bPKU+t7rHymHHIQku1s8Jz/Qv3KKKt1ohDFtSWoMuCe
-        h4Z/rDNkA8FbYoirxH2kByF1Vw==
-X-Google-Smtp-Source: ADFU+vv+xHc+Rr1UGKn/v70xw8LFUA/EYdzRhMgcJY4xJ9NFuwzP6M5LicOfJuYbs5v5GixSEdrWVA==
-X-Received: by 2002:a63:7f09:: with SMTP id a9mr22043810pgd.375.1583868777114;
-        Tue, 10 Mar 2020 12:32:57 -0700 (PDT)
-Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id s18sm3003094pjp.24.2020.03.10.12.32.55
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=GMuYDMQptT1n1uJsZIzgAcIkITwsd6hqzDFmp4rEPRE=;
+        b=HdNjhV42RLhLHZ5LagC8KRowsX+T1gHsxdzlZEesHCP222dEP6gmRzOKzkp3hdD301
+         Km3H5ZhRmgutQAID/01cKH3Mw65oRMVvQVjlTCWTMAEPZtTBK6fIpMxcRrOkHnGU+q+M
+         Etfranu2auQKBQylKxUe/VFe3j0k5u391F6PwoVTc6+S9cbXfRAnBlkoYQFu5OE1POWg
+         ViYOL1f36l+BqkAuaVu/UtXH26ex6avI3REkCfJnAIh2KTzNb/OEYGDwhQ5mNhrpcWhR
+         IxkQg4N1CeRLccIGlTWN6YVhZt7xbtayVVag1gBrcKwjUxlKbXQ0OmiWszAEMnYaXAF2
+         gp8w==
+X-Gm-Message-State: ANhLgQ0FnRTGi2T+AdKSFyJ+U35TLMFpsIcbnvGpfDTiVLLBS+yyutUW
+        on2J0VTgXAESQEhA/P7LOeyd+A==
+X-Google-Smtp-Source: ADFU+vvgzyrWpYIB6gNvxgfP9/U5zEOx+2Aom36kZpRYU1vljRz8s4s5Xhy7AwVsaesd5IsjqhOf5A==
+X-Received: by 2002:a17:902:eacb:: with SMTP id p11mr15990588pld.39.1583872144174;
+        Tue, 10 Mar 2020 13:29:04 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id z22sm27087928pgn.19.2020.03.10.13.29.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 12:32:56 -0700 (PDT)
-Date:   Tue, 10 Mar 2020 12:32:53 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Cl?ment Leger <cleger@kalrayinc.com>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        linux-doc <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Loic PALLARDY <loic.pallardy@st.com>, s-anna <s-anna@ti.com>
-Subject: Re: [PATCH v5 3/8] remoteproc: Use u64 type for boot_addr
-Message-ID: <20200310193253.GL264362@yoga>
-References: <20200210162209.23149-1-cleger@kalray.eu>
- <20200302093902.27849-1-cleger@kalray.eu>
- <20200302093902.27849-4-cleger@kalray.eu>
- <20200309195247.GC1399@xps15>
- <1297722115.9030349.1583827151221.JavaMail.zimbra@kalray.eu>
+        Tue, 10 Mar 2020 13:29:03 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1297722115.9030349.1583827151221.JavaMail.zimbra@kalray.eu>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200310063338.3344582-3-bjorn.andersson@linaro.org>
+References: <20200310063338.3344582-1-bjorn.andersson@linaro.org> <20200310063338.3344582-3-bjorn.andersson@linaro.org>
+Subject: Re: [PATCH v4 2/5] remoteproc: qcom: Introduce driver to store pil info in IMEM
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 10 Mar 2020 13:29:02 -0700
+Message-ID: <158387214232.149997.3935472981193001512@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue 10 Mar 00:59 PDT 2020, Cl?ment Leger wrote:
+Quoting Bjorn Andersson (2020-03-09 23:33:35)
+> A region in IMEM is used to communicate load addresses of remoteproc to
+> post mortem debug tools. Implement a driver that can be used to store
+> this information in order to enable these tools to process collected
+> ramdumps.
+>=20
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>=20
+> Changes since v3:
+> - Don't carry shadow of all entries
+> - Reworked indexing of entries in qcom_pil_info_store()
+> - Marked global __read_mostly
+>=20
+> Stephen requested, in v3, that the driver should be turned into a library=
+ that,
+> in the context of the remoteproc drivers, would resolve the pil info regi=
+on and
+> update an appropriate entry, preferably a statically assigned one.
+>=20
+> Unfortunately the entries must be packed, so it's not possible to pre-ass=
+ign
+> entries for each remoteproc, in case some of them aren't booted. Further =
+more,
+> it turns out that the IMEM region must be zero-initialized in order to ha=
+ve a
+> reliable way to determining which entries are available.
+>=20
+> We therefor have the need for global mutual exclusion and a mechanism tha=
+t is
+> guaranteed to run before any clients attempt to update the content - so t=
+he
+> previously proposed design is maintained.
 
-> 
-> 
-> ----- On 9 Mar, 2020, at 20:52, Mathieu Poirier mathieu.poirier@linaro.org wrote:
-> 
-> > On Mon, Mar 02, 2020 at 10:38:57AM +0100, Clement Leger wrote:
-> >> elf64 entry is defined as a u64. Since boot_addr is used to store the
-> >> elf entry point, change boot_addr type to u64 to support both elf32
-> >> and elf64. In the same time, fix users that were using this variable.
-> >> 
-> >> Signed-off-by: Clement Leger <cleger@kalray.eu>
-> >> ---
-> >>  drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
-> >>  drivers/remoteproc/remoteproc_internal.h   | 2 +-
-> >>  drivers/remoteproc/st_remoteproc.c         | 2 +-
-> >>  include/linux/remoteproc.h                 | 4 ++--
-> >>  4 files changed, 5 insertions(+), 5 deletions(-)
-> >> 
-> >> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c
-> >> b/drivers/remoteproc/remoteproc_elf_loader.c
-> >> index 606aae166eba..c2a9783cfb9a 100644
-> >> --- a/drivers/remoteproc/remoteproc_elf_loader.c
-> >> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
-> >> @@ -102,7 +102,7 @@ EXPORT_SYMBOL(rproc_elf_sanity_check);
-> >>   * Note that the boot address is not a configurable property of all remote
-> >>   * processors. Some will always boot at a specific hard-coded address.
-> >>   */
-> >> -u32 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw)
-> >> +u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw)
-> >>  {
-> >>  	struct elf32_hdr *ehdr  = (struct elf32_hdr *)fw->data;
-> >>  
-> >> diff --git a/drivers/remoteproc/remoteproc_internal.h
-> >> b/drivers/remoteproc/remoteproc_internal.h
-> >> index 58580210575c..0deae5f237b8 100644
-> >> --- a/drivers/remoteproc/remoteproc_internal.h
-> >> +++ b/drivers/remoteproc/remoteproc_internal.h
-> >> @@ -55,7 +55,7 @@ phys_addr_t rproc_va_to_pa(void *cpu_addr);
-> >>  int rproc_trigger_recovery(struct rproc *rproc);
-> >>  
-> >>  int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw);
-> >> -u32 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw);
-> >> +u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw);
-> >>  int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw);
-> >>  int rproc_elf_load_rsc_table(struct rproc *rproc, const struct firmware *fw);
-> >>  struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
-> > 
-> > The return type of function rproc_get_boot_addr() should also be changed from
-> > u32 to u64.  Or perhaps this is intentional to make sure rproc->bootaddr never
-> > occupies more than 32bit?
-> 
-> No, this is a mistake clearly. I haven't been able to test with a 64 bit
-> boot address since our remote processors always boot in the 32 bits
-> space. But since the elf64 boot address is on 64 bitsn this was a logical
-> modification. I will fix that.
-> 
+The library could have a static variable that tracks when it's been
+called once, holds a lock to protect concurrent access and then zero
+initializes on the first call.=20
 
-Sorry, I forgot to reply to this one. I fixed it up while applying the
-patch.
+> diff --git a/drivers/remoteproc/qcom_pil_info.c b/drivers/remoteproc/qcom=
+_pil_info.c
+> new file mode 100644
+> index 000000000000..0ddfb2639b7f
+> --- /dev/null
+> +++ b/drivers/remoteproc/qcom_pil_info.c
+> @@ -0,0 +1,180 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2019-2020 Linaro Ltd.
+> + */
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/slab.h>
+> +
+> +#define PIL_RELOC_NAME_LEN     8
+> +
+> +struct pil_reloc_entry {
+> +       char name[PIL_RELOC_NAME_LEN];
+> +       __le64 base;
+> +       __le32 size;
 
-Thanks,
-Bjorn
+Why are these little endian? Isn't regmap doing endian swaps?
 
-> > 
-> >> diff --git a/drivers/remoteproc/st_remoteproc.c
-> >> b/drivers/remoteproc/st_remoteproc.c
-> >> index ee13d23b43a9..a3268d95a50e 100644
-> >> --- a/drivers/remoteproc/st_remoteproc.c
-> >> +++ b/drivers/remoteproc/st_remoteproc.c
-> >> @@ -190,7 +190,7 @@ static int st_rproc_start(struct rproc *rproc)
-> >>  		}
-> >>  	}
-> >>  
-> >> -	dev_info(&rproc->dev, "Started from 0x%x\n", rproc->bootaddr);
-> >> +	dev_info(&rproc->dev, "Started from 0x%llx\n", rproc->bootaddr);
-> >>  
-> >>  	return 0;
-> >>  
-> >> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> >> index bee559330204..1683d6c386a6 100644
-> >> --- a/include/linux/remoteproc.h
-> >> +++ b/include/linux/remoteproc.h
-> >> @@ -382,7 +382,7 @@ struct rproc_ops {
-> >>  				struct rproc *rproc, const struct firmware *fw);
-> >>  	int (*load)(struct rproc *rproc, const struct firmware *fw);
-> >>  	int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
-> >> -	u32 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
-> >> +	u64 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
-> >>  };
-> >>  
-> >>  /**
-> >> @@ -498,7 +498,7 @@ struct rproc {
-> >>  	int num_traces;
-> >>  	struct list_head carveouts;
-> >>  	struct list_head mappings;
-> >> -	u32 bootaddr;
-> >> +	u64 bootaddr;
-> >>  	struct list_head rvdevs;
-> >>  	struct list_head subdevs;
-> >>  	struct idr notifyids;
-> >> --
-> >> 2.15.0.276.g89ea799
+> +} __packed;
+
+Is __packed necessary? It looks like things are naturally aligned
+already.
+
+> +
+> +struct pil_reloc {
+> +       struct device *dev;
+> +       struct regmap *map;
+> +       size_t offset;
+> +       size_t num_entries;
+> +       size_t entry_size;
+> +};
+> +
+> +static struct pil_reloc *_reloc __read_mostly;
+> +static DEFINE_MUTEX(reloc_mutex);
+> +
+> +/**
+> + * qcom_pil_info_store() - store PIL information of image in IMEM
+> + * @image:     name of the image
+> + * @base:      base address of the loaded image
+> + * @size:      size of the loaded image
+> + *
+> + * Return: 0 on success, negative errno on failure
+> + */
+> +int qcom_pil_info_store(const char *image, phys_addr_t base, size_t size)
+> +{
+> +       struct pil_reloc_entry entry;
+> +       unsigned int offset;
+> +       int selected =3D -1;
+> +       int ret;
+> +       int i;
+> +
+> +       offset =3D _reloc->offset;
+> +
+> +       mutex_lock(&reloc_mutex);
+> +       for (i =3D 0; i < _reloc->num_entries; i++) {
+> +               ret =3D regmap_bulk_read(_reloc->map, offset, &entry, _re=
+loc->entry_size);
+> +               if (ret < 0)
+> +                       continue;
+> +
+> +               if (!entry.name[0]) {
+> +                       if (selected =3D=3D -1)
+> +                               selected =3D offset;
+> +                       continue;
+
+Why not goto found?
+
+> +               }
+> +
+> +               if (!strncmp(entry.name, image, sizeof(entry.name))) {
+> +                       selected =3D offset;
+> +                       goto found;
+
+Why not goto found_again? And then jump over the strscpy() in this case?
+
+> +               }
+> +
+> +               offset +=3D sizeof(entry);
+> +       }
+> +
+> +       if (selected =3D=3D -1) {
+
+Do we need this check? It should have been jumped over if it found it?
+
+> +               dev_warn(_reloc->dev, "insufficient PIL info slots\n");
+> +               ret =3D -ENOMEM;
+> +               goto unlock;
+> +       }
+> +
+> +found:
+> +       strscpy(entry.name, image, ARRAY_SIZE(entry.name));
+> +       entry.base =3D base;
+> +       entry.size =3D size;
+
+Sparse should complain here.
+
+> +
+> +       ret =3D regmap_bulk_write(_reloc->map, selected, &entry, _reloc->=
+entry_size);
+
+It would make a lot more sense to me if this was written with plain
+readl/writel logic. Then I don't have to think about structs being
+stored in I/O memory regions, and instead I can concentrate on there
+being two 64-bit registers for name and base and one 32-bit register for
+the size.
+
+> +unlock:
+> +       mutex_unlock(&reloc_mutex);
+> +
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_pil_info_store);
+> +
+> +/**
+> + * qcom_pil_info_available() - query if the pil info is probed
+> + *
+> + * Return: boolean indicating if the pil info device is probed
+> + */
+> +bool qcom_pil_info_available(void)
+> +{
+> +       return !!_reloc;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_pil_info_available);
+> +
+> +static int pil_reloc_probe(struct platform_device *pdev)
+> +{
+> +       struct pil_reloc_entry entry =3D {0};
+> +       struct pil_reloc *reloc;
+> +       struct resource *res;
+> +       struct resource imem;
+> +       unsigned int offset;
+> +       int ret;
+> +       int i;
+> +
+> +       reloc =3D devm_kzalloc(&pdev->dev, sizeof(*reloc), GFP_KERNEL);
+> +       if (!reloc)
+> +               return -ENOMEM;
+> +
+> +       reloc->dev =3D &pdev->dev;
+> +
+> +       res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +       if (!res)
+> +               return -EINVAL;
+> +
+> +       /* reloc->offset is relative to parent (IMEM) base address */
+> +       ret =3D of_address_to_resource(pdev->dev.of_node->parent, 0, &ime=
+m);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       reloc->offset =3D res->start - imem.start;
+> +       reloc->num_entries =3D resource_size(res) / sizeof(entry);
+> +
+> +       reloc->map =3D syscon_node_to_regmap(pdev->dev.parent->of_node);
+> +       if (IS_ERR(reloc->map))
+> +               return PTR_ERR(reloc->map);
+> +
+> +       ret =3D regmap_get_val_bytes(reloc->map);
+> +       if (ret < 0)
+> +               return -EINVAL;
+> +       reloc->entry_size =3D sizeof(entry) / ret;
+> +
+> +       offset =3D reloc->offset;
+> +       for (i =3D 0; i < reloc->num_entries; i++, offset +=3D sizeof(ent=
+ry)) {
+> +               ret =3D regmap_bulk_write(reloc->map, offset, &entry,
+> +                                       reloc->entry_size);
+> +               if (ret < 0)
+> +                       return ret;
+> +       }
+
+This would be a lot easier to read with a memset_io().
+
+> +
+> +       mutex_lock(&reloc_mutex);
+> +       _reloc =3D reloc;
+> +       mutex_unlock(&reloc_mutex);
+> +
+> +       return 0;
+> +}
+> +
+> +static int pil_reloc_remove(struct platform_device *pdev)
+> +{
+> +       mutex_lock(&reloc_mutex);
+> +       _reloc =3D NULL;
+> +       mutex_unlock(&reloc_mutex);
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct of_device_id pil_reloc_of_match[] =3D {
+> +       { .compatible =3D "qcom,pil-reloc-info" },
+> +       {}
+> +};
+> +MODULE_DEVICE_TABLE(of, pil_reloc_of_match);
+> +
+> +static struct platform_driver pil_reloc_driver =3D {
+
+I still don't understand the need for a platform device driver and probe
+ordering. It's not a device in the usual ways, it's just some memory
+that's lying around and always there! Why can't we search in DT for the
+imem node and then find the pil reloc info compatible string on the
+first call to this library? Then we don't need an API to see if the
+device has probed yet (qcom_pil_info_available) and we can just ioremap
+some region of memory that's carved out for this reason. Forcing
+everything through the regmap is mostly adding pain.
+
+> +       .probe =3D pil_reloc_probe,
