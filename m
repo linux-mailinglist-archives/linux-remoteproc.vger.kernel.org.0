@@ -2,77 +2,74 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2861803CD
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2020 17:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52719180591
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2020 18:54:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbgCJQoY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 10 Mar 2020 12:44:24 -0400
-Received: from foss.arm.com ([217.140.110.172]:39442 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726307AbgCJQoY (ORCPT
+        id S1726899AbgCJRyW (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 10 Mar 2020 13:54:22 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:36578 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726636AbgCJRyV (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 10 Mar 2020 12:44:24 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E0AB1FB;
-        Tue, 10 Mar 2020 09:44:24 -0700 (PDT)
-Received: from [10.1.196.37] (e121345-lin.cambridge.arm.com [10.1.196.37])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 09A613F67D;
-        Tue, 10 Mar 2020 09:44:19 -0700 (PDT)
-Subject: Re: [PATCH 0/3] Request direct mapping for modem firmware subdevice
-To:     Joerg Roedel <joro@8bytes.org>, Sibi Sankar <sibis@codeaurora.org>
-Cc:     ohad@wizery.com, devicetree@vger.kernel.org,
-        linux-kernel-owner@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, iommu@lists.linux-foundation.org,
-        robh+dt@kernel.org, agross@kernel.org
-References: <20200309182255.20142-1-sibis@codeaurora.org>
- <20200310112332.GG3794@8bytes.org>
- <4ed6ddd667a3e6f670084a443d141474@codeaurora.org>
- <20200310162320.GL3794@8bytes.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <a50040a9-54fe-f682-dd7e-b2991b48d633@arm.com>
-Date:   Tue, 10 Mar 2020 16:44:12 +0000
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Tue, 10 Mar 2020 13:54:21 -0400
+Received: by mail-pj1-f65.google.com with SMTP id l41so756609pjb.1
+        for <linux-remoteproc@vger.kernel.org>; Tue, 10 Mar 2020 10:54:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=9xrGyjBP9/lId96bp3b0igZ5Fq6/ehIsq8nZJf92rko=;
+        b=jayoZwrFjKOylGI+0rtBXlSDlY2LI3eMJQ9vUgbiaT7A5gbExcoxXs6kZ4H0rfpPKq
+         emu0SkdUMUaPDPNQMHeWDYB5I7e2BNz7Vx864brt4kmIZ/CYXCyKWi+0B9mD50fRESM8
+         4MSd6RAwPRlxig/I7ixHdKlIzWUOmq0/OuEeM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=9xrGyjBP9/lId96bp3b0igZ5Fq6/ehIsq8nZJf92rko=;
+        b=r9aRoGJaKwSShqGfGf0SmOSb9tUVUsGJwMgzscBBvCzr7JH+ezAtMZfjX4reNvxoAT
+         FCWy6H5Sp63TRpNHkjgysKntUs3/8i00npPJwqcnqtwxE5Z/JjHtOUGHXulpH6bCWNYc
+         rYp6Oku1FQGGTBmHuaoP2xzBZ0wAOBAY0Cd6rV7iUd45sRTzUa9YjTc4qE40bo5AhbJm
+         zhYwNUxwt8QZ6LzoNVozLttzX5tCBAVuVWevM2IRR6jM5t6+WSeUZ3VuiAMFM5aF6vBj
+         BWf2WnI1QZBm7QQCdiPULXEjFEfzsLtyizTb1N0bdM2gnHGgtny6EtJx5hgfZKiV2Sab
+         0SYQ==
+X-Gm-Message-State: ANhLgQ0wyjZc5XddTcbFOyNZLWgtbSxn3hWZ0POI2dslc5Fxt0+RXgHN
+        QE1ssNaVacyVzqA1VF7PlsoHxQ==
+X-Google-Smtp-Source: ADFU+vsELhgfsIXkY//Egix35HBOFMo21WrTy/dWY0Dm1iIST3gawKKEcusOZCNKpBkodKXdPRL59Q==
+X-Received: by 2002:a17:902:8b89:: with SMTP id ay9mr21466796plb.309.1583862860685;
+        Tue, 10 Mar 2020 10:54:20 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id h6sm2792595pjk.33.2020.03.10.10.54.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2020 10:54:19 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20200310162320.GL3794@8bytes.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200310063338.3344582-2-bjorn.andersson@linaro.org>
+References: <20200310063338.3344582-1-bjorn.andersson@linaro.org> <20200310063338.3344582-2-bjorn.andersson@linaro.org>
+Subject: Re: [PATCH v4 1/5] dt-bindings: remoteproc: Add Qualcomm PIL info binding
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 10 Mar 2020 10:54:19 -0700
+Message-ID: <158386285904.149997.9749528768955800249@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 10/03/2020 4:23 pm, Joerg Roedel wrote:
-> On Tue, Mar 10, 2020 at 07:30:50PM +0530, Sibi Sankar wrote:
->> The accesses are initiated by the firmware
->> and they access modem reserved regions.
->> However as explained in ^^ any accesses
->> outside the region will result in a violation
->> and is controlled through XPUs (protection units).
-> 
-> Okay, this sounds like a case for arm_smmu_get_resv_region(). It should
-> return an entry for the reserved memory region the firmware needs to
-> access, so that generic iommu can setup this mapping.
-> 
-> Note that it should return that entry only for your device, not for all
-> devices. Maybe there is a property in DT or IORT you can set to
-> transport this information into the arm-smmu driver.
-> 
-> This is pretty similar to RMRR mapping on the Intel VT-d IOMMU or
-> Unity-mapped ranges in the AMD-Vi IOMMU.
+Quoting Bjorn Andersson (2020-03-09 23:33:34)
+> Add a devicetree binding for the Qualcomm peripheral image loader
+> relocation information region found in the IMEM.
+>=20
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
 
-Yup, a way to describe boot-time memory regions in IORT is in the 
-process of being specced out; the first attempt at an equivalent for DT 
-is here:
-
-https://lore.kernel.org/linux-iommu/20191209150748.2471814-1-thierry.reding@gmail.com/
-
-If that's not enough and the SMMU still needs to treat certain Stream 
-IDs specially because they may be untranslatable (due to having direct 
-access to memory as a side-channel), then that should be handled in the 
-SoC-specific corner of the SMMU driver, not delegated to individual 
-endpoint drivers.
-
-Robin.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
