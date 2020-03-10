@@ -2,64 +2,60 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FFA817F09B
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2020 07:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6B617F0A4
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2020 07:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726290AbgCJGfX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 10 Mar 2020 02:35:23 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43717 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726497AbgCJGfT (ORCPT
+        id S1726224AbgCJGju (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 10 Mar 2020 02:39:50 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37569 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726205AbgCJGju (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 10 Mar 2020 02:35:19 -0400
-Received: by mail-pg1-f195.google.com with SMTP id u12so5857927pgb.10
-        for <linux-remoteproc@vger.kernel.org>; Mon, 09 Mar 2020 23:35:18 -0700 (PDT)
+        Tue, 10 Mar 2020 02:39:50 -0400
+Received: by mail-pf1-f195.google.com with SMTP id p14so6025848pfn.4
+        for <linux-remoteproc@vger.kernel.org>; Mon, 09 Mar 2020 23:39:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=v580Rmb03EtLJPoOXCw/wOCBD8/8JxS+MoT154A+lnQ=;
-        b=mZjnCK5vkBIEyZzc52Dk5xKX2BfQ4L8Z8HcJx+EiQC03uv4g6+eRRk4jICz1TvlwxF
-         pz3aLzoHZks6knnpqS++ZFf5tPuVGESoZ2yZbKadXuqgPzAgqi7/TXMdpEh1O2j3s1Gl
-         v4bcGPiX5s/4jbedA5urg6swkCFxd5wBDCicTaB/F0u/DHq/nXl9joKuGBAinkAzS2vc
-         Z+js7OfJk7DwI56K2vyUZ5zLBiGliWVM/ngL8cr5PX7aFRPkKp7pnBwqPfRj5NlEAmD2
-         UApecdCUqnHxLO5ghE2IOabdpF9QEe0E3KoVuk5IKTDGCTUA9KKQrJhKqsGado8ogL2O
-         Gm9A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ra3lKpyRwpXEMv7HLjwjk2xlSk4Do59iXflfneeNh40=;
+        b=Lbd+jRiVgFM/GOA25/zgQIwcVdRtjO336AYWMv936Bf0BBNwu/atrxnDP92hlNItad
+         S+zcWWIOstOuzuwvc1BTHx/E/Ko37whEBJUybmpnhY+sODvoXsH0G9C4uo9NF2ZYKAiu
+         z+lfQIxjGSU0jIkyDJbP9rpxS7ayJVvxy56VvCkc04qU+You79QuaWbNs518z/IMBsP5
+         NMWt6sqK4E73ZFH6k2qwMbVGsfLZYmQNLiSxItRXmrdc+F05AtUEhSytIlgPG0W7tI0W
+         O7+uPihlXtizOmHR3VGO8O85AffsPjfh+0TMppMXcHGnS+x2IFNXJVzdM1fnWP0hF94t
+         LA2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=v580Rmb03EtLJPoOXCw/wOCBD8/8JxS+MoT154A+lnQ=;
-        b=gC4YZDklkMYFiAc//prAm09PRKj2R8ZetDgqx5Q/btDtyrwoFn3Y8o7xQIB0rpVTqH
-         Mb8VZoPNRH85RZwKrH0vQsLhGQ57gkQ2a64E3mD/gsBxZyjw9V0lbm0BKaTfLmbdxudd
-         olfKofM7kZadpI0Wr2D6yhJ1oZvyGhfEE+WopkNbPcnAq93DbQpBgJL97q24Vry9Waa9
-         pMcrTpIJxtULiDUhy7EmxNyLQ7TW2O9mZBZxXJ8Er40e2KKaa/qDTZenbGChsNP91uyK
-         ke5sKqM7/iNZs3bwROgYQbKoUnsEFO9Np63haQ3pouAy7N7UaK/qYqiQnlnwBZT7yO4d
-         nx7w==
-X-Gm-Message-State: ANhLgQ368qe3eHKcA1YcxxDhoqKXVlG3K5czQbHgKBkmqWzUK5Ob9Tdo
-        3ZLRVltb0C/ZLVAVY/H4MOTmzQ==
-X-Google-Smtp-Source: ADFU+vtPlT2KsyZktOOc6LBt4AUsdDGVs4j2Zjv4y1WWMu5o9XGsVuStyT+MHbY93epK6kNtxoTLhQ==
-X-Received: by 2002:aa7:875a:: with SMTP id g26mr20675002pfo.193.1583822118013;
-        Mon, 09 Mar 2020 23:35:18 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ra3lKpyRwpXEMv7HLjwjk2xlSk4Do59iXflfneeNh40=;
+        b=HY5VtybOvWjqX8SQXy7iX+/xz9zf8ACjHiCK6cTPLCcA22hZCOKW7qvuWsvw/hsZlK
+         rTxstXhVUoyy+vn7nR45GSzN/e0XYyzkMe48+nSuDJ1cklg/kq0+oPhy0UtsRU54uP3T
+         AIK5AmUnwtU9Xr2XhDKZzRJKjKTTl+kAXUNqmRZeCTCJ8gR7dI91qy/ePJRdyq5glAhW
+         GXYddp305xdSJgD2MrJk33RWfCcSde6bI4zSBIe9r6aag0RZH/wI2n8bClnDxxelGl/E
+         ru32SCIqmiWJhIa9pNFI50Tw/05mXoRiQNKQOidkRdbmMZ+qXDbv1Q57hEXAMm42yLzS
+         R8xA==
+X-Gm-Message-State: ANhLgQ1mUYPPdIgTK7jf4ybIA+Q6ngpcdqSbVbe2XTsr0IUKMEY2fHm1
+        F0kwWNaBoznTQFeYXkYvOctp8Q==
+X-Google-Smtp-Source: ADFU+vvg6ldWvoYAmaIYZ5vD5tZJbZSSd9XMNxXMPf8i/qa/tRM6EyvNYj9Og3zbvkL3fncx9Vg2VA==
+X-Received: by 2002:aa7:9538:: with SMTP id c24mr14561624pfp.14.1583822389416;
+        Mon, 09 Mar 2020 23:39:49 -0700 (PDT)
 Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id v8sm1388029pjr.10.2020.03.09.23.35.16
+        by smtp.gmail.com with ESMTPSA id j38sm42398468pgi.51.2020.03.09.23.39.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 23:35:17 -0700 (PDT)
+        Mon, 09 Mar 2020 23:39:48 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Rob Herring <robh+dt@kernel.org>
+        Ohad Ben-Cohen <ohad@wizery.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH v4 5/5] arm64: dts: qcom: sdm845: Add IMEM and PIL info region
-Date:   Mon,  9 Mar 2020 23:33:38 -0700
-Message-Id: <20200310063338.3344582-6-bjorn.andersson@linaro.org>
+        linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: [PATCH v4 0/4] remoteproc: Panic handling
+Date:   Mon,  9 Mar 2020 23:38:13 -0700
+Message-Id: <20200310063817.3344712-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20200310063338.3344582-1-bjorn.andersson@linaro.org>
-References: <20200310063338.3344582-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -67,46 +63,24 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add a simple-mfd representing IMEM on SDM845 and define the PIL
-relocation info region, so that post mortem tools will be able to locate
-the loaded remoteprocs.
+Add support for invoking a panic handler in remoteproc drivers, to allow them
+to invoke e.g. cache flushing on the remote processors in response to a kernel
+panic - to aid in post mortem debugging of system issues.
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
+Bjorn Andersson (4):
+  remoteproc: Traverse rproc_list under RCU read lock
+  remoteproc: Introduce "panic" callback in ops
+  remoteproc: qcom: q6v5: Add common panic handler
+  remoteproc: qcom: Introduce panic handler for PAS and ADSP
 
-Changes since v3:
-- Added ranges
-- Made size in reg hex
+ drivers/remoteproc/qcom_q6v5.c       | 20 ++++++++++
+ drivers/remoteproc/qcom_q6v5.h       |  1 +
+ drivers/remoteproc/qcom_q6v5_adsp.c  |  8 ++++
+ drivers/remoteproc/qcom_q6v5_pas.c   |  8 ++++
+ drivers/remoteproc/remoteproc_core.c | 57 +++++++++++++++++++++++++---
+ include/linux/remoteproc.h           |  3 ++
+ 6 files changed, 92 insertions(+), 5 deletions(-)
 
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 061f49faab19..36ed6d8d0863 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -3254,6 +3254,21 @@ spmi_bus: spmi@c440000 {
- 			cell-index = <0>;
- 		};
- 
-+		imem@146bf000 {
-+			compatible = "syscon", "simple-mfd";
-+			reg = <0 0x146bf000 0 0x1000>;
-+
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			ranges = <0 0 0x146bf000 0x1000>;
-+
-+			pil-reloc@94c {
-+				compatible = "qcom,pil-reloc-info";
-+				reg = <0x94c 0xc8>;
-+			};
-+		};
-+
- 		apps_smmu: iommu@15000000 {
- 			compatible = "qcom,sdm845-smmu-500", "arm,mmu-500";
- 			reg = <0 0x15000000 0 0x80000>;
 -- 
 2.24.0
 
