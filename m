@@ -2,324 +2,105 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E0A1180920
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2020 21:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67878180A22
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2020 22:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbgCJU3F (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 10 Mar 2020 16:29:05 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:40190 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726283AbgCJU3F (ORCPT
+        id S1727631AbgCJVP0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 10 Mar 2020 17:15:26 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:43825 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbgCJVPY (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 10 Mar 2020 16:29:05 -0400
-Received: by mail-pj1-f65.google.com with SMTP id gv19so919356pjb.5
-        for <linux-remoteproc@vger.kernel.org>; Tue, 10 Mar 2020 13:29:04 -0700 (PDT)
+        Tue, 10 Mar 2020 17:15:24 -0400
+Received: by mail-ot1-f66.google.com with SMTP id a6so6763453otb.10;
+        Tue, 10 Mar 2020 14:15:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:content-transfer-encoding:in-reply-to:references
-         :subject:from:cc:to:date:message-id:user-agent;
-        bh=GMuYDMQptT1n1uJsZIzgAcIkITwsd6hqzDFmp4rEPRE=;
-        b=JeYo3SmdY6UxY4FgcPu7B+OoZgo3hnnVSr6PZBMNBtFWHKglByULsKeeb/caAjP4jJ
-         jLJRrzzJGRr6T4Yrlck9Obyx5RovU5Ncve8AeGBizYahB+RuF4+LwpC1MOREIrrM6a0J
-         GTGGWzZX+8xImif3vrWHhXBsgG8uJ5oS7z4jo=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7hNWBofucArT17MnCRXZQMQQdTzbenzVIK3M8zSgFrs=;
+        b=dN1DJyXu9qxAGT5sUE6ZtOnH6zUyhErKldhJDm/7WbWLTndvrlMjzXlxKt0BofnnWE
+         gH1NiZ39GxjP1zKwRIUjTFC78v6faijm/bXy1SykgDIiA9HQsxDhPDqfO0MbUk3w52cK
+         NAPx3NUnmyHQqMvrs7UO60oNGKIM7di5I/ovX860fDPPgCrG+QntBATS4ZeoB5joKLJx
+         VHIoh5WWDwrL+7hQIz6IlCuKhtLvjR66DH1AWCSMwwHVYrWSSThc/iQgU8Zsx5872Ouu
+         FePQ3k15JNhQTQGFroMnrQZ/39pHC+lZr07mZXoOxcdm/2FlRaK/bwLZxC1FMUEW+aky
+         47Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding
-         :in-reply-to:references:subject:from:cc:to:date:message-id
-         :user-agent;
-        bh=GMuYDMQptT1n1uJsZIzgAcIkITwsd6hqzDFmp4rEPRE=;
-        b=HdNjhV42RLhLHZ5LagC8KRowsX+T1gHsxdzlZEesHCP222dEP6gmRzOKzkp3hdD301
-         Km3H5ZhRmgutQAID/01cKH3Mw65oRMVvQVjlTCWTMAEPZtTBK6fIpMxcRrOkHnGU+q+M
-         Etfranu2auQKBQylKxUe/VFe3j0k5u391F6PwoVTc6+S9cbXfRAnBlkoYQFu5OE1POWg
-         ViYOL1f36l+BqkAuaVu/UtXH26ex6avI3REkCfJnAIh2KTzNb/OEYGDwhQ5mNhrpcWhR
-         IxkQg4N1CeRLccIGlTWN6YVhZt7xbtayVVag1gBrcKwjUxlKbXQ0OmiWszAEMnYaXAF2
-         gp8w==
-X-Gm-Message-State: ANhLgQ0FnRTGi2T+AdKSFyJ+U35TLMFpsIcbnvGpfDTiVLLBS+yyutUW
-        on2J0VTgXAESQEhA/P7LOeyd+A==
-X-Google-Smtp-Source: ADFU+vvgzyrWpYIB6gNvxgfP9/U5zEOx+2Aom36kZpRYU1vljRz8s4s5Xhy7AwVsaesd5IsjqhOf5A==
-X-Received: by 2002:a17:902:eacb:: with SMTP id p11mr15990588pld.39.1583872144174;
-        Tue, 10 Mar 2020 13:29:04 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id z22sm27087928pgn.19.2020.03.10.13.29.03
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7hNWBofucArT17MnCRXZQMQQdTzbenzVIK3M8zSgFrs=;
+        b=iVg5n/hZ38osZbfrduoBelIC9KpV6DxUPws6lWComOSpUEonD64E60PVlSwdG6E1yE
+         3gs8/jKgv7RuP+r0BYIQB4YAZewwNoIROF06SEwMszJZ8uE2jyBfTT+yqhMgy8rW0gHA
+         69Z01+OTpMSdhPGlzA70dklUCgzTo7rh1sL7mN9fP6smNgkwyG1ecV4OKf/OcvKypDBf
+         t3fQnm2fw1IghH1K5CRIyf373GI8iP70ERD5UUrjb+JCqS3+yiXReqV5wU1o7FBWVFZy
+         HqRtkuILhS1kRekqyu5NjQiEKQUdgqN+32wOFhRrZbh88Mh8FAG2z7b/vG+fgybMuDqu
+         mZmw==
+X-Gm-Message-State: ANhLgQ21mnpoUdV8UTijW/iz7XdV/Wkt13F5SxITl7PrNybWaQpdEkRK
+        lQ4rcWehQfUxKR2ysixMwyw=
+X-Google-Smtp-Source: ADFU+vvjtpN/bwJQkI2vcndXaZbxD8dD0mCBVB9RhSu8g5NE5E5B4HBs9qwmz9bvppBuPjIrS4onDw==
+X-Received: by 2002:a9d:6348:: with SMTP id y8mr687408otk.347.1583874924146;
+        Tue, 10 Mar 2020 14:15:24 -0700 (PDT)
+Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id j90sm205345otc.21.2020.03.10.14.15.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 13:29:03 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 Mar 2020 14:15:23 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH] remoteproc/mediatek: Use size_t type for len in scp_da_to_va
+Date:   Tue, 10 Mar 2020 14:15:14 -0700
+Message-Id: <20200310211514.32288-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.26.0.rc1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200310063338.3344582-3-bjorn.andersson@linaro.org>
-References: <20200310063338.3344582-1-bjorn.andersson@linaro.org> <20200310063338.3344582-3-bjorn.andersson@linaro.org>
-Subject: Re: [PATCH v4 2/5] remoteproc: qcom: Introduce driver to store pil info in IMEM
-From:   Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 10 Mar 2020 13:29:02 -0700
-Message-ID: <158387214232.149997.3935472981193001512@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Quoting Bjorn Andersson (2020-03-09 23:33:35)
-> A region in IMEM is used to communicate load addresses of remoteproc to
-> post mortem debug tools. Implement a driver that can be used to store
-> this information in order to enable these tools to process collected
-> ramdumps.
->=20
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->=20
-> Changes since v3:
-> - Don't carry shadow of all entries
-> - Reworked indexing of entries in qcom_pil_info_store()
-> - Marked global __read_mostly
->=20
-> Stephen requested, in v3, that the driver should be turned into a library=
- that,
-> in the context of the remoteproc drivers, would resolve the pil info regi=
-on and
-> update an appropriate entry, preferably a statically assigned one.
->=20
-> Unfortunately the entries must be packed, so it's not possible to pre-ass=
-ign
-> entries for each remoteproc, in case some of them aren't booted. Further =
-more,
-> it turns out that the IMEM region must be zero-initialized in order to ha=
-ve a
-> reliable way to determining which entries are available.
->=20
-> We therefor have the need for global mutual exclusion and a mechanism tha=
-t is
-> guaranteed to run before any clients attempt to update the content - so t=
-he
-> previously proposed design is maintained.
+Clang errors:
 
-The library could have a static variable that tracks when it's been
-called once, holds a lock to protect concurrent access and then zero
-initializes on the first call.=20
+drivers/remoteproc/mtk_scp.c:364:14: error: incompatible function
+pointer types initializing 'void *(*)(struct rproc *, u64, size_t)' (aka
+'void *(*)(struct rproc *, unsigned long long, unsigned int)') with an
+expression of type 'void *(struct rproc *, u64, int)' (aka 'void
+*(struct rproc *, unsigned long long, int)')
+[-Werror,-Wincompatible-function-pointer-types]
+        .da_to_va       = scp_da_to_va,
+                          ^~~~~~~~~~~~
+1 error generated.
 
-> diff --git a/drivers/remoteproc/qcom_pil_info.c b/drivers/remoteproc/qcom=
-_pil_info.c
-> new file mode 100644
-> index 000000000000..0ddfb2639b7f
-> --- /dev/null
-> +++ b/drivers/remoteproc/qcom_pil_info.c
-> @@ -0,0 +1,180 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2019-2020 Linaro Ltd.
-> + */
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/slab.h>
-> +
-> +#define PIL_RELOC_NAME_LEN     8
-> +
-> +struct pil_reloc_entry {
-> +       char name[PIL_RELOC_NAME_LEN];
-> +       __le64 base;
-> +       __le32 size;
+Make the same change as commit 0fcbb369f052 ("remoteproc: Use size_t
+type for len in da_to_va"), which was not updated for the acceptance of
+commit 63c13d61eafe ("remoteproc/mediatek: add SCP support for mt8183").
 
-Why are these little endian? Isn't regmap doing endian swaps?
+Fixes: 0fcbb369f052 ("remoteproc: Use size_t type for len in da_to_va")
+Link: https://github.com/ClangBuiltLinux/linux/issues/927
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
+ drivers/remoteproc/mtk_scp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +} __packed;
+diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+index 7ccdf64ff3ea..ea3743e7e794 100644
+--- a/drivers/remoteproc/mtk_scp.c
++++ b/drivers/remoteproc/mtk_scp.c
+@@ -320,7 +320,7 @@ static int scp_start(struct rproc *rproc)
+ 	return ret;
+ }
+ 
+-static void *scp_da_to_va(struct rproc *rproc, u64 da, int len)
++static void *scp_da_to_va(struct rproc *rproc, u64 da, size_t len)
+ {
+ 	struct mtk_scp *scp = (struct mtk_scp *)rproc->priv;
+ 	int offset;
+-- 
+2.26.0.rc1
 
-Is __packed necessary? It looks like things are naturally aligned
-already.
-
-> +
-> +struct pil_reloc {
-> +       struct device *dev;
-> +       struct regmap *map;
-> +       size_t offset;
-> +       size_t num_entries;
-> +       size_t entry_size;
-> +};
-> +
-> +static struct pil_reloc *_reloc __read_mostly;
-> +static DEFINE_MUTEX(reloc_mutex);
-> +
-> +/**
-> + * qcom_pil_info_store() - store PIL information of image in IMEM
-> + * @image:     name of the image
-> + * @base:      base address of the loaded image
-> + * @size:      size of the loaded image
-> + *
-> + * Return: 0 on success, negative errno on failure
-> + */
-> +int qcom_pil_info_store(const char *image, phys_addr_t base, size_t size)
-> +{
-> +       struct pil_reloc_entry entry;
-> +       unsigned int offset;
-> +       int selected =3D -1;
-> +       int ret;
-> +       int i;
-> +
-> +       offset =3D _reloc->offset;
-> +
-> +       mutex_lock(&reloc_mutex);
-> +       for (i =3D 0; i < _reloc->num_entries; i++) {
-> +               ret =3D regmap_bulk_read(_reloc->map, offset, &entry, _re=
-loc->entry_size);
-> +               if (ret < 0)
-> +                       continue;
-> +
-> +               if (!entry.name[0]) {
-> +                       if (selected =3D=3D -1)
-> +                               selected =3D offset;
-> +                       continue;
-
-Why not goto found?
-
-> +               }
-> +
-> +               if (!strncmp(entry.name, image, sizeof(entry.name))) {
-> +                       selected =3D offset;
-> +                       goto found;
-
-Why not goto found_again? And then jump over the strscpy() in this case?
-
-> +               }
-> +
-> +               offset +=3D sizeof(entry);
-> +       }
-> +
-> +       if (selected =3D=3D -1) {
-
-Do we need this check? It should have been jumped over if it found it?
-
-> +               dev_warn(_reloc->dev, "insufficient PIL info slots\n");
-> +               ret =3D -ENOMEM;
-> +               goto unlock;
-> +       }
-> +
-> +found:
-> +       strscpy(entry.name, image, ARRAY_SIZE(entry.name));
-> +       entry.base =3D base;
-> +       entry.size =3D size;
-
-Sparse should complain here.
-
-> +
-> +       ret =3D regmap_bulk_write(_reloc->map, selected, &entry, _reloc->=
-entry_size);
-
-It would make a lot more sense to me if this was written with plain
-readl/writel logic. Then I don't have to think about structs being
-stored in I/O memory regions, and instead I can concentrate on there
-being two 64-bit registers for name and base and one 32-bit register for
-the size.
-
-> +unlock:
-> +       mutex_unlock(&reloc_mutex);
-> +
-> +       return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(qcom_pil_info_store);
-> +
-> +/**
-> + * qcom_pil_info_available() - query if the pil info is probed
-> + *
-> + * Return: boolean indicating if the pil info device is probed
-> + */
-> +bool qcom_pil_info_available(void)
-> +{
-> +       return !!_reloc;
-> +}
-> +EXPORT_SYMBOL_GPL(qcom_pil_info_available);
-> +
-> +static int pil_reloc_probe(struct platform_device *pdev)
-> +{
-> +       struct pil_reloc_entry entry =3D {0};
-> +       struct pil_reloc *reloc;
-> +       struct resource *res;
-> +       struct resource imem;
-> +       unsigned int offset;
-> +       int ret;
-> +       int i;
-> +
-> +       reloc =3D devm_kzalloc(&pdev->dev, sizeof(*reloc), GFP_KERNEL);
-> +       if (!reloc)
-> +               return -ENOMEM;
-> +
-> +       reloc->dev =3D &pdev->dev;
-> +
-> +       res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +       if (!res)
-> +               return -EINVAL;
-> +
-> +       /* reloc->offset is relative to parent (IMEM) base address */
-> +       ret =3D of_address_to_resource(pdev->dev.of_node->parent, 0, &ime=
-m);
-> +       if (ret < 0)
-> +               return ret;
-> +
-> +       reloc->offset =3D res->start - imem.start;
-> +       reloc->num_entries =3D resource_size(res) / sizeof(entry);
-> +
-> +       reloc->map =3D syscon_node_to_regmap(pdev->dev.parent->of_node);
-> +       if (IS_ERR(reloc->map))
-> +               return PTR_ERR(reloc->map);
-> +
-> +       ret =3D regmap_get_val_bytes(reloc->map);
-> +       if (ret < 0)
-> +               return -EINVAL;
-> +       reloc->entry_size =3D sizeof(entry) / ret;
-> +
-> +       offset =3D reloc->offset;
-> +       for (i =3D 0; i < reloc->num_entries; i++, offset +=3D sizeof(ent=
-ry)) {
-> +               ret =3D regmap_bulk_write(reloc->map, offset, &entry,
-> +                                       reloc->entry_size);
-> +               if (ret < 0)
-> +                       return ret;
-> +       }
-
-This would be a lot easier to read with a memset_io().
-
-> +
-> +       mutex_lock(&reloc_mutex);
-> +       _reloc =3D reloc;
-> +       mutex_unlock(&reloc_mutex);
-> +
-> +       return 0;
-> +}
-> +
-> +static int pil_reloc_remove(struct platform_device *pdev)
-> +{
-> +       mutex_lock(&reloc_mutex);
-> +       _reloc =3D NULL;
-> +       mutex_unlock(&reloc_mutex);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct of_device_id pil_reloc_of_match[] =3D {
-> +       { .compatible =3D "qcom,pil-reloc-info" },
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(of, pil_reloc_of_match);
-> +
-> +static struct platform_driver pil_reloc_driver =3D {
-
-I still don't understand the need for a platform device driver and probe
-ordering. It's not a device in the usual ways, it's just some memory
-that's lying around and always there! Why can't we search in DT for the
-imem node and then find the pil reloc info compatible string on the
-first call to this library? Then we don't need an API to see if the
-device has probed yet (qcom_pil_info_available) and we can just ioremap
-some region of memory that's carved out for this reason. Forcing
-everything through the regmap is mostly adding pain.
-
-> +       .probe =3D pil_reloc_probe,
