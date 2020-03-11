@@ -2,31 +2,31 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE85180E96
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 Mar 2020 04:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABB24180EA4
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 Mar 2020 04:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727994AbgCKDgW (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 10 Mar 2020 23:36:22 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:55453 "EHLO
+        id S1727693AbgCKDkf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 10 Mar 2020 23:40:35 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:3655 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727693AbgCKDgW (ORCPT
+        with ESMTP id S1727648AbgCKDke (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 10 Mar 2020 23:36:22 -0400
-X-UUID: 1aa98038cfbd4693bc62a88c2391dbf7-20200311
+        Tue, 10 Mar 2020 23:40:34 -0400
+X-UUID: 81f17c152e164f9383b9b7000a4dfcb9-20200311
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
         h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=DPJUQnv87RbzN8dm0Mgk9azwyYcGOhnHBbgcNu92ga0=;
-        b=iERI+jak/HtMasoCvWXvUVw192XtrcERlG2u980a1zpgERP8wFU7foQ3UYStKaKb9IoBEKp51wPndZ01t5tthjGJZhPYwV/6NEBtFSh0vg54X+sRXqkXP66IJgZtStHfuirh/KnKuMIsW7yKirTbIWqZYlzOA2upjLNd0dhkwXU=;
-X-UUID: 1aa98038cfbd4693bc62a88c2391dbf7-20200311
+        b=seQpaq7wh3QvTuJhwbe+meyca1r2ih/FeygCYu5e+8YpMfq6aRbaFL1DmyhjsTuAM591AGhZPdClYLMGEIs1VtrGWUEi9ZnzklRa8rGbCjdmcDnMx5CMtkBYZBhngrln0JDTK2xzbKw70kmiolzoF4q3bk4Phr346NCTOeeNV5U=;
+X-UUID: 81f17c152e164f9383b9b7000a4dfcb9-20200311
 Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
         (envelope-from <erin.lo@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 763538050; Wed, 11 Mar 2020 11:36:16 +0800
+        with ESMTP id 767051948; Wed, 11 Mar 2020 11:40:28 +0800
 Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 11 Mar 2020 11:35:17 +0800
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 11 Mar 2020 11:39:24 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas09.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 11 Mar 2020 11:35:23 +0800
+ Transport; Wed, 11 Mar 2020 11:39:36 +0800
 From:   Erin Lo <erin.lo@mediatek.com>
 To:     <linux-firmware@kernel.org>
 CC:     <linux-mediatek@lists.infradead.org>,
@@ -36,8 +36,8 @@ CC:     <linux-mediatek@lists.infradead.org>,
         <sj.huang@mediatek.com>, <drinkcat@google.com>,
         <shawnku@google.com>, <srv_heupstream@mediatek.com>
 Subject: pull request: linux-firmware: Create Mediatek MT8183 SCP firmware 
-Date:   Wed, 11 Mar 2020 11:36:01 +0800
-Message-ID: <20200311033602.31905-1-erin.lo@mediatek.com>
+Date:   Wed, 11 Mar 2020 11:39:07 +0800
+Message-ID: <20200311033908.31960-1-erin.lo@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
