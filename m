@@ -2,122 +2,94 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F78182422
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 Mar 2020 22:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A0D1825CB
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2020 00:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729223AbgCKVpI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 11 Mar 2020 17:45:08 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:34406 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729102AbgCKVpH (ORCPT
+        id S1731418AbgCKXZp (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 11 Mar 2020 19:25:45 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:47005 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731399AbgCKXZp (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 11 Mar 2020 17:45:07 -0400
-Received: by mail-pl1-f193.google.com with SMTP id a23so1732746plm.1
-        for <linux-remoteproc@vger.kernel.org>; Wed, 11 Mar 2020 14:45:07 -0700 (PDT)
+        Wed, 11 Mar 2020 19:25:45 -0400
+Received: by mail-pf1-f193.google.com with SMTP id c19so2213500pfo.13
+        for <linux-remoteproc@vger.kernel.org>; Wed, 11 Mar 2020 16:25:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=uN1amOH5ZU5RT92sA61UloyUkxnxKCdtIJfyk4RzGY8=;
-        b=KfPWVzHOvplm4aMeyKxQGHaE4kkrJqpFPCJQJRlKEZ8nqcZ36dfbDASxWD+9ZYSwf3
-         G+yYqjTq7URoOiqgVXn9gbYPSo4QYw2ZjHwldmiRqFLDR8srM57PiCcn6dNx4BkIuFwv
-         28FOivlX9pYy6fzhz6+udQIv6YVqyiNncE74PdCOSelZ8PxIdweX9uN6TrAAkO86obZE
-         mVkfhtgemtAUTMp8BtV9L2huvca0Ld6ml8UQPzQLz4jsAZMjg9t0DibzEAtYY2iJ+Kf2
-         1tqgQS1rM5xq+ixnbRKvCx8IhexYPjmPBAuwZVq1WMhnr0KxsZiQbb9ZJF8NSVebUYLQ
-         5ueg==
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=chyavRIYqqg/mT1hVMLjimyfJ88wTwSB8SQE5bJSCcg=;
+        b=FDuOKRQ4jYAowPTrfkqbWPNwLC7ne85VH2TIBW4KS2PmvN2f6LhHAIPRx3ZI8cJWyc
+         l4865PDFEMva7cIi8Zt5qHizgX8lFeYT5H30cNNZ8/WeEXOONjMQI4utYiRmU1VIZixr
+         QA+8hVzyQYT9CfKVouR7a6z9Bf+kwLRUrAq2g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=uN1amOH5ZU5RT92sA61UloyUkxnxKCdtIJfyk4RzGY8=;
-        b=Xj0FibAKd449j0e3h1SDY8LbgK+JT3aCAnbOOQqveN7ZEosu6y5fsCxCPT6UiodD1f
-         HwA6GiApoh2SioBbOGvBuC0g0yAF+gMODKxQ2uR6Yo2K86wF54eDE0K0ypdj1EPfl4gb
-         i/VBjXX1S4IHZrUMOEzdhOIbwkliey6V7LjiqfGrr+l+vF+lCMEeUX20FeDoGOoOqIP3
-         etb5ZuZsA7olXPvi3J+EkQGxbgn0Ez9t8tz4ha/JoNDOOW3iZqEka+CfpogdKxeLhYHf
-         9Ztr4P37RiDQRzlL4lCeYUSthVSbA/fgXGHX2cDzfKas9pmRiCA7fxmnHrqIKzIDIX22
-         YsCw==
-X-Gm-Message-State: ANhLgQ1lnG1eIctaYJo3jQAP8OJlsfC1eiOQWzWiLDIh5HPhNVeKmaYP
-        O38mETDCYCX/zDOlwiYkARtwzA==
-X-Google-Smtp-Source: ADFU+vt4rfokOL/oJaLw4dSeLhyEOzJbqm/GUHgNbwUXS8INzMYJiSGput+Rwtg/T3NvKl0tKxjRgg==
-X-Received: by 2002:a17:902:8c91:: with SMTP id t17mr4525944plo.98.1583963106709;
-        Wed, 11 Mar 2020 14:45:06 -0700 (PDT)
-Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id r24sm27165674pfg.61.2020.03.11.14.45.05
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=chyavRIYqqg/mT1hVMLjimyfJ88wTwSB8SQE5bJSCcg=;
+        b=Ux9ibFaujGbdTHDk00v5BNUBmH2Qf3Mx5k12ZkUsekvGHXmDAASAkxs0UiRt9M2ath
+         DKWrC4ojIuNUReA27Quqwg3v5YXVjVVtXvp3Ss+nvEmco+ZOy2ywaYB323TgcTkO+rGi
+         p3pCUmfb73peHts8IQGbbJ5CkDG0ZJjc45GrNVj/hyI/55c8BRcI9bX4N8OZ7yIbQCB4
+         3oOia3Mq6vAse5w0+bqoFMTpg9pRj/ru/imwV0SON7B4GTN2xY+31fTJCvAVxmTrpV+E
+         P8j9Y+wX2jSYqwyQx90WL2WZYcnVrSTZrfrPMQHXfdJd4KmTCwyUGyUcuH6hWZgKAtW+
+         donw==
+X-Gm-Message-State: ANhLgQ2798P8nI7wGVYE0QxFFQCI4L3zu6tmxApG1HcDM+9hMxjoIBpA
+        QJ5l0Ply0RacuwFRNB7iIejVAQ==
+X-Google-Smtp-Source: ADFU+vv2rgEtd5LEvteUH15nHk8MoZckTyu4sc5oAWNh51o+qVCUk8hdHGfWn2+RI0sNiXgdi5lb8g==
+X-Received: by 2002:aa7:92da:: with SMTP id k26mr5126575pfa.139.1583969144060;
+        Wed, 11 Mar 2020 16:25:44 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id w128sm50656459pgb.55.2020.03.11.16.25.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2020 14:45:06 -0700 (PDT)
-Date:   Wed, 11 Mar 2020 15:45:04 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Loic Pallardy <loic.pallardy@st.com>
-Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arnaud.pouliquen@st.com, benjamin.gaignard@linaro.org,
-        fabien.dessenne@st.com, s-anna@ti.com
-Subject: Re: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when rproc
- is crashed
-Message-ID: <20200311214504.GA32471@xps15>
-References: <1583924072-20648-1-git-send-email-loic.pallardy@st.com>
- <1583924072-20648-2-git-send-email-loic.pallardy@st.com>
+        Wed, 11 Mar 2020 16:25:43 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1583924072-20648-2-git-send-email-loic.pallardy@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200310212728.GQ264362@yoga>
+References: <20200310063338.3344582-1-bjorn.andersson@linaro.org> <20200310063338.3344582-3-bjorn.andersson@linaro.org> <158387214232.149997.3935472981193001512@swboyd.mtv.corp.google.com> <20200310212728.GQ264362@yoga>
+Subject: Re: [PATCH v4 2/5] remoteproc: qcom: Introduce driver to store pil info in IMEM
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>, Ohad Ben-Cohen <ohad@wizery.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Date:   Wed, 11 Mar 2020 16:25:42 -0700
+Message-ID: <158396914211.149997.8114928596665644267@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Loic,
+Quoting Bjorn Andersson (2020-03-10 14:27:28)
+> On Tue 10 Mar 13:29 PDT 2020, Stephen Boyd wrote:
+>=20
+> > Why can't we search in DT for the
+> > imem node and then find the pil reloc info compatible string on the
+> > first call to this library? Then we don't need an API to see if the
+> > device has probed yet (qcom_pil_info_available)
+>=20
+> I think this sounds reasonable.
 
-On Wed, Mar 11, 2020 at 11:54:31AM +0100, Loic Pallardy wrote:
-> When remoteproc recovery is disabled and rproc crashed, user space
-> client has no way to reboot co-processor except by a complete platform
-> reboot.
-> Indeed rproc_shutdown() is called by sysfs state_store() only is rproc
-> state is RPROC_RUNNING.
-> 
-> This patch offers the possibility to shutdown the co-processor if
-> it is in RPROC_CRASHED state and so to restart properly co-processor
-> from sysfs interface.
+Great!
 
-And it is not possible to use the debugfs interface [1] to restart the MCU?
+>=20
+> > and we can just ioremap
+> > some region of memory that's carved out for this reason. Forcing
+> > everything through the regmap is mostly adding pain.
+> >=20
+>=20
+> My concern here was simply that we'll end up ioremapping various small
+> chunks of the imem region 10 (or so) times. But I agree that things
+> would be cleaner here.
 
-[1]. https://elixir.bootlin.com/linux/v5.6-rc2/source/drivers/remoteproc/remoteproc_debugfs.c#L147
-
-
-> 
-> Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
-> ---
->  drivers/remoteproc/remoteproc_core.c  | 2 +-
->  drivers/remoteproc/remoteproc_sysfs.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 097f33e4f1f3..7ac87a75cd1b 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -1812,7 +1812,7 @@ void rproc_shutdown(struct rproc *rproc)
->  	if (!atomic_dec_and_test(&rproc->power))
->  		goto out;
->  
-> -	ret = rproc_stop(rproc, false);
-> +	ret = rproc_stop(rproc, rproc->state == RPROC_CRASHED);
->  	if (ret) {
->  		atomic_inc(&rproc->power);
->  		goto out;
-> diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
-> index 7f8536b73295..1029458a4678 100644
-> --- a/drivers/remoteproc/remoteproc_sysfs.c
-> +++ b/drivers/remoteproc/remoteproc_sysfs.c
-> @@ -101,7 +101,7 @@ static ssize_t state_store(struct device *dev,
->  		if (ret)
->  			dev_err(&rproc->dev, "Boot failed: %d\n", ret);
->  	} else if (sysfs_streq(buf, "stop")) {
-> -		if (rproc->state != RPROC_RUNNING)
-> +		if (rproc->state != RPROC_RUNNING && rproc->state != RPROC_CRASHED)
->  			return -EINVAL;
->  
->  		rproc_shutdown(rproc);
-> -- 
-> 2.7.4
-> 
+Alright. I'd like the ioremap() approach. ioremap() will "do the right
+thing" and reuse mappings if they're already there and overlap in the
+page. So it's OK that the syscon/simple-mfd exists and makes a device,
+etc. etc., but we don't need to care about it. We can just ioremap() the
+area and not worry that the regmap users may have a mapping to the same
+place. This is a dedicated carveout inside IMEM so we're safe from other
+meddling users.
