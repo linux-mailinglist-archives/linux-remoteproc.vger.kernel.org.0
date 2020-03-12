@@ -2,57 +2,57 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FF3183C11
+	by mail.lfdr.de (Postfix) with ESMTP id D91BB183C12
 	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2020 23:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726901AbgCLWMN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        id S1726908AbgCLWMN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
         Thu, 12 Mar 2020 18:12:13 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:45347 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726513AbgCLWMM (ORCPT
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37594 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726814AbgCLWMN (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 12 Mar 2020 18:12:12 -0400
-Received: by mail-pf1-f193.google.com with SMTP id 2so3934637pfg.12
-        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Mar 2020 15:12:11 -0700 (PDT)
+        Thu, 12 Mar 2020 18:12:13 -0400
+Received: by mail-pf1-f195.google.com with SMTP id p14so3959230pfn.4
+        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Mar 2020 15:12:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FD0VTjAKokoI3E/7TSv80ZTX/OnmyOrZGmVSUVDTIJg=;
-        b=AtzT6ed3RKo+TrBHWC/oRo/qy++U+kIyg8pEz/cAcAxFalTsfaNdcddt59hyBGMNEX
-         98z9yUyFG9eUnVqaey0BfiviUAngHMxHU21vQddA50UDn1oQesci2jnws/tLmTQKuqB4
-         rTL2jXB4JwlNU4EVGZN96IuPoDoki+B6xC0y16eiqSiNUM1k5W0bzbZH4/jJTt46OTfO
-         wglG+BgrzMFltQBVUnbsLXa5zw6/uE003dJ25gpo4tRW/xQ260N/nfJfKv0hZ6Rse9NS
-         m+PaVtH/Z+en8tP9A0aGfaYaIaL5O+X3vGx+enbSJyjSSaoAD7JdBkNDrq8G0uYkpFwI
-         6biw==
+        bh=vEoXsLC+v8mX4Vj+t+8zprwRGYdue84ZJZhMv1TU7d4=;
+        b=SCVgI5XtVuEAaxg45te/VTYpHWW864jeuIp4KtBoTO0VM++HlKKMQ6DGyjW0f1D9dE
+         prII1dfHfBmiKXI3qAeuYYW8I/cNyxW8O2XOrTMJoHw6YPfBJdsL+jEdbpg+ZuE75Dw+
+         UH2nGYJRUzJMZ5g/4F48q6sCipF2ZF3wZsJmYCZWO/3TbyS30soNDtWVK1hsaY626VmE
+         AplJFKkkEtKIYq134wpLxaFp3lt36SkUeeQCotNbguCK37DATHIyVMlLFBvN8HjN08ox
+         wbv/Ar+gnHI+J7p36ymcqTW+6wWUz88krY9t486xMELO0Vak4V0UxOukALZmkcuDjwWl
+         4CjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FD0VTjAKokoI3E/7TSv80ZTX/OnmyOrZGmVSUVDTIJg=;
-        b=RPVEq0yJjac9C5lR9JoTHD0fyd7VwvXFjVQUFfGJTYKKZdRSfp8jh8xvisMxs/Nrm6
-         of3V/ebFnoSgwnE/n+YMh12Y3D/Dq/J/1rrH1iFg5dTna/pkfdGJdSJPUFv7VOKWiKTf
-         Q17dhd05g5gjTWEefNuvW/o1JwogYqVUoneE65XlTfTc3XNE9vuQ8Ha+iLmYlJY90/bn
-         jsohhB7HsSnyKdXfAoyIXZ2imjKnprunX+4NQdhg+orvohsGX+1Jj6SpxHPOp3EaJX/A
-         ktrmUYmNGzDBbdfiP7ZMtlC7JeJ91GMXiA1vufZqpn73jBlM/GXwakS2PvrAuLAGwhmI
-         t6lA==
-X-Gm-Message-State: ANhLgQ1uICQdsw6+Bd8RtRrdKL0emlSG2bpg1ROmlVLthCuf9F4gpTzM
-        e/IjSe0tsfg30Zl+EoQPIEjxAw==
-X-Google-Smtp-Source: ADFU+vsNlTT9sk4Q7XMlGIB6bczoRUD+KopZ+EHzv7lRdNg8NnDkGjfii6ucP3dIao6OdeMgEXxNcQ==
-X-Received: by 2002:aa7:96b2:: with SMTP id g18mr10558338pfk.221.1584051130996;
-        Thu, 12 Mar 2020 15:12:10 -0700 (PDT)
+        bh=vEoXsLC+v8mX4Vj+t+8zprwRGYdue84ZJZhMv1TU7d4=;
+        b=hU9F8VEBpTlMCCeGw00UOSmzhF35qJ8ZvIq2G5IcfNKitpv9EDEFIO7Yo8tMQeb1Lc
+         Atdpo8kyuYhP3ed1CQzRt/QYPxApfVQPXgR9SUy2G+OzNbpWXWZnmLm4DeEXX1kzqEsf
+         8tYax/eBYT2pgXBhAGRz4f4+Xiz5xcTq7E8qacvElli7u2qrOMqqPdyLOSFxvUUi6mqq
+         LjNlmM8CLvjBfBsXYgy07VeQqVMj40mZZT0A3i3kcJZFuZSaetAZWMi0x5CROg1blaY1
+         6bqAVc57bOfwgvW1mc0Fmm1ywln2zhfvuLexlFPI+oFw/TNAOi4Qm9+Wb70xBQJOD2g2
+         qK8Q==
+X-Gm-Message-State: ANhLgQ0xpm+8S/U4qKJeyyihiIgHYT4NA0sm2tKH2y/ATjd4W7Kbjmtm
+        5HpY9Fh1pbcXfVOLwAOQpdbVJg==
+X-Google-Smtp-Source: ADFU+vvA1I4Lz9JWSZlABTRE9oXfu8PPIMhcQXdAwmtq1XDXEuKqM7yXOBhIXnywvfB0wLdWD/Gl3Q==
+X-Received: by 2002:a65:63ca:: with SMTP id n10mr9509453pgv.19.1584051132153;
+        Thu, 12 Mar 2020 15:12:12 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id j2sm20945362pfg.169.2020.03.12.15.12.10
+        by smtp.gmail.com with ESMTPSA id j2sm20945362pfg.169.2020.03.12.15.12.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 15:12:10 -0700 (PDT)
+        Thu, 12 Mar 2020 15:12:11 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     bjorn.andersson@linaro.org
 Cc:     linux-remoteproc@vger.kernel.org, ohad@wizery.com,
         loic.pallardy@st.com, s-anna@ti.com, peng.fan@nxp.com,
         arnaud.pouliquen@st.com, fabien.dessenne@st.com
-Subject: [PATCH 10/18] remoteproc: Decouple firmware load and remoteproc booting
-Date:   Thu, 12 Mar 2020 16:11:50 -0600
-Message-Id: <20200312221158.3613-11-mathieu.poirier@linaro.org>
+Subject: [PATCH 11/18] remoteproc: Repurpose function rproc_trigger_auto_boot()
+Date:   Thu, 12 Mar 2020 16:11:51 -0600
+Message-Id: <20200312221158.3613-12-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200312221158.3613-1-mathieu.poirier@linaro.org>
 References: <20200312221158.3613-1-mathieu.poirier@linaro.org>
@@ -63,117 +63,64 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-In preparation to support scenarios where MCU firmware is loaded and
-the MCU itself booted by another entity, split function rproc_boot()
-to decouple the functions of loading the firwmare and starting the
-initialisation process.  That way we can reuse the functionality
-provided by the current implementation without invariably dealing
-with firmware loading.
+Repurpose function rproc_trigger_auto_boot() so that it can deal with
+scenarios where the MCU is already running.  As such give it a new name
+to better represent the capabilities and add a call to rproc_actuate()
+if instructed by the platform code to synchronise with the MCU rather
+than boot it from scratch.
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- drivers/remoteproc/remoteproc_core.c | 63 +++++++++++++++++-----------
- 1 file changed, 39 insertions(+), 24 deletions(-)
+ drivers/remoteproc/remoteproc_core.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 1578a9c70422..7faee1396ef7 100644
+index 7faee1396ef7..d57b47b0d6be 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1714,21 +1714,10 @@ static void rproc_crash_handler_work(struct work_struct *work)
- 		rproc_trigger_recovery(rproc);
+@@ -51,6 +51,8 @@ static int rproc_alloc_carveout(struct rproc *rproc,
+ 				struct rproc_mem_entry *mem);
+ static int rproc_release_carveout(struct rproc *rproc,
+ 				  struct rproc_mem_entry *mem);
++static int rproc_actuate(struct rproc *rproc,
++			 const struct firmware *firmware_p);
+ 
+ /* Unique indices for remoteproc devices */
+ static DEFINE_IDA(rproc_dev_index);
+@@ -1444,10 +1446,17 @@ static void rproc_auto_boot_callback(const struct firmware *fw, void *context)
+ 	release_firmware(fw);
  }
  
--/**
-- * rproc_boot() - boot a remote processor
-- * @rproc: handle of a remote processor
-- *
-- * Boot a remote processor (i.e. load its firmware, power it on, ...).
-- *
-- * If the remote processor is already powered on, this function immediately
-- * returns (successfully).
-- *
-- * Returns 0 on success, and an appropriate error value otherwise.
-- */
--int rproc_boot(struct rproc *rproc)
-+static int rproc_actuate(struct rproc *rproc,
-+			 const struct firmware *firmware_p)
+-static int rproc_trigger_auto_boot(struct rproc *rproc)
++static int rproc_trigger_auto_initiate(struct rproc *rproc)
  {
--	const struct firmware *firmware_p;
--	struct device *dev;
-+	struct device *dev = &rproc->dev;
  	int ret;
  
- 	if (!rproc) {
-@@ -1736,8 +1725,6 @@ int rproc_boot(struct rproc *rproc)
- 		return -EINVAL;
++	/*
++	 * The MCU is already booted, all we need to do is synchronise with it.
++	 * No point dealing with a firmware image.
++	 */
++	if (rproc_sync_with_mcu(rproc))
++		return rproc_actuate(rproc, NULL);
++
+ 	/*
+ 	 * We're initiating an asynchronous firmware loading, so we can
+ 	 * be built-in kernel code, without hanging the boot process.
+@@ -1931,9 +1940,12 @@ int rproc_add(struct rproc *rproc)
+ 	/* create debugfs entries */
+ 	rproc_create_debug_dir(rproc);
+ 
+-	/* if rproc is marked always-on, request it to boot */
++	/*
++	 * if rproc is marked always-on, request it to boot or synchronise
++	 * with it.
++	 */
+ 	if (rproc->auto_boot) {
+-		ret = rproc_trigger_auto_boot(rproc);
++		ret = rproc_trigger_auto_initiate(rproc);
+ 		if (ret < 0)
+ 			return ret;
  	}
- 
--	dev = &rproc->dev;
--
- 	ret = mutex_lock_interruptible(&rproc->lock);
- 	if (ret) {
- 		dev_err(dev, "can't lock rproc %s: %d\n", rproc->name, ret);
-@@ -1756,24 +1743,52 @@ int rproc_boot(struct rproc *rproc)
- 		goto unlock_mutex;
- 	}
- 
--	dev_info(dev, "powering up %s\n", rproc->name);
-+	dev_info(dev, "%s %s\n",
-+		 firmware_p ? "powering up" : "syncing with",
-+		 rproc->name);
-+
-+	ret = rproc_fw_boot(rproc, firmware_p);
-+	if (ret)
-+		atomic_dec(&rproc->power);
-+
-+unlock_mutex:
-+	mutex_unlock(&rproc->lock);
-+	return ret;
-+}
-+
-+/**
-+ * rproc_boot() - boot a remote processor
-+ * @rproc: handle of a remote processor
-+ *
-+ * Boot a remote processor (i.e. load its firmware, power it on, ...).
-+ *
-+ * If the remote processor is already powered on, this function immediately
-+ * returns (successfully).
-+ *
-+ * Returns 0 on success, and an appropriate error value otherwise.
-+ */
-+int rproc_boot(struct rproc *rproc)
-+{
-+	const struct firmware *firmware_p;
-+	struct device *dev = &rproc->dev;
-+	int ret;
-+
-+	if (!rproc) {
-+		pr_err("invalid rproc handle\n");
-+		return -EINVAL;
-+	}
- 
- 	/* load firmware */
- 	ret = request_firmware(&firmware_p, rproc->firmware, dev);
- 	if (ret < 0) {
- 		dev_err(dev, "request_firmware failed: %d\n", ret);
--		goto downref_rproc;
-+		return ret;
- 	}
- 
--	ret = rproc_fw_boot(rproc, firmware_p);
-+	ret = rproc_actuate(rproc, firmware_p);
- 
- 	release_firmware(firmware_p);
- 
--downref_rproc:
--	if (ret)
--		atomic_dec(&rproc->power);
--unlock_mutex:
--	mutex_unlock(&rproc->lock);
- 	return ret;
- }
- EXPORT_SYMBOL(rproc_boot);
 -- 
 2.20.1
 
