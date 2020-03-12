@@ -2,48 +2,48 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8EA182A12
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2020 09:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FD4182AE7
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2020 09:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387999AbgCLIAJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 12 Mar 2020 04:00:09 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:50828 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387869AbgCLIAJ (ORCPT
+        id S1726000AbgCLIMk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 12 Mar 2020 04:12:40 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:11920 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725268AbgCLIMk (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 12 Mar 2020 04:00:09 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02C7qxMI028487;
-        Thu, 12 Mar 2020 09:00:02 +0100
+        Thu, 12 Mar 2020 04:12:40 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02C7rCGI031103;
+        Thu, 12 Mar 2020 09:12:33 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
  : date : message-id : references : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=yfAjiskuApnI7ltsE6KidUCesqH67sfSRCasBTHc9pE=;
- b=Lne50YTzS6lz8OYhd9F/XWSrt2snNGYTq7agdjSLizjH5doLKDoh2MS9HjDUQ6emwRRB
- 4U9FylMaG0pi5wpgKCAuzXpu7uYaTQyJW7w+sjmWH9b0O2ilHYxAYNnG0/pMhdJh9rRm
- yHb7qePTII1cSZWWTPmA8Qxgb785a82jQE19N30kWvG/F+USh/8qHMKJpdSR47aPK2w5
- 5qqnZGkUL4MoQVNBKaUDV4cbOuO7XzJK/HkuGvWDEk2LQqo84dovoOu9Qr42gg1W8VMd
- aC6Tpa1jxB6PInAHySMoCwN4GvCafsWpcN89AxbhO0CKpKJy4jT/1LK1hFMMwaJgxYe7 lQ== 
+ bh=RwEJBp8wHCul5X0rCg/SvUcmZaexxdJBwvrno11VP9w=;
+ b=n2Ns6GKJ/MPlczw8pswUq5NEBuk9m7/5pJHgZnNsYPm56MZAa9szNHhd3m69q12o855S
+ FIBr75IItjNH+Wg5KvGSXic2afygEua6bb0nBSQKBbVvNWu0bPhVoc0u1ZEnA11f+2tz
+ YA3a84Ofn7/MNuC9GfHM+sYIBDkEpc9GIbCd/kvc4rh2DplvypE/NFLfKZawS9uPcJZD
+ 2c2IouNQKxJRLzGGFDqGZH0/49r0+nWYtHQFX/F8mztOQlIUW9qtQSlrEnGs3ldOcQdo
+ +LQjd9C/i9ypJcvPqITAzhEsAeLgQbNrNJFTMQhodr8LlRd98EkUpdvVOqQdZKICUeog VQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2ynecdpw2n-1
+        by mx07-00178001.pphosted.com with ESMTP id 2ym1y70eyt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Mar 2020 09:00:02 +0100
+        Thu, 12 Mar 2020 09:12:33 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1FBEA100034;
-        Thu, 12 Mar 2020 09:00:02 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4050410002A;
+        Thu, 12 Mar 2020 09:12:33 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 11844210453;
-        Thu, 12 Mar 2020 09:00:02 +0100 (CET)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2E38C21046A;
+        Thu, 12 Mar 2020 09:12:33 +0100 (CET)
 Received: from SFHDAG7NODE2.st.com (10.75.127.20) by SFHDAG5NODE3.st.com
  (10.75.127.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Mar
- 2020 09:00:01 +0100
+ 2020 09:12:32 +0100
 Received: from SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090]) by
  SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090%20]) with mapi id
- 15.00.1473.003; Thu, 12 Mar 2020 09:00:01 +0100
+ 15.00.1473.003; Thu, 12 Mar 2020 09:12:32 +0100
 From:   Loic PALLARDY <loic.pallardy@st.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "ohad@wizery.com" <ohad@wizery.com>,
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     "ohad@wizery.com" <ohad@wizery.com>,
+        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
         "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
@@ -54,19 +54,19 @@ Subject: RE: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when rproc
  is crashed
 Thread-Topic: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when rproc
  is crashed
-Thread-Index: AQHV95N1/mW6m1ZqkUyhqMT4RCAmr6hD3LsAgAC7ffA=
-Date:   Thu, 12 Mar 2020 08:00:01 +0000
-Message-ID: <991a1e4bce844103a7e93960750944c1@SFHDAG7NODE2.st.com>
+Thread-Index: AQHV95N1/mW6m1ZqkUyhqMT4RCAmr6hD+T6AgACgTkA=
+Date:   Thu, 12 Mar 2020 08:12:32 +0000
+Message-ID: <1161f034ddc64d6aa782f06c3c4996cd@SFHDAG7NODE2.st.com>
 References: <1583924072-20648-1-git-send-email-loic.pallardy@st.com>
  <1583924072-20648-2-git-send-email-loic.pallardy@st.com>
- <20200311214504.GA32471@xps15>
-In-Reply-To: <20200311214504.GA32471@xps15>
+ <20200311232707.GA1214176@minitux>
+In-Reply-To: <20200311232707.GA1214176@minitux>
 Accept-Language: fr-FR, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.50]
+x-originating-ip: [10.75.127.46]
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
@@ -77,22 +77,21 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Mathieu,
+Hi Bjorn,
 
 > -----Original Message-----
-> From: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Sent: mercredi 11 mars 2020 22:45
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Sent: jeudi 12 mars 2020 00:27
 > To: Loic PALLARDY <loic.pallardy@st.com>
-> Cc: bjorn.andersson@linaro.org; ohad@wizery.com; linux-
+> Cc: ohad@wizery.com; mathieu.poirier@linaro.org; linux-
 > remoteproc@vger.kernel.org; linux-kernel@vger.kernel.org; Arnaud
 > POULIQUEN <arnaud.pouliquen@st.com>; benjamin.gaignard@linaro.org;
 > Fabien DESSENNE <fabien.dessenne@st.com>; s-anna@ti.com
 > Subject: Re: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when
 > rproc is crashed
 >=20
-> Hi Loic,
+> On Wed 11 Mar 03:54 PDT 2020, Loic Pallardy wrote:
 >=20
-> On Wed, Mar 11, 2020 at 11:54:31AM +0100, Loic Pallardy wrote:
 > > When remoteproc recovery is disabled and rproc crashed, user space
 > > client has no way to reboot co-processor except by a complete platform
 > > reboot.
@@ -102,21 +101,13 @@ Hi Mathieu,
 > > This patch offers the possibility to shutdown the co-processor if
 > > it is in RPROC_CRASHED state and so to restart properly co-processor
 > > from sysfs interface.
->=20
-> And it is not possible to use the debugfs interface [1] to restart the MC=
-U?
->=20
-> [1]. https://elixir.bootlin.com/linux/v5.6-
-> rc2/source/drivers/remoteproc/remoteproc_debugfs.c#L147
-
-Debugfs interface is optional and on final product it is often disabled.
-The used control interfaces are in kernel API and sysfs one.
-
-Regards,
-Loic
->=20
->=20
 > >
+>=20
+> I did recently run into a similar problem when I fed my remoteproc
+> faulty firmware, which lead to it recovering immediately upon boot. The
+> amount of time spent in !CRASHED state was minimal, so I didn't have any
+> way to stop the remoteproc.
+>=20
 > > Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
 > > ---
 > >  drivers/remoteproc/remoteproc_core.c  | 2 +-
@@ -134,6 +125,14 @@ Loic
 > >
 > > -	ret =3D rproc_stop(rproc, false);
 > > +	ret =3D rproc_stop(rproc, rproc->state =3D=3D RPROC_CRASHED);
+>=20
+> Afaict this is unrelated to the problem you're describing in the commit
+> message.
+Right, it is because now rproc_shudown could be could in a context where rp=
+roc is in RPROC_CRASHED state and so false is no more the default value.
+Could be split in another patch.
+
+>=20
 > >  	if (ret) {
 > >  		atomic_inc(&rproc->power);
 > >  		goto out;
@@ -149,6 +148,32 @@ Loic
 > > -		if (rproc->state !=3D RPROC_RUNNING)
 > > +		if (rproc->state !=3D RPROC_RUNNING && rproc->state !=3D
 > RPROC_CRASHED)
+>=20
+> Analogous to the problem reported by Alex here
+> https://patchwork.kernel.org/patch/11413161/ the handling of stop seems
+> racy.
+>=20
+> In particular, I believe you're failing to protect against a race
+> with a just scheduled rproc_crash_handler_work() being executed after
+> the mutex_unlock() in rproc_shutdown()...
+>=20
+> With Alex fix that should be less of a problem though...
+Thanks for pointing me Alex's patch. But I don't think it is exactly the sa=
+me issue as it concerns the recovery procedure itself.
+In my case, the recovery is disabled. On a crash detection, rproc->state is=
+ simply set to RPROC_CRASHED
+and recovery is not  triggered.
+Without client action, rproc will stay forever in RPROC_CRASHED test.
+Today without this modification, it is not possible to shutdown rproc prope=
+rly, putting coprocessor under reset,  disabling clocks...
+
+Regards,
+Loic
+
+>=20
+> Regards,
+> Bjorn
+>=20
 > >  			return -EINVAL;
 > >
 > >  		rproc_shutdown(rproc);
