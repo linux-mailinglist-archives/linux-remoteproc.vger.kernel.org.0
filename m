@@ -2,181 +2,93 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FD4182AE7
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2020 09:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 086FE182FCE
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2020 13:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726000AbgCLIMk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 12 Mar 2020 04:12:40 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:11920 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725268AbgCLIMk (ORCPT
+        id S1726720AbgCLME5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 12 Mar 2020 08:04:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:33302 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726044AbgCLME5 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 12 Mar 2020 04:12:40 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02C7rCGI031103;
-        Thu, 12 Mar 2020 09:12:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=RwEJBp8wHCul5X0rCg/SvUcmZaexxdJBwvrno11VP9w=;
- b=n2Ns6GKJ/MPlczw8pswUq5NEBuk9m7/5pJHgZnNsYPm56MZAa9szNHhd3m69q12o855S
- FIBr75IItjNH+Wg5KvGSXic2afygEua6bb0nBSQKBbVvNWu0bPhVoc0u1ZEnA11f+2tz
- YA3a84Ofn7/MNuC9GfHM+sYIBDkEpc9GIbCd/kvc4rh2DplvypE/NFLfKZawS9uPcJZD
- 2c2IouNQKxJRLzGGFDqGZH0/49r0+nWYtHQFX/F8mztOQlIUW9qtQSlrEnGs3ldOcQdo
- +LQjd9C/i9ypJcvPqITAzhEsAeLgQbNrNJFTMQhodr8LlRd98EkUpdvVOqQdZKICUeog VQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2ym1y70eyt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 12 Mar 2020 09:12:33 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4050410002A;
-        Thu, 12 Mar 2020 09:12:33 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2E38C21046A;
-        Thu, 12 Mar 2020 09:12:33 +0100 (CET)
-Received: from SFHDAG7NODE2.st.com (10.75.127.20) by SFHDAG5NODE3.st.com
- (10.75.127.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Mar
- 2020 09:12:32 +0100
-Received: from SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090]) by
- SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090%20]) with mapi id
- 15.00.1473.003; Thu, 12 Mar 2020 09:12:32 +0100
-From:   Loic PALLARDY <loic.pallardy@st.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     "ohad@wizery.com" <ohad@wizery.com>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
-        "benjamin.gaignard@linaro.org" <benjamin.gaignard@linaro.org>,
-        "Fabien DESSENNE" <fabien.dessenne@st.com>,
-        "s-anna@ti.com" <s-anna@ti.com>
-Subject: RE: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when rproc
- is crashed
-Thread-Topic: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when rproc
- is crashed
-Thread-Index: AQHV95N1/mW6m1ZqkUyhqMT4RCAmr6hD+T6AgACgTkA=
-Date:   Thu, 12 Mar 2020 08:12:32 +0000
-Message-ID: <1161f034ddc64d6aa782f06c3c4996cd@SFHDAG7NODE2.st.com>
-References: <1583924072-20648-1-git-send-email-loic.pallardy@st.com>
- <1583924072-20648-2-git-send-email-loic.pallardy@st.com>
- <20200311232707.GA1214176@minitux>
-In-Reply-To: <20200311232707.GA1214176@minitux>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.46]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 12 Mar 2020 08:04:57 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CDDB231B;
+        Thu, 12 Mar 2020 05:04:56 -0700 (PDT)
+Received: from [192.168.1.123] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 25B963F67D;
+        Thu, 12 Mar 2020 05:04:55 -0700 (PDT)
+Subject: Re: [PATCH 0/3] Request direct mapping for modem firmware subdevice
+To:     Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
+Cc:     ohad@wizery.com, devicetree@vger.kernel.org,
+        linux-kernel-owner@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org, iommu@lists.linux-foundation.org,
+        robh+dt@kernel.org, Sibi Sankar <sibis@codeaurora.org>,
+        agross@kernel.org
+References: <20200309182255.20142-1-sibis@codeaurora.org>
+ <20200310112332.GG3794@8bytes.org>
+ <4ed6ddd667a3e6f670084a443d141474@codeaurora.org>
+ <20200310162320.GL3794@8bytes.org>
+ <a50040a9-54fe-f682-dd7e-b2991b48d633@arm.com>
+ <ff805c5c647326c5edaddf2efec5cb87@codeaurora.org>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <497e40b8-300f-1b83-4312-93a58c459d1d@arm.com>
+Date:   Thu, 12 Mar 2020 12:05:00 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-03-11_15:2020-03-11,2020-03-11 signatures=0
+In-Reply-To: <ff805c5c647326c5edaddf2efec5cb87@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Bjorn,
+On 2020-03-12 6:28 am, Sai Prakash Ranjan wrote:
+> Hi Robin,
+> 
+> On 2020-03-10 22:14, Robin Murphy wrote:
+>> On 10/03/2020 4:23 pm, Joerg Roedel wrote:
+>>> On Tue, Mar 10, 2020 at 07:30:50PM +0530, Sibi Sankar wrote:
+>>>> The accesses are initiated by the firmware
+>>>> and they access modem reserved regions.
+>>>> However as explained in ^^ any accesses
+>>>> outside the region will result in a violation
+>>>> and is controlled through XPUs (protection units).
+>>>
+>>> Okay, this sounds like a case for arm_smmu_get_resv_region(). It should
+>>> return an entry for the reserved memory region the firmware needs to
+>>> access, so that generic iommu can setup this mapping.
+>>>
+>>> Note that it should return that entry only for your device, not for all
+>>> devices. Maybe there is a property in DT or IORT you can set to
+>>> transport this information into the arm-smmu driver.
+>>>
+>>> This is pretty similar to RMRR mapping on the Intel VT-d IOMMU or
+>>> Unity-mapped ranges in the AMD-Vi IOMMU.
+>>
+>> Yup, a way to describe boot-time memory regions in IORT is in the
+>> process of being specced out; the first attempt at an equivalent for
+>> DT is here:
+>>
+>> https://lore.kernel.org/linux-iommu/20191209150748.2471814-1-thierry.reding@gmail.com/ 
+>>
+>>
+>> If that's not enough and the SMMU still needs to treat certain Stream
+>> IDs specially because they may be untranslatable (due to having direct
+>> access to memory as a side-channel), then that should be handled in
+>> the SoC-specific corner of the SMMU driver, not delegated to
+>> individual endpoint drivers.
+>>
+> 
+> Are you talking about this one for SoC specific change - 
+> https://lore.kernel.org/patchwork/patch/1183530/
 
-> -----Original Message-----
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Sent: jeudi 12 mars 2020 00:27
-> To: Loic PALLARDY <loic.pallardy@st.com>
-> Cc: ohad@wizery.com; mathieu.poirier@linaro.org; linux-
-> remoteproc@vger.kernel.org; linux-kernel@vger.kernel.org; Arnaud
-> POULIQUEN <arnaud.pouliquen@st.com>; benjamin.gaignard@linaro.org;
-> Fabien DESSENNE <fabien.dessenne@st.com>; s-anna@ti.com
-> Subject: Re: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when
-> rproc is crashed
->=20
-> On Wed 11 Mar 03:54 PDT 2020, Loic Pallardy wrote:
->=20
-> > When remoteproc recovery is disabled and rproc crashed, user space
-> > client has no way to reboot co-processor except by a complete platform
-> > reboot.
-> > Indeed rproc_shutdown() is called by sysfs state_store() only is rproc
-> > state is RPROC_RUNNING.
-> >
-> > This patch offers the possibility to shutdown the co-processor if
-> > it is in RPROC_CRASHED state and so to restart properly co-processor
-> > from sysfs interface.
-> >
->=20
-> I did recently run into a similar problem when I fed my remoteproc
-> faulty firmware, which lead to it recovering immediately upon boot. The
-> amount of time spent in !CRASHED state was minimal, so I didn't have any
-> way to stop the remoteproc.
->=20
-> > Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
-> > ---
-> >  drivers/remoteproc/remoteproc_core.c  | 2 +-
-> >  drivers/remoteproc/remoteproc_sysfs.c | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/remoteproc/remoteproc_core.c
-> b/drivers/remoteproc/remoteproc_core.c
-> > index 097f33e4f1f3..7ac87a75cd1b 100644
-> > --- a/drivers/remoteproc/remoteproc_core.c
-> > +++ b/drivers/remoteproc/remoteproc_core.c
-> > @@ -1812,7 +1812,7 @@ void rproc_shutdown(struct rproc *rproc)
-> >  	if (!atomic_dec_and_test(&rproc->power))
-> >  		goto out;
-> >
-> > -	ret =3D rproc_stop(rproc, false);
-> > +	ret =3D rproc_stop(rproc, rproc->state =3D=3D RPROC_CRASHED);
->=20
-> Afaict this is unrelated to the problem you're describing in the commit
-> message.
-Right, it is because now rproc_shudown could be could in a context where rp=
-roc is in RPROC_CRASHED state and so false is no more the default value.
-Could be split in another patch.
+Exactly - this particular wheel needs no reinventing at all.
 
->=20
-> >  	if (ret) {
-> >  		atomic_inc(&rproc->power);
-> >  		goto out;
-> > diff --git a/drivers/remoteproc/remoteproc_sysfs.c
-> b/drivers/remoteproc/remoteproc_sysfs.c
-> > index 7f8536b73295..1029458a4678 100644
-> > --- a/drivers/remoteproc/remoteproc_sysfs.c
-> > +++ b/drivers/remoteproc/remoteproc_sysfs.c
-> > @@ -101,7 +101,7 @@ static ssize_t state_store(struct device *dev,
-> >  		if (ret)
-> >  			dev_err(&rproc->dev, "Boot failed: %d\n", ret);
-> >  	} else if (sysfs_streq(buf, "stop")) {
-> > -		if (rproc->state !=3D RPROC_RUNNING)
-> > +		if (rproc->state !=3D RPROC_RUNNING && rproc->state !=3D
-> RPROC_CRASHED)
->=20
-> Analogous to the problem reported by Alex here
-> https://patchwork.kernel.org/patch/11413161/ the handling of stop seems
-> racy.
->=20
-> In particular, I believe you're failing to protect against a race
-> with a just scheduled rproc_crash_handler_work() being executed after
-> the mutex_unlock() in rproc_shutdown()...
->=20
-> With Alex fix that should be less of a problem though...
-Thanks for pointing me Alex's patch. But I don't think it is exactly the sa=
-me issue as it concerns the recovery procedure itself.
-In my case, the recovery is disabled. On a crash detection, rproc->state is=
- simply set to RPROC_CRASHED
-and recovery is not  triggered.
-Without client action, rproc will stay forever in RPROC_CRASHED test.
-Today without this modification, it is not possible to shutdown rproc prope=
-rly, putting coprocessor under reset,  disabling clocks...
+[ I guess I should go review those patches properly... :) ]
 
-Regards,
-Loic
-
->=20
-> Regards,
-> Bjorn
->=20
-> >  			return -EINVAL;
-> >
-> >  		rproc_shutdown(rproc);
-> > --
-> > 2.7.4
-> >
+Robin.
