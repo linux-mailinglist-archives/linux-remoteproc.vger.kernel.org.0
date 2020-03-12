@@ -2,114 +2,177 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C78182900
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2020 07:28:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFA41829C7
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2020 08:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387950AbgCLG2s (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 12 Mar 2020 02:28:48 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:64710 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387831AbgCLG2s (ORCPT
+        id S2388032AbgCLHcX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 12 Mar 2020 03:32:23 -0400
+Received: from mail-bn8nam11on2058.outbound.protection.outlook.com ([40.107.236.58]:15041
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387930AbgCLHcX (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 12 Mar 2020 02:28:48 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1583994527; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=1U9Dhk5Hq6bAWxKppOxTuYI7ucms9N1Z1Z8GWTVbRSk=;
- b=ujMdUgUjLuz8j2g8IsSRvGJevx0cB3MUmepTMLJCbYymsTuoMsQZNujGzE9c4UnvyfLn56iD
- kkamLvo5gCmMtNoVhcVSfa8F7060mgEqr5Da0/vs/gvgRfwGl27NFsp+lAaKV1mYQyOi2dKi
- Mo8puus8anho123gEFwkEKUS7FI=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e69d68f.7efb4d199ed8-smtp-out-n01;
- Thu, 12 Mar 2020 06:28:31 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 04A0BC43637; Thu, 12 Mar 2020 06:28:30 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: saiprakash.ranjan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5FDDEC433CB;
-        Thu, 12 Mar 2020 06:28:30 +0000 (UTC)
+        Thu, 12 Mar 2020 03:32:23 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Yxb0r/bBgrJpqzin2Amp9Byd8aLI7AzMpYri41wm7VaSQlDvow1zqjQxHRjM8Wkd1eEAvn3nvWLHQuGh6gsX9my0Ix/s03iua+XfX7x8KXqYnaXOuilxKB0pAysAhL6cKDAbW8pPd9VjYdl6Q71EG+2AbQOZ25MyG7yLKHroUp1ukNcTsHKCcBEjrKXZFV0YzeXj/aVjS2yobFHGinLHo94lU7Sh++i+5+xBq77UlzPZeyhlFkOuYEcJJ2O/fs88paLq0w/bdB+iL/pOPaC+GBo7dkrOviYdgjpRiczhTpvEyoXlzSp/OcJkXIJUucK2m/uYvfr+bI6kkQfhQMaVkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ILKe4tO3bnfssvWnx/3cUr+LFaZe92AjLpSYHCCSs5w=;
+ b=liv76c1C4BaIQSSZ8J1KERLOJk2ywBhrKFj9VN3plngsGkTi34jq9eaSKAHvnWPoGGtmKxbkkxCqDjHy5BUxRoLFD57RHkiUGZY+7U96iPjqRcaj9ATG76HrnMsls+VY5npnBiHDDIB4G31/LBIQGUmtPVdaGjkIoeeAnSHG2OTsfdcZq8ztTBxRh0wgaIjYoBIVodqqaVj8entpSL3kZlKApa6PtOyc3WOZE7GuQANbLsQJqvgUj/OFj1/cccjlCBLhLtzGcv5OZlYuKXaSed5HhzDCsBn9trAx+Cq7p3EYIcM/JzaGpLocEIyIWOgOkyYCQ0W5utcNl7LBHnQTow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ILKe4tO3bnfssvWnx/3cUr+LFaZe92AjLpSYHCCSs5w=;
+ b=AwuxN5z7vslCRCVx/pwHv4UxsV1D7vDrVDFxEC1+9cwMm0ZhsZoP0K9ep8TF3BtgNEOILSvrQypExpK+r45Aa0M945khcJsAf7rUdiPHfxF9nE50pXHCuolP5czoffdCNYe9B0/fh5K2q57ejU07FYnP5OZAZyspBgK/1S7PB2E=
+Received: from DM6PR08CA0018.namprd08.prod.outlook.com (2603:10b6:5:80::31) by
+ DM6PR02MB4410.namprd02.prod.outlook.com (2603:10b6:5:1e::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2793.17; Thu, 12 Mar 2020 07:32:20 +0000
+Received: from CY1NAM02FT020.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:5:80:cafe::9f) by DM6PR08CA0018.outlook.office365.com
+ (2603:10b6:5:80::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2793.16 via Frontend
+ Transport; Thu, 12 Mar 2020 07:32:19 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ CY1NAM02FT020.mail.protection.outlook.com (10.152.75.191) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2814.13
+ via Frontend Transport; Thu, 12 Mar 2020 07:32:19 +0000
+Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1jCIKJ-0008Ln-A1; Thu, 12 Mar 2020 00:32:19 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1jCIKE-0003Fh-78; Thu, 12 Mar 2020 00:32:14 -0700
+Received: from [172.30.17.108]
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <michals@xilinx.com>)
+        id 1jCIK4-0003DC-JB; Thu, 12 Mar 2020 00:32:04 -0700
+Subject: Re: [PATCH 1/5] firmware: xilinx: Add ZynqMP firmware ioctl enums for
+ RPU configuration.
+To:     Ben Levinsky <ben.levinsky@xilinx.com>, ohad@wizery.com,
+        bjorn.andersson@linaro.org, michal.simek@xilinx.com,
+        jollys@xilinx.com, rajan.vaja@xilinx.com, robh+dt@kernel.org,
+        mark.rutland@arm.com
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1582566751-13118-1-git-send-email-ben.levinsky@xilinx.com>
+ <1582566751-13118-2-git-send-email-ben.levinsky@xilinx.com>
+From:   Michal Simek <michal.simek@xilinx.com>
+Message-ID: <4d95f021-c3cc-3238-665d-8d5825c6a123@xilinx.com>
+Date:   Thu, 12 Mar 2020 08:32:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <1582566751-13118-2-git-send-email-ben.levinsky@xilinx.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 12 Mar 2020 11:58:30 +0530
-From:   Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Joerg Roedel <joro@8bytes.org>, Sibi Sankar <sibis@codeaurora.org>,
-        ohad@wizery.com, devicetree@vger.kernel.org,
-        linux-kernel-owner@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, iommu@lists.linux-foundation.org,
-        robh+dt@kernel.org, agross@kernel.org,
-        saiprakash.ranjan@codeaurora.org
-Subject: Re: [PATCH 0/3] Request direct mapping for modem firmware subdevice
-In-Reply-To: <a50040a9-54fe-f682-dd7e-b2991b48d633@arm.com>
-References: <20200309182255.20142-1-sibis@codeaurora.org>
- <20200310112332.GG3794@8bytes.org>
- <4ed6ddd667a3e6f670084a443d141474@codeaurora.org>
- <20200310162320.GL3794@8bytes.org>
- <a50040a9-54fe-f682-dd7e-b2991b48d633@arm.com>
-Message-ID: <ff805c5c647326c5edaddf2efec5cb87@codeaurora.org>
-X-Sender: saiprakash.ranjan@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(136003)(346002)(376002)(396003)(199004)(356004)(426003)(478600001)(9786002)(8676002)(31686004)(36756003)(81166006)(8936002)(4326008)(70586007)(6666004)(81156014)(70206006)(186003)(31696002)(316002)(2616005)(26005)(336012)(5660300002)(44832011)(2906002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR02MB4410;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d8a0345e-4862-4ac9-afde-08d7c6577f6c
+X-MS-TrafficTypeDiagnostic: DM6PR02MB4410:
+X-Microsoft-Antispam-PRVS: <DM6PR02MB44103B4529EEA8FAD9606DC3C6FD0@DM6PR02MB4410.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:525;
+X-Forefront-PRVS: 0340850FCD
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: juEt3ycHiV2q6n/SKCuAIGDPZhhPglb7da2gee+MzGlhTt6drCevMJblJKmkiyLczOCBD8yPCh12e8IPpCyt5dkV+M6a0FAp0yQbBMaWKXXEj0lJ8248fnSrfFqGm4nAeKWLBQC9LPw167XP1bb8IeLJehG29JrFJnMfRS/ngHeTcOXSW0wQmNY0ZFVOvGQUk/3som5T5jLGIQAJneHiOpdCe9u3rT8vytDw+5lZv8ouXzYndqwV5hxjXCpciwlQUPrAZNkx4bwGz+b6z514NmJiGIc6xc8HuJEkn8MawFWg1ED0Iz3IetIRQiJ3qoJlxnCHoO2imB/XpHf87VN1GsDwN5D5+5evhn+xNfHBXTRN/2220OgjArCKcrpLlixyZp5jGW1GBQY/EbxCELfSssO7MZ6vqj/hiDh071uSiUqLkopoLmIG3MvlLzeSDiZy
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2020 07:32:19.7187
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8a0345e-4862-4ac9-afde-08d7c6577f6c
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB4410
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Robin,
-
-On 2020-03-10 22:14, Robin Murphy wrote:
-> On 10/03/2020 4:23 pm, Joerg Roedel wrote:
->> On Tue, Mar 10, 2020 at 07:30:50PM +0530, Sibi Sankar wrote:
->>> The accesses are initiated by the firmware
->>> and they access modem reserved regions.
->>> However as explained in ^^ any accesses
->>> outside the region will result in a violation
->>> and is controlled through XPUs (protection units).
->> 
->> Okay, this sounds like a case for arm_smmu_get_resv_region(). It 
->> should
->> return an entry for the reserved memory region the firmware needs to
->> access, so that generic iommu can setup this mapping.
->> 
->> Note that it should return that entry only for your device, not for 
->> all
->> devices. Maybe there is a property in DT or IORT you can set to
->> transport this information into the arm-smmu driver.
->> 
->> This is pretty similar to RMRR mapping on the Intel VT-d IOMMU or
->> Unity-mapped ranges in the AMD-Vi IOMMU.
+On 24. 02. 20 18:52, Ben Levinsky wrote:
+> Add ZynqMP firmware ioctl enums for RPU configuration.
 > 
-> Yup, a way to describe boot-time memory regions in IORT is in the
-> process of being specced out; the first attempt at an equivalent for
-> DT is here:
+> Signed-off-by: Ben Levinsky <ben.levinsky@xilinx.com>
+> ---
+>  drivers/firmware/xilinx/zynqmp.c     |  4 ++++
+>  include/linux/firmware/xlnx-zynqmp.h | 19 +++++++++++++++++++
+>  2 files changed, 23 insertions(+)
 > 
-> https://lore.kernel.org/linux-iommu/20191209150748.2471814-1-thierry.reding@gmail.com/
-> 
-> If that's not enough and the SMMU still needs to treat certain Stream
-> IDs specially because they may be untranslatable (due to having direct
-> access to memory as a side-channel), then that should be handled in
-> the SoC-specific corner of the SMMU driver, not delegated to
-> individual endpoint drivers.
+> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
+> index ecc339d..20e4574 100644
+> --- a/drivers/firmware/xilinx/zynqmp.c
+> +++ b/drivers/firmware/xilinx/zynqmp.c
+> @@ -512,6 +512,10 @@ static int zynqmp_pm_clock_getparent(u32 clock_id, u32 *parent_id)
+>  static inline int zynqmp_is_valid_ioctl(u32 ioctl_id)
+>  {
+>  	switch (ioctl_id) {
+> +	case IOCTL_GET_RPU_OPER_MODE:
+> +	case IOCTL_SET_RPU_OPER_MODE:
+> +	case IOCTL_RPU_BOOT_ADDR_CONFIG:
+> +	case IOCTL_TCM_COMB_CONFIG:
+>  	case IOCTL_SET_PLL_FRAC_MODE:
+>  	case IOCTL_GET_PLL_FRAC_MODE:
+>  	case IOCTL_SET_PLL_FRAC_DATA:
+> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
+> index 2cd12eb..b8ca118 100644
+> --- a/include/linux/firmware/xlnx-zynqmp.h
+> +++ b/include/linux/firmware/xlnx-zynqmp.h
+> @@ -100,6 +100,10 @@ enum pm_ret_status {
+>  };
+>  
+>  enum pm_ioctl_id {
+> +	IOCTL_GET_RPU_OPER_MODE = 0,
+> +	IOCTL_SET_RPU_OPER_MODE,
+> +	IOCTL_RPU_BOOT_ADDR_CONFIG,
+> +	IOCTL_TCM_COMB_CONFIG,
+>  	IOCTL_SET_SD_TAPDELAY = 7,
+>  	IOCTL_SET_PLL_FRAC_MODE,
+>  	IOCTL_GET_PLL_FRAC_MODE,
+> @@ -118,6 +122,21 @@ enum pm_query_id {
+>  	PM_QID_CLOCK_GET_MAX_DIVISOR,
+>  };
+>  
+> +enum rpu_oper_mode {
+> +	PM_RPU_MODE_LOCKSTEP,
+> +	PM_RPU_MODE_SPLIT,
+> +};
+> +
+> +enum rpu_boot_mem {
+> +	PM_RPU_BOOTMEM_LOVEC,
+> +	PM_RPU_BOOTMEM_HIVEC,
+> +};
+> +
+> +enum rpu_tcm_comb {
+> +	PM_RPU_TCM_SPLIT,
+> +	PM_RPU_TCM_COMB,
+> +};
+> +
+>  enum zynqmp_pm_reset_action {
+>  	PM_RESET_ACTION_RELEASE,
+>  	PM_RESET_ACTION_ASSERT,
 > 
 
-Are you talking about this one for SoC specific change - 
-https://lore.kernel.org/patchwork/patch/1183530/
+This is fine.
 
-Thanks,
-Sai
-
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a 
-member
-of Code Aurora Forum, hosted by The Linux Foundation
+M
