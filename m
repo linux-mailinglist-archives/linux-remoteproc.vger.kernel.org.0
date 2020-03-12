@@ -2,57 +2,57 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5E1183C15
+	by mail.lfdr.de (Postfix) with ESMTP id 80B91183C16
 	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2020 23:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726832AbgCLWMQ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 12 Mar 2020 18:12:16 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36773 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726814AbgCLWMQ (ORCPT
+        id S1726863AbgCLWMS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 12 Mar 2020 18:12:18 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:34837 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726814AbgCLWMR (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 12 Mar 2020 18:12:16 -0400
-Received: by mail-pg1-f195.google.com with SMTP id c7so3767012pgw.3
-        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Mar 2020 15:12:16 -0700 (PDT)
+        Thu, 12 Mar 2020 18:12:17 -0400
+Received: by mail-pg1-f193.google.com with SMTP id 7so3762162pgr.2
+        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Mar 2020 15:12:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vXhYKsEgtOtgmS2aSTH+9jrtvT5eBwGnQHEbD8f3LS4=;
-        b=GHNsrf4r82idDLjJS2AHJnlBPM6GEbxGK0jOAdX44HLAjVn4joEGbqk6+nrTTtXiL8
-         6L+yr3xaYccZHD3RvVXnD0XZ5FK+2tuw3W7bXfxLIk7UxwhwW9TiMyYF5CpsxbNK08IT
-         1VO9ZFdiPLEzb0L5JttOfJhK9UlPSXJteWuFcllVUOp58wairbSGwBKzWzydMNORxQf5
-         BtWtsZeo1oOK4iMRAf+JxQdHMDKqyGlBWKRYotbWXdBCQPkTiSkfIaOayCSPfObnC1PU
-         hrmCaXQpOmF6RgiCRdJ7vJLz8r+E/G9DQxBjz9fiy4fHwD/F3aeEkzxb3KhTEpWzu3UI
-         g7gA==
+        bh=OyAEH5Ogm2ev5rgwlfYAIWzzoyq+qykv1xNnTlFgbyA=;
+        b=IAiyvPZm32U6z3XsX+mSpRQZ1E4PFzGOC2cu6jj0rBvvPG+/l7nAckIiCw7wQJgC98
+         Fi/SKwJbo7crVx3LjE9LntdIikWlspWBYb93YO6fW5sz/8vjINy87ShsaY/SV6JHxZZt
+         fOEqjC349KXOZg8A7WSBLdabyEc/XvboFmyF9ES3aEG790AbSlUhmWhYbfWGQYc96x/C
+         GmlZwlInVtlqtp03QrJoSxSkZnpkurbvJUP+5ut2+yzbf4RdPadjLrIhHpLQgRLT/Z3z
+         LkcD+8+DURX1Jp1mPudG/+iH8T/ipNUoycUsrdHQxRQAmx1hVQHHppAwGFudwBS7e8rl
+         yI0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vXhYKsEgtOtgmS2aSTH+9jrtvT5eBwGnQHEbD8f3LS4=;
-        b=AiviNu3rW40jDhg7dUInX4dzkg7sAGeAkF1NuI+BoMIcEgfovk5fOqGBxS4yLqG6a6
-         cSoWl5p379qCbjjIaeUJaNcgHFDHKnSB+ka5MlpXUCMGGn2Udc62ZkmBr746ZExuxZMP
-         xceLVCZty+BRka5q/TaMOHU70ocar+zeNMIO1djv3Bz9gwM3Kz5g2YzAYC6YujGEsdtg
-         79q7RpvZOmPl+eX9pu+KCfdx+7HmWG3rhgTD4eBTl8JQ6vr0Vwr2QZ0b/865ps/m8/in
-         OqwrD25l1toe9wUGvGqCuZP/7c/PjarW6XqD+cCeXTBLB51GFULnm30avy2BNogqbhuO
-         5t2w==
-X-Gm-Message-State: ANhLgQ1tqVMQtlDx898gMHvf9H5rZuVQGVlriFV4r/LE/OQwKdOqUtuv
-        JEKkILmiO0qYU+uGotYA7WITovWgP78=
-X-Google-Smtp-Source: ADFU+vsE2mHV0veywNiOl1WQtHYDlMdkrAltxtd+XxZXrYLdh90LH1fQGQJgzzIGFWE05nB2iXUBFw==
-X-Received: by 2002:a63:5f41:: with SMTP id t62mr9662004pgb.114.1584051135609;
-        Thu, 12 Mar 2020 15:12:15 -0700 (PDT)
+        bh=OyAEH5Ogm2ev5rgwlfYAIWzzoyq+qykv1xNnTlFgbyA=;
+        b=XBn/xF1SFN8aywChR80yNkUaBWZfTW7dNXcDPiV7ZAg+7rSl4RQjdwltMPYDKC1tg/
+         OuOx64Mn+BLPEEPahC1CFnlvYBgGG8FL/nLq/58T078bTHO8JCO9KZub8J4PMvA7Hevt
+         792lIiPnv3LLktMmUeuUIPrsvgYW5wiHbIlK8ahJ8X60OmxOyqGXuVyMIuL5cTTnUC4r
+         IIEt1DVpRVfYkb7jvGo9u8IFSkDNG2zwKgjTh5m5JotWeCHiyjZGUK3yPFO0D/ZnOu0p
+         rM1nc0xL7JEgVU+e00ZXdY8wWkYCmFiyNcR1Ai+8EgkdGv9ILlnT0QSr/ZgMnxXMonhA
+         JB9g==
+X-Gm-Message-State: ANhLgQ3hEff717yGvVDcz1KJugfFwuD6N6LCkAEagPHI0jJ+i0E8lno7
+        fVx9qXOTZYgIEsJsK+Gb/SALlQ==
+X-Google-Smtp-Source: ADFU+vuzHxWCeYNEf7MKu4lwaKllQEoaRR90gNFZmapLIbQ+eCMrF6mBzJcaTMLeXJU7qnJbT2Rxgw==
+X-Received: by 2002:a63:5547:: with SMTP id f7mr10046223pgm.166.1584051136698;
+        Thu, 12 Mar 2020 15:12:16 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id j2sm20945362pfg.169.2020.03.12.15.12.14
+        by smtp.gmail.com with ESMTPSA id j2sm20945362pfg.169.2020.03.12.15.12.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 15:12:15 -0700 (PDT)
+        Thu, 12 Mar 2020 15:12:16 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     bjorn.andersson@linaro.org
 Cc:     linux-remoteproc@vger.kernel.org, ohad@wizery.com,
         loic.pallardy@st.com, s-anna@ti.com, peng.fan@nxp.com,
         arnaud.pouliquen@st.com, fabien.dessenne@st.com
-Subject: [PATCH 14/18] remoteproc: Refactor function rproc_trigger_recovery()
-Date:   Thu, 12 Mar 2020 16:11:54 -0600
-Message-Id: <20200312221158.3613-15-mathieu.poirier@linaro.org>
+Subject: [PATCH 15/18] remoteproc: Correctly deal with MCU synchronisation when changing FW image
+Date:   Thu, 12 Mar 2020 16:11:55 -0600
+Message-Id: <20200312221158.3613-16-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200312221158.3613-1-mathieu.poirier@linaro.org>
 References: <20200312221158.3613-1-mathieu.poirier@linaro.org>
@@ -63,51 +63,61 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Refactor function rproc_trigger_recovery() in order to avoid
-reloading the fw image when synchronising with an MCU rather than
-booting it.
+This patch prevents the firmware image from being displayed or changed when
+the remoteproc core is synchronising with an MCU. This is needed since
+there is no guarantee about the nature of the firmware image that is loaded
+by the external entity.
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- drivers/remoteproc/remoteproc_core.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/remoteproc/remoteproc_sysfs.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 806201af9470..7ea4397a9004 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1659,7 +1659,7 @@ static void rproc_coredump(struct rproc *rproc)
-  */
- int rproc_trigger_recovery(struct rproc *rproc)
+diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
+index 7f8536b73295..4956577ad4b4 100644
+--- a/drivers/remoteproc/remoteproc_sysfs.c
++++ b/drivers/remoteproc/remoteproc_sysfs.c
+@@ -13,9 +13,20 @@
+ static ssize_t firmware_show(struct device *dev, struct device_attribute *attr,
+ 			  char *buf)
  {
--	const struct firmware *firmware_p;
-+	const struct firmware *firmware_p = NULL;
- 	struct device *dev = &rproc->dev;
- 	int ret;
++	ssize_t ret;
+ 	struct rproc *rproc = to_rproc(dev);
  
-@@ -1676,14 +1676,16 @@ int rproc_trigger_recovery(struct rproc *rproc)
- 	/* generate coredump */
- 	rproc_coredump(rproc);
+-	return sprintf(buf, "%s\n", rproc->firmware);
++	/*
++	 * In most instances there is no guarantee about the firmware
++	 * that was loaded by the external entity.  As such simply don't
++	 * print anything.
++	 */
++	if (rproc_sync_with_mcu(rproc))
++		ret = sprintf(buf, "\n");
++	else
++		ret = sprintf(buf, "%s\n", rproc->firmware);
++
++	return ret;
+ }
  
--	/* load firmware */
--	ret = request_firmware(&firmware_p, rproc->firmware, dev);
--	if (ret < 0) {
--		dev_err(dev, "request_firmware failed: %d\n", ret);
--		goto unlock_mutex;
-+	/* load firmware if need be */
-+	if (!rproc_sync_with_mcu(rproc)) {
-+		ret = request_firmware(&firmware_p, rproc->firmware, dev);
-+		if (ret < 0) {
-+			dev_err(dev, "request_firmware failed: %d\n", ret);
-+			goto unlock_mutex;
-+		}
+ /* Change firmware name via sysfs */
+@@ -33,6 +44,18 @@ static ssize_t firmware_store(struct device *dev,
+ 		return -EINVAL;
  	}
  
--	/* boot the remote processor up again */
-+	/* boot up or synchronise with the remote processor again */
- 	ret = rproc_start(rproc, firmware_p);
- 
- 	release_firmware(firmware_p);
++	/*
++	 * There is no point in trying to change the firmware if the MCU
++	 * is currently running or if loading of the image is done by
++	 * another entity.
++	 */
++	if (rproc_sync_with_mcu(rproc)) {
++		dev_err(dev,
++			"can't change firmware while synchronising with MCU\n");
++		err = -EBUSY;
++		goto out;
++	}
++
+ 	if (rproc->state != RPROC_OFFLINE) {
+ 		dev_err(dev, "can't change firmware while running\n");
+ 		err = -EBUSY;
 -- 
 2.20.1
 
