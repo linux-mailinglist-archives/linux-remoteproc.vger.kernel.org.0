@@ -2,379 +2,210 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5E9183C19
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2020 23:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3103B183EEE
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Mar 2020 03:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbgCLWMV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 12 Mar 2020 18:12:21 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:36222 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726814AbgCLWMV (ORCPT
+        id S1726246AbgCMCEK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 12 Mar 2020 22:04:10 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:45899 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726099AbgCMCEK (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 12 Mar 2020 18:12:21 -0400
-Received: by mail-pl1-f194.google.com with SMTP id g2so723096plo.3
-        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Mar 2020 15:12:20 -0700 (PDT)
+        Thu, 12 Mar 2020 22:04:10 -0400
+Received: by mail-qk1-f194.google.com with SMTP id c145so9964248qke.12
+        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Mar 2020 19:04:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HLllXn7X6ZYAetG9wnBDeuGkqxnnfCDJmFR0GyYYgLc=;
-        b=Deyw2YuyH9eOgoAIh+aVwVJshvhroUtWHNY0T8IX9ACTPxR5I+yIFbE5fit4eowwKQ
-         3YjHLkmzYYUbrwQefnyodWtaFJrqjiEMzUAwkOrbLm8DA8dD5NPkCPeR36igseOXCKaX
-         raJYY5t/FxTcbrjGU9jHKm6hA9PZcBuh3IKgvyLNxy9YFNguk1W2MskaAJxu9Lgz/hl2
-         syyb6fJwMdNGcnF3ou/PO1yCZvn1mggZbkavR9nvGHVtZeLd5hsCM/Zz2NRcWwvNabg6
-         Hkgl7FE3taQbMdIW9WSyH0hub7UgurKzNya4l1rNkB29Rk56+5dt3TNdhvQuovDF9Lun
-         2s9w==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JvB0bH2bqfpVh+di/rVF1OH+9fKRfbO8e7XXbmWMp1Q=;
+        b=UjmHZ90F2e80yQE5Jy6pdDfmXa3GhNSBk1hOMiUL1ebkm0DZZS/DvvQBh9MH5lIsy+
+         WlDgedbtT9Bjxe0ZYqFsjfKpawVRIBQVF+KYLnyVsX5lzmTCdjpWpRcL0XrEYtdK1Gu3
+         Y4Z8I2KbGt8J3UXvooB1Yplhf6TEw1LF/XGJH+vpc1thcsfgO+OQX/p0iT1Jij+g/+qh
+         oC0pXUyaFY3AxGmIDt0ffi3oeX6g6txyhUVHXLkCSiqAM0iEZtyntLhQbjWfIa11kxHi
+         HsdCe6QUECiDcioZ/DL8S2SJ8Gc3t58HVNa45PzbF4X3f63QX9UI4/1rkoupiAoINzGd
+         YJ3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HLllXn7X6ZYAetG9wnBDeuGkqxnnfCDJmFR0GyYYgLc=;
-        b=pHNeS6k1F4/9yS1ffVrIYldX7S4YD80EkpksYD/CwMt5KBxliabd6PWmI61mkkGVQz
-         6GJPdzp9KbTJFoe63veI82zgL3hs7p2LYAEbX2fWWLpWVfvdmiUYdb1rzvJzL0JmihCa
-         QWySDKPWh47q5RWxtb+Z5GpEDy8jLEOlo0Mvstz1oDJ83UKu2C4ywiHvi7hmFva3GS1v
-         2mrii/lLvyvwdg5EXZqAQtl4xKZvluSXaSZwhPsA+DyEYqsskx7unDgRqZ1rxSFwmLv4
-         8tee0MZCVl+18lqTbZ6bC8kd69mx80zGOsKYY4nZCFH7gY0BRf72vdrNEXsG9sCQTc81
-         cgug==
-X-Gm-Message-State: ANhLgQ3zzRPf/y6uN0ougQf9HQ2JAFGL5IrCnEwnMo0AZYcO+9BTevFw
-        l5YG+B/xWUMffmAcGTOhrxHmSw==
-X-Google-Smtp-Source: ADFU+vtRhB8GTqHj6vHrODDI52dGnB+cfyE+xEIKo8Dx89XdlRgL6Be0UZV2qjcExIQa74VrcDIJdg==
-X-Received: by 2002:a17:902:524:: with SMTP id 33mr10455071plf.241.1584051139951;
-        Thu, 12 Mar 2020 15:12:19 -0700 (PDT)
-Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id j2sm20945362pfg.169.2020.03.12.15.12.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 15:12:19 -0700 (PDT)
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     bjorn.andersson@linaro.org
-Cc:     linux-remoteproc@vger.kernel.org, ohad@wizery.com,
-        loic.pallardy@st.com, s-anna@ti.com, peng.fan@nxp.com,
-        arnaud.pouliquen@st.com, fabien.dessenne@st.com
-Subject: [PATCH 18/18] remoteproc: stm32: add support for co-processor booted before kernel
-Date:   Thu, 12 Mar 2020 16:11:58 -0600
-Message-Id: <20200312221158.3613-19-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200312221158.3613-1-mathieu.poirier@linaro.org>
-References: <20200312221158.3613-1-mathieu.poirier@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JvB0bH2bqfpVh+di/rVF1OH+9fKRfbO8e7XXbmWMp1Q=;
+        b=hOVhHR2e0Omj/D09NdfUOc45xYZz8ujIr8D6lQsNh3cr6bkdARHCAJ3ETLiStiVs0O
+         JFCd/a9zNr4QKCS/RzVxO3SlgnuuopeiDZdkj/nSjwfAUNExtNcfAmFH/EQbVpsWd0Gs
+         BW3y71NCwOedjzcnU3vlepPmCETJsJI2zNu9pf3NbERFGovhKEXtjPcrAgpNnK/4HC4f
+         XecaU/1rh+E6H4v1gFGKC8pN73mHXHdJTLiDw5vcyVaRCgXI9HsteCDtMoWqSCfa7oSK
+         KZL1x0VH5AtlYNOrJCboyv1kyJmF5NO65+WgeEhMCM6ZoVucV6L2cDwFd9odInS8nnQE
+         GjCQ==
+X-Gm-Message-State: ANhLgQ0Vv7edG7EQsgACyMUVKtHdLDQoPcTee4Uy11D+gY4VdPPQD1o3
+        58APQaYl29U7ROX/pgMFbE3pgDXRT99DWygRdSg=
+X-Google-Smtp-Source: ADFU+vvP093Qp/lp7gztx2A/wYs7B4uc8iy6SrJ/dUeLbWLtkOBCa7MdV5Pz6N3QwecuUAFMDvunSLaQivLw4AKVcQE=
+X-Received: by 2002:a37:987:: with SMTP id 129mr10961225qkj.83.1584065049168;
+ Thu, 12 Mar 2020 19:04:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200312221158.3613-1-mathieu.poirier@linaro.org> <20200312221158.3613-2-mathieu.poirier@linaro.org>
+In-Reply-To: <20200312221158.3613-2-mathieu.poirier@linaro.org>
+From:   Xiang Xiao <xiaoxiang781216@gmail.com>
+Date:   Fri, 13 Mar 2020 10:03:57 +0800
+Message-ID: <CAH2Cfb8jkMtdJ0oUNWQ4Bbsybrkb4z_0kP8UH6tYkEB6peZ56g@mail.gmail.com>
+Subject: Re: [PATCH 01/18] remoteproc: Add new operation and state machine for
+ MCU synchronisation
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, Ohad Ben Cohen <ohad@wizery.com>,
+        Loic Pallardy <loic.pallardy@st.com>,
+        Suman Anna <s-anna@ti.com>, peng.fan@nxp.com,
+        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
+        Fabien Dessenne <fabien.dessenne@st.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Fabien Dessenne <fabien.dessenne@st.com>
+On Fri, Mar 13, 2020 at 6:12 AM Mathieu Poirier
+<mathieu.poirier@linaro.org> wrote:
+>
+> Add a new rproc_ops sync_ops to support use cases where the remoteproc
+> core is synchronisting with the MCU.  When exactly to use the sync_ops is
+> directed by the states in struct rproc_sync_states.
+>
+> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> ---
+>  drivers/remoteproc/remoteproc_debugfs.c  | 31 ++++++++++++++++++++++++
+>  drivers/remoteproc/remoteproc_internal.h |  5 ++++
+>  include/linux/remoteproc.h               | 23 +++++++++++++++++-
+>  3 files changed, 58 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
+> index dd93cf04e17f..187bcc67f997 100644
+> --- a/drivers/remoteproc/remoteproc_debugfs.c
+> +++ b/drivers/remoteproc/remoteproc_debugfs.c
+> @@ -311,6 +311,35 @@ static const struct file_operations rproc_carveouts_ops = {
+>         .release        = single_release,
+>  };
+>
+> +/* Expose synchronisation states via debugfs */
+> +static int rproc_sync_states_show(struct seq_file *seq, void *p)
+> +{
+> +       struct rproc *rproc = seq->private;
+> +
+> +       seq_printf(seq, "Sync with MCU: %s\n",
+> +                  rproc->sync_with_mcu ? "true" : "false");
+> +       seq_printf(seq, "On init: %s\n",
+> +                  rproc->sync_states->on_init ? "true" : "false");
+> +       seq_printf(seq, "After stop: %s\n",
+> +                  rproc->sync_states->after_stop ? "true" : "false");
+> +       seq_printf(seq, "After crash: %s\n",
+> +                  rproc->sync_states->after_crash ? "true" : "false");
+> +
+> +       return 0;
+> +}
+> +
+> +static int rproc_sync_states_open(struct inode *inode, struct file *file)
+> +{
+> +       return single_open(file, rproc_sync_states_show, inode->i_private);
+> +}
+> +
+> +static const struct file_operations rproc_sync_states_ops = {
+> +       .open           = rproc_sync_states_open,
+> +       .read           = seq_read,
+> +       .llseek         = seq_lseek,
+> +       .release        = single_release,
+> +};
+> +
+>  void rproc_remove_trace_file(struct dentry *tfile)
+>  {
+>         debugfs_remove(tfile);
+> @@ -357,6 +386,8 @@ void rproc_create_debug_dir(struct rproc *rproc)
+>                             rproc, &rproc_rsc_table_ops);
+>         debugfs_create_file("carveout_memories", 0400, rproc->dbg_dir,
+>                             rproc, &rproc_carveouts_ops);
+> +       debugfs_create_file("sync_states", 0400, rproc->dbg_dir,
+> +                           rproc, &rproc_sync_states_ops);
+>  }
+>
+>  void __init rproc_init_debugfs(void)
+> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+> index 493ef9262411..5c93de5e00bb 100644
+> --- a/drivers/remoteproc/remoteproc_internal.h
+> +++ b/drivers/remoteproc/remoteproc_internal.h
+> @@ -63,6 +63,11 @@ struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
+>  struct rproc_mem_entry *
+>  rproc_find_carveout_by_name(struct rproc *rproc, const char *name, ...);
+>
+> +static inline bool rproc_sync_with_mcu(struct rproc *rproc)
+> +{
+> +       return rproc->sync_with_mcu;
+> +}
+> +
+>  static inline
+>  int rproc_fw_sanity_check(struct rproc *rproc, const struct firmware *fw)
+>  {
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index 16ad66683ad0..d115e47d702d 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -353,6 +353,21 @@ enum rsc_handling_status {
+>         RSC_IGNORED     = 1,
+>  };
+>
+> +/**
+> + * struct rproc_sync_states - platform specific states indicating which
+> + *                           rproc_ops to use at specific times during
+> + *                           the MCU lifecycle.
+> + * @on_init: true if synchronising with MCU at system initialisation time
+> + * @after_stop: true if synchronising with MCU after stopped from the
+> + *             command line
+> + * @after_crash: true if synchonising with MCU after the MCU has crashed
+> + */
+> +struct rproc_sync_states {
+> +       bool on_init;
+> +       bool after_stop;
+> +       bool after_crash;
+> +};
+> +
+>  /**
+>   * struct rproc_ops - platform-specific device handlers
+>   * @start:     power on the device and boot it
+> @@ -456,6 +471,9 @@ struct rproc_dump_segment {
+>   * @firmware: name of firmware file to be loaded
+>   * @priv: private data which belongs to the platform-specific rproc module
+>   * @ops: platform-specific start/stop rproc handlers
+> + * @sync_ops: paltform-specific start/stop rproc handlers when
+> + *           synchronising with a remote processor.
+> + * @sync_states: Determine the rproc_ops to choose in specific states.
+>   * @dev: virtual device for refcounting and common remoteproc behavior
+>   * @power: refcount of users who need this rproc powered up
+>   * @state: state of the device
+> @@ -479,6 +497,7 @@ struct rproc_dump_segment {
+>   * @table_sz: size of @cached_table
+>   * @has_iommu: flag to indicate if remote processor is behind an MMU
+>   * @auto_boot: flag to indicate if remote processor should be auto-started
+> + * @sync_with_mcu: true if currently synchronising with MCU
+>   * @dump_segments: list of segments in the firmware
+>   * @nb_vdev: number of vdev currently handled by rproc
+>   */
+> @@ -488,7 +507,8 @@ struct rproc {
+>         const char *name;
+>         char *firmware;
+>         void *priv;
+> -       struct rproc_ops *ops;
+> +       struct rproc_ops *ops, *sync_ops;
+> +       struct rproc_sync_states *sync_states;
+>         struct device dev;
+>         atomic_t power;
+>         unsigned int state;
+> @@ -512,6 +532,7 @@ struct rproc {
+>         size_t table_sz;
+>         bool has_iommu;
+>         bool auto_boot;
+> +       bool sync_with_mcu;
 
-Refactoring of the work from Fabien Dessenne and Arnaud Pouliquen
-originally published here [1].  Provided as an example only.
+mcu isn't good suffix here, why DSP/VSP can't start before kernel?
 
-Compiled tested but will likely crash horribly.
-
-[1]. https://patchwork.kernel.org/project/linux-remoteproc/list/?series=239877
----
- drivers/remoteproc/stm32_rproc.c | 207 ++++++++++++++++++++++++++++++-
- 1 file changed, 201 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index a18f88044111..c3d5bb214ea7 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -38,6 +38,15 @@
- #define STM32_MBX_VQ1_ID	1
- #define STM32_MBX_SHUTDOWN	"shutdown"
- 
-+#define RSC_TBL_SIZE		(1024)
-+
-+#define COPRO_STATE_OFF		0
-+#define COPRO_STATE_INIT	1
-+#define COPRO_STATE_CRUN	2
-+#define COPRO_STATE_CSTOP	3
-+#define COPRO_STATE_STANDBY	4
-+#define COPRO_STATE_CRASH	5
-+
- struct stm32_syscon {
- 	struct regmap *map;
- 	u32 reg;
-@@ -70,12 +79,14 @@ struct stm32_rproc {
- 	struct reset_control *rst;
- 	struct stm32_syscon hold_boot;
- 	struct stm32_syscon pdds;
-+	struct stm32_syscon copro_state;
- 	int wdg_irq;
- 	u32 nb_rmems;
- 	struct stm32_rproc_mem *rmems;
- 	struct stm32_mbox mb[MBOX_NB_MBX];
- 	struct workqueue_struct *workqueue;
- 	bool secured_soc;
-+	void __iomem *rsc_va;
- };
- 
- static int stm32_rproc_pa_to_da(struct rproc *rproc, phys_addr_t pa, u64 *da)
-@@ -98,6 +109,28 @@ static int stm32_rproc_pa_to_da(struct rproc *rproc, phys_addr_t pa, u64 *da)
- 	return -EINVAL;
- }
- 
-+static int stm32_rproc_da_to_pa(struct rproc *rproc, u64 da, phys_addr_t *pa)
-+{
-+	unsigned int i;
-+	struct stm32_rproc *ddata = rproc->priv;
-+	struct stm32_rproc_mem *p_mem;
-+
-+	for (i = 0; i < ddata->nb_rmems; i++) {
-+		p_mem = &ddata->rmems[i];
-+
-+		if (da < p_mem->dev_addr ||
-+		    da >= p_mem->dev_addr + p_mem->size)
-+			continue;
-+		*pa = da - p_mem->dev_addr + p_mem->bus_addr;
-+		dev_dbg(rproc->dev.parent, "da %llx to pa %#x\n", da, *pa);
-+		return 0;
-+	}
-+
-+	dev_err(rproc->dev.parent, "can't translate da %llx\n", da);
-+
-+	return -EINVAL;
-+}
-+
- static int stm32_rproc_mem_alloc(struct rproc *rproc,
- 				 struct rproc_mem_entry *mem)
- {
-@@ -203,7 +236,17 @@ static int stm32_rproc_elf_load_rsc_table(struct rproc *rproc,
- 	return 0;
- }
- 
--static int stm32_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
-+static struct resource_table *
-+stm32_rproc_elf_find_loaded_rsc_table_sync_mcu(struct rproc *rproc,
-+					       const struct firmware *fw)
-+{
-+       struct stm32_rproc *ddata = rproc->priv;
-+
-+       return (struct resource_table *)ddata->rsc_va;
-+}
-+
-+static int __stm32_rproc_parse_fw(struct rproc *rproc,
-+				  const struct firmware *fw)
- {
- 	struct device *dev = rproc->dev.parent;
- 	struct device_node *np = dev->of_node;
-@@ -256,9 +299,48 @@ static int stm32_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
- 		index++;
- 	}
- 
-+	return 0;
-+}
-+
-+static int stm32_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
-+{
-+	int ret;
-+
-+	ret = __stm32_rproc_parse_fw(rproc, fw);
-+
- 	return stm32_rproc_elf_load_rsc_table(rproc, fw);
- }
- 
-+static int stm32_rproc_parse_fw_sync_mcu(struct rproc *rproc,
-+					 const struct firmware *fw)
-+{
-+	struct resource_table *table = NULL;
-+	struct stm32_rproc *ddata = rproc->priv;
-+	int ret;
-+
-+	ret = __stm32_rproc_parse_fw(rproc, fw);
-+
-+	if (ddata->rsc_va) {
-+		table = (struct resource_table *)ddata->rsc_va;
-+		/* Assuming that the resource table fits in 1kB is fair */
-+		rproc->cached_table = kmemdup(table, RSC_TBL_SIZE, GFP_KERNEL);
-+		if (!rproc->cached_table)
-+			return -ENOMEM;
-+
-+		rproc->table_ptr = rproc->cached_table;
-+		rproc->table_sz = RSC_TBL_SIZE;
-+		return 0;
-+	}
-+
-+	rproc->cached_table = NULL;
-+	rproc->table_ptr = NULL;
-+	rproc->table_sz = 0;
-+
-+	dev_warn(&rproc->dev, "no resource table found for this firmware\n");
-+	return 0;
-+}
-+
-+
- static irqreturn_t stm32_rproc_wdg(int irq, void *data)
- {
- 	struct rproc *rproc = data;
-@@ -429,6 +511,19 @@ static int stm32_rproc_start(struct rproc *rproc)
- 		}
- 	}
- 
-+	return stm32_rproc_set_hold_boot(rproc, true);
-+}
-+
-+static int stm32_rproc_start_sync_mcu(struct rproc *rproc)
-+{
-+	int err;
-+
-+	stm32_rproc_add_coredump_trace(rproc);
-+
-+	/*
-+	 * If M4 previously started by bootloader, just guarantee holdboot
-+	 * is set to catch any crash.
-+	 */
- 	err = stm32_rproc_set_hold_boot(rproc, false);
- 	if (err)
- 		return err;
-@@ -476,6 +571,28 @@ static int stm32_rproc_stop(struct rproc *rproc)
- 	return 0;
- }
- 
-+static int stm32_rproc_stop_sync_mcu(struct rproc *rproc)
-+{
-+	struct stm32_rproc *ddata = rproc->priv;
-+	int err;
-+
-+	err = stm32_rproc_stop(rproc);
-+	if (err)
-+		return err;
-+
-+	/* update copro state to OFF */
-+	err = regmap_update_bits(ddata->copro_state.map,
-+				 ddata->copro_state.reg,
-+				 ddata->copro_state.mask,
-+				 COPRO_STATE_OFF);
-+	if (err) {
-+		dev_err(&rproc->dev, "failed to set copro state\n");
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
- static void stm32_rproc_kick(struct rproc *rproc, int vqid)
- {
- 	struct stm32_rproc *ddata = rproc->priv;
-@@ -498,6 +615,14 @@ static void stm32_rproc_kick(struct rproc *rproc, int vqid)
- 	}
- }
- 
-+static struct rproc_ops st_rproc_ops_sync_mcu = {
-+	.start		= stm32_rproc_start_sync_mcu,
-+	.stop		= stm32_rproc_stop_sync_mcu,
-+	.kick		= stm32_rproc_kick,
-+	.parse_fw	= stm32_rproc_parse_fw_sync_mcu,
-+	.find_loaded_rsc_table = stm32_rproc_elf_find_loaded_rsc_table_sync_mcu,
-+};
-+
- static struct rproc_ops st_rproc_ops = {
- 	.start		= stm32_rproc_start,
- 	.stop		= stm32_rproc_stop,
-@@ -543,8 +668,10 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev)
- 	struct device_node *np = dev->of_node;
- 	struct rproc *rproc = platform_get_drvdata(pdev);
- 	struct stm32_rproc *ddata = rproc->priv;
--	struct stm32_syscon tz;
--	unsigned int tzen;
-+	struct stm32_syscon tz, rsctbl;
-+	phys_addr_t rsc_pa;
-+	u32 rsc_da;
-+	unsigned int tzen, state;
- 	int err, irq;
- 
- 	irq = platform_get_irq(pdev, 0);
-@@ -602,11 +729,72 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev)
- 
- 	err = stm32_rproc_get_syscon(np, "st,syscfg-pdds", &ddata->pdds);
- 	if (err)
--		dev_warn(dev, "failed to get pdds\n");
-+		dev_warn(dev, "pdds not supported\n");
- 
- 	rproc->auto_boot = of_property_read_bool(np, "st,auto-boot");
- 
--	return stm32_rproc_of_memory_translations(rproc);
-+	err = stm32_rproc_of_memory_translations(rproc);
-+	if (err)
-+		return err;
-+
-+	/* check if the coprocessor has been started from the bootloader */
-+	err = stm32_rproc_get_syscon(np, "st,syscfg-copro-state",
-+				     &ddata->copro_state);
-+	if (err) {
-+		/* no copro_state syscon (optional) */
-+		dev_warn(dev, "copro_state not supported\n");
-+		goto bail;
-+	}
-+
-+	err = regmap_read(ddata->copro_state.map, ddata->copro_state.reg,
-+			  &state);
-+	if (err) {
-+		dev_err(&rproc->dev, "failed to read copro state\n");
-+		return err;
-+	}
-+
-+	if (state == COPRO_STATE_CRUN) {
-+		if (stm32_rproc_get_syscon(np, "st,syscfg-rsc-tbl", &rsctbl)) {
-+			/* no rsc table syscon (optional) */
-+			dev_warn(dev, "rsc tbl syscon not supported\n");
-+			goto bail;
-+		}
-+
-+		err = regmap_read(rsctbl.map, rsctbl.reg, &rsc_da);
-+		if (err) {
-+			dev_err(&rproc->dev, "failed to read rsc tbl addr\n");
-+			return err;
-+		}
-+		if (!rsc_da)
-+			/* no rsc table */
-+			goto bail;
-+
-+		err = stm32_rproc_da_to_pa(rproc, rsc_da, &rsc_pa);
-+		if (err)
-+			return err;
-+
-+		ddata->rsc_va = devm_ioremap_wc(dev, rsc_pa, RSC_TBL_SIZE);
-+		if (IS_ERR_OR_NULL(ddata->rsc_va)) {
-+			dev_err(dev, "Unable to map memory region: %pa+%zx\n",
-+				&rsc_pa, RSC_TBL_SIZE);
-+			ddata->rsc_va = NULL;
-+			return -ENOMEM;
-+		}
-+	}
-+bail:
-+	return 0;
-+}
-+
-+static struct rproc_sync_states stm32_sync_states = {
-+	.on_init = true, /* sync with MCU when the kernel boots */
-+	.after_stop = false, /* don't sync with MCU if stopped from sysfs */
-+	.after_crash = false,/* don't sync with MCU after a crash */
-+};
-+
-+static bool stm32_sync_with_mcu(struct platform_device *pdev)
-+{
-+	/* Find something platform specific here */
-+	return true;
- }
- 
- static int stm32_rproc_probe(struct platform_device *pdev)
-@@ -621,7 +809,14 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	rproc = rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
-+	if (stm32_sync_with_mcu(pdev))
-+		rproc = rproc_alloc(dev, np->name, &st_rproc_ops,
-+				    NULL, sizeof(*ddata));
-+	else
-+		rproc = rproc_alloc_state_machine(dev, np->name, &st_rproc_ops,
-+						  &st_rproc_ops_sync_mcu,
-+						  &stm32_sync_states, NULL,
-+						  sizeof(*ddata));
- 	if (!rproc)
- 		return -ENOMEM;
- 
--- 
-2.20.1
-
+>         struct list_head dump_segments;
+>         int nb_vdev;
+>  };
+> --
+> 2.20.1
+>
