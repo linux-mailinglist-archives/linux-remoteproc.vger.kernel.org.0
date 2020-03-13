@@ -2,115 +2,108 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 905BF18426B
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Mar 2020 09:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 815CC184679
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Mar 2020 13:04:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726414AbgCMIST (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 13 Mar 2020 04:18:19 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:42688 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726443AbgCMIST (ORCPT
+        id S1726851AbgCMME4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 13 Mar 2020 08:04:56 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:44685 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726775AbgCMME4 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 13 Mar 2020 04:18:19 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02D8IIU7121468;
-        Fri, 13 Mar 2020 03:18:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1584087498;
-        bh=l2gu9rs8h39sF4Bj86NFmN/6VGZaDVO6RMYS9HjLJdA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=gHGVMVlW1yHEhETMEozYCoOW2fzuleSHAijyUYN0mAz1FK2pdsiVfoZ5Rxpsq0qsG
-         C6MV0hdbNdhSn7p4Jt7zisiWzpA/AEZTq0qQ1okqwO70piguyx1weWAER3TcMhsDLc
-         zJG/zga+Be81kf3JaU559V6lVJbmSFCWvAp6cgXY=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02D8IIvo022177;
-        Fri, 13 Mar 2020 03:18:18 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Fri, 13
- Mar 2020 03:18:02 -0500
-Received: from localhost.localdomain (10.64.41.19) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Fri, 13 Mar 2020 03:18:02 -0500
-Received: from sokoban.bb.dnainternet.fi (ileax41-snat.itg.ti.com [10.172.224.153])
-        by localhost.localdomain (8.15.2/8.15.2) with ESMTP id 02D8HQll097835;
-        Fri, 13 Mar 2020 03:18:01 -0500
-From:   Tero Kristo <t-kristo@ti.com>
-To:     <bjorn.andersson@linaro.org>, <ohad@wizery.com>,
-        <linux-remoteproc@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <mathieu.poirier@linaro.org>,
-        <s-anna@ti.com>, <afd@ti.com>, Tero Kristo <t-kristo@ti.com>
-Subject: [PATCHv8 15/15] remoteproc/omap: Switch to SPDX license identifiers
-Date:   Fri, 13 Mar 2020 10:17:18 +0200
-Message-ID: <20200313081718.30612-16-t-kristo@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200313081718.30612-1-t-kristo@ti.com>
-References: <20200313081718.30612-1-t-kristo@ti.com>
+        Fri, 13 Mar 2020 08:04:56 -0400
+Received: by mail-ed1-f68.google.com with SMTP id g19so11535207eds.11
+        for <linux-remoteproc@vger.kernel.org>; Fri, 13 Mar 2020 05:04:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=KVQaV5WPaAITEfXGJD3iw4zrtyye7kAolYp6oZ1quUI=;
+        b=GVZv6ChaXLEWYvbrWTdhS4i8fMw2qeJSXb/2JBjNdfMY6mhOggh6/Z5mOaWCYPz6Ad
+         PetuwUXpdI272XaInycenRqesHqQBmYhwOBAMPaM4DCpfbCev1WQekRbj0o7QM4YsMTi
+         FkvBwDPMqy4tbFaLyfxVfYKBPgeGMPLpoi1kp2ylMBm1/Ithj6eoLKXkBEzlhpA/ihLd
+         qL22Qiw9DAFKOJT6+N8KPo5aUP110lqB7mD++bhFrTZXbdce6Qd/U/JEnBbgdbSZBnq/
+         AaqJO9+Hx6eGmoHph7LwUFG+z4KSEcnIHB1QgOQ3JYmudJ1VcD4R91SoUMJraYGdukpk
+         vEcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KVQaV5WPaAITEfXGJD3iw4zrtyye7kAolYp6oZ1quUI=;
+        b=ltK6o0odn0EZBpZ+D91IeJOppAO1srK4r0Kx5VD4nB9EyQwHafrNUgPtvQ/i+zPCfW
+         QBg3ml15txweoholPEhAIeRE3AbLEtn1Yckf8H53CAPr3Mu36bzXcWzOXMhlmezt4TV8
+         OPD0lviODn7i4BIUzJWvLHTIyunNfK6M+EQh47xqy5Km1pP8Z/ig+W5+eoX0cBTr4aOv
+         vq6K0bfDTe71k23EfvR5pIZAki4mX81kSyvOUPcgVEjTrbMp5Bj/axFAht6ZjAmIdk92
+         sglgi4jD9DJJdrjbzlSnq/XjkXpB6jU7C5BT0lyZl+wdxlwCZuinTRjRxGSgCrcmJbA9
+         FyPw==
+X-Gm-Message-State: ANhLgQ02PYLN7W8+K0/n2OJrf+qOUTP8X4mUBZmUCphIL07Fp3xxj1FH
+        xvAZkIyrt5TB0f342lCXJvJCKA==
+X-Google-Smtp-Source: ADFU+vskqub7CpCaC/ugUWZs2oR/RvePIrTwC+6a82eCHZMWi25KAtvuE8JcxWJt62Qtis9Q1Vw0NQ==
+X-Received: by 2002:a17:906:76c6:: with SMTP id q6mr11068012ejn.176.1584101092902;
+        Fri, 13 Mar 2020 05:04:52 -0700 (PDT)
+Received: from [192.168.1.9] ([84.238.208.211])
+        by smtp.googlemail.com with ESMTPSA id v25sm4584220edx.89.2020.03.13.05.04.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Mar 2020 05:04:52 -0700 (PDT)
+Subject: Re: [PATCH -next 011/491] ARM/QUALCOMM SUPPORT: Use fallthrough;
+To:     Joe Perches <joe@perches.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-pm@vger.kernel.org
+References: <cover.1583896344.git.joe@perches.com>
+ <2e6818291503f032e7662f1fa45fb64c7751a7ae.1583896348.git.joe@perches.com>
+From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
+Message-ID: <2ac47436-e13c-bc87-d661-e4a423c7ef5b@linaro.org>
+Date:   Fri, 13 Mar 2020 14:04:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <2e6818291503f032e7662f1fa45fb64c7751a7ae.1583896348.git.joe@perches.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Suman Anna <s-anna@ti.com>
+Hi,
 
-Use the appropriate SPDX license identifiers in various OMAP remoteproc
-source files and drop the previous boilerplate license text.
+On 3/11/20 6:51 AM, Joe Perches wrote:
+> Convert the various uses of fallthrough comments to fallthrough;
+> 
+> Done via script
+> Link: https://lore.kernel.org/lkml/b56602fcf79f849e733e7b521bb0e17895d390fa.1582230379.git.joe.com/
+> 
+> Signed-off-by: Joe Perches <joe@perches.com>
+> ---
+>  drivers/media/platform/qcom/venus/vdec.c |  2 +-
 
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
-Reviewed-by: Andrew F. Davis <afd@ti.com>
-Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- drivers/remoteproc/omap_remoteproc.h | 27 +--------------------------
- 1 file changed, 1 insertion(+), 26 deletions(-)
+For the Venus bits:
 
-diff --git a/drivers/remoteproc/omap_remoteproc.h b/drivers/remoteproc/omap_remoteproc.h
-index 13f17d9135c0..828e13256c02 100644
---- a/drivers/remoteproc/omap_remoteproc.h
-+++ b/drivers/remoteproc/omap_remoteproc.h
-@@ -1,35 +1,10 @@
-+/* SPDX-License-Identifier: BSD-3-Clause */
- /*
-  * Remote processor messaging
-  *
-  * Copyright (C) 2011-2020 Texas Instruments, Inc.
-  * Copyright (C) 2011 Google, Inc.
-  * All rights reserved.
-- *
-- * Redistribution and use in source and binary forms, with or without
-- * modification, are permitted provided that the following conditions
-- * are met:
-- *
-- * * Redistributions of source code must retain the above copyright
-- *   notice, this list of conditions and the following disclaimer.
-- * * Redistributions in binary form must reproduce the above copyright
-- *   notice, this list of conditions and the following disclaimer in
-- *   the documentation and/or other materials provided with the
-- *   distribution.
-- * * Neither the name Texas Instruments nor the names of its
-- *   contributors may be used to endorse or promote products derived
-- *   from this software without specific prior written permission.
-- *
-- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-- * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-- * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-- * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-  */
- 
- #ifndef _OMAP_RPMSG_H
+Acked-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
+
+>  drivers/phy/qualcomm/phy-qcom-usb-hs.c   |  2 +-
+>  drivers/pinctrl/qcom/pinctrl-spmi-gpio.c |  4 ++--
+>  drivers/pinctrl/qcom/pinctrl-ssbi-gpio.c |  2 +-
+>  drivers/rpmsg/qcom_glink_native.c        |  4 ++--
+>  drivers/soc/qcom/socinfo.c               | 16 ++++++++--------
+>  drivers/thermal/qcom/tsens-v0_1.c        |  8 ++++----
+>  drivers/thermal/qcom/tsens-v1.c          |  4 ++--
+>  8 files changed, 21 insertions(+), 21 deletions(-)
+> 
+
 -- 
-2.17.1
-
---
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+regards,
+Stan
