@@ -2,143 +2,56 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 787B318536B
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Mar 2020 01:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E4A186F21
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Mar 2020 16:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727771AbgCNAnk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 13 Mar 2020 20:43:40 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:45114 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727695AbgCNAnk (ORCPT
+        id S1731914AbgCPPuc (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 16 Mar 2020 11:50:32 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:41330 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731890AbgCPPuc (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 13 Mar 2020 20:43:40 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02E0hcbl090466;
-        Fri, 13 Mar 2020 19:43:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1584146618;
-        bh=pPGfl1/MfmLCax7BhN6s6oSzE9jBgXIiLPf5nVaagEI=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=UQw0O3pboRXiJCKg5Sg/S7ehhpupRltTIvHm9kn1yNzGpGUwNC6vQTzQfgCht4u7J
-         oiHk2/dUjCZWAGcNOuHfMwCdJdg4rrlzP8thZCncGNrjcOo0ijO3JriLb0AlgTzHLE
-         gwr9lMMAMA4D/iZmmIJ2cZq7H3cbo6LTvi5B2Abw=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02E0hc6Q055650
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 13 Mar 2020 19:43:38 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Fri, 13
- Mar 2020 19:43:38 -0500
-Received: from localhost.localdomain (10.64.41.19) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Fri, 13 Mar 2020 19:43:38 -0500
-Received: from lelv0597.itg.ti.com (lelv0597.itg.ti.com [10.181.64.32])
-        by localhost.localdomain (8.15.2/8.15.2) with ESMTP id 02E0hcSQ123457;
-        Fri, 13 Mar 2020 19:43:38 -0500
-Received: from localhost (irmo.dhcp.ti.com [128.247.81.254])
-        by lelv0597.itg.ti.com (8.14.7/8.14.7) with ESMTP id 02E0hcwQ116067;
-        Fri, 13 Mar 2020 19:43:38 -0500
-From:   Suman Anna <s-anna@ti.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        <linux-remoteproc@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suman Anna <s-anna@ti.com>, "Andrew F. Davis" <afd@ti.com>,
-        Tero Kristo <t-kristo@ti.com>
-Subject: [PATCHv8 RESEND 05/15] remoteproc/omap: Add the rproc ops .da_to_va() implementation
-Date:   Fri, 13 Mar 2020 19:43:37 -0500
-Message-ID: <20200314004337.26556-1-s-anna@ti.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200313081718.30612-6-t-kristo@ti.com>
-References: <20200313081718.30612-6-t-kristo@ti.com>
+        Mon, 16 Mar 2020 11:50:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4Fcs/ravGQBzEwV+PwLN/3FuduA8sqVcdSOOMqzyw+E=; b=cZVHtxGt+DHwY530inZn5uaoAd
+        NKYBLQCYm+jTGzzEtxEZZcghNZyQz3KZrzDd7pz5fIwHj8M1443PQzUVnDLn/hazE65KuoyeFpX4q
+        SlRMMnPERZ+98066ISJv8PqhvKadqBvfmDLO8yR9v9I62OoyIKC9HSVz650f2PtsxYapCWFVbdZ5R
+        f4Zrx1W+r/vsU+FwAD8cKpo9ZL8NyEpgdqr6xqK9E2SS96UpdcX+0mbPNpmGzTlROypcTsbmMtJ+v
+        SIN/U5JGq9qiN3Kzq85xwDB29JrmkRYMtCWIIZ3wmAhwo4vIys/n0ZiMZfOMz5rdYneOW+8wr8bIu
+        p6c7BDsw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jDs0a-0004dZ-Nu; Mon, 16 Mar 2020 15:50:28 +0000
+Date:   Mon, 16 Mar 2020 08:50:28 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     bjorn.andersson@linaro.org, robh+dt@kernel.org, joro@8bytes.org,
+        ohad@wizery.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        agross@kernel.org
+Subject: Re: [PATCH 0/3] Request direct mapping for modem firmware subdevice
+Message-ID: <20200316155028.GB18704@infradead.org>
+References: <20200309182255.20142-1-sibis@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200309182255.20142-1-sibis@codeaurora.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-An implementation for the rproc ops .da_to_va() has been added
-that provides the address translation between device addresses
-to kernel virtual addresses for internal RAMs present on that
-particular remote processor device. The implementation provides
-the translations based on the addresses parsed and stored during
-the probe.
+On Mon, Mar 09, 2020 at 11:52:52PM +0530, Sibi Sankar wrote:
+> The Q6 modem sub-system has direct access to DDR through memnoc and
+> an indirect access routed through a SMMU which MSS CE (crypto engine
+> sub-component of MSS) uses during out of reset sequence. Request direct
+> mapping for the modem-firmware subdevice since smmu is not expected
+> to provide access control/translation for these SIDs (sandboxing of the
+> modem is achieved through XPUs engaged using SMC calls).
 
-This ops gets invoked by the exported rproc_da_to_va() function
-and allows the remoteproc core's ELF loader to be able to load
-program data directly into the internal memories.
-
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
-Reviewed-by: Andrew F. Davis <afd@ti.com>
-Acked-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
-v8-Resend: Updated to fix compilation issues against rproc-next
-
- drivers/remoteproc/omap_remoteproc.c | 40 ++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
-index cdcc9c227b96..6091666697ed 100644
---- a/drivers/remoteproc/omap_remoteproc.c
-+++ b/drivers/remoteproc/omap_remoteproc.c
-@@ -245,10 +245,50 @@ static int omap_rproc_stop(struct rproc *rproc)
- 	return 0;
- }
- 
-+/**
-+ * omap_rproc_da_to_va() - internal memory translation helper
-+ * @rproc: remote processor to apply the address translation for
-+ * @da: device address to translate
-+ * @len: length of the memory buffer
-+ *
-+ * Custom function implementing the rproc .da_to_va ops to provide address
-+ * translation (device address to kernel virtual address) for internal RAMs
-+ * present in a DSP or IPU device). The translated addresses can be used
-+ * either by the remoteproc core for loading, or by any rpmsg bus drivers.
-+ *
-+ * Return: translated virtual address in kernel memory space on success,
-+ *         or NULL on failure.
-+ */
-+static void *omap_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len)
-+{
-+	struct omap_rproc *oproc = rproc->priv;
-+	int i;
-+	u32 offset;
-+
-+	if (len == 0)
-+		return NULL;
-+
-+	if (!oproc->num_mems)
-+		return NULL;
-+
-+	for (i = 0; i < oproc->num_mems; i++) {
-+		if (da >= oproc->mem[i].dev_addr && da + len <=
-+		    oproc->mem[i].dev_addr + oproc->mem[i].size) {
-+			offset = da - oproc->mem[i].dev_addr;
-+			/* __force to make sparse happy with type conversion */
-+			return (__force void *)(oproc->mem[i].cpu_addr +
-+						offset);
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
- static const struct rproc_ops omap_rproc_ops = {
- 	.start		= omap_rproc_start,
- 	.stop		= omap_rproc_stop,
- 	.kick		= omap_rproc_kick,
-+	.da_to_va	= omap_rproc_da_to_va,
- };
- 
- static const struct omap_rproc_mem_data ipu_mems[] = {
--- 
-2.23.0
-
+Please fix your device tree so that the device isn't bound to an
+IOMMU.
