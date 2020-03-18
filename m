@@ -2,63 +2,66 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BF2F18A0AF
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Mar 2020 17:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3433018A186
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Mar 2020 18:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727281AbgCRQii (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 18 Mar 2020 12:38:38 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:48811 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727244AbgCRQii (ORCPT
+        id S1726776AbgCRR3W (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 18 Mar 2020 13:29:22 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:3844 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726680AbgCRR3W (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 18 Mar 2020 12:38:38 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02IGHbtb020610;
-        Wed, 18 Mar 2020 17:38:32 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : subject : to : cc
- : references : message-id : date : mime-version : in-reply-to :
+        Wed, 18 Mar 2020 13:29:22 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02IHQvxN021219;
+        Wed, 18 Mar 2020 18:29:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=NRNvpny+eWOCNOPinfnZBTKVTNomHJASQiqSmkj08tk=;
- b=df74hTquu0tY3/u4I6IfThldZm5Dt4eNfFMACSfDBqUjlbOuhV5WBZvID7D+eVE4SA9w
- 83h4ZnKG+TgVW8d5WfRK/Jp3Cv7lLBU1YU3b+S0sP1sueXQJDTSjDvxYGsHEFc2S9XKL
- tY7sHwHzuMiw3+6zwz5PtG05lDjErui33Ed5HW9P99MuzB5o5PlnTHM61xVf8MWaM9sG
- RYXOMwXVpKHgQOPlwU+qvBH628GCUnuqmt+LN1+SWdp2+sHwehla9m915I4eflOHhnuX
- uBuC5o+gSXmLzq3V1q4KwQX9QGNUF+wIAuJnTJJg23mC/pFYWIIUvUMETXXYMPVcU0cI lQ== 
+ bh=DLuEaticBOxZPRiG0ghZvKKxllUa/anY8IH2xUyWjYk=;
+ b=HaegrmnoWeCic3aQMM/PR6nzvB3fzyuh1cLxzMlNQHLjC+6qeEOsNJ+fYdkJnXR+uIwk
+ kf7KF3cQMw2Vo6ZE7JHI8ixelYl/qQP0jyNNpE8B88psaQO5Bhda1jLthOr5h1joS/x4
+ UMA2BmVr6I4ARkQFvs1oxwV7W8s+V96YLGRruj3kSSA0H7b2jve1ethIo6fsLm+gLctf
+ bMqwEiEt+6HvLeJQdEMmKu6FJ/I3+USv58yoo+51cWuLnn8KUFh6KA6Wru3/f76vavi5
+ 2ZF9tqxiurbAx2by3HUV+3wEHe3pJ9MaQHRm7IWtMAslhykykE+iUV/GZsWfJIIh00u/ +A== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2yu8etcy09-1
+        by mx07-00178001.pphosted.com with ESMTP id 2yua4wcq8j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Mar 2020 17:38:32 +0100
+        Wed, 18 Mar 2020 18:29:16 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0A61D100034;
-        Wed, 18 Mar 2020 17:38:31 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DBFD010002A;
+        Wed, 18 Mar 2020 18:29:15 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EEFFD2BF9DA;
-        Wed, 18 Mar 2020 17:38:30 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.50) by SFHDAG3NODE1.st.com
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C8B972BC7AF;
+        Wed, 18 Mar 2020 18:29:15 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.51) by SFHDAG3NODE1.st.com
  (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 18 Mar
- 2020 17:38:30 +0100
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Subject: Re: [PATCH 2/2] remoteproc: Fix and restore the parenting hierarchy
- for vdev
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suman Anna <s-anna@ti.com>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Loic Pallardy <loic.pallardy@st.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+ 2020 18:29:14 +0100
+Subject: Re: [PATCH 1/2] remoteproc: fall back to using parent memory pool if
+ no dedicated available
+To:     Suman Anna <s-anna@ti.com>, Tero Kristo <t-kristo@ti.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Loic PALLARDY <loic.pallardy@st.com>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 References: <20200305224108.21351-1-s-anna@ti.com>
- <20200305224108.21351-3-s-anna@ti.com> <20200317180530.GA1801@xps15>
-Message-ID: <76772d98-93d9-e559-01b8-ba7d4d1cc1eb@st.com>
-Date:   Wed, 18 Mar 2020 17:38:29 +0100
+ <20200305224108.21351-2-s-anna@ti.com>
+ <ce37072d2f304214aa920e66fa3b30b1@SFHDAG3NODE1.st.com>
+ <d71d6061-2bfe-e8be-857b-67b22493aeab@ti.com>
+ <46d1fadd-1935-ab63-db41-89afaac79e21@ti.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Message-ID: <41d6734c-3fcb-499b-e1ba-09825ffc2957@st.com>
+Date:   Wed, 18 Mar 2020 18:29:12 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200317180530.GA1801@xps15>
+In-Reply-To: <46d1fadd-1935-ab63-db41-89afaac79e21@ti.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG7NODE2.st.com (10.75.127.20) To SFHDAG3NODE1.st.com
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG6NODE1.st.com (10.75.127.16) To SFHDAG3NODE1.st.com
  (10.75.127.7)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
  definitions=2020-03-18_07:2020-03-18,2020-03-18 signatures=0
@@ -67,90 +70,197 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Suman, Mathieu,
+Hi Suman,
 
-On 3/17/20 7:05 PM, Mathieu Poirier wrote:
-> Hi Suman,
+On 3/18/20 5:19 PM, Suman Anna wrote:
+> Hi Arnaud,
 > 
-> On Thu, Mar 05, 2020 at 04:41:08PM -0600, Suman Anna wrote:
->> The commit 086d08725d34 ("remoteproc: create vdev subdevice with specific
->> dma memory pool") has introduced a new vdev subdevice for each vdev
->> declared in the firmware resource table and made it as the parent for the
->> created virtio rpmsg devices instead of the previous remoteproc device.
->> This changed the overall parenting hierarchy for the rpmsg devices, which
->> were children of virtio devices, and does not allow the corresponding
->> rpmsg drivers to retrieve the parent rproc device through the
->> rproc_get_by_child() API.
->>
->> Fix this by restoring the remoteproc device as the parent. The new vdev
->> subdevice can continue to inherit the DMA attributes from the remoteproc's
->> parent device (actual platform device).
->>
->> Fixes: 086d08725d34 ("remoteproc: create vdev subdevice with specific dma memory pool")
->> Signed-off-by: Suman Anna <s-anna@ti.com>
->> ---
->>  drivers/remoteproc/remoteproc_core.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
->> index 097f33e4f1f3..ba18f32bd0c4 100644
->> --- a/drivers/remoteproc/remoteproc_core.c
->> +++ b/drivers/remoteproc/remoteproc_core.c
->> @@ -510,7 +510,7 @@ static int rproc_handle_vdev(struct rproc *rproc, struct fw_rsc_vdev *rsc,
->>  
->>  	/* Initialise vdev subdevice */
->>  	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
->> -	rvdev->dev.parent = rproc->dev.parent;
->> +	rvdev->dev.parent = &rproc->dev;
+> On 3/18/20 4:37 AM, Tero Kristo wrote:
+>> On 13/03/2020 18:52, Arnaud POULIQUEN wrote:
+>>> Hi Suman,
+>>>
+>>>> -----Original Message-----
+>>>> From: Suman Anna <s-anna@ti.com>
+>>>> Sent: jeudi 5 mars 2020 23:41
+>>>> To: Bjorn Andersson <bjorn.andersson@linaro.org>; Loic PALLARDY
+>>>> <loic.pallardy@st.com>
+>>>> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>; Arnaud POULIQUEN
+>>>> <arnaud.pouliquen@st.com>; Tero Kristo <t-kristo@ti.com>; linux-
+>>>> remoteproc@vger.kernel.org; linux-kernel@vger.kernel.org; Suman Anna
+>>>> <s-anna@ti.com>
+>>>> Subject: [PATCH 1/2] remoteproc: fall back to using parent memory
+>>>> pool if no
+>>>> dedicated available
+>>>>
+>>>> From: Tero Kristo <t-kristo@ti.com>
+>>>>
+>>>> In some cases, like with OMAP remoteproc, we are not creating dedicated
+>>>> memory pool for the virtio device. Instead, we use the same memory pool
+>>>> for all shared memories. The current virtio memory pool handling
+>>>> forces a
+>>>> split between these two, as a separate device is created for it, causing
+>>>> memory to be allocated from bad location if the dedicated pool is not
+>>>> available. Fix this by falling back to using the parent device memory
+>>>> pool if
+>>>> dedicated is not available.
+>>>>
+>>>> Fixes: 086d08725d34 ("remoteproc: create vdev subdevice with specific
+>>>> dma
+>>>> memory pool")
+>>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>>> ---
+>>>>   drivers/remoteproc/remoteproc_virtio.c | 10 ++++++++++
+>>>>   1 file changed, 10 insertions(+)
+>>>>
+>>>> diff --git a/drivers/remoteproc/remoteproc_virtio.c
+>>>> b/drivers/remoteproc/remoteproc_virtio.c
+>>>> index 8c07cb2ca8ba..4723ebe574b8 100644
+>>>> --- a/drivers/remoteproc/remoteproc_virtio.c
+>>>> +++ b/drivers/remoteproc/remoteproc_virtio.c
+>>>> @@ -368,6 +368,16 @@ int rproc_add_virtio_dev(struct rproc_vdev *rvdev,
+>>>> int id)
+>>>>                   goto out;
+>>>>               }
+>>>>           }
+>>>> +    } else {
+>>>> +        struct device_node *np = rproc->dev.parent->of_node;
+>>>> +
+>>>> +        /*
+>>>> +         * If we don't have dedicated buffer, just attempt to
+>>>> +         * re-assign the reserved memory from our parent.
+>>>> +         * Failure is non-critical so don't check return value
+>>>> +         * either.
+>>>> +         */
+>>>> +        of_reserved_mem_device_init_by_idx(dev, np, 0);
+>>>>       }
+>>> I aven't tested your patchset yet, but reviewing you code,  I wonder
+>>> if you cannot declare your  memory pool
+>>> in your platform driver using  rproc_of_resm_mem_entry_init. 
 > 
-> I can see how it would not be possible to retrieve the parent rproc device since
-> rvdev->dev.parent was set to be platform device...
+> The patch actually provides a fallback option and even now this path is
+> entered only when there are no dedicated pools. This restores the code
+> to how the allocations were made prior to the fixed memory carveout
+> changes. If the remoteproc drivers themselves do not use any DMA/CMA
+> pools, then nothing changes and allocations continue to be made from the
+> global pools.
 
-In rpmsg_virtio_bus.c [1] the vdev buffers are allocated in a memory region using a dma_alloc_coherent
-So the buffers are allocated in the platform driver memory region if declared, else in the default memory region. 
-
-According to  086d08725d34 ("remoteproc: create vdev subdevice with specific dma memory pool"),
-A patch has been integrated in rpmsg framework:  d999b622fcfb3 ("rpmsg: virtio: allocate buffer from parent")
-
--	bufs_va = dma_alloc_coherent(vdev->dev.parent->parent,
-+	bufs_va = dma_alloc_coherent(vdev->dev.parent,
-
-So in term of parent-child relationchip the Loic's patches seem coherent, and don't affect parenting hierarchy
-for the rpmsg bus.
-
-So It seems to me that this patch breaks the relationship between the rpmsg bus
-and the rproc platform driver, at least concerning the buffer allocation.
-But on the other side this patch doesn't introduce regression for rpmsg bus on my platform... 
-
-I probably missed something important because i can not figure out how this patch don't introduce regression.
-Can the rproc->dev inherits from the rproc platform device in term of memory regions?
-
-[1]: https://elixir.bootlin.com/linux/latest/source/drivers/rpmsg/virtio_rpmsg_bus.c#L915
-[2]: https://lkml.org/lkml/2018/11/30/180
+If there is no dedicated pool, no need to associate a memory pool here,
+The allocation by default should be done in the global pools if not pool
+is associated to the vdev.
+Only a global pool assigned to a rproc is not treated as you mention.    
 
 > 
-> I wonder how the original change didn't blow up sysmon_probe() and potentially
-> other out-of-tree users of rproc_get_by_child().  It would be nice to have
-> someone from the QCOM team test your patch.
+> Something
+>>> like:
+>>>     struct device_node *mem_node;
+>>>     struct reserved_mem *rmem;
+>>>
+>>>     mem_node = of_parse_phandle(dev->of_node, "memory-region", 0);
+>>>     rmem = of_reserved_mem_lookup(mem_node);
+>>>     mem = rproc_of_resm_mem_entry_init(dev, 0,
+>>>                                rmem->size,
+>>>                                rmem->base,
+>>>                                " vdev0buffer");
+>>>
+>>> A main advantage of this implementation would be that the index of the
+>>> memory region would not be hard coded to 0.
+> 
+> The 0 is the default (equivalent to of_reserved_mem_device_init(), but
+> we can't use that function here since dev and np are different).
+> 
+> While your suggestion does work for us, this does bring in the knowledge
+> of how many vdevs a remoteproc driver is supporting. It is fine for
+> remoteproc drivers that are designed exactly for a known number of vdevs
+> and/or fixed pools to use the above function, but every other remoteproc
+> driver would have to repeat similar code. Given that the number of vdevs
+> are currently defined through the resource table and can change from
+> firmware to firmware, I think this fallback option patch is the better
+> scalable solution.
 
-You are right the rproc platform device is now the grand parent of a rpmsg device, while before it was the parent.
-Anyway, does it makes sense to have this kind of dependency between rpmsg device and rproc device?
-The fix could be done in the rpmsg device that would be rproc dependent (if out-of-tree).  
-The alternative could be to declare the rpmsg device in device tree as child of the rproc platform device...
+Yes you right this supposes that the number of vdev is limited and known, so
+not enough scalable.
+
+From MPOV what is restrictive here is the index forced to 0. 
+This implementation would impose to declare first the global memory for the vdevs 
+then other memory regions (e.g memory reserved for firmware code loading). 
+Need at minimum to be documented this restriction...
+
+A alternative would be to use resource table carveout to declare region, but 
+this would probably break compatibility with legacy remote firmware...
+
+A second alternative could be to define a specific name for a rproc default memory pool.
+and then look for it. 
 
 Regards,
 Arnaud
 
 > 
->>  	rvdev->dev.dma_pfn_offset = rproc->dev.parent->dma_pfn_offset;
->>  	rvdev->dev.release = rproc_rvdev_release;
->>  	dev_set_name(&rvdev->dev, "%s#%s", dev_name(rvdev->dev.parent), name);
+> Let's see if others have any opinion on this.
 > 
-> Be mindful there might be fallouts from applying this patch since it does change
-> the location of the vdev under /sys/device/platform/ .
+> regards
+> Suman
 > 
-> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> 
->> -- 
->> 2.23.0
 >>
+>> It seems like that would work for us also, and thus this patch can be
+>> dropped. See the following patch. Suman, any comments on this? If this
+>> seems acceptable, I can send this as a proper patch to the list.
+>>
+>> ------
+>>
+>> From: Tero Kristo <t-kristo@ti.com>
+>> Date: Wed, 18 Mar 2020 11:22:58 +0200
+>> Subject: [PATCH] remoteproc/omap: Allocate vdev0buffer memory from
+>>  reserved memory pool
+>>
+>> Since 086d08725d34 ("remoteproc: create vdev subdevice with specific dma
+>> memory pool"), remoteprocs must allocate separate vdev memory buffer. As
+>> OMAP remoteproc does not do this yet, the memory gets allocated from
+>> default DMA pool, and this memory is not suitable for the use. To fix
+>> the issue, map the vdev0buffer to use the same device reserved memory
+>> pool as the rest of the remoteproc.
+>>
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> ---
+>>  drivers/remoteproc/omap_remoteproc.c | 16 ++++++++++++++++
+>>  1 file changed, 16 insertions(+)
+>>
+>> diff --git a/drivers/remoteproc/omap_remoteproc.c
+>> b/drivers/remoteproc/omap_remoteproc.c
+>> index 29d19a608af8..024330e31a9e 100644
+>> --- a/drivers/remoteproc/omap_remoteproc.c
+>> +++ b/drivers/remoteproc/omap_remoteproc.c
+>> @@ -1273,6 +1273,9 @@ static int omap_rproc_probe(struct platform_device
+>> *pdev)
+>>      const char *firmware;
+>>      int ret;
+>>      struct reset_control *reset;
+>> +    struct device_node *mem_node;
+>> +    struct reserved_mem *rmem;
+>> +    struct rproc_mem_entry *mem;
+>>
+>>      if (!np) {
+>>          dev_err(&pdev->dev, "only DT-based devices are supported\n");
+>> @@ -1335,6 +1338,19 @@ static int omap_rproc_probe(struct
+>> platform_device *pdev)
+>>          dev_warn(&pdev->dev, "device does not have specific CMA pool.\n");
+>>          dev_warn(&pdev->dev, "Typically this should be provided,\n");
+>>          dev_warn(&pdev->dev, "only omit if you know what you are
+>> doing.\n");
+>> +    } else {
+>> +        mem_node = of_parse_phandle(pdev->dev.of_node, "memory-region",
+>> +                        0);
+>> +        rmem = of_reserved_mem_lookup(mem_node);
+>> +        mem = rproc_of_resm_mem_entry_init(&pdev->dev, 0, rmem->size,
+>> +                           rmem->base, "vdev0buffer");
+>> +
+>> +        if (!mem) {
+>> +            ret = -ENOMEM;
+>> +            goto release_mem;
+>> +        }
+>> +
+>> +        rproc_add_carveout(rproc, mem);
+>>      }
+>>
+>>      platform_set_drvdata(pdev, rproc);
+> 
