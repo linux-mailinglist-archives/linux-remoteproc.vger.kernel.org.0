@@ -2,197 +2,198 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FA0188DDD
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 17 Mar 2020 20:20:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C781B189802
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Mar 2020 10:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbgCQTU3 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 17 Mar 2020 15:20:29 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:46508 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726476AbgCQTU3 (ORCPT
+        id S1727469AbgCRJhd (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 18 Mar 2020 05:37:33 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:40150 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726586AbgCRJhc (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 17 Mar 2020 15:20:29 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1584472828; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=04UTOZ7ySzY56t49Lejqqg+/qSfvKFvxULvm3fkhHB8=; b=v+0Or7xdrkub15FXYeEGFG4zDKxjR6VLt8Z4x6KFt7lswVNDyBJ3l3QyxqNIxe8bMjIgnQtM
- oHBwKc4K2amDzvuNX7KfEGG7QPEIoudayjadiWV6R3ZnHXnE9G/f1oIba2f08S06jGjmrB7P
- iGGkZ70+JkIjk8/pLQmL6ym6tjo=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e7122f4.7f0a0b246458-smtp-out-n04;
- Tue, 17 Mar 2020 19:20:20 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1557CC432C2; Tue, 17 Mar 2020 19:20:19 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id EE6D3C433CB;
-        Tue, 17 Mar 2020 19:20:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org EE6D3C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     bjorn.andersson@linaro.org
-Cc:     agross@kernel.org, ohad@wizery.com, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        evgreen@chromium.org, Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH] remoteproc: qcom_q6v5_mss: map/unmap mpss region before/after use
-Date:   Wed, 18 Mar 2020 00:49:18 +0530
-Message-Id: <20200317191918.4123-1-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.25.0
+        Wed, 18 Mar 2020 05:37:32 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02I9bS0J020453;
+        Wed, 18 Mar 2020 04:37:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1584524248;
+        bh=TG411fQ151Ls0rjVlozc0vrbRdPS52F0qzbMBEw9UR4=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=jVXpj2S3QBKpKP/CXZiSv8/KxCWpcS6qgrufxY+Y+s4Cd66noCtgRX6AahV7e4axJ
+         sDZxWLpsT1K48fvMir5LHy1TkMkXWtMT6JwYbJ9jKChfw7lHZ+9TljjyQkvALeQWpg
+         BKjrs0B3umRxwLgYqooL43eREuRcdMZXsOPetftY=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02I9bSNi086123
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 18 Mar 2020 04:37:28 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 18
+ Mar 2020 04:37:28 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 18 Mar 2020 04:37:28 -0500
+Received: from [127.0.0.1] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02I9bPj2035219;
+        Wed, 18 Mar 2020 04:37:26 -0500
+Subject: Re: [PATCH 1/2] remoteproc: fall back to using parent memory pool if
+ no dedicated available
+To:     Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
+        Suman Anna <s-anna@ti.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Loic PALLARDY <loic.pallardy@st.com>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20200305224108.21351-1-s-anna@ti.com>
+ <20200305224108.21351-2-s-anna@ti.com>
+ <ce37072d2f304214aa920e66fa3b30b1@SFHDAG3NODE1.st.com>
+From:   Tero Kristo <t-kristo@ti.com>
+Message-ID: <d71d6061-2bfe-e8be-857b-67b22493aeab@ti.com>
+Date:   Wed, 18 Mar 2020 11:37:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <ce37072d2f304214aa920e66fa3b30b1@SFHDAG3NODE1.st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The application processor accessing the mpss region when the Q6 modem
-is running will lead to an XPU violation. Fix this by un-mapping the
-mpss region post copy during processor out of reset sequence and
-coredumps.
+On 13/03/2020 18:52, Arnaud POULIQUEN wrote:
+> Hi Suman,
+> 
+>> -----Original Message-----
+>> From: Suman Anna <s-anna@ti.com>
+>> Sent: jeudi 5 mars 2020 23:41
+>> To: Bjorn Andersson <bjorn.andersson@linaro.org>; Loic PALLARDY
+>> <loic.pallardy@st.com>
+>> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>; Arnaud POULIQUEN
+>> <arnaud.pouliquen@st.com>; Tero Kristo <t-kristo@ti.com>; linux-
+>> remoteproc@vger.kernel.org; linux-kernel@vger.kernel.org; Suman Anna
+>> <s-anna@ti.com>
+>> Subject: [PATCH 1/2] remoteproc: fall back to using parent memory pool if no
+>> dedicated available
+>>
+>> From: Tero Kristo <t-kristo@ti.com>
+>>
+>> In some cases, like with OMAP remoteproc, we are not creating dedicated
+>> memory pool for the virtio device. Instead, we use the same memory pool
+>> for all shared memories. The current virtio memory pool handling forces a
+>> split between these two, as a separate device is created for it, causing
+>> memory to be allocated from bad location if the dedicated pool is not
+>> available. Fix this by falling back to using the parent device memory pool if
+>> dedicated is not available.
+>>
+>> Fixes: 086d08725d34 ("remoteproc: create vdev subdevice with specific dma
+>> memory pool")
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> ---
+>>   drivers/remoteproc/remoteproc_virtio.c | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_virtio.c
+>> b/drivers/remoteproc/remoteproc_virtio.c
+>> index 8c07cb2ca8ba..4723ebe574b8 100644
+>> --- a/drivers/remoteproc/remoteproc_virtio.c
+>> +++ b/drivers/remoteproc/remoteproc_virtio.c
+>> @@ -368,6 +368,16 @@ int rproc_add_virtio_dev(struct rproc_vdev *rvdev,
+>> int id)
+>>   				goto out;
+>>   			}
+>>   		}
+>> +	} else {
+>> +		struct device_node *np = rproc->dev.parent->of_node;
+>> +
+>> +		/*
+>> +		 * If we don't have dedicated buffer, just attempt to
+>> +		 * re-assign the reserved memory from our parent.
+>> +		 * Failure is non-critical so don't check return value
+>> +		 * either.
+>> +		 */
+>> +		of_reserved_mem_device_init_by_idx(dev, np, 0);
+>>   	}
+> I aven't tested your patchset yet, but reviewing you code,  I wonder if you cannot declare your  memory pool
+> in your platform driver using  rproc_of_resm_mem_entry_init. Something like:
+> 	struct device_node *mem_node;
+> 	struct reserved_mem *rmem;
+> 
+> 	mem_node = of_parse_phandle(dev->of_node, "memory-region", 0);
+> 	rmem = of_reserved_mem_lookup(mem_node);
+> 	mem = rproc_of_resm_mem_entry_init(dev, 0,
+> 							   rmem->size,
+> 							   rmem->base,
+> 							   " vdev0buffer");
+> 
+> A main advantage of this implementation would be that the index of the memory region would not be hard coded to 0.
 
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+It seems like that would work for us also, and thus this patch can be 
+dropped. See the following patch. Suman, any comments on this? If this 
+seems acceptable, I can send this as a proper patch to the list.
+
+------
+
+From: Tero Kristo <t-kristo@ti.com>
+Date: Wed, 18 Mar 2020 11:22:58 +0200
+Subject: [PATCH] remoteproc/omap: Allocate vdev0buffer memory from
+  reserved memory pool
+
+Since 086d08725d34 ("remoteproc: create vdev subdevice with specific dma
+memory pool"), remoteprocs must allocate separate vdev memory buffer. As
+OMAP remoteproc does not do this yet, the memory gets allocated from
+default DMA pool, and this memory is not suitable for the use. To fix
+the issue, map the vdev0buffer to use the same device reserved memory
+pool as the rest of the remoteproc.
+
+Signed-off-by: Tero Kristo <t-kristo@ti.com>
 ---
- drivers/remoteproc/qcom_q6v5_mss.c | 53 ++++++++++++++++--------------
- 1 file changed, 29 insertions(+), 24 deletions(-)
+  drivers/remoteproc/omap_remoteproc.c | 16 ++++++++++++++++
+  1 file changed, 16 insertions(+)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index ce49c3236ff7c..b1ad4de179019 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -196,7 +196,6 @@ struct q6v5 {
- 
- 	phys_addr_t mpss_phys;
- 	phys_addr_t mpss_reloc;
--	void *mpss_region;
- 	size_t mpss_size;
- 
- 	struct qcom_rproc_glink glink_subdev;
-@@ -1061,6 +1060,18 @@ static int q6v5_reload_mba(struct rproc *rproc)
- 	return ret;
- }
- 
-+static void *q6v5_da_to_va(struct rproc *rproc, u64 da, size_t len)
-+{
-+	struct q6v5 *qproc = rproc->priv;
-+	int offset;
-+
-+	offset = da - qproc->mpss_reloc;
-+	if (offset < 0 || offset + len > qproc->mpss_size)
-+		return NULL;
-+
-+	return devm_ioremap_wc(qproc->dev, qproc->mpss_phys + offset, len);
-+}
-+
- static int q6v5_mpss_load(struct q6v5 *qproc)
- {
- 	const struct elf32_phdr *phdrs;
-@@ -1156,7 +1167,11 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 			goto release_firmware;
- 		}
- 
--		ptr = qproc->mpss_region + offset;
-+		ptr = q6v5_da_to_va(qproc->rproc, phdr->p_paddr, phdr->p_memsz);
-+		if (!ptr) {
-+			dev_err(qproc->dev, "failed to map memory\n");
-+			goto release_firmware;
-+		}
- 
- 		if (phdr->p_filesz && phdr->p_offset < fw->size) {
- 			/* Firmware is large enough to be non-split */
-@@ -1165,6 +1180,7 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 					"failed to load segment %d from truncated file %s\n",
- 					i, fw_name);
- 				ret = -EINVAL;
-+				devm_iounmap(qproc->dev, ptr);
- 				goto release_firmware;
- 			}
- 
-@@ -1175,6 +1191,7 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 			ret = request_firmware(&seg_fw, fw_name, qproc->dev);
- 			if (ret) {
- 				dev_err(qproc->dev, "failed to load %s\n", fw_name);
-+				devm_iounmap(qproc->dev, ptr);
- 				goto release_firmware;
- 			}
- 
-@@ -1187,6 +1204,7 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 			memset(ptr + phdr->p_filesz, 0,
- 			       phdr->p_memsz - phdr->p_filesz);
- 		}
-+		devm_iounmap(qproc->dev, ptr);
- 		size += phdr->p_memsz;
- 
- 		code_length = readl(qproc->rmb_base + RMB_PMI_CODE_LENGTH_REG);
-@@ -1236,7 +1254,7 @@ static void qcom_q6v5_dump_segment(struct rproc *rproc,
- 	int ret = 0;
- 	struct q6v5 *qproc = rproc->priv;
- 	unsigned long mask = BIT((unsigned long)segment->priv);
--	void *ptr = rproc_da_to_va(rproc, segment->da, segment->size);
-+	void *ptr = NULL;
- 
- 	/* Unlock mba before copying segments */
- 	if (!qproc->dump_mba_loaded) {
-@@ -1250,10 +1268,15 @@ static void qcom_q6v5_dump_segment(struct rproc *rproc,
- 		}
- 	}
- 
--	if (!ptr || ret)
--		memset(dest, 0xff, segment->size);
--	else
-+	if (!ret)
-+		ptr = rproc_da_to_va(rproc, segment->da, segment->size);
-+
-+	if (ptr) {
- 		memcpy(dest, ptr, segment->size);
-+		devm_iounmap(qproc->dev, ptr);
+diff --git a/drivers/remoteproc/omap_remoteproc.c 
+b/drivers/remoteproc/omap_remoteproc.c
+index 29d19a608af8..024330e31a9e 100644
+--- a/drivers/remoteproc/omap_remoteproc.c
++++ b/drivers/remoteproc/omap_remoteproc.c
+@@ -1273,6 +1273,9 @@ static int omap_rproc_probe(struct platform_device 
+*pdev)
+  	const char *firmware;
+  	int ret;
+  	struct reset_control *reset;
++	struct device_node *mem_node;
++	struct reserved_mem *rmem;
++	struct rproc_mem_entry *mem;
+
+  	if (!np) {
+  		dev_err(&pdev->dev, "only DT-based devices are supported\n");
+@@ -1335,6 +1338,19 @@ static int omap_rproc_probe(struct 
+platform_device *pdev)
+  		dev_warn(&pdev->dev, "device does not have specific CMA pool.\n");
+  		dev_warn(&pdev->dev, "Typically this should be provided,\n");
+  		dev_warn(&pdev->dev, "only omit if you know what you are doing.\n");
 +	} else {
-+		memset(dest, 0xff, segment->size);
-+	}
- 
- 	qproc->dump_segment_mask |= mask;
- 
-@@ -1327,18 +1350,6 @@ static int q6v5_stop(struct rproc *rproc)
- 	return 0;
- }
- 
--static void *q6v5_da_to_va(struct rproc *rproc, u64 da, size_t len)
--{
--	struct q6v5 *qproc = rproc->priv;
--	int offset;
--
--	offset = da - qproc->mpss_reloc;
--	if (offset < 0 || offset + len > qproc->mpss_size)
--		return NULL;
--
--	return qproc->mpss_region + offset;
--}
--
- static int qcom_q6v5_register_dump_segments(struct rproc *rproc,
- 					    const struct firmware *mba_fw)
- {
-@@ -1595,12 +1606,6 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
- 
- 	qproc->mpss_phys = qproc->mpss_reloc = r.start;
- 	qproc->mpss_size = resource_size(&r);
--	qproc->mpss_region = devm_ioremap_wc(qproc->dev, qproc->mpss_phys, qproc->mpss_size);
--	if (!qproc->mpss_region) {
--		dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n",
--			&r.start, qproc->mpss_size);
--		return -EBUSY;
--	}
- 
- 	return 0;
- }
++		mem_node = of_parse_phandle(pdev->dev.of_node, "memory-region",
++					    0);
++		rmem = of_reserved_mem_lookup(mem_node);
++		mem = rproc_of_resm_mem_entry_init(&pdev->dev, 0, rmem->size,
++						   rmem->base, "vdev0buffer");
++
++		if (!mem) {
++			ret = -ENOMEM;
++			goto release_mem;
++		}
++
++		rproc_add_carveout(rproc, mem);
+  	}
+
+  	platform_set_drvdata(pdev, rproc);
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.17.1
+--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
