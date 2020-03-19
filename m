@@ -2,104 +2,122 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5225818BC53
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 19 Mar 2020 17:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E3818C2AE
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 19 Mar 2020 23:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbgCSQXc (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 19 Mar 2020 12:23:32 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:39032 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727399AbgCSQXb (ORCPT
+        id S1727340AbgCSWBR (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 19 Mar 2020 18:01:17 -0400
+Received: from gateway33.websitewelcome.com ([192.185.146.130]:33160 "EHLO
+        gateway33.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727302AbgCSWBR (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 19 Mar 2020 12:23:31 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02JGNRSY087050;
-        Thu, 19 Mar 2020 11:23:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1584635007;
-        bh=InLyviOkfFOPkDrw3fsPx+IycNhWr/qvF9UvPT91rPQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=UWKk46eVJesUFUnliJecoZN01llOhTN+aRKM3g76mu04W7PPR/KuPD4aiszhfEPEk
-         AMU9Qw6+/8lpVNXO9w7x2oIPQabg/4uGF4grRSD/FDtEB/Ds+RPNEXsNVLenczBZEk
-         T4cEoTvgrRA9Kj+5buRnF78J+VpiUILfgh39ss3E=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02JGNR5v096819
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 19 Mar 2020 11:23:27 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 19
- Mar 2020 11:23:27 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 19 Mar 2020 11:23:27 -0500
-Received: from lelv0597.itg.ti.com (lelv0597.itg.ti.com [10.181.64.32])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02JGNR8w100125;
-        Thu, 19 Mar 2020 11:23:27 -0500
-Received: from localhost ([10.250.86.212])
-        by lelv0597.itg.ti.com (8.14.7/8.14.7) with ESMTP id 02JGNQrH066554;
-        Thu, 19 Mar 2020 11:23:26 -0500
-From:   Suman Anna <s-anna@ti.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Loic Pallardy <loic.pallardy@st.com>
-CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Suman Anna <s-anna@ti.com>
-Subject: [PATCH v2 2/2] remoteproc: Fix and restore the parenting hierarchy for vdev
-Date:   Thu, 19 Mar 2020 11:23:21 -0500
-Message-ID: <20200319162321.20632-3-s-anna@ti.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200319162321.20632-1-s-anna@ti.com>
-References: <20200319162321.20632-1-s-anna@ti.com>
+        Thu, 19 Mar 2020 18:01:17 -0400
+X-Greylist: delayed 1353 seconds by postgrey-1.27 at vger.kernel.org; Thu, 19 Mar 2020 18:01:16 EDT
+Received: from cm10.websitewelcome.com (cm10.websitewelcome.com [100.42.49.4])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id E473C4B9B2
+        for <linux-remoteproc@vger.kernel.org>; Thu, 19 Mar 2020 16:38:42 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id F2sEjCDjSEfyqF2sEjCGed; Thu, 19 Mar 2020 16:38:42 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8t+GKURvPsiO09P1cerppTv6KLHnl8mv7NQMq1iJcNM=; b=ySM5kIDMuSsDptGkthLtuvRg7z
+        AHjQu993DIg+zVXmTFYBvwUSfH38F8YRbaUBx5nS3bw3OFdIj+ORziSAD/H1MXC9jGyEXALYJp9VM
+        0KR9g9foGdFdFdkHxSXxA0kcDuQTvxRvw83/YgYiyQ6fYR4K/pBegimesX29m9jysPtdFbTJuKpLh
+        Zd91PNJXiVV+VIYpicABw/dQ6FI4ZsrmyJsY8LjNzE2xeUnK2VJxyz5ubdid3gzOLzVgxZxVgoGyy
+        SWZIcIUE43DL0NgOlcxQFjYoVMBKV+K32YzVsCLPvQ7B0u9yVPs2lB5fy1VAAMkw5iW+mFipm1AIq
+        VVe5OPCw==;
+Received: from cablelink-189-218-116-241.hosts.intercable.net ([189.218.116.241]:53364 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1jF2sC-001gsA-8G; Thu, 19 Mar 2020 16:38:40 -0500
+Date:   Thu, 19 Mar 2020 16:38:39 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Baolin Wang <baolin.wang7@gmail.com>
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH][next] hwspinlock: hwspinlock_internal.h: Replace zero-length
+ array with flexible-array member
+Message-ID: <20200319213839.GA10669@embeddedor.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.218.116.241
+X-Source-L: No
+X-Exim-ID: 1jF2sC-001gsA-8G
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: cablelink-189-218-116-241.hosts.intercable.net (embeddedor) [189.218.116.241]:53364
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 40
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The commit 086d08725d34 ("remoteproc: create vdev subdevice with specific
-dma memory pool") has introduced a new vdev subdevice for each vdev
-declared in the firmware resource table and made it as the parent for the
-created virtio rpmsg devices instead of the previous remoteproc device.
-This changed the overall parenting hierarchy for the rpmsg devices, which
-were children of virtio devices, and does not allow the corresponding
-rpmsg drivers to retrieve the parent rproc device through the
-rproc_get_by_child() API.
+The current codebase makes use of the zero-length array language
+extension to the C90 standard, but the preferred mechanism to declare
+variable-length types such as these ones is a flexible array member[1][2],
+introduced in C99:
 
-Fix this by restoring the remoteproc device as the parent. The new vdev
-subdevice can continue to inherit the DMA attributes from the remoteproc's
-parent device (actual platform device).
+struct foo {
+        int stuff;
+        struct boo array[];
+};
 
-Fixes: 086d08725d34 ("remoteproc: create vdev subdevice with specific dma memory pool")
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Acked-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
+By making use of the mechanism above, we will get a compiler warning
+in case the flexible array does not occur last in the structure, which
+will help us prevent some kind of undefined behavior bugs from being
+inadvertently introduced[3] to the codebase from now on.
+
+Also, notice that, dynamic memory allocations won't be affected by
+this change:
+
+"Flexible array members have incomplete type, and so the sizeof operator
+may not be applied. As a quirk of the original implementation of
+zero-length arrays, sizeof evaluates to zero."[1]
+
+This issue was found with the help of Coccinelle.
+
+[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+[2] https://github.com/KSPP/linux/issues/21
+[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 ---
-v2: No code changes, picked up review tags
-v1: https://patchwork.kernel.org/patch/11422725/
-
- drivers/remoteproc/remoteproc_core.c | 2 +-
+ drivers/hwspinlock/hwspinlock_internal.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index a9ac1d01e09b..0962855f27fc 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -514,7 +514,7 @@ static int rproc_handle_vdev(struct rproc *rproc, struct fw_rsc_vdev *rsc,
+diff --git a/drivers/hwspinlock/hwspinlock_internal.h b/drivers/hwspinlock/hwspinlock_internal.h
+index 9eb6bd020dc7..29892767bb7a 100644
+--- a/drivers/hwspinlock/hwspinlock_internal.h
++++ b/drivers/hwspinlock/hwspinlock_internal.h
+@@ -56,7 +56,7 @@ struct hwspinlock_device {
+ 	const struct hwspinlock_ops *ops;
+ 	int base_id;
+ 	int num_locks;
+-	struct hwspinlock lock[0];
++	struct hwspinlock lock[];
+ };
  
- 	/* Initialise vdev subdevice */
- 	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
--	rvdev->dev.parent = rproc->dev.parent;
-+	rvdev->dev.parent = &rproc->dev;
- 	rvdev->dev.dma_pfn_offset = rproc->dev.parent->dma_pfn_offset;
- 	rvdev->dev.release = rproc_rvdev_release;
- 	dev_set_name(&rvdev->dev, "%s#%s", dev_name(rvdev->dev.parent), name);
+ static inline int hwlock_to_id(struct hwspinlock *hwlock)
 -- 
 2.23.0
 
