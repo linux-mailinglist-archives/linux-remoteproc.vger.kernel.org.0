@@ -2,121 +2,65 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D32718C494
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 20 Mar 2020 02:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3FB18C809
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 20 Mar 2020 08:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727235AbgCTBSL (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 19 Mar 2020 21:18:11 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:40516 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726950AbgCTBSL (ORCPT
+        id S1726603AbgCTHNq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 20 Mar 2020 03:13:46 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:29980 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726893AbgCTHNp (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 19 Mar 2020 21:18:11 -0400
-Received: by mail-lj1-f194.google.com with SMTP id 19so4688190ljj.7;
-        Thu, 19 Mar 2020 18:18:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UMYxm6j+mIIPOTy3mCj/AiqxDzaoPpHmSg1bqjbwEg4=;
-        b=eujV/S1+/hFD8I3NIMRmaYqBxQ/qD6C9agLp2DzdbbmA9G9Nj7qC2HcNr5N64MhZ5C
-         eF+IItDROXnCO7CJTZS8plyWouuYgee99zmGj6UbzTUriWFCu7eRZwIqXL5IeBnIiysg
-         oxpF2UQVHSxAPI1pG7DaqGJJ44vtL110CBtStpuK1ObGBKWnqKcq98P6D6dyTfQ/JXb4
-         TRjdCwsGWjsUkv6ev9UrkHRVb5/UECs2nSC1utUVlt+fVY72ecjzPL429dMNP484Lf0O
-         UpDuF6fc58xpI/CDK50vVS49vimJ1N/9pdXCMjnA57ERcbpraIatBrMIMidEKmxRSfNu
-         jKcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UMYxm6j+mIIPOTy3mCj/AiqxDzaoPpHmSg1bqjbwEg4=;
-        b=RYq4akmfU2ZCZeqYqcKndcoWMugQdsCLpMJpoe1GamtVgRXr7VzhOvYfat5kLie8lL
-         B5mE+f9InfLQVQqN2wiRPtytXmdTboNhqgrTxZlSxMPG19fYumUjj2L+v9rbVJxgyspf
-         k0VcCrVdFG/UOs+nAGBjlaO/dNe+P2tGj3YY8a/LMTSQJVAlu8TZiYBxOO7tMqrfKC+7
-         VSVJPYSNTUfMPtRbFzJbQkJtJFLN59uQ0yMsoe8hDieg71x0/2uvwxPKE4Bqq3C6rs9P
-         gNBrsH+U3kOhN/P40AqsHbU4PQ/nIjZ9yqNk819QDxx3wjvkhVYykvzqvrhGDcXjPalW
-         hNLQ==
-X-Gm-Message-State: ANhLgQ04RT/oFQPVJ/QbDKfqUJxJtcaLL5FipI7hFyAejAJHGvQB3YCB
-        XPNipHluhaKH7YlYh4CEbO+jiRTDgOBGUYQXegU=
-X-Google-Smtp-Source: ADFU+vvmMZ6JShwQhcE6b7jCzzIRlrhXSCBuofU5ssxbnD6vsVrhizSR456+/Mut7TJGrwdGW3Vu1OzCaaeO4hN8YLc=
-X-Received: by 2002:a2e:3a11:: with SMTP id h17mr3742351lja.110.1584667088457;
- Thu, 19 Mar 2020 18:18:08 -0700 (PDT)
+        Fri, 20 Mar 2020 03:13:45 -0400
+X-UUID: fe6e58230481426591d35cee78bd5517-20200320
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=k58APG24uidmU5v8KtptUOGOeNfiLEWeS+xyzZ6fKUI=;
+        b=iQ5dSost9Wnho3MFg3aDcFx5NtUWxkTmfe3IuhR1yUa6k0WtBY+nXG7GX5BeU5nqaHFKmoUCyHUvm5qfWIoPRi6Ayw4aRQg2fHtOnaLwGJw78oH138t61PAQw76pjuIrUwPwEJBqWH2T5pm2Qk3uliHu0jroGLlC6n+EcPX4ZDg=;
+X-UUID: fe6e58230481426591d35cee78bd5517-20200320
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <erin.lo@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 972960322; Fri, 20 Mar 2020 15:13:36 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 20 Mar 2020 15:12:36 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 20 Mar 2020 15:13:37 +0800
+From:   Erin Lo <erin.lo@mediatek.com>
+To:     <linux-firmware@kernel.org>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <yunfei.dong@mediatek.com>,
+        <maoguang.meng@mediatek.com>, <menghui.lin@mediatek.com>,
+        <sj.huang@mediatek.com>, <erin.lo@mediatek.com>,
+        <drinkcat@google.com>, <shawnku@google.com>,
+        <srv_heupstream@mediatek.com>
+Subject: pull request v2: linux-firmware: Create Mediatek MT8183 SCP firmware  
+Date:   Fri, 20 Mar 2020 15:11:42 +0800
+Message-ID: <20200320071143.4225-1-erin.lo@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20200319213839.GA10669@embeddedor.com>
-In-Reply-To: <20200319213839.GA10669@embeddedor.com>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Fri, 20 Mar 2020 09:17:57 +0800
-Message-ID: <CADBw62qjK=0_UKmOyvvYszLkjgVi8LQTwAg1Vqm07-89fOU=fg@mail.gmail.com>
-Subject: Re: [PATCH][next] hwspinlock: hwspinlock_internal.h: Replace
- zero-length array with flexible-array member
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-remoteproc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, Mar 20, 2020 at 5:38 AM Gustavo A. R. Silva
-<gustavo@embeddedor.com> wrote:
->
-> The current codebase makes use of the zero-length array language
-> extension to the C90 standard, but the preferred mechanism to declare
-> variable-length types such as these ones is a flexible array member[1][2],
-> introduced in C99:
->
-> struct foo {
->         int stuff;
->         struct boo array[];
-> };
->
-> By making use of the mechanism above, we will get a compiler warning
-> in case the flexible array does not occur last in the structure, which
-> will help us prevent some kind of undefined behavior bugs from being
-> inadvertently introduced[3] to the codebase from now on.
->
-> Also, notice that, dynamic memory allocations won't be affected by
-> this change:
->
-> "Flexible array members have incomplete type, and so the sizeof operator
-> may not be applied. As a quirk of the original implementation of
-> zero-length arrays, sizeof evaluates to zero."[1]
->
-> This issue was found with the help of Coccinelle.
->
-> [1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
-> [2] https://github.com/KSPP/linux/issues/21
-> [3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
->
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+SGksIG1haW50YWluZXJzLA0KQ2hhbmdlcyBzaW5jZSB2MToNCiAtIEFkZCBpbmZvcm1hdGlvbiB0
+byBXSEVOQ0UNCg0KVGhlIGZvbGxvd2luZyBjaGFuZ2VzIHNpbmNlIGNvbW1pdCAwMTQ4Y2ZlZmNi
+Zjk4ODk4Y2E2NWJiMjZkOWQ3ZDYzOGIzMGUyMTFkOg0KDQogIE1lcmdlIGh0dHBzOi8vZ2l0aHVi
+LmNvbS9yamxpYW8tcWNhL3FjYS1idGZ3ICgyMDIwLTAzLTAyIDA4OjA4OjE1IC0wNTAwKQ0KDQph
+cmUgYXZhaWxhYmxlIGluIHRoZSBHaXQgcmVwb3NpdG9yeSBhdDoNCg0KICBodHRwczovL2dpdGh1
+Yi5jb20vZXJpbmxvL2xpbnV4X2Z3X3NjcCB2MTI1NzMuNzcNCg0KZm9yIHlvdSB0byBmZXRjaCBj
+aGFuZ2VzIHVwIHRvIDNjMjEzYWE1OTY2MWM0NjQxZjBjMjE2NmEzMTUxNDBhYzA0NDUyMzA6DQoN
+CiAgbWVkaWF0ZWs6IEFkZCBtdDgxODMgU0NQIGZpcm13YXJlICgyMDIwLTAzLTIwIDE0OjM3OjQ5
+ICswODAwKQ0KDQotLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tDQpFcmluIExvICgxKToNCiAgICAgIG1lZGlhdGVrOiBBZGQgbXQ4
+MTgzIFNDUCBmaXJtd2FyZQ0KDQogV0hFTkNFICAgICAgICAgICAgICAgICAgfCAgMTggKysrKysr
+KysrKysrKysrKysrDQogbWVkaWF0ZWsvbXQ4MTgzL3NjcC5pbWcgfCBCaW4gMCAtPiAxMDI3MTA0
+IGJ5dGVzDQogMiBmaWxlcyBjaGFuZ2VkLCAxOCBpbnNlcnRpb25zKCspDQogY3JlYXRlIG1vZGUg
+MTAwNjQ0IG1lZGlhdGVrL210ODE4My9zY3AuaW1nDQoNCg==
 
-Looks good to me. Thanks.
-Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
-
-> ---
->  drivers/hwspinlock/hwspinlock_internal.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/hwspinlock/hwspinlock_internal.h b/drivers/hwspinlock/hwspinlock_internal.h
-> index 9eb6bd020dc7..29892767bb7a 100644
-> --- a/drivers/hwspinlock/hwspinlock_internal.h
-> +++ b/drivers/hwspinlock/hwspinlock_internal.h
-> @@ -56,7 +56,7 @@ struct hwspinlock_device {
->         const struct hwspinlock_ops *ops;
->         int base_id;
->         int num_locks;
-> -       struct hwspinlock lock[0];
-> +       struct hwspinlock lock[];
->  };
->
->  static inline int hwlock_to_id(struct hwspinlock *hwlock)
-> --
-> 2.23.0
->
-
-
--- 
-Baolin Wang
