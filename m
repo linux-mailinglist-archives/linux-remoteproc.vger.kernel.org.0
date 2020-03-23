@@ -2,418 +2,139 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBBFA18F855
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 23 Mar 2020 16:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2031900B1
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 23 Mar 2020 22:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726049AbgCWPOc (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 23 Mar 2020 11:14:32 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:41800 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727024AbgCWPOb (ORCPT
+        id S1726203AbgCWVwJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 23 Mar 2020 17:52:09 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:44869 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725990AbgCWVwJ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 23 Mar 2020 11:14:31 -0400
-Received: by mail-io1-f66.google.com with SMTP id y24so14460274ioa.8
-        for <linux-remoteproc@vger.kernel.org>; Mon, 23 Mar 2020 08:14:30 -0700 (PDT)
+        Mon, 23 Mar 2020 17:52:09 -0400
+Received: by mail-pg1-f195.google.com with SMTP id 142so2658240pgf.11
+        for <linux-remoteproc@vger.kernel.org>; Mon, 23 Mar 2020 14:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nazMPjqIkWs0ZAFFdqSSlzNpLlqJL/D39lu/3l7gP4c=;
-        b=SYMt7G/UNMHGwRJntbHtFslxj/bTJmuy0IOrfmiI5HWVY+5tWMTCoB4Y7B0gXVqggj
-         9VXOspv4dWzgfyWrDGNrApyhodINuOzS+4+b5NV4HqCrqCPD2gEpX2fPyvEWjiyk3IJF
-         foyLw//SN0sA7NqP4/0UcROdLgDy6vM17WcNuuZJ6/f9jchN3xHYFdL8TEKXMCvGiOUF
-         AxVVZ+O8g92Gixj8NXSwna/wjy0GM/PYHRUSELh+88+VGPma25T3Zt29uF0r1efuVPTe
-         7tJ8zF7YHsdMKoJPwmK1zpYRqlKVitXvFr9zWPN2pMSszkm+Oc/UZ+77xiCkJOFOvy7w
-         ldLA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=zzaojujfcls2hgFyVUn0hD1Rb+7tZyy+TgUJhbpUoN0=;
+        b=tWTwtLciVWGSxsbK51pBsm7+vZ073MLGRYvTY2C4gVsjjvEfn14hy7mCtlIsWT+LvQ
+         al5phEEv8sdIIHJnFOjBu5CNIfygJVjQbwKif/nBhzkXYzPt2NeARsXaQbO7sHjYl7Ho
+         IyuMyLSDe76UZsuPAvnYEFVGKNVGSkygCw+8o5OXo9RGlOSzkscK/JydAc5DUTMZO83W
+         03ohm0vE/DAPjcuZXljtjSbkdPHLTIyQmiBH6KTiDrfaisDWAPIrUN0bK7hUee01IuaS
+         2vh5bPwOmBCgwlmBoPM7NeRT3ejSr2KPgaJ3H/+g6hW07PbV15/ZheZ3OF+7xCrlsE1Y
+         pXqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nazMPjqIkWs0ZAFFdqSSlzNpLlqJL/D39lu/3l7gP4c=;
-        b=e2SPs+K9HbBSmuyQssFSECAL3bAyyHLu1bFwcjvGX3fD1umWfAjZdHJsASZO7WIg8a
-         KzfMMTlIYYIT+JL7WJz++syZm+z+7pMKe1zR0xNbhY9KeZ7tvB1KZAi8aKmhxuljggBq
-         226yRLYdPdNuANR3Hd4WNt+YgCjNsqwAntti9H9OJmHHoK7CmKbzJDNxzN+koOVes0Gu
-         uJJKQbshGyaqB9VRfj/NTz+6e1MhOGV3f1dMna8MVFk+PcN3NqaPc51qWKsvPnZXTW0d
-         +tIkiBHNfoFxV4NiRwQ9Cg4/KgsedgQZ3Mcat/ml+bG6iapIkpsBfwURR5S/lP5fGy1R
-         0Uzw==
-X-Gm-Message-State: ANhLgQ3nA9QHW1OJV7Srge64l98z/witvyC62FvJXfsSghFrF1YNrcB+
-        diXnu7wR+f4gOtPYf+CTKgNEQ5HNxKXoNphTI5jzeQ==
-X-Google-Smtp-Source: ADFU+vu9r73PngwSQKcMF8AMCXYhboC6W13IzfBmPA6tsmX7L3igjJ73Z1iIfjSENCYVJ2BRZ4OGgoZmcK+t3q1skho=
-X-Received: by 2002:a02:cbd0:: with SMTP id u16mr19827970jaq.36.1584976469483;
- Mon, 23 Mar 2020 08:14:29 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200313081718.30612-1-t-kristo@ti.com> <20200313081718.30612-15-t-kristo@ti.com>
- <20200320203224.GB16145@xps15> <3fb94cbd-fd05-b5aa-b7f2-dbef24584040@ti.com>
-In-Reply-To: <3fb94cbd-fd05-b5aa-b7f2-dbef24584040@ti.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=zzaojujfcls2hgFyVUn0hD1Rb+7tZyy+TgUJhbpUoN0=;
+        b=fASbs5t8YFwIPrUE08oS2RVLBf9EvMeP7z9Zc68J820pwKkHkctDIlX0ikLttY9xFX
+         2yPssl307nV2LSKB+Xz4z+cL+gEgSHYHgIDAwsWCwmGMnQuae3+TrP9uJYpYQMRvaGn7
+         vFC5o2on6CnoOjQhjTi6NcuqIHVE65N1a+aaaHxJqk63X1KOYgnjgZSl5P3P4KHZTE8T
+         xoAqY7DbCvPtwc5Wx6GBeNGN8vJ7LkbpzU3InLnB0cHUPbuejCu5BXWEB0M3D684CNgW
+         LYSfTnFO0A+bRLZwrqjxtcspg9MrXtMmhYOw9U/X2EgBwgt6WJ0ul5TNTgifHvi2oY+K
+         00Fg==
+X-Gm-Message-State: ANhLgQ340EBJITAcGwkf6cRJYDU0D3Y3PMZ/ijuTmdBog6defLQDl9nZ
+        CK2RR42HjdequXbj4ypscBqlJ3IA0kw=
+X-Google-Smtp-Source: ADFU+vvmkqQHQNARe/Cfqm5giF+9fLK7xjtj+Kr/nmczELP2SRPVq3XmEvxUAYfyJp75b2PX8eQsiQ==
+X-Received: by 2002:a63:ec50:: with SMTP id r16mr25369318pgj.274.1585000327853;
+        Mon, 23 Mar 2020 14:52:07 -0700 (PDT)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id j12sm5499008pgs.0.2020.03.23.14.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2020 14:52:07 -0700 (PDT)
+Date:   Mon, 23 Mar 2020 15:52:05 -0600
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Mon, 23 Mar 2020 09:14:18 -0600
-Message-ID: <CANLsYkwnbmXbodEbQQGSMP-oVGeZs6N-NisicGD5DgBfzGu1rg@mail.gmail.com>
-Subject: Re: [PATCHv8 14/15] remoteproc/omap: Add watchdog functionality for
- remote processors
-To:     Suman Anna <s-anna@ti.com>
-Cc:     Tero Kristo <t-kristo@ti.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Andrew F. Davis" <afd@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] remoteproc: Traverse rproc_list under RCU read
+ lock
+Message-ID: <20200323215205.GA30464@xps15>
+References: <20200310063817.3344712-1-bjorn.andersson@linaro.org>
+ <20200310063817.3344712-2-bjorn.andersson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200310063817.3344712-2-bjorn.andersson@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, 20 Mar 2020 at 15:48, Suman Anna <s-anna@ti.com> wrote:
->
-> On 3/20/20 3:32 PM, Mathieu Poirier wrote:
-> > On Fri, Mar 13, 2020 at 10:17:17AM +0200, Tero Kristo wrote:
-> >> From: Suman Anna <s-anna@ti.com>
-> >>
-> >> Remote processors can be stuck in a loop, and may not be recoverable
-> >> if they do not have a built-in watchdog. The watchdog implementation
-> >> for OMAP remote processors uses external gptimers that can be used
-> >> to interrupt both the Linux host as well as the remote processor.
-> >>
-> >> Each remote processor is responsible for refreshing the timer during
-> >> normal behavior - during OS task scheduling or entering the idle loop
-> >> properly. During a watchdog condition (executing a tight loop causing
-> >> no scheduling), the host processor gets interrupts and schedules a
-> >> recovery for the corresponding remote processor. The remote processor
-> >> may also get interrupted to be able to print a back trace.
-> >>
-> >> A menuconfig option has also been added to enable/disable the Watchdog
-> >> functionality, with the default as disabled.
-> >>
-> >> Signed-off-by: Suman Anna <s-anna@ti.com>
-> >> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> >> Reviewed-by: Andrew F. Davis <afd@ti.com>
-> >> ---
-> >> v8:
-> >>   - minor cosmetic changes
-> >>
-> >>  drivers/remoteproc/Kconfig           |  12 +++
-> >>  drivers/remoteproc/omap_remoteproc.c | 152 +++++++++++++++++++++++++--
-> >>  2 files changed, 153 insertions(+), 11 deletions(-)
-> >>
-> >> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-> >> index b52abc2268cc..5f33358eb2f1 100644
-> >> --- a/drivers/remoteproc/Kconfig
-> >> +++ b/drivers/remoteproc/Kconfig
-> >> @@ -52,6 +52,18 @@ config OMAP_REMOTEPROC
-> >>        It's safe to say N here if you're not interested in multimedia
-> >>        offloading or just want a bare minimum kernel.
-> >>
-> >> +config OMAP_REMOTEPROC_WATCHDOG
-> >> +    bool "OMAP remoteproc watchdog timer"
-> >> +    depends on OMAP_REMOTEPROC
-> >> +    default n
-> >> +    help
-> >> +      Say Y here to enable watchdog timer for remote processors.
-> >> +
-> >> +      This option controls the watchdog functionality for the remote
-> >> +      processors in OMAP. Dedicated OMAP DMTimers are used by the remote
-> >> +      processors and triggers the timer interrupt upon a watchdog
-> >> +      detection.
-> >> +
-> >>  config WKUP_M3_RPROC
-> >>      tristate "AMx3xx Wakeup M3 remoteproc support"
-> >>      depends on SOC_AM33XX || SOC_AM43XX
-> >> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
-> >> index ece60a183e19..29d19a608af8 100644
-> >> --- a/drivers/remoteproc/omap_remoteproc.c
-> >> +++ b/drivers/remoteproc/omap_remoteproc.c
-> >> @@ -24,6 +24,7 @@
-> >>  #include <linux/platform_device.h>
-> >>  #include <linux/pm_runtime.h>
-> >>  #include <linux/dma-mapping.h>
-> >> +#include <linux/interrupt.h>
-> >>  #include <linux/remoteproc.h>
-> >>  #include <linux/mailbox_client.h>
-> >>  #include <linux/omap-iommu.h>
-> >> @@ -72,10 +73,12 @@ struct omap_rproc_mem {
-> >>   * struct omap_rproc_timer - data structure for a timer used by a omap rproc
-> >>   * @odt: timer pointer
-> >>   * @timer_ops: OMAP dmtimer ops for @odt timer
-> >> + * @irq: timer irq
-> >>   */
-> >>  struct omap_rproc_timer {
-> >>      struct omap_dm_timer *odt;
-> >>      const struct omap_dm_timer_ops *timer_ops;
-> >> +    int irq;
-> >>  };
-> >>
-> >>  /**
-> >> @@ -86,6 +89,7 @@ struct omap_rproc_timer {
-> >>   * @mem: internal memory regions data
-> >>   * @num_mems: number of internal memory regions
-> >>   * @num_timers: number of rproc timer(s)
-> >> + * @num_wd_timers: number of rproc watchdog timers
-> >>   * @timers: timer(s) info used by rproc
-> >>   * @autosuspend_delay: auto-suspend delay value to be used for runtime pm
-> >>   * @need_resume: if true a resume is needed in the system resume callback
-> >> @@ -102,6 +106,7 @@ struct omap_rproc {
-> >>      struct omap_rproc_mem *mem;
-> >>      int num_mems;
-> >>      int num_timers;
-> >> +    int num_wd_timers;
-> >>      struct omap_rproc_timer *timers;
-> >>      int autosuspend_delay;
-> >>      bool need_resume;
-> >> @@ -219,6 +224,79 @@ static inline int omap_rproc_release_timer(struct omap_rproc_timer *timer)
-> >>      return timer->timer_ops->free(timer->odt);
-> >>  }
-> >>
-> >> +/**
-> >> + * omap_rproc_get_timer_irq() - get the irq for a timer
-> >> + * @timer: handle to a OMAP rproc timer
-> >> + *
-> >> + * This function is used to get the irq associated with a watchdog timer. The
-> >> + * function is called by the OMAP remoteproc driver to register a interrupt
-> >> + * handler to handle watchdog events on the remote processor.
-> >> + *
-> >> + * Return: irq id on success, otherwise a failure as returned by DMTimer ops
-> >> + */
-> >> +static inline int omap_rproc_get_timer_irq(struct omap_rproc_timer *timer)
-> >> +{
-> >> +    return timer->timer_ops->get_irq(timer->odt);
-> >> +}
-> >> +
-> >> +/**
-> >> + * omap_rproc_ack_timer_irq() - acknowledge a timer irq
-> >> + * @timer: handle to a OMAP rproc timer
-> >> + *
-> >> + * This function is used to clear the irq associated with a watchdog timer. The
-> >> + * The function is called by the OMAP remoteproc upon a watchdog event on the
-> >> + * remote processor to clear the interrupt status of the watchdog timer.
-> >> + */
-> >> +static inline void omap_rproc_ack_timer_irq(struct omap_rproc_timer *timer)
-> >> +{
-> >> +    timer->timer_ops->write_status(timer->odt, OMAP_TIMER_INT_OVERFLOW);
-> >> +}
-> >> +
-> >> +/**
-> >> + * omap_rproc_watchdog_isr() - Watchdog ISR handler for remoteproc device
-> >> + * @irq: IRQ number associated with a watchdog timer
-> >> + * @data: IRQ handler data
-> >> + *
-> >> + * This ISR routine executes the required necessary low-level code to
-> >> + * acknowledge a watchdog timer interrupt. There can be multiple watchdog
-> >> + * timers associated with a rproc (like IPUs which have 2 watchdog timers,
-> >> + * one per Cortex M3/M4 core), so a lookup has to be performed to identify
-> >> + * the timer to acknowledge its interrupt.
-> >> + *
-> >> + * The function also invokes rproc_report_crash to report the watchdog event
-> >> + * to the remoteproc driver core, to trigger a recovery.
-> >> + *
-> >> + * Return: IRQ_HANDLED on success, otherwise IRQ_NONE
-> >> + */
-> >> +static irqreturn_t omap_rproc_watchdog_isr(int irq, void *data)
-> >> +{
-> >> +    struct rproc *rproc = data;
-> >> +    struct omap_rproc *oproc = rproc->priv;
-> >> +    struct device *dev = rproc->dev.parent;
-> >> +    struct omap_rproc_timer *timers = oproc->timers;
-> >> +    struct omap_rproc_timer *wd_timer = NULL;
-> >> +    int num_timers = oproc->num_timers + oproc->num_wd_timers;
-> >> +    int i;
-> >> +
-> >> +    for (i = oproc->num_timers; i < num_timers; i++) {
-> >> +            if (timers[i].irq > 0 && irq == timers[i].irq) {
-> >> +                    wd_timer = &timers[i];
-> >> +                    break;
-> >> +            }
-> >> +    }
-> >> +
-> >> +    if (!wd_timer) {
-> >> +            dev_err(dev, "invalid timer\n");
-> >> +            return IRQ_NONE;
-> >> +    }
-> >> +
-> >> +    omap_rproc_ack_timer_irq(wd_timer);
-> >> +
-> >> +    rproc_report_crash(rproc, RPROC_WATCHDOG);
-> >> +
-> >> +    return IRQ_HANDLED;
-> >> +}
-> >> +
-> >>  /**
-> >>   * omap_rproc_enable_timers() - enable the timers for a remoteproc
-> >>   * @rproc: handle of a remote processor
-> >> @@ -242,19 +320,26 @@ static int omap_rproc_enable_timers(struct rproc *rproc, bool configure)
-> >>      struct omap_rproc_timer *timers = oproc->timers;
-> >>      struct device *dev = rproc->dev.parent;
-> >>      struct device_node *np = NULL;
-> >> +    int num_timers = oproc->num_timers + oproc->num_wd_timers;
-> >>
-> >> -    if (!oproc->num_timers)
-> >> +    if (!num_timers)
-> >>              return 0;
-> >>
-> >>      if (!configure)
-> >>              goto start_timers;
-> >>
-> >> -    for (i = 0; i < oproc->num_timers; i++) {
-> >> -            np = of_parse_phandle(dev->of_node, "ti,timers", i);
-> >> +    for (i = 0; i < num_timers; i++) {
-> >> +            if (i < oproc->num_timers)
-> >> +                    np = of_parse_phandle(dev->of_node, "ti,timers", i);
-> >> +            else
-> >> +                    np = of_parse_phandle(dev->of_node,
-> >> +                                          "ti,watchdog-timers",
-> >> +                                          (i - oproc->num_timers));
-> >>              if (!np) {
-> >>                      ret = -ENXIO;
-> >>                      dev_err(dev, "device node lookup for timer at index %d failed: %d\n",
-> >> -                            i, ret);
-> >> +                            i < oproc->num_timers ? i :
-> >> +                            i - oproc->num_timers, ret);
-> >>                      goto free_timers;
-> >>              }
-> >>
-> >> @@ -277,12 +362,14 @@ static int omap_rproc_enable_timers(struct rproc *rproc, bool configure)
-> >>              if (!timer_ops || !timer_ops->request_by_node ||
-> >>                  !timer_ops->set_source || !timer_ops->set_load ||
-> >>                  !timer_ops->free || !timer_ops->start ||
-> >> -                !timer_ops->stop) {
-> >> +                !timer_ops->stop || !timer_ops->get_irq ||
-> >> +                !timer_ops->write_status) {
-> >>                      ret = -EINVAL;
-> >>                      dev_err(dev, "device does not have required timer ops\n");
-> >>                      goto put_node;
-> >>              }
-> >>
-> >> +            timers[i].irq = -1;
-> >>              timers[i].timer_ops = timer_ops;
-> >>              ret = omap_rproc_request_timer(dev, np, &timers[i]);
-> >>              if (ret) {
-> >> @@ -291,10 +378,33 @@ static int omap_rproc_enable_timers(struct rproc *rproc, bool configure)
-> >>                      goto put_node;
-> >>              }
-> >>              of_node_put(np);
-> >> +
-> >> +            if (i >= oproc->num_timers) {
-> >> +                    timers[i].irq = omap_rproc_get_timer_irq(&timers[i]);
-> >> +                    if (timers[i].irq < 0) {
-> >> +                            dev_err(dev, "get_irq for timer %p failed: %d\n",
-> >> +                                    np, timers[i].irq);
-> >> +                            ret = -EBUSY;
-> >> +                            goto free_timers;
-> >> +                    }
-> >> +
-> >> +                    ret = request_irq(timers[i].irq,
-> >> +                                      omap_rproc_watchdog_isr, IRQF_SHARED,
-> >> +                                      "rproc-wdt", rproc);
-> >> +                    if (ret) {
-> >> +                            dev_err(dev, "error requesting irq for timer %p\n",
-> >> +                                    np);
-> >> +                            omap_rproc_release_timer(&timers[i]);
-> >> +                            timers[i].odt = NULL;
-> >> +                            timers[i].timer_ops = NULL;
-> >> +                            timers[i].irq = -1;
-> >> +                            goto free_timers;
-> >> +                    }
-> >> +            }
-> >>      }
-> >>
-> >>  start_timers:
-> >> -    for (i = 0; i < oproc->num_timers; i++) {
-> >> +    for (i = 0; i < num_timers; i++) {
-> >>              ret = omap_rproc_start_timer(&timers[i]);
-> >>              if (ret) {
-> >>                      dev_err(dev, "start timer %p failed failed: %d\n", np,
-> >> @@ -316,9 +426,12 @@ static int omap_rproc_enable_timers(struct rproc *rproc, bool configure)
-> >>              of_node_put(np);
-> >>  free_timers:
-> >>      while (i--) {
-> >> +            if (i >= oproc->num_timers)
-> >> +                    free_irq(timers[i].irq, rproc);
-> >>              omap_rproc_release_timer(&timers[i]);
-> >>              timers[i].odt = NULL;
-> >>              timers[i].timer_ops = NULL;
-> >> +            timers[i].irq = -1;
-> >>      }
-> >>
-> >>      return ret;
-> >> @@ -341,16 +454,20 @@ static int omap_rproc_disable_timers(struct rproc *rproc, bool configure)
-> >>      int i;
-> >>      struct omap_rproc *oproc = rproc->priv;
-> >>      struct omap_rproc_timer *timers = oproc->timers;
-> >> +    int num_timers = oproc->num_timers + oproc->num_wd_timers;
-> >>
-> >> -    if (!oproc->num_timers)
-> >> +    if (!num_timers)
-> >>              return 0;
-> >>
-> >> -    for (i = 0; i < oproc->num_timers; i++) {
-> >> +    for (i = 0; i < num_timers; i++) {
-> >>              omap_rproc_stop_timer(&timers[i]);
-> >>              if (configure) {
-> >> +                    if (i >= oproc->num_timers)
-> >> +                            free_irq(timers[i].irq, rproc);
-> >>                      omap_rproc_release_timer(&timers[i]);
-> >>                      timers[i].odt = NULL;
-> >>                      timers[i].timer_ops = NULL;
-> >> +                    timers[i].irq = -1;
-> >>              }
-> >>      }
-> >>
-> >> @@ -1110,6 +1227,7 @@ static int omap_rproc_of_get_timers(struct platform_device *pdev,
-> >>      struct device_node *np = pdev->dev.of_node;
-> >>      struct omap_rproc *oproc = rproc->priv;
-> >>      struct device *dev = &pdev->dev;
-> >> +    int num_timers;
-> >>
-> >>      /*
-> >>       * Timer nodes are directly used in client nodes as phandles, so
-> >> @@ -1122,14 +1240,26 @@ static int omap_rproc_of_get_timers(struct platform_device *pdev,
-> >>              oproc->num_timers = 0;
-> >>      }
-> >>
-> >> -    if (oproc->num_timers) {
-> >> -            oproc->timers = devm_kcalloc(dev, oproc->num_timers,
-> >> +#ifdef CONFIG_OMAP_REMOTEPROC_WATCHDOG
-> >> +    oproc->num_wd_timers =
-> >> +            of_count_phandle_with_args(np, "ti,watchdog-timers", NULL);
-> >> +    if (oproc->num_wd_timers <= 0) {
-> >> +            dev_dbg(dev, "device does not have watchdog timers, status = %d\n",
-> >> +                    oproc->num_wd_timers);
-> >> +            oproc->num_wd_timers = 0;
-> >> +    }
-> >> +#endif
-> >
-> > I commented on the above in the previous version...
->
-> Oh, misunderstood your agreed response. I have moved the entire timer
-> parse into a separate function. Do you still prefer just this block to
-> be defined in its own function, it is already self-contained?
+On Mon, Mar 09, 2020 at 11:38:14PM -0700, Bjorn Andersson wrote:
+> In order to be able to traverse the mostly read-only rproc_list without
+> locking during panic migrate traversal to be done under rcu_read_lock().
+> 
+> Mutual exclusion for modifications of the list continues to be handled
+> by the rproc_list_mutex and a synchronization point is added before
+> releasing objects that are popped from the list.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+> 
+> Change v3:
+> - New patch
+> 
+>  drivers/remoteproc/remoteproc_core.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 097f33e4f1f3..f0a77c30c6b1 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -1854,8 +1854,8 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
+>  	if (!np)
+>  		return NULL;
+>  
+> -	mutex_lock(&rproc_list_mutex);
+> -	list_for_each_entry(r, &rproc_list, node) {
+> +	rcu_read_lock();
+> +	list_for_each_entry_rcu(r, &rproc_list, node) {
+>  		if (r->dev.parent && r->dev.parent->of_node == np) {
+>  			/* prevent underlying implementation from being removed */
+>  			if (!try_module_get(r->dev.parent->driver->owner)) {
+> @@ -1868,7 +1868,7 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
+>  			break;
+>  		}
+>  	}
+> -	mutex_unlock(&rproc_list_mutex);
+> +	rcu_read_unlock();
+>  
+>  	of_node_put(np);
+>  
+> @@ -1925,7 +1925,7 @@ int rproc_add(struct rproc *rproc)
+>  
+>  	/* expose to rproc_get_by_phandle users */
+>  	mutex_lock(&rproc_list_mutex);
+> -	list_add(&rproc->node, &rproc_list);
+> +	list_add_rcu(&rproc->node, &rproc_list);
+>  	mutex_unlock(&rproc_list_mutex);
+>  
+>  	return 0;
+> @@ -2140,9 +2140,12 @@ int rproc_del(struct rproc *rproc)
+>  
+>  	/* the rproc is downref'ed as soon as it's removed from the klist */
+>  	mutex_lock(&rproc_list_mutex);
+> -	list_del(&rproc->node);
+> +	list_del_rcu(&rproc->node);
+>  	mutex_unlock(&rproc_list_mutex);
+>  
+> +	/* Ensure that no readers of rproc_list are still active */
+> +	synchronize_rcu();
+> +
 
-Please remove the #ifdef block from the function to favour a simple
-function that resolve to nothing if the configuration flag is not
-defined.
+Please add linuc/rculist.h to include the RCU API.  With that:
 
->
-> regards
-> Suman
->
-> >
-> >> +
-> >> +    num_timers = oproc->num_timers + oproc->num_wd_timers;
-> >> +    if (num_timers) {
-> >> +            oproc->timers = devm_kcalloc(dev, num_timers,
-> >>                                           sizeof(*oproc->timers),
-> >>                                           GFP_KERNEL);
-> >>              if (!oproc->timers)
-> >>                      return -ENOMEM;
-> >>
-> >> -            dev_dbg(dev, "device has %d tick timers\n", oproc->num_timers);
-> >> +            dev_dbg(dev, "device has %d tick timers and %d watchdog timers\n",
-> >> +                    oproc->num_timers, oproc->num_wd_timers);
-> >>      }
-> >>
-> >>      return 0;
-> >> --
-> >> 2.17.1
-> >>
-> >> --
-> >> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
->
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+
+>  	device_del(&rproc->dev);
+>  
+>  	return 0;
+> -- 
+> 2.24.0
+> 
