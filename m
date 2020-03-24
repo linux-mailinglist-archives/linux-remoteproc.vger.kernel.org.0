@@ -2,57 +2,57 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1853191C6F
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 23:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C40191C70
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 23:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728241AbgCXWDm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 24 Mar 2020 18:03:42 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:35909 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728343AbgCXWDm (ORCPT
+        id S1728349AbgCXWDo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 24 Mar 2020 18:03:44 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:34611 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728343AbgCXWDo (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 24 Mar 2020 18:03:42 -0400
-Received: by mail-pj1-f67.google.com with SMTP id nu11so137639pjb.1
-        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Mar 2020 15:03:41 -0700 (PDT)
+        Tue, 24 Mar 2020 18:03:44 -0400
+Received: by mail-pj1-f68.google.com with SMTP id q16so1611326pje.1
+        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Mar 2020 15:03:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=wm2/c43XLKQLZdmKqDIyd+QRT6a53rrkW0k1kyN2WTo=;
-        b=KHGQbZRyU0qKpPHYO7Iw891NZc86TZBYMcX5ix4jv6/Y+2gYE/v1msJhWxogEY3fsm
-         IQlFC8Nf1l4Pm5oG4k/kJzl1gpAqFJsdGgUbqroyuF9vpD3xF7VhJgULxrN+eAa+vS8O
-         nlqox4al9Ocbeo8l0hlnAyAzEA3mUls/f5gHTuJ+r++iFm2fyPoiZ8m5qEBu1p+sBaum
-         5uMK7QlbFKsq13yX/qbiry+BMpzf9ilX/GZZmoXxqtwPX74bQSbiWmvyufPzmEZ4gUfq
-         nHYcEYQc3V076Wmw++TwnnP+K3WPTHaKDH97Ww8rlqMK9MLtGvpJodTFjl5uaz3xClqy
-         +CyQ==
+        bh=DF6ut+sIjxCo1vYVUNvb1kGsbVUugsDLID5ZsQOGmMA=;
+        b=mK+pFgyIPI92Ul0mJlK/vgwhdWnxVTNscH8ueyJXKuq9SZHbFmbRt1BJUXHpn/bnwA
+         rv/yFTHMJIGcNGf1kRWbHdoj3QlFgQaiE3OWVGBQplLL++jq1BQIkzshoohfqFO271LI
+         xg4lKW/zAy34IwIF/y6KFYgdpa30uaBN0km9LKYIADTX7dqE2fV7Ascv4E4OxgMm/p5n
+         KAxSAgkpEOjUAxqKkLsbf5hhlGPNX+P0CJq0bJBeQrySeTsfO8oi7M0nlqyjYpujN9A6
+         LWi1yVT7U1OQ3pu0Qh8YXYjZJRkkCWkQHdwW03gEqhBV/IP6I06K16W+CLVy5U/sml08
+         pRjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=wm2/c43XLKQLZdmKqDIyd+QRT6a53rrkW0k1kyN2WTo=;
-        b=D7aFyMpyOBz4vEfr3bxXzCfCwLwolfU4mxwBDcSlxtitqql7b5w40xfoOvZoMtndc+
-         iFdxSasgmruj+AotnZ1AKEnJ5NCGP4KV5134zmLgp5J5HDZgiVEBNStiVBiiu1+X2PX/
-         DF2YKhT0/fimIvtJBNbWG3+Mp0nhaChFXMy3hG7rLo+3znWy5rA4LeIIPLS5pAh9XFxH
-         X6kxJZNJ+rOoJJt52XQRj7xunwVkt5MQOCTHgeWeYSvVxivA/MDye5NdWpE1z2G8Txfy
-         rs0XXpmXHflSp/0jf915sdOfc7c+Sp0JpxqOTHsKAcLAiotWyzetgTGd+MqzeRVDend5
-         54hw==
-X-Gm-Message-State: ANhLgQ2kLQJVdEfSNCxi0bj8+IZC4XLE9OSm3dGvoEcbt0Tz/BiMOOxe
-        lWSIrYNn0L3Z8QKmkb539nYoUVBtmLA=
-X-Google-Smtp-Source: ADFU+vvDIncx8bBiJdzpN8fICcVxfuZoti1nsG4BaSFLu5qEaZaJf/XjXtxHpq0BGBE7LKvrKkRCnA==
-X-Received: by 2002:a17:90a:1784:: with SMTP id q4mr38680pja.174.1585087421115;
-        Tue, 24 Mar 2020 15:03:41 -0700 (PDT)
+        bh=DF6ut+sIjxCo1vYVUNvb1kGsbVUugsDLID5ZsQOGmMA=;
+        b=UHkFbfE3rnK1jyck28XddeW2OMkX27ptjsuCGxNYxXAdz19LMzeC0LEMteOncSVSsW
+         I3eMGB78wsXB4SDhn41xqggbBoZELYIcJ7FCcGwPP5k31nIZNYm5UwnTHxg/UzehQpJT
+         sOM5M7pI05kBk9WxjVl9M67IHZ4TpM5VXsaCnKgNVCFpkoU0V9WFbmX//OSSYEm16ZJJ
+         8Y0+LvxmSSLZVJzWzGNb623FnPE35vzlR6VsAWqcvge6FAEex75eNVZO3qdPOuMyQG4x
+         g0nuAHLs2PRTzMDDvWt3aDjg8GsefGUuay1dXIBujR67P8KGzydKVSwQKH8/sMongo0Y
+         skzg==
+X-Gm-Message-State: ANhLgQ1CyHM22ZB17IqV8RlJNWtyjJX6eaLmTilRzNGf38QwzLn8FNd4
+        4vwBNY6+iLjYeChX4+LWSbRWD1lkwhM=
+X-Google-Smtp-Source: ADFU+vuCa1KOnFgQj8YIxLv2THmgFu83DUIbZOQf3a7UoMhQ6Dh40lETyXNVj4m7Vm5VNvTFf0K7pw==
+X-Received: by 2002:a17:90b:1b04:: with SMTP id nu4mr22645pjb.81.1585087422177;
+        Tue, 24 Mar 2020 15:03:42 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id x70sm15571199pgd.37.2020.03.24.15.03.40
+        by smtp.gmail.com with ESMTPSA id x70sm15571199pgd.37.2020.03.24.15.03.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 15:03:40 -0700 (PDT)
+        Tue, 24 Mar 2020 15:03:41 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     bjorn.andersson@linaro.org
 Cc:     ohad@wizery.com, loic.pallardy@st.com, s-anna@ti.com,
         peng.fan@nxp.com, arnaud.pouliquen@st.com, fabien.dessenne@st.com,
         linux-remoteproc@vger.kernel.org
-Subject: [PATCH 07/11] remoteproc: stm32: Get loaded resource table for synchronisation
-Date:   Tue, 24 Mar 2020 16:03:25 -0600
-Message-Id: <20200324220329.15523-8-mathieu.poirier@linaro.org>
+Subject: [PATCH 08/11] remoteproc: stm32: Introduce new start and stop ops for synchronisation
+Date:   Tue, 24 Mar 2020 16:03:26 -0600
+Message-Id: <20200324220329.15523-9-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200324220329.15523-1-mathieu.poirier@linaro.org>
 References: <20200324220329.15523-1-mathieu.poirier@linaro.org>
@@ -63,8 +63,8 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Get the resource table location when synchronising with the M4 so
-that the remoteproc and rpmsg subsystem can be initialised properly.
+Introduce new start and stop rproc_ops functions to be used when
+synchonising with an MCU.
 
 Mainly based on the work published by Arnaud Pouliquen [1].
 
@@ -72,100 +72,71 @@ Mainly based on the work published by Arnaud Pouliquen [1].
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- drivers/remoteproc/stm32_rproc.c | 66 ++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+ drivers/remoteproc/stm32_rproc.c | 37 ++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
 diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index b8af15dd0510..5bac0baf8f4c 100644
+index 5bac0baf8f4c..734605a9223e 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -87,6 +87,7 @@ struct stm32_rproc {
- 	struct stm32_mbox mb[MBOX_NB_MBX];
- 	struct workqueue_struct *workqueue;
- 	bool secured_soc;
-+	void __iomem *rsc_va;
- };
- 
- static int stm32_rproc_pa_to_da(struct rproc *rproc, phys_addr_t pa, u64 *da)
-@@ -654,6 +655,65 @@ static int stm32_rproc_get_m4_status(struct stm32_rproc *ddata,
- 	return regmap_read(ddata->m4_state.map, ddata->m4_state.reg, state);
+@@ -449,6 +449,13 @@ static int stm32_rproc_start(struct rproc *rproc)
+ 	return stm32_rproc_set_hold_boot(rproc, true);
  }
  
-+static int stm32_rproc_da_to_pa(struct platform_device *pdev,
-+				struct stm32_rproc *ddata,
-+				u64 da, phys_addr_t *pa)
++static int stm32_rproc_sync_start(struct rproc *rproc)
 +{
-+	struct device *dev = &pdev->dev;
-+	struct stm32_rproc_mem *p_mem;
-+	unsigned int i;
++	stm32_rproc_add_coredump_trace(rproc);
 +
-+	for (i = 0; i < ddata->nb_rmems; i++) {
-+		p_mem = &ddata->rmems[i];
-+
-+		if (da < p_mem->dev_addr ||
-+		    da >= p_mem->dev_addr + p_mem->size)
-+			continue;
-+
-+		*pa = da - p_mem->dev_addr + p_mem->bus_addr;
-+		dev_dbg(dev, "da %llx to pa %#x\n", da, *pa);
-+
-+		return 0;
-+	}
-+
-+	dev_err(dev, "can't translate da %llx\n", da);
-+
-+	return -EINVAL;
++	return stm32_rproc_set_hold_boot(rproc, true);
 +}
 +
-+static int stm32_rproc_get_loaded_rsc_table(struct platform_device *pdev,
-+					    struct stm32_rproc *ddata)
+ static int stm32_rproc_stop(struct rproc *rproc)
+ {
+ 	struct stm32_rproc *ddata = rproc->priv;
+@@ -489,6 +496,30 @@ static int stm32_rproc_stop(struct rproc *rproc)
+ 	return 0;
+ }
+ 
++static int stm32_rproc_sync_stop(struct rproc *rproc)
 +{
-+	struct device *dev = &pdev->dev;
-+	phys_addr_t rsc_pa;
-+	u32 rsc_da;
++	struct stm32_rproc *ddata = rproc->priv;
 +	int err;
 +
-+	err = regmap_read(ddata->rsctbl.map, ddata->rsctbl.reg, &rsc_da);
-+	if (err) {
-+		dev_err(dev, "failed to read rsc tbl addr\n");
-+		return err;
-+	}
-+
-+	if (!rsc_da)
-+		/* no rsc table */
-+		return 0;
-+
-+	err = stm32_rproc_da_to_pa(pdev, ddata, rsc_da, &rsc_pa);
++	err = stm32_rproc_stop(rproc);
 +	if (err)
 +		return err;
 +
-+	ddata->rsc_va = devm_ioremap_wc(dev, rsc_pa, RSC_TBL_SIZE);
-+	if (IS_ERR_OR_NULL(ddata->rsc_va)) {
-+		dev_err(dev, "Unable to map memory region: %pa+%zx\n",
-+			&rsc_pa, RSC_TBL_SIZE);
-+		ddata->rsc_va = NULL;
-+		return -ENOMEM;
++	/* update copro state to OFF */
++	if (ddata->m4_state.map) {
++		err = regmap_update_bits(ddata->m4_state.map,
++					 ddata->m4_state.reg,
++					 ddata->m4_state.mask,
++					 M4_STATE_OFF);
++		if (err) {
++			dev_err(&rproc->dev, "failed to set copro state\n");
++			return err;
++		}
 +	}
 +
 +	return 0;
 +}
 +
- static int stm32_rproc_probe(struct platform_device *pdev)
+ static void stm32_rproc_kick(struct rproc *rproc, int vqid)
  {
- 	struct device *dev = &pdev->dev;
-@@ -689,6 +749,12 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 		state = M4_STATE_OFF;
- 	}
+ 	struct stm32_rproc *ddata = rproc->priv;
+@@ -522,6 +553,12 @@ static struct rproc_ops st_rproc_ops = {
+ 	.get_boot_addr	= rproc_elf_get_boot_addr,
+ };
  
-+	if (state == M4_STATE_CRUN) {
-+		ret = stm32_rproc_get_loaded_rsc_table(pdev, ddata);
-+		if (ret)
-+			goto free_ddata;
-+	}
++static __maybe_unused struct rproc_ops st_rproc_sync_ops = {
++	.start		= stm32_rproc_sync_start,
++	.stop		= stm32_rproc_sync_stop,
++	.kick		= stm32_rproc_kick,
++};
 +
- 	rproc = rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
- 	if (!rproc) {
- 		ret = -ENOMEM;
+ static const struct of_device_id stm32_rproc_match[] = {
+ 	{ .compatible = "st,stm32mp1-m4" },
+ 	{},
 -- 
 2.20.1
 
