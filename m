@@ -2,253 +2,112 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DEB191AD0
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 21:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EACEC191B7E
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 21:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728195AbgCXUSk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 24 Mar 2020 16:18:40 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:43620 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727513AbgCXUSj (ORCPT
+        id S1727682AbgCXUwP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 24 Mar 2020 16:52:15 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:36737 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726984AbgCXUwP (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 24 Mar 2020 16:18:39 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02OKIXkY039621;
-        Tue, 24 Mar 2020 15:18:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1585081113;
-        bh=rgcK0izV60vaMgOYTwIlec7ZHpQ6A2jrrTou43/lA6E=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=S3lGOy1olcbdIpBpppcydK7E44YzT0jssboimdq/4q7x9+PsNW230ogzxkIWVK99L
-         5m8FWf8BrfuXL69jyax0CYue7xPaul7uXtg2oTUFzPtDWGW5MkEzJCAymmyZjHsmEc
-         7a4KcaLuhNrRXrao9VNlsBtUsinzfYCpoazMiPOE=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02OKIXI3065754
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 24 Mar 2020 15:18:33 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 24
- Mar 2020 15:18:33 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 24 Mar 2020 15:18:32 -0500
-Received: from fllv0103.dal.design.ti.com (fllv0103.dal.design.ti.com [10.247.120.73])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02OKIWb4113597;
-        Tue, 24 Mar 2020 15:18:32 -0500
-Received: from localhost ([10.250.35.147])
-        by fllv0103.dal.design.ti.com (8.14.7/8.14.7) with ESMTP id 02OKIWI1085001;
-        Tue, 24 Mar 2020 15:18:32 -0500
-From:   Suman Anna <s-anna@ti.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Tue, 24 Mar 2020 16:52:15 -0400
+Received: by mail-pl1-f193.google.com with SMTP id g2so7914252plo.3
+        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Mar 2020 13:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RUH2GpKiZzcp+HWMY8/0tgoroE59nDoZuKy+VZo5HoQ=;
+        b=ntboDvPpO4mkIqoOhoGXBG65LwzTrCrhDR8XrhgItSkYAvVx0nDaIFCBhgwlE8+b3B
+         y6p8/oHwZoumQYYk3A1AzzxHVkXT6O6foFkaxu4imEmIvRAWv/oMpfPHGgbxrTvRWSJk
+         gIFK1Am2GLRwaAk5axXIPgh23srMlz0n3DanoTyOa9GDaxu/vLb4pd80gJuGfXRZvFfN
+         9yYECe7ugpWAGzj2sy3/0p4O61zScSUI1p0bkfKRlTrUSt8hghGolfUp584p846q7sI+
+         TWvUS7SFV62KctatZgmzNHcZ4+uPfa12URZyyig2GjXYpWMhIgTHXJNzdoKULwuNqvOT
+         xpMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RUH2GpKiZzcp+HWMY8/0tgoroE59nDoZuKy+VZo5HoQ=;
+        b=EEyzSR8n7fs7UtQ5RNbM31AWr2FUH7eXmIAy7peSeogImwTKkroB4dHoENLcWeBbNG
+         fGb9N2IZZUgQuQ/8QChJrHaaySsn9+3bA3k0kKbQaPl9VYxLmXvRnAborNLE/JvJdEZH
+         TOiZ42DkaqRwFoGhvT0BmoPYn9VHa/q4QAKlZqyDLJasmAg8tpm0vfLIS8iLSYuNcjrx
+         +YBlGQTCQKjQBxIgm1zGg45wDg7l0Z9eXTaC6cPeUP/z9HVhm1+415S8kjXBTCLfsgO8
+         gkMOim3Spnoo/OFgkOh+q9Pj/N/2R6eMH0QTB2WtkpHSq8w5GrCUqvQREg/vZjgkXhHb
+         ye9g==
+X-Gm-Message-State: ANhLgQ18eUYtPm4OBB05kGb4u1mSvRBZk5Imt1Vwnip04/GWL8dn6e8F
+        MPnTZJqCy5gzEuHDO3ZUuBk5+UiOV1A=
+X-Google-Smtp-Source: ADFU+vuFTdjBOEELC4vADOx1eo0GZ5R9fhZn/of+Gz8RGRkQBwgXM30Df8fjCPIj52s2Ffu2c1Bidw==
+X-Received: by 2002:a17:902:b281:: with SMTP id u1mr6218733plr.287.1585083133418;
+        Tue, 24 Mar 2020 13:52:13 -0700 (PDT)
+Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id z6sm16696078pfn.212.2020.03.24.13.52.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2020 13:52:12 -0700 (PDT)
+Date:   Tue, 24 Mar 2020 13:52:10 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lokesh Vutla <lokeshvutla@ti.com>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Suman Anna <s-anna@ti.com>
-Subject: [PATCH 7/7] remoteproc/k3-r5: Add loading support for on-chip SRAM regions
-Date:   Tue, 24 Mar 2020 15:18:19 -0500
-Message-ID: <20200324201819.23095-8-s-anna@ti.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200324201819.23095-1-s-anna@ti.com>
-References: <20200324201819.23095-1-s-anna@ti.com>
+        Suman Anna <s-anna@ti.com>,
+        Fabien DESSENNE <fabien.dessenne@st.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
+        xiang xiao <xiaoxiang781216@gmail.com>
+Subject: Re: [PATCH v7 2/2] tty: add rpmsg driver
+Message-ID: <20200324205210.GE119913@minitux>
+References: <20200324170407.16470-1-arnaud.pouliquen@st.com>
+ <20200324170407.16470-3-arnaud.pouliquen@st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200324170407.16470-3-arnaud.pouliquen@st.com>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The K3 SoCs has various internal on-chip SRAM memories like the SRAM
-within the MCU domain or the shared MSMC RAM within NavSS that can be
-used for multiple purposes. One such purpose is to have the R5F cores
-use a portion of such on-chip SRAM for fast-access data or to directly
-execute code.
+On Tue 24 Mar 10:04 PDT 2020, Arnaud Pouliquen wrote:
+[..]
+> diff --git a/drivers/tty/Makefile b/drivers/tty/Makefile
+> index 020b1cd9294f..c2465e7ebc2a 100644
+> --- a/drivers/tty/Makefile
+> +++ b/drivers/tty/Makefile
+> @@ -34,5 +34,6 @@ obj-$(CONFIG_PPC_EPAPR_HV_BYTECHAN) += ehv_bytechan.o
+>  obj-$(CONFIG_GOLDFISH_TTY)	+= goldfish.o
+>  obj-$(CONFIG_MIPS_EJTAG_FDC_TTY) += mips_ejtag_fdc.o
+>  obj-$(CONFIG_VCC)		+= vcc.o
+> +obj-$(CONFIG_RPMSG_TTY)		+= rpmsg_tty.o
+>  
+>  obj-y += ipwireless/
+> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
+[..]
+> +static struct rpmsg_device_id rpmsg_driver_tty_id_table[] = {
+> +	{ .name	= TTY_CH_NAME_RAW },
+> +	{ .name	= TTY_CH_NAME_WITH_CTS},
 
-Add support to the K3 R5 remoteproc driver to parse and support
-loading into such memories. The SRAM regions need to be mapped as
-normal non-cacheable memory to avoid kernel crashes when the remoteproc
-loader code uses the Arm64 memset library function (the "DC ZVA"
-instruction throws a alignment fault on device type memory).
+I still don't like the idea that the tty devices are tied to channels by
+fixed names.
 
-These SRAM regions are completely optional as not all firmware images
-require these memories, and any such memory has to be reserved as such
-in the DTS files.
+This makes the driver unusable for communicating with any firmware out
+there that provides tty-like data over a channel with a different name -
+such as modems with channels providing an AT command interface (they are
+not named "rpmsg-tty-raw").
 
-Signed-off-by: Suman Anna <s-anna@ti.com>
----
- drivers/remoteproc/ti_k3_r5_remoteproc.c | 106 ++++++++++++++++++++++-
- 1 file changed, 105 insertions(+), 1 deletion(-)
+I also fail to see how you would distinguish ttys when the firmware
+provides more than a single tty - e.g. say you have a modem-like device
+that provides an AT command channel and a NMEA stream.
 
-diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-index 8c9b7ae5d8b7..0ae0b66ec9eb 100644
---- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-@@ -85,7 +85,9 @@ struct k3_r5_cluster {
-  * @dev: cached device pointer
-  * @rproc: rproc handle representing this core
-  * @mem: internal memory regions data
-+ * @sram: on-chip SRAM memory regions data
-  * @num_mems: number of internal memory regions
-+ * @num_sram: number of on-chip SRAM memory regions
-  * @reset: reset control handle
-  * @tsp: TI-SCI processor control handle
-  * @ti_sci: TI-SCI handle
-@@ -99,7 +101,9 @@ struct k3_r5_core {
- 	struct device *dev;
- 	struct rproc *rproc;
- 	struct k3_r5_mem *mem;
-+	struct k3_r5_mem *sram;
- 	int num_mems;
-+	int num_sram;
- 	struct reset_control *reset;
- 	struct ti_sci_proc *tsp;
- 	const struct ti_sci_handle *ti_sci;
-@@ -585,6 +589,18 @@ static void *k3_r5_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len)
- 		}
- 	}
- 
-+	/* handle any SRAM regions using SoC-view addresses */
-+	for (i = 0; i < core->num_sram; i++) {
-+		dev_addr = core->sram[i].dev_addr;
-+		size = core->sram[i].size;
-+
-+		if (da >= dev_addr && ((da + len) <= (dev_addr + size))) {
-+			offset = da - dev_addr;
-+			va = core->sram[i].cpu_addr + offset;
-+			return (__force void *)va;
-+		}
-+	}
-+
- 	/* handle static DDR reserved memory regions */
- 	for (i = 0; i < kproc->num_rmems; i++) {
- 		dev_addr = kproc->rmem[i].dev_addr;
-@@ -1017,6 +1033,77 @@ static int k3_r5_core_of_get_internal_memories(struct platform_device *pdev,
- 	return ret;
- }
- 
-+static int k3_r5_core_of_get_sram_memories(struct platform_device *pdev,
-+					   struct k3_r5_core *core)
-+{
-+	struct device_node *np = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *sram_np;
-+	struct resource res;
-+	int num_sram;
-+	int i, ret;
-+
-+	num_sram = of_property_count_elems_of_size(np, "sram", sizeof(phandle));
-+	if (num_sram <= 0) {
-+		dev_dbg(dev, "device does not use reserved on-chip memories, num_sram = %d\n",
-+			num_sram);
-+		return 0;
-+	}
-+
-+	core->sram = kcalloc(num_sram, sizeof(*core->sram), GFP_KERNEL);
-+	if (!core->sram)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < num_sram; i++) {
-+		sram_np = of_parse_phandle(np, "sram", i);
-+		if (!sram_np) {
-+			ret = -EINVAL;
-+			goto fail;
-+		}
-+
-+		if (!of_device_is_available(sram_np)) {
-+			of_node_put(sram_np);
-+			ret = -EINVAL;
-+			goto fail;
-+		}
-+
-+		ret = of_address_to_resource(sram_np, 0, &res);
-+		of_node_put(sram_np);
-+		if (ret) {
-+			ret = -EINVAL;
-+			goto fail;
-+		}
-+		core->sram[i].bus_addr = res.start;
-+		core->sram[i].dev_addr = res.start;
-+		core->sram[i].size = resource_size(&res);
-+		core->sram[i].cpu_addr = ioremap_wc(res.start,
-+						    resource_size(&res));
-+		if (!core->sram[i].cpu_addr) {
-+			dev_err(dev, "failed to parse and map sram%d memory at %pad\n",
-+				i, &res.start);
-+			ret = -ENOMEM;
-+			goto fail;
-+		}
-+
-+		dev_dbg(dev, "memory    sram%d: bus addr %pa size 0x%zx va %pK da 0x%x\n",
-+			i, &core->sram[i].bus_addr,
-+			core->sram[i].size, core->sram[i].cpu_addr,
-+			core->sram[i].dev_addr);
-+	}
-+	core->num_sram = num_sram;
-+
-+	return 0;
-+
-+fail:
-+	for (i--; i >= 0; i--) {
-+		if (core->sram[i].cpu_addr)
-+			iounmap(core->sram[i].cpu_addr);
-+	}
-+	kfree(core->sram);
-+
-+	return ret;
-+}
-+
- static
- struct ti_sci_proc *k3_r5_core_of_get_tsp(struct device *dev,
- 					  const struct ti_sci_handle *sci)
-@@ -1048,7 +1135,7 @@ static int k3_r5_core_of_init(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct device_node *np = dev->of_node;
- 	struct k3_r5_core *core;
--	int ret, ret1;
-+	int ret, ret1, i;
- 
- 	core = devm_kzalloc(dev, sizeof(*core), GFP_KERNEL);
- 	if (!core)
-@@ -1125,10 +1212,23 @@ static int k3_r5_core_of_init(struct platform_device *pdev)
- 		goto err_intmem;
- 	}
- 
-+	ret = k3_r5_core_of_get_sram_memories(pdev, core);
-+	if (ret) {
-+		dev_err(dev, "failed to get sram memories, ret = %d\n", ret);
-+		goto err_sram;
-+	}
-+
- 	platform_set_drvdata(pdev, core);
- 
- 	return 0;
- 
-+err_sram:
-+	for (i = 0; i < core->num_mems; i++) {
-+		devm_iounmap(dev, core->mem[i].cpu_addr);
-+		devm_release_mem_region(dev, core->mem[i].bus_addr,
-+					core->mem[i].size);
-+	}
-+	devm_kfree(dev, core->mem);
- err_intmem:
- 	ret1 = ti_sci_proc_release(core->tsp);
- 	if (ret1)
-@@ -1156,6 +1256,10 @@ static int k3_r5_core_of_exit(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	int i, ret;
- 
-+	for (i = 0; i < core->num_sram; i++)
-+		iounmap(core->sram[i].cpu_addr);
-+	kfree(core->sram);
-+
- 	for (i = 0; i < core->num_mems; i++) {
- 		devm_release_mem_region(dev, core->mem[i].bus_addr,
- 					core->mem[i].size);
--- 
-2.23.0
 
+These are the reasons why drivers/rpmsg/rpmsg_char registers a "control
+device", from which you can spawn new char devices. As I've said before,
+I really think the same approach should be taken for ttys - perhaps by
+just extending the rpmsg_char to allow it to create tty devices in
+addition to the "packet based" char device?
+
+Regards,
+Bjorn
