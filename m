@@ -2,30 +2,30 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DCA19178F
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 18:24:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DA9B1917F4
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 18:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727266AbgCXRY7 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 24 Mar 2020 13:24:59 -0400
-Received: from smtprelay0034.hostedemail.com ([216.40.44.34]:37800 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727164AbgCXRY6 (ORCPT
+        id S1727806AbgCXRpC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 24 Mar 2020 13:45:02 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:54012 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727775AbgCXRpB (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 24 Mar 2020 13:24:58 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay02.hostedemail.com (Postfix) with ESMTP id DDE0ADA994;
-        Tue, 24 Mar 2020 17:24:57 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2194:2199:2393:2559:2562:2828:2900:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:4250:4321:5007:6119:7903:7975:10004:10400:10848:11026:11232:11658:11914:12043:12048:12296:12297:12438:12740:12760:12895:13069:13311:13357:13439:13972:14659:14695:14721:21080:21212:21433:21627:21740:21795:21939:30003:30054:30083:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: sleet61_653e1bf6a3242
-X-Filterd-Recvd-Size: 2920
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf04.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 24 Mar 2020 17:24:55 +0000 (UTC)
-Message-ID: <1dff1b277e5d2c95ce100a2daff4967f98d074ba.camel@perches.com>
+        Tue, 24 Mar 2020 13:45:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=gm8o3p9zY1Nww2ErmVEzpZYR85DamogULeQ92HOiqsg=; b=MJ5Q2eN7pgjMr1qGPiNVaVF4YX
+        S8uK2Ve6zQ5viz+aS2zad3jugoq82QLkfDEvjP1Y1VAoEsIodg9B5iyueY7TP7ZdJlBbZQqSuHgJ4
+        imKPSmGBmU2IEGVMM4m8i7Ds1nRMIQ/xtRjA62qBIjnsNOT3BR03YwYnUwUPnIEIxkI6WJzEh1XOZ
+        YXi03zulnM4gdykL0w1Xrncmf4zZrBJxhD++gWzKygcl6il2jlaYDDZravNtlnS2buJ7R+is5Fpzc
+        KzoAAsTpyeotKdGewfwZ139mXokDXhzia8ZOAtpKKZ0Hbpbj1ji0tfYqUymXuhYLsLeD5St42NP/1
+        KqfQQ6Vw==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jGnbi-00021Q-Jv; Tue, 24 Mar 2020 17:44:54 +0000
 Subject: Re: [PATCH v7 2/2] tty: add rpmsg driver
-From:   Joe Perches <joe@perches.com>
 To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>,
         Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -38,68 +38,113 @@ Cc:     Suman Anna <s-anna@ti.com>,
         linux-stm32@st-md-mailman.stormreply.com,
         Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
         xiang xiao <xiaoxiang781216@gmail.com>
-Date:   Tue, 24 Mar 2020 10:23:05 -0700
-In-Reply-To: <20200324170407.16470-3-arnaud.pouliquen@st.com>
 References: <20200324170407.16470-1-arnaud.pouliquen@st.com>
-         <20200324170407.16470-3-arnaud.pouliquen@st.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.34.1-2 
+ <20200324170407.16470-3-arnaud.pouliquen@st.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <8821448b-3c6e-6277-06d2-9be7f81de9e9@infradead.org>
+Date:   Tue, 24 Mar 2020 10:44:52 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
+In-Reply-To: <20200324170407.16470-3-arnaud.pouliquen@st.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, 2020-03-24 at 18:04 +0100, Arnaud Pouliquen wrote:
+Hi,
+
+On 3/24/20 10:04 AM, Arnaud Pouliquen wrote:
 > This driver exposes a standard TTY interface on top of the rpmsg
 > framework through a rpmsg service.
 > 
 > This driver supports multi-instances, offering a /dev/ttyRPMSGx entry
 > per rpmsg endpoint.
-
-trivial notes:
-
+> 
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
+> ---
+>  Documentation/serial/tty_rpmsg.rst |  45 ++++
+>  drivers/tty/Kconfig                |   9 +
+>  drivers/tty/Makefile               |   1 +
+>  drivers/tty/rpmsg_tty.c            | 417 +++++++++++++++++++++++++++++
+>  4 files changed, 472 insertions(+)
+>  create mode 100644 Documentation/serial/tty_rpmsg.rst
+>  create mode 100644 drivers/tty/rpmsg_tty.c
+> 
 > diff --git a/Documentation/serial/tty_rpmsg.rst b/Documentation/serial/tty_rpmsg.rst
-[]
+> new file mode 100644
+> index 000000000000..fc1d3fba73c5
+> --- /dev/null
+> +++ b/Documentation/serial/tty_rpmsg.rst
+> @@ -0,0 +1,45 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=============
+> +The rpmsg TTY
+> +=============
+> +
 > +The rpmsg tty driver implements serial communication on the RPMsg bus to makes possible for user-space programs to send and receive rpmsg messages as a standard tty protocol.
 
-Very long text lines missing newlines?
+                                                                         to make it possible
 
-[]
+> +
+> +The remote processor can instantiate a new tty by requesting:
+> +- a "rpmsg-tty-raw" RPMsg service, for TTY raw data support without flow control
+> +- a "rpmsg-tty-ctrl" RPMSg service, for TTY support with flow control.
+> +
+> +Information related to the RPMsg and associated tty device is available in
+> +/sys/bus/rpmsg/devices/.
+> +
+> +RPMsg TTY without control
+> +---------------------
+
+extend underline under "control"
+
+> +
+> +The default end point associated with the "rpmsg-tty-raw" service is directly
+> +used for data exchange. No flow control is available.
+> +
 > +To be compliant with this driver, the remote firmware must create its data end point associated with the "rpmsg-tty-raw" service.
-[]
+> +
+> +RPMsg TTY with control
+> +---------------------
+
+extend underline length.
+
+> +
+> +The default end point associated with the "rpmsg-tty-ctrl" service is reserved for
+> +the control. A second endpoint must be created for data exchange.
+> +
+> +The control channel is used to transmit to the remote processor the CTS status,
+> +as well as the end point address for data transfer.
+> +
 > +To be compatible with this driver, the remote firmware must create or use its end point associated with "rpmsg-tty-ctrl" service, plus a second endpoint for the data flow.
 > +On Linux rpmsg_tty probes, the data endpoint address and the CTS (set to disable)
+> +is sent to the remote processor.
+> +The remote processor has to respect following rules:
 
-[]
+                               respect the following rules:
 
-> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
-[]
-> +typedef void (*rpmsg_tty_rx_cb_t)(struct rpmsg_device *, void *, int, void *,
-> +				  u32);
+> +- It only transmits data when Linux remote cts is enable, otherwise message
 
-unused typedef?
+                                              CTS is enabled,
 
-[]
+> +  could be lost.
+> +- It can pause/resume reception by sending a control message (rely on CTS state).
+> +
+> +Control message structure:
+> +struct rpmsg_tty_ctrl {
+> +	u8 cts;			/* remote reception status */
+> +	u16 d_ept_addr;		/* data endpoint address */
+> +};
 
-> +static int __init rpmsg_tty_init(void)
-> +{
-[]
-> +	err = tty_register_driver(rpmsg_tty_driver);
-> +	if (err < 0) {
-> +		pr_err("Couldn't install rpmsg tty driver: err %d\n", err);
-> +		goto error_put;
-> +	}
+Is that struct packed or padded?
 
-Might use vsprintf extension %pe
 
-		pr_err("Couldn't install rpmsg tty driver: %pe\n", ERR_PTR(err));
 
-> +	err = register_rpmsg_driver(&rpmsg_tty_rpmsg_drv);
-> +	if (err < 0) {
-> +		pr_err("Couldn't register rpmsg tty driver: err %d\n", err);
-
-etc.
-
+-- 
+~Randy
 
