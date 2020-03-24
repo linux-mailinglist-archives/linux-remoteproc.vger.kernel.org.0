@@ -2,57 +2,57 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2A7191C71
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 23:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA36191C72
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 23:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728350AbgCXWDp (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 24 Mar 2020 18:03:45 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:41439 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728348AbgCXWDp (ORCPT
+        id S1728348AbgCXWDq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 24 Mar 2020 18:03:46 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:46712 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728343AbgCXWDq (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 24 Mar 2020 18:03:45 -0400
-Received: by mail-pl1-f196.google.com with SMTP id t16so7977964plr.8
-        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Mar 2020 15:03:44 -0700 (PDT)
+        Tue, 24 Mar 2020 18:03:46 -0400
+Received: by mail-pl1-f194.google.com with SMTP id s23so920097plq.13
+        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Mar 2020 15:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=53Pt2UxbJ0AcOc/SylPuZOGJYQb+/r7CHW3XYFqP5OA=;
-        b=nxVkTqdqwjdMkgPNQ7QHDCWeVZvkhTf7gxg2URNe2pUB7oAok5uoZRzxFtXBCdCQfZ
-         zKI8sfraQ1GOmBjST6CQjcSqIeZDXwluxn6VwvH6QXLNQ5MuGP29r7Vu8q06yLSKEdvq
-         WBmPwVqczfRVs52CKVDiCZFjseANmXnaDIdOcB9psAaJRm6oOM2DFCVkKBcmFxXXTHLD
-         ifcQH9CfkBRifq9JHDk0LZ/Zd+5hwgS2zu4eCidBDZIgUk5KSR8BOkDDFMMqfIJSEOPJ
-         atXg3CYo9q1VG/Yb7xQqJhg/q393kaNw7MhfVHSD5uZUtvxB5aoTZ7mQShf/HedOebAX
-         S1Zg==
+        bh=PKFUCHXycedKqG9pECFjQS1acORaTZjCEUQUtaelduI=;
+        b=gzMsHTsVyIUTei6peXf0dv2b63rz5xBe7VrXDVor696ijcCZpxKMx5kGqYBm7D6MfJ
+         FsgrO9nyGmJPE8Cn3H4JR7z62QKzyxd9MDaNNTVtHcBIm46xHUrRnVsf01/Hr0X+ct1z
+         Lir8Hy2cxlx8jBc5ts4Ugze0tjShpSpH2+iSqMoJ6+AY/fV4LeDlWM+PNOLkGd13K9Li
+         j0N3FpaD+y/8gEo/ier8nlnLAIf8LzcZjjI513H+eXt/KYjuj/WUXAvfYBrT4M/tjFlm
+         qB6N9/DotKH7TPTwA1Jo5tjPAMlirL40ncrJAwkTq1WrqdifW4zwTGvadu1kt83pA4/m
+         UBNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=53Pt2UxbJ0AcOc/SylPuZOGJYQb+/r7CHW3XYFqP5OA=;
-        b=qGBqL7piLUxHT64xaenxmUTRuvoVxxJYS/I5aSe2HSuYx1KM2e0KUz5eyB+WaYx3wy
-         N+12NDn/fyIP0kdxn2kA+brhW9NvmS95xvSEzE/mfWh5xJC9rkQKEZz0vZdyg4l88Jjf
-         9KmuFXWvS+1ofXOUcsdAISPhzKB/mVkCYOinJeQHFBMIUBooZ08R84KhUlTTRAcNlRvt
-         +X23B+C8Yau+B9kYkFXgmdJ3niCPQqT9oKBdI5CdKzhOrmSBkeFP4sbJeNIN/hvRoJ+S
-         tUyq1CDwBJaTXofFeaEP+qvUa7hEig2g8+2xo1tRRZ6KLG5M/W012vAfwQ6J4dC9Ggte
-         v6oA==
-X-Gm-Message-State: ANhLgQ2sozrYEO2nfqWNoRUGxxxipuu39vzeo8oBHgyAXdpk0pl2BB5e
-        mBH7Dcd5Kp9hON9myWa+BTodtg==
-X-Google-Smtp-Source: ADFU+vt8xHIO05Qv970vtKtT+VAk08PdzIHKwwZoTykDGE8HkfCJD2ViyHtaFGkBFnwXjvsSHjLdCw==
-X-Received: by 2002:a17:90a:f50b:: with SMTP id cs11mr16254pjb.145.1585087423798;
-        Tue, 24 Mar 2020 15:03:43 -0700 (PDT)
+        bh=PKFUCHXycedKqG9pECFjQS1acORaTZjCEUQUtaelduI=;
+        b=R9g2dwdKOgh/9bCY0gYTP7BESo0ucg/DdA+EEF9DnAB5C+DR2w86N+KPEXJyT8/o2/
+         P5GVTxgJNLv8G3U44qcZXK48s8Zq8gLxn50W/U+fz/9LmZ0HTiU7Cjxhx9AxVz1/ezHY
+         7CbSIQ3U1qC6zhYpPRo+ZfFCSiLOz/NIKeQm9NhdVeGVXTXvbPHKvf6lmlo3sYCCwHm9
+         Zdew7Hc1Vmcb/BZK7u6hR5rUkJodYAmHLrv9Tldg5a5efF+5sT5phslOvcLcVj2vr7X0
+         /RlItI5wkvae3oJp9ORja2hXJwoPfyBmGKp2s7seNUBUWqfcrsqpjbHaLtcvUV+/WsOt
+         u6oQ==
+X-Gm-Message-State: ANhLgQ3taxN/Uui9GOAS+98CCDsOrH4etDzpG3fb9JCgiM4IySYVdM/J
+        KZKvHmA4bOrF+zBv6piALTuefw==
+X-Google-Smtp-Source: ADFU+vuufWxTBzrJ5IbvPv66AqqjzhSCg3mJ/5FnkckEJ3Q7p35Xxmnlc08HtevYBAvN6lFyZCzEHw==
+X-Received: by 2002:a17:902:b90c:: with SMTP id bf12mr157451plb.152.1585087424956;
+        Tue, 24 Mar 2020 15:03:44 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id x70sm15571199pgd.37.2020.03.24.15.03.42
+        by smtp.gmail.com with ESMTPSA id x70sm15571199pgd.37.2020.03.24.15.03.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 15:03:43 -0700 (PDT)
+        Tue, 24 Mar 2020 15:03:44 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     bjorn.andersson@linaro.org
 Cc:     ohad@wizery.com, loic.pallardy@st.com, s-anna@ti.com,
         peng.fan@nxp.com, arnaud.pouliquen@st.com, fabien.dessenne@st.com,
         linux-remoteproc@vger.kernel.org
-Subject: [PATCH 09/11] remoteproc: stm32: Introduce new parse fw ops for synchronisation
-Date:   Tue, 24 Mar 2020 16:03:27 -0600
-Message-Id: <20200324220329.15523-10-mathieu.poirier@linaro.org>
+Subject: [PATCH 10/11] remoteproc: stm32: Introduce new loaded rsc ops for synchronisation
+Date:   Tue, 24 Mar 2020 16:03:28 -0600
+Message-Id: <20200324220329.15523-11-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200324220329.15523-1-mathieu.poirier@linaro.org>
 References: <20200324220329.15523-1-mathieu.poirier@linaro.org>
@@ -63,8 +63,8 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Introduce new parse firmware rproc_ops functions to be used when
-synchonising with an MCU.
+Introduce new elf find loaded resource table rproc_ops functions to be
+used when synchonising with an MCU.
 
 Mainly based on the work published by Arnaud Pouliquen [1].
 
@@ -72,83 +72,34 @@ Mainly based on the work published by Arnaud Pouliquen [1].
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- drivers/remoteproc/stm32_rproc.c | 49 +++++++++++++++++++++++++++++++-
- 1 file changed, 48 insertions(+), 1 deletion(-)
+ drivers/remoteproc/stm32_rproc.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
 diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 734605a9223e..4268d71f191d 100644
+index 4268d71f191d..07be306c0fb1 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -215,7 +215,34 @@ static int stm32_rproc_elf_load_rsc_table(struct rproc *rproc,
- 	return 0;
+@@ -317,6 +317,15 @@ static int stm32_rproc_sync_parse_fw(struct rproc *rproc,
+ 	return stm32_rproc_sync_elf_load_rsc_table(rproc, fw);
  }
  
--static int stm32_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
-+static int stm32_rproc_sync_elf_load_rsc_table(struct rproc *rproc,
-+					       const struct firmware *fw)
++static struct resource_table *
++stm32_rproc_sync_elf_find_loaded_rsc_table(struct rproc *rproc,
++					   const struct firmware *fw)
 +{
-+	struct resource_table *table = NULL;
 +	struct stm32_rproc *ddata = rproc->priv;
 +
-+	if (ddata->rsc_va) {
-+		table = (struct resource_table *)ddata->rsc_va;
-+		/* Assuming that the resource table fits in 1kB is fair */
-+		rproc->cached_table = kmemdup(table, RSC_TBL_SIZE, GFP_KERNEL);
-+		if (!rproc->cached_table)
-+			return -ENOMEM;
-+
-+		rproc->table_ptr = rproc->cached_table;
-+		rproc->table_sz = RSC_TBL_SIZE;
-+		return 0;
-+	}
-+
-+	rproc->cached_table = NULL;
-+	rproc->table_ptr = NULL;
-+	rproc->table_sz = 0;
-+
-+	dev_warn(&rproc->dev, "no resource table found for this firmware\n");
-+	return 0;
-+}
-+
-+static int stm32_rproc_parse_memory_regions(struct rproc *rproc,
-+					    const struct firmware *fw)
- {
- 	struct device *dev = rproc->dev.parent;
- 	struct device_node *np = dev->of_node;
-@@ -268,9 +295,28 @@ static int stm32_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
- 		index++;
- 	}
- 
-+	return 0;
-+}
-+
-+static int stm32_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
-+{
-+	int ret = stm32_rproc_parse_memory_regions(rproc, fw);
-+	if (ret)
-+		return ret;
-+
- 	return stm32_rproc_elf_load_rsc_table(rproc, fw);
- }
- 
-+static int stm32_rproc_sync_parse_fw(struct rproc *rproc,
-+				     const struct firmware *fw)
-+{
-+	int ret = stm32_rproc_parse_memory_regions(rproc, fw);
-+	if (ret)
-+		return ret;
-+
-+	return stm32_rproc_sync_elf_load_rsc_table(rproc, fw);
++	return (struct resource_table *)ddata->rsc_va;
 +}
 +
  static irqreturn_t stm32_rproc_wdg(int irq, void *data)
  {
  	struct platform_device *pdev = data;
-@@ -557,6 +603,7 @@ static __maybe_unused struct rproc_ops st_rproc_sync_ops = {
- 	.start		= stm32_rproc_sync_start,
+@@ -604,6 +613,7 @@ static __maybe_unused struct rproc_ops st_rproc_sync_ops = {
  	.stop		= stm32_rproc_sync_stop,
  	.kick		= stm32_rproc_kick,
-+	.parse_fw	= stm32_rproc_sync_parse_fw,
+ 	.parse_fw	= stm32_rproc_sync_parse_fw,
++	.find_loaded_rsc_table = stm32_rproc_sync_elf_find_loaded_rsc_table,
  };
  
  static const struct of_device_id stm32_rproc_match[] = {
