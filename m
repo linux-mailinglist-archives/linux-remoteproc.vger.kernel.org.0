@@ -2,57 +2,57 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AC1191C22
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 22:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC610191C23
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 22:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727270AbgCXVqT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 24 Mar 2020 17:46:19 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:34607 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727747AbgCXVqT (ORCPT
+        id S1727613AbgCXVqU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 24 Mar 2020 17:46:20 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:51835 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727747AbgCXVqU (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 24 Mar 2020 17:46:19 -0400
-Received: by mail-pg1-f196.google.com with SMTP id t3so114736pgn.1
-        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Mar 2020 14:46:18 -0700 (PDT)
+        Tue, 24 Mar 2020 17:46:20 -0400
+Received: by mail-pj1-f68.google.com with SMTP id w9so120490pjh.1
+        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Mar 2020 14:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=0aC0W/518gjnn+FmK3AUNBAeb9XjXBNzVkVSx2D1XV4=;
-        b=gvMG5SoAo4dcUk97Xr5oa52WsIphapj8PJlJj06zeoEbCNK99QJjmWkPCFGPK/1FXj
-         6wveLkR2bnULAtJLjgof+/MGPp0JpwYidPVq+JccBVtPoITcC1mxH7KBl4ot4GmAfmn1
-         4ioV8V3aI6wjJj7sV0WMAVp5R9DH6kHHBzgyaB5wFZEAIG3nvJIEMaPpLx2dKQrDPZWl
-         cZWroPS3cvzzXkAP2cx2+UKiyvmCWMWYJtqSoPVc3QjCVNhGQH4m8n4+OSvLwfD7Omef
-         WI+XdnIUJ72BDEJm4pVUktY7Y5iSWyB2f4Gl+k4+iOw3kYg1o5WKaYaGFm10KLlXoC/2
-         ucrw==
+        bh=9b1+nNVbR3sCyMduzopiYh9Dkhm8/+7NJkp3fZXzhTU=;
+        b=qhK1pmGESXCBcbwtx8gy6DGEPSkCDqNfNU7GDFfza/8+V0ckw+Oda4/p/ZICr0qt6G
+         8m+8fKuzcH//MNCVLjmORbF0frVmBAdBcI0aFUNLZZhxFvpyYSrlGrdm7+K3KHhp+p62
+         vHZOYEwueAaK9msnttS9umiLHJ5aWDnDYHLm40DIpFbedTztkr8UAllcpEgPTQPouBhs
+         jyMjcCiqMkPiT4U8e3YeRsBJfDtznf8OOPNC80YCfmElsuau9S3oxP4+OjbkFx+P+B/L
+         hWnewTpXRf5BDPeCy8lv9ue7I6O9MxtLjreijf/WSU6/QYjZ+jvrs5u3rxmYrCL91gfe
+         sRKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=0aC0W/518gjnn+FmK3AUNBAeb9XjXBNzVkVSx2D1XV4=;
-        b=j/zPu1mjwq3HbdWjVzMS7VlV8bYu+jWymGG3eAdCVpfQFZlHLkyImvU+wTUhgCotgr
-         2ioZAB+tnWaNbL8JpitfeDMlaLyqfj1SPLXpRSsOoo2wGhst3ZRhHpJuz0iEwoKYQaPd
-         uq2VD0pik8wEwgwUGC1lf13kylyExlirwDbkgKa2GY8893gqlkB4tSrQEsZP+5wmVl15
-         3F+Qavz8CHUowm+AtO4pkvunQ9eDJ8je63JpHLBT22+lqaADy5paH74qj1WaY7UmVx3P
-         SWutJtlKY2fVE+qfXbst6lU4oIRQnL42QDbQfaCT18lqiZBCqzv7mfqK5x/0raJdkkrc
-         /6Cw==
-X-Gm-Message-State: ANhLgQ2nN4uQ/LG0nKqFEWc+Fl+97kDprokbrjQhcEyAIopMaDMMQcQW
-        6TQB4CVXoCxbn1Dkj7kQtuTjKg==
-X-Google-Smtp-Source: ADFU+vtUBtc3SqH18/USFJViwQ5ySwBzzIPJfBGZC+nxK84vxpsKWnS6uRBaRQ/dYKyJnDCALOamCQ==
-X-Received: by 2002:a63:c84c:: with SMTP id l12mr13984307pgi.225.1585086378357;
-        Tue, 24 Mar 2020 14:46:18 -0700 (PDT)
+        bh=9b1+nNVbR3sCyMduzopiYh9Dkhm8/+7NJkp3fZXzhTU=;
+        b=BcL6IxDj3c8Vojz0kt3hE+UR5g0UoOh1PCoD7lo9UWHy7QElCcT4UrEsUnIf5cBqjv
+         B1qW9rnxl/ivV4Lc55GVa3iQHaVCU1AMh7O0/94sPIQR7gGtQtBOCr2ZW+cF7eBVNPn3
+         7jQ5gxJTV1nOQXSVc08Iv5GXztyp5jtwanDwH2+veKrlNueL6ndvipH4/3L65oB3aZB3
+         5WAX0kTyq0dRZaEzvXU250e6G59vBDBo7QldVGX0alTCtve+0w8v0URvGGq8uzxFsoKH
+         IUuXnUfh8/6OlCRmkFv+hzF7dpB/yc88VRa//ugcN27Nx0dVQvNpnwSXzUmoF5VEoIlJ
+         c2qw==
+X-Gm-Message-State: ANhLgQ2vN5Pmk9WSCGQzV2iqdMZgYpR4YRpB3xB/XSmgQRD6dpZzD4cg
+        riPM9wvckGLPOjCJt+NPpRbpeg==
+X-Google-Smtp-Source: ADFU+vuabZXdchfF8VWJJvUtTWkf8e4E0tGVizmq3qyPuLbqozcSBx4REc/mHqHtURwCIxPNIkTssA==
+X-Received: by 2002:a17:90a:252b:: with SMTP id j40mr7719175pje.189.1585086379462;
+        Tue, 24 Mar 2020 14:46:19 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id y131sm17070240pfb.78.2020.03.24.14.46.17
+        by smtp.gmail.com with ESMTPSA id y131sm17070240pfb.78.2020.03.24.14.46.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 14:46:18 -0700 (PDT)
+        Tue, 24 Mar 2020 14:46:19 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     bjorn.andersson@linaro.org
 Cc:     ohad@wizery.com, loic.pallardy@st.com, s-anna@ti.com,
         peng.fan@nxp.com, arnaud.pouliquen@st.com, fabien.dessenne@st.com,
         linux-remoteproc@vger.kernel.org
-Subject: [PATCH v2 12/17] remoteproc: Rename function rproc_fw_boot()
-Date:   Tue, 24 Mar 2020 15:45:58 -0600
-Message-Id: <20200324214603.14979-13-mathieu.poirier@linaro.org>
+Subject: [PATCH v2 13/17] remoteproc: Introducting new functions to start and stop an MCU
+Date:   Tue, 24 Mar 2020 15:45:59 -0600
+Message-Id: <20200324214603.14979-14-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200324214603.14979-1-mathieu.poirier@linaro.org>
 References: <20200324214603.14979-1-mathieu.poirier@linaro.org>
@@ -63,49 +63,68 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Renaming function rproc_fw_boot() in order to better reflect the work
-that is done when supporting scenarios where the remoteproc core is
-synchronising with an MCU.
+Add new functions to replace direct calling of rproc->ops->start() and
+rproc->ops->stop().  That way different behaviour can be played out
+when booting an MCU or synchronising with it.
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- drivers/remoteproc/remoteproc_core.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/remoteproc/remoteproc_core.c     |  6 +++---
+ drivers/remoteproc/remoteproc_internal.h | 12 ++++++++++++
+ 2 files changed, 15 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index d57b47b0d6be..488723fcb142 100644
+index 488723fcb142..d3c4d7e6ca25 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1363,7 +1363,8 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
- /*
-  * take a firmware and boot a remote processor with it.
-  */
--static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
-+static int rproc_actuate_platform(struct rproc *rproc,
-+				  const struct firmware *fw)
- {
- 	struct device *dev = &rproc->dev;
- 	const char *name = rproc->firmware;
-@@ -1373,7 +1374,9 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
- 	if (ret)
+@@ -1330,7 +1330,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+ 	}
+ 
+ 	/* power up the remote processor */
+-	ret = rproc->ops->start(rproc);
++	ret = rproc_start_hw(rproc);
+ 	if (ret) {
+ 		dev_err(dev, "can't start rproc %s: %d\n", rproc->name, ret);
+ 		goto unprepare_subdevices;
+@@ -1351,7 +1351,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+ 	return 0;
+ 
+ stop_rproc:
+-	rproc->ops->stop(rproc);
++	rproc_stop_hw(rproc);
+ unprepare_subdevices:
+ 	rproc_unprepare_subdevices(rproc);
+ reset_table_ptr:
+@@ -1485,7 +1485,7 @@ static int rproc_stop(struct rproc *rproc, bool crashed)
+ 	rproc->table_ptr = rproc->cached_table;
+ 
+ 	/* power off the remote processor */
+-	ret = rproc->ops->stop(rproc);
++	ret = rproc_stop_hw(rproc);
+ 	if (ret) {
+ 		dev_err(dev, "can't stop rproc: %d\n", ret);
  		return ret;
+diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+index 5f711ceb97ba..7ca23d46dfd4 100644
+--- a/drivers/remoteproc/remoteproc_internal.h
++++ b/drivers/remoteproc/remoteproc_internal.h
+@@ -160,4 +160,16 @@ struct resource_table *rproc_find_loaded_rsc_table(struct rproc *rproc,
+ 	return NULL;
+ }
  
--	dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
-+	if (!rproc_sync_with_mcu(rproc))
-+		dev_info(dev, "Booting fw image %s, size %zd\n",
-+			 name, fw->size);
- 
- 	/*
- 	 * if enabling an IOMMU isn't relevant for this rproc, this is
-@@ -1756,7 +1759,7 @@ static int rproc_actuate(struct rproc *rproc,
- 		 firmware_p ? "powering up" : "syncing with",
- 		 rproc->name);
- 
--	ret = rproc_fw_boot(rproc, firmware_p);
-+	ret = rproc_actuate_platform(rproc, firmware_p);
- 	if (ret)
- 		atomic_dec(&rproc->power);
- 
++static inline int rproc_start_hw(struct rproc *rproc)
++{
++	RPROC_OPS_HELPER(start, rproc);
++	return -EINVAL;
++}
++
++static inline int rproc_stop_hw(struct rproc *rproc)
++{
++	RPROC_OPS_HELPER(stop, rproc);
++	return -EINVAL;
++}
++
+ #endif /* REMOTEPROC_INTERNAL_H */
 -- 
 2.20.1
 
