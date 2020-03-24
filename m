@@ -2,57 +2,57 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 823B6191C6D
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 23:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC19191C6E
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2020 23:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728340AbgCXWDk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 24 Mar 2020 18:03:40 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:34705 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728241AbgCXWDk (ORCPT
+        id S1728347AbgCXWDl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 24 Mar 2020 18:03:41 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38350 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728241AbgCXWDl (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 24 Mar 2020 18:03:40 -0400
-Received: by mail-pg1-f195.google.com with SMTP id t3so135512pgn.1
-        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Mar 2020 15:03:39 -0700 (PDT)
+        Tue, 24 Mar 2020 18:03:41 -0400
+Received: by mail-pg1-f193.google.com with SMTP id x7so125358pgh.5
+        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Mar 2020 15:03:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=guFt8oGFuo3gPPM+xBh+k6k6Nv14RJK4O+Zn8ic0KVU=;
-        b=c1QvcWyfWv7e1xyoWH+FMhYS2NsRqbKYi1wSUQtcFUs+xqznsPa7zQTrk8yzXFhTgB
-         mk03JTELTSw5SYu8aOYb2Ae+HmBvBApatR4J07W8fQgDm0QVIrCVgWU6dpOakqOXJ5fg
-         /dg2mAh00EMmerTh/WnqvicVLhzleeQps51nw7v1HAH/re7GoBAffN3fKVTPTx2YJGRY
-         kWOisnyKs8rmFL+C7JRqOPoYMIRLWK3pgFuMfoZUllmxSsSwA7TnT6WisKG6wDzJvp8Q
-         6a7m9LF5IkAouhJmQn9vWUJfR5FuNPusNoSk0biM/r4LkGc5V2vMUFRHaF20lM08Xwbj
-         QeUA==
+        bh=aRsPqWT6vmGZz/3jq1BhRl7LiRSK/M8TMnFnWtPZ1Kg=;
+        b=ZRI7+w8EIpIM7WTHHJFrqA99kQVHK8QWr1zfP0VNdd1KrGgyWykMrUXSgwptl9G7E1
+         mtbFApOujppNm+I7w6iUkEzEZHqG5n2rzp2mIP5WQRJKyk0olVXWijhyMUZXrFj5fho9
+         Nleoz2vH4Wl1dEwYo1Nd6BFOMeQIOJ+eByz9fV2S12uNJUJlAKQ6cFzZrztxbCYDLYW+
+         INV5c0/u85N6tfABErEzddZbxxO1v+2Cyh8WQg+U6dlIhxLr5mXc3cvEHFasYxEpNSpn
+         F+rMVCld5kQcz2PR8NRFNO1k9lQlmJXxnsZCf57uHGLQjFcRudCL5VUH/B7GLmoOvc8t
+         ZMYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=guFt8oGFuo3gPPM+xBh+k6k6Nv14RJK4O+Zn8ic0KVU=;
-        b=IofSfrKZmHV73D0h3K3UOJivNiG0/aVJi4ATCOVbLejm8+0RFNccLGx8b2L9TRzwZh
-         ecyqqKg0GkFSe1okV3GaFpFtPKa+o5nmGt6zCLO9bfKIOfDMPO0AQgUnzIWI944Hl4E5
-         DcB2oJ5BPP3HZcN8GTNv/irZdXD6nGJDyPP7xG5pWlqr9WAgVlHEzUEWTudqYjlhKa6L
-         UCvFIEEqOG94ziO/EeNKWShFnOuO96NeDscBS2aOGMkKDMV8vlp6QbLgcjicxyOf3F47
-         vAFWAs/NOhULN3jsUmMnCUav+xnwKs0mgCzozpFs/piTtbaDyRem7JCSBiN/LibFIj0f
-         6e9Q==
-X-Gm-Message-State: ANhLgQ3wBu8ywEEj+F1pJ/myvnfVl1LftsLL/bbz1pSrdpkViJBq+Etr
-        mtkcK034/efnFqKXEm3rXDfKXg==
-X-Google-Smtp-Source: ADFU+vtTdxmv//ElJ3Ml9Jhfv4fLUxbT6lugU7ITWyt58qmRzcbWgRobP/bn9c4k4Sa/jJBRYiBbkA==
-X-Received: by 2002:aa7:9e46:: with SMTP id z6mr32471807pfq.17.1585087418994;
-        Tue, 24 Mar 2020 15:03:38 -0700 (PDT)
+        bh=aRsPqWT6vmGZz/3jq1BhRl7LiRSK/M8TMnFnWtPZ1Kg=;
+        b=dnmq2lzFtlU0nerRgzfABNQI96byP5MVlxdNpdNKjwCfrjLspwA2QYF2pDaCXg3BgH
+         0dXnKod5BY7peIBjHtPv/mfzB6xPNMOzKLlTsxJ6dhGaFejm/2Hyl3Bcw1/uThtu+awc
+         02LrMNWmTqlIK1D6R9ByGQ7qG+ZvMOz934S6rwRI3ABzWC04YLSnOY+A5BpuYTfVhlf8
+         ITwwynQKL9mKYPDsF9cs597D3sANy9m4kcM4dPkYlylIagiTZ2vuy4QgXq4Qle6EsTp5
+         NNt8SE4bTNf3juiRgAnU6c179cW5Ka8/Z+UXDke1EKJkymhl42uzaE7r7T7+L/46jiYu
+         TBZw==
+X-Gm-Message-State: ANhLgQ1w27mP897mB3zS6owHGeKzZaF0hsaoDUqWsWABrigijE7e1t8b
+        phEYSRoZ4GtD/g76Owo79eIufltikR8=
+X-Google-Smtp-Source: ADFU+vuRQtWfgQEtf/qFi9xkFs1QtZKM9ng21j1xrRMcaYotaAClGZZgCIPIkYFN/b588cAUk4dNUg==
+X-Received: by 2002:aa7:9e4d:: with SMTP id z13mr32215089pfq.6.1585087420015;
+        Tue, 24 Mar 2020 15:03:40 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id x70sm15571199pgd.37.2020.03.24.15.03.38
+        by smtp.gmail.com with ESMTPSA id x70sm15571199pgd.37.2020.03.24.15.03.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 15:03:38 -0700 (PDT)
+        Tue, 24 Mar 2020 15:03:39 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     bjorn.andersson@linaro.org
 Cc:     ohad@wizery.com, loic.pallardy@st.com, s-anna@ti.com,
         peng.fan@nxp.com, arnaud.pouliquen@st.com, fabien.dessenne@st.com,
         linux-remoteproc@vger.kernel.org
-Subject: [PATCH 05/11] remoteproc: stm32: Parse syscon that will manage M4 synchronisation
-Date:   Tue, 24 Mar 2020 16:03:23 -0600
-Message-Id: <20200324220329.15523-6-mathieu.poirier@linaro.org>
+Subject: [PATCH 06/11] remoteproc: stm32: Get coprocessor state
+Date:   Tue, 24 Mar 2020 16:03:24 -0600
+Message-Id: <20200324220329.15523-7-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200324220329.15523-1-mathieu.poirier@linaro.org>
 References: <20200324220329.15523-1-mathieu.poirier@linaro.org>
@@ -63,8 +63,8 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Get from the DT the syncon to probe the state of the remote processor
-and the location of the resource table.
+Introduce the required mechanic to get the state of the M4 when the
+remoteproc core is initialising.
 
 Mainly based on the work published by Arnaud Pouliquen [1].
 
@@ -72,53 +72,69 @@ Mainly based on the work published by Arnaud Pouliquen [1].
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- drivers/remoteproc/stm32_rproc.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ drivers/remoteproc/stm32_rproc.c | 29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
 diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index a3e278490bb4..7d5d4a7dbb04 100644
+index 7d5d4a7dbb04..b8af15dd0510 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
-@@ -70,6 +70,8 @@ struct stm32_rproc {
- 	struct reset_control *rst;
- 	struct stm32_syscon hold_boot;
- 	struct stm32_syscon pdds;
-+	struct stm32_syscon m4_state;
-+	struct stm32_syscon rsctbl;
- 	int wdg_irq;
- 	u32 nb_rmems;
- 	struct stm32_rproc_mem *rmems;
-@@ -606,6 +608,30 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
+@@ -38,6 +38,15 @@
+ #define STM32_MBX_VQ1_ID	1
+ #define STM32_MBX_SHUTDOWN	"shutdown"
  
- 	*auto_boot = of_property_read_bool(np, "st,auto-boot");
- 
-+	/*
-+	 * See if we can check the M4 status, i.e if it was started
-+	 * from the boot loader or not.
-+	 */
-+        err = stm32_rproc_get_syscon(np, "st,syscfg-m4-state",
-+                                     &ddata->m4_state);
-+        if (err) {
-+		/* remember this */
-+		ddata->m4_state.map = NULL;
-+                /* no coprocessor state syscon (optional) */
-+                dev_warn(dev, "m4 state not supported\n");
++#define RSC_TBL_SIZE		(1024)
 +
-+		/* no need to go further */
-+		return 0;
-+        }
++#define M4_STATE_OFF		0
++#define M4_STATE_INI		1
++#define M4_STATE_CRUN		2
++#define M4_STATE_CSTOP		3
++#define M4_STATE_STANDBY	4
++#define M4_STATE_CRASH		5
 +
-+	/* See if we can get the resource table */
-+        err = stm32_rproc_get_syscon(np, "st,syscfg-rsc-tbl",
-+                                     &ddata->rsctbl);
-+	if (err) {
-+		/* no rsc table syscon (optional) */
-+		dev_warn(dev, "rsc tbl syscon not supported\n");
-+	}
-+
+ struct stm32_syscon {
+ 	struct regmap *map;
+ 	u32 reg;
+@@ -635,12 +644,23 @@ static int stm32_rproc_parse_dt(struct platform_device *pdev,
  	return 0;
  }
  
++static int stm32_rproc_get_m4_status(struct stm32_rproc *ddata,
++				     unsigned int *state)
++{
++	/* See stm32_rproc_parse_dt() */
++	if (!ddata->m4_state.map)
++		return -EINVAL;
++
++	return regmap_read(ddata->m4_state.map, ddata->m4_state.reg, state);
++}
++
+ static int stm32_rproc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct stm32_rproc *ddata;
+ 	struct device_node *np = dev->of_node;
+ 	struct rproc *rproc;
++	unsigned int state;
+ 	bool auto_boot = false;
+ 	int ret;
+ 
+@@ -660,6 +680,15 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto free_ddata;
+ 
++	ret = stm32_rproc_get_m4_status(ddata, &state);
++	if (ret) {
++		/*
++		 * We couldn't get the coprocessor's state, assume
++		 * it is not running.
++		 */
++		state = M4_STATE_OFF;
++	}
++
+ 	rproc = rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
+ 	if (!rproc) {
+ 		ret = -ENOMEM;
 -- 
 2.20.1
 
