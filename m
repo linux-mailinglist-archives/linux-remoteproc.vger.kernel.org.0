@@ -2,209 +2,190 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC151932F1
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Mar 2020 22:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0D61934B2
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2020 00:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727501AbgCYVm0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 25 Mar 2020 17:42:26 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:36791 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726081AbgCYVmZ (ORCPT
+        id S1727430AbgCYXjJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 25 Mar 2020 19:39:09 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:59610 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726970AbgCYXjJ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 25 Mar 2020 17:42:25 -0400
-Received: by mail-io1-f67.google.com with SMTP id d15so3957639iog.3
-        for <linux-remoteproc@vger.kernel.org>; Wed, 25 Mar 2020 14:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=buU5ko9WYyQLxe4W65aArJ2mzLoua7+RSvDwL1OmNEg=;
-        b=ZxKKEZdmuoacpoKH0XbpR+refRSDkns4jbDBtRk3JBWdJYvtlvzH6zeRmYxRLnwPbi
-         T/4W8v5h5MF9MulUBGCkY2+MwNYQjo8TfX2xlOniViVAQb0jIWN+mAdHMumMG5HeUR7H
-         zjNLM/E84YwbKbrbKsC9VXmfZbDz1PBdA+pJH83LVHFtMeDAfzI+/LahfbYioLaq2JEI
-         7PS3spkJriaL0il5nrd72TkAuqckgC3/sFB5nIsMQiuO+ad0T8cYZPG/frekt36Rtnm4
-         KiUUiigbVxzt/Ok/p0Vv1tttxwvpzs4lbm69D/UyZ+2o+1a14+oC3DEgDQrkasMx/SI2
-         x7XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=buU5ko9WYyQLxe4W65aArJ2mzLoua7+RSvDwL1OmNEg=;
-        b=L7XVaz1vdBIdwDMN30CHXPBAgG8sjPvGzKkkOQK0D8TboBS3PVNJHdp2TCtI/KUtrO
-         ztYktwcqe603gYR7n7NmS0DYlldf4I3IJrfYAN6UrtK1QwhFm1mfk8ch7WO0j1cxQEN2
-         8mDet+N7lsXitNht1JlzQ/dHOEI0pHauili4Xgyjpy7ruTviWTz3XmrF9rGL/UPgPjGN
-         6CVt+q6RJXQ0Xn1gBixkJkUdK+kYEu7nXuT+E9o6cGjDlmpR9oNPtYPs/gI7gE8e8z3y
-         Barunl8A489zL8asUEiWHSm0AGG6haE2KRCa7m3M1Wn7S4cHFaOHQwMBpaakcm/orcUz
-         3ZIQ==
-X-Gm-Message-State: ANhLgQ1YB2TaGsApSGdpoxn4uIet6GNKeaNQmvfZ5wvtW5zUpBqacMeh
-        X/bvgywUgAxSG/eyfvz8OM3+tFewODg6DBCJ5FvfrA==
-X-Google-Smtp-Source: ADFU+vt03WS4BPLmvug6jXuKwDLorGSYjYXta09fqhNCu8gA1XPd34yufhSVjMQhRmWDUWIsP5tpTpqujEWgIhFdPJM=
-X-Received: by 2002:a02:8405:: with SMTP id k5mr5081184jah.52.1585172541443;
- Wed, 25 Mar 2020 14:42:21 -0700 (PDT)
+        Wed, 25 Mar 2020 19:39:09 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02PNd3l7119398;
+        Wed, 25 Mar 2020 18:39:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1585179543;
+        bh=uTm5/NcikW799RsqS/cdd6w7cvlF937SI2+gXPxCQUg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Z1SbKHoITV1jfyNXDOsKmOC16XShnWPkEWA8qnhWD4Ryxr4jaMHvLleLHYo9zu6fC
+         dR6pVPNdK7vdsncS4SdA/CexHBfY/HNghWIXQBSmVd+Y/ePofsUkCDtnAr/huRhdn0
+         QWeruHODzHXd9LLoHeJ0FMkQeX9rKgONdNb6RSec=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02PNd3kb031785;
+        Wed, 25 Mar 2020 18:39:03 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 25
+ Mar 2020 18:39:03 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 25 Mar 2020 18:39:03 -0500
+Received: from [10.250.35.147] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02PNd2cP013907;
+        Wed, 25 Mar 2020 18:39:03 -0500
+Subject: Re: [PATCH v2 1/2] remoteproc: fall back to using parent memory pool
+ if no dedicated available
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Loic Pallardy <loic.pallardy@st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Tero Kristo <t-kristo@ti.com>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20200319162321.20632-1-s-anna@ti.com>
+ <20200319162321.20632-2-s-anna@ti.com> <20200325203812.GA9384@xps15>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <207036a8-b34e-6311-5ad6-3289eb9f7a06@ti.com>
+Date:   Wed, 25 Mar 2020 18:39:01 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <1583924072-20648-1-git-send-email-loic.pallardy@st.com>
- <1583924072-20648-2-git-send-email-loic.pallardy@st.com> <20200325175746.GA6227@xps15>
- <9a089cba07f7454ea0fc0f2d09bd9bf0@SFHDAG7NODE2.st.com>
-In-Reply-To: <9a089cba07f7454ea0fc0f2d09bd9bf0@SFHDAG7NODE2.st.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Wed, 25 Mar 2020 15:42:10 -0600
-Message-ID: <CANLsYkwMOD-AY5WXkUkNz_A1ZeQRdNC4WAV3PHLxXUq5Rg5Yvg@mail.gmail.com>
-Subject: Re: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when rproc
- is crashed
-To:     Loic PALLARDY <loic.pallardy@st.com>
-Cc:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "ohad@wizery.com" <ohad@wizery.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
-        "benjamin.gaignard@linaro.org" <benjamin.gaignard@linaro.org>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
-        "s-anna@ti.com" <s-anna@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200325203812.GA9384@xps15>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed, 25 Mar 2020 at 12:30, Loic PALLARDY <loic.pallardy@st.com> wrote:
->
-> Hi Mathieu,
->
-> > -----Original Message-----
-> > From: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > Sent: mercredi 25 mars 2020 18:58
-> > To: Loic PALLARDY <loic.pallardy@st.com>
-> > Cc: bjorn.andersson@linaro.org; ohad@wizery.com; linux-
-> > remoteproc@vger.kernel.org; linux-kernel@vger.kernel.org; Arnaud
-> > POULIQUEN <arnaud.pouliquen@st.com>; benjamin.gaignard@linaro.org;
-> > Fabien DESSENNE <fabien.dessenne@st.com>; s-anna@ti.com
-> > Subject: Re: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when
-> > rproc is crashed
-> >
-> > Hi Loic,
-> >
-> > On Wed, Mar 11, 2020 at 11:54:31AM +0100, Loic Pallardy wrote:
-> > > When remoteproc recovery is disabled and rproc crashed, user space
-> > > client has no way to reboot co-processor except by a complete platform
-> > > reboot.
-> > > Indeed rproc_shutdown() is called by sysfs state_store() only is rproc
-> > > state is RPROC_RUNNING.
-> > >
-> > > This patch offers the possibility to shutdown the co-processor if
-> > > it is in RPROC_CRASHED state and so to restart properly co-processor
-> > > from sysfs interface.
-> >
-> > If recovery is disabled on an rproc the platform likely intended to have a hard
-> > reboot and as such we should not be concerned about this case.
-> I disagree with your view. In fact, we can have a configuration for which
-> we don't want a silent recovery. Application layer can be involved to stop and
-> restart some services because it is the simplest way to resync with the coprocessor.
-> What's missing today is an event to notify user space application that coprocessor state
-> has changed. (even if we can rely on rpmsg services closure)
+Hi Mathieu,
 
-I have a better understanding of the scenario now.
+On 3/25/20 3:38 PM, Mathieu Poirier wrote:
+> On Thu, Mar 19, 2020 at 11:23:20AM -0500, Suman Anna wrote:
+>> From: Tero Kristo <t-kristo@ti.com>
+>>
+>> In some cases, like with OMAP remoteproc, we are not creating dedicated
+>> memory pool for the virtio device. Instead, we use the same memory pool
+>> for all shared memories. The current virtio memory pool handling forces
+>> a split between these two, as a separate device is created for it,
+>> causing memory to be allocated from bad location if the dedicated pool
+>> is not available. Fix this by falling back to using the parent device
+>> memory pool if dedicated is not available.
+>>
+>> Fixes: 086d08725d34 ("remoteproc: create vdev subdevice with specific dma memory pool")
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> ---
+>> v2:
+>>  - Address Arnaud's concerns about hard-coded memory-region index 0
+>>  - Update the comment around the new code addition
+>> v1: https://patchwork.kernel.org/patch/11422721/
+>>
+>>  drivers/remoteproc/remoteproc_virtio.c | 15 +++++++++++++++
+>>  include/linux/remoteproc.h             |  2 ++
+>>  2 files changed, 17 insertions(+)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+>> index eb817132bc5f..b687715cdf4b 100644
+>> --- a/drivers/remoteproc/remoteproc_virtio.c
+>> +++ b/drivers/remoteproc/remoteproc_virtio.c
+>> @@ -369,6 +369,21 @@ int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
+>>  				goto out;
+>>  			}
+>>  		}
+>> +	} else {
+>> +		struct device_node *np = rproc->dev.parent->of_node;
+>> +
+>> +		/*
+>> +		 * If we don't have dedicated buffer, just attempt to re-assign
+>> +		 * the reserved memory from our parent. A default memory-region
+>> +		 * at index 0 from the parent's memory-regions is assigned for
+>> +		 * the rvdev dev to allocate from, and this can be customized
+>> +		 * by updating the vdevbuf_mem_id in platform drivers if
+>> +		 * desired. Failure is non-critical and the allocations will
+>> +		 * fall back to global pools, so don't check return value
+>> +		 * either.
+> 
+> I'm perplex...  In the changelog it is indicated that if a memory pool is
+> not dedicated allocation happens from a bad location but here failure of
+> getting a hold of a dedicated memory pool is not critical.
 
->
-> >
-> > Where I think we have a problem, something that is asserted by looking at
-> > your 2
-> > patches, is cases where rproc_trigger_recovery() fails.  That leaves the
-> > system
-> > in a state where it can't be recovered, something the remoteproc core
-> > should not
-> > allow.
-> >
-> Right this is a second use case we faced when user space application which provided
-> firmware file crashed before coprocessor. In that case firmware file may be removed
-> from /lib/firmware directory and coprocessor recovery failed.
-> Application, when restarting, can't anymore control coprocessor.
+So, the comment here is a generic one while the bad location part in the
+commit description is actually from OMAP remoteproc usage perspective
+(if you remember the dev_warn messages we added to the memory-region
+parse logic in the driver).
 
-This is a very specific use case.  It seems to me that fixing the
-problem with the availability of files under /lib/firmware is where
-the solution really lies.
+Before the fixed-memory carveout support, all the DMA allocations in
+remoteproc core were made from the rproc platform device's DMA pool (
+which can be NULL). That is lost after the fixed-memory support, and
+they were always allocated from global DMA pools if no dedicated pools
+are used. After this patch, that continues to be case for drivers that
+still do not use any dedicated pools, while it does restore the usage of
+the platform device's DMA pool if a driver uses one (OMAP remoteproc
+falls into the latter).
 
->
-> Regards,
-> Loic
->
-> > >
-> > > Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
-> > > ---
-> > >  drivers/remoteproc/remoteproc_core.c  | 2 +-
-> > >  drivers/remoteproc/remoteproc_sysfs.c | 2 +-
-> > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/remoteproc/remoteproc_core.c
-> > b/drivers/remoteproc/remoteproc_core.c
-> > > index 097f33e4f1f3..7ac87a75cd1b 100644
-> > > --- a/drivers/remoteproc/remoteproc_core.c
-> > > +++ b/drivers/remoteproc/remoteproc_core.c
-> > > @@ -1812,7 +1812,7 @@ void rproc_shutdown(struct rproc *rproc)
-> > >     if (!atomic_dec_and_test(&rproc->power))
-> > >             goto out;
-> > >
-> > > -   ret = rproc_stop(rproc, false);
-> > > +   ret = rproc_stop(rproc, rproc->state == RPROC_CRASHED);
-> >
-> > Please add a comment that explains how we can be in rproc_shutdown()
-> > when the
-> > processor has crashed and point to rproc_trigger_recovery().  See below for
-> > more
-> > details.
-> >
-> > >     if (ret) {
-> > >             atomic_inc(&rproc->power);
-> > >             goto out;
-> > > diff --git a/drivers/remoteproc/remoteproc_sysfs.c
-> > b/drivers/remoteproc/remoteproc_sysfs.c
-> > > index 7f8536b73295..1029458a4678 100644
-> > > --- a/drivers/remoteproc/remoteproc_sysfs.c
-> > > +++ b/drivers/remoteproc/remoteproc_sysfs.c
-> > > @@ -101,7 +101,7 @@ static ssize_t state_store(struct device *dev,
-> > >             if (ret)
-> > >                     dev_err(&rproc->dev, "Boot failed: %d\n", ret);
-> > >     } else if (sysfs_streq(buf, "stop")) {
-> > > -           if (rproc->state != RPROC_RUNNING)
-> > > +           if (rproc->state != RPROC_RUNNING && rproc->state !=
-> > RPROC_CRASHED)
-> > >                     return -EINVAL;
-> >
-> > Wouldn't it be better to just prevent the MCU to stay in a crashed state
-> > (when
-> > recovery is not disabled)?
-> >
-> > I like what you did in the next patch where the state of the MCU is set to
-> > RPROC_CRASHED in case of failure, so that we keep.  I also think the hunk
-> > above is correct.  All that is left is to call rproc_shutdown() directly in
-> > rproc_trigger_recovery() when something goes wrong.  I would also add a
-> > dev_err() so that users have a clue of what happened.
-> >
-> > That would leave the system in a stable state without having to add
-> > intelligence
-> > to state_store().
-> It is a solution we debate internally. Should rproc_shutdown() called directly in
-> rproc_trigger_recovery() or not? If we go in such direction, that clearly simplify
-> coprocessor control as it will always be in a "stable" state. But that means user
-> will lost information that coprocessor crashed (mainly when recovery is disabled).
-> We just know that coprocessor is stopped but not why? Crashed or client action?
-> For debug purpose, it could be an issue from my pov.
+> 
+>> +		 */
+>> +		of_reserved_mem_device_init_by_idx(dev, np,
+>> +						   rproc->vdevbuf_mem_id);
+> 
+> I wonder if using an index setup by platform code is really the best way
+> forward when we already have the carveout mechanic available to us.  I see the
+> platform code adding a carveout that would have the same name as rproc->name.
+> From there in rproc_add_virtio_dev() we could have something like:
+> 
+>         mem = rproc_find_carveout_by_name(rproc, "%s", rproc->name);
+> 
+> 
+> That would be very flexible, the location of the reserved memory withing the
+> memory-region could change without fear of breaking things and no need to add to
+> struct rproc.
+> 
+> Let me know what you think.
 
-That is why I suggested to add a dev_err() so that users know recovery
-of the MCU has failed.  Moreover I expect users to be aware of what is
-happening on their platform, i.e if application did not switch off the
-MCU and it is in the offline state, then it is fair to assume it
-crashed.
+I think that can work as well but I feel it is lot more cumbersome. It
+does require every platform driver to add code adding/registering that
+carveout, and parse the reserved memory region etc. End of the day, we
+rely on DMA API and we just have to assign the region to the newly
+created device. The DMA pool assignment for devices using
+reserved-memory nodes has simply been the of_reserved_mem_device_init()
+function.
 
->
-> Regards,
-> Loic
-> >
-> > Let me know that you think...
-> >
-> > Mathieu
-> >
-> > >
-> > >             rproc_shutdown(rproc);
-> > > --
-> > > 2.7.4
-> > >
+regards
+Suman
+
+> 
+> Thanks,
+> Mathieu
+> 
+>>  	}
+>>  
+>>  	/* Allocate virtio device */
+>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+>> index ed127b2d35ca..07bd73a6d72a 100644
+>> --- a/include/linux/remoteproc.h
+>> +++ b/include/linux/remoteproc.h
+>> @@ -481,6 +481,7 @@ struct rproc_dump_segment {
+>>   * @auto_boot: flag to indicate if remote processor should be auto-started
+>>   * @dump_segments: list of segments in the firmware
+>>   * @nb_vdev: number of vdev currently handled by rproc
+>> + * @vdevbuf_mem_id: default memory-region index for allocating vdev buffers
+>>   */
+>>  struct rproc {
+>>  	struct list_head node;
+>> @@ -514,6 +515,7 @@ struct rproc {
+>>  	bool auto_boot;
+>>  	struct list_head dump_segments;
+>>  	int nb_vdev;
+>> +	u8 vdevbuf_mem_id;
+>>  	u8 elf_class;
+>>  };
+>>  
+>> -- 
+>> 2.23.0
+>>
+
