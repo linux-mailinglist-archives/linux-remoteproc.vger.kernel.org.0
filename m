@@ -2,217 +2,165 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C1E1931CD
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Mar 2020 21:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0EA193200
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Mar 2020 21:38:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727355AbgCYUTI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 25 Mar 2020 16:19:08 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:38084 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727504AbgCYUS6 (ORCPT
+        id S1727275AbgCYUiS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 25 Mar 2020 16:38:18 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36080 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727280AbgCYUiS (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 25 Mar 2020 16:18:58 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02PKInxn053430;
-        Wed, 25 Mar 2020 15:18:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1585167529;
-        bh=h6Y7kKyK0HpFuOURmmpiDpmaMkeTeq/m6EYhOH7YPZc=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=A372TIB2G5ZkXvyo7xBTZU1Zk7HYMLTJN1K7MEMmVnYkGCtZpoalqEfv6b4+2L6Ak
-         /KCkZQe3iHabYULf9HIUIn7Vh9oqQZD8Iqk+Iy9lno8fEy+X3qYHI3WsgIA5CfFD74
-         AaXtmPIFfkkhG2GqOPki9cKxNQPy4R8L16rlP8MY=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02PKIndn010823
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 25 Mar 2020 15:18:49 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 25
- Mar 2020 15:18:49 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 25 Mar 2020 15:18:48 -0500
-Received: from fllv0103.dal.design.ti.com (fllv0103.dal.design.ti.com [10.247.120.73])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02PKInIi064382;
-        Wed, 25 Mar 2020 15:18:49 -0500
-Received: from localhost ([10.250.35.147])
-        by fllv0103.dal.design.ti.com (8.14.7/8.14.7) with ESMTP id 02PKInUQ090870;
-        Wed, 25 Mar 2020 15:18:49 -0500
-From:   Suman Anna <s-anna@ti.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Lokesh Vutla <lokeshvutla@ti.com>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Suman Anna <s-anna@ti.com>
-Subject: [PATCH 3/3] remoteproc/k3-dsp: Add support for L2RAM loading on C66x DSPs
-Date:   Wed, 25 Mar 2020 15:18:39 -0500
-Message-ID: <20200325201839.15896-4-s-anna@ti.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20200325201839.15896-1-s-anna@ti.com>
-References: <20200325201839.15896-1-s-anna@ti.com>
+        Wed, 25 Mar 2020 16:38:18 -0400
+Received: by mail-pf1-f196.google.com with SMTP id i13so1636061pfe.3
+        for <linux-remoteproc@vger.kernel.org>; Wed, 25 Mar 2020 13:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cW9MnwtDcHpoDKnTJ702/Kg6m9pE6WYf6URglD3o1w0=;
+        b=fJbiZ8YqtSieHRjqMA+q3O2zd/6PfH1NKkhaaIK4ZENvoWouwsDui4ifBA5E7Eco60
+         W0y6kOzZH10DROxPEy8o0RzMqTyGmmUIhRA2I37UfsOxcatnIptUp9QcOoFO18SY9Jnd
+         OmuTEc84nKLsiseiiNfErRzALqq6siR7WSsJF/b/CFKHcJLNMYtcx3PUh1SZ+6Lv2spu
+         oNkzMSbuDtpKMOYsnSinI0xYVdWWK29CsIBSNIxuJBgAtTuDoeIPf+28x6e9FYL11XlD
+         A+BByxmLF2bObHlzspmPqza4LalNeYQ8tz480O+gi6nhM69UYT4ADgzcWGm14aFlCphD
+         by0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cW9MnwtDcHpoDKnTJ702/Kg6m9pE6WYf6URglD3o1w0=;
+        b=Imh3bxxKkIrQVooFkXRjVTyDzPTHVxZ0OK1ozZ7n4UwjzGU1QlYx7fpO2urRhHQmuD
+         u4F/jijxAXNMDH69lpV3JfZJrG3GRj4/RYhxcFHkhwNViz6E4Gu8hklNxlhaYUeWep/T
+         hz4AgbmkERd9UdqwuGtx7Cr5AB3GA9/hNR2ya5y4+d8YXv5tZoOtLbK8rPoaS7AD3o+C
+         uEGQVsCSFH6/tQxG45A7E+5ZbiDGpuKBo28Q66GYpN8OPKH3PLECEu92EZXnIa+LXzSt
+         SQ9Ay6v5x8Ee2WS2nnbu1HH24TQ1rgkLqsrdYYpScfRwIEHtBzGAjJeGUaB0d9AlhgTy
+         CQ+A==
+X-Gm-Message-State: ANhLgQ3gKG4Tp25rg7tsfLUZ9RggJqSyHOB4noU3Uiaqxb0zXKC5j2qK
+        jmd1BOSx0T+sxi4UN+oiGc8zug==
+X-Google-Smtp-Source: ADFU+vsnj7V93VGXtvyofYEqpVoLW6KrobGFdsl3HF6jBLQpSWuTK3OGahz8k9lafMvkCshznJ/vnw==
+X-Received: by 2002:a63:a06e:: with SMTP id u46mr4852531pgn.140.1585168695285;
+        Wed, 25 Mar 2020 13:38:15 -0700 (PDT)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id nl7sm121214pjb.36.2020.03.25.13.38.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Mar 2020 13:38:14 -0700 (PDT)
+Date:   Wed, 25 Mar 2020 14:38:12 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Suman Anna <s-anna@ti.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Loic Pallardy <loic.pallardy@st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Tero Kristo <t-kristo@ti.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] remoteproc: fall back to using parent memory pool
+ if no dedicated available
+Message-ID: <20200325203812.GA9384@xps15>
+References: <20200319162321.20632-1-s-anna@ti.com>
+ <20200319162321.20632-2-s-anna@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200319162321.20632-2-s-anna@ti.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The resets for the DSP processors on K3 SoCs are managed through the
-Power and Sleep Controller (PSC) module. Each DSP typically has two
-resets - a global module reset for powering on the device, and a local
-reset that affects only the CPU while allowing access to the other
-sub-modules within the DSP processor sub-systems.
+On Thu, Mar 19, 2020 at 11:23:20AM -0500, Suman Anna wrote:
+> From: Tero Kristo <t-kristo@ti.com>
+> 
+> In some cases, like with OMAP remoteproc, we are not creating dedicated
+> memory pool for the virtio device. Instead, we use the same memory pool
+> for all shared memories. The current virtio memory pool handling forces
+> a split between these two, as a separate device is created for it,
+> causing memory to be allocated from bad location if the dedicated pool
+> is not available. Fix this by falling back to using the parent device
+> memory pool if dedicated is not available.
+> 
+> Fixes: 086d08725d34 ("remoteproc: create vdev subdevice with specific dma memory pool")
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> ---
+> v2:
+>  - Address Arnaud's concerns about hard-coded memory-region index 0
+>  - Update the comment around the new code addition
+> v1: https://patchwork.kernel.org/patch/11422721/
+> 
+>  drivers/remoteproc/remoteproc_virtio.c | 15 +++++++++++++++
+>  include/linux/remoteproc.h             |  2 ++
+>  2 files changed, 17 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+> index eb817132bc5f..b687715cdf4b 100644
+> --- a/drivers/remoteproc/remoteproc_virtio.c
+> +++ b/drivers/remoteproc/remoteproc_virtio.c
+> @@ -369,6 +369,21 @@ int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
+>  				goto out;
+>  			}
+>  		}
+> +	} else {
+> +		struct device_node *np = rproc->dev.parent->of_node;
+> +
+> +		/*
+> +		 * If we don't have dedicated buffer, just attempt to re-assign
+> +		 * the reserved memory from our parent. A default memory-region
+> +		 * at index 0 from the parent's memory-regions is assigned for
+> +		 * the rvdev dev to allocate from, and this can be customized
+> +		 * by updating the vdevbuf_mem_id in platform drivers if
+> +		 * desired. Failure is non-critical and the allocations will
+> +		 * fall back to global pools, so don't check return value
+> +		 * either.
 
-The C66x DSPs have two levels of internal RAMs that can be used to
-boot from, and the firmware loading into these RAMs require the
-local reset to be asserted with the device powered on/enabled using
-the module reset. Enhance the K3 DSP remoteproc driver to add support
-for loading into the internal RAMs. The local reset is deasserted on
-SoC power-on-reset, so logic has to be added in probe in remoteproc
-mode to balance the remoteproc state-machine.
+I'm perplex...  In the changelog it is indicated that if a memory pool is
+not dedicated allocation happens from a bad location but here failure of
+getting a hold of a dedicated memory pool is not critical. 
 
-Note that the local resets are a no-op on C71x cores, and the hardware
-does not supporting loading into its internal RAMs.
+> +		 */
+> +		of_reserved_mem_device_init_by_idx(dev, np,
+> +						   rproc->vdevbuf_mem_id);
 
-Signed-off-by: Suman Anna <s-anna@ti.com>
----
- drivers/remoteproc/ti_k3_dsp_remoteproc.c | 82 +++++++++++++++++++++++
- 1 file changed, 82 insertions(+)
+I wonder if using an index setup by platform code is really the best way
+forward when we already have the carveout mechanic available to us.  I see the
+platform code adding a carveout that would have the same name as rproc->name.
+From there in rproc_add_virtio_dev() we could have something like:
 
-diff --git a/drivers/remoteproc/ti_k3_dsp_remoteproc.c b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-index fd0d84f46f90..7b712ef74611 100644
---- a/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-@@ -175,6 +175,9 @@ static int k3_dsp_rproc_reset(struct k3_dsp_rproc *kproc)
- 		return ret;
- 	}
- 
-+	if (kproc->data->uses_lreset)
-+		return ret;
-+
- 	ret = kproc->ti_sci->ops.dev_ops.put_device(kproc->ti_sci,
- 						    kproc->ti_sci_id);
- 	if (ret) {
-@@ -192,6 +195,9 @@ static int k3_dsp_rproc_release(struct k3_dsp_rproc *kproc)
- 	struct device *dev = kproc->dev;
- 	int ret;
- 
-+	if (kproc->data->uses_lreset)
-+		goto lreset;
-+
- 	ret = kproc->ti_sci->ops.dev_ops.get_device(kproc->ti_sci,
- 						   kproc->ti_sci_id);
- 	if (ret) {
-@@ -199,6 +205,7 @@ static int k3_dsp_rproc_release(struct k3_dsp_rproc *kproc)
- 		return ret;
- 	}
- 
-+lreset:
- 	ret = reset_control_deassert(kproc->reset);
- 	if (ret) {
- 		dev_err(dev, "local-reset deassert failed, ret = %d\n", ret);
-@@ -210,6 +217,63 @@ static int k3_dsp_rproc_release(struct k3_dsp_rproc *kproc)
- 	return ret;
- }
- 
-+/*
-+ * The C66x DSP cores have a local reset that affects only the CPU, and a
-+ * generic module reset that powers on the device and allows the DSP internal
-+ * memories to be accessed while the local reset is asserted. This function is
-+ * used to release the global reset on C66x DSPs to allow loading into the DSP
-+ * internal RAMs. The .prepare() ops is invoked by remoteproc core before any
-+ * firmware loading, and is followed by the .start() ops after loading to
-+ * actually let the C66x DSP cores run. The local reset on C71x cores is a
-+ * no-op and the global reset cannot be released on C71x cores until after
-+ * the firmware images are loaded, so this function does nothing for C71x cores.
-+ */
-+static int k3_dsp_rproc_prepare(struct rproc *rproc)
-+{
-+	struct k3_dsp_rproc *kproc = rproc->priv;
-+	struct device *dev = kproc->dev;
-+	int ret;
-+
-+	/* local reset is no-op on C71x processors */
-+	if (!kproc->data->uses_lreset)
-+		return 0;
-+
-+	ret = kproc->ti_sci->ops.dev_ops.get_device(kproc->ti_sci,
-+						    kproc->ti_sci_id);
-+	if (ret)
-+		dev_err(dev, "module-reset deassert failed, cannot enable internal RAM loading, ret = %d\n",
-+			ret);
-+
-+	return ret;
-+}
-+
-+/*
-+ * This function implements the .unprepare() ops and performs the complimentary
-+ * operations to that of the .prepare() ops. The function is used to assert the
-+ * global reset on applicable C66x cores. This completes the second portion of
-+ * powering down the C66x DSP cores. The cores themselves are only halted in the
-+ * .stop() callback through the local reset, and the .unprepare() ops is invoked
-+ * by the remoteproc core after the remoteproc is stopped to balance the global
-+ * reset.
-+ */
-+static int k3_dsp_rproc_unprepare(struct rproc *rproc)
-+{
-+	struct k3_dsp_rproc *kproc = rproc->priv;
-+	struct device *dev = kproc->dev;
-+	int ret;
-+
-+	/* local reset is no-op on C71x processors */
-+	if (!kproc->data->uses_lreset)
-+		return 0;
-+
-+	ret = kproc->ti_sci->ops.dev_ops.put_device(kproc->ti_sci,
-+						    kproc->ti_sci_id);
-+	if (ret)
-+		dev_err(dev, "module-reset assert failed, ret = %d\n", ret);
-+
-+	return ret;
-+}
-+
- /*
-  * Power up the DSP remote processor.
-  *
-@@ -353,6 +417,8 @@ static void *k3_dsp_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len)
- }
- 
- static const struct rproc_ops k3_dsp_rproc_ops = {
-+	.prepare	= k3_dsp_rproc_prepare,
-+	.unprepare	= k3_dsp_rproc_unprepare,
- 	.start		= k3_dsp_rproc_start,
- 	.stop		= k3_dsp_rproc_stop,
- 	.kick		= k3_dsp_rproc_kick,
-@@ -644,6 +710,22 @@ static int k3_dsp_rproc_probe(struct platform_device *pdev)
- 		goto disable_clk;
- 	}
- 
-+	/*
-+	 * ensure the DSP local reset is asserted to ensure the DSP doesn't
-+	 * execute bogus code in .prepare() when the module reset is released.
-+	 */
-+	if (data->uses_lreset) {
-+		ret = reset_control_status(kproc->reset);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to get reset status, status = %d\n",
-+				ret);
-+			goto release_mem;
-+		} else if (ret == 0) {
-+			dev_warn(dev, "local reset is deasserted for device\n");
-+			k3_dsp_rproc_reset(kproc);
-+		}
-+	}
-+
- 	ret = rproc_add(rproc);
- 	if (ret) {
- 		dev_err(dev, "failed to add register device with remoteproc core, status = %d\n",
--- 
-2.23.0
+        mem = rproc_find_carveout_by_name(rproc, "%s", rproc->name);
 
+
+That would be very flexible, the location of the reserved memory withing the
+memory-region could change without fear of breaking things and no need to add to
+struct rproc.
+
+Let me know what you think.
+
+Thanks,
+Mathieu
+
+>  	}
+>  
+>  	/* Allocate virtio device */
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index ed127b2d35ca..07bd73a6d72a 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -481,6 +481,7 @@ struct rproc_dump_segment {
+>   * @auto_boot: flag to indicate if remote processor should be auto-started
+>   * @dump_segments: list of segments in the firmware
+>   * @nb_vdev: number of vdev currently handled by rproc
+> + * @vdevbuf_mem_id: default memory-region index for allocating vdev buffers
+>   */
+>  struct rproc {
+>  	struct list_head node;
+> @@ -514,6 +515,7 @@ struct rproc {
+>  	bool auto_boot;
+>  	struct list_head dump_segments;
+>  	int nb_vdev;
+> +	u8 vdevbuf_mem_id;
+>  	u8 elf_class;
+>  };
+>  
+> -- 
+> 2.23.0
+> 
