@@ -2,217 +2,109 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF114193064
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Mar 2020 19:30:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E450F1931C6
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Mar 2020 21:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727541AbgCYSai (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 25 Mar 2020 14:30:38 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:55300 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727027AbgCYSai (ORCPT
+        id S1727549AbgCYUS6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 25 Mar 2020 16:18:58 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:38440 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727406AbgCYUS5 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 25 Mar 2020 14:30:38 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02PINxeb028143;
-        Wed, 25 Mar 2020 19:30:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=zpllj8praaLPPLYV2yYmSw2+242E3/2OF9GtQEZE5YY=;
- b=JvzCXlBsGQXc4SSlLAxkL6bmmKQgc47b9xbhwwYS7zZYoVjhDILewgVOMfuYKyzQqjTf
- LsYh1pBE8IhBna3CmKExxoEs5UHXN7H1fmy5cbiPkDUugk4V4faR+xBiVrCiqAUeqsYh
- 8jWvEOnFAqYHc3dBEJNRkcALkLPF+DpGl1RnJsDt5yf7ByGaSLovJALaT/KWr5PFr6wr
- 8/O5jmoaHCGd2PHktFdLsEUYMhYaKXBkCmFay1K0mg+U3MlAbFSXyTEjX0UNlnzk/1d6
- jYVVpz0NMsoMPChB1kEo7fEo/GRplxZdY3ng8fmvgtyWfUBMY9kRV0GHB+jMX1oNL3Su QA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2ywapp71y6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 25 Mar 2020 19:30:29 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 586D610002A;
-        Wed, 25 Mar 2020 19:30:29 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag5node3.st.com [10.75.127.15])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4971E2ABE3A;
-        Wed, 25 Mar 2020 19:30:29 +0100 (CET)
-Received: from SFHDAG7NODE2.st.com (10.75.127.20) by SFHDAG5NODE3.st.com
- (10.75.127.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 25 Mar
- 2020 19:30:28 +0100
-Received: from SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090]) by
- SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090%20]) with mapi id
- 15.00.1473.003; Wed, 25 Mar 2020 19:30:28 +0100
-From:   Loic PALLARDY <loic.pallardy@st.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "ohad@wizery.com" <ohad@wizery.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
-        "benjamin.gaignard@linaro.org" <benjamin.gaignard@linaro.org>,
-        "Fabien DESSENNE" <fabien.dessenne@st.com>,
-        "s-anna@ti.com" <s-anna@ti.com>
-Subject: RE: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when rproc
- is crashed
-Thread-Topic: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when rproc
- is crashed
-Thread-Index: AQHV95N1/mW6m1ZqkUyhqMT4RCAmr6hZndwAgAATJNA=
-Date:   Wed, 25 Mar 2020 18:30:28 +0000
-Message-ID: <9a089cba07f7454ea0fc0f2d09bd9bf0@SFHDAG7NODE2.st.com>
-References: <1583924072-20648-1-git-send-email-loic.pallardy@st.com>
- <1583924072-20648-2-git-send-email-loic.pallardy@st.com>
- <20200325175746.GA6227@xps15>
-In-Reply-To: <20200325175746.GA6227@xps15>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.49]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 25 Mar 2020 16:18:57 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02PKIiVR085834;
+        Wed, 25 Mar 2020 15:18:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1585167524;
+        bh=CxukkovBJFpII0uJw7j2rQdNqCAT4Ya7y+OIAbYeZf4=;
+        h=From:To:CC:Subject:Date;
+        b=gJdxXPXFwXAp0L2ctK6D43oGj9tX0xL5s2QfU0OqcRaWno9SD9iQ3H9B8D0zg530/
+         TWp4uzQOnKNMetj1WTeaugk4suty839vKyYipV9DL1pXkKCNE/DD2icfYgOzEsAJTo
+         mM/W6bBSRpx4d5deIoEkb91ol9QtUz0ACaVuRAeI=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02PKIi8a025540
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 25 Mar 2020 15:18:44 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 25
+ Mar 2020 15:18:43 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 25 Mar 2020 15:18:43 -0500
+Received: from fllv0103.dal.design.ti.com (fllv0103.dal.design.ti.com [10.247.120.73])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02PKIhmC064313;
+        Wed, 25 Mar 2020 15:18:43 -0500
+Received: from localhost ([10.250.35.147])
+        by fllv0103.dal.design.ti.com (8.14.7/8.14.7) with ESMTP id 02PKIhhq090851;
+        Wed, 25 Mar 2020 15:18:43 -0500
+From:   Suman Anna <s-anna@ti.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Lokesh Vutla <lokeshvutla@ti.com>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Suman Anna <s-anna@ti.com>
+Subject: [PATCH 0/3] TI K3 DSP remoteproc driver for C66x DSPs
+Date:   Wed, 25 Mar 2020 15:18:36 -0500
+Message-ID: <20200325201839.15896-1-s-anna@ti.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-25_09:2020-03-24,2020-03-25 signatures=0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Mathieu,
+Hi All,
 
-> -----Original Message-----
-> From: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Sent: mercredi 25 mars 2020 18:58
-> To: Loic PALLARDY <loic.pallardy@st.com>
-> Cc: bjorn.andersson@linaro.org; ohad@wizery.com; linux-
-> remoteproc@vger.kernel.org; linux-kernel@vger.kernel.org; Arnaud
-> POULIQUEN <arnaud.pouliquen@st.com>; benjamin.gaignard@linaro.org;
-> Fabien DESSENNE <fabien.dessenne@st.com>; s-anna@ti.com
-> Subject: Re: [RFC 1/2] remoteproc: sysfs: authorize rproc shutdown when
-> rproc is crashed
->=20
-> Hi Loic,
->=20
-> On Wed, Mar 11, 2020 at 11:54:31AM +0100, Loic Pallardy wrote:
-> > When remoteproc recovery is disabled and rproc crashed, user space
-> > client has no way to reboot co-processor except by a complete platform
-> > reboot.
-> > Indeed rproc_shutdown() is called by sysfs state_store() only is rproc
-> > state is RPROC_RUNNING.
-> >
-> > This patch offers the possibility to shutdown the co-processor if
-> > it is in RPROC_CRASHED state and so to restart properly co-processor
-> > from sysfs interface.
->=20
-> If recovery is disabled on an rproc the platform likely intended to have =
-a hard
-> reboot and as such we should not be concerned about this case.
-I disagree with your view. In fact, we can have a configuration for which
-we don't want a silent recovery. Application layer can be involved to stop =
-and
-restart some services because it is the simplest way to resync with the cop=
-rocessor.
-What's missing today is an event to notify user space application that copr=
-ocessor state
-has changed. (even if we can rely on rpmsg services closure)
+The following series adds a new K3 DSP remoteproc driver supporting the
+C66x DSPs on the TI K3 J721E SoCs. The current series mainly adds the support
+for booting the DSPs from the Linux kernel. This series forms the foundation
+for adding support for a new 64-bit DSP (C71x DSP) to be posted in a separate
+series. Support for attaching to pre-booted DSPs (from bootloader) will be
+done in a future series.
 
->=20
-> Where I think we have a problem, something that is asserted by looking at
-> your 2
-> patches, is cases where rproc_trigger_recovery() fails.  That leaves the
-> system
-> in a state where it can't be recovered, something the remoteproc core
-> should not
-> allow.
->=20
-Right this is a second use case we faced when user space application which =
-provided
-firmware file crashed before coprocessor. In that case firmware file may be=
- removed
-from /lib/firmware directory and coprocessor recovery failed.
-Application, when restarting, can't anymore control coprocessor.
+The C66x DSPs can boot either using firmware segments loaded into either DDR
+and/or internal DSP RAMs. IPC is through the virtio-rpmsg transport. There is 
+no Error Recovery or Power Management support at present. The driver also does
+not support loading into on-chip SRAMs at present.
 
-Regards,
-Loic
+The patches are based on the current rproc-next branch, and does use couple
+of patches posted earlier from the OMAP remoteproc series [1] and TI K3 R5F
+series [2]. It also leverages the fixed memory carveout fixes series [3].
 
-> >
-> > Signed-off-by: Loic Pallardy <loic.pallardy@st.com>
-> > ---
-> >  drivers/remoteproc/remoteproc_core.c  | 2 +-
-> >  drivers/remoteproc/remoteproc_sysfs.c | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/remoteproc/remoteproc_core.c
-> b/drivers/remoteproc/remoteproc_core.c
-> > index 097f33e4f1f3..7ac87a75cd1b 100644
-> > --- a/drivers/remoteproc/remoteproc_core.c
-> > +++ b/drivers/remoteproc/remoteproc_core.c
-> > @@ -1812,7 +1812,7 @@ void rproc_shutdown(struct rproc *rproc)
-> >  	if (!atomic_dec_and_test(&rproc->power))
-> >  		goto out;
-> >
-> > -	ret =3D rproc_stop(rproc, false);
-> > +	ret =3D rproc_stop(rproc, rproc->state =3D=3D RPROC_CRASHED);
->=20
-> Please add a comment that explains how we can be in rproc_shutdown()
-> when the
-> processor has crashed and point to rproc_trigger_recovery().  See below f=
-or
-> more
-> details.
->=20
-> >  	if (ret) {
-> >  		atomic_inc(&rproc->power);
-> >  		goto out;
-> > diff --git a/drivers/remoteproc/remoteproc_sysfs.c
-> b/drivers/remoteproc/remoteproc_sysfs.c
-> > index 7f8536b73295..1029458a4678 100644
-> > --- a/drivers/remoteproc/remoteproc_sysfs.c
-> > +++ b/drivers/remoteproc/remoteproc_sysfs.c
-> > @@ -101,7 +101,7 @@ static ssize_t state_store(struct device *dev,
-> >  		if (ret)
-> >  			dev_err(&rproc->dev, "Boot failed: %d\n", ret);
-> >  	} else if (sysfs_streq(buf, "stop")) {
-> > -		if (rproc->state !=3D RPROC_RUNNING)
-> > +		if (rproc->state !=3D RPROC_RUNNING && rproc->state !=3D
-> RPROC_CRASHED)
-> >  			return -EINVAL;
->=20
-> Wouldn't it be better to just prevent the MCU to stay in a crashed state
-> (when
-> recovery is not disabled)?
->=20
-> I like what you did in the next patch where the state of the MCU is set t=
-o
-> RPROC_CRASHED in case of failure, so that we keep.  I also think the hunk
-> above is correct.  All that is left is to call rproc_shutdown() directly =
-in
-> rproc_trigger_recovery() when something goes wrong.  I would also add a
-> dev_err() so that users have a clue of what happened.
->=20
-> That would leave the system in a stable state without having to add
-> intelligence
-> to state_store().
-It is a solution we debate internally. Should rproc_shutdown() called direc=
-tly in
-rproc_trigger_recovery() or not? If we go in such direction, that clearly s=
-implify=20
-coprocessor control as it will always be in a "stable" state. But that mean=
-s user
-will lost information that coprocessor crashed (mainly when recovery is dis=
-abled).
-We just know that coprocessor is stopped but not why? Crashed or client act=
-ion?=20
-For debug purpose, it could be an issue from my pov.
+Following is the patch summary:
+ - Patch 1 adds the bindings in the YAML format.
+ - Patch 2 adds the basic remoteproc driver for the C66x DSPs
+ - Patch 3 is an enhancement to support loading into the DSP's internal
+   RAMs directly.
 
-Regards,
-Loic
->=20
-> Let me know that you think...
->=20
-> Mathieu
->=20
-> >
-> >  		rproc_shutdown(rproc);
-> > --
-> > 2.7.4
-> >
+regards
+Suman
+
+[1] https://patchwork.kernel.org/patch/11455135/
+[2] https://patchwork.kernel.org/patch/11456383/ 
+[3] https://patchwork.kernel.org/cover/11447649/
+
+Suman Anna (3):
+  dt-bindings: remoteproc: Add bindings for C66x DSPs on TI K3 SoCs
+  remoteproc/k3-dsp: Add a remoteproc driver of K3 C66x DSPs
+  remoteproc/k3-dsp: Add support for L2RAM loading on C66x DSPs
+
+ .../bindings/remoteproc/ti,k3-dsp-rproc.yaml  | 180 ++++
+ drivers/remoteproc/Kconfig                    |  16 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/ti_k3_dsp_remoteproc.c     | 818 ++++++++++++++++++
+ 4 files changed, 1015 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+ create mode 100644 drivers/remoteproc/ti_k3_dsp_remoteproc.c
+
+-- 
+2.23.0
+
