@@ -2,180 +2,181 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 453901929B6
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Mar 2020 14:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17256192EC7
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Mar 2020 17:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727021AbgCYNbl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 25 Mar 2020 09:31:41 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58700 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726842AbgCYNbk (ORCPT
+        id S1727006AbgCYQ6G (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 25 Mar 2020 12:58:06 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:18478 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726102AbgCYQ6G (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 25 Mar 2020 09:31:40 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 12DC3AD7C;
-        Wed, 25 Mar 2020 13:31:38 +0000 (UTC)
+        Wed, 25 Mar 2020 12:58:06 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02PGquT7027578;
+        Wed, 25 Mar 2020 17:57:49 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=765SUSoYfp3NkYF15kCDHOpVCNo5Ahc9UvpYL/PCA/M=;
+ b=zbqieNq2sJ+MTi1bySzVUNs74mUZsYfbjmdlLQiSYqxZV+MhSPgzhG1o3mYW2HgbC7HQ
+ +epC4/SMzj9/qm+moIedwP6F3+I+PpQZplQ3QqED2Pj9V46qCJZd7GyHT6ZDkZ7pscP6
+ Nea5jRdfpG9yq/x8g3HeEZjKPebeQ5okDQqQ+lmBk+D4M+6DyFDPLGWAyERiToCWu445
+ SPsu+ohZqI7ATzaBKgOv6A0OkumloeCC51JF1EuybFteSvfwWpAtn0CZYNdEl6TWL92z
+ t5Rh9Vz2DzYXd0FVx9aSs1g7RRWlgEqPbePIGmlwwGGOwPBQ811TS+M7Jf6XzycToS1y ng== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2yw9k06txh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 25 Mar 2020 17:57:49 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 120B910002A;
+        Wed, 25 Mar 2020 17:57:45 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F40222BEC4A;
+        Wed, 25 Mar 2020 17:57:44 +0100 (CET)
+Received: from lmecxl0889.tpe.st.com (10.75.127.44) by SFHDAG3NODE1.st.com
+ (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 25 Mar
+ 2020 17:57:36 +0100
 Subject: Re: [PATCH v7 2/2] tty: add rpmsg driver
-To:     Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Ohad Ben-Cohen <ohad@wizery.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Suman Anna <s-anna@ti.com>,
+        Jiri Slaby <jslaby@suse.com>, <linux-kernel@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suman Anna <s-anna@ti.com>,
         Fabien DESSENNE <fabien.dessenne@st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
+        <linux-stm32@st-md-mailman.stormreply.com>,
         xiang xiao <xiaoxiang781216@gmail.com>
 References: <20200324170407.16470-1-arnaud.pouliquen@st.com>
  <20200324170407.16470-3-arnaud.pouliquen@st.com>
- <e458f805-c746-c88e-98f4-d874a7552933@suse.cz>
- <1e4ce821-dd9b-bb04-774b-58a255834cf5@st.com>
-From:   Jiri Slaby <jslaby@suse.cz>
-Autocrypt: addr=jslaby@suse.cz; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <ec061c30-eace-1df9-fa7b-71a61e5710a2@suse.cz>
-Date:   Wed, 25 Mar 2020 14:31:36 +0100
+ <20200324205210.GE119913@minitux>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Message-ID: <4f5e6dd0-5deb-8036-0a94-eb7055744f35@st.com>
+Date:   Wed, 25 Mar 2020 17:57:26 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <1e4ce821-dd9b-bb04-774b-58a255834cf5@st.com>
-Content-Type: text/plain; charset=iso-8859-2
+In-Reply-To: <20200324205210.GE119913@minitux>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG3NODE1.st.com
+ (10.75.127.7)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-25_09:2020-03-24,2020-03-25 signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 25. 03. 20, 14:15, Arnaud POULIQUEN wrote:
->>> +		if (copied != len)
->>> +			dev_dbg(&rpdev->dev, "trunc buffer: available space is %d\n",
->>> +				copied);
->>> +		tty_flip_buffer_push(&cport->port);
->>> +	} else {
->>> +		/* control message */
->>> +		struct rpmsg_tty_ctrl *msg = data;
->>> +
->>> +		if (len != sizeof(*msg))
->>> +			return -EINVAL;
->>> +
->>> +		cport->data_dst = msg->d_ept_addr;
->>> +
->>> +		/* Update remote cts state */
->>> +		cport->cts = msg->cts ? 1 : 0;
->>
->> Number to bool implicit conversion needs no magic, just do:
->> cport->cts = msg->cts;
+Hi Bjorn,
+
+On 3/24/20 9:52 PM, Bjorn Andersson wrote:
+> On Tue 24 Mar 10:04 PDT 2020, Arnaud Pouliquen wrote:
+> [..]
+>> diff --git a/drivers/tty/Makefile b/drivers/tty/Makefile
+>> index 020b1cd9294f..c2465e7ebc2a 100644
+>> --- a/drivers/tty/Makefile
+>> +++ b/drivers/tty/Makefile
+>> @@ -34,5 +34,6 @@ obj-$(CONFIG_PPC_EPAPR_HV_BYTECHAN) += ehv_bytechan.o
+>>  obj-$(CONFIG_GOLDFISH_TTY)	+= goldfish.o
+>>  obj-$(CONFIG_MIPS_EJTAG_FDC_TTY) += mips_ejtag_fdc.o
+>>  obj-$(CONFIG_VCC)		+= vcc.o
+>> +obj-$(CONFIG_RPMSG_TTY)		+= rpmsg_tty.o
+>>  
+>>  obj-y += ipwireless/
+>> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
+> [..]
+>> +static struct rpmsg_device_id rpmsg_driver_tty_id_table[] = {
+>> +	{ .name	= TTY_CH_NAME_RAW },
+>> +	{ .name	= TTY_CH_NAME_WITH_CTS},
 > 
-> In this case i would prefer  cport->cts = (msg->cts != 1);
-> for the conversion
+> I still don't like the idea that the tty devices are tied to channels by
+> fixed names.
 
-That still looks confusing. In the ternary operator above, you used
-msg->cts as a bool implicitly and now you are trying to artificially
-create one :)?
+This point has been discussed with Xiang, he has the same kind of requirement. 
+My proposal here is to do this in two steps. First a fixed name, then
+in a second step we can extend the naming using the implementation proposed
+by Mathieu Poirier:
 
-IOW in a bool context, "msg->cts ? 1 : 0" is the same as "msg->cts".
+[1]https://lkml.org/lkml/2020/2/12/1083
 
->>> +	/*
->>> +	 * Try to send the message to remote processor, if failed return 0 as
->>> +	 * no data sent
->>> +	 */
->>> +	ret = rpmsg_trysendto(cport->d_ept, tmpbuf, msg_size, cport->data_dst);
->>
->> data of rpmsg_trysendto is not const. OK, you seem you need to change
->> that first, I see no blocker for that.
+Is this patch could answer to your requirement?
+
+if requested i can I can integrate the Mathieu's patch in this patchset.
+ 
 > 
-> I created a temporary buffer to ensure that buffer to sent does not exceed the 
-> MTU size.
-> But perhaps this is an useless protection as the rpmsg_tty_write_room already
-> return the MTU value, and so the 'len' variable can not be higher that value
-> returned by the write_room?
+> This makes the driver unusable for communicating with any firmware out
+> there that provides tty-like data over a channel with a different name -
+> such as modems with channels providing an AT command interface (they are
+> not named "rpmsg-tty-raw").
 
-You still can limit it by msg_size without cloning the buffer, right?
+I'm not fixed on the naming, any proposal is welcome.
+If we use the patch [1], could be renamed 
+"rpmsg-tty". then for AT command could be something like "rpmsg-tty-at"
 
->>> +static int rpmsg_tty_port_activate(struct tty_port *p, struct tty_struct *tty)
->>> +{
->>> +	p->low_latency = (p->flags & ASYNC_LOW_LATENCY) ? 1 : 0;
->>> +
->>> +	/* Allocate the buffer we use for writing data */
->>
->> Where exactly -- am I missing something?
+But here seems we are speaking about service over TTY and not over RPMsg.
+
 > 
-> in tty_port_alloc_xmit_buf. it's a copy past from mips_ejtag_fdc.c,
-> I will clean this line if it's confusing.
+> I also fail to see how you would distinguish ttys when the firmware
+> provides more than a single tty - e.g. say you have a modem-like device
+> that provides an AT command channel and a NMEA stream.
 
-No, I mean where do you use the allocated buffer? mips_ejtag_fdc.c uses it.
+Today it is a limitation. In fact this limitation is the same for all RPMsg
+devices with multi instance.
+The patch [1] will allow to retrieve the instance by identifying
+the service device name in /sys/class/tty/ttyRPMSG<X>/device/name
 
->>> +static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
->>> +{
->>> +	struct rpmsg_tty_port *cport;
->>> +	struct device *dev = &rpdev->dev;
->>> +	struct rpmsg_channel_info chinfo;
->>> +	struct device *tty_dev;
->>> +	int ret;
->>> +
->>> +	cport = rpmsg_tty_alloc_cport();
->>> +	if (IS_ERR(cport)) {
->>> +		dev_err(dev, "failed to alloc tty port\n");
->>> +		return PTR_ERR(cport);
->>> +	}
->>> +
->>> +	if (!strncmp(rpdev->id.name, TTY_CH_NAME_WITH_CTS,
->>> +		     sizeof(TTY_CH_NAME_WITH_CTS))) {
->>
->> sizeof of a string feels unnatural, but will work in this case. Can a
->> compiler optimize strlen of a static string?
 > 
-> I don't know if a compiler can do this...
-> what about replacing sizeof by strlen function? 
-> i saw some code example that use strlen with static string...
-> (e.g  https://elixir.bootlin.com/linux/latest/source/drivers/edac/edac_mc.c#L1193)
+> 
+> These are the reasons why drivers/rpmsg/rpmsg_char registers a "control
+> device", from which you can spawn new char devices. As I've said before,
+> I really think the same approach should be taken for ttys - perhaps by
+> just extending the rpmsg_char to allow it to create tty devices in
+> addition to the "packet based" char device?
+> 
+I'm not very familiar with the rpmsg_char so please correct me if i'm wrong:
 
-The question was exactly about that: can a compiler optimize it to a
-bare number or will strlen call remain there?
+The rpmsg_char exposes to userland an interface to manage rpmsg channels
+(relying on a char device). This interface offers the  possibility to create
+new channels/endpoints and send/received related messages. 
+ 
+Thus, the application declares the RPMsg channels which is bound if they matches
+with the remote processor channel (similar behavior than a kernel rpmsg driver).
+There is no constrain on the service once same service is advertised by remote
+firmware.
 
-thanks,
--- 
-js
-suse labs
+In addition, a limitation of the rpmsg_char device is that it needs to be
+associated with an existing device, as example the implementation in qcom_smd
+driver.
+
+If i try to figure out how to implement TTY using the rpmsg_char:
+I should create a rpmsg_char dev in the rpmsg tty driver. Then application
+will create channels related to its service. But in this case
+how to ensure that channels created are related to the TTY service?  
+
+
+I would also expect to manage RPMsg TTY such as a generic TTY: without
+extra interface and auto mounted as an USB TTY. this means that the
+/dev/ttyRMPSGx are created automatically at remote firmware startup
+(without any application action). For instance a generic application 
+(e.g. minicom) could control an internal remote processor such as
+an external processor through a TTY link. 
+
+Then we have also similar RPMsg driver for I2C and SPI virtual link. So extend
+the rpmsg_char to support TTY seems not a good solution for long terms. 
+
+For these reasons i would prefer to have a specific driver. And found a solution
+to allow user to differentiate the TTY instances.
+
+Anyway I am very interesting in having more details of an implementation relying
+on rpmsg_char if you still thinking that is the good approach here.
+
+Thanks for your comments, 
+Arnaud
+
+> Regards,
+> Bjorn
+> 
