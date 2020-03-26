@@ -2,252 +2,132 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B38BD194591
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2020 18:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5E619461E
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2020 19:09:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbgCZRiA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 26 Mar 2020 13:38:00 -0400
-Received: from zimbra2.kalray.eu ([92.103.151.219]:51498 "EHLO
-        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726163AbgCZRh7 (ORCPT
+        id S1727792AbgCZSJx (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 26 Mar 2020 14:09:53 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:40438 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726267AbgCZSJx (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 26 Mar 2020 13:37:59 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 71C3927E043E;
-        Thu, 26 Mar 2020 18:37:58 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id spkmu2Ax8Y4I; Thu, 26 Mar 2020 18:37:58 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 0053C27E0A11;
-        Thu, 26 Mar 2020 18:37:57 +0100 (CET)
-X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id CerupkUqSsv7; Thu, 26 Mar 2020 18:37:57 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id DA0F827E043E;
-        Thu, 26 Mar 2020 18:37:57 +0100 (CET)
-Date:   Thu, 26 Mar 2020 18:37:57 +0100 (CET)
-From:   =?utf-8?Q?Cl=C3=A9ment?= Leger <cleger@kalrayinc.com>
-To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>, psodagud@codeaurora.org,
-        tsoni@codeaurora.org, sidgup@codeaurora.org
-Message-ID: <1233159221.12306373.1585244277714.JavaMail.zimbra@kalray.eu>
-In-Reply-To: <1585241440-7572-2-git-send-email-rishabhb@codeaurora.org>
-References: <1585241440-7572-1-git-send-email-rishabhb@codeaurora.org> <1585241440-7572-2-git-send-email-rishabhb@codeaurora.org>
-Subject: Re: [PATCH 1/2] remoteproc: Add userspace char device driver
+        Thu, 26 Mar 2020 14:09:53 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02QI9fkO005199;
+        Thu, 26 Mar 2020 13:09:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1585246181;
+        bh=p3uCdd3lNgStEmVbRoGU3tYob5tHrXuUe3dGhywOrXc=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=oxTllWopocVS+boJ3JwFLjfj7+B7KNkWnWw8YgaE1/SQv0c0QnjdnCkH705FazV7R
+         TzUrv+kqFB8IHVRP6nI68IeE5MeJJd5ArtvJbBzzK862KXr7G1Wgeo25yevhkuoeQP
+         UXyQy2H94/jn8WXIcWpg0S8Jz07hnbU0N1hAX+HQ=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02QI9fj9094474
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 26 Mar 2020 13:09:41 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 26
+ Mar 2020 13:09:41 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 26 Mar 2020 13:09:41 -0500
+Received: from [10.250.86.212] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02QI9eb5072144;
+        Thu, 26 Mar 2020 13:09:41 -0500
+Subject: Re: [PATCH 3/7] dt-bindings: remoteproc: Add bindings for R5F
+ subsystem on TI K3 SoCs
+To:     Rob Herring <robh@kernel.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20200324201819.23095-1-s-anna@ti.com>
+ <20200324201819.23095-4-s-anna@ti.com> <20200326162802.GA32328@bogus>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <90bae05e-dd47-5b71-07a7-5c3efd929143@ti.com>
+Date:   Thu, 26 Mar 2020 13:09:40 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [192.168.40.202]
-X-Mailer: Zimbra 8.8.15_GA_3895 (ZimbraWebClient - GC80 (Linux)/8.8.15_GA_3895)
-Thread-Topic: remoteproc: Add userspace char device driver
-Thread-Index: sALBqN+bhswvmd/pt74gPjg/0ba/6g==
+In-Reply-To: <20200326162802.GA32328@bogus>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Rishabh,
+Hi Rob,
 
-While being interesting to have a such a userspace interface, I have
-some remarks.
-
------ On 26 Mar, 2020, at 17:50, Rishabh Bhatnagar rishabhb@codeaurora.org wrote:
-
-> Add the driver for creating the character device interface for
-> userspace applications. The character device interface can be used
-> in order to boot up and shutdown the remote processor.
-> This might be helpful for remote processors that are booted by
-> userspace applications and need to shutdown when the application
-> crahes/shutsdown.
+On 3/26/20 11:28 AM, Rob Herring wrote:
+> On Tue, 24 Mar 2020 15:18:15 -0500, Suman Anna wrote:
+>> The Texas Instruments K3 family of SoCs have one or more dual-core
+>> Arm Cortex R5F processor subsystems/clusters (R5FSS). The clusters
+>> can be split between multiple voltage domains as well. Add the device
+>> tree bindings document for these R5F subsystem devices. These R5F
+>> processors do not have an MMU, and so require fixed memory carveout
+>> regions matching the firmware image addresses. The nodes require more
+>> than one memory region, with the first memory region used for DMA
+>> allocations at runtime. The remaining memory regions are reserved
+>> and are used for the loading and running of the R5F remote processors.
+>> The R5F processors can also optionally use any internal on-chip SRAM
+>> memories either for executing code or using it as fast-access data.
+>>
+>> The added example illustrates the DT nodes for the single R5FSS device
+>> present on K3 AM65x family of SoCs.
+>>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> ---
+>> Hi Rob,
+>>
+>> The dt_bindings_check seems to throw couple of warnings around the
+>> usage of ranges because the tooling is adding the #address-cells
+>> and #size-cells of 1 by default, whereas our actual code uses 2.
+>> No issues are found with dtbs_check.
+>>
+>> regards
+>> Suman
+>>
+>>  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml  | 338 ++++++++++++++++++
+>>  1 file changed, 338 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
+>>
 > 
-> Change-Id: If23c8986272bb7c943eb76665f127ff706f12394
-> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
-> ---
-> drivers/remoteproc/Makefile               |  1 +
-> drivers/remoteproc/remoteproc_internal.h  |  6 +++
-> drivers/remoteproc/remoteproc_userspace.c | 90 +++++++++++++++++++++++++++++++
-> include/linux/remoteproc.h                |  2 +
-> 4 files changed, 99 insertions(+)
-> create mode 100644 drivers/remoteproc/remoteproc_userspace.c
+> My bot found errors running 'make dt_binding_check' on your patch:
 > 
-> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-> index e30a1b1..facb3fa 100644
-> --- a/drivers/remoteproc/Makefile
-> +++ b/drivers/remoteproc/Makefile
-> @@ -7,6 +7,7 @@ obj-$(CONFIG_REMOTEPROC)		+= remoteproc.o
-> remoteproc-y				:= remoteproc_core.o
-> remoteproc-y				+= remoteproc_debugfs.o
-> remoteproc-y				+= remoteproc_sysfs.o
-> +remoteproc-y				+= remoteproc_userspace.o
-> remoteproc-y				+= remoteproc_virtio.o
-> remoteproc-y				+= remoteproc_elf_loader.o
-> obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
-> diff --git a/drivers/remoteproc/remoteproc_internal.h
-> b/drivers/remoteproc/remoteproc_internal.h
-> index 493ef92..97513ba 100644
-> --- a/drivers/remoteproc/remoteproc_internal.h
-> +++ b/drivers/remoteproc/remoteproc_internal.h
-> @@ -47,6 +47,9 @@ struct dentry *rproc_create_trace_file(const char *name,
-> struct rproc *rproc,
-> int rproc_init_sysfs(void);
-> void rproc_exit_sysfs(void);
+> Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.example.dts:23.13-20: Warning (ranges_format): /example-0/reserved-memory:ranges: empty "ranges" property but its #address-cells (2) differs from /example-0 (1)
+> Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.example.dts:23.13-20: Warning (ranges_format): /example-0/reserved-memory:ranges: empty "ranges" property but its #size-cells (2) differs from /example-0 (1)
+> Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.example.dts:54.13-56.72: Warning (ranges_format): /example-0/interconnect@100000:ranges: "ranges" property has invalid length (72 bytes) (parent #address-cells == 1, child #address-cells == 2, #size-cells == 2)
+
+I only saw these, because the generated example dts is using cell values
+of 1. I tried adding them using 2 in my example, but then it complains
+about duplicate properties. I do not know how to fix these though. Same
+with the K3 DSP bindings patches as well.
+
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.example.dt.yaml: interconnect@100000: $nodename:0: 'interconnect@100000' does not match '^(bus|soc|axi|ahb|apb)(@[0-9a-f]+)?$'
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.example.dt.yaml: interconnect@28380000: $nodename:0: 'interconnect@28380000' does not match '^(bus|soc|axi|ahb|apb)(@[0-9a-f]+)?$'
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.example.dt.yaml: mcu-ram@41c00000: 'r5f-sram@0' does not match any of the regexes: '^([a-z]*-)?sram(-section)?@[a-f0-9]+$', 'pinctrl-[0-9]+'
+> /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.example.dt.yaml: mcu-ram@41c00000: $nodename:0: 'mcu-ram@41c00000' does not match '^sram(@.*)?'
+
+These node names are already upstream. Do I just update the example or
+the upstream dts also needs fixing?
+
 > 
-> +void rproc_init_cdev(void);
-> +void rproc_exit_cdev(void);
-> +
-> void rproc_free_vring(struct rproc_vring *rvring);
-> int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
+> See https://patchwork.ozlabs.org/patch/1260966
 > 
-> @@ -63,6 +66,9 @@ struct resource_table *rproc_elf_find_loaded_rsc_table(struct
-> rproc *rproc,
-> struct rproc_mem_entry *
-> rproc_find_carveout_by_name(struct rproc *rproc, const char *name, ...);
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure dt-schema is up to date:
 > 
-> +/* from remoteproc_userspace.c */
-> +int rproc_char_device_add(struct rproc *rproc);
-> +
-> static inline
-> int rproc_fw_sanity_check(struct rproc *rproc, const struct firmware *fw)
-> {
-> diff --git a/drivers/remoteproc/remoteproc_userspace.c
-> b/drivers/remoteproc/remoteproc_userspace.c
-> new file mode 100644
-> index 0000000..2ef7679
-> --- /dev/null
-> +++ b/drivers/remoteproc/remoteproc_userspace.c
-> @@ -0,0 +1,90 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Character device interface driver for Remoteproc framework.
-> + *
-> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/fs.h>
-> +#include <linux/cdev.h>
-> +#include <linux/mutex.h>
-> +#include <linux/remoteproc.h>
-> +
-> +#include "remoteproc_internal.h"
-> +
-> +#define NUM_RPROC_DEVICES	64
-> +static dev_t rproc_cdev;
-> +static DEFINE_IDA(cdev_minor_ida);
-> +
-> +static int rproc_open(struct inode *inode, struct file *file)
-> +{
-> +	struct rproc *rproc;
-> +
-> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
-> +	if (!rproc)
-> +		return -EINVAL;
-> +
-> +	return rproc_boot(rproc);
-> +}
+> pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
 
-What happens if multiple user open this chardev ? Apparently,
-rproc_boot returns 0 if already powered_up, so the next user won't know
-what is the state of the rproc.
-Exclusive access could probably be a good idea.
+Thanks, will upgrade my dt-schema.
 
-> +
-> +static int rproc_release(struct inode *inode, struct file *file)
-> +{
-> +	struct rproc *rproc;
-> +
-> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
-> +	if (!rproc)
-> +		return -EINVAL;
-> +
-> +	rproc_shutdown(rproc);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct file_operations rproc_fops = {
-> +	.open = rproc_open,
-> +	.release = rproc_release,
-> +};
-> +
-> +int rproc_char_device_add(struct rproc *rproc)
-> +{
-> +	int ret, minor;
-> +	dev_t cdevt;
-> +
-> +	minor = ida_simple_get(&cdev_minor_ida, 0, NUM_RPROC_DEVICES,
-> +			GFP_KERNEL);
-> +	if (minor < 0) {
-> +	pr_err("%s: No more minor numbers left! rc:%d\n", __func__,
-> +							minor);
-> +		return -ENODEV;
-> +	}
-
-How can you make the link between the chardev and the device instance ?
-In our case, we have several remoteproc instances and thus we will end
-up having multiple chardev.
-
-Regards,
-
-Clément
-
-> +
-> +	cdev_init(&rproc->char_dev, &rproc_fops);
-> +	rproc->char_dev.owner = THIS_MODULE;
-> +
-> +	cdevt = MKDEV(MAJOR(rproc_cdev), minor);
-> +	ret = cdev_add(&rproc->char_dev, cdevt, 1);
-> +	if (ret < 0)
-> +		ida_simple_remove(&cdev_minor_ida, minor);
-> +
-> +	rproc->dev.devt = cdevt;
-> +
-> +	return ret;
-> +}
-> +
-> +void __init rproc_init_cdev(void)
-> +{
-> +	int ret;
-> +
-> +	ret = alloc_chrdev_region(&rproc_cdev, 0, NUM_RPROC_DEVICES, "rproc");
-> +	if (ret < 0) {
-> +		pr_err("Failed to alloc rproc_cdev region, err %d\n", ret);
-> +		return;
-> +	}
-> +}
-> +
-> +void __exit rproc_exit_cdev(void)
-> +{
-> +	unregister_chrdev_region(MKDEV(MAJOR(rproc_cdev), 0),
-> +				NUM_RPROC_DEVICES);
-> +}
-> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> index 16ad666..c4ca796 100644
-> --- a/include/linux/remoteproc.h
-> +++ b/include/linux/remoteproc.h
-> @@ -37,6 +37,7 @@
-> 
-> #include <linux/types.h>
-> #include <linux/mutex.h>
-> +#include <linux/cdev.h>
-> #include <linux/virtio.h>
-> #include <linux/completion.h>
-> #include <linux/idr.h>
-> @@ -514,6 +515,7 @@ struct rproc {
-> 	bool auto_boot;
-> 	struct list_head dump_segments;
-> 	int nb_vdev;
-> +	struct cdev char_dev;
-> };
-> 
-> /**
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
+regards
+Suman
