@@ -2,33 +2,33 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8D1F19381B
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2020 06:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F80419381C
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2020 06:47:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726259AbgCZFrA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        id S1726038AbgCZFrA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
         Thu, 26 Mar 2020 01:47:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44446 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:44428 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726138AbgCZFrA (ORCPT
+        id S1725819AbgCZFrA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
         Thu, 26 Mar 2020 01:47:00 -0400
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1585201619;
-        bh=f66f2WUjm2iM2+9aZeA4irlBMX5TfohVOZJh2DfD4lg=;
+        bh=6vw2ect6WUWGiRxukZ+Ju3Kr9Md2VMPveSQ3HCeVf10=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=OoscNR4AppSZRtZ0idUphHq/lV24Rcloc32if4gwiuQ1oFpcrWHtLaxvUIq9kLwwG
-         J31cLg+hYGNc8wd3fHT0n4IjI1eWLawc6WdjRUrPlHSHcCa09F4bTZuRsRyBBCgV1P
-         4bhT14S66H6/MDLP0Mj9eEGpf2x2hnw/8RwDmlsI=
+        b=W/CPiSyrXIdK30wuL99jVLr7voYfbi4LcebDg/ULItUb2NlfzBN7vzhQc5saNwSvs
+         S+CCTPWmt9fbDfJZPbzqvMbO32qug7v2MjCJIjqbMPmLAbkQyMJL8wB2TTxuE5+rUm
+         DNS/ujLJkJLCB+wZfyYWJmpgEEIJadPycFyjsUXU=
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 0/4] remoteproc: Panic handling
+Subject: Re: [PATCHv9 00/15] remoteproc: updates for omap remoteproc support
 From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <158520161973.22016.9379591268245001299.git-patchwork-notify@kernel.org>
+Message-Id: <158520161938.22016.7368699440369806392.git-patchwork-notify@kernel.org>
 Date:   Thu, 26 Mar 2020 05:46:59 +0000
-References: <20200324052904.738594-1-bjorn.andersson@linaro.org>
-In-Reply-To: <20200324052904.738594-1-bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20200324110035.29907-1-t-kristo@ti.com>
+In-Reply-To: <20200324110035.29907-1-t-kristo@ti.com>
+To:     Tero Kristo <t-kristo@ti.com>
 Cc:     linux-remoteproc@vger.kernel.org
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
@@ -39,29 +39,49 @@ Hello:
 
 This series was applied to andersson/remoteproc.git (refs/heads/for-next).
 
-On Mon, 23 Mar 2020 22:29:00 -0700 you wrote:
-> Add support for invoking a panic handler in remoteproc drivers, to allow them
-> to invoke e.g. cache flushing on the remote processors in response to a kernel
-> panic - to aid in post mortem debugging of system issues.
+On Tue, 24 Mar 2020 13:00:20 +0200 you wrote:
+> Hi,
 > 
-> Bjorn Andersson (4):
->   remoteproc: Traverse rproc_list under RCU read lock
->   remoteproc: Introduce "panic" callback in ops
->   remoteproc: qcom: q6v5: Add common panic handler
->   remoteproc: qcom: Introduce panic handler for PAS and ADSP
+> v9 is just a rebase on top of rproc-next (I am optimistic here still
+> assuming that maintainers would pick this up for 5.7), and fixing one
+> final comment from Mathieu on patch #14. Rebase on top of rproc-next
+> causes a couple of minor changes to fix compile breakages compared to v8
+> of this series (some APIs have changed slightly, see patch #3, #5 and #7.)
 > 
 > [...]
 
 
 Here is a summary with links:
-  - [v5,1/4] remoteproc: Traverse rproc_list under RCU read lock
-    https://git.kernel.org/andersson/remoteproc/c/c0abe2ca3605e4c4fb25bf69d0218c63baf71d2b
-  - [v5,2/4] remoteproc: Introduce "panic" callback in ops
-    https://git.kernel.org/andersson/remoteproc/c/dc5192c449368eed3385f4405670aa3ed21d6270
-  - [v5,3/4] remoteproc: qcom: q6v5: Add common panic handler
-    https://git.kernel.org/andersson/remoteproc/c/e9142f5c28e997ab45fac23bc27a3bc01725bb49
-  - [v5,4/4] remoteproc: qcom: Introduce panic handler for PAS and ADSP
-    https://git.kernel.org/andersson/remoteproc/c/717c21bad161dd7127f6e6acf86a3571e1102254
+  - [PATCHv9,01/15] dt-bindings: remoteproc: Add OMAP remoteproc bindings
+    https://git.kernel.org/andersson/remoteproc/c/c8f70f80b0afd4ef484bbd4e720f14a8403ba613
+  - [PATCHv9,02/15] remoteproc/omap: Add device tree support
+    https://git.kernel.org/andersson/remoteproc/c/75242927014f532b9a04c4c2fb74566e2b0da70a
+  - [PATCHv9,03/15] remoteproc/omap: Add a sanity check for DSP boot address alignment
+    https://git.kernel.org/andersson/remoteproc/c/feae0300536a9220d2d696798ef3952d612ac73d
+  - [PATCHv9,04/15] remoteproc/omap: Add support to parse internal memories from DT
+    https://git.kernel.org/andersson/remoteproc/c/4a032199d3f7c59e450ed78aa5306a12226987a7
+  - [PATCHv9,05/15] remoteproc/omap: Add the rproc ops .da_to_va() implementation
+    https://git.kernel.org/andersson/remoteproc/c/530a1b57e8590f2ebbb6a35effa0efa988aabf6c
+  - [PATCHv9,06/15] remoteproc/omap: Initialize and assign reserved memory node
+    https://git.kernel.org/andersson/remoteproc/c/f4af5bd233657d741ebb317e9abee893dd78a4a0
+  - [PATCHv9,07/15] remoteproc/omap: Add support for DRA7xx remote processors
+    https://git.kernel.org/andersson/remoteproc/c/0aaf19130262059591be51bb745b59788a18c24c
+  - [PATCHv9,08/15] remoteproc/omap: Remove the platform_data header
+    https://git.kernel.org/andersson/remoteproc/c/1070f24d4ae90420db342fe54c1ed90ef1129bb5
+  - [PATCHv9,09/15] remoteproc/omap: Check for undefined mailbox messages
+    https://git.kernel.org/andersson/remoteproc/c/8135d1d28173a7d62c9180a58d37f12f0d69b1c0
+  - [PATCHv9,10/15] remoteproc/omap: Request a timer(s) for remoteproc usage
+    https://git.kernel.org/andersson/remoteproc/c/e28edc571925ffe0e77aa4ab6082a829690c79f2
+  - [PATCHv9,11/15] remoteproc/omap: Add support for system suspend/resume
+    https://git.kernel.org/andersson/remoteproc/c/9077ac1ab14be8b91ee9b18bbb654a4c27b7b10c
+  - [PATCHv9,12/15] remoteproc/omap: Add support for runtime auto-suspend/resume
+    https://git.kernel.org/andersson/remoteproc/c/5f31b232c67434199558fd236e7644b432636b76
+  - [PATCHv9,13/15] remoteproc/omap: Report device exceptions and trigger recovery
+    https://git.kernel.org/andersson/remoteproc/c/232ba6ca007c9585ea666ad083f510b9666259dd
+  - [PATCHv9,14/15] remoteproc/omap: Add watchdog functionality for remote processors
+    https://git.kernel.org/andersson/remoteproc/c/69591e4a0e173e9a19c54c172cdb2febd151dda6
+  - [PATCHv9,15/15] remoteproc/omap: Switch to SPDX license identifiers
+    https://git.kernel.org/andersson/remoteproc/c/a7084c3d47c4aaedcca217ce87b7b5b5fe3cfa35
 
 You are awesome, thank you!
 
