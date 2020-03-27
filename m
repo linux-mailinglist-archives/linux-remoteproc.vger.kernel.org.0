@@ -2,166 +2,260 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF281960B3
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2020 22:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A48C19622F
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 28 Mar 2020 00:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727585AbgC0Vtu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 Mar 2020 17:49:50 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39802 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727473AbgC0Vtt (ORCPT
+        id S1726212AbgC0X5B (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 Mar 2020 19:57:01 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:25096 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726071AbgC0X5B (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 27 Mar 2020 17:49:49 -0400
-Received: by mail-pf1-f194.google.com with SMTP id d25so5114474pfn.6
-        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Mar 2020 14:49:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=CDLu6trpOMmV70WHqdWAeYxqMaun7qvkBKGKhZ/S8eU=;
-        b=o0Ya1ZGI+1TgIKnzmSov4JKNXvrcfV1GbI27nJEdSc6z7s6bD4EK0gfU7OhiFmnwt8
-         Ye1vzOo2Ajg+fKy1ivqQg7ClxpXWqpRd5I0E2O2jUqWpIfpjHEOstYZXK1npC56EeMN6
-         Vp4vcLg0kbzI+gUKYrbPuEeVKaE30DcGojt4WMAx4Xyigyzx7sgDC7SOqKb6HZzNUZGP
-         /OAikXFe47hG/FQ0GxgfQojVAWzAHXnvGbFFKbDu8bVAgWj2Ns+zCnuPsQ7ds6aR2ecU
-         jR+iv0Vw/OfXgyb29bHZG6lIMAKV+0D5Tbytwm0gu7AgBZjK8S7byBjH6DBd8CvIzYYp
-         TDpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CDLu6trpOMmV70WHqdWAeYxqMaun7qvkBKGKhZ/S8eU=;
-        b=R9jv8yxWZawacK5V+7FMbdTmyfMMNPpdbY55Q3sdFLXoUdOVZVHDNfyPavkunoXQnv
-         suXWuhh0A/XPKU9ldgz/4xv74QP1H3ba9PUWOMk2sOKBR5eb79U+evPVBPicL0AMA1J6
-         TBpFOZyWTTXJze0+P4u30LF8AB+8FHm0BQ2MDsHbOP66nPLpX9V5BcVs+mr75gDe6Tzz
-         JLh5KClxTgwNCmXlkQB4VjDAvX77GLffvu42Hq1h6b+i6Nd2pl+2kgz0t8pOmnu+D9fN
-         xcqWPDReenXIOIyGU/hSJb9V2BvZZdyg6vi6j9dIsg80n+pOEiGIbFAup7++FSbvrTa8
-         V1XA==
-X-Gm-Message-State: ANhLgQ3WOK50O849OBj0/86grfdGb9FOyGn2oz7ElLP8+60rlvsJpNBP
-        baiJoRQ5x5dYDXfd7CFUNpAi0Q==
-X-Google-Smtp-Source: ADFU+vscVQDjUyyxMHc5n4FzQg+w/ebRC85W3cGqwuOJULTQnEYGena4WIPDiAkhp3DXx4UrOq1inA==
-X-Received: by 2002:aa7:8586:: with SMTP id w6mr1276138pfn.140.1585345786910;
-        Fri, 27 Mar 2020 14:49:46 -0700 (PDT)
-Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id g11sm4803739pfm.4.2020.03.27.14.49.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 14:49:46 -0700 (PDT)
-Date:   Fri, 27 Mar 2020 15:49:44 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Loic PALLARDY <loic.pallardy@st.com>
-Cc:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "ohad@wizery.com" <ohad@wizery.com>,
-        "s-anna@ti.com" <s-anna@ti.com>,
-        "peng.fan@nxp.com" <peng.fan@nxp.com>,
-        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>
-Subject: Re: [PATCH 11/11] remoteproc: stm32: Allocate rproc for
- synchronisation with MCU
-Message-ID: <20200327214944.GA25303@xps15>
-References: <20200324220329.15523-1-mathieu.poirier@linaro.org>
- <20200324220329.15523-12-mathieu.poirier@linaro.org>
- <fd4e531aa40b40bcb401268e720cefe6@SFHDAG7NODE2.st.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd4e531aa40b40bcb401268e720cefe6@SFHDAG7NODE2.st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Fri, 27 Mar 2020 19:57:01 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585353420; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=zC2emTwPKxUPRv3bLCjD97NRgGeOHFMYAI7D8CPHheg=; b=oJYjQRMSEfR4xt0ezEJfoW6zjyYy72zi6siEany2f9R60v43ZF3cWx7zsK3GSq20EjGiKqpw
+ igFRQf9IydONP2UlQ/pr0ps3fA05aj02u9omAdqe4UXd+nCqW4wbOjWm4KvHxT4Obk1wgMR+
+ A+ze9qixhjML+5Kcc1LFPay9JYY=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e7e92cb.7f8e54293e30-smtp-out-n03;
+ Fri, 27 Mar 2020 23:56:59 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6E62BC433BA; Fri, 27 Mar 2020 23:56:59 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rishabhb)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3A1C5C433D2;
+        Fri, 27 Mar 2020 23:56:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3A1C5C433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rishabhb@codeaurora.org
+From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
+To:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        bjorn.andersson@linaro.org, ohad@wizery.com
+Cc:     psodagud@codeaurora.org, tsoni@codeaurora.org,
+        sidgup@codeaurora.org, Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Subject: [PATCH] remoteproc: core: Add a memory efficient coredump function
+Date:   Fri, 27 Mar 2020 16:56:52 -0700
+Message-Id: <1585353412-19644-1-git-send-email-rishabhb@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, Mar 27, 2020 at 05:11:37PM +0000, Loic PALLARDY wrote:
-> Hi Mathieu,
-> 
-> > -----Original Message-----
-> > From: linux-remoteproc-owner@vger.kernel.org <linux-remoteproc-
-> > owner@vger.kernel.org> On Behalf Of Mathieu Poirier
-> > Sent: mardi 24 mars 2020 23:03
-> > To: bjorn.andersson@linaro.org
-> > Cc: ohad@wizery.com; Loic PALLARDY <loic.pallardy@st.com>; s-
-> > anna@ti.com; peng.fan@nxp.com; Arnaud POULIQUEN
-> > <arnaud.pouliquen@st.com>; Fabien DESSENNE
-> > <fabien.dessenne@st.com>; linux-remoteproc@vger.kernel.org
-> > Subject: [PATCH 11/11] remoteproc: stm32: Allocate rproc for
-> > synchronisation with MCU
-> > 
-> > Allocate remote processor structure with state machine if the MCU
-> > has already been started by an external entity.
-> > 
-> > Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > ---
-> >  drivers/remoteproc/stm32_rproc.c | 19 ++++++++++++++++---
-> >  1 file changed, 16 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/remoteproc/stm32_rproc.c
-> > b/drivers/remoteproc/stm32_rproc.c
-> > index 07be306c0fb1..f320ef9ee286 100644
-> > --- a/drivers/remoteproc/stm32_rproc.c
-> > +++ b/drivers/remoteproc/stm32_rproc.c
-> > @@ -608,7 +608,7 @@ static struct rproc_ops st_rproc_ops = {
-> >  	.get_boot_addr	= rproc_elf_get_boot_addr,
-> >  };
-> > 
-> > -static __maybe_unused struct rproc_ops st_rproc_sync_ops = {
-> > +static struct rproc_ops st_rproc_sync_ops = {
-> >  	.start		= stm32_rproc_sync_start,
-> >  	.stop		= stm32_rproc_sync_stop,
-> >  	.kick		= stm32_rproc_kick,
-> > @@ -616,6 +616,12 @@ static __maybe_unused struct rproc_ops
-> > st_rproc_sync_ops = {
-> >  	.find_loaded_rsc_table =
-> > stm32_rproc_sync_elf_find_loaded_rsc_table,
-> >  };
-> > 
-> > +static struct rproc_sync_states st_sync_states = {
-> > +	.on_init = true, /* sync with MCU when the kernel boots */
-> > +	.after_stop = false, /* don't resync with MCU if stopped from sysfs
-> > */
-> > +	.after_crash = false, /* don't resync with MCU after a crash */
-> > +};
-> > +
-> >  static const struct of_device_id stm32_rproc_match[] = {
-> >  	{ .compatible = "st,stm32mp1-m4" },
-> >  	{},
-> > @@ -847,15 +853,22 @@ static int stm32_rproc_probe(struct
-> > platform_device *pdev)
-> >  		ret = stm32_rproc_get_loaded_rsc_table(pdev, ddata);
-> >  		if (ret)
-> >  			goto free_ddata;
-> > +
-> > +		rproc = rproc_alloc_state_machine(dev, np->name,
-> > &st_rproc_ops,
-> > +						  &st_rproc_sync_ops,
-> > +						  &st_sync_states, NULL,
-> > +						  sizeof(*ddata));
-> Could we have only one call to rproc_alloc_state_machine(), simply configuring
-> st_sync_states according to m4_state and other DT properties?
+The current coredump implementation uses vmalloc area to copy
+all the segments. But this might put a lot of strain on low memory
+targets as the firmware size sometimes is in ten's of MBs.
+The situation becomes worse if there are multiple remote processors
+undergoing recovery at the same time.
+This patch directly copies the device memory to userspace buffer
+and avoids extra memory usage. This requires recovery to be halted
+until data is read by userspace and free function is called.
 
-Yes, very much so - I'll do that for V2.
+Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+---
+ drivers/remoteproc/remoteproc_core.c | 107 +++++++++++++++++++++++++++++------
+ include/linux/remoteproc.h           |   4 ++
+ 2 files changed, 94 insertions(+), 17 deletions(-)
 
-Mathieu
-
-> 
-> Regards,
-> Loic
-> > +	} else {
-> > +		rproc = rproc_alloc(dev, np->name, &st_rproc_ops,
-> > +				    NULL, sizeof(*ddata));
-> > +		rproc->auto_boot = auto_boot;
-> >  	}
-> > 
-> > -	rproc = rproc_alloc(dev, np->name, &st_rproc_ops, NULL,
-> > sizeof(*ddata));
-> >  	if (!rproc) {
-> >  		ret = -ENOMEM;
-> >  		goto free_ddata;
-> >  	}
-> > 
-> > -	rproc->auto_boot = auto_boot;
-> >  	rproc->has_iommu = false;
-> >  	ddata->workqueue = create_workqueue(dev_name(dev));
-> >  	if (!ddata->workqueue) {
-> > --
-> > 2.20.1
-> 
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 097f33e..2d881e5 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -1516,6 +1516,86 @@ int rproc_coredump_add_segment(struct rproc *rproc, dma_addr_t da, size_t size)
+ }
+ EXPORT_SYMBOL(rproc_coredump_add_segment);
+ 
++
++void rproc_free_dump(void *data)
++{
++	struct rproc *rproc = data;
++
++	dev_info(&rproc->dev, "Userspace done reading rproc dump\n");
++	complete(&rproc->dump_done);
++}
++
++static unsigned long get_offset(loff_t user_offset, struct list_head *segments,
++				unsigned long *data_left)
++{
++	struct rproc_dump_segment *segment;
++
++	list_for_each_entry(segment, segments, node) {
++		if (user_offset >= segment->size)
++			user_offset -= segment->size;
++		else
++			break;
++	}
++
++	if (&segment->node == segments) {
++		*data_left = 0;
++		return 0;
++	}
++
++	*data_left = segment->size - user_offset;
++
++	return segment->da + user_offset;
++}
++
++static ssize_t rproc_read_dump(char *buffer, loff_t offset, size_t count,
++				void *data, size_t elfcorelen)
++{
++	void *device_mem = NULL;
++	unsigned long data_left = 0;
++	unsigned long bytes_left = count;
++	unsigned long addr = 0;
++	size_t copy_size = 0;
++	struct rproc *rproc = data;
++
++	if (offset < elfcorelen) {
++		copy_size = elfcorelen - offset;
++		copy_size = min(copy_size, bytes_left);
++
++		memcpy(buffer, rproc->elfcore + offset, copy_size);
++		offset += copy_size;
++		bytes_left -= copy_size;
++		buffer += copy_size;
++	}
++
++	while (bytes_left) {
++		addr = get_offset(offset - elfcorelen, &rproc->dump_segments,
++				&data_left);
++	/* EOF check */
++		if (data_left == 0) {
++			pr_info("Ramdump complete. %lld bytes read.", offset);
++			return 0;
++		}
++
++		copy_size = min_t(size_t, bytes_left, data_left);
++
++		device_mem = rproc->ops->da_to_va(rproc, addr, copy_size);
++		if (!device_mem) {
++			pr_err("Unable to ioremap: addr %lx, size %zd\n",
++				 addr, copy_size);
++			return -ENOMEM;
++		}
++		memcpy(buffer, device_mem, copy_size);
++
++		offset += copy_size;
++		buffer += copy_size;
++		bytes_left -= copy_size;
++		dev_dbg(&rproc->dev, "Copied %d bytes to userspace\n",
++			copy_size);
++	}
++
++	return count;
++}
++
+ /**
+  * rproc_coredump_add_custom_segment() - add custom coredump segment
+  * @rproc:	handle of a remote processor
+@@ -1566,27 +1646,27 @@ static void rproc_coredump(struct rproc *rproc)
+ 	struct rproc_dump_segment *segment;
+ 	struct elf32_phdr *phdr;
+ 	struct elf32_hdr *ehdr;
+-	size_t data_size;
++	size_t header_size;
+ 	size_t offset;
+ 	void *data;
+-	void *ptr;
+ 	int phnum = 0;
+ 
+ 	if (list_empty(&rproc->dump_segments))
+ 		return;
+ 
+-	data_size = sizeof(*ehdr);
++	header_size = sizeof(*ehdr);
+ 	list_for_each_entry(segment, &rproc->dump_segments, node) {
+-		data_size += sizeof(*phdr) + segment->size;
++		header_size += sizeof(*phdr);
+ 
+ 		phnum++;
+ 	}
+ 
+-	data = vmalloc(data_size);
++	data = vmalloc(header_size);
+ 	if (!data)
+ 		return;
+ 
+ 	ehdr = data;
++	rproc->elfcore = data;
+ 
+ 	memset(ehdr, 0, sizeof(*ehdr));
+ 	memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
+@@ -1618,23 +1698,14 @@ static void rproc_coredump(struct rproc *rproc)
+ 
+ 		if (segment->dump) {
+ 			segment->dump(rproc, segment, data + offset);
+-		} else {
+-			ptr = rproc_da_to_va(rproc, segment->da, segment->size);
+-			if (!ptr) {
+-				dev_err(&rproc->dev,
+-					"invalid coredump segment (%pad, %zu)\n",
+-					&segment->da, segment->size);
+-				memset(data + offset, 0xff, segment->size);
+-			} else {
+-				memcpy(data + offset, ptr, segment->size);
+-			}
+-		}
+ 
+ 		offset += phdr->p_filesz;
+ 		phdr++;
+ 	}
++	dev_coredumpm(&rproc->dev, NULL, rproc, header_size, GFP_KERNEL,
++			rproc_read_dump, rproc_free_dump);
+ 
+-	dev_coredumpv(&rproc->dev, data, data_size, GFP_KERNEL);
++	wait_for_completion(&rproc->dump_done);
+ }
+ 
+ /**
+@@ -1665,6 +1736,7 @@ int rproc_trigger_recovery(struct rproc *rproc)
+ 
+ 	/* generate coredump */
+ 	rproc_coredump(rproc);
++	reinit_completion(&rproc->dump_done);
+ 
+ 	/* load firmware */
+ 	ret = request_firmware(&firmware_p, rproc->firmware, dev);
+@@ -2067,6 +2139,7 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
+ 	INIT_LIST_HEAD(&rproc->rvdevs);
+ 	INIT_LIST_HEAD(&rproc->subdevs);
+ 	INIT_LIST_HEAD(&rproc->dump_segments);
++	init_completion(&rproc->dump_done);
+ 
+ 	INIT_WORK(&rproc->crash_handler, rproc_crash_handler_work);
+ 
+diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+index 16ad666..461b235 100644
+--- a/include/linux/remoteproc.h
++++ b/include/linux/remoteproc.h
+@@ -481,6 +481,8 @@ struct rproc_dump_segment {
+  * @auto_boot: flag to indicate if remote processor should be auto-started
+  * @dump_segments: list of segments in the firmware
+  * @nb_vdev: number of vdev currently handled by rproc
++ * @dump_done: completion variable when dump is complete
++ * @elfcore: pointer to elf header buffer
+  */
+ struct rproc {
+ 	struct list_head node;
+@@ -514,6 +516,8 @@ struct rproc {
+ 	bool auto_boot;
+ 	struct list_head dump_segments;
+ 	int nb_vdev;
++	struct completion dump_done;
++	void *elfcore;
+ };
+ 
+ /**
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
