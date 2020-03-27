@@ -2,154 +2,103 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC15195C6D
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2020 18:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC732195DE5
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2020 19:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbgC0RU0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 Mar 2020 13:20:26 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:33625 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726515AbgC0RU0 (ORCPT
+        id S1726770AbgC0SvB (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 Mar 2020 14:51:01 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:40314 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726758AbgC0SvA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 27 Mar 2020 13:20:26 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02RHHExC023340;
-        Fri, 27 Mar 2020 18:20:19 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=STMicroelectronics;
- bh=QTSuuKZLP8ozbtRl/SbrJ5W4JDHdQ/hH7avSuWM4VcU=;
- b=o/8sviQhVFTMTEy2mftQ+94N4rogPA4YMfn5PvyMkmbznzVUxYKJU0Cc9eeut+OCMjDi
- 5cS6nbwdcOpwM3kNHZjGDOVXOGMezNU8vYNAlua/DD8v6t64zrnyAC7GPLuU6ezUui1I
- iRlM5G6mEqX61kX2NEhzyvPFI5QCw77PeqNvQ3ICoOiOeaHEpNRiOHRE89GtZffC/cak
- /j7t3ntPSRK0YVOY6YsYDuHgcrRUXv7Taj0bdqdoSup9C5LsaIZhMS6ZFofQdeAhBYk8
- GJxpxBWTHeI+CUNk4NzXClApzxg5LIzwQLmfnu7G9WeK/tjCxhXwd9gzqwUGt25o3joA VA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2yw9k0kc84-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Mar 2020 18:20:19 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D8BE810002A;
-        Fri, 27 Mar 2020 18:20:14 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C90D52BC7A3;
-        Fri, 27 Mar 2020 18:20:14 +0100 (CET)
-Received: from SFHDAG7NODE2.st.com (10.75.127.20) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 27 Mar
- 2020 18:20:14 +0100
-Received: from SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090]) by
- SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090%20]) with mapi id
- 15.00.1473.003; Fri, 27 Mar 2020 18:20:14 +0100
-From:   Loic PALLARDY <loic.pallardy@st.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>
-CC:     "ohad@wizery.com" <ohad@wizery.com>,
-        "s-anna@ti.com" <s-anna@ti.com>,
-        "peng.fan@nxp.com" <peng.fan@nxp.com>,
-        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>
-Subject: RE: [PATCH v2 00/17] remoteproc: Add support for synchronisation with
- MCU 
-Thread-Topic: [PATCH v2 00/17] remoteproc: Add support for synchronisation
- with MCU 
-Thread-Index: AQHWAiWg8CueXbuyYU+sQgKagKpF+qhcsWug
-Date:   Fri, 27 Mar 2020 17:20:14 +0000
-Message-ID: <4d264de6259449338cef9b2da1f39304@SFHDAG7NODE2.st.com>
-References: <20200324214603.14979-1-mathieu.poirier@linaro.org>
-In-Reply-To: <20200324214603.14979-1-mathieu.poirier@linaro.org>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.75.127.46]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 27 Mar 2020 14:51:00 -0400
+Received: by mail-ot1-f67.google.com with SMTP id r19so4999015otn.7;
+        Fri, 27 Mar 2020 11:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=wDI9SfzV2R8hyVfBWBp+68ChjK6A5bogDpMizFkhzeM=;
+        b=bhDkyxLxUVigjSTEIIzP1F4GbQDrLmGX2OdMX4YPUWRLfB0UdzopRsiocfCDBjnTCH
+         RccowB5sFrNiabPaBIkjd/u+7m5DcIO3wWRu5cdGJEWvvU+sCpTrpCGlbUyOTmaQJrZv
+         TVwQMh+CAx+tdev7JmWIoOnfVWJlBLYVq1XN6s3aWbrjD+5LhxukuUToVOhKjm0DZLvx
+         mo13kaE8Cb+i7Y5F8zyztPC2i1jBQBLPRcCfEyLorw5+87z/zdJokNhbZmY6fsoqA4GV
+         I0YC047l11ATgh0c9RELO5YkFJThfMeM2ktp+ELv4uL2jhUFUchxOqvYOOmvo+mYi9Ym
+         9ZQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=wDI9SfzV2R8hyVfBWBp+68ChjK6A5bogDpMizFkhzeM=;
+        b=hSByXtBdZXW9JJLFBumEtpyCRTjsGP41PWq0BnSVDTxXL4UqUv8L4pwebwqv5vrtRR
+         QGvuiDKTx6pbiv67iaAiv32y04gzZ3A86jSYFUQC2Y16XpSa1BuSPob7z7Ff7yMedHnw
+         /3pJwCk6Z1REP1Qad4vVUcpFGzniYSh2ibbZCYsYoUk4NExBP9eGDXk+vN/kIxy9MB28
+         jJlbeRuVlxXvHoGbXInPDKV6Dry26k8KDMhac3luBHOt2rdCLJBnqxtDAUWqTqemI73b
+         brFsPWd5KNTDj4EOt4/AhC18Xbb9wf1a+1sQ7V+GafrUEMzBU8gWUCRnzLYV+PEs8p3t
+         c6Pw==
+X-Gm-Message-State: ANhLgQ0nggW+Y/f8CnTrllASbDT7oMjfUHksVe9ySUEdaK6a8Zga6soL
+        pzN/4ZaZxhr+sllWG/58yy7yUZFttKk=
+X-Google-Smtp-Source: ADFU+vvuomHQOVxr5SPCDj1qBovJy4K7MFoYLPRUKu5zLKZaz14xBFFY2iM8Xphy/2s6CDhFP/+1MQ==
+X-Received: by 2002:a9d:3ea4:: with SMTP id b33mr89534otc.136.1585335059680;
+        Fri, 27 Mar 2020 11:50:59 -0700 (PDT)
+Received: from ubuntu-m2-xlarge-x86 ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id h29sm1696493ooe.33.2020.03.27.11.50.57
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 27 Mar 2020 11:50:59 -0700 (PDT)
+Date:   Fri, 27 Mar 2020 11:50:55 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Build failure in omap_remoteproc due to 02e6d546e3bd
+Message-ID: <20200327185055.GA22438@ubuntu-m2-xlarge-x86>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-27_06:2020-03-27,2020-03-27 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Mathieu,
+Hi all,
 
-> -----Original Message-----
-> From: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Sent: mardi 24 mars 2020 22:46
-> To: bjorn.andersson@linaro.org
-> Cc: ohad@wizery.com; Loic PALLARDY <loic.pallardy@st.com>; s-
-> anna@ti.com; peng.fan@nxp.com; Arnaud POULIQUEN
-> <arnaud.pouliquen@st.com>; Fabien DESSENNE
-> <fabien.dessenne@st.com>; linux-remoteproc@vger.kernel.org
-> Subject: [PATCH v2 00/17] remoteproc: Add support for synchronisation wit=
-h
-> MCU
->=20
-> This is the second revision of this set that tries to address the
-> problem of synchronising with an MCU with as much flexibility as
-> possible.
->=20
-> New in this revision is a fix for a couple of bugs I found while
-> testing things.  First with the helper macro in patch 09 and the
-> suppression of a boot message when synchronising with an MCU
-> in patch 12.  I have completely removed what used to be patch 18,
-> the example on how to use the new API.  This will be the subject
-> of an upcoming patchset.
->=20
-> Tested on ST's mp157c platform.  Applies on v5.6-rc7 to keep things
-> simple.
+Apologies if this has already been reported, I did not see anything in
+the archives. On next-20200327, I see the following build error:
 
-Thanks Mathieu for the 2 series. I tested on my STM32MP157-DK2 the differen=
-t
-synchronization use cases (on_init, after_stop, after_crash), mixing the va=
-lues and
-I succeed to start/stop/restart M4 coprocessor with or without reloading fi=
-rmware
-according to sync values. (I only applied the correction I proposed in patc=
-h 16 review
-to allow to resync with a preloaded or an already running coprocessor.
+drivers/remoteproc/omap_remoteproc.c:174:44: error: too many arguments
+to function call, expected 2, have 3
+        timer->timer_ops->set_load(timer->odt, 0, 0);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~                ^
+1 error generated.
 
-Regards,
-Loic
->=20
-> Comments would be much appreciated.
->=20
-> Thanks,
-> Mathieu
->=20
-> Mathieu Poirier (17):
->   remoteproc: Add new operation and state machine for MCU
->     synchronisation
->   remoteproc: Introduce function rproc_set_mcu_sync_state()
->   remoteproc: Split firmware name allocation from rproc_alloc()
->   remoteproc: Split rproc_ops allocation from rproc_alloc()
->   remoteproc: Get rid of tedious error path
->   remoteproc: Introduce function rproc_alloc_internals()
->   remoteproc: Introduce function rproc_alloc_state_machine()
->   remoteproc: Allocate synchronisation state machine
->   remoteproc: Call the right core function based on synchronisation
->     state
->   remoteproc: Decouple firmware load and remoteproc booting
->   remoteproc: Repurpose function rproc_trigger_auto_boot()
->   remoteproc: Rename function rproc_fw_boot()
->   remoteproc: Introducting new functions to start and stop an MCU
->   remoteproc: Refactor function rproc_trigger_recovery()
->   remoteproc: Correctly deal with MCU synchronisation when changing FW
->     image
->   remoteproc: Correctly deal with MCU synchronisation when changing
->     state
->   remoteproc: Make MCU synchronisation state changes on stop and crashed
->=20
->  drivers/remoteproc/remoteproc_core.c     | 387 ++++++++++++++++++-----
->  drivers/remoteproc/remoteproc_debugfs.c  |  31 ++
->  drivers/remoteproc/remoteproc_internal.h |  91 ++++--
->  drivers/remoteproc/remoteproc_sysfs.c    |  57 +++-
->  include/linux/remoteproc.h               |  28 +-
->  5 files changed, 487 insertions(+), 107 deletions(-)
->=20
-> --
-> 2.20.1
+This is due to commit 02e6d546e3bd ("clocksource/drivers/timer-ti-dm:
+Enable autoreload in set_pwm") in the clockevents tree interacting with
+commit e28edc571925 ("remoteproc/omap: Request a timer(s) for remoteproc
+usage") from the rpmsg tree.
 
+Something like the diff below should resolve it but it cannot be applied
+to the rpmsg tree because it does not have the clockevents change. It
+will have to be applied by Linus as a merge fixup.
+
+Stephen, would you mind applying this to whichever merge happens second?
+
+Cheers,
+Nathan
+
+diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+index cdb546f7232e..6955fab0a78b 100644
+--- a/drivers/remoteproc/omap_remoteproc.c
++++ b/drivers/remoteproc/omap_remoteproc.c
+@@ -171,7 +171,7 @@ static int omap_rproc_request_timer(struct device *dev, struct device_node *np,
+ 	}
+ 
+ 	/* clean counter, remoteproc code will set the value */
+-	timer->timer_ops->set_load(timer->odt, 0, 0);
++	timer->timer_ops->set_load(timer->odt, 0);
+ 
+ 	return 0;
+ }
