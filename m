@@ -2,171 +2,178 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A64D1195345
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2020 09:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD55419541D
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2020 10:35:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbgC0IuP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 Mar 2020 04:50:15 -0400
-Received: from zimbra2.kalray.eu ([92.103.151.219]:57286 "EHLO
-        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726169AbgC0IuO (ORCPT
+        id S1726168AbgC0Jf5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 Mar 2020 05:35:57 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:3412 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725956AbgC0Jf4 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 27 Mar 2020 04:50:14 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id 5860A27E039A;
-        Fri, 27 Mar 2020 09:50:13 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id FpmscZvK2U_Z; Fri, 27 Mar 2020 09:50:12 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.kalray.eu (Postfix) with ESMTP id CB6CC27E0AEB;
-        Fri, 27 Mar 2020 09:50:12 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu CB6CC27E0AEB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
-        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1585299012;
-        bh=SN/jDLRWylESkAt6QMekC/Tpe7ewfTl4FIMoaHWoEeE=;
-        h=From:To:Date:Message-Id;
-        b=cb1Ymu+VokqUrg5PAArt3L1fVzMSjaS8q1pFp8sQ05nvnbXNfsNMzoWTUAbeAWvc3
-         T/P28dcqbk3354ctudCjeii82CY8Td+j1cg/eCpWgvONCz0RYRSeUfYhJjTq1CU0SV
-         p0aPmDnS+ZuITE0P0BxkugItjSRiYYTy36K90D00=
-X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
-Received: from zimbra2.kalray.eu ([127.0.0.1])
-        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id JMcNRfuSCV0B; Fri, 27 Mar 2020 09:50:12 +0100 (CET)
-Received: from triton.lin.mbt.kalray.eu (unknown [192.168.37.25])
-        by zimbra2.kalray.eu (Postfix) with ESMTPSA id AF16827E039A;
-        Fri, 27 Mar 2020 09:50:12 +0100 (CET)
-From:   Clement Leger <cleger@kalray.eu>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Fri, 27 Mar 2020 05:35:56 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02R9SX6P022476;
+        Fri, 27 Mar 2020 10:35:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=6nNFnk8jID5lHjOahVO0boRafihUTXXOYaMNQuIINKA=;
+ b=g2v40gs2320Af1QC6KtcQhpiDc6DulbBptbFNUoLwpElORI3qytUWlno3YXkjN312VIP
+ cersvx0NFkGPlPYzjD6GoG1h9U3rDlLlf0N7HWl2xGWHtW5iQm6G64nLasdZlRNBL7/E
+ uacv/4LrjxaQ6iVcqMR82NJAO7mQT3HRYOBDp/nEXovnqzbQN8VVfg/Ik9ORLJ65/iqa
+ Hn9/DBFtZilZoxEcmMupeso3aow68phDII++mj465ELGzeoMpLaG889rj1DrrDEeJzkd
+ gO2h9/rfoPVkjtjwSAVA8+XxbPzf9ZBOldWIIrgtsAJyerkOX2MPAmhsjqK7/Pbcf8xa Og== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2yw8xehc57-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 27 Mar 2020 10:35:52 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1894410002A;
+        Fri, 27 Mar 2020 10:35:50 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 240FA21FEA3;
+        Fri, 27 Mar 2020 10:35:50 +0100 (CET)
+Received: from lmecxl0889.tpe.st.com (10.75.127.44) by SFHDAG3NODE1.st.com
+ (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 27 Mar
+ 2020 10:35:44 +0100
+Subject: Re: [PATCH v2] rpmsg: core: Add wildcard match for name service
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suman Anna <s-anna@ti.com>
+CC:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Clement Leger <cleger@kalray.eu>
-Subject: [PATCH] remoteproc: remove rproc_elf32_sanity_check
-Date:   Fri, 27 Mar 2020 09:49:39 +0100
-Message-Id: <20200327084939.8321-1-cleger@kalray.eu>
-X-Mailer: git-send-email 2.17.1
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200310155058.1607-1-mathieu.poirier@linaro.org>
+ <591bd727-32af-9ea2-8c46-98f46ee3711e@ti.com>
+ <CANLsYkyv+4cSCY27kA6qfo2XMzXy_h+DmXTe0nVZuUkC0kyRUQ@mail.gmail.com>
+ <ca77fe73-3baf-64ff-c9e2-b2f35f96ffe3@ti.com>
+ <CANLsYkz8iqiperjdQVcwAC3YGT5cmEvJcu8fPFGF5-X6eKVUDQ@mail.gmail.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Message-ID: <34d1277f-c35e-5df8-7d0c-ea1e961a127f@st.com>
+Date:   Fri, 27 Mar 2020 10:35:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <CANLsYkz8iqiperjdQVcwAC3YGT5cmEvJcu8fPFGF5-X6eKVUDQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG4NODE2.st.com (10.75.127.11) To SFHDAG3NODE1.st.com
+ (10.75.127.7)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-27_02:2020-03-26,2020-03-27 signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Since checks are present in the remoteproc elf loader before calling
-da_to_va, loading a elf64 will work on 32bits flavors of kernel.
-Indeed, if a segment size is larger than what size_t can hold, the
-loader will return an error so the functionality is equivalent to
-what exists today.
+Hi
 
-Signed-off-by: Clement Leger <cleger@kalray.eu>
----
- drivers/remoteproc/remoteproc_core.c       |  2 +-
- drivers/remoteproc/remoteproc_elf_loader.c | 21 ---------------------
- drivers/remoteproc/remoteproc_internal.h   |  1 -
- drivers/remoteproc/st_remoteproc.c         |  2 +-
- drivers/remoteproc/st_slim_rproc.c         |  2 +-
- drivers/remoteproc/stm32_rproc.c           |  2 +-
- 6 files changed, 4 insertions(+), 26 deletions(-)
+On 3/26/20 11:01 PM, Mathieu Poirier wrote:
+> On Thu, 26 Mar 2020 at 14:42, Suman Anna <s-anna@ti.com> wrote:
+>>
+>> On 3/26/20 3:21 PM, Mathieu Poirier wrote:
+>>> On Thu, 26 Mar 2020 at 09:06, Suman Anna <s-anna@ti.com> wrote:
+>>>>
+>>>> Hi Mathieu,
+>>>>
+>>>> On 3/10/20 10:50 AM, Mathieu Poirier wrote:
+>>>>> Adding the capability to supplement the base definition published
+>>>>> by an rpmsg_driver with a postfix description so that it is possible
+>>>>> for several entity to use the same service.
+>>>>>
+>>>>> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+>>>>> Acked-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
+>>>>
+>>>> So, the concern I have here is that we are retrofitting this into the
+>>>> existing 32-byte name field, and the question is if it is going to be
+>>>> enough in general. That's the reason I went with the additional 32-byte
+>>>> field with the "rpmsg: add a description field" patch.
+>>>>
+>>>
+>>> That's a valid concern.
+>>>
+>>> Did you consider increasing the size of RPMSG_NAME_SIZE to 64? Have
+>>> you found cases where that wouldn't work?  I did a survey of all the
+>>> places the #define is used and all destination buffers are also using
+>>> the same #define in their definition.  It would also be backward
+>>> compatible with firmware implementations that use 32 byte.
+>>
+>> You can't directly bump the size without breaking the compatibility on
+>> the existing rpmsg_ns_msg in firmwares right? All the Linux-side drivers
+>> will be ok since they use the same macro but rpmsg_ns_msg has presence
+>> on both kernel and firmware-sides.
+> 
+> Ah yes yes... The amount of bytes coming out of the pipe won't match.
+> Let me think a little...
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index a9ac1d01e09b..02ff076b0122 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -2069,7 +2069,7 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
- 		rproc->ops->parse_fw = rproc_elf_load_rsc_table;
- 		rproc->ops->find_loaded_rsc_table = rproc_elf_find_loaded_rsc_table;
- 		if (!rproc->ops->sanity_check)
--			rproc->ops->sanity_check = rproc_elf32_sanity_check;
-+			rproc->ops->sanity_check = rproc_elf_sanity_check;
- 		rproc->ops->get_boot_addr = rproc_elf_get_boot_addr;
- 	}
- 
-diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
-index 16e2c496fd45..29034f99898d 100644
---- a/drivers/remoteproc/remoteproc_elf_loader.c
-+++ b/drivers/remoteproc/remoteproc_elf_loader.c
-@@ -112,27 +112,6 @@ int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw)
- }
- EXPORT_SYMBOL(rproc_elf_sanity_check);
- 
--/**
-- * rproc_elf_sanity_check() - Sanity Check ELF32 firmware image
-- * @rproc: the remote processor handle
-- * @fw: the ELF32 firmware image
-- *
-- * Make sure this fw image is sane.
-- */
--int rproc_elf32_sanity_check(struct rproc *rproc, const struct firmware *fw)
--{
--	int ret = rproc_elf_sanity_check(rproc, fw);
--
--	if (ret)
--		return ret;
--
--	if (fw_elf_get_class(fw) == ELFCLASS32)
--		return 0;
--
--	return -EINVAL;
--}
--EXPORT_SYMBOL(rproc_elf32_sanity_check);
--
- /**
-  * rproc_elf_get_boot_addr() - Get rproc's boot address.
-  * @rproc: the remote processor handle
-diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-index b389dc79da81..31994715fd43 100644
---- a/drivers/remoteproc/remoteproc_internal.h
-+++ b/drivers/remoteproc/remoteproc_internal.h
-@@ -54,7 +54,6 @@ void *rproc_da_to_va(struct rproc *rproc, u64 da, size_t len);
- phys_addr_t rproc_va_to_pa(void *cpu_addr);
- int rproc_trigger_recovery(struct rproc *rproc);
- 
--int rproc_elf32_sanity_check(struct rproc *rproc, const struct firmware *fw);
- int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw);
- u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw);
- int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw);
-diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_remoteproc.c
-index a6cbfa452764..a3268d95a50e 100644
---- a/drivers/remoteproc/st_remoteproc.c
-+++ b/drivers/remoteproc/st_remoteproc.c
-@@ -233,7 +233,7 @@ static const struct rproc_ops st_rproc_ops = {
- 	.parse_fw		= st_rproc_parse_fw,
- 	.load			= rproc_elf_load_segments,
- 	.find_loaded_rsc_table	= rproc_elf_find_loaded_rsc_table,
--	.sanity_check		= rproc_elf32_sanity_check,
-+	.sanity_check		= rproc_elf_sanity_check,
- 	.get_boot_addr		= rproc_elf_get_boot_addr,
- };
- 
-diff --git a/drivers/remoteproc/st_slim_rproc.c b/drivers/remoteproc/st_slim_rproc.c
-index 3cca8b65a8db..09bcb4d8b9e0 100644
---- a/drivers/remoteproc/st_slim_rproc.c
-+++ b/drivers/remoteproc/st_slim_rproc.c
-@@ -203,7 +203,7 @@ static const struct rproc_ops slim_rproc_ops = {
- 	.da_to_va       = slim_rproc_da_to_va,
- 	.get_boot_addr	= rproc_elf_get_boot_addr,
- 	.load		= rproc_elf_load_segments,
--	.sanity_check	= rproc_elf32_sanity_check,
-+	.sanity_check	= rproc_elf_sanity_check,
- };
- 
- /**
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 6a66dbf2df40..2e07a95439c8 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -505,7 +505,7 @@ static struct rproc_ops st_rproc_ops = {
- 	.load		= rproc_elf_load_segments,
- 	.parse_fw	= stm32_rproc_parse_fw,
- 	.find_loaded_rsc_table = rproc_elf_find_loaded_rsc_table,
--	.sanity_check	= rproc_elf32_sanity_check,
-+	.sanity_check	= rproc_elf_sanity_check,
- 	.get_boot_addr	= rproc_elf_get_boot_addr,
- };
- 
--- 
-2.17.1
++1 for Suman's concern.
 
+Anyway i would like to challenge the need of more than 32 bytes to
+differentiate service instances.
+"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", seems to me enough if we only need
+to differentiate the instances.
+
+But perhaps the need is also to provide a short description of the service?
+
+Suman, could you share some examples of your need?
+
+Regards
+Arnaud
+   
+> 
+>>
+>> regards
+>> Suman
+>>
+>>>
+>>> Thanks,
+>>> Mathieu
+>>>
+>>>> regards
+>>>> Suman
+>>>>
+>>>>> ---
+>>>>> Changes for V2:
+>>>>> - Added Arnaud's Acked-by.
+>>>>> - Rebased to latest rproc-next.
+>>>>>
+>>>>>  drivers/rpmsg/rpmsg_core.c | 20 +++++++++++++++++++-
+>>>>>  1 file changed, 19 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+>>>>> index e330ec4dfc33..bfd25978fa35 100644
+>>>>> --- a/drivers/rpmsg/rpmsg_core.c
+>>>>> +++ b/drivers/rpmsg/rpmsg_core.c
+>>>>> @@ -399,7 +399,25 @@ ATTRIBUTE_GROUPS(rpmsg_dev);
+>>>>>  static inline int rpmsg_id_match(const struct rpmsg_device *rpdev,
+>>>>>                                 const struct rpmsg_device_id *id)
+>>>>>  {
+>>>>> -     return strncmp(id->name, rpdev->id.name, RPMSG_NAME_SIZE) == 0;
+>>>>> +     size_t len = min_t(size_t, strlen(id->name), RPMSG_NAME_SIZE);
+>>>>> +
+>>>>> +     /*
+>>>>> +      * Allow for wildcard matches.  For example if rpmsg_driver::id_table
+>>>>> +      * is:
+>>>>> +      *
+>>>>> +      * static struct rpmsg_device_id rpmsg_driver_sample_id_table[] = {
+>>>>> +      *      { .name = "rpmsg-client-sample" },
+>>>>> +      *      { },
+>>>>> +      * }
+>>>>> +      *
+>>>>> +      * Then it is possible to support "rpmsg-client-sample*", i.e:
+>>>>> +      *      rpmsg-client-sample
+>>>>> +      *      rpmsg-client-sample_instance0
+>>>>> +      *      rpmsg-client-sample_instance1
+>>>>> +      *      ...
+>>>>> +      *      rpmsg-client-sample_instanceX
+>>>>> +      */
+>>>>> +     return strncmp(id->name, rpdev->id.name, len) == 0;
+>>>>>  }
+>>>>>
+>>>>>  /* match rpmsg channel and rpmsg driver */
+>>>>>
+>>>>
+>>
