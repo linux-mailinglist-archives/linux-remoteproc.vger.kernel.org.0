@@ -2,178 +2,210 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD55419541D
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2020 10:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDB21955F6
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2020 12:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726168AbgC0Jf5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 Mar 2020 05:35:57 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:3412 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725956AbgC0Jf4 (ORCPT
+        id S1726400AbgC0LGN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 Mar 2020 07:06:13 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:13106 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726165AbgC0LGN (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 27 Mar 2020 05:35:56 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02R9SX6P022476;
-        Fri, 27 Mar 2020 10:35:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=6nNFnk8jID5lHjOahVO0boRafihUTXXOYaMNQuIINKA=;
- b=g2v40gs2320Af1QC6KtcQhpiDc6DulbBptbFNUoLwpElORI3qytUWlno3YXkjN312VIP
- cersvx0NFkGPlPYzjD6GoG1h9U3rDlLlf0N7HWl2xGWHtW5iQm6G64nLasdZlRNBL7/E
- uacv/4LrjxaQ6iVcqMR82NJAO7mQT3HRYOBDp/nEXovnqzbQN8VVfg/Ik9ORLJ65/iqa
- Hn9/DBFtZilZoxEcmMupeso3aow68phDII++mj465ELGzeoMpLaG889rj1DrrDEeJzkd
- gO2h9/rfoPVkjtjwSAVA8+XxbPzf9ZBOldWIIrgtsAJyerkOX2MPAmhsjqK7/Pbcf8xa Og== 
+        Fri, 27 Mar 2020 07:06:13 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02RB49Tr005511;
+        Fri, 27 Mar 2020 12:06:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=STMicroelectronics;
+ bh=BkPo9i+CQo1BdLxEPO9sQgD9Z2i2lfEU7kh865ZUDMQ=;
+ b=WKmlUFo/y5ev/Sfn7lfrLk5jwAplrdmWrMXMmGtlYJQnBjHQz3IQcpet1RqEiYSYhsma
+ jm33ter54zvGcHZpKVv+XSPeFP/7FYX0FFt2x+bP1E2C6h+Ei4ZWMe6adfatsOF+Cikn
+ kWbDHpLHqGbm/6z0Mm7/1iV2Z6+JBtGF+Ei1QR4Kx2hpD4XqTJqj+48J5HRDzK/urLef
+ Qh9TzZEatyq3vk8KrLCw0DR81HYU0UXJEo96CbNPXxbfVudSbC7jiTw9UbSGryOzPjwg
+ Kka6UluG1XyKP384oye+P9RooW7ETbgISpKD+1bzYGp2oXF5fXKw0NVgs9VS1qJqLFOp sw== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2yw8xehc57-1
+        by mx07-00178001.pphosted.com with ESMTP id 2yw9961haf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 27 Mar 2020 10:35:52 +0100
+        Fri, 27 Mar 2020 12:06:03 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1894410002A;
-        Fri, 27 Mar 2020 10:35:50 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 240FA21FEA3;
-        Fri, 27 Mar 2020 10:35:50 +0100 (CET)
-Received: from lmecxl0889.tpe.st.com (10.75.127.44) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 27 Mar
- 2020 10:35:44 +0100
-Subject: Re: [PATCH v2] rpmsg: core: Add wildcard match for name service
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6A80A100034;
+        Fri, 27 Mar 2020 12:05:57 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5881F2A5541;
+        Fri, 27 Mar 2020 12:05:57 +0100 (CET)
+Received: from SFHDAG7NODE2.st.com (10.75.127.20) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Fri, 27 Mar
+ 2020 12:05:56 +0100
+Received: from SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090]) by
+ SFHDAG7NODE2.st.com ([fe80::d548:6a8f:2ca4:2090%20]) with mapi id
+ 15.00.1473.003; Fri, 27 Mar 2020 12:05:56 +0100
+From:   Loic PALLARDY <loic.pallardy@st.com>
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suman Anna <s-anna@ti.com>
-CC:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200310155058.1607-1-mathieu.poirier@linaro.org>
- <591bd727-32af-9ea2-8c46-98f46ee3711e@ti.com>
- <CANLsYkyv+4cSCY27kA6qfo2XMzXy_h+DmXTe0nVZuUkC0kyRUQ@mail.gmail.com>
- <ca77fe73-3baf-64ff-c9e2-b2f35f96ffe3@ti.com>
- <CANLsYkz8iqiperjdQVcwAC3YGT5cmEvJcu8fPFGF5-X6eKVUDQ@mail.gmail.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Message-ID: <34d1277f-c35e-5df8-7d0c-ea1e961a127f@st.com>
-Date:   Fri, 27 Mar 2020 10:35:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <CANLsYkz8iqiperjdQVcwAC3YGT5cmEvJcu8fPFGF5-X6eKVUDQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>
+CC:     "ohad@wizery.com" <ohad@wizery.com>,
+        "s-anna@ti.com" <s-anna@ti.com>,
+        "peng.fan@nxp.com" <peng.fan@nxp.com>,
+        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
+        Fabien DESSENNE <fabien.dessenne@st.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>
+Subject: RE: [PATCH v2 03/17] remoteproc: Split firmware name allocation from
+ rproc_alloc()
+Thread-Topic: [PATCH v2 03/17] remoteproc: Split firmware name allocation from
+ rproc_alloc()
+Thread-Index: AQHWAiWiMFL9vrg4EEWZ9deexWiQ+qhcSoAQ
+Date:   Fri, 27 Mar 2020 11:05:56 +0000
+Message-ID: <d0a399feb0f647ec98841ea8b8339449@SFHDAG7NODE2.st.com>
+References: <20200324214603.14979-1-mathieu.poirier@linaro.org>
+ <20200324214603.14979-4-mathieu.poirier@linaro.org>
+In-Reply-To: <20200324214603.14979-4-mathieu.poirier@linaro.org>
+Accept-Language: fr-FR, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG4NODE2.st.com (10.75.127.11) To SFHDAG3NODE1.st.com
- (10.75.127.7)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.75.127.46]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-27_02:2020-03-26,2020-03-27 signatures=0
+ definitions=2020-03-27_03:2020-03-27,2020-03-27 signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi
+Hi Mathieu,
 
-On 3/26/20 11:01 PM, Mathieu Poirier wrote:
-> On Thu, 26 Mar 2020 at 14:42, Suman Anna <s-anna@ti.com> wrote:
->>
->> On 3/26/20 3:21 PM, Mathieu Poirier wrote:
->>> On Thu, 26 Mar 2020 at 09:06, Suman Anna <s-anna@ti.com> wrote:
->>>>
->>>> Hi Mathieu,
->>>>
->>>> On 3/10/20 10:50 AM, Mathieu Poirier wrote:
->>>>> Adding the capability to supplement the base definition published
->>>>> by an rpmsg_driver with a postfix description so that it is possible
->>>>> for several entity to use the same service.
->>>>>
->>>>> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
->>>>> Acked-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
->>>>
->>>> So, the concern I have here is that we are retrofitting this into the
->>>> existing 32-byte name field, and the question is if it is going to be
->>>> enough in general. That's the reason I went with the additional 32-byte
->>>> field with the "rpmsg: add a description field" patch.
->>>>
->>>
->>> That's a valid concern.
->>>
->>> Did you consider increasing the size of RPMSG_NAME_SIZE to 64? Have
->>> you found cases where that wouldn't work?  I did a survey of all the
->>> places the #define is used and all destination buffers are also using
->>> the same #define in their definition.  It would also be backward
->>> compatible with firmware implementations that use 32 byte.
->>
->> You can't directly bump the size without breaking the compatibility on
->> the existing rpmsg_ns_msg in firmwares right? All the Linux-side drivers
->> will be ok since they use the same macro but rpmsg_ns_msg has presence
->> on both kernel and firmware-sides.
-> 
-> Ah yes yes... The amount of bytes coming out of the pipe won't match.
-> Let me think a little...
+> -----Original Message-----
+> From: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Sent: mardi 24 mars 2020 22:46
+> To: bjorn.andersson@linaro.org
+> Cc: ohad@wizery.com; Loic PALLARDY <loic.pallardy@st.com>; s-
+> anna@ti.com; peng.fan@nxp.com; Arnaud POULIQUEN
+> <arnaud.pouliquen@st.com>; Fabien DESSENNE
+> <fabien.dessenne@st.com>; linux-remoteproc@vger.kernel.org
+> Subject: [PATCH v2 03/17] remoteproc: Split firmware name allocation from
+> rproc_alloc()
+>=20
+> Make the firmware name allocation a function on its own in order to
+> introduce more flexibility to function rproc_alloc().
+>=20
+> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 62 +++++++++++++++++-----------
+>  1 file changed, 39 insertions(+), 23 deletions(-)
+>=20
+> diff --git a/drivers/remoteproc/remoteproc_core.c
+> b/drivers/remoteproc/remoteproc_core.c
+> index 097f33e4f1f3..c0871f69929b 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -1962,6 +1962,36 @@ static const struct device_type rproc_type =3D {
+>  	.release	=3D rproc_type_release,
+>  };
+>=20
+> +static int rproc_alloc_firmware(struct rproc *rproc,
+> +				const char *name, const char *firmware)
+> +{
+> +	char *p, *template =3D "rproc-%s-fw";
+> +	int name_len;
+> +
+> +	if (!rproc || !name)
+> +		return -EINVAL;
+> +
+> +	if (!firmware) {
+> +		/*
+> +		 * If the caller didn't pass in a firmware name then
+> +		 * construct a default name.
+> +		 */
+> +		name_len =3D strlen(name) + strlen(template) - 2 + 1;
+> +		p =3D kmalloc(name_len, GFP_KERNEL);
+> +		if (!p)
+> +			return -ENOMEM;
+> +		snprintf(p, name_len, template, name);
+> +	} else {
+> +		p =3D kstrdup(firmware, GFP_KERNEL);
+> +		if (!p)
+> +			return -ENOMEM;
+> +	}
+> +
+> +	rproc->firmware =3D p;
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * rproc_alloc() - allocate a remote processor handle
+>   * @dev: the underlying device
+> @@ -1990,42 +2020,24 @@ struct rproc *rproc_alloc(struct device *dev,
+> const char *name,
+>  			  const char *firmware, int len)
+>  {
+>  	struct rproc *rproc;
+> -	char *p, *template =3D "rproc-%s-fw";
+> -	int name_len;
+>=20
+>  	if (!dev || !name || !ops)
+>  		return NULL;
+>=20
+> -	if (!firmware) {
+> -		/*
+> -		 * If the caller didn't pass in a firmware name then
+> -		 * construct a default name.
+> -		 */
+> -		name_len =3D strlen(name) + strlen(template) - 2 + 1;
+> -		p =3D kmalloc(name_len, GFP_KERNEL);
+> -		if (!p)
+> -			return NULL;
+> -		snprintf(p, name_len, template, name);
+> -	} else {
+> -		p =3D kstrdup(firmware, GFP_KERNEL);
+> -		if (!p)
+> -			return NULL;
+> -	}
+> -
+>  	rproc =3D kzalloc(sizeof(struct rproc) + len, GFP_KERNEL);
+> -	if (!rproc) {
+> -		kfree(p);
+> +	if (!rproc)
+>  		return NULL;
+> -	}
+> +
+> +	if (rproc_alloc_firmware(rproc, name, firmware))
+> +		goto free_rproc;
+>=20
+>  	rproc->ops =3D kmemdup(ops, sizeof(*ops), GFP_KERNEL);
+>  	if (!rproc->ops) {
+> -		kfree(p);
+> +		kfree(rproc->firmware);
+>  		kfree(rproc);
+Small remark only for patch coherency, as it is modified in next patches.
+Use free_rproc label which is introduced just below here for error manageme=
+nt.
 
-+1 for Suman's concern.
+Regards,
+Loic
+>  		return NULL;
+>  	}
+>=20
+> -	rproc->firmware =3D p;
+>  	rproc->name =3D name;
+>  	rproc->priv =3D &rproc[1];
+>  	rproc->auto_boot =3D true;
+> @@ -2073,6 +2085,10 @@ struct rproc *rproc_alloc(struct device *dev, cons=
+t
+> char *name,
+>  	rproc->state =3D RPROC_OFFLINE;
+>=20
+>  	return rproc;
+> +
+> +free_rproc:
+> +	kfree(rproc);
+> +	return NULL;
+>  }
+>  EXPORT_SYMBOL(rproc_alloc);
+>=20
+> --
+> 2.20.1
 
-Anyway i would like to challenge the need of more than 32 bytes to
-differentiate service instances.
-"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", seems to me enough if we only need
-to differentiate the instances.
-
-But perhaps the need is also to provide a short description of the service?
-
-Suman, could you share some examples of your need?
-
-Regards
-Arnaud
-   
-> 
->>
->> regards
->> Suman
->>
->>>
->>> Thanks,
->>> Mathieu
->>>
->>>> regards
->>>> Suman
->>>>
->>>>> ---
->>>>> Changes for V2:
->>>>> - Added Arnaud's Acked-by.
->>>>> - Rebased to latest rproc-next.
->>>>>
->>>>>  drivers/rpmsg/rpmsg_core.c | 20 +++++++++++++++++++-
->>>>>  1 file changed, 19 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
->>>>> index e330ec4dfc33..bfd25978fa35 100644
->>>>> --- a/drivers/rpmsg/rpmsg_core.c
->>>>> +++ b/drivers/rpmsg/rpmsg_core.c
->>>>> @@ -399,7 +399,25 @@ ATTRIBUTE_GROUPS(rpmsg_dev);
->>>>>  static inline int rpmsg_id_match(const struct rpmsg_device *rpdev,
->>>>>                                 const struct rpmsg_device_id *id)
->>>>>  {
->>>>> -     return strncmp(id->name, rpdev->id.name, RPMSG_NAME_SIZE) == 0;
->>>>> +     size_t len = min_t(size_t, strlen(id->name), RPMSG_NAME_SIZE);
->>>>> +
->>>>> +     /*
->>>>> +      * Allow for wildcard matches.  For example if rpmsg_driver::id_table
->>>>> +      * is:
->>>>> +      *
->>>>> +      * static struct rpmsg_device_id rpmsg_driver_sample_id_table[] = {
->>>>> +      *      { .name = "rpmsg-client-sample" },
->>>>> +      *      { },
->>>>> +      * }
->>>>> +      *
->>>>> +      * Then it is possible to support "rpmsg-client-sample*", i.e:
->>>>> +      *      rpmsg-client-sample
->>>>> +      *      rpmsg-client-sample_instance0
->>>>> +      *      rpmsg-client-sample_instance1
->>>>> +      *      ...
->>>>> +      *      rpmsg-client-sample_instanceX
->>>>> +      */
->>>>> +     return strncmp(id->name, rpdev->id.name, len) == 0;
->>>>>  }
->>>>>
->>>>>  /* match rpmsg channel and rpmsg driver */
->>>>>
->>>>
->>
