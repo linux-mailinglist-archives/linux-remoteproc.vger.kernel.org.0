@@ -2,279 +2,184 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23526196240
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 28 Mar 2020 01:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A57C1962BC
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 28 Mar 2020 01:59:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726212AbgC1AJ4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 Mar 2020 20:09:56 -0400
-Received: from mail27.static.mailgun.info ([104.130.122.27]:26592 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726340AbgC1AJ4 (ORCPT
+        id S1726340AbgC1A7T (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 Mar 2020 20:59:19 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:21930 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726212AbgC1A7T (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 27 Mar 2020 20:09:56 -0400
+        Fri, 27 Mar 2020 20:59:19 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1585354195; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=GvtVp/Yj12asfGB13WaSH0CdXh3O49A0v11XieSOvUo=;
- b=vOGr1jajLfWoRv1odV+TtLVEVQqPCq9l2CL8Z6mpAqdQXNoVeMDMSsCeJH3QPh4cTgik0WgS
- IyehFBdh8sfM3ntmCPjhggTF9XO3VsRREWskdjDgo/Dpqlyhs3umoiZoHZDw/ekBOVEdDObc
- cfmiI2FA7pPulpWY6jrXM6eSMsY=
-X-Mailgun-Sending-Ip: 104.130.122.27
+ s=smtp; t=1585357158; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=ucG8qxJO8nRYPBhl/MNaG6lqgYMEuVpubS292bl3V6k=; b=kmZylB++eWU6g7DgQKYHqU5ppbxBKz0mWcmdR/eex/Rn9vzTO+4giCtgBwjWFhbQ4x/RA0C4
+ Ls1mENOm2YMM1Rs//wDCDsNdbPaVBAahiRVw1CUIhB57rleIenCSLMX397iP2DijVXOvUxfH
+ dxRhypj1cKDkPV+d0ya8VfGHtGk=
+X-Mailgun-Sending-Ip: 104.130.122.26
 X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e7e95c6.7fbd61360688-smtp-out-n04;
- Sat, 28 Mar 2020 00:09:42 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5e7ea163.7f4e0c5056f8-smtp-out-n05;
+ Sat, 28 Mar 2020 00:59:15 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6239DC43637; Sat, 28 Mar 2020 00:09:42 +0000 (UTC)
+        id 71069C433BA; Sat, 28 Mar 2020 00:59:14 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: rishabhb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 68060C433F2;
-        Sat, 28 Mar 2020 00:09:41 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Fri, 27 Mar 2020 17:09:41 -0700
-From:   rishabhb@codeaurora.org
-To:     =?UTF-8?Q?Cl=C3=A9ment_Leger?= <cleger@kalrayinc.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>, psodagud@codeaurora.org,
-        tsoni@codeaurora.org, sidgup@codeaurora.org
-Subject: Re: [PATCH 1/2] remoteproc: Add userspace char device driver
-In-Reply-To: <1233159221.12306373.1585244277714.JavaMail.zimbra@kalray.eu>
-References: <1585241440-7572-1-git-send-email-rishabhb@codeaurora.org>
- <1585241440-7572-2-git-send-email-rishabhb@codeaurora.org>
- <1233159221.12306373.1585244277714.JavaMail.zimbra@kalray.eu>
-Message-ID: <679f34c02ed9842dd71af2033d610f9a@codeaurora.org>
-X-Sender: rishabhb@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 744CFC433D2;
+        Sat, 28 Mar 2020 00:59:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 744CFC433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rishabhb@codeaurora.org
+From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
+To:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     psodagud@codeaurora.org, tsoni@codeaurora.org,
+        sidgup@codeaurora.org, Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Subject: [PATCH 1/2] remoteproc: qcom: Add bus scaling capability during bootup
+Date:   Fri, 27 Mar 2020 17:59:07 -0700
+Message-Id: <1585357147-4616-1-git-send-email-rishabhb@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 2020-03-26 10:37, Clément Leger wrote:
-> Hi Rishabh,
-> 
-> While being interesting to have a such a userspace interface, I have
-> some remarks.
-> 
-> ----- On 26 Mar, 2020, at 17:50, Rishabh Bhatnagar
-> rishabhb@codeaurora.org wrote:
-> 
->> Add the driver for creating the character device interface for
->> userspace applications. The character device interface can be used
->> in order to boot up and shutdown the remote processor.
->> This might be helpful for remote processors that are booted by
->> userspace applications and need to shutdown when the application
->> crahes/shutsdown.
->> 
->> Change-Id: If23c8986272bb7c943eb76665f127ff706f12394
->> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
->> ---
->> drivers/remoteproc/Makefile               |  1 +
->> drivers/remoteproc/remoteproc_internal.h  |  6 +++
->> drivers/remoteproc/remoteproc_userspace.c | 90 
->> +++++++++++++++++++++++++++++++
->> include/linux/remoteproc.h                |  2 +
->> 4 files changed, 99 insertions(+)
->> create mode 100644 drivers/remoteproc/remoteproc_userspace.c
->> 
->> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
->> index e30a1b1..facb3fa 100644
->> --- a/drivers/remoteproc/Makefile
->> +++ b/drivers/remoteproc/Makefile
->> @@ -7,6 +7,7 @@ obj-$(CONFIG_REMOTEPROC)		+= remoteproc.o
->> remoteproc-y				:= remoteproc_core.o
->> remoteproc-y				+= remoteproc_debugfs.o
->> remoteproc-y				+= remoteproc_sysfs.o
->> +remoteproc-y				+= remoteproc_userspace.o
->> remoteproc-y				+= remoteproc_virtio.o
->> remoteproc-y				+= remoteproc_elf_loader.o
->> obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
->> diff --git a/drivers/remoteproc/remoteproc_internal.h
->> b/drivers/remoteproc/remoteproc_internal.h
->> index 493ef92..97513ba 100644
->> --- a/drivers/remoteproc/remoteproc_internal.h
->> +++ b/drivers/remoteproc/remoteproc_internal.h
->> @@ -47,6 +47,9 @@ struct dentry *rproc_create_trace_file(const char 
->> *name,
->> struct rproc *rproc,
->> int rproc_init_sysfs(void);
->> void rproc_exit_sysfs(void);
->> 
->> +void rproc_init_cdev(void);
->> +void rproc_exit_cdev(void);
->> +
->> void rproc_free_vring(struct rproc_vring *rvring);
->> int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
->> 
->> @@ -63,6 +66,9 @@ struct resource_table 
->> *rproc_elf_find_loaded_rsc_table(struct
->> rproc *rproc,
->> struct rproc_mem_entry *
->> rproc_find_carveout_by_name(struct rproc *rproc, const char *name, 
->> ...);
->> 
->> +/* from remoteproc_userspace.c */
->> +int rproc_char_device_add(struct rproc *rproc);
->> +
->> static inline
->> int rproc_fw_sanity_check(struct rproc *rproc, const struct firmware 
->> *fw)
->> {
->> diff --git a/drivers/remoteproc/remoteproc_userspace.c
->> b/drivers/remoteproc/remoteproc_userspace.c
->> new file mode 100644
->> index 0000000..2ef7679
->> --- /dev/null
->> +++ b/drivers/remoteproc/remoteproc_userspace.c
->> @@ -0,0 +1,90 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Character device interface driver for Remoteproc framework.
->> + *
->> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
->> + */
->> +
->> +#include <linux/module.h>
->> +#include <linux/fs.h>
->> +#include <linux/cdev.h>
->> +#include <linux/mutex.h>
->> +#include <linux/remoteproc.h>
->> +
->> +#include "remoteproc_internal.h"
->> +
->> +#define NUM_RPROC_DEVICES	64
->> +static dev_t rproc_cdev;
->> +static DEFINE_IDA(cdev_minor_ida);
->> +
->> +static int rproc_open(struct inode *inode, struct file *file)
->> +{
->> +	struct rproc *rproc;
->> +
->> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
->> +	if (!rproc)
->> +		return -EINVAL;
->> +
->> +	return rproc_boot(rproc);
->> +}
-> 
-> What happens if multiple user open this chardev ? Apparently,
-> rproc_boot returns 0 if already powered_up, so the next user won't know
-> what is the state of the rproc.
-> Exclusive access could probably be a good idea.
-Since it is synchronized inside rproc_boot multiple users simultaneously
-calling open shouldn't be a problem. If it is one after the other then
-second caller will get result as 0 and assume that rproc booted 
-successfully.
-That is the expected flow right?
-> 
->> +
->> +static int rproc_release(struct inode *inode, struct file *file)
->> +{
->> +	struct rproc *rproc;
->> +
->> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
->> +	if (!rproc)
->> +		return -EINVAL;
->> +
->> +	rproc_shutdown(rproc);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct file_operations rproc_fops = {
->> +	.open = rproc_open,
->> +	.release = rproc_release,
->> +};
->> +
->> +int rproc_char_device_add(struct rproc *rproc)
->> +{
->> +	int ret, minor;
->> +	dev_t cdevt;
->> +
->> +	minor = ida_simple_get(&cdev_minor_ida, 0, NUM_RPROC_DEVICES,
->> +			GFP_KERNEL);
->> +	if (minor < 0) {
->> +	pr_err("%s: No more minor numbers left! rc:%d\n", __func__,
->> +							minor);
->> +		return -ENODEV;
->> +	}
-> 
-> How can you make the link between the chardev and the device instance ?
-I do this rproc->dev.devt = cdevt. Let me know of there is a better way
-to do this?
-> In our case, we have several remoteproc instances and thus we will end
-> up having multiple chardev.
-> 
-> Regards,
-> 
-> Clément
-> 
-rproc_char_device_add will be called for each remoteproc that is
-added. So we will have one char dev per remoteproc.
->> +
->> +	cdev_init(&rproc->char_dev, &rproc_fops);
->> +	rproc->char_dev.owner = THIS_MODULE;
->> +
->> +	cdevt = MKDEV(MAJOR(rproc_cdev), minor);
->> +	ret = cdev_add(&rproc->char_dev, cdevt, 1);
->> +	if (ret < 0)
->> +		ida_simple_remove(&cdev_minor_ida, minor);
->> +
->> +	rproc->dev.devt = cdevt;
->> +
->> +	return ret;
->> +}
->> +
->> +void __init rproc_init_cdev(void)
->> +{
->> +	int ret;
->> +
->> +	ret = alloc_chrdev_region(&rproc_cdev, 0, NUM_RPROC_DEVICES, 
->> "rproc");
->> +	if (ret < 0) {
->> +		pr_err("Failed to alloc rproc_cdev region, err %d\n", ret);
->> +		return;
->> +	}
->> +}
->> +
->> +void __exit rproc_exit_cdev(void)
->> +{
->> +	unregister_chrdev_region(MKDEV(MAJOR(rproc_cdev), 0),
->> +				NUM_RPROC_DEVICES);
->> +}
->> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->> index 16ad666..c4ca796 100644
->> --- a/include/linux/remoteproc.h
->> +++ b/include/linux/remoteproc.h
->> @@ -37,6 +37,7 @@
->> 
->> #include <linux/types.h>
->> #include <linux/mutex.h>
->> +#include <linux/cdev.h>
->> #include <linux/virtio.h>
->> #include <linux/completion.h>
->> #include <linux/idr.h>
->> @@ -514,6 +515,7 @@ struct rproc {
->> 	bool auto_boot;
->> 	struct list_head dump_segments;
->> 	int nb_vdev;
->> +	struct cdev char_dev;
->> };
->> 
->> /**
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
->> Forum,
->> a Linux Foundation Collaborative Project
+During bootup since remote processors cannot request for
+additional bus bandwidth from the interconect framework,
+platform driver should provide the proxy resources. This
+is useful for scenarios where the Q6 tries to access the DDR
+memory in the initial stages of bootup. For e.g. during
+bootup or after recovery modem Q6 tries to zero out the bss
+section in the DDR. Since this is a big chunk of memory if
+don't bump up the bandwidth we might encounter timeout issues.
+This patch makes a proxy vote for maximizing the bus bandwidth
+during bootup and removes it once processor is up.
+
+Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+---
+ drivers/remoteproc/qcom_q6v5_pas.c | 43 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 42 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index edf9d0e..8f5db8d 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -20,6 +20,7 @@
+ #include <linux/qcom_scm.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/remoteproc.h>
++#include <linux/interconnect.h>
+ #include <linux/soc/qcom/mdt_loader.h>
+ #include <linux/soc/qcom/smem.h>
+ #include <linux/soc/qcom/smem_state.h>
+@@ -28,6 +29,9 @@
+ #include "qcom_q6v5.h"
+ #include "remoteproc_internal.h"
+ 
++#define PIL_TZ_AVG_BW  0
++#define PIL_TZ_PEAK_BW UINT_MAX
++
+ struct adsp_data {
+ 	int crash_reason_smem;
+ 	const char *firmware_name;
+@@ -62,6 +66,7 @@ struct qcom_adsp {
+ 	int proxy_pd_count;
+ 
+ 	int pas_id;
++	struct icc_path *bus_client;
+ 	int crash_reason_smem;
+ 	bool has_aggre2_clk;
+ 
+@@ -124,6 +129,25 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+ 
+ }
+ 
++static int do_bus_scaling(struct qcom_adsp *adsp, bool enable)
++{
++	int rc;
++	u32 avg_bw = enable ? PIL_TZ_AVG_BW : 0;
++	u32 peak_bw = enable ? PIL_TZ_PEAK_BW : 0;
++
++	if (adsp->bus_client) {
++		rc = icc_set_bw(adsp->bus_client, avg_bw, peak_bw);
++		if (rc) {
++			dev_err(adsp->dev, "bandwidth request failed(rc:%d)\n",
++				rc);
++			return rc;
++		}
++	} else
++		dev_info(adsp->dev, "Bus scaling not setup for %s\n",
++			adsp->rproc->name);
++	return 0;
++}
++
+ static int adsp_start(struct rproc *rproc)
+ {
+ 	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+@@ -131,9 +155,13 @@ static int adsp_start(struct rproc *rproc)
+ 
+ 	qcom_q6v5_prepare(&adsp->q6v5);
+ 
++	ret = do_bus_scaling(adsp, true);
++	if (ret)
++		goto disable_irqs;
++
+ 	ret = adsp_pds_enable(adsp, adsp->active_pds, adsp->active_pd_count);
+ 	if (ret < 0)
+-		goto disable_irqs;
++		goto unscale_bus;
+ 
+ 	ret = adsp_pds_enable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+ 	if (ret < 0)
+@@ -183,6 +211,8 @@ static int adsp_start(struct rproc *rproc)
+ 	adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+ disable_active_pds:
+ 	adsp_pds_disable(adsp, adsp->active_pds, adsp->active_pd_count);
++unscale_bus:
++	do_bus_scaling(adsp, false);
+ disable_irqs:
+ 	qcom_q6v5_unprepare(&adsp->q6v5);
+ 
+@@ -198,6 +228,7 @@ static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
+ 	clk_disable_unprepare(adsp->aggre2_clk);
+ 	clk_disable_unprepare(adsp->xo);
+ 	adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
++	do_bus_scaling(adsp, false);
+ }
+ 
+ static int adsp_stop(struct rproc *rproc)
+@@ -280,6 +311,14 @@ static int adsp_init_regulator(struct qcom_adsp *adsp)
+ 	return PTR_ERR_OR_ZERO(adsp->px_supply);
+ }
+ 
++static void adsp_init_bus_scaling(struct qcom_adsp *adsp)
++{
++	adsp->bus_client = of_icc_get(adsp->dev, NULL);
++	if (!adsp->bus_client)
++		dev_warn(adsp->dev, "%s: unable to get bus client \n",
++			__func__);
++}
++
+ static int adsp_pds_attach(struct device *dev, struct device **devs,
+ 			   char **pd_names)
+ {
+@@ -410,6 +449,8 @@ static int adsp_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto free_rproc;
+ 
++	adsp_init_bus_scaling(adsp);
++
+ 	ret = adsp_pds_attach(&pdev->dev, adsp->active_pds,
+ 			      desc->active_pd_names);
+ 	if (ret < 0)
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
