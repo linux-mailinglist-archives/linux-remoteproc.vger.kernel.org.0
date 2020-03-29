@@ -2,89 +2,120 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1F21962C5
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 28 Mar 2020 02:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC1D197046
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 29 Mar 2020 22:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726134AbgC1BFZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 Mar 2020 21:05:25 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:29946 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726956AbgC1BFZ (ORCPT
+        id S1727903AbgC2Ucm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 29 Mar 2020 16:32:42 -0400
+Received: from ozlabs.org ([203.11.71.1]:57915 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727370AbgC2Ucl (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 27 Mar 2020 21:05:25 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1585357524; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=Yu/yfc1pdlLgqM2OG91GrsSCmvKtPBtwpqL/H4qG6sU=; b=L6ZPnxgJX7qrWRXyLhCpw+mhxOeC1xCJ4U2V8EjwHu9nKm1htlNbzO07XXXYaCnlAuuJ20wL
- 1Vkk6Ihvdt/4OEIAZnOROmEXeER3ylkJP5FzRc0r4Bquk6vAwZIpaJnaBjl7CB4AofLVH6kJ
- kbzTIiQPNioUTMNt7NdyVZrh1ng=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e7ea2cc.7f5e1caf7b90-smtp-out-n01;
- Sat, 28 Mar 2020 01:05:16 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1BA49C43637; Sat, 28 Mar 2020 01:05:16 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        Sun, 29 Mar 2020 16:32:41 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: rishabhb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1D20CC433F2;
-        Sat, 28 Mar 2020 01:05:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1D20CC433F2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rishabhb@codeaurora.org
-From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
-To:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org
-Cc:     bjorn.andersson@linaro.org, psodagud@codeaurora.org,
-        tsoni@codeaurora.org, sidgup@codeaurora.org,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Subject: [PATCH] dt-bindings: remoteproc: Add interconnect property
-Date:   Fri, 27 Mar 2020 18:04:56 -0700
-Message-Id: <1585357496-6368-1-git-send-email-rishabhb@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48r6j235X1z9sRN;
+        Mon, 30 Mar 2020 07:32:38 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1585513959;
+        bh=wtdE/xlqjJigILuC52/ujbxaiSyFTL1AhRTSlpQdnnM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AbaUTddb47juNzth6lZa+NH56Eg7RuaCRJtp2nagH/0oG1OIHbFPC4URcbaBYxGnQ
+         WBxXKWEc3igs/Zx8Rk574Q3yGaDrWAddEJuALT/uW5glh1XggiPpVl7kHp3WY8d/Jm
+         pjpZuRqL2na7CDrcAPgp+xWbpmAGyn6F0OkSSESorOPSQ6Jyl+OXXxO9xwAVl3b837
+         8UVue+8QXFmOBoORBX8Jknc3Yrw8jsbBa8xaiBHWCX9U7p2/lym6BwptzCc3ZYmgOH
+         daFHFPtdWMD0GM1qfz7Uy8Ep791bEjrboagTy2VEFDKAhX0Z41DzE1Q3vSU02v3+KC
+         2+VLjPx/vremQ==
+Date:   Mon, 30 Mar 2020 07:32:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Nathan Chancellor <natechancellor@gmail.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: Re: Build failure in omap_remoteproc due to 02e6d546e3bd
+Message-ID: <20200330073231.6e04035e@canb.auug.org.au>
+In-Reply-To: <20200327185055.GA22438@ubuntu-m2-xlarge-x86>
+References: <20200327185055.GA22438@ubuntu-m2-xlarge-x86>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/n6aWScVd=OTDo0fxVhMctuB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Allow proxy voting/unvoting of bus bandwidth for remote
-processors. This property will specify the bus-master and
-slave so that remoteproc platform driver can make the proxy
-vote for bus bandwidth.
+--Sig_/n6aWScVd=OTDo0fxVhMctuB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
----
- Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Hi Nathan,
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt
-index 9938918..529b0a0 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt
-@@ -111,6 +111,17 @@ on the Qualcomm ADSP Hexagon core.
- 	qcom,sm8150-slpi-pas:
- 		    must be "lcx", "lmx", "load_state"
- 
-+- interconnect:
-+	Usage: optional
-+	Value type: <prop-encoded-array>
-+	Definition: Specifies the interconnect bus-master and bus-slave for
-+		    bandwidth voting during proxy vote/unvote.
-+
-+- interconnect-names:
-+	Usage: optional
-+	Value type: <stringlist>
-+	Definition: The interconnect name depends on the compatible string
-+
- - memory-region:
- 	Usage: required
- 	Value type: <phandle>
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+On Fri, 27 Mar 2020 11:50:55 -0700 Nathan Chancellor <natechancellor@gmail.=
+com> wrote:
+>
+> Apologies if this has already been reported, I did not see anything in
+> the archives. On next-20200327, I see the following build error:
+>=20
+> drivers/remoteproc/omap_remoteproc.c:174:44: error: too many arguments
+> to function call, expected 2, have 3
+>         timer->timer_ops->set_load(timer->odt, 0, 0);
+>         ~~~~~~~~~~~~~~~~~~~~~~~~~~                ^
+> 1 error generated.
+>=20
+> This is due to commit 02e6d546e3bd ("clocksource/drivers/timer-ti-dm:
+> Enable autoreload in set_pwm") in the clockevents tree interacting with
+> commit e28edc571925 ("remoteproc/omap: Request a timer(s) for remoteproc
+> usage") from the rpmsg tree.
+>=20
+> Something like the diff below should resolve it but it cannot be applied
+> to the rpmsg tree because it does not have the clockevents change. It
+> will have to be applied by Linus as a merge fixup.
+>=20
+> Stephen, would you mind applying this to whichever merge happens second?
+>=20
+> Cheers,
+> Nathan
+>=20
+> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/om=
+ap_remoteproc.c
+> index cdb546f7232e..6955fab0a78b 100644
+> --- a/drivers/remoteproc/omap_remoteproc.c
+> +++ b/drivers/remoteproc/omap_remoteproc.c
+> @@ -171,7 +171,7 @@ static int omap_rproc_request_timer(struct device *de=
+v, struct device_node *np,
+>  	}
+> =20
+>  	/* clean counter, remoteproc code will set the value */
+> -	timer->timer_ops->set_load(timer->odt, 0, 0);
+> +	timer->timer_ops->set_load(timer->odt, 0);
+> =20
+>  	return 0;
+>  }
+
+Thanks, I will use that as a merge fix up from today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/n6aWScVd=OTDo0fxVhMctuB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6BBeAACgkQAVBC80lX
+0Gz/tQf+Jak6uV9MnoCsyPrLx1fCq0oYPt8FVj/npVTYLTuEFiwKn3i7vXHVdFw4
+vEzpW0ZtPrccyWk8gEwksLrhbwYZNt40Pzy9pEjlPjRIj3fWhRJI6bJmaZXyhM31
++u785y0yaX8nxjZIihxu7ghuWbLx11iCgTDunvBvhv/xVrrCPmbtuY4xMzDKt1va
+OiHnGDfuOiENQckikS4gR6s1C1P97QHKSYSLyGhiB4DUuykzVQGqEPbfo2/WkfsP
+cVnA+Wgf0+iHEc74LAb5JGqDsfkGZohoqiVKswBdPe1NKwmJQM2OMZksUMKpaUzN
+1o7g+18wyHN9AdTmP9vMjZusY4q1Hw==
+=eV0w
+-----END PGP SIGNATURE-----
+
+--Sig_/n6aWScVd=OTDo0fxVhMctuB--
