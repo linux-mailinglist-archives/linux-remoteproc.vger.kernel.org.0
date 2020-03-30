@@ -2,243 +2,204 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D4D197BDB
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 30 Mar 2020 14:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B4E198076
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 30 Mar 2020 18:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729848AbgC3M36 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 30 Mar 2020 08:29:58 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:27182 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729785AbgC3M36 (ORCPT
+        id S1728738AbgC3QG0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 30 Mar 2020 12:06:26 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:32782 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727048AbgC3QG0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 30 Mar 2020 08:29:58 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02UCR4Qu019865;
-        Mon, 30 Mar 2020 14:29:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=mbFSM761yAaavJun1kNF0tT5J2giZpivhFkj0sa/ry8=;
- b=u50o6qtF82aO70k16lugOqa7xLwNQ5woGKpvcyQRP4eenbwXDjpPr7cZpx0JdSSTiNYS
- d/G9+Q7WSq4f1khTAefKM397W1WEd7zQSxO6R0DVwlwms3F9TR6cxUOAPMMvu1CM13gq
- gFz2PyYrLQvSMuLVKACgzB9T0eh0Ae0VcW+tVkE0vEonICCBdWDpQeEvFPFDc0UFbVJl
- jGIAqye3OfnAmqRkYMfh9C0M73wl8dF8v3zp+KV4lyEJsdm1s5ftzo8CbRRCIh5Z8L9S
- Y6gI03sUBY6nGbJaOYjpZiqXql6u+OqVu5d5caFTm1eBzxJQI2zJNhlyB3lSKZ/wklsL 1w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 301vkdhr94-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 30 Mar 2020 14:29:53 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 339DA10002A;
-        Mon, 30 Mar 2020 14:29:52 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1EBB92B1866;
-        Mon, 30 Mar 2020 14:29:52 +0200 (CEST)
-Received: from lmecxl0889.tpe.st.com (10.75.127.45) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 30 Mar
- 2020 14:29:50 +0200
-Subject: Re: [PATCH v2 1/2] remoteproc: fall back to using parent memory pool
- if no dedicated available
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suman Anna <s-anna@ti.com>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Loic Pallardy <loic.pallardy@st.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200319162321.20632-1-s-anna@ti.com>
- <20200319162321.20632-2-s-anna@ti.com> <20200325203812.GA9384@xps15>
- <207036a8-b34e-6311-5ad6-3289eb9f7a06@ti.com>
- <CANLsYkzU79LDVWO=wtoOY-=iW0a4EUf5sruwWicyj+2EAFZ4rg@mail.gmail.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Message-ID: <592f2ed1-7833-d4f1-2894-d2300b9cc9dc@st.com>
-Date:   Mon, 30 Mar 2020 14:29:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Mon, 30 Mar 2020 12:06:26 -0400
+Received: by mail-io1-f68.google.com with SMTP id o127so18347020iof.0
+        for <linux-remoteproc@vger.kernel.org>; Mon, 30 Mar 2020 09:06:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5bpA+uRoS/xe1TwgteXV8ewe8pRcRq8994ynAclRq9k=;
+        b=zg0kJwviZ8ywmhJ/+iqExvFo0kWah9E2N2+mhaTXVOgTvy87nxb7qU7388NFfwtXQ2
+         bWeD+H2L4fCMWBLgSrZOsSXl/rYZpAKNWBwYp8J/eEKHFEZbRvH4sTApiipPE1lq3FYb
+         PPBLHdDGqr6+gKTCUWKUhrjNgaDXvQIQYTIv25Wg0j6dbGRsUlO0xF10kxSb/dGOygYv
+         cOxNRn3RGedI+dwnAghT8fL3OrexhcJifX1pMjyyuBPccb/NvFuTEw5kTjGSsgGxSyIE
+         zUsTbRqcM2ZDj7xm7Nu/m0KP/l6SgeD3nQSvVLv8ZCm9AOGB6xoQEfTyA79gd/OWejlC
+         uitA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5bpA+uRoS/xe1TwgteXV8ewe8pRcRq8994ynAclRq9k=;
+        b=rnMJk9JX3dEj+xT7PMZjGfUCkgUko2Smi1BtCGGH8GOerGo95WAYzOXDUePkv3R/Vb
+         OAQAgaWBP0bF4kjZ+7Q7NrcUK6PKgl7xjDXl2NWFlIemvCLKvjq/QcLUTMDL/UXQs0HB
+         D+QgwYUsSRSk0LEL9Hc+Z/LzMbJ2UhbtF96QeaUG2BmWd/9d/rek2EXIKIr5EsjawPoo
+         tRvsTO0IvbtaOsZgFYVFqqxz+0SqA3nwLv3dZZiehcgcdKffAT7oONmwf8bwqZwMeR7d
+         BSTB+x0GgotczVeC4Ae1YbuNRDuUZ7BTOEfFE/l2uubZwpN3hsQ7CKTJ6+lbp0/oNOE5
+         67kA==
+X-Gm-Message-State: ANhLgQ2hGB5Qjb8S5x2WW2D197k4wz3SwcgdK8jXsiqFqVr2ztyDJlJr
+        ezQqOG3UDNr4bkOZYOuml/4Nh982NNz4LLUVeJjz4w==
+X-Google-Smtp-Source: ADFU+vsqGo8yZ32IiYI1KIdUaJMtleuq/WxCA4CMDFl1e7rZRmFNPE8oYyxl9rpU2tiR3KPWU2xaEwlbqdQ44FkyFM0=
+X-Received: by 2002:a02:a1c2:: with SMTP id o2mr11273993jah.98.1585584385286;
+ Mon, 30 Mar 2020 09:06:25 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CANLsYkzU79LDVWO=wtoOY-=iW0a4EUf5sruwWicyj+2EAFZ4rg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE1.st.com
- (10.75.127.7)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-30_01:2020-03-27,2020-03-30 signatures=0
+References: <1585357147-4616-1-git-send-email-rishabhb@codeaurora.org>
+In-Reply-To: <1585357147-4616-1-git-send-email-rishabhb@codeaurora.org>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Mon, 30 Mar 2020 10:06:12 -0600
+Message-ID: <CANLsYkxV7xWUkggBXF=ziGfmLs-EZewuzCzZ3fq56CR+xA0poQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] remoteproc: qcom: Add bus scaling capability during bootup
+To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        psodagud@codeaurora.org, tsoni@codeaurora.org,
+        Siddharth Gupta <sidgup@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Hi Rishabh,
 
+On Fri, 27 Mar 2020 at 18:59, Rishabh Bhatnagar <rishabhb@codeaurora.org> wrote:
+>
+> During bootup since remote processors cannot request for
+> additional bus bandwidth from the interconect framework,
+> platform driver should provide the proxy resources. This
+> is useful for scenarios where the Q6 tries to access the DDR
+> memory in the initial stages of bootup. For e.g. during
+> bootup or after recovery modem Q6 tries to zero out the bss
+> section in the DDR. Since this is a big chunk of memory if
+> don't bump up the bandwidth we might encounter timeout issues.
+> This patch makes a proxy vote for maximizing the bus bandwidth
+> during bootup and removes it once processor is up.
+>
+> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
 
-On 3/27/20 10:09 PM, Mathieu Poirier wrote:
-> On Wed, 25 Mar 2020 at 17:39, Suman Anna <s-anna@ti.com> wrote:
->>
->> Hi Mathieu,
->>
->> On 3/25/20 3:38 PM, Mathieu Poirier wrote:
->>> On Thu, Mar 19, 2020 at 11:23:20AM -0500, Suman Anna wrote:
->>>> From: Tero Kristo <t-kristo@ti.com>
->>>>
->>>> In some cases, like with OMAP remoteproc, we are not creating dedicated
->>>> memory pool for the virtio device. Instead, we use the same memory pool
->>>> for all shared memories. The current virtio memory pool handling forces
->>>> a split between these two, as a separate device is created for it,
->>>> causing memory to be allocated from bad location if the dedicated pool
->>>> is not available. Fix this by falling back to using the parent device
->>>> memory pool if dedicated is not available.
->>>>
->>>> Fixes: 086d08725d34 ("remoteproc: create vdev subdevice with specific dma memory pool")
->>>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
->>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>> ---
->>>> v2:
->>>>  - Address Arnaud's concerns about hard-coded memory-region index 0
->>>>  - Update the comment around the new code addition
->>>> v1: https://patchwork.kernel.org/patch/11422721/
->>>>
->>>>  drivers/remoteproc/remoteproc_virtio.c | 15 +++++++++++++++
->>>>  include/linux/remoteproc.h             |  2 ++
->>>>  2 files changed, 17 insertions(+)
->>>>
->>>> diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
->>>> index eb817132bc5f..b687715cdf4b 100644
->>>> --- a/drivers/remoteproc/remoteproc_virtio.c
->>>> +++ b/drivers/remoteproc/remoteproc_virtio.c
->>>> @@ -369,6 +369,21 @@ int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
->>>>                              goto out;
->>>>                      }
->>>>              }
->>>> +    } else {
->>>> +            struct device_node *np = rproc->dev.parent->of_node;
->>>> +
->>>> +            /*
->>>> +             * If we don't have dedicated buffer, just attempt to re-assign
->>>> +             * the reserved memory from our parent. A default memory-region
->>>> +             * at index 0 from the parent's memory-regions is assigned for
->>>> +             * the rvdev dev to allocate from, and this can be customized
->>>> +             * by updating the vdevbuf_mem_id in platform drivers if
->>>> +             * desired. Failure is non-critical and the allocations will
->>>> +             * fall back to global pools, so don't check return value
->>>> +             * either.
->>>
->>> I'm perplex...  In the changelog it is indicated that if a memory pool is
->>> not dedicated allocation happens from a bad location but here failure of
->>> getting a hold of a dedicated memory pool is not critical.
->>
->> So, the comment here is a generic one while the bad location part in the
->> commit description is actually from OMAP remoteproc usage perspective
->> (if you remember the dev_warn messages we added to the memory-region
->> parse logic in the driver).
-> 
-> I can't tell... Are you referring to the comment lines after
-> of_reserved_mem_device_init() in omap_rproc_probe()?
-> 
->>
->> Before the fixed-memory carveout support, all the DMA allocations in
->> remoteproc core were made from the rproc platform device's DMA pool (
->> which can be NULL). That is lost after the fixed-memory support, and
->> they were always allocated from global DMA pools if no dedicated pools
->> are used. After this patch, that continues to be case for drivers that
->> still do not use any dedicated pools, while it does restore the usage of
->> the platform device's DMA pool if a driver uses one (OMAP remoteproc
->> falls into the latter).
->>
->>>
->>>> +             */
->>>> +            of_reserved_mem_device_init_by_idx(dev, np,
->>>> +                                               rproc->vdevbuf_mem_id);
->>>
->>> I wonder if using an index setup by platform code is really the best way
->>> forward when we already have the carveout mechanic available to us.  I see the
->>> platform code adding a carveout that would have the same name as rproc->name.
->>> From there in rproc_add_virtio_dev() we could have something like:
->>>
->>>         mem = rproc_find_carveout_by_name(rproc, "%s", rproc->name);
->>>
->>>
->>> That would be very flexible, the location of the reserved memory withing the
->>> memory-region could change without fear of breaking things and no need to add to
->>> struct rproc.
->>>
->>> Let me know what you think.
->>
->> I think that can work as well but I feel it is lot more cumbersome. It
->> does require every platform driver to add code adding/registering that
->> carveout, and parse the reserved memory region etc. End of the day, we
->> rely on DMA API and we just have to assign the region to the newly
->> created device. The DMA pool assignment for devices using
->> reserved-memory nodes has simply been the of_reserved_mem_device_init()
->> function.
-> 
-> Given all the things happening in the platform drivers adding and
-> registering a single carveout doesn't seem that onerous to me.   I
-> also expect setting rproc->vdevbuf_mem_id would involve some form of
-> parsing.  Lastly if a couple of platforms end up doing the same thing
-> might as well bring the code in the core, hence choosing a generic
-> name such as rproc->name for the memory region.
-> 
-> At the very least I would use of_reserved_mem_device_init_by_idx(dev,
-> np, 0).  I agree it is not flexible but I'll take that over adding a
-> new field to structure rproc.
+The title of this patch contains "[PATCH 1/2]" but only one patch was
+sent to the linux-remoteproc mailing list.  Is this a mistake and this
+is a stand alone patch or another patch did not reach the list?
 
-I wonder whether this would not introduce side effect for some legacy
-drivers. Some rproc platforms can have a memory region defined but not
-used for the virtio buffers which is allocated in the Linux default
-memory pool.
+Thanks,
+Mathieu
 
-If the aim is to minimize impact in the core part, the solution i proposed
-in V1 using rproc_of_resm_mem_entry_init seems a good default candidate too.
-The constraint would be that the platform driver has to pre-register
-vdev<X>buffer reserved memory associated for a max number of vdev.
-This max would limit the number of vdev that a remote firmware can request.
-Also not very flexible more that the index 0, as managed at platform level.
-
-Having a default name or a default index seems to me a good compromise...
-One advantage of the default name (in this case not rproc->name) is the 
-ability to define the memory region in a resource table carveout, instead
-of a static definition in DT.
-
-Regards,
-Arnaud
-
-> 
-> Thanks,
-> Mathieu
-> 
->>
->> regards
->> Suman
->>
->>>
->>> Thanks,
->>> Mathieu
->>>
->>>>      }
->>>>
->>>>      /* Allocate virtio device */
->>>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->>>> index ed127b2d35ca..07bd73a6d72a 100644
->>>> --- a/include/linux/remoteproc.h
->>>> +++ b/include/linux/remoteproc.h
->>>> @@ -481,6 +481,7 @@ struct rproc_dump_segment {
->>>>   * @auto_boot: flag to indicate if remote processor should be auto-started
->>>>   * @dump_segments: list of segments in the firmware
->>>>   * @nb_vdev: number of vdev currently handled by rproc
->>>> + * @vdevbuf_mem_id: default memory-region index for allocating vdev buffers
->>>>   */
->>>>  struct rproc {
->>>>      struct list_head node;
->>>> @@ -514,6 +515,7 @@ struct rproc {
->>>>      bool auto_boot;
->>>>      struct list_head dump_segments;
->>>>      int nb_vdev;
->>>> +    u8 vdevbuf_mem_id;
->>>>      u8 elf_class;
->>>>  };
->>>>
->>>> --
->>>> 2.23.0
->>>>
->>
+> ---
+>  drivers/remoteproc/qcom_q6v5_pas.c | 43 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 42 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+> index edf9d0e..8f5db8d 100644
+> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/qcom_scm.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/remoteproc.h>
+> +#include <linux/interconnect.h>
+>  #include <linux/soc/qcom/mdt_loader.h>
+>  #include <linux/soc/qcom/smem.h>
+>  #include <linux/soc/qcom/smem_state.h>
+> @@ -28,6 +29,9 @@
+>  #include "qcom_q6v5.h"
+>  #include "remoteproc_internal.h"
+>
+> +#define PIL_TZ_AVG_BW  0
+> +#define PIL_TZ_PEAK_BW UINT_MAX
+> +
+>  struct adsp_data {
+>         int crash_reason_smem;
+>         const char *firmware_name;
+> @@ -62,6 +66,7 @@ struct qcom_adsp {
+>         int proxy_pd_count;
+>
+>         int pas_id;
+> +       struct icc_path *bus_client;
+>         int crash_reason_smem;
+>         bool has_aggre2_clk;
+>
+> @@ -124,6 +129,25 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+>
+>  }
+>
+> +static int do_bus_scaling(struct qcom_adsp *adsp, bool enable)
+> +{
+> +       int rc;
+> +       u32 avg_bw = enable ? PIL_TZ_AVG_BW : 0;
+> +       u32 peak_bw = enable ? PIL_TZ_PEAK_BW : 0;
+> +
+> +       if (adsp->bus_client) {
+> +               rc = icc_set_bw(adsp->bus_client, avg_bw, peak_bw);
+> +               if (rc) {
+> +                       dev_err(adsp->dev, "bandwidth request failed(rc:%d)\n",
+> +                               rc);
+> +                       return rc;
+> +               }
+> +       } else
+> +               dev_info(adsp->dev, "Bus scaling not setup for %s\n",
+> +                       adsp->rproc->name);
+> +       return 0;
+> +}
+> +
+>  static int adsp_start(struct rproc *rproc)
+>  {
+>         struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+> @@ -131,9 +155,13 @@ static int adsp_start(struct rproc *rproc)
+>
+>         qcom_q6v5_prepare(&adsp->q6v5);
+>
+> +       ret = do_bus_scaling(adsp, true);
+> +       if (ret)
+> +               goto disable_irqs;
+> +
+>         ret = adsp_pds_enable(adsp, adsp->active_pds, adsp->active_pd_count);
+>         if (ret < 0)
+> -               goto disable_irqs;
+> +               goto unscale_bus;
+>
+>         ret = adsp_pds_enable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+>         if (ret < 0)
+> @@ -183,6 +211,8 @@ static int adsp_start(struct rproc *rproc)
+>         adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+>  disable_active_pds:
+>         adsp_pds_disable(adsp, adsp->active_pds, adsp->active_pd_count);
+> +unscale_bus:
+> +       do_bus_scaling(adsp, false);
+>  disable_irqs:
+>         qcom_q6v5_unprepare(&adsp->q6v5);
+>
+> @@ -198,6 +228,7 @@ static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
+>         clk_disable_unprepare(adsp->aggre2_clk);
+>         clk_disable_unprepare(adsp->xo);
+>         adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+> +       do_bus_scaling(adsp, false);
+>  }
+>
+>  static int adsp_stop(struct rproc *rproc)
+> @@ -280,6 +311,14 @@ static int adsp_init_regulator(struct qcom_adsp *adsp)
+>         return PTR_ERR_OR_ZERO(adsp->px_supply);
+>  }
+>
+> +static void adsp_init_bus_scaling(struct qcom_adsp *adsp)
+> +{
+> +       adsp->bus_client = of_icc_get(adsp->dev, NULL);
+> +       if (!adsp->bus_client)
+> +               dev_warn(adsp->dev, "%s: unable to get bus client \n",
+> +                       __func__);
+> +}
+> +
+>  static int adsp_pds_attach(struct device *dev, struct device **devs,
+>                            char **pd_names)
+>  {
+> @@ -410,6 +449,8 @@ static int adsp_probe(struct platform_device *pdev)
+>         if (ret)
+>                 goto free_rproc;
+>
+> +       adsp_init_bus_scaling(adsp);
+> +
+>         ret = adsp_pds_attach(&pdev->dev, adsp->active_pds,
+>                               desc->active_pd_names);
+>         if (ret < 0)
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
