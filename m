@@ -2,214 +2,216 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3F41980AB
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 30 Mar 2020 18:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 200F21983E3
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 30 Mar 2020 21:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729514AbgC3QNf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 30 Mar 2020 12:13:35 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:38349 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727704AbgC3QNf (ORCPT
+        id S1728162AbgC3TDm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 30 Mar 2020 15:03:42 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:41355 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726518AbgC3TDm (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 30 Mar 2020 12:13:35 -0400
-Received: by mail-il1-f195.google.com with SMTP id n13so9022022ilm.5
-        for <linux-remoteproc@vger.kernel.org>; Mon, 30 Mar 2020 09:13:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bODexIV6jLtyYVwawU8DJgOMgDkTFyGRSElefALKc94=;
-        b=FT7vWuyikzgxPomzGjkyE4IEv2HM7lYxtOUlj4CfNO/mlCDMt9yBch04xRdBVKoIb1
-         +wp6SiwqOYhUeBNGsXL6+G/yWpEhCqNQpxfZ4YcfpMiUaWOzdePQ2OCalJ2CfdDdJ4us
-         82xyZ4JunPKz32xwCvTWzoL3ZrTiUhscCYQRboQhW1itJ6bzbauntekksOsfWlNAgH0v
-         Tji8MaOIGB8C4QO2VtJ9TttBv2zAhg5EhaKOnIFXSCEHs4jYaCDM0weyQWSMMVBgsMhS
-         +ciigFVgdx59IckiCS8XkE27tvEgBXQWRmoIEQIBv0mGaUTaxIl6d3SoqLYZhPPqL9VZ
-         sbrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bODexIV6jLtyYVwawU8DJgOMgDkTFyGRSElefALKc94=;
-        b=pJ56G7JKtRU4nLZ3tUvW7HXHCXvm8g/VWf+qIu+jnRZtIMqY9bGFvJ2M1YASuCWjjB
-         DcvVnnLDN4YM2ybDNJBqJOh6TUrvwmAGRdKkaTLHFSK1+FGE0xhnYVzIZOjTwZ6qtRrG
-         HyourBTA8KqOjfX61W03VT+Q/ge68OrNfaShTzDgy0B7IqnesbWP7eUKeAHim3R6vmeM
-         PUdblRhx4OrV5ZFQoNArnOy/zZCTHxAP+RlhuATLmTrQUz3pzXaeE9Ge4ISkMxYnDLgl
-         9XTHWRCHDCvVOauK5vcVMDSEV4W5OEbSLjqqUSNK0tjtpJgSaVGbQuC1nLMQZi3bFjFR
-         lv/A==
-X-Gm-Message-State: ANhLgQ32gbp/+wsIrrEF5J3qInXUai9KfRAnTMqa1a6QCXnIWhS+UGXn
-        TPDwd+R4CoLM5zRHJd71egim0I1F+fIR4PFjLOgkGTw05QI=
-X-Google-Smtp-Source: ADFU+vsONJFXOtpXfvufxuj95WetEkpYrcjQTVIfKk81ZEZO0CeUAb740FntTxqlkUbdf7apaJ7ZReSl0ui2f1wPimY=
-X-Received: by 2002:a92:dc51:: with SMTP id x17mr12372330ilq.50.1585584812676;
- Mon, 30 Mar 2020 09:13:32 -0700 (PDT)
+        Mon, 30 Mar 2020 15:03:42 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585595021; h=Message-ID: References: In-Reply-To: Subject:
+ To: From: Date: Content-Transfer-Encoding: Content-Type: MIME-Version:
+ Sender; bh=AQGiG5GDREzTfhSq9CASDUgd4b4IkanSkzsRnrcZxMs=; b=V+aNO7m1++wvA/JcTRUlSYCjLkT3tPEn8FGpXW1Tam+AuSUySfm+eMWOHO/p33wUfL5jhWJH
+ oewOgocUmT3voatOmSDYd6IBcrICwtOstuvBX1PaXhLU5g4FkgwB0paFYbhb5gKsqMG1PKeB
+ ngrz8qHaHMgK5PLWn+mqUv8lU08=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e824284.7f655b780ed8-smtp-out-n02;
+ Mon, 30 Mar 2020 19:03:32 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 337E9C43636; Mon, 30 Mar 2020 19:03:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: rishabhb)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5CF7EC433BA;
+        Mon, 30 Mar 2020 19:03:30 +0000 (UTC)
 MIME-Version: 1.0
-References: <1585357147-4616-1-git-send-email-rishabhb@codeaurora.org> <CANLsYkxV7xWUkggBXF=ziGfmLs-EZewuzCzZ3fq56CR+xA0poQ@mail.gmail.com>
-In-Reply-To: <CANLsYkxV7xWUkggBXF=ziGfmLs-EZewuzCzZ3fq56CR+xA0poQ@mail.gmail.com>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Mon, 30 Mar 2020 10:13:21 -0600
-Message-ID: <CANLsYkzNKDwL6PSSagvk6YWRedLKmW80ji3nOYy1VrPQ3cP-8w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] remoteproc: qcom: Add bus scaling capability during bootup
-To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        psodagud@codeaurora.org, tsoni@codeaurora.org,
-        Siddharth Gupta <sidgup@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 30 Mar 2020 12:03:30 -0700
+From:   rishabhb@codeaurora.org
+To:     undisclosed-recipients:;
+Subject: Re: [PATCH 1/2] remoteproc: qcom: Add bus scaling capability during
+ bootup
+In-Reply-To: <CANLsYkzNKDwL6PSSagvk6YWRedLKmW80ji3nOYy1VrPQ3cP-8w@mail.gmail.com>
+References: <1585357147-4616-1-git-send-email-rishabhb@codeaurora.org>
+ <CANLsYkxV7xWUkggBXF=ziGfmLs-EZewuzCzZ3fq56CR+xA0poQ@mail.gmail.com>
+ <CANLsYkzNKDwL6PSSagvk6YWRedLKmW80ji3nOYy1VrPQ3cP-8w@mail.gmail.com>
+Message-ID: <f049524d9789d005ba83b51d30011bcb@codeaurora.org>
+X-Sender: rishabhb@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, 30 Mar 2020 at 10:06, Mathieu Poirier
-<mathieu.poirier@linaro.org> wrote:
->
-> Hi Rishabh,
->
-> On Fri, 27 Mar 2020 at 18:59, Rishabh Bhatnagar <rishabhb@codeaurora.org> wrote:
-> >
-> > During bootup since remote processors cannot request for
-> > additional bus bandwidth from the interconect framework,
-> > platform driver should provide the proxy resources. This
-> > is useful for scenarios where the Q6 tries to access the DDR
-> > memory in the initial stages of bootup. For e.g. during
-> > bootup or after recovery modem Q6 tries to zero out the bss
-> > section in the DDR. Since this is a big chunk of memory if
-> > don't bump up the bandwidth we might encounter timeout issues.
-> > This patch makes a proxy vote for maximizing the bus bandwidth
-> > during bootup and removes it once processor is up.
-> >
-> > Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
->
-> The title of this patch contains "[PATCH 1/2]" but only one patch was
-> sent to the linux-remoteproc mailing list.  Is this a mistake and this
-> is a stand alone patch or another patch did not reach the list?
->
-
-I see that you sent another patch [1] that seems to be stand alone but
-when looking into the code function of_icc_get() is called, which does
-reference the bindings in [1].
-
-[1]. https://patchwork.kernel.org/patch/11463381/
-
-> Thanks,
-> Mathieu
->
-> > ---
-> >  drivers/remoteproc/qcom_q6v5_pas.c | 43 +++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 42 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-> > index edf9d0e..8f5db8d 100644
-> > --- a/drivers/remoteproc/qcom_q6v5_pas.c
-> > +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-> > @@ -20,6 +20,7 @@
-> >  #include <linux/qcom_scm.h>
-> >  #include <linux/regulator/consumer.h>
-> >  #include <linux/remoteproc.h>
-> > +#include <linux/interconnect.h>
-> >  #include <linux/soc/qcom/mdt_loader.h>
-> >  #include <linux/soc/qcom/smem.h>
-> >  #include <linux/soc/qcom/smem_state.h>
-> > @@ -28,6 +29,9 @@
-> >  #include "qcom_q6v5.h"
-> >  #include "remoteproc_internal.h"
-> >
-> > +#define PIL_TZ_AVG_BW  0
-> > +#define PIL_TZ_PEAK_BW UINT_MAX
-> > +
-> >  struct adsp_data {
-> >         int crash_reason_smem;
-> >         const char *firmware_name;
-> > @@ -62,6 +66,7 @@ struct qcom_adsp {
-> >         int proxy_pd_count;
-> >
-> >         int pas_id;
-> > +       struct icc_path *bus_client;
-> >         int crash_reason_smem;
-> >         bool has_aggre2_clk;
-> >
-> > @@ -124,6 +129,25 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
-> >
-> >  }
-> >
-> > +static int do_bus_scaling(struct qcom_adsp *adsp, bool enable)
-> > +{
-> > +       int rc;
-> > +       u32 avg_bw = enable ? PIL_TZ_AVG_BW : 0;
-> > +       u32 peak_bw = enable ? PIL_TZ_PEAK_BW : 0;
-> > +
-> > +       if (adsp->bus_client) {
-> > +               rc = icc_set_bw(adsp->bus_client, avg_bw, peak_bw);
-> > +               if (rc) {
-> > +                       dev_err(adsp->dev, "bandwidth request failed(rc:%d)\n",
-> > +                               rc);
-> > +                       return rc;
-> > +               }
-> > +       } else
-> > +               dev_info(adsp->dev, "Bus scaling not setup for %s\n",
-> > +                       adsp->rproc->name);
-> > +       return 0;
-> > +}
-> > +
-> >  static int adsp_start(struct rproc *rproc)
-> >  {
-> >         struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
-> > @@ -131,9 +155,13 @@ static int adsp_start(struct rproc *rproc)
-> >
-> >         qcom_q6v5_prepare(&adsp->q6v5);
-> >
-> > +       ret = do_bus_scaling(adsp, true);
-> > +       if (ret)
-> > +               goto disable_irqs;
-> > +
-> >         ret = adsp_pds_enable(adsp, adsp->active_pds, adsp->active_pd_count);
-> >         if (ret < 0)
-> > -               goto disable_irqs;
-> > +               goto unscale_bus;
-> >
-> >         ret = adsp_pds_enable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
-> >         if (ret < 0)
-> > @@ -183,6 +211,8 @@ static int adsp_start(struct rproc *rproc)
-> >         adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
-> >  disable_active_pds:
-> >         adsp_pds_disable(adsp, adsp->active_pds, adsp->active_pd_count);
-> > +unscale_bus:
-> > +       do_bus_scaling(adsp, false);
-> >  disable_irqs:
-> >         qcom_q6v5_unprepare(&adsp->q6v5);
-> >
-> > @@ -198,6 +228,7 @@ static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
-> >         clk_disable_unprepare(adsp->aggre2_clk);
-> >         clk_disable_unprepare(adsp->xo);
-> >         adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
-> > +       do_bus_scaling(adsp, false);
-> >  }
-> >
-> >  static int adsp_stop(struct rproc *rproc)
-> > @@ -280,6 +311,14 @@ static int adsp_init_regulator(struct qcom_adsp *adsp)
-> >         return PTR_ERR_OR_ZERO(adsp->px_supply);
-> >  }
-> >
-> > +static void adsp_init_bus_scaling(struct qcom_adsp *adsp)
-> > +{
-> > +       adsp->bus_client = of_icc_get(adsp->dev, NULL);
-> > +       if (!adsp->bus_client)
-> > +               dev_warn(adsp->dev, "%s: unable to get bus client \n",
-> > +                       __func__);
-> > +}
-> > +
-> >  static int adsp_pds_attach(struct device *dev, struct device **devs,
-> >                            char **pd_names)
-> >  {
-> > @@ -410,6 +449,8 @@ static int adsp_probe(struct platform_device *pdev)
-> >         if (ret)
-> >                 goto free_rproc;
-> >
-> > +       adsp_init_bus_scaling(adsp);
-> > +
-> >         ret = adsp_pds_attach(&pdev->dev, adsp->active_pds,
-> >                               desc->active_pd_names);
-> >         if (ret < 0)
-> > --
-> > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> > a Linux Foundation Collaborative Project
+On 2020-03-30 09:13, Mathieu Poirier wrote:
+> On Mon, 30 Mar 2020 at 10:06, Mathieu Poirier
+> <mathieu.poirier@linaro.org> wrote:
+>> 
+>> Hi Rishabh,
+>> 
+>> On Fri, 27 Mar 2020 at 18:59, Rishabh Bhatnagar 
+>> <rishabhb@codeaurora.org> wrote:
+>> >
+>> > During bootup since remote processors cannot request for
+>> > additional bus bandwidth from the interconect framework,
+>> > platform driver should provide the proxy resources. This
+>> > is useful for scenarios where the Q6 tries to access the DDR
+>> > memory in the initial stages of bootup. For e.g. during
+>> > bootup or after recovery modem Q6 tries to zero out the bss
+>> > section in the DDR. Since this is a big chunk of memory if
+>> > don't bump up the bandwidth we might encounter timeout issues.
+>> > This patch makes a proxy vote for maximizing the bus bandwidth
+>> > during bootup and removes it once processor is up.
+>> >
+>> > Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+>> 
+>> The title of this patch contains "[PATCH 1/2]" but only one patch was
+>> sent to the linux-remoteproc mailing list.  Is this a mistake and this
+>> is a stand alone patch or another patch did not reach the list?
+>> 
+> 
+> I see that you sent another patch [1] that seems to be stand alone but
+> when looking into the code function of_icc_get() is called, which does
+> reference the bindings in [1].
+> 
+> [1]. https://patchwork.kernel.org/patch/11463381/
+> 
+>> Thanks,
+>> Mathieu
+Yes its supposed to be a patchset of 2, somehow the numbering got messed 
+up.
+I'll resend the two patches so that you can take a look.
+>> 
+>> > ---
+>> >  drivers/remoteproc/qcom_q6v5_pas.c | 43 +++++++++++++++++++++++++++++++++++++-
+>> >  1 file changed, 42 insertions(+), 1 deletion(-)
+>> >
+>> > diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+>> > index edf9d0e..8f5db8d 100644
+>> > --- a/drivers/remoteproc/qcom_q6v5_pas.c
+>> > +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+>> > @@ -20,6 +20,7 @@
+>> >  #include <linux/qcom_scm.h>
+>> >  #include <linux/regulator/consumer.h>
+>> >  #include <linux/remoteproc.h>
+>> > +#include <linux/interconnect.h>
+>> >  #include <linux/soc/qcom/mdt_loader.h>
+>> >  #include <linux/soc/qcom/smem.h>
+>> >  #include <linux/soc/qcom/smem_state.h>
+>> > @@ -28,6 +29,9 @@
+>> >  #include "qcom_q6v5.h"
+>> >  #include "remoteproc_internal.h"
+>> >
+>> > +#define PIL_TZ_AVG_BW  0
+>> > +#define PIL_TZ_PEAK_BW UINT_MAX
+>> > +
+>> >  struct adsp_data {
+>> >         int crash_reason_smem;
+>> >         const char *firmware_name;
+>> > @@ -62,6 +66,7 @@ struct qcom_adsp {
+>> >         int proxy_pd_count;
+>> >
+>> >         int pas_id;
+>> > +       struct icc_path *bus_client;
+>> >         int crash_reason_smem;
+>> >         bool has_aggre2_clk;
+>> >
+>> > @@ -124,6 +129,25 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+>> >
+>> >  }
+>> >
+>> > +static int do_bus_scaling(struct qcom_adsp *adsp, bool enable)
+>> > +{
+>> > +       int rc;
+>> > +       u32 avg_bw = enable ? PIL_TZ_AVG_BW : 0;
+>> > +       u32 peak_bw = enable ? PIL_TZ_PEAK_BW : 0;
+>> > +
+>> > +       if (adsp->bus_client) {
+>> > +               rc = icc_set_bw(adsp->bus_client, avg_bw, peak_bw);
+>> > +               if (rc) {
+>> > +                       dev_err(adsp->dev, "bandwidth request failed(rc:%d)\n",
+>> > +                               rc);
+>> > +                       return rc;
+>> > +               }
+>> > +       } else
+>> > +               dev_info(adsp->dev, "Bus scaling not setup for %s\n",
+>> > +                       adsp->rproc->name);
+>> > +       return 0;
+>> > +}
+>> > +
+>> >  static int adsp_start(struct rproc *rproc)
+>> >  {
+>> >         struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+>> > @@ -131,9 +155,13 @@ static int adsp_start(struct rproc *rproc)
+>> >
+>> >         qcom_q6v5_prepare(&adsp->q6v5);
+>> >
+>> > +       ret = do_bus_scaling(adsp, true);
+>> > +       if (ret)
+>> > +               goto disable_irqs;
+>> > +
+>> >         ret = adsp_pds_enable(adsp, adsp->active_pds, adsp->active_pd_count);
+>> >         if (ret < 0)
+>> > -               goto disable_irqs;
+>> > +               goto unscale_bus;
+>> >
+>> >         ret = adsp_pds_enable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+>> >         if (ret < 0)
+>> > @@ -183,6 +211,8 @@ static int adsp_start(struct rproc *rproc)
+>> >         adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+>> >  disable_active_pds:
+>> >         adsp_pds_disable(adsp, adsp->active_pds, adsp->active_pd_count);
+>> > +unscale_bus:
+>> > +       do_bus_scaling(adsp, false);
+>> >  disable_irqs:
+>> >         qcom_q6v5_unprepare(&adsp->q6v5);
+>> >
+>> > @@ -198,6 +228,7 @@ static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
+>> >         clk_disable_unprepare(adsp->aggre2_clk);
+>> >         clk_disable_unprepare(adsp->xo);
+>> >         adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+>> > +       do_bus_scaling(adsp, false);
+>> >  }
+>> >
+>> >  static int adsp_stop(struct rproc *rproc)
+>> > @@ -280,6 +311,14 @@ static int adsp_init_regulator(struct qcom_adsp *adsp)
+>> >         return PTR_ERR_OR_ZERO(adsp->px_supply);
+>> >  }
+>> >
+>> > +static void adsp_init_bus_scaling(struct qcom_adsp *adsp)
+>> > +{
+>> > +       adsp->bus_client = of_icc_get(adsp->dev, NULL);
+>> > +       if (!adsp->bus_client)
+>> > +               dev_warn(adsp->dev, "%s: unable to get bus client \n",
+>> > +                       __func__);
+>> > +}
+>> > +
+>> >  static int adsp_pds_attach(struct device *dev, struct device **devs,
+>> >                            char **pd_names)
+>> >  {
+>> > @@ -410,6 +449,8 @@ static int adsp_probe(struct platform_device *pdev)
+>> >         if (ret)
+>> >                 goto free_rproc;
+>> >
+>> > +       adsp_init_bus_scaling(adsp);
+>> > +
+>> >         ret = adsp_pds_attach(&pdev->dev, adsp->active_pds,
+>> >                               desc->active_pd_names);
+>> >         if (ret < 0)
+>> > --
+>> > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> > a Linux Foundation Collaborative Project
