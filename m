@@ -2,143 +2,178 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B79B31987A2
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 31 Mar 2020 00:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2991B1987A3
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 31 Mar 2020 00:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728880AbgC3Wzn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 30 Mar 2020 18:55:43 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:59514 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728876AbgC3Wzm (ORCPT
+        id S1728880AbgC3W4h (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 30 Mar 2020 18:56:37 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:38158 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728876AbgC3W4h (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 30 Mar 2020 18:55:42 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02UMtaVK045171;
-        Mon, 30 Mar 2020 17:55:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1585608936;
-        bh=oHpfdPfRh+9am9cE5dhxTL5hifNWypcMy6aJZKLe8xI=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ZFW4KfydO+MGIWhohx18gL/71tUDCFQR6iPkRT9/Yyboim5oUOLu0t+My0XS6EPNR
-         6f2yQKgqQnGYNKnggbOxnF7AACWhwwW9KyAxVU6/F7LkM3Ta0kjfiNKKBh/F28/Adr
-         lF4jg7UeP+zHHua/KwEQVCk9FkSwP6wZcwnkOBW0=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02UMtalt011601
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 30 Mar 2020 17:55:36 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 30
- Mar 2020 17:55:36 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Mon, 30 Mar 2020 17:55:35 -0500
-Received: from [10.250.86.212] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02UMtZP9011397;
-        Mon, 30 Mar 2020 17:55:35 -0500
-Subject: Re: [PATCH v2 02/17] remoteproc: Introduce function
- rproc_set_mcu_sync_state()
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <ohad@wizery.com>, <loic.pallardy@st.com>, <peng.fan@nxp.com>,
-        <arnaud.pouliquen@st.com>, <fabien.dessenne@st.com>,
-        <linux-remoteproc@vger.kernel.org>
-References: <20200324214603.14979-1-mathieu.poirier@linaro.org>
- <20200324214603.14979-3-mathieu.poirier@linaro.org>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <1ae43f43-33b9-94aa-06a4-771780c6d7aa@ti.com>
-Date:   Mon, 30 Mar 2020 17:55:35 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Mon, 30 Mar 2020 18:56:37 -0400
+Received: by mail-pl1-f196.google.com with SMTP id w3so7351853plz.5
+        for <linux-remoteproc@vger.kernel.org>; Mon, 30 Mar 2020 15:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=LqW+k9ssfI1/+RyuTLs1LIxwPenIt8xaGdO0xqQZp9g=;
+        b=qEQ3bdf1H7heBSUdmdKFORjhyoCl+k+vT0hAhulX0ndmgq+VgqvL6zhFAo8MnNbzOz
+         dz5HmJRT+SyVizwlajmaoZd/NTTlBFpAybDUd8II0y57L5nd4tH3Z7ODsDGeMtrFVR02
+         rXf/OC7QXWnPUM8/a2aNIGwYS3m+h9KRSJNjSOPvGikHPWJkOCBOL+qxAztLuzQ6HMHQ
+         EUttOjqus8CvNTLzLN0WR6YAabvx6wAH8DzLiGjkYiT9fU6Ao8ztDtrf4lnnZOrlfbRJ
+         kqg24NhgrjOjoBzb5cRh4lPrkTduQfdKQR2+H7e95TmflZ34REDxCrmRlyfm1YtJ7DYu
+         DXhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LqW+k9ssfI1/+RyuTLs1LIxwPenIt8xaGdO0xqQZp9g=;
+        b=iH20Y0lEqfervXYAvIYs4qErtohiyt+88UDVLUy/Z94zUtfWaF2tLa3KK6MtTnKXZk
+         9/XgBO4inZSfAT/xhr7v0Ce13nSbHa4wTTuKX4VmZXpOuXzc5GkuW7NymK3H/Ho2cZRu
+         2PAmNs6i/Lxn84uzR/W349DqdEmu/Fj3LVadGtUG5QRl5EyT3rlByXn4OWdM+sfbASO0
+         oG+9Yo0YdpOjKYPzn72p+5yBoyLZ6GozbuNHfeHnzaDe5XK36ET1RVvSB7dgED9G0Vow
+         10VlA2cAdECuYC86IaZ9XkDkCFI+n7hqubP8HLFwZ2OE0BNKo3llUCtpmiddxMAQvRt0
+         WqJg==
+X-Gm-Message-State: AGi0PuYt4/nKJc1rAN/JJEqhOb/W1N4Z/E1ccY4JRUh1+2mHOSo7JjWw
+        hs8+96kMkGLGwLbLu3oDfjopBQ==
+X-Google-Smtp-Source: APiQypJLr0f4+8oLc4Kelyv6iXUVPVo89DqvrOc20hxa2gOrfKLtE7WpZPgm4mOtC4189r0GxoFdSA==
+X-Received: by 2002:a17:90a:c20b:: with SMTP id e11mr423798pjt.57.1585608996200;
+        Mon, 30 Mar 2020 15:56:36 -0700 (PDT)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id y131sm10902690pfb.78.2020.03.30.15.56.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2020 15:56:35 -0700 (PDT)
+Date:   Mon, 30 Mar 2020 16:56:33 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Loic PALLARDY <loic.pallardy@st.com>
+Cc:     "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "ohad@wizery.com" <ohad@wizery.com>,
+        "s-anna@ti.com" <s-anna@ti.com>,
+        "peng.fan@nxp.com" <peng.fan@nxp.com>,
+        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
+        Fabien DESSENNE <fabien.dessenne@st.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>
+Subject: Re: [PATCH 08/11] remoteproc: stm32: Introduce new start and stop
+ ops for synchronisation
+Message-ID: <20200330225633.GB31331@xps15>
+References: <20200324220329.15523-1-mathieu.poirier@linaro.org>
+ <20200324220329.15523-9-mathieu.poirier@linaro.org>
+ <cf76679a1a7248df9620aeb2ca659062@SFHDAG7NODE2.st.com>
 MIME-Version: 1.0
-In-Reply-To: <20200324214603.14979-3-mathieu.poirier@linaro.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cf76679a1a7248df9620aeb2ca659062@SFHDAG7NODE2.st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Mathieu,
-
-On 3/24/20 4:45 PM, Mathieu Poirier wrote:
-> Introduce function rproc_set_mcu_sync_state() to set the synchronisation
-> state of the MCU at various stages of the lifecycle process.
+On Fri, Mar 27, 2020 at 05:04:34PM +0000, Loic PALLARDY wrote:
+> Hi Mathieu,
 > 
-> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> ---
->  drivers/remoteproc/remoteproc_internal.h | 38 ++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
+> > -----Original Message-----
+> > From: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > Sent: mardi 24 mars 2020 23:03
+> > To: bjorn.andersson@linaro.org
+> > Cc: ohad@wizery.com; Loic PALLARDY <loic.pallardy@st.com>; s-
+> > anna@ti.com; peng.fan@nxp.com; Arnaud POULIQUEN
+> > <arnaud.pouliquen@st.com>; Fabien DESSENNE
+> > <fabien.dessenne@st.com>; linux-remoteproc@vger.kernel.org
+> > Subject: [PATCH 08/11] remoteproc: stm32: Introduce new start and stop ops
+> > for synchronisation
+> > 
+> > Introduce new start and stop rproc_ops functions to be used when
+> > synchonising with an MCU.
+> > 
+> > Mainly based on the work published by Arnaud Pouliquen [1].
+> > 
+> > [1]. https://patchwork.kernel.org/project/linux-
+> > remoteproc/list/?series=239877
+> > 
+> > Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > ---
+> >  drivers/remoteproc/stm32_rproc.c | 37
+> > ++++++++++++++++++++++++++++++++
+> >  1 file changed, 37 insertions(+)
+> > 
+> > diff --git a/drivers/remoteproc/stm32_rproc.c
+> > b/drivers/remoteproc/stm32_rproc.c
+> > index 5bac0baf8f4c..734605a9223e 100644
+> > --- a/drivers/remoteproc/stm32_rproc.c
+> > +++ b/drivers/remoteproc/stm32_rproc.c
+> > @@ -449,6 +449,13 @@ static int stm32_rproc_start(struct rproc *rproc)
+> >  	return stm32_rproc_set_hold_boot(rproc, true);
+> >  }
+> > 
+> > +static int stm32_rproc_sync_start(struct rproc *rproc)
+> > +{
+> > +	stm32_rproc_add_coredump_trace(rproc);
+> > +
+> > +	return stm32_rproc_set_hold_boot(rproc, true);
+> > +}
+> > +
+> >  static int stm32_rproc_stop(struct rproc *rproc)
+> >  {
+> >  	struct stm32_rproc *ddata = rproc->priv;
+> > @@ -489,6 +496,30 @@ static int stm32_rproc_stop(struct rproc *rproc)
+> >  	return 0;
+> >  }
+> > 
+> > +static int stm32_rproc_sync_stop(struct rproc *rproc)
+> > +{
+> > +	struct stm32_rproc *ddata = rproc->priv;
+> > +	int err;
+> > +
+> > +	err = stm32_rproc_stop(rproc);
+> > +	if (err)
+> > +		return err;
+> > +
+> > +	/* update copro state to OFF */
+> > +	if (ddata->m4_state.map) {
+> > +		err = regmap_update_bits(ddata->m4_state.map,
+> > +					 ddata->m4_state.reg,
+> > +					 ddata->m4_state.mask,
+> > +					 M4_STATE_OFF);
+> > +		if (err) {
+> > +			dev_err(&rproc->dev, "failed to set copro state\n");
+> > +			return err;
+> > +		}
+> > +	}
+> In fact m4_state is updated in following way:
+> - it is set by Linux when M4 is guarantee, that means only when Linux is stopping the M4.
+> in that case M4 is under reset and m4_state could be updated to M4_STATE_OFF
+> - for all other states, it is M4 responsibility to update m4_state when running
+> That means the code above is common to both stm32_rproc_stop() and stm32_rproc_sync_stop().
+> Only one function is required.
+
+Very well, I'll get it fixed.
+
 > 
-> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-> index 5c93de5e00bb..73ea32df0156 100644
-> --- a/drivers/remoteproc/remoteproc_internal.h
-> +++ b/drivers/remoteproc/remoteproc_internal.h
-> @@ -24,6 +24,26 @@ struct rproc_debug_trace {
->  	struct rproc_mem_entry trace_mem;
->  };
->  
-> +/*
-> + * enum rproc_sync_states - remote processsor sync states
-> + * @RPROC_SYNC_STATE_INIT	state to use when the remoteproc core
-> + *				is initialising.
-> + * @RPROC_SYNC_STATE_SHUTDOWN	state to use after the remoteproc core
-> + *				has shutdown (rproc_shutdown()) the MCU.
-> + * @RPROC_SYNC_STATE_CRASHED	state to use after the MCU has crashed but
-> + *				has not been recovered by the remoteproc
-> + *				core yet.
-> + *
-> + * Keeping these separate from the enum rproc_state in order to avoid
-> + * introducing coupling between the state of the MCU and the synchronisation
-> + * operation to use.
-> + */
-> +enum rproc_mcu_sync_states {
-> +	RPROC_SYNC_STATE_INIT,
-> +	RPROC_SYNC_STATE_SHUTDOWN,
-> +	RPROC_SYNC_STATE_CRASHED,
-> +};
-> +
-
-Perhaps rename the enum as rproc_sync_state
-
->  /* from remoteproc_core.c */
->  void rproc_release(struct kref *kref);
->  irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int vq_id);
-> @@ -68,6 +88,24 @@ static inline bool rproc_sync_with_mcu(struct rproc *rproc)
->  	return rproc->sync_with_mcu;
->  }
->  
-> +static inline void rproc_set_mcu_sync_state(struct rproc *rproc,
-> +					    unsigned int state)
-
-Change the argument type to the above enum, and perhaps rename the
-function to use flags instead of state.
-
-regards
-Suman
-
-
-> +{
-> +	switch (state) {
-> +	case RPROC_SYNC_STATE_INIT:
-> +		rproc->sync_with_mcu = rproc->sync_states->on_init;
-> +		break;
-> +	case RPROC_SYNC_STATE_SHUTDOWN:
-> +		rproc->sync_with_mcu = rproc->sync_states->after_stop;
-> +		break;
-> +	case RPROC_SYNC_STATE_CRASHED:
-> +		rproc->sync_with_mcu = rproc->sync_states->after_crash;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +}
-> +
->  static inline
->  int rproc_fw_sanity_check(struct rproc *rproc, const struct firmware *fw)
->  {
+> Regards,
+> Loic
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static void stm32_rproc_kick(struct rproc *rproc, int vqid)
+> >  {
+> >  	struct stm32_rproc *ddata = rproc->priv;
+> > @@ -522,6 +553,12 @@ static struct rproc_ops st_rproc_ops = {
+> >  	.get_boot_addr	= rproc_elf_get_boot_addr,
+> >  };
+> > 
+> > +static __maybe_unused struct rproc_ops st_rproc_sync_ops = {
+> > +	.start		= stm32_rproc_sync_start,
+> > +	.stop		= stm32_rproc_sync_stop,
+> > +	.kick		= stm32_rproc_kick,
+> > +};
+> > +
+> >  static const struct of_device_id stm32_rproc_match[] = {
+> >  	{ .compatible = "st,stm32mp1-m4" },
+> >  	{},
+> > --
+> > 2.20.1
 > 
-
