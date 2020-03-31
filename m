@@ -2,206 +2,138 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9947199D02
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 31 Mar 2020 19:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 149C0199D09
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 31 Mar 2020 19:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726170AbgCaRgr (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 31 Mar 2020 13:36:47 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:32817 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725958AbgCaRgq (ORCPT
+        id S1725947AbgCaRi3 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 31 Mar 2020 13:38:29 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:31547 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726291AbgCaRi3 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 31 Mar 2020 13:36:46 -0400
-Received: by mail-pl1-f196.google.com with SMTP id g18so8394609plq.0
-        for <linux-remoteproc@vger.kernel.org>; Tue, 31 Mar 2020 10:36:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=itnJI6TbXHN042Oa+aTTOeRNLontCXYyyXyRfk33Mmc=;
-        b=cLsERM1XNUA8PFQaWGoAh/DqbQJ7NCrZjyEmqn9SOkOaGVCy64bv8UanQGECXkNtnt
-         jwGbVsJz3cxnWTuybMxY68Sf7BFOHkXBjTgf9IgKG5Fp0keI2F1ZIo7IC2QPBPZXXp4R
-         Pm8zX9Wt9jX3A37lcq0axmzKzV2qIkp9TIMcJqYjEdzoPlG8Kvk317eKWpFj7qMuWh36
-         IvX0ZH8GEgA7nXw+h/9tKIpnzzeqWnFYdNce2Qft80ImIPeX4ArneoUkzgF96jRgmfO8
-         7UHBafxADfewOCV2GZesnuIEEluB7c3wEcnrryihq/Z8N3huWaWi1RRIp/Rp7VdVRbJg
-         nPKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=itnJI6TbXHN042Oa+aTTOeRNLontCXYyyXyRfk33Mmc=;
-        b=Qoz3zbMfYbN46j6VLdRNHf4HApFEeb6Eg6zeEnKOfeZQrf2+IgSI4gLC4e6soBWyKe
-         +/ikBBKrM8xHOHzL11VK9E4UTvM4e7O6O1Aq1xZ1a6BhvxuuvmQ7wlZ5ZJtg3qex7hZ9
-         VKbnHFUOa6ZhGfwJ3n7kSHDcWYoYxnrzNBw3L7ikazBF8eVgUMwJ49w7uZPDZFpYx/oh
-         AKL0NO/HPwXyoSNblUffdJiPXU1ifarceEtt1ULWGhy5yfKuX8/dWtLyf5+v7f9Zz6CU
-         8MuwSQCsWvwX7LLa7dITpYha2rmhTTHy8+djImYKXhWPcL9A/cawOjAEf7nIENgRLwE3
-         q+Cg==
-X-Gm-Message-State: ANhLgQ2vA/cHGWZ+mCIUmzfbQ3smYwGSYuUznj/E68OF/RGHJEDFKRnZ
-        JxCCQZM5bGoUMSKDzrs2NBeOnQ==
-X-Google-Smtp-Source: ADFU+vuHAMUlcbxqb/N3HSGF+xsV+3DP9UUsTb+iyyE/sj6a8xzWdNLikk0xou/WLtqbZoILztVuiw==
-X-Received: by 2002:a17:902:b497:: with SMTP id y23mr18708380plr.81.1585676203788;
-        Tue, 31 Mar 2020 10:36:43 -0700 (PDT)
-Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id w2sm6713384pff.195.2020.03.31.10.36.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2020 10:36:43 -0700 (PDT)
-Date:   Tue, 31 Mar 2020 11:36:41 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, Suman Anna <s-anna@ti.com>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
-        xiang xiao <xiaoxiang781216@gmail.com>
-Subject: Re: [PATCH v7 1/2] rpmsg: core: add API to get MTU
-Message-ID: <20200331173641.GA23918@xps15>
-References: <20200324170407.16470-1-arnaud.pouliquen@st.com>
- <20200324170407.16470-2-arnaud.pouliquen@st.com>
+        Tue, 31 Mar 2020 13:38:29 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585676308; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=A68oC8U79UBpdukiOxjd0RuIgv72CKAYZ4hNjVAU4J4=;
+ b=UFKNoN4+pwVUJFK2PSmSqN1RtpSyw0PIHS7Hi34ZLeRlUytymE9Hias6I7mNkjs4LHl3qaVD
+ EAniWV0GbD6wU4x/dYWiXarG8X8rAJwG328kANsCBuW2iDSglh+y1C69jbhjKyNrG8IJeQ5b
+ T6sQvRRKnEcWYBQuhMsh986wtJ0=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e838013.7f249de50e30-smtp-out-n01;
+ Tue, 31 Mar 2020 17:38:27 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6F137C43637; Tue, 31 Mar 2020 17:38:26 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: rishabhb)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C0B3BC433F2;
+        Tue, 31 Mar 2020 17:38:24 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200324170407.16470-2-arnaud.pouliquen@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 31 Mar 2020 10:38:24 -0700
+From:   rishabhb@codeaurora.org
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>, psodagud@codeaurora.org,
+        tsoni@codeaurora.org, Siddharth Gupta <sidgup@codeaurora.org>,
+        linux-remoteproc-owner@vger.kernel.org
+Subject: Re: [PATCH 1/2] remoteproc: Add userspace char device driver
+In-Reply-To: <CANLsYkxEA66kGZh1rToSn79fpgPHqEjMZsSw74Rx3OLwG2k35w@mail.gmail.com>
+References: <1585241440-7572-1-git-send-email-rishabhb@codeaurora.org>
+ <1585241440-7572-2-git-send-email-rishabhb@codeaurora.org>
+ <20200330221245.GA17782@xps15> <20200330224554.GD215915@minitux>
+ <CANLsYkxEA66kGZh1rToSn79fpgPHqEjMZsSw74Rx3OLwG2k35w@mail.gmail.com>
+Message-ID: <30f8b41df8831d19ce6efd0a28862708@codeaurora.org>
+X-Sender: rishabhb@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 06:04:06PM +0100, Arnaud Pouliquen wrote:
-> Return the rpmsg buffer MTU for sending message, so rpmsg users
-> can split a long message in several sub rpmsg buffers.
+On 2020-03-31 09:47, Mathieu Poirier wrote:
+> On Mon, 30 Mar 2020 at 16:45, Bjorn Andersson
+> <bjorn.andersson@linaro.org> wrote:
+>> 
+>> On Mon 30 Mar 15:12 PDT 2020, Mathieu Poirier wrote:
+>> [..]
+>> > > +   struct rproc *rproc;
+>> > > +
+>> > > +   rproc = container_of(inode->i_cdev, struct rproc, char_dev);
+>> > > +   if (!rproc)
+>> > > +           return -EINVAL;
+>> > > +
+>> > > +   rproc_shutdown(rproc);
+>> >
+>> > The scenario I see here is that a userspace program will call
+>> > open(/dev/rproc_xyz, SOME_OPTION) when it is launched.  The file stays open
+>> > until either the application shuts down, in which case it calls close() or it
+>> > crashes.  In that case the system will automatically close all file descriptors
+>> > that were open by the application, which will also call rproc_shutdown().
+>> >
+>> > To me the same functionality can be achieved with the current functionality
+>> > provided by sysfs.
+>> >
+>> > When the application starts it needs to read
+>> > "/sys/class/remoteproc/remoteprocX/state".  If the state is "offline" then
+>> > "start" should be written to "/sys/.../state".  If the state is "running" the
+>> > application just crashed and got restarted.  In which case it needs to stop the
+>> > remote processor and start it again.
+>> >
+>> 
+>> A case when this would be useful is the Qualcomm modem, which relies 
+>> on
+>> disk access through a "remote file system service" [1].
+>> 
+>> Today we register the service (a few layers ontop of rpmsg/GLINK) then
+>> find the modem remoteproc and write "start" into the state sysfs file.
+>> 
+>> When we get a signal for termination we write "stop" into state to 
+>> stop
+>> the remoteproc before exiting.
+>> 
+>> There is however no way for us to indicate to the modem that rmtfs 
+>> just
+>> died, e.g. a kill -9 on the process will result in the modem continue
+>> and the next IO request will fail which in most cases will be fatal.
+I have this scenario written down in the cover letter for this patchset
+  "[PATCH 0/2] Add character device interface to remoteproc"
+I'll add it to the commit text as well.
 > 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
-> Acked-by: Suman Anna <s-anna@ti.com>
-
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-
-> ---
->  drivers/rpmsg/rpmsg_core.c       | 21 +++++++++++++++++++++
->  drivers/rpmsg/rpmsg_internal.h   |  2 ++
->  drivers/rpmsg/virtio_rpmsg_bus.c | 10 ++++++++++
->  include/linux/rpmsg.h            | 10 ++++++++++
->  4 files changed, 43 insertions(+)
+> The modem will crash when attempting an IO while rmtfs is down?
 > 
-> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-> index e330ec4dfc33..a6ef54c4779a 100644
-> --- a/drivers/rpmsg/rpmsg_core.c
-> +++ b/drivers/rpmsg/rpmsg_core.c
-> @@ -283,6 +283,27 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
->  }
->  EXPORT_SYMBOL(rpmsg_trysend_offchannel);
->  
-> +/**
-> + * rpmsg_get_mtu() - get maximum transmission buffer size for sending message.
-> + * @ept: the rpmsg endpoint
-> + *
-> + * This function returns maximum buffer size available for a single message.
-> + *
-> + * Return: the maximum transmission size on success and an appropriate error
-> + * value on failure.
-> + */
-> +
-> +ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
-> +{
-> +	if (WARN_ON(!ept))
-> +		return -EINVAL;
-> +	if (!ept->ops->get_mtu)
-> +		return -ENOTSUPP;
-> +
-> +	return ept->ops->get_mtu(ept);
-> +}
-> +EXPORT_SYMBOL(rpmsg_get_mtu);
-> +
->  /*
->   * match an rpmsg channel with a channel info struct.
->   * this is used to make sure we're not creating rpmsg devices for channels
-> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-> index 3fc83cd50e98..e6f88ee90ff6 100644
-> --- a/drivers/rpmsg/rpmsg_internal.h
-> +++ b/drivers/rpmsg/rpmsg_internal.h
-> @@ -47,6 +47,7 @@ struct rpmsg_device_ops {
->   * @trysendto:		see @rpmsg_trysendto(), optional
->   * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
->   * @poll:		see @rpmsg_poll(), optional
-> + * @get_mtu:		see @rpmsg_get_mtu(), optional
->   *
->   * Indirection table for the operations that a rpmsg backend should implement.
->   * In addition to @destroy_ept, the backend must at least implement @send and
-> @@ -66,6 +67,7 @@ struct rpmsg_endpoint_ops {
->  			     void *data, int len);
->  	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
->  			     poll_table *wait);
-> +	ssize_t (*get_mtu)(struct rpmsg_endpoint *ept);
->  };
->  
->  int rpmsg_register_device(struct rpmsg_device *rpdev);
-> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> index 376ebbf880d6..6e48fdf24555 100644
-> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> @@ -175,6 +175,7 @@ static int virtio_rpmsg_trysendto(struct rpmsg_endpoint *ept, void *data,
->  				  int len, u32 dst);
->  static int virtio_rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src,
->  					   u32 dst, void *data, int len);
-> +static ssize_t virtio_rpmsg_get_mtu(struct rpmsg_endpoint *ept);
->  
->  static const struct rpmsg_endpoint_ops virtio_endpoint_ops = {
->  	.destroy_ept = virtio_rpmsg_destroy_ept,
-> @@ -184,6 +185,7 @@ static const struct rpmsg_endpoint_ops virtio_endpoint_ops = {
->  	.trysend = virtio_rpmsg_trysend,
->  	.trysendto = virtio_rpmsg_trysendto,
->  	.trysend_offchannel = virtio_rpmsg_trysend_offchannel,
-> +	.get_mtu = virtio_rpmsg_get_mtu,
->  };
->  
->  /**
-> @@ -699,6 +701,14 @@ static int virtio_rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src,
->  	return rpmsg_send_offchannel_raw(rpdev, src, dst, data, len, false);
->  }
->  
-> +static ssize_t virtio_rpmsg_get_mtu(struct rpmsg_endpoint *ept)
-> +{
-> +	struct rpmsg_device *rpdev = ept->rpdev;
-> +	struct virtio_rpmsg_channel *vch = to_virtio_rpmsg_channel(rpdev);
-> +
-> +	return vch->vrp->buf_size - sizeof(struct rpmsg_hdr);
-> +}
-> +
->  static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
->  			     struct rpmsg_hdr *msg, unsigned int len)
->  {
-> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-> index 9fe156d1c018..88d7892ca93d 100644
-> --- a/include/linux/rpmsg.h
-> +++ b/include/linux/rpmsg.h
-> @@ -135,6 +135,8 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
->  __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
->  			poll_table *wait);
->  
-> +ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept);
-> +
->  #else
->  
->  static inline int register_rpmsg_device(struct rpmsg_device *dev)
-> @@ -242,6 +244,14 @@ static inline __poll_t rpmsg_poll(struct rpmsg_endpoint *ept,
->  	return 0;
->  }
->  
-> +static inline ssize_t rpmsg_get_mtu(struct rpmsg_endpoint *ept)
-> +{
-> +	/* This shouldn't be possible */
-> +	WARN_ON(1);
-> +
-> +	return -ENXIO;
-> +}
-> +
->  #endif /* IS_ENABLED(CONFIG_RPMSG) */
->  
->  /* use a macro to avoid include chaining to get THIS_MODULE */
-> -- 
-> 2.17.1
+>> 
+>> So instead having rmtfs holding /dev/rproc_foo open would upon its
+>> termination cause the modem to be stopped automatically, and as the
+>> system respawns rmtfs the modem would be started anew and the two 
+>> sides
+>> would be synced up again.
 > 
+> I have a better idea of what is going on now - thanks for writing this 
+> up.
+> 
+> I would make this feature a kernel configurable option as some people
+> may not want it.  I also think having "/dev/remoteprocX" is fine, so
+> no need to change anything currently visible in sysfs.
+Ok. Makes sense.
+> 
+> Mathieu
+> 
+>> 
+>> [1] https://github.com/andersson/rmtfs
+>> 
+>> Regards,
+>> Bjorn
