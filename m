@@ -2,160 +2,111 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DDE19A21A
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  1 Apr 2020 00:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D903519A298
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  1 Apr 2020 01:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729153AbgCaWvw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 31 Mar 2020 18:51:52 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:58646 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728245AbgCaWvw (ORCPT
+        id S1731568AbgCaXll (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 31 Mar 2020 19:41:41 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38816 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731331AbgCaXlk (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 31 Mar 2020 18:51:52 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02VMpiun099119;
-        Tue, 31 Mar 2020 17:51:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1585695104;
-        bh=9I4cCc1SgE42RHC5aJ1yx86MMxf4TNo16ftyvS58EE4=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ems31SUqageRlfAFvQyajePUVxcueAe0RtrpRf47ioUjT31DIHUieUWqso2WlhXlW
-         MEmFElvEzl3CePjVSJ6O1zablbZtdyNbSY6HhHKJ/+tyKIAwIsDM0ieRAfDX+luy9f
-         kF/QQLLsGJzv7kBRkj0LVMW33maInHFNLG6DrZMA=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02VMpiZq104180
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 31 Mar 2020 17:51:44 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 31
- Mar 2020 17:51:44 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 31 Mar 2020 17:51:44 -0500
-Received: from [10.250.86.212] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02VMpi9V101374;
-        Tue, 31 Mar 2020 17:51:44 -0500
-Subject: Re: [PATCH v2 00/17] remoteproc: Add support for synchronisation with
- MCU
-To:     Loic PALLARDY <loic.pallardy@st.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>
-CC:     "ohad@wizery.com" <ohad@wizery.com>,
-        "peng.fan@nxp.com" <peng.fan@nxp.com>,
-        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>
-References: <20200324214603.14979-1-mathieu.poirier@linaro.org>
- <4d264de6259449338cef9b2da1f39304@SFHDAG7NODE2.st.com>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <172c8ba5-f365-5e63-cc39-94dfe1bafa9f@ti.com>
-Date:   Tue, 31 Mar 2020 17:51:44 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Tue, 31 Mar 2020 19:41:40 -0400
+Received: by mail-pf1-f194.google.com with SMTP id c21so10489020pfo.5
+        for <linux-remoteproc@vger.kernel.org>; Tue, 31 Mar 2020 16:41:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kgLg1BYMpswLOvaY9ouREHThum7EqW/Wb2UtLfVPDwA=;
+        b=mRqmaUgoOW9VnbKgx4EF0ko6I3gfQVayMY4tJ2KbUJwDw6KyIFwM3GYQ3zv6iwPfDA
+         RBj7069dKZ7bUxg+TF5m3UxXR1+LM79xl51LOpF1ztxjrT9RN69vCvl8pcShYculTJRu
+         XZLW0nI4bg5rC2m/ln/Y4GNh0P00XwtvlwYYoH+wnPGSz1fE9aNuheBrgFPitLVK4D8j
+         0tc6pHbeZWS88bb9hFgA/XOD/P6dlxVFKLt07HeT1whYTLhZf1/1E3wWUdht2AxOhfYT
+         8dt33gRdJl9DmRe/FIhGc3AylBB1+l1w/rTh3Ok1t0cZKTwismTjg89tvCSn1BoPMfMD
+         yYOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kgLg1BYMpswLOvaY9ouREHThum7EqW/Wb2UtLfVPDwA=;
+        b=Sj6DJuloUVsCtpevcKju3zFerRUtkwsWTxlF1uahi8RN0rIYU/KJaUPZqFeh18En2s
+         gc4oVCJi9kCWlc9Hfo8AOu0JmH1fewXybWRSUsiDXGzj0buc/685QDaotZ/4maqffshO
+         sIOiidJputkMIb/V5cieXbEkz+zpPYl2ngG/AW0Pb4y4uBbZuPKWz16Ao1kqm5PNP96y
+         iaj1hwX0q1i3H3RWLldxCSrSqw2vhM5qZf2vsgYy39xzmSY3tgrCPf8HcNeGDJ35fy0m
+         vfR38IADzYWekY5EJN8dM7AXSLx0/sRT2SGXoR+AbI/jBXgwO7Vg/vYUIzASAiwpS/zK
+         vC2Q==
+X-Gm-Message-State: AGi0Pubafb9OOoj6b6WZFfHKtmg3ZMyyCfjTicJJBufbhFyIohDE8/hL
+        9CcDO9HFUl/72h3A1lpSh07gQw==
+X-Google-Smtp-Source: APiQypJMF+3p+OYDbDQ4wyrkTdV5Dob4Zmqb1h73XbhqTI/p2mAJDLPwuix49HbnjKy/j58rekzVAA==
+X-Received: by 2002:a63:fd43:: with SMTP id m3mr7937975pgj.129.1585698097837;
+        Tue, 31 Mar 2020 16:41:37 -0700 (PDT)
+Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id l5sm116369pgt.10.2020.03.31.16.41.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2020 16:41:37 -0700 (PDT)
+Date:   Tue, 31 Mar 2020 16:41:35 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Cc:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, robh@kernel.org,
+        psodagud@codeaurora.org, tsoni@codeaurora.org,
+        sidgup@codeaurora.org
+Subject: Re: [PATCH] dt-bindings: remoteproc: Add interconnect property
+Message-ID: <20200331234135.GC267644@minitux>
+References: <1585357496-6368-1-git-send-email-rishabhb@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <4d264de6259449338cef9b2da1f39304@SFHDAG7NODE2.st.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1585357496-6368-1-git-send-email-rishabhb@codeaurora.org>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Mathieu,
+On Fri 27 Mar 18:04 PDT 2020, Rishabh Bhatnagar wrote:
 
-On 3/27/20 12:20 PM, Loic PALLARDY wrote:
-> Hi Mathieu,
+> Allow proxy voting/unvoting of bus bandwidth for remote
+> processors. This property will specify the bus-master and
+> slave so that remoteproc platform driver can make the proxy
+> vote for bus bandwidth.
 > 
->>
->> This is the second revision of this set that tries to address the
->> problem of synchronising with an MCU with as much flexibility as
->> possible.
->>
->> New in this revision is a fix for a couple of bugs I found while
->> testing things.  First with the helper macro in patch 09 and the
->> suppression of a boot message when synchronising with an MCU
->> in patch 12.  I have completely removed what used to be patch 18,
->> the example on how to use the new API.  This will be the subject
->> of an upcoming patchset.
->>
->> Tested on ST's mp157c platform.  Applies on v5.6-rc7 to keep things
->> simple.
+> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+> ---
+>  Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
-> Thanks Mathieu for the 2 series. I tested on my STM32MP157-DK2 the different
-> synchronization use cases (on_init, after_stop, after_crash), mixing the values and
-> I succeed to start/stop/restart M4 coprocessor with or without reloading firmware
-> according to sync values. (I only applied the correction I proposed in patch 16 review
-> to allow to resync with a preloaded or an already running coprocessor.
-> 
-> Regards,
-> Loic
->>
->> Comments would be much appreciated.
+> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt
+> index 9938918..529b0a0 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt
+> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt
+> @@ -111,6 +111,17 @@ on the Qualcomm ADSP Hexagon core.
+>  	qcom,sm8150-slpi-pas:
+>  		    must be "lcx", "lmx", "load_state"
+>  
+> +- interconnect:
 
-Thank you for the enhanced series to implement the logic in remoteproc
-core. I have provided my comments on most of the patches.
+This should be plural; "interconnects".
 
-Overall, I can see my early-boot scenarios work with the series, and the
-slightly different userspace-loading support usecase would need some
-additional support.
+> +	Usage: optional
+> +	Value type: <prop-encoded-array>
+> +	Definition: Specifies the interconnect bus-master and bus-slave for
+> +		    bandwidth voting during proxy vote/unvote.
+> +
+> +- interconnect-names:
+> +	Usage: optional
+> +	Value type: <stringlist>
+> +	Definition: The interconnect name depends on the compatible string
 
-As I commented on patch 1 in v1, I would rather reuse the the generic
-"rproc" instead of adding a new "mcu" terminology to code.. Let's just
-stick with the rproc
+This should be elaborated upon, similar to e.g. power-domain-names.
 
-Another thing I would prefer (echoing my comments on patch 7) is to just
-use an API for modifying the sync states, that can be used between
-rproc_alloc() and rproc_add(). The state-machine really doesn't kick in
-until rproc_add() is invoked. The memory for the driver private rproc
-structure is allocated using rproc_alloc() normally, and most of the
-DT-parsing in platform drivers is generally done directly into this
-allocated memory. I see it a bit cumbersome having to maintain a
-separate structure, and then do a memcpy, especially given that the
-rproc_alloc_state_machine() logic requires that you detect the state
-before calling the rproc_alloc().
+Regards,
+Bjorn
 
-regards
-Suman
-
->>
->> Thanks,
->> Mathieu
->>
->> Mathieu Poirier (17):
->>   remoteproc: Add new operation and state machine for MCU
->>     synchronisation
->>   remoteproc: Introduce function rproc_set_mcu_sync_state()
->>   remoteproc: Split firmware name allocation from rproc_alloc()
->>   remoteproc: Split rproc_ops allocation from rproc_alloc()
->>   remoteproc: Get rid of tedious error path
->>   remoteproc: Introduce function rproc_alloc_internals()
->>   remoteproc: Introduce function rproc_alloc_state_machine()
->>   remoteproc: Allocate synchronisation state machine
->>   remoteproc: Call the right core function based on synchronisation
->>     state
->>   remoteproc: Decouple firmware load and remoteproc booting
->>   remoteproc: Repurpose function rproc_trigger_auto_boot()
->>   remoteproc: Rename function rproc_fw_boot()
->>   remoteproc: Introducting new functions to start and stop an MCU
->>   remoteproc: Refactor function rproc_trigger_recovery()
->>   remoteproc: Correctly deal with MCU synchronisation when changing FW
->>     image
->>   remoteproc: Correctly deal with MCU synchronisation when changing
->>     state
->>   remoteproc: Make MCU synchronisation state changes on stop and crashed
->>
->>  drivers/remoteproc/remoteproc_core.c     | 387 ++++++++++++++++++-----
->>  drivers/remoteproc/remoteproc_debugfs.c  |  31 ++
->>  drivers/remoteproc/remoteproc_internal.h |  91 ++++--
->>  drivers/remoteproc/remoteproc_sysfs.c    |  57 +++-
->>  include/linux/remoteproc.h               |  28 +-
->>  5 files changed, 487 insertions(+), 107 deletions(-)
->>
->> --
->> 2.20.1
-> 
-
+> +
+>  - memory-region:
+>  	Usage: required
+>  	Value type: <phandle>
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
