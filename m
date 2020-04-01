@@ -2,328 +2,244 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E42FD19B6C0
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  1 Apr 2020 22:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6911F19B6CB
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  1 Apr 2020 22:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732651AbgDAUId (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 1 Apr 2020 16:08:33 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:36892 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732645AbgDAUId (ORCPT
+        id S1732385AbgDAURh (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 1 Apr 2020 16:17:37 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:55956 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727178AbgDAURh (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 1 Apr 2020 16:08:33 -0400
-Received: by mail-pf1-f195.google.com with SMTP id u65so566749pfb.4
-        for <linux-remoteproc@vger.kernel.org>; Wed, 01 Apr 2020 13:08:31 -0700 (PDT)
+        Wed, 1 Apr 2020 16:17:37 -0400
+Received: by mail-pj1-f67.google.com with SMTP id fh8so554128pjb.5
+        for <linux-remoteproc@vger.kernel.org>; Wed, 01 Apr 2020 13:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=R7eDdx1qelZyEjmG13/wh77DXdQeKNXE0tobEN6ZDRo=;
-        b=B9MKkhnJIwiSLqyk04z7PvShDGSOfDwd4jup49SV2akCRHhK5lWMykJnlxCnljcpu7
-         tT8bgrDh4a792FlKsZD4WsS3g0YD4G5WklUccuG9uDteo9NL1Z/EJwI+VyUpwlCxBbsW
-         1beVk5wXw/mAA4n3ulmPm8iauL9ltHw5NyKS4SGnKPYMT5FJ4a5mNLu3oW6VRZEPBQe7
-         lQTk7bugRJNfDKiWWujoSAK2wqffxr4DQqOaVZrCOFBfsfbpii0SzCln+6uXGp5VYmyw
-         HqzfFieAKAYZLIx0jraT94AlRahVQpVh3Qq5hle0/WSvPmxDfs+SIFOQIn+fX667Fldh
-         pl9w==
+        bh=7QXM5fjeLv6e7wruqQv62gWJ5sED1p3tH47WlR+hLIE=;
+        b=YGMnDWsG0ZR1g+JyYg5zKDRMK1O35HfU96XTzVrCiZyyDkfnHAwwvKq6yHyonJL84n
+         jl2aLQDk9OzxeGyHN+98LRY7pSor3o6Zelig3o0Avko9l7MwjQLnx1SRFI5xyvvoxxay
+         e60vy+XVTbJbBPbyU7oJ44zEsH0WTS/yAuu/n27mXk1jonz8+MXZWemQrWMN2t7mkPn0
+         QvlOR7RQP9I7lF9D+gPb2NppYbb/yTIZdxRxU1A+8q3lAKQgLuBD54cYU509eKNSvRsy
+         9C7nExb+NOJeFhWy0szZbp3XaiiOggn2HfnUY9ATK4So1oeBlTITuKTK7/I+j1GlF+XB
+         nkcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=R7eDdx1qelZyEjmG13/wh77DXdQeKNXE0tobEN6ZDRo=;
-        b=pwf+7IzUoR2+8GOdy3O01ziFzbFLGP9vWpdxwXoPzg+X7qsdqA3YDn84CfOlnSptaI
-         2Fpkiy94vxDxhnqX9+0arATwQ7Pz2tz62MEnVoHL1EPnP+TMz+gmBkRxUtZFnUvsuU9e
-         M5yftBQqVcJqwbR4V999gRRQReIJXbkuNxnva7wFjH7/zxc7Ri/VAG9QhuzZLUYKxfL4
-         EjAnCiR3bSuPJFDJXr6DFZESCIBGbU4Cl8Ketft9eKuBkI6e1M7K8G7XLrrDw6fj2Cqf
-         b2rSyPje6R9Dxs0ol+0NLuRqh3mLD1SwAbDpNYuFhOCIFXNeT6g2x0lQa8Ks8x1/sRur
-         tnxQ==
-X-Gm-Message-State: ANhLgQ11ElPLeOBFOQBgATBSAkGvxJ4DVOKLex01ddNHUd+7ZxLh4ezX
-        oWokolFbKQXFzwMY6ge5A0N4FQ==
-X-Google-Smtp-Source: ADFU+vvZpZ30+dH95jIKlKit8eUxIFKJ0pbqc3JKrtLESC+2S8FQXlCxe8nS8iewMey88u4dz619Lg==
-X-Received: by 2002:a62:1894:: with SMTP id 142mr25672341pfy.27.1585771710780;
-        Wed, 01 Apr 2020 13:08:30 -0700 (PDT)
+        bh=7QXM5fjeLv6e7wruqQv62gWJ5sED1p3tH47WlR+hLIE=;
+        b=qc18RmqN8Kb7bAOHZWoyFef6kI+2+cke3AnVkI9N9qXfENHNu/ot9qF5v5ncRTI39F
+         lEcKHAAfHt++LrBcf7XiQ4usct2mMW70SjWdce73uL8z5/MyCAgEyJkvfjUOuumZuNvx
+         NR+lcxGVBeM2VOpYL++79PmPBpx3uBZfHrUIq9D5yT8C2kj6pQNiMaUgtgk2PwccHI8M
+         DuBH1HfGzD0HENPggxAafWIgafaTKiVMR+ru0A1aSJP550q55AqxQ/U9UsZzfZ8o8KDp
+         swvHSqd+dbnwEUc23E1tXUE5kyj2K4+DZbPa8JZDJ6WEE+XHtFinuCN4huZMB6zYc2uc
+         /TXg==
+X-Gm-Message-State: AGi0PuYBZ/YVzxAl3tABIhCte4YH3sJLsozspprX4nhJiWOmCSqGGySn
+        yJX/xjCFT6XgKM77qJotG7OW4g==
+X-Google-Smtp-Source: APiQypLtGYyXbFfmZZjtyDuDbV7lYQakXZwSxTvMqeaSjxfrV12j482v+QbT3C15jtCjVEWzzqOUdg==
+X-Received: by 2002:a17:90a:c001:: with SMTP id p1mr7107170pjt.86.1585772255587;
+        Wed, 01 Apr 2020 13:17:35 -0700 (PDT)
 Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id c128sm2145906pfa.11.2020.04.01.13.08.29
+        by smtp.gmail.com with ESMTPSA id y4sm2214312pfo.39.2020.04.01.13.17.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2020 13:08:30 -0700 (PDT)
-Date:   Wed, 1 Apr 2020 13:08:27 -0700
+        Wed, 01 Apr 2020 13:17:11 -0700 (PDT)
+Date:   Wed, 1 Apr 2020 13:17:07 -0700
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>
 Cc:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         psodagud@codeaurora.org, tsoni@codeaurora.org,
         sidgup@codeaurora.org
-Subject: Re: [PATCH v2 1/2] remoteproc: Add character device interface
-Message-ID: <20200401200827.GF267644@minitux>
-References: <1585699438-14394-1-git-send-email-rishabhb@codeaurora.org>
+Subject: Re: [PATCH 1/2] remoteproc: qcom: Add bus scaling capability during
+ bootup
+Message-ID: <20200401201707.GG267644@minitux>
+References: <1585357147-4616-1-git-send-email-rishabhb@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1585699438-14394-1-git-send-email-rishabhb@codeaurora.org>
+In-Reply-To: <1585357147-4616-1-git-send-email-rishabhb@codeaurora.org>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue 31 Mar 17:03 PDT 2020, Rishabh Bhatnagar wrote:
+On Fri 27 Mar 17:59 PDT 2020, Rishabh Bhatnagar wrote:
 
-> Add the character device interface for userspace applications.
-> This interface can be used in order to boot up and shutdown
-> remote subsystems. Currently there is only a sysfs interface
-> which the userspace clients can use. If a usersapce application
-> crashes after booting the remote processor does not get any
-> indication about the crash. It might still assume that the
-> application is running. For example modem uses remotefs service
-> to fetch data from disk/flash memory. If the remotefs service
-> crashes, modem keeps on requesting data which might lead to a
-> crash. Adding a character device interface makes the remote
-> processor tightly coupled with the user space application.
-> A crash of the application leads to a close on the file descriptors
-> therefore shutting down the remoteproc.
+> During bootup since remote processors cannot request for
+> additional bus bandwidth from the interconect framework,
+> platform driver should provide the proxy resources. This
+> is useful for scenarios where the Q6 tries to access the DDR
+> memory in the initial stages of bootup. For e.g. during
+> bootup or after recovery modem Q6 tries to zero out the bss
+> section in the DDR. Since this is a big chunk of memory if
+> don't bump up the bandwidth we might encounter timeout issues.
+> This patch makes a proxy vote for maximizing the bus bandwidth
+> during bootup and removes it once processor is up.
 > 
 > Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
 > ---
->  drivers/remoteproc/Kconfig               |   9 +++
->  drivers/remoteproc/Makefile              |   1 +
->  drivers/remoteproc/remoteproc_cdev.c     | 100 +++++++++++++++++++++++++++++++
->  drivers/remoteproc/remoteproc_internal.h |  22 +++++++
->  include/linux/remoteproc.h               |   2 +
->  5 files changed, 134 insertions(+)
->  create mode 100644 drivers/remoteproc/remoteproc_cdev.c
+>  drivers/remoteproc/qcom_q6v5_pas.c | 43 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 42 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-> index de3862c..6374b79 100644
-> --- a/drivers/remoteproc/Kconfig
-> +++ b/drivers/remoteproc/Kconfig
-> @@ -14,6 +14,15 @@ config REMOTEPROC
+> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+> index edf9d0e..8f5db8d 100644
+> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/qcom_scm.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <linux/remoteproc.h>
+> +#include <linux/interconnect.h>
+
+These are sorted alphabetically, please maintain this.
+
+>  #include <linux/soc/qcom/mdt_loader.h>
+>  #include <linux/soc/qcom/smem.h>
+>  #include <linux/soc/qcom/smem_state.h>
+> @@ -28,6 +29,9 @@
+>  #include "qcom_q6v5.h"
+>  #include "remoteproc_internal.h"
 >  
->  if REMOTEPROC
+> +#define PIL_TZ_AVG_BW  0
+> +#define PIL_TZ_PEAK_BW UINT_MAX
+
+Please just inline these in do_bus_scaling().
+
+> +
+>  struct adsp_data {
+>  	int crash_reason_smem;
+>  	const char *firmware_name;
+> @@ -62,6 +66,7 @@ struct qcom_adsp {
+>  	int proxy_pd_count;
 >  
-> +config REMOTEPROC_CDEV
-> +	bool "Remoteproc character device interface"
-> +	help
-> +	  Say y here to have a character device interface for Remoteproc
-> +	  framework. Userspace can boot/shutdown remote processors through
-> +	  this interface.
-> +
-> +	  It's safe to say N if you don't want to use this interface.
-> +
->  config IMX_REMOTEPROC
->  	tristate "IMX6/7 remoteproc support"
->  	depends on ARCH_MXC
-> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-> index e30a1b1..b7d4f77 100644
-> --- a/drivers/remoteproc/Makefile
-> +++ b/drivers/remoteproc/Makefile
-> @@ -9,6 +9,7 @@ remoteproc-y				+= remoteproc_debugfs.o
->  remoteproc-y				+= remoteproc_sysfs.o
->  remoteproc-y				+= remoteproc_virtio.o
->  remoteproc-y				+= remoteproc_elf_loader.o
-> +obj-$(CONFIG_REMOTEPROC_CDEV)		+= remoteproc_cdev.o
->  obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
->  obj-$(CONFIG_MTK_SCP)			+= mtk_scp.o mtk_scp_ipi.o
->  obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o
-> diff --git a/drivers/remoteproc/remoteproc_cdev.c b/drivers/remoteproc/remoteproc_cdev.c
-> new file mode 100644
-> index 0000000..8182bd1
-> --- /dev/null
-> +++ b/drivers/remoteproc/remoteproc_cdev.c
-> @@ -0,0 +1,100 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Character device interface driver for Remoteproc framework.
-> + *
-> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#include <linux/cdev.h>
-> +#include <linux/fs.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/remoteproc.h>
-> +
-> +#include "remoteproc_internal.h"
-> +
-> +#define NUM_RPROC_DEVICES	64
-> +static dev_t rproc_cdev;
-> +static DEFINE_IDA(cdev_minor_ida);
-> +
-> +static int rproc_cdev_open(struct inode *inode, struct file *file)
+>  	int pas_id;
+> +	struct icc_path *bus_client;
+
+Please rename this proxy_path
+
+>  	int crash_reason_smem;
+>  	bool has_aggre2_clk;
+>  
+> @@ -124,6 +129,25 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+>  
+>  }
+>  
+> +static int do_bus_scaling(struct qcom_adsp *adsp, bool enable)
+
+adsp_bus_vote()
+
 > +{
-> +	struct rproc *rproc;
+> +	int rc;
+
+This driver uses "int ret".
+
+> +	u32 avg_bw = enable ? PIL_TZ_AVG_BW : 0;
+
+No need to carry a variable for 0 or 0, jut pass 0 in the function call
+directly.
+
+> +	u32 peak_bw = enable ? PIL_TZ_PEAK_BW : 0;
 > +
-> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
+> +	if (adsp->bus_client) {
 
-I would prefer this to be a on a single line
-	struct rproc *rproc = container_of(..);
+No need for this check, icc_set_bw(NULL, ..) is a nop.
 
-> +
-> +	if (!rproc)
+> +		rc = icc_set_bw(adsp->bus_client, avg_bw, peak_bw);
+> +		if (rc) {
+> +			dev_err(adsp->dev, "bandwidth request failed(rc:%d)\n",
 
-I don't think this is possible.
+"failed to request bandwidth: %d\n"
 
-> +		return -EINVAL;
-> +
-> +	if (rproc->state == RPROC_RUNNING)
-> +		return -EBUSY;
-> +
+> +				rc);
+> +			return rc;
+> +		}
+> +	} else
+> +		dev_info(adsp->dev, "Bus scaling not setup for %s\n",
 
-This is racy, it's possible that state wasn't RUNNING, but at the time
-we're entering rproc_boot() it is - or as Clement correctly points out,
-the core might be in CRASHED state.
+No need to print this.
 
-> +	return rproc_boot(rproc);
-
-Feels like we would want a variant of rproc_boot() that doesn't do
-refcounting... Maybe a rproc_boot_exclusive() that takes the mutex and
-then fails if the core is refcounted already?
-
-> +}
-> +
-> +static int rproc_cdev_release(struct inode *inode, struct file *file)
-> +{
-> +	struct rproc *rproc;
-> +
-> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
-> +
-> +	if (!rproc || rproc->state != RPROC_RUNNING)
-> +		return -EINVAL;
-
-rproc can't be NULL here and the core might be in CRASHED state here, in
-which case we still want to abort that and shut down the core...
-
-Note that in the event of calling close() the return value is discarded
-on the way to userspace and in the event that the process is killed we
-still expect the remoteproc to be shut down (if the refcount hit 0). 
-
-> +
-> +	rproc_shutdown(rproc);
-> +
+> +			adsp->rproc->name);
 > +	return 0;
 > +}
 > +
-> +static const struct file_operations rproc_fops = {
-> +	.open = rproc_cdev_open,
-> +	.release = rproc_cdev_release,
-> +};
-> +
-> +int rproc_char_device_add(struct rproc *rproc)
-> +{
-> +	int ret, minor;
-> +	dev_t cdevt;
-> +
-> +	minor = ida_simple_get(&cdev_minor_ida, 0, NUM_RPROC_DEVICES,
-
-Can't you use rproc->index as minor?
-
-> +			       GFP_KERNEL);
-> +	if (minor < 0) {
-> +		dev_err(&rproc->dev, "%s: No more minor numbers left! rc:%d\n",
-> +			__func__, minor);
-> +		return -ENODEV;
-> +	}
-> +
-> +	cdev_init(&rproc->char_dev, &rproc_fops);
-> +	rproc->char_dev.owner = THIS_MODULE;
-> +
-> +	cdevt = MKDEV(MAJOR(rproc_cdev), minor);
-> +	ret = cdev_add(&rproc->char_dev, cdevt, 1);
-> +	if (ret < 0)
-> +		ida_simple_remove(&cdev_minor_ida, minor);
-> +
-> +	rproc->dev.devt = cdevt;
-> +	return ret;
-> +}
-> +
-> +void rproc_char_device_remove(struct rproc *rproc)
-> +{
-> +	__unregister_chrdev(MAJOR(rproc->dev.devt), MINOR(rproc->dev.devt), 1,
-> +			    "rproc");
-
-Shouldn't this be cdev_del()?
-
-> +	ida_simple_remove(&cdev_minor_ida, MINOR(rproc->dev.devt));
-> +}
-> +
-> +void __init rproc_init_cdev(void)
-> +{
-> +	int ret;
-> +
-> +	ret = alloc_chrdev_region(&rproc_cdev, 0, NUM_RPROC_DEVICES, "rproc");
-> +	if (ret < 0) {
-> +		pr_err("Failed to alloc rproc_cdev region, err %d\n", ret);
-> +		return;
-
-Drop this return, and hence the {}
-
-> +	}
-> +}
-> +
-> +void __exit rproc_exit_cdev(void)
-> +{
-> +	__unregister_chrdev(MAJOR(rproc_cdev), 0, NUM_RPROC_DEVICES, "rproc");
-
-unregister_chrdev_region();
-
-> +}
-> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-> index 493ef92..28d61a1 100644
-> --- a/drivers/remoteproc/remoteproc_internal.h
-> +++ b/drivers/remoteproc/remoteproc_internal.h
-> @@ -47,6 +47,27 @@ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
->  int rproc_init_sysfs(void);
->  void rproc_exit_sysfs(void);
->  
-> +#ifdef CONFIG_REMOTEPROC_CDEV
-> +void rproc_init_cdev(void);
-> +void rproc_exit_cdev(void);
-> +int rproc_char_device_add(struct rproc *rproc);
-> +void rproc_char_device_remove(struct rproc *rproc);
-> +#else
-> +static inline void rproc_init_cdev(void)
-> +{
-> +}
-> +static inline void rproc_exit_cdev(void)
-> +{
-> +}
-> +static inline int rproc_char_device_add(struct rproc *rproc)
-> +{
-> +	return 0;
-> +}
-> +static inline void  rproc_char_device_remove(struct rproc *rproc)
-> +{
-> +}
-> +#endif
-> +
->  void rproc_free_vring(struct rproc_vring *rvring);
->  int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
->  
-> @@ -63,6 +84,7 @@ struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
->  struct rproc_mem_entry *
->  rproc_find_carveout_by_name(struct rproc *rproc, const char *name, ...);
->  
-> +
->  static inline
->  int rproc_fw_sanity_check(struct rproc *rproc, const struct firmware *fw)
+>  static int adsp_start(struct rproc *rproc)
 >  {
-> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> index 16ad666..c4ca796 100644
-> --- a/include/linux/remoteproc.h
-> +++ b/include/linux/remoteproc.h
-> @@ -37,6 +37,7 @@
+>  	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+> @@ -131,9 +155,13 @@ static int adsp_start(struct rproc *rproc)
 >  
->  #include <linux/types.h>
->  #include <linux/mutex.h>
-> +#include <linux/cdev.h>
->  #include <linux/virtio.h>
->  #include <linux/completion.h>
->  #include <linux/idr.h>
-> @@ -514,6 +515,7 @@ struct rproc {
->  	bool auto_boot;
->  	struct list_head dump_segments;
->  	int nb_vdev;
-> +	struct cdev char_dev;
->  };
+>  	qcom_q6v5_prepare(&adsp->q6v5);
 >  
->  /**
+> +	ret = do_bus_scaling(adsp, true);
+> +	if (ret)
+> +		goto disable_irqs;
+> +
+>  	ret = adsp_pds_enable(adsp, adsp->active_pds, adsp->active_pd_count);
+>  	if (ret < 0)
+> -		goto disable_irqs;
+> +		goto unscale_bus;
+>  
+>  	ret = adsp_pds_enable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+>  	if (ret < 0)
+> @@ -183,6 +211,8 @@ static int adsp_start(struct rproc *rproc)
+>  	adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+>  disable_active_pds:
+>  	adsp_pds_disable(adsp, adsp->active_pds, adsp->active_pd_count);
+> +unscale_bus:
+> +	do_bus_scaling(adsp, false);
+>  disable_irqs:
+>  	qcom_q6v5_unprepare(&adsp->q6v5);
+>  
+> @@ -198,6 +228,7 @@ static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
+>  	clk_disable_unprepare(adsp->aggre2_clk);
+>  	clk_disable_unprepare(adsp->xo);
+>  	adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+> +	do_bus_scaling(adsp, false);
+>  }
+>  
+>  static int adsp_stop(struct rproc *rproc)
+> @@ -280,6 +311,14 @@ static int adsp_init_regulator(struct qcom_adsp *adsp)
+>  	return PTR_ERR_OR_ZERO(adsp->px_supply);
+>  }
+>  
+> +static void adsp_init_bus_scaling(struct qcom_adsp *adsp)
+> +{
+> +	adsp->bus_client = of_icc_get(adsp->dev, NULL);
+> +	if (!adsp->bus_client)
+
+!adsp->bus_client means there's no interconnects property in the DT
+node, you still need to test for errors with IS_ERR().
+
+And in particular you're not guaranteed that the provider has probed, so
+you need to propagate EPROBE_DEFER.
+
+> +		dev_warn(adsp->dev, "%s: unable to get bus client \n",
+> +			__func__);
+
+This is a dev_err() for the case of IS_ERR().
+
+And please drop the __func__, it doesn't add any value.
+
+> +}
+> +
+>  static int adsp_pds_attach(struct device *dev, struct device **devs,
+>  			   char **pd_names)
+>  {
+> @@ -410,6 +449,8 @@ static int adsp_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto free_rproc;
+>  
+> +	adsp_init_bus_scaling(adsp);
+> +
+
+As stated above, you need to propagate actual errors here (i.e. not the
+case where of_icc_get() returned NULL, but when it returned IS_ERR())
+
+Regards,
+bjorn
+>  	ret = adsp_pds_attach(&pdev->dev, adsp->active_pds,
+>  			      desc->active_pd_names);
+>  	if (ret < 0)
 > -- 
 > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
 > a Linux Foundation Collaborative Project
