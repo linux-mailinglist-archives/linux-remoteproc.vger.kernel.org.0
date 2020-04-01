@@ -2,244 +2,172 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6911F19B6CB
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  1 Apr 2020 22:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61AB619B6F5
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  1 Apr 2020 22:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732385AbgDAURh (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 1 Apr 2020 16:17:37 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:55956 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727178AbgDAURh (ORCPT
+        id S1732669AbgDAU3y (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 1 Apr 2020 16:29:54 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:33316 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732337AbgDAU3y (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 1 Apr 2020 16:17:37 -0400
-Received: by mail-pj1-f67.google.com with SMTP id fh8so554128pjb.5
-        for <linux-remoteproc@vger.kernel.org>; Wed, 01 Apr 2020 13:17:36 -0700 (PDT)
+        Wed, 1 Apr 2020 16:29:54 -0400
+Received: by mail-pl1-f194.google.com with SMTP id ay1so452458plb.0
+        for <linux-remoteproc@vger.kernel.org>; Wed, 01 Apr 2020 13:29:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7QXM5fjeLv6e7wruqQv62gWJ5sED1p3tH47WlR+hLIE=;
-        b=YGMnDWsG0ZR1g+JyYg5zKDRMK1O35HfU96XTzVrCiZyyDkfnHAwwvKq6yHyonJL84n
-         jl2aLQDk9OzxeGyHN+98LRY7pSor3o6Zelig3o0Avko9l7MwjQLnx1SRFI5xyvvoxxay
-         e60vy+XVTbJbBPbyU7oJ44zEsH0WTS/yAuu/n27mXk1jonz8+MXZWemQrWMN2t7mkPn0
-         QvlOR7RQP9I7lF9D+gPb2NppYbb/yTIZdxRxU1A+8q3lAKQgLuBD54cYU509eKNSvRsy
-         9C7nExb+NOJeFhWy0szZbp3XaiiOggn2HfnUY9ATK4So1oeBlTITuKTK7/I+j1GlF+XB
-         nkcA==
+         :content-disposition:in-reply-to:user-agent;
+        bh=nPl3UxaupApmm+htX84e8WNA6HpoIMDJmhDOFauG+sw=;
+        b=aLAHqoo0Ou7xVcELCPxA1ycd91HMT4LR2BmLviShvmfGB/64TeA0twCgEqM+dcrgeS
+         SdSK0SKdSDRm6wou8wz33QhtleYjBMVjugV6IxMKposIMOtRv0Vy7ZKCMcMyB+SdMQWJ
+         Q+dOuHe+SUY9hRxG2jobrul9V4WkUjbB97fIrKv8MIyPM558+9ey9hxigAJ6kcJ15seY
+         zyGU2bw1+mo+VqNVWzkg1cZMa8sEnq3UYKyI+b6MUyhKMs+1VhLyu5QYvY2ITBicKKtV
+         k0RVhdZOIqVqa1727hIncuPG2FcK+5pkMOcQwqIudDMb24BWfGNXW9PQeRVPDdvdOTf+
+         bEww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7QXM5fjeLv6e7wruqQv62gWJ5sED1p3tH47WlR+hLIE=;
-        b=qc18RmqN8Kb7bAOHZWoyFef6kI+2+cke3AnVkI9N9qXfENHNu/ot9qF5v5ncRTI39F
-         lEcKHAAfHt++LrBcf7XiQ4usct2mMW70SjWdce73uL8z5/MyCAgEyJkvfjUOuumZuNvx
-         NR+lcxGVBeM2VOpYL++79PmPBpx3uBZfHrUIq9D5yT8C2kj6pQNiMaUgtgk2PwccHI8M
-         DuBH1HfGzD0HENPggxAafWIgafaTKiVMR+ru0A1aSJP550q55AqxQ/U9UsZzfZ8o8KDp
-         swvHSqd+dbnwEUc23E1tXUE5kyj2K4+DZbPa8JZDJ6WEE+XHtFinuCN4huZMB6zYc2uc
-         /TXg==
-X-Gm-Message-State: AGi0PuYBZ/YVzxAl3tABIhCte4YH3sJLsozspprX4nhJiWOmCSqGGySn
-        yJX/xjCFT6XgKM77qJotG7OW4g==
-X-Google-Smtp-Source: APiQypLtGYyXbFfmZZjtyDuDbV7lYQakXZwSxTvMqeaSjxfrV12j482v+QbT3C15jtCjVEWzzqOUdg==
-X-Received: by 2002:a17:90a:c001:: with SMTP id p1mr7107170pjt.86.1585772255587;
-        Wed, 01 Apr 2020 13:17:35 -0700 (PDT)
-Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id y4sm2214312pfo.39.2020.04.01.13.17.08
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nPl3UxaupApmm+htX84e8WNA6HpoIMDJmhDOFauG+sw=;
+        b=Xd3821u9y8z5lGCTLIxMAdN3B4ruG4jSkGo6/sYyg8iKm54XTlqLs72FJIQ6ZPkqcs
+         DodVlFJLdF4V3RijFSkFGgJg9niKV9ghESd373Tr+vrXhLSq9qkr4u1147VTYfjhZIG9
+         WgoXq4Kxxsb6eF3KkjKvA83vSROHlfDDY2nr30SDSRoaMtcnyg46qqLtMwU3CfPdnyWh
+         mvyXk1WC2bd/z+P8MzLnnSTE7uWFpfVkxJUYVV8O2J2x3EBxTnKYf5DodmAsJgifb684
+         BqpMZmX6xtUl/ak1iDN2oHWcho1hAdNbChLwvVcYM+6UmDj4V6P+FpkqG+7tjQfP5N0h
+         wc+Q==
+X-Gm-Message-State: ANhLgQ2q+x4Rfh2LyOHwuM8ubWysQ/385vrfE1CwcdGz1f+5YPAkok7d
+        UrkkWCb5qG5r0dOgYwC+UTSJtw==
+X-Google-Smtp-Source: ADFU+vt5OVy4CHt6UGo2XVOKvrx4Wg2oR+omT9fhp1LE8sFh87vx2K+BqsR8UAs9qSx6BDZViycyNA==
+X-Received: by 2002:a17:902:a40e:: with SMTP id p14mr24410411plq.295.1585772993220;
+        Wed, 01 Apr 2020 13:29:53 -0700 (PDT)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id f45sm2237015pjg.29.2020.04.01.13.29.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2020 13:17:11 -0700 (PDT)
-Date:   Wed, 1 Apr 2020 13:17:07 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        psodagud@codeaurora.org, tsoni@codeaurora.org,
-        sidgup@codeaurora.org
-Subject: Re: [PATCH 1/2] remoteproc: qcom: Add bus scaling capability during
- bootup
-Message-ID: <20200401201707.GG267644@minitux>
-References: <1585357147-4616-1-git-send-email-rishabhb@codeaurora.org>
+        Wed, 01 Apr 2020 13:29:52 -0700 (PDT)
+Date:   Wed, 1 Apr 2020 14:29:50 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Suman Anna <s-anna@ti.com>
+Cc:     Loic PALLARDY <loic.pallardy@st.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "ohad@wizery.com" <ohad@wizery.com>,
+        "peng.fan@nxp.com" <peng.fan@nxp.com>,
+        Arnaud POULIQUEN <arnaud.pouliquen@st.com>,
+        Fabien DESSENNE <fabien.dessenne@st.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>
+Subject: Re: [PATCH v2 06/17] remoteproc: Introduce function
+ rproc_alloc_internals()
+Message-ID: <20200401202950.GA17383@xps15>
+References: <20200324214603.14979-1-mathieu.poirier@linaro.org>
+ <20200324214603.14979-7-mathieu.poirier@linaro.org>
+ <064cda96467f4ab39b494d543198fa7e@SFHDAG7NODE2.st.com>
+ <88f56a4e-dccb-0d50-4656-82380a2e57aa@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1585357147-4616-1-git-send-email-rishabhb@codeaurora.org>
+In-Reply-To: <88f56a4e-dccb-0d50-4656-82380a2e57aa@ti.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri 27 Mar 17:59 PDT 2020, Rishabh Bhatnagar wrote:
+Hi Suman,
 
-> During bootup since remote processors cannot request for
-> additional bus bandwidth from the interconect framework,
-> platform driver should provide the proxy resources. This
-> is useful for scenarios where the Q6 tries to access the DDR
-> memory in the initial stages of bootup. For e.g. during
-> bootup or after recovery modem Q6 tries to zero out the bss
-> section in the DDR. Since this is a big chunk of memory if
-> don't bump up the bandwidth we might encounter timeout issues.
-> This patch makes a proxy vote for maximizing the bus bandwidth
-> during bootup and removes it once processor is up.
+On Mon, Mar 30, 2020 at 03:38:14PM -0500, Suman Anna wrote:
+> Hi Mathieu,
 > 
-> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
-> ---
->  drivers/remoteproc/qcom_q6v5_pas.c | 43 +++++++++++++++++++++++++++++++++++++-
->  1 file changed, 42 insertions(+), 1 deletion(-)
+> On 3/27/20 6:10 AM, Loic PALLARDY wrote:
+> > Hi Mathieu,
+> > 
+> >>
+> >> In preparation to allocate the synchronisation operation and state
+> >> machine, spin off a new function in order to keep rproc_alloc() as
+> >> clean as possible.
+> >>
+> >> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> >> ---
+> >>  drivers/remoteproc/remoteproc_core.c | 26 ++++++++++++++++++++++---
+> >> -
+> >>  1 file changed, 22 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/drivers/remoteproc/remoteproc_core.c
+> >> b/drivers/remoteproc/remoteproc_core.c
+> >> index ee277bc5556c..9da245734db6 100644
+> >> --- a/drivers/remoteproc/remoteproc_core.c
+> >> +++ b/drivers/remoteproc/remoteproc_core.c
+> >> @@ -2018,6 +2018,26 @@ static int rproc_alloc_ops(struct rproc *rproc,
+> >> const struct rproc_ops *ops)
+> >>  	return 0;
+> >>  }
+> >>
+> >> +static int rproc_alloc_internals(struct rproc *rproc, const char *name,
+> >> +				 const struct rproc_ops *boot_ops,
+> >> +				 const char *firmware, int len)
+> > 
+> > len argument is not used in the patch nor in the following, maybe removed from my pov.
 > 
-> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-> index edf9d0e..8f5db8d 100644
-> --- a/drivers/remoteproc/qcom_q6v5_pas.c
-> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-> @@ -20,6 +20,7 @@
->  #include <linux/qcom_scm.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/remoteproc.h>
-> +#include <linux/interconnect.h>
+> Indeed.
+> 
+> > 
+> > Regards,
+> > Loic
+> 
+> >> +{
+> >> +	int ret;
+> >> +
+> >> +	/* We have a boot_ops so allocate firmware name and operations */
+> >> +	if (boot_ops) {
+> >> +		ret = rproc_alloc_firmware(rproc, name, firmware);
+> >> +		if (ret)
+> >> +			return ret;
+> 
+> So, can you explain why firmware allocation now becomes conditional on
+> this boot_ops?
 
-These are sorted alphabetically, please maintain this.
+There is no point in allocating a firmware name in a scenario where the
+remoteproc core is only synchronising with the MCU.  As soon as a boot_ops (to
+be renamed ops as per your comment below) is present I assume firmware loading
+will be involved at some point.   Do you see a scenario where that wouldn't be
+be case?
 
->  #include <linux/soc/qcom/mdt_loader.h>
->  #include <linux/soc/qcom/smem.h>
->  #include <linux/soc/qcom/smem_state.h>
-> @@ -28,6 +29,9 @@
->  #include "qcom_q6v5.h"
->  #include "remoteproc_internal.h"
->  
-> +#define PIL_TZ_AVG_BW  0
-> +#define PIL_TZ_PEAK_BW UINT_MAX
+> 
+> Perhaps, continue to call this as ops following the field name in struct
+> rproc.
 
-Please just inline these in do_bus_scaling().
+Ok
 
-> +
->  struct adsp_data {
->  	int crash_reason_smem;
->  	const char *firmware_name;
-> @@ -62,6 +66,7 @@ struct qcom_adsp {
->  	int proxy_pd_count;
->  
->  	int pas_id;
-> +	struct icc_path *bus_client;
-
-Please rename this proxy_path
-
->  	int crash_reason_smem;
->  	bool has_aggre2_clk;
->  
-> @@ -124,6 +129,25 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
->  
->  }
->  
-> +static int do_bus_scaling(struct qcom_adsp *adsp, bool enable)
-
-adsp_bus_vote()
-
-> +{
-> +	int rc;
-
-This driver uses "int ret".
-
-> +	u32 avg_bw = enable ? PIL_TZ_AVG_BW : 0;
-
-No need to carry a variable for 0 or 0, jut pass 0 in the function call
-directly.
-
-> +	u32 peak_bw = enable ? PIL_TZ_PEAK_BW : 0;
-> +
-> +	if (adsp->bus_client) {
-
-No need for this check, icc_set_bw(NULL, ..) is a nop.
-
-> +		rc = icc_set_bw(adsp->bus_client, avg_bw, peak_bw);
-> +		if (rc) {
-> +			dev_err(adsp->dev, "bandwidth request failed(rc:%d)\n",
-
-"failed to request bandwidth: %d\n"
-
-> +				rc);
-> +			return rc;
-> +		}
-> +	} else
-> +		dev_info(adsp->dev, "Bus scaling not setup for %s\n",
-
-No need to print this.
-
-> +			adsp->rproc->name);
-> +	return 0;
-> +}
-> +
->  static int adsp_start(struct rproc *rproc)
->  {
->  	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
-> @@ -131,9 +155,13 @@ static int adsp_start(struct rproc *rproc)
->  
->  	qcom_q6v5_prepare(&adsp->q6v5);
->  
-> +	ret = do_bus_scaling(adsp, true);
-> +	if (ret)
-> +		goto disable_irqs;
-> +
->  	ret = adsp_pds_enable(adsp, adsp->active_pds, adsp->active_pd_count);
->  	if (ret < 0)
-> -		goto disable_irqs;
-> +		goto unscale_bus;
->  
->  	ret = adsp_pds_enable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
->  	if (ret < 0)
-> @@ -183,6 +211,8 @@ static int adsp_start(struct rproc *rproc)
->  	adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
->  disable_active_pds:
->  	adsp_pds_disable(adsp, adsp->active_pds, adsp->active_pd_count);
-> +unscale_bus:
-> +	do_bus_scaling(adsp, false);
->  disable_irqs:
->  	qcom_q6v5_unprepare(&adsp->q6v5);
->  
-> @@ -198,6 +228,7 @@ static void qcom_pas_handover(struct qcom_q6v5 *q6v5)
->  	clk_disable_unprepare(adsp->aggre2_clk);
->  	clk_disable_unprepare(adsp->xo);
->  	adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
-> +	do_bus_scaling(adsp, false);
->  }
->  
->  static int adsp_stop(struct rproc *rproc)
-> @@ -280,6 +311,14 @@ static int adsp_init_regulator(struct qcom_adsp *adsp)
->  	return PTR_ERR_OR_ZERO(adsp->px_supply);
->  }
->  
-> +static void adsp_init_bus_scaling(struct qcom_adsp *adsp)
-> +{
-> +	adsp->bus_client = of_icc_get(adsp->dev, NULL);
-> +	if (!adsp->bus_client)
-
-!adsp->bus_client means there's no interconnects property in the DT
-node, you still need to test for errors with IS_ERR().
-
-And in particular you're not guaranteed that the provider has probed, so
-you need to propagate EPROBE_DEFER.
-
-> +		dev_warn(adsp->dev, "%s: unable to get bus client \n",
-> +			__func__);
-
-This is a dev_err() for the case of IS_ERR().
-
-And please drop the __func__, it doesn't add any value.
-
-> +}
-> +
->  static int adsp_pds_attach(struct device *dev, struct device **devs,
->  			   char **pd_names)
->  {
-> @@ -410,6 +449,8 @@ static int adsp_probe(struct platform_device *pdev)
->  	if (ret)
->  		goto free_rproc;
->  
-> +	adsp_init_bus_scaling(adsp);
-> +
-
-As stated above, you need to propagate actual errors here (i.e. not the
-case where of_icc_get() returned NULL, but when it returned IS_ERR())
-
-Regards,
-bjorn
->  	ret = adsp_pds_attach(&pdev->dev, adsp->active_pds,
->  			      desc->active_pd_names);
->  	if (ret < 0)
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
+> 
+> regards
+> Suman
+> 
+> >> +
+> >> +		ret = rproc_alloc_ops(rproc, boot_ops);
+> >> +		if (ret)
+> >> +			return ret;
+> >> +	}
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >>  /**
+> >>   * rproc_alloc() - allocate a remote processor handle
+> >>   * @dev: the underlying device
+> >> @@ -2064,10 +2084,8 @@ struct rproc *rproc_alloc(struct device *dev, const
+> >> char *name,
+> >>  	rproc->dev.class = &rproc_class;
+> >>  	rproc->dev.driver_data = rproc;
+> >>
+> >> -	if (rproc_alloc_firmware(rproc, name, firmware))
+> >> -		goto out;
+> >> -
+> >> -	if (rproc_alloc_ops(rproc, ops))
+> >> +	if (rproc_alloc_internals(rproc, name, ops,
+> >> +				  firmware, len))
+> >>  		goto out;
+> >>
+> >>  	/* Assign a unique device index and name */
+> >> --
+> >> 2.20.1
+> > 
+> 
