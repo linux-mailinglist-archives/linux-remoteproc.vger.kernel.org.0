@@ -2,344 +2,308 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DA019B91E
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  2 Apr 2020 01:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C5719B9AE
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  2 Apr 2020 03:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732989AbgDAXxe (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 1 Apr 2020 19:53:34 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:12912 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732682AbgDAXxc (ORCPT
+        id S1732664AbgDBBB6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 1 Apr 2020 21:01:58 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:54708 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732732AbgDBBB6 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 1 Apr 2020 19:53:32 -0400
+        Wed, 1 Apr 2020 21:01:58 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1585785211; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=AxlPvDNFAnlaO5kN8Ue2z7R5/mFEDs7cI6QoEP369TQ=;
- b=HT6MLDDqMbXdcXvuJqxqG4rqv02WCbLi8c0lY82dmhbcaknLL6k2daTVYo7E4C4tmrxUNVwg
- 1S27Gz4zBCeDCy+UuPpyueXmn9DPRRggpe5Mg80wrZwN8OYKxEqtkhA6qFGXp6R2HBP8Xz66
- 6QHEF6BSZAAElNA0f2GpLd4nw00=
-X-Mailgun-Sending-Ip: 104.130.122.26
+ s=smtp; t=1585789317; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=QAHYcoUDv2nhsjy7hNSPwmWAPOAPbrFtNhtJ+n4wZcw=; b=xAPTX4Ho/hdtgl/9gm3i5NH4ejSYzutrD3iMMXjUqQl+KYgghshEPBHTa0xEUAvNjb6sxpxe
+ /OPItjy4hhjRxeXbaJJEqwcjeBIbs09U3OgLfsGI0wpMXz6WrIWYnEokndbhMBbQJJMZc8MV
+ gCp2aivASm0MpqClB+N8gVs5Glw=
+X-Mailgun-Sending-Ip: 104.130.122.27
 X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e852976.7fa860237378-smtp-out-n04;
- Wed, 01 Apr 2020 23:53:26 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5e853960.7fd24970d3b0-smtp-out-n01;
+ Thu, 02 Apr 2020 01:01:20 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 9B97DC433BA; Wed,  1 Apr 2020 23:53:26 +0000 (UTC)
+        id 6A846C4478F; Thu,  2 Apr 2020 01:01:19 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+Received: from [192.168.1.10] (cpe-70-95-5-60.san.res.rr.com [70.95.5.60])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: rishabhb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 92968C433F2;
-        Wed,  1 Apr 2020 23:53:25 +0000 (UTC)
+        (Authenticated sender: sidgup)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 98F41C433F2;
+        Thu,  2 Apr 2020 01:01:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 98F41C433F2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sidgup@codeaurora.org
+Subject: Re: [PATCH 6/6] remoteproc: qcom: Add notification types to SSR
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>, tsoni@codeaurora.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, psodagud@codeaurora.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-remoteproc-owner@vger.kernel.org
+References: <1582167465-2549-1-git-send-email-sidgup@codeaurora.org>
+ <1582167465-2549-7-git-send-email-sidgup@codeaurora.org>
+ <20200227215940.GC20116@xps15>
+ <1a615fcd5a5c435d1d8babe8d5c3f8c3@codeaurora.org>
+ <20200228183832.GA23026@xps15>
+ <cac45f2726a272ccd0ce82e12e46756f@codeaurora.org>
+ <CANLsYkzUh_BRjapX_jDZZ00Lj8MMgMPM12+otYHDKqad1s-qHQ@mail.gmail.com>
+ <050a8613cd00a84678b4478ef3387465@codeaurora.org>
+ <CANLsYkyrzNPUymuJzehEOAA2FV+WDohUpgCYTNdbGCJBoat2cg@mail.gmail.com>
+From:   Siddharth Gupta <sidgup@codeaurora.org>
+Message-ID: <64310efc-00f3-f8d8-3058-19dfbe1aa578@codeaurora.org>
+Date:   Wed, 1 Apr 2020 18:01:16 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <CANLsYkyrzNPUymuJzehEOAA2FV+WDohUpgCYTNdbGCJBoat2cg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Wed, 01 Apr 2020 16:53:25 -0700
-From:   rishabhb@codeaurora.org
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        psodagud@codeaurora.org, tsoni@codeaurora.org,
-        sidgup@codeaurora.org
-Subject: Re: [PATCH v2 1/2] remoteproc: Add character device interface
-In-Reply-To: <20200401200827.GF267644@minitux>
-References: <1585699438-14394-1-git-send-email-rishabhb@codeaurora.org>
- <20200401200827.GF267644@minitux>
-Message-ID: <27cae9aae50385f9123cb0987edeec1c@codeaurora.org>
-X-Sender: rishabhb@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Language: en-US
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 2020-04-01 13:08, Bjorn Andersson wrote:
-> On Tue 31 Mar 17:03 PDT 2020, Rishabh Bhatnagar wrote:
-> 
->> Add the character device interface for userspace applications.
->> This interface can be used in order to boot up and shutdown
->> remote subsystems. Currently there is only a sysfs interface
->> which the userspace clients can use. If a usersapce application
->> crashes after booting the remote processor does not get any
->> indication about the crash. It might still assume that the
->> application is running. For example modem uses remotefs service
->> to fetch data from disk/flash memory. If the remotefs service
->> crashes, modem keeps on requesting data which might lead to a
->> crash. Adding a character device interface makes the remote
->> processor tightly coupled with the user space application.
->> A crash of the application leads to a close on the file descriptors
->> therefore shutting down the remoteproc.
->> 
->> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
->> ---
->>  drivers/remoteproc/Kconfig               |   9 +++
->>  drivers/remoteproc/Makefile              |   1 +
->>  drivers/remoteproc/remoteproc_cdev.c     | 100 
->> +++++++++++++++++++++++++++++++
->>  drivers/remoteproc/remoteproc_internal.h |  22 +++++++
->>  include/linux/remoteproc.h               |   2 +
->>  5 files changed, 134 insertions(+)
->>  create mode 100644 drivers/remoteproc/remoteproc_cdev.c
->> 
->> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
->> index de3862c..6374b79 100644
->> --- a/drivers/remoteproc/Kconfig
->> +++ b/drivers/remoteproc/Kconfig
->> @@ -14,6 +14,15 @@ config REMOTEPROC
->> 
->>  if REMOTEPROC
->> 
->> +config REMOTEPROC_CDEV
->> +	bool "Remoteproc character device interface"
->> +	help
->> +	  Say y here to have a character device interface for Remoteproc
->> +	  framework. Userspace can boot/shutdown remote processors through
->> +	  this interface.
->> +
->> +	  It's safe to say N if you don't want to use this interface.
->> +
->>  config IMX_REMOTEPROC
->>  	tristate "IMX6/7 remoteproc support"
->>  	depends on ARCH_MXC
->> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
->> index e30a1b1..b7d4f77 100644
->> --- a/drivers/remoteproc/Makefile
->> +++ b/drivers/remoteproc/Makefile
->> @@ -9,6 +9,7 @@ remoteproc-y				+= remoteproc_debugfs.o
->>  remoteproc-y				+= remoteproc_sysfs.o
->>  remoteproc-y				+= remoteproc_virtio.o
->>  remoteproc-y				+= remoteproc_elf_loader.o
->> +obj-$(CONFIG_REMOTEPROC_CDEV)		+= remoteproc_cdev.o
->>  obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
->>  obj-$(CONFIG_MTK_SCP)			+= mtk_scp.o mtk_scp_ipi.o
->>  obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o
->> diff --git a/drivers/remoteproc/remoteproc_cdev.c 
->> b/drivers/remoteproc/remoteproc_cdev.c
->> new file mode 100644
->> index 0000000..8182bd1
->> --- /dev/null
->> +++ b/drivers/remoteproc/remoteproc_cdev.c
->> @@ -0,0 +1,100 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Character device interface driver for Remoteproc framework.
->> + *
->> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
->> + */
->> +
->> +#include <linux/cdev.h>
->> +#include <linux/fs.h>
->> +#include <linux/module.h>
->> +#include <linux/mutex.h>
->> +#include <linux/remoteproc.h>
->> +
->> +#include "remoteproc_internal.h"
->> +
->> +#define NUM_RPROC_DEVICES	64
->> +static dev_t rproc_cdev;
->> +static DEFINE_IDA(cdev_minor_ida);
->> +
->> +static int rproc_cdev_open(struct inode *inode, struct file *file)
->> +{
->> +	struct rproc *rproc;
->> +
->> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
-> 
-> I would prefer this to be a on a single line
-> 	struct rproc *rproc = container_of(..);
-> 
->> +
->> +	if (!rproc)
-> 
-> I don't think this is possible.
-> 
->> +		return -EINVAL;
->> +
->> +	if (rproc->state == RPROC_RUNNING)
->> +		return -EBUSY;
->> +
-> 
-> This is racy, it's possible that state wasn't RUNNING, but at the time
-> we're entering rproc_boot() it is - or as Clement correctly points out,
-> the core might be in CRASHED state.
-> 
-I can check for OFFLINE state and only then call rproc_boot.
-But we would need to check inside rproc_boot if the state was OFFLINE as 
-well.
-Same issue we might need to fix for sysfs interface?
->> +	return rproc_boot(rproc);
-> 
-> Feels like we would want a variant of rproc_boot() that doesn't do
-> refcounting... Maybe a rproc_boot_exclusive() that takes the mutex and
-> then fails if the core is refcounted already?
-> 
->> +}
->> +
->> +static int rproc_cdev_release(struct inode *inode, struct file *file)
->> +{
->> +	struct rproc *rproc;
->> +
->> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
->> +
->> +	if (!rproc || rproc->state != RPROC_RUNNING)
->> +		return -EINVAL;
-> 
-> rproc can't be NULL here and the core might be in CRASHED state here, 
-> in
-> which case we still want to abort that and shut down the core...
-> 
-> Note that in the event of calling close() the return value is discarded
-> on the way to userspace and in the event that the process is killed we
-> still expect the remoteproc to be shut down (if the refcount hit 0).
-> 
->> +
->> +	rproc_shutdown(rproc);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct file_operations rproc_fops = {
->> +	.open = rproc_cdev_open,
->> +	.release = rproc_cdev_release,
->> +};
->> +
->> +int rproc_char_device_add(struct rproc *rproc)
->> +{
->> +	int ret, minor;
->> +	dev_t cdevt;
->> +
->> +	minor = ida_simple_get(&cdev_minor_ida, 0, NUM_RPROC_DEVICES,
-> 
-> Can't you use rproc->index as minor?
-> 
->> +			       GFP_KERNEL);
->> +	if (minor < 0) {
->> +		dev_err(&rproc->dev, "%s: No more minor numbers left! rc:%d\n",
->> +			__func__, minor);
->> +		return -ENODEV;
->> +	}
->> +
->> +	cdev_init(&rproc->char_dev, &rproc_fops);
->> +	rproc->char_dev.owner = THIS_MODULE;
->> +
->> +	cdevt = MKDEV(MAJOR(rproc_cdev), minor);
->> +	ret = cdev_add(&rproc->char_dev, cdevt, 1);
->> +	if (ret < 0)
->> +		ida_simple_remove(&cdev_minor_ida, minor);
->> +
->> +	rproc->dev.devt = cdevt;
->> +	return ret;
->> +}
->> +
->> +void rproc_char_device_remove(struct rproc *rproc)
->> +{
->> +	__unregister_chrdev(MAJOR(rproc->dev.devt), MINOR(rproc->dev.devt), 
->> 1,
->> +			    "rproc");
-> 
-> Shouldn't this be cdev_del()?
-_unregist_chrdev should delete the cdev internally.
-> 
->> +	ida_simple_remove(&cdev_minor_ida, MINOR(rproc->dev.devt));
->> +}
->> +
->> +void __init rproc_init_cdev(void)
->> +{
->> +	int ret;
->> +
->> +	ret = alloc_chrdev_region(&rproc_cdev, 0, NUM_RPROC_DEVICES, 
->> "rproc");
->> +	if (ret < 0) {
->> +		pr_err("Failed to alloc rproc_cdev region, err %d\n", ret);
->> +		return;
-> 
-> Drop this return, and hence the {}
-> 
->> +	}
->> +}
->> +
->> +void __exit rproc_exit_cdev(void)
->> +{
->> +	__unregister_chrdev(MAJOR(rproc_cdev), 0, NUM_RPROC_DEVICES, 
->> "rproc");
-> 
-> unregister_chrdev_region();
-> 
-we might want to delete character devices as well, which is done by 
-__unregister_chrdev
->> +}
->> diff --git a/drivers/remoteproc/remoteproc_internal.h 
->> b/drivers/remoteproc/remoteproc_internal.h
->> index 493ef92..28d61a1 100644
->> --- a/drivers/remoteproc/remoteproc_internal.h
->> +++ b/drivers/remoteproc/remoteproc_internal.h
->> @@ -47,6 +47,27 @@ struct dentry *rproc_create_trace_file(const char 
->> *name, struct rproc *rproc,
->>  int rproc_init_sysfs(void);
->>  void rproc_exit_sysfs(void);
->> 
->> +#ifdef CONFIG_REMOTEPROC_CDEV
->> +void rproc_init_cdev(void);
->> +void rproc_exit_cdev(void);
->> +int rproc_char_device_add(struct rproc *rproc);
->> +void rproc_char_device_remove(struct rproc *rproc);
->> +#else
->> +static inline void rproc_init_cdev(void)
->> +{
->> +}
->> +static inline void rproc_exit_cdev(void)
->> +{
->> +}
->> +static inline int rproc_char_device_add(struct rproc *rproc)
->> +{
->> +	return 0;
->> +}
->> +static inline void  rproc_char_device_remove(struct rproc *rproc)
->> +{
->> +}
->> +#endif
->> +
->>  void rproc_free_vring(struct rproc_vring *rvring);
->>  int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
->> 
->> @@ -63,6 +84,7 @@ struct resource_table 
->> *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
->>  struct rproc_mem_entry *
->>  rproc_find_carveout_by_name(struct rproc *rproc, const char *name, 
->> ...);
->> 
->> +
->>  static inline
->>  int rproc_fw_sanity_check(struct rproc *rproc, const struct firmware 
->> *fw)
->>  {
->> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->> index 16ad666..c4ca796 100644
->> --- a/include/linux/remoteproc.h
->> +++ b/include/linux/remoteproc.h
->> @@ -37,6 +37,7 @@
->> 
->>  #include <linux/types.h>
->>  #include <linux/mutex.h>
->> +#include <linux/cdev.h>
->>  #include <linux/virtio.h>
->>  #include <linux/completion.h>
->>  #include <linux/idr.h>
->> @@ -514,6 +515,7 @@ struct rproc {
->>  	bool auto_boot;
->>  	struct list_head dump_segments;
->>  	int nb_vdev;
->> +	struct cdev char_dev;
->>  };
->> 
->>  /**
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
->> Forum,
->> a Linux Foundation Collaborative Project
+On 3/9/2020 10:34 AM, Mathieu Poirier wrote:
+
+> On Tue, 3 Mar 2020 at 16:30, <rishabhb@codeaurora.org> wrote:
+>> On 2020-03-03 10:05, Mathieu Poirier wrote:
+>>> On Mon, 2 Mar 2020 at 13:54, <rishabhb@codeaurora.org> wrote:
+>>>> On 2020-02-28 10:38, Mathieu Poirier wrote:
+>>>>> On Thu, Feb 27, 2020 at 04:00:21PM -0800, rishabhb@codeaurora.org
+>>>>> wrote:
+>>>>>> On 2020-02-27 13:59, Mathieu Poirier wrote:
+>>>>>>> On Wed, Feb 19, 2020 at 06:57:45PM -0800, Siddharth Gupta wrote:
+>>>>>>>> The SSR subdevice only adds callback for the unprepare event. Add
+>>>>>>>> callbacks
+>>>>>>>> for unprepare, start and prepare events. The client driver for a
+>>>>>>>> particular
+>>>>>>>> remoteproc might be interested in knowing the status of the remoteproc
+>>>>>>>> while undergoing SSR, not just when the remoteproc has finished
+>>>>>>>> shutting
+>>>>>>>> down.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
+>>>>>>>> ---
+>>>>>>>>   drivers/remoteproc/qcom_common.c | 39
+>>>>>>>> +++++++++++++++++++++++++++++++++++----
+>>>>>>>>   include/linux/remoteproc.h       | 15 +++++++++++++++
+>>>>>>>>   2 files changed, 50 insertions(+), 4 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/remoteproc/qcom_common.c
+>>>>>>>> b/drivers/remoteproc/qcom_common.c
+>>>>>>>> index 6714f27..6f04a5b 100644
+>>>>>>>> --- a/drivers/remoteproc/qcom_common.c
+>>>>>>>> +++ b/drivers/remoteproc/qcom_common.c
+>>>>>>>> @@ -183,9 +183,9 @@ EXPORT_SYMBOL_GPL(qcom_remove_smd_subdev);
+>>>>>>>>    *
+>>>>>>>>    * Returns pointer to srcu notifier head on success, ERR_PTR on
+>>>>>>>> failure.
+>>>>>>>>    *
+>>>>>>>> - * This registers the @notify function as handler for restart
+>>>>>>>> notifications. As
+>>>>>>>> - * remote processors are stopped this function will be called, with
+>>>>>>>> the rproc
+>>>>>>>> - * pointer passed as a parameter.
+>>>>>>>> + * This registers the @notify function as handler for
+>>>>>>>> powerup/shutdown
+>>>>>>>> + * notifications. This function will be invoked inside the
+>>>>>>>> callbacks registered
+>>>>>>>> + * for the ssr subdevice, with the rproc pointer passed as a
+>>>>>>>> parameter.
+>>>>>>>>    */
+>>>>>>>>   void *qcom_register_ssr_notifier(struct rproc *rproc, struct
+>>>>>>>> notifier_block *nb)
+>>>>>>>>   {
+>>>>>>>> @@ -227,11 +227,39 @@ int qcom_unregister_ssr_notifier(void *notify,
+>>>>>>>> struct notifier_block *nb)
+>>>>>>>>   }
+>>>>>>>>   EXPORT_SYMBOL_GPL(qcom_unregister_ssr_notifier);
+>>>>>>>>
+>>>>>>>> +static int ssr_notify_prepare(struct rproc_subdev *subdev)
+>>>>>>>> +{
+>>>>>>>> +        struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
+>>>>>>>> +
+>>>>>>>> +        srcu_notifier_call_chain(ssr->rproc_notif_list,
+>>>>>>>> +                                 RPROC_BEFORE_POWERUP, (void *)ssr->name);
+>>>>>>>> +        return 0;
+>>>>>>>> +}
+>>>>>>>> +
+>>>>>>>> +static int ssr_notify_start(struct rproc_subdev *subdev)
+>>>>>>>> +{
+>>>>>>>> +        struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
+>>>>>>>> +
+>>>>>>>> +        srcu_notifier_call_chain(ssr->rproc_notif_list,
+>>>>>>>> +                                 RPROC_AFTER_POWERUP, (void *)ssr->name);
+>>>>>>>> +        return 0;
+>>>>>>>> +}
+>>>>>>>> +
+>>>>>>>> +static void ssr_notify_stop(struct rproc_subdev *subdev, bool
+>>>>>>>> crashed)
+>>>>>>>> +{
+>>>>>>>> +        struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
+>>>>>>>> +
+>>>>>>>> +        srcu_notifier_call_chain(ssr->rproc_notif_list,
+>>>>>>>> +                                 RPROC_BEFORE_SHUTDOWN, (void *)ssr->name);
+>>>>>>>> +}
+>>>>>>>> +
+>>>>>>>> +
+>>>>>>>>   static void ssr_notify_unprepare(struct rproc_subdev *subdev)
+>>>>>>>>   {
+>>>>>>>>           struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
+>>>>>>>>
+>>>>>>>> -        srcu_notifier_call_chain(ssr->rproc_notif_list, 0, (void
+>>>>>>>> *)ssr->name);
+>>>>>>>> +        srcu_notifier_call_chain(ssr->rproc_notif_list,
+>>>>>>>> +                                 RPROC_AFTER_SHUTDOWN, (void *)ssr->name);
+>>>>>>>>   }
+>>>>>>>>
+>>>>>>>>   /**
+>>>>>>>> @@ -248,6 +276,9 @@ void qcom_add_ssr_subdev(struct rproc *rproc,
+>>>>>>>> struct qcom_rproc_ssr *ssr,
+>>>>>>>>   {
+>>>>>>>>           ssr->name = ssr_name;
+>>>>>>>>           ssr->subdev.name = kstrdup("ssr_notifs", GFP_KERNEL);
+>>>>>>>> +        ssr->subdev.prepare = ssr_notify_prepare;
+>>>>>>>> +        ssr->subdev.start = ssr_notify_start;
+>>>>>>>> +        ssr->subdev.stop = ssr_notify_stop;
+>>>>>>> Now that I have a better understanding of what this patchset is doing, I
+>>>>>>> realise
+>>>>>>> my comments in patch 04 won't work.  To differentiate the subdevs of an
+>>>>>>> rproc I
+>>>>>>> suggest to wrap them in a generic structure with a type and an enum.
+>>>>>>> That way
+>>>>>>> you can differenciate between subdevices without having to add to the
+>>>>>>> core.
+
+While creating a new revision of the patchset we tried to implement 
+this, but a similar issue comes
+up. If at a later point we wish to utilize the functionality of some 
+common subdevice (not the case
+right now, but potentially), we might run into a similar problem of 
+accessing illegal memory using
+container_of. I think it might be a better idea to introduce the name in 
+the subdevice structure over
+having a potential security bug. What do you think?
+
+Thanks,
+Siddharth
+
+>>>>>> Ok. I can try that.
+>>>>>>> That being said, I don't understand what patches 5 and 6 are doing...
+>>>>>>> Registering with the global ssr_notifiers allowed to gracefully shutdown
+>>>>>>> all the
+>>>>>>> MCUs in the system when one of them would go down.  But now that we are
+>>>>>>> using
+>>>>>>> the notifier on a per MCU, I really don't see why each subdev couldn't
+>>>>>>> implement
+>>>>>>> the right prepare/start/stop functions.
+>>>>>>>
+>>>>>>> Am I missing something here?
+>>>>>> We only want kernel clients to be notified when the Remoteproc they
+>>>>>> are
+>>>>>> interested
+>>>>>> in changes state. For e.g. audio kernel driver should be notified when
+>>>>>> audio
+>>>>>> processor goes down but it does not care about any other remoteproc.
+>>>>>> If you are suggesting that these kernel clients be added as subdevices
+>>>>>> then
+>>>>>> we will end up having many subdevices registered to each remoteproc.
+>>>>>> So we
+>>>>>> implemented a notifier chain per Remoteproc. This keeps the SSR
+>>>>>> notifications as
+>>>>>> the subdevice per remoteproc, and all interested clients can register
+>>>>>> to it.
+>>>>> It seems like I am missing information...  Your are referring to
+>>>>> "kernel
+>>>>> clients" and as such I must assume some drivers that are not part of
+>>>>> the
+>>>>> remoteproc/rpmsg subsystems are calling qcom_register_ssr_notifier().
+>>>>> I must
+>>>> Yes these are not part of remoteproc framework and they will register
+>>>> for notifications.
+>>>>> also assume these drivers (or that functionality) are not yet upsream
+>>>>> because
+>>>>> all I can see calling qcom_register_ssr_notifier() is
+>>>>> qcom_glink_ssr_probe().
+>>>> Correct.These are not upstreamed.
+>>> Ok, things are starting to make sense.
+>>>
+>>>>> Speaking of which, what is the role of the qcom_glink_ssr_driver?  Is
+>>>>> the glink
+>>>>> device that driver is handling the same as the glink device registed in
+>>>>> adsp_probe() and q6v5_probe()?
+>>>> glink ssr driver will send out notifications to remoteprocs that have
+>>>> opened the
+>>>> "glink_ssr" channel that some subsystem has gone down or booted up.
+>>>> This
+>>>> helps notify
+>>>> neighboring subsystems about change in state of any other subsystem.
+>>> I am still looking for an answer to my second question.
+>> Yes its the subdevice of the glink device that is registered in
+>> adsp_probe.
+>> It uses the "glink_ssr" glink channel.
+> Since this is confining events to a single MCU, I was mostly worried
+> about opening the "glink_ssr" channel for nothing but taking a step
+> back and thinking further on this, there might be other purposes for
+> the channel than only receiving notifications of other MCUs in the
+> system going down.
+>
+> Please spin off a new revision of this set and I will take another look.
+>
+> Thanks,
+> Mathieu
+>
+>>>>>>>
+>>>>>>>>           ssr->subdev.unprepare = ssr_notify_unprepare;
+>>>>>>>>           ssr->rproc_notif_list = kzalloc(sizeof(struct srcu_notifier_head),
+>>>>>>>>                                                                   GFP_KERNEL);
+>>>>>>>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+>>>>>>>> index e2f60cc..4be4478 100644
+>>>>>>>> --- a/include/linux/remoteproc.h
+>>>>>>>> +++ b/include/linux/remoteproc.h
+>>>>>>>> @@ -449,6 +449,21 @@ struct rproc_dump_segment {
+>>>>>>>>   };
+>>>>>>>>
+>>>>>>>>   /**
+>>>>>>>> + * enum rproc_notif_type - Different stages of remoteproc
+>>>>>>>> notifications
+>>>>>>>> + * @RPROC_BEFORE_SHUTDOWN:      unprepare stage of  remoteproc
+>>>>>>>> + * @RPROC_AFTER_SHUTDOWN:       stop stage of  remoteproc
+>>>>>>>> + * @RPROC_BEFORE_POWERUP:       prepare stage of  remoteproc
+>>>>>>>> + * @RPROC_AFTER_POWERUP:        start stage of  remoteproc
+>>>>>>>> + */
+>>>>>>>> +enum rproc_notif_type {
+>>>>>>>> +        RPROC_BEFORE_SHUTDOWN,
+>>>>>>>> +        RPROC_AFTER_SHUTDOWN,
+>>>>>>>> +        RPROC_BEFORE_POWERUP,
+>>>>>>>> +        RPROC_AFTER_POWERUP,
+>>>>>>>> +        RPROC_MAX
+>>>>>>>> +};
+>>>>>>>> +
+>>>>>>>> +/**
+>>>>>>>>    * struct rproc - represents a physical remote processor device
+>>>>>>>>    * @node: list node of this rproc object
+>>>>>>>>    * @domain: iommu domain
+>>>>>>>> --
+>>>>>>>> Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>>>>>>>> a Linux Foundation Collaborative Project
+>>>>>>>>
+>>>>>>>> _______________________________________________
+>>>>>>>> linux-arm-kernel mailing list
+>>>>>>>> linux-arm-kernel@lists.infradead.org
+>>>>>>>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>>>> _______________________________________________
+>>>> linux-arm-kernel mailing list
+>>>> linux-arm-kernel@lists.infradead.org
+>>>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
