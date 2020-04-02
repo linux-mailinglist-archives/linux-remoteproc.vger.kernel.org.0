@@ -2,313 +2,311 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9733419C7FE
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  2 Apr 2020 19:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED96719C849
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  2 Apr 2020 19:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389166AbgDBR2i (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 2 Apr 2020 13:28:38 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:47709 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2389021AbgDBR2i (ORCPT
+        id S1732784AbgDBRr1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 2 Apr 2020 13:47:27 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:33738 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389987AbgDBRrZ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 2 Apr 2020 13:28:38 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 032HEAr5007586;
-        Thu, 2 Apr 2020 19:28:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=XyD2GCXI5gciPit6wopCB+3aqxL9iQ7U2dnlinJ8VuA=;
- b=oxYMX8MgiDwkWLGrQKcFiSNBZHTR1oiJKiXp63fSVXFi/3Ht57J2ZjKO9v4ZqYuBK4IO
- IgnO429HEfTG5GeFyXe+9MfUwcbTwMVVxlnZrAIUZgKZQr0AzQ2eLtP7im+AofHQycXS
- co4sQHgNWepL3ggY02AsFV+coOJN/C9qT9T7jpjQ2bocKvhJ3wnJj+vtP/6IvuIstke4
- NsIwdkUdIvMnHbMsTSj5P56zCUL6RdZszor7XNBuRD/qZSABSdkF55HJFi5x7u3M8Sr8
- rKicBiVZpfsP8YaFf8X2KjDd095yYXquElLgXTI6l9580YLfv+lGH04HN+X8wxD0/3dL TA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 301w81cmnb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Apr 2020 19:28:31 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C4737100034;
-        Thu,  2 Apr 2020 19:28:26 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A1B362BF9CF;
-        Thu,  2 Apr 2020 19:28:26 +0200 (CEST)
-Received: from lmecxl0889.tpe.st.com (10.75.127.46) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 2 Apr
- 2020 19:28:25 +0200
-Subject: Re: [PATCH v2 1/2] remoteproc: Add character device interface
-To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <bjorn.andersson@linaro.org>
-CC:     <psodagud@codeaurora.org>, <tsoni@codeaurora.org>,
-        <sidgup@codeaurora.org>
-References: <1585699438-14394-1-git-send-email-rishabhb@codeaurora.org>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Message-ID: <5b1c8287-0077-87e7-9364-b1f5a104c9e3@st.com>
-Date:   Thu, 2 Apr 2020 19:28:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Thu, 2 Apr 2020 13:47:25 -0400
+Received: by mail-il1-f195.google.com with SMTP id k29so4505089ilg.0
+        for <linux-remoteproc@vger.kernel.org>; Thu, 02 Apr 2020 10:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7tyjlIV/2N0ARSrmOSXoDfKybdDWJ1zVvs4tCYf0i/w=;
+        b=WIn+vTZciEAII1pqjyivQ1oU/4Tql4s5w6b3N6Pj6lK28NBIzSTgE82av/gaTkujH9
+         uIZXyZyY9db5NPDylikYSMAgjIE2Vlum+0ND6xe6sLHa/0VfzRTBtwCjW+BZHKhxe4II
+         rZLW4umjx7zNZVfTIa2t3LY7ePRlijW8lSsqBPA1RL/WII37a2bcZgmbEK47kyHULLNZ
+         E9XZ1Fgf/J7I1PNLeARHk+aoVJn9LNmNKgLcO8/J3YlrTEmlEKSywJcAoUodeJZh5ryx
+         gXY5028liMLkOmUSU8daIlKsq6sMDZs3+e2m4gPb2EFTzIK6+MjdNNXRqAhWleyGb1YS
+         MgCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7tyjlIV/2N0ARSrmOSXoDfKybdDWJ1zVvs4tCYf0i/w=;
+        b=crLxnpbkFB2PP0F/e+1vMlx4tBtefb0/fFiwCgqiLJ7Kc2ZCvvSifRLgTlNZ5b2XVU
+         iWnWgb/neyKrBrPeRd+xJF77vCDKOs4vxnPaVnkoxcuLfolZqay8/+oTAQYuZyw/YzVY
+         +0dRWHoZgUhnGSJS2Oef+F92aJni8Gp5JiB2HNwl6oDsmVa1oMuOPqJ1duoUaMSNcoy8
+         2VG8iimggzFztLt7Oau81Ex96+f4lLKo/Qm4qiK78t2UBPZSWcTdosckSYTOuoDvKag1
+         CAhgdlnWf+BZYSDF3g0VLTjJHdMvB4uTFVHx5V5QPDhMKL1pgLZLpbVHXZ2AxLOx7GSv
+         KZXg==
+X-Gm-Message-State: AGi0PuZ/9qPC3BD2KuzwkB28FdtfwdpNZv6JVxkihSGl48XSLh8PzwCC
+        H76anhJS1WnD6W0SJzt9MFjkdocWz3va5X3j82Um7g==
+X-Google-Smtp-Source: APiQypKz3Kwv9DPfJaatShj+kFJdZu0incWoyAV2P37mLvdgxzx17KnZpVbtMYlW5s5jOfrz5Y2YxVho0Dyf4uJRkzc=
+X-Received: by 2002:a92:8352:: with SMTP id f79mr4349489ild.58.1585849642843;
+ Thu, 02 Apr 2020 10:47:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1585699438-14394-1-git-send-email-rishabhb@codeaurora.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG8NODE2.st.com (10.75.127.23) To SFHDAG3NODE1.st.com
- (10.75.127.7)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-02_07:2020-04-02,2020-04-02 signatures=0
+References: <1582167465-2549-1-git-send-email-sidgup@codeaurora.org>
+ <1582167465-2549-7-git-send-email-sidgup@codeaurora.org> <20200227215940.GC20116@xps15>
+ <1a615fcd5a5c435d1d8babe8d5c3f8c3@codeaurora.org> <20200228183832.GA23026@xps15>
+ <cac45f2726a272ccd0ce82e12e46756f@codeaurora.org> <CANLsYkzUh_BRjapX_jDZZ00Lj8MMgMPM12+otYHDKqad1s-qHQ@mail.gmail.com>
+ <050a8613cd00a84678b4478ef3387465@codeaurora.org> <CANLsYkyrzNPUymuJzehEOAA2FV+WDohUpgCYTNdbGCJBoat2cg@mail.gmail.com>
+ <64310efc-00f3-f8d8-3058-19dfbe1aa578@codeaurora.org>
+In-Reply-To: <64310efc-00f3-f8d8-3058-19dfbe1aa578@codeaurora.org>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 2 Apr 2020 11:47:11 -0600
+Message-ID: <CANLsYkxHGUE3hGxnO3SY-5pq8_q-hKM-F25RUmM+9Xr94xDCJw@mail.gmail.com>
+Subject: Re: [PATCH 6/6] remoteproc: qcom: Add notification types to SSR
+To:     Siddharth Gupta <sidgup@codeaurora.org>
+Cc:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>, tsoni@codeaurora.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, psodagud@codeaurora.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-remoteproc-owner@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi 
+On Wed, 1 Apr 2020 at 19:01, Siddharth Gupta <sidgup@codeaurora.org> wrote:
+>
+> On 3/9/2020 10:34 AM, Mathieu Poirier wrote:
+>
+> > On Tue, 3 Mar 2020 at 16:30, <rishabhb@codeaurora.org> wrote:
+> >> On 2020-03-03 10:05, Mathieu Poirier wrote:
+> >>> On Mon, 2 Mar 2020 at 13:54, <rishabhb@codeaurora.org> wrote:
+> >>>> On 2020-02-28 10:38, Mathieu Poirier wrote:
+> >>>>> On Thu, Feb 27, 2020 at 04:00:21PM -0800, rishabhb@codeaurora.org
+> >>>>> wrote:
+> >>>>>> On 2020-02-27 13:59, Mathieu Poirier wrote:
+> >>>>>>> On Wed, Feb 19, 2020 at 06:57:45PM -0800, Siddharth Gupta wrote:
+> >>>>>>>> The SSR subdevice only adds callback for the unprepare event. Add
+> >>>>>>>> callbacks
+> >>>>>>>> for unprepare, start and prepare events. The client driver for a
+> >>>>>>>> particular
+> >>>>>>>> remoteproc might be interested in knowing the status of the remoteproc
+> >>>>>>>> while undergoing SSR, not just when the remoteproc has finished
+> >>>>>>>> shutting
+> >>>>>>>> down.
+> >>>>>>>>
+> >>>>>>>> Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
+> >>>>>>>> ---
+> >>>>>>>>   drivers/remoteproc/qcom_common.c | 39
+> >>>>>>>> +++++++++++++++++++++++++++++++++++----
+> >>>>>>>>   include/linux/remoteproc.h       | 15 +++++++++++++++
+> >>>>>>>>   2 files changed, 50 insertions(+), 4 deletions(-)
+> >>>>>>>>
+> >>>>>>>> diff --git a/drivers/remoteproc/qcom_common.c
+> >>>>>>>> b/drivers/remoteproc/qcom_common.c
+> >>>>>>>> index 6714f27..6f04a5b 100644
+> >>>>>>>> --- a/drivers/remoteproc/qcom_common.c
+> >>>>>>>> +++ b/drivers/remoteproc/qcom_common.c
+> >>>>>>>> @@ -183,9 +183,9 @@ EXPORT_SYMBOL_GPL(qcom_remove_smd_subdev);
+> >>>>>>>>    *
+> >>>>>>>>    * Returns pointer to srcu notifier head on success, ERR_PTR on
+> >>>>>>>> failure.
+> >>>>>>>>    *
+> >>>>>>>> - * This registers the @notify function as handler for restart
+> >>>>>>>> notifications. As
+> >>>>>>>> - * remote processors are stopped this function will be called, with
+> >>>>>>>> the rproc
+> >>>>>>>> - * pointer passed as a parameter.
+> >>>>>>>> + * This registers the @notify function as handler for
+> >>>>>>>> powerup/shutdown
+> >>>>>>>> + * notifications. This function will be invoked inside the
+> >>>>>>>> callbacks registered
+> >>>>>>>> + * for the ssr subdevice, with the rproc pointer passed as a
+> >>>>>>>> parameter.
+> >>>>>>>>    */
+> >>>>>>>>   void *qcom_register_ssr_notifier(struct rproc *rproc, struct
+> >>>>>>>> notifier_block *nb)
+> >>>>>>>>   {
+> >>>>>>>> @@ -227,11 +227,39 @@ int qcom_unregister_ssr_notifier(void *notify,
+> >>>>>>>> struct notifier_block *nb)
+> >>>>>>>>   }
+> >>>>>>>>   EXPORT_SYMBOL_GPL(qcom_unregister_ssr_notifier);
+> >>>>>>>>
+> >>>>>>>> +static int ssr_notify_prepare(struct rproc_subdev *subdev)
+> >>>>>>>> +{
+> >>>>>>>> +        struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
+> >>>>>>>> +
+> >>>>>>>> +        srcu_notifier_call_chain(ssr->rproc_notif_list,
+> >>>>>>>> +                                 RPROC_BEFORE_POWERUP, (void *)ssr->name);
+> >>>>>>>> +        return 0;
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +static int ssr_notify_start(struct rproc_subdev *subdev)
+> >>>>>>>> +{
+> >>>>>>>> +        struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
+> >>>>>>>> +
+> >>>>>>>> +        srcu_notifier_call_chain(ssr->rproc_notif_list,
+> >>>>>>>> +                                 RPROC_AFTER_POWERUP, (void *)ssr->name);
+> >>>>>>>> +        return 0;
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +static void ssr_notify_stop(struct rproc_subdev *subdev, bool
+> >>>>>>>> crashed)
+> >>>>>>>> +{
+> >>>>>>>> +        struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
+> >>>>>>>> +
+> >>>>>>>> +        srcu_notifier_call_chain(ssr->rproc_notif_list,
+> >>>>>>>> +                                 RPROC_BEFORE_SHUTDOWN, (void *)ssr->name);
+> >>>>>>>> +}
+> >>>>>>>> +
+> >>>>>>>> +
+> >>>>>>>>   static void ssr_notify_unprepare(struct rproc_subdev *subdev)
+> >>>>>>>>   {
+> >>>>>>>>           struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
+> >>>>>>>>
+> >>>>>>>> -        srcu_notifier_call_chain(ssr->rproc_notif_list, 0, (void
+> >>>>>>>> *)ssr->name);
+> >>>>>>>> +        srcu_notifier_call_chain(ssr->rproc_notif_list,
+> >>>>>>>> +                                 RPROC_AFTER_SHUTDOWN, (void *)ssr->name);
+> >>>>>>>>   }
+> >>>>>>>>
+> >>>>>>>>   /**
+> >>>>>>>> @@ -248,6 +276,9 @@ void qcom_add_ssr_subdev(struct rproc *rproc,
+> >>>>>>>> struct qcom_rproc_ssr *ssr,
+> >>>>>>>>   {
+> >>>>>>>>           ssr->name = ssr_name;
+> >>>>>>>>           ssr->subdev.name = kstrdup("ssr_notifs", GFP_KERNEL);
+> >>>>>>>> +        ssr->subdev.prepare = ssr_notify_prepare;
+> >>>>>>>> +        ssr->subdev.start = ssr_notify_start;
+> >>>>>>>> +        ssr->subdev.stop = ssr_notify_stop;
+> >>>>>>> Now that I have a better understanding of what this patchset is doing, I
+> >>>>>>> realise
+> >>>>>>> my comments in patch 04 won't work.  To differentiate the subdevs of an
+> >>>>>>> rproc I
+> >>>>>>> suggest to wrap them in a generic structure with a type and an enum.
+> >>>>>>> That way
+> >>>>>>> you can differenciate between subdevices without having to add to the
+> >>>>>>> core.
+>
+> While creating a new revision of the patchset we tried to implement
+> this, but a similar issue comes
+> up. If at a later point we wish to utilize the functionality of some
+> common subdevice (not the case
+> right now, but potentially), we might run into a similar problem of
+> accessing illegal memory using
+> container_of. I think it might be a better idea to introduce the name in
+> the subdevice structure over
+> having a potential security bug. What do you think?
 
-On 4/1/20 2:03 AM, Rishabh Bhatnagar wrote:
-> Add the character device interface for userspace applications.
-> This interface can be used in order to boot up and shutdown
-> remote subsystems. Currently there is only a sysfs interface
-> which the userspace clients can use. If a usersapce application
-> crashes after booting the remote processor does not get any
-> indication about the crash. It might still assume that the
-> application is running. For example modem uses remotefs service
-> to fetch data from disk/flash memory. If the remotefs service
-> crashes, modem keeps on requesting data which might lead to a
-> crash. Adding a character device interface makes the remote
-> processor tightly coupled with the user space application.
-> A crash of the application leads to a close on the file descriptors
-> therefore shutting down the remoteproc.
+I trust that you have given this an honest try but found potential
+problems that I can't foresee due to the lack of insight on your
+operating environment.  Please move forward with the addition of a new
+"name" field to the rproc_subdev structure.
 
-Sorry I'm late in the discussion, I hope I've gone through the whole
-discussion so I don't reopen a closed point...
-
-Something here is not crystal clear to me so I'd rather share it...
-
-I suppose that you the automatic restart of the application is not possible to
-stop and restart the remote processor...
- 
-Why this use case can not be solved by a process monitor or a service
-in userland that detects the application crash and stop the remote firmware using
-the sysfs interface?
-
-I just want to be sure that there is no alternative to this, because having two ways
-for application to shutdown the firmware seems to me confusing...
-
-What about the opposite service, mean inform the application that the remote
-processor is crashed?
-Do you identify such need? or the "auto" crash recovery is sufficient?
-
-Thanks,
-Arnaud
-> 
-> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
-> ---
->  drivers/remoteproc/Kconfig               |   9 +++
->  drivers/remoteproc/Makefile              |   1 +
->  drivers/remoteproc/remoteproc_cdev.c     | 100 +++++++++++++++++++++++++++++++
->  drivers/remoteproc/remoteproc_internal.h |  22 +++++++
->  include/linux/remoteproc.h               |   2 +
->  5 files changed, 134 insertions(+)
->  create mode 100644 drivers/remoteproc/remoteproc_cdev.c
-> 
-> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-> index de3862c..6374b79 100644
-> --- a/drivers/remoteproc/Kconfig
-> +++ b/drivers/remoteproc/Kconfig
-> @@ -14,6 +14,15 @@ config REMOTEPROC
->  
->  if REMOTEPROC
->  
-> +config REMOTEPROC_CDEV
-> +	bool "Remoteproc character device interface"
-> +	help
-> +	  Say y here to have a character device interface for Remoteproc
-> +	  framework. Userspace can boot/shutdown remote processors through
-> +	  this interface.
-> +
-> +	  It's safe to say N if you don't want to use this interface.
-> +
->  config IMX_REMOTEPROC
->  	tristate "IMX6/7 remoteproc support"
->  	depends on ARCH_MXC
-> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-> index e30a1b1..b7d4f77 100644
-> --- a/drivers/remoteproc/Makefile
-> +++ b/drivers/remoteproc/Makefile
-> @@ -9,6 +9,7 @@ remoteproc-y				+= remoteproc_debugfs.o
->  remoteproc-y				+= remoteproc_sysfs.o
->  remoteproc-y				+= remoteproc_virtio.o
->  remoteproc-y				+= remoteproc_elf_loader.o
-> +obj-$(CONFIG_REMOTEPROC_CDEV)		+= remoteproc_cdev.o
->  obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
->  obj-$(CONFIG_MTK_SCP)			+= mtk_scp.o mtk_scp_ipi.o
->  obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o
-> diff --git a/drivers/remoteproc/remoteproc_cdev.c b/drivers/remoteproc/remoteproc_cdev.c
-> new file mode 100644
-> index 0000000..8182bd1
-> --- /dev/null
-> +++ b/drivers/remoteproc/remoteproc_cdev.c
-> @@ -0,0 +1,100 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Character device interface driver for Remoteproc framework.
-> + *
-> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#include <linux/cdev.h>
-> +#include <linux/fs.h>
-> +#include <linux/module.h>
-> +#include <linux/mutex.h>
-> +#include <linux/remoteproc.h>
-> +
-> +#include "remoteproc_internal.h"
-> +
-> +#define NUM_RPROC_DEVICES	64
-> +static dev_t rproc_cdev;
-> +static DEFINE_IDA(cdev_minor_ida);
-> +
-> +static int rproc_cdev_open(struct inode *inode, struct file *file)
-> +{
-> +	struct rproc *rproc;
-> +
-> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
-> +
-> +	if (!rproc)
-> +		return -EINVAL;
-> +
-> +	if (rproc->state == RPROC_RUNNING)
-> +		return -EBUSY;
-> +
-> +	return rproc_boot(rproc);
-> +}
-> +
-> +static int rproc_cdev_release(struct inode *inode, struct file *file)
-> +{
-> +	struct rproc *rproc;
-> +
-> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
-> +
-> +	if (!rproc || rproc->state != RPROC_RUNNING)
-> +		return -EINVAL;
-> +
-> +	rproc_shutdown(rproc);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct file_operations rproc_fops = {
-> +	.open = rproc_cdev_open,
-> +	.release = rproc_cdev_release,
-> +};
-> +
-> +int rproc_char_device_add(struct rproc *rproc)
-> +{
-> +	int ret, minor;
-> +	dev_t cdevt;
-> +
-> +	minor = ida_simple_get(&cdev_minor_ida, 0, NUM_RPROC_DEVICES,
-> +			       GFP_KERNEL);
-> +	if (minor < 0) {
-> +		dev_err(&rproc->dev, "%s: No more minor numbers left! rc:%d\n",
-> +			__func__, minor);
-> +		return -ENODEV;
-> +	}
-> +
-> +	cdev_init(&rproc->char_dev, &rproc_fops);
-> +	rproc->char_dev.owner = THIS_MODULE;
-> +
-> +	cdevt = MKDEV(MAJOR(rproc_cdev), minor);
-> +	ret = cdev_add(&rproc->char_dev, cdevt, 1);
-> +	if (ret < 0)
-> +		ida_simple_remove(&cdev_minor_ida, minor);
-> +
-> +	rproc->dev.devt = cdevt;
-> +	return ret;
-> +}
-> +
-> +void rproc_char_device_remove(struct rproc *rproc)
-> +{
-> +	__unregister_chrdev(MAJOR(rproc->dev.devt), MINOR(rproc->dev.devt), 1,
-> +			    "rproc");
-> +	ida_simple_remove(&cdev_minor_ida, MINOR(rproc->dev.devt));
-> +}
-> +
-> +void __init rproc_init_cdev(void)
-> +{
-> +	int ret;
-> +
-> +	ret = alloc_chrdev_region(&rproc_cdev, 0, NUM_RPROC_DEVICES, "rproc");
-> +	if (ret < 0) {
-> +		pr_err("Failed to alloc rproc_cdev region, err %d\n", ret);
-> +		return;
-> +	}
-> +}
-> +
-> +void __exit rproc_exit_cdev(void)
-> +{
-> +	__unregister_chrdev(MAJOR(rproc_cdev), 0, NUM_RPROC_DEVICES, "rproc");
-> +}
-> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-> index 493ef92..28d61a1 100644
-> --- a/drivers/remoteproc/remoteproc_internal.h
-> +++ b/drivers/remoteproc/remoteproc_internal.h
-> @@ -47,6 +47,27 @@ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
->  int rproc_init_sysfs(void);
->  void rproc_exit_sysfs(void);
->  
-> +#ifdef CONFIG_REMOTEPROC_CDEV
-> +void rproc_init_cdev(void);
-> +void rproc_exit_cdev(void);
-> +int rproc_char_device_add(struct rproc *rproc);
-> +void rproc_char_device_remove(struct rproc *rproc);
-> +#else
-> +static inline void rproc_init_cdev(void)
-> +{
-> +}
-> +static inline void rproc_exit_cdev(void)
-> +{
-> +}
-> +static inline int rproc_char_device_add(struct rproc *rproc)
-> +{
-> +	return 0;
-> +}
-> +static inline void  rproc_char_device_remove(struct rproc *rproc)
-> +{
-> +}
-> +#endif
-> +
->  void rproc_free_vring(struct rproc_vring *rvring);
->  int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
->  
-> @@ -63,6 +84,7 @@ struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
->  struct rproc_mem_entry *
->  rproc_find_carveout_by_name(struct rproc *rproc, const char *name, ...);
->  
-> +
->  static inline
->  int rproc_fw_sanity_check(struct rproc *rproc, const struct firmware *fw)
->  {
-> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> index 16ad666..c4ca796 100644
-> --- a/include/linux/remoteproc.h
-> +++ b/include/linux/remoteproc.h
-> @@ -37,6 +37,7 @@
->  
->  #include <linux/types.h>
->  #include <linux/mutex.h>
-> +#include <linux/cdev.h>
->  #include <linux/virtio.h>
->  #include <linux/completion.h>
->  #include <linux/idr.h>
-> @@ -514,6 +515,7 @@ struct rproc {
->  	bool auto_boot;
->  	struct list_head dump_segments;
->  	int nb_vdev;
-> +	struct cdev char_dev;
->  };
->  
->  /**
-> 
+>
+> Thanks,
+> Siddharth
+>
+> >>>>>> Ok. I can try that.
+> >>>>>>> That being said, I don't understand what patches 5 and 6 are doing...
+> >>>>>>> Registering with the global ssr_notifiers allowed to gracefully shutdown
+> >>>>>>> all the
+> >>>>>>> MCUs in the system when one of them would go down.  But now that we are
+> >>>>>>> using
+> >>>>>>> the notifier on a per MCU, I really don't see why each subdev couldn't
+> >>>>>>> implement
+> >>>>>>> the right prepare/start/stop functions.
+> >>>>>>>
+> >>>>>>> Am I missing something here?
+> >>>>>> We only want kernel clients to be notified when the Remoteproc they
+> >>>>>> are
+> >>>>>> interested
+> >>>>>> in changes state. For e.g. audio kernel driver should be notified when
+> >>>>>> audio
+> >>>>>> processor goes down but it does not care about any other remoteproc.
+> >>>>>> If you are suggesting that these kernel clients be added as subdevices
+> >>>>>> then
+> >>>>>> we will end up having many subdevices registered to each remoteproc.
+> >>>>>> So we
+> >>>>>> implemented a notifier chain per Remoteproc. This keeps the SSR
+> >>>>>> notifications as
+> >>>>>> the subdevice per remoteproc, and all interested clients can register
+> >>>>>> to it.
+> >>>>> It seems like I am missing information...  Your are referring to
+> >>>>> "kernel
+> >>>>> clients" and as such I must assume some drivers that are not part of
+> >>>>> the
+> >>>>> remoteproc/rpmsg subsystems are calling qcom_register_ssr_notifier().
+> >>>>> I must
+> >>>> Yes these are not part of remoteproc framework and they will register
+> >>>> for notifications.
+> >>>>> also assume these drivers (or that functionality) are not yet upsream
+> >>>>> because
+> >>>>> all I can see calling qcom_register_ssr_notifier() is
+> >>>>> qcom_glink_ssr_probe().
+> >>>> Correct.These are not upstreamed.
+> >>> Ok, things are starting to make sense.
+> >>>
+> >>>>> Speaking of which, what is the role of the qcom_glink_ssr_driver?  Is
+> >>>>> the glink
+> >>>>> device that driver is handling the same as the glink device registed in
+> >>>>> adsp_probe() and q6v5_probe()?
+> >>>> glink ssr driver will send out notifications to remoteprocs that have
+> >>>> opened the
+> >>>> "glink_ssr" channel that some subsystem has gone down or booted up.
+> >>>> This
+> >>>> helps notify
+> >>>> neighboring subsystems about change in state of any other subsystem.
+> >>> I am still looking for an answer to my second question.
+> >> Yes its the subdevice of the glink device that is registered in
+> >> adsp_probe.
+> >> It uses the "glink_ssr" glink channel.
+> > Since this is confining events to a single MCU, I was mostly worried
+> > about opening the "glink_ssr" channel for nothing but taking a step
+> > back and thinking further on this, there might be other purposes for
+> > the channel than only receiving notifications of other MCUs in the
+> > system going down.
+> >
+> > Please spin off a new revision of this set and I will take another look.
+> >
+> > Thanks,
+> > Mathieu
+> >
+> >>>>>>>
+> >>>>>>>>           ssr->subdev.unprepare = ssr_notify_unprepare;
+> >>>>>>>>           ssr->rproc_notif_list = kzalloc(sizeof(struct srcu_notifier_head),
+> >>>>>>>>                                                                   GFP_KERNEL);
+> >>>>>>>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> >>>>>>>> index e2f60cc..4be4478 100644
+> >>>>>>>> --- a/include/linux/remoteproc.h
+> >>>>>>>> +++ b/include/linux/remoteproc.h
+> >>>>>>>> @@ -449,6 +449,21 @@ struct rproc_dump_segment {
+> >>>>>>>>   };
+> >>>>>>>>
+> >>>>>>>>   /**
+> >>>>>>>> + * enum rproc_notif_type - Different stages of remoteproc
+> >>>>>>>> notifications
+> >>>>>>>> + * @RPROC_BEFORE_SHUTDOWN:      unprepare stage of  remoteproc
+> >>>>>>>> + * @RPROC_AFTER_SHUTDOWN:       stop stage of  remoteproc
+> >>>>>>>> + * @RPROC_BEFORE_POWERUP:       prepare stage of  remoteproc
+> >>>>>>>> + * @RPROC_AFTER_POWERUP:        start stage of  remoteproc
+> >>>>>>>> + */
+> >>>>>>>> +enum rproc_notif_type {
+> >>>>>>>> +        RPROC_BEFORE_SHUTDOWN,
+> >>>>>>>> +        RPROC_AFTER_SHUTDOWN,
+> >>>>>>>> +        RPROC_BEFORE_POWERUP,
+> >>>>>>>> +        RPROC_AFTER_POWERUP,
+> >>>>>>>> +        RPROC_MAX
+> >>>>>>>> +};
+> >>>>>>>> +
+> >>>>>>>> +/**
+> >>>>>>>>    * struct rproc - represents a physical remote processor device
+> >>>>>>>>    * @node: list node of this rproc object
+> >>>>>>>>    * @domain: iommu domain
+> >>>>>>>> --
+> >>>>>>>> Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> >>>>>>>> a Linux Foundation Collaborative Project
+> >>>>>>>>
+> >>>>>>>> _______________________________________________
+> >>>>>>>> linux-arm-kernel mailing list
+> >>>>>>>> linux-arm-kernel@lists.infradead.org
+> >>>>>>>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> >>>> _______________________________________________
+> >>>> linux-arm-kernel mailing list
+> >>>> linux-arm-kernel@lists.infradead.org
+> >>>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
