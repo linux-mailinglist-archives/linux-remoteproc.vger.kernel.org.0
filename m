@@ -2,337 +2,313 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 514DE19C7E6
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  2 Apr 2020 19:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9733419C7FE
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  2 Apr 2020 19:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388942AbgDBRYk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 2 Apr 2020 13:24:40 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39953 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732754AbgDBRYk (ORCPT
+        id S2389166AbgDBR2i (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 2 Apr 2020 13:28:38 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:47709 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389021AbgDBR2i (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 2 Apr 2020 13:24:40 -0400
-Received: by mail-pl1-f194.google.com with SMTP id h11so1584561plk.7
-        for <linux-remoteproc@vger.kernel.org>; Thu, 02 Apr 2020 10:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3fnsy5yUWiTn8/hbaEYoE5LAlbLYRS9NpYz2srxBPSc=;
-        b=Bn/AxBTw6+f7Ugyvn8/X27GiALp9ZzUBbvVFmCAX311aZJ/sSE1z9xHsZCPFarXNTC
-         A5E6BHWvIB4LFP3HwPNX2PGjjNdjNJT5YCf3+UipnGRuwKGi3rLqPi24V2SbvGNiLWfE
-         QEL3/krXOptE/5vPkdQayFfzeL0WhOFNUDDkb2GK2nDZFt36ELXhPp6J2lGyRjE05cHL
-         A0QB+KFY5p2WxzjZ360ZDW82j3j2bt+FjQMIAS97dxGggd64DLiUWily6BeBCORyQdxi
-         zu0k4ncWtLIZm2MVegIBN1+mCoHGSC6aCef4Qx6M1YbCNnxM6fgKaK2EFaD8+7QFZKlf
-         zqOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3fnsy5yUWiTn8/hbaEYoE5LAlbLYRS9NpYz2srxBPSc=;
-        b=jW72J13PP2P9uSkUu9LYs1o1TIf5zH9z5oUwYioQLdVUW6z6aoM+jq3dFmV+IVbAaU
-         fw6DEgiSOAyQBB7JulwLGq1q5hm8XK/kXYIwEn7P8maom3V8HinBdlCu+Pc/NLi0rUMs
-         eEYuUjEKsOHf5ASgjVrBb1hixixjDJVXIabWQ19YYdBVlWYnSe7tTtmyq4JYF7KDGmsM
-         NHX917vgueTxK6ZW7HeMhHMx18HKZ2jQFQD0gQipHr+0X1YJrBDospR/CFXIwq1lfLsP
-         J4ae49oSyoTo6iYnBdYsp95RYPGgMgQj2G0ejOf+q8ljlDLnNsbpk0KRfHM2lZ3zpNbG
-         ssHQ==
-X-Gm-Message-State: AGi0PuYQZHO6c7K/ULyTT4VIbSfFQMk61ZJFs4bgQM6maI75S5Ti/lhO
-        jYYQhdnpy17tbIg0/jtA4MzZc/qJQo0=
-X-Google-Smtp-Source: APiQypIDi0rLx2QohirhE4hbnmWiP62qjpU0khykmKrejrCa7upS0aaccQBryOdVLmKfCcYYqY7faQ==
-X-Received: by 2002:a17:90a:ba09:: with SMTP id s9mr5045176pjr.20.1585848278603;
-        Thu, 02 Apr 2020 10:24:38 -0700 (PDT)
-Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id p7sm4268021pjp.1.2020.04.02.10.24.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2020 10:24:37 -0700 (PDT)
-Date:   Thu, 2 Apr 2020 11:24:35 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        ohad@wizery.com, psodagud@codeaurora.org, tsoni@codeaurora.org,
-        sidgup@codeaurora.org
-Subject: Re: [PATCH] remoteproc: core: Add a memory efficient coredump
- function
-Message-ID: <20200402172435.GA2785@xps15>
-References: <1585353412-19644-1-git-send-email-rishabhb@codeaurora.org>
- <20200401195114.GD267644@minitux>
+        Thu, 2 Apr 2020 13:28:38 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 032HEAr5007586;
+        Thu, 2 Apr 2020 19:28:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=XyD2GCXI5gciPit6wopCB+3aqxL9iQ7U2dnlinJ8VuA=;
+ b=oxYMX8MgiDwkWLGrQKcFiSNBZHTR1oiJKiXp63fSVXFi/3Ht57J2ZjKO9v4ZqYuBK4IO
+ IgnO429HEfTG5GeFyXe+9MfUwcbTwMVVxlnZrAIUZgKZQr0AzQ2eLtP7im+AofHQycXS
+ co4sQHgNWepL3ggY02AsFV+coOJN/C9qT9T7jpjQ2bocKvhJ3wnJj+vtP/6IvuIstke4
+ NsIwdkUdIvMnHbMsTSj5P56zCUL6RdZszor7XNBuRD/qZSABSdkF55HJFi5x7u3M8Sr8
+ rKicBiVZpfsP8YaFf8X2KjDd095yYXquElLgXTI6l9580YLfv+lGH04HN+X8wxD0/3dL TA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 301w81cmnb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Apr 2020 19:28:31 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C4737100034;
+        Thu,  2 Apr 2020 19:28:26 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A1B362BF9CF;
+        Thu,  2 Apr 2020 19:28:26 +0200 (CEST)
+Received: from lmecxl0889.tpe.st.com (10.75.127.46) by SFHDAG3NODE1.st.com
+ (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 2 Apr
+ 2020 19:28:25 +0200
+Subject: Re: [PATCH v2 1/2] remoteproc: Add character device interface
+To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <psodagud@codeaurora.org>, <tsoni@codeaurora.org>,
+        <sidgup@codeaurora.org>
+References: <1585699438-14394-1-git-send-email-rishabhb@codeaurora.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Message-ID: <5b1c8287-0077-87e7-9364-b1f5a104c9e3@st.com>
+Date:   Thu, 2 Apr 2020 19:28:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200401195114.GD267644@minitux>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1585699438-14394-1-git-send-email-rishabhb@codeaurora.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG8NODE2.st.com (10.75.127.23) To SFHDAG3NODE1.st.com
+ (10.75.127.7)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-02_07:2020-04-02,2020-04-02 signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed, Apr 01, 2020 at 12:51:14PM -0700, Bjorn Andersson wrote:
-> On Fri 27 Mar 16:56 PDT 2020, Rishabh Bhatnagar wrote:
-> 
-> > The current coredump implementation uses vmalloc area to copy
-> > all the segments. But this might put a lot of strain on low memory
-> > targets as the firmware size sometimes is in ten's of MBs.
-> > The situation becomes worse if there are multiple remote processors
-> > undergoing recovery at the same time.
-> > This patch directly copies the device memory to userspace buffer
-> > and avoids extra memory usage. This requires recovery to be halted
-> > until data is read by userspace and free function is called.
-> > 
-> > Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
-> > ---
-> >  drivers/remoteproc/remoteproc_core.c | 107 +++++++++++++++++++++++++++++------
-> >  include/linux/remoteproc.h           |   4 ++
-> >  2 files changed, 94 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> > index 097f33e..2d881e5 100644
-> > --- a/drivers/remoteproc/remoteproc_core.c
-> > +++ b/drivers/remoteproc/remoteproc_core.c
-> > @@ -1516,6 +1516,86 @@ int rproc_coredump_add_segment(struct rproc *rproc, dma_addr_t da, size_t size)
-> >  }
-> >  EXPORT_SYMBOL(rproc_coredump_add_segment);
-> >  
-> > +
-> > +void rproc_free_dump(void *data)
-> 
-> static
-> 
-> > +{
-> > +	struct rproc *rproc = data;
-> > +
-> > +	dev_info(&rproc->dev, "Userspace done reading rproc dump\n");
-> 
-> Please drop the info prints throughout.
-> 
-> > +	complete(&rproc->dump_done);
-> > +}
-> > +
-> > +static unsigned long get_offset(loff_t user_offset, struct list_head *segments,
-> > +				unsigned long *data_left)
-> 
-> Please rename this rproc_coredump_resolve_segment(), or something along
-> those lines.
-> 
-> > +{
-> > +	struct rproc_dump_segment *segment;
-> > +
-> > +	list_for_each_entry(segment, segments, node) {
-> > +		if (user_offset >= segment->size)
-> > +			user_offset -= segment->size;
-> > +		else
-> > +			break;
-> > +	}
-> > +
-> > +	if (&segment->node == segments) {
-> > +		*data_left = 0;
-> > +		return 0;
-> > +	}
-> > +
-> > +	*data_left = segment->size - user_offset;
-> > +
-> > +	return segment->da + user_offset;
-> > +}
-> > +
-> > +static ssize_t rproc_read_dump(char *buffer, loff_t offset, size_t count,
-> > +				void *data, size_t elfcorelen)
-> > +{
-> > +	void *device_mem = NULL;
-> > +	unsigned long data_left = 0;
-> > +	unsigned long bytes_left = count;
-> > +	unsigned long addr = 0;
-> > +	size_t copy_size = 0;
-> > +	struct rproc *rproc = data;
-> > +
-> > +	if (offset < elfcorelen) {
-> > +		copy_size = elfcorelen - offset;
-> > +		copy_size = min(copy_size, bytes_left);
-> > +
-> > +		memcpy(buffer, rproc->elfcore + offset, copy_size);
-> > +		offset += copy_size;
-> > +		bytes_left -= copy_size;
-> > +		buffer += copy_size;
-> > +	}
-> > +
-> > +	while (bytes_left) {
-> > +		addr = get_offset(offset - elfcorelen, &rproc->dump_segments,
-> > +				&data_left);
-> > +	/* EOF check */
-> 
-> Indentation, and "if no data left" does indicate that this is the end of
-> the loop already.
-> 
-> > +		if (data_left == 0) {
-> > +			pr_info("Ramdump complete. %lld bytes read.", offset);
-> > +			return 0;
-> 
-> You might have copied data to the buffer, so returning 0 here doesn't
-> seem right. Presumably instead you should break and return offset -
-> original offset or something like that.
-> 
-> > +		}
-> > +
-> > +		copy_size = min_t(size_t, bytes_left, data_left);
-> > +
-> > +		device_mem = rproc->ops->da_to_va(rproc, addr, copy_size);
-> > +		if (!device_mem) {
-> > +			pr_err("Unable to ioremap: addr %lx, size %zd\n",
-> > +				 addr, copy_size);
-> > +			return -ENOMEM;
-> > +		}
-> > +		memcpy(buffer, device_mem, copy_size);
-> > +
-> > +		offset += copy_size;
-> > +		buffer += copy_size;
-> > +		bytes_left -= copy_size;
-> > +		dev_dbg(&rproc->dev, "Copied %d bytes to userspace\n",
-> > +			copy_size);
-> > +	}
-> > +
-> > +	return count;
-> 
-> This should be the number of bytes actually returned, so if count is
-> larger than the sum of the segment sizes this will be wrong.
-> 
-> > +}
-> > +
-> >  /**
-> >   * rproc_coredump_add_custom_segment() - add custom coredump segment
-> >   * @rproc:	handle of a remote processor
-> > @@ -1566,27 +1646,27 @@ static void rproc_coredump(struct rproc *rproc)
-> >  	struct rproc_dump_segment *segment;
-> >  	struct elf32_phdr *phdr;
-> >  	struct elf32_hdr *ehdr;
-> > -	size_t data_size;
-> > +	size_t header_size;
-> >  	size_t offset;
-> >  	void *data;
-> > -	void *ptr;
-> >  	int phnum = 0;
-> >  
-> >  	if (list_empty(&rproc->dump_segments))
-> >  		return;
-> >  
-> > -	data_size = sizeof(*ehdr);
-> > +	header_size = sizeof(*ehdr);
-> >  	list_for_each_entry(segment, &rproc->dump_segments, node) {
-> > -		data_size += sizeof(*phdr) + segment->size;
-> > +		header_size += sizeof(*phdr);
-> >  
-> >  		phnum++;
-> >  	}
-> >  
-> > -	data = vmalloc(data_size);
-> > +	data = vmalloc(header_size);
-> >  	if (!data)
-> >  		return;
-> >  
-> >  	ehdr = data;
-> > +	rproc->elfcore = data;
-> 
-> Rather than using a rproc-global variable I would prefer that you create
-> a new rproc_coredump_state struct that carries the header pointer and
-> the information needed by the read & free functions.
-> 
-> >  
-> >  	memset(ehdr, 0, sizeof(*ehdr));
-> >  	memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
-> > @@ -1618,23 +1698,14 @@ static void rproc_coredump(struct rproc *rproc)
-> >  
-> >  		if (segment->dump) {
-> >  			segment->dump(rproc, segment, data + offset);
+Hi 
 
-I'm not exactly sure why custom segments can be copied to the elf image but not
-generic ones... And as far as I can tell accessing "data + offset" will blow up
-because only the memory for the program headers has been allocated, not for the
-program segments. 
+On 4/1/20 2:03 AM, Rishabh Bhatnagar wrote:
+> Add the character device interface for userspace applications.
+> This interface can be used in order to boot up and shutdown
+> remote subsystems. Currently there is only a sysfs interface
+> which the userspace clients can use. If a usersapce application
+> crashes after booting the remote processor does not get any
+> indication about the crash. It might still assume that the
+> application is running. For example modem uses remotefs service
+> to fetch data from disk/flash memory. If the remotefs service
+> crashes, modem keeps on requesting data which might lead to a
+> crash. Adding a character device interface makes the remote
+> processor tightly coupled with the user space application.
+> A crash of the application leads to a close on the file descriptors
+> therefore shutting down the remoteproc.
 
+Sorry I'm late in the discussion, I hope I've gone through the whole
+discussion so I don't reopen a closed point...
 
-> > -		} else {
-> > -			ptr = rproc_da_to_va(rproc, segment->da, segment->size);
-> > -			if (!ptr) {
-> > -				dev_err(&rproc->dev,
-> > -					"invalid coredump segment (%pad, %zu)\n",
-> > -					&segment->da, segment->size);
-> > -				memset(data + offset, 0xff, segment->size);
-> > -			} else {
-> > -				memcpy(data + offset, ptr, segment->size);
-> > -			}
-> > -		}
-> >  
-> >  		offset += phdr->p_filesz;
-> >  		phdr++;
-> >  	}
-> > +	dev_coredumpm(&rproc->dev, NULL, rproc, header_size, GFP_KERNEL,
-> > +			rproc_read_dump, rproc_free_dump);
-> >  
-> > -	dev_coredumpv(&rproc->dev, data, data_size, GFP_KERNEL);
-> > +	wait_for_completion(&rproc->dump_done);
-> 
-> This will mean that recovery handling will break on installations that
-> doesn't have your ramdump collector - as it will just sit here forever
-> (5 minutes) waiting for userspace to do its job.
+Something here is not crystal clear to me so I'd rather share it...
 
-Right, that problem also came to mind.
+I suppose that you the automatic restart of the application is not possible to
+stop and restart the remote processor...
+ 
+Why this use case can not be solved by a process monitor or a service
+in userland that detects the application crash and stop the remote firmware using
+the sysfs interface?
 
-> 
-> I think we need to device a new sysfs attribute, through which you can
-> enable the "inline" coredump mechanism. That way recovery would work for
-> all systems and in your specific case you could reconfigure it - perhaps
-> once the ramdump collector starts.
+I just want to be sure that there is no alternative to this, because having two ways
+for application to shutdown the firmware seems to me confusing...
 
-Another option is to make rproc_coredump() customizable, as with all the other
-functions in remoteproc_internal.h.  That way the current rproc_coredump() is
-kept intact and we don't need a new sysfs entry.
+What about the opposite service, mean inform the application that the remote
+processor is crashed?
+Do you identify such need? or the "auto" crash recovery is sufficient?
 
 Thanks,
-Mathieu
-
+Arnaud
 > 
-> Regards,
-> Bjorn
+> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+> ---
+>  drivers/remoteproc/Kconfig               |   9 +++
+>  drivers/remoteproc/Makefile              |   1 +
+>  drivers/remoteproc/remoteproc_cdev.c     | 100 +++++++++++++++++++++++++++++++
+>  drivers/remoteproc/remoteproc_internal.h |  22 +++++++
+>  include/linux/remoteproc.h               |   2 +
+>  5 files changed, 134 insertions(+)
+>  create mode 100644 drivers/remoteproc/remoteproc_cdev.c
 > 
-> >  }
-> >  
-> >  /**
-> > @@ -1665,6 +1736,7 @@ int rproc_trigger_recovery(struct rproc *rproc)
-> >  
-> >  	/* generate coredump */
-> >  	rproc_coredump(rproc);
-> > +	reinit_completion(&rproc->dump_done);
-> >  
-> >  	/* load firmware */
-> >  	ret = request_firmware(&firmware_p, rproc->firmware, dev);
-> > @@ -2067,6 +2139,7 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
-> >  	INIT_LIST_HEAD(&rproc->rvdevs);
-> >  	INIT_LIST_HEAD(&rproc->subdevs);
-> >  	INIT_LIST_HEAD(&rproc->dump_segments);
-> > +	init_completion(&rproc->dump_done);
-> >  
-> >  	INIT_WORK(&rproc->crash_handler, rproc_crash_handler_work);
-> >  
-> > diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> > index 16ad666..461b235 100644
-> > --- a/include/linux/remoteproc.h
-> > +++ b/include/linux/remoteproc.h
-> > @@ -481,6 +481,8 @@ struct rproc_dump_segment {
-> >   * @auto_boot: flag to indicate if remote processor should be auto-started
-> >   * @dump_segments: list of segments in the firmware
-> >   * @nb_vdev: number of vdev currently handled by rproc
-> > + * @dump_done: completion variable when dump is complete
-> > + * @elfcore: pointer to elf header buffer
-> >   */
-> >  struct rproc {
-> >  	struct list_head node;
-> > @@ -514,6 +516,8 @@ struct rproc {
-> >  	bool auto_boot;
-> >  	struct list_head dump_segments;
-> >  	int nb_vdev;
-> > +	struct completion dump_done;
-> > +	void *elfcore;
-> >  };
-> >  
-> >  /**
-> > -- 
-> > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> > a Linux Foundation Collaborative Project
+> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
+> index de3862c..6374b79 100644
+> --- a/drivers/remoteproc/Kconfig
+> +++ b/drivers/remoteproc/Kconfig
+> @@ -14,6 +14,15 @@ config REMOTEPROC
+>  
+>  if REMOTEPROC
+>  
+> +config REMOTEPROC_CDEV
+> +	bool "Remoteproc character device interface"
+> +	help
+> +	  Say y here to have a character device interface for Remoteproc
+> +	  framework. Userspace can boot/shutdown remote processors through
+> +	  this interface.
+> +
+> +	  It's safe to say N if you don't want to use this interface.
+> +
+>  config IMX_REMOTEPROC
+>  	tristate "IMX6/7 remoteproc support"
+>  	depends on ARCH_MXC
+> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
+> index e30a1b1..b7d4f77 100644
+> --- a/drivers/remoteproc/Makefile
+> +++ b/drivers/remoteproc/Makefile
+> @@ -9,6 +9,7 @@ remoteproc-y				+= remoteproc_debugfs.o
+>  remoteproc-y				+= remoteproc_sysfs.o
+>  remoteproc-y				+= remoteproc_virtio.o
+>  remoteproc-y				+= remoteproc_elf_loader.o
+> +obj-$(CONFIG_REMOTEPROC_CDEV)		+= remoteproc_cdev.o
+>  obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
+>  obj-$(CONFIG_MTK_SCP)			+= mtk_scp.o mtk_scp_ipi.o
+>  obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o
+> diff --git a/drivers/remoteproc/remoteproc_cdev.c b/drivers/remoteproc/remoteproc_cdev.c
+> new file mode 100644
+> index 0000000..8182bd1
+> --- /dev/null
+> +++ b/drivers/remoteproc/remoteproc_cdev.c
+> @@ -0,0 +1,100 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Character device interface driver for Remoteproc framework.
+> + *
+> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#include <linux/cdev.h>
+> +#include <linux/fs.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/remoteproc.h>
+> +
+> +#include "remoteproc_internal.h"
+> +
+> +#define NUM_RPROC_DEVICES	64
+> +static dev_t rproc_cdev;
+> +static DEFINE_IDA(cdev_minor_ida);
+> +
+> +static int rproc_cdev_open(struct inode *inode, struct file *file)
+> +{
+> +	struct rproc *rproc;
+> +
+> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
+> +
+> +	if (!rproc)
+> +		return -EINVAL;
+> +
+> +	if (rproc->state == RPROC_RUNNING)
+> +		return -EBUSY;
+> +
+> +	return rproc_boot(rproc);
+> +}
+> +
+> +static int rproc_cdev_release(struct inode *inode, struct file *file)
+> +{
+> +	struct rproc *rproc;
+> +
+> +	rproc = container_of(inode->i_cdev, struct rproc, char_dev);
+> +
+> +	if (!rproc || rproc->state != RPROC_RUNNING)
+> +		return -EINVAL;
+> +
+> +	rproc_shutdown(rproc);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct file_operations rproc_fops = {
+> +	.open = rproc_cdev_open,
+> +	.release = rproc_cdev_release,
+> +};
+> +
+> +int rproc_char_device_add(struct rproc *rproc)
+> +{
+> +	int ret, minor;
+> +	dev_t cdevt;
+> +
+> +	minor = ida_simple_get(&cdev_minor_ida, 0, NUM_RPROC_DEVICES,
+> +			       GFP_KERNEL);
+> +	if (minor < 0) {
+> +		dev_err(&rproc->dev, "%s: No more minor numbers left! rc:%d\n",
+> +			__func__, minor);
+> +		return -ENODEV;
+> +	}
+> +
+> +	cdev_init(&rproc->char_dev, &rproc_fops);
+> +	rproc->char_dev.owner = THIS_MODULE;
+> +
+> +	cdevt = MKDEV(MAJOR(rproc_cdev), minor);
+> +	ret = cdev_add(&rproc->char_dev, cdevt, 1);
+> +	if (ret < 0)
+> +		ida_simple_remove(&cdev_minor_ida, minor);
+> +
+> +	rproc->dev.devt = cdevt;
+> +	return ret;
+> +}
+> +
+> +void rproc_char_device_remove(struct rproc *rproc)
+> +{
+> +	__unregister_chrdev(MAJOR(rproc->dev.devt), MINOR(rproc->dev.devt), 1,
+> +			    "rproc");
+> +	ida_simple_remove(&cdev_minor_ida, MINOR(rproc->dev.devt));
+> +}
+> +
+> +void __init rproc_init_cdev(void)
+> +{
+> +	int ret;
+> +
+> +	ret = alloc_chrdev_region(&rproc_cdev, 0, NUM_RPROC_DEVICES, "rproc");
+> +	if (ret < 0) {
+> +		pr_err("Failed to alloc rproc_cdev region, err %d\n", ret);
+> +		return;
+> +	}
+> +}
+> +
+> +void __exit rproc_exit_cdev(void)
+> +{
+> +	__unregister_chrdev(MAJOR(rproc_cdev), 0, NUM_RPROC_DEVICES, "rproc");
+> +}
+> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+> index 493ef92..28d61a1 100644
+> --- a/drivers/remoteproc/remoteproc_internal.h
+> +++ b/drivers/remoteproc/remoteproc_internal.h
+> @@ -47,6 +47,27 @@ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
+>  int rproc_init_sysfs(void);
+>  void rproc_exit_sysfs(void);
+>  
+> +#ifdef CONFIG_REMOTEPROC_CDEV
+> +void rproc_init_cdev(void);
+> +void rproc_exit_cdev(void);
+> +int rproc_char_device_add(struct rproc *rproc);
+> +void rproc_char_device_remove(struct rproc *rproc);
+> +#else
+> +static inline void rproc_init_cdev(void)
+> +{
+> +}
+> +static inline void rproc_exit_cdev(void)
+> +{
+> +}
+> +static inline int rproc_char_device_add(struct rproc *rproc)
+> +{
+> +	return 0;
+> +}
+> +static inline void  rproc_char_device_remove(struct rproc *rproc)
+> +{
+> +}
+> +#endif
+> +
+>  void rproc_free_vring(struct rproc_vring *rvring);
+>  int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
+>  
+> @@ -63,6 +84,7 @@ struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
+>  struct rproc_mem_entry *
+>  rproc_find_carveout_by_name(struct rproc *rproc, const char *name, ...);
+>  
+> +
+>  static inline
+>  int rproc_fw_sanity_check(struct rproc *rproc, const struct firmware *fw)
+>  {
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index 16ad666..c4ca796 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -37,6 +37,7 @@
+>  
+>  #include <linux/types.h>
+>  #include <linux/mutex.h>
+> +#include <linux/cdev.h>
+>  #include <linux/virtio.h>
+>  #include <linux/completion.h>
+>  #include <linux/idr.h>
+> @@ -514,6 +515,7 @@ struct rproc {
+>  	bool auto_boot;
+>  	struct list_head dump_segments;
+>  	int nb_vdev;
+> +	struct cdev char_dev;
+>  };
+>  
+>  /**
+> 
