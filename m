@@ -2,57 +2,107 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CD5C19CDD8
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Apr 2020 02:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 779A019CE21
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Apr 2020 03:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390416AbgDCAkQ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 2 Apr 2020 20:40:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38840 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390413AbgDCAkP (ORCPT
+        id S2389422AbgDCBcG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 2 Apr 2020 21:32:06 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:37332 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389108AbgDCBcF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 2 Apr 2020 20:40:15 -0400
-Subject: Re: [GIT PULL] hwspinlock updates for v5.7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585874415;
-        bh=6Fq0RBm47SeNRN3pI4nuUmLYd+7mBF4nPYB411dFPz0=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=vM10yjNyR9njHFkAy533WNUOolWjt4F3fBiK+AgXk6FfnaI13yWdy+rx7JO+iC26a
-         L6eHDSS07ZIF0QNOaxehuehKW9UZ+eE5qP97rFUTWMteZrh7w5MiBgU5nE3kpGWvay
-         SND4JZ493ubkPZiss7H4v7OEcJQHEXwAHp0DuJQE=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20200402010837.GB751391@yoga>
-References: <20200402010837.GB751391@yoga>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20200402010837.GB751391@yoga>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git
- tags/hwlock-v5.7
-X-PR-Tracked-Commit-Id: ef17f5193edd42e8913c93d0b601c101c56a15bb
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 11786191e2d946410cf5fde482b10cdd5356e76c
-Message-Id: <158587441546.31624.17775444987242154271.pr-tracker-bot@kernel.org>
-Date:   Fri, 03 Apr 2020 00:40:15 +0000
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
+        Thu, 2 Apr 2020 21:32:05 -0400
+Received: by mail-ot1-f66.google.com with SMTP id g23so5699406otq.4;
+        Thu, 02 Apr 2020 18:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=tL84JIZ9PPBKDtxjAsXoKktPkF0mAfOinDidTcxG+ZI=;
+        b=BIFtyczK2wzQJIVuXDXXu1+CSY9fxuK/7yvOqlrcPXt5rRCXgAew9NVV/PltLx9Rev
+         agwVJWlPyFti+xt3KXdi44NAufL6twb64gvU/EhzBctUsoFkuZUx3hrq+3P6Xv8dylFc
+         EDramOmmYBIkKIcou7gmsR+NWJujkI7mi54mvTlct23WvPuFwbx3Y7c6DJJWa2UR7FBm
+         befolPENSeQ99v/6G51dsZWPRjPuUgYVX8/oLuDsHnQQ25yHJVLMSgjY3j+VSbNStNSs
+         VAclT8M3TEDEleZiPaOdzuRNAMjTWB/7wVED3V4DUERKUCI3UekwicG1ASW77mjqM/k3
+         ztcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=tL84JIZ9PPBKDtxjAsXoKktPkF0mAfOinDidTcxG+ZI=;
+        b=cMn0iLilexXsbbTwCeqfsQwlo/t+2Zd/x2DJRYJKe8aFbzpgqd6XBPiN3NoOx5QkJ3
+         5BB/DiUYc0kFjGWpjE3uLc3hLqJjzfmoSUZJPka9QoHHennaUZwngiENCSGCagFX3SiY
+         QjKQwGnsdiUdTbIosDv3YhjgHCIOQzR1xkOMI0L8VzeoJZRwqrLCxIfFA3ogPTu2wQ8c
+         kEf+TpuLHgpcYphPVn6wZJs8QJN8hI6QxCq90OqSX8/H3CAHdaeuAw29swAwElFphGiA
+         IxU8lO4nnJO583bKCDz2whqZN/OItm1PPIwUcWOOWtUyh8Y9go+f0s9ZRtQSKVvrbO6z
+         0t/g==
+X-Gm-Message-State: AGi0PuaRYdLRqlZdavUJErCfqrDWmOQxyM/GA9Sz9GFMDLH13+hyCPNm
+        q8ejxCpek/25BrbFnr7ec7U=
+X-Google-Smtp-Source: APiQypJ4iphaBRpe5lJEeM4w3H4utcznK6c8v7WzM+EmpPpzRvAY4xHA3Kziib5EUJ9FwQv6lw7Tfg==
+X-Received: by 2002:a9d:748e:: with SMTP id t14mr4853268otk.334.1585877523192;
+        Thu, 02 Apr 2020 18:32:03 -0700 (PDT)
+Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id m20sm1743494otj.37.2020.04.02.18.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2020 18:32:02 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH] remoteproc/omap: Fix set_load call in omap_rproc_request_timer
+Date:   Thu,  2 Apr 2020 18:31:35 -0700
+Message-Id: <20200403013134.11407-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.26.0
+In-Reply-To: <20200402010812.GA751391@yoga>
+References: <20200402010812.GA751391@yoga>
+MIME-Version: 1.0
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The pull request you sent on Wed, 1 Apr 2020 18:08:37 -0700:
+When building arm allyesconfig:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/hwlock-v5.7
+drivers/remoteproc/omap_remoteproc.c:174:44: error: too many arguments
+to function call, expected 2, have 3
+        timer->timer_ops->set_load(timer->odt, 0, 0);
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~                ^
+1 error generated.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/11786191e2d946410cf5fde482b10cdd5356e76c
+This is due to commit 02e6d546e3bd ("clocksource/drivers/timer-ti-dm:
+Enable autoreload in set_pwm") in the clockevents tree interacting with
+commit e28edc571925 ("remoteproc/omap: Request a timer(s) for remoteproc
+usage") from the rpmsg tree.
 
-Thank you!
+This should have been fixed during the merge of the remoteproc tree
+since it happened after the clockevents tree merge; however, it does not
+look like my email was noticed by either maintainer and I did not pay
+attention when the pull was sent since I was on CC.
 
+Fixes: c6570114316f ("Merge tag 'rproc-v5.7' of git://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc")
+Link: https://lore.kernel.org/lkml/20200327185055.GA22438@ubuntu-m2-xlarge-x86/
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
+ drivers/remoteproc/omap_remoteproc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+index cdb546f7232e..6955fab0a78b 100644
+--- a/drivers/remoteproc/omap_remoteproc.c
++++ b/drivers/remoteproc/omap_remoteproc.c
+@@ -171,7 +171,7 @@ static int omap_rproc_request_timer(struct device *dev, struct device_node *np,
+ 	}
+ 
+ 	/* clean counter, remoteproc code will set the value */
+-	timer->timer_ops->set_load(timer->odt, 0, 0);
++	timer->timer_ops->set_load(timer->odt, 0);
+ 
+ 	return 0;
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.26.0
+
