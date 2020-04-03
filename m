@@ -2,731 +2,322 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B9719DF1B
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Apr 2020 22:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D8D19DF63
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Apr 2020 22:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727627AbgDCUS1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 3 Apr 2020 16:18:27 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:35863 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726368AbgDCUS1 (ORCPT
+        id S1727829AbgDCUaq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 3 Apr 2020 16:30:46 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:36406 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727792AbgDCUaq (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 3 Apr 2020 16:18:27 -0400
-Received: by mail-io1-f68.google.com with SMTP id n10so8986981iom.3
-        for <linux-remoteproc@vger.kernel.org>; Fri, 03 Apr 2020 13:18:24 -0700 (PDT)
+        Fri, 3 Apr 2020 16:30:46 -0400
+Received: by mail-io1-f67.google.com with SMTP id n10so9025479iom.3
+        for <linux-remoteproc@vger.kernel.org>; Fri, 03 Apr 2020 13:30:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=gHLwd7tW+yY/xm1BU5jr+xQmR6G7Y08mWvbB2R+BIOo=;
-        b=guU56ioHZYD2xEZoRKj05PK3YlJGJtnnDqkI3bEL3d9FJdLgZydpbdCl1mz5sbqLhh
-         IY+Re+sujqYwZfMzixBYJQvegRlF+aklZV/3dNu3CnfLJGDe/kl6TKl/204AolUO0ufY
-         43O6bclh6ydBizC7VQXh8JFuyk9zvgLhwHYrJcngYi5shwmsetcTyyacKE1McEkgp9+v
-         P3kC40Nj6MoVcgh8C6hpWZr1+dEkWALogt/1rH/tcTQV4Bwzzv2bwgx7pCtAcOBY4Fit
-         /OiKxlO63mSAJewDcBEQ0Re0FO9qDucNdTI7g51esvzSadgVbG4JVHuJdSNjbSsD3Wox
-         K86A==
+         :cc;
+        bh=zik9NrCxAhGPE/lFsh624bVzZ+6DmxMdz0dsT27Kvv8=;
+        b=q9y0KOJ5ENlNPLWMhG7SaQVI10HNpx94qBO0mUwW/9M8WvuKG+24bQSGu4cyyz6iSs
+         nifLww6ifF1gLpmHsRz8iaZyC8Dw4HrMAdu9Gz53D7SW5pOpQOu2/bM1SDuyHfdMoUUV
+         33wLvdjyfnMChPLnSleiiav6sn4O1wXbv88YhHLE6YqA4342StVVb41h1cPHLYUcee0S
+         kg5kzrzlQMgI+et7BJ2tC9usx1wXax1i25f91teEtxbdJNLB5x5+psBc2XyaWfMc8aOc
+         nJ4pKoiQAwkhJPv5NF/uZ2Wo26el9tNmwHaN0R5GjmGx98WPcWJGqQqV5yUCDk8Ryanm
+         QSTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=gHLwd7tW+yY/xm1BU5jr+xQmR6G7Y08mWvbB2R+BIOo=;
-        b=NuLvkF31Vm6MhITx9kVzBYHaPzLKTc/6qeUPhh6d8vdppED9z0KKgjp22NjsVIShcX
-         ZynukbJpnVaNiIsnvENQKrg4bqaPgG5fJ9EOPk6LVkeSKvlhu3QrnaQyTL69x7HsmNh0
-         OVvxkN7jAuGB3usxoW66n/6BMyEV8u/4r2UL/1rLdalDWBWz9EOD1nstWnhZ188jKkg5
-         PUbXB5yZpJxizkJg1nJBycQdSIViL4CXyiZpLUzErAuPXJZZP7TOhKOC3708NBc1xeMP
-         pZZw1cOkswtdM8XWwYEDaZCtNUlO42EilKajJSyVNa3mNB1BCNRWRAy0SV3nmQU+koXH
-         EDvQ==
-X-Gm-Message-State: AGi0PubHTxorTwWEbmjS4ih9xRsaTS+Dc89UYxI34LGRXX2B5gHAqmGp
-        SSRHkiDBtHWMoHxStZfWFA8MluZq3v6LnpP/3CtAQw==
-X-Google-Smtp-Source: APiQypJJ1JxG3ZtPL8mi5Gu4NvUT/Z+F1mhNkXcOLq+UQOEAs0l6eh88MXAtMqZ7vYQPLZzNAqbF3CZqRilT/H/4aWs=
-X-Received: by 2002:a6b:bb45:: with SMTP id l66mr9493673iof.73.1585945104007;
- Fri, 03 Apr 2020 13:18:24 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=zik9NrCxAhGPE/lFsh624bVzZ+6DmxMdz0dsT27Kvv8=;
+        b=GKOqO3MrRB8N+R62and5iHHB8PoZr8wAxD9e3+reKlWkAXtD4wYoYq0hQ7PZYA9n6y
+         gR/LVJ2tmB29m9daOfpcfTB3p6IeLRMmwHu/3LE0DWD13v4hOn8PIAG+hwxfrfIrLCJa
+         ekyoUNo8GZuuUR4GDBDtnHXJc8IDrS3Q0TuIr/QwRW5wgfT2cjtlg3wgCHbYo3QIlOaK
+         Y8OFdhqQjmywect064qTFaS7ztBSnviPL2Mw53RxV2czs5Lq9qTHiSGfrUKXUxkYLLQ1
+         WJ2i0ov+RJaOs3FnFswTA1BYK7DNLVENrlBkBg8VngLGfsQRKtpZOANaMLPMBCQ2n4Wg
+         uqsg==
+X-Gm-Message-State: AGi0PuafispOehTAG+RPkFEz/5bZWeTQdjo1zX/ZR2payzoAGV8LmtCZ
+        HUJm4NgdqIm8TVJZ5IYkFla3zJ4qJlvAXs80QE3U0w==
+X-Google-Smtp-Source: APiQypLqRZBF1zR/0UOAX4YKl21MpCqrk2G9ANvjPA36Oh7n7qZ0l2V/KB6KKSA0Tsw80mnF6YnfFANBuYqMEwVMVdM=
+X-Received: by 2002:a05:6638:186:: with SMTP id a6mr9842874jaq.36.1585945844000;
+ Fri, 03 Apr 2020 13:30:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200324170407.16470-1-arnaud.pouliquen@st.com>
- <20200324170407.16470-3-arnaud.pouliquen@st.com> <20200401180618.GB23918@xps15>
- <dab484a2-fcf4-889e-a05c-923b95dcd501@st.com>
-In-Reply-To: <dab484a2-fcf4-889e-a05c-923b95dcd501@st.com>
+References: <1585699438-14394-1-git-send-email-rishabhb@codeaurora.org> <5b1c8287-0077-87e7-9364-b1f5a104c9e3@st.com>
+In-Reply-To: <5b1c8287-0077-87e7-9364-b1f5a104c9e3@st.com>
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Fri, 3 Apr 2020 14:18:12 -0600
-Message-ID: <CANLsYkwCMR5OiFC8r-V29iWZL46-Mo6WL-oSnmNioGd2czDQtw@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] tty: add rpmsg driver
+Date:   Fri, 3 Apr 2020 14:30:33 -0600
+Message-ID: <CANLsYky1AR7FHBK9gCxsTLp2LBFc2h_RJCR_4mqqYPhAgnufNg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] remoteproc: Add character device interface
 To:     Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
+Cc:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        Suman Anna <s-anna@ti.com>,
-        Fabien DESSENNE <fabien.dessenne@st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
-        xiang xiao <xiaoxiang781216@gmail.com>
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        psodagud@codeaurora.org, tsoni@codeaurora.org,
+        Siddharth Gupta <sidgup@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu, 2 Apr 2020 at 09:25, Arnaud POULIQUEN <arnaud.pouliquen@st.com> wro=
-te:
+On Thu, 2 Apr 2020 at 11:28, Arnaud POULIQUEN <arnaud.pouliquen@st.com> wrote:
 >
-> Hi Mathieu,
+> Hi
 >
-> On 4/1/20 8:06 PM, Mathieu Poirier wrote:
-> > On Tue, Mar 24, 2020 at 06:04:07PM +0100, Arnaud Pouliquen wrote:
-> >> This driver exposes a standard TTY interface on top of the rpmsg
-> >> framework through a rpmsg service.
-> >>
-> >> This driver supports multi-instances, offering a /dev/ttyRPMSGx entry
-> >> per rpmsg endpoint.
-> >>
-> >> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
-> >> ---
-> >>  Documentation/serial/tty_rpmsg.rst |  45 ++++
-> >>  drivers/tty/Kconfig                |   9 +
-> >>  drivers/tty/Makefile               |   1 +
-> >>  drivers/tty/rpmsg_tty.c            | 417 ++++++++++++++++++++++++++++=
-+
-> >>  4 files changed, 472 insertions(+)
-> >>  create mode 100644 Documentation/serial/tty_rpmsg.rst
-> >>  create mode 100644 drivers/tty/rpmsg_tty.c
-> >>
-> >> diff --git a/Documentation/serial/tty_rpmsg.rst b/Documentation/serial=
-/tty_rpmsg.rst
-> >> new file mode 100644
-> >> index 000000000000..fc1d3fba73c5
-> >> --- /dev/null
-> >> +++ b/Documentation/serial/tty_rpmsg.rst
-> >> @@ -0,0 +1,45 @@
-> >> +.. SPDX-License-Identifier: GPL-2.0
-> >> +
-> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >> +The rpmsg TTY
-> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >> +
-> >> +The rpmsg tty driver implements serial communication on the RPMsg bus=
- to makes possible for user-space programs to send and receive rpmsg messag=
-es as a standard tty protocol.
-> >> +
-> >> +The remote processor can instantiate a new tty by requesting:
-> >> +- a "rpmsg-tty-raw" RPMsg service, for TTY raw data support without f=
-low control
-> >> +- a "rpmsg-tty-ctrl" RPMSg service, for TTY support with flow control=
-.
-> >> +
-> >> +Information related to the RPMsg and associated tty device is availab=
-le in
-> >> +/sys/bus/rpmsg/devices/.
-> >> +
-> >> +RPMsg TTY without control
-> >> +---------------------
-> >> +
-> >> +The default end point associated with the "rpmsg-tty-raw" service is =
-directly
-> >> +used for data exchange. No flow control is available.
-> >> +
-> >> +To be compliant with this driver, the remote firmware must create its=
- data end point associated with the "rpmsg-tty-raw" service.
-> >> +
-> >> +RPMsg TTY with control
-> >> +---------------------
-> >> +
-> >> +The default end point associated with the "rpmsg-tty-ctrl" service is=
- reserved for
-> >> +the control. A second endpoint must be created for data exchange.
-> >> +
-> >> +The control channel is used to transmit to the remote processor the C=
-TS status,
-> >> +as well as the end point address for data transfer.
-> >> +
-> >> +To be compatible with this driver, the remote firmware must create or=
- use its end point associated with "rpmsg-tty-ctrl" service, plus a second =
-endpoint for the data flow.
-> >> +On Linux rpmsg_tty probes, the data endpoint address and the CTS (set=
- to disable)
-> >> +is sent to the remote processor.
-> >> +The remote processor has to respect following rules:
-> >> +- It only transmits data when Linux remote cts is enable, otherwise m=
-essage
-> >> +  could be lost.
-> >> +- It can pause/resume reception by sending a control message (rely on=
- CTS state).
-> >> +
-> >> +Control message structure:
-> >> +struct rpmsg_tty_ctrl {
-> >> +    u8 cts;                 /* remote reception status */
-> >> +    u16 d_ept_addr;         /* data endpoint address */
-> >> +};
-> >> diff --git a/drivers/tty/Kconfig b/drivers/tty/Kconfig
-> >> index a312cb33a99b..9d3ff6df9f25 100644
-> >> --- a/drivers/tty/Kconfig
-> >> +++ b/drivers/tty/Kconfig
-> >> @@ -454,6 +454,15 @@ config VCC
-> >>      help
-> >>        Support for Sun logical domain consoles.
-> >>
-> >> +config RPMSG_TTY
-> >> +    tristate "RPMSG tty driver"
-> >> +    depends on RPMSG
-> >> +    help
-> >> +      Say y here to export rpmsg endpoints as tty devices, usually fo=
-und
-> >> +      in /dev/ttyRPMSGx.
-> >> +      This makes it possible for user-space programs to send and rece=
-ive
-> >> +      rpmsg messages as a standard tty protocol.
-> >> +
-> >>  config LDISC_AUTOLOAD
-> >>      bool "Automatically load TTY Line Disciplines"
-> >>      default y
-> >> diff --git a/drivers/tty/Makefile b/drivers/tty/Makefile
-> >> index 020b1cd9294f..c2465e7ebc2a 100644
-> >> --- a/drivers/tty/Makefile
-> >> +++ b/drivers/tty/Makefile
-> >> @@ -34,5 +34,6 @@ obj-$(CONFIG_PPC_EPAPR_HV_BYTECHAN) +=3D ehv_bytecha=
-n.o
-> >>  obj-$(CONFIG_GOLDFISH_TTY)  +=3D goldfish.o
-> >>  obj-$(CONFIG_MIPS_EJTAG_FDC_TTY) +=3D mips_ejtag_fdc.o
-> >>  obj-$(CONFIG_VCC)           +=3D vcc.o
-> >> +obj-$(CONFIG_RPMSG_TTY)             +=3D rpmsg_tty.o
-> >>
-> >>  obj-y +=3D ipwireless/
-> >> diff --git a/drivers/tty/rpmsg_tty.c b/drivers/tty/rpmsg_tty.c
-> >> new file mode 100644
-> >> index 000000000000..49ce3b72781a
-> >> --- /dev/null
-> >> +++ b/drivers/tty/rpmsg_tty.c
-> >> @@ -0,0 +1,417 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
-> >> + * Authors: Arnaud Pouliquen <arnaud.pouliquen@st.com> for STMicroele=
-ctronics.
-> >> + */
-> >> +
-> >> +#include <linux/module.h>
-> >> +#include <linux/rpmsg.h>
-> >> +#include <linux/slab.h>
-> >> +#include <linux/tty.h>
-> >> +#include <linux/tty_flip.h>
-> >> +
-> >> +#define MAX_TTY_RPMSG       32
-> >> +
-> >> +#define TTY_CH_NAME_RAW             "rpmsg-tty-raw"
-> >> +#define TTY_CH_NAME_WITH_CTS        "rpmsg-tty-ctrl"
-> >> +
-> >> +static DEFINE_IDR(tty_idr); /* tty instance id */
-> >> +static DEFINE_MUTEX(idr_lock);      /* protects tty_idr */
-> >> +
-> >> +static struct tty_driver *rpmsg_tty_driver;
-> >> +
-> >> +struct rpmsg_tty_ctrl {
-> >> +    u16 d_ept_addr;         /* data endpoint address */
-> >> +    u8 cts;                 /* remote reception status */
-> >> +} __packed;
-> >> +
-> >> +struct rpmsg_tty_port {
-> >> +    struct tty_port         port;    /* TTY port data */
-> >> +    int                     id;      /* TTY rpmsg index */
-> >> +    bool                    cts;     /* remote reception status */
-> >> +    struct rpmsg_device     *rpdev;  /* rpmsg device */
-> >> +    struct rpmsg_endpoint   *cs_ept; /* channel control endpoint */
-> >> +    struct rpmsg_endpoint   *d_ept;  /* data endpoint */
-> >> +    u32 data_dst;                    /* data destination endpoint add=
-ress */
-> >> +};
-> >> +
-> >> +typedef void (*rpmsg_tty_rx_cb_t)(struct rpmsg_device *, void *, int,=
- void *,
-> >> +                              u32);
-> >> +
-> >> +static int rpmsg_tty_cb(struct rpmsg_device *rpdev, void *data, int l=
-en,
-> >> +                    void *priv, u32 src)
-> >> +{
-> >> +    struct rpmsg_tty_port *cport =3D dev_get_drvdata(&rpdev->dev);
-> >> +    int copied;
-> >> +
-> >> +    if (src =3D=3D cport->data_dst) {
-> >> +            /* data message */
-> >> +            if (!len)
-> >> +                    return -EINVAL;
-> >> +            copied =3D tty_insert_flip_string_fixed_flag(&cport->port=
-, data,
-> >> +                                                       TTY_NORMAL, le=
-n);
-> >> +            if (copied !=3D len)
-> >> +                    dev_dbg(&rpdev->dev, "trunc buffer: available spa=
-ce is %d\n",
-> >> +                            copied);
-> >> +            tty_flip_buffer_push(&cport->port);
-> >> +    } else {
-> >> +            /* control message */
-> >> +            struct rpmsg_tty_ctrl *msg =3D data;
-> >> +
-> >> +            if (len !=3D sizeof(*msg))
-> >> +                    return -EINVAL;
-> >> +
-> >> +            cport->data_dst =3D msg->d_ept_addr;
-> >> +
-> >> +            /* Update remote cts state */
-> >> +            cport->cts =3D msg->cts ? 1 : 0;
-> >> +
-> >> +            if (cport->cts)
-> >> +                    tty_port_tty_wakeup(&cport->port);
-> >> +    }
-> >> +
-> >> +    return 0;
-> >> +}
-> >> +
-> >> +static void rpmsg_tty_send_term_ready(struct tty_struct *tty, u8 stat=
-e)
-> >> +{
-> >> +    struct rpmsg_tty_port *cport =3D tty->driver_data;
-> >> +    struct rpmsg_tty_ctrl m_ctrl;
-> >> +    int ret;
-> >> +
-> >> +    m_ctrl.cts =3D state;
-> >> +    m_ctrl.d_ept_addr =3D cport->d_ept->addr;
-> >> +
-> >> +    ret =3D rpmsg_trysend(cport->cs_ept, &m_ctrl, sizeof(m_ctrl));
-> >> +    if (ret < 0)
-> >> +            dev_dbg(tty->dev, "cannot send control (%d)\n", ret);
-> >> +};
-> >> +
-> >> +static void rpmsg_tty_throttle(struct tty_struct *tty)
-> >> +{
-> >> +    struct rpmsg_tty_port *cport =3D tty->driver_data;
-> >> +
-> >> +    /* Disable remote transmission */
-> >> +    if (cport->cs_ept)
-> >> +            rpmsg_tty_send_term_ready(tty, 0);
-> >> +};
-> >> +
-> >> +static void rpmsg_tty_unthrottle(struct tty_struct *tty)
-> >> +{
-> >> +    struct rpmsg_tty_port *cport =3D tty->driver_data;
-> >> +
-> >> +    /* Enable remote transmission */
-> >> +    if (cport->cs_ept)
-> >> +            rpmsg_tty_send_term_ready(tty, 1);
-> >> +};
-> >> +
-> >> +static int rpmsg_tty_install(struct tty_driver *driver, struct tty_st=
-ruct *tty)
-> >> +{
-> >> +    struct rpmsg_tty_port *cport =3D idr_find(&tty_idr, tty->index);
-> >> +
-> >> +    if (!cport) {
-> >> +            dev_err(tty->dev, "cannot get cport\n");
-> >> +            return -ENODEV;
-> >> +    }
-> >> +
-> >> +    tty->driver_data =3D cport;
-> >> +
-> >> +    return tty_port_install(&cport->port, driver, tty);
-> >> +}
-> >> +
-> >> +static int rpmsg_tty_open(struct tty_struct *tty, struct file *filp)
-> >> +{
-> >> +    return tty_port_open(tty->port, tty, filp);
-> >> +}
-> >> +
-> >> +static void rpmsg_tty_close(struct tty_struct *tty, struct file *filp=
-)
-> >> +{
-> >> +    return tty_port_close(tty->port, tty, filp);
-> >> +}
-> >> +
-> >> +static int rpmsg_tty_write(struct tty_struct *tty, const u8 *buf, int=
- len)
-> >> +{
-> >> +    struct rpmsg_tty_port *cport =3D tty->driver_data;
-> >> +    struct rpmsg_device *rpdev;
-> >> +    int msg_max_size, msg_size;
-> >> +    int ret;
-> >> +    u8 *tmpbuf;
-> >> +
-> >> +    /* If cts not set, the message is not sent*/
-> >> +    if (!cport->cts)
-> >> +            return 0;
-> >> +
-> >> +    rpdev =3D cport->rpdev;
-> >> +
-> >> +    dev_dbg(&rpdev->dev, "%s: send msg from tty->index =3D %d, len =
-=3D %d\n",
-> >> +            __func__, tty->index, len);
-> >> +
-> >> +    msg_max_size =3D rpmsg_get_mtu(rpdev->ept);
-> >> +
-> >> +    msg_size =3D min(len, msg_max_size);
-> >> +    tmpbuf =3D kzalloc(msg_size, GFP_KERNEL);
-> >> +    if (!tmpbuf)
-> >> +            return -ENOMEM;
-> >> +
-> >> +    memcpy(tmpbuf, buf, msg_size);
-> >> +
-> >> +    /*
-> >> +     * Try to send the message to remote processor, if failed return =
-0 as
-> >> +     * no data sent
-> >> +     */
-> >> +    ret =3D rpmsg_trysendto(cport->d_ept, tmpbuf, msg_size, cport->da=
-ta_dst);
-> >> +    kfree(tmpbuf);
-> >> +    if (ret) {
-> >> +            dev_dbg(&rpdev->dev, "rpmsg_send failed: %d\n", ret);
-> >> +            return 0;
-> >> +    }
-> >> +
-> >> +    return msg_size;
-> >> +}
-> >> +
-> >> +static int rpmsg_tty_write_room(struct tty_struct *tty)
-> >> +{
-> >> +    struct rpmsg_tty_port *cport =3D tty->driver_data;
-> >> +
-> >> +    return cport->cts ? rpmsg_get_mtu(cport->rpdev->ept) : 0;
-> >> +}
-> >> +
-> >> +static const struct tty_operations rpmsg_tty_ops =3D {
-> >> +    .install        =3D rpmsg_tty_install,
-> >> +    .open           =3D rpmsg_tty_open,
-> >> +    .close          =3D rpmsg_tty_close,
-> >> +    .write          =3D rpmsg_tty_write,
-> >> +    .write_room     =3D rpmsg_tty_write_room,
-> >> +    .throttle       =3D rpmsg_tty_throttle,
-> >> +    .unthrottle     =3D rpmsg_tty_unthrottle,
-> >> +};
-> >> +
-> >> +static struct rpmsg_tty_port *rpmsg_tty_alloc_cport(void)
-> >> +{
-> >> +    struct rpmsg_tty_port *cport;
-> >> +
-> >> +    cport =3D kzalloc(sizeof(*cport), GFP_KERNEL);
-> >> +    if (!cport)
-> >> +            return ERR_PTR(-ENOMEM);
-> >> +
-> >> +    mutex_lock(&idr_lock);
-> >> +    cport->id =3D idr_alloc(&tty_idr, cport, 0, MAX_TTY_RPMSG, GFP_KE=
-RNEL);
-> >> +    mutex_unlock(&idr_lock);
-> >> +
-> >> +    if (cport->id < 0) {
-> >> +            kfree(cport);
-> >> +            return ERR_PTR(-ENOSPC);
-> >> +    }
-> >> +
-> >> +    return cport;
-> >> +}
-> >> +
-> >> +static void rpmsg_tty_release_cport(struct rpmsg_tty_port *cport)
-> >> +{
-> >> +    mutex_lock(&idr_lock);
-> >> +    idr_remove(&tty_idr, cport->id);
-> >> +    mutex_unlock(&idr_lock);
-> >> +
-> >> +    kfree(cport);
-> >> +}
-> >> +
-> >> +static int rpmsg_tty_port_activate(struct tty_port *p, struct tty_str=
-uct *tty)
-> >> +{
-> >> +    p->low_latency =3D (p->flags & ASYNC_LOW_LATENCY) ? 1 : 0;
-> >> +
-> >> +    /* Allocate the buffer we use for writing data */
-> >> +    return tty_port_alloc_xmit_buf(p);
-> >> +}
-> >> +
-> >> +static void rpmsg_tty_port_shutdown(struct tty_port *p)
-> >> +{
-> >> +    /* Free the write buffer */
-> >> +    tty_port_free_xmit_buf(p);
-> >> +}
-> >> +
-> >> +static void rpmsg_tty_dtr_rts(struct tty_port *port, int raise)
-> >> +{
-> >> +    dev_dbg(port->tty->dev, "%s: dtr_rts state %d\n", __func__, raise=
-);
-> >> +
-> >> +    if (raise)
-> >> +            rpmsg_tty_unthrottle(port->tty);
-> >> +    else
-> >> +            rpmsg_tty_throttle(port->tty);
-> >> +}
-> >> +
-> >> +static const struct tty_port_operations rpmsg_tty_port_ops =3D {
-> >> +    .activate =3D rpmsg_tty_port_activate,
-> >> +    .shutdown =3D rpmsg_tty_port_shutdown,
-> >> +    .dtr_rts  =3D rpmsg_tty_dtr_rts,
-> >> +};
-> >> +
-> >> +static int rpmsg_tty_probe(struct rpmsg_device *rpdev)
-> >> +{
-> >> +    struct rpmsg_tty_port *cport;
-> >> +    struct device *dev =3D &rpdev->dev;
-> >> +    struct rpmsg_channel_info chinfo;
-> >> +    struct device *tty_dev;
-> >> +    int ret;
-> >> +
-> >> +    cport =3D rpmsg_tty_alloc_cport();
-> >> +    if (IS_ERR(cport)) {
-> >> +            dev_err(dev, "failed to alloc tty port\n");
-> >> +            return PTR_ERR(cport);
-> >> +    }
-> >> +
-> >> +    if (!strncmp(rpdev->id.name, TTY_CH_NAME_WITH_CTS,
-> >> +                 sizeof(TTY_CH_NAME_WITH_CTS))) {
-> >> +            /*
-> >> +             * the default endpoint is used for control. Create a sec=
-ond
-> >> +             * endpoint for the data that would be exchanges trough c=
-ontrol
-> >> +             * endpoint. address of the data endpoint will be provide=
-d with
-> >> +             * the cts state
-> >> +             */
-> >> +            cport->cs_ept =3D rpdev->ept;
-> >> +            cport->data_dst =3D RPMSG_ADDR_ANY;
-> >> +
-> >> +            strscpy(chinfo.name, TTY_CH_NAME_WITH_CTS, sizeof(chinfo.=
-name));
-> >
-> > Shouldn't this be TTY_CH_NAME_RAW instead of TTY_CH_NAME_WITH_CTS?
-> The TTY_CH_NAME_WITH_CTS represent here the service "TTY support with flo=
-w control"
-> the aim here is to define 2 endpoints on top of the service channel.
-> the main is used for the CTS control but also to exchange the addresses o=
-f the
-> second endpoint that is used for the data flow.
-
-Right - the new endpoint, the one that is about to be created using
-"chinfo.name" is a data endpoint, hence the confusion.
-
-> here if you associate the 2nd endpoint to a diff=C3=A9rent service name, =
-you have no
-> correlation between the control ept and the data endpoint ( at least if y=
-ou
-> want to support multi instance)
+> On 4/1/20 2:03 AM, Rishabh Bhatnagar wrote:
+> > Add the character device interface for userspace applications.
+> > This interface can be used in order to boot up and shutdown
+> > remote subsystems. Currently there is only a sysfs interface
+> > which the userspace clients can use. If a usersapce application
+> > crashes after booting the remote processor does not get any
+> > indication about the crash. It might still assume that the
+> > application is running. For example modem uses remotefs service
+> > to fetch data from disk/flash memory. If the remotefs service
+> > crashes, modem keeps on requesting data which might lead to a
+> > crash. Adding a character device interface makes the remote
+> > processor tightly coupled with the user space application.
+> > A crash of the application leads to a close on the file descriptors
+> > therefore shutting down the remoteproc.
 >
-> I can probaly implement it in a different way using your path [1]
-> by creating a correlation between the control and the data, based
-> on the naming.
-> something like:
-> - "tty-featureA"  /* data stream associated to featureA"
-> - "tty-featureB"  /* data stream associated to featureB"
-> - "tty-ctl-featureB"  /* control associated to featureB"
+> Sorry I'm late in the discussion, I hope I've gone through the whole
+> discussion so I don't reopen a closed point...
+>
+> Something here is not crystal clear to me so I'd rather share it...
+>
+> I suppose that you the automatic restart of the application is not possible to
+> stop and restart the remote processor...
+>
+> Why this use case can not be solved by a process monitor or a service
+> in userland that detects the application crash and stop the remote firmware using
+> the sysfs interface?
 
-I would do "tty-featureB-ctrl".  That way "tty-featureB" and
-"tty-featureB-ctrl" always appear one after the other when doing an
-"ls" on the command line.
+I also looked for a better way to do things...  The conclusion I came
+to is that it may take too long between the application crash and the
+monitoring service to stop the firmware via sysfs.
 
 >
-> That would be probably more straight forward for users...
+> I just want to be sure that there is no alternative to this, because having two ways
+> for application to shutdown the firmware seems to me confusing...
 >
-> [1] https://lkml.org/lkml/2020/2/12/1083
-> >
-> >> +            chinfo.src =3D RPMSG_ADDR_ANY;
-> >> +            chinfo.dst =3D RPMSG_ADDR_ANY;
-> >> +
-> >> +            cport->d_ept =3D rpmsg_create_ept(rpdev, rpmsg_tty_cb, cp=
-ort,
-> >> +                                            chinfo);
-> >> +            if (!cport->d_ept) {
-> >> +                    dev_err(dev, "failed to create tty control channe=
-l\n");
-> >
-> > Here too I don't understand why we are talking about the control channe=
-l when
-> > the data channel is created.  Am I missing something?
-> >
-> > Also I suggest function rpmsg_tty_cp() to be split, one for control and=
- one for
-> > data.  That will make it easier to follow who processes what.
->
-> you mean rpmsg_tty_probe?  yes i will.
+> What about the opposite service, mean inform the application that the remote
+> processor is crashed?
 
-Splitting rpmsg_tty_probe() would be good too, but I was referring to
-rpmsg_tty_cb().
+Also a valid point - the problem with asynchronous notification
+schemes is the possibility to get out of sync.  I would also like to
+find a better way...
 
->
-> >
-> >> +                    ret =3D -ENOMEM;
-> >> +                    goto err_r_cport;
-> >> +            }
-> >> +            dev_dbg(dev, "%s: creating data endpoint with address %#x=
-\n",
-> >> +                    __func__, cport->d_ept->addr);
-> >> +    } else {
-> >> +            /*
-> >> +             * TTY over rpmsg without CTS management the default endp=
-oint
-> >> +             * is use for raw data transmission.
-> >> +             */
-> >> +            cport->cs_ept =3D NULL;
-> >> +            cport->cts =3D 1;
-> >> +            cport->d_ept =3D rpdev->ept;
-> >> +            cport->data_dst =3D rpdev->dst;
-> >> +    }
-> >> +
-> >> +    tty_port_init(&cport->port);
-> >> +    cport->port.ops =3D &rpmsg_tty_port_ops;
-> >> +
-> >> +    tty_dev =3D tty_port_register_device(&cport->port, rpmsg_tty_driv=
-er,
-> >> +                                       cport->id, dev);
-> >> +    if (IS_ERR(tty_dev)) {
-> >> +            dev_err(dev, "failed to register tty port\n");
-> >> +            ret =3D PTR_ERR(tty_dev);
-> >> +            goto  err_destroy;
-> >> +    }
-> >> +
-> >> +    cport->rpdev =3D rpdev;
-> >> +
-> >> +    dev_set_drvdata(dev, cport);
-> >> +
-> >> +    dev_dbg(dev, "new channel: 0x%x -> 0x%x : ttyRPMSG%d\n",
-> >> +            rpdev->src, rpdev->dst, cport->id);
-> >> +
-> >> +    return 0;
-> >> +
-> >> +err_destroy:
-> >> +    tty_port_destroy(&cport->port);
-> >> +    if (cport->cs_ept)
-> >> +            rpmsg_destroy_ept(cport->d_ept);
-> >> +err_r_cport:
-> >> +    rpmsg_tty_release_cport(cport);
-> >> +
-> >> +    return ret;
-> >> +}
-> >> +
-> >> +static void rpmsg_tty_remove(struct rpmsg_device *rpdev)
-> >> +{
-> >> +    struct rpmsg_tty_port *cport =3D dev_get_drvdata(&rpdev->dev);
-> >> +
-> >> +    dev_dbg(&rpdev->dev, "removing rpmsg tty device %d\n", cport->id)=
-;
-> >> +
-> >> +    /* User hang up to release the tty */
-> >> +    if (tty_port_initialized(&cport->port))
-> >> +            tty_port_tty_hangup(&cport->port, false);
-> >> +
-> >> +    tty_unregister_device(rpmsg_tty_driver, cport->id);
-> >> +
-> >> +    tty_port_destroy(&cport->port);
-> >> +    if (cport->cs_ept)
-> >> +            rpmsg_destroy_ept(cport->d_ept);
-> >> +    rpmsg_tty_release_cport(cport);
-> >> +}
-> >> +
-> >> +static struct rpmsg_device_id rpmsg_driver_tty_id_table[] =3D {
-> >> +    { .name =3D TTY_CH_NAME_RAW },
-> >> +    { .name =3D TTY_CH_NAME_WITH_CTS},
-> >
-> > If I'm not mistaken support for more than one tty
-> > per remote proc can't happen because of rpmsg_find_device() in
-> > rpmsg_create_channel() - is this correct?
->
-> There is not bloker to instantiate the same service several times.
-
-You are correct.  I took another look at rpmsg_device_match() and the
-second condition [2] allows for channels to have the same name for as
-long as the destination address is different.
-
-[2]. https://elixir.bootlin.com/linux/v5.6/source/drivers/rpmsg/rpmsg_core.=
-c#L299
-
-> On remote side it is enough to create 2 endpoints with the same service
-> name and with the destination address set to RPMSG_ADDR_ANY. This will
-> trig 2 rpmsg_ns_cb, that will probe 2 times the device.
->
-> As example please have a look to the stm32MP1 sample here which creates
-> 2 tty rpmsg channels:
-> https://github.com/STMicroelectronics/STM32CubeMP1/tree/master/Projects/S=
-TM32MP157C-DK2/Applications/OpenAMP/OpenAMP_TTY_echo
+> Do you identify such need? or the "auto" crash recovery is sufficient?
 >
 > Thanks,
 > Arnaud
->
 > >
-> > Thanks,
-> > Mathieu
+> > Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+> > ---
+> >  drivers/remoteproc/Kconfig               |   9 +++
+> >  drivers/remoteproc/Makefile              |   1 +
+> >  drivers/remoteproc/remoteproc_cdev.c     | 100 +++++++++++++++++++++++++++++++
+> >  drivers/remoteproc/remoteproc_internal.h |  22 +++++++
+> >  include/linux/remoteproc.h               |   2 +
+> >  5 files changed, 134 insertions(+)
+> >  create mode 100644 drivers/remoteproc/remoteproc_cdev.c
 > >
-> >> +    { },
-> >> +};
-> >> +MODULE_DEVICE_TABLE(rpmsg, rpmsg_driver_tty_id_table);
-> >> +
-> >> +static struct rpmsg_driver rpmsg_tty_rpmsg_drv =3D {
-> >> +    .drv.name       =3D KBUILD_MODNAME,
-> >> +    .id_table       =3D rpmsg_driver_tty_id_table,
-> >> +    .probe          =3D rpmsg_tty_probe,
-> >> +    .callback       =3D rpmsg_tty_cb,
-> >> +    .remove         =3D rpmsg_tty_remove,
-> >> +};
-> >> +
-> >> +static int __init rpmsg_tty_init(void)
-> >> +{
-> >> +    int err;
-> >> +
-> >> +    rpmsg_tty_driver =3D tty_alloc_driver(MAX_TTY_RPMSG, TTY_DRIVER_R=
-EAL_RAW |
-> >> +                                        TTY_DRIVER_DYNAMIC_DEV);
-> >> +    if (IS_ERR(rpmsg_tty_driver))
-> >> +            return PTR_ERR(rpmsg_tty_driver);
-> >> +
-> >> +    rpmsg_tty_driver->driver_name =3D "rpmsg_tty";
-> >> +    rpmsg_tty_driver->name =3D "ttyRPMSG";
-> >> +    rpmsg_tty_driver->major =3D 0;
-> >> +    rpmsg_tty_driver->type =3D TTY_DRIVER_TYPE_CONSOLE;
-> >> +
-> >> +    /* Disable unused mode by default */
-> >> +    rpmsg_tty_driver->init_termios =3D tty_std_termios;
-> >> +    rpmsg_tty_driver->init_termios.c_lflag &=3D ~(ECHO | ICANON);
-> >> +    rpmsg_tty_driver->init_termios.c_oflag &=3D ~(OPOST | ONLCR);
-> >> +
-> >> +    tty_set_operations(rpmsg_tty_driver, &rpmsg_tty_ops);
-> >> +
-> >> +    err =3D tty_register_driver(rpmsg_tty_driver);
-> >> +    if (err < 0) {
-> >> +            pr_err("Couldn't install rpmsg tty driver: err %d\n", err=
-);
-> >> +            goto error_put;
-> >> +    }
-> >> +
-> >> +    err =3D register_rpmsg_driver(&rpmsg_tty_rpmsg_drv);
-> >> +    if (err < 0) {
-> >> +            pr_err("Couldn't register rpmsg tty driver: err %d\n", er=
-r);
-> >> +            goto error_unregister;
-> >> +    }
-> >> +
-> >> +    return 0;
-> >> +
-> >> +error_unregister:
-> >> +    tty_unregister_driver(rpmsg_tty_driver);
-> >> +
-> >> +error_put:
-> >> +    put_tty_driver(rpmsg_tty_driver);
-> >> +
-> >> +    return err;
-> >> +}
-> >> +
-> >> +static void __exit rpmsg_tty_exit(void)
-> >> +{
-> >> +    unregister_rpmsg_driver(&rpmsg_tty_rpmsg_drv);
-> >> +    tty_unregister_driver(rpmsg_tty_driver);
-> >> +    put_tty_driver(rpmsg_tty_driver);
-> >> +    idr_destroy(&tty_idr);
-> >> +}
-> >> +
-> >> +module_init(rpmsg_tty_init);
-> >> +module_exit(rpmsg_tty_exit);
-> >> +
-> >> +MODULE_AUTHOR("Arnaud Pouliquen <arnaud.pouliquen@st.com>");
-> >> +MODULE_DESCRIPTION("remote processor messaging tty driver");
-> >> +MODULE_LICENSE("GPL v2");
-> >> --
-> >> 2.17.1
-> >>
+> > diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
+> > index de3862c..6374b79 100644
+> > --- a/drivers/remoteproc/Kconfig
+> > +++ b/drivers/remoteproc/Kconfig
+> > @@ -14,6 +14,15 @@ config REMOTEPROC
+> >
+> >  if REMOTEPROC
+> >
+> > +config REMOTEPROC_CDEV
+> > +     bool "Remoteproc character device interface"
+> > +     help
+> > +       Say y here to have a character device interface for Remoteproc
+> > +       framework. Userspace can boot/shutdown remote processors through
+> > +       this interface.
+> > +
+> > +       It's safe to say N if you don't want to use this interface.
+> > +
+> >  config IMX_REMOTEPROC
+> >       tristate "IMX6/7 remoteproc support"
+> >       depends on ARCH_MXC
+> > diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
+> > index e30a1b1..b7d4f77 100644
+> > --- a/drivers/remoteproc/Makefile
+> > +++ b/drivers/remoteproc/Makefile
+> > @@ -9,6 +9,7 @@ remoteproc-y                          += remoteproc_debugfs.o
+> >  remoteproc-y                         += remoteproc_sysfs.o
+> >  remoteproc-y                         += remoteproc_virtio.o
+> >  remoteproc-y                         += remoteproc_elf_loader.o
+> > +obj-$(CONFIG_REMOTEPROC_CDEV)                += remoteproc_cdev.o
+> >  obj-$(CONFIG_IMX_REMOTEPROC)         += imx_rproc.o
+> >  obj-$(CONFIG_MTK_SCP)                        += mtk_scp.o mtk_scp_ipi.o
+> >  obj-$(CONFIG_OMAP_REMOTEPROC)                += omap_remoteproc.o
+> > diff --git a/drivers/remoteproc/remoteproc_cdev.c b/drivers/remoteproc/remoteproc_cdev.c
+> > new file mode 100644
+> > index 0000000..8182bd1
+> > --- /dev/null
+> > +++ b/drivers/remoteproc/remoteproc_cdev.c
+> > @@ -0,0 +1,100 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Character device interface driver for Remoteproc framework.
+> > + *
+> > + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+> > + */
+> > +
+> > +#include <linux/cdev.h>
+> > +#include <linux/fs.h>
+> > +#include <linux/module.h>
+> > +#include <linux/mutex.h>
+> > +#include <linux/remoteproc.h>
+> > +
+> > +#include "remoteproc_internal.h"
+> > +
+> > +#define NUM_RPROC_DEVICES    64
+> > +static dev_t rproc_cdev;
+> > +static DEFINE_IDA(cdev_minor_ida);
+> > +
+> > +static int rproc_cdev_open(struct inode *inode, struct file *file)
+> > +{
+> > +     struct rproc *rproc;
+> > +
+> > +     rproc = container_of(inode->i_cdev, struct rproc, char_dev);
+> > +
+> > +     if (!rproc)
+> > +             return -EINVAL;
+> > +
+> > +     if (rproc->state == RPROC_RUNNING)
+> > +             return -EBUSY;
+> > +
+> > +     return rproc_boot(rproc);
+> > +}
+> > +
+> > +static int rproc_cdev_release(struct inode *inode, struct file *file)
+> > +{
+> > +     struct rproc *rproc;
+> > +
+> > +     rproc = container_of(inode->i_cdev, struct rproc, char_dev);
+> > +
+> > +     if (!rproc || rproc->state != RPROC_RUNNING)
+> > +             return -EINVAL;
+> > +
+> > +     rproc_shutdown(rproc);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct file_operations rproc_fops = {
+> > +     .open = rproc_cdev_open,
+> > +     .release = rproc_cdev_release,
+> > +};
+> > +
+> > +int rproc_char_device_add(struct rproc *rproc)
+> > +{
+> > +     int ret, minor;
+> > +     dev_t cdevt;
+> > +
+> > +     minor = ida_simple_get(&cdev_minor_ida, 0, NUM_RPROC_DEVICES,
+> > +                            GFP_KERNEL);
+> > +     if (minor < 0) {
+> > +             dev_err(&rproc->dev, "%s: No more minor numbers left! rc:%d\n",
+> > +                     __func__, minor);
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     cdev_init(&rproc->char_dev, &rproc_fops);
+> > +     rproc->char_dev.owner = THIS_MODULE;
+> > +
+> > +     cdevt = MKDEV(MAJOR(rproc_cdev), minor);
+> > +     ret = cdev_add(&rproc->char_dev, cdevt, 1);
+> > +     if (ret < 0)
+> > +             ida_simple_remove(&cdev_minor_ida, minor);
+> > +
+> > +     rproc->dev.devt = cdevt;
+> > +     return ret;
+> > +}
+> > +
+> > +void rproc_char_device_remove(struct rproc *rproc)
+> > +{
+> > +     __unregister_chrdev(MAJOR(rproc->dev.devt), MINOR(rproc->dev.devt), 1,
+> > +                         "rproc");
+> > +     ida_simple_remove(&cdev_minor_ida, MINOR(rproc->dev.devt));
+> > +}
+> > +
+> > +void __init rproc_init_cdev(void)
+> > +{
+> > +     int ret;
+> > +
+> > +     ret = alloc_chrdev_region(&rproc_cdev, 0, NUM_RPROC_DEVICES, "rproc");
+> > +     if (ret < 0) {
+> > +             pr_err("Failed to alloc rproc_cdev region, err %d\n", ret);
+> > +             return;
+> > +     }
+> > +}
+> > +
+> > +void __exit rproc_exit_cdev(void)
+> > +{
+> > +     __unregister_chrdev(MAJOR(rproc_cdev), 0, NUM_RPROC_DEVICES, "rproc");
+> > +}
+> > diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+> > index 493ef92..28d61a1 100644
+> > --- a/drivers/remoteproc/remoteproc_internal.h
+> > +++ b/drivers/remoteproc/remoteproc_internal.h
+> > @@ -47,6 +47,27 @@ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
+> >  int rproc_init_sysfs(void);
+> >  void rproc_exit_sysfs(void);
+> >
+> > +#ifdef CONFIG_REMOTEPROC_CDEV
+> > +void rproc_init_cdev(void);
+> > +void rproc_exit_cdev(void);
+> > +int rproc_char_device_add(struct rproc *rproc);
+> > +void rproc_char_device_remove(struct rproc *rproc);
+> > +#else
+> > +static inline void rproc_init_cdev(void)
+> > +{
+> > +}
+> > +static inline void rproc_exit_cdev(void)
+> > +{
+> > +}
+> > +static inline int rproc_char_device_add(struct rproc *rproc)
+> > +{
+> > +     return 0;
+> > +}
+> > +static inline void  rproc_char_device_remove(struct rproc *rproc)
+> > +{
+> > +}
+> > +#endif
+> > +
+> >  void rproc_free_vring(struct rproc_vring *rvring);
+> >  int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
+> >
+> > @@ -63,6 +84,7 @@ struct resource_table *rproc_elf_find_loaded_rsc_table(struct rproc *rproc,
+> >  struct rproc_mem_entry *
+> >  rproc_find_carveout_by_name(struct rproc *rproc, const char *name, ...);
+> >
+> > +
+> >  static inline
+> >  int rproc_fw_sanity_check(struct rproc *rproc, const struct firmware *fw)
+> >  {
+> > diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> > index 16ad666..c4ca796 100644
+> > --- a/include/linux/remoteproc.h
+> > +++ b/include/linux/remoteproc.h
+> > @@ -37,6 +37,7 @@
+> >
+> >  #include <linux/types.h>
+> >  #include <linux/mutex.h>
+> > +#include <linux/cdev.h>
+> >  #include <linux/virtio.h>
+> >  #include <linux/completion.h>
+> >  #include <linux/idr.h>
+> > @@ -514,6 +515,7 @@ struct rproc {
+> >       bool auto_boot;
+> >       struct list_head dump_segments;
+> >       int nb_vdev;
+> > +     struct cdev char_dev;
+> >  };
+> >
+> >  /**
+> >
