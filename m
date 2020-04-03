@@ -2,171 +2,311 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E86419DD1E
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Apr 2020 19:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F75A19DE32
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Apr 2020 20:46:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404278AbgDCRuR (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 3 Apr 2020 13:50:17 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:41645 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404238AbgDCRuQ (ORCPT
+        id S1728276AbgDCSqS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 3 Apr 2020 14:46:18 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:47491 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726087AbgDCSqR (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 3 Apr 2020 13:50:16 -0400
-Received: by mail-qk1-f194.google.com with SMTP id y3so4102190qky.8
-        for <linux-remoteproc@vger.kernel.org>; Fri, 03 Apr 2020 10:50:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9cI4scVoKJKw1b/HO6QaDyp3LKbjdrfchQuuiHLWjWc=;
-        b=rLMMh5/uZTRR5enw62HL/VSaxyamFjN4+UGzBnS8klJ3U4s3RFmAAyCL4wGrLkwMpq
-         52GPlvDoYnNkCsbId8slVjxMWH/y2XSa5iO/SWWdtbE1VTehRN2UhVzyxcHcweV6tfe7
-         2trbZ0MYKH6SqYhemT4a9SRZPY9m9xaWs9UVfR90W/8FxBdn/kwXkx4vcMf+OVFV+R+Y
-         MIWBr6DA7YvHjhy/GpAYvvRn0uvyleJk10fTq1YLU2+g57CrXsT8C8V7KL4NSMr6eVf0
-         KAsUBdiCPDu823eqBD98pLdlOHOXeUqHH9DDsP3fbQrEz/lZdyEyaP9WOpvKfIHaww3B
-         Yfnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9cI4scVoKJKw1b/HO6QaDyp3LKbjdrfchQuuiHLWjWc=;
-        b=ka3g078AdH7kwkVXvXPOOQdmzVD43uMZusVnwgOI7dSDVREV14KTtOBPfKcN4uLEFm
-         jTQ8PNUVPlhYHkFpR1q9LeHSceZKLqAFLtYShzrNFGH/5+8w8brJMj0euqkiJngaUOZy
-         6xTo2m5XzSCiaaCxgpFSCpQUDbxNOEAA3S/j5NPVnoLRYD6Qw8p4MjxFsTLTGJdEC/Lh
-         jgNJL6HSekKPbCWrvhO28+fNsscmYpiQV/29lCRhMrjx1YQcOaT6bL9SwPxijIQu0fAb
-         oZnr3OteBJluHJckZfnKAeYxL/8byQt75Q+bmSK+Xxy092+Xwww+aHX6Ben4jBPw0/fZ
-         emaA==
-X-Gm-Message-State: AGi0Pub2eKd+QSjOM6BI4OyBtZTQlm6AVREiLc0GgHleApDhTuQeNkIt
-        ZBjKdc/PX0xHoBIzZBCVsr2KPA==
-X-Google-Smtp-Source: APiQypLbHKb7rWYJp6CQb5HJWjxuJFaOwE+O1MVmtbr6e7yua8Mc9Jgufd4yiFLoFk5gnocLafzasQ==
-X-Received: by 2002:ae9:ee01:: with SMTP id i1mr10181110qkg.498.1585936215146;
-        Fri, 03 Apr 2020 10:50:15 -0700 (PDT)
-Received: from presto.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
-        by smtp.gmail.com with ESMTPSA id 77sm6821225qkh.26.2020.04.03.10.50.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2020 10:50:14 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Andy Gross <agross@kernel.org>
-Cc:     linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] remoteproc: qcom_q6v5_mss: fix q6v5_probe() error paths
-Date:   Fri,  3 Apr 2020 12:50:05 -0500
-Message-Id: <20200403175005.17130-4-elder@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200403175005.17130-1-elder@linaro.org>
-References: <20200403175005.17130-1-elder@linaro.org>
+        Fri, 3 Apr 2020 14:46:17 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1585939576; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=MhwRegvxQrRF9p/QfSaqN1ehQ0wiTG2eaDJJpc5A9ec=;
+ b=aHvj/RccZUPL8goWt9tQuJSi6/n5OupenAkYozcw2IFeyU5N6R8IrC4RNrbql1toB7ydoyLT
+ 2C+RShiz4/TY7ZiYeM3mpwYh+7GqfsTjf3+dJNKDBhJ2CkyPbFqvHx5Vnk4M6Anbwa/CxGhZ
+ Cw7E4k3XC7QMu9L/N77eDiNSCW8=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e87846b.7f1e0de65ca8-smtp-out-n03;
+ Fri, 03 Apr 2020 18:46:03 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3A975C4478C; Fri,  3 Apr 2020 18:46:02 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: rishabhb)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 133A8C433BA;
+        Fri,  3 Apr 2020 18:46:01 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 03 Apr 2020 11:46:01 -0700
+From:   rishabhb@codeaurora.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        ohad@wizery.com, psodagud@codeaurora.org, tsoni@codeaurora.org,
+        sidgup@codeaurora.org
+Subject: Re: [PATCH] remoteproc: core: Add a memory efficient coredump
+ function
+In-Reply-To: <20200403051611.GJ663905@yoga>
+References: <1585353412-19644-1-git-send-email-rishabhb@codeaurora.org>
+ <20200401195114.GD267644@minitux> <20200402172435.GA2785@xps15>
+ <20200403051611.GJ663905@yoga>
+Message-ID: <1388d1c2ef5f573e723ea2f43a64496b@codeaurora.org>
+X-Sender: rishabhb@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-If an error occurs in q6v5_probe() after the proxy power domains
-are attached, but before qcom_add_ipa_notify_subdev() is called,
-qcom_remove_ipa_notify_subdev() is called in the error path, which
-is a bug.  Fix this by having that call be reached through a
-different label.
-
-Additionally, if qcom_add_sysmon_subdev() returns an error, the
-subdevs that had already been added will not be properly removed.
-Fix this by having the added subdevs (including the IPA notify one)
-be removed in this case.
-
-Finally, arrange for the sysmon subdev to be removed before the rest
-in the event rproc_add() returns an error.
-
-Have cleanup activity done in q6v5_remove() be done in the reverse
-order they are set up in q6v5_probe() (the same order they're done
-in the q6v5_probe() error path).  Use a local variable for the
-remoteproc pointer, which is used repeatedly.
-
-Remove errant semicolons at the end of two function blocks.
-
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/remoteproc/qcom_q6v5_mss.c | 31 ++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index 60cdf699ea80..5475d4f808a8 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -367,7 +367,7 @@ static int q6v5_pds_enable(struct q6v5 *qproc, struct device **pds,
- 	}
- 
- 	return ret;
--};
-+}
- 
- static void q6v5_pds_disable(struct q6v5 *qproc, struct device **pds,
- 			     size_t pd_count)
-@@ -1527,7 +1527,7 @@ static int q6v5_pds_attach(struct device *dev, struct device **devs,
- 		dev_pm_domain_detach(devs[i], false);
- 
- 	return ret;
--};
-+}
- 
- static void q6v5_pds_detach(struct q6v5 *qproc, struct device **pds,
- 			    size_t pd_count)
-@@ -1766,17 +1766,23 @@ static int q6v5_probe(struct platform_device *pdev)
- 	qproc->sysmon = qcom_add_sysmon_subdev(rproc, "modem", 0x12);
- 	if (IS_ERR(qproc->sysmon)) {
- 		ret = PTR_ERR(qproc->sysmon);
--		goto detach_proxy_pds;
-+		goto remove_subdevs;
- 	}
- 
- 	ret = rproc_add(rproc);
- 	if (ret)
--		goto detach_proxy_pds;
-+		goto remove_sysmon_subdev;
- 
- 	return 0;
- 
-+remove_sysmon_subdev:
-+	qcom_remove_sysmon_subdev(qproc->sysmon);
-+remove_subdevs:
-+	qcom_remove_ipa_notify_subdev(qproc->rproc, &qproc->ipa_notify_subdev);
-+	qcom_remove_ssr_subdev(rproc, &qproc->ssr_subdev);
-+	qcom_remove_smd_subdev(rproc, &qproc->smd_subdev);
-+	qcom_remove_glink_subdev(rproc, &qproc->glink_subdev);
- detach_proxy_pds:
--	qcom_remove_ipa_notify_subdev(qproc->rproc, &qproc->ipa_notify_subdev);
- 	q6v5_pds_detach(qproc, qproc->proxy_pds, qproc->proxy_pd_count);
- detach_active_pds:
- 	q6v5_pds_detach(qproc, qproc->active_pds, qproc->active_pd_count);
-@@ -1789,19 +1795,20 @@ static int q6v5_probe(struct platform_device *pdev)
- static int q6v5_remove(struct platform_device *pdev)
- {
- 	struct q6v5 *qproc = platform_get_drvdata(pdev);
-+	struct rproc *rproc = qproc->rproc;
- 
--	rproc_del(qproc->rproc);
-+	rproc_del(rproc);
- 
- 	qcom_remove_sysmon_subdev(qproc->sysmon);
--	qcom_remove_ipa_notify_subdev(qproc->rproc, &qproc->ipa_notify_subdev);
--	qcom_remove_glink_subdev(qproc->rproc, &qproc->glink_subdev);
--	qcom_remove_smd_subdev(qproc->rproc, &qproc->smd_subdev);
--	qcom_remove_ssr_subdev(qproc->rproc, &qproc->ssr_subdev);
-+	qcom_remove_ipa_notify_subdev(rproc, &qproc->ipa_notify_subdev);
-+	qcom_remove_ssr_subdev(rproc, &qproc->ssr_subdev);
-+	qcom_remove_smd_subdev(rproc, &qproc->smd_subdev);
-+	qcom_remove_glink_subdev(rproc, &qproc->glink_subdev);
- 
--	q6v5_pds_detach(qproc, qproc->active_pds, qproc->active_pd_count);
- 	q6v5_pds_detach(qproc, qproc->proxy_pds, qproc->proxy_pd_count);
-+	q6v5_pds_detach(qproc, qproc->active_pds, qproc->active_pd_count);
- 
--	rproc_free(qproc->rproc);
-+	rproc_free(rproc);
- 
- 	return 0;
- }
--- 
-2.20.1
-
+On 2020-04-02 22:16, Bjorn Andersson wrote:
+> On Thu 02 Apr 10:24 PDT 2020, Mathieu Poirier wrote:
+> 
+>> On Wed, Apr 01, 2020 at 12:51:14PM -0700, Bjorn Andersson wrote:
+>> > On Fri 27 Mar 16:56 PDT 2020, Rishabh Bhatnagar wrote:
+>> >
+>> > > The current coredump implementation uses vmalloc area to copy
+>> > > all the segments. But this might put a lot of strain on low memory
+>> > > targets as the firmware size sometimes is in ten's of MBs.
+>> > > The situation becomes worse if there are multiple remote processors
+>> > > undergoing recovery at the same time.
+>> > > This patch directly copies the device memory to userspace buffer
+>> > > and avoids extra memory usage. This requires recovery to be halted
+>> > > until data is read by userspace and free function is called.
+>> > >
+>> > > Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+>> > > ---
+>> > >  drivers/remoteproc/remoteproc_core.c | 107 +++++++++++++++++++++++++++++------
+>> > >  include/linux/remoteproc.h           |   4 ++
+>> > >  2 files changed, 94 insertions(+), 17 deletions(-)
+>> > >
+>> > > diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+>> > > index 097f33e..2d881e5 100644
+>> > > --- a/drivers/remoteproc/remoteproc_core.c
+>> > > +++ b/drivers/remoteproc/remoteproc_core.c
+>> > > @@ -1516,6 +1516,86 @@ int rproc_coredump_add_segment(struct rproc *rproc, dma_addr_t da, size_t size)
+>> > >  }
+>> > >  EXPORT_SYMBOL(rproc_coredump_add_segment);
+>> > >
+>> > > +
+>> > > +void rproc_free_dump(void *data)
+>> >
+>> > static
+>> >
+>> > > +{
+>> > > +	struct rproc *rproc = data;
+>> > > +
+>> > > +	dev_info(&rproc->dev, "Userspace done reading rproc dump\n");
+>> >
+>> > Please drop the info prints throughout.
+>> >
+>> > > +	complete(&rproc->dump_done);
+>> > > +}
+>> > > +
+>> > > +static unsigned long get_offset(loff_t user_offset, struct list_head *segments,
+>> > > +				unsigned long *data_left)
+>> >
+>> > Please rename this rproc_coredump_resolve_segment(), or something along
+>> > those lines.
+>> >
+>> > > +{
+>> > > +	struct rproc_dump_segment *segment;
+>> > > +
+>> > > +	list_for_each_entry(segment, segments, node) {
+>> > > +		if (user_offset >= segment->size)
+>> > > +			user_offset -= segment->size;
+>> > > +		else
+>> > > +			break;
+>> > > +	}
+>> > > +
+>> > > +	if (&segment->node == segments) {
+>> > > +		*data_left = 0;
+>> > > +		return 0;
+>> > > +	}
+>> > > +
+>> > > +	*data_left = segment->size - user_offset;
+>> > > +
+>> > > +	return segment->da + user_offset;
+>> > > +}
+>> > > +
+>> > > +static ssize_t rproc_read_dump(char *buffer, loff_t offset, size_t count,
+>> > > +				void *data, size_t elfcorelen)
+>> > > +{
+>> > > +	void *device_mem = NULL;
+>> > > +	unsigned long data_left = 0;
+>> > > +	unsigned long bytes_left = count;
+>> > > +	unsigned long addr = 0;
+>> > > +	size_t copy_size = 0;
+>> > > +	struct rproc *rproc = data;
+>> > > +
+>> > > +	if (offset < elfcorelen) {
+>> > > +		copy_size = elfcorelen - offset;
+>> > > +		copy_size = min(copy_size, bytes_left);
+>> > > +
+>> > > +		memcpy(buffer, rproc->elfcore + offset, copy_size);
+>> > > +		offset += copy_size;
+>> > > +		bytes_left -= copy_size;
+>> > > +		buffer += copy_size;
+>> > > +	}
+>> > > +
+>> > > +	while (bytes_left) {
+>> > > +		addr = get_offset(offset - elfcorelen, &rproc->dump_segments,
+>> > > +				&data_left);
+>> > > +	/* EOF check */
+>> >
+>> > Indentation, and "if no data left" does indicate that this is the end of
+>> > the loop already.
+>> >
+>> > > +		if (data_left == 0) {
+>> > > +			pr_info("Ramdump complete. %lld bytes read.", offset);
+>> > > +			return 0;
+>> >
+>> > You might have copied data to the buffer, so returning 0 here doesn't
+>> > seem right. Presumably instead you should break and return offset -
+>> > original offset or something like that.
+>> >
+>> > > +		}
+>> > > +
+>> > > +		copy_size = min_t(size_t, bytes_left, data_left);
+>> > > +
+>> > > +		device_mem = rproc->ops->da_to_va(rproc, addr, copy_size);
+>> > > +		if (!device_mem) {
+>> > > +			pr_err("Unable to ioremap: addr %lx, size %zd\n",
+>> > > +				 addr, copy_size);
+>> > > +			return -ENOMEM;
+>> > > +		}
+>> > > +		memcpy(buffer, device_mem, copy_size);
+>> > > +
+>> > > +		offset += copy_size;
+>> > > +		buffer += copy_size;
+>> > > +		bytes_left -= copy_size;
+>> > > +		dev_dbg(&rproc->dev, "Copied %d bytes to userspace\n",
+>> > > +			copy_size);
+>> > > +	}
+>> > > +
+>> > > +	return count;
+>> >
+>> > This should be the number of bytes actually returned, so if count is
+>> > larger than the sum of the segment sizes this will be wrong.
+>> >
+>> > > +}
+>> > > +
+>> > >  /**
+>> > >   * rproc_coredump_add_custom_segment() - add custom coredump segment
+>> > >   * @rproc:	handle of a remote processor
+>> > > @@ -1566,27 +1646,27 @@ static void rproc_coredump(struct rproc *rproc)
+>> > >  	struct rproc_dump_segment *segment;
+>> > >  	struct elf32_phdr *phdr;
+>> > >  	struct elf32_hdr *ehdr;
+>> > > -	size_t data_size;
+>> > > +	size_t header_size;
+>> > >  	size_t offset;
+>> > >  	void *data;
+>> > > -	void *ptr;
+>> > >  	int phnum = 0;
+>> > >
+>> > >  	if (list_empty(&rproc->dump_segments))
+>> > >  		return;
+>> > >
+>> > > -	data_size = sizeof(*ehdr);
+>> > > +	header_size = sizeof(*ehdr);
+>> > >  	list_for_each_entry(segment, &rproc->dump_segments, node) {
+>> > > -		data_size += sizeof(*phdr) + segment->size;
+>> > > +		header_size += sizeof(*phdr);
+>> > >
+>> > >  		phnum++;
+>> > >  	}
+>> > >
+>> > > -	data = vmalloc(data_size);
+>> > > +	data = vmalloc(header_size);
+>> > >  	if (!data)
+>> > >  		return;
+>> > >
+>> > >  	ehdr = data;
+>> > > +	rproc->elfcore = data;
+>> >
+>> > Rather than using a rproc-global variable I would prefer that you create
+>> > a new rproc_coredump_state struct that carries the header pointer and
+>> > the information needed by the read & free functions.
+>> >
+>> > >
+>> > >  	memset(ehdr, 0, sizeof(*ehdr));
+>> > >  	memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
+>> > > @@ -1618,23 +1698,14 @@ static void rproc_coredump(struct rproc *rproc)
+>> > >
+>> > >  		if (segment->dump) {
+>> > >  			segment->dump(rproc, segment, data + offset);
+>> 
+>> I'm not exactly sure why custom segments can be copied to the elf 
+>> image but not
+>> generic ones... And as far as I can tell accessing "data + offset" 
+>> will blow up
+>> because only the memory for the program headers has been allocated, 
+>> not for the
+>> program segments.
+>> 
+> 
+> Thanks, I missed that, but you're correct.
+> 
+>> 
+>> > > -		} else {
+>> > > -			ptr = rproc_da_to_va(rproc, segment->da, segment->size);
+>> > > -			if (!ptr) {
+>> > > -				dev_err(&rproc->dev,
+>> > > -					"invalid coredump segment (%pad, %zu)\n",
+>> > > -					&segment->da, segment->size);
+>> > > -				memset(data + offset, 0xff, segment->size);
+>> > > -			} else {
+>> > > -				memcpy(data + offset, ptr, segment->size);
+>> > > -			}
+>> > > -		}
+>> > >
+>> > >  		offset += phdr->p_filesz;
+>> > >  		phdr++;
+>> > >  	}
+>> > > +	dev_coredumpm(&rproc->dev, NULL, rproc, header_size, GFP_KERNEL,
+>> > > +			rproc_read_dump, rproc_free_dump);
+>> > >
+>> > > -	dev_coredumpv(&rproc->dev, data, data_size, GFP_KERNEL);
+>> > > +	wait_for_completion(&rproc->dump_done);
+>> >
+>> > This will mean that recovery handling will break on installations that
+>> > doesn't have your ramdump collector - as it will just sit here forever
+>> > (5 minutes) waiting for userspace to do its job.
+>> 
+>> Right, that problem also came to mind.
+>> 
+>> >
+>> > I think we need to device a new sysfs attribute, through which you can
+>> > enable the "inline" coredump mechanism. That way recovery would work for
+>> > all systems and in your specific case you could reconfigure it - perhaps
+>> > once the ramdump collector starts.
+>> 
+>> Another option is to make rproc_coredump() customizable, as with all 
+>> the other
+>> functions in remoteproc_internal.h.  That way the current 
+>> rproc_coredump() is
+>> kept intact and we don't need a new sysfs entry.
+>> 
+> 
+> Rishabh suggested this in a discussion we had earlier this week as 
+> well,
+> but we still have the problem that the same platform driver will need 
+> to
+> support both modes, depending on which user space is running. So even 
+> if
+> we push this out to the platform driver we still need some mechanism
+> for userspace to enable the "inline" mode.
+> 
+> Regards,
+> Bjorn
+I think doing both makes sense. Making it customizable will keep the 
+original
+function intact and enable platform driver to implement their own 
+functionality. It
+will default to rproc_coredump. Also adding a sysfs entry that would 
+skip the
+wait_for_completion if not set so that it doesn't block recovery.
