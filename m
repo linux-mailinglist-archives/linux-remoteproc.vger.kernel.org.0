@@ -2,67 +2,67 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C89EB1A011C
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Apr 2020 00:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8D3E1A0412
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Apr 2020 03:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726591AbgDFW06 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 6 Apr 2020 18:26:58 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:31099 "EHLO
+        id S1726587AbgDGBHr (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 6 Apr 2020 21:07:47 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:55779 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726586AbgDFW05 (ORCPT
+        with ESMTP id S1726552AbgDGBHq (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 6 Apr 2020 18:26:57 -0400
+        Mon, 6 Apr 2020 21:07:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586212016;
+        s=mimecast20190719; t=1586221665;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=sGNQNkbNwJWickjlRxXK9zH9MXSx5qKtnPAyeHR3Xys=;
-        b=hRQQfrRag/lnGyEXobu3tPqJAX+ytKUk3RTS+F5HaM+hEadGxAlKq0W0xP8bVbKYhuVnrU
-        Cojuof7Wd6qTDuBdqTMS1sH/HyfBzdhd9iLTCUl2CXM85VKTdacvUMane6iiCotoeWEHR9
-        VVFJzv4GG24fVt70OYMFrK79I6S2TAM=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-454-YNfywxYFP_GN7BckdYEnyg-1; Mon, 06 Apr 2020 18:26:54 -0400
-X-MC-Unique: YNfywxYFP_GN7BckdYEnyg-1
-Received: by mail-wr1-f70.google.com with SMTP id d4so648779wrq.10
-        for <linux-remoteproc@vger.kernel.org>; Mon, 06 Apr 2020 15:26:54 -0700 (PDT)
+        bh=5TH7w/JfrvK6PO93eOn/asqSkXlWjc9e7s1Mrzet5kE=;
+        b=HTU0yNaMAGcK2lPvKssnI/NFrI342ixHfXQrfWXTpjpzzZeW1vtgklwxdlm6FneHSe/IUP
+        tyyI1pF+0QfVhhz2jGA8Fz1CiuF99K8ASMoyf4bwY8QjekvY/N6oqPMFSe4T9O33xZvW6n
+        LYYnUFJBV8HrPP3t860m5qKIWrapj3Q=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-427-aVkn_MMIOi-S9yV9xkOFEQ-1; Mon, 06 Apr 2020 21:07:44 -0400
+X-MC-Unique: aVkn_MMIOi-S9yV9xkOFEQ-1
+Received: by mail-wr1-f71.google.com with SMTP id g6so853128wru.8
+        for <linux-remoteproc@vger.kernel.org>; Mon, 06 Apr 2020 18:07:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=sGNQNkbNwJWickjlRxXK9zH9MXSx5qKtnPAyeHR3Xys=;
-        b=P/7GCwrROpYgM/RR9Ka6bbVeBuU4QF2ZgNGehyzV4DDEaTE2Jg9MLx45gjf++JXMIH
-         bDoONOa7Ze2X1GC5RECuYP+xCnC122Hy6PChZIETrJ0DkmerEc0jTiKL4oAoud5haTJK
-         ZFl2JFEJfJ9hVBrEgTlMb8t0dU7u5LJwl3+qY7rI4jHYA5PXSJc1T1CjX/7O750+rfm5
-         0WqSStn03vT4GVnj+0tCmlK1kCS8kELAEPY02QOj07YoGcHhii5j0gph/tpchNz1Wo0l
-         Pql7J67X/YaZt0zkB8ZrZNxQ0I/O6HbB+gPfP6bsHE7MJQh2WQCGEEW1gFIEbsHD5YCr
-         v1/w==
-X-Gm-Message-State: AGi0PuZl6Y0muRztI7PvCo8YJFItueepluWzdZBFo1CsrVzvjyB2k3Gy
-        WydPaUObJ2LSg4pUTjO5uTPW5ZKTpabW3iw1EQ2f1ugWRJ6xJIgJZQ9/qEMvvlGSLxb+e/XZk9o
-        GiVBY0MCviBvvN9TSw4lY/rCQfbVrJw==
-X-Received: by 2002:a5d:688e:: with SMTP id h14mr1589672wru.372.1586212012783;
-        Mon, 06 Apr 2020 15:26:52 -0700 (PDT)
-X-Google-Smtp-Source: APiQypKugF2uUocJlMIxJYAVtDr6RsGartXONR6Ws52dqmZjr+1kpYMbnATkUFh4PIrqGiUfbeyzvA==
-X-Received: by 2002:a5d:688e:: with SMTP id h14mr1589659wru.372.1586212012581;
-        Mon, 06 Apr 2020 15:26:52 -0700 (PDT)
+        bh=5TH7w/JfrvK6PO93eOn/asqSkXlWjc9e7s1Mrzet5kE=;
+        b=Z7kr8dn4NKYskwpLCE/maeFcOP7tnQ1mRjoP/TH2GdLB2o+hJZOSO2MaYdXmPcSF+F
+         5J0cvt0qDZ02RkDTtbbxjv44QqBaKdY8uIalGoT7Oz8j5VQZrs8GRP/MLwXcOBlDviQ3
+         OkjAfl0YUoExlizeUFBqZzZvPmQNuEiS2e1W/h4xssMpqv1CPMWvx5X7rHVPqRXI8W7V
+         MgKGYscuqYr2PLcQTzKYxyeiHW6TeiGodiXKn1GbJxTAjlb+I77l1TCoTjvaJU0kGtDj
+         abe3ef5CU7s8x3OJRA1TEu1/HMPIya1l8hya2GRpBjumaF5c3FhLRLJi2xDCQ6lOLVmp
+         CUqQ==
+X-Gm-Message-State: AGi0PuY5NjVLWNcGItetLMZjTJAAkR6WhpoakLx6cUGF+7f6NgqGmoZd
+        llwtoZSrrZ9WPuKCCn83bMm9bhqxMIEoL4PQl7I7bm+5NxsT+ms3iAxmObXrWLtpNbTPMdQEEae
+        Es7vekIDCnfBBut3c1Wvd/EGcxfXnCA==
+X-Received: by 2002:a7b:cb45:: with SMTP id v5mr1992023wmj.17.1586221662967;
+        Mon, 06 Apr 2020 18:07:42 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKi5SDLXVoxB05X0Fa1g9oKsnmtj3oVbQGLHfVW+Qb94Vy8QZNx7bP9RNsJ+Ug6e0rfRynbiA==
+X-Received: by 2002:a7b:cb45:: with SMTP id v5mr1992013wmj.17.1586221662773;
+        Mon, 06 Apr 2020 18:07:42 -0700 (PDT)
 Received: from redhat.com (bzq-79-176-51-222.red.bezeqint.net. [79.176.51.222])
-        by smtp.gmail.com with ESMTPSA id b15sm27488656wru.70.2020.04.06.15.26.51
+        by smtp.gmail.com with ESMTPSA id o16sm28751497wrw.75.2020.04.06.18.07.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2020 15:26:52 -0700 (PDT)
-Date:   Mon, 6 Apr 2020 18:26:50 -0400
+        Mon, 06 Apr 2020 18:07:42 -0700 (PDT)
+Date:   Mon, 6 Apr 2020 21:07:40 -0400
 From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-remoteproc@vger.kernel.org
-Subject: [PATCH v6 11/12] remoteproc: switch to virtio_legacy_init/size
-Message-ID: <20200406222507.281867-12-mst@redhat.com>
-References: <20200406222507.281867-1-mst@redhat.com>
+Subject: [PATCH v7 07/19] remoteproc: pull in slab.h
+Message-ID: <20200407010700.446571-8-mst@redhat.com>
+References: <20200407010700.446571-1-mst@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200406222507.281867-1-mst@redhat.com>
+In-Reply-To: <20200407010700.446571-1-mst@redhat.com>
 X-Mailer: git-send-email 2.24.1.751.gd10ce2899c
 X-Mutt-Fcc: =sent
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -70,45 +70,26 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-These are used for legacy ring format, switch to APIs that make this
-explicit.
+In preparation to virtio header changes, include slab.h directly as
+this module is using it.
 
 Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 ---
+ drivers/remoteproc/remoteproc_sysfs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-maintainers, pls ack merging this through virtio tree due to dependency
-on previous patches in the patchset.
-
- drivers/remoteproc/remoteproc_core.c   | 2 +-
- drivers/remoteproc/remoteproc_virtio.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 097f33e4f1f3..c350a01e6c4e 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -322,7 +322,7 @@ int rproc_alloc_vring(struct rproc_vdev *rvdev, int i)
- 	struct rproc_mem_entry *mem;
+diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
+index 7f8536b73295..52b871327b55 100644
+--- a/drivers/remoteproc/remoteproc_sysfs.c
++++ b/drivers/remoteproc/remoteproc_sysfs.c
+@@ -4,6 +4,7 @@
+  */
  
- 	/* actual size of vring (in bytes) */
--	size = PAGE_ALIGN(vring_size(rvring->len, rvring->align));
-+	size = PAGE_ALIGN(vring_legacy_size(rvring->len, rvring->align));
+ #include <linux/remoteproc.h>
++#include <linux/slab.h>
  
- 	rsc = (void *)rproc->table_ptr + rvdev->rsc_offset;
+ #include "remoteproc_internal.h"
  
-diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
-index 8c07cb2ca8ba..35b02468197a 100644
---- a/drivers/remoteproc/remoteproc_virtio.c
-+++ b/drivers/remoteproc/remoteproc_virtio.c
-@@ -95,7 +95,7 @@ static struct virtqueue *rp_find_vq(struct virtio_device *vdev,
- 	len = rvring->len;
- 
- 	/* zero vring */
--	size = vring_size(len, rvring->align);
-+	size = vring_legacy_size(len, rvring->align);
- 	memset(addr, 0, size);
- 
- 	dev_dbg(dev, "vring%d: va %pK qsz %d notifyid %d\n",
 -- 
 MST
 
