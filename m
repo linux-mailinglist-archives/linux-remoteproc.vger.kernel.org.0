@@ -2,81 +2,110 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 199ED1A065E
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Apr 2020 07:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0431A0692
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Apr 2020 07:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727089AbgDGFPP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 7 Apr 2020 01:15:15 -0400
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:38841 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727002AbgDGFPP (ORCPT
+        id S1726232AbgDGFai (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 7 Apr 2020 01:30:38 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43293 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726030AbgDGFai (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 7 Apr 2020 01:15:15 -0400
-Received: by mail-vs1-f67.google.com with SMTP id x206so1429824vsx.5
-        for <linux-remoteproc@vger.kernel.org>; Mon, 06 Apr 2020 22:15:14 -0700 (PDT)
+        Tue, 7 Apr 2020 01:30:38 -0400
+Received: by mail-pg1-f196.google.com with SMTP id s4so1167994pgk.10
+        for <linux-remoteproc@vger.kernel.org>; Mon, 06 Apr 2020 22:30:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
-        b=MfHDvIBIt69xqysjTBYVVNc0kV20i2uh+5pM5bA0kgqzaY38Y8DWEj01Pvo2lprKBQ
-         GeMPmsDw8mI8JPS3USlc7fo909SxPcbTvuuO8fmlDj3Epr1eVDtR360WKQPQyhZWRFR1
-         e2AVs/X8xmnpyFeBVbEpWkW/7xUX6BkoKcBNjhVPYru9i1s3MQXqsGzojyz2OPT8Gzuk
-         eAsRgBBtJfCcoxVL23nq2mmza5GNfLtG1Vewilonxc/7to20Va10m3hSWyxvaqvjeUuq
-         +R1bw/nay987q2JQWtF8qmoAYape5iyXc2fGu9oueeJmEOdg+02io2ZWkJnJglNvfVbH
-         fVHQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2yp65LXRHS8b4CoqvfhDXfYJaRJFniHa6sPW5Upo/IY=;
+        b=uX2fXn5ODDErvR4rjd6maBLifARI491HJVvdbalmW7LUSWOMzTDIInpxZUs7WRGWIy
+         lAWTmRHDbL9Fj4l9ZOStyk0ATa6OU/dnhWEyl1zAUmKBBtSOHyES/NnJMbbYjGP03m27
+         MKEQKTxpdjmhoiepXNUPazApp9S18M8admZ6ftmuBuah3yjJZd8GbGsZXhAKgPTQFcGY
+         BMucU1IM0AxDDmdgRetoGqyvEHfXOKbBQ79IHxdqRgZgfFY8DpFhYHxSrhBXDNcpgpHW
+         O3ZmtklIsyDfOrw9gDio79Ldkk4BrpE87rCeTYwT0oyHwgTfi2KRffiQgCDiLbVGdQD1
+         A32Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
-        b=dVOmMOtkJx5lFJFFEMQ6ah/sFkic8oejuu+Bl+nAsNXwPO17RW7ruU53gmRLs7KcFp
-         ScXeSghtgjQUo8TEahWS50eKbL4OY6lLrpiXMKt4cnMF7V4iP76an4E+A08n+St2jjHS
-         P6ZOsRC3tLF2CmIeuaENUIThC6T8PngDCYgeQVBKt7P2B8Yp6tKKXJvUPF+eEYcT0nTn
-         im7ZxynicWJP7hCUzBlQphfkTt69/AVQr28J877I664Gp1ngRz8qltfzoeWdo0E+Lf3D
-         iLWywQG/K+55mEoKD4pYmOWgO3/j75ZYEYucIf2TR92zsRm20rGcZTOoNH/DoABqhYSp
-         ilPA==
-X-Gm-Message-State: AGi0PuYuzODiGt0fUTOe6FOBdMseltvFbeavr0oOkcbZJdwVUoH3Mexz
-        vGgBacgWp5vWpaDMkiisYxRunRqf67qVcfEIR3Q=
-X-Google-Smtp-Source: APiQypL+ArhsKP1HCJpJZSuqqOKzmqGe03VSBcvbyU5XLwMdkDIdNu0ELlIqojTyqMNnJA6AEodSyvd4rSFXD4DVz/E=
-X-Received: by 2002:a67:fa85:: with SMTP id f5mr495699vsq.65.1586236514277;
- Mon, 06 Apr 2020 22:15:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2yp65LXRHS8b4CoqvfhDXfYJaRJFniHa6sPW5Upo/IY=;
+        b=BnOBTk9fpbijtHHCjo4q1hu90Yb/1dL50YHbDMcRMOpK9VfLxfnPA2iMk/ZkTAVEMw
+         awU9B4yEst1kMs+0F+/q+0eCMNhCYM378X9qzPsTLNKAVGRAxOHgSHhQ8rq7YoNp6zDv
+         F01T+QqKAlbhZBNFk7jK4wtcjUHELhnqBA74NnjFtkAgiPrXeVcyS7PmzlXF9nZzs9bZ
+         Y89y+kRUzDAnQHrDimWsJw4COahLPu/2zm9IEJ4sYYn4MJfcnYrn/p5+yG+vb1sg9kOa
+         JIHkmju6BJJapLU9NC4scIQ7btdnTMuSkKCAv3iluyYjYr4ok0aetc2t2axx8v+UXAw8
+         3+tg==
+X-Gm-Message-State: AGi0PuZhtaabWvt4ZPjk+zokkT7HPk6OINgBbBHb5128UeLtqlJ1c2U1
+        2tyfIQiBTzoSg1Le95Z1UBnXSw==
+X-Google-Smtp-Source: APiQypLpy6z8Mw1alhL1ApCSa+GJdJhQWitDiE4nlil3Q7eMBzZ1zD9e90r0SwiRKTTBUrcZfPGTHQ==
+X-Received: by 2002:a63:5c01:: with SMTP id q1mr351344pgb.177.1586237436887;
+        Mon, 06 Apr 2020 22:30:36 -0700 (PDT)
+Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id d23sm13042395pfq.210.2020.04.06.22.30.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Apr 2020 22:30:36 -0700 (PDT)
+Date:   Mon, 6 Apr 2020 22:30:41 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v8 15/19] remoteproc: switch to virtio_legacy_init/size
+Message-ID: <20200407053041.GH20625@builder.lan>
+References: <20200407011612.478226-1-mst@redhat.com>
+ <20200407011612.478226-16-mst@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:ab0:254a:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 22:15:12 -0700 (PDT)
-From:   SANDRA DEWI <sdewisandra@gmail.com>
-Date:   Tue, 7 Apr 2020 05:15:12 +0000
-Message-ID: <CALe9-EdG2aBp2yBY=t79ZuBObzzfY6nuVfAsra6+wc2BAYMhcg@mail.gmail.com>
-Subject: whether this is your correct email address or not
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200407011612.478226-16-mst@redhat.com>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Dear ,Pastor
+On Mon 06 Apr 18:16 PDT 2020, Michael S. Tsirkin wrote:
 
+> These are used for legacy ring format, switch to APIs that make this
+> explicit.
+> 
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 
+Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-I have a client who is an oil business man and he made a fixed deposit
-of $26 million USD in my bank, where I am the director of the branch,
-My client died with his entire family in Jordanian
+Regards,
+Bjorn
 
-50% of the fund will be for the church  for the work of God,the
-balance 50% we share it in the ratio of 50/50. Meaning 50% to you and
-50% for me
-
-intervention in the Syrian Civil War 2014 leaving behind no next of
-kin. I Propose to present you as next of kin to claim the funds, if
-interested reply me for full details and how we are to
-
-
-
-proceed to close this deal.
-
-
-
-
-Mrs. Sandra Dewi
-
-
-
-Email  mrsdewi@gmx.com
+> ---
+>  drivers/remoteproc/remoteproc_core.c   | 2 +-
+>  drivers/remoteproc/remoteproc_virtio.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 097f33e4f1f3..c350a01e6c4e 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -322,7 +322,7 @@ int rproc_alloc_vring(struct rproc_vdev *rvdev, int i)
+>  	struct rproc_mem_entry *mem;
+>  
+>  	/* actual size of vring (in bytes) */
+> -	size = PAGE_ALIGN(vring_size(rvring->len, rvring->align));
+> +	size = PAGE_ALIGN(vring_legacy_size(rvring->len, rvring->align));
+>  
+>  	rsc = (void *)rproc->table_ptr + rvdev->rsc_offset;
+>  
+> diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+> index 8c07cb2ca8ba..35b02468197a 100644
+> --- a/drivers/remoteproc/remoteproc_virtio.c
+> +++ b/drivers/remoteproc/remoteproc_virtio.c
+> @@ -95,7 +95,7 @@ static struct virtqueue *rp_find_vq(struct virtio_device *vdev,
+>  	len = rvring->len;
+>  
+>  	/* zero vring */
+> -	size = vring_size(len, rvring->align);
+> +	size = vring_legacy_size(len, rvring->align);
+>  	memset(addr, 0, size);
+>  
+>  	dev_dbg(dev, "vring%d: va %pK qsz %d notifyid %d\n",
+> -- 
+> MST
+> 
