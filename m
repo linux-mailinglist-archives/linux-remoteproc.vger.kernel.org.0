@@ -2,109 +2,81 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 595101A045F
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Apr 2020 03:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 199ED1A065E
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Apr 2020 07:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726825AbgDGBRG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 6 Apr 2020 21:17:06 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:42899 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726794AbgDGBRE (ORCPT
+        id S1727089AbgDGFPP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 7 Apr 2020 01:15:15 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:38841 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727002AbgDGFPP (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 6 Apr 2020 21:17:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586222223;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TEc48I7L40swgY91SNpoqqlFJs2YDtsi09a3nE4rzt0=;
-        b=L1m0sqfKzS5IrWAvXOgKD04i1HfGmSjmMeoP7KxDc4scov0Kkp9KHt4N5LJq1D7MHWk8Tm
-        OaaZnuI4vJau0DwVU3+ejRLeDnr4RKibrYgU/kBn9KwhLL/Iatni5z4ivLaJ9kaUxXVLTK
-        HGIcVSwQU7f93tRsrvZGragl5U+XWic=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-260-sq8RTNIEOVSybhEiSdYYMA-1; Mon, 06 Apr 2020 21:17:02 -0400
-X-MC-Unique: sq8RTNIEOVSybhEiSdYYMA-1
-Received: by mail-wm1-f69.google.com with SMTP id s15so47987wmc.0
-        for <linux-remoteproc@vger.kernel.org>; Mon, 06 Apr 2020 18:17:02 -0700 (PDT)
+        Tue, 7 Apr 2020 01:15:15 -0400
+Received: by mail-vs1-f67.google.com with SMTP id x206so1429824vsx.5
+        for <linux-remoteproc@vger.kernel.org>; Mon, 06 Apr 2020 22:15:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
+        b=MfHDvIBIt69xqysjTBYVVNc0kV20i2uh+5pM5bA0kgqzaY38Y8DWEj01Pvo2lprKBQ
+         GeMPmsDw8mI8JPS3USlc7fo909SxPcbTvuuO8fmlDj3Epr1eVDtR360WKQPQyhZWRFR1
+         e2AVs/X8xmnpyFeBVbEpWkW/7xUX6BkoKcBNjhVPYru9i1s3MQXqsGzojyz2OPT8Gzuk
+         eAsRgBBtJfCcoxVL23nq2mmza5GNfLtG1Vewilonxc/7to20Va10m3hSWyxvaqvjeUuq
+         +R1bw/nay987q2JQWtF8qmoAYape5iyXc2fGu9oueeJmEOdg+02io2ZWkJnJglNvfVbH
+         fVHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TEc48I7L40swgY91SNpoqqlFJs2YDtsi09a3nE4rzt0=;
-        b=fY0lAlTc0Yxwk0ndOWwSK8F9hhfFhQWli3yMeeZbzHlGSaoGbpZ953WS35q8GiYWgU
-         qanTFQLZwQ0czqZXyunBom5JQBrm/6TPn5GABPz5mnEdquv8QtkSKOLxs4JOgfKlY/GY
-         wfxzE+LJg2r+BQ5WJKa3WLob/NG6egQMoQ6eez2LiovgLEuZ0ukNrCztMB7mXp62Nrm7
-         9txLreHyWKEO52qM6gbaaQXhdNoccV2U8us8s6eMH9flgVrD6AovVp6dt3BDLg17EgSZ
-         lsgPGo+eH33n7yH6ZDkkiHxo1gOPx7qiIRnwlve9O2gURVQrsU8k9OTXY+cROtRqgjC+
-         BJvQ==
-X-Gm-Message-State: AGi0PuYTssFtSPp6V1mmxutM6cPPr9o8J+YqTkxplBshpdB4SkeVPn2N
-        rZsq/Mmc5DngNBMnB0oHfTsuezRdQPEjoOzBPct1L1sWzZsj9oZ0KQWYFDmyTl1WYVtqc91xk5F
-        9w/DFCBd3Rg6jLnPofWmDS4nN6ctrKg==
-X-Received: by 2002:a1c:7f8e:: with SMTP id a136mr2117566wmd.33.1586222220759;
-        Mon, 06 Apr 2020 18:17:00 -0700 (PDT)
-X-Google-Smtp-Source: APiQypKQ8ZFP7SqvR9SfME3wLzzSSain/ZwRIGeGpFsv0tcRpM9Qel1kekfQFVeNUkF4nqbNDouBCQ==
-X-Received: by 2002:a1c:7f8e:: with SMTP id a136mr2117550wmd.33.1586222220535;
-        Mon, 06 Apr 2020 18:17:00 -0700 (PDT)
-Received: from redhat.com (bzq-79-176-51-222.red.bezeqint.net. [79.176.51.222])
-        by smtp.gmail.com with ESMTPSA id u22sm94021wmu.43.2020.04.06.18.16.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2020 18:17:00 -0700 (PDT)
-Date:   Mon, 6 Apr 2020 21:16:58 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-remoteproc@vger.kernel.org
-Subject: [PATCH v8 15/19] remoteproc: switch to virtio_legacy_init/size
-Message-ID: <20200407011612.478226-16-mst@redhat.com>
-References: <20200407011612.478226-1-mst@redhat.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=38NlpNEbzNFWb7RFQtfvRASB+B576yw7dNc7pozf3pc=;
+        b=dVOmMOtkJx5lFJFFEMQ6ah/sFkic8oejuu+Bl+nAsNXwPO17RW7ruU53gmRLs7KcFp
+         ScXeSghtgjQUo8TEahWS50eKbL4OY6lLrpiXMKt4cnMF7V4iP76an4E+A08n+St2jjHS
+         P6ZOsRC3tLF2CmIeuaENUIThC6T8PngDCYgeQVBKt7P2B8Yp6tKKXJvUPF+eEYcT0nTn
+         im7ZxynicWJP7hCUzBlQphfkTt69/AVQr28J877I664Gp1ngRz8qltfzoeWdo0E+Lf3D
+         iLWywQG/K+55mEoKD4pYmOWgO3/j75ZYEYucIf2TR92zsRm20rGcZTOoNH/DoABqhYSp
+         ilPA==
+X-Gm-Message-State: AGi0PuYuzODiGt0fUTOe6FOBdMseltvFbeavr0oOkcbZJdwVUoH3Mexz
+        vGgBacgWp5vWpaDMkiisYxRunRqf67qVcfEIR3Q=
+X-Google-Smtp-Source: APiQypL+ArhsKP1HCJpJZSuqqOKzmqGe03VSBcvbyU5XLwMdkDIdNu0ELlIqojTyqMNnJA6AEodSyvd4rSFXD4DVz/E=
+X-Received: by 2002:a67:fa85:: with SMTP id f5mr495699vsq.65.1586236514277;
+ Mon, 06 Apr 2020 22:15:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200407011612.478226-1-mst@redhat.com>
-X-Mailer: git-send-email 2.24.1.751.gd10ce2899c
-X-Mutt-Fcc: =sent
+Received: by 2002:ab0:254a:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 22:15:12 -0700 (PDT)
+From:   SANDRA DEWI <sdewisandra@gmail.com>
+Date:   Tue, 7 Apr 2020 05:15:12 +0000
+Message-ID: <CALe9-EdG2aBp2yBY=t79ZuBObzzfY6nuVfAsra6+wc2BAYMhcg@mail.gmail.com>
+Subject: whether this is your correct email address or not
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-These are used for legacy ring format, switch to APIs that make this
-explicit.
+Dear ,Pastor
 
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
----
- drivers/remoteproc/remoteproc_core.c   | 2 +-
- drivers/remoteproc/remoteproc_virtio.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 097f33e4f1f3..c350a01e6c4e 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -322,7 +322,7 @@ int rproc_alloc_vring(struct rproc_vdev *rvdev, int i)
- 	struct rproc_mem_entry *mem;
- 
- 	/* actual size of vring (in bytes) */
--	size = PAGE_ALIGN(vring_size(rvring->len, rvring->align));
-+	size = PAGE_ALIGN(vring_legacy_size(rvring->len, rvring->align));
- 
- 	rsc = (void *)rproc->table_ptr + rvdev->rsc_offset;
- 
-diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
-index 8c07cb2ca8ba..35b02468197a 100644
---- a/drivers/remoteproc/remoteproc_virtio.c
-+++ b/drivers/remoteproc/remoteproc_virtio.c
-@@ -95,7 +95,7 @@ static struct virtqueue *rp_find_vq(struct virtio_device *vdev,
- 	len = rvring->len;
- 
- 	/* zero vring */
--	size = vring_size(len, rvring->align);
-+	size = vring_legacy_size(len, rvring->align);
- 	memset(addr, 0, size);
- 
- 	dev_dbg(dev, "vring%d: va %pK qsz %d notifyid %d\n",
--- 
-MST
 
+I have a client who is an oil business man and he made a fixed deposit
+of $26 million USD in my bank, where I am the director of the branch,
+My client died with his entire family in Jordanian
+
+50% of the fund will be for the church  for the work of God,the
+balance 50% we share it in the ratio of 50/50. Meaning 50% to you and
+50% for me
+
+intervention in the Syrian Civil War 2014 leaving behind no next of
+kin. I Propose to present you as next of kin to claim the funds, if
+interested reply me for full details and how we are to
+
+
+
+proceed to close this deal.
+
+
+
+
+Mrs. Sandra Dewi
+
+
+
+Email  mrsdewi@gmx.com
