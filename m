@@ -2,490 +2,258 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 263D81A30E1
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 Apr 2020 10:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C801A314A
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 Apr 2020 10:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbgDII3U (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 9 Apr 2020 04:29:20 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:7906 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725828AbgDII3U (ORCPT
+        id S1726681AbgDIIyT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 9 Apr 2020 04:54:19 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:50388 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725972AbgDIIyT (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 9 Apr 2020 04:29:20 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0398RSwZ011921;
-        Thu, 9 Apr 2020 10:29:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : subject : to : cc
- : references : message-id : date : mime-version : in-reply-to :
+        Thu, 9 Apr 2020 04:54:19 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0398s6wD028951;
+        Thu, 9 Apr 2020 10:54:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=pvNYoGRSyo2rWLVdnJAB2Trt54SboMRVt0DDFJhq3Mw=;
- b=Jzg2acb2ZP3x9oX+elMVEs5zz5IKYAn3m/ubELT6JLpSwpJGd9jKm8oPZ8ytNS+KKbzV
- iOPfQeG7d/LB0PBhazkAoXG+zs5IwZj4ROYMBxtp6JKjrvnFJdhVvs/0DmhaIkp1PwwP
- 3KdZQtZpggXnoIpKyNadyOD4ShSoNJel88GgU2rZ87m46/VZZXglrimxHi061t1BtkCA
- NS04kdqmBUzX8xHRmsAUejYUpEq09qVb+ZtixpICbEWPeWSRoSfHlK9PuqhH1nyZPvdM
- bKkCR7JyLvWcCFVSIY/9KV5tpj1U4/Ep8hI00qxxvpSVbSm3cotCK+IIcLNU8b3BlSLr yg== 
+ bh=CmoutC0W8WZlASEipmjSnN2qdkVdCXVJOAEJkp9FQOg=;
+ b=qqnLh2JLoNbSlDythMFLuO+XTtJmamANLPiFnC/MWniwACpJhwJ5bKRG42OjSz5NjJiw
+ bCcb49XNg/e+zYq4TcfSW2OZ4KxVnCQ8JNKbJFC51/qAIFCGwXw2oQQacckQGPC8wKBH
+ u5B0V96vwwrMbr+M9gmDQAttA6U62C6OI3jnrgdsscNdhwHS9K7BLNY21/L87pODaIFX
+ nx2Gir27O+dZ+gLef2Oox3tcv/2RdytIa98VvpeXYtLUDilEzqpj/hmUx9OQnuRAJMA4
+ GWnVPDORCF0fK5+io5OQdso/jzgFOc3KiWOAo77kSPhRa3n74BLy10AnP9IuBnV091bH lg== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3091qk8pkg-1
+        by mx07-00178001.pphosted.com with ESMTP id 309vr98qkw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 09 Apr 2020 10:29:09 +0200
+        Thu, 09 Apr 2020 10:54:12 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 55243100044;
-        Thu,  9 Apr 2020 10:29:08 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A440C10004F;
+        Thu,  9 Apr 2020 10:54:11 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2F30121F67C;
-        Thu,  9 Apr 2020 10:29:08 +0200 (CEST)
-Received: from lmecxl0889.tpe.st.com (10.75.127.45) by SFHDAG3NODE1.st.com
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8EC2721FE9D;
+        Thu,  9 Apr 2020 10:54:11 +0200 (CEST)
+Received: from lmecxl0889.tpe.st.com (10.75.127.44) by SFHDAG3NODE1.st.com
  (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 9 Apr
- 2020 10:29:06 +0200
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Subject: Re: [PATCH v2 1/2] remoteproc: Add character device interface
-To:     <rishabhb@codeaurora.org>,
-        =?UTF-8?Q?Cl=c3=a9ment_Leger?= <cleger@kalrayinc.com>
-CC:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+ 2020 10:54:10 +0200
+Subject: Re: [PATCH v2] rpmsg: core: Add wildcard match for name service
+To:     Suman Anna <s-anna@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        psodagud <psodagud@codeaurora.org>, tsoni <tsoni@codeaurora.org>,
-        sidgup <sidgup@codeaurora.org>,
-        <linux-remoteproc-owner@vger.kernel.org>
-References: <1585699438-14394-1-git-send-email-rishabhb@codeaurora.org>
- <5b1c8287-0077-87e7-9364-b1f5a104c9e3@st.com>
- <6261646b2e0c4d9c8a30900b2f475890@codeaurora.org>
- <730c75c9-15e2-19c5-d97a-190bf1e6ffaa@st.com>
- <634144036.14036712.1586174761552.JavaMail.zimbra@kalray.eu>
- <8379238a-a9e0-da4e-330a-18dffba5f841@st.com>
- <1331212923.14096350.1586188737626.JavaMail.zimbra@kalray.eu>
- <877ed3c91c8f140a08a743f03cafc633@codeaurora.org>
-Message-ID: <d1ccddc1-c97b-7573-74eb-ff0f09337cce@st.com>
-Date:   Thu, 9 Apr 2020 10:29:06 +0200
+        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200310155058.1607-1-mathieu.poirier@linaro.org>
+ <591bd727-32af-9ea2-8c46-98f46ee3711e@ti.com>
+ <CANLsYkyv+4cSCY27kA6qfo2XMzXy_h+DmXTe0nVZuUkC0kyRUQ@mail.gmail.com>
+ <ca77fe73-3baf-64ff-c9e2-b2f35f96ffe3@ti.com>
+ <CANLsYkz8iqiperjdQVcwAC3YGT5cmEvJcu8fPFGF5-X6eKVUDQ@mail.gmail.com>
+ <34d1277f-c35e-5df8-7d0c-ea1e961a127f@st.com> <20200327193602.GA22939@xps15>
+ <77cba22f-5911-e88a-ec25-50cbe9b8fbbe@ti.com>
+ <CANLsYkxWSQNA0SqP5p1d_EK6am5rV-ONrvou1UyuNMnMjGW71Q@mail.gmail.com>
+ <56a34534-f005-1e1c-a8c5-8bef02664eac@ti.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Message-ID: <e618244f-905b-9796-4e0e-c9d2a2c2341f@st.com>
+Date:   Thu, 9 Apr 2020 10:54:09 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <877ed3c91c8f140a08a743f03cafc633@codeaurora.org>
+In-Reply-To: <56a34534-f005-1e1c-a8c5-8bef02664eac@ti.com>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.75.127.45]
-X-ClientProxiedBy: SFHDAG6NODE2.st.com (10.75.127.17) To SFHDAG3NODE1.st.com
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG3NODE1.st.com
  (10.75.127.7)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-09_03:2020-04-07,2020-04-09 signatures=0
+ definitions=2020-04-08_09:2020-04-07,2020-04-08 signatures=0
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Hi Suman,
 
-On 4/8/20 8:34 PM, rishabhb@codeaurora.org wrote:
-> On 2020-04-06 08:58, Clément Leger wrote:
->> Hi Arnaud,
->>
->> ----- On 6 Apr, 2020, at 16:17, Arnaud Pouliquen arnaud.pouliquen@st.com wrote:
->>
->>> Hi Clément,
+On 4/8/20 10:52 PM, Suman Anna wrote:
+> On 4/8/20 10:59 AM, Mathieu Poirier wrote:
+>> On Tue, 7 Apr 2020 at 17:07, Suman Anna <s-anna@ti.com> wrote:
 >>>
->>> On 4/6/20 2:06 PM, Clément Leger wrote:
->>>> Hi Arnaud,
->>>>
->>>> ----- On 6 Apr, 2020, at 11:01, Arnaud Pouliquen arnaud.pouliquen@st.com wrote:
->>>>
->>>>> On 4/3/20 9:13 PM, rishabhb@codeaurora.org wrote:
->>>>>> On 2020-04-02 10:28, Arnaud POULIQUEN wrote:
->>>>>>> Hi
->>>>>>>
->>>>>>> On 4/1/20 2:03 AM, Rishabh Bhatnagar wrote:
->>>>>>>> Add the character device interface for userspace applications.
->>>>>>>> This interface can be used in order to boot up and shutdown
->>>>>>>> remote subsystems. Currently there is only a sysfs interface
->>>>>>>> which the userspace clients can use. If a usersapce application
->>>>>>>> crashes after booting the remote processor does not get any
->>>>>>>> indication about the crash. It might still assume that the
->>>>>>>> application is running. For example modem uses remotefs service
->>>>>>>> to fetch data from disk/flash memory. If the remotefs service
->>>>>>>> crashes, modem keeps on requesting data which might lead to a
->>>>>>>> crash. Adding a character device interface makes the remote
->>>>>>>> processor tightly coupled with the user space application.
->>>>>>>> A crash of the application leads to a close on the file descriptors
->>>>>>>> therefore shutting down the remoteproc.
->>>>>>>
->>>>>>> Sorry I'm late in the discussion, I hope I've gone through the whole
->>>>>>> discussion so I don't reopen a closed point...
->>>>>>>
->>>>>>> Something here is not crystal clear to me so I'd rather share it...
->>>>>>>
->>>>>>> I suppose that you the automatic restart of the application is not possible to
->>>>>>> stop and restart the remote processor...
->>>>>> Yes correct, while we wait for the application to restart we might observe a
->>>>>> fatal crash.
->>>>>>>
->>>>>>> Why this use case can not be solved by a process monitor or a service
->>>>>>> in userland that detects the application crash and stop the remote
->>>>>>> firmware using
->>>>>>> the sysfs interface?
->>>>>>>
->>>>>> What happens in the case where the process monitor itself crashes? This is
->>>>>> actually the approach we follow in our downstream code. We have a central entity
->>>>>> in userspace that controls bootup/shutdown of some remote processors based on
->>>>>> the
->>>>>> votes from userspace clients. We have observed cases where this entity
->>>>>> itself crashes and remote processors are left hanging.
->>>>>
->>>>> Your description makes me feel like this patch is only a workaround of something
->>>>> that
->>>>> should be fixed in the userland, even if i understand that hanging is one of the
->>>>> most
->>>>> critical problem and have to be fixed.
->>>>> For instance, how to handle several applications that interact with the remote
->>>>> processor
->>>>> ( e.g. rpmsg service applications) how to stop and restart everything. Using the
->>>>> char
->>>>> device would probaly resolve only a part of the issue...
->>>>>
->>>>> I'm not aware about your environment and i'm not a userland expert. But what i
->>>>> still not
->>>>> understand why a parent process can not do the job...
->>>>> I just test a simple script on my side that treat the kill -9 of an application
->>>>> ("cat" in my case).
->>>>
->>>> This is not entirely true, if the parent process is killed with a SIGKILL, then
->>>> the process will not be able to handle anything and the remoteproc will still
->>>> be running.
->>>>
->>>> What I understood from Rishabh patch is a way to allow a single process handling
->>>> the rproc state. We have the same kind of need and currently, if the
->>>> user application crashes, then the rproc is still running (which happens).
->>>>
->>>>>
->>>>> #start the remote firmware
->>>>> cp  $1 /lib/firmware/
->>>>> echo $1> /sys/class/remoteproc/remoteproc0/firmware
->>>>> echo start >/sys/class/remoteproc/remoteproc0/state
->>>>> #your binary
->>>>> cat /dev/kmsg
->>>>> # stop the remote firmware in case of crash (and potentially some other apps)
->>>>> echo stop >/sys/class/remoteproc/remoteproc0/state
->>>>>
->>>>
->>>> This is not really "production proof" and what happens if the application is
->>>> responsible of setting the firmware which might be jitted ?
->>>> And if the script receives the SIGKILL, then we are back to the same problem.
->>> Yes this is just a basic example, not an implementation which would depend on
->>> the
->>> environment. i'm just trying here to  put forward a multi-process solution...and
->>> that I'm not an userland expert :).
+>>> Hi Mathieu, Arnaud,
 >>>
+>>> On 3/27/20 2:36 PM, Mathieu Poirier wrote:
+>>>> On Fri, Mar 27, 2020 at 10:35:34AM +0100, Arnaud POULIQUEN wrote:
+>>>>> Hi
+>>>>>
+>>>>> On 3/26/20 11:01 PM, Mathieu Poirier wrote:
+>>>>>> On Thu, 26 Mar 2020 at 14:42, Suman Anna <s-anna@ti.com> wrote:
+>>>>>>>
+>>>>>>> On 3/26/20 3:21 PM, Mathieu Poirier wrote:
+>>>>>>>> On Thu, 26 Mar 2020 at 09:06, Suman Anna <s-anna@ti.com> wrote:
+>>>>>>>>>
+>>>>>>>>> Hi Mathieu,
+>>>>>>>>>
+>>>>>>>>> On 3/10/20 10:50 AM, Mathieu Poirier wrote:
+>>>>>>>>>> Adding the capability to supplement the base definition published
+>>>>>>>>>> by an rpmsg_driver with a postfix description so that it is possible
+>>>>>>>>>> for several entity to use the same service.
+>>>>>>>>>>
+>>>>>>>>>> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+>>>>>>>>>> Acked-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
+>>>>>>>>>
+>>>>>>>>> So, the concern I have here is that we are retrofitting this into the
+>>>>>>>>> existing 32-byte name field, and the question is if it is going to be
+>>>>>>>>> enough in general. That's the reason I went with the additional 32-byte
+>>>>>>>>> field with the "rpmsg: add a description field" patch.
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> That's a valid concern.
+>>>>>>>>
+>>>>>>>> Did you consider increasing the size of RPMSG_NAME_SIZE to 64? Have
+>>>>>>>> you found cases where that wouldn't work?  I did a survey of all the
+>>>>>>>> places the #define is used and all destination buffers are also using
+>>>>>>>> the same #define in their definition.  It would also be backward
+>>>>>>>> compatible with firmware implementations that use 32 byte.
+>>>>>>>
+>>>>>>> You can't directly bump the size without breaking the compatibility on
+>>>>>>> the existing rpmsg_ns_msg in firmwares right? All the Linux-side drivers
+>>>>>>> will be ok since they use the same macro but rpmsg_ns_msg has presence
+>>>>>>> on both kernel and firmware-sides.
+>>>>>>
+>>>>>> Ah yes yes... The amount of bytes coming out of the pipe won't match.
+>>>>>> Let me think a little...
+>>>>>
+>>>>> +1 for Suman's concern.
+>>>>>
+>>>>> Anyway i would like to challenge the need of more than 32 bytes to
+>>>>> differentiate service instances.
+>>>>> "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", seems to me enough if we only need
+>>>>> to differentiate the instances.
+>>>
+>>> Remember that the rpmsg_device_id name takes some space within here. So,
+>>> the shorter the rpmsg_device_id table name, the more room you have.
+>>>
+>>>>>
+>>>>> But perhaps the need is also to provide a short description of the service?
+>>>
+>>> I am mostly using it to provide a unique instantiation name. In anycase,
+>>> I have cross-checked against my current firmwares, and so far all of
+>>> them happen to have the name + desc < 31 bytes.
+>>>
+>>>
+>>>>>
+>>>>> Suman, could you share some examples of your need?
 >>>>
->>>> I really think, this is a step forward an easier and reliable use of the
->>>> remoteproc
->>>> on userland to guarantee a coherent rproc state even if host application
->>>> crashes.
-> Yes what we want is simple mechanism where a single userspace process can boot/
-> shutdown the remote processor in all scenarios. Adding more processes to monitor
-> the already existing process might have 2 issues. One is there might be a delay
-> between the application crash and process monitor getting to know about it and taking
-> action. This might prove to be fatal in our case. Second, possibly the monitor can hang
-> or get killed and is not deterministic.
+>>>> Looking at things further it is possible to extend the name of the service to
+>>>> 64 byte while keeping backward compatibility by looking up the size of @len
+>>>> in function rpmsg_ns_cb().  From there work with an rpmsg_ns_msg or a new
+>>>> rpmsg_ns_msg64, pretty much the way you did in your patch[1].  In fact the
+>>>> approach is the same except you are using 2 arrays of 32 byte and I'm using one
+>>>> of 64.
+>>>>
+>>>> As Arnaud mentioned, is there an immediate need to support a 64-byte name?  If
+>>>> not than I suggest to move forward with this patch and address the issue when we
+>>>> get there - at least we know there is room for extention. Otherwise I'll spin
+>>>> off another revision but it will be bigger and more complex.
 >>>
->>> I can see 3 ways of handling an application crash:
->>> - just shutdown the firmware
->>> => can be done through char device
->>> - stop some other related processes and/or generate a remote proc crash dump for
->>> debug
->>> => /sysfs and/or debugfs
->>> - do nothing as you want a silence application reboot and re-attach to the
->>> running firmware
->>> => use sysfs
+>>> Yeah ok. I have managed to get my downstream drivers that use the desc
+>>> field working with this patch after modifying the firmwares to publish
+>>> using combined name, and adding logic in probe to get the trailing
+>>> portion of the name.
+>>
+>> Perfect
+>>
 >>>
->>> I'm challenging the solution because splitting the API seems to me not a good
->>> solution.
+>>> So, the only thing that is missing or content for another patch is if we
+>>> need to add some tooling/helper stuff for giving the trailing stuff to
+>>> rpmsg drivers?
 >>
->> Completely ok with that, we have to fully understand the targeted usecase to
->> avoid implemented a flawed interface.
->>
->>> Now i wonder how it works for the other applications that are relying on some
->>> other
->>> kernel frameworks...
->>
->> For some other device, there is a chardev. The watchdog for intance uses a
->> /dev/watchdog. Regarding the gpio, it seems they are also using a chardev
->> and the sysfs interface is deprecated.
->>
->>> Perhaps the answer is that these frameworks don't use sysfs but char device.
->>> That would means that the sysfs solution is not the more adapted solution and
->>> perhaps we should migrate to a char device.
->>> But in this case, i think that it should implement the whole API and be
->>> exclusive with
->>> the syfs legacy API (so no sysfs or sysfs in read-only).
->>
->> I agree with that, if another interface must be defined, then it should
->> implement everything that is supported right now with the sysfs.
->>
-> The other fields that sysfs exposes right now are firmware_name, name(rproc name),
-> state. The targeted usecase was that these are configuration parameters specific
-> to the remoteproc and should stay in the sysfs interface. Whereas char device
-> should provide direct access to remoteproc device.
-> It would make sense to use this interface in conjunction with sysfs
-> interface, where you use /dev/remoteproc0 to boot/shutdown the remote processor
-> sysfs entries to fine tune the parameters.
-> Adding ioctls to implement all sysfs functionality seems like overkill to me. Let
-> me know what you guys think.
+>> So that all rpmsg drivers don't come up with their own parsing that
+>> ends up doing the same thing.  Let me think about that - I may have to
+>> get back to you...
+> 
+> Yep. Sure no problem. It can be a patch on top of this as well.
+> 
+> Arnaud,
+> Do you have immediate need for the tooling stuff for the rpmsg-tty driver?
 
-In my opinion if we open the possibility of accessing to remoteproc through a char
-device, we should move torwards a solution that would replace the sysfs. 
-In this case sysfs fields could be read-only, and the char devices would have to
-support the different shutdown modes. This means that the auto shutdown should be
-configurable (IOCTL?).
-But I assume that the minimum could be to only disable write access on the "state" field
-and handle the "auto shutdown" as an option of the char device.
+Before moving forward on rpmsg_tty i would prefer that we are aligned with Bjorn
+on the implementation of the rpmsg_tty itself and the evolution of the service name...
+Then rpmsg_tty could be a good threadfor a first implementation...
 
-Anyway it only my opinion, let Bjorn an Mathieu comment and decide :)
+
+Concerning the name service, having a discussion around the name service skeleton would
+be nice. This could be an good input for the helpers function definition.
+
+Propositions in rpmsg_tty thread are
+
+<service_name>-<feature>
+or
+<service_name>-<feature>-<sub_service>
+
+don't hesitate to comment and/or propose alternatives
 
 Regards,
 Arnaud
 
->>
->> Clément
+> 
+> regards
+> Suman
+> 
+> 
 >>
 >>>
->>> Regards,
->>> Arnaud
+>>> regards
+>>> Suman
 >>>
 >>>>
->>>> Regards,
+>>>> Thanks,
+>>>> Mathieu
 >>>>
->>>> Clément
+>>>> [1]. https://patchwork.kernel.org/patch/11096599/
 >>>>
->>>>> Anyway, it's just my feeling, let other people give their feedback.
->>>>>
->>>>>>> I just want to be sure that there is no alternative to this, because
->>>>>>> having two ways
->>>>>>> for application to shutdown the firmware seems to me confusing...
->>>>>> Does making this interface optional/configurable helps?
+>>>>>>>>>
+>>>>>>>>>> ---
+>>>>>>>>>> Changes for V2:
+>>>>>>>>>> - Added Arnaud's Acked-by.
+>>>>>>>>>> - Rebased to latest rproc-next.
+>>>>>>>>>>
+>>>>>>>>>>  drivers/rpmsg/rpmsg_core.c | 20 +++++++++++++++++++-
+>>>>>>>>>>  1 file changed, 19 insertions(+), 1 deletion(-)
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+>>>>>>>>>> index e330ec4dfc33..bfd25978fa35 100644
+>>>>>>>>>> --- a/drivers/rpmsg/rpmsg_core.c
+>>>>>>>>>> +++ b/drivers/rpmsg/rpmsg_core.c
+>>>>>>>>>> @@ -399,7 +399,25 @@ ATTRIBUTE_GROUPS(rpmsg_dev);
+>>>>>>>>>>  static inline int rpmsg_id_match(const struct rpmsg_device *rpdev,
+>>>>>>>>>>                                 const struct rpmsg_device_id *id)
+>>>>>>>>>>  {
+>>>>>>>>>> -     return strncmp(id->name, rpdev->id.name, RPMSG_NAME_SIZE) == 0;
+>>>>>>>>>> +     size_t len = min_t(size_t, strlen(id->name), RPMSG_NAME_SIZE);
+>>>>>>>>>> +
+>>>>>>>>>> +     /*
+>>>>>>>>>> +      * Allow for wildcard matches.  For example if rpmsg_driver::id_table
+>>>>>>>>>> +      * is:
+>>>>>>>>>> +      *
+>>>>>>>>>> +      * static struct rpmsg_device_id rpmsg_driver_sample_id_table[] = {
+>>>>>>>>>> +      *      { .name = "rpmsg-client-sample" },
+>>>>>>>>>> +      *      { },
+>>>>>>>>>> +      * }
+>>>>>>>>>> +      *
+>>>>>>>>>> +      * Then it is possible to support "rpmsg-client-sample*", i.e:
+>>>>>>>>>> +      *      rpmsg-client-sample
+>>>>>>>>>> +      *      rpmsg-client-sample_instance0
+>>>>>>>>>> +      *      rpmsg-client-sample_instance1
+>>>>>>>>>> +      *      ...
+>>>>>>>>>> +      *      rpmsg-client-sample_instanceX
+>>>>>>>>>> +      */
+>>>>>>>>>> +     return strncmp(id->name, rpdev->id.name, len) == 0;
+>>>>>>>>>>  }
+>>>>>>>>>>
+>>>>>>>>>>  /* match rpmsg channel and rpmsg driver */
+>>>>>>>>>>
+>>>>>>>>>
 >>>>>>>
->>>>>>> What about the opposite service, mean inform the application that the remote
->>>>>>> processor is crashed?
->>>>>>> Do you identify such need? or the "auto" crash recovery is sufficient?
->>>>>> Auto recovery works perfectly for us. Although there is a mechanism in
->>>>>> place using QMI(Qualcomm MSM interface) that can notify clients about remote
->>>>>> processor crash.
->>>>>
->>>>> Thanks for the information.
->>>>>
->>>>> Regards
->>>>> Arnaud
->>>>>
->>>>>>>
->>>>>>> Thanks,
->>>>>>> Arnaud
->>>>>>>>
->>>>>>>> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
->>>>>>>> ---
->>>>>>>>  drivers/remoteproc/Kconfig               |   9 +++
->>>>>>>>  drivers/remoteproc/Makefile              |   1 +
->>>>>>>>  drivers/remoteproc/remoteproc_cdev.c     | 100 +++++++++++++++++++++++++++++++
->>>>>>>>  drivers/remoteproc/remoteproc_internal.h |  22 +++++++
->>>>>>>>  include/linux/remoteproc.h               |   2 +
->>>>>>>>  5 files changed, 134 insertions(+)
->>>>>>>>  create mode 100644 drivers/remoteproc/remoteproc_cdev.c
->>>>>>>>
->>>>>>>> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
->>>>>>>> index de3862c..6374b79 100644
->>>>>>>> --- a/drivers/remoteproc/Kconfig
->>>>>>>> +++ b/drivers/remoteproc/Kconfig
->>>>>>>> @@ -14,6 +14,15 @@ config REMOTEPROC
->>>>>>>>
->>>>>>>>  if REMOTEPROC
->>>>>>>>
->>>>>>>> +config REMOTEPROC_CDEV
->>>>>>>> +    bool "Remoteproc character device interface"
->>>>>>>> +    help
->>>>>>>> +      Say y here to have a character device interface for Remoteproc
->>>>>>>> +      framework. Userspace can boot/shutdown remote processors through
->>>>>>>> +      this interface.
->>>>>>>> +
->>>>>>>> +      It's safe to say N if you don't want to use this interface.
->>>>>>>> +
->>>>>>>>  config IMX_REMOTEPROC
->>>>>>>>      tristate "IMX6/7 remoteproc support"
->>>>>>>>      depends on ARCH_MXC
->>>>>>>> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
->>>>>>>> index e30a1b1..b7d4f77 100644
->>>>>>>> --- a/drivers/remoteproc/Makefile
->>>>>>>> +++ b/drivers/remoteproc/Makefile
->>>>>>>> @@ -9,6 +9,7 @@ remoteproc-y                += remoteproc_debugfs.o
->>>>>>>>  remoteproc-y                += remoteproc_sysfs.o
->>>>>>>>  remoteproc-y                += remoteproc_virtio.o
->>>>>>>>  remoteproc-y                += remoteproc_elf_loader.o
->>>>>>>> +obj-$(CONFIG_REMOTEPROC_CDEV)        += remoteproc_cdev.o
->>>>>>>>  obj-$(CONFIG_IMX_REMOTEPROC)        += imx_rproc.o
->>>>>>>>  obj-$(CONFIG_MTK_SCP)            += mtk_scp.o mtk_scp_ipi.o
->>>>>>>>  obj-$(CONFIG_OMAP_REMOTEPROC)        += omap_remoteproc.o
->>>>>>>> diff --git a/drivers/remoteproc/remoteproc_cdev.c
->>>>>>>> b/drivers/remoteproc/remoteproc_cdev.c
->>>>>>>> new file mode 100644
->>>>>>>> index 0000000..8182bd1
->>>>>>>> --- /dev/null
->>>>>>>> +++ b/drivers/remoteproc/remoteproc_cdev.c
->>>>>>>> @@ -0,0 +1,100 @@
->>>>>>>> +// SPDX-License-Identifier: GPL-2.0-only
->>>>>>>> +/*
->>>>>>>> + * Character device interface driver for Remoteproc framework.
->>>>>>>> + *
->>>>>>>> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
->>>>>>>> + */
->>>>>>>> +
->>>>>>>> +#include <linux/cdev.h>
->>>>>>>> +#include <linux/fs.h>
->>>>>>>> +#include <linux/module.h>
->>>>>>>> +#include <linux/mutex.h>
->>>>>>>> +#include <linux/remoteproc.h>
->>>>>>>> +
->>>>>>>> +#include "remoteproc_internal.h"
->>>>>>>> +
->>>>>>>> +#define NUM_RPROC_DEVICES    64
->>>>>>>> +static dev_t rproc_cdev;
->>>>>>>> +static DEFINE_IDA(cdev_minor_ida);
->>>>>>>> +
->>>>>>>> +static int rproc_cdev_open(struct inode *inode, struct file *file)
->>>>>>>> +{
->>>>>>>> +    struct rproc *rproc;
->>>>>>>> +
->>>>>>>> +    rproc = container_of(inode->i_cdev, struct rproc, char_dev);
->>>>>>>> +
->>>>>>>> +    if (!rproc)
->>>>>>>> +        return -EINVAL;
->>>>>>>> +
->>>>>>>> +    if (rproc->state == RPROC_RUNNING)
->>>>>>>> +        return -EBUSY;
->>>>>>>> +
->>>>>>>> +    return rproc_boot(rproc);
->>>>>>>> +}
->>>>>>>> +
->>>>>>>> +static int rproc_cdev_release(struct inode *inode, struct file *file)
->>>>>>>> +{
->>>>>>>> +    struct rproc *rproc;
->>>>>>>> +
->>>>>>>> +    rproc = container_of(inode->i_cdev, struct rproc, char_dev);
->>>>>>>> +
->>>>>>>> +    if (!rproc || rproc->state != RPROC_RUNNING)
->>>>>>>> +        return -EINVAL;
->>>>>>>> +
->>>>>>>> +    rproc_shutdown(rproc);
->>>>>>>> +
->>>>>>>> +    return 0;
->>>>>>>> +}
->>>>>>>> +
->>>>>>>> +static const struct file_operations rproc_fops = {
->>>>>>>> +    .open = rproc_cdev_open,
->>>>>>>> +    .release = rproc_cdev_release,
->>>>>>>> +};
->>>>>>>> +
->>>>>>>> +int rproc_char_device_add(struct rproc *rproc)
->>>>>>>> +{
->>>>>>>> +    int ret, minor;
->>>>>>>> +    dev_t cdevt;
->>>>>>>> +
->>>>>>>> +    minor = ida_simple_get(&cdev_minor_ida, 0, NUM_RPROC_DEVICES,
->>>>>>>> +                   GFP_KERNEL);
->>>>>>>> +    if (minor < 0) {
->>>>>>>> +        dev_err(&rproc->dev, "%s: No more minor numbers left! rc:%d\n",
->>>>>>>> +            __func__, minor);
->>>>>>>> +        return -ENODEV;
->>>>>>>> +    }
->>>>>>>> +
->>>>>>>> +    cdev_init(&rproc->char_dev, &rproc_fops);
->>>>>>>> +    rproc->char_dev.owner = THIS_MODULE;
->>>>>>>> +
->>>>>>>> +    cdevt = MKDEV(MAJOR(rproc_cdev), minor);
->>>>>>>> +    ret = cdev_add(&rproc->char_dev, cdevt, 1);
->>>>>>>> +    if (ret < 0)
->>>>>>>> +        ida_simple_remove(&cdev_minor_ida, minor);
->>>>>>>> +
->>>>>>>> +    rproc->dev.devt = cdevt;
->>>>>>>> +    return ret;
->>>>>>>> +}
->>>>>>>> +
->>>>>>>> +void rproc_char_device_remove(struct rproc *rproc)
->>>>>>>> +{
->>>>>>>> +    __unregister_chrdev(MAJOR(rproc->dev.devt), MINOR(rproc->dev.devt), 1,
->>>>>>>> +                "rproc");
->>>>>>>> +    ida_simple_remove(&cdev_minor_ida, MINOR(rproc->dev.devt));
->>>>>>>> +}
->>>>>>>> +
->>>>>>>> +void __init rproc_init_cdev(void)
->>>>>>>> +{
->>>>>>>> +    int ret;
->>>>>>>> +
->>>>>>>> +    ret = alloc_chrdev_region(&rproc_cdev, 0, NUM_RPROC_DEVICES, "rproc");
->>>>>>>> +    if (ret < 0) {
->>>>>>>> +        pr_err("Failed to alloc rproc_cdev region, err %d\n", ret);
->>>>>>>> +        return;
->>>>>>>> +    }
->>>>>>>> +}
->>>>>>>> +
->>>>>>>> +void __exit rproc_exit_cdev(void)
->>>>>>>> +{
->>>>>>>> +    __unregister_chrdev(MAJOR(rproc_cdev), 0, NUM_RPROC_DEVICES, "rproc");
->>>>>>>> +}
->>>>>>>> diff --git a/drivers/remoteproc/remoteproc_internal.h
->>>>>>>> b/drivers/remoteproc/remoteproc_internal.h
->>>>>>>> index 493ef92..28d61a1 100644
->>>>>>>> --- a/drivers/remoteproc/remoteproc_internal.h
->>>>>>>> +++ b/drivers/remoteproc/remoteproc_internal.h
->>>>>>>> @@ -47,6 +47,27 @@ struct dentry *rproc_create_trace_file(const char *name,
->>>>>>>> struct rproc *rproc,
->>>>>>>>  int rproc_init_sysfs(void);
->>>>>>>>  void rproc_exit_sysfs(void);
->>>>>>>>
->>>>>>>> +#ifdef CONFIG_REMOTEPROC_CDEV
->>>>>>>> +void rproc_init_cdev(void);
->>>>>>>> +void rproc_exit_cdev(void);
->>>>>>>> +int rproc_char_device_add(struct rproc *rproc);
->>>>>>>> +void rproc_char_device_remove(struct rproc *rproc);
->>>>>>>> +#else
->>>>>>>> +static inline void rproc_init_cdev(void)
->>>>>>>> +{
->>>>>>>> +}
->>>>>>>> +static inline void rproc_exit_cdev(void)
->>>>>>>> +{
->>>>>>>> +}
->>>>>>>> +static inline int rproc_char_device_add(struct rproc *rproc)
->>>>>>>> +{
->>>>>>>> +    return 0;
->>>>>>>> +}
->>>>>>>> +static inline void  rproc_char_device_remove(struct rproc *rproc)
->>>>>>>> +{
->>>>>>>> +}
->>>>>>>> +#endif
->>>>>>>> +
->>>>>>>>  void rproc_free_vring(struct rproc_vring *rvring);
->>>>>>>>  int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
->>>>>>>>
->>>>>>>> @@ -63,6 +84,7 @@ struct resource_table *rproc_elf_find_loaded_rsc_table(struct
->>>>>>>> rproc *rproc,
->>>>>>>>  struct rproc_mem_entry *
->>>>>>>>  rproc_find_carveout_by_name(struct rproc *rproc, const char *name, ...);
->>>>>>>>
->>>>>>>> +
->>>>>>>>  static inline
->>>>>>>>  int rproc_fw_sanity_check(struct rproc *rproc, const struct firmware *fw)
->>>>>>>>  {
->>>>>>>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->>>>>>>> index 16ad666..c4ca796 100644
->>>>>>>> --- a/include/linux/remoteproc.h
->>>>>>>> +++ b/include/linux/remoteproc.h
->>>>>>>> @@ -37,6 +37,7 @@
->>>>>>>>
->>>>>>>>  #include <linux/types.h>
->>>>>>>>  #include <linux/mutex.h>
->>>>>>>> +#include <linux/cdev.h>
->>>>>>>>  #include <linux/virtio.h>
->>>>>>>>  #include <linux/completion.h>
->>>>>>>>  #include <linux/idr.h>
->>>>>>>> @@ -514,6 +515,7 @@ struct rproc {
->>>>>>>>      bool auto_boot;
->>>>>>>>      struct list_head dump_segments;
->>>>>>>>      int nb_vdev;
->>>>>>>> +    struct cdev char_dev;
->>>>>>>>  };
->>>>>>>>
->>> >>>>>  /**
+>>>
+> 
