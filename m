@@ -2,62 +2,59 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D0A1A2CB0
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 Apr 2020 02:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E871A2CBF
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 Apr 2020 02:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726592AbgDIACS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 8 Apr 2020 20:02:18 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:41668 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726508AbgDIACR (ORCPT
+        id S1726613AbgDIAML (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 8 Apr 2020 20:12:11 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55698 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726527AbgDIAML (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 8 Apr 2020 20:02:17 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 039027Xf033354;
-        Wed, 8 Apr 2020 19:02:07 -0500
+        Wed, 8 Apr 2020 20:12:11 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 0390C2dp005178;
+        Wed, 8 Apr 2020 19:12:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1586390527;
-        bh=3SXoNqQ/Qohczo02kc6rTpyLmeIai7jU/VQTKDNDaGE=;
+        s=ti-com-17Q1; t=1586391122;
+        bh=9i/GAF4Awy59qEaFva0CSCYrMZyXLcHnSjOjiKl9CU8=;
         h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=eolr92kScgpeDkjFsVxMur7HyuYZ8OYulDYZ12TMJzE+Xs68lxN/SQ203k9tcbVqT
-         tHDSIFTDPHJp+sOgIg8T/nYeVwdSUrXXM6OfP3vFP+GZoicD8xcWATQ/pluSwHBxEw
-         rD7ftJlHa2ylnHxuGzvzdfzriUN5+vPy+vMgLOaY=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 039027nX117043
+        b=vW917R9gWvjoRlumgNZe1beM3s2W5JeH88gmxNPLnQh0kh/jMqDMB+KMfxiFf+aox
+         EZOjOWWg/uP/lEgfzdxL9WpIaiHP+hFMfphPd/PXyICPGK5vUDJkezJOC0sSokHhCH
+         vH84VpgwmR1W0MMWrxkmeQlvy9Pw6901K2C5C+NY=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 0390C2Jv094469
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 8 Apr 2020 19:02:07 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 8 Apr 2020 19:12:02 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 8 Apr
- 2020 19:02:06 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ 2020 19:12:01 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 8 Apr 2020 19:02:07 -0500
+ Frontend Transport; Wed, 8 Apr 2020 19:12:01 -0500
 Received: from [10.250.86.212] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 039026MX079644;
-        Wed, 8 Apr 2020 19:02:06 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 0390C0BA018737;
+        Wed, 8 Apr 2020 19:12:01 -0500
 Subject: Re: [PATCH 3/7] dt-bindings: remoteproc: Add bindings for R5F
  subsystem on TI K3 SoCs
-To:     Rob Herring <robh+dt@kernel.org>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
 CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Lokesh Vutla <lokeshvutla@ti.com>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
         <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        <linux-kernel@vger.kernel.org>
 References: <20200324201819.23095-1-s-anna@ti.com>
- <20200324201819.23095-4-s-anna@ti.com>
- <CAL_JsqKpC=W-y3OdeqSROhiKLbQKf3sGyCXzQH__Wr-O=QS4Tg@mail.gmail.com>
+ <20200324201819.23095-4-s-anna@ti.com> <20200406195915.GB11572@xps15>
 From:   Suman Anna <s-anna@ti.com>
-Message-ID: <30cb4bee-fe79-8683-8225-fad174e0d630@ti.com>
-Date:   Wed, 8 Apr 2020 19:02:06 -0500
+Message-ID: <761b34e4-b9c7-7c4c-540c-a917896a62ba@ti.com>
+Date:   Wed, 8 Apr 2020 19:12:00 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqKpC=W-y3OdeqSROhiKLbQKf3sGyCXzQH__Wr-O=QS4Tg@mail.gmail.com>
+In-Reply-To: <20200406195915.GB11572@xps15>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -67,11 +64,10 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Rob,
+Hi Mathieu,
 
-On 3/26/20 11:53 AM, Rob Herring wrote:
-> On Tue, Mar 24, 2020 at 2:18 PM Suman Anna <s-anna@ti.com> wrote:
->>
+On 4/6/20 2:59 PM, Mathieu Poirier wrote:
+> On Tue, Mar 24, 2020 at 03:18:15PM -0500, Suman Anna wrote:
 >> The Texas Instruments K3 family of SoCs have one or more dual-core
 >> Arm Cortex R5F processor subsystems/clusters (R5FSS). The clusters
 >> can be split between multiple voltage domains as well. Add the device
@@ -83,16 +79,7 @@ On 3/26/20 11:53 AM, Rob Herring wrote:
 >> and are used for the loading and running of the R5F remote processors.
 >> The R5F processors can also optionally use any internal on-chip SRAM
 >> memories either for executing code or using it as fast-access data.
-> 
-> I'm inclined to say the system DT stuff should be sorted out before
-> accepting this. Is the system DT stuff going to be useful for your R5
-> cores? Do you really want to be stuck with this binding?
-
-Hmm, I am not dependent on System DT and prefer to be not gated by that.
-This is still all from the Linux host perspective, and we don't have any
-plans to use DT on the firmware-side.
-
-> 
+>>
 >> The added example illustrates the DT nodes for the single R5FSS device
 >> present on K3 AM65x family of SoCs.
 >>
@@ -103,24 +90,7 @@ plans to use DT on the firmware-side.
 >> The dt_bindings_check seems to throw couple of warnings around the
 >> usage of ranges because the tooling is adding the #address-cells
 >> and #size-cells of 1 by default, whereas our actual code uses 2.
-> 
-> Then change the default by specifying what you want. Or change the
-> example to be 1 cell. It is *just* an example.
-
-OK, was using the actual dts nodes as how they would be added in our dts
-files. The only way to get rid of the warnings is to use 1 cell. I can
-do that for the R5F bindings, but cannot really do that for the DSPs
-since the addresses need 2 cells.
-
-> 
 >> No issues are found with dtbs_check.
-> 
-> I doubt that if your dts matches the example.
-
-The top-level cells value is 2 in our dts files (See either of
-arm64/dts/ti/k3-am65.dtsi or k3-j721e.dtsi).
-
-> 
 >>
 >> regards
 >> Suman
@@ -180,14 +150,6 @@ arm64/dts/ti/k3-am65.dtsi or k3-j721e.dtsi).
 >> +      specifier containing the R5FSS device id value. This property is
 >> +      as per the binding,
 >> +      Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
-> 
-> What implementation of power domains is used is outside the scope of
-> this binding. I'd just drop the whole description as it is pretty
-> generic.
-
-OK.
-
-> 
 >> +    maxItems: 1
 >> +
 >> +  "#address-cells":
@@ -205,18 +167,21 @@ OK.
 >> +# --------------------
 >> +
 >> +  lockstep-mode:
-> 
-> Needs a vendor prefix.
-
-Yep, will fix this one and all the others below.
-
-> 
 >> +    $ref: /schemas/types.yaml#/definitions/uint32
 >> +    enum: [0, 1]
 >> +    description: |
 >> +      Configuration Mode for the Dual R5F cores within the R5F
 >> +      cluster. Should be either a value of 1 (LockStep mode) or
 >> +      0 (Split mode), default is LockStep mode if omitted.
+> 
+> Should I deduce lockstep means SMP and split mode two processors running in UP
+> mode?
+
+No, slightly different from SMP. It is a safety/fault-tolerance mode,
+the 2 cores run the same code, and then the output is compared, and an
+error is thrown if they yield different results.
+
+> 
 >> +
 >> +# R5F Processor Child Nodes:
 >> +# ==========================
@@ -247,25 +212,18 @@ Yep, will fix this one and all the others below.
 >> +          Each entry should have the memory region's start address
 >> +          and the size of the region, the representation matching
 >> +          the parent node's '#address-cells' and '#size-cells' values.
-> 
-> That's every 'reg' property.
-> 
 >> +        maxItems: 2
-> 
-> You need to define what each one is:
-> 
-> items:
->   - description: ...
->   - description: ...
-
-OK, will fix.
-
-> 
 >> +
 >> +      reg-names:
 >> +        description: |
 >> +          Should contain strings with the names of the specific internal
 >> +          internal memory regions, and should be defined in this order
+> 
+> There is two "internal" in a row.
+
+Thanks, will fix it up.
+
+> 
 >> +        maxItems: 2
 >> +        items:
 >> +          - const: atcm
@@ -287,13 +245,6 @@ OK, will fix.
 >> +        description: Should contain a single tuple of <proc_id host_id>.
 >> +        allOf:
 >> +          - $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> 
-> Sounds more like an array.
-
-OK, I can modify this. Went with this originally to reflect the tuple,
-but guess both translate similarly for my usage.
-
-> 
 >> +          - maxItems: 1
 >> +            items:
 >> +              items:
@@ -309,13 +260,6 @@ but guess both translate similarly for my usage.
 >> +          for the reset argument specifier,
 >> +          Documentation/devicetree/bindings/reset/ti,sci-reset.txt
 >> +            for AM65x and J721E SoCs
-> 
-> Drop. How many resets (maxItems or items list)?
-
-Yeah, this is 1, will update. Do you want me to drop just the specifier
-link or the entire description?
-
-> 
 >> +
 >> +      firmware-name:
 >> +        description: |
@@ -334,9 +278,14 @@ link or the entire description?
 >> +          format is as per the bindings,
 >> +          Documentation/devicetree/bindings/mailbox/omap-mailbox.txt
 > 
-> How many?
+> In the example below node "mcu_r5f1" has a "mboxes" property despite being in lockstep mode.  I
+> haven't delved in the code yet, perharps I'll find an answer in there.
 
-OK, will fix.
+Yeah, it is defined, but won't be parsed or used if the cluster is in
+lockstep mode as my comment above says. The lockstep capability is an
+efuse bit, so on some SoC variants, which do not have the capability,
+the cluster is hard-wired for Split-mode only. And we detect that in the
+driver irrespective of the lockstep-mode value.
 
 > 
 >> +
@@ -346,11 +295,9 @@ OK, will fix.
 >> +          phandle to the reserved memory nodes to be associated with the remoteproc
 >> +          device. There should be atleast two reserved memory nodes defined - the
 > 
-> What's the max number? As is, it will be 2.
+> s/atleast/at least
 
-Aah, I misinterpreted that not having would be open-ended. OK, I will
-have to give an arbitrary number here (maybe 4 or 8). Can we update this
-later on if a usecase really needs more?
+OK
 
 > 
 >> +          first one would be used for dynamic DMA allocations like vrings and vring
@@ -364,31 +311,33 @@ later on if a usecase really needs more?
 >> +# The following properties are optional properties for each of the R5F cores:
 >> +
 >> +      atcm-enable:
-> 
-> Vendor prefix needed.
-> 
 >> +        $ref: /schemas/types.yaml#/definitions/uint32
 >> +        enum: [0, 1]
 >> +        description: |
 >> +          R5F core configuration mode dictating if ATCM should be enabled. R5F
 >> +          view of ATCM dictated by loczrama property. Should be either a value
 >> +          of 1 (enabled) or 0 (disabled), default is disabled if omitted.
+> 
+> What is ATCM and why would one want to enable the feature?
+
+TCM stands for Tightly Coupled Memory (an internal RAM memory
+essentially), and R5 supports two such bank interfaces called A and B.
+Some of the specs use TCMA or TCMB as well.
+
+> 
 >> +
 >> +      btcm-enable:
-> 
-> ditto
-> 
 >> +        $ref: /schemas/types.yaml#/definitions/uint32
 >> +        enum: [0, 1]
 >> +        description: |
 >> +          R5F core configuration mode dictating if BTCM should be enabled. R5F
 >> +          view of BTCM dictated by loczrama property. Should be either a value
 >> +          of 1 (enabled) or 0 (disabled), default is enabled if omitted.
+> 
+> Same here, there is no way to tell what BTCM is.
+> 
 >> +
 >> +      loczrama:
-> 
-> ditto
-> 
 >> +        $ref: /schemas/types.yaml#/definitions/uint32
 >> +        enum: [0, 1]
 >> +        description: |
@@ -396,9 +345,17 @@ later on if a usecase really needs more?
 >> +          address 0 (from core's view). Should be either a value of 1 (ATCM
 >> +          at 0x0) or 0 (BTCM at 0x0), default value is 1 if omitted.
 > 
-> I can't decipher how you came up with 'loczrama' based on the description.
+> loczrama: Location Zero Ram Address? 
 
-That's actually the signal name from the Arm R5 specs.
+Guess so. I never found the expansion.
+
+ Can both core show up at the address 0x0?
+> In the example below both cores have the same setting for atcm, btcm and
+> loczrama.
+
+Each core has their own ATCM, BTCM and loczrama settings and are
+effective in Split-mode. Only Core0 memories and settings are used in
+LockStep mode.
 
 > 
 >> +
@@ -410,6 +367,19 @@ That's actually the signal name from the Arm R5 specs.
 >> +          should be defined as child nodes of the respective SRAM node, and
 >> +          should be defined as per the generic bindings in,
 >> +          Documentation/devicetree/bindings/sram/sram.yaml
+> 
+> Is the behaviour the same whether operating in locksetup mode and split mode?
+
+This is per core. So, just like mboxes, will be unused on Core1 if the
+cluster is configured for LockStep mode.
+
+regards
+Suman
+
+> 
+> Thanks,
+> Mathieu
+> 
 >> +
 >> +    required:
 >> +     - compatible
@@ -468,19 +438,6 @@ That's actually the signal name from the Arm R5 specs.
 >> +    };
 >> +
 >> +    cbass_main: interconnect@100000 {
-> 
-> bus@...
-
-Yeah, will update the example to use bus. The DTS nodes in the kernel
-are already using the interconnect name.
-
-> 
-> Doesn't look like the right address either.
-
-Yeah, I skipped the actual first entry from the ranges, and only
-mentioned the ones that I am using in the nodes. Will fix this.
-
-> 
 >> +        compatible = "simple-bus";
 >> +        #address-cells = <2>;
 >> +        #size-cells = <2>;
@@ -489,12 +446,6 @@ mentioned the ones that I am using in the nodes. Will fix this.
 >> +                 <0x00 0x41c00000 0x00 0x41c00000 0x00 0x00080000>;
 >> +
 >> +        cbass_mcu: interconnect@28380000 {
-> 
-> Doesn't look like the right address.
-
-Same as above.
-
-> 
 >> +            compatible = "simple-bus";
 >> +            #address-cells = <2>;
 >> +            #size-cells = <2>;
@@ -504,15 +455,6 @@ Same as above.
 >> +
 >> +            /* MCU domain SRAM node */
 >> +            mcu_ram: mcu-ram@41c00000 {
-> 
-> I would omit this node from the example. Nothing special here really.
-
-Showcasing the optional sram property usage from the mcu_r5f0 node.
-
-regards
-Suman
-
-> 
 >> +                compatible = "mmio-sram";
 >> +                reg = <0x00 0x41c00000 0x00 0x80000>;
 >> +                ranges = <0x0 0x00 0x41c00000 0x80000>;
@@ -571,7 +513,7 @@ Suman
 >> +           };
 >> +        };
 >> +    };
->> --
+>> -- 
 >> 2.23.0
 >>
 
