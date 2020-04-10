@@ -2,95 +2,77 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8331A3E1C
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 10 Apr 2020 04:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6511A4535
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 10 Apr 2020 12:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbgDJCQs (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 9 Apr 2020 22:16:48 -0400
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:55002 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726726AbgDJCQs (ORCPT
+        id S1726626AbgDJKYm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 10 Apr 2020 06:24:42 -0400
+Received: from zimbra2.kalray.eu ([92.103.151.219]:57142 "EHLO
+        zimbra2.kalray.eu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725955AbgDJKYm (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 9 Apr 2020 22:16:48 -0400
-Received: by mail-pj1-f68.google.com with SMTP id np9so261495pjb.4
-        for <linux-remoteproc@vger.kernel.org>; Thu, 09 Apr 2020 19:16:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=epcePNPH75ZrOgRmkPaWETOFUufSwk1exuBAOcMmYKU=;
-        b=pjfn/IP8jAV7H7R+w1ysZc+k8OBRHDB+7tnnwKs9KOlerSrQpXe+PcIJfqm/jgAfrK
-         Zv8qRfcT4RqhPlTiGwjYle9eLBeczRlE6OCGR8Ap3OJXpPVyDfxxTrbErDCQUyltqm1f
-         AX2lzP5P+Z9q7nOWpd+ib1y8DAR391Ers/N0LqsMn/uBK2EsoZQCiiIlAwmHdjyLU4mk
-         LoR0nHuuDquB04+10oLTkQCAPwjKTa6UcFE/KxLXt5sgtYgo00JfW5lIUzxmsq0gNlwP
-         oqHFrMQn1H3/YWhoksSyKOI1P9dvFP0a8q/kBjAoPxLQZ4ux7c9M+Jh90W1N+7YPeFs0
-         uFng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=epcePNPH75ZrOgRmkPaWETOFUufSwk1exuBAOcMmYKU=;
-        b=YdilJOcF93WQPbEjjhK86vl/TyNcrGVawobpvyfD20h95Jg8gLRZpCYgzyfb79kj+G
-         waT429s41kIfkWO3n4Db0dp0hY7vByjiEeKAYDVGUNIlv26ryCiIiQunIehWR/a225mT
-         mRmqSNJYNvR36laj6zGHmrPFIw6yh7eciggw6Lkbizzm4DdygYEHwe6EQNQ9iZd7QmTU
-         xP8WlrPXUuBHfTKgcaeUbABUMcbuqatiVGiAnZw+Nv6LeZ/esMXbJ9d6Mr7E/MXxDu6K
-         MSY/GigXZSMsmH5ZviMKwfH9LLRwDxU7LzDXXZl7aQo8EDeZamhHsTmnrS+REeKvP2Ay
-         l0nw==
-X-Gm-Message-State: AGi0PuZ0Eo2yrqyO/6eULAkN7B/ot4wU+dyvfitIsVIiCzucO6KOvpsY
-        Gumuwp8jLn2NmMmWRzDcs+pJ+R7nJrY=
-X-Google-Smtp-Source: APiQypJqyKR3rsDc5ml7bDajSOWFoKnB5Kl1YpiY804f+Y5ThLwopJ6r9asJ14nxdI4SJULEUHHkNg==
-X-Received: by 2002:a17:902:ab83:: with SMTP id f3mr2612236plr.197.1586485007444;
-        Thu, 09 Apr 2020 19:16:47 -0700 (PDT)
-Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id q15sm381086pgj.4.2020.04.09.19.16.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Apr 2020 19:16:46 -0700 (PDT)
-Date:   Thu, 9 Apr 2020 19:16:55 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Ohad Ben-Cohen <ohad@wizery.com>,
+        Fri, 10 Apr 2020 06:24:42 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 4B6CB27E0566;
+        Fri, 10 Apr 2020 12:24:40 +0200 (CEST)
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id aLP0ixhF3Vdn; Fri, 10 Apr 2020 12:24:40 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra2.kalray.eu (Postfix) with ESMTP id 0A2D327E039A;
+        Fri, 10 Apr 2020 12:24:40 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 0A2D327E039A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+        s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1586514280;
+        bh=Fuewdad1fAPYUYavFKBJ1ELvfko88w6R3xYRHUH3S40=;
+        h=From:To:Date:Message-Id;
+        b=qVOz/McsGNTJMHfkamSpXlba8MDEHlmARacqIqynXv/SQVnwGK8BfM1S+GYWYQiMN
+         9Ucq/1t4Db9Q0ePYcr0a/s4WGf0ch0gnsKAn5o31Sp4iI+4CNGz2+eYWR7LJYAWwwl
+         B/TCxrFJzsawYaceFWtTmUODuF2G39UNtt7IeFac=
+X-Virus-Scanned: amavisd-new at zimbra2.kalray.eu
+Received: from zimbra2.kalray.eu ([127.0.0.1])
+        by localhost (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 1wIrsaQBTd8l; Fri, 10 Apr 2020 12:24:39 +0200 (CEST)
+Received: from triton.lin.mbt.kalray.eu (unknown [192.168.37.25])
+        by zimbra2.kalray.eu (Postfix) with ESMTPSA id D593327E0566;
+        Fri, 10 Apr 2020 12:24:39 +0200 (CEST)
+From:   Clement Leger <cleger@kalray.eu>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-remoteproc@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] remoteproc: pull in slab.h
-Message-ID: <20200410021655.GA20625@builder.lan>
-References: <20200409211054.12091-1-mst@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200409211054.12091-1-mst@redhat.com>
+        linux-arm-kernel@lists.infradead.org,
+        Clement Leger <cleger@kalray.eu>
+Subject: [PATCH 0/2] remoteproc: add rproc_coredump_set_elf_info
+Date:   Fri, 10 Apr 2020 12:24:31 +0200
+Message-Id: <20200410102433.2672-1-cleger@kalray.eu>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu 09 Apr 14:10 PDT 2020, Michael S. Tsirkin wrote:
+This patch adds a way to set the elf informations that will be used to
+generate the coredump. Second patch fixes drivers to use this function.
 
-> In preparation to virtio header changes, include slab.h directly as
-> this module is using it.
-> 
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Clement Leger (2):
+  remoteproc: add rproc_coredump_set_elf_info
+  remoteproc: use rproc_coredump_set_elf_info in drivers
 
-Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+ drivers/remoteproc/qcom_q6v5_adsp.c        |  1 +
+ drivers/remoteproc/qcom_q6v5_mss.c         |  3 ++
+ drivers/remoteproc/qcom_q6v5_pas.c         |  1 +
+ drivers/remoteproc/qcom_wcnss.c            |  1 +
+ drivers/remoteproc/remoteproc_core.c       | 32 ++++++++++++++++++++--
+ drivers/remoteproc/remoteproc_elf_loader.c |  3 --
+ drivers/remoteproc/stm32_rproc.c           |  1 +
+ include/linux/remoteproc.h                 |  2 ++
+ 8 files changed, 39 insertions(+), 5 deletions(-)
 
-> ---
->  drivers/remoteproc/stm32_rproc.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-> index a18f88044111..7ef931e9605c 100644
-> --- a/drivers/remoteproc/stm32_rproc.c
-> +++ b/drivers/remoteproc/stm32_rproc.c
-> @@ -19,6 +19,7 @@
->  #include <linux/regmap.h>
->  #include <linux/remoteproc.h>
->  #include <linux/reset.h>
-> +#include <linux/slab.h>
->  #include <linux/workqueue.h>
->  
->  #include "remoteproc_internal.h"
-> -- 
-> MST
-> 
+-- 
+2.17.1
+
