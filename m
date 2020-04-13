@@ -2,60 +2,62 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 972BB1A6C86
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Apr 2020 21:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89731A6C8B
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Apr 2020 21:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387891AbgDMTeJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 Apr 2020 15:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
+        id S2387895AbgDMTeK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 13 Apr 2020 15:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387876AbgDMTeF (ORCPT
+        by vger.kernel.org with ESMTP id S2387887AbgDMTeF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
         Mon, 13 Apr 2020 15:34:05 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19876C0A3BE2
-        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Apr 2020 12:34:04 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id g2so3768986plo.3
-        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Apr 2020 12:34:04 -0700 (PDT)
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EE0C008749
+        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Apr 2020 12:34:05 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id t40so4222572pjb.3
+        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Apr 2020 12:34:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Uy1IdPuBXp7VgVD7eTNB6uNJOU6qTuzmXsvstPKTvdc=;
-        b=rQMPxkwS4+7Mq/Yq3K5p+s0kbh0EQ4YHqy9tnYxTmuVtLvpLCfnb4FDrqOoM7P5+iY
-         +l2lfpazPOkQEqQ12MqfPlEfI8L3r2U7vV2YYb6dsJ5YxnGapRwqcGxEjY20jkL3yg48
-         u6NuAzGo71MDSwc8XK8OMt1pp+k1mnO0jpP3ZNRyfND2xCU+QTbgo4qC3Uc02iLEkPxE
-         8Kdhfoi3fJ1oib/m9cHWPeGF8L6NE9k1r+wT+JX5dENy/keMTELSDH8CfAQMPwRIlXLN
-         H4EA47L32xUuo4h+PR6UUMQud0agY+gRSAEZr5TYUjLT8BO5lBRMndK9KjWbofw5/F3r
-         ONWg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6TjOuIVToF1NlCHf/TN+d81EeLU7495kSPR6hHYE0Fk=;
+        b=RGuxT7DpcK4VfIkxlFhREK8AALcVpHkQVLbiSOBe9Rmhwa/lMCBk9FuOaLEHJHlusS
+         pJN5x65XaiwE4Bz51GDFC2djK+UdL1kx+AfVUFzLWEQhTJ7LTpKmZxXrt6lA+etbs9U7
+         00352uM+uPYGSuDB+xQ9AG5iB/c+JW4XzvXGXC38SrQNC5Z7UEsohospYWA97qOILDQw
+         fiax3Sf0/mBBaj1C9lY9c+9+stwhNul098oiIVSr/gUSgSy6ihT/jdf+Ch4i6iZtRRLJ
+         T2iHHUXfE8cTihGwv7K2c/b/L7ePOqN6A32TKC3DTMW5Bqsek1dn2HajJZ3AJkO3hkkI
+         gztg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Uy1IdPuBXp7VgVD7eTNB6uNJOU6qTuzmXsvstPKTvdc=;
-        b=ebvPSb6eoHALzrOPxW3RFPOCbJ5BeuRvcPb/jiwoBnZ32bkyUoLMYiVIvaJBxHC0VT
-         6cCY79pXqN835V7tnKjyudeZ7U0WTknA9TIdD2TluiD2r7r631OHaE+gkohEwaNlmH8a
-         zdeEXvczKMNxjYQ0/sbbelh+JwtLXezdqYjq/58i/hwsvndNRAQZltcr9/yEsW1/Igl8
-         CkGg5mnqoq+0Q+B21wrUTiQNpJBvmo51OEHLNgVUiHAyxjjf5bruN6OT0hvvp+2jiO8b
-         xB2SWj6iK8mkNEb63BQcZ7ADzaxDeDdKhYz9X/vUSVXfVCkbxaXX2de9hDjcr4cBwAQg
-         IksA==
-X-Gm-Message-State: AGi0PuacjhviwruklhR48srX+y0r/jdE0DF5DeXbAeLzWAtmbQV2A3Sr
-        fTDL00jpUiZs+u2QvkNSuEjSlg==
-X-Google-Smtp-Source: APiQypJDiXvrVscdRWIFzgkmw0vE0eAonIfSGOofEC/ATUFi6ujjyiKxZmJrLM+w6EdsaWDcuEC7PQ==
-X-Received: by 2002:a17:90a:dc01:: with SMTP id i1mr6256901pjv.154.1586806443522;
-        Mon, 13 Apr 2020 12:34:03 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6TjOuIVToF1NlCHf/TN+d81EeLU7495kSPR6hHYE0Fk=;
+        b=e32aI2/gFqx3RTBzu/QyUJR1j33JIVV11IAL1id04kf1QT8+jRa540CQJkVuEQjQrr
+         3zOk2Tc3m6XgGFCm2kRapISai4TBgVX/ygsHcKhNbYd4qcZwnDJP0IsR+ND0Q4qDXNWy
+         6tV1QV4ipi/aaNiES6qVCOHE6zUFzRqn0EFx5+xNOKuO1tHrCpdsweIzGBOIUYxs1ai0
+         eyYSKtD+WCesJGg9nRIs8+Mw2dkSTuojYAqu5NBP9TAOO9hzpTJVNwbFg1YlMu30qL1/
+         sCtzRLpvAtdVwWk0w6qqfpeU7YcafTjkZNKBtOyJLw1FajEkIi1DANr+xzd/9La/ENnS
+         NttQ==
+X-Gm-Message-State: AGi0PuaDp2UyMRVis0lJiPHYhQv8syKlwCNRD2fxHIVx57NhbqjBE4Mc
+        Mu1NweJS1qx+6u9vFklIXbXdAQ==
+X-Google-Smtp-Source: APiQypKtMpSzbygORrjyitVbPW/AtwsKD923jVbEsASpdT9n/FTIelN3THWi9eixr3ud0NMeNVKAxQ==
+X-Received: by 2002:a17:90a:1681:: with SMTP id o1mr23927367pja.55.1586806444594;
+        Mon, 13 Apr 2020 12:34:04 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id ml24sm7032330pjb.48.2020.04.13.12.34.02
+        by smtp.gmail.com with ESMTPSA id ml24sm7032330pjb.48.2020.04.13.12.34.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 12:34:02 -0700 (PDT)
+        Mon, 13 Apr 2020 12:34:04 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     bjorn.andersson@linaro.org, ohad@wizery.com
 Cc:     s-anna@ti.com, elder@linaro.org, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/4] remoteproc: Refactor function rproc_alloc() 
-Date:   Mon, 13 Apr 2020 13:33:57 -0600
-Message-Id: <20200413193401.27234-1-mathieu.poirier@linaro.org>
+Subject: [PATCH 1/4] remoteproc: Fix a bug in rproc_alloc()
+Date:   Mon, 13 Apr 2020 13:33:58 -0600
+Message-Id: <20200413193401.27234-2-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200413193401.27234-1-mathieu.poirier@linaro.org>
+References: <20200413193401.27234-1-mathieu.poirier@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -63,37 +65,50 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Bjorn,
+From: Alex Elder <elder@linaro.org>
 
-Function rproc_alloc() had to be reworked as part of my work on MCU
-synchronisation[1].  Concurrent to that Suman [2] and Alex [3] also did
-some work on the same function.  
+If ida_simple_get() returns an error when called in rproc_alloc(),
+put_device() is called to clean things up.  By this time the rproc
+device type has been assigned, with rproc_type_release() as the
+release function.
 
-In order to provide a clean foundation for everyone to work from and avoid
-unpleasant merge conflicts this set gathers the work that both Alex and I
-did.  That way Suman and I can move forward with our respective patchsets
-without too much headache.   
+The first thing rproc_type_release() does is call:
+    idr_destroy(&rproc->notifyids);
 
-Applies cleanly on v5.7-rc1.
+But at the time the ida_simple_get() call is made, the notifyids
+field in the remoteproc structure has not been initialized.
 
-Thanks,
-Mathieu
+I'm not actually sure this case causes an observable problem, but
+it's incorrect.  Fix this by initializing the notifyids field before
+calling ida_simple_get() in rproc_alloc().
 
-[1]. https://patchwork.kernel.org/project/linux-remoteproc/list/?series=261069
-[2]. https://patchwork.kernel.org/patch/11456385/
-[3]. https://patchwork.kernel.org/patch/11473241/ 
+Signed-off-by: Alex Elder <elder@linaro.org>
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+---
+ drivers/remoteproc/remoteproc_core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Alex Elder (1):
-  remoteproc: Fix a bug in rproc_alloc()
-
-Mathieu Poirier (3):
-  remoteproc: Split firmware name allocation from rproc_alloc()
-  remoteproc: Split rproc_ops allocation from rproc_alloc()
-  remoteproc: Get rid of tedious error path
-
- drivers/remoteproc/remoteproc_core.c | 101 +++++++++++++++------------
- 1 file changed, 58 insertions(+), 43 deletions(-)
-
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index e12a54e67588..80056513ae71 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -2053,6 +2053,7 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
+ 	rproc->dev.type = &rproc_type;
+ 	rproc->dev.class = &rproc_class;
+ 	rproc->dev.driver_data = rproc;
++	idr_init(&rproc->notifyids);
+ 
+ 	/* Assign a unique device index and name */
+ 	rproc->index = ida_simple_get(&rproc_dev_index, 0, 0, GFP_KERNEL);
+@@ -2078,8 +2079,6 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
+ 
+ 	mutex_init(&rproc->lock);
+ 
+-	idr_init(&rproc->notifyids);
+-
+ 	INIT_LIST_HEAD(&rproc->carveouts);
+ 	INIT_LIST_HEAD(&rproc->mappings);
+ 	INIT_LIST_HEAD(&rproc->traces);
 -- 
 2.20.1
 
