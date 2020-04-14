@@ -2,542 +2,125 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32AA21A724C
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 Apr 2020 06:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB881A75EF
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 Apr 2020 10:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405082AbgDNEKA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 14 Apr 2020 00:10:00 -0400
-Received: from m17618.mail.qiye.163.com ([59.111.176.18]:11079 "EHLO
-        m17618.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405115AbgDNEJ7 (ORCPT
+        id S2436705AbgDNIYj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 14 Apr 2020 04:24:39 -0400
+Received: from mout.web.de ([217.72.192.78]:41197 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2436695AbgDNIYe (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 14 Apr 2020 00:09:59 -0400
-Received: from ubuntu.localdomain (unknown [58.251.74.227])
-        by m17618.mail.qiye.163.com (Hmail) with ESMTPA id 9F1FF4E15B2;
-        Tue, 14 Apr 2020 12:00:35 +0800 (CST)
-From:   Wang Wenhu <wenhu.wang@vivo.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
-Cc:     rdunlap@infradead.org, kernel@vivo.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, ohad@wizery.com,
-        linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Wang Wenhu <wenhu.wang@vivo.com>
-Subject: [PATCH v3,3/3] driver: rpmon: add rpmon_qmi driver
-Date:   Mon, 13 Apr 2020 20:59:49 -0700
-Message-Id: <20200414035949.107225-4-wenhu.wang@vivo.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200414035949.107225-1-wenhu.wang@vivo.com>
-References: <20200412112405.24116-1-wenhu.wang@vivo.com>
- <20200414035949.107225-1-wenhu.wang@vivo.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZSVVOS05LS0tKSk9PT0tCSVlXWShZQU
-        hPN1dZLVlBSVdZCQ4XHghZQVk1NCk2OjckKS43PlkG
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Mk06Cyo5Izg6SwojPT0xPT85
-        DyEaCjNVSlVKTkNNQ0hNQ0hNSUNCVTMWGhIXVQweFRMOVQwaFRw7DRINFFUYFBZFWVdZEgtZQVlO
-        Q1VJTkpVTE9VSUlMWVdZCAFZQUpOT0xCNwY+
-X-HM-Tid: 0a7176d88e979376kuws9f1ff4e15b2
+        Tue, 14 Apr 2020 04:24:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1586852667;
+        bh=xYmpjD3b4g0+uRWfz6ZucD+8z8VMXMdEU294FPLBGDw=;
+        h=X-UI-Sender-Class:To:Cc:Subject:From:Date;
+        b=OCiuS6MDsv9C7UUT7Q0JZyw17KAsUJDdSnwsGfZZhlAwpkVZIbx5Hj9QJEhyoSVrR
+         l+nLv4u3axnO8pdnqr/TMQTP2gs4ywi0lX8/B/bjoE3us/BERe0Muea3j5/siNMq5t
+         6309TORDTwKMbju1S4rsJKndEZsV9AjsevQ+abn4=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.3] ([78.49.66.171]) by smtp.web.de (mrweb101
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0MGzjq-1jTAPA3hZa-00DpHE; Tue, 14
+ Apr 2020 10:24:27 +0200
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alex Elder <elder@linaro.org>, linux-remoteproc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>, Suman Anna <s-anna@ti.com>
+Subject: Re: [PATCH 1/4] remoteproc: Fix a bug in rproc_alloc()
+From:   Markus Elfring <Markus.Elfring@web.de>
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Message-ID: <e459f807-4c61-257b-b7b5-dd767202c435@web.de>
+Date:   Tue, 14 Apr 2020 10:24:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:x3pdaU8T+pJDvPTFMHeaGE4NFDXjx/oIl5bqFFTbxRwj1inj0Ds
+ tccARXNh0XLP+iqXBZqa+oYIL6Qp0SXzOCdzwQgA7zkMhgU9/gD2LJtlRLewApYYY5A5neR
+ OtsauIzyL5k75EJYnHwuMXdWFPi5uJSSensDTfI4G8vewDnWX0hwshX8b5QwtiwbHijL8LP
+ OeQDDOaLbYd5qCsa/Xs6w==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8YkSqLQf2Ng=:eO37U/FXPCWPJUy/sX82K7
+ 0K8+vQULu9iyydiGNH51uxY/ezTzK8AuUuZ5DyOXRCFqd4D/ZTJrDESvDbkEvVMpgMcKxE1oT
+ ooMD/ZGf3US8iZruJHIvZEI0tGLBc3s/89gEfQ+C4nx17z6wazfqNQvkncXIgeVDf33y+LAJQ
+ 1V69d6Wj6BHq8PeRlxfk9vf5i8WLuRkLtWpgF/CEVA1iwf2OwNW9yoEqa40LPoCI0Ukfnvylr
+ uiR8q2FQht1LiPUNS6UoAe/GjpnBeIxaFAAZLTDste45NI3UhcN7a06lODlgq9EG5g9VzmBJH
+ FmAoke6FpPRM1Yp60emMFgCb0eoYFrHmsDfXWgV3oQnVFjX5IVtSPGqV51E6LBT7UQx5iMOrH
+ 35a3IK4PQz4aI5XxR/I7VhqyABlDjHeKUT8HWyPWuoyCYUMAvhdDxgNdYxkVFXu70VflKS+sa
+ gmTjTI96pYt3HDpEawk3AqeqJbIiLwr4PeQPyejEDmnyRAJRr7s+8eE45JrbbVitpAHgdXSc4
+ v+9bNtpQ3Sa6qC3UYNg8qpk/vS82t3rcEH49yXAfsY6iOb9MnLdaZJ5szWDJUCEgvbiwTB2Fr
+ j6NCTUYr7gupaB8oYeKcxpG3EvtuLiAWUjbsHCIXPskWO7e/Y9uAD1n5d4tciZn6LYFPfI/bR
+ mjbuuSaZPVsG01ZZGwCU5L3+6P3DnufEXWhKr3UH4dsJAJgxd9M+eQvgy9MvsRgQuWb9RMUvS
+ +p/DjN/4cuJ9d9CkJQYJgoR+zmDSk9et3WS0QbCiF1KgJJzFlBkoMjfKaxSzSPK2QfFnEzR/F
+ lpbNVeFfvghx+BdJ20Qw70Q3JzznW+bO0YHYbYx/dkLk8xw5UMAH4vW4CzNCmQ3RogoN3R0/6
+ wkEqbZ9dCVlJ9iG4+FlvRC1gnuB2wmisTlnULg5Dwn956aDliwLxEapNvc+hhhIrl7foxqp5n
+ ZrbUrrkJqZXiUOOcMsOSOFBhk4k5YikgBqmOExDvW6u58vgtqaFSetj49DdN2cld46PNnMZAI
+ a6fystAJe2FkPGCO27xOcPicAzDbAw5fijtbveDe1u33BBORhfcn03Z6RRr8B7FK8OfwsQY+k
+ Ug4/wL58vdVpdjZ0kIs1JN5+egCPEKr0MC3bbr5WVUpuu/branPjPa3c0zRlc5X+r1IF7OQjV
+ kblWrjkFesJkND+qCGpIt6tpGMJwiq/tOT6M87LTZkSvdqYnA3I+vPKq/RnWufHZCPqdBghap
+ kGZbmDN5IIXq27gtN
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Implements a kind of communication routine for RPMON to communicate
-with remote processors through QMI infrastructure. RPMON_QMI itself
-is designed as a modular framework that would introduce different
-kind of message sets binding to different services.
+> I'm not actually sure this case causes an observable problem, but
+> it's incorrect.  Fix this by initializing the notifyids field before
+> calling ida_simple_get() in rproc_alloc().
 
-RPMON_QMI creates a device of rpmon_device type for each remote
-processor endpoint. All the endpoint devices share an unique set
-of QMI suite.
+I suggest to improve the commit message.
 
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Ohad Ben-Cohen <ohad@wizery.com>
-Cc: linux-remoteproc@vger.kernel.org
-Cc: linux-arm-msm@vger.kernel.org
-Signed-off-by: Wang Wenhu <wenhu.wang@vivo.com>
----
-Changes since v1:
- - Addressed review comments from Randy
-Changes since v2:
- - Added Cc list
- - Use ARRAY_SIZE instead of multiple sizeof calculation
----
- drivers/rpmon/Kconfig     |  15 ++
- drivers/rpmon/Makefile    |   1 +
- drivers/rpmon/rpmon_qmi.c | 431 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 447 insertions(+)
- create mode 100644 drivers/rpmon/rpmon_qmi.c
+* Can the information =E2=80=9Cfield initialisation=E2=80=9D be more helpf=
+ul than =E2=80=9Cbug=E2=80=9D
+  in the patch subject?
 
-diff --git a/drivers/rpmon/Kconfig b/drivers/rpmon/Kconfig
-index 0b80236ad186..fc44d3e803c1 100644
---- a/drivers/rpmon/Kconfig
-+++ b/drivers/rpmon/Kconfig
-@@ -23,6 +23,21 @@ config RPMON
- 	  Currently RPMON_QMI is available which uses QMI infrastructures
- 	  on Qualcomm SoC Platforms.
- 
-+config RPMON_QMI
-+	tristate "RPMON QMI Driver Engine"
-+	select RPMON_QMI_MSG_V1
-+	depends on RPMON
-+	depends on QCOM_QMI_HELPERS
-+	help
-+	  RPMON_QMI is used by RPMON to communicate with remote processors
-+	  with QMI APIs if enabled. RPMON_QMI itself is designed as a modular
-+	  framework that would introduce different kinds of message sets
-+	  which may be updated for versions.
-+
-+	  RPMON_QMI creates a device of rpmon_device type for each remote
-+	  processor endpoint. All the endpoint devices shares an unique set
-+	  of QMI suite.
-+
- config RPMON_QMI_MSG_V1
- 	tristate "RPMON QMI Message Version 1.0"
- 	depends on RPMON
-diff --git a/drivers/rpmon/Makefile b/drivers/rpmon/Makefile
-index 25f468a73a20..76d9525339d9 100644
---- a/drivers/rpmon/Makefile
-+++ b/drivers/rpmon/Makefile
-@@ -1,2 +1,3 @@
- obj-$(CONFIG_RPMON) += rpmon.o
-+obj-$(CONFIG_RPMON_QMI) += rpmon_qmi.o
- obj-$(CONFIG_RPMON_QMI_MSG_V1)	+= rpmon_qmi_msg_v1.o
-diff --git a/drivers/rpmon/rpmon_qmi.c b/drivers/rpmon/rpmon_qmi.c
-new file mode 100644
-index 000000000000..3c33a86284d5
---- /dev/null
-+++ b/drivers/rpmon/rpmon_qmi.c
-@@ -0,0 +1,431 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2020 Vivo Communication Technology Co. Ltd.
-+ * Copyright (C) 2020 Wang Wenhu <wenhu.wang@vivo.com>
-+ * All rights reserved.
-+ *
-+ * RPMON: An implementation of remote processor monitor framework
-+ * for modern SoCs that typically have heterogeneous remote processor
-+ * devices in asymmetric multiprocessing configurations. It is
-+ * implemented with chardev and sysfs class, which act as interfaces
-+ * to communicate with user level. It supports different communication
-+ * interfaces added modularly to communicate with remote processors.
-+ *
-+ * RPMON_QMI: Implements a kind of communication routine for RPMON
-+ * to communicate with remote processors through QMI infrastructure.
-+ * At least one set of RPMON_QMI_MSG should be available and RPMON_QMI
-+ * initiates with the message set(s) to provide certain servicei(s)
-+ * like stability checking of remote processors. Currently a set of
-+ * messages, implemented by RPMON_QMI_MSG_V1 is available.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/rpmon.h>
-+#include <linux/soc/qcom/qmi.h>
-+#include <linux/of_platform.h>
-+#include <linux/nospec.h>
-+#include "rpmon_qmi.h"
-+
-+#define DRIVER_NAME "rpmon_qmi_drv"
-+
-+/* Remote processor registered. */
-+#define RP_REGISTERED		0x0001
-+
-+/* work struct for message processing. */
-+struct recv_work {
-+	struct work_struct work;
-+	struct sockaddr_qrtr sq;
-+	void *msg;
-+};
-+
-+/* Delayed work to take a reset action when a failure is detected. */
-+struct exec_cb_work {
-+	struct delayed_work		dwk;
-+	struct rpmon_qmi_device *rdev;
-+	u32			checks;
-+};
-+
-+struct rpmon_qmi_exec_fn {
-+	int (*exec_call)(struct rpmon_qmi_device *rdev);
-+};
-+
-+struct rpmon_qmi_cb_fn {
-+	void (*callback)(struct work_struct *work);
-+	u32 msg_len;
-+};
-+
-+static DEFINE_MUTEX(rdev_list_lock);
-+static LIST_HEAD(rdev_list);
-+static struct rpmon_qmi *rpqmi;
-+static struct workqueue_struct *rpqmi_wq;
-+
-+static void rpmon_qmi_register_req_cb(struct work_struct *work)
-+{
-+	struct rpmon_register_req *req;
-+	struct rpmon_qmi_device *rdev;
-+	struct recv_work *rwk = container_of(work, struct recv_work, work);
-+
-+	req = (struct rpmon_register_req *)rwk->msg;
-+
-+	mutex_lock(&rdev_list_lock);
-+	list_for_each_entry(rdev, &rdev_list, list) {
-+		if (strncmp(rdev->info->name, req->name, RP_NAME_LEN))
-+			continue;
-+
-+		rdev->flag |= RP_REGISTERED;
-+		memcpy(&rdev->addr, &rwk->sq, sizeof(rwk->sq));
-+		if (req->timeout_valid)
-+			rdev->timeout = req->timeout;
-+		else
-+			rdev->timeout = 5000;
-+		rpmon_event_notify(rdev->info, RPMON_EVENT_REGISTER);
-+		break;
-+	}
-+	mutex_unlock(&rdev_list_lock);
-+
-+	kfree(rwk->msg);
-+	kfree(rwk);
-+}
-+
-+void rpmon_qmi_conn_check_resp_cb(struct work_struct *work)
-+{
-+	struct rpmon_conn_check_resp *cc_resp;
-+	struct rpmon_qmi_device *rdev;
-+	struct sockaddr_qrtr *addr;
-+	struct recv_work *rwk =
-+			container_of(work, struct recv_work, work);
-+
-+	cc_resp = (struct rpmon_conn_check_resp *)rwk->msg;
-+	mutex_lock(&rdev_list_lock);
-+	list_for_each_entry(rdev, &rdev_list, list) {
-+		addr = &rdev->addr;
-+		if (addr->sq_node != rwk->sq.sq_node ||
-+		    addr->sq_port != rwk->sq.sq_port)
-+			continue;
-+
-+		if (!cc_resp->result.error)
-+			atomic_inc(&rdev->reports);
-+		break;
-+	}
-+	mutex_unlock(&rdev_list_lock);
-+
-+	kfree(rwk->msg);
-+	kfree(rwk);
-+}
-+
-+/**
-+ * rpmon_qmi_exec_cb_worker - callback worker for execution
-+ * @work: work to been done
-+ *
-+ * Called as worker handler by the single worker thread of rpmon_wq.
-+ * The worker is scheduled after timeout ms duration since the execution.
-+ */
-+static void rpmon_qmi_exec_cb_worker(struct work_struct *work)
-+{
-+	struct delayed_work *dwk = to_delayed_work(work);
-+	struct exec_cb_work *ewk =
-+			container_of(dwk, struct exec_cb_work, dwk);
-+	struct rpmon_qmi_device *rdev = ewk->rdev;
-+
-+	mutex_lock(&rdev_list_lock);
-+	if (ewk->checks <= atomic_read(&rdev->reports)) {
-+		pr_debug("%s health check success", rdev->info->name);
-+		goto out;
-+	}
-+
-+	pr_err("subsystem %s failed to respond in time", rdev->info->name);
-+
-+	rpmon_event_notify(rdev->info, RPMON_EVENT_CHKCONN_FAIL);
-+
-+out:
-+	mutex_unlock(&rdev_list_lock);
-+	kfree(ewk);
-+}
-+
-+static struct rpmon_qmi_cb_fn rpmon_qmi_event_callbacks[] = {
-+	{
-+		.callback = rpmon_qmi_register_req_cb,
-+		.msg_len = sizeof(struct rpmon_register_req),
-+	},
-+	{
-+		.callback = rpmon_qmi_conn_check_resp_cb,
-+		.msg_len = sizeof(struct rpmon_conn_check_resp),
-+	},
-+};
-+
-+/**
-+ * rpmon_qmi_conn_check - send indication, initiate and queue callback work
-+ * @rdev: device interface of specific remote processor to be checked
-+ */
-+static int rpmon_qmi_conn_check(struct rpmon_qmi_device *rdev)
-+{
-+	struct exec_cb_work *ewk;
-+
-+	mutex_lock(&rdev_list_lock);
-+	if (!(rdev->flag & RP_REGISTERED)) {
-+		pr_err("%s has not registered", rdev->info->name);
-+		return -ENONET;
-+	}
-+
-+	if (!__ratelimit(&rdev->ratelimit)) {
-+		pr_err("%s rate-limited", rdev->info->name);
-+		return 0;
-+	}
-+	mutex_unlock(&rdev_list_lock);
-+
-+	rdev->rqmi->sendmsg(rdev, NULL, 0);
-+
-+	ewk = kzalloc(sizeof(*ewk), GFP_KERNEL);
-+	if (!ewk)
-+		return -ENOMEM;
-+
-+	ewk->rdev = rdev;
-+	ewk->checks = atomic_inc_return(&rdev->checks);
-+	INIT_DELAYED_WORK(&ewk->dwk, rpmon_qmi_exec_cb_worker);
-+	queue_delayed_work(rpqmi_wq,
-+			   &ewk->dwk, msecs_to_jiffies(rdev->timeout));
-+
-+	return 0;
-+}
-+
-+static struct rpmon_qmi_exec_fn rpmon_qmi_exec_calls[] = {
-+	{.exec_call = rpmon_qmi_conn_check},
-+};
-+
-+static int rpmon_qmi_monitor(struct rpmon_info *info, u32 event)
-+{
-+	struct rpmon_qmi_device *rdev = (struct rpmon_qmi_device *)info->priv;
-+	int i, idx;
-+
-+	for (i = 0; i < RPMON_EXEC_MAX; i++) {
-+		if (event & RPMON_ACTION(i)) {
-+			if (i < ARRAY_SIZE(rpmon_qmi_exec_calls)) {
-+				idx = array_index_nospec(i, ARRAY_SIZE(rpmon_qmi_exec_calls));
-+				if (rpmon_qmi_exec_calls[idx].exec_call)
-+					return rpmon_qmi_exec_calls[idx].exec_call(rdev);
-+				else
-+					return -ENOTSUPP;
-+			} else
-+				return -ENOPARAM;
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int rpmon_qmi_drv_probe(struct platform_device *pdev)
-+{
-+	struct rpmon_info *info = pdev->dev.platform_data;
-+	struct rpmon_qmi_device *rdev;
-+	struct device_node *node = pdev->dev.of_node;
-+	const char *name;
-+	int ret = -ENODEV;
-+
-+	if (node) {
-+		/* Allocate info for one device */
-+		info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
-+		if (!info) {
-+			ret = -ENOMEM;
-+			goto out;
-+		}
-+
-+		if (!of_property_read_string(node, "linux,subsys", &name))
-+			info->name = devm_kstrdup(&pdev->dev, name, GFP_KERNEL);
-+		else
-+			info->name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
-+						       "%pOFn", node);
-+		info->version = "devicetree";
-+	}
-+
-+	if (!info || !info->name || !info->version) {
-+		dev_dbg(&pdev->dev, "%s: err_info\n", __func__);
-+		return ret;
-+	}
-+
-+	/* Allocate device for qmi specific reference */
-+	rdev = devm_kzalloc(&pdev->dev, sizeof(*rdev), GFP_KERNEL);
-+	if (!rdev) {
-+		ret = -ENOMEM;
-+		goto err_info_free;
-+	}
-+
-+	rdev->rqmi = rpqmi;
-+	rdev->info = info;
-+	info->priv = rdev;
-+	info->monitor = rpmon_qmi_monitor;
-+	platform_set_drvdata(pdev, rdev);
-+
-+	ret = rpmon_register_device(&pdev->dev, info);
-+	if (ret) {
-+		dev_err(&pdev->dev, "unable to register rpmon_qmi_device\n");
-+		goto err_rdev_free;
-+	}
-+
-+	mutex_lock(&rdev_list_lock);
-+	list_add_tail(&rdev->list, &rdev_list);
-+	mutex_unlock(&rdev_list_lock);
-+
-+	return ret;
-+
-+err_rdev_free:
-+	devm_kfree(&pdev->dev, rdev);
-+err_info_free:
-+	devm_kfree(&pdev->dev, info);
-+out:
-+	return ret;
-+}
-+
-+static int rpmon_qmi_drv_remove(struct platform_device *pdev)
-+{
-+	struct rpmon_qmi_device *rdev = platform_get_drvdata(pdev);
-+
-+	rpmon_unregister_device(rdev->info);
-+
-+	return 0;
-+}
-+
-+static void rpmon_qmi_msg_callback(enum rpmon_qmi_msg_type type,
-+			struct sockaddr_qrtr *sq,
-+			const void *msg)
-+{
-+	struct recv_work *rwk;
-+
-+	if (type >= ARRAY_SIZE(rpmon_qmi_event_callbacks)) {
-+		pr_err("Error non-supported message type.\n");
-+		return;
-+	}
-+
-+	if (rpmon_qmi_event_callbacks[type].callback) {
-+		rwk = kzalloc(sizeof(*rwk), GFP_KERNEL);
-+		if (!rwk) {
-+			pr_err("Error to alloc recv_work");
-+			return;
-+		}
-+
-+		INIT_WORK(&rwk->work, rpmon_qmi_event_callbacks[type].callback);
-+		memcpy(&rwk->sq, sq, sizeof(*sq));
-+
-+		rwk->msg = kzalloc(rpmon_qmi_event_callbacks[type].msg_len,
-+				   GFP_KERNEL);
-+		if (!rwk->msg) {
-+			pr_err("Error to alloc message of recv_work");
-+			kfree(rwk);
-+			return;
-+		}
-+
-+		memcpy(rwk->msg, msg, rpmon_qmi_event_callbacks[type].msg_len);
-+		queue_work(rpqmi_wq, &rwk->work);
-+	}
-+}
-+
-+static const struct of_device_id rpmon_of_qmi_match[] = {
-+	{ .compatible = "rpmon-qmi" },
-+	{ /* Sentinel */ },
-+};
-+
-+static struct platform_driver rpmon_qmi_drv = {
-+	.probe = rpmon_qmi_drv_probe,
-+	.remove = rpmon_qmi_drv_remove,
-+	.driver = {
-+		.name = DRIVER_NAME,
-+		.owner = THIS_MODULE,
-+		.of_match_table = of_match_ptr(rpmon_of_qmi_match),
-+	},
-+};
-+
-+static int __init rpmon_qmi_drv_init(void)
-+{
-+	int ret;
-+
-+	rpqmi_wq = create_singlethread_workqueue("rpmon_qmi_wq");
-+	if (!rpqmi_wq) {
-+		pr_err("Error creating workqueue\n");
-+		ret = -EFAULT;
-+		goto out;
-+	}
-+
-+	rpqmi = kzalloc(sizeof(*rpqmi), GFP_KERNEL);
-+	if (!rpqmi) {
-+		ret = -ENOMEM;
-+		goto err_wq_free;
-+	}
-+
-+	ret = rpmon_qmi_handle_init(rpqmi, rpmon_qmi_msg_callback);
-+	if (ret)
-+		goto err_rpqmi_free;
-+
-+	ret = qmi_handle_init(&rpqmi->qmi,
-+			      RPQMI_BUF_SIZE, NULL, rpqmi->handlers);
-+	if (ret < 0) {
-+		pr_err("Error init qmi handle, %d", ret);
-+		goto err_rpqmi_free;
-+	}
-+
-+	ret = qmi_add_server(&rpqmi->qmi,
-+			     rpqmi->svc->service,
-+			     rpqmi->svc->version,
-+			     rpqmi->svc->instance);
-+	if (ret < 0) {
-+		pr_err("Error add qmi server, %d", ret);
-+		goto err_rpqmi_free;
-+	}
-+	mutex_init(&rdev_list_lock);
-+
-+	return platform_driver_register(&rpmon_qmi_drv);
-+
-+err_rpqmi_free:
-+	kfree(rpqmi);
-+err_wq_free:
-+	destroy_workqueue(rpqmi_wq);
-+out:
-+	return ret;
-+}
-+late_initcall_sync(rpmon_qmi_drv_init);
-+
-+static void rpmon_qmi_del_server(void)
-+{
-+	struct qrtr_ctrl_pkt pkt;
-+	struct sockaddr_qrtr sq;
-+	struct msghdr msg = { };
-+	struct kvec iv = { &pkt, sizeof(pkt) };
-+	struct qmi_service *svc = rpqmi->svc;
-+	struct qmi_handle *qmi = &rpqmi->qmi;
-+	int ret;
-+
-+	memset(&pkt, 0, sizeof(pkt));
-+	pkt.cmd = cpu_to_le32(QRTR_TYPE_DEL_SERVER);
-+	pkt.server.service = cpu_to_le32(svc->service);
-+	pkt.server.instance = cpu_to_le32(svc->version | svc->instance << 8);
-+	pkt.server.node = cpu_to_le32(qmi->sq.sq_node);
-+	pkt.server.port = cpu_to_le32(qmi->sq.sq_port);
-+
-+	sq.sq_family = qmi->sq.sq_family;
-+	sq.sq_node = qmi->sq.sq_node;
-+	sq.sq_port = QRTR_PORT_CTRL;
-+
-+	msg.msg_name = &sq;
-+	msg.msg_namelen = sizeof(sq);
-+
-+	mutex_lock(&qmi->sock_lock);
-+	if (qmi->sock) {
-+		ret = kernel_sendmsg(qmi->sock, &msg, &iv, 1, sizeof(pkt));
-+		if (ret < 0)
-+			pr_err("send service delete message failed: %d\n", ret);
-+	}
-+	mutex_unlock(&qmi->sock_lock);
-+}
-+
-+static void __exit rpmon_qmi_drv_exit(void)
-+{
-+	rpmon_qmi_del_server();
-+
-+	qmi_handle_release(&rpqmi->qmi);
-+
-+	platform_driver_unregister(&rpmon_qmi_drv);
-+}
-+module_exit(rpmon_qmi_drv_exit);
-+
-+MODULE_AUTHOR("Wang Wenhu <wenhu.wang@vivo.com>");
-+MODULE_DESCRIPTION("Subsystem Monitor via QMI platform driver");
-+MODULE_ALIAS("platform:" DRIVER_NAME);
-+MODULE_LICENSE("GPL v2");
--- 
-2.17.1
+* Will the tag =E2=80=9CFixes=E2=80=9D become relevant?
 
+Regards,
+Markus
