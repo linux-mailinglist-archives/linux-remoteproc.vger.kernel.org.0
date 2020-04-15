@@ -2,149 +2,77 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A191AA481
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 15 Apr 2020 15:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C94901AAADF
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 15 Apr 2020 16:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633263AbgDONdH (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 15 Apr 2020 09:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731696AbgDONdF (ORCPT
+        id S371021AbgDOOvh (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 15 Apr 2020 10:51:37 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:44449 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S371005AbgDOOvd (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 15 Apr 2020 09:33:05 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0D5C061A0C;
-        Wed, 15 Apr 2020 06:33:04 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id r7so3621214ljg.13;
-        Wed, 15 Apr 2020 06:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rweJjnMrX8DVOwJI978T4+zp/Dc4ldAeC6N/9wICZ1w=;
-        b=EtO6NHecxgTrUGnMVlx7i3ATAgsdf3gtJ68v14xO88EpmFNAGg5igoHGOh8H+9iFnT
-         U+aXfzs2UAcidoE88j2khBx/3IrLqn8AZ3NnVdzNEjcKn7bZKB+OcZtOdX4ff/KxDIXM
-         SWEqmB3uZq2eqv2y9+ATuYiiBISQFQIdqWAMwk+ZKHtO23SE6prvYcSrAAXNrPbMXOdR
-         m/c6Mesnr6DF343g2os+JR122TLWwd7rcOgRCbskoANzQ2v9sLEKLQhgON1xOTYh6mtk
-         F71Ri+dIC9ZYwKcdNurMEVJuwKbo6aqZi9CutbZazhbkbNQhCrbz7ZNPaysnwr3o/ZoM
-         bR5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rweJjnMrX8DVOwJI978T4+zp/Dc4ldAeC6N/9wICZ1w=;
-        b=U7tZMZnmFgfEIZHuqw6+PugcOhI4ipUVbzRaIO1mzGjBH5YLVmQAFTvp+E7s4j5eTd
-         Ajk6FcUH1PdWulDZ4YPfDskBnjNlx3EmkCPhgrfKMYV6M3vQgXYZ2Mp7zBmKCYji493r
-         T8i79JwC3JjjNxJuhXHMXIOFTwJtIUZKAyYI5JC4jQpMn/lMHSt5zsHPfUUw1W1pRBv0
-         ZDFuOqwqY2QFCi3bCHRQ7m9x2Py7ON+r7TSkWwqASp3OMkwcZ4yHHeK79Iysp+KQGETn
-         OR5onZ2aUhauWtEwmJjaslzmbS4JH2wmuIj/I1AsFE/DNbK9Yedx9oZ32MbrMrNM2s0W
-         uqTA==
-X-Gm-Message-State: AGi0PuaJOr3wbtsslPybx5UuGAtTHF0cYckJU3YnKkZXbgv1JADL1oAt
-        gDdmAfQNUobzuQtBfKkmm9jOrAgbTMVb4MZHOPQ=
-X-Google-Smtp-Source: APiQypKS3xz8rw5Jy7+JZAEVCjE7qNjWum5PB0iQLEBBPGJIPaZ4eDEcQCJaRQ98XaFHtdQO4V9Zs8EXEbzFYwJFXV4=
-X-Received: by 2002:a2e:9b07:: with SMTP id u7mr3252420lji.110.1586957583245;
- Wed, 15 Apr 2020 06:33:03 -0700 (PDT)
+        Wed, 15 Apr 2020 10:51:33 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1586962292; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=QRBPrK4+I/ZGGr7woOaqts44CO0Or0LnpyTflypw/WQ=; b=UeaPa/qqomUbs8NJUBBzD1/TtkQnsqpiVqiwxcRKn1puxGooEsrxJlvcx1Ctai2pEUA36c1f
+ O/EFMarfTIeTdRWb0ckGAYJ8SsHfMvHSD4FH2AEQBQTOsgkcOo5H48mw6qTpUaUoPn748Zv3
+ LwVyefHQjOzpBwwRNlZCtiEua5U=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e971f71.7fac36418960-smtp-out-n04;
+ Wed, 15 Apr 2020 14:51:29 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id ACC62C433BA; Wed, 15 Apr 2020 14:51:29 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 274E6C433CB;
+        Wed, 15 Apr 2020 14:51:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 274E6C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     bjorn.andersson@linaro.org, robh+dt@kernel.org
+Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        evgreen@chromium.org, ohad@wizery.com,
+        Sibi Sankar <sibis@codeaurora.org>
+Subject: [PATCH 0/2] Drop all accesses to MPSS PERPH register space
+Date:   Wed, 15 Apr 2020 20:21:08 +0530
+Message-Id: <20200415145110.20624-1-sibis@codeaurora.org>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-References: <20200414220943.6203-1-ezequiel@collabora.com>
-In-Reply-To: <20200414220943.6203-1-ezequiel@collabora.com>
-From:   Baolin Wang <baolin.wang7@gmail.com>
-Date:   Wed, 15 Apr 2020 21:32:52 +0800
-Message-ID: <CADBw62oJj_x046piRbPP48A04ALo-w2J6jZXNspyN5eOGj-TEg@mail.gmail.com>
-Subject: Re: [PATCH] hwspinlock: Simplify Kconfig
-To:     Ezequiel Garcia <ezequiel@collabora.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-remoteproc@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Ezequiel,
+7C retail devices using MSA based boot will result in a fuse combination
+which will prevent accesses to MSS PERPH register space where the mpss
+clocks and halt-nav reside. Hence requesting a halt-nav as part of the
+SSR sequence will result in a NoC error. Issuing HALT NAV request and
+turning on the mss clocks as part of SSR will no longer be required
+since the modem firmware will have the necessary fixes to ensure that
+there are no pending NAV DMA transactions thereby ensuring a smooth
+SSR.
 
-On Wed, Apr 15, 2020 at 6:09 AM Ezequiel Garcia <ezequiel@collabora.com> wrote:
->
-> Every hwspinlock driver is expected to depend on the
-> hwspinlock core, so it's possible to simplify the
-> Kconfig, factoring out the HWSPINLOCK dependency.
->
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+Sibi Sankar (2):
+  dt-bindings: remoteproc: qcom: Replace halt-nav with spare-regs
+  remoteproc: qcom_q6v5_mss: Drop accesses to MPSS PERPH register space
 
-Looks reasonable to me.
-Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
-
-> ---
->  drivers/hwspinlock/Kconfig | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/hwspinlock/Kconfig b/drivers/hwspinlock/Kconfig
-> index 826a1054100d..32cd26352f38 100644
-> --- a/drivers/hwspinlock/Kconfig
-> +++ b/drivers/hwspinlock/Kconfig
-> @@ -6,9 +6,10 @@
->  menuconfig HWSPINLOCK
->         bool "Hardware Spinlock drivers"
->
-> +if HWSPINLOCK
-> +
->  config HWSPINLOCK_OMAP
->         tristate "OMAP Hardware Spinlock device"
-> -       depends on HWSPINLOCK
->         depends on ARCH_OMAP4 || SOC_OMAP5 || SOC_DRA7XX || SOC_AM33XX || SOC_AM43XX || ARCH_K3 || COMPILE_TEST
->         help
->           Say y here to support the OMAP Hardware Spinlock device (firstly
-> @@ -18,7 +19,6 @@ config HWSPINLOCK_OMAP
->
->  config HWSPINLOCK_QCOM
->         tristate "Qualcomm Hardware Spinlock device"
-> -       depends on HWSPINLOCK
->         depends on ARCH_QCOM || COMPILE_TEST
->         select MFD_SYSCON
->         help
-> @@ -30,7 +30,6 @@ config HWSPINLOCK_QCOM
->
->  config HWSPINLOCK_SIRF
->         tristate "SIRF Hardware Spinlock device"
-> -       depends on HWSPINLOCK
->         depends on ARCH_SIRF || COMPILE_TEST
->         help
->           Say y here to support the SIRF Hardware Spinlock device, which
-> @@ -43,7 +42,6 @@ config HWSPINLOCK_SIRF
->  config HWSPINLOCK_SPRD
->         tristate "SPRD Hardware Spinlock device"
->         depends on ARCH_SPRD || COMPILE_TEST
-> -       depends on HWSPINLOCK
->         help
->           Say y here to support the SPRD Hardware Spinlock device.
->
-> @@ -52,7 +50,6 @@ config HWSPINLOCK_SPRD
->  config HWSPINLOCK_STM32
->         tristate "STM32 Hardware Spinlock device"
->         depends on MACH_STM32MP157 || COMPILE_TEST
-> -       depends on HWSPINLOCK
->         help
->           Say y here to support the STM32 Hardware Spinlock device.
->
-> @@ -60,7 +57,6 @@ config HWSPINLOCK_STM32
->
->  config HSEM_U8500
->         tristate "STE Hardware Semaphore functionality"
-> -       depends on HWSPINLOCK
->         depends on ARCH_U8500 || COMPILE_TEST
->         help
->           Say y here to support the STE Hardware Semaphore functionality, which
-> @@ -68,3 +64,5 @@ config HSEM_U8500
->           SoC.
->
->           If unsure, say N.
-> +
-> +endif # HWSPINLOCK
-> --
-> 2.26.0.rc2
->
-
+ .../bindings/remoteproc/qcom,q6v5.txt         |  14 +--
+ drivers/remoteproc/qcom_q6v5_mss.c            | 102 ++++--------------
+ 2 files changed, 23 insertions(+), 93 deletions(-)
 
 -- 
-Baolin Wang
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
