@@ -2,148 +2,107 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2431ACFD0
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Apr 2020 20:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844951AD031
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Apr 2020 21:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732452AbgDPSjY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 16 Apr 2020 14:39:24 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:24235 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727921AbgDPSjX (ORCPT
+        id S1727813AbgDPTPX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 16 Apr 2020 15:15:23 -0400
+Received: from mga04.intel.com ([192.55.52.120]:60733 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727774AbgDPTPX (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 16 Apr 2020 14:39:23 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1587062363; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=v/buFpzpjL4mG4kIZ2jrF/IKuzqpxNBjnqkVAVckdOo=; b=kQCW/XCKoVlYxF8wzhJ0Yvl2Uvj18DN1CMRxlQw90zsPB9J0jPnsNLAq8+ZypbzPP8cFJM08
- UQ7FUCU93HgaCEmuv9GZ3Er2EpGdC0N7cR1NjsvadrTBVrCWCbf27manQmbWjhujjzCjNOOC
- dnF9HHoMyTJU1g+Oq8EbngFFAmA=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e98a64b.7fb20023ff10-smtp-out-n05;
- Thu, 16 Apr 2020 18:39:07 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id DD6DBC44788; Thu, 16 Apr 2020 18:39:06 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rishabhb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E93D9C433CB;
-        Thu, 16 Apr 2020 18:39:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E93D9C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rishabhb@codeaurora.org
-From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
-To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
-        mathieu.poirier@linaro.org, tsoni@codeaurora.org,
-        psodagud@codeaurora.org, sidgup@codeaurora.org,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Subject: [PATCH 3/3] remoteproc: Add coredump sysfs attribute
-Date:   Thu, 16 Apr 2020 11:38:32 -0700
-Message-Id: <1587062312-4939-3-git-send-email-rishabhb@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1587062312-4939-1-git-send-email-rishabhb@codeaurora.org>
-References: <1587062312-4939-1-git-send-email-rishabhb@codeaurora.org>
+        Thu, 16 Apr 2020 15:15:23 -0400
+IronPort-SDR: NegDJEZv2xVjxprnZeN0+YfjbP3rFizC2lg9m+9AJNHO2kadJbMeVcGgAGtYnzA6r+EdB2u51b
+ rAUtxLSAH7rw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 12:15:21 -0700
+IronPort-SDR: FqcATAY3e41SHf0dDM0TTXTSac2aLtmsrAs0BX+5h1whlZsf6GOmi5VSN+XwhZweI70hOm5jU6
+ zrNyhDLWTd/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,392,1580803200"; 
+   d="scan'208";a="400780618"
+Received: from gliakhov-mobl2.ger.corp.intel.com (HELO ubuntu) ([10.249.43.195])
+  by orsmga004.jf.intel.com with ESMTP; 16 Apr 2020 12:15:18 -0700
+Date:   Thu, 16 Apr 2020 21:15:17 +0200
+From:   Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     linux-remoteproc <linux-remoteproc@vger.kernel.org>
+Subject: Re: RPMSG over VirtIO under KVM
+Message-ID: <20200416191516.GB25561@ubuntu>
+References: <20200416140307.GA25561@ubuntu>
+ <CANLsYky6hdPnerfYvZk6SdO2supVPSr7Sa_x4-UsJ6Y5bgTfHQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANLsYky6hdPnerfYvZk6SdO2supVPSr7Sa_x4-UsJ6Y5bgTfHQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add coredump sysfs attribute to configure the type of memory dump.
-User can select between default or inline coredump functionality.
-Also coredump collection can be disabled through this interface.
-This functionality can be configured differently for different
-remote processors.
-This provides an option to dynamically configure the dump type
-based on userpsace capability.
+Hi Mathieu,
 
-Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
----
- drivers/remoteproc/remoteproc_sysfs.c | 57 +++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+On Thu, Apr 16, 2020 at 11:50:48AM -0600, Mathieu Poirier wrote:
+> Good day Guennadi,
+> 
+> On Thu, 16 Apr 2020 at 08:06, Guennadi Liakhovetski
+> <guennadi.liakhovetski@linux.intel.com> wrote:
+> >
+> > Hi,
+> >
+> > It has been proposed to port the VirtIO SOF driver [1], used to
+> > implement audio support under Linux, running in a KVM guest, to use
+> > RPMSG to communicate with the SOF vhost driver, running on the Linux
+> > host. On one hand I see an rpmsg-virtio driver, which should make such
+> > a port possible, on the other hand I don't see a single VirtIO driver
+> > in the kernel, using RPMSG for Linux virtualisation.
+> 
+> Above you wrote "rpmsg-virtio" driver, which I take to mean the code
+> found in file virtio_rpmsg_bus.c [1].
 
-diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
-index 7f8536b..d112664 100644
---- a/drivers/remoteproc/remoteproc_sysfs.c
-+++ b/drivers/remoteproc/remoteproc_sysfs.c
-@@ -9,6 +9,62 @@
- 
- #define to_rproc(d) container_of(d, struct rproc, dev)
- 
-+/*
-+ * A coredump-configuration-to-string lookup table, for exposing a
-+ * human readable configuration via sysfs. Always keep in sync with
-+ * enum rproc_coredump_conf
-+ */
-+static const char * const rproc_coredump_str[] = {
-+	[COREDUMP_DEFAULT]	= "default",
-+	[COREDUMP_INLINE]	= "inline",
-+	[COREDUMP_DISABLED]	= "disabled",
-+};
-+
-+/* Expose the current coredump configuration via sysfs */
-+static ssize_t coredump_show(struct device *dev, struct device_attribute *attr,
-+			      char *buf)
-+{
-+	struct rproc *rproc = to_rproc(dev);
-+
-+	return sprintf(buf, "%s\n", rproc_coredump_str[rproc->coredump_conf]);
-+}
-+
-+/* Change the coredump configuration via sysfs */
-+static ssize_t coredump_store(struct device *dev, struct device_attribute *attr,
-+			       const char *buf, size_t count)
-+{
-+	struct rproc *rproc = to_rproc(dev);
-+	int err;
-+
-+	err = mutex_lock_interruptible(&rproc->lock);
-+	if (err) {
-+		dev_err(dev, "can't lock rproc %s: %d\n", rproc->name, err);
-+		return -EINVAL;
-+	}
-+
-+	if (rproc->state == RPROC_CRASHED) {
-+		dev_err(dev, "can't change coredump configuration\n");
-+		err = -EBUSY;
-+		goto out;
-+	}
-+
-+	if (sysfs_streq(buf, "disable"))
-+		rproc->coredump_conf = COREDUMP_DISABLED;
-+	else if (sysfs_streq(buf, "inline"))
-+		rproc->coredump_conf = COREDUMP_INLINE;
-+	else if (sysfs_streq(buf, "default"))
-+		rproc->coredump_conf = COREDUMP_DEFAULT;
-+	else {
-+		dev_err(dev, "Invalid coredump configuration\n");
-+		err = -EINVAL;
-+	}
-+out:
-+	mutex_unlock(&rproc->lock);
-+
-+	return err ? err : count;
-+}
-+static DEVICE_ATTR_RW(coredump);
-+
- /* Expose the loaded / running firmware name via sysfs */
- static ssize_t firmware_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
-@@ -127,6 +183,7 @@ static ssize_t name_show(struct device *dev, struct device_attribute *attr,
- 	&dev_attr_firmware.attr,
- 	&dev_attr_state.attr,
- 	&dev_attr_name.attr,
-+	&dev_attr_coredump.attr,
- 	NULL
- };
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Exactly.
+
+> The code in [1] centers around
+> the communication between an application processor and some form of
+> remote processor (micro controller or dsp).  The "virtio" part of the
+> name refers to the underlying infrastructure put in place to
+> communicate with the remote processor, all coming from the virtio
+> space.  Here instead of using the virtio mechanic to communicate
+> between a host and a guest, it is used to communicate with a remote
+> processor.
+> 
+> I came to the same conclusion a while back - as of today no virtio
+> drivers are using RPMSG to communicate between host and guest.  I
+> suppose nobody needed it or implemented their own schemes.
+> 
+> [1].  https://elixir.bootlin.com/linux/v5.7-rc1/source/drivers/rpmsg/virtio_rpmsg_bus.c
+> 
+> >
+> > Hence my questions: is this a good idea? Is there anything in the
+> > kernel VirtIO RPMSG implementation, that would make this impossible?
+> 
+> I don't see why it wouldn't be a good idea, nor what would technically
+> prevent such a thing from happening.  Two things work in your favour:
+> 1) the RPMSG foundation has been tailored to be used over different
+> kinds of hardware and 2) an existing implementation is already using
+> virtioqueues.
+> 
+> I suggest to start looking at function rpmsg_register_device(), used
+> by different RPMSG drivers - the magic is really in the RPMSG
+> operations (struct rpmsg_device_ops) that are used to abstract the HW
+> implementation.
+
+Exactly, just what I was thinking too. And I also think it can well be 
+possible to reuse the code in virtio_rpmsg_bus.c, possibly with some 
+limited extensions and modifications. I'll get it rolling then.
+
+Thanks
+Guennadi
+
+> Regards,
+> Mathieu
+> 
+> > [1] https://thesofproject.github.io/latest/developer_guides/virtualization/virtualization.html
