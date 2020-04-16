@@ -2,107 +2,163 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 844951AD031
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Apr 2020 21:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996E51AD04A
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Apr 2020 21:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbgDPTPX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 16 Apr 2020 15:15:23 -0400
-Received: from mga04.intel.com ([192.55.52.120]:60733 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727774AbgDPTPX (ORCPT
+        id S1728630AbgDPTXz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 16 Apr 2020 15:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727844AbgDPTXx (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 16 Apr 2020 15:15:23 -0400
-IronPort-SDR: NegDJEZv2xVjxprnZeN0+YfjbP3rFizC2lg9m+9AJNHO2kadJbMeVcGgAGtYnzA6r+EdB2u51b
- rAUtxLSAH7rw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 12:15:21 -0700
-IronPort-SDR: FqcATAY3e41SHf0dDM0TTXTSac2aLtmsrAs0BX+5h1whlZsf6GOmi5VSN+XwhZweI70hOm5jU6
- zrNyhDLWTd/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,392,1580803200"; 
-   d="scan'208";a="400780618"
-Received: from gliakhov-mobl2.ger.corp.intel.com (HELO ubuntu) ([10.249.43.195])
-  by orsmga004.jf.intel.com with ESMTP; 16 Apr 2020 12:15:18 -0700
-Date:   Thu, 16 Apr 2020 21:15:17 +0200
-From:   Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     linux-remoteproc <linux-remoteproc@vger.kernel.org>
-Subject: Re: RPMSG over VirtIO under KVM
-Message-ID: <20200416191516.GB25561@ubuntu>
-References: <20200416140307.GA25561@ubuntu>
- <CANLsYky6hdPnerfYvZk6SdO2supVPSr7Sa_x4-UsJ6Y5bgTfHQ@mail.gmail.com>
+        Thu, 16 Apr 2020 15:23:53 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B820C061A0F
+        for <linux-remoteproc@vger.kernel.org>; Thu, 16 Apr 2020 12:23:53 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id ms17so779044pjb.0
+        for <linux-remoteproc@vger.kernel.org>; Thu, 16 Apr 2020 12:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=aKFYVYQ9OYxfkj6UtWE/c0zee6GGkl7hN2RiXbrSsVQ=;
+        b=wOOCNhaQsoosxHRpdTHfDHxWt+3yGUwtdVHwF/2+AdpJ85PsC8MarhgRu+8jev/fUw
+         guZPcEBfiQibYkIVoTbLyaM6Sn0VMko49d/uKZC4KFoRxdN0drDm372VeGsWO4MMzNbH
+         IBIx/jZz+pr/4Cwst1GDcrnoY+ozXV3t+DzKHxanKWTIp51IsQSu4wvgiLJJlokx4nQH
+         0Acdma8hyGFfKiB55qOrNPYc42ho6XiVtd+wmAkwGZp0UA9JevcXfDYt2Qi4c1jRtYnG
+         MONrmuHqYbLHEaHlcRMW9p065LGFFAkDU/brduXXVkgSUPt9l1yml2c5mpbucPCRPhtU
+         CuGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=aKFYVYQ9OYxfkj6UtWE/c0zee6GGkl7hN2RiXbrSsVQ=;
+        b=HBt/j1rmYrCYG7mpX901gqaERwjxo9XVKMwTgoTJue0lwSDc27+16sF+1J8LUSP+U7
+         cRf1vqxCnX+QZVmNl6WGeMqa+FENMb/x1iWwNp19Mq4PsKo8Oi7WAdDgMc1n+B6yzWdf
+         KyYkh64RaxLxrZxFJytAvhjBwmOyjvUa3yWZovFi1SsQrNQAHE6ZaPjJwcmtSJOiGKys
+         r11dJJyu/RTtUNWYrLruUqWUoITEyEl+TMCMzc4WexDHRhf4jwho7JP4ZTNA2gcp0Ojt
+         MrDE5pzrRLpgnp8A22xJCuAhk7SUQWp5Qpyvb537aPl8ADEz339eAxvpGWgZtTjI6UpS
+         CH3A==
+X-Gm-Message-State: AGi0PuZys/ojFRxQX+xi8QPQeCGHPfcsdDYMSy3AlSA5WPZG2bzI+jJc
+        TSj3OgwXBvxKVHYjEtslKAbxMw==
+X-Google-Smtp-Source: APiQypK0eaYot0thKROCDeMzMTdcPgMIkES3AeLNRv813IJwsbnRKl5Rw9PycXGl/pCuoTqlxZH3aw==
+X-Received: by 2002:a17:90b:3691:: with SMTP id mj17mr6924777pjb.114.1587065032831;
+        Thu, 16 Apr 2020 12:23:52 -0700 (PDT)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id p8sm3465938pjd.10.2020.04.16.12.23.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Apr 2020 12:23:52 -0700 (PDT)
+Date:   Thu, 16 Apr 2020 13:23:50 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Siddharth Gupta <sidgup@codeaurora.org>
+Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, rishabhb@codeaurora.org
+Subject: Re: [PATCH v2 1/2] remoteproc: core: Add an API for changing
+ firmware name
+Message-ID: <20200416192350.GA29577@xps15>
+References: <1586384305-7825-1-git-send-email-sidgup@codeaurora.org>
+ <1586384305-7825-2-git-send-email-sidgup@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANLsYky6hdPnerfYvZk6SdO2supVPSr7Sa_x4-UsJ6Y5bgTfHQ@mail.gmail.com>
+In-Reply-To: <1586384305-7825-2-git-send-email-sidgup@codeaurora.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Mathieu,
+Hi Siddharth,
 
-On Thu, Apr 16, 2020 at 11:50:48AM -0600, Mathieu Poirier wrote:
-> Good day Guennadi,
+On Wed, Apr 08, 2020 at 03:18:24PM -0700, Siddharth Gupta wrote:
+> Add an API which allows to change the name of the firmware to be booted on
+> the specified rproc. This change gives us the flixibility to change the
+> firmware at run-time depending on the usecase. Some remoteprocs might use
+> a different firmware for testing, production and development purposes,
+> which may be selected based on the fuse settings during bootup.
 > 
-> On Thu, 16 Apr 2020 at 08:06, Guennadi Liakhovetski
-> <guennadi.liakhovetski@linux.intel.com> wrote:
-> >
-> > Hi,
-> >
-> > It has been proposed to port the VirtIO SOF driver [1], used to
-> > implement audio support under Linux, running in a KVM guest, to use
-> > RPMSG to communicate with the SOF vhost driver, running on the Linux
-> > host. On one hand I see an rpmsg-virtio driver, which should make such
-> > a port possible, on the other hand I don't see a single VirtIO driver
-> > in the kernel, using RPMSG for Linux virtualisation.
+> Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 43 ++++++++++++++++++++++++++++++++++++
+>  include/linux/remoteproc.h           |  1 +
+>  2 files changed, 44 insertions(+)
 > 
-> Above you wrote "rpmsg-virtio" driver, which I take to mean the code
-> found in file virtio_rpmsg_bus.c [1].
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index fb9c813..9f99fe2 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -1796,6 +1796,49 @@ int rproc_boot(struct rproc *rproc)
+>  EXPORT_SYMBOL(rproc_boot);
+>  
+>  /**
+> + * rproc_set_firmware_name() - change the firmware name for specified remoteproc
+> + * @rproc: handle of a remote processor
+> + * @firmware: name of the firmware to boot with
+> + *
+> + * Change the name of the firmware to be loaded to @firmware in the rproc
+> + * structure. We should ensure that the remoteproc is not running.
+> + *
+> + * Returns 0 on success, and an appropriate error value otherwise.
+> + */
+> +int rproc_set_firmware_name(struct rproc *rproc, const char *firmware)
+> +{
+> +	int len, ret = 0;
+> +	char *p;
+> +
+> +	if (!rproc || !firmware)
+> +		return -EINVAL;
+> +
+> +	len = strcspn(firmware, "\n");
+> +	if (!len)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&rproc->lock);
+> +
+> +	if (rproc->state != RPROC_OFFLINE) {
+> +		ret = -EBUSY;
+> +		goto out;
+> +	}
+> +
+> +	p = kstrndup(firmware, len, GFP_KERNEL);
+> +	if (!p) {
+> +		ret = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	kfree(rproc->firmware);
+> +	rproc->firmware = p;
+> +out:
+> +	mutex_unlock(&rproc->lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(rproc_set_firmware_name);
+> +
 
-Exactly.
+This is much better, thanks for cleaning things up. Keep in mind that when you
+do resend this rproc->firmware will likely have become a "const char *",
+requiring the use of kstrndup_const()...  But that is for a later time.  
 
-> The code in [1] centers around
-> the communication between an application processor and some form of
-> remote processor (micro controller or dsp).  The "virtio" part of the
-> name refers to the underlying infrastructure put in place to
-> communicate with the remote processor, all coming from the virtio
-> space.  Here instead of using the virtio mechanic to communicate
-> between a host and a guest, it is used to communicate with a remote
-> processor.
-> 
-> I came to the same conclusion a while back - as of today no virtio
-> drivers are using RPMSG to communicate between host and guest.  I
-> suppose nobody needed it or implemented their own schemes.
-> 
-> [1].  https://elixir.bootlin.com/linux/v5.7-rc1/source/drivers/rpmsg/virtio_rpmsg_bus.c
-> 
-> >
-> > Hence my questions: is this a good idea? Is there anything in the
-> > kernel VirtIO RPMSG implementation, that would make this impossible?
-> 
-> I don't see why it wouldn't be a good idea, nor what would technically
-> prevent such a thing from happening.  Two things work in your favour:
-> 1) the RPMSG foundation has been tailored to be used over different
-> kinds of hardware and 2) an existing implementation is already using
-> virtioqueues.
-> 
-> I suggest to start looking at function rpmsg_register_device(), used
-> by different RPMSG drivers - the magic is really in the RPMSG
-> operations (struct rpmsg_device_ops) that are used to abstract the HW
-> implementation.
+Mathieu
 
-Exactly, just what I was thinking too. And I also think it can well be 
-possible to reuse the code in virtio_rpmsg_bus.c, possibly with some 
-limited extensions and modifications. I'll get it rolling then.
-
-Thanks
-Guennadi
-
-> Regards,
-> Mathieu
-> 
-> > [1] https://thesofproject.github.io/latest/developer_guides/virtualization/virtualization.html
+> +/**
+>   * rproc_shutdown() - power off the remote processor
+>   * @rproc: the remote processor
+>   *
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index 9c07d79..c5d36e6 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -613,6 +613,7 @@ rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, size_t len,
+>  			     u32 da, const char *name, ...);
+>  
+>  int rproc_boot(struct rproc *rproc);
+> +int rproc_set_firmware_name(struct rproc *rproc, const char *firmware);
+>  void rproc_shutdown(struct rproc *rproc);
+>  void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type);
+>  int rproc_coredump_add_segment(struct rproc *rproc, dma_addr_t da, size_t size);
+> -- 
+> Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
