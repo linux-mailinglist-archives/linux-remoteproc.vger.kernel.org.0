@@ -2,94 +2,113 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 763401ACD46
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Apr 2020 18:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEF31ACF1D
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Apr 2020 19:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2636685AbgDPQOq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 16 Apr 2020 12:14:46 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:17074 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2442867AbgDPQOj (ORCPT
+        id S1728407AbgDPRvA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 16 Apr 2020 13:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727816AbgDPRvA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 16 Apr 2020 12:14:39 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03GGDEcF005340;
-        Thu, 16 Apr 2020 18:14:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=BECJGiUvhGzClMdYvElFVDvpweq8Gq2dCCcfEt+39VM=;
- b=uDEgwfep1IxcMNE3qQYLz7nmAf7hRsnCEl2UqP0aBHrsslBvDeBlhzBOaowRWi2eejG1
- Lii/Ye/5Rf7muXqnQhi0wIqPuuESWBYCvhLSFPf8KXM2106qEK0LGVPHgoZ36z/0RSwj
- PVAtuZ8whFjfSVrOtnyR8HQYSe/BspgNeElg/cVonS3EiGMLwPg/BgMO1MUWvrb5xD+G
- eIRWiw4Lz39TG3GZmXJfynyaUuEcRngu0GmHyYnj/fIQE7ML+Dd8F5mizwly3n2K0yfQ
- C3JlNQnV3T78RhYb9dI2YWQ2SfWfW6kBMIXiy6cTbgk7BhYJFog4sSwvvmxB4euekuzF 0Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 30dn6t3nds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Apr 2020 18:14:34 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2952210002A;
-        Thu, 16 Apr 2020 18:14:34 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1E6B22B2D2C;
-        Thu, 16 Apr 2020 18:14:34 +0200 (CEST)
-Received: from localhost (10.75.127.46) by SFHDAG3NODE1.st.com (10.75.127.7)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 16 Apr 2020 18:14:33
- +0200
-From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <arnaud.pouliquen@st.com>
-Subject: [RFC 18/18] ARM: dts: stm32: Declare a virtio device
-Date:   Thu, 16 Apr 2020 18:13:31 +0200
-Message-ID: <20200416161331.7606-19-arnaud.pouliquen@st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200416161331.7606-1-arnaud.pouliquen@st.com>
-References: <20200416161331.7606-1-arnaud.pouliquen@st.com>
+        Thu, 16 Apr 2020 13:51:00 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318D6C061A0C
+        for <linux-remoteproc@vger.kernel.org>; Thu, 16 Apr 2020 10:51:00 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id w1so21949685iot.7
+        for <linux-remoteproc@vger.kernel.org>; Thu, 16 Apr 2020 10:51:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qvDNGsNqHjDrCE4+GX5Z6gol2sth2186m3RYDZYo6jk=;
+        b=RkhPvzQlk8K06HidVYnpuuHKoyV8V8s0YxHSFPU3RVmE0gsVfzI+S1fpPNIe0O4XDJ
+         NdXeCK4dbNixO2i31h5SSSs6wcviLJQcflaLesKk2o1GWUFcQa6T0u9VTGs2mGZh2pOI
+         MEoVUC6U0G1KUSvDJFbgMtBytKlzah99fAVxXPoRIGJ6E3ON25RyjLalm6VcZJThQ10+
+         O0L9QQ+I9nSggoZtpmEJb8XbZRba3cRKB1Ixvyfu9mZZyKMfMkLs07cM6fD+L3mlobxz
+         +7UgG5Ax6pki170R9WGOYbN7JeCcKbThndmj2gHqjmaBYFFqcjF9kQkg/qV1qY63XUgU
+         p0ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qvDNGsNqHjDrCE4+GX5Z6gol2sth2186m3RYDZYo6jk=;
+        b=OHfDxz83ixjZEKk8Xsd4FrnOtAbUlxBQcrzXUKbmCAXEVFHKHBp4jrFj6Y0sNoe7q5
+         /T2jilnxtasMVEis5mU7XMwa6Nh9n6nbA57YvXRbh4QbwC8jj6T6SR7OmLZdn0vtqoZ7
+         uMSguSjFp0j1rWiJiBHHB1ekOpDFUfvBj+O7ErklP3G2nLdDb1yb/USLorspwbkbVC2b
+         F7GjJfij9iGyvjp762KwzZT2alCLo9T02Iij3JO2g3yPY/ymeKGnX10kFcAgTVhaxCWx
+         YKTfsBFTtijQiONJbOtqdcmp977GWJ0M/q28P8e5i5SYmrIi8cRVT7BS17nZfTM2bvdm
+         YdrA==
+X-Gm-Message-State: AGi0PuYQVVsSp5IZmEvwiIx5ro2zanBupAA3Ci1JeIsnhstpZuIXLPh7
+        Yyga4f9w5HGK7hfryHtxqE/YEdRdmECEJa4DVmFrHg==
+X-Google-Smtp-Source: APiQypKx+CBM28qFggfKWe/QuM8a/pfXbDXH+bEFQho9kkFzAeHXXsHurC7bCxult5cGDuDMhqXDmq76Cswy3AsWTaI=
+X-Received: by 2002:a02:969a:: with SMTP id w26mr30960201jai.71.1587059459352;
+ Thu, 16 Apr 2020 10:50:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG4NODE2.st.com (10.75.127.11) To SFHDAG3NODE1.st.com
- (10.75.127.7)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-16_06:2020-04-14,2020-04-16 signatures=0
+References: <20200416140307.GA25561@ubuntu>
+In-Reply-To: <20200416140307.GA25561@ubuntu>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 16 Apr 2020 11:50:48 -0600
+Message-ID: <CANLsYky6hdPnerfYvZk6SdO2supVPSr7Sa_x4-UsJ6Y5bgTfHQ@mail.gmail.com>
+Subject: Re: RPMSG over VirtIO under KVM
+To:     Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
+Cc:     linux-remoteproc <linux-remoteproc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Declare a virtio device as sub device of the stm32 remote proc
+Good day Guennadi,
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
----
- arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+On Thu, 16 Apr 2020 at 08:06, Guennadi Liakhovetski
+<guennadi.liakhovetski@linux.intel.com> wrote:
+>
+> Hi,
+>
+> It has been proposed to port the VirtIO SOF driver [1], used to
+> implement audio support under Linux, running in a KVM guest, to use
+> RPMSG to communicate with the SOF vhost driver, running on the Linux
+> host. On one hand I see an rpmsg-virtio driver, which should make such
+> a port possible, on the other hand I don't see a single VirtIO driver
+> in the kernel, using RPMSG for Linux virtualisation.
 
-diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-index f6672e87aef3..2bb16c860c82 100644
---- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-@@ -414,6 +414,16 @@
- 	interrupt-parent = <&exti>;
- 	interrupts = <68 1>;
- 	status = "okay";
-+
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	vdev@0 {
-+		memory-region = <&vdev0vring0>,	<&vdev0vring1>, <&vdev0buffer>;
-+		compatible = "rproc-virtio";
-+		reg = <0>;
-+		status = "okay";
-+	};
- };
- 
- &pwr_regulators {
--- 
-2.17.1
+Above you wrote "rpmsg-virtio" driver, which I take to mean the code
+found in file virtio_rpmsg_bus.c [1].  The code in [1] centers around
+the communication between an application processor and some form of
+remote processor (micro controller or dsp).  The "virtio" part of the
+name refers to the underlying infrastructure put in place to
+communicate with the remote processor, all coming from the virtio
+space.  Here instead of using the virtio mechanic to communicate
+between a host and a guest, it is used to communicate with a remote
+processor.
 
+I came to the same conclusion a while back - as of today no virtio
+drivers are using RPMSG to communicate between host and guest.  I
+suppose nobody needed it or implemented their own schemes.
+
+[1].  https://elixir.bootlin.com/linux/v5.7-rc1/source/drivers/rpmsg/virtio_rpmsg_bus.c
+
+>
+> Hence my questions: is this a good idea? Is there anything in the
+> kernel VirtIO RPMSG implementation, that would make this impossible?
+
+I don't see why it wouldn't be a good idea, nor what would technically
+prevent such a thing from happening.  Two things work in your favour:
+1) the RPMSG foundation has been tailored to be used over different
+kinds of hardware and 2) an existing implementation is already using
+virtioqueues.
+
+I suggest to start looking at function rpmsg_register_device(), used
+by different RPMSG drivers - the magic is really in the RPMSG
+operations (struct rpmsg_device_ops) that are used to abstract the HW
+implementation.
+
+Regards,
+Mathieu
+
+>
+> Thanks
+> Guennadi
+>
+> [1] https://thesofproject.github.io/latest/developer_guides/virtualization/virtualization.html
