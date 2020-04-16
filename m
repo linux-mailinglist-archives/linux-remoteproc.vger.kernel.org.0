@@ -2,113 +2,320 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEF31ACF1D
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Apr 2020 19:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 542ED1ACFD2
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Apr 2020 20:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728407AbgDPRvA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 16 Apr 2020 13:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727816AbgDPRvA (ORCPT
+        id S1728891AbgDPSj1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 16 Apr 2020 14:39:27 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:49644 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729504AbgDPSj0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 16 Apr 2020 13:51:00 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318D6C061A0C
-        for <linux-remoteproc@vger.kernel.org>; Thu, 16 Apr 2020 10:51:00 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id w1so21949685iot.7
-        for <linux-remoteproc@vger.kernel.org>; Thu, 16 Apr 2020 10:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qvDNGsNqHjDrCE4+GX5Z6gol2sth2186m3RYDZYo6jk=;
-        b=RkhPvzQlk8K06HidVYnpuuHKoyV8V8s0YxHSFPU3RVmE0gsVfzI+S1fpPNIe0O4XDJ
-         NdXeCK4dbNixO2i31h5SSSs6wcviLJQcflaLesKk2o1GWUFcQa6T0u9VTGs2mGZh2pOI
-         MEoVUC6U0G1KUSvDJFbgMtBytKlzah99fAVxXPoRIGJ6E3ON25RyjLalm6VcZJThQ10+
-         O0L9QQ+I9nSggoZtpmEJb8XbZRba3cRKB1Ixvyfu9mZZyKMfMkLs07cM6fD+L3mlobxz
-         +7UgG5Ax6pki170R9WGOYbN7JeCcKbThndmj2gHqjmaBYFFqcjF9kQkg/qV1qY63XUgU
-         p0ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qvDNGsNqHjDrCE4+GX5Z6gol2sth2186m3RYDZYo6jk=;
-        b=OHfDxz83ixjZEKk8Xsd4FrnOtAbUlxBQcrzXUKbmCAXEVFHKHBp4jrFj6Y0sNoe7q5
-         /T2jilnxtasMVEis5mU7XMwa6Nh9n6nbA57YvXRbh4QbwC8jj6T6SR7OmLZdn0vtqoZ7
-         uMSguSjFp0j1rWiJiBHHB1ekOpDFUfvBj+O7ErklP3G2nLdDb1yb/USLorspwbkbVC2b
-         F7GjJfij9iGyvjp762KwzZT2alCLo9T02Iij3JO2g3yPY/ymeKGnX10kFcAgTVhaxCWx
-         YKTfsBFTtijQiONJbOtqdcmp977GWJ0M/q28P8e5i5SYmrIi8cRVT7BS17nZfTM2bvdm
-         YdrA==
-X-Gm-Message-State: AGi0PuYQVVsSp5IZmEvwiIx5ro2zanBupAA3Ci1JeIsnhstpZuIXLPh7
-        Yyga4f9w5HGK7hfryHtxqE/YEdRdmECEJa4DVmFrHg==
-X-Google-Smtp-Source: APiQypKx+CBM28qFggfKWe/QuM8a/pfXbDXH+bEFQho9kkFzAeHXXsHurC7bCxult5cGDuDMhqXDmq76Cswy3AsWTaI=
-X-Received: by 2002:a02:969a:: with SMTP id w26mr30960201jai.71.1587059459352;
- Thu, 16 Apr 2020 10:50:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200416140307.GA25561@ubuntu>
-In-Reply-To: <20200416140307.GA25561@ubuntu>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Thu, 16 Apr 2020 11:50:48 -0600
-Message-ID: <CANLsYky6hdPnerfYvZk6SdO2supVPSr7Sa_x4-UsJ6Y5bgTfHQ@mail.gmail.com>
-Subject: Re: RPMSG over VirtIO under KVM
-To:     Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
-Cc:     linux-remoteproc <linux-remoteproc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 16 Apr 2020 14:39:26 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1587062365; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=wTXcWMpyufLuva/nL1kCOt0KcJ7KJwwjbJKrR8cHieY=; b=YU7vqVCvDxRVJU/rLDggtmMqQ7MDYihuat4IZvDhgQck6kBrJnwMoKRRTzM6BSaxTqD1Ck/X
+ rw5JF2Y5UQ4ymU9YYX+qnIyei2pd3YcAyNVLGth1qK/Tdmv+g9JK3D3uMRwWImel2nukEl3j
+ mkzTLxjJblup+SrCjLnAWxG220E=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e98a64a.7fb8caca74c8-smtp-out-n04;
+ Thu, 16 Apr 2020 18:39:06 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 3F36FC43636; Thu, 16 Apr 2020 18:39:06 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rishabhb)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DC886C432C2;
+        Thu, 16 Apr 2020 18:39:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DC886C432C2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rishabhb@codeaurora.org
+From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
+To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
+        mathieu.poirier@linaro.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, sidgup@codeaurora.org,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Subject: [PATCH 1/3] remoteproc: Make coredump functionality configurable
+Date:   Thu, 16 Apr 2020 11:38:30 -0700
+Message-Id: <1587062312-4939-1-git-send-email-rishabhb@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Good day Guennadi,
+Add a new file implementing coredump specific functionality.
+This would enable clients to have the option to implement custom
+dump functionality. The default coredump functionality remains same
+as rproc_coredump function.
 
-On Thu, 16 Apr 2020 at 08:06, Guennadi Liakhovetski
-<guennadi.liakhovetski@linux.intel.com> wrote:
->
-> Hi,
->
-> It has been proposed to port the VirtIO SOF driver [1], used to
-> implement audio support under Linux, running in a KVM guest, to use
-> RPMSG to communicate with the SOF vhost driver, running on the Linux
-> host. On one hand I see an rpmsg-virtio driver, which should make such
-> a port possible, on the other hand I don't see a single VirtIO driver
-> in the kernel, using RPMSG for Linux virtualisation.
+Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+---
+ drivers/remoteproc/Makefile              |   1 +
+ drivers/remoteproc/remoteproc_core.c     |  83 -----------------------
+ drivers/remoteproc/remoteproc_coredump.c | 111 +++++++++++++++++++++++++++++++
+ drivers/remoteproc/remoteproc_internal.h |  10 +++
+ 4 files changed, 122 insertions(+), 83 deletions(-)
+ create mode 100644 drivers/remoteproc/remoteproc_coredump.c
 
-Above you wrote "rpmsg-virtio" driver, which I take to mean the code
-found in file virtio_rpmsg_bus.c [1].  The code in [1] centers around
-the communication between an application processor and some form of
-remote processor (micro controller or dsp).  The "virtio" part of the
-name refers to the underlying infrastructure put in place to
-communicate with the remote processor, all coming from the virtio
-space.  Here instead of using the virtio mechanic to communicate
-between a host and a guest, it is used to communicate with a remote
-processor.
-
-I came to the same conclusion a while back - as of today no virtio
-drivers are using RPMSG to communicate between host and guest.  I
-suppose nobody needed it or implemented their own schemes.
-
-[1].  https://elixir.bootlin.com/linux/v5.7-rc1/source/drivers/rpmsg/virtio_rpmsg_bus.c
-
->
-> Hence my questions: is this a good idea? Is there anything in the
-> kernel VirtIO RPMSG implementation, that would make this impossible?
-
-I don't see why it wouldn't be a good idea, nor what would technically
-prevent such a thing from happening.  Two things work in your favour:
-1) the RPMSG foundation has been tailored to be used over different
-kinds of hardware and 2) an existing implementation is already using
-virtioqueues.
-
-I suggest to start looking at function rpmsg_register_device(), used
-by different RPMSG drivers - the magic is really in the RPMSG
-operations (struct rpmsg_device_ops) that are used to abstract the HW
-implementation.
-
-Regards,
-Mathieu
-
->
-> Thanks
-> Guennadi
->
-> [1] https://thesofproject.github.io/latest/developer_guides/virtualization/virtualization.html
+diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
+index e30a1b1..f1d1264 100644
+--- a/drivers/remoteproc/Makefile
++++ b/drivers/remoteproc/Makefile
+@@ -9,6 +9,7 @@ remoteproc-y				+= remoteproc_debugfs.o
+ remoteproc-y				+= remoteproc_sysfs.o
+ remoteproc-y				+= remoteproc_virtio.o
+ remoteproc-y				+= remoteproc_elf_loader.o
++remoteproc-y				+= remoteproc_coredump.o
+ obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
+ obj-$(CONFIG_MTK_SCP)			+= mtk_scp.o mtk_scp_ipi.o
+ obj-$(CONFIG_OMAP_REMOTEPROC)		+= omap_remoteproc.o
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 097f33e..c0e9e5d 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -1555,89 +1555,6 @@ int rproc_coredump_add_custom_segment(struct rproc *rproc,
+ EXPORT_SYMBOL(rproc_coredump_add_custom_segment);
+ 
+ /**
+- * rproc_coredump() - perform coredump
+- * @rproc:	rproc handle
+- *
+- * This function will generate an ELF header for the registered segments
+- * and create a devcoredump device associated with rproc.
+- */
+-static void rproc_coredump(struct rproc *rproc)
+-{
+-	struct rproc_dump_segment *segment;
+-	struct elf32_phdr *phdr;
+-	struct elf32_hdr *ehdr;
+-	size_t data_size;
+-	size_t offset;
+-	void *data;
+-	void *ptr;
+-	int phnum = 0;
+-
+-	if (list_empty(&rproc->dump_segments))
+-		return;
+-
+-	data_size = sizeof(*ehdr);
+-	list_for_each_entry(segment, &rproc->dump_segments, node) {
+-		data_size += sizeof(*phdr) + segment->size;
+-
+-		phnum++;
+-	}
+-
+-	data = vmalloc(data_size);
+-	if (!data)
+-		return;
+-
+-	ehdr = data;
+-
+-	memset(ehdr, 0, sizeof(*ehdr));
+-	memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
+-	ehdr->e_ident[EI_CLASS] = ELFCLASS32;
+-	ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
+-	ehdr->e_ident[EI_VERSION] = EV_CURRENT;
+-	ehdr->e_ident[EI_OSABI] = ELFOSABI_NONE;
+-	ehdr->e_type = ET_CORE;
+-	ehdr->e_machine = EM_NONE;
+-	ehdr->e_version = EV_CURRENT;
+-	ehdr->e_entry = rproc->bootaddr;
+-	ehdr->e_phoff = sizeof(*ehdr);
+-	ehdr->e_ehsize = sizeof(*ehdr);
+-	ehdr->e_phentsize = sizeof(*phdr);
+-	ehdr->e_phnum = phnum;
+-
+-	phdr = data + ehdr->e_phoff;
+-	offset = ehdr->e_phoff + sizeof(*phdr) * ehdr->e_phnum;
+-	list_for_each_entry(segment, &rproc->dump_segments, node) {
+-		memset(phdr, 0, sizeof(*phdr));
+-		phdr->p_type = PT_LOAD;
+-		phdr->p_offset = offset;
+-		phdr->p_vaddr = segment->da;
+-		phdr->p_paddr = segment->da;
+-		phdr->p_filesz = segment->size;
+-		phdr->p_memsz = segment->size;
+-		phdr->p_flags = PF_R | PF_W | PF_X;
+-		phdr->p_align = 0;
+-
+-		if (segment->dump) {
+-			segment->dump(rproc, segment, data + offset);
+-		} else {
+-			ptr = rproc_da_to_va(rproc, segment->da, segment->size);
+-			if (!ptr) {
+-				dev_err(&rproc->dev,
+-					"invalid coredump segment (%pad, %zu)\n",
+-					&segment->da, segment->size);
+-				memset(data + offset, 0xff, segment->size);
+-			} else {
+-				memcpy(data + offset, ptr, segment->size);
+-			}
+-		}
+-
+-		offset += phdr->p_filesz;
+-		phdr++;
+-	}
+-
+-	dev_coredumpv(&rproc->dev, data, data_size, GFP_KERNEL);
+-}
+-
+-/**
+  * rproc_trigger_recovery() - recover a remoteproc
+  * @rproc: the remote processor
+  *
+diff --git a/drivers/remoteproc/remoteproc_coredump.c b/drivers/remoteproc/remoteproc_coredump.c
+new file mode 100644
+index 0000000..9de0467
+--- /dev/null
++++ b/drivers/remoteproc/remoteproc_coredump.c
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Coredump functionality for Remoteproc framework.
++ *
++ * Copyright (c) 2020, The Linux Foundation. All rights reserved.
++ */
++
++#include <linux/devcoredump.h>
++#include <linux/device.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/remoteproc.h>
++#include "remoteproc_internal.h"
++
++static void create_elf_header(void *data, int phnum, struct rproc *rproc)
++{
++	struct elf32_phdr *phdr;
++	struct elf32_hdr *ehdr;
++	struct rproc_dump_segment *segment;
++	int offset;
++
++	ehdr = data;
++
++	memset(ehdr, 0, sizeof(*ehdr));
++	memcpy(ehdr->e_ident, ELFMAG, SELFMAG);
++	ehdr->e_ident[EI_CLASS] = ELFCLASS32;
++	ehdr->e_ident[EI_DATA] = ELFDATA2LSB;
++	ehdr->e_ident[EI_VERSION] = EV_CURRENT;
++	ehdr->e_ident[EI_OSABI] = ELFOSABI_NONE;
++	ehdr->e_type = ET_CORE;
++	ehdr->e_machine = EM_NONE;
++	ehdr->e_version = EV_CURRENT;
++	ehdr->e_entry = rproc->bootaddr;
++	ehdr->e_phoff = sizeof(*ehdr);
++	ehdr->e_ehsize = sizeof(*ehdr);
++	ehdr->e_phentsize = sizeof(*phdr);
++	ehdr->e_phnum = phnum;
++
++	phdr = data + ehdr->e_phoff;
++	offset = ehdr->e_phoff + sizeof(*phdr) * ehdr->e_phnum;
++	list_for_each_entry(segment, &rproc->dump_segments, node) {
++		memset(phdr, 0, sizeof(*phdr));
++		phdr->p_type = PT_LOAD;
++		phdr->p_offset = offset;
++		phdr->p_vaddr = segment->da;
++		phdr->p_paddr = segment->da;
++		phdr->p_filesz = segment->size;
++		phdr->p_memsz = segment->size;
++		phdr->p_flags = PF_R | PF_W | PF_X;
++		phdr->p_align = 0;
++
++		offset += phdr->p_filesz;
++		phdr++;
++	}
++}
++
++/**
++ * rproc_default_coredump() - perform coredump
++ * @rproc:	rproc handle
++ *
++ * This function will generate an ELF header for the registered segments
++ * and create a devcoredump device associated with rproc.
++ */
++void rproc_default_coredump(struct rproc *rproc)
++{
++	struct rproc_dump_segment *segment;
++	struct elf32_phdr *phdr;
++	struct elf32_hdr *ehdr;
++	size_t data_size;
++	void *data, *ptr;
++	int offset, phnum = 0;
++
++	if (list_empty(&rproc->dump_segments))
++		return;
++
++	data_size = sizeof(*ehdr);
++	list_for_each_entry(segment, &rproc->dump_segments, node) {
++		data_size += sizeof(*phdr) + segment->size;
++
++		phnum++;
++	}
++
++	data = vmalloc(data_size);
++	if (!data)
++		return;
++
++	ehdr = data;
++	create_elf_header(data, phnum, rproc);
++
++	phdr = data + ehdr->e_phoff;
++	offset = ehdr->e_phoff + sizeof(*phdr) * ehdr->e_phnum;
++	list_for_each_entry(segment, &rproc->dump_segments, node) {
++		if (segment->dump) {
++			segment->dump(rproc, segment, data + offset);
++		} else {
++			ptr = rproc_da_to_va(rproc, segment->da, segment->size);
++			if (!ptr) {
++				dev_err(&rproc->dev,
++					"invalid coredump segment (%pad, %zu)\n",
++					&segment->da, segment->size);
++				memset(data + offset, 0xff, segment->size);
++			} else {
++				memcpy(data + offset, ptr, segment->size);
++			}
++		}
++		phdr++;
++	}
++
++	dev_coredumpv(&rproc->dev, data, data_size, GFP_KERNEL);
++}
++EXPORT_SYMBOL(rproc_default_coredump);
+diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+index 493ef92..28b6af2 100644
+--- a/drivers/remoteproc/remoteproc_internal.h
++++ b/drivers/remoteproc/remoteproc_internal.h
+@@ -47,6 +47,9 @@ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
+ int rproc_init_sysfs(void);
+ void rproc_exit_sysfs(void);
+ 
++/* from remoteproc_coredump.c */
++void rproc_default_coredump(struct rproc *rproc);
++
+ void rproc_free_vring(struct rproc_vring *rvring);
+ int rproc_alloc_vring(struct rproc_vdev *rvdev, int i);
+ 
+@@ -119,4 +122,11 @@ struct resource_table *rproc_find_loaded_rsc_table(struct rproc *rproc,
+ 	return NULL;
+ }
+ 
++static inline
++void rproc_coredump(struct rproc *rproc)
++{
++	return rproc_default_coredump(rproc);
++
++}
++
+ #endif /* REMOTEPROC_INTERNAL_H */
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
