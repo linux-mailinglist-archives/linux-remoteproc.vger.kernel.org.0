@@ -2,69 +2,89 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E97E1AD313
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 17 Apr 2020 01:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1691AD394
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 17 Apr 2020 02:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726530AbgDPXHa (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 16 Apr 2020 19:07:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51300 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728142AbgDPXH3 (ORCPT
+        id S1728124AbgDQAU5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 16 Apr 2020 20:20:57 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:55552 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728069AbgDQAU4 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 16 Apr 2020 19:07:29 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587078449;
-        bh=7KeaUOSzNO2lnWHozcO7lo7ZUDx/eEbL7/NyIVZ0QNc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=gPfs3qND/TJjV0mjBKVtIiYYCGqk5Ry8gjKI+jJHdUoj6uJUxzGXJ3YiPSDUBAVg+
-         Aq7C0EAUzhdgg9SD4KVMWpauJkF3HaJPH/Jtwtahp+EjTgSpNF7ij5/hgMDD+kAL6b
-         w1m0bdauxYv606l47jtmLFbNgnVehSz0P3hB8f+A=
+        Thu, 16 Apr 2020 20:20:56 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 03H0KeSx002968;
+        Thu, 16 Apr 2020 19:20:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1587082840;
+        bh=MmrL7c1P4QoUychSaHzqzrqt5M60o7cJWVq4Yc0OSjI=;
+        h=From:To:CC:Subject:Date;
+        b=N0O0iCnVsymFZGgsPIsioGMsvMDztXJ0PYo1zGRubWTAyRTUTF9Qdt8wg5lnbiNJr
+         gOpT9CJ7GQtmNdW7eA2DZA03Grxzx2Pzu5JdhmiHzzsXdDixXctZgoz0LOxm7LclqG
+         RExaPwRMLtClUMzQj4G2NsHWrsG7R6CzK0CrTmok=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 03H0KeOf060155
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 16 Apr 2020 19:20:40 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 16
+ Apr 2020 19:20:39 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 16 Apr 2020 19:20:39 -0500
+Received: from fllv0103.dal.design.ti.com (fllv0103.dal.design.ti.com [10.247.120.73])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 03H0Kd4W020891;
+        Thu, 16 Apr 2020 19:20:39 -0500
+Received: from localhost ([10.250.70.56])
+        by fllv0103.dal.design.ti.com (8.14.7/8.14.7) with ESMTP id 03H0Kdj3060516;
+        Thu, 16 Apr 2020 19:20:39 -0500
+From:   Suman Anna <s-anna@ti.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Suman Anna <s-anna@ti.com>
+Subject: [PATCH 0/2] rproc core patches needed for TI K3 drivers
+Date:   Thu, 16 Apr 2020 19:20:34 -0500
+Message-ID: <20200417002036.24359-1-s-anna@ti.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] remoteproc: mtk_scp: use dma_addr_t for DMA API
-From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <158707844948.17838.5032787244781893947.git-patchwork-notify@kernel.org>
-Date:   Thu, 16 Apr 2020 23:07:29 +0000
-References: <20200408155450.2186471-1-arnd@arndb.de>
-In-Reply-To: <20200408155450.2186471-1-arnd@arndb.de>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-remoteproc@vger.kernel.org
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello:
+Hi Bjorn, Mathieu,
 
-This patch was applied to andersson/remoteproc.git (refs/heads/for-next).
+The following 2 patches were a revised version and split out from the
+TI K3 R5F remoteproc support patch series [1]. The patches do use the
+cleanup logic from  Mathieu's "remoteproc: Refactor function rproc_alloc()"
+series. The patches address both of your comments.
 
-On Wed,  8 Apr 2020 17:54:29 +0200 you wrote:
-> dma_addr_t and phys_addr_t are distinct types and must not be
-> mixed, as both the values and the size of the type may be
-> different depending on what the remote device uses.
-> 
-> In this driver the compiler warns when the two types are different:
-> 
-> drivers/remoteproc/mtk_scp.c: In function 'scp_map_memory_region':
-> drivers/remoteproc/mtk_scp.c:454:9: error: passing argument 3 of 'dma_alloc_coherent' from incompatible pointer type [-Werror=incompatible-pointer-types]
->   454 |         &scp->phys_addr, GFP_KERNEL);
->       |         ^~~~~~~~~~~~~~~
->       |         |
->       |         phys_addr_t * {aka unsigned int *}
-> In file included from drivers/remoteproc/mtk_scp.c:7:
-> include/linux/dma-mapping.h:642:15: note: expected 'dma_addr_t *' {aka 'long long unsigned int *'} but argument is of type 'phys_addr_t *' {aka 'unsigned int *'}
->   642 |   dma_addr_t *dma_handle, gfp_t gfp)
-> 
-> [...]
+Delta changes in individual patches.
 
+regards
+Suman
 
-Here is a summary with links:
-  - remoteproc: mtk_scp: use dma_addr_t for DMA API
-    https://git.kernel.org/andersson/remoteproc/c/c2781e4d9bc6d925dfc1ff833dfdaf12b69679de
+[1] https://patchwork.kernel.org/cover/11456367/
+[2] https://patchwork.kernel.org/cover/11492005/
 
-You are awesome, thank you!
+Loic Pallardy (1):
+  remoteproc: Add prepare and unprepare ops
+
+Suman Anna (1):
+  remoteproc: Use a local copy for the name field
+
+ drivers/remoteproc/remoteproc_core.c     | 21 +++++++++++++++++++--
+ drivers/remoteproc/remoteproc_internal.h | 16 ++++++++++++++++
+ include/linux/remoteproc.h               |  4 ++++
+ 3 files changed, 39 insertions(+), 2 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+2.26.0
+
