@@ -2,162 +2,201 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1C51B29FA
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 21 Apr 2020 16:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3FE31B2B2C
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 21 Apr 2020 17:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728422AbgDUOdf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 21 Apr 2020 10:33:35 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:13648 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729352AbgDUOdc (ORCPT
+        id S1725870AbgDUPap (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 21 Apr 2020 11:30:45 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:42168 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725987AbgDUPao (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 21 Apr 2020 10:33:32 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1587479611; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=LKhdSg28NnR3I8OZVDPXHKTM1A7Z4ruLmGkZBwTex78=; b=tS6imFKvEqgDG7f2Q9CtM38Ct4X2u4SX/sNJRLtW7eDOrDoGOWyxe+aXicn7FmuKy0dhY9e9
- 8tXHMLSxqHK42f2zlFrFYAl7o/mf73veCInPT5bXrp2Anm4K0mipqLKsjFuF+UBZfe8GVvpz
- 8gZews7qnZJWMKsJN8M7fL/5Xyg=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e9f042c.7f7cc6e7c0a0-smtp-out-n02;
- Tue, 21 Apr 2020 14:33:16 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id AAC38C38567; Tue, 21 Apr 2020 14:33:14 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 11FAEC43636;
-        Tue, 21 Apr 2020 14:33:08 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 11FAEC43636
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     bjorn.andersson@linaro.org, robh+dt@kernel.org
-Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        evgreen@chromium.org, ohad@wizery.com, mka@chromium.org,
-        dianders@chromium.org, devicetree@vger.kernel.org,
-        Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH v2 7/7] arm64: dts: qcom: sc7180: Update Q6V5 MSS node
-Date:   Tue, 21 Apr 2020 20:02:28 +0530
-Message-Id: <20200421143228.8981-8-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200421143228.8981-1-sibis@codeaurora.org>
-References: <20200421143228.8981-1-sibis@codeaurora.org>
+        Tue, 21 Apr 2020 11:30:44 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 03LFULav048654;
+        Tue, 21 Apr 2020 10:30:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1587483021;
+        bh=SqS4rr3BfxnSzLgPx1JoL8+qkQ9DLPAefk5MFj5dqPM=;
+        h=Subject:From:To:CC:References:Date:In-Reply-To;
+        b=yH6aMjiH+Ot5jJ512oB3wK+NLRKenM5UmRmRAXmjQ6bjskhiprJSZecsDr2KH0rAd
+         Ducw0AKThPdP4noyB1/f85TcoybuWFv0gERmlVmZd4+SJVPt5xlDlWjr4nd4OCtI8o
+         MMId2FSvS8yvnjYzfdwlzZgiqMIhnbU2eTGjjR3M=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 03LFUKLQ071348
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 21 Apr 2020 10:30:20 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 21
+ Apr 2020 10:30:20 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 21 Apr 2020 10:30:20 -0500
+Received: from [10.250.70.56] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 03LFUJ6P067959;
+        Tue, 21 Apr 2020 10:30:19 -0500
+Subject: Re: [PATCH v2] remoteproc: remove rproc_elf32_sanity_check
+From:   Suman Anna <s-anna@ti.com>
+To:     Clement Leger <cleger@kalray.eu>, Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Patrice Chotard <patrice.chotard@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20200331083336.7459-1-cleger@kalray.eu>
+ <0fc07250-c62c-cb10-58e5-04ccdd6ee176@ti.com>
+Message-ID: <a7994631-7a63-5477-df70-e40b995fe14f@ti.com>
+Date:   Tue, 21 Apr 2020 10:30:19 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <0fc07250-c62c-cb10-58e5-04ccdd6ee176@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add TCSR node and update MSS node to support MSA based Modem boot on
-SC7180 SoCs.
+Hi Clement,
 
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
----
+On 3/31/20 10:13 AM, Suman Anna wrote:
+> On 3/31/20 3:33 AM, Clement Leger wrote:
+>> Since checks are present in the remoteproc elf loader before calling
+>> da_to_va, loading a elf64 will work on 32bits flavors of kernel.
+>> Indeed, if a segment size is larger than what size_t can hold, the
+>> loader will return an error so the functionality is equivalent to
+>> what exists today.
+>>
+>> Signed-off-by: Clement Leger <cleger@kalray.eu>
+> 
+> Acked-by: Suman Anna <s-anna@ti.com>
 
-V2:
- * use memory-region to reference mba/mpss regions [Bjorn]
- * overload the base remoteproc_mpss node wherever possible [Bjorn]
+Can you repost this after rebasing on top of the rproc-next branch
+which has the rproc_alloc refactoring changes pushed now?
 
-Depends on the following bindings:
-iommus: https://patchwork.kernel.org/patch/11499603/
-spare-regs: https://patchwork.kernel.org/patch/11491425/
+regards
+Suman
 
- arch/arm64/boot/dts/qcom/sc7180-idp.dts |  7 +++++++
- arch/arm64/boot/dts/qcom/sc7180.dtsi    | 28 +++++++++++++++++++++----
- 2 files changed, 31 insertions(+), 4 deletions(-)
+> 
+> regards
+> Suman
+> 
+>> ---
+>> Changes from v1 -> v2:
+>>   - Remove possibity to override sanity_check operation
+>>
+>>   drivers/remoteproc/remoteproc_core.c       |  3 +--
+>>   drivers/remoteproc/remoteproc_elf_loader.c | 21 ---------------------
+>>   drivers/remoteproc/remoteproc_internal.h   |  1 -
+>>   drivers/remoteproc/st_remoteproc.c         |  2 +-
+>>   drivers/remoteproc/st_slim_rproc.c         |  2 +-
+>>   drivers/remoteproc/stm32_rproc.c           |  2 +-
+>>   6 files changed, 4 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+>> index a9ac1d01e09b..191560048c1a 100644
+>> --- a/drivers/remoteproc/remoteproc_core.c
+>> +++ b/drivers/remoteproc/remoteproc_core.c
+>> @@ -2068,8 +2068,7 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
+>>   		rproc->ops->load = rproc_elf_load_segments;
+>>   		rproc->ops->parse_fw = rproc_elf_load_rsc_table;
+>>   		rproc->ops->find_loaded_rsc_table = rproc_elf_find_loaded_rsc_table;
+>> -		if (!rproc->ops->sanity_check)
+>> -			rproc->ops->sanity_check = rproc_elf32_sanity_check;
+>> +		rproc->ops->sanity_check = rproc_elf_sanity_check;
+>>   		rproc->ops->get_boot_addr = rproc_elf_get_boot_addr;
+>>   	}
+>>   
+>> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
+>> index 16e2c496fd45..29034f99898d 100644
+>> --- a/drivers/remoteproc/remoteproc_elf_loader.c
+>> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
+>> @@ -112,27 +112,6 @@ int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw)
+>>   }
+>>   EXPORT_SYMBOL(rproc_elf_sanity_check);
+>>   
+>> -/**
+>> - * rproc_elf_sanity_check() - Sanity Check ELF32 firmware image
+>> - * @rproc: the remote processor handle
+>> - * @fw: the ELF32 firmware image
+>> - *
+>> - * Make sure this fw image is sane.
+>> - */
+>> -int rproc_elf32_sanity_check(struct rproc *rproc, const struct firmware *fw)
+>> -{
+>> -	int ret = rproc_elf_sanity_check(rproc, fw);
+>> -
+>> -	if (ret)
+>> -		return ret;
+>> -
+>> -	if (fw_elf_get_class(fw) == ELFCLASS32)
+>> -		return 0;
+>> -
+>> -	return -EINVAL;
+>> -}
+>> -EXPORT_SYMBOL(rproc_elf32_sanity_check);
+>> -
+>>   /**
+>>    * rproc_elf_get_boot_addr() - Get rproc's boot address.
+>>    * @rproc: the remote processor handle
+>> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+>> index b389dc79da81..31994715fd43 100644
+>> --- a/drivers/remoteproc/remoteproc_internal.h
+>> +++ b/drivers/remoteproc/remoteproc_internal.h
+>> @@ -54,7 +54,6 @@ void *rproc_da_to_va(struct rproc *rproc, u64 da, size_t len);
+>>   phys_addr_t rproc_va_to_pa(void *cpu_addr);
+>>   int rproc_trigger_recovery(struct rproc *rproc);
+>>   
+>> -int rproc_elf32_sanity_check(struct rproc *rproc, const struct firmware *fw);
+>>   int rproc_elf_sanity_check(struct rproc *rproc, const struct firmware *fw);
+>>   u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw);
+>>   int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw);
+>> diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_remoteproc.c
+>> index a6cbfa452764..a3268d95a50e 100644
+>> --- a/drivers/remoteproc/st_remoteproc.c
+>> +++ b/drivers/remoteproc/st_remoteproc.c
+>> @@ -233,7 +233,7 @@ static const struct rproc_ops st_rproc_ops = {
+>>   	.parse_fw		= st_rproc_parse_fw,
+>>   	.load			= rproc_elf_load_segments,
+>>   	.find_loaded_rsc_table	= rproc_elf_find_loaded_rsc_table,
+>> -	.sanity_check		= rproc_elf32_sanity_check,
+>> +	.sanity_check		= rproc_elf_sanity_check,
+>>   	.get_boot_addr		= rproc_elf_get_boot_addr,
+>>   };
+>>   
+>> diff --git a/drivers/remoteproc/st_slim_rproc.c b/drivers/remoteproc/st_slim_rproc.c
+>> index 3cca8b65a8db..09bcb4d8b9e0 100644
+>> --- a/drivers/remoteproc/st_slim_rproc.c
+>> +++ b/drivers/remoteproc/st_slim_rproc.c
+>> @@ -203,7 +203,7 @@ static const struct rproc_ops slim_rproc_ops = {
+>>   	.da_to_va       = slim_rproc_da_to_va,
+>>   	.get_boot_addr	= rproc_elf_get_boot_addr,
+>>   	.load		= rproc_elf_load_segments,
+>> -	.sanity_check	= rproc_elf32_sanity_check,
+>> +	.sanity_check	= rproc_elf_sanity_check,
+>>   };
+>>   
+>>   /**
+>> diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+>> index 6a66dbf2df40..2e07a95439c8 100644
+>> --- a/drivers/remoteproc/stm32_rproc.c
+>> +++ b/drivers/remoteproc/stm32_rproc.c
+>> @@ -505,7 +505,7 @@ static struct rproc_ops st_rproc_ops = {
+>>   	.load		= rproc_elf_load_segments,
+>>   	.parse_fw	= stm32_rproc_parse_fw,
+>>   	.find_loaded_rsc_table = rproc_elf_find_loaded_rsc_table,
+>> -	.sanity_check	= rproc_elf32_sanity_check,
+>> +	.sanity_check	= rproc_elf_sanity_check,
+>>   	.get_boot_addr	= rproc_elf_get_boot_addr,
+>>   };
+>>   
+>>
+> 
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-idp.dts b/arch/arm64/boot/dts/qcom/sc7180-idp.dts
-index 5405cde1a32ef..08f1f04cca734 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-idp.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-idp.dts
-@@ -309,6 +309,13 @@ &qupv3_id_1 {
- 	status = "okay";
- };
- 
-+&remoteproc_mpss {
-+	status = "okay";
-+	compatible = "qcom,sc7180-mss-pil";
-+	iommus = <&apps_smmu 0x460 0x1>, <&apps_smmu 0x444 0x3>;
-+	memory-region = <&mba_mem &mpss_mem>;
-+};
-+
- &sdhc_1 {
- 	status = "okay";
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 94cead96eade0..5e2618eb1b7fa 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -932,6 +932,11 @@ tcsr_mutex_regs: syscon@1f40000 {
- 			reg = <0 0x01f40000 0 0x40000>;
- 		};
- 
-+		tcsr_regs: syscon@1fc0000 {
-+			compatible = "syscon";
-+			reg = <0 0x01fc0000 0 0x40000>;
-+		};
-+
- 		tlmm: pinctrl@3500000 {
- 			compatible = "qcom,sc7180-pinctrl";
- 			reg = <0 0x03500000 0 0x300000>,
-@@ -1325,7 +1330,8 @@ pinconf-sd-cd {
- 
- 		remoteproc_mpss: remoteproc@4080000 {
- 			compatible = "qcom,sc7180-mpss-pas";
--			reg = <0 0x04080000 0 0x4040>;
-+			reg = <0 0x04080000 0 0x4040>, <0 0x04180000 0 0x48>;
-+			reg-names = "qdsp6", "rmb";
- 
- 			interrupts-extended = <&intc GIC_SPI 266 IRQ_TYPE_EDGE_RISING>,
- 					      <&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-@@ -1336,19 +1342,33 @@ remoteproc_mpss: remoteproc@4080000 {
- 			interrupt-names = "wdog", "fatal", "ready", "handover",
- 					  "stop-ack", "shutdown-ack";
- 
--			clocks = <&rpmhcc RPMH_CXO_CLK>;
--			clock-names = "xo";
-+			clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
-+				 <&gcc GCC_MSS_Q6_MEMNOC_AXI_CLK>,
-+				 <&gcc GCC_MSS_NAV_AXI_CLK>,
-+				 <&gcc GCC_MSS_SNOC_AXI_CLK>,
-+				 <&gcc GCC_MSS_MFAB_AXIS_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "iface", "bus", "nav", "snoc_axi",
-+				      "mnoc_axi", "xo";
- 
- 			power-domains = <&aoss_qmp AOSS_QMP_LS_MODEM>,
- 					<&rpmhpd SC7180_CX>,
-+					<&rpmhpd SC7180_MX>,
- 					<&rpmhpd SC7180_MSS>;
--			power-domain-names = "load_state", "cx", "mss";
-+			power-domain-names = "load_state", "cx", "mx", "mss";
- 
- 			memory-region = <&mpss_mem>;
- 
- 			qcom,smem-states = <&modem_smp2p_out 0>;
- 			qcom,smem-state-names = "stop";
- 
-+			resets = <&aoss_reset AOSS_CC_MSS_RESTART>,
-+				 <&pdc_reset PDC_MODEM_SYNC_RESET>;
-+			reset-names = "mss_restart", "pdc_reset";
-+
-+			qcom,halt-regs = <&tcsr_mutex_regs 0x23000 0x25000 0x24000>;
-+			qcom,spare-regs = <&tcsr_regs 0xb3e4>;
-+
- 			status = "disabled";
- 
- 			glink-edge {
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
