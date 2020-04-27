@@ -2,132 +2,288 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9100D1B8090
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 24 Apr 2020 22:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5776E1BAE6B
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 27 Apr 2020 21:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729557AbgDXUZW (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 24 Apr 2020 16:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729552AbgDXUZV (ORCPT
+        id S1726409AbgD0TtT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 27 Apr 2020 15:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725919AbgD0TtT (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 24 Apr 2020 16:25:21 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B4BC09B049
-        for <linux-remoteproc@vger.kernel.org>; Fri, 24 Apr 2020 13:25:21 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id j7so5141178pgj.13
-        for <linux-remoteproc@vger.kernel.org>; Fri, 24 Apr 2020 13:25:21 -0700 (PDT)
+        Mon, 27 Apr 2020 15:49:19 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EA4C0610D5
+        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Apr 2020 12:49:19 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id t4so7361975plq.12
+        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Apr 2020 12:49:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kG2iXiDOAlrBuv2wqeB6r8YKH3F8C14k21yMdoM6KR8=;
-        b=IYmAPTxMHxW01D1OdVg6js0cI3JraeOKhnKiDvx7CwBKWa6HBJ5zMo2JXOk06e/Sk6
-         z+nio/13fncpMdAUX7spt/kaAdFvjjhFr27I5IGkEnpyq5itIbJ0DZadSC1kV0kfU/VG
-         KIXb/wx4Kwy0Mv7cMRsloIra5uyuvT9FtN9fxkamelqavtEsRm76jY+Wvkc4oyMTAquw
-         rC3J1uAtJ2ew8ID6OijjWwnBJ8HaNk8LwVmSMfuZ5btvxQLoMOiTZl0oQtLYU4f9iD3j
-         WRpWAniZVy7XJpx+Zexi4t9p9A9yjEGUR2K8OpOexgNyGxG/SY7LUmS5ytP8iAuFCN7J
-         yHfQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=jEerkCT9TzKSUHSlKdk8mBv+MQGjDxFrB8vo7AAG6JU=;
+        b=aDNtRS5fEYc2xcdaMDa/QNBMD/BsPucouNMYbVlDpQONpV26D2tuBVwj6JPoc5/Pry
+         KdGXM5xJoeKU5AMeIf3ENbpBb8KlonA9Xry72AnuALLKcto9mCZt2tnNRy4aGMsPWfNF
+         jsOjGNOUiCnrmVh84ellq+Ju3o4+oa2iq0N4+NjBbrMsXHrJOZAJpYV6MLNtGPDq4ltU
+         rZ0asxAM31wIIcsGC+b9xDyy47396WcXJRwX++XBx09cQgLMGOEzQNMSVSkz5Z0+v/vH
+         6nn8y0dpauXUafz/9wvckLtOiO2Jas7HuErUVTf0Tao6GHYUB8h2BTtrojmEr9etkanl
+         TLhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kG2iXiDOAlrBuv2wqeB6r8YKH3F8C14k21yMdoM6KR8=;
-        b=hRktw735ugMH93FWMDEmPE0obfiNCkgPiSt/9d0d5OkoZJ49/RH2FzGGURfg5dVmnU
-         LBB6l6XHy/JKD2bk8N0HPL3iymHTcK2lR0D9BGKGfvjsiNLzu7QraWkbn3sC1TlXh1uu
-         SmIeVRZ2733vA2vLc712EJKylnqY4fp1nqSAGeGz8SrRkUeh3L/HV4E4KgvUWf6uE+aO
-         5on4ZT8mPJ80hE4A82NpSuB/+X8YmV3oC0JVhsYpBKfBsw8VfoF+RpSR9X4WUs2k90k5
-         iw5JC74jhfo+otgMheDVtkrdoRx9E3oXITW/FOq9kJBdHFbaKRIGqNF3gVhKJMjlhett
-         ogkg==
-X-Gm-Message-State: AGi0PuZHhPMJkvT4WUA7JWCBSofU3oSOQLBoYPmVQaY/IojEsccJ4zVr
-        DrQiBiqmpS1GxKmNpwtEgz0+6a4196w=
-X-Google-Smtp-Source: APiQypKviZ6PkeE83136I1kJAdKrTrljVnv7Q8b8j/LsmS+zqipjOpZk/taRmaQdP/cWXjJXLqB8TA==
-X-Received: by 2002:a63:4a59:: with SMTP id j25mr10666444pgl.336.1587759921334;
-        Fri, 24 Apr 2020 13:25:21 -0700 (PDT)
-Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id c1sm6553245pfc.94.2020.04.24.13.25.20
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=jEerkCT9TzKSUHSlKdk8mBv+MQGjDxFrB8vo7AAG6JU=;
+        b=EVayNOK+Ltr0XjoBVrkuqXfK+4/WCoy3lzAh1AkyyftyyIEP1tj+sXDMbNN5/sO8pk
+         rjAs30bJxrmcjP9fR3244gSmZ6T3ttNOAeAa9lFSe4YLn6ZfUJel/9oZQDmfSuPgnwFm
+         2pK89IBJRS4DKkfzOA1dis2EihBjaI3boTH9iwRFBRXhjy46BBrkDjTyyyySkVCQ+aWv
+         1ZM+c3/qmGkiNeHf4VmyS9dq/JZS5XkPsncCeLRPiMx5dDH4SLDv09aK8tuSiUtDJjDf
+         8xLYvtoY+YqDZ5rPpD5aT05OyN97MnRTT1bUnB/tk2SAhgbCw+e8b/GMAEv3Krdqq3Bc
+         0P6A==
+X-Gm-Message-State: AGi0PubK3TrGrqM9rcI9PdTjGN+uTp1o3Tr+C4KEs8rtFSZrvWwsaaVo
+        cEUkFWRHBl5vhdWeU/PS0v3G2g==
+X-Google-Smtp-Source: APiQypKoHMXhC7ldZltP3zeeHiihA+8rUs3muVExUWi1iQdL4LAmPnhL/gnjMXhSDCVSdoydpXLszw==
+X-Received: by 2002:a17:90a:d703:: with SMTP id y3mr375417pju.75.1588016958305;
+        Mon, 27 Apr 2020 12:49:18 -0700 (PDT)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id 184sm13502817pfy.144.2020.04.27.12.49.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Apr 2020 13:25:20 -0700 (PDT)
+        Mon, 27 Apr 2020 12:49:17 -0700 (PDT)
+Date:   Mon, 27 Apr 2020 13:49:15 -0600
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     bjorn.andersson@linaro.org, ohad@wizery.com,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com
-Cc:     loic.pallardy@st.com, arnaud.pouliquen@st.com,
-        linux-remoteproc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
+To:     Suman Anna <s-anna@ti.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 12/12] remoteproc: stm32: Set synchronisation state machine if needed
-Date:   Fri, 24 Apr 2020 14:25:05 -0600
-Message-Id: <20200424202505.29562-13-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200424202505.29562-1-mathieu.poirier@linaro.org>
-References: <20200424202505.29562-1-mathieu.poirier@linaro.org>
+Subject: Re: [PATCH 1/3] dt-bindings: remoteproc: Add bindings for C66x DSPs
+ on TI K3 SoCs
+Message-ID: <20200427194915.GA10552@xps15>
+References: <20200325201839.15896-1-s-anna@ti.com>
+ <20200325201839.15896-2-s-anna@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200325201839.15896-2-s-anna@ti.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Set the flags and operations to use if the M4 has been started
-by another entity than the remoteproc core.
+Hi Suman,
 
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- drivers/remoteproc/stm32_rproc.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+I have started to review this set - comments will come over the next few days.
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index dcae6103e3df..02dad3f51c7a 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -598,13 +598,20 @@ static struct rproc_ops st_rproc_ops = {
- 	.get_boot_addr	= rproc_elf_get_boot_addr,
- };
- 
--static __maybe_unused struct rproc_ops st_rproc_sync_ops = {
-+static struct rproc_ops st_rproc_sync_ops = {
- 	.start		= stm32_rproc_sync_start,
- 	.stop		= stm32_rproc_stop,
-+	.kick		= stm32_rproc_kick,
- 	.parse_fw       = stm32_rproc_sync_parse_fw,
- 	.find_loaded_rsc_table = stm32_rproc_sync_elf_find_loaded_rsc_table,
- };
- 
-+static struct rproc_sync_flags st_sync_flags = {
-+	.on_init = true, /* sync with MCU when the kernel boots */
-+	.after_stop = false, /* don't resync with MCU if stopped from sysfs */
-+	.after_crash = false, /* don't resync with MCU after a crash */
-+};
-+
- static const struct of_device_id stm32_rproc_match[] = {
- 	{ .compatible = "st,stm32mp1-m4" },
- 	{},
-@@ -803,6 +810,7 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	struct stm32_rproc *ddata;
- 	struct device_node *np = dev->of_node;
- 	struct rproc *rproc;
-+	struct rproc_sync_flags sync_flags = {0};
- 	unsigned int state;
- 	bool auto_boot = false;
- 	int ret;
-@@ -837,11 +845,17 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	}
- 
- 	if (state == M4_STATE_CRUN) {
-+		auto_boot = true;
-+		sync_flags = st_sync_flags;
- 		ret = stm32_rproc_get_loaded_rsc_table(pdev, ddata);
- 		if (ret)
- 			goto free_rproc;
- 	}
- 
-+	ret = rproc_set_state_machine(rproc, &st_rproc_sync_ops, sync_flags);
-+	if (ret)
-+		goto free_rproc;
-+
- 	rproc->auto_boot = auto_boot;
- 	rproc->has_iommu = false;
- 	ddata->workqueue = create_workqueue(dev_name(dev));
--- 
-2.20.1
+On Wed, Mar 25, 2020 at 03:18:37PM -0500, Suman Anna wrote:
+> Some Texas Instruments K3 family of SoCs have one of more Digital Signal
+> Processor (DSP) subsystems that are comprised of either a TMS320C66x
+> CorePac and/or a next-generation TMS320C71x CorePac processor subsystem.
+> Add the device tree bindings document for the C66x DSP devices on these
+> SoCs. The added example illustrates the DT nodes for the first C66x DSP
+> device present on the K3 J721E family of SoCs.
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> ---
+>  .../bindings/remoteproc/ti,k3-dsp-rproc.yaml  | 180 ++++++++++++++++++
+>  1 file changed, 180 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> new file mode 100644
+> index 000000000000..416e3abe7937
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> @@ -0,0 +1,180 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/remoteproc/ti,k3-dsp-rproc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI K3 DSP devices
+> +
+> +maintainers:
+> +  - Suman Anna <s-anna@ti.com>
+> +
+> +description: |
+> +  The TI K3 family of SoCs usually have one or more TI DSP Core sub-systems
+> +  that are used to offload some of the processor-intensive tasks or algorithms,
+> +  for achieving various system level goals.
+> +
+> +  These processor sub-systems usually contain additional sub-modules like
+> +  L1 and/or L2 caches/SRAMs, an Interrupt Controller, an external memory
+> +  controller, a dedicated local power/sleep controller etc. The DSP processor
+> +  cores in the K3 SoCs are usually either a TMS320C66x CorePac processor or a
+> +  TMS320C71x CorePac processor.
+> +
+> +  Each DSP Core sub-system is represented as a single DT node. Each node has a
+> +  number of required or optional properties that enable the OS running on the
+> +  host processor (Arm CorePac) to perform the device management of the remote
+> +  processor and to communicate with the remote processor.
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,j721e-c66-dsp
+> +    description:
+> +      Use "ti,j721e-c66-dsp" for C66x DSPs on K3 J721E SoCs
+> +
+> +  reg:
+> +    description: |
+> +      Should contain an entry for each value in 'reg-names'.
+> +      Each entry should have the memory region's start address
+> +      and the size of the region, the representation matching
+> +      the parent node's '#address-cells' and '#size-cells' values.
+> +    minItems: 3
+> +    maxItems: 3
+> +
+> +  reg-names:
+> +    description: |
+> +      Should contain strings with the names of the specific internal
+> +      internal memory regions, and should be defined in this order
 
+The word "internal" is found twice in a row.
+
+> +    maxItems: 3
+> +    items:
+> +      - const: l2sram
+> +      - const: l1pram
+> +      - const: l1dram
+> +
+> +  ti,sci:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Should be a phandle to the TI-SCI System Controller node
+> +
+> +  ti,sci-dev-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Should contain the TI-SCI device id corresponding to the DSP core.
+> +      Please refer to the corresponding System Controller documentation
+> +      for valid values for the DSP cores.
+> +
+> +  ti,sci-proc-ids:
+> +    description: Should contain a single tuple of <proc_id host_id>.
+> +    allOf:
+> +      - $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +      - maxItems: 1
+> +        items:
+> +          items:
+> +            - description: TI-SCI processor id for the DSP core device
+> +            - description: TI-SCI host id to which processor control
+> +                           ownership should be transferred to
+> +
+> +  resets:
+> +    description: |
+> +      Should contain the phandle to the reset controller node
+> +      managing the resets for this device, and a reset
+> +      specifier. Please refer to the following reset bindings
+> +      for the reset argument specifier,
+> +      Documentation/devicetree/bindings/reset/ti,sci-reset.txt
+> +
+> +  firmware-name:
+> +    description: |
+> +      Should contain the name of the default firmware image
+> +      file located on the firmware search path
+> +
+> +  mboxes:
+> +    description: |
+> +      OMAP Mailbox specifier denoting the sub-mailbox, to be used for
+> +      communication with the remote processor. This property should match
+> +      with the sub-mailbox node used in the firmware image. The specifier
+> +      format is as per the bindings,
+> +      Documentation/devicetree/bindings/mailbox/omap-mailbox.txt
+> +
+> +  memory-region:
+> +    minItems: 2
+> +    description: |
+> +      phandle to the reserved memory nodes to be associated with the remoteproc
+> +      device. There should be atleast two reserved memory nodes defined - the
+> +      first one would be used for dynamic DMA allocations like vrings and vring
+> +      buffers, and the remaining ones used for the firmware image sections. The
+> +      reserved memory nodes should be carveout nodes, and should be defined as
+> +      per the bindings in
+> +      Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt
+> +
+> +# Optional properties:
+> +# --------------------
+> +
+> +  sram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    minItems: 1
+> +    description: |
+> +      pHandles to one or more reserved on-chip SRAM regions. The regions
+
+s/pHandle/phandle
+
+Thanks,
+Mathieu
+
+> +      should be defined as child nodes of the respective SRAM node, and
+> +      should be defined as per the generic bindings in,
+> +      Documentation/devicetree/bindings/sram/sram.yaml
+> +
+> +required:
+> + - compatible
+> + - reg
+> + - reg-names
+> + - ti,sci
+> + - ti,sci-dev-id
+> + - ti,sci-proc-ids
+> + - resets
+> + - firmware-name
+> + - mboxes
+> + - memory-region
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+> +    //Example: J721E SoC
+> +    /* DSP Carveout reserved memory nodes */
+> +    reserved-memory {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        ranges;
+> +
+> +        c66_0_dma_memory_region: c66-dma-memory@a6000000 {
+> +            compatible = "shared-dma-pool";
+> +            reg = <0x00 0xa6000000 0x00 0x100000>;
+> +            no-map;
+> +        };
+> +
+> +        c66_0_memory_region: c66-memory@a6100000 {
+> +            compatible = "shared-dma-pool";
+> +            reg = <0x00 0xa6100000 0x00 0xf00000>;
+> +            no-map;
+> +        };
+> +    };
+> +
+> +    cbass_main: interconnect@100000 {
+> +        compatible = "simple-bus";
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +        ranges = <0x4d 0x80800000 0x4d 0x80800000 0x00 0x00800000>, /* C66_0 */
+> +                 <0x4d 0x81800000 0x4d 0x81800000 0x00 0x00800000>; /* C66_1 */
+> +
+> +        /* J721E C66_0 DSP node */
+> +        c66_0: dsp@4d80800000 {
+> +            compatible = "ti,j721e-c66-dsp";
+> +            reg = <0x4d 0x80800000 0x00 0x00048000>,
+> +                  <0x4d 0x80e00000 0x00 0x00008000>,
+> +                  <0x4d 0x80f00000 0x00 0x00008000>;
+> +            reg-names = "l2sram", "l1pram", "l1dram";
+> +            ti,sci = <&dmsc>;
+> +            ti,sci-dev-id = <142>;
+> +            ti,sci-proc-ids = <0x03 0xFF>;
+> +            resets = <&k3_reset 142 1>;
+> +            firmware-name = "j7-c66_0-fw";
+> +            memory-region = <&c66_0_dma_memory_region>,
+> +                            <&c66_0_memory_region>;
+> +            mboxes = <&mailbox0_cluster3 &mbox_c66_0>;
+> +        };
+> +    };
+> -- 
+> 2.23.0
+> 
