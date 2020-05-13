@@ -2,111 +2,191 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC471D0400
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 13 May 2020 02:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886B91D05B5
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 13 May 2020 05:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732118AbgEMAzh (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 12 May 2020 20:55:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732111AbgEMAzg (ORCPT
+        id S1728461AbgEMD6A (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 12 May 2020 23:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727107AbgEMD6A (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 12 May 2020 20:55:36 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7EEC061A0E
-        for <linux-remoteproc@vger.kernel.org>; Tue, 12 May 2020 17:55:35 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id r14so7235913pfg.2
-        for <linux-remoteproc@vger.kernel.org>; Tue, 12 May 2020 17:55:35 -0700 (PDT)
+        Tue, 12 May 2020 23:58:00 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2BEC061A0C;
+        Tue, 12 May 2020 20:57:58 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id w10so5402418ljo.0;
+        Tue, 12 May 2020 20:57:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=8wwa3jMzBsVMJhoFoeC5HT1Ng/t6lRTgcx0Z6MLydpE=;
-        b=LJOeK6k167T0qHY/gHMk23W6JRgArf4RIgYDYeFgTsfbhyZqu+osvBhNLNcuVPjbKy
-         PG/guFzPEwywB449YFQpC9DO6jCJtzM0O7yOGK/mIVmS4ECi4TtLmxARO6QqV3fnEM//
-         Jel0ZKNx+9d6UXfedIsiPRzPC9phkUE+gKTkBAO++xhgPvoBwVSljFo/pYjYqRdJPSFB
-         jj8H+/dCw5hsa8VYYbe/fiGFxSjwh82/FyOh+nhoezLFEdezhwbpQ7z107Bjc4EAdfjQ
-         7l6TTbXKLuAKvoj6j3d9vpQ1z4qM7Jf08DmfIaCwEY8uyE3GxHBTKO+mBCQY9MeZcTTm
-         WodA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6jF36zZV4YkOjjEEZcxlJOpsCDyfDyyD6Cte3hhe7uI=;
+        b=Y9XbgXJjX+6b/Our6/e59lW7rMJCRfJO6yDzwJR1u5a+RhYXDVOjWj/MbixpXAlrui
+         tpctqJeC0xlc287Dtv0RlCI9Uv3LvCKCDQXDdmqtodxedvelQUWwAUVoxR6kLxDRPBIw
+         nnlXH487hTvFkMAeK0XmN2uMADfBTpXbEGCqUQGJTLs+JgJVU8YQdc+gqaczKCjXk/ww
+         dLIJykfm8bjmnLHP0QANywpt1aM1jPQBkTI2QIZlSz01me1G9dgncXGPbNmvdgzbDn0n
+         //rocSpNRMykFJEJry29KXF0+QRYEnhnH9lQeHG/nK33ixD2idsoyYRUOyXRCyNyY5bP
+         eGfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=8wwa3jMzBsVMJhoFoeC5HT1Ng/t6lRTgcx0Z6MLydpE=;
-        b=Ej2yFm5xZPqq1e97F/KAHSII5oNtuLY6cyq9uD+IHAIZKlNC3SJvUUSBpGfolqU33M
-         Uf0FSGNGoTuqZuVuhCRT1LvF8A+XYqWZzDUL2A735boTx2Ct0QnutQ9dMRSwIicbWHC7
-         DWrxIOj0k7TNXgqXnIiXSLYLw332efyKL3i09SXJEV5ur9sF2CQM4qvHkX73nChXInY7
-         +i12t5K2PPxRGIWZ7jf3cRaHOaX56SjryCfik4ZdfgUentpYpzgmNr00mP7rVTB3nmA7
-         uaMTEmpQuGeGYZ0ZKz2m0V/OnfjvmIe1HrHLdy7IItBJwzD+ppWG96rNY0Cg6YX2ea1T
-         f0tg==
-X-Gm-Message-State: AGi0PuYOWoiCEZ1sVRw12tAfZQCOE/uYdiWtbF4DGCH2V0JLkZsSsJ+s
-        6AcRHFLKnf1BISJrb9gAPZMTwg==
-X-Google-Smtp-Source: APiQypK8A9XkNcELLFq9SHtAPbnP58OXlvL1We6HYrbyzS93bOuj6d8WCwO3j1pBijtX2cVIhuXkqA==
-X-Received: by 2002:a62:c1c4:: with SMTP id i187mr24691197pfg.319.1589331335353;
-        Tue, 12 May 2020 17:55:35 -0700 (PDT)
-Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id p2sm11057428pgh.25.2020.05.12.17.55.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 17:55:34 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: qcom: sm8250: Drop tcsr_mutex syscon
-Date:   Tue, 12 May 2020 17:54:41 -0700
-Message-Id: <20200513005441.1102586-5-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200513005441.1102586-1-bjorn.andersson@linaro.org>
-References: <20200513005441.1102586-1-bjorn.andersson@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6jF36zZV4YkOjjEEZcxlJOpsCDyfDyyD6Cte3hhe7uI=;
+        b=VCNKvjEATSZPebT/uMWXPV+aiuagMob3Tt1iB7EcG7jewtj56cnFMjN5bs1b9WjOxB
+         ptl56bTA7Gvi39MNjBjV7Z0Qalv+GWqZq+mv/GHfD99gvlhG6D90Yo6akDRV4cOd95q8
+         fUDcMV2pykWwBOwc0JZcCXphLySwNYeFRaohvewJiZHZaPuxWu+IbAQwQ9BPWpstV/jC
+         +YXuHn2WnqnthCdP/hD4H3kbBNjTRR04Zt1zGxNW7WgLgrYJLW23yQ9h58I0D/uFFjUT
+         weYBy2P9C/VyO+S5U5Vmm8opsF1tP86HWehZ90NVq831ZWprbmIT3YGapmLa5VAbEg3L
+         TlEg==
+X-Gm-Message-State: AOAM533uKDX8Xhqatz8+O2rNWsb9r7+25n2poKInd8Qp4rh6UO7d8/4W
+        cKGloUYyLQldsBSmSsNEU8/4HvKkLmr4A/sFl0d8L/6m
+X-Google-Smtp-Source: ABdhPJxfEIMDcND6bucfnbiaUf/kKcp6Jv+7+dq6HYchFLm1kBE0LRNTGoe8f4XeHYTkPvaQm5pT9GMkoE/Myrf+lFY=
+X-Received: by 2002:a2e:9490:: with SMTP id c16mr15831301ljh.110.1589342276826;
+ Tue, 12 May 2020 20:57:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200513005441.1102586-1-bjorn.andersson@linaro.org> <20200513005441.1102586-4-bjorn.andersson@linaro.org>
+In-Reply-To: <20200513005441.1102586-4-bjorn.andersson@linaro.org>
+From:   Baolin Wang <baolin.wang7@gmail.com>
+Date:   Wed, 13 May 2020 11:57:42 +0800
+Message-ID: <CADBw62oF=o4xxar8yO+xwhLa3h2oD_GD_tWhFo1DDTJGgFnEjg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] hwspinlock: qcom: Allow mmio usage in addition to syscon
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Ohad Ben-Cohen <ohad@wizery.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Now that we don't need the intermediate syscon to represent the TCSR
-mutexes, update the dts to describe the TCSR mutex directly.
+On Wed, May 13, 2020 at 8:55 AM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> In all modern Qualcomm platforms the mutex region of the TCSR is forked
+> off into its own block, all with a offset of 0 and stride of 4096. So
+> add support for directly memory mapping this register space, to avoid
+> the need to represent this block using a syscon.
+>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/hwspinlock/qcom_hwspinlock.c | 72 +++++++++++++++++++++-------
+>  1 file changed, 56 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
+> index f0da544b14d2..d8d4d729816c 100644
+> --- a/drivers/hwspinlock/qcom_hwspinlock.c
+> +++ b/drivers/hwspinlock/qcom_hwspinlock.c
+> @@ -70,41 +70,81 @@ static const struct of_device_id qcom_hwspinlock_of_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, qcom_hwspinlock_of_match);
+>
+> -static int qcom_hwspinlock_probe(struct platform_device *pdev)
+> +static struct regmap *qcom_hwspinlock_probe_syscon(struct platform_device *pdev,
+> +                                                  u32 *base, u32 *stride)
+>  {
+> -       struct hwspinlock_device *bank;
+>         struct device_node *syscon;
+> -       struct reg_field field;
+>         struct regmap *regmap;
+> -       size_t array_size;
+> -       u32 stride;
+> -       u32 base;
+>         int ret;
+> -       int i;
+>
+>         syscon = of_parse_phandle(pdev->dev.of_node, "syscon", 0);
+> -       if (!syscon) {
+> -               dev_err(&pdev->dev, "no syscon property\n");
+> -               return -ENODEV;
+> -       }
+> +       if (!syscon)
+> +               return ERR_PTR(-ENODEV);
+>
+>         regmap = syscon_node_to_regmap(syscon);
+>         of_node_put(syscon);
+>         if (IS_ERR(regmap))
+> -               return PTR_ERR(regmap);
+> +               return regmap;
+>
+> -       ret = of_property_read_u32_index(pdev->dev.of_node, "syscon", 1, &base);
+> +       ret = of_property_read_u32_index(pdev->dev.of_node, "syscon", 1, base);
+>         if (ret < 0) {
+>                 dev_err(&pdev->dev, "no offset in syscon\n");
+> -               return -EINVAL;
+> +               return ERR_PTR(-EINVAL);
+>         }
+>
+> -       ret = of_property_read_u32_index(pdev->dev.of_node, "syscon", 2, &stride);
+> +       ret = of_property_read_u32_index(pdev->dev.of_node, "syscon", 2, stride);
+>         if (ret < 0) {
+>                 dev_err(&pdev->dev, "no stride syscon\n");
+> -               return -EINVAL;
+> +               return ERR_PTR(-EINVAL);
+>         }
+>
+> +       return regmap;
+> +}
+> +
+> +static const struct regmap_config tcsr_mutex_config = {
+> +       .reg_bits               = 32,
+> +       .reg_stride             = 4,
+> +       .val_bits               = 32,
+> +       .max_register           = 0x40000,
+> +       .fast_io                = true,
+> +};
+> +
+> +static struct regmap *qcom_hwspinlock_probe_mmio(struct platform_device *pdev,
+> +                                                u32 *offset, u32 *stride)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct resource *res;
+> +       void __iomem *base;
+> +
+> +       /* All modern platform has offset 0 and stride of 4k */
+> +       *offset = 0;
+> +       *stride = 0x1000;
+> +
+> +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +       base = devm_ioremap_resource(&pdev->dev, res);
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+I think you can use devm_platform_ioremap_resource(pdev, 0) to
+simplify your code, otherwise looks good to me.
+Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index ecbcf725fba2..6e28754705b9 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -146,12 +146,6 @@ scm: scm {
- 		};
- 	};
- 
--	tcsr_mutex: hwlock {
--		compatible = "qcom,tcsr-mutex";
--		syscon = <&tcsr_mutex_regs 0 0x1000>;
--		#hwlock-cells = <1>;
--	};
--
- 	memory@80000000 {
- 		device_type = "memory";
- 		/* We expect the bootloader to fill in the size */
-@@ -569,9 +563,10 @@ rpmhpd_opp_turbo_l1: opp10 {
- 			};
- 		};
- 
--		tcsr_mutex_regs: syscon@1f40000 {
--			compatible = "syscon";
-+		tcsr_mutex: hwlock@1f40000 {
-+			compatible = "qcom,tcsr-mutex";
- 			reg = <0x0 0x01f40000 0x0 0x40000>;
-+			#hwlock-cells = <1>;
- 		};
- 
- 		slpi: remoteproc@5c00000 {
+> +       if (IS_ERR(base))
+> +               return ERR_CAST(base);
+> +
+> +       return devm_regmap_init_mmio(dev, base, &tcsr_mutex_config);
+> +}
+> +
+> +static int qcom_hwspinlock_probe(struct platform_device *pdev)
+> +{
+> +       struct hwspinlock_device *bank;
+> +       struct reg_field field;
+> +       struct regmap *regmap;
+> +       size_t array_size;
+> +       u32 stride;
+> +       u32 base;
+> +       int i;
+> +
+> +       regmap = qcom_hwspinlock_probe_syscon(pdev, &base, &stride);
+> +       if (IS_ERR(regmap) && PTR_ERR(regmap) == -ENODEV)
+> +               regmap = qcom_hwspinlock_probe_mmio(pdev, &base, &stride);
+> +
+> +       if (IS_ERR(regmap))
+> +               return PTR_ERR(regmap);
+> +
+>         array_size = QCOM_MUTEX_NUM_LOCKS * sizeof(struct hwspinlock);
+>         bank = devm_kzalloc(&pdev->dev, sizeof(*bank) + array_size, GFP_KERNEL);
+>         if (!bank)
+> --
+> 2.26.2
+>
+
+
 -- 
-2.26.2
-
+Baolin Wang
