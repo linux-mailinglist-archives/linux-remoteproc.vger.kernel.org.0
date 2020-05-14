@@ -2,175 +2,89 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2A5F1D3EAE
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 14 May 2020 22:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4615A1D3F10
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 14 May 2020 22:40:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728774AbgENUIb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 14 May 2020 16:08:31 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:11939 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729427AbgENUI1 (ORCPT
+        id S1726200AbgENUkY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 14 May 2020 16:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726076AbgENUkY (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 14 May 2020 16:08:27 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1589486906; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=4sodTfYBSa80PcaqFm4+5cs7pkyxemTKYG6L44YBdc0=; b=RafvSJiQPOBIjN/eYTD57ORNSA2KsZ0aTuRZKWqiW+aK8JpWSG0BPvFXKkXtWhbKgp9VTxFD
- /LwCnVkgTiAopk6i5SJ3iAKgKiuIgURdX6n7DAiIW9n+xH5jpYWf3wiCmlyvGwJXtky5Dn+P
- aZ7C+L78v+6uE0ayS04NCgf0olM=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5ebda539.7fdb73bc6ab0-smtp-out-n02;
- Thu, 14 May 2020 20:08:25 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 44F29C38561; Thu, 14 May 2020 20:08:25 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rishabhb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id DCC6BC49493;
-        Thu, 14 May 2020 20:08:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DCC6BC49493
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rishabhb@codeaurora.org
-From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
-To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
-        tsoni@codeaurora.org, psodagud@codeaurora.org,
-        sidgup@codeaurora.org, Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Subject: [PATCH v3 3/3] remoteproc: Add coredump debugfs entry
-Date:   Thu, 14 May 2020 13:07:36 -0700
-Message-Id: <1589486856-23440-4-git-send-email-rishabhb@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1589486856-23440-1-git-send-email-rishabhb@codeaurora.org>
-References: <1589486856-23440-1-git-send-email-rishabhb@codeaurora.org>
+        Thu, 14 May 2020 16:40:24 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34D66C061A0E
+        for <linux-remoteproc@vger.kernel.org>; Thu, 14 May 2020 13:40:24 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id b12so1649579plz.13
+        for <linux-remoteproc@vger.kernel.org>; Thu, 14 May 2020 13:40:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8ShLHCjvXE5CC05PHmK2XoqTLK7MtzkzghArKGHtan0=;
+        b=PbhW5x5zfvK7CT1lw2rJjnTpTGhFpvIGG2nIm0gjiYMHZaNuoex89UcQiyXrL+RTVt
+         LQAmVSG4A4o0AlxzIxjnahjAE/gTAfWQiAAylmz9Gfbc6UJJiZKuCb3S67XzlyiinOPB
+         M3EUcqB4RwyOGubsFfvx6EAox4Hi8KHSN/ENdZ0g8ydlQKhsiAEeeXXwAvlh7aL2+VcY
+         kAzY0nhQJGGOeDFR1yTrRNKVYyhf1ciWLKMw+ket3XMer9nmiYn8dN64Tnnyw6Wd6n5I
+         33LahBp2w38lWSCWHeLyX3Fmv1ODnntZXv7VlC+vnByVIxjEG9OqC1JujiK0CcZwpVha
+         7pcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8ShLHCjvXE5CC05PHmK2XoqTLK7MtzkzghArKGHtan0=;
+        b=aLcC/uCeLbfF+MbAYHG9CvoQx3WF71d7lmq1cUK3IZGsmVCD69583sQ5GuKjhJVjTV
+         S+fLzR4vcYYT3NjiI4A5CWT4E5dnYXCr86WdIX9cs8twva+vMPeC/4vLUz6aIkTonAQD
+         tc7hjpi+qWJLRNBA+aIN41uDuQbJckxtceWJUPoO6rvA3OQGlPdQHZyJ7CKBkUeAR908
+         9A7QzMNg6dwmFQAkT3Yvym1HtdQzHBojcPeAd5aLzVtz3Lo9a2YfFArTjFasVjT3JfRZ
+         tdhskNUwFBH1dwpM5PmrZRbnEpIn8y2J6fe9RXlvXvCOls5DK3d8j9Mv3XnkesV6BS+r
+         Ac2w==
+X-Gm-Message-State: AOAM533jN7kE9Mm+GGjynUHlgprghf01jVQJH651ma7KY5+f5PHhEM/I
+        QLZqC2JNb4UD29M4cNvHbfvjCA==
+X-Google-Smtp-Source: ABdhPJwjkZn2TxedarCJgzq9tQN35yVP/QBf0FK0TqaVBZ6NHPCbCNQ6ePPyBE/alOLnlemR59nlxg==
+X-Received: by 2002:a17:902:b906:: with SMTP id bf6mr352723plb.169.1589488823674;
+        Thu, 14 May 2020 13:40:23 -0700 (PDT)
+Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id d124sm76062pfa.98.2020.05.14.13.40.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 May 2020 13:40:23 -0700 (PDT)
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org
+Cc:     arnaud.pouliquen@st.com, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/2] rpmsg: core: Add support for name extension 
+Date:   Thu, 14 May 2020 14:40:20 -0600
+Message-Id: <20200514204022.24233-1-mathieu.poirier@linaro.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add coredump debugfs entry to configure the type of dump that will
-be collected during recovery. User can select between default or
-inline coredump functionality. Also coredump collection can be
-disabled through this interface.
-This functionality can be configured differently for different
-remote processors.
+This patchset adds the capability to supplement the base definition
+published by an rpmsg_driver with a postfix description so that it
+is easy to differentiate entities that use the same name service.
 
-Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
----
- drivers/remoteproc/remoteproc_debugfs.c | 86 +++++++++++++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
+Applies cleanly on rpmsg-next (4f05fc33bebd).
 
-diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
-index 732770e..2f611de 100644
---- a/drivers/remoteproc/remoteproc_debugfs.c
-+++ b/drivers/remoteproc/remoteproc_debugfs.c
-@@ -28,6 +28,90 @@
- static struct dentry *rproc_dbg;
- 
- /*
-+ * A coredump-configuration-to-string lookup table, for exposing a
-+ * human readable configuration via debugfs. Always keep in sync with
-+ * enum rproc_coredump_mechanism
-+ */
-+static const char * const rproc_coredump_str[] = {
-+	[COREDUMP_DEFAULT]	= "default",
-+	[COREDUMP_INLINE]	= "inline",
-+	[COREDUMP_DISABLED]	= "disabled",
-+};
-+
-+/* Expose the current coredump configuration via debugfs */
-+static ssize_t rproc_coredump_read(struct file *filp, char __user *userbuf,
-+				    size_t count, loff_t *ppos)
-+{
-+	struct rproc *rproc = filp->private_data;
-+	const char *buf = rproc_coredump_str[rproc->dump_conf];
-+
-+	return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf));
-+}
-+
-+/*
-+ * By writing to the 'coredump' debugfs entry, we control the behavior of the
-+ * coredump mechanism dynamically. The default value of this entry is "default".
-+ *
-+ * The 'coredump' debugfs entry supports these commands:
-+ *
-+ * default:	This is the default coredump mechanism. When the remoteproc
-+ *		crashes the entire coredump will be copied to a separate buffer
-+ *		and exposed to userspace.
-+ *
-+ * inline:	The coredump will not be copied to a separate buffer and the
-+ *		recovery process will have to wait until data is read by
-+ *		userspace. But this avoid usage of extra memory.
-+ *
-+ * disabled:	This will disable coredump. Recovery will proceed without
-+ *		collecting any dump.
-+ */
-+static ssize_t rproc_coredump_write(struct file *filp,
-+				     const char __user *user_buf, size_t count,
-+				     loff_t *ppos)
-+{
-+	struct rproc *rproc = filp->private_data;
-+	int ret, err = 0;
-+	char buf[20];
-+
-+	if (count > sizeof(buf))
-+		return -EINVAL;
-+
-+	ret = copy_from_user(buf, user_buf, count);
-+	if (ret)
-+		return -EFAULT;
-+
-+	/* remove end of line */
-+	if (buf[count - 1] == '\n')
-+		buf[count - 1] = '\0';
-+
-+	if (rproc->state == RPROC_CRASHED) {
-+		dev_err(&rproc->dev, "can't change coredump configuration\n");
-+		err = -EBUSY;
-+		goto out;
-+	}
-+
-+	if (!strncmp(buf, "disable", count))
-+		rproc->dump_conf = COREDUMP_DISABLED;
-+	else if (!strncmp(buf, "inline", count))
-+		rproc->dump_conf = COREDUMP_INLINE;
-+	else if (!strncmp(buf, "default", count))
-+		rproc->dump_conf = COREDUMP_DEFAULT;
-+	else {
-+		dev_err(&rproc->dev, "Invalid coredump configuration\n");
-+		err = -EINVAL;
-+	}
-+out:
-+	return err ? err : count;
-+}
-+
-+static const struct file_operations rproc_coredump_fops = {
-+	.read = rproc_coredump_read,
-+	.write = rproc_coredump_write,
-+	.open = simple_open,
-+	.llseek = generic_file_llseek,
-+};
-+
-+/*
-  * Some remote processors may support dumping trace logs into a shared
-  * memory buffer. We expose this trace buffer using debugfs, so users
-  * can easily tell what's going on remotely.
-@@ -337,6 +421,8 @@ void rproc_create_debug_dir(struct rproc *rproc)
- 			    rproc, &rproc_rsc_table_fops);
- 	debugfs_create_file("carveout_memories", 0400, rproc->dbg_dir,
- 			    rproc, &rproc_carveouts_fops);
-+	debugfs_create_file("coredump", 0600, rproc->dbg_dir,
-+			    rproc, &rproc_coredump_fops);
- }
- 
- void __init rproc_init_debugfs(void)
+Thanks,
+Mathieu
+
+New for V5:
+- Return error code if no match is found (Arnaud).
+- Return a pointer to the rpmsg device name rather than
+  duplicating it (Arnaud).
+
+Mathieu Poirier (2):
+  rpmsg: core: Add wildcard match for name service
+  rpmsg: core: Add support to retrieve name extension
+
+ drivers/rpmsg/rpmsg_core.c | 115 ++++++++++++++++++++++++++++++++++++-
+ include/linux/rpmsg.h      |  13 +++++
+ 2 files changed, 127 insertions(+), 1 deletion(-)
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.20.1
+
