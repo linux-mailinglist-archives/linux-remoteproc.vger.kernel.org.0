@@ -2,62 +2,35 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD6E1D3F12
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 14 May 2020 22:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AEB1D4B38
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 15 May 2020 12:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbgENUk2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 14 May 2020 16:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728031AbgENUk0 (ORCPT
+        id S1728081AbgEOKnt (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 15 May 2020 06:43:49 -0400
+Received: from outils.crapouillou.net ([89.234.176.41]:41384 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728013AbgEOKns (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 14 May 2020 16:40:26 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B3DC061A0E
-        for <linux-remoteproc@vger.kernel.org>; Thu, 14 May 2020 13:40:26 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id b12so1649612plz.13
-        for <linux-remoteproc@vger.kernel.org>; Thu, 14 May 2020 13:40:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=LYKG+gPEFw9rTlwwtHvknuJBiWyt3JtNpuAesPtjSaQ=;
-        b=N/j6Xr/HTfj8RV8QAidBt37S2c0i7E8uRZ5YJyOWAw499sJ1EUXrzu7F4WT6GJPlF9
-         aeglZhU5PjNKvdjCSd2awrbNLLETqgHIHx19k+IVrKiS8Tk6NUnmX5CM1dKWk2u0SMgB
-         y6FGMqKjH2SgpD5Yahx8ew98VV7QDHTOw2Xo6Oi4ImEKpsJnbMd9eZyWGdur2e2uOofd
-         VyhruT5IxF/g2Ue3cp4pf4Zro4LVRz9wDp7T8ItGA2FVlfQaJtEmH5quBKya/NEtvpD4
-         bBhlgG9DtStnwfsI5PYYAmv1XKfftHn2iOZYzad2FNkkuK0a7SUUYjyfZh8iufZ0TVM2
-         aWnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=LYKG+gPEFw9rTlwwtHvknuJBiWyt3JtNpuAesPtjSaQ=;
-        b=HKVVQOISH5gHI4gPuxMN+GDPXt6EdF/j9esmCvCwthIRcv9IG9nXH33Km9/FddcEbE
-         xWH0GHCpyhx16CKf9WUFCqu7QGbj9O74mGTNqgt2AlLiOsGrRf+J5tXgpwaha84Gjf6R
-         jast5WCaiRviDVwCRlV323Apa4WmR5JCRYa79ggFODqaZjwYrBtOsf7vitB4Xeuefb4/
-         VI6dX5TTz4vV+PcI9CC/x6rjZWial02zAeDKEDhJqpp9Mt6rMEwZdojVg1y6n/lrc02b
-         jKJHJUhLmOKR1WA17cUcDTn+21EfnFDL/8N/21HZ7tZekPTrO19aP7B9GDLBcJhni7K4
-         T4Sw==
-X-Gm-Message-State: AOAM5335HMMg+4nutGDIN/IuXk3Nl7EekFe0XgZepKw/y5JU751YtFed
-        WWF+XB/1Tiq3ghBifktZIxM4Zg==
-X-Google-Smtp-Source: ABdhPJw0BRcE+Hcz9YmDGTnJ+mTJbIMDLAj4d1Ig+s808slxOgxGDQocpMaaLrHWrevAeUO6c1cEgg==
-X-Received: by 2002:a17:902:c213:: with SMTP id 19mr374929pll.172.1589488825761;
-        Thu, 14 May 2020 13:40:25 -0700 (PDT)
-Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id d124sm76062pfa.98.2020.05.14.13.40.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2020 13:40:25 -0700 (PDT)
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org
-Cc:     arnaud.pouliquen@st.com, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/2] rpmsg: core: Add support to retrieve name extension
-Date:   Thu, 14 May 2020 14:40:22 -0600
-Message-Id: <20200514204022.24233-3-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200514204022.24233-1-mathieu.poirier@linaro.org>
-References: <20200514204022.24233-1-mathieu.poirier@linaro.org>
+        Fri, 15 May 2020 06:43:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1589539425; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=LSfDnvsEJIz1J1JIdTi+RPD75P1nIyJJmUoWunmP6sM=;
+        b=VCM6A/LaTaE0jZo38Ia7KdlbNDVbLYUQh1fOPfNZuD5aN7E/BiQZx0E93N1S1RcAf+2uJO
+        WuazfiA/DKpxQ1UJnTlv1m1+vVrDK08II/59JZYG2lpkTO98M2bmXqHcxw1ncapo/1vtes
+        Uolr7r3/BC/45wJYF5L0bnM6+fXjUmo=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Cc:     od@zcrc.me, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Cercueil <paul@crapouillou.net>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v7 1/5] dt-bindings: Document JZ47xx VPU auxiliary processor
+Date:   Fri, 15 May 2020 12:43:36 +0200
+Message-Id: <20200515104340.10473-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -65,155 +38,110 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-After adding support for rpmsg device name extension, this patch
-provides a function that returns the extension portion of an rpmsg
-device name.  That way users of the name extension functionality don't
-have to write the same boiler plate code to extract the information.
+Inside the Video Processing Unit (VPU) of the recent JZ47xx SoCs from
+Ingenic is a second Xburst MIPS CPU very similar to the main core.
+This document describes the devicetree bindings for this auxiliary
+processor.
 
-Suggested-by: Suman Anna <s-anna@ti.com>;
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/rpmsg/rpmsg_core.c | 95 ++++++++++++++++++++++++++++++++++++++
- include/linux/rpmsg.h      | 13 ++++++
- 2 files changed, 108 insertions(+)
 
-diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
-index 5e01e8dede6b..9583eb936607 100644
---- a/drivers/rpmsg/rpmsg_core.c
-+++ b/drivers/rpmsg/rpmsg_core.c
-@@ -439,6 +439,101 @@ static int rpmsg_dev_match(struct device *dev, struct device_driver *drv)
- 	return of_driver_match_device(dev, drv);
- }
- 
-+/**
-+ * rpmsg_device_get_name_extension() - get the name extension of a rpmsg device
-+ * @rpdev: the rpmsg device to work with
-+ * @skip: how many characters in the extension should be skipped over
-+ *
-+ * With function rpmsg_id_match() allowing for extension of the base driver name
-+ * in order to differentiate services, this function returns the extension part
-+ * of an rpmsg device name.  As such and with the following rpmsg driver device
-+ * id table and rpmsg device names:
-+ *
-+ * static struct rpmsg_device_id rpmsg_driver_sample_id_table[] = {
-+ *      { .name = "rpmsg-client-sample" },
-+ *      { },
-+ * }
-+ *
-+ * rpdev1->id.name == "rpmsg-client-sample";
-+ * rpdev2->id.name == "rpmsg-client-sample_instance0";
-+ *
-+ * Calling rpmsg_device_get_name_extension() will yields the following:
-+ *
-+ * rpmsg_device_get_name_extension(rpdev1, 0) == NULL;
-+ * rpmsg_device_get_name_extension(rpdev2, 0) == "_instance0";
-+ * rpmsg_device_get_name_extension(rpdev2, 1) == "instance0";
-+ *
-+ *
-+ * Return: The name extension if found, NULL if the name of the RPMSG device
-+ *	   equals the name of the RPMSG driver and an error if no match is
-+ *	   found or a validation problem has occurred.
-+ */
-+const char *rpmsg_device_get_name_extension(struct rpmsg_device *rpdev,
-+					    unsigned int skip)
-+{
-+	const char *drv_name, *dev_name, *extension;
-+	const struct rpmsg_device_id *ids;
-+	struct device *dev = &rpdev->dev;
-+	struct rpmsg_driver *rpdrv;
-+	bool match = false;
-+	unsigned int i;
+Notes:
+    v2: Update TCSM0 address in example
+    v3: Change node name to 'video-decoder'
+    v4: Convert to YAML. I didn't add Rob's Ack on v3 because of that (sorry Rob)
+    v5: - Fix 'reg' not in <addr, len> pairs
+    	- Add missing include to devicetree example
+    v6-v7: No change
+
+ .../bindings/remoteproc/ingenic,vpu.yaml      | 77 +++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
+
+diff --git a/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
+new file mode 100644
+index 000000000000..c019f9fbe916
+--- /dev/null
++++ b/Documentation/devicetree/bindings/remoteproc/ingenic,vpu.yaml
+@@ -0,0 +1,77 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/remoteproc/ingenic,vpu.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+	if (!dev->driver)
-+		return ERR_PTR(-EINVAL);
++title: Ingenic Video Processing Unit bindings
 +
-+	rpdrv = to_rpmsg_driver(dev->driver);
++description:
++  Inside the Video Processing Unit (VPU) of the recent JZ47xx SoCs from
++  Ingenic is a second Xburst MIPS CPU very similar to the main core.
++  This document describes the devicetree bindings for this auxiliary
++  processor.
 +
-+	/*
-+	 * No point in going further if the device doesn't have name or
-+	 * the driver doesn't have a table to work with.
-+	 */
-+	if (!rpdev->id.name[0] || !rpdrv->id_table)
-+		return ERR_PTR(-EINVAL);
++maintainers:
++  - Paul Cercueil <paul@crapouillou.net>
 +
-+	ids = rpdrv->id_table;
-+	dev_name = rpdev->id.name;
++properties:
++  compatible:
++    const: ingenic,jz4770-vpu-rproc
 +
-+	/*
-+	 * See if any name in the driver's table match the beginning
-+	 * of the rpmsg device's name.
-+	 */
-+	for (i = 0; ids[i].name[0]; i++) {
-+		drv_name = ids[i].name;
-+		if (strncmp(drv_name,
-+			    dev_name, strlen(drv_name)) == 0) {
-+			match = true;
-+			break;
-+		}
-+	}
++  reg:
++    items:
++      - description: aux registers
++      - description: tcsm0 registers
++      - description: tcsm1 registers
++      - description: sram registers
 +
-+	/*
-+	 * A match was not found, return an error to differentiate with cases
-+	 * where a match was found but the name has no extension (see below).
-+	 */
-+	if (!match)
-+		return ERR_PTR(-ENOENT);
++  reg-names:
++    items:
++      - const: aux
++      - const: tcsm0
++      - const: tcsm1
++      - const: sram
 +
-+	 /* No name extension to return if device and driver are the same */
-+	if (strlen(dev_name) == strlen(drv_name))
-+		return NULL;
++  clocks:
++    items:
++      - description: aux clock
++      - description: vpu clock
 +
-+	/*
-+	 * Make sure we were not requested to skip past the end
-+	 * of the device name.
-+	 */
-+	if (strlen(drv_name) + skip >= strlen(dev_name))
-+		return ERR_PTR(-EINVAL);
++  clock-names:
++    items:
++      - const: aux
++      - const: vpu
 +
-+	/*
-+	 * Move past the base name published by the driver and
-+	 * skip any extra characters if needed.
-+	 */
-+	extension = dev_name + strlen(drv_name) + skip;
++  interrupts:
++    description: VPU hardware interrupt
 +
-+	return extension;
-+}
-+EXPORT_SYMBOL(rpmsg_device_get_name_extension);
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - interrupts
 +
- static int rpmsg_uevent(struct device *dev, struct kobj_uevent_env *env)
- {
- 	struct rpmsg_device *rpdev = to_rpmsg_device(dev);
-diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-index 9fe156d1c018..9537b95ad30a 100644
---- a/include/linux/rpmsg.h
-+++ b/include/linux/rpmsg.h
-@@ -135,6 +135,9 @@ int rpmsg_trysend_offchannel(struct rpmsg_endpoint *ept, u32 src, u32 dst,
- __poll_t rpmsg_poll(struct rpmsg_endpoint *ept, struct file *filp,
- 			poll_table *wait);
- 
-+const char *rpmsg_device_get_name_extension(struct rpmsg_device *dev,
-+					    unsigned int skip);
++additionalProperties: false
 +
- #else
- 
- static inline int register_rpmsg_device(struct rpmsg_device *dev)
-@@ -242,6 +245,16 @@ static inline __poll_t rpmsg_poll(struct rpmsg_endpoint *ept,
- 	return 0;
- }
- 
-+static inline
-+const char *rpmsg_device_get_name_extension(struct rpmsg_device *dev,
-+					    unsigned int skip)
-+{
-+	/* This shouldn't be possible */
-+	WARN_ON(1);
++examples:
++  - |
++    #include <dt-bindings/clock/jz4770-cgu.h>
 +
-+	return NULL;
-+}
++    vpu: video-decoder@132a0000 {
++      compatible = "ingenic,jz4770-vpu-rproc";
 +
- #endif /* IS_ENABLED(CONFIG_RPMSG) */
- 
- /* use a macro to avoid include chaining to get THIS_MODULE */
++      reg = <0x132a0000 0x20>, /* AUX */
++            <0x132b0000 0x4000>, /* TCSM0 */
++            <0x132c0000 0xc000>, /* TCSM1 */
++            <0x132f0000 0x7000>; /* SRAM */
++      reg-names = "aux", "tcsm0", "tcsm1", "sram";
++
++      clocks = <&cgu JZ4770_CLK_AUX>, <&cgu JZ4770_CLK_VPU>;
++      clock-names = "aux", "vpu";
++
++      interrupt-parent = <&cpuintc>;
++      interrupts = <3>;
++    };
 -- 
-2.20.1
+2.26.2
 
