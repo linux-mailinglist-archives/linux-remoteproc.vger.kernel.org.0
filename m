@@ -2,96 +2,104 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6051D5B13
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 15 May 2020 22:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A2C1D5B39
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 15 May 2020 23:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbgEOU4u (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 15 May 2020 16:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S1726980AbgEOVKn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 15 May 2020 17:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726722AbgEOU4t (ORCPT
+        with ESMTP id S1726183AbgEOVKn (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 15 May 2020 16:56:49 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D99C061A0C
-        for <linux-remoteproc@vger.kernel.org>; Fri, 15 May 2020 13:56:49 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id t16so1396925plo.7
-        for <linux-remoteproc@vger.kernel.org>; Fri, 15 May 2020 13:56:49 -0700 (PDT)
+        Fri, 15 May 2020 17:10:43 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE43C061A0C
+        for <linux-remoteproc@vger.kernel.org>; Fri, 15 May 2020 14:10:43 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id q16so1418578plr.2
+        for <linux-remoteproc@vger.kernel.org>; Fri, 15 May 2020 14:10:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=s8VDhGuf90flrni22PAMq0PKDvRvzu01cgQHrQkAFj4=;
-        b=y/0wl3uo18c7tS7j57d3Zz+JlewUQBMvtMwNWF0DZ7HLH1KZYmL0up0STGVDbMDtyK
-         7HseB+rrPRH1K+IJ4zFxWycOTsh6YlrcOZc4K7vbjrBwwRr1aEeELQxu/JB0ShYEm65Y
-         Tc4gNrusae8YlRRDo8NchO+oZrGWxqr+GTdQEEgVoynZ0hHV+PyzI2mpXLHZHLPNvp3Z
-         TvltwGzEPHW8vNrozpq/YZBeffCUdr8pQETq0y7jlPy9m3zM3kZicnLcyCZmCCjgyCPK
-         JQA/0p9UKXrucdcZECmSi5EoXCMfOEZFfqgZLoSNRYFBtbfOVef+xs8lVNQ7jXg9a3Sj
-         pxyw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y1I+UKL+S9RIToBCTfDZkoeewbB2eUT2boKx9t2Bbw4=;
+        b=qfIyYrNnt5F1ERWHO/RjTURyMAmjIDaNeEnqrvy9nNQRINucfLSqSbVlDez082XVMd
+         h1wSiFEzcf9f5/5xvVB+byyPuhMp785Lf7EgE1BVrO2Sipxe0AnTE7N3Oj6HZRdGief0
+         FdMSQdZIopNnwL/8bYHlDPPse2Zmx/xCSb007AV+ouY/9EER+EMjTNlE1UsTQsRkgIuE
+         CDWxj1sC5xNLx7FEWXgkpj/oGf9KCLI9pDfvzyfkn5W/28N++7gt3AlRE/BQ/TFtObTT
+         Mb9j1N+ozbht3bpBUmcCT9drDP+LaBJwG4dq1OKyhTPxRf5c9xzgI9uyMv7TwIlaRJNS
+         SqCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=s8VDhGuf90flrni22PAMq0PKDvRvzu01cgQHrQkAFj4=;
-        b=Ti/08cy3i9cMBGn7tPtUPFUVg4ZiThI4PRDorCcX/Z9soyeA3uz4aDnzEiVmn5vWor
-         gHZKXOTK3UHoJq8PjpNxPcarNO777/hf8ZoKpZLn76LPbA6FT0kxWn9nVMUyDh/gorry
-         IvwGqzKAda3pGq9lgRb5aPRBVkCRDZOMc+wFryxYRYcEQ/co8oWpSS5FKjw9QHSk1rmf
-         Z/L4frB7MUOSdVuJw3A/wYcNrSHrJI3zaGNnFQ6zYJqXgjnKIgsrTGfya97/TdzUQGsB
-         oTbXbLLo8y8NZrMoNz6J1Atc9Wp1ssPjmP+eBb0MX1RY9RvlNiQLR99hYNA0/ikkhLeN
-         h0eA==
-X-Gm-Message-State: AOAM5335rbl6B3eLzKVFEdZ87Tr/rruzIrQZCIbqjnTRMK4G5zVAqmdX
-        MDjQRvTp4kVEYSb+Dk3aZEGhsA==
-X-Google-Smtp-Source: ABdhPJx24OkkbS2jhgwfSIrmOtBRqe/ry5dIWhu5gs9ECDMAJuQMhtatx9NQP1yAHm23aPdjWmBFUw==
-X-Received: by 2002:a17:90a:4d4a:: with SMTP id l10mr5560683pjh.0.1589576208902;
-        Fri, 15 May 2020 13:56:48 -0700 (PDT)
-Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id z13sm2208903pjz.42.2020.05.15.13.56.47
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y1I+UKL+S9RIToBCTfDZkoeewbB2eUT2boKx9t2Bbw4=;
+        b=SMv+9bcgb2X8loFRfddWVSIWucMcNBdyv7JlGw63F+2EOMaXIEXoi8MA7mg7IYLUHy
+         yKxHwuPWJVTlH5napenXdeejqWydWlZi9QQJKFb1gQHIvQ+zRF/BiisTPRr03rqri9Tx
+         qfK9NWLBNIJltYYDIDJdMWFGC9yWsbd1ymXLRVmfPHs0y8Mf48WJmbxeo95e/yF5FuDw
+         D69p/CfNEKkLCaIF1+J0sOYsf54KJuld4hbVco3nvqOlClDYB0uDO4GTMFGtU5Xa77Wp
+         jkOPzUF24W3EjjV8WRXEidam2d6hvPTtTjvz0wI6wbt0c/q5FTdG4H+Yodrn97vKi4za
+         /rHQ==
+X-Gm-Message-State: AOAM531BOUEVstxdmCVEfaO+f5b93cMNAfpjFr9HbEXTwy1H1/4vB/Wm
+        XqBW/7WeIT/cRvJwlr3WV6ah0g==
+X-Google-Smtp-Source: ABdhPJxM3uFamD7cT3IoJIFOJUgTBrJbOx0dOs+bvU643+PNKH5jhK1WEf+BioK/CwyCuY3G0/JEMw==
+X-Received: by 2002:a17:902:326:: with SMTP id 35mr4975654pld.188.1589577042796;
+        Fri, 15 May 2020 14:10:42 -0700 (PDT)
+Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id a2sm2646525pfl.12.2020.05.15.14.10.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 May 2020 13:56:47 -0700 (PDT)
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org
-Cc:     arnaud.pouliquen@st.com, s-anna@ti.com,
+        Fri, 15 May 2020 14:10:42 -0700 (PDT)
+Date:   Fri, 15 May 2020 14:09:14 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     ohad@wizery.com, arnaud.pouliquen@st.com, s-anna@ti.com,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 3/3] sample: rpmsg: Print out RPMSG device name extension
-Date:   Fri, 15 May 2020 14:56:42 -0600
-Message-Id: <20200515205642.13529-4-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200515205642.13529-1-mathieu.poirier@linaro.org>
+Subject: Re: [PATCH v6 0/3] rpmsg: core: Add support for name extension
+Message-ID: <20200515210914.GA408178@builder.lan>
 References: <20200515205642.13529-1-mathieu.poirier@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200515205642.13529-1-mathieu.poirier@linaro.org>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Use the new rpmsg_device_get_name_extension() API to print the
-RPMSG name extension if used by a RPMSG device name.
+On Fri 15 May 13:56 PDT 2020, Mathieu Poirier wrote:
 
-Suggested-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- samples/rpmsg/rpmsg_client_sample.c | 5 +++++
- 1 file changed, 5 insertions(+)
+> This patchset adds the capability to supplement the base definition
+> published by an rpmsg_driver with a postfix description so that it
+> is easy to differentiate entities that use the same name service.
+> 
+> Applies cleanly on rpmsg-next (4f05fc33bebd).
+> 
 
-diff --git a/samples/rpmsg/rpmsg_client_sample.c b/samples/rpmsg/rpmsg_client_sample.c
-index ae5081662283..2c5dc65ed844 100644
---- a/samples/rpmsg/rpmsg_client_sample.c
-+++ b/samples/rpmsg/rpmsg_client_sample.c
-@@ -51,8 +51,13 @@ static int rpmsg_sample_cb(struct rpmsg_device *rpdev, void *data, int len,
- static int rpmsg_sample_probe(struct rpmsg_device *rpdev)
- {
- 	int ret;
-+	const char *extension;
- 	struct instance_data *idata;
- 
-+	extension = rpmsg_device_get_name_extension(rpdev, 1);
-+	if (!IS_ERR_OR_NULL(extension))
-+		dev_info(&rpdev->dev, "extension: %s\n", extension);
-+
- 	dev_info(&rpdev->dev, "new channel: 0x%x -> 0x%x!\n",
- 					rpdev->src, rpdev->dst);
- 
--- 
-2.20.1
+Thanks Mathieu, this series does look good.
 
+
+But before merging this, can someone show me a real example where this
+is being/would be used? What are some real channel names and extensions?
+
+Regards,
+Bjorn
+
+> New for V6:
+> - Added example on how to use the new API.
+> 
+> Thanks,
+> Mathieu
+> 
+> 
+> Mathieu Poirier (3):
+>   rpmsg: core: Add wildcard match for name service
+>   rpmsg: core: Add support to retrieve name extension
+>   sample/rpmsg: Print out RPMSG device name extension
+> 
+>  drivers/rpmsg/rpmsg_core.c          | 115 +++++++++++++++++++++++++++-
+>  include/linux/rpmsg.h               |  13 ++++
+>  samples/rpmsg/rpmsg_client_sample.c |   5 ++
+>  3 files changed, 132 insertions(+), 1 deletion(-)
+> 
+> -- 
+> 2.20.1
+> 
