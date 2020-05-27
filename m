@@ -2,131 +2,98 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0E11E4E2C
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 27 May 2020 21:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4DB01E4F48
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 27 May 2020 22:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725920AbgE0TbM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 27 May 2020 15:31:12 -0400
-Received: from mail-il1-f193.google.com ([209.85.166.193]:46193 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbgE0TbL (ORCPT
+        id S1728707AbgE0U07 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 27 May 2020 16:26:59 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:50930 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727997AbgE0U07 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 27 May 2020 15:31:11 -0400
-Received: by mail-il1-f193.google.com with SMTP id h3so2750540ilh.13;
-        Wed, 27 May 2020 12:31:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=sAgRZEOkeo465WXLSSAxn5bIub6KkhXGVZu40dWUrNY=;
-        b=YsdwlX1SRlOdBIcTFUinNLMlHsDSxLUyYko+1yxh2jWcnm6Rh5fxesKYY++SBUuXcn
-         LyckZyBgPkdSFOE7IGQ+RXE2AXLj2Er1gWzGmudzdya6TTUXaiZfVBy7tOXCAmNSqn8l
-         SyoF+v3W5/zC7H/PX0ZBgT1IW2VLvlFfoEXL/2p8M0h27zQprINOdjwIekjq0HQbDVJS
-         PNja+8RUZYhP8rrTyRAWbDoOHpOIObuT7ja3ufzPJwoFQfL9Me6NJBgeYZt7OGnj2He/
-         GJ6M4zDdwxn1LkFpgm8nicDhyTXcnDCPe5G/h8v3CbGYABb3vPKFC1wi8jkUAC8cfscr
-         AxnA==
-X-Gm-Message-State: AOAM531ylw7R0tqnr/cEHc9jmeOtmlIMMQiSWj+Rp38pajAd+GSETtTw
-        m3YsgPYl+apy5y7CRFyc+w==
-X-Google-Smtp-Source: ABdhPJx/5Sz7NHPGLgt5sw/lt8hHsq2px9eDP7QopDynfCqhw3zJ0ye1bD3gS7CWWHQCIoXwZYDsKg==
-X-Received: by 2002:a92:8d03:: with SMTP id s3mr7285926ild.256.1590607870279;
-        Wed, 27 May 2020 12:31:10 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id y11sm1976877ily.22.2020.05.27.12.31.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 May 2020 12:31:09 -0700 (PDT)
-Received: (nullmailer pid 2600923 invoked by uid 1000);
-        Wed, 27 May 2020 19:31:08 -0000
-Date:   Wed, 27 May 2020 13:31:08 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>, Ohad Ben-Cohen <ohad@wizery.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: hwlock: qcom: Migrate binding to YAML
-Message-ID: <20200527193108.GA2597510@bogus>
-References: <20200513005441.1102586-1-bjorn.andersson@linaro.org>
- <20200513005441.1102586-2-bjorn.andersson@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200513005441.1102586-2-bjorn.andersson@linaro.org>
+        Wed, 27 May 2020 16:26:59 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1590611218; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=lDvp9mtb1BNZtF00ZqLwVSC6bknYfvTg0uIyQBTnJ20=; b=I+/5fwLPYGtg72c7RbtWjWCAU0tbEvOvqrqSKrDrB5uIrBhVXydpK1ijcRRslcC6cLC4e/Za
+ tXz7tu8N59b5WRujBxe7eBhHp0/CKGYD3O8y86bJ58t9cVWpt8xPBkJNZdFVjsJEpPZDrZec
+ yaDFY11Jf3s6PJ5GO61iF2r2obg=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 5ececd00ea0dfa490e06c969 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 27 May 2020 20:26:40
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id A5940C433CB; Wed, 27 May 2020 20:26:39 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rishabhb)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 85C51C433C6;
+        Wed, 27 May 2020 20:26:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 85C51C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rishabhb@codeaurora.org
+From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
+To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bjorn.andersson@linaro.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, sidgup@codeaurora.org,
+        mathieu.poirier@linaro.org,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Subject: [v4 PATCH 0/3] Extend coredump functionality
+Date:   Wed, 27 May 2020 13:26:14 -0700
+Message-Id: <1590611177-15826-1-git-send-email-rishabhb@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, May 12, 2020 at 05:54:38PM -0700, Bjorn Andersson wrote:
-> Migrate the Qualcomm TCSR mutex binding to YAML to allow validation.
+This patch series moves the coredump functionality to a separate
+file and adds "inline" coredump feature. Inline coredump directly
+copies segments from device memory during coredump to userspace.
+This avoids extra memory usage at the cost of speed. Recovery is
+stalled until all data is read by userspace.
 
-Where's the deletion of the old text file?
+Changelog:
 
-Looks fine if this is existing. Lots of comments if this is a new 
-binding...
+v4 -> v3:
+- Write a helper function to copy segment memory for every dump format
+- Change segment dump fn to add offset and size adn covert mss driver
 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  .../bindings/hwlock/qcom-hwspinlock.yaml      | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
-> new file mode 100644
-> index 000000000000..71e63b52edd5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/hwlock/qcom-hwspinlock.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Hardware Mutex Block
-> +
-> +maintainers:
-> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> +
-> +description:
-> +  The hardware block provides mutexes utilized between different processors on
-> +  the SoC as part of the communication protocol used by these processors.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sfpb-mutex
-> +      - qcom,tcsr-mutex
-> +
-> +  '#hwlock-cells':
-> +    const: 1
-> +
-> +  syscon:
-> +    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-> +    description:
-> +      Should be a triple of phandle referencing the TCSR mutex syscon, offset
-> +      of first mutex within the syscon and stride between each mutex.
-> +
-> +required:
-> +  - compatible
-> +  - '#hwlock-cells'
-> +  - syscon
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +        tcsr_mutex_block: syscon@fd484000 {
-> +                compatible = "syscon";
-> +                reg = <0xfd484000 0x2000>;
-> +        };
-> +
-> +        hwlock {
-> +                compatible = "qcom,tcsr-mutex";
-> +                syscon = <&tcsr_mutex_block 0 0x80>;
-> +
-> +                #hwlock-cells = <1>;
-> +        };
-> +...
-> -- 
-> 2.26.2
-> 
+v3 -> v2:
+- Move entire coredump functionality to remoteproc_coredump.c
+- Modify rproc_coredump to perform dump according to conf. set by userspace
+- Move the userspace configuration to debugfs from sysfs.
+- Keep the default coredump implementation as is
+
+v2 -> v1:
+- Introduce new file for coredump.
+- Add userspace sysfs configuration for dump type.
+
+Rishabh Bhatnagar (3):
+  remoteproc: Move coredump functionality to a new file
+  remoteproc: Add inline coredump functionality
+  remoteproc: Add coredump debugfs entry
+
+ drivers/remoteproc/Makefile              |   1 +
+ drivers/remoteproc/qcom_q6v5_mss.c       |   9 +-
+ drivers/remoteproc/remoteproc_core.c     | 191 ------------------
+ drivers/remoteproc/remoteproc_coredump.c | 328 +++++++++++++++++++++++++++++++
+ drivers/remoteproc/remoteproc_debugfs.c  |  86 ++++++++
+ drivers/remoteproc/remoteproc_internal.h |   4 +
+ include/linux/remoteproc.h               |  21 +-
+ 7 files changed, 443 insertions(+), 197 deletions(-)
+ create mode 100644 drivers/remoteproc/remoteproc_coredump.c
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
