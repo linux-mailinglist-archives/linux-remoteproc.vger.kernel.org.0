@@ -2,65 +2,56 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D781EAF28
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  1 Jun 2020 21:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B3F81EC014
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  2 Jun 2020 18:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728488AbgFAR4J (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 1 Jun 2020 13:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728483AbgFAR4H (ORCPT
+        id S1726636AbgFBQdf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 2 Jun 2020 12:33:35 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:59194 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726267AbgFBQdf (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 1 Jun 2020 13:56:07 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3B1C08C5CB
-        for <linux-remoteproc@vger.kernel.org>; Mon,  1 Jun 2020 10:56:06 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id y18so257245plr.4
-        for <linux-remoteproc@vger.kernel.org>; Mon, 01 Jun 2020 10:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XWgUrN+UJxeOnEn8O9BSntxA58isuMWyp3M6ttChdiM=;
-        b=jEjCzgdu5MsL5KccNh8vxCzKIljzLYVxhF3CBPDDYzqJeFnwEgyE8ZgD0pRMbJAhkG
-         JDFcly9sdSc6Jmt3XMaBExC/AbuJ4wqIMhj+/Vywvdp2RGTqWD7BXg+NhFODVOe2vDS7
-         G5RTS985vDgtn5vBmfAqKzRnMZRbNI0p6JBtZnbhnvLKdelLH3H8kDXIyjtwYCu7Wccc
-         uViDjvO9CCj9SHisEwviLNpAowii6v9jDA27zw/pqj39NxoPRW16fmxdmTezuDFagk0o
-         R++/uvxlwxMGzUjBApiUUQ34SB129LvaYp9iVl0PwBhb5wbUwyAUYofiiomx3kLMqLnN
-         JE9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XWgUrN+UJxeOnEn8O9BSntxA58isuMWyp3M6ttChdiM=;
-        b=lLldUQX+sRU8UrtC3gWEZwMb+zv5hHqfAmH1N8l/rOzx/P9Mrd2n4EZvuonQJAsY62
-         qo54d9lIVx1S8n91rn7Yn/KXtgPBayBSaJLGLyaheZVShSAwDulZ49BQW1IitAZVlUcd
-         pE//u+TeZ1pxgEQjELdnoUG9KyuCjSBS4d+HWeqZ9lxO1ICtWdFZbLFNBzayH1DOhoFE
-         pw2ySB95v6vY8nTzvF3lZHXpCNejB/BcFRYFKXVZprwxxANXhWb+Ldoa7Co7yV73tXsf
-         iczrsm7Lcmkjrs6c1P8eFTN3E9qN0SS8gSrKmJTf65WrrnLxbSWXQ5ShDH+9HRBYMliv
-         wlTw==
-X-Gm-Message-State: AOAM531baNYQ/Z7WMlHHPZMyExTCvFjRPIZyqlnIq0sHls+RAWgOn+Yz
-        NewLNNhBmuvIq+zN3jtBYLi7zQ==
-X-Google-Smtp-Source: ABdhPJz6Uzgkggx9J2O27bgymb95HzErcAQMVBeWDG+YypocdNA0Y4UMUYMBvXdoeRv4M7+EppSTbg==
-X-Received: by 2002:a17:90a:a515:: with SMTP id a21mr628227pjq.158.1591034166120;
-        Mon, 01 Jun 2020 10:56:06 -0700 (PDT)
-Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id p7sm64771pfq.184.2020.06.01.10.56.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2020 10:56:05 -0700 (PDT)
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     bjorn.andersson@linaro.org, ohad@wizery.com,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@st.com
-Cc:     loic.pallardy@st.com, arnaud.pouliquen@st.com,
+        Tue, 2 Jun 2020 12:33:35 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1591115614; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=bML8xYcSHixqGiWlTX8GPg6V0NOqHOANEhjj6IVL0dI=; b=oGjPC2V3K2fSdG4F2v81ME2jz8cJzIBZmo7P0DN53kOmr4QW84Z5VOdSAjonFarcEgQcaa+S
+ lvCww4fFpNLlFCVe+rjzT7vfSTq01YrNNNUwmG9s5e7IggMCu7NyjpHYS8GfacaJ+BlajMQ0
+ 8qYPpuIjicolMdrScCtfXk6iAIk=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 5ed67f4b4c2ebead13ebe8b7 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 02 Jun 2020 16:33:15
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 4A063C433A0; Tue,  2 Jun 2020 16:33:15 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 493AEC433CA;
+        Tue,  2 Jun 2020 16:33:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 493AEC433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     bjorn.andersson@linaro.org
+Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 09/11] remoteproc: stm32: Properly handle the resource table when attaching
-Date:   Mon,  1 Jun 2020 11:55:50 -0600
-Message-Id: <20200601175552.22286-10-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200601175552.22286-1-mathieu.poirier@linaro.org>
-References: <20200601175552.22286-1-mathieu.poirier@linaro.org>
+        evgreen@chromium.org, ohad@wizery.com, rohitkr@codeaurora.org,
+        Sibi Sankar <sibis@codeaurora.org>, stable@vger.kernel.org
+Subject: [PATCH 1/2] remoteproc: qcom: q6v5: Update running state before requesting stop
+Date:   Tue,  2 Jun 2020 22:02:56 +0530
+Message-Id: <20200602163257.26978-1-sibis@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -68,125 +59,39 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Properly set the remote processor's resource table based on where it was
-loaded by the external entity when attaching to a remote processor.
+Sometimes the stop triggers a watchdog rather than a stop-ack. Update
+the running state to false on requesting stop to skip the watchdog
+instead.
 
-Mainly based on the work published by Arnaud Pouliquen [1].
+Error Logs:
+$ echo stop > /sys/class/remoteproc/remoteproc0/state
+ipa 1e40000.ipa: received modem stopping event
+remoteproc-modem: watchdog received: sys_m_smsm_mpss.c:291:APPS force stop
+qcom-q6v5-mss 4080000.remoteproc-modem: port failed halt
+ipa 1e40000.ipa: received modem offline event
+remoteproc0: stopped remote processor 4080000.remoteproc-modem
 
-[1]. https://patchwork.kernel.org/project/linux-remoteproc/list/?series=239877
-
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Fixes: 3b415c8fb263 ("remoteproc: q6v5: Extract common resource handling")
+Cc: stable@vger.kernel.org
+Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
 ---
- drivers/remoteproc/stm32_rproc.c | 75 ++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ drivers/remoteproc/qcom_q6v5.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 9316ce3b03c2..7c8789164af7 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -38,6 +38,8 @@
- #define STM32_MBX_VQ1_ID	1
- #define STM32_MBX_SHUTDOWN	"shutdown"
- 
-+#define RSC_TBL_SIZE		1024
-+
- #define M4_STATE_OFF		0
- #define M4_STATE_INI		1
- #define M4_STATE_CRUN		2
-@@ -85,6 +87,7 @@ struct stm32_rproc {
- 	struct stm32_mbox mb[MBOX_NB_MBX];
- 	struct workqueue_struct *workqueue;
- 	bool secured_soc;
-+	void __iomem *rsc_va;
- };
- 
- static int stm32_rproc_pa_to_da(struct rproc *rproc, phys_addr_t pa, u64 *da)
-@@ -668,6 +671,74 @@ static int stm32_rproc_get_m4_status(struct stm32_rproc *ddata,
- 	return regmap_read(ddata->m4_state.map, ddata->m4_state.reg, state);
- }
- 
-+static int stm32_rproc_da_to_pa(struct platform_device *pdev,
-+				struct stm32_rproc *ddata,
-+				u64 da, phys_addr_t *pa)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct stm32_rproc_mem *p_mem;
-+	unsigned int i;
-+
-+	for (i = 0; i < ddata->nb_rmems; i++) {
-+		p_mem = &ddata->rmems[i];
-+
-+		if (da < p_mem->dev_addr ||
-+		    da >= p_mem->dev_addr + p_mem->size)
-+			continue;
-+
-+		*pa = da - p_mem->dev_addr + p_mem->bus_addr;
-+		dev_dbg(dev, "da %llx to pa %#x\n", da, *pa);
-+
-+		return 0;
-+	}
-+
-+	dev_err(dev, "can't translate da %llx\n", da);
-+
-+	return -EINVAL;
-+}
-+
-+static int stm32_rproc_get_loaded_rsc_table(struct platform_device *pdev,
-+					    struct rproc *rproc,
-+					    struct stm32_rproc *ddata)
-+{
-+	struct device *dev = &pdev->dev;
-+	phys_addr_t rsc_pa;
-+	u32 rsc_da;
-+	int err;
-+
-+	err = regmap_read(ddata->rsctbl.map, ddata->rsctbl.reg, &rsc_da);
-+	if (err) {
-+		dev_err(dev, "failed to read rsc tbl addr\n");
-+		return err;
-+	}
-+
-+	if (!rsc_da)
-+		/* no rsc table */
-+		return 0;
-+
-+	err = stm32_rproc_da_to_pa(pdev, ddata, rsc_da, &rsc_pa);
-+	if (err)
-+		return err;
-+
-+	ddata->rsc_va = devm_ioremap_wc(dev, rsc_pa, RSC_TBL_SIZE);
-+	if (IS_ERR_OR_NULL(ddata->rsc_va)) {
-+		dev_err(dev, "Unable to map memory region: %pa+%zx\n",
-+			&rsc_pa, RSC_TBL_SIZE);
-+		ddata->rsc_va = NULL;
-+		return -ENOMEM;
-+	}
-+
-+	/*
-+	 * The resource table is already loaded in device memory, no need
-+	 * to work with a cached table.
-+	 */
-+	rproc->cached_table = NULL;
-+	/* Assuming the resource table fits in 1kB is fair */
-+	rproc->table_sz = RSC_TBL_SIZE;
-+	rproc->table_ptr = (struct resource_table *)ddata->rsc_va;
-+
-+	return 0;
-+}
- 
- static int stm32_rproc_probe(struct platform_device *pdev)
+diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+index 111a442c993c4..fd6fd36268d93 100644
+--- a/drivers/remoteproc/qcom_q6v5.c
++++ b/drivers/remoteproc/qcom_q6v5.c
+@@ -153,6 +153,8 @@ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5)
  {
-@@ -708,6 +779,10 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 		ret = stm32_rproc_parse_memory_regions(rproc);
- 		if (ret)
- 			goto free_resources;
-+
-+		ret = stm32_rproc_get_loaded_rsc_table(pdev, rproc, ddata);
-+		if (ret)
-+			goto free_resources;
- 	}
+ 	int ret;
  
- 	rproc->has_iommu = false;
++	q6v5->running = false;
++
+ 	qcom_smem_state_update_bits(q6v5->state,
+ 				    BIT(q6v5->stop_bit), BIT(q6v5->stop_bit));
+ 
 -- 
-2.20.1
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
