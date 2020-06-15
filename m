@@ -2,158 +2,367 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FE91F7F50
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 13 Jun 2020 00:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 440771F8E9C
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 15 Jun 2020 08:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726456AbgFLWyJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 12 Jun 2020 18:54:09 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:58110 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726432AbgFLWyH (ORCPT
+        id S1728654AbgFOGvO (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 15 Jun 2020 02:51:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36804 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728866AbgFOGug (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 12 Jun 2020 18:54:07 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05CMs3dB122149;
-        Fri, 12 Jun 2020 17:54:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1592002443;
-        bh=JsdLc3UrmL6+wRZKSVcyiE2egyVdZb4H4YQxivMTJl8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=kBsLp8MvIuNiQE6PXdYWba9tcZ1TVyosIkcvik8haqzlaVQkP2w8e8sbDm2xfICyH
-         0iHRchPUMtEDKfdawMtxqfWkHlKZrEF/jYeMB2Vh4yguUToGoVLDMyI6gls8rjd3r7
-         krY3RHFTKqAhtVM9vySx/TkO4ilNJaIV1q5yov+4=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 05CMs2aE125996
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 12 Jun 2020 17:54:03 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 12
- Jun 2020 17:54:02 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 12 Jun 2020 17:54:02 -0500
-Received: from fllv0103.dal.design.ti.com (fllv0103.dal.design.ti.com [10.247.120.73])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05CMs2is040959;
-        Fri, 12 Jun 2020 17:54:02 -0500
-Received: from localhost ([10.250.48.148])
-        by fllv0103.dal.design.ti.com (8.14.7/8.14.7) with ESMTP id 05CMs2YB063955;
-        Fri, 12 Jun 2020 17:54:02 -0500
-From:   Suman Anna <s-anna@ti.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Lokesh Vutla <lokeshvutla@ti.com>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Suman Anna <s-anna@ti.com>
-Subject: [PATCH v3 2/2] remoteproc: k3-dsp: Add support for C71x DSPs
-Date:   Fri, 12 Jun 2020 17:53:57 -0500
-Message-ID: <20200612225357.8251-3-s-anna@ti.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200612225357.8251-1-s-anna@ti.com>
-References: <20200612225357.8251-1-s-anna@ti.com>
+        Mon, 15 Jun 2020 02:50:36 -0400
+Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CDE9421475;
+        Mon, 15 Jun 2020 06:50:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592203833;
+        bh=DFY5FpzrJgN81lmVCJ+Y6CWVQ+LEkXh6XxkoD221LIk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nAIC9RUb5a2TFAFCyXvp457Mnd2rdbwjEN39d8duXxTH86R+A9tfGD85wmAs7vPW6
+         pGDJRB2Pzye7o+uZAVY1mExESYAkuEkVjlfdiaMfJ76uPCBynIfbr+0OcZLzrgtFyC
+         zUTo0JKn48uY2TBeJahau1tVeXqans/L5vTCoTYI=
+Received: from mchehab by mail.kernel.org with local (Exim 4.93)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jkiww-009o6y-O8; Mon, 15 Jun 2020 08:50:30 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-remoteproc@vger.kernel.org, tee-dev@lists.linaro.org
+Subject: [PATCH 20/22] docs: move remaining stuff under Documentation/*.txt to Documentation/staging
+Date:   Mon, 15 Jun 2020 08:50:25 +0200
+Message-Id: <11bd0d75e65a874f7c276a0aeab0fe13f3376f5f.1592203650.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1592203650.git.mchehab+huawei@kernel.org>
+References: <cover.1592203650.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The Texas Instrument's K3 J721E SoCs have a newer next-generation
-C71x DSP Subsystem in the MAIN voltage domain in addition to the
-previous generation C66x DSP subsystems. The C71x DSP subsystem is
-based on the TMS320C71x DSP CorePac module. The C71x CPU is a true
-64-bit machine including 64-bit memory addressing and single-cycle
-64-bit base arithmetic operations and supports vector signal processing
-providing a significant lift in DSP processing power over C66x DSPs.
-J721E SoCs use a C711 (a one-core 512-bit vector width CPU core) DSP
-that is cache coherent with the A72 Arm cores.
+There are several files that I was unable to find a proper place
+for them, and 3 ones that are still in plain old text format.
 
-Each subsystem has one or more Fixed/Floating-Point DSP CPUs, with 32 KB
-of L1P Cache, 48 KB of L1D SRAM that can be configured and partitioned as
-either RAM and/or Cache, and 512 KB of L2 SRAM configurable as either RAM
-and/or Cache. The CorePac also includes a Matrix Multiplication Accelerator
-(MMA), a Stream Engine (SE) and a C71x Memory Management Unit (CMMU), an
-Interrupt Controller (INTC) and a Powerdown Management Unit (PMU) modules.
+Let's place those stuff behind the carpet, as we'd like to keep the
+root directory clean.
 
-Update the existing K3 DSP remoteproc driver to add support for this C71x
-DSP subsystem. The firmware loading support is provided by using the newly
-added 64-bit ELF loader support, and is limited to images using only
-external DDR memory at the moment. The L1D and L2 SRAMs are used as scratch
-memory when using as RAMs, and cannot be used for loadable segments. The
-CMMU is also not supported to begin with, and the driver is designed to
-treat the MMU as if it is in bypass mode.
+We can later discuss and move those into better places.
 
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
-v3:
- - No code changes, rebased patch
- - Picked up review tags
- - Switched from remoteproc/k3-dsp to remoteproc: k3-dsp in patch title
-v2: https://patchwork.kernel.org/patch/11563233/
+ Documentation/index.rst                       | 13 ++++++++
+ .../{crc32.txt => staging/crc32.rst}          |  0
+ Documentation/staging/index.rst               | 32 +++++++++++++++++++
+ .../{kprobes.txt => staging/kprobes.rst}      |  0
+ Documentation/{lzo.txt => staging/lzo.rst}    |  0
+ .../remoteproc.rst}                           |  2 +-
+ .../{rpmsg.txt => staging/rpmsg.rst}          |  0
+ .../speculation.rst}                          |  8 +++--
+ .../static-keys.rst}                          |  0
+ Documentation/{tee.txt => staging/tee.rst}    |  1 +
+ Documentation/{xz.txt => staging/xz.rst}      |  0
+ Documentation/trace/kprobetrace.rst           |  2 +-
+ MAINTAINERS                                   |  8 ++---
+ include/linux/jump_label.h                    |  2 +-
+ lib/crc32.c                                   |  2 +-
+ lib/lzo/lzo1x_decompress_safe.c               |  2 +-
+ lib/xz/Kconfig                                |  2 +-
+ samples/kprobes/kprobe_example.c              |  2 +-
+ samples/kprobes/kretprobe_example.c           |  2 +-
+ 19 files changed, 63 insertions(+), 15 deletions(-)
+ rename Documentation/{crc32.txt => staging/crc32.rst} (100%)
+ create mode 100644 Documentation/staging/index.rst
+ rename Documentation/{kprobes.txt => staging/kprobes.rst} (100%)
+ rename Documentation/{lzo.txt => staging/lzo.rst} (100%)
+ rename Documentation/{remoteproc.txt => staging/remoteproc.rst} (99%)
+ rename Documentation/{rpmsg.txt => staging/rpmsg.rst} (100%)
+ rename Documentation/{speculation.txt => staging/speculation.rst} (97%)
+ rename Documentation/{static-keys.txt => staging/static-keys.rst} (100%)
+ rename Documentation/{tee.txt => staging/tee.rst} (99%)
+ rename Documentation/{xz.txt => staging/xz.rst} (100%)
 
- drivers/remoteproc/ti_k3_dsp_remoteproc.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/remoteproc/ti_k3_dsp_remoteproc.c b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-index 668bb45b3fe8..861cc9126241 100644
---- a/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-@@ -407,8 +407,6 @@ static void *k3_dsp_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len)
- }
+diff --git a/Documentation/index.rst b/Documentation/index.rst
+index 71eca3171574..3b491af0122d 100644
+--- a/Documentation/index.rst
++++ b/Documentation/index.rst
+@@ -182,6 +182,19 @@ subprojects.
  
- static const struct rproc_ops k3_dsp_rproc_ops = {
--	.prepare	= k3_dsp_rproc_prepare,
--	.unprepare	= k3_dsp_rproc_unprepare,
- 	.start		= k3_dsp_rproc_start,
- 	.stop		= k3_dsp_rproc_stop,
- 	.kick		= k3_dsp_rproc_kick,
-@@ -618,6 +616,10 @@ static int k3_dsp_rproc_probe(struct platform_device *pdev)
+    filesystems/ext4/index
  
- 	rproc->has_iommu = false;
- 	rproc->recovery_disabled = true;
-+	if (data->uses_lreset) {
-+		rproc->ops->prepare = k3_dsp_rproc_prepare;
-+		rproc->ops->unprepare = k3_dsp_rproc_unprepare;
-+	}
- 	kproc = rproc->priv;
- 	kproc->rproc = rproc;
- 	kproc->dev = dev;
-@@ -745,6 +747,12 @@ static const struct k3_dsp_mem_data c66_mems[] = {
- 	{ .name = "l1dram", .dev_addr = 0xf00000 },
- };
- 
-+/* C71x cores only have a L1P Cache, there are no L1P SRAMs */
-+static const struct k3_dsp_mem_data c71_mems[] = {
-+	{ .name = "l2sram", .dev_addr = 0x800000 },
-+	{ .name = "l1dram", .dev_addr = 0xe00000 },
-+};
++Other documentation
++-------------------
 +
- static const struct k3_dsp_dev_data c66_data = {
- 	.mems = c66_mems,
- 	.num_mems = ARRAY_SIZE(c66_mems),
-@@ -752,8 +760,16 @@ static const struct k3_dsp_dev_data c66_data = {
- 	.uses_lreset = true,
- };
- 
-+static const struct k3_dsp_dev_data c71_data = {
-+	.mems = c71_mems,
-+	.num_mems = ARRAY_SIZE(c71_mems),
-+	.boot_align_addr = SZ_2M,
-+	.uses_lreset = false,
-+};
++There are several unsorted documents that don't seem to fit on other parts
++of the documentation body, or may require some adjustments and/or conversion
++to ReStructured Text format, or are simply too old.
 +
- static const struct of_device_id k3_dsp_of_match[] = {
- 	{ .compatible = "ti,j721e-c66-dsp", .data = &c66_data, },
-+	{ .compatible = "ti,j721e-c71-dsp", .data = &c71_data, },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, k3_dsp_of_match);
++.. toctree::
++   :maxdepth: 2
++
++   staging/index
++
++
+ Translations
+ ------------
+ 
+diff --git a/Documentation/crc32.txt b/Documentation/staging/crc32.rst
+similarity index 100%
+rename from Documentation/crc32.txt
+rename to Documentation/staging/crc32.rst
+diff --git a/Documentation/staging/index.rst b/Documentation/staging/index.rst
+new file mode 100644
+index 000000000000..8e98517675ca
+--- /dev/null
++++ b/Documentation/staging/index.rst
+@@ -0,0 +1,32 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++Unsorted Documentation
++======================
++
++.. toctree::
++   :maxdepth: 2
++
++   crc32
++   kprobes
++   lzo
++   remoteproc
++   rpmsg
++   speculation
++   static-keys
++   tee
++   xz
++
++Atomic Types
++============
++
++.. literalinclude:: ../atomic_t.txt
++
++Atomic bitops
++=============
++
++.. literalinclude:: ../atomic_bitops.txt
++
++Memory Barriers
++===============
++
++.. literalinclude:: ../memory-barriers.txt
+diff --git a/Documentation/kprobes.txt b/Documentation/staging/kprobes.rst
+similarity index 100%
+rename from Documentation/kprobes.txt
+rename to Documentation/staging/kprobes.rst
+diff --git a/Documentation/lzo.txt b/Documentation/staging/lzo.rst
+similarity index 100%
+rename from Documentation/lzo.txt
+rename to Documentation/staging/lzo.rst
+diff --git a/Documentation/remoteproc.txt b/Documentation/staging/remoteproc.rst
+similarity index 99%
+rename from Documentation/remoteproc.txt
+rename to Documentation/staging/remoteproc.rst
+index 2be1147256e0..9cccd3dd6a4b 100644
+--- a/Documentation/remoteproc.txt
++++ b/Documentation/staging/remoteproc.rst
+@@ -22,7 +22,7 @@ for remote processors that supports this kind of communication. This way,
+ platform-specific remoteproc drivers only need to provide a few low-level
+ handlers, and then all rpmsg drivers will then just work
+ (for more information about the virtio-based rpmsg bus and its drivers,
+-please read Documentation/rpmsg.txt).
++please read Documentation/staging/rpmsg.rst).
+ Registration of other types of virtio devices is now also possible. Firmwares
+ just need to publish what kind of virtio devices do they support, and then
+ remoteproc will add those devices. This makes it possible to reuse the
+diff --git a/Documentation/rpmsg.txt b/Documentation/staging/rpmsg.rst
+similarity index 100%
+rename from Documentation/rpmsg.txt
+rename to Documentation/staging/rpmsg.rst
+diff --git a/Documentation/speculation.txt b/Documentation/staging/speculation.rst
+similarity index 97%
+rename from Documentation/speculation.txt
+rename to Documentation/staging/speculation.rst
+index 50d7ea857cff..8045d99bcf12 100644
+--- a/Documentation/speculation.txt
++++ b/Documentation/staging/speculation.rst
+@@ -1,9 +1,11 @@
++===========
++Speculation
++===========
++
+ This document explains potential effects of speculation, and how undesirable
+ effects can be mitigated portably using common APIs.
+ 
+-===========
+-Speculation
+-===========
++------------------------------------------------------------------------------
+ 
+ To improve performance and minimize average latencies, many contemporary CPUs
+ employ speculative execution techniques such as branch prediction, performing
+diff --git a/Documentation/static-keys.txt b/Documentation/staging/static-keys.rst
+similarity index 100%
+rename from Documentation/static-keys.txt
+rename to Documentation/staging/static-keys.rst
+diff --git a/Documentation/tee.txt b/Documentation/staging/tee.rst
+similarity index 99%
+rename from Documentation/tee.txt
+rename to Documentation/staging/tee.rst
+index c8fad81c4563..324604a15d17 100644
+--- a/Documentation/tee.txt
++++ b/Documentation/staging/tee.rst
+@@ -162,6 +162,7 @@ The AMD-TEE driver packages the command buffer payload for processing in TEE.
+ The command buffer format for the different TEE commands can be found in [7].
+ 
+ The TEE commands supported by AMD-TEE Trusted OS are:
++
+ * TEE_CMD_ID_LOAD_TA          - loads a Trusted Application (TA) binary into
+                                 TEE environment.
+ * TEE_CMD_ID_UNLOAD_TA        - unloads TA binary from TEE environment.
+diff --git a/Documentation/xz.txt b/Documentation/staging/xz.rst
+similarity index 100%
+rename from Documentation/xz.txt
+rename to Documentation/staging/xz.rst
+diff --git a/Documentation/trace/kprobetrace.rst b/Documentation/trace/kprobetrace.rst
+index cc4c5fc313df..c1709165c553 100644
+--- a/Documentation/trace/kprobetrace.rst
++++ b/Documentation/trace/kprobetrace.rst
+@@ -40,7 +40,7 @@ Synopsis of kprobe_events
+  MEMADDR	: Address where the probe is inserted.
+  MAXACTIVE	: Maximum number of instances of the specified function that
+ 		  can be probed simultaneously, or 0 for the default value
+-		  as defined in Documentation/kprobes.txt section 1.3.1.
++		  as defined in Documentation/staging/kprobes.rst section 1.3.1.
+ 
+  FETCHARGS	: Arguments. Each probe can have up to 128 args.
+   %REG		: Fetch register REG
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 805309399939..4c9814ee2fdb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9597,7 +9597,7 @@ M:	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
+ M:	"David S. Miller" <davem@davemloft.net>
+ M:	Masami Hiramatsu <mhiramat@kernel.org>
+ S:	Maintained
+-F:	Documentation/kprobes.txt
++F:	Documentation/staging/kprobes.rst
+ F:	include/asm-generic/kprobes.h
+ F:	include/linux/kprobes.h
+ F:	kernel/kprobes.c
+@@ -14500,7 +14500,7 @@ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git rproc-next
+ F:	Documentation/ABI/testing/sysfs-class-remoteproc
+ F:	Documentation/devicetree/bindings/remoteproc/
+-F:	Documentation/remoteproc.txt
++F:	Documentation/staging/remoteproc.rst
+ F:	drivers/remoteproc/
+ F:	include/linux/remoteproc.h
+ F:	include/linux/remoteproc/
+@@ -14512,7 +14512,7 @@ L:	linux-remoteproc@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git rpmsg-next
+ F:	Documentation/ABI/testing/sysfs-bus-rpmsg
+-F:	Documentation/rpmsg.txt
++F:	Documentation/staging/rpmsg.rst
+ F:	drivers/rpmsg/
+ F:	include/linux/rpmsg.h
+ F:	include/linux/rpmsg/
+@@ -16761,7 +16761,7 @@ TEE SUBSYSTEM
+ M:	Jens Wiklander <jens.wiklander@linaro.org>
+ L:	tee-dev@lists.linaro.org
+ S:	Maintained
+-F:	Documentation/tee.txt
++F:	Documentation/staging/tee.rst
+ F:	drivers/tee/
+ F:	include/linux/tee_drv.h
+ F:	include/uapi/linux/tee.h
+diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
+index 3526c0aee954..32809624d422 100644
+--- a/include/linux/jump_label.h
++++ b/include/linux/jump_label.h
+@@ -68,7 +68,7 @@
+  * Lacking toolchain and or architecture support, static keys fall back to a
+  * simple conditional branch.
+  *
+- * Additional babbling in: Documentation/static-keys.txt
++ * Additional babbling in: Documentation/staging/static-keys.rst
+  */
+ 
+ #ifndef __ASSEMBLY__
+diff --git a/lib/crc32.c b/lib/crc32.c
+index 4a20455d1f61..35a03d03f973 100644
+--- a/lib/crc32.c
++++ b/lib/crc32.c
+@@ -24,7 +24,7 @@
+  * Version 2.  See the file COPYING for more details.
+  */
+ 
+-/* see: Documentation/crc32.txt for a description of algorithms */
++/* see: Documentation/staging/crc32.rst for a description of algorithms */
+ 
+ #include <linux/crc32.h>
+ #include <linux/crc32poly.h>
+diff --git a/lib/lzo/lzo1x_decompress_safe.c b/lib/lzo/lzo1x_decompress_safe.c
+index 2717c7963acd..7892a40cf765 100644
+--- a/lib/lzo/lzo1x_decompress_safe.c
++++ b/lib/lzo/lzo1x_decompress_safe.c
+@@ -32,7 +32,7 @@
+  * depending on the base count. Since the base count is taken from a u8
+  * and a few bits, it is safe to assume that it will always be lower than
+  * or equal to 2*255, thus we can always prevent any overflow by accepting
+- * two less 255 steps. See Documentation/lzo.txt for more information.
++ * two less 255 steps. See Documentation/staging/lzo.rst for more information.
+  */
+ #define MAX_255_COUNT      ((((size_t)~0) / 255) - 2)
+ 
+diff --git a/lib/xz/Kconfig b/lib/xz/Kconfig
+index 22528743d4ce..5cb50245a878 100644
+--- a/lib/xz/Kconfig
++++ b/lib/xz/Kconfig
+@@ -5,7 +5,7 @@ config XZ_DEC
+ 	help
+ 	  LZMA2 compression algorithm and BCJ filters are supported using
+ 	  the .xz file format as the container. For integrity checking,
+-	  CRC32 is supported. See Documentation/xz.txt for more information.
++	  CRC32 is supported. See Documentation/staging/xz.rst for more information.
+ 
+ if XZ_DEC
+ 
+diff --git a/samples/kprobes/kprobe_example.c b/samples/kprobes/kprobe_example.c
+index 501911d1b327..240f2435ce6f 100644
+--- a/samples/kprobes/kprobe_example.c
++++ b/samples/kprobes/kprobe_example.c
+@@ -5,7 +5,7 @@
+  * stack trace and selected registers when _do_fork() is called.
+  *
+  * For more information on theory of operation of kprobes, see
+- * Documentation/kprobes.txt
++ * Documentation/staging/kprobes.rst
+  *
+  * You will see the trace data in /var/log/messages and on the console
+  * whenever _do_fork() is invoked to create a new process.
+diff --git a/samples/kprobes/kretprobe_example.c b/samples/kprobes/kretprobe_example.c
+index 013e8e6ebae9..78a2da6fb3cd 100644
+--- a/samples/kprobes/kretprobe_example.c
++++ b/samples/kprobes/kretprobe_example.c
+@@ -11,7 +11,7 @@
+  * If no func_name is specified, _do_fork is instrumented
+  *
+  * For more information on theory of operation of kretprobes, see
+- * Documentation/kprobes.txt
++ * Documentation/staging/kprobes.rst
+  *
+  * Build and insert the kernel module as done in the kprobe example.
+  * You will see the trace data in /var/log/messages and on the console
 -- 
-2.26.0
+2.26.2
 
