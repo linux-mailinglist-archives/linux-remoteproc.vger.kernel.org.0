@@ -2,28 +2,28 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8517C1FE319
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 18 Jun 2020 04:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726621FE905
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 18 Jun 2020 04:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729943AbgFRBW3 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 17 Jun 2020 21:22:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55510 "EHLO mail.kernel.org"
+        id S1727773AbgFRBIV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 17 Jun 2020 21:08:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33868 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730743AbgFRBW3 (ORCPT
+        id S1727060AbgFRBIT (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:22:29 -0400
+        Wed, 17 Jun 2020 21:08:19 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D8AAD20776;
-        Thu, 18 Jun 2020 01:22:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3133B2193E;
+        Thu, 18 Jun 2020 01:08:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443348;
-        bh=3jmixMD1aqvVxMgyqA6NUesXMHCJpUlIdFaZ9yIXDD4=;
+        s=default; t=1592442499;
+        bh=dUtyJ0sPCHDAMrCFVYZk9Na/o7Im+6kdHi4WP4M/VJ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=boZqIAPoA0yDcrnkeP4+kIMPccYJax72fdyraO2NmBqKZ66OSt80B31gToqnsZ7C6
-         MkxD0RtsktIuOPZdvlMU0EBg3adMNDFuK5f+R9rgO+h295WAiuzEi/4sz3UG14+qmq
-         d+FuuubJLxIUMgFEo2rMOk6Y8Ctw9I/HTXlaQ5ho=
+        b=B5kHqYEx7ALMHmA1Q7w/SxOqgKu6OCo9zhGe5XRfSANQs3hpxKlnPpwclu62XYHb7
+         r8/EMgRUFE9MU2bAJUpDpyBPxj8G8WjkGkgZNcKJx6FHxxfNU6UCjVgNqh+hidnbnM
+         OTwMCTjDNkDb3Bfssj7sI5aV9AcDw+xNDkI2K65s=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alex Elder <elder@linaro.org>,
@@ -32,12 +32,12 @@ Cc:     Alex Elder <elder@linaro.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-remoteproc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 008/172] remoteproc: Fix IDR initialisation in rproc_alloc()
-Date:   Wed, 17 Jun 2020 21:19:34 -0400
-Message-Id: <20200618012218.607130-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 010/388] remoteproc: Fix IDR initialisation in rproc_alloc()
+Date:   Wed, 17 Jun 2020 21:01:47 -0400
+Message-Id: <20200618010805.600873-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
-References: <20200618012218.607130-1-sashal@kernel.org>
+In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
+References: <20200618010805.600873-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -79,10 +79,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index d5ff272fde34..e48069db1703 100644
+index be15aace9b3c..8f79cfd2e467 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1598,6 +1598,7 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
+@@ -2053,6 +2053,7 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
  	rproc->dev.type = &rproc_type;
  	rproc->dev.class = &rproc_class;
  	rproc->dev.driver_data = rproc;
@@ -90,7 +90,7 @@ index d5ff272fde34..e48069db1703 100644
  
  	/* Assign a unique device index and name */
  	rproc->index = ida_simple_get(&rproc_dev_index, 0, 0, GFP_KERNEL);
-@@ -1622,8 +1623,6 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
+@@ -2078,8 +2079,6 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
  
  	mutex_init(&rproc->lock);
  
