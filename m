@@ -2,122 +2,105 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C21A2204762
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Jun 2020 04:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE82205052
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Jun 2020 13:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731653AbgFWCoA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 22 Jun 2020 22:44:00 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:38233 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731557AbgFWCn7 (ORCPT
+        id S1732458AbgFWLPv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 23 Jun 2020 07:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732445AbgFWLPq (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 22 Jun 2020 22:43:59 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1592880239; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=WfFCzgOO13CqCxPazC8JqcGDUy+ilIoTv/tjzdvEEtg=;
- b=bezD0Fa+B26Pk2YgF20Waw42LKbgx+/sLo9eyCyfodnPVmqdUsk09EGUf9xL856wDZsXFHK/
- jjhEQl8XZyi6O2i74lX9ts3XRTG/68GakzGynBePCpwD9dm+Bf1l+bHNN4mnXReIKeLIy0GS
- 3EG8syqtEFDgk7pEX/E871WVUC8=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
- 5ef16c5a356bcc26aba8d025 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 23 Jun 2020 02:43:38
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id CDD37C433CA; Tue, 23 Jun 2020 02:43:37 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: rishabhb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5009FC433C6;
-        Tue, 23 Jun 2020 02:43:37 +0000 (UTC)
+        Tue, 23 Jun 2020 07:15:46 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2DAC061573
+        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Jun 2020 04:15:45 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id a6so18127325wrm.4
+        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Jun 2020 04:15:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=Xyy6aY3CzpTrB1jWSxZ+AZN1wwOD7LD+LfCki0d12w2TW+w1X0sGlX5yRgU+UcE3Xc
+         Sai4+ze5dk2Qt+18TpmHM4m07NxQq9zk94Aa8Z6DDOBMIfknaKRUDr9Qa4eAKRV1j2nJ
+         /ZzQzpn3D5WMkKao8WnmlQTHXZseJbZXbNWPxcMMEYSKiry/6/ClOjOSl58CrMkwNWcO
+         wQBzDNzdqe4GIGpXvGLIwxrqzJCn1eGIBa2J0WLaTzi+STb+HsZ0ZLxF09nkzg52CzUK
+         PcaoRXHmgLv/PBKUNmTO4JtULArsNuajcBSmFANYWYzFtMjegRI8J5HTV4/DSXdlz5fy
+         6iLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=oQFLrJtgD7jMoLShmyDx0XQaCcLmQQ4XoB6+EZsGBlUDyxeL2wofVU0ALeB9R0SaOR
+         z6ZHzUJmX1T7TmNXTVECo5sPzFGVlIVCz0iU+tP+6gMQJrDDvc7bWqxKgQ0uRaMgAmHT
+         dxCSVgo3kmx+lmxrduN5Vw/RhGQXzkpImsT2nXPtnngFqQmmSivgGTo+nQ3HTWfYf+6T
+         /P8sAwAh4SfFIdFTaj02LK411DjlykzWEvXVLX//cTI8VKJUDMU08lwAattKndezANk1
+         ydzB2njcfT27XU9l0fH09eYV6MgCh69nH6+hlgjH5eNazjoRb+Az6+Ye4G8NU7tashct
+         BaOA==
+X-Gm-Message-State: AOAM531Doa5M2E3Q3Dq0L0wIIbGNiXvuDDwKwvGwQqybzB8XsDomy+G1
+        qWBYmkb7yWqy3RKd7aaO+xO4s0oQrM0SOlKK0e4=
+X-Google-Smtp-Source: ABdhPJxtc+iGLXTpGncJsl55fUtNTlaYI1GL+Syh9U32BbYvKWSnrFcDUTy2CHQaVlATc2cvuwKiGrujIn2Ws91mXPU=
+X-Received: by 2002:adf:e948:: with SMTP id m8mr20918122wrn.398.1592910944654;
+ Tue, 23 Jun 2020 04:15:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 22 Jun 2020 19:43:37 -0700
-From:   rishabhb@codeaurora.org
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tsoni@codeaurora.org, psodagud@codeaurora.org,
-        sidgup@codeaurora.org, mathieu.poirier@linaro.org
-Subject: Re: [v4 PATCH 0/3] Extend coredump functionality
-In-Reply-To: <20200622222330.GN149351@builder.lan>
-References: <1590611177-15826-1-git-send-email-rishabhb@codeaurora.org>
- <20200622222330.GN149351@builder.lan>
-Message-ID: <d1eb275a572ac3e2979c6997daf5acf6@codeaurora.org>
-X-Sender: rishabhb@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Received: by 2002:a1c:f002:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 04:15:44
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <paulwiliam782@gmail.com>
+Date:   Tue, 23 Jun 2020 12:15:44 +0100
+Message-ID: <CAHqcnY13QZ9cNfV--WUT2Yv7Bbg50EpH9YkPHEnJWyKR7jVZoA@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 2020-06-22 15:23, Bjorn Andersson wrote:
-> On Wed 27 May 13:26 PDT 2020, Rishabh Bhatnagar wrote:
-> 
->> This patch series moves the coredump functionality to a separate
->> file and adds "inline" coredump feature. Inline coredump directly
->> copies segments from device memory during coredump to userspace.
->> This avoids extra memory usage at the cost of speed. Recovery is
->> stalled until all data is read by userspace.
->> 
->> Changelog:
->> 
-> 
-> Hi Rishabh,
-> 
-> This looks good to me, but it doesn't apply cleanly on linux-next. Can
-> you please take a look?
-> 
-> Regards,
-> Bjorn
-> 
-Yes some more gerrits have been merged in the meantime. I'll rebase on 
-top
-of Linux-next and send out another patchset.
->> v4 -> v3:
->> - Write a helper function to copy segment memory for every dump format
->> - Change segment dump fn to add offset and size adn covert mss driver
->> 
->> v3 -> v2:
->> - Move entire coredump functionality to remoteproc_coredump.c
->> - Modify rproc_coredump to perform dump according to conf. set by 
->> userspace
->> - Move the userspace configuration to debugfs from sysfs.
->> - Keep the default coredump implementation as is
->> 
->> v2 -> v1:
->> - Introduce new file for coredump.
->> - Add userspace sysfs configuration for dump type.
->> 
->> Rishabh Bhatnagar (3):
->>   remoteproc: Move coredump functionality to a new file
->>   remoteproc: Add inline coredump functionality
->>   remoteproc: Add coredump debugfs entry
->> 
->>  drivers/remoteproc/Makefile              |   1 +
->>  drivers/remoteproc/qcom_q6v5_mss.c       |   9 +-
->>  drivers/remoteproc/remoteproc_core.c     | 191 ------------------
->>  drivers/remoteproc/remoteproc_coredump.c | 328 
->> +++++++++++++++++++++++++++++++
->>  drivers/remoteproc/remoteproc_debugfs.c  |  86 ++++++++
->>  drivers/remoteproc/remoteproc_internal.h |   4 +
->>  include/linux/remoteproc.h               |  21 +-
->>  7 files changed, 443 insertions(+), 197 deletions(-)
->>  create mode 100644 drivers/remoteproc/remoteproc_coredump.c
->> 
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
->> Forum,
->> a Linux Foundation Collaborative Project
->> 
+Greetings From Mrs. Sarah Koffi
+
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
+
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
+
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
+
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
+
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
+
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
+
+I will wait to hear from you so as to give you details.With love from
+
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
+
+Mrs. Sarah Koffi
