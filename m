@@ -2,153 +2,253 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD40207A8F
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Jun 2020 19:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC21207E1C
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Jun 2020 23:08:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405676AbgFXRpx (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 24 Jun 2020 13:45:53 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:25819 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405639AbgFXRpw (ORCPT
+        id S2389337AbgFXVIZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 24 Jun 2020 17:08:25 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:56132 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388453AbgFXVIY (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 24 Jun 2020 13:45:52 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1593020751; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=J3C3DH38HNTXhiMFboVNl1/mnSBUaUI3h0PuvrpneKg=; b=O3q1iUNnNIeH45/0rFFsgolOHRIc8fAfP/oknxZojVdP7TUN4p8WaE0t0iKO2atl7olBrPmQ
- OyWnYcAtLv6zdZiEacEAIF55c524e6DeMVjIITLYp7kDjtxJdOPI0zmeRaIkbvdhjl8PYr/x
- lUUaR6SACeIF0Z4s8HbVUofYKLk=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n09.prod.us-east-1.postgun.com with SMTP id
- 5ef3914186de6ccd44d7d843 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 24 Jun 2020 17:45:37
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 01945C43391; Wed, 24 Jun 2020 17:45:36 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from deesin-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: deesin)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D1C59C43395;
-        Wed, 24 Jun 2020 17:45:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D1C59C43395
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=deesin@codeaurora.org
-From:   Deepak Kumar Singh <deesin@codeaurora.org>
-To:     bjorn.andersson@linaro.org, clew@codeaurora.org,
-        mathieu.poirier@linaro.org
-Cc:     rampraka@codeaurora.org,
-        Arun Kumar Neelakantam <aneela@codeaurora.org>,
-        Deepak Kumar Singh <deesin@codeaurora.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR MESSAGING
-        (RPMSG) SUBSYSTEM), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH V5 4/4] rpmsg: char: Add signal callback and POLLPRI support
-Date:   Wed, 24 Jun 2020 23:15:01 +0530
-Message-Id: <1593020701-23778-5-git-send-email-deesin@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1593020701-23778-1-git-send-email-deesin@codeaurora.org>
-References: <1593020701-23778-1-git-send-email-deesin@codeaurora.org>
+        Wed, 24 Jun 2020 17:08:24 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05OL88Ht114055;
+        Wed, 24 Jun 2020 16:08:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1593032888;
+        bh=0hfApv4knRyVKaIA3g3GtdG0GI6yY99sLLLIR8z/lh0=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=puGj3lycI5nVlwfgXdUpm46TYi7Y/XBjGl7vIDnIWb6icFLiqN3WNgdfEdFWDcmMf
+         MM4oFCn5JjPH7VRDaj63a2x4n0zJcOu4O7oTiQoBKQn7/3Rir0+FPcxdigD1oswWUw
+         aLCKtbqIk1ebxola3Vj66BIKS/V0VLKe/+G2Ai6g=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 05OL88tA028275
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 24 Jun 2020 16:08:08 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 24
+ Jun 2020 16:08:08 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 24 Jun 2020 16:08:08 -0500
+Received: from [10.250.70.56] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05OL87ic117344;
+        Wed, 24 Jun 2020 16:08:08 -0500
+Subject: Re: [PATCH v3 4/6] dt-bindings: remoteproc: Add bindings for C66x
+ DSPs on TI K3 SoCs
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Lokesh Vutla <lokeshvutla@ti.com>,
+        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20200612224914.7634-1-s-anna@ti.com>
+ <20200612224914.7634-5-s-anna@ti.com>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <50a1abf6-ecb0-b130-67be-20364965a514@ti.com>
+Date:   Wed, 24 Jun 2020 16:08:07 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <20200612224914.7634-5-s-anna@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Arun Kumar Neelakantam <aneela@codeaurora.org>
+Hi Rob,
 
-Register a callback to get the signal notifications from rpmsg and
-send POLLPRI mask to indicate the signal change in POLL system call.
+On 6/12/20 5:49 PM, Suman Anna wrote:
+> Some Texas Instruments K3 family of SoCs have one of more Digital Signal
+> Processor (DSP) subsystems that are comprised of either a TMS320C66x
+> CorePac and/or a next-generation TMS320C71x CorePac processor subsystem.
+> Add the device tree bindings document for the C66x DSP devices on these
+> SoCs. The added example illustrates the DT nodes for the first C66x DSP
+> device present on the K3 J721E family of SoCs.
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> ---
+> v3:
+>   - Refactored the common ti-sci properties "ti,sci", "ti,sci-dev-id" and
+>     "ti,sci-proc-ids" into a separate binding ti,k3-sci-proc.yaml.
+>   - Dropped the general description and maxItems against reg and reg-names
+>   - Added items list under reg
+>   - Removed the other binding references from the description for resets
+>     and mboxes
+>   - Revised the memory-region description and listed the mandatory items
+>   - Updated example to drop reserved-memory nodes, unused node labels
 
-Signed-off-by: Deepak Kumar Singh <deesin@codeaurora.org>
-Signed-off-by: Arun Kumar Neelakantam <aneela@codeaurora.org>
----
- drivers/rpmsg/rpmsg_char.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Thanks for acking the corresponding C71x binding update [1] that is on 
+top of this patch.
 
-diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index 43ceac0..50a02fb 100644
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -64,6 +64,7 @@ struct rpmsg_ctrldev {
-  * @queue_lock:	synchronization of @queue operations
-  * @queue:	incoming message queue
-  * @readq:	wait object for incoming queue
-+ * @sig_pending:state of signal notification
-  */
- struct rpmsg_eptdev {
- 	struct device dev;
-@@ -78,6 +79,8 @@ struct rpmsg_eptdev {
- 	spinlock_t queue_lock;
- 	struct sk_buff_head queue;
- 	wait_queue_head_t readq;
-+
-+	bool sig_pending;
- };
- 
- static int rpmsg_eptdev_destroy(struct device *dev, void *data)
-@@ -122,6 +125,19 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
- 	return 0;
- }
- 
-+static int rpmsg_sigs_cb(struct rpmsg_device *rpdev, void *priv,
-+			 u32 old, u32 new)
-+{
-+	struct rpmsg_eptdev *eptdev = priv;
-+
-+	eptdev->sig_pending = true;
-+
-+	/* wake up any blocking processes, waiting for signal notification */
-+	wake_up_interruptible(&eptdev->readq);
-+	return 0;
-+}
-+
-+
- static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
- {
- 	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
-@@ -138,6 +154,7 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
- 		return -EINVAL;
- 	}
- 
-+	ept->sig_cb = rpmsg_sigs_cb;
- 	eptdev->ept = ept;
- 	filp->private_data = eptdev;
- 
-@@ -156,6 +173,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
- 		eptdev->ept = NULL;
- 	}
- 	mutex_unlock(&eptdev->ept_lock);
-+	eptdev->sig_pending = false;
- 
- 	/* Discard all SKBs */
- 	skb_queue_purge(&eptdev->queue);
-@@ -266,6 +284,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
- 	if (!skb_queue_empty(&eptdev->queue))
- 		mask |= EPOLLIN | EPOLLRDNORM;
- 
-+	if (eptdev->sig_pending)
-+		mask |= POLLPRI;
-+
- 	mask |= rpmsg_poll(eptdev->ept, filp, wait);
- 
- 	return mask;
-@@ -309,6 +330,7 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
- 
- 	switch (cmd) {
- 	case TIOCMGET:
-+		eptdev->sig_pending = false;
- 		ret = rpmsg_get_signals(eptdev->ept);
- 		if (ret >= 0)
- 			ret = put_user(ret, (int __user *)arg);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Can you provide your Ack for this updated patch and the refactored 
+ti,k3-sci-proc.yaml binding if you don't have any comments?
+
+regards
+Suman
+
+[1] https://patchwork.kernel.org/comment/23421509/
+
+
+> v2: https://patchwork.kernel.org/patch/11561781/
+> 
+>   .../bindings/remoteproc/ti,k3-dsp-rproc.yaml  | 139 ++++++++++++++++++
+>   1 file changed, 139 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> new file mode 100644
+> index 000000000000..f03e88c42a6e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> @@ -0,0 +1,139 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/remoteproc/ti,k3-dsp-rproc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI K3 DSP devices
+> +
+> +maintainers:
+> +  - Suman Anna <s-anna@ti.com>
+> +
+> +description: |
+> +  The TI K3 family of SoCs usually have one or more TI DSP Core sub-systems
+> +  that are used to offload some of the processor-intensive tasks or algorithms,
+> +  for achieving various system level goals.
+> +
+> +  These processor sub-systems usually contain additional sub-modules like
+> +  L1 and/or L2 caches/SRAMs, an Interrupt Controller, an external memory
+> +  controller, a dedicated local power/sleep controller etc. The DSP processor
+> +  cores in the K3 SoCs are usually either a TMS320C66x CorePac processor or a
+> +  TMS320C71x CorePac processor.
+> +
+> +  Each DSP Core sub-system is represented as a single DT node. Each node has a
+> +  number of required or optional properties that enable the OS running on the
+> +  host processor (Arm CorePac) to perform the device management of the remote
+> +  processor and to communicate with the remote processor.
+> +
+> +allOf:
+> +  - $ref: "ti,k3-sci-proc.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,j721e-c66-dsp
+> +    description:
+> +      Use "ti,j721e-c66-dsp" for C66x DSPs on K3 J721E SoCs
+> +
+> +  reg:
+> +    items:
+> +      - description: Address and Size of the L2 SRAM internal memory region
+> +      - description: Address and Size of the L1 PRAM internal memory region
+> +      - description: Address and Size of the L1 DRAM internal memory region
+> +
+> +  reg-names:
+> +    items:
+> +      - const: l2sram
+> +      - const: l1pram
+> +      - const: l1dram
+> +
+> +  resets:
+> +    description: |
+> +      Should contain the phandle to the reset controller node managing the
+> +      local resets for this device, and a reset specifier.
+> +    maxItems: 1
+> +
+> +  firmware-name:
+> +    description: |
+> +      Should contain the name of the default firmware image
+> +      file located on the firmware search path
+> +
+> +  mboxes:
+> +    description: |
+> +      OMAP Mailbox specifier denoting the sub-mailbox, to be used for
+> +      communication with the remote processor. This property should match
+> +      with the sub-mailbox node used in the firmware image.
+> +    maxItems: 1
+> +
+> +  memory-region:
+> +    minItems: 2
+> +    maxItems: 8
+> +    description: |
+> +      phandle to the reserved memory nodes to be associated with the remoteproc
+> +      device. There should be at least two reserved memory nodes defined. The
+> +      reserved memory nodes should be carveout nodes, and should be defined as
+> +      per the bindings in
+> +      Documentation/devicetree/bindings/reserved-memory/reserved-memory.txt
+> +    items:
+> +      - description: region used for dynamic DMA allocations like vrings and
+> +                     vring buffers
+> +      - description: region reserved for firmware image sections
+> +    additionalItems: true
+> +
+> +# Optional properties:
+> +# --------------------
+> +
+> +  sram:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    minItems: 1
+> +    maxItems: 4
+> +    description: |
+> +      phandles to one or more reserved on-chip SRAM regions. The regions
+> +      should be defined as child nodes of the respective SRAM node, and
+> +      should be defined as per the generic bindings in,
+> +      Documentation/devicetree/bindings/sram/sram.yaml
+> +
+> +required:
+> + - compatible
+> + - reg
+> + - reg-names
+> + - resets
+> + - firmware-name
+> + - mboxes
+> + - memory-region
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    / {
+> +        model = "Texas Instruments K3 J721E SoC";
+> +        compatible = "ti,j721e";
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        bus@100000 {
+> +            compatible = "simple-bus";
+> +            #address-cells = <2>;
+> +            #size-cells = <2>;
+> +            ranges = <0x00 0x00100000 0x00 0x00100000 0x00 0x00020000>, /* ctrl mmr */
+> +                     <0x4d 0x80800000 0x4d 0x80800000 0x00 0x00800000>, /* C66_0 */
+> +                     <0x4d 0x81800000 0x4d 0x81800000 0x00 0x00800000>; /* C66_1 */
+> +
+> +            /* J721E C66_0 DSP node */
+> +            dsp@4d80800000 {
+> +                compatible = "ti,j721e-c66-dsp";
+> +                reg = <0x4d 0x80800000 0x00 0x00048000>,
+> +                      <0x4d 0x80e00000 0x00 0x00008000>,
+> +                      <0x4d 0x80f00000 0x00 0x00008000>;
+> +                reg-names = "l2sram", "l1pram", "l1dram";
+> +                ti,sci = <&dmsc>;
+> +                ti,sci-dev-id = <142>;
+> +                ti,sci-proc-ids = <0x03 0xFF>;
+> +                resets = <&k3_reset 142 1>;
+> +                firmware-name = "j7-c66_0-fw";
+> +                memory-region = <&c66_0_dma_memory_region>,
+> +                                <&c66_0_memory_region>;
+> +                mboxes = <&mailbox0_cluster3 &mbox_c66_0>;
+> +            };
+> +        };
+> +    };
+> 
 
