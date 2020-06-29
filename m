@@ -2,151 +2,73 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C7520B3E8
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 26 Jun 2020 16:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AA420D553
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 29 Jun 2020 21:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729421AbgFZOr0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 26 Jun 2020 10:47:26 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:34941 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729405AbgFZOrZ (ORCPT
+        id S1731943AbgF2TQS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 29 Jun 2020 15:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731931AbgF2TQL (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 26 Jun 2020 10:47:25 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1593182844; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=B4n9r+xdCvV52+OhcuwhLgh4BajiH4rVAxbO9eD/Pok=; b=IDWqOeR3Ed//uW/7xQCfGAR4s9eMXJrWvO5L/n7ZrTTAVX5EBs46LXw16FpO0J9lT87gr1K9
- z7LSi7ZK2WOT7/hivHks8GCqiGQRbnLVYzFc6Q9hCLQtB7q/uT8PTIN+9FzJmKqjAWhFvgsF
- keeGHa8kts/xLIYxoVBgaREnYk8=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 5ef60a7c356bcc26ab20b0f8 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 26 Jun 2020 14:47:24
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 91A9FC433C8; Fri, 26 Jun 2020 14:47:23 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
-Received: from deesin-linux.qualcomm.com (blr-c-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: deesin)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B7690C43395;
-        Fri, 26 Jun 2020 14:47:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B7690C43395
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=deesin@codeaurora.org
-From:   Deepak Kumar Singh <deesin@codeaurora.org>
-To:     bjorn.andersson@linaro.org, clew@codeaurora.org,
-        mathieu.poirier@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Arun Kumar Neelakantam <aneela@codeaurora.org>,
-        Deepak Kumar Singh <deesin@codeaurora.org>
-Subject: [PATCH V6 4/4] rpmsg: char: Add signal callback and POLLPRI support
-Date:   Fri, 26 Jun 2020 20:16:59 +0530
-Message-Id: <1593182819-30747-5-git-send-email-deesin@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1593182819-30747-1-git-send-email-deesin@codeaurora.org>
-References: <1593182819-30747-1-git-send-email-deesin@codeaurora.org>
+        Mon, 29 Jun 2020 15:16:11 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489A2C08EAEF
+        for <linux-remoteproc@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id p3so8749332pgh.3
+        for <linux-remoteproc@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=E57soH+fAZU9oM/uuDn4bCNx2wALmvA7rwFsDeo/VdmyR4hSt+vRDMPW0qpAcJ9V/h
+         UbYJ9fIR9BUAZrS+1TfrEzBoFSxbLFUBB/IIzj7rfy4Y1SyxPmM/cs9fEremwVWV5m5u
+         b9v38myIgTBJNjasjLIOUO/K2CJS7vPJsURIlWBEC7RA0ax+vZbkexDjvFbqaAUgNm/w
+         yj4NkgHNxXLdKOO4AZsIv5vnXx8YMl4s3e1fTXh2Hp6rhwVI9k4nzVvvlc/OSvXrfpbl
+         +6DOlsrKa8IKCRxKxdcbetpm2uz+ZUKJBnziwlMhGJ11qW6bGQPIDGjYXF06+gry04Zz
+         3NGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=o7cyaEeT3XuudPGvASd/qBmHPYDd2lMbHzINsnnKzND6hWRmtFMoei39t14L7zw7nQ
+         owRF/iyNDy0hTY+mBvyeYIIfEJSHpZ6sd/kg9MCrn/lZ9DiJSJZb2nci4QACX9r2Hj+1
+         jJbwosPeH9kqc/Nr3cmF2S2EGeTQ/E8I5NpeZciYM2mBueAk7CWHSjTeEbDYHZvixXW2
+         pgctcpFWSy3OkSPK/ysdMNki7w/RXJJQAggjjBI+BylDq6jsYT/Yb0YCWXC7PiBuAPkx
+         0EVFGvUM7yT28JY325aRaEUAvQ4Jo1PLu66t/2Wy/dySVoCA8A9pK6Ff51D8qgObXo9M
+         +L+Q==
+X-Gm-Message-State: AOAM532vwe/BZBo98rZagUY0QKmI5wjendlQJJvEq6Xelw+K/qgo1w3p
+        SoHJqrvkPe5jAwJ/oqc0wTtPPHf1GnWwy/LFfSKaLH3b5qo=
+X-Google-Smtp-Source: ABdhPJyNR5zXZ8o09DSJzsSA3OSccnAxM/c9AxKQjYYOZlXvOMCiHs1YW/1gQi1Sa70TQ2VOPtabshfviWRkV7+ICnM=
+X-Received: by 2002:a6b:db17:: with SMTP id t23mr18236117ioc.4.1593458159284;
+ Mon, 29 Jun 2020 12:15:59 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:15:58
+ -0700 (PDT)
+Reply-To: mrs.victoria.alexander2@gmail.com
+From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
+Date:   Mon, 29 Jun 2020 12:15:58 -0700
+Message-ID: <CAP7XNCwEGQ+-Q==u4yk4yvJdk1X+gsfSU6pUV_hROjmF=p-DHw@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Arun Kumar Neelakantam <aneela@codeaurora.org>
+Dear friend,
 
-Register a callback to get the signal notifications from rpmsg and
-send POLLPRI mask to indicate the signal change in POLL system call.
 
-Signed-off-by: Deepak Kumar Singh <deesin@codeaurora.org>
-Signed-off-by: Arun Kumar Neelakantam <aneela@codeaurora.org>
----
- drivers/rpmsg/rpmsg_char.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+I have a business container transaction what that some of( $13million dollars)
 
-diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index 43ceac0..64506ca 100644
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -64,6 +64,7 @@ struct rpmsg_ctrldev {
-  * @queue_lock:	synchronization of @queue operations
-  * @queue:	incoming message queue
-  * @readq:	wait object for incoming queue
-+ * @sig_pending:state of signal notification
-  */
- struct rpmsg_eptdev {
- 	struct device dev;
-@@ -78,6 +79,8 @@ struct rpmsg_eptdev {
- 	spinlock_t queue_lock;
- 	struct sk_buff_head queue;
- 	wait_queue_head_t readq;
-+
-+	bool sig_pending;
- };
- 
- static int rpmsg_eptdev_destroy(struct device *dev, void *data)
-@@ -122,6 +125,19 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
- 	return 0;
- }
- 
-+static int rpmsg_sigs_cb(struct rpmsg_device *rpdev, void *priv,
-+			 u32 old, u32 new)
-+{
-+	struct rpmsg_eptdev *eptdev = priv;
-+
-+	eptdev->sig_pending = true;
-+
-+	/* wake up any blocking processes, waiting for signal notification */
-+	wake_up_interruptible(&eptdev->readq);
-+	return 0;
-+}
-+
-+
- static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
- {
- 	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
-@@ -138,6 +154,7 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
- 		return -EINVAL;
- 	}
- 
-+	ept->sig_cb = rpmsg_sigs_cb;
- 	eptdev->ept = ept;
- 	filp->private_data = eptdev;
- 
-@@ -156,6 +173,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
- 		eptdev->ept = NULL;
- 	}
- 	mutex_unlock(&eptdev->ept_lock);
-+	eptdev->sig_pending = false;
- 
- 	/* Discard all SKBs */
- 	skb_queue_purge(&eptdev->queue);
-@@ -266,6 +284,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
- 	if (!skb_queue_empty(&eptdev->queue))
- 		mask |= EPOLLIN | EPOLLRDNORM;
- 
-+	if (eptdev->sig_pending)
-+		mask |= EPOLLPRI;
-+
- 	mask |= rpmsg_poll(eptdev->ept, filp, wait);
- 
- 	return mask;
-@@ -309,6 +330,7 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
- 
- 	switch (cmd) {
- 	case TIOCMGET:
-+		eptdev->sig_pending = false;
- 		ret = rpmsg_get_signals(eptdev->ept);
- 		if (ret >= 0)
- 			ret = put_user(ret, (int __user *)arg);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+ I would like to discuss with you. If you are interested, please
+contact my email
 
+address (mrs.victoria.alexander2@gmail.com)
+
+My WhatsApp number but only message (+19293737780)
+
+Please do not reply if you are not ready
+Thanks
