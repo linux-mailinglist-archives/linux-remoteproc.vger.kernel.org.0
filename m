@@ -2,73 +2,103 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AA420D553
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 29 Jun 2020 21:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 891E320DB19
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 29 Jun 2020 22:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731943AbgF2TQS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 29 Jun 2020 15:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731931AbgF2TQL (ORCPT
+        id S2388508AbgF2UDf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 29 Jun 2020 16:03:35 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:12310 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732288AbgF2UDe (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:16:11 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489A2C08EAEF
-        for <linux-remoteproc@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id p3so8749332pgh.3
-        for <linux-remoteproc@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=E57soH+fAZU9oM/uuDn4bCNx2wALmvA7rwFsDeo/VdmyR4hSt+vRDMPW0qpAcJ9V/h
-         UbYJ9fIR9BUAZrS+1TfrEzBoFSxbLFUBB/IIzj7rfy4Y1SyxPmM/cs9fEremwVWV5m5u
-         b9v38myIgTBJNjasjLIOUO/K2CJS7vPJsURIlWBEC7RA0ax+vZbkexDjvFbqaAUgNm/w
-         yj4NkgHNxXLdKOO4AZsIv5vnXx8YMl4s3e1fTXh2Hp6rhwVI9k4nzVvvlc/OSvXrfpbl
-         +6DOlsrKa8IKCRxKxdcbetpm2uz+ZUKJBnziwlMhGJ11qW6bGQPIDGjYXF06+gry04Zz
-         3NGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
-        b=o7cyaEeT3XuudPGvASd/qBmHPYDd2lMbHzINsnnKzND6hWRmtFMoei39t14L7zw7nQ
-         owRF/iyNDy0hTY+mBvyeYIIfEJSHpZ6sd/kg9MCrn/lZ9DiJSJZb2nci4QACX9r2Hj+1
-         jJbwosPeH9kqc/Nr3cmF2S2EGeTQ/E8I5NpeZciYM2mBueAk7CWHSjTeEbDYHZvixXW2
-         pgctcpFWSy3OkSPK/ysdMNki7w/RXJJQAggjjBI+BylDq6jsYT/Yb0YCWXC7PiBuAPkx
-         0EVFGvUM7yT28JY325aRaEUAvQ4Jo1PLu66t/2Wy/dySVoCA8A9pK6Ff51D8qgObXo9M
-         +L+Q==
-X-Gm-Message-State: AOAM532vwe/BZBo98rZagUY0QKmI5wjendlQJJvEq6Xelw+K/qgo1w3p
-        SoHJqrvkPe5jAwJ/oqc0wTtPPHf1GnWwy/LFfSKaLH3b5qo=
-X-Google-Smtp-Source: ABdhPJyNR5zXZ8o09DSJzsSA3OSccnAxM/c9AxKQjYYOZlXvOMCiHs1YW/1gQi1Sa70TQ2VOPtabshfviWRkV7+ICnM=
-X-Received: by 2002:a6b:db17:: with SMTP id t23mr18236117ioc.4.1593458159284;
- Mon, 29 Jun 2020 12:15:59 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:15:58
- -0700 (PDT)
-Reply-To: mrs.victoria.alexander2@gmail.com
-From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
-Date:   Mon, 29 Jun 2020 12:15:58 -0700
-Message-ID: <CAP7XNCwEGQ+-Q==u4yk4yvJdk1X+gsfSU6pUV_hROjmF=p-DHw@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 29 Jun 2020 16:03:34 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1593461014; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=qtpTpEyX7P3/UBQOBDIxCImXEpI/7q2pBRc6Go1iexs=; b=RRn0m56VTUHrCwBTg2iBeeOqRyEvM9vHJcVA1D/UnrVMmec33uzkLHKVhFqNXXf6pH+wbXC4
+ ftTZuOHvg7V4j6QlshiAxa/bI0EZNQW8QGz+6CtGIUDSLwxShg9Y+m9++34KJhSCA5LIKjTd
+ zFQyuE1kUAlTmN7knIcQplq2lhA=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 5efa490f4c9690533af33427 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Jun 2020 20:03:27
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id BCC48C433AF; Mon, 29 Jun 2020 20:03:26 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rishabhb)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DD483C4339C;
+        Mon, 29 Jun 2020 20:03:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DD483C4339C
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rishabhb@codeaurora.org
+From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
+To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
+        tsoni@codeaurora.org, psodagud@codeaurora.org,
+        sidgup@codeaurora.org, Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Subject: [PATCH v6 0/3] Extend coredump functionality
+Date:   Mon, 29 Jun 2020 13:02:10 -0700
+Message-Id: <1593460933-4262-1-git-send-email-rishabhb@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Dear friend,
+This patch series moves the coredump functionality to a separate
+file and adds "inline" coredump feature. Inline coredump directly
+copies segments from device memory during coredump to userspace.
+This avoids extra memory usage at the cost of speed. Recovery is
+stalled until all data is read by userspace.
 
+Changelog:
 
-I have a business container transaction what that some of( $13million dollars)
+v6 -> v5:
+- Fix unsigned comaprison with negative bug found on gcc-9.3.0
 
- I would like to discuss with you. If you are interested, please
-contact my email
+v5 -> v4:
+- Rebase on top of linux-next
 
-address (mrs.victoria.alexander2@gmail.com)
+v4 -> v3:
+- Write a helper function to copy segment memory for every dump format
+- Change segment dump fn to add offset and size adn covert mss driver
 
-My WhatsApp number but only message (+19293737780)
+v3 -> v2:
+- Move entire coredump functionality to remoteproc_coredump.c
+- Modify rproc_coredump to perform dump according to conf. set by userspace
+- Move the userspace configuration to debugfs from sysfs.
+- Keep the default coredump implementation as is
 
-Please do not reply if you are not ready
-Thanks
+v2 -> v1:
+- Introduce new file for coredump.
+- Add userspace sysfs configuration for dump type.
+
+Rishabh Bhatnagar (3):
+  remoteproc: Move coredump functionality to a new file
+  remoteproc: Add inline coredump functionality
+  remoteproc: Add coredump debugfs entry
+
+ drivers/remoteproc/Makefile              |   1 +
+ drivers/remoteproc/qcom_q6v5_mss.c       |   9 +-
+ drivers/remoteproc/remoteproc_core.c     | 191 ------------------
+ drivers/remoteproc/remoteproc_coredump.c | 328 +++++++++++++++++++++++++++++++
+ drivers/remoteproc/remoteproc_debugfs.c  |  86 ++++++++
+ drivers/remoteproc/remoteproc_internal.h |   4 +
+ include/linux/remoteproc.h               |  21 +-
+ 7 files changed, 443 insertions(+), 197 deletions(-)
+ create mode 100644 drivers/remoteproc/remoteproc_coredump.c
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
