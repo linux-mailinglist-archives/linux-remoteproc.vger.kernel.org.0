@@ -2,181 +2,167 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E23C20DB29
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 29 Jun 2020 22:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5C4320EA58
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Jun 2020 02:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732735AbgF2UD6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 29 Jun 2020 16:03:58 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:47737 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732443AbgF2UD5 (ORCPT
+        id S1728636AbgF3AhZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 29 Jun 2020 20:37:25 -0400
+Received: from mail-eopbgr770040.outbound.protection.outlook.com ([40.107.77.40]:59303
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726899AbgF3AhZ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 29 Jun 2020 16:03:57 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1593461037; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=r5Ps0ckSVMP7RdDIdPCozlpA1Q6xNvrvfOb891tsolA=; b=q18yvraBWxH5Ad1L4UX21EkoGXVSZJoSs2oaxb55dzzFHfcToE+ZPqzpGzDn1U7ZHSSTV0tb
- 9amCF/gF8FDA1JTUAJNlu4E+GOLp1R50gkqnpuDD4BRhmBUtihNFBs9anStHftqu8H9y4ulM
- XyzORNfqqfLnPgrugHVPU0hVnyg=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5efa49133a8a8b20b80cbe17 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Jun 2020 20:03:30
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D693AC433AF; Mon, 29 Jun 2020 20:03:30 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rishabhb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 10804C433AD;
-        Mon, 29 Jun 2020 20:03:28 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 10804C433AD
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rishabhb@codeaurora.org
-From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
-To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
-        tsoni@codeaurora.org, psodagud@codeaurora.org,
-        sidgup@codeaurora.org, Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Subject: [PATCH v6 3/3] remoteproc: Add coredump debugfs entry
-Date:   Mon, 29 Jun 2020 13:02:13 -0700
-Message-Id: <1593460933-4262-4-git-send-email-rishabhb@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1593460933-4262-1-git-send-email-rishabhb@codeaurora.org>
-References: <1593460933-4262-1-git-send-email-rishabhb@codeaurora.org>
+        Mon, 29 Jun 2020 20:37:25 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f0Vkn4/Lhx8ar2fTnDy6dNz+SpBjNX+dOgN341myQpgYsmkCVQQjgjYygkHod9kwCpEcA5XzHxlBw4lnfmxGDfl+OFZAvk8+Vti+ZliMe02hN9OlwCa1RoGXexFEl0YRJg7DLPWvfcAvJR0jy4n4CBsdAd8PiywLD6u44xrQt9UCGIiZqLEBBtBPFPELtNxiA5YxpbUzsPpZckOIw9mNHhJngmfm+uqTHugIOMfOv60bOhPenxJ6pEUBpUITvx+I7ggUZkkv/FJ8845+ZZ76HWpAh0X+xeWhgX0QxvZiiO4Su4pLxHi9yFqnXAzicWIkso37hNZnO9BlWiQygX6PuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/I4IEY3BGgm+0yi5c+G6fFoNP02lZecbmfs8IRD4+4Q=;
+ b=OAw6K/GHFlI2h9D/qVPunSgA75s1r0ds+QtE71Fxctwqy4EfZiyGI+gT2NYocAgAAra+Y55hxb3uj30Yb7hAg20pXW5QZjXVH+CoLjb3fJWy9G/8kWuD5/+vdgjGF0A7ZTx4TNUn8WfDDTJSH4DvVywi+pgbxjPqZb/jE/j7xG9bzuuvkwfS/1x46xq7QPDcYHpytyRgXv/t7yxFqYEBiNf/Si09qrAQjZYOX/NCmywB3Lnu7qHVl/7z3ymTVPvSb3KF2Ywi6A8iSDxf3bQZ6GURW1Bu+RueEgZlWTsWq/ItuZmoU38w+iBfWgpZp+O4CgBJf87oVCp9jbc0i7yA1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/I4IEY3BGgm+0yi5c+G6fFoNP02lZecbmfs8IRD4+4Q=;
+ b=omzNQ+l2TAoTb/eDyYt6PHNHpwFzgfrf2HV0372k/B9tXTSJcXeqh+ZdHVpBDATcMTYXVL+xQ8Dq1irMJDO355+K7uNtaZpQwYPfYaPtdQrDVLGjqCL+kHoNBsNUkCpMbLMhZXXiUyHPAzwAJLtJ7ZhfSD+xpdLSrRlKaVt8QFo=
+Received: from SN4PR0501CA0079.namprd05.prod.outlook.com
+ (2603:10b6:803:22::17) by DM5PR02MB3864.namprd02.prod.outlook.com
+ (2603:10b6:4:b4::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.21; Tue, 30 Jun
+ 2020 00:37:21 +0000
+Received: from SN1NAM02FT032.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:803:22:cafe::39) by SN4PR0501CA0079.outlook.office365.com
+ (2603:10b6:803:22::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3153.10 via Frontend
+ Transport; Tue, 30 Jun 2020 00:37:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ SN1NAM02FT032.mail.protection.outlook.com (10.152.72.126) with Microsoft SMTP
+ Server id 15.20.3131.20 via Frontend Transport; Tue, 30 Jun 2020 00:37:21
+ +0000
+Received: from [149.199.38.66] (port=37946 helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
+        (envelope-from <stefano.stabellini@xilinx.com>)
+        id 1jq4Fj-0005Bx-D0; Mon, 29 Jun 2020 17:35:59 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <stefano.stabellini@xilinx.com>)
+        id 1jq4H2-0007Gw-S4; Mon, 29 Jun 2020 17:37:20 -0700
+Received: from xsj-pvapsmtp01 (smtp.xilinx.com [149.199.38.66])
+        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id 05U0bCFq011323;
+        Mon, 29 Jun 2020 17:37:12 -0700
+Received: from [10.23.120.6] (helo=localhost)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <stefanos@xilinx.com>)
+        id 1jq4Gu-0007FO-Fx; Mon, 29 Jun 2020 17:37:12 -0700
+Date:   Mon, 29 Jun 2020 17:37:12 -0700 (PDT)
+From:   Stefano Stabellini <stefano.stabellini@xilinx.com>
+X-X-Sender: sstabellini@sstabellini-ThinkPad-T480s
+To:     Rob Herring <robh@kernel.org>
+cc:     Ben Levinsky <BLEVINSK@xilinx.com>,
+        "ohad@wizery.com" <ohad@wizery.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        Michal Simek <michals@xilinx.com>,
+        Jolly Shah <JOLLYS@xilinx.com>, Rajan Vaja <RAJANV@xilinx.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Stefano Stabellini <stefanos@xilinx.com>
+Subject: Re: [PATCH v4 4/5] dt-bindings: remoteproc: Add documentation for
+ ZynqMP R5 rproc bindings
+In-Reply-To: <CAL_JsqLGo380SRYska+xGgJhgF8NCRvY56ewafvSCU6c-LmhZw@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2006291734370.8121@sstabellini-ThinkPad-T480s>
+References: <1587749770-15082-1-git-send-email-ben.levinsky@xilinx.com> <1587749770-15082-5-git-send-email-ben.levinsky@xilinx.com> <20200511221755.GA13585@bogus> <BYAPR02MB44077C8B7B7FD23FDE8E31B8B5B00@BYAPR02MB4407.namprd02.prod.outlook.com>
+ <CAL_JsqLGo380SRYska+xGgJhgF8NCRvY56ewafvSCU6c-LmhZw@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFTY:;SFS:(7916004)(376002)(346002)(396003)(39860400002)(136003)(46966005)(53546011)(8936002)(426003)(9786002)(478600001)(4326008)(356005)(47076004)(81166007)(54906003)(70586007)(70206006)(8676002)(5660300002)(336012)(186003)(82310400002)(2906002)(107886003)(44832011)(9686003)(6916009)(82740400003)(316002)(33716001)(26005);DIR:OUT;SFP:1101;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5f0db55e-a943-467e-a12e-08d81c8dc01b
+X-MS-TrafficTypeDiagnostic: DM5PR02MB3864:
+X-Microsoft-Antispam-PRVS: <DM5PR02MB386454C6F2DD409C385C27B6A06F0@DM5PR02MB3864.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-Forefront-PRVS: 0450A714CB
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Cu0pSfqybQc1DO5SxkfkFHuMfeJCoEK0hIflMXIeltFyhVy727z/40rR8XiyJJTdIy9uNJer1z5CnaT5aReixXSwEbP4UZ6QF9bWnLJ/6jsi1NksNhzoxeN2xTKkj+5iJHzATDUCQ4Pk71nJn2dQP91Fvl8Dd7BiFL96UXxQ0rzeiDh5KqtS9YB+IwbXRfoyT74oZ8r+hQ4f9KaHNd6IdHYmorrKFX/yFIoVBOLYHqtkaDVt1zANBioANxK3OGxzfmUwJofhBkDG5PorxM8zmlqd99WFL/gspVtN4MukfVEUZJhaym+suxDQV8RaSCoVJW0x+24KlH13xkeaPuoArn91fAXGsPScWmew9WnSEc9l46DArpRrUQ6ZVJ+Scq1y+tmFOTxa0LyCMNFgUctzCw==
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2020 00:37:21.1797
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f0db55e-a943-467e-a12e-08d81c8dc01b
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT032.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB3864
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add coredump debugfs entry to configure the type of dump that will
-be collected during recovery. User can select between default or
-inline coredump functionality. Also coredump collection can be
-disabled through this interface.
-This functionality can be configured differently for different
-remote processors.
+On Wed, 10 Jun 2020, Rob Herring wrote:
+> On Tue, May 26, 2020 at 11:40 AM Ben Levinsky <BLEVINSK@xilinx.com> wrote:
+> >
+> > Hi Rob,
+> >
+> > The Xilinx R5 Remoteproc driver has been around for a long time -- admittedly we should have upstreamed it long ago. The driver in the current form is using an "classic" remoteproc device tree node as described here.
+> 
+> I would rather not have 2 possible bindings to maintain. If there's
+> been no rush to upstream this til now, then it can wait longer.
+> 
+> >
+> > I am working with Stefano to come up with an appropriate System Device Tree representation but it is not going to be ready right away. Our preference would be to upstream the remoteproc node and driver in their current forms while system device tree is maturing.
+> 
+> There's obviously going to still need to be some sort of description
+> of the interface between cores, but this has parts that obviously
+> conflict with what's getting defined for system DT. The TCMs are the
+> most obvious. If you can remove (or hardcode in the driver) what
+> conflicts, then perhaps this can be upstreamed now.
 
-Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- drivers/remoteproc/remoteproc_debugfs.c | 86 +++++++++++++++++++++++++++++++++
- 1 file changed, 86 insertions(+)
 
-diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
-index 732770e..cca0a91 100644
---- a/drivers/remoteproc/remoteproc_debugfs.c
-+++ b/drivers/remoteproc/remoteproc_debugfs.c
-@@ -28,6 +28,90 @@
- static struct dentry *rproc_dbg;
- 
- /*
-+ * A coredump-configuration-to-string lookup table, for exposing a
-+ * human readable configuration via debugfs. Always keep in sync with
-+ * enum rproc_coredump_mechanism
-+ */
-+static const char * const rproc_coredump_str[] = {
-+	[RPROC_COREDUMP_DEFAULT]	= "default",
-+	[RPROC_COREDUMP_INLINE]	= "inline",
-+	[RPROC_COREDUMP_DISABLED]	= "disabled",
-+};
-+
-+/* Expose the current coredump configuration via debugfs */
-+static ssize_t rproc_coredump_read(struct file *filp, char __user *userbuf,
-+				   size_t count, loff_t *ppos)
-+{
-+	struct rproc *rproc = filp->private_data;
-+	const char *buf = rproc_coredump_str[rproc->dump_conf];
-+
-+	return simple_read_from_buffer(userbuf, count, ppos, buf, strlen(buf));
-+}
-+
-+/*
-+ * By writing to the 'coredump' debugfs entry, we control the behavior of the
-+ * coredump mechanism dynamically. The default value of this entry is "default".
-+ *
-+ * The 'coredump' debugfs entry supports these commands:
-+ *
-+ * default:	This is the default coredump mechanism. When the remoteproc
-+ *		crashes the entire coredump will be copied to a separate buffer
-+ *		and exposed to userspace.
-+ *
-+ * inline:	The coredump will not be copied to a separate buffer and the
-+ *		recovery process will have to wait until data is read by
-+ *		userspace. But this avoid usage of extra memory.
-+ *
-+ * disabled:	This will disable coredump. Recovery will proceed without
-+ *		collecting any dump.
-+ */
-+static ssize_t rproc_coredump_write(struct file *filp,
-+				    const char __user *user_buf, size_t count,
-+				    loff_t *ppos)
-+{
-+	struct rproc *rproc = filp->private_data;
-+	int ret, err = 0;
-+	char buf[20];
-+
-+	if (count > sizeof(buf))
-+		return -EINVAL;
-+
-+	ret = copy_from_user(buf, user_buf, count);
-+	if (ret)
-+		return -EFAULT;
-+
-+	/* remove end of line */
-+	if (buf[count - 1] == '\n')
-+		buf[count - 1] = '\0';
-+
-+	if (rproc->state == RPROC_CRASHED) {
-+		dev_err(&rproc->dev, "can't change coredump configuration\n");
-+		err = -EBUSY;
-+		goto out;
-+	}
-+
-+	if (!strncmp(buf, "disable", count)) {
-+		rproc->dump_conf = RPROC_COREDUMP_DISABLED;
-+	} else if (!strncmp(buf, "inline", count)) {
-+		rproc->dump_conf = RPROC_COREDUMP_INLINE;
-+	} else if (!strncmp(buf, "default", count)) {
-+		rproc->dump_conf = RPROC_COREDUMP_DEFAULT;
-+	} else {
-+		dev_err(&rproc->dev, "Invalid coredump configuration\n");
-+		err = -EINVAL;
-+	}
-+out:
-+	return err ? err : count;
-+}
-+
-+static const struct file_operations rproc_coredump_fops = {
-+	.read = rproc_coredump_read,
-+	.write = rproc_coredump_write,
-+	.open = simple_open,
-+	.llseek = generic_file_llseek,
-+};
-+
-+/*
-  * Some remote processors may support dumping trace logs into a shared
-  * memory buffer. We expose this trace buffer using debugfs, so users
-  * can easily tell what's going on remotely.
-@@ -337,6 +421,8 @@ void rproc_create_debug_dir(struct rproc *rproc)
- 			    rproc, &rproc_rsc_table_fops);
- 	debugfs_create_file("carveout_memories", 0400, rproc->dbg_dir,
- 			    rproc, &rproc_carveouts_fops);
-+	debugfs_create_file("coredump", 0600, rproc->dbg_dir,
-+			    rproc, &rproc_coredump_fops);
- }
- 
- void __init rproc_init_debugfs(void)
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Hi Rob,
 
+Sorry it took a while to answer back but we wanted to do some research
+to make sure the reply is correct.
+
+
+The System Device Tree version of the OpenAMP remoteproc bindings aims
+at being simpler and vendor-neutral. As anything else System Device
+Tree, Lopper will read it and generate a "traditional" device tree with
+the existing remoteproc bindings. In that sense, it might not affect
+Linux directly.
+
+However, given the fragmentation of the remoteproc bindings across
+multiple vendors (they are all different), I think it is a good idea for
+Linux, for System Device Tree, and in general to come up with simpler
+remoteproc bindings, more aligned between the vendors. If nothing else,
+it is going to make Lopper's development easier.
+
+
+So I think it is a good idea to take this opportunity to simplify the
+Xilinx remoteproc bindings as you suggested. The idea of to removing the
+TCM nodes is a good one. In addition I asked Ben to have a look at
+whether the mboxes and mbox-names properties can be removed too.
+
+Ben will reply with a simplified bindings proposal.
