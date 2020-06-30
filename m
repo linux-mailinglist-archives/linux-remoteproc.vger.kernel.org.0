@@ -2,149 +2,109 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A12020EB6C
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Jun 2020 04:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2B120EB93
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Jun 2020 04:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728164AbgF3CXD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 29 Jun 2020 22:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54636 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgF3CXC (ORCPT
+        id S1728713AbgF3Ctj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 29 Jun 2020 22:49:39 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:54410 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728665AbgF3Cti (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 29 Jun 2020 22:23:02 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47522C061755
-        for <linux-remoteproc@vger.kernel.org>; Mon, 29 Jun 2020 19:23:02 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id y18so7852865plr.4
-        for <linux-remoteproc@vger.kernel.org>; Mon, 29 Jun 2020 19:23:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D7EQW6LVu/0LCQVaLjrZlygqrUoX4J/4WhIdq95ups4=;
-        b=eqGvK2P0KbEv7YNVWM3sX4gdSuUS22MEImdYUCitDNbLwwQhlXEWVMN+sfnQfxSI7s
-         X3ZIBVg76VMnPRXZLDlylOoDN2aMsPdl82fJrcCwBMALeO9TkTUu4vmMLyek91DGMJKb
-         b5KkT4yWgiJNfABUQSLhbMG+6l8qMZK7pv24h3ZS18gqVw5Kq1LmRqmgHfUnSrdtbjfb
-         bSMaxciVuXntSrLmo3XqJ4Td/FraZqYIPvwoEXdWHAV/LeSKTk+BRhZOU2ypdssfZ/le
-         crp20QShS7XdaU+N1xz+B+0AbQA4L0rm24yak5coOERB5bK9q1uVAn7wadqkY1rG1c13
-         CMwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D7EQW6LVu/0LCQVaLjrZlygqrUoX4J/4WhIdq95ups4=;
-        b=Wy8GBIl6r0XqCR2eLYGXt0dp40NVEJc10Ok/Sdz81U4t5ZPhm10rLZhJXe6V6s9162
-         qo/YXz3vG/cBjWiBFPP1iXgnWX6gWO6vKoSxK1wVpNwuP1VjCfcYqeLKU06gNifavHKU
-         nKl6TKClJETRhrYDYWkwz0cZROjSvTKAHlQLZ4fIeBlaDaYdZM6EKjHN9f/C4+b02ftS
-         Q8EhOVWrsB09LqeOwWOlrgStQ40deIckuisCBC3ZRI3Ugs/K9spWDIMn3wh497ILL4v9
-         eLZzi88yTzqCE5mg1OU32fbQgcr04q5mXyZLw20RGVKA37wo73+k22ie23P5Bu9E2Ytn
-         yGFw==
-X-Gm-Message-State: AOAM530evxF8Yh7wVmetqZUCcfuYBAYrNt9lupeF1ZYK3/Hp7KQaQbkb
-        hY/Op09k+CUsBenzobOgVJnOABB7RUo=
-X-Google-Smtp-Source: ABdhPJzrYacdOd5DIB52tslC3wsLFea6Uoc0i4RCCBB1Jf0xYsnX6xU+fppqQC3njjiitgbGDm3/BQ==
-X-Received: by 2002:a17:90a:20e9:: with SMTP id f96mr20462600pjg.13.1593483781624;
-        Mon, 29 Jun 2020 19:23:01 -0700 (PDT)
-Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id j19sm819933pfn.109.2020.06.29.19.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 19:23:00 -0700 (PDT)
-Date:   Mon, 29 Jun 2020 19:20:29 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stefano Stabellini <stefano.stabellini@xilinx.com>
-Cc:     Rob Herring <robh@kernel.org>, Ben Levinsky <BLEVINSK@xilinx.com>,
-        "ohad@wizery.com" <ohad@wizery.com>,
-        Michal Simek <michals@xilinx.com>,
-        Jolly Shah <JOLLYS@xilinx.com>, Rajan Vaja <RAJANV@xilinx.com>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+        Mon, 29 Jun 2020 22:49:38 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05U2nPWg105154;
+        Mon, 29 Jun 2020 21:49:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1593485365;
+        bh=l3dJNMTnCJS2Tr9Fc2NBXAUcVx30a2Jtr1XirbH4bSQ=;
+        h=From:To:CC:Subject:Date;
+        b=uynyKw0k0VUCxZ8VoF8w9a5ttM0x+3lkNoX3+8nbl9b8VCUX/xl2sx3fFFxrhO5Zl
+         ooL9/3dSSZVmBSa790/YlF0ul2FU6N1qBrhgRJrAZNROK25XX0sYRSmoVkGMJaElE8
+         W3RaSDFOgI14SBY+2YuEZuohJnFxAyxZEXSYG9jE=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 05U2nPS5048597
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 29 Jun 2020 21:49:25 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 29
+ Jun 2020 21:49:25 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 29 Jun 2020 21:49:25 -0500
+Received: from fllv0103.dal.design.ti.com (fllv0103.dal.design.ti.com [10.247.120.73])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05U2nPFt075189;
+        Mon, 29 Jun 2020 21:49:25 -0500
+Received: from localhost ([10.250.48.148])
+        by fllv0103.dal.design.ti.com (8.14.7/8.14.7) with ESMTP id 05U2nPFT029139;
+        Mon, 29 Jun 2020 21:49:25 -0500
+From:   Suman Anna <s-anna@ti.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lokesh Vutla <lokeshvutla@ti.com>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Stefano Stabellini <stefanos@xilinx.com>
-Subject: Re: [PATCH v4 4/5] dt-bindings: remoteproc: Add documentation for
- ZynqMP R5 rproc bindings
-Message-ID: <20200630022029.GC407764@builder.lan>
-References: <1587749770-15082-1-git-send-email-ben.levinsky@xilinx.com>
- <1587749770-15082-5-git-send-email-ben.levinsky@xilinx.com>
- <20200511221755.GA13585@bogus>
- <BYAPR02MB44077C8B7B7FD23FDE8E31B8B5B00@BYAPR02MB4407.namprd02.prod.outlook.com>
- <CAL_JsqLGo380SRYska+xGgJhgF8NCRvY56ewafvSCU6c-LmhZw@mail.gmail.com>
- <alpine.DEB.2.21.2006291734370.8121@sstabellini-ThinkPad-T480s>
+        <linux-kernel@vger.kernel.org>, Suman Anna <s-anna@ti.com>
+Subject: [PATCH v2 0/4] TI K3 R5F remoteproc support
+Date:   Mon, 29 Jun 2020 21:49:18 -0500
+Message-ID: <20200630024922.32491-1-s-anna@ti.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2006291734370.8121@sstabellini-ThinkPad-T480s>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon 29 Jun 17:37 PDT 2020, Stefano Stabellini wrote:
+Hi All,
 
-> On Wed, 10 Jun 2020, Rob Herring wrote:
-> > On Tue, May 26, 2020 at 11:40 AM Ben Levinsky <BLEVINSK@xilinx.com> wrote:
-> > >
-> > > Hi Rob,
-> > >
-> > > The Xilinx R5 Remoteproc driver has been around for a long time -- admittedly we should have upstreamed it long ago. The driver in the current form is using an "classic" remoteproc device tree node as described here.
-> > 
-> > I would rather not have 2 possible bindings to maintain. If there's
-> > been no rush to upstream this til now, then it can wait longer.
-> > 
-> > >
-> > > I am working with Stefano to come up with an appropriate System Device Tree representation but it is not going to be ready right away. Our preference would be to upstream the remoteproc node and driver in their current forms while system device tree is maturing.
-> > 
-> > There's obviously going to still need to be some sort of description
-> > of the interface between cores, but this has parts that obviously
-> > conflict with what's getting defined for system DT. The TCMs are the
-> > most obvious. If you can remove (or hardcode in the driver) what
-> > conflicts, then perhaps this can be upstreamed now.
-> 
-> 
-> Hi Rob,
-> 
-> Sorry it took a while to answer back but we wanted to do some research
-> to make sure the reply is correct.
-> 
-> 
-> The System Device Tree version of the OpenAMP remoteproc bindings aims
-> at being simpler and vendor-neutral. As anything else System Device
-> Tree, Lopper will read it and generate a "traditional" device tree with
-> the existing remoteproc bindings. In that sense, it might not affect
-> Linux directly.
-> 
+The following is v2 of the TI K3 R5F remoteproc driver series supporting all
+the R5F processor clusters/subsystems on TI AM65x and J721E SoCs. Please
+see the v1 cover-letter [1] for the features supported on these R5F
+processors.
 
-Can you give some examples of how you will be able to describe the
-hardware involved in powering/clocking resources surrounding your
-remoteproc and the necessary resources in a "simpler and vendor neutral"
-way that then can be further lopped(?) into something that Linux can use
-to control any remoteproc?
+The patches are based off 5.8-rc1 and now sit on top of the v3 K3 DSP C66x
+and C71x remoteproc driver series [2][3] (v1 had R5F followed by DSPs).
 
-> However, given the fragmentation of the remoteproc bindings across
-> multiple vendors (they are all different), I think it is a good idea for
-> Linux, for System Device Tree, and in general to come up with simpler
-> remoteproc bindings, more aligned between the vendors. If nothing else,
-> it is going to make Lopper's development easier.
-> 
+The v2 version now only has 4 patches instead of the 7 patches in v1. The
+first 2 patches from v1 are already part of 5.8-rc1 and the third patch is
+moved to the K3 DSP C66x series [4].
 
-In my view the big reason for the fragmentation between bindings is
-because they all describe different hardware. There has been common
-properties of remoteprocs discussed, but apart from the firmware-name
-property I don't think we have agreed on any.
+The following is the summary of the main changes in v2:
+ - Reworked bindings patch (patch #1) to leverage a new common ti-sci-proc
+   yaml bindings file introduced in the K3 DSP C66x series.
+ - K3 R5F remoteproc driver revised to leverage more devm_ API and
+   address all Mathieu's comments. 
 
-> 
-> So I think it is a good idea to take this opportunity to simplify the
-> Xilinx remoteproc bindings as you suggested. The idea of to removing the
-> TCM nodes is a good one. In addition I asked Ben to have a look at
-> whether the mboxes and mbox-names properties can be removed too.
-> 
+Please see the individual patches for detailed delta differences.
 
-If your remoteproc uses a mailbox for signaling, then this should be
-described in devicetree. This will allow you to reuse components in
-other designs where either part is replaced or reused.
+regards
+Suman
 
-Regards,
-Bjorn
+[1] R5F v1: https://patchwork.kernel.org/cover/11456367/
+[2] C66x v3: https://patchwork.kernel.org/cover/11602331/
+[3] C71x v3: https://patchwork.kernel.org/cover/11602345/
+[4] https://patchwork.kernel.org/patch/11602329/
 
-> Ben will reply with a simplified bindings proposal.
+Suman Anna (4):
+  dt-bindings: remoteproc: Add bindings for R5F subsystem on TI K3 SoCs
+  remoteproc: k3-r5: Add a remoteproc driver for R5F subsystem
+  remoteproc: k3-r5: Initialize TCM memories for ECC
+  remoteproc: k3-r5: Add loading support for on-chip SRAM regions
+
+ .../bindings/remoteproc/ti,k3-r5f-rproc.yaml  |  278 ++++
+ drivers/remoteproc/Kconfig                    |   13 +
+ drivers/remoteproc/Makefile                   |    1 +
+ drivers/remoteproc/ti_k3_r5_remoteproc.c      | 1396 +++++++++++++++++
+ 4 files changed, 1688 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
+ create mode 100644 drivers/remoteproc/ti_k3_r5_remoteproc.c
+
+-- 
+2.26.0
+
