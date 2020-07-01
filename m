@@ -2,54 +2,55 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C10A2114DF
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  1 Jul 2020 23:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44453211515
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  1 Jul 2020 23:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725915AbgGAVVj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 1 Jul 2020 17:21:39 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:60074 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727076AbgGAVVi (ORCPT
+        id S1726469AbgGAV1a (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 1 Jul 2020 17:27:30 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:33576 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbgGAV1a (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 1 Jul 2020 17:21:38 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 061LLXxS130492;
-        Wed, 1 Jul 2020 16:21:33 -0500
+        Wed, 1 Jul 2020 17:27:30 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 061LRP3M036911;
+        Wed, 1 Jul 2020 16:27:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1593638493;
-        bh=rLRInyM1HUBSe42k9HXIZL+IrIZT1shCKCGOH7tBuOA=;
+        s=ti-com-17Q1; t=1593638845;
+        bh=DE8CnC7FP5Y5OqDbKoA3A18OoqaSIir0VAtnrw0TWg0=;
         h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=NQvtGT/ZG8cPpHc0YuQ+p+9b1vhq5YCipHI6/SYBsD7VZ89xI6JSjhmmGAZ3vdfRM
-         pAvBkzy2HXQ83NEJmgL6ed2dSkMGtGuXurAmgiFyd9+N30wGt6Ik5/KIlaGzKUDZVs
-         S6rQR1fmb7ywdo1URRKpUo5B6uPA4rE0bXwvKf7c=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 061LLXCX129314
+        b=O7jawF1cTxy7JuOAcSxI5kB+yWscyqAjMtP60MfTyv3ftaFiKXeyGvUbjHrtpkRVI
+         SU9DLoFysPhGrm9bqnHq1lotAYP/bVFmp60E9OvenV9avvIIj+yPdxUsRb69byfGiM
+         E55F3XYItd8W1B5SXOcUyrfFhj4bErnI60J6s2jc=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 061LRPan005461
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 1 Jul 2020 16:21:33 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+        Wed, 1 Jul 2020 16:27:25 -0500
+Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 1 Jul
- 2020 16:21:33 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ 2020 16:27:25 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 1 Jul 2020 16:21:33 -0500
+ Frontend Transport; Wed, 1 Jul 2020 16:27:24 -0500
 Received: from [10.250.70.56] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 061LLWww081460;
-        Wed, 1 Jul 2020 16:21:32 -0500
-Subject: Re: [PATCH 2/2] Revert "remoteproc: Add support for runtime PM"
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 061LROhk011033;
+        Wed, 1 Jul 2020 16:27:24 -0500
+Subject: Re: [PATCH 1/2] remoteproc: ingenic: Move clock handling to
+ prepare/unprepare callbacks
 To:     Mathieu Poirier <mathieu.poirier@linaro.org>, <ohad@wizery.com>,
         <bjorn.andersson@linaro.org>, <paul@crapouillou.net>
 CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 References: <20200630163118.3830422-1-mathieu.poirier@linaro.org>
- <20200630163118.3830422-3-mathieu.poirier@linaro.org>
+ <20200630163118.3830422-2-mathieu.poirier@linaro.org>
 From:   Suman Anna <s-anna@ti.com>
-Message-ID: <14cdd336-a2d9-537d-cc61-f47e01f89e9c@ti.com>
-Date:   Wed, 1 Jul 2020 16:21:32 -0500
+Message-ID: <8d089532-19a7-d687-d087-a3a48df16407@ti.com>
+Date:   Wed, 1 Jul 2020 16:27:24 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200630163118.3830422-3-mathieu.poirier@linaro.org>
+In-Reply-To: <20200630163118.3830422-2-mathieu.poirier@linaro.org>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -62,103 +63,163 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 Hi Mathieu,
 
 On 6/30/20 11:31 AM, Mathieu Poirier wrote:
-> This reverts commit a99a37f6cd5a74d5b22c08544aa6c5890813c8ba.
+> This patch moves clock related operations to the remoteproc prepare()
+> and unprepare() callbacks so that the PM runtime framework doesn't
+> have to be involved needlessly.  This provides a simpler approach and
+> requires less code.
 > 
-> Removing PM runtime operations from the remoteproc core in order to:
-> 
-> 1) Keep all power management operations in platform drivers.  That way we
-> do not loose flexibility in an area that is very HW specific.
-> 
-> 2) Avoid making the support for remote processor managed by external
-> entities more complex that it already is.
-> 
-> 3) Fix regression introduced for the Omap remoteproc driver.
-
-Thanks for following up on the discussion, I have verified that the 
-autosuspend regression is fixed.
-
+> Based on the work from Paul Cercueil published here:
+> https://lore.kernel.org/linux-remoteproc/20191116170846.67220-4-paul@crapouillou.net/
 > 
 > Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-
-Tested-by: Suman Anna <s-anna@ti.com>
-Acked-by: Suman Anna <s-anna@ti.com>
-
-regards
-Suman
-
 > ---
->   drivers/remoteproc/remoteproc_core.c | 17 +----------------
->   1 file changed, 1 insertion(+), 16 deletions(-)
+>   drivers/remoteproc/ingenic_rproc.c | 84 +++++++++---------------------
+>   1 file changed, 26 insertions(+), 58 deletions(-)
 > 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 9f04c30c4aaf..0f95e025ba03 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -29,7 +29,6 @@
->   #include <linux/devcoredump.h>
->   #include <linux/rculist.h>
->   #include <linux/remoteproc.h>
+> diff --git a/drivers/remoteproc/ingenic_rproc.c b/drivers/remoteproc/ingenic_rproc.c
+> index 189020d77b25..b0fc8eace6ec 100644
+> --- a/drivers/remoteproc/ingenic_rproc.c
+> +++ b/drivers/remoteproc/ingenic_rproc.c
+> @@ -11,7 +11,6 @@
+>   #include <linux/io.h>
+>   #include <linux/module.h>
+>   #include <linux/platform_device.h>
 > -#include <linux/pm_runtime.h>
->   #include <linux/iommu.h>
->   #include <linux/idr.h>
->   #include <linux/elf.h>
-> @@ -1383,12 +1382,6 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
->   	if (ret)
->   		return ret;
+>   #include <linux/remoteproc.h>
 >   
-> -	ret = pm_runtime_get_sync(dev);
-> -	if (ret < 0) {
-> -		dev_err(dev, "pm_runtime_get_sync failed: %d\n", ret);
+>   #include "remoteproc_internal.h"
+> @@ -62,6 +61,28 @@ struct vpu {
+>   	struct device *dev;
+>   };
+>   
+> +static int ingenic_rproc_prepare(struct rproc *rproc)
+> +{
+> +	struct vpu *vpu = rproc->priv;
+> +	int ret;
+> +
+> +	/* The clocks must be enabled for the firmware to be loaded in TCSM */
+> +	ret = clk_bulk_prepare_enable(ARRAY_SIZE(vpu->clks), vpu->clks);
+> +	if (ret)
+> +		dev_err(vpu->dev, "Unable to start clocks: %d", ret);
+
+Minor nit, add a newline character at the end of the trace statement.
+
+With that,
+Reviewed-by: Suman Anna <s-anna@ti.com>
+
+> +
+> +	return ret;
+> +}
+> +
+> +static int ingenic_rproc_unprepare(struct rproc *rproc)
+> +{
+> +	struct vpu *vpu = rproc->priv;
+> +
+> +	clk_bulk_disable_unprepare(ARRAY_SIZE(vpu->clks), vpu->clks);
+> +
+> +	return 0;
+> +}
+> +
+>   static int ingenic_rproc_start(struct rproc *rproc)
+>   {
+>   	struct vpu *vpu = rproc->priv;
+> @@ -115,6 +136,8 @@ static void *ingenic_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len)
+>   }
+>   
+>   static struct rproc_ops ingenic_rproc_ops = {
+> +	.prepare = ingenic_rproc_prepare,
+> +	.unprepare = ingenic_rproc_unprepare,
+>   	.start = ingenic_rproc_start,
+>   	.stop = ingenic_rproc_stop,
+>   	.kick = ingenic_rproc_kick,
+> @@ -135,16 +158,6 @@ static irqreturn_t vpu_interrupt(int irq, void *data)
+>   	return rproc_vq_interrupt(rproc, vring);
+>   }
+>   
+> -static void ingenic_rproc_disable_clks(void *data)
+> -{
+> -	struct vpu *vpu = data;
+> -
+> -	pm_runtime_resume(vpu->dev);
+> -	pm_runtime_disable(vpu->dev);
+> -
+> -	clk_bulk_disable_unprepare(ARRAY_SIZE(vpu->clks), vpu->clks);
+> -}
+> -
+>   static int ingenic_rproc_probe(struct platform_device *pdev)
+>   {
+>   	struct device *dev = &pdev->dev;
+> @@ -206,35 +219,13 @@ static int ingenic_rproc_probe(struct platform_device *pdev)
+>   
+>   	disable_irq(vpu->irq);
+>   
+> -	/* The clocks must be enabled for the firmware to be loaded in TCSM */
+> -	ret = clk_bulk_prepare_enable(ARRAY_SIZE(vpu->clks), vpu->clks);
+> -	if (ret) {
+> -		dev_err(dev, "Unable to start clocks\n");
 > -		return ret;
 > -	}
 > -
->   	dev_info(dev, "Booting fw image %s, size %zd\n", name, fw->size);
->   
->   	/*
-> @@ -1398,7 +1391,7 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
->   	ret = rproc_enable_iommu(rproc);
+> -	pm_runtime_irq_safe(dev);
+> -	pm_runtime_set_active(dev);
+> -	pm_runtime_enable(dev);
+> -	pm_runtime_get_sync(dev);
+> -	pm_runtime_use_autosuspend(dev);
+> -
+> -	ret = devm_add_action_or_reset(dev, ingenic_rproc_disable_clks, vpu);
+> -	if (ret) {
+> -		dev_err(dev, "Unable to register action\n");
+> -		goto out_pm_put;
+> -	}
+> -
+>   	ret = devm_rproc_add(dev, rproc);
 >   	if (ret) {
->   		dev_err(dev, "can't enable iommu: %d\n", ret);
-> -		goto put_pm_runtime;
+>   		dev_err(dev, "Failed to register remote processor\n");
+> -		goto out_pm_put;
 > +		return ret;
 >   	}
 >   
->   	/* Prepare rproc for firmware loading if needed */
-> @@ -1452,8 +1445,6 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
->   	rproc_unprepare_device(rproc);
->   disable_iommu:
->   	rproc_disable_iommu(rproc);
-> -put_pm_runtime:
-> -	pm_runtime_put(dev);
->   	return ret;
+> -out_pm_put:
+> -	pm_runtime_put_autosuspend(dev);
+> -
+> -	return ret;
+> +	return 0;
 >   }
 >   
-> @@ -1891,8 +1882,6 @@ void rproc_shutdown(struct rproc *rproc)
+>   static const struct of_device_id ingenic_rproc_of_matches[] = {
+> @@ -243,33 +234,10 @@ static const struct of_device_id ingenic_rproc_of_matches[] = {
+>   };
+>   MODULE_DEVICE_TABLE(of, ingenic_rproc_of_matches);
 >   
->   	rproc_disable_iommu(rproc);
->   
-> -	pm_runtime_put(dev);
+> -static int __maybe_unused ingenic_rproc_suspend(struct device *dev)
+> -{
+> -	struct vpu *vpu = dev_get_drvdata(dev);
 > -
->   	/* Free the copy of the resource table */
->   	kfree(rproc->cached_table);
->   	rproc->cached_table = NULL;
-> @@ -2183,9 +2172,6 @@ struct rproc *rproc_alloc(struct device *dev, const char *name,
->   
->   	rproc->state = RPROC_OFFLINE;
->   
-> -	pm_runtime_no_callbacks(&rproc->dev);
-> -	pm_runtime_enable(&rproc->dev);
+> -	clk_bulk_disable(ARRAY_SIZE(vpu->clks), vpu->clks);
 > -
->   	return rproc;
->   
->   put_device:
-> @@ -2205,7 +2191,6 @@ EXPORT_SYMBOL(rproc_alloc);
->    */
->   void rproc_free(struct rproc *rproc)
->   {
-> -	pm_runtime_disable(&rproc->dev);
->   	put_device(&rproc->dev);
->   }
->   EXPORT_SYMBOL(rproc_free);
+> -	return 0;
+> -}
+> -
+> -static int __maybe_unused ingenic_rproc_resume(struct device *dev)
+> -{
+> -	struct vpu *vpu = dev_get_drvdata(dev);
+> -
+> -	return clk_bulk_enable(ARRAY_SIZE(vpu->clks), vpu->clks);
+> -}
+> -
+> -static const struct dev_pm_ops __maybe_unused ingenic_rproc_pm = {
+> -	SET_RUNTIME_PM_OPS(ingenic_rproc_suspend, ingenic_rproc_resume, NULL)
+> -};
+> -
+>   static struct platform_driver ingenic_rproc_driver = {
+>   	.probe = ingenic_rproc_probe,
+>   	.driver = {
+>   		.name = "ingenic-vpu",
+> -#ifdef CONFIG_PM
+> -		.pm = &ingenic_rproc_pm,
+> -#endif
+>   		.of_match_table = ingenic_rproc_of_matches,
+>   	},
+>   };
 > 
 
