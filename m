@@ -2,61 +2,62 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7D62179DD
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Jul 2020 23:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55480217A67
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Jul 2020 23:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729144AbgGGVA1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 7 Jul 2020 17:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
+        id S1728517AbgGGVbP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 7 Jul 2020 17:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729143AbgGGVA1 (ORCPT
+        with ESMTP id S1728372AbgGGVbP (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 7 Jul 2020 17:00:27 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065E4C08C5DC
-        for <linux-remoteproc@vger.kernel.org>; Tue,  7 Jul 2020 14:00:27 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id e18so20564612pgn.7
-        for <linux-remoteproc@vger.kernel.org>; Tue, 07 Jul 2020 14:00:27 -0700 (PDT)
+        Tue, 7 Jul 2020 17:31:15 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2025DC061755
+        for <linux-remoteproc@vger.kernel.org>; Tue,  7 Jul 2020 14:31:15 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id b92so228572pjc.4
+        for <linux-remoteproc@vger.kernel.org>; Tue, 07 Jul 2020 14:31:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=DXihWIxuNvTRnDoqQ/WGQ+3cWsaukK63XK7MoneTKGE=;
-        b=wCtNGckKVZFCFAuUdZsUw9mSFizW/062kFnHcpDSKKzrt9wS+WWMTqcBQpPV31HmQs
-         CRGM3WKA+gCXwrspMDYMYoeeKfPU6sVhpycFx4Hk2EQ6aQ+fGEGqVNrFboBiPwH9C//S
-         niLoEyMvn1HAvphxxck3y7z/VcDKLIr53k5uyjqVFSR174th6lKWNOnKDrSsAGuCIVHZ
-         I8BNJB5hnS+WiI2pDNMMro3t9z467k2JiraNB+kceNkiYcfSSuaQeBA50zIhwgkzO7r5
-         Nb/3UN/zTKgEP5O2fdvellFQ/bTAxfQBd2VOH/SU27mBK13FCuXy1NPGJ10rYjt4o+/C
-         AGHQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2x+L8FUv9bI+crByz6/Ejtn3DTdscAGUJ17rPzAIyTM=;
+        b=Uar/WVI5Uzn3sX7rG1DAuVylL5XgU7OFLcnSATfNdujh9l6dnFFSiueycjbskupllK
+         celMxqY20h+WdblDasjQ1F38BszhI2do0gEHIlktty4KSV0cOnRKxhIon51VNKznyIec
+         dfjSilPFBTh9IwRVFg7h+U0KJJNmXLwLR8y6O5q5t8M7D1nNA8n9EojU8azxptnVypny
+         fv4+hH3JNyOLDCE7T4FTrp4aEYsq9aKCeO71waT+yZ8tQKUjsnBdfCq7T1oxa8kdcdHx
+         +bophkIFyqn/1lEPOQBj6LzZix1MN8GBkXBH9dLEVXOIzFJ6CyTGtpVRVVpiQVnFTjMX
+         BWhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=DXihWIxuNvTRnDoqQ/WGQ+3cWsaukK63XK7MoneTKGE=;
-        b=NldKiwzUy+J9EC/wnCLw4KNQlBQKPH4D4qXbxHXjmyQeiE3dmnR0n6ofUnJDqpPC9z
-         Xs6KqZ8FwyOVAEz8hLdbP8HLZpT9fAwWh5Koo4FIyiletpXTDLq/U7u3oZ3YiFOfciwd
-         yRM/hNERZKIMczfug+a82uI3lJZ4tyguiTU7dOlFXm8XMsz7FQT+NHFOOatnyZbHAA14
-         kCcACXqdi8pJISZ77X2/S6IGOMMICfeaGdLdQpnvBm/0jed1OelXFY8m8a7i7uJDBGl1
-         Lrz178Uo9FNqxzuAiIqVJW45w9veYmJJ07uORLE3UelsvGgDhFO43nN0+CcSKUoq/jD8
-         j2Ug==
-X-Gm-Message-State: AOAM530aVBvbJVmm9osigiFMQJj6xucrWJswY0Tze2/1XN/14zSLZind
-        XZcdk1sVCZM9u3lHPtfpXz7snW05pfY=
-X-Google-Smtp-Source: ABdhPJw8VONUyHkapEOJN8eJzw+l3h8xertsjk/QdIylkXYno8uLy5Snd1L7vKjOLDF4ip3FnrSBJg==
-X-Received: by 2002:a62:ea03:: with SMTP id t3mr50358791pfh.57.1594155626491;
-        Tue, 07 Jul 2020 14:00:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2x+L8FUv9bI+crByz6/Ejtn3DTdscAGUJ17rPzAIyTM=;
+        b=YJNdDvemEX26n5MlQGmwYPEBF2Wu5w+Z4K6OSAjeXYrQuanujZseiCwLfAESr/U3PB
+         tkoCEVKOqBEBhGyCzTV/Y8c8KROE39vJioP7tahEVcboA9dIZ/rfS2umj8RExbCqG3KD
+         FpSS/aB6IKdDVfBA7RKZdPeW59rumpC4b6R2Zc95Pe1UVUTsx9IZ1PCv3MPvA5cfOmso
+         kinEM94mjRwsv8VrNu7Clh7o29EQ7eOz8mQG2B8c9CjimAohw2HHCP2MWl3hSkOcFUgX
+         3f15GOGOHbWBvzGpd7FrmvoxMGQCUsvM7dcuds2Bge9J3eeDAG976I6RKmxt7uWncr78
+         VglA==
+X-Gm-Message-State: AOAM532g6GhMOM+YqFlewp/w8wQwUvzNOVqIw0eye61G/Gd7CyigxQTi
+        bFT7OanI7DKfVTDan0J63ORcrQ==
+X-Google-Smtp-Source: ABdhPJxj36Ux6T1EDbfBl8b9cg/WZBuy2kEOSrmZQ9rkYWPCm3sFJTgo+Y9ZkjXG8JajBiUvgf4rxw==
+X-Received: by 2002:a17:902:a410:: with SMTP id p16mr46001431plq.283.1594157474673;
+        Tue, 07 Jul 2020 14:31:14 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id b21sm13738061pfb.45.2020.07.07.14.00.25
+        by smtp.gmail.com with ESMTPSA id o128sm23560832pfg.127.2020.07.07.14.31.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 14:00:26 -0700 (PDT)
+        Tue, 07 Jul 2020 14:31:14 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 9/9] remoteproc: Properly handle firmware name when attaching
-Date:   Tue,  7 Jul 2020 15:00:14 -0600
-Message-Id: <20200707210014.927691-10-mathieu.poirier@linaro.org>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org, loic.pallardy@st.com,
+        arnaud.pouliquen@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH v5 00/11] remoteproc: stm32: Add support for attaching to M4
+Date:   Tue,  7 Jul 2020 15:31:01 -0600
+Message-Id: <20200707213112.928383-1-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200707210014.927691-1-mathieu.poirier@linaro.org>
-References: <20200707210014.927691-1-mathieu.poirier@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -64,101 +65,41 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-This patch prevents the firmware image name from being displayed when
-the remoteproc core is attaching to a remote processor. This is needed
-needed since there is no guarantee about the nature of the firmware
-image that is loaded by the external entity.
+This set applies on top of [1] and refactors the STM32 platform code in
+order to attach to the M4 remote processor when it has been started by the
+boot loader.
 
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- drivers/remoteproc/remoteproc_core.c  | 18 ++++++++++++++++++
- drivers/remoteproc/remoteproc_sysfs.c | 16 ++++++++++++++--
- include/linux/remoteproc.h            |  2 ++
- 3 files changed, 34 insertions(+), 2 deletions(-)
+New to V5:
+1) Added Bjorn's reviewed-by to patch 06.
+2) Removed Loic's reviewed-by from patch 08, it has changed too much.
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 6b6e4ec8cf3a..099c76ab198f 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1624,6 +1624,14 @@ static int rproc_stop(struct rproc *rproc, bool crashed)
- 
- 	rproc->state = RPROC_OFFLINE;
- 
-+	/*
-+	 * The remote processor has been stopped and is now offline, which means
-+	 * that the next time it is brought back online the remoteproc core will
-+	 * be responsible to load its firmware.  As such it is no longer
-+	 * autonomous.
-+	 */
-+	rproc->autonomous = false;
-+
- 	dev_info(dev, "stopped remote processor %s\n", rproc->name);
- 
- 	return 0;
-@@ -2142,6 +2150,16 @@ int rproc_add(struct rproc *rproc)
- 	/* create debugfs entries */
- 	rproc_create_debug_dir(rproc);
- 
-+	/*
-+	 * Remind ourselves the remote processor has been attached to rather
-+	 * than booted by the remoteproc core.  This is important because the
-+	 * RPROC_DETACHED state will be lost as soon as the remote processor
-+	 * has been attached to.  Used in firmware_show() and reset in
-+	 * rproc_stop().
-+	 */
-+	if (rproc->state == RPROC_DETACHED)
-+		rproc->autonomous = true;
-+
- 	/* if rproc is marked always-on, request it to boot */
- 	if (rproc->auto_boot) {
- 		ret = rproc_trigger_auto_boot(rproc);
-diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
-index 264759713934..eea514cec50e 100644
---- a/drivers/remoteproc/remoteproc_sysfs.c
-+++ b/drivers/remoteproc/remoteproc_sysfs.c
-@@ -15,8 +15,20 @@ static ssize_t firmware_show(struct device *dev, struct device_attribute *attr,
- 			  char *buf)
- {
- 	struct rproc *rproc = to_rproc(dev);
--
--	return sprintf(buf, "%s\n", rproc->firmware);
-+	const char *firmware = rproc->firmware;
-+
-+	/*
-+	 * If the remote processor has been started by an external
-+	 * entity we have no idea of what image it is running.  As such
-+	 * simply display a generic string rather then rproc->firmware.
-+	 *
-+	 * Here we rely on the autonomous flag because a remote processor
-+	 * may have been attached to and currently in a running state.
-+	 */
-+	if (rproc->autonomous)
-+		firmware = "unknown";
-+
-+	return sprintf(buf, "%s\n", firmware);
- }
- 
- /* Change firmware name via sysfs */
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index bf6a310ba870..cf5e31556780 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -491,6 +491,7 @@ struct rproc_dump_segment {
-  * @table_sz: size of @cached_table
-  * @has_iommu: flag to indicate if remote processor is behind an MMU
-  * @auto_boot: flag to indicate if remote processor should be auto-started
-+ * @autonomous: true if an external entity has booted the remote processor
-  * @dump_segments: list of segments in the firmware
-  * @nb_vdev: number of vdev currently handled by rproc
-  */
-@@ -524,6 +525,7 @@ struct rproc {
- 	size_t table_sz;
- 	bool has_iommu;
- 	bool auto_boot;
-+	bool autonomous;
- 	struct list_head dump_segments;
- 	int nb_vdev;
- 	u8 elf_class;
+Patches that need to be reviewed: 7, 8, 9 and 10.
+
+Tested on ST's mp157c development board.
+
+Thanks,
+Mathieu
+
+[1]. https://patchwork.kernel.org/project/linux-remoteproc/list/?series=314523
+
+Mathieu Poirier (11):
+  remoteproc: stm32: Decouple rproc from memory translation
+  remoteproc: stm32: Request IRQ with platform device
+  remoteproc: stm32: Decouple rproc from DT parsing
+  remoteproc: stm32: Remove memory translation from DT parsing
+  remoteproc: stm32: Parse syscon that will manage M4 synchronisation
+  remoteproc: stm32: Properly set co-processor state when attaching
+  remoteproc: Make function rproc_resource_cleanup() public
+  remoteproc: stm32: Split function stm32_rproc_parse_fw()
+  remoteproc: stm32: Properly handle the resource table when attaching
+  remoteproc: stm32: Introduce new attach() operation
+  remoteproc: stm32: Update M4 state in stm32_rproc_stop()
+
+ drivers/remoteproc/remoteproc_core.c |   3 +-
+ drivers/remoteproc/stm32_rproc.c     | 214 ++++++++++++++++++++++++---
+ include/linux/remoteproc.h           |   1 +
+ 3 files changed, 198 insertions(+), 20 deletions(-)
+
 -- 
 2.25.1
 
