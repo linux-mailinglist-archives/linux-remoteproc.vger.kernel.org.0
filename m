@@ -2,61 +2,61 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3663B217A7F
+	by mail.lfdr.de (Postfix) with ESMTP id A3A35217A80
 	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Jul 2020 23:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729331AbgGGVbZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        id S1729328AbgGGVbZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
         Tue, 7 Jul 2020 17:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729321AbgGGVbX (ORCPT
+        with ESMTP id S1729297AbgGGVbZ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 7 Jul 2020 17:31:23 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976EAC061755
-        for <linux-remoteproc@vger.kernel.org>; Tue,  7 Jul 2020 14:31:23 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id e18so20599820pgn.7
-        for <linux-remoteproc@vger.kernel.org>; Tue, 07 Jul 2020 14:31:23 -0700 (PDT)
+        Tue, 7 Jul 2020 17:31:25 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93B6C08C5E2
+        for <linux-remoteproc@vger.kernel.org>; Tue,  7 Jul 2020 14:31:24 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id x72so9549922pfc.6
+        for <linux-remoteproc@vger.kernel.org>; Tue, 07 Jul 2020 14:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=h12JhHvSO+bmX99ezv3yaLnOJmMzfHeXrbHb3WDJUWc=;
-        b=jic4pcGQoE5bbkcXOsIMdiKLSg+ok5snqmEkp5W4cedeKRPsSjWdR8qXyBYYMrKUF0
-         GLsR17gvZ6kXQCC0uXBiAtGOhoarH5KfTlv/VetDPfX5sRclATaqgwTDRKqMdXoUhtvm
-         mKDrD4/RJ0tTb8iUM4CvT7eh+5Ow7lvNFnioN78naLDRKOFpqSDhse86yKVoR/h2G2JZ
-         w1SQ1wm9HBVLvIeUDuRVjPkHwGmr7FTXvs5ki2MMdV8dGNPRIJv2aK2JsupuUCv16Fc2
-         /+ZcrQybwx6s/JU5QDnlzcmTtewaZoZuab1BP/DuJM6lJtAv+uLOUy7zdBLvGUDgWVXd
-         c+Lg==
+        bh=FfAaJp6b5HalmkhHN7cSjDzeHULwHynUsuI0BeNMqXI=;
+        b=W7JNiFoJyW2TF5WpFjA0OtJAoBXDVTHORHDXhNJSr98obNYv7gMVpE5+Xp+PGW3xTP
+         tYxHfU+c9G0QCi8Y9jufWdWXM1iooCKMX0NKSQFwIA1pZKIoOSPnOR4b4tKkdrgCMZXc
+         zHyxK0ahj1BrGCKT7OY4G9gDaruMZbNoasT6EFhJKUi2/MUkRg3ZJzpEMbuP9xGgMoNn
+         XoyJyovBrcG0BY0JDtLb1xj19CNwM3Zy9Pkz3sCekQ4TzEFCZjLKLhHsa2E39RJfhDpy
+         JLmKa91jDaerOoNXuzIGniXMvSnvtkN2nCpD5KLmc5S6V99G4S2d/y/tUZiG6S87bz81
+         djzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=h12JhHvSO+bmX99ezv3yaLnOJmMzfHeXrbHb3WDJUWc=;
-        b=R05X7sX08YFS3aTg1+HnDROWmwDGUlkU/oanqn1aYa8SDqZ0JA7XM4xn20govffU5M
-         FnwAdu0tdm1cOYTZszCthau0zi0dYMKX0VIOXpztPWJwJ1Jj1QIalXgOPfGvEn2AtohC
-         rH5HnTrW70WB9PHPzxCWLYkLgUkrK99OutcTvROgMfJPI9uMK8PUsV1FpiVxinXTmss2
-         hwJ1bWLE27KjEpySdXq+8pCjI97VTTxd8cB0EVwWOGfA5HqRGdsFNvZapL4+iylNIuMB
-         Fg8/0grv5g9/qZu6zfYY5KWGZEvSm5tsZ5CgwEuKkDtIDaz/jz5vVr7YSSFx9DjGBV1/
-         Sj1g==
-X-Gm-Message-State: AOAM533RYyroeL37ypFxD/ALOpDhFnkwUhnCTGG+1MqANkUky8KpSGoX
-        BItL+33l43LJ8z3Glka6Q/fzbg==
-X-Google-Smtp-Source: ABdhPJxgyaQh4mTEIOmvaKPyRLDgsJvLs8cVkBxus9NiBgbjD9jwfunvRpeoL0T5pYTI5kAYPoc2ow==
-X-Received: by 2002:a62:1d0b:: with SMTP id d11mr53080485pfd.1.1594157483189;
-        Tue, 07 Jul 2020 14:31:23 -0700 (PDT)
+        bh=FfAaJp6b5HalmkhHN7cSjDzeHULwHynUsuI0BeNMqXI=;
+        b=JSylOnh8bZY2W/gPcSAVcIXQnqdxOUMMlRKnzcrc+n3JXi1Fz9HdOiC+tSOVejOpRt
+         /ax+zg91JIvdDuqEG4ngbW76A27CoxK7hm59NRzaPqLdDpuMDNKfpCwNMgbDCtqi4J/G
+         6hHALkWiqE5M9dR24bGsUfgBhzxDjY2n9frbq08kOAfLioi0FkyapEuX5iCcRZEtzax4
+         f59KKf3zG0kmRqxIOzvI6CPA0L5YBzKYHIhNOAKntiPtMLMFh/OBUNG+gcop6i0yje9n
+         1CTpzDLbj1364ELbmRoWmKeKn2X3+sWOnTa0NsqGSdifengJlk9Yg9NOWhl6McD5nBNh
+         U2PA==
+X-Gm-Message-State: AOAM531YRLd8bMWdkjKspcINs/Zw5Fa069oJcAWLMaOrf2ed5cYW08S8
+        wa/wP+JV29u5H5nboAf6SUGeuQ==
+X-Google-Smtp-Source: ABdhPJzOb/JNsarcAf0GT3Q/J+fPJoVGP0wz87PXsnc3tu0ypOGcHBInuCtvZIn2ccSOQGJ7Yk7MaQ==
+X-Received: by 2002:aa7:9422:: with SMTP id y2mr34496972pfo.211.1594157484318;
+        Tue, 07 Jul 2020 14:31:24 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id o128sm23560832pfg.127.2020.07.07.14.31.22
+        by smtp.gmail.com with ESMTPSA id o128sm23560832pfg.127.2020.07.07.14.31.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 14:31:22 -0700 (PDT)
+        Tue, 07 Jul 2020 14:31:23 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     ohad@wizery.com, bjorn.andersson@linaro.org, loic.pallardy@st.com,
         arnaud.pouliquen@st.com, mcoquelin.stm32@gmail.com,
         alexandre.torgue@st.com
 Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com
-Subject: [PATCH v5 07/11] remoteproc: Make function rproc_resource_cleanup() public
-Date:   Tue,  7 Jul 2020 15:31:08 -0600
-Message-Id: <20200707213112.928383-8-mathieu.poirier@linaro.org>
+Subject: [PATCH v5 08/11] remoteproc: stm32: Split function stm32_rproc_parse_fw()
+Date:   Tue,  7 Jul 2020 15:31:09 -0600
+Message-Id: <20200707213112.928383-9-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200707213112.928383-1-mathieu.poirier@linaro.org>
 References: <20200707213112.928383-1-mathieu.poirier@linaro.org>
@@ -67,49 +67,82 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Make function rproc_resource_cleanup() public so that it can be
-used by platform drivers when allocating resources to be used by
-a detached remote processor.
+Split function stm32_rproc_parse_fw() in two parts, the first one
+to parse the memory regions and the second one to load the
+resource table.  That way parsing of the memory regions can be
+re-used when attaching to the remote processor.
+
+Mainly based on the work published by Arnaud Pouliquen [1].
+
+[1]. https://patchwork.kernel.org/project/linux-remoteproc/list/?series=239877
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- drivers/remoteproc/remoteproc_core.c | 3 ++-
- include/linux/remoteproc.h           | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/remoteproc/stm32_rproc.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 099c76ab198f..6e0f985e9c9a 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1271,7 +1271,7 @@ static void rproc_coredump_cleanup(struct rproc *rproc)
-  * This function will free all resources acquired for @rproc, and it
-  * is called whenever @rproc either shuts down or fails to boot.
-  */
--static void rproc_resource_cleanup(struct rproc *rproc)
-+void rproc_resource_cleanup(struct rproc *rproc)
- {
- 	struct rproc_mem_entry *entry, *tmp;
- 	struct rproc_debug_trace *trace, *ttmp;
-@@ -1315,6 +1315,7 @@ static void rproc_resource_cleanup(struct rproc *rproc)
- 
- 	rproc_coredump_cleanup(rproc);
+diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+index cbeb5ceb15c5..9ab58fae252f 100644
+--- a/drivers/remoteproc/stm32_rproc.c
++++ b/drivers/remoteproc/stm32_rproc.c
+@@ -213,7 +213,7 @@ static int stm32_rproc_elf_load_rsc_table(struct rproc *rproc,
+ 	return 0;
  }
-+EXPORT_SYMBOL(rproc_resource_cleanup);
  
- static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+-static int stm32_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
++static int stm32_rproc_parse_memory_regions(struct rproc *rproc)
  {
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index cf5e31556780..7c0567029f7c 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -610,6 +610,7 @@ void rproc_put(struct rproc *rproc);
- int rproc_add(struct rproc *rproc);
- int rproc_del(struct rproc *rproc);
- void rproc_free(struct rproc *rproc);
-+void rproc_resource_cleanup(struct rproc *rproc);
+ 	struct device *dev = rproc->dev.parent;
+ 	struct device_node *np = dev->of_node;
+@@ -266,6 +266,16 @@ static int stm32_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
+ 		index++;
+ 	}
  
- struct rproc *devm_rproc_alloc(struct device *dev, const char *name,
- 			       const struct rproc_ops *ops,
++	return 0;
++}
++
++static int stm32_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
++{
++	int ret = stm32_rproc_parse_memory_regions(rproc);
++
++	if (ret)
++		return ret;
++
+ 	return stm32_rproc_elf_load_rsc_table(rproc, fw);
+ }
+ 
+@@ -693,15 +703,20 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto free_rproc;
+ 
+-	if (state == M4_STATE_CRUN)
++	if (state == M4_STATE_CRUN) {
+ 		rproc->state = RPROC_DETACHED;
+ 
++		ret = stm32_rproc_parse_memory_regions(rproc);
++		if (ret)
++			goto free_resources;
++	}
++
+ 	rproc->has_iommu = false;
+ 	ddata->workqueue = create_workqueue(dev_name(dev));
+ 	if (!ddata->workqueue) {
+ 		dev_err(dev, "cannot create workqueue\n");
+ 		ret = -ENOMEM;
+-		goto free_rproc;
++		goto free_resources;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, rproc);
+@@ -720,6 +735,8 @@ static int stm32_rproc_probe(struct platform_device *pdev)
+ 	stm32_rproc_free_mbox(rproc);
+ free_wkq:
+ 	destroy_workqueue(ddata->workqueue);
++free_resources:
++	rproc_resource_cleanup(rproc);
+ free_rproc:
+ 	if (device_may_wakeup(dev)) {
+ 		dev_pm_clear_wake_irq(dev);
 -- 
 2.25.1
 
