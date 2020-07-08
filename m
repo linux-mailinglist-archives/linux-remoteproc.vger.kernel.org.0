@@ -2,264 +2,316 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F1D2190A4
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  8 Jul 2020 21:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A0E2194BA
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 Jul 2020 01:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbgGHTcz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 8 Jul 2020 15:32:55 -0400
-Received: from rnd-relay.smtp.broadcom.com ([192.19.229.170]:60736 "EHLO
-        rnd-relay.smtp.broadcom.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725903AbgGHTc1 (ORCPT
+        id S1726215AbgGHX5A (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 8 Jul 2020 19:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726145AbgGHX5A (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 8 Jul 2020 15:32:27 -0400
-Received: from mail-irv-17.broadcom.com (mail-irv-17.lvn.broadcom.net [10.75.242.48])
-        by rnd-relay.smtp.broadcom.com (Postfix) with ESMTP id 8117D30C0C0;
-        Wed,  8 Jul 2020 12:32:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 rnd-relay.smtp.broadcom.com 8117D30C0C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1594236745;
-        bh=EwUpHpRkQBD8sV+nVCn/MQ7dk/rrClGaFM9+jr1cZU8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=drvkI27/fHhYXEkdId7+vJ5i7ud2y2ikwR+y7AE/J9w55EFR8sPGecnB7IsWGC5uz
-         QYnOtjYQKHGABcozhyAcYfAE4G1Ji4EbwN/BE2eVF+TGJcKtGInC4j8GhvM9G92paa
-         KZakrRTm8TE2epxp2zFEUFWeyuw6NGfh/Z+0hNrk=
-Received: from stbsrv-and-01.and.broadcom.net (stbsrv-and-01.and.broadcom.net [10.28.16.211])
-        by mail-irv-17.broadcom.com (Postfix) with ESMTP id 039BE140069;
-        Wed,  8 Jul 2020 12:32:21 -0700 (PDT)
-From:   Jim Quinlan <james.quinlan@broadcom.com>
-To:     linux-pci@vger.kernel.org,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        bcm-kernel-feedback-list@broadcom.com, james.quinlan@broadcom.com
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        devel@driverdev.osuosl.org (open list:STAGING SUBSYSTEM),
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE),
-        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS FOR ALLWINNER
-        A10), Florian Fainelli <f.fainelli@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        iommu@lists.linux-foundation.org (open list:IOMMU DRIVERS),
-        Jens Axboe <axboe@kernel.dk>, Joerg Roedel <jroedel@suse.de>,
-        Julien Grall <julien.grall@arm.com>,
-        linux-acpi@vger.kernel.org (open list:ACPI FOR ARM64 (ACPI/arm64)),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM PORT),
-        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
-        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
-        linux-media@vger.kernel.org (open list:ALLWINNER A10 CSI DRIVER),
-        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR
-        (REMOTEPROC) SUBSYSTEM),
-        linux-rpi-kernel@lists.infradead.org (moderated list:BROADCOM
-        BCM2711/BCM2835 ARM ARCHITECTURE),
-        linux-sh@vger.kernel.org (open list:SUPERH),
-        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM),
-        Oliver Neukum <oneukum@suse.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Rob Herring <robh@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v7 00/12] PCI: brcmstb: enable PCIe for STB chips
-Date:   Wed,  8 Jul 2020 15:31:53 -0400
-Message-Id: <20200708193219.47134-1-james.quinlan@broadcom.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 8 Jul 2020 19:57:00 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26634C061A0B
+        for <linux-remoteproc@vger.kernel.org>; Wed,  8 Jul 2020 16:56:53 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id i4so417956iov.11
+        for <linux-remoteproc@vger.kernel.org>; Wed, 08 Jul 2020 16:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZRaUaMMq2NTXjJUKetKgW8D+EKDseJLjkujRcuo8Oco=;
+        b=a6e366iLytZJ+53w6DtVoO8ImHdegEp7g+5YUmJhcLm4x72b+za+0Gt1jzdFkI/F1W
+         ak+9BADB67F5Aue7JKLs0Qgk7CT2hNu3ThD9U8fjGT+MH8skriOTakqKjpD8gDGNYDwm
+         pXcr4/hGMfjyZ1ceWjYxGf+WC/3ClNxI45NQE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZRaUaMMq2NTXjJUKetKgW8D+EKDseJLjkujRcuo8Oco=;
+        b=d5Q4VwEewf3ZgV2cD38cFtmtOZHQ4ih4+5DdYnFMReqWAceJMDZrRJbaWFWUcKoY3v
+         UpNtQ1nqEYJEdSsX4U1J8YaFZQanc5Q2s09ud1JVznHS8daSuE9/0hXUEXMiYcqcE9Xo
+         mkOBD3xN3u0kyBy5LAig3QE0ia5ZL0WjwDTvwvydfhPTGZ7xvxJfvVlgU79XU8fXjmPf
+         7G8vsA+ujfRLuXc0bauldSj20Rbt2drvrz1fIdnr8U0JhjjNclPi/cpoUkn3VerQ2B5D
+         uHduDXSMVn9bZ+WiVtQKDtC9Ov3GbClsxhNfc68bVxaroCraZ4m/na9CaGAUhWA+O2sD
+         nmvA==
+X-Gm-Message-State: AOAM5339uta+5Yc/7xbEbEN0HOjEUR0EQ2fEhTb3s5AMemEQcVAwT2b3
+        zsa/cLj9PHGmVi1kSY8k5xHeKQ==
+X-Google-Smtp-Source: ABdhPJweX92mROv9x8e8TpUr4RoI8mb28yiepJXi41CMEPAB/p4TSNx3KzwbZ9hmfsdNkeCCYF6nGA==
+X-Received: by 2002:a05:6602:2555:: with SMTP id j21mr19658304ioe.11.1594252612260;
+        Wed, 08 Jul 2020 16:56:52 -0700 (PDT)
+Received: from [172.22.22.26] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id v16sm1231504iow.19.2020.07.08.16.56.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jul 2020 16:56:51 -0700 (PDT)
+Subject: Re: [PATCH v6 1/2] remoteproc: qcom: Add per subsystem SSR
+ notification
+To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bjorn.andersson@linaro.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, sidgup@codeaurora.org
+References: <1592965408-16908-1-git-send-email-rishabhb@codeaurora.org>
+ <1592965408-16908-2-git-send-email-rishabhb@codeaurora.org>
+From:   Alex Elder <elder@ieee.org>
+Message-ID: <7c2b9088-75be-b45c-0d55-4ac026a01090@ieee.org>
+Date:   Wed, 8 Jul 2020 18:56:50 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <1592965408-16908-2-git-send-email-rishabhb@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+On 6/23/20 9:23 PM, Rishabh Bhatnagar wrote:
+> Currently there is a single notification chain which is called whenever any
+> remoteproc shuts down. This leads to all the listeners being notified, and
+> is not an optimal design as kernel drivers might only be interested in
+> listening to notifications from a particular remoteproc. Create a global
+> list of remoteproc notification info data structures. This will hold the
+> name and notifier_list information for a particular remoteproc. The API
+> to register for notifications will use name argument to retrieve the
+> notification info data structure and the notifier block will be added to
+> that data structure's notification chain. Also move from blocking notifier
+> to srcu notifer based implementation to support dynamic notifier head
+> creation.
 
-Patchset Summary:
-  Enhance a PCIe host controller driver.  Because of its unusual design
-  we are foced to change dev->dma_pfn_offset into a more general role
-  allowing multiple offsets.  See the 'v1' notes below for more info.
+You misspelled "cookie" (coookie) but please fix that later.
 
-v7:
-  Commit: "device core: Introduce DMA range map, supplanting ..."
-  -- remove second kcalloc/copy in device.c (AndyS)
-  -- use PTR_ERR_OR_ZERO() and PHYS_PFN() (AndyS)
-  -- indentation, sizeof(struct ...) => sizeof(*r) (AndyS)
-  -- add pfn.h definitions: PFN_DMA_ADDR(), DMA_ADDR_PFN() (AndyS)
-  -- Fixed compile error in "sun6i_csi.c" (kernel test robot)
-  Commit "ata: ahci_brcm: Fix use of BCM7216 reset controller"
-  -- correct name of function in the commit msg (SergeiS)
-  
-v6:
-  Commit "device core: Introduce DMA range map":
-  -- of_dma_get_range() now takes a single argument and returns either
-     NULL, a valid map, or an ERR_PTR. (Robin)
-  -- offsets are no longer a PFN value but an actual address. (Robin)
-  -- the bus_dma_region struct stores the range size instead of
-     the cpu_end and pci_end values. (Robin)
-  -- devices that were setting a single offset with no boundaries
-     have been modified to have boundaries; in a few places
-     where this informatino was unavilable a /* FIXME: ... */
-     comment was added. (Robin)
-  -- dma_attach_offset_range() can be called when an offset
-     map already exists; if it's range is already present
-     nothing is done and success is returned. (Robin)
-  All commits:
-  -- Man name/style/corrections/etc changed (Bjorn)
-  -- rebase to Torvalds master
+I did not look as closely at this as I did last time.  However
+I *did* do a quick implementation in the IPA driver of using
+this instead of the IPA notification code, and it should be
+a straightforward conversion.
 
-v5:
-  Commit "device core: Introduce multiple dma pfn offsets"
-  -- in of/address.c: "map_size = 0" => "*map_size = 0"
-  -- use kcalloc instead of kzalloc (AndyS)
-  -- use PHYS_ADDR_MAX instead of "~(phys_addr_t)0"
-  Commit "PCI: brcmstb: Set internal memory viewport sizes"
-  -- now gives error on missing dma-ranges property.
-  Commit "dt-bindings: PCI: Add bindings for more Brcmstb chips"
-  -- removed "Allof:" from brcm,scb-sizes definition (RobH)
-  All Commits:
-  -- indentation style, use max chars 100 (AndyS)
-  -- rebased to torvalds master
+I'm going to call this good...
 
-v4:
-  Commit "device core: Introduce multiple dma pfn offsets"
-  -- of_dma_get_range() does not take a dev param but instead
-     takes two "out" params: map and map_size.  We do this so
-     that the code that parses dma-ranges is separate from
-     the code that modifies 'dev'.   (Nicolas)
-  -- the separate case of having a single pfn offset has
-     been removed and is now processed by going through the
-     map array. (Nicolas)
-  -- move attach_uniform_dma_pfn_offset() from of/address.c to
-     dma/mapping.c so that it does not depend on CONFIG_OF. (Nicolas)
-  -- devm_kcalloc => devm_kzalloc (DanC)
-  -- add/fix assignment to dev->dma_pfn_offset_map for func
-     attach_uniform_dma_pfn_offset() (DanC, Nicolas)
-  -- s/struct dma_pfn_offset_region/struct bus_dma_region/ (Nicolas)
-  -- s/attach_uniform_dma_pfn_offset/dma_attach_uniform_pfn_offset/
-  -- s/attach_dma_pfn_offset_map/dma_attach_pfn_offset_map/
-  -- More use of PFN_{PHYS,DOWN,UP}. (AndyS)
-  Commit "of: Include a dev param in of_dma_get_range()"
-  -- this commit was sqaushed with "device core: Introduce ..."
+Reviewed-by: Alex Elder <elder@linaro.org>
 
-v3:
-  Commit "device core: Introduce multiple dma pfn offsets"
-  Commit "arm: dma-mapping: Invoke dma offset func if needed"
-  -- The above two commits have been squashed.  More importantly,
-     the code has been modified so that the functionality for
-     multiple pfn offsets subsumes the use of dev->dma_pfn_offset.
-     In fact, dma_pfn_offset is removed and supplanted by
-     dma_pfn_offset_map, which is a pointer to an array.  The
-     more common case of a uniform offset is now handled as
-     a map with a single entry, while cases requiring multiple
-     pfn offsets use a map with multiple entries.  Code paths
-     that used to do this:
 
-         dev->dma_pfn_offset = mydrivers_pfn_offset;
 
-     have been changed to do this:
-
-         attach_uniform_dma_pfn_offset(dev, pfn_offset);
-
-  Commit "dt-bindings: PCI: Add bindings for more Brcmstb chips"
-  -- Add if/then clause for required props: resets, reset-names (RobH)
-  -- Change compatible list from const to enum (RobH)
-  -- Change list of u32-tuples to u64 (RobH)
-
-  Commit "of: Include a dev param in of_dma_get_range()"
-  -- modify of/unittests.c to add NULL param in of_dma_get_range() call.
-
-  Commit "device core: Add ability to handle multiple dma offsets"
-  -- align comment in device.h (AndyS).
-  -- s/cpu_beg/cpu_start/ and s/dma_beg/dma_start/ in struct
-     dma_pfn_offset_region (AndyS).
-
-v2:
-Commit: "device core: Add ability to handle multiple dma offsets"
-  o Added helper func attach_dma_pfn_offset_map() in address.c (Chistoph)
-  o Helpers funcs added to __phys_to_dma() & __dma_to_phys() (Christoph)
-  o Added warning when multiple offsets are needed and !DMA_PFN_OFFSET_MAP
-  o dev->dma_pfn_map => dev->dma_pfn_offset_map
-  o s/frm/from/ for dma_pfn_offset_frm_{phys,dma}_addr() (Christoph)
-  o In device.h: s/const void */const struct dma_pfn_offset_region */
-  o removed 'unlikely' from unlikely(dev->dma_pfn_offset_map) since
-    guarded by CONFIG_DMA_PFN_OFFSET_MAP (Christoph)
-  o Since dev->dma_pfn_offset is copied in usb/core/{usb,message}.c, now
-    dev->dma_pfn_offset_map is copied as well.
-  o Merged two of the DMA commits into one (Christoph).
-
-Commit "arm: dma-mapping: Invoke dma offset func if needed":
-  o Use helper functions instead of #if CONFIG_DMA_PFN_OFFSET
-
-Other commits' changes:
-  o Removed need for carrying of_id var in priv (Nicolas)
-  o Commit message rewordings (Bjorn)
-  o Commit log messages filled to 75 chars (Bjorn)
-  o devm_reset_control_get_shared())
-    => devm_reset_control_get_optional_shared (Philipp)
-  o Add call to reset_control_assert() in PCIe remove routines (Philipp)
-
-v1:
-This patchset expands the usefulness of the Broadcom Settop Box PCIe
-controller by building upon the PCIe driver used currently by the
-Raspbery Pi.  Other forms of this patchset were submitted by me years
-ago and not accepted; the major sticking point was the code required
-for the DMA remapping needed for the PCIe driver to work [1].
-
-There have been many changes to the DMA and OF subsystems since that
-time, making a cleaner and less intrusive patchset possible.  This
-patchset implements a generalization of "dev->dma_pfn_offset", except
-that instead of a single scalar offset it provides for multiple
-offsets via a function which depends upon the "dma-ranges" property of
-the PCIe host controller.  This is required for proper functionality
-of the BrcmSTB PCIe controller and possibly some other devices.
-
-[1] https://lore.kernel.org/linux-arm-kernel/1516058925-46522-5-git-send-email-jim2101024@gmail.com/
-
-Jim Quinlan (12):
-  PCI: brcmstb: PCIE_BRCMSTB depends on ARCH_BRCMSTB
-  ata: ahci_brcm: Fix use of BCM7216 reset controller
-  dt-bindings: PCI: Add bindings for more Brcmstb chips
-  PCI: brcmstb: Add bcm7278 register info
-  PCI: brcmstb: Add suspend and resume pm_ops
-  PCI: brcmstb: Add bcm7278 PERST# support
-  PCI: brcmstb: Add control of rescal reset
-  device core: Introduce DMA range map, supplanting dma_pfn_offset
-  PCI: brcmstb: Set additional internal memory DMA viewport sizes
-  PCI: brcmstb: Accommodate MSI for older chips
-  PCI: brcmstb: Set bus max burst size by chip type
-  PCI: brcmstb: Add bcm7211, bcm7216, bcm7445, bcm7278 to match list
-
- .../bindings/pci/brcm,stb-pcie.yaml           |  56 ++-
- arch/arm/include/asm/dma-mapping.h            |   9 +-
- arch/arm/mach-keystone/keystone.c             |  17 +-
- arch/sh/drivers/pci/pcie-sh7786.c             |   9 +-
- arch/sh/kernel/dma-coherent.c                 |  16 +-
- arch/x86/pci/sta2x11-fixup.c                  |   7 +-
- drivers/acpi/arm64/iort.c                     |   5 +-
- drivers/ata/ahci_brcm.c                       |  11 +-
- drivers/gpu/drm/sun4i/sun4i_backend.c         |   7 +-
- drivers/iommu/io-pgtable-arm.c                |   2 +-
- .../platform/sunxi/sun4i-csi/sun4i_csi.c      |   6 +-
- .../platform/sunxi/sun6i-csi/sun6i_csi.c      |   5 +-
- drivers/of/address.c                          |  95 ++--
- drivers/of/device.c                           |  47 +-
- drivers/of/of_private.h                       |   9 +-
- drivers/of/unittest.c                         |  35 +-
- drivers/pci/controller/Kconfig                |   3 +-
- drivers/pci/controller/pcie-brcmstb.c         | 408 +++++++++++++++---
- drivers/remoteproc/remoteproc_core.c          |   2 +-
- .../staging/media/sunxi/cedrus/cedrus_hw.c    |   8 +-
- drivers/usb/core/message.c                    |   4 +-
- drivers/usb/core/usb.c                        |   2 +-
- include/linux/device.h                        |   4 +-
- include/linux/dma-direct.h                    |  10 +-
- include/linux/dma-mapping.h                   |  37 ++
- include/linux/pfn.h                           |   2 +
- kernel/dma/coherent.c                         |  10 +-
- kernel/dma/mapping.c                          |  53 +++
- 28 files changed, 682 insertions(+), 197 deletions(-)
-
--- 
-2.17.1
+> 
+> Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
+> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+> ---
+>  drivers/remoteproc/qcom_common.c      | 90 ++++++++++++++++++++++++++++++-----
+>  drivers/remoteproc/qcom_common.h      |  5 +-
+>  include/linux/remoteproc/qcom_rproc.h | 20 ++++++--
+>  3 files changed, 95 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+> index 9028cea..7a7384c 100644
+> --- a/drivers/remoteproc/qcom_common.c
+> +++ b/drivers/remoteproc/qcom_common.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/module.h>
+>  #include <linux/notifier.h>
+>  #include <linux/remoteproc.h>
+> +#include <linux/remoteproc/qcom_rproc.h>
+>  #include <linux/rpmsg/qcom_glink.h>
+>  #include <linux/rpmsg/qcom_smd.h>
+>  #include <linux/soc/qcom/mdt_loader.h>
+> @@ -23,7 +24,14 @@
+>  #define to_smd_subdev(d) container_of(d, struct qcom_rproc_subdev, subdev)
+>  #define to_ssr_subdev(d) container_of(d, struct qcom_rproc_ssr, subdev)
+>  
+> -static BLOCKING_NOTIFIER_HEAD(ssr_notifiers);
+> +struct qcom_ssr_subsystem {
+> +	const char *name;
+> +	struct srcu_notifier_head notifier_list;
+> +	struct list_head list;
+> +};
+> +
+> +static LIST_HEAD(qcom_ssr_subsystem_list);
+> +static DEFINE_MUTEX(qcom_ssr_subsys_lock);
+>  
+>  static int glink_subdev_start(struct rproc_subdev *subdev)
+>  {
+> @@ -189,37 +197,83 @@ void qcom_remove_smd_subdev(struct rproc *rproc, struct qcom_rproc_subdev *smd)
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_remove_smd_subdev);
+>  
+> +static struct qcom_ssr_subsystem *qcom_ssr_get_subsys(const char *name)
+> +{
+> +	struct qcom_ssr_subsystem *info;
+> +
+> +	mutex_lock(&qcom_ssr_subsys_lock);
+> +	/* Match in the global qcom_ssr_subsystem_list with name */
+> +	list_for_each_entry(info, &qcom_ssr_subsystem_list, list)
+> +		if (!strcmp(info->name, name))
+> +			goto out;
+> +
+> +	info = kzalloc(sizeof(*info), GFP_KERNEL);
+> +	if (!info) {
+> +		info = ERR_PTR(-ENOMEM);
+> +		goto out;
+> +	}
+> +	info->name = kstrdup_const(name, GFP_KERNEL);
+> +	srcu_init_notifier_head(&info->notifier_list);
+> +
+> +	/* Add to global notification list */
+> +	list_add_tail(&info->list, &qcom_ssr_subsystem_list);
+> +
+> +out:
+> +	mutex_unlock(&qcom_ssr_subsys_lock);
+> +	return info;
+> +}
+> +
+>  /**
+>   * qcom_register_ssr_notifier() - register SSR notification handler
+> - * @nb:		notifier_block to notify for restart notifications
+> + * @name:	Subsystem's SSR name
+> + * @nb:		notifier_block to be invoked upon subsystem's state change
+>   *
+> - * Returns 0 on success, negative errno on failure.
+> + * This registers the @nb notifier block as part the notifier chain for a
+> + * remoteproc associated with @name. The notifier block's callback
+> + * will be invoked when the remote processor's SSR events occur
+> + * (pre/post startup and pre/post shutdown).
+>   *
+> - * This register the @notify function as handler for restart notifications. As
+> - * remote processors are stopped this function will be called, with the SSR
+> - * name passed as a parameter.
+> + * Return: a subsystem cookie on success, ERR_PTR on failure.
+>   */
+> -int qcom_register_ssr_notifier(struct notifier_block *nb)
+> +void *qcom_register_ssr_notifier(const char *name, struct notifier_block *nb)
+>  {
+> -	return blocking_notifier_chain_register(&ssr_notifiers, nb);
+> +	struct qcom_ssr_subsystem *info;
+> +
+> +	info = qcom_ssr_get_subsys(name);
+> +	if (IS_ERR(info))
+> +		return info;
+> +
+> +	srcu_notifier_chain_register(&info->notifier_list, nb);
+> +
+> +	return &info->notifier_list;
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_register_ssr_notifier);
+>  
+>  /**
+>   * qcom_unregister_ssr_notifier() - unregister SSR notification handler
+> + * @notify:	subsystem coookie returned from qcom_register_ssr_notifier
+>   * @nb:		notifier_block to unregister
+> + *
+> + * This function will unregister the notifier from the particular notifier
+> + * chain.
+> + *
+> + * Return: 0 on success, %ENOENT otherwise.
+>   */
+> -void qcom_unregister_ssr_notifier(struct notifier_block *nb)
+> +int qcom_unregister_ssr_notifier(void *notify, struct notifier_block *nb)
+>  {
+> -	blocking_notifier_chain_unregister(&ssr_notifiers, nb);
+> +	return srcu_notifier_chain_unregister(notify, nb);
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_unregister_ssr_notifier);
+>  
+>  static void ssr_notify_unprepare(struct rproc_subdev *subdev)
+>  {
+>  	struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
+> +	struct qcom_ssr_notify_data data = {
+> +		.name = ssr->info->name,
+> +		.crashed = false,
+> +	};
+>  
+> -	blocking_notifier_call_chain(&ssr_notifiers, 0, (void *)ssr->name);
+> +	srcu_notifier_call_chain(&ssr->info->notifier_list, 0, &data);
+>  }
+>  
+>  /**
+> @@ -229,12 +283,21 @@ static void ssr_notify_unprepare(struct rproc_subdev *subdev)
+>   * @ssr_name:	identifier to use for notifications originating from @rproc
+>   *
+>   * As the @ssr is registered with the @rproc SSR events will be sent to all
+> - * registered listeners in the system as the remoteproc is shut down.
+> + * registered listeners for the remoteproc when it's SSR events occur
+> + * (pre/post startup and pre/post shutdown).
+>   */
+>  void qcom_add_ssr_subdev(struct rproc *rproc, struct qcom_rproc_ssr *ssr,
+>  			 const char *ssr_name)
+>  {
+> -	ssr->name = ssr_name;
+> +	struct qcom_ssr_subsystem *info;
+> +
+> +	info = qcom_ssr_get_subsys(ssr_name);
+> +	if (IS_ERR(info)) {
+> +		dev_err(&rproc->dev, "Failed to add ssr subdevice\n");
+> +		return;
+> +	}
+> +
+> +	ssr->info = info;
+>  	ssr->subdev.unprepare = ssr_notify_unprepare;
+>  
+>  	rproc_add_subdev(rproc, &ssr->subdev);
+> @@ -249,6 +312,7 @@ EXPORT_SYMBOL_GPL(qcom_add_ssr_subdev);
+>  void qcom_remove_ssr_subdev(struct rproc *rproc, struct qcom_rproc_ssr *ssr)
+>  {
+>  	rproc_remove_subdev(rproc, &ssr->subdev);
+> +	ssr->info = NULL;
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_remove_ssr_subdev);
+>  
+> diff --git a/drivers/remoteproc/qcom_common.h b/drivers/remoteproc/qcom_common.h
+> index 34e5188..dfc641c 100644
+> --- a/drivers/remoteproc/qcom_common.h
+> +++ b/drivers/remoteproc/qcom_common.h
+> @@ -26,10 +26,11 @@ struct qcom_rproc_subdev {
+>  	struct qcom_smd_edge *edge;
+>  };
+>  
+> +struct qcom_ssr_subsystem;
+> +
+>  struct qcom_rproc_ssr {
+>  	struct rproc_subdev subdev;
+> -
+> -	const char *name;
+> +	struct qcom_ssr_subsystem *info;
+>  };
+>  
+>  void qcom_add_glink_subdev(struct rproc *rproc, struct qcom_rproc_glink *glink,
+> diff --git a/include/linux/remoteproc/qcom_rproc.h b/include/linux/remoteproc/qcom_rproc.h
+> index fa8e386..2a1d6d0 100644
+> --- a/include/linux/remoteproc/qcom_rproc.h
+> +++ b/include/linux/remoteproc/qcom_rproc.h
+> @@ -5,17 +5,27 @@ struct notifier_block;
+>  
+>  #if IS_ENABLED(CONFIG_QCOM_RPROC_COMMON)
+>  
+> -int qcom_register_ssr_notifier(struct notifier_block *nb);
+> -void qcom_unregister_ssr_notifier(struct notifier_block *nb);
+> +struct qcom_ssr_notify_data {
+> +	const char *name;
+> +	bool crashed;
+> +};
+> +
+> +void *qcom_register_ssr_notifier(const char *name, struct notifier_block *nb);
+> +int qcom_unregister_ssr_notifier(void *notify, struct notifier_block *nb);
+>  
+>  #else
+>  
+> -static inline int qcom_register_ssr_notifier(struct notifier_block *nb)
+> +static inline void *qcom_register_ssr_notifier(const char *name,
+> +					       struct notifier_block *nb)
+>  {
+> -	return 0;
+> +	return NULL;
+>  }
+>  
+> -static inline void qcom_unregister_ssr_notifier(struct notifier_block *nb) {}
+> +static inline int qcom_unregister_ssr_notifier(void *notify,
+> +					       struct notifier_block *nb)
+> +{
+> +	return 0;
+> +}
+>  
+>  #endif
+>  
+> 
 
