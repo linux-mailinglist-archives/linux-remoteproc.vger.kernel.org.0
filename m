@@ -2,138 +2,149 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A63B21D722
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Jul 2020 15:29:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0ABA21DBAD
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Jul 2020 18:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729926AbgGMN3u (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 Jul 2020 09:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48658 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729910AbgGMN3t (ORCPT
+        id S1729875AbgGMQ0r (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 13 Jul 2020 12:26:47 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:12629 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729593AbgGMQ0r (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 Jul 2020 09:29:49 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B262C061794
-        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Jul 2020 06:29:49 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id k6so16551080wrn.3
-        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Jul 2020 06:29:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1L4Fd0ydGXB1tLJq49wHyxg/8oVp3tIdrwadCHK6MBc=;
-        b=Mm7n4KSQrzuIzL5V5oAkygyQJZK8zxZPRPWSKVqHAT9JGioQsWMBEhYVvUKCdvZ5qk
-         nLEktNB+4PQs+YC1AYQ40rQPY1h/mssBV76kXxTD9eS2QLXV4HhBsMuTNBI1KaNCq3nH
-         ElPJHUjYX36UTba60MYN5rdXsYfuPYcBEzH5Zw+374d1AZ5YlG0ZqAawK1AgYum1b4e1
-         XwIfBVLmSLzPzyGRur2HJh8m9v4Ri3z1GoUxesRy0e73/rvpIXw7LyWY/N8mif+ZuscX
-         ypm/lS84F5l4VhYEeo49NcBQJ2dealR6xBuOF3ezU1P1edoaMRebYsEhc6eJldWcsEdS
-         Kdbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1L4Fd0ydGXB1tLJq49wHyxg/8oVp3tIdrwadCHK6MBc=;
-        b=SXaU3vJg/rsWI8nP0MZdsDUZ1ctcPw++ScfHNtdaE7QWMq2ckucRLPIXjZJkvifvuJ
-         shUAIJEKUdOqtauwQkwtQsP2dn3u6m+FztQKKNIVdtFxs+oRNIM1i2PovGVDg5xv4ZeW
-         NcNcQltiGY7g9BCGHnH3tx5psixy4AvqpP9n9ClumTjoVvp9RSpGb78XAMW9o96no6V8
-         UDZBr8as8XLe9cU8Wz0ziZHeCsqhEPEGUf/hP/W9qAcZj4gZFDV4o/h28hKuEa81x6L3
-         tfDPl4li7hNjWwNOAnmMvDnJRr/3wDmXniLPuabsTKsvkbo1x/IK9TlOdXTnA8XRX3Uw
-         o7EQ==
-X-Gm-Message-State: AOAM533rd4CzqS8aoVRNk/0BatPzrrkm7Fbe+8EhEyhI/WBScFcIFcVq
-        yfjem7hpQOgsMrLAreOE+YWo5Q==
-X-Google-Smtp-Source: ABdhPJwzZlcUKbMf7yvv/ipKPBNj0GCeAedKQcrzHWzFJjvtRWFrPMYVOGGBdMWDjOPRwHglztjNig==
-X-Received: by 2002:adf:e90d:: with SMTP id f13mr75056890wrm.146.1594646986821;
-        Mon, 13 Jul 2020 06:29:46 -0700 (PDT)
-Received: from linux.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id j14sm23896642wrs.75.2020.07.13.06.29.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 06:29:46 -0700 (PDT)
-From:   Alexandre Bailon <abailon@baylibre.com>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        matthias.bgg@gmail.com
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Bailon <abailon@baylibre.com>
-Subject: [PATCH 6/6] ARM64: mt8183: Add support of APU to mt8183
-Date:   Mon, 13 Jul 2020 15:29:27 +0200
-Message-Id: <20200713132927.24925-7-abailon@baylibre.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200713132927.24925-1-abailon@baylibre.com>
-References: <20200713132927.24925-1-abailon@baylibre.com>
+        Mon, 13 Jul 2020 12:26:47 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f0c8b0d0000>; Mon, 13 Jul 2020 09:25:49 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 13 Jul 2020 09:26:46 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 13 Jul 2020 09:26:46 -0700
+Received: from [10.26.72.101] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 13 Jul
+ 2020 16:26:44 +0000
+Subject: Re: [PATCH v6 1/2] remoteproc: qcom: Add per subsystem SSR
+ notification
+To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <bjorn.andersson@linaro.org>, <tsoni@codeaurora.org>,
+        <psodagud@codeaurora.org>, <sidgup@codeaurora.org>,
+        <elder@ieee.org>, linux-tegra <linux-tegra@vger.kernel.org>
+References: <1592965408-16908-1-git-send-email-rishabhb@codeaurora.org>
+ <1592965408-16908-2-git-send-email-rishabhb@codeaurora.org>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <98e3a18e-1491-6f20-6507-d6e6817b76fe@nvidia.com>
+Date:   Mon, 13 Jul 2020 17:26:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1592965408-16908-2-git-send-email-rishabhb@codeaurora.org>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1594657549; bh=n+W/fHPjiMLdifX49gddUCYGAELEgIBFfQAWGVbyyE8=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=WvP9QjqA1apj6IdMTqNWwQW8Mv+jSmgZuhsua2WWsJluO8QGxsdYFR0P3cbkPk2ZJ
+         Db9PDdGwAGhKyCtYnv0kEdeUbHIk2stgK52SzcgJoUEkjIvINh7mQM/FHi8Y981w0m
+         TAP+RtpFSWn9HGhhFrirKiVErYUsHI9O3JFcMgDUApXKfnt1dtJM9dH8f7rm4FJfb1
+         u4yM9+QmvpI7O9VZB550oy2yBrPYpFb2YziyZcLCELiYxznS9ZZwLCbWWDCm9uF6Jv
+         Wjr1x+JZUx8U/6wRy5Xv6TQo7vUcZ7x+WWVhcx4JYfp/qsPFW9g3vlqg1HW7MY4arz
+         iVBSiB9DTLXtA==
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-This adds the support of APU to mt8183.
 
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 42 ++++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+On 24/06/2020 03:23, Rishabh Bhatnagar wrote:
+> Currently there is a single notification chain which is called whenever any
+> remoteproc shuts down. This leads to all the listeners being notified, and
+> is not an optimal design as kernel drivers might only be interested in
+> listening to notifications from a particular remoteproc. Create a global
+> list of remoteproc notification info data structures. This will hold the
+> name and notifier_list information for a particular remoteproc. The API
+> to register for notifications will use name argument to retrieve the
+> notification info data structure and the notifier block will be added to
+> that data structure's notification chain. Also move from blocking notifier
+> to srcu notifer based implementation to support dynamic notifier head
+> creation.
+> 
+> Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
+> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+> ---
+>  drivers/remoteproc/qcom_common.c      | 90 ++++++++++++++++++++++++++++++-----
+>  drivers/remoteproc/qcom_common.h      |  5 +-
+>  include/linux/remoteproc/qcom_rproc.h | 20 ++++++--
+>  3 files changed, 95 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+> index 9028cea..7a7384c 100644
+> --- a/drivers/remoteproc/qcom_common.c
+> +++ b/drivers/remoteproc/qcom_common.c
+> @@ -12,6 +12,7 @@
+>  #include <linux/module.h>
+>  #include <linux/notifier.h>
+>  #include <linux/remoteproc.h>
+> +#include <linux/remoteproc/qcom_rproc.h>
+>  #include <linux/rpmsg/qcom_glink.h>
+>  #include <linux/rpmsg/qcom_smd.h>
+>  #include <linux/soc/qcom/mdt_loader.h>
+> @@ -23,7 +24,14 @@
+>  #define to_smd_subdev(d) container_of(d, struct qcom_rproc_subdev, subdev)
+>  #define to_ssr_subdev(d) container_of(d, struct qcom_rproc_ssr, subdev)
+>  
+> -static BLOCKING_NOTIFIER_HEAD(ssr_notifiers);
+> +struct qcom_ssr_subsystem {
+> +	const char *name;
+> +	struct srcu_notifier_head notifier_list;
+> +	struct list_head list;
+> +};
+> +
+> +static LIST_HEAD(qcom_ssr_subsystem_list);
+> +static DEFINE_MUTEX(qcom_ssr_subsys_lock);
+>  
+>  static int glink_subdev_start(struct rproc_subdev *subdev)
+>  {
+> @@ -189,37 +197,83 @@ void qcom_remove_smd_subdev(struct rproc *rproc, struct qcom_rproc_subdev *smd)
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_remove_smd_subdev);
+>  
+> +static struct qcom_ssr_subsystem *qcom_ssr_get_subsys(const char *name)
+> +{
+> +	struct qcom_ssr_subsystem *info;
+> +
+> +	mutex_lock(&qcom_ssr_subsys_lock);
+> +	/* Match in the global qcom_ssr_subsystem_list with name */
+> +	list_for_each_entry(info, &qcom_ssr_subsystem_list, list)
+> +		if (!strcmp(info->name, name))
+> +			goto out;
+> +
+> +	info = kzalloc(sizeof(*info), GFP_KERNEL);
+> +	if (!info) {
+> +		info = ERR_PTR(-ENOMEM);
+> +		goto out;
+> +	}
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index 1e03c849dc5d..6a2e9ee0b566 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -720,12 +720,54 @@ ipu_adl: syscon@19010000 {
- 			#clock-cells = <1>;
- 		};
+
+The above appears to be breaking the ARM64 build on the latest -next
+when building the modules  ...
  
-+		vpu0: vpu@0x19100000 {
-+			compatible = "mediatek,mt8183-apu";
-+			reg = <0 0x19180000 0 0x14000>;
-+			reg-names = "mmio";
-+			interrupts = <GIC_SPI 292 IRQ_TYPE_LEVEL_LOW>;
-+
-+			iommus = <&iommu M4U_PORT_IMG_IPUO>,
-+				 <&iommu M4U_PORT_IMG_IPU3O>,
-+				 <&iommu M4U_PORT_IMG_IPUI>;
-+
-+			clocks = <&ipu_core0 CLK_IPU_CORE0_AXI>,
-+				 <&ipu_core0 CLK_IPU_CORE0_IPU>,
-+				 <&ipu_core0 CLK_IPU_CORE0_JTAG>;
-+
-+			clock-names = "axi", "ipu", "jtag";
-+
-+			power-domains = <&scpsys MT8183_POWER_DOMAIN_VPU_CORE0>;
-+			memory-region = <&vpu_ram>;
-+		};
-+
- 		ipu_core0: syscon@19180000 {
- 			compatible = "mediatek,mt8183-ipu_core0", "syscon";
- 			reg = <0 0x19180000 0 0x1000>;
- 			#clock-cells = <1>;
- 		};
- 
-+		vpu1: vpu@0x19200000 {
-+			compatible = "mediatek,mt8183-apu";
-+			reg = <0 0x19280000 0 0x14000>;
-+			reg-names = "mmio";
-+			interrupts = <GIC_SPI 293 IRQ_TYPE_LEVEL_LOW>;
-+
-+			iommus = <&iommu M4U_PORT_IMG_IPUO>,
-+				 <&iommu M4U_PORT_IMG_IPU2O>,
-+				 <&iommu M4U_PORT_IMG_IPU3O>,
-+				 <&iommu M4U_PORT_IMG_IPUI>,
-+				 <&iommu M4U_PORT_IMG_IPU2I>;
-+
-+			clocks = <&ipu_core0 CLK_IPU_CORE1_AXI>,
-+				 <&ipu_core0 CLK_IPU_CORE1_IPU>,
-+				 <&ipu_core0 CLK_IPU_CORE1_JTAG>;
-+
-+			clock-names = "axi", "ipu", "jtag";
-+
-+			power-domains = <&scpsys MT8183_POWER_DOMAIN_VPU_CORE1>;
-+			memory-region = <&vpu_ram>;
-+		};
-+
- 		ipu_core1: syscon@19280000 {
- 			compatible = "mediatek,mt8183-ipu_core1", "syscon";
- 			reg = <0 0x19280000 0 0x1000>;
+  CC [M]  drivers/remoteproc/qcom_common.o
+drivers/remoteproc/qcom_common.c: In function 'qcom_ssr_get_subsys':
+remoteproc/qcom_common.c:210:9: error: implicit declaration of function 'kzalloc' [-Werror=implicit-function-declaration]
+  info = kzalloc(sizeof(*info), GFP_KERNEL);
+         ^~~~~~~
+drivers/remoteproc/qcom_common.c:210:7: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
+  info = kzalloc(sizeof(*info), GFP_KERNEL);
+
+Cheers
+Jon
+
 -- 
-2.26.2
-
+nvpublic
