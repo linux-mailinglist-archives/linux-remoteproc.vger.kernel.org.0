@@ -2,60 +2,77 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B0321E098
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Jul 2020 21:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC50521E571
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 Jul 2020 04:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726347AbgGMTUD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 Jul 2020 15:20:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49736 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726356AbgGMTUD (ORCPT
+        id S1726364AbgGNCJi (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 13 Jul 2020 22:09:38 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:41404 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbgGNCJi (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 Jul 2020 15:20:03 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594668003;
-        bh=cBtwRHviCu5lMzL4sDCalcEH/WQ6gNAvTu6uR/ZwgYM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kLWnK6DApzJEOrWUEHMmURyrarMPwJwPPFD10/KoENgcavJC7pxnXaUe9HSu1pnVS
-         SEmTut11XnLUE/MlMkBd/sHQROzUxCz8Y/sB0wXeCtTRvzcnhU6tzteExUcULJNVCs
-         5GBctthMlaCRAsW3glfELDAM02+ci8+HEYKlZ4R4=
+        Mon, 13 Jul 2020 22:09:38 -0400
+Received: by mail-il1-f193.google.com with SMTP id q3so12959121ilt.8;
+        Mon, 13 Jul 2020 19:09:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KPcWWEFayVvDQVr24WFW0Iat95lCbS98CRPSzZcM2HA=;
+        b=SFw4/AYH1AOcgtAYPf/CYXijucCTKs8V3pYvuOoGzFYnnC7dL4IWKNgcNXqGig9SYG
+         2UAzJH6bSCRKaLV7lqepn4A8Iu5snRSgJyDZvXpCUW+9aC7CXtXcZzpoK2SZc9hz73e4
+         usXczK10ylDV/UlDan+yWVJwXbwrPdZC+Zzvwt/WWPzAufzMfUQk1Sb1tAhAv7ZSxHFv
+         w8io4QeYjJmPNQHDjTIoS7mX1Mx9AUaDhbgsIu76StJSnYsxpBScNO4X6iT+NVrwCdjf
+         LN4oVQHlVbPCjxusTSRTKzFUj0pQ5DrahopfOHOxvv7YiHASbwoMONXnY4JnCUGGpAJp
+         w6rA==
+X-Gm-Message-State: AOAM533bosifZDzRHTrmwdqk1KlevyfjHmRGZTcTFFF4Wfz/K5KEteue
+        7sDKEBt3gtShBSaYykEydg==
+X-Google-Smtp-Source: ABdhPJzQQad0wTSDAMPA9ATJ9hA1u98WVgnzC9LLhonu5X2eHqH93+QPB4bNhmGqkdB13vmALMiaJw==
+X-Received: by 2002:a05:6e02:14c2:: with SMTP id o2mr2669736ilk.54.1594692576834;
+        Mon, 13 Jul 2020 19:09:36 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id i84sm9534158ill.30.2020.07.13.19.09.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jul 2020 19:09:36 -0700 (PDT)
+Received: (nullmailer pid 1132789 invoked by uid 1000);
+        Tue, 14 Jul 2020 02:09:35 -0000
+Date:   Mon, 13 Jul 2020 20:09:35 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Baolin Wang <baolin.wang7@gmail.com>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: hwlock: qcom: Migrate binding to YAML
+Message-ID: <20200714020935.GA1122169@bogus>
+References: <20200622075956.171058-1-bjorn.andersson@linaro.org>
+ <20200622075956.171058-2-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next] remoteproc: qcom: Add missing slab.h
-From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <159466800300.18640.9525560095014053151.git-patchwork-notify@kernel.org>
-Date:   Mon, 13 Jul 2020 19:20:03 +0000
-References: <20200713020003.134039-1-wangkefeng.wang@huawei.com>
-In-Reply-To: <20200713020003.134039-1-wangkefeng.wang@huawei.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     linux-remoteproc@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200622075956.171058-2-bjorn.andersson@linaro.org>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello:
-
-This patch was applied to andersson/remoteproc.git (refs/heads/for-next).
-
-On Mon, 13 Jul 2020 10:00:03 +0800 you wrote:
-> drivers/remoteproc/qcom_common.c: In function ‘qcom_ssr_get_subsys’:
-> drivers/remoteproc/qcom_common.c:210:9: error: implicit declaration of function ‘kzalloc’; did you mean ‘vzalloc’?
-> [-Werror=implicit-function-declaration]
->   info = kzalloc(sizeof(*info), GFP_KERNEL);
->          ^~~~~~~
->          vzalloc
+On Mon, 22 Jun 2020 00:59:53 -0700, Bjorn Andersson wrote:
+> Migrate the Qualcomm TCSR mutex binding to YAML to allow validation.
 > 
-> [...]
+> Reviewed-by: Vinod Koul <vkoul@kernel.org>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+> 
+> Changes since v1:
+> - Actually remove the old binding doc
+> 
+>  .../bindings/hwlock/qcom-hwspinlock.txt       | 39 --------------
+>  .../bindings/hwlock/qcom-hwspinlock.yaml      | 51 +++++++++++++++++++
+>  2 files changed, 51 insertions(+), 39 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.txt
+>  create mode 100644 Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
+> 
 
-
-Here is a summary with links:
-  - [-next] remoteproc: qcom: Add missing slab.h
-    https://git.kernel.org/andersson/remoteproc/c/0cf17702d872128fc2bec79a9578b5cb00d54a11
-
-You are awesome, thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+Reviewed-by: Rob Herring <robh@kernel.org>
