@@ -2,211 +2,77 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E472122472C
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 18 Jul 2020 01:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F58E22476F
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 18 Jul 2020 02:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728638AbgGQXsT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 17 Jul 2020 19:48:19 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:39574 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728562AbgGQXsS (ORCPT
+        id S1728087AbgGRAUH (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 17 Jul 2020 20:20:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55392 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728068AbgGRAUH (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 17 Jul 2020 19:48:18 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06HNmBMP013382;
-        Fri, 17 Jul 2020 18:48:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1595029691;
-        bh=jq4rgHcvJJ8L4v7IzJjoMyKc+IOd8AzBCxOmX0OsqdM=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=nAggGv61x1G5J2XqEiM57YhQZkQDhm1lsM0/QjH3tL7fnhWz/9v56rWSNJvkFl/P9
-         jbWrB0/iAysU09bNjo8mPIow1pvaw7yVGneFCF5M8SEdla9FUzAT0HX+2h50fGM9Yr
-         ZYFRgGifaez3SHz3q/ybW/bWfxlhUkz2/VlWqgdE=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06HNmBAr029966;
-        Fri, 17 Jul 2020 18:48:11 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 17
- Jul 2020 18:48:11 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 17 Jul 2020 18:48:10 -0500
-Received: from lelv0597.itg.ti.com (lelv0597.itg.ti.com [10.181.64.32])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06HNmBTt129102;
-        Fri, 17 Jul 2020 18:48:11 -0500
-Received: from localhost ([10.250.34.57])
-        by lelv0597.itg.ti.com (8.14.7/8.14.7) with ESMTP id 06HNmAmv108326;
-        Fri, 17 Jul 2020 18:48:11 -0500
-From:   Suman Anna <s-anna@ti.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Lokesh Vutla <lokeshvutla@ti.com>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Suman Anna <s-anna@ti.com>
-Subject: [PATCH v4 6/6] remoteproc: k3-dsp: Add support for L2RAM loading on C66x DSPs
-Date:   Fri, 17 Jul 2020 18:48:00 -0500
-Message-ID: <20200717234800.9423-7-s-anna@ti.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200717234800.9423-1-s-anna@ti.com>
-References: <20200717234800.9423-1-s-anna@ti.com>
+        Fri, 17 Jul 2020 20:20:07 -0400
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595031606;
+        bh=ny7eOIZso/SXfx6ujzSKGgslbBNXTZ0CRpfebPISmxc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=DczfeivOSMzw3juolvXF9aQ/a/CRpdkxmjYlhBtAeweCV3vR0avAosnyUihERyA0H
+         Um8b5Xnvti5w2umC2GXxexquD0U7KXY0hmxxinSq08RIkcIVJnfLu2Q78T/5iRqKiq
+         jSXLUBm9CM/3ZQfwo91Qc+rXZS4KcivKp3NxiKsg=
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Subject: Re: [PATCH v6 0/9] remoteproc: Add support for attaching with rproc
+From:   patchwork-bot+linux-remoteproc@kernel.org
+Message-Id: <159503160649.20678.6713482814298871841.git-patchwork-notify@kernel.org>
+Date:   Sat, 18 Jul 2020 00:20:06 +0000
+References: <20200714195035.1426873-1-mathieu.poirier@linaro.org>
+In-Reply-To: <20200714195035.1426873-1-mathieu.poirier@linaro.org>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     linux-remoteproc@vger.kernel.org
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The resets for the DSP processors on K3 SoCs are managed through the
-Power and Sleep Controller (PSC) module. Each DSP typically has two
-resets - a global module reset for powering on the device, and a local
-reset that affects only the CPU while allowing access to the other
-sub-modules within the DSP processor sub-systems.
+Hello:
 
-The C66x DSPs have two levels of internal RAMs that can be used to
-boot from, and the firmware loading into these RAMs require the
-local reset to be asserted with the device powered on/enabled using
-the module reset. Enhance the K3 DSP remoteproc driver to add support
-for loading into the internal RAMs. The local reset is deasserted on
-SoC power-on-reset, so logic has to be added in probe in remoteproc
-mode to balance the remoteproc state-machine.
+This series was applied to andersson/remoteproc.git (refs/heads/for-next).
 
-Note that the local resets are a no-op on C71x cores, and the hardware
-does not supporting loading into its internal RAMs.
+On Tue, 14 Jul 2020 13:50:26 -0600 you wrote:
+> This set provides functionality allowing the remoteproc core to attach to
+> a remote processor that was started by another entity.
+> 
+> New in V6:
+> 1) Added Arnaud's reviewed-by and tested-by tags.
+> 
+> Applies cleanly on rproc-next (0cf17702d872)
+> 
+> [...]
 
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
-v4: No changes
-v3: https://patchwork.kernel.org/patch/11602323/
 
- drivers/remoteproc/ti_k3_dsp_remoteproc.c | 72 +++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+Here is a summary with links:
+  - [v6,1/9] remoteproc: Add new RPROC_DETACHED state
+    https://git.kernel.org/andersson/remoteproc/c/e2e5c55eed8023ecfbf4c9b623ef7dec343d1845
+  - [v6,2/9] remoteproc: Add new attach() remoteproc operation
+    https://git.kernel.org/andersson/remoteproc/c/a6a4f2857524007848f7957af432cddb4d43b593
+  - [v6,3/9] remoteproc: Introducing function rproc_attach()
+    https://git.kernel.org/andersson/remoteproc/c/d848a4819d858973952de181314de6d05512fb98
+  - [v6,4/9] remoteproc: Introducing function rproc_actuate()
+    https://git.kernel.org/andersson/remoteproc/c/fdf0e00ed646fc94ab27e7d46fac983b1533a761
+  - [v6,5/9] remoteproc: Introducing function rproc_validate()
+    https://git.kernel.org/andersson/remoteproc/c/88d3a1360755b7dd88a737ef2cd966a54c932682
+  - [v6,6/9] remoteproc: Refactor function rproc_boot()
+    https://git.kernel.org/andersson/remoteproc/c/0f9dc562b721aa1c0190ffe9f32aa0fcd7b8f2e8
+  - [v6,7/9] remoteproc: Refactor function rproc_trigger_auto_boot()
+    https://git.kernel.org/andersson/remoteproc/c/e3d2193959824e2119996fe361f92b34750de2b0
+  - [v6,8/9] remoteproc: Refactor function rproc_free_vring()
+    https://git.kernel.org/andersson/remoteproc/c/4d3ebb3b99905e0e1c83b320764495f5fc3f93fe
+  - [v6,9/9] remoteproc: Properly handle firmware name when attaching
+    https://git.kernel.org/andersson/remoteproc/c/4a4dca1941fedc1b02635ff0b4ed51b9857d0382
 
-diff --git a/drivers/remoteproc/ti_k3_dsp_remoteproc.c b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-index 18f714b012df..43566ead7a1d 100644
---- a/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-@@ -174,6 +174,9 @@ static int k3_dsp_rproc_reset(struct k3_dsp_rproc *kproc)
- 		return ret;
- 	}
- 
-+	if (kproc->data->uses_lreset)
-+		return ret;
-+
- 	ret = kproc->ti_sci->ops.dev_ops.put_device(kproc->ti_sci,
- 						    kproc->ti_sci_id);
- 	if (ret) {
-@@ -191,6 +194,9 @@ static int k3_dsp_rproc_release(struct k3_dsp_rproc *kproc)
- 	struct device *dev = kproc->dev;
- 	int ret;
- 
-+	if (kproc->data->uses_lreset)
-+		goto lreset;
-+
- 	ret = kproc->ti_sci->ops.dev_ops.get_device(kproc->ti_sci,
- 						    kproc->ti_sci_id);
- 	if (ret) {
-@@ -198,6 +204,7 @@ static int k3_dsp_rproc_release(struct k3_dsp_rproc *kproc)
- 		return ret;
- 	}
- 
-+lreset:
- 	ret = reset_control_deassert(kproc->reset);
- 	if (ret) {
- 		dev_err(dev, "local-reset deassert failed, ret = %d\n", ret);
-@@ -209,6 +216,53 @@ static int k3_dsp_rproc_release(struct k3_dsp_rproc *kproc)
- 	return ret;
- }
- 
-+/*
-+ * The C66x DSP cores have a local reset that affects only the CPU, and a
-+ * generic module reset that powers on the device and allows the DSP internal
-+ * memories to be accessed while the local reset is asserted. This function is
-+ * used to release the global reset on C66x DSPs to allow loading into the DSP
-+ * internal RAMs. The .prepare() ops is invoked by remoteproc core before any
-+ * firmware loading, and is followed by the .start() ops after loading to
-+ * actually let the C66x DSP cores run.
-+ */
-+static int k3_dsp_rproc_prepare(struct rproc *rproc)
-+{
-+	struct k3_dsp_rproc *kproc = rproc->priv;
-+	struct device *dev = kproc->dev;
-+	int ret;
-+
-+	ret = kproc->ti_sci->ops.dev_ops.get_device(kproc->ti_sci,
-+						    kproc->ti_sci_id);
-+	if (ret)
-+		dev_err(dev, "module-reset deassert failed, cannot enable internal RAM loading, ret = %d\n",
-+			ret);
-+
-+	return ret;
-+}
-+
-+/*
-+ * This function implements the .unprepare() ops and performs the complimentary
-+ * operations to that of the .prepare() ops. The function is used to assert the
-+ * global reset on applicable C66x cores. This completes the second portion of
-+ * powering down the C66x DSP cores. The cores themselves are only halted in the
-+ * .stop() callback through the local reset, and the .unprepare() ops is invoked
-+ * by the remoteproc core after the remoteproc is stopped to balance the global
-+ * reset.
-+ */
-+static int k3_dsp_rproc_unprepare(struct rproc *rproc)
-+{
-+	struct k3_dsp_rproc *kproc = rproc->priv;
-+	struct device *dev = kproc->dev;
-+	int ret;
-+
-+	ret = kproc->ti_sci->ops.dev_ops.put_device(kproc->ti_sci,
-+						    kproc->ti_sci_id);
-+	if (ret)
-+		dev_err(dev, "module-reset assert failed, ret = %d\n", ret);
-+
-+	return ret;
-+}
-+
- /*
-  * Power up the DSP remote processor.
-  *
-@@ -352,6 +406,8 @@ static void *k3_dsp_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len)
- }
- 
- static const struct rproc_ops k3_dsp_rproc_ops = {
-+	.prepare	= k3_dsp_rproc_prepare,
-+	.unprepare	= k3_dsp_rproc_unprepare,
- 	.start		= k3_dsp_rproc_start,
- 	.stop		= k3_dsp_rproc_stop,
- 	.kick		= k3_dsp_rproc_kick,
-@@ -612,6 +668,22 @@ static int k3_dsp_rproc_probe(struct platform_device *pdev)
- 		goto release_tsp;
- 	}
- 
-+	/*
-+	 * ensure the DSP local reset is asserted to ensure the DSP doesn't
-+	 * execute bogus code in .prepare() when the module reset is released.
-+	 */
-+	if (data->uses_lreset) {
-+		ret = reset_control_status(kproc->reset);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to get reset status, status = %d\n",
-+				ret);
-+			goto release_mem;
-+		} else if (ret == 0) {
-+			dev_warn(dev, "local reset is deasserted for device\n");
-+			k3_dsp_rproc_reset(kproc);
-+		}
-+	}
-+
- 	ret = rproc_add(rproc);
- 	if (ret) {
- 		dev_err(dev, "failed to add register device with remoteproc core, status = %d\n",
+You are awesome, thank you!
+
 -- 
-2.26.0
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/pwbot
