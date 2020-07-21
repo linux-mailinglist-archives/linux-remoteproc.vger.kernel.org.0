@@ -2,212 +2,186 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8F0228C06
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jul 2020 00:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C0A228C21
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jul 2020 00:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731341AbgGUWge (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 21 Jul 2020 18:36:34 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:40924 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731329AbgGUWgd (ORCPT
+        id S1728014AbgGUWoK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 21 Jul 2020 18:44:10 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:39932 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728893AbgGUWoK (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 21 Jul 2020 18:36:33 -0400
+        Tue, 21 Jul 2020 18:44:10 -0400
 Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06LMaP8Z125619;
-        Tue, 21 Jul 2020 17:36:25 -0500
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06LMi57v102668;
+        Tue, 21 Jul 2020 17:44:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1595370985;
-        bh=8KNAwPsdGywKQ0GcVC6he8tDEtU3Dh8l3gISxCsI5uM=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=tImMTXZQwq+6XefhFHorXzhZgELbp8oMxeJruHBmX7ROqndZLotyJ1wGqg4+jsxiO
-         0x67NufMJ7j8JWuAl5ixwn8PLl4vWCAqCeYeoNvzBPfOXaEOl7NekE4OBVSISEf5tO
-         muhBOtrVuHMu2Hg+vBmr17FF/iYcTLKgLbPGu6qg=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 06LMaPQD056854
+        s=ti-com-17Q1; t=1595371445;
+        bh=o5pfuOZQ3v8bqEF5rP8SfpEUPbWc47QiCm/8pv3TAyE=;
+        h=Subject:From:To:CC:References:Date:In-Reply-To;
+        b=vHj4iN6ViSlXKMm/c8wbLFymdX0NvGMIN5Jr3YL1BjqHK7w7jjnAD9DsAges+dtUi
+         IzkyB2YDAnQzCjzxjH5hIBa5ETJK6K+58RApTwxs0f2+BFkxt32VyPcoMhGgSuL8rr
+         S6X4xBE0vYoc0iYQeCBGvSYvubw7OnNwXvfGsXjw=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 06LMi5g5067639
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Jul 2020 17:36:25 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 21
- Jul 2020 17:36:25 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+        Tue, 21 Jul 2020 17:44:05 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE104.ent.ti.com
  (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 21
+ Jul 2020 17:44:04 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 21 Jul 2020 17:36:25 -0500
-Received: from fllv0103.dal.design.ti.com (fllv0103.dal.design.ti.com [10.247.120.73])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06LMaPbB013965;
-        Tue, 21 Jul 2020 17:36:25 -0500
-Received: from localhost ([10.250.34.248])
-        by fllv0103.dal.design.ti.com (8.14.7/8.14.7) with ESMTP id 06LMaPVE080818;
-        Tue, 21 Jul 2020 17:36:25 -0500
+ Frontend Transport; Tue, 21 Jul 2020 17:44:05 -0500
+Received: from [10.250.34.248] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06LMi45V028193;
+        Tue, 21 Jul 2020 17:44:04 -0500
+Subject: Re: [PATCH v4 3/6] dt-bindings: remoteproc: Add common TI SCI rproc
+ bindings
 From:   Suman Anna <s-anna@ti.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Nishanth Menon <nm@ti.com>, Lokesh Vutla <lokeshvutla@ti.com>,
+To:     Rob Herring <robh+dt@kernel.org>, Lokesh Vutla <lokeshvutla@ti.com>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
         <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Suman Anna <s-anna@ti.com>
-Subject: [PATCH v5 6/6] remoteproc: k3-dsp: Add support for L2RAM loading on C66x DSPs
-Date:   Tue, 21 Jul 2020 17:36:17 -0500
-Message-ID: <20200721223617.20312-7-s-anna@ti.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200721223617.20312-1-s-anna@ti.com>
-References: <20200721223617.20312-1-s-anna@ti.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20200717234800.9423-1-s-anna@ti.com>
+ <20200717234800.9423-4-s-anna@ti.com>
+ <CAL_JsqLnPQNZ7KhqfPwiMCJESYrD9_UN2gwc_hj9=WOJM8NQQw@mail.gmail.com>
+ <647642d5-5021-363f-c9c9-3714a826436c@ti.com>
+Message-ID: <deead680-9699-9de5-84af-059c31a4bbd4@ti.com>
+Date:   Tue, 21 Jul 2020 17:44:04 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <647642d5-5021-363f-c9c9-3714a826436c@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The resets for the DSP processors on K3 SoCs are managed through the
-Power and Sleep Controller (PSC) module. Each DSP typically has two
-resets - a global module reset for powering on the device, and a local
-reset that affects only the CPU while allowing access to the other
-sub-modules within the DSP processor sub-systems.
+Hi Rob,
 
-The C66x DSPs have two levels of internal RAMs that can be used to
-boot from, and the firmware loading into these RAMs require the
-local reset to be asserted with the device powered on/enabled using
-the module reset. Enhance the K3 DSP remoteproc driver to add support
-for loading into the internal RAMs. The local reset is deasserted on
-SoC power-on-reset, so logic has to be added in probe in remoteproc
-mode to balance the remoteproc state-machine.
+On 7/21/20 11:40 AM, Suman Anna wrote:
+> Hi Rob,
+> 
+> On 7/21/20 10:53 AM, Rob Herring wrote:
+>> On Fri, Jul 17, 2020 at 5:48 PM Suman Anna <s-anna@ti.com> wrote:
+>>>
+>>> Add a bindings document that lists the common TI SCI properties
+>>> used by the K3 R5F and DSP remoteproc devices.
+>>>
+>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>> ---
+>>> v4: Addressed both of Rob's review comments on ti,sci-proc-ids property
+>>> v3: https://patchwork.kernel.org/patch/11602317/
+>>>
+>>>   .../bindings/remoteproc/ti,k3-sci-proc.yaml   | 48 +++++++++++++++++++
+>>>   1 file changed, 48 insertions(+)
+>>>   create mode 100644 
+>>> Documentation/devicetree/bindings/remoteproc/ti,k3-sci-proc.yaml
+>>>
+>>> diff --git 
+>>> a/Documentation/devicetree/bindings/remoteproc/ti,k3-sci-proc.yaml 
+>>> b/Documentation/devicetree/bindings/remoteproc/ti,k3-sci-proc.yaml
+>>> new file mode 100644
+>>> index 000000000000..0dca2ffdbc48
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-sci-proc.yaml
+>>> @@ -0,0 +1,48 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/remoteproc/ti,k3-sci-proc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Common TI K3 remote processor device bindings
+>>> +
+>>> +maintainers:
+>>> +  - Suman Anna <s-anna@ti.com>
+>>> +
+>>> +description: |
+>>> +  The TI K3 family of SoCs usually have one or more remote processor 
+>>> sub-systems
+>>> +  like the dual-core R5F sub-system or a C66x or C71x DSP processor 
+>>> subsystem.
+>>> +  The device management of these remote processors is managed by a 
+>>> dedicated
+>>> +  System Processor, and the communication with that processor is 
+>>> managed through
+>>> +  the TI-SCI protocol.
+>>> +
+>>> +  Each remote processor device node should define a common set of 
+>>> properties
+>>> +  that allows the System Processor firmware to perform the device 
+>>> management
+>>> +  such as powering the IPs, asserting/deasserting the resets for 
+>>> each of these
+>>> +  processors.
+>>> +
+>>> +properties:
+>>> +  ti,sci:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +    description:
+>>> +      Should be a phandle to the TI-SCI System Controller node
+>>> +
+>>> +  ti,sci-dev-id:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description: |
+>>> +      Should contain the TI-SCI device id corresponding to the 
+>>> remote processor
+>>> +      core. Please refer to the corresponding System Controller 
+>>> documentation
+>>> +      for valid values.
+>>
+>> These also apply on Lokesh's series converting ti,sci-int[ra]
+>> bindings. Please rework to use for both.
+> 
+> OK.
 
-Note that the local resets are a no-op on C71x cores, and the hardware
-does not supporting loading into its internal RAMs.
+OK, I have reworked for this and posted it [1] as part of v5 of this series.
 
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
-v4, v5: No changes
-v3: https://patchwork.kernel.org/patch/11602323/
+regards
+Suman
 
- drivers/remoteproc/ti_k3_dsp_remoteproc.c | 72 +++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+[1] https://patchwork.kernel.org/patch/11676821/
 
-diff --git a/drivers/remoteproc/ti_k3_dsp_remoteproc.c b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-index 18f714b012df..43566ead7a1d 100644
---- a/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-@@ -174,6 +174,9 @@ static int k3_dsp_rproc_reset(struct k3_dsp_rproc *kproc)
- 		return ret;
- 	}
- 
-+	if (kproc->data->uses_lreset)
-+		return ret;
-+
- 	ret = kproc->ti_sci->ops.dev_ops.put_device(kproc->ti_sci,
- 						    kproc->ti_sci_id);
- 	if (ret) {
-@@ -191,6 +194,9 @@ static int k3_dsp_rproc_release(struct k3_dsp_rproc *kproc)
- 	struct device *dev = kproc->dev;
- 	int ret;
- 
-+	if (kproc->data->uses_lreset)
-+		goto lreset;
-+
- 	ret = kproc->ti_sci->ops.dev_ops.get_device(kproc->ti_sci,
- 						    kproc->ti_sci_id);
- 	if (ret) {
-@@ -198,6 +204,7 @@ static int k3_dsp_rproc_release(struct k3_dsp_rproc *kproc)
- 		return ret;
- 	}
- 
-+lreset:
- 	ret = reset_control_deassert(kproc->reset);
- 	if (ret) {
- 		dev_err(dev, "local-reset deassert failed, ret = %d\n", ret);
-@@ -209,6 +216,53 @@ static int k3_dsp_rproc_release(struct k3_dsp_rproc *kproc)
- 	return ret;
- }
- 
-+/*
-+ * The C66x DSP cores have a local reset that affects only the CPU, and a
-+ * generic module reset that powers on the device and allows the DSP internal
-+ * memories to be accessed while the local reset is asserted. This function is
-+ * used to release the global reset on C66x DSPs to allow loading into the DSP
-+ * internal RAMs. The .prepare() ops is invoked by remoteproc core before any
-+ * firmware loading, and is followed by the .start() ops after loading to
-+ * actually let the C66x DSP cores run.
-+ */
-+static int k3_dsp_rproc_prepare(struct rproc *rproc)
-+{
-+	struct k3_dsp_rproc *kproc = rproc->priv;
-+	struct device *dev = kproc->dev;
-+	int ret;
-+
-+	ret = kproc->ti_sci->ops.dev_ops.get_device(kproc->ti_sci,
-+						    kproc->ti_sci_id);
-+	if (ret)
-+		dev_err(dev, "module-reset deassert failed, cannot enable internal RAM loading, ret = %d\n",
-+			ret);
-+
-+	return ret;
-+}
-+
-+/*
-+ * This function implements the .unprepare() ops and performs the complimentary
-+ * operations to that of the .prepare() ops. The function is used to assert the
-+ * global reset on applicable C66x cores. This completes the second portion of
-+ * powering down the C66x DSP cores. The cores themselves are only halted in the
-+ * .stop() callback through the local reset, and the .unprepare() ops is invoked
-+ * by the remoteproc core after the remoteproc is stopped to balance the global
-+ * reset.
-+ */
-+static int k3_dsp_rproc_unprepare(struct rproc *rproc)
-+{
-+	struct k3_dsp_rproc *kproc = rproc->priv;
-+	struct device *dev = kproc->dev;
-+	int ret;
-+
-+	ret = kproc->ti_sci->ops.dev_ops.put_device(kproc->ti_sci,
-+						    kproc->ti_sci_id);
-+	if (ret)
-+		dev_err(dev, "module-reset assert failed, ret = %d\n", ret);
-+
-+	return ret;
-+}
-+
- /*
-  * Power up the DSP remote processor.
-  *
-@@ -352,6 +406,8 @@ static void *k3_dsp_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len)
- }
- 
- static const struct rproc_ops k3_dsp_rproc_ops = {
-+	.prepare	= k3_dsp_rproc_prepare,
-+	.unprepare	= k3_dsp_rproc_unprepare,
- 	.start		= k3_dsp_rproc_start,
- 	.stop		= k3_dsp_rproc_stop,
- 	.kick		= k3_dsp_rproc_kick,
-@@ -612,6 +668,22 @@ static int k3_dsp_rproc_probe(struct platform_device *pdev)
- 		goto release_tsp;
- 	}
- 
-+	/*
-+	 * ensure the DSP local reset is asserted to ensure the DSP doesn't
-+	 * execute bogus code in .prepare() when the module reset is released.
-+	 */
-+	if (data->uses_lreset) {
-+		ret = reset_control_status(kproc->reset);
-+		if (ret < 0) {
-+			dev_err(dev, "failed to get reset status, status = %d\n",
-+				ret);
-+			goto release_mem;
-+		} else if (ret == 0) {
-+			dev_warn(dev, "local reset is deasserted for device\n");
-+			k3_dsp_rproc_reset(kproc);
-+		}
-+	}
-+
- 	ret = rproc_add(rproc);
- 	if (ret) {
- 		dev_err(dev, "failed to add register device with remoteproc core, status = %d\n",
--- 
-2.26.0
+> 
+>>
+>>> +
+>>> +  ti,sci-proc-ids:
+>>> +    description: Should contain a single tuple of <proc_id host_id>.
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +    items:
+>>> +      - description: TI-SCI processor id for the remote processor 
+>>> device
+>>> +      - description: TI-SCI host id to which processor control 
+>>> ownership
+>>> +                     should be transferred to
+> 
+> This property is not required for the ti,sci-int[ra].
+> 
+> I can plan to move this to a common location like 
+> Documentation/devicetree/bindings/arm/keystone/ and let the individual 
+> bindings define the required properties. Does that sound ok to you?
+> 
+> regards
+> Suman
+> 
+>>> +
+>>> +required:
+>>> +  - ti,sci
+>>> +  - ti,sci-dev-id
+>>> +  - ti,sci-proc-ids
+>>> -- 
+>>> 2.26.0
+>>>
+> 
 
