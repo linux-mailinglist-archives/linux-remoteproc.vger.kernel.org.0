@@ -2,155 +2,107 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC9F22A089
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jul 2020 22:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E9F22A356
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 23 Jul 2020 01:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732812AbgGVULP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 22 Jul 2020 16:11:15 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:41483 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732755AbgGVULO (ORCPT
+        id S1729198AbgGVX4E (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 22 Jul 2020 19:56:04 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:59950 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728607AbgGVX4E (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 22 Jul 2020 16:11:14 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1595448673; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=REoXVWQbHijBuNKTFEkR7jVwMDFykpE2PFboAKq4xoI=; b=paJ+8JMLtppbiWg6yuvjaYftW3+izvjPwVK3mcqmZerrAc0w5MMXGziLceCt8RIsnIo9inrm
- tLwk3JGEX2OJrWbmfWgenM0xSflug25EuRfL57K0NddNyQ25d2EJX9pqMq0mwtNR0M1xK9e0
- hfe6HhBeDDkix7QTeScFN9NeEQ0=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n09.prod.us-east-1.postgun.com with SMTP id
- 5f189d6165270fa5953aeb2c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 22 Jul 2020 20:11:13
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E3B65C433A0; Wed, 22 Jul 2020 20:11:12 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A1D69C43391;
-        Wed, 22 Jul 2020 20:11:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A1D69C43391
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     bjorn.andersson@linaro.org
-Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        evgreen@chromium.org, ohad@wizery.com,
-        Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH v3 3/3] remoteproc: qcom_q6v5_mss: Add modem debug policy support
-Date:   Thu, 23 Jul 2020 01:40:47 +0530
-Message-Id: <20200722201047.12975-4-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200722201047.12975-1-sibis@codeaurora.org>
-References: <20200722201047.12975-1-sibis@codeaurora.org>
+        Wed, 22 Jul 2020 19:56:04 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06MNtwsG014770;
+        Wed, 22 Jul 2020 18:55:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1595462158;
+        bh=v0VRddPclOlei0BW7bJOnJe3NxEuTUvl0Xe3+dkijHY=;
+        h=From:To:CC:Subject:Date;
+        b=To56uubNhecdnY7N7N0RiBNcLyPPbzGnvQxQGGtM3w8dKRaktjFcajeuh86kI7+P1
+         Dy0Ay3si+iZk1VFgRCZXPJGWskrVj0vOFEiY7bFYqTSgKZ1K6y8Z4SnlhDEswDhnwG
+         jw8FzZzEt9LcTfgxZpQ3XGrkZuKixMK60gJxJZd4=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 06MNtwDc094112
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 22 Jul 2020 18:55:58 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 22
+ Jul 2020 18:55:58 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 22 Jul 2020 18:55:58 -0500
+Received: from lelv0597.itg.ti.com (lelv0597.itg.ti.com [10.181.64.32])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06MNtwMo109422;
+        Wed, 22 Jul 2020 18:55:58 -0500
+Received: from localhost ([10.250.34.248])
+        by lelv0597.itg.ti.com (8.14.7/8.14.7) with ESMTP id 06MNtwML072336;
+        Wed, 22 Jul 2020 18:55:58 -0500
+From:   Suman Anna <s-anna@ti.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Lokesh Vutla <lokeshvutla@ti.com>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Suman Anna <s-anna@ti.com>
+Subject: [PATCH v3 0/4] TI K3 R5F remoteproc support
+Date:   Wed, 22 Jul 2020 18:55:50 -0500
+Message-ID: <20200722235554.7511-1-s-anna@ti.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add modem debug policy support which will enable coredumps and live
-debug support when the msadp firmware is present on secure devices.
+Hi All,
 
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
----
+The following is v3 of the TI K3 R5F remoteproc driver series supporting all
+the R5F processor clusters/subsystems on TI AM65x and J721E SoCs. Please
+see the v1 cover-letter [1] for the features supported on these R5F processors.
+This series is almost ready and awaiting the conclusion on the bindings
+discussion from v2.
 
-v3:
- * Fix dp_fw leak and create a separate func for dp load [Bjorn]
- * Reset dp_size on mba_reclaim
+The patches are rebased and slightly revised versions of v2 to sit on top of
+the v5 K3 DSP C66x [2] and v3 C71x remoteproc driver series [3].
 
-v2:
- * Use request_firmware_direct [Bjorn]
- * Use Bjorn's template to show if debug policy is present
- * Add size check to prevent memcpy out of bounds [Bjorn]
+Following are the main differences from v2:
+ - The bindings patch (patch #1) is revised to move away from using the
+   ti-sci-proc yaml bindings file to the generic refactored ti,k3-sci-common.yaml
+   bindings patch introduced in the latest K3 DSP C66x series.
+ - Minor updates to the R5F remoteproc driver (patch #2) fixing all the
+   pending review comments from Mathieu
 
- drivers/remoteproc/qcom_q6v5_mss.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+Please see the individual patches for detailed delta differences.
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index f4aa61ba220dc..da99c8504a346 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -191,6 +191,7 @@ struct q6v5 {
- 	phys_addr_t mba_phys;
- 	void *mba_region;
- 	size_t mba_size;
-+	size_t dp_size;
- 
- 	phys_addr_t mpss_phys;
- 	phys_addr_t mpss_reloc;
-@@ -408,6 +409,21 @@ static int q6v5_xfer_mem_ownership(struct q6v5 *qproc, int *current_perm,
- 				   current_perm, next, perms);
- }
- 
-+static void q6v5_debug_policy_load(struct q6v5 *qproc)
-+{
-+	const struct firmware *dp_fw;
-+
-+	if (request_firmware_direct(&dp_fw, "msadp", qproc->dev))
-+		return;
-+
-+	if (SZ_1M + dp_fw->size <= qproc->mba_size) {
-+		memcpy(qproc->mba_region + SZ_1M, dp_fw->data, dp_fw->size);
-+		qproc->dp_size = dp_fw->size;
-+	}
-+
-+	release_firmware(dp_fw);
-+}
-+
- static int q6v5_load(struct rproc *rproc, const struct firmware *fw)
- {
- 	struct q6v5 *qproc = rproc->priv;
-@@ -419,6 +435,7 @@ static int q6v5_load(struct rproc *rproc, const struct firmware *fw)
- 	}
- 
- 	memcpy(qproc->mba_region, fw->data, fw->size);
-+	q6v5_debug_policy_load(qproc);
- 
- 	return 0;
- }
-@@ -928,6 +945,10 @@ static int q6v5_mba_load(struct q6v5 *qproc)
- 	}
- 
- 	writel(qproc->mba_phys, qproc->rmb_base + RMB_MBA_IMAGE_REG);
-+	if (qproc->dp_size) {
-+		writel(qproc->mba_phys + SZ_1M, qproc->rmb_base + RMB_PMI_CODE_START_REG);
-+		writel(qproc->dp_size, qproc->rmb_base + RMB_PMI_CODE_LENGTH_REG);
-+	}
- 
- 	ret = q6v5proc_reset(qproc);
- 	if (ret)
-@@ -996,6 +1017,7 @@ static void q6v5_mba_reclaim(struct q6v5 *qproc)
- 	u32 val;
- 
- 	qproc->dump_mba_loaded = false;
-+	qproc->dp_size = 0;
- 
- 	q6v5proc_halt_axi_port(qproc, qproc->halt_map, qproc->halt_q6);
- 	q6v5proc_halt_axi_port(qproc, qproc->halt_map, qproc->halt_modem);
-@@ -1290,7 +1312,8 @@ static int q6v5_start(struct rproc *rproc)
- 	if (ret)
- 		return ret;
- 
--	dev_info(qproc->dev, "MBA booted, loading mpss\n");
-+	dev_info(qproc->dev, "MBA booted with%s debug policy, loading mpss\n",
-+		 qproc->dp_size ? "" : "out");
- 
- 	ret = q6v5_mpss_load(qproc);
- 	if (ret)
+regards
+Suman
+
+[1] R5F v1: https://patchwork.kernel.org/cover/11456367/
+[2] R5F v2: https://patchwork.kernel.org/cover/11632993/
+[3] C66x v5: https://patchwork.kernel.org/cover/11676819/
+[4] C71x v3: https://patchwork.kernel.org/cover/11602345/
+
+Suman Anna (4):
+  dt-bindings: remoteproc: Add bindings for R5F subsystem on TI K3 SoCs
+  remoteproc: k3-r5: Add a remoteproc driver for R5F subsystem
+  remoteproc: k3-r5: Initialize TCM memories for ECC
+  remoteproc: k3-r5: Add loading support for on-chip SRAM regions
+
+ .../bindings/remoteproc/ti,k3-r5f-rproc.yaml  |  281 ++++
+ drivers/remoteproc/Kconfig                    |   13 +
+ drivers/remoteproc/Makefile                   |    1 +
+ drivers/remoteproc/ti_k3_r5_remoteproc.c      | 1395 +++++++++++++++++
+ 4 files changed, 1690 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
+ create mode 100644 drivers/remoteproc/ti_k3_r5_remoteproc.c
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.26.0
 
