@@ -2,186 +2,85 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78330230805
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 28 Jul 2020 12:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 598EE2308F7
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 28 Jul 2020 13:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728855AbgG1Kpt (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 28 Jul 2020 06:45:49 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:31625 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728566AbgG1Kpt (ORCPT
+        id S1729186AbgG1Li1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 28 Jul 2020 07:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729158AbgG1LiQ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 28 Jul 2020 06:45:49 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1595933148; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=UwYBC8FIK6Ao+d1NkDjZjS8SDHzIo5U4cf8VMIHtRHo=;
- b=pdWg1kiS2S2S0f2FKhQvNikL1GXxbuAmaPeUaHgj59QhIdDqBcBFruy5E+lPRmZpThyCCCqf
- lHJSIYwAVnMT2+fCx8GzlLuhotP1dhxr4uYScXznP3ovX5MJLtHXjhB6HRdcYhVDRxNqiOGP
- 47acF5LFZNn/jO8o6VY5l+QNwwA=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n16.prod.us-east-1.postgun.com with SMTP id
- 5f2001d8fcbecb3df18e8da6 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 28 Jul 2020 10:45:44
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E55F4C4339C; Tue, 28 Jul 2020 10:45:43 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: gokulsri)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 05D62C433CA;
-        Tue, 28 Jul 2020 10:45:43 +0000 (UTC)
+        Tue, 28 Jul 2020 07:38:16 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06104C0619DB
+        for <linux-remoteproc@vger.kernel.org>; Tue, 28 Jul 2020 04:38:16 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id a5so7982110wrm.6
+        for <linux-remoteproc@vger.kernel.org>; Tue, 28 Jul 2020 04:38:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=z88eUg589kIPbwfcJkBbHKFa4QR0wOZWGk2diK1jFPM=;
+        b=b8/14qSmtpua6DExDbiZQujm3FVCJQWOEnGYc8m39CT4QhCFHb7H/8m/Mr+GJhki5y
+         D26KeL8e5wwIhpqswED7Iyj8LNXjLx29RYfhZ1pPRjvkmM3zHNDeTF1tCFcQE9cmRh/R
+         raunFxUrBwUmVbHiIcNmDsAsXlg0feXUzfnq5cUO9m3PCR65DPFX0ENqSsff92XlzdML
+         2lZ1DHEdMBJRJ7G/JmLQNbN9a0xCfCCdIavasCRbfc1GMLbxrWB9YQiD4Jx827i+wgQH
+         uvPy2fXgy98qEeiaY5zYJY4YAm1gQLhdwyYSQS3qfKNnqXIVHUgDrgxJy+XFocnlCNnt
+         WweQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=z88eUg589kIPbwfcJkBbHKFa4QR0wOZWGk2diK1jFPM=;
+        b=cFPYmQwmXXrUOOFZ1lhy9ELzhZK4VfZMp5IkEdf2pkKAEylYsMku/u/zK4Ra9Oqgk4
+         dzRQfCCr5zA01y57memmiKSKf+nqhF7CLWuWKLxtlLvde4TGxK+lQIoAG5czKiuXX2NH
+         AIrVJJYpRxftVe+g+Z/np3zj7WjCMSls4Rrg6vsj1NZxOGlXUn1Ej8MEqT0xtP4nVG7Y
+         oyYkpC0t9LkSJ6o9aHDADbr1yXNEjgoTJTVDcK8LRxtR8tqtb99giShdZEyQ8r8U08z2
+         pBIL741APB/UtLBal6p3UlI0tccbgBxw5GGFzXpMe1R4F2seo8wgJijmOp96JuQTLgva
+         rTPg==
+X-Gm-Message-State: AOAM531v9ywV5ooF741BM6w4kJqXNVCQfadWaW5hAWONQXcwgZWVuNVj
+        iYLC+KRUgIzsFsKAbVk6C/Z/JTZTRpOJwY8sO1k=
+X-Google-Smtp-Source: ABdhPJxf3Z6j28ZJZ91yE+38HygJgiTtZMyB/VSeYng0agg0J+nv4s0qzz48SwEN7D8BizofBLS128ELYqeZWTC2zc4=
+X-Received: by 2002:a5d:5746:: with SMTP id q6mr24649773wrw.59.1595936294234;
+ Tue, 28 Jul 2020 04:38:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 28 Jul 2020 16:15:42 +0530
-From:   gokulsri@codeaurora.org
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        agross@kernel.org, linux-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, govinds@codeaurora.org,
-        sricharan@codeaurora.org
-Subject: Re: [v7 1/4] remoteproc: qcom: wcss: populate hardcoded param using
- driver data
-In-Reply-To: <159442464252.1987609.9113647358389820731@swboyd.mtv.corp.google.com>
-References: <20190726092332.25202-1-govinds@codeaurora.org>
- <1593766722-28838-1-git-send-email-gokulsri@codeaurora.org>
- <1593766722-28838-2-git-send-email-gokulsri@codeaurora.org>
- <159442464252.1987609.9113647358389820731@swboyd.mtv.corp.google.com>
-Message-ID: <2cf8aa0af13a104a8e4171ebcb0a6e62@codeaurora.org>
-X-Sender: gokulsri@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Received: by 2002:a5d:65cb:0:0:0:0:0 with HTTP; Tue, 28 Jul 2020 04:38:13
+ -0700 (PDT)
+From:   Rashid Al-Wahaibi <pdlarsen550@gmail.com>
+Date:   Tue, 28 Jul 2020 12:38:13 +0100
+Message-ID: <CAE00X2F5SUiQf0qCZYq3Yx353S0Esu1hA3RH4THqOM0WZMKHFQ@mail.gmail.com>
+Subject: Your Partnership
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-   Thanks for your comments Stephen.
-   Will address your comments below and re-submit.
-On 2020-07-11 05:14, Stephen Boyd wrote:
-> Quoting Gokul Sriram Palanisamy (2020-07-03 01:58:39)
->> From: Govind Singh <govinds@codeaurora.org>
->> 
->> Q6 based WiFi fw loading is supported across
->> different targets, ex: IPQ8074/QCS404. In order to
->> support different fw names/pas id etc, populate
->> hardcoded param using driver data.
->> 
->> Signed-off-by: Govind Singh <govinds@codeaurora.org>
->> [rebased on top of 5.8-rc3]
-> 
-> This tag is not really useful and doesn't follow the style of having
-> your email prefix the text. I'd expect to see
-> 
-> [gokulsri@codeaurora.org: made some sort of change]
-> 
->> Signed-off-by: Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
->> ---
->>  drivers/remoteproc/qcom_q6v5_wcss.c | 31 
->> ++++++++++++++++++++++++++-----
->>  1 file changed, 26 insertions(+), 5 deletions(-)
->> 
->> diff --git a/drivers/remoteproc/qcom_q6v5_wcss.c 
->> b/drivers/remoteproc/qcom_q6v5_wcss.c
->> index 88c76b9..abc5f9d 100644
->> --- a/drivers/remoteproc/qcom_q6v5_wcss.c
->> +++ b/drivers/remoteproc/qcom_q6v5_wcss.c
->> @@ -70,6 +71,11 @@
->>  #define TCSR_WCSS_CLK_MASK     0x1F
->>  #define TCSR_WCSS_CLK_ENABLE   0x14
->> 
->> +struct wcss_data {
->> +       const char *firmware_name;
->> +       int crash_reason_smem;
-> 
-> Is it signed for some reason?
-   Can be unsigned. Will update.
-> 
->> +};
->> +
->>  struct q6v5_wcss {
->>         struct device *dev;
->> 
->> @@ -92,6 +98,8 @@ struct q6v5_wcss {
->>         void *mem_region;
->>         size_t mem_size;
->> 
->> +       int crash_reason_smem;
->> +
-> 
-> Same question, why not unsigned?
-   Can be unsigned. Will update.
-> 
->>         struct qcom_rproc_glink glink_subdev;
->>         struct qcom_rproc_ssr ssr_subdev;
->>  };
->> @@ -430,7 +438,7 @@ static int q6v5_wcss_load(struct rproc *rproc, 
->> const struct firmware *fw)
->>                                      wcss->mem_size, 
->> &wcss->mem_reloc);
->>  }
->> 
->> -static const struct rproc_ops q6v5_wcss_ops = {
->> +static const struct rproc_ops q6v5_wcss_ipq8074_ops = {
->>         .start = q6v5_wcss_start,
->>         .stop = q6v5_wcss_stop,
->>         .da_to_va = q6v5_wcss_da_to_va,
->> @@ -530,12 +538,17 @@ static int q6v5_alloc_memory_region(struct 
->> q6v5_wcss *wcss)
->> 
->>  static int q6v5_wcss_probe(struct platform_device *pdev)
->>  {
->> +       const struct wcss_data *desc;
->>         struct q6v5_wcss *wcss;
->>         struct rproc *rproc;
->>         int ret;
->> 
->> -       rproc = rproc_alloc(&pdev->dev, pdev->name, &q6v5_wcss_ops,
->> -                           "IPQ8074/q6_fw.mdt", sizeof(*wcss));
->> +       desc = of_device_get_match_data(&pdev->dev);
-> 
-> Use device_get_match_data() and drop the of_device.h include.
-   ok, will do.
-> 
->> +       if (!desc)
->> +               return -EINVAL;
->> +
->> +       rproc = rproc_alloc(&pdev->dev, pdev->name, 
->> &q6v5_wcss_ipq8074_ops,
->> +                           desc->firmware_name, sizeof(*wcss));
->>         if (!rproc) {
->>                 dev_err(&pdev->dev, "failed to allocate rproc\n");
->>                 return -ENOMEM;
->> @@ -587,8 +602,14 @@ static int q6v5_wcss_remove(struct 
->> platform_device *pdev)
->>         return 0;
->>  }
->> 
->> +static const struct wcss_data wcss_ipq8074_res_init = {
->> +       .firmware_name = "IPQ8074/q6_fw.mdt",
->> +       .crash_reason_smem = WCSS_CRASH_REASON,
->> +};
->> +
->>  static const struct of_device_id q6v5_wcss_of_match[] = {
->> -       { .compatible = "qcom,ipq8074-wcss-pil" },
->> +       { .compatible = "qcom,ipq8074-wcss-pil", .data = 
->> &wcss_ipq8074_res_init },
->> +
-> 
-> Please remove this extra newline.
-   ok. Will do.
-> 
->>         { },
->>  };
->>  MODULE_DEVICE_TABLE(of, q6v5_wcss_of_match);
+-- 
+Good day,
+My name is Rashid Al-Wahaibi, I am from Oman but base here in the UK
+and a Managing Partner of BP Partnership Ltd, a Financial Consultancy
+Firm with office in the United Kingdom. I am contacting you based on
+the request of Ms Rosmah Mansor Najib Razak, wife of Najib Razak, the
+immediate past Malaysian Prime Minister.
+
+I found your profile satisfying and decided to contact you based on Ms
+Rosmah Mansor Najib Razak desire to invest in any viable project in
+your region.
+
+I need you to guide me on the type of investment that will be of best
+interest and provide good return on investment in your country and
+also act as her investment manager. She is ready to invest $25m to
+$50m USD
+
+I will explain further detail of this business proposal when you reply
+to this email indicating your interest.
+
+
+Regards,
+
+Rashid Al-Wahaibi,
+Bp Partnership Ltd
+60 Raglan Road
+Reigate, ENG RH2 0HN,
+United Kingdom
