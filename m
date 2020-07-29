@@ -2,70 +2,125 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C66852316AE
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Jul 2020 02:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076242316EB
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Jul 2020 02:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728236AbgG2AUF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 28 Jul 2020 20:20:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50740 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730011AbgG2AUF (ORCPT
+        id S1730881AbgG2AsN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 28 Jul 2020 20:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730864AbgG2AsM (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 28 Jul 2020 20:20:05 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595982005;
-        bh=Tm5A7UPsCuAn5S6l67gbWwLGvKwLesFAFvvtf/GUQRQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=0So8f/Oo+X5pyf/QTo7lcbJ2cyhBiPDsd52YAJ6FggzAnoO8jZzMLa8djQ6qBU7h/
-         PuTrjNPBVGEqUgsbCeFGP3zWHCyJIWgkY6QEH+859HTNd3+5NUtQMAA5JccuNXzaPC
-         Vn+MqNcNattWiWSZIhMFNFqokhw1sCiBKId3hiVE=
+        Tue, 28 Jul 2020 20:48:12 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A4DC0619D2
+        for <linux-remoteproc@vger.kernel.org>; Tue, 28 Jul 2020 17:48:11 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id l63so13300333pge.12
+        for <linux-remoteproc@vger.kernel.org>; Tue, 28 Jul 2020 17:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EfvldELvo7FLErlsWiPVmAKuN5/SSFt2LmTOBkch4kw=;
+        b=xHJHTx9HefSaFKWD99K/a9Hxxsg14EZ0R7MjRerhC5HktfBA386qIt0TiPmveUYa8e
+         Xh6QKnGdUkZODk+PZYNKQJ3Wy+8aaXe3dY7LIN9E/E/n74Aj4EKuRZlZqX8vZN6ddulD
+         CjJsEJ65XjyBJK0HKWWo47QTOhKXHazH7/9M2ImseYflwXqDmFMuuzwFX7gy7mXHiADh
+         +sMzlTGEtTqMsgz+/NwVxVEFfl8BVnhTmX8XbR2/CyfDRLLFWQiPo7F6aLNZF08vIYQF
+         /KboZeV5uNNgsWP5UmnxJJaNvzeAwjjShKfH2lLlqzfFWsoQbF6xpIYUumE4rhxPQFDQ
+         61gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EfvldELvo7FLErlsWiPVmAKuN5/SSFt2LmTOBkch4kw=;
+        b=XUGYBjn/gKfs4yxpXUeiSubkN02cCu0mxSfFb9p/4BZymluMdIs3AJ3gqwD/mULJp0
+         lhYVBEUP9d37c4zQtC/4Sc7gqkIeXBL8oJ4xblb6g/c5/LlowCzDMIs9YUhqau83JJK4
+         OgHvV6m4mEJxdyiaa/FBU55EOjih0oNqxrguFmrR/2kUV8hB7MH458NfY0t2SVNnewM+
+         VP8UbuLdZr4qF/avecnkrol2QbKH9vbiV9PMSaqGbC/k0612KZjXurrvUJQl0DjDyP/N
+         jQmWgKbaXyDvnq5+SM98YWuN5Qyof894WG1NkY+uXicjyjKntTHItA9Q47lqTSAppEHs
+         kY2Q==
+X-Gm-Message-State: AOAM533KCQNLTC5HjY9R5auG3us5o9deQ4nv9nrkXStZ96h3q+HNJQM0
+        LomB2nSCsMdwGBW3a7xj8p8f2w==
+X-Google-Smtp-Source: ABdhPJytjlRHqA72yY0KPiWKOWc6Pn9lDKQnBeGMXjcmSmSP/8NoYvt4Jb6mHcI1wDmaqYEGo6JvaA==
+X-Received: by 2002:aa7:9422:: with SMTP id y2mr27652112pfo.211.1595983691313;
+        Tue, 28 Jul 2020 17:48:11 -0700 (PDT)
+Received: from localhost.localdomain (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id q12sm239414pfg.135.2020.07.28.17.48.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2020 17:48:10 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: hwlock: qcom: Remove invalid binding
+Date:   Tue, 28 Jul 2020 17:47:57 -0700
+Message-Id: <20200729004757.1901107-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5 0/6] TI K3 DSP remoteproc driver for C66x DSPs
-From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <159598200516.16572.1999223066811954651.git-patchwork-notify@kernel.org>
-Date:   Wed, 29 Jul 2020 00:20:05 +0000
-References: <20200721223617.20312-1-s-anna@ti.com>
-In-Reply-To: <20200721223617.20312-1-s-anna@ti.com>
-To:     Suman Anna <s-anna@ti.com>
-Cc:     linux-remoteproc@vger.kernel.org
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello:
+The Qualcomm hwlock is described in DeviceTree either directly on the
+mmio bus or split between a syscon and a mutex node, but as noted in
+[1] the latter is not valid DT, so remove any traces of this from the
+binding.
 
-This series was applied to andersson/remoteproc.git (refs/heads/for-next).
+[1] https://lore.kernel.org/r/CAL_JsqLa9GBtbgN6aL7AQ=A6V-YRtPgYqh6XgM2kpx532+r4Gg@mail.gmail.com/
 
-On Tue, 21 Jul 2020 17:36:11 -0500 you wrote:
-> Hi All,
-> 
-> The following is v5 of the K3 DSP remoteproc driver supporting the C66x DSPs
-> on the TI K3 J721E SoCs. The patches apply cleanly both on v5.8-rc1 as well
-> as on latest HEAD of rproc-next branch. The C71x v3 still applies cleanly on
-> top of this series.
-> 
-> [...]
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ .../bindings/hwlock/qcom-hwspinlock.yaml      | 25 +------------------
+ 1 file changed, 1 insertion(+), 24 deletions(-)
 
-
-Here is a summary with links:
-  - [v5,1/6] dt-bindings: arm: keystone: Add common TI SCI bindings
-    https://git.kernel.org/andersson/remoteproc/c/44aa656f22d287b33f33bdb28dfb900846e1fc60
-  - [v5,2/6] remoteproc: Introduce rproc_of_parse_firmware() helper
-    https://git.kernel.org/andersson/remoteproc/c/a8aa5ee100df45f4988975822f5af7c2b67ee9e6
-  - [v5,3/6] remoteproc: k3: Add TI-SCI processor control helper functions
-    https://git.kernel.org/andersson/remoteproc/c/cf7acb49083658be69d6ef83d06865fc9cc51426
-  - [v5,4/6] dt-bindings: remoteproc: Add bindings for C66x DSPs on TI K3 SoCs
-    https://git.kernel.org/andersson/remoteproc/c/2a2180206ab62b42c6a7fd3d77c47c3675cbc893
-  - [v5,5/6] remoteproc: k3-dsp: Add a remoteproc driver of K3 C66x DSPs
-    https://git.kernel.org/andersson/remoteproc/c/6edbe024ba17777b065e0d0b8aeca9789a4d880b
-  - [v5,6/6] remoteproc: k3-dsp: Add support for L2RAM loading on C66x DSPs
-    https://git.kernel.org/andersson/remoteproc/c/21a4d7386e7e8b5f6fb97ced6af3b8181f2c9bd5
-
-You are awesome, thank you!
-
+diff --git a/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
+index 88f975837588..1c7149f7d171 100644
+--- a/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
++++ b/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
+@@ -25,37 +25,14 @@ properties:
+   '#hwlock-cells':
+     const: 1
+ 
+-  syscon:
+-    $ref: "/schemas/types.yaml#/definitions/phandle-array"
+-    description:
+-      Should be a triple of phandle referencing the TCSR mutex syscon, offset
+-      of first mutex within the syscon and stride between each mutex.
+-
+ required:
+   - compatible
++  - reg
+   - '#hwlock-cells'
+ 
+-oneOf:
+-  - required:
+-    - reg
+-  - required:
+-    - syscon
+-
+ additionalProperties: false
+ 
+ examples:
+-  - |
+-        tcsr_mutex_block: syscon@fd484000 {
+-                compatible = "syscon";
+-                reg = <0xfd484000 0x2000>;
+-        };
+-
+-        hwlock {
+-                compatible = "qcom,tcsr-mutex";
+-                syscon = <&tcsr_mutex_block 0 0x80>;
+-
+-                #hwlock-cells = <1>;
+-        };
+   - |
+         tcsr_mutex: hwlock@1f40000 {
+                 compatible = "qcom,tcsr-mutex";
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/pwbot
+2.26.2
+
