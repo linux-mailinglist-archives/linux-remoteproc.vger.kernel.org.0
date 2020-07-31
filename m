@@ -2,40 +2,39 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 181932344C5
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 31 Jul 2020 13:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4731234552
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 31 Jul 2020 14:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732833AbgGaLrz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 31 Jul 2020 07:47:55 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:15206 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1732814AbgGaLry (ORCPT
+        id S1732900AbgGaMLG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 31 Jul 2020 08:11:06 -0400
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:22274 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732719AbgGaMLF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 31 Jul 2020 07:47:54 -0400
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06VBbbei031331;
-        Fri, 31 Jul 2020 13:47:51 +0200
+        Fri, 31 Jul 2020 08:11:05 -0400
+Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06VC84VN026410;
+        Fri, 31 Jul 2020 14:11:00 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=k7ltq3/ZPaKQIqQq9LylBJfe8kS7T2cxwS2tEwGJ8FM=;
- b=joW8sDzXNZeMc8r5/zaM+7A1pWt15kDnuOuf/mIpk+QIvdT8vxGhwQGhQ++9Q3uOSpwD
- +Qs0E6PvtCSd3CE4cO1Z3QG51g7ryzi8wgFSzS6uD4jLWfh0gMy8b9NG+JxWhqrYPywo
- 6EU3H90l/YFqnnObN75RSzJXaNWXxCVRcknNH+WgXf90XEoLBl+LTNtEcRE6/Q4zEldj
- FEIAvoWI7kPK/XuWJ8ssyFvDRGXPYmubuBmUOnOViCgQMfwsqhBFHVaOmfJqwOh6tUk/
- 8fiEltUKyWbT0g5km1A9ZduM2x/f8BQI2AELq1U6XkrpLwhhFOpoa5pklFjzfIfTAddU fQ== 
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=BIDMQCn2Xt/p6Gejfis8MlD0wl710CqmLRL6yrznlSo=;
+ b=NjZrhuVARUXQ7waNuEutUIWyLyVS99XZC6odY3M9oXy6TIbcM5O0sBs8w6iUCFDrrfvq
+ aROlVubV8C80rVYojfkHIOnq919Pr9l0okOkDu+YKNt6sasIOAFPx7UEQUWCY9gANG+h
+ xMQpuIdqYtw3pN1U9eJsAPaMFHtJALP5wAWNx3AschSEdrWn/XRrCTW/cpZCd3u7OOO5
+ CB6GIh68MWkgq3Yuswbn/98zrX3TO3TwqNY9DtGsqgIpGKW0CAZ6hXHvFysx+XSmmvJ9
+ Pyw9rq/pW4hHhYumIRU2JPPMaeS8QR0mD0Q4PA0XUW5KIM7rv7hq5NcDP8f+8l5C/UG4 +Q== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 32g9v9xgsm-1
+        by mx07-00178001.pphosted.com with ESMTP id 32gagvnd0a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 31 Jul 2020 13:47:51 +0200
+        Fri, 31 Jul 2020 14:11:00 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BF65E10002A;
-        Fri, 31 Jul 2020 13:47:50 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2811410002A;
+        Fri, 31 Jul 2020 14:11:00 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B3FA02A7A83;
-        Fri, 31 Jul 2020 13:47:50 +0200 (CEST)
-Received: from localhost (10.75.127.47) by SFHDAG3NODE1.st.com (10.75.127.7)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 Jul 2020 13:47:50
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 128512AE6DD;
+        Fri, 31 Jul 2020 14:11:00 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SFHDAG3NODE1.st.com (10.75.127.7)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 Jul 2020 14:10:59
  +0200
 From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -44,16 +43,14 @@ To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
 CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
         <arnaud.pouliquen@st.com>
-Subject: [PATCH 9/9] rpmsg: ns: name service announcement endianness
-Date:   Fri, 31 Jul 2020 13:47:32 +0200
-Message-ID: <20200731114732.12815-10-arnaud.pouliquen@st.com>
+Subject: [PATCH 00/13] introduce IOCTL interface for RPMsg channel management
+Date:   Fri, 31 Jul 2020 14:10:30 +0200
+Message-ID: <20200731121043.24199-1-arnaud.pouliquen@st.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200731114732.12815-1-arnaud.pouliquen@st.com>
-References: <20200731114732.12815-1-arnaud.pouliquen@st.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG3NODE1.st.com
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG7NODE1.st.com (10.75.127.19) To SFHDAG3NODE1.st.com
  (10.75.127.7)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-31_04:2020-07-31,2020-07-31 signatures=0
@@ -62,67 +59,94 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The endianness has to be fixed to ensure that both sides can
-decode the message. The Little endian format is used according
-to the generic virtio implementation.
+This serie is inspired by the RPMsg char driver. The RPMsg char driver
+provides interfaces that:
+- expose a char RPMsg device for communication with the remote processor
+- expose controls interface for applications to create and release channels
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
----
- drivers/rpmsg/rpmsg_ns.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+The purpose of this series is to decorrelate the two interfaces:
+ - provide a char device for a RPMsg raw service similar to the rpmsg_char
+   but that can be probed by a RPMsg bus on a ns announcement
+ - generalize the use of the ioctl for all RPMsg services.
 
-diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
-index cc2bd47c415a..b478e2b55213 100644
---- a/drivers/rpmsg/rpmsg_ns.c
-+++ b/drivers/rpmsg/rpmsg_ns.c
-@@ -33,8 +33,8 @@ enum rpmsg_ns_flags {
-  */
- struct rpmsg_ns_msg {
- 	char name[RPMSG_NAME_SIZE];
--	u32 addr;
--	u32 flags;
-+	__le32 addr;
-+	__le32 flags;
- } __packed;
- 
- /**
-@@ -57,8 +57,8 @@ static int rpmsg_ns_channel_announce(struct rpmsg_device *rpdev, int ns_flag)
- 		return -EINVAL;
- 
- 	strncpy(nsm.name, rpdev->id.name, RPMSG_NAME_SIZE);
--	nsm.addr = rpdev->ept->addr;
--	nsm.flags = ns_flag;
-+	nsm.addr = cpu_to_le32(rpdev->ept->addr);
-+	nsm.flags = cpu_to_le32(ns_flag);
- 
- 	return rpmsg_send_offchannel(rpdev->ept, RPMSG_NS_ADDR, RPMSG_NS_ADDR,
- 				     &nsm, sizeof(nsm));
-@@ -84,6 +84,7 @@ static int rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
- 	struct rpmsg_device *newch;
- 	struct rpmsg_channel_info chinfo;
- 	struct device *dev = &rpdev->dev;
-+	unsigned int flags = le32_to_cpu(msg->flags);
- 	int ret;
- 
- #if defined(CONFIG_DYNAMIC_DEBUG)
-@@ -101,13 +102,13 @@ static int rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
- 
- 	strncpy(chinfo.name, msg->name, sizeof(chinfo.name));
- 	chinfo.src = RPMSG_ADDR_ANY;
--	chinfo.dst = msg->addr;
-+	chinfo.dst = le32_to_cpu(msg->addr);
- 
- 	dev_info(dev, "%sing channel %s addr 0x%x\n",
--		 msg->flags & RPMSG_NS_DESTROY ? "destroy" : "creat",
--		 msg->name, msg->addr);
-+		 flags & RPMSG_NS_DESTROY ? "destroy" : "creat",
-+		 msg->name, chinfo.dst);
- 
--	if (msg->flags & RPMSG_NS_DESTROY) {
-+	if (flags & RPMSG_NS_DESTROY) {
- 		ret = rpmsg_release_channel(rpdev, &chinfo);
- 		if (ret)
- 			dev_err(dev, "rpmsg_destroy_channel failed: %d\n", ret);
+1) rpmsg raw driver: rpmsg_raw.c
+For legacy reason, I created a new file instead of modifying the rpmsg_char
+driver. But the rework of the rpmsg_char driver to only support the RPMsg
+raw service could be an alternative
+Few differences can be found:
+    - The rpmsg class has not been implemented. The associated attributes
+      are already available in /sys/bus/rpmsg/.
+    - The eptdev device is now an RPMsg device probed by a RPMsg bus driver
+      (probed only by the ioctl in rpmsg_char driver).
+    - The associated endpoint is now created by the bus no more on the
+      devfs open.
+
+2) RPMsg control driver: rpmsg_ctrl.c
+  This driver is based on the control part of the RPMsg_char driver. 
+  On probe a /dev/rpmsg_ctrl<X> interface is created to allow to manage the
+  channels.
+  The principles are the following:
+  - The RPMsg service driver registers it's name and the associated service
+    using the rpmsg_ctrl_unregister_ctl API. The list of supported services
+    is defined in  include/uapi/linux/rpmsg.h and exposed to the
+    application thanks to a new field in rpmsg_endpoint_info struct.
+  - On the RPMsg bus probe(e.g virtio bus) an rpmsg_ctrl device is
+    registered that creates the control interface.
+  - The application can then create or release a channel by specifying:
+       - the name service
+       - the source address (default: RPMSG_ADDR_ANY)
+       - the destination address ( default: RPMSG_ADDR_ANY)
+       - the associated service (new)
+  - The rpmsg_ctrl uses the same interface than the ns announcement to
+    create and release the channel but using the driver_override field to
+    force the service name.
+    The  "driver_override" allows to force the name service associated to
+    an RPMsg driver, bypassing the rpmsg_device_id based match check.
+  - At least for virtio bus, an associated ns announcement is sent to the
+    remote side.  
+
+Know current Limitations:
+- Tested only with virtio RPMsg bus and for one vdev instance.
+- rpmsg_device_match does not allow to match a local endpoint created by
+  ioctl with a same service requested by the ns announcement callback.
+- Current implementation of the release makes it possible to release any
+  endpoint, even not created by the ioctl. Should we limit the release to
+  the RPMsg channel created with the ioctl? 
+
+This serie can be applied in Bjorn's rpmsg-next branch on top of the
+RPMsg_ns series.
+
+This series can be tested using rpmsgexport tools updated according to the
+ioctl update and available here: https://github.com/arnopo/rpmsgexport. 
+
+Arnaud Pouliquen (13):
+  rpmsg: introduce rpmsg raw driver
+  rpmsg: introduce rpmsg_control driver for channel creation
+  rpmsg: add helper to create the rpmsg ctrl device
+  rpmsg: virtio: probe the rpmsg_ctrl device
+  rpmsg: uapi: add service param for create destroy ioctls
+  rpmsg: add RPMsg control info structure
+  rpmsg: control: add driver registration API
+  rpmsg: raw: register service to the rpmsg control
+  rpmsg: add override field in channel info
+  rpmsg: ns: initialize channel info override field
+  rpmsg: virtio: use the driver_override in channel creation
+  rpmsg: control: implement the ioctrl function to create device
+  rpmsg: ctrl: add support of the endpoints release
+
+ drivers/rpmsg/Kconfig            |  17 ++
+ drivers/rpmsg/Makefile           |   2 +
+ drivers/rpmsg/rpmsg_ctrl.c       | 314 ++++++++++++++++++++++++++
+ drivers/rpmsg/rpmsg_internal.h   |  18 ++
+ drivers/rpmsg/rpmsg_ns.c         |   1 +
+ drivers/rpmsg/rpmsg_raw.c        | 364 +++++++++++++++++++++++++++++++
+ drivers/rpmsg/virtio_rpmsg_bus.c |  37 +++-
+ include/linux/rpmsg.h            |  15 ++
+ include/uapi/linux/rpmsg.h       |  17 ++
+ 9 files changed, 784 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/rpmsg/rpmsg_ctrl.c
+ create mode 100644 drivers/rpmsg/rpmsg_raw.c
+
 -- 
 2.17.1
 
