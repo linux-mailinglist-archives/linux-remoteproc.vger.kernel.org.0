@@ -2,106 +2,55 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 442552420A9
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 11 Aug 2020 21:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED2724214A
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 11 Aug 2020 22:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726405AbgHKT42 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 11 Aug 2020 15:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726165AbgHKT42 (ORCPT
+        id S1726420AbgHKU1W (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 11 Aug 2020 16:27:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56358 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726173AbgHKU1W (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 11 Aug 2020 15:56:28 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA780C061788
-        for <linux-remoteproc@vger.kernel.org>; Tue, 11 Aug 2020 12:56:27 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id p1so44214pls.4
-        for <linux-remoteproc@vger.kernel.org>; Tue, 11 Aug 2020 12:56:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jSpZyl6zszveRQTb+X3U9qCb6qt2a47wW3ClpVmbJd4=;
-        b=Qp530flHFX5VujI6zk3JRpc5NHS0opLYWMJdFxardQIeNKy0kHusBV2UjudiK3A/4d
-         nhhJ7oBQKZ6dPIgZTqyjIwb2PYjNxf/8dXO0LCpeQh/2qJxRxpIku/gGymanLHhOJsy1
-         esS5XOfi4eJ93Bw3t3emRXrWxZh6+lZj0+EUeHdRJovtGI421LpFAVG73OAU8Wm38dwF
-         Yvs2LPr7qeBJjl8N6xCV/LmhXVZeZPyhvIcIlVNVdRTRIYsjAprLT0GpUX5pJwMrZyvW
-         MwElCRoigXVExeMWpHlCirPTR10nssTPHq+fhb4VqNW4sctT7PS2MvSBfBnd4wuC4mlz
-         XWrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jSpZyl6zszveRQTb+X3U9qCb6qt2a47wW3ClpVmbJd4=;
-        b=uOryk1BqqITeFZLjsn5HduXYc1W8u6lMysRjTP0QJaZMXHpXk0oOy544Pcp6dVlVUK
-         Y+JbzWB5WQneWby0CuGs0xy5NTLPeypjWr55qTmAhbt/FYBL9CJETt7Jkf9yq2uZ1xYg
-         LCXgCEJn+rAn5ZV95nsSglE4FEjawaBmEvCSNEgqZrfDsBxuJNtb8p5dXV1WFojpx5VW
-         l6Wf93lXmsJf8C7QJHWdWE3Gyt/DsTuNlncWJzQnCJQqIjSxOtXR/dvpUN5Yr/yuq/Ru
-         Q8nkeKVchaUSP7ZfkiJ1MW5YJf8bf5OZiemOeuNzQ3BUgGVHVLsQID5xvvdeqCuUTHT7
-         bXYg==
-X-Gm-Message-State: AOAM530kT09eC3331xfmY47xjMxE5wpoCTlULdl0AWAgOK6lvBlkWa3a
-        y5XujK9BQFjsU3OyT53OuI9yXl0dFPA=
-X-Google-Smtp-Source: ABdhPJzEvYm0TmVimHvXEGe/uKF0y2jzt+VsiVIHOLfRm4O0wA7RC6raA0fGG6z0aao+n1UTTAZFJw==
-X-Received: by 2002:a17:90a:9f44:: with SMTP id q4mr2826417pjv.66.1597175787041;
-        Tue, 11 Aug 2020 12:56:27 -0700 (PDT)
-Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id h24sm21487728pgi.85.2020.08.11.12.56.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2020 12:56:26 -0700 (PDT)
-Date:   Tue, 11 Aug 2020 13:56:24 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     bjorn.andersson@linaro.org, o.rempel@pengutronix.de,
-        robh+dt@kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 02/10] remoteproc: imx_rproc: correct err message
-Message-ID: <20200811195624.GA3370567@xps15>
-References: <20200724080813.24884-1-peng.fan@nxp.com>
- <20200724080813.24884-3-peng.fan@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200724080813.24884-3-peng.fan@nxp.com>
+        Tue, 11 Aug 2020 16:27:22 -0400
+Subject: Re: [GIT PULL] rpmsg updates for v5.9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597177641;
+        bh=wVlYOKzby7gO7RECzcBPbA8Hm0bfz43GeglDMXV4mAE=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=nbI6igaqtKfId79z26+SOOb3dKYWJ3S9OExm1tEf+wCCg62XaI8k8d/BIPVKOSLPL
+         xLUF9kZ6I6Orn3W56ekLOZ+pJXzlpDZeMqmZDsNS3TGaStDSAczNKGHRZIbJxDnw2y
+         lE9bgkLaazDPWmWGIqjd244cofIjeXdELNTE8lNI=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20200811052801.404208-1-bjorn.andersson@linaro.org>
+References: <20200811052801.404208-1-bjorn.andersson@linaro.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20200811052801.404208-1-bjorn.andersson@linaro.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/rpmsg-v5.9
+X-PR-Tracked-Commit-Id: 111d1089700cdb752681ef44f54ab6137736f5c2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: dded87afdacf8fe129fe13fe61d0a21e2afff3f6
+Message-Id: <159717764166.9233.10489762359962840800.pr-tracker-bot@kernel.org>
+Date:   Tue, 11 Aug 2020 20:27:21 +0000
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, Jul 24, 2020 at 04:08:05PM +0800, Peng Fan wrote:
-> It is using devm_ioremap, so not devm_ioremap_resource. Correct
-> the error message and print out sa/size.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/remoteproc/imx_rproc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> index 8957ed271d20..3b3904ebac75 100644
-> --- a/drivers/remoteproc/imx_rproc.c
-> +++ b/drivers/remoteproc/imx_rproc.c
-> @@ -268,7 +268,7 @@ static int imx_rproc_addr_init(struct imx_rproc *priv,
->  		priv->mem[b].cpu_addr = devm_ioremap(&pdev->dev,
->  						     att->sa, att->size);
->  		if (!priv->mem[b].cpu_addr) {
-> -			dev_err(dev, "devm_ioremap_resource failed\n");
-> +			dev_err(dev, "devm_ioremap sa:0x%x size:0x%x failed\n", att->sa, att->size);
+The pull request you sent on Mon, 10 Aug 2020 22:28:01 -0700:
 
-I'm good with fixing the devm_ioremap part but please remove the address and
-size.  Printing them provides little value because they come from the device
-configuration area that is private to the driver.  That way we don't expose
-system information involuntarily. 
+> https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/rpmsg-v5.9
 
-With that:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/dded87afdacf8fe129fe13fe61d0a21e2afff3f6
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Thank you!
 
->  			return -ENOMEM;
->  		}
->  		priv->mem[b].sys_addr = att->sa;
-> -- 
-> 2.16.4
-> 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
