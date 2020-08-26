@@ -2,59 +2,61 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5559825352C
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 26 Aug 2020 18:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA1325355D
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 26 Aug 2020 18:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728069AbgHZQpo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 26 Aug 2020 12:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51646 "EHLO
+        id S1727943AbgHZQtD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 26 Aug 2020 12:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726820AbgHZQpc (ORCPT
+        with ESMTP id S1726894AbgHZQpe (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 26 Aug 2020 12:45:32 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1232EC061756
+        Wed, 26 Aug 2020 12:45:34 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF553C061757
         for <linux-remoteproc@vger.kernel.org>; Wed, 26 Aug 2020 09:45:32 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id ls14so1119432pjb.3
+Received: by mail-pl1-x644.google.com with SMTP id y6so1153103plk.10
         for <linux-remoteproc@vger.kernel.org>; Wed, 26 Aug 2020 09:45:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=15mxbSikUleqN8D1YAzOW2MaGksrprUeUYpM9VqWUIg=;
-        b=e4ZNNroaLq7afzbqudQmKu/XebEU12dV4cwOEZO5PGjjQksIMMrMzZU4zFt84smS4R
-         kJVs4Ug8ZSSGHmLd6C07EpbBJQVs1vEmyg7qeE6G4SmKBKRNgy5Ao6ECqbMp0N8Rpcnx
-         NQTIwmwlzQpbWA69PryOSYx4c7GIq5T1D9bQR2X2NYqTNbPCTtmW/GiNZJ/gzBalkyoN
-         n1J1HXfljeORqhzj7W5PjQYY80g3nmyJJ/R+axemXsyt3qNIqev8sQTKc12P96eanaCG
-         K+3h6MGVzeMIJFDNMLwA3SIUVYVq7lE93XaU2YiI9bpsbNVgvydex2htBIOQGIoCEUwa
-         h8FQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jCF/a0xKIWqbt7wIUY8AEgGbHy28w20HVJLneFBKefA=;
+        b=f9AZkUF8HwjIrp6vPGOuGK5/BZQ33xA15gaimxyXyvQqbYPMj/aTBZyE79upHJXcyx
+         g0QJuEEu5J6Y1FHXlnQhPuuAeC0D40IYRf81gM2IaC7kqLRVpFie8Eft3ETUodKI4Clk
+         fRWIkJmznBpF/DtjU6iC04NjhKCfy5PL4vbyxzu7KGSFFTf45esVto7O31wAJ1QzCFxa
+         /XgqHeg+eK0QHle+WRUMi9uCgz70vNlJh3foE2Ey/zxfILokqIfynvcBv4K3fwOIaWFq
+         g0+3JbAgzeAoP34ux82szDlXvf3kv6Cp7FfXZBQtWFPAL8uOb7k8zLrJo3hPsaj2QDTA
+         MTOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=15mxbSikUleqN8D1YAzOW2MaGksrprUeUYpM9VqWUIg=;
-        b=TINiF35w6w4Mtqfz2G+zVDUSQ2861kVgRrZHLV4bMOvQgLs95rTjTclYaEgMBYS3qF
-         OPbERa7rcKWe16dwiF5+wE0oHmGRXBo+C9pTTQA1va+FInnLHjii/CC1eo0ND1crrhTB
-         NiYuAcZXOpDzYIlqdUTF+Db4u/zptm8J3482GIse+uNGrb7xKQkF7ImmO4IXC6ES3ND9
-         Kt8FYb718VRXkiMMdSpWkqvVvFQoltC6f846lkqSS1y21wlriLQ8QyL1mQbmXTkTq04k
-         5j+QVYmdfr/BlqIN5zUIi9msEXgs13h5/5QMkAP+p3GPtFJPyqz82lknfNh/iUMltb0k
-         cGBQ==
-X-Gm-Message-State: AOAM530VHcfdu9m/P1J91ff6lmUeEHUcQgYVw0j0OVFcRBnlDcq77W3P
-        CjUBIGrNskpu56sArIPFse9owg==
-X-Google-Smtp-Source: ABdhPJwNzJHoyZuX62NxwhhcibMKbVEGHA8utGAYoW5T6sJQeXAri/BtpTXijArCoGFLdp+nNwZ8fQ==
-X-Received: by 2002:a17:90a:4488:: with SMTP id t8mr7064939pjg.191.1598460331448;
-        Wed, 26 Aug 2020 09:45:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jCF/a0xKIWqbt7wIUY8AEgGbHy28w20HVJLneFBKefA=;
+        b=a9HweQl0lYt1obxllRVH1iOQkX4IIPhg7MIuMyfzfIJQT5r6vsV1AIMfMymPEfLsZl
+         sgiN72WHBkVMTjihitcutoDbLcLAFAMIx88lWhRuTykFG2EYlS+yJCmJVQ/Ffx9AXxo4
+         DrVJBav2918baM9cVcmihBxTHz2N3H0zzRfaak7CoHwWEsinCWfaTrsC468Qurez5XQX
+         akcb/z7+mIu2CGTLMBYd1KuDgSUoo8tjcaO7agl59Da/R2QCl30sTp/zutVERZ9gGiwe
+         iGrsQJJPVjdSiVS9HFUXwkkf5M9uv7ke/1WTecBtgn0y4XbhJXBLt35z6SQnMKlbK/oH
+         9uMQ==
+X-Gm-Message-State: AOAM531xhh4eBen5nLg7qTNtjCJ+6HQJhKVBoNVC53VfE70WEPWRs+b1
+        Fe6+1m7LQx6daGGnyy77T9M6mfFn27rHTA==
+X-Google-Smtp-Source: ABdhPJxEUc2ptVXTNpO+YXWFtlc9/9RA87PwcwkcXOQDJRawbIyXYC5dSKq0dPbyN6OxLL9jL1icBQ==
+X-Received: by 2002:a17:902:b28b:: with SMTP id u11mr3741410plr.117.1598460332525;
+        Wed, 26 Aug 2020 09:45:32 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id u3sm2548878pjn.29.2020.08.26.09.45.30
+        by smtp.gmail.com with ESMTPSA id u3sm2548878pjn.29.2020.08.26.09.45.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2020 09:45:30 -0700 (PDT)
+        Wed, 26 Aug 2020 09:45:32 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     bjorn.andersson@linaro.org, ohad@wizery.com
 Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 00/13] remoteproc: Add support for detaching from rproc 
-Date:   Wed, 26 Aug 2020 10:45:16 -0600
-Message-Id: <20200826164529.224476-1-mathieu.poirier@linaro.org>
+Subject: [PATCH 01/13] remoteproc: Re-check state in rproc_shutdown()
+Date:   Wed, 26 Aug 2020 10:45:17 -0600
+Message-Id: <20200826164529.224476-2-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200826164529.224476-1-mathieu.poirier@linaro.org>
+References: <20200826164529.224476-1-mathieu.poirier@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -62,44 +64,31 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Following the work done here [1] this set provides support for the
-remoteproc core to release resources associated with a remote processor
-without having to switch it off. That way a platform driver can be removed
-or the applcation processor power cycled while the remote processor is
-still operating.
+The state of the remote processor may have changed between the
+time a call to rproc_shutdown() was made and the time it is
+executed.  To avoid moving forward with an operation that may
+have been cancelled, recheck while holding the mutex.
 
-I have not tested the solution because of the work involved in getting
-a new firmware image to support the feature.  I will do so once it is
-determined that this is the right approach to follow.
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+---
+ drivers/remoteproc/remoteproc_core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Applies cleanly on rproc-next (62b8f9e99329)
-
-Thanks,
-Mathieu 
-
-[1]. https://lkml.org/lkml/2020/7/14/1600
-
-Mathieu Poirier (13):
-  remoteproc: Re-check state in rproc_shutdown()
-  remoteproc: Remove useless check in rproc_del()
-  remoteproc: Add new RPROC_ATTACHED state
-  remoteproc: Properly represent the attached state
-  remoteproc: Add new detach() remoteproc operation
-  remoteproc: Introduce function __rproc_detach()
-  remoteproc: Introduce function rproc_detach()
-  remoteproc: Rename function rproc_actuate()
-  remoteproc: Add return value to function rproc_shutdown()
-  remoteproc: Properly deal with a stop request when attached
-  remoteproc: Properly deal with detach request
-  remoteproc: Refactor rproc delete and cdev release path
-  remoteproc: Properly deal with a kernel panic when attached
-
- drivers/remoteproc/remoteproc_cdev.c  |  18 ++-
- drivers/remoteproc/remoteproc_core.c  | 151 +++++++++++++++++++++-----
- drivers/remoteproc/remoteproc_sysfs.c |  17 ++-
- include/linux/remoteproc.h            |  14 ++-
- 4 files changed, 157 insertions(+), 43 deletions(-)
-
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 7f90eeea67e2..fb2632cbd2df 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -1834,6 +1834,9 @@ void rproc_shutdown(struct rproc *rproc)
+ 		return;
+ 	}
+ 
++	if (rproc->state != RPROC_RUNNING)
++		goto out;
++
+ 	/* if the remote proc is still needed, bail out */
+ 	if (!atomic_dec_and_test(&rproc->power))
+ 		goto out;
 -- 
 2.25.1
 
