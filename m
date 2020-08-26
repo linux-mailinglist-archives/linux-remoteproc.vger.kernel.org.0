@@ -2,61 +2,49 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45ED5253538
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 26 Aug 2020 18:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EA9253616
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 26 Aug 2020 19:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728052AbgHZQqq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 26 Aug 2020 12:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728130AbgHZQpu (ORCPT
+        id S1726609AbgHZRql (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 26 Aug 2020 13:46:41 -0400
+Received: from mga07.intel.com ([134.134.136.100]:49544 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726187AbgHZRqk (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 26 Aug 2020 12:45:50 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A869C061797
-        for <linux-remoteproc@vger.kernel.org>; Wed, 26 Aug 2020 09:45:45 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id k18so1264816pfp.7
-        for <linux-remoteproc@vger.kernel.org>; Wed, 26 Aug 2020 09:45:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Tv4kkgaRKTSg5mtSljLIfWbV/kKMUzinzR1WF6eOzEg=;
-        b=J+4aQEtMWRdEKu9phF530PTZGUl/xpTYrzdCpeHbB+8t4qEY57QZZ57Oy0uPAG7nWx
-         4o1yCxg/bHvHeUri+8M0acPYPfr4CtxUJh5903KOR4u2OSWncpgRUzGawcbXVZ+UX3NC
-         uyqfGC7n8eDOLw/mt2lHyNZq35ay3Dv7HTxUNXpgAa+7aVb9IAQgHUOPWw9J3RZi0my2
-         9Ghv7Soy2weYsjF3W4KQ+m/rX+jwIpGLFwkr1JjOH2R8eENS0dYzpmE4chQDSw6TlNn7
-         2wVCYXB6Jo/RUhdA8a9m7+P3piMKVs3mHmP54Vi8b92dfQv7zzr57oeQuGFoZOaYcJ3T
-         6tsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Tv4kkgaRKTSg5mtSljLIfWbV/kKMUzinzR1WF6eOzEg=;
-        b=qozEBxLIv7bnNg6Br6Dq75N5bnLljABnijfJAqQlC1mQwFr2rLjWwMhBK/XWyFf7GT
-         uYwbJdk80az+1OEqBXuC3ierXVXi2eVb9fJkljl4772pweDxmj7YVOUGi4rXsBmyI+z0
-         dYzzrd78M1KUr+oBxA/efK3X90SuG0hjKptrL3RtPjOBsw3L7NUG+KJt2FfcaPoTqzW3
-         Wo8hm90O1cGkChMrh5pYKuy1HhTHxxJ0KYFLnLA8nCk8h1Lh0LMjv1AW7kcw40xbGU84
-         p7JU8QXWkJFLptJbMCE+DfmZtBLKyRqvfEtUxqktL49hhh4IV7EADivQO06SgG5ITsj8
-         TgZA==
-X-Gm-Message-State: AOAM532NyCdkzIv3D25oh+3r0HlbVcaeMB8fm6Z0f5gxACpxZ5/78Mc7
-        88uEwCTudTyE9Y4Vzmzgaap5cg==
-X-Google-Smtp-Source: ABdhPJxyzlVX/8Rvvcg9V+qehVKYMWuW/NjS+sBb919BgJbJyrH7K1Tk5T+Ui8lWqsfYm9kSDScjwQ==
-X-Received: by 2002:a63:1d01:: with SMTP id d1mr6076566pgd.437.1598460344844;
-        Wed, 26 Aug 2020 09:45:44 -0700 (PDT)
-Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id u3sm2548878pjn.29.2020.08.26.09.45.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2020 09:45:44 -0700 (PDT)
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     bjorn.andersson@linaro.org, ohad@wizery.com
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 13/13] remoteproc: Properly deal with a kernel panic when attached
-Date:   Wed, 26 Aug 2020 10:45:29 -0600
-Message-Id: <20200826164529.224476-14-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200826164529.224476-1-mathieu.poirier@linaro.org>
-References: <20200826164529.224476-1-mathieu.poirier@linaro.org>
+        Wed, 26 Aug 2020 13:46:40 -0400
+IronPort-SDR: gpce1UmP34tPutiLd6xAsI70/cckO4WHcFg4mgpJVMcM1r/4+y8Ll/1UP2jFdhFWcdLiC2k3pm
+ Im9ForHRWGhg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9725"; a="220607111"
+X-IronPort-AV: E=Sophos;i="5.76,356,1592895600"; 
+   d="scan'208";a="220607111"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 10:46:40 -0700
+IronPort-SDR: NvVKc6XJtzEuvejT10T0ZfgUmLOsrZhgFX0TcsLcHbcsrq3JnXyqD5FwhmIvmidyChl+uEYnqe
+ KndxEbdQSPsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,356,1592895600"; 
+   d="scan'208";a="299553450"
+Received: from gliakhov-mobl2.ger.corp.intel.com (HELO ubuntu.ger.corp.intel.com) ([10.252.54.141])
+  by orsmga006.jf.intel.com with ESMTP; 26 Aug 2020 10:46:37 -0700
+From:   Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
+To:     kvm@vger.kernel.org
+Cc:     linux-remoteproc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        sound-open-firmware@alsa-project.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+Subject: [PATCH v5 0/4] Add a vhost RPMsg API
+Date:   Wed, 26 Aug 2020 19:46:32 +0200
+Message-Id: <20200826174636.23873-1-guennadi.liakhovetski@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -64,32 +52,59 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The panic handler operation of registered remote processors
-should also be called when remote processors have been
-attached to.
+Hi,
 
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- drivers/remoteproc/remoteproc_core.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Next update:
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 5586582f54c5..54b5e3437ab5 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -2491,7 +2491,11 @@ static int rproc_panic_handler(struct notifier_block *nb, unsigned long event,
- 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(rproc, &rproc_list, node) {
--		if (!rproc->ops->panic || rproc->state != RPROC_RUNNING)
-+		if (!rproc->ops->panic)
-+			continue;
-+
-+		if (rproc->state != RPROC_RUNNING &&
-+		    rproc->state != RPROC_ATTACHED)
- 			continue;
- 
- 		d = rproc->ops->panic(rproc);
+v5:
+- don't hard-code message layout
+
+v4:
+- add endianness conversions to comply with the VirtIO standard
+
+v3:
+- address several checkpatch warnings
+- address comments from Mathieu Poirier
+
+v2:
+- update patch #5 with a correct vhost_dev_init() prototype
+- drop patch #6 - it depends on a different patch, that is currently
+  an RFC
+- address comments from Pierre-Louis Bossart:
+  * remove "default n" from Kconfig
+
+Linux supports RPMsg over VirtIO for "remote processor" / AMP use
+cases. It can however also be used for virtualisation scenarios,
+e.g. when using KVM to run Linux on both the host and the guests.
+This patch set adds a wrapper API to facilitate writing vhost
+drivers for such RPMsg-based solutions. The first use case is an
+audio DSP virtualisation project, currently under development, ready
+for review and submission, available at
+https://github.com/thesofproject/linux/pull/1501/commits
+
+Thanks
+Guennadi
+
+Guennadi Liakhovetski (4):
+  vhost: convert VHOST_VSOCK_SET_RUNNING to a generic ioctl
+  rpmsg: move common structures and defines to headers
+  rpmsg: update documentation
+  vhost: add an RPMsg API
+
+ Documentation/rpmsg.txt          |   6 +-
+ drivers/rpmsg/virtio_rpmsg_bus.c |  78 +------
+ drivers/vhost/Kconfig            |   7 +
+ drivers/vhost/Makefile           |   3 +
+ drivers/vhost/rpmsg.c            | 373 +++++++++++++++++++++++++++++++
+ drivers/vhost/vhost_rpmsg.h      |  74 ++++++
+ include/linux/virtio_rpmsg.h     |  83 +++++++
+ include/uapi/linux/rpmsg.h       |   3 +
+ include/uapi/linux/vhost.h       |   4 +-
+ 9 files changed, 551 insertions(+), 80 deletions(-)
+ create mode 100644 drivers/vhost/rpmsg.c
+ create mode 100644 drivers/vhost/vhost_rpmsg.h
+ create mode 100644 include/linux/virtio_rpmsg.h
+
 -- 
-2.25.1
+2.28.0
 
