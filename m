@@ -2,67 +2,60 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D16253E87
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 27 Aug 2020 09:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CD48253EE3
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 27 Aug 2020 09:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727814AbgH0HDM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 27 Aug 2020 03:03:12 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:51414 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727105AbgH0HDL (ORCPT
+        id S1728016AbgH0HVe (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 27 Aug 2020 03:21:34 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:47824 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726851AbgH0HVc (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 27 Aug 2020 03:03:11 -0400
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07R6qpS3005548;
-        Thu, 27 Aug 2020 09:03:07 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=zTYlE8txNi8j4pKHdQtyqm86ciy1hB6NNeBayyhFyv4=;
- b=xV3TfPG7sPs/B1knAi2ouMJEWOkWCF5gS+9SrVj7yy768JsEC/MzqsCy7iveMwiOYEXh
- y02iEJ98W+LP7wDoVEQfk1mLfyF864qv+os2OeGWLzN92TQCpnB3Z9BWWKkHKafjF6qD
- v1R/LtWed8EkW7go6YMNqKuYCTNJPK4k74Bkkju8z4KEaF2lgSS/EKfq87Sie9uLEV6g
- sc17+1BM8wLw30AvbNm2xiUHiIGLGDZxSOIBJ9NXB1H1htpoCplMc5WrsbjxL48UF2mH
- sJ2gJTfqPlBgkoIEyhLBE8Qa6iqUypwKRsglJbapCvcymDFTNcUTkT9qDpxSzR0AaKnI ow== 
+        Thu, 27 Aug 2020 03:21:32 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07R7HHh7017753;
+        Thu, 27 Aug 2020 09:21:18 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=er4Ixrwfv9fQtVwv3DRVGw1gJfakQBAKllzYQn9OtiM=;
+ b=a7EE7PAbll3c14ASBRIA+wF9bjVb1pnKUnvURwGJPoYW1D/UmRufs//ZJ3TW9RwpVSss
+ zw+qNQfqpeau7nChrzJAmh/LNiS2VMk6cMwYWhy4pnnYpWC0aNRg7Em1zXaZuEG3qA+O
+ 3cGmb2aiDw0wDsw0VNJ7+fg+fEDz+2UnLK6/N7syIDZk9/6CKsUUaBVlWnL5MRSp/6qt
+ Xk7sMg6eaEBdC7aFbDZYhHZq2S2NNx9d+cIZD1Okxip5JsDc6sL8pK2AMCSi7NiXby17
+ xniCOBKz3zLGvmt+uTZYftAyOzfS0JEmxhvDsSiRLTLnY46WfpnI4EtNcDecWmF/Zq+6 ew== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 333b6xccj6-1
+        by mx07-00178001.pphosted.com with ESMTP id 332t8fy7b5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 27 Aug 2020 09:03:07 +0200
+        Thu, 27 Aug 2020 09:21:18 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D157410002A;
-        Thu, 27 Aug 2020 09:03:06 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1DE1E100034;
+        Thu, 27 Aug 2020 09:21:18 +0200 (CEST)
 Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BFD28210F88;
-        Thu, 27 Aug 2020 09:03:06 +0200 (CEST)
-Received: from lmecxl0889.tpe.st.com (10.75.127.47) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 27 Aug
- 2020 09:03:05 +0200
-Subject: Re: [PATCH 8/9] rpmsg: virtio: use rpmsg_ns driver to manage ns
- announcement
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 07B43212648;
+        Thu, 27 Aug 2020 09:21:18 +0200 (CEST)
+Received: from localhost (10.75.127.47) by SFHDAG3NODE1.st.com (10.75.127.7)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 27 Aug 2020 09:21:17
+ +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
+To:     Rob Herring <robh@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Fabien Dessenne <fabien.dessenne@st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Ohad Ben-Cohen <ohad@wizery.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20200731114732.12815-1-arnaud.pouliquen@st.com>
- <20200731114732.12815-9-arnaud.pouliquen@st.com>
- <20200825165433.GA4141387@xps15>
- <c1b81b38-c155-3183-ed67-822c4f87ec71@st.com>
- <20200826221030.GB4141387@xps15>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Message-ID: <c6dc8282-7c84-730b-2946-378078b1e514@st.com>
-Date:   Thu, 27 Aug 2020 09:03:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 0/3] ARM: stm32: add DT properties for remote proc synchronisation
+Date:   Thu, 27 Aug 2020 09:20:58 +0200
+Message-ID: <20200827072101.26588-1-arnaud.pouliquen@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20200826221030.GB4141387@xps15>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Originating-IP: [10.75.127.47]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG3NODE1.st.com
+X-ClientProxiedBy: SFHDAG6NODE2.st.com (10.75.127.17) To SFHDAG3NODE1.st.com
  (10.75.127.7)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-27_02:2020-08-27,2020-08-27 signatures=0
@@ -71,37 +64,21 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+This series implements the DT part associated to the commit 9276536f455b3
+("remoteproc: stm32: Parse syscon that will manage M4 synchronisation")
 
+Arnaud Pouliquen (3):
+  dt-bindings: arm: stm32: Add compatible for syscon tamp node
+  dt-bindings: remoteproc: stm32_rproc: update for firmware
+    synchronization
+  ARM: dts: stm32: update stm32mp151 for remote proc synchronization
+    support
 
-On 8/27/20 12:10 AM, Mathieu Poirier wrote:
-> I had another very long look at this...  I haven't had the time to look in your
-> next serie so the end result is not yet clear in my head.  But...
-> 
-> In __rpmsg_create_channel() the new code is testing for VIRTIO_RPMSG_F_NS in
-> order to allocate the ops, which means that the rpdev that is fed to
-> virtio_rpmsg_announce_create/destroy() are associated with a virtproc_info.
-> Moreover there is a test in virtio_rpmsg_announce_create/destroy() that checks 
-> for VIRTIO_RPMSG_F_NS already.  So if the rpdev was created from another
-> interface than the name announcement then no message would be sent.  
-> 
-> So it seems to me that the last two patches could be dropped and things would
-> still work properly.
+ .../bindings/arm/stm32/st,stm32-syscon.yaml   |  1 +
+ .../bindings/remoteproc/st,stm32-rproc.yaml   | 19 +++++++++++++++++++
+ arch/arm/boot/dts/stm32mp151.dtsi             |  7 +++++++
+ 3 files changed, 27 insertions(+)
 
-Yes the last 2 patches concerns the TX part. Drop them could also be an option.
-  
-> 
-> The good news is that I reviewed V2 today and things look good.  I will wait to
-> review your next set before adding RB tags.  The down side is that having spent
-> a fair amount of time on your set, I need to look at other people's work if I
-> want to be fair to everyone.  As such I have to push back the review of your
-> other set to next week.
+-- 
+2.17.1
 
-That's fair! And this will give me time to have a look to the detach series. 
-
-Thanks,
-Arnaud
-
-> 
-> Thanks,
-> Mathieu
-> 
