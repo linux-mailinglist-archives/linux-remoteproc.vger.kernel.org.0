@@ -2,216 +2,215 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9481254F3B
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 27 Aug 2020 21:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1A925537D
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Aug 2020 06:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbgH0Tti (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 27 Aug 2020 15:49:38 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:15150 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727949AbgH0Ttg (ORCPT
+        id S1725808AbgH1EPD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 28 Aug 2020 00:15:03 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:54794 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725774AbgH1EPC (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 27 Aug 2020 15:49:36 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1598557775; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=bdHYAMPgcy3cvjCiidfmeFTYKUu3fscjSsmkXsVM6sw=; b=SgabqXErybvus7iJrdbt3aFex8nw6P9EJZ1JYwxhIxkzTUH7KHKzaxvFi+/FK3Rb8aG57nxP
- Jb/vVP/x3AVuKdqjjK8xNNHRjov0qk3dF7EIdqMVNM0nJQ/x2Jfod4MswBrK0WiipphF/Ice
- JpTp92rp7d+fdPjSv+9WoWLQlzM=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 5f480e4491574590bff134bd (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 27 Aug 2020 19:49:24
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 60EF3C433A0; Thu, 27 Aug 2020 19:49:24 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.0
-Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rishabhb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 41D88C43395;
-        Thu, 27 Aug 2020 19:49:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 41D88C43395
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rishabhb@codeaurora.org
-From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
-To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
-        tsoni@codeaurora.org, psodagud@codeaurora.org,
-        sidgup@codeaurora.org, Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Subject: [PATCH v2 3/3] remoteproc: Add recovery configuration to sysfs
-Date:   Thu, 27 Aug 2020 12:48:51 -0700
-Message-Id: <1598557731-1566-4-git-send-email-rishabhb@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1598557731-1566-1-git-send-email-rishabhb@codeaurora.org>
-References: <1598557731-1566-1-git-send-email-rishabhb@codeaurora.org>
+        Fri, 28 Aug 2020 00:15:02 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 07S4EqSs004217;
+        Thu, 27 Aug 2020 23:14:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1598588092;
+        bh=ksMDBIEYDIQj+YhE72Vk5Tv1UMCKHZejKBgmKasY+So=;
+        h=From:To:CC:Subject:Date;
+        b=pKMdyDGBxj8VVeIEiXcX6qZbYNzUrWq549XPILUxUS61+xoVgc7CXfwuCpTcdhoS+
+         UDcJ/SnHR+V3Q1QfhLieubgxgSOV9srjkmlg4lqGxp7ue4rkSz7SDHNIaGY3drHbSR
+         PaKsO3HOrO6Gyujf6XMbneiG9MaeJ9L2Qy0seitE=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07S4Eq2p124957;
+        Thu, 27 Aug 2020 23:14:52 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 27
+ Aug 2020 23:14:52 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 27 Aug 2020 23:14:52 -0500
+Received: from lelv0597.itg.ti.com (lelv0597.itg.ti.com [10.181.64.32])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07S4EqIX024893;
+        Thu, 27 Aug 2020 23:14:52 -0500
+Received: from localhost ([10.250.69.147])
+        by lelv0597.itg.ti.com (8.14.7/8.14.7) with ESMTP id 07S4Eqxm079287;
+        Thu, 27 Aug 2020 23:14:52 -0500
+From:   Suman Anna <s-anna@ti.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Tony Lindgren <tony@atomide.com>, <devicetree@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, Suman Anna <s-anna@ti.com>
+Subject: [PATCH] dt-bindings: hwlock: omap: Convert binding to YAML
+Date:   Thu, 27 Aug 2020 23:14:47 -0500
+Message-ID: <20200828041447.5900-1-s-anna@ti.com>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Expose recovery configuration in sysfs under a feature
-flag. This is useful for systems where access to
-debugfs might be limited.
+Convert the current OMAP hwspinlock binding from text format to YAML
+format/DT schema, and delete the legacy text binding file.
 
-Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+The new YAML binding conversion is a slightly updated version compared
+to the original. The legacy "ti,hwmods" property is now obsolete and
+is dropped altogether, and the K3 example is updated to showcase the
+actual dts node usage.
+
+Signed-off-by: Suman Anna <s-anna@ti.com>
 ---
- Documentation/ABI/testing/sysfs-class-remoteproc | 20 ++++++++
- drivers/remoteproc/remoteproc_debugfs.c          |  6 ++-
- drivers/remoteproc/remoteproc_sysfs.c            | 58 ++++++++++++++++++++++++
- 3 files changed, 82 insertions(+), 2 deletions(-)
+Hi Tony,
 
-diff --git a/Documentation/ABI/testing/sysfs-class-remoteproc b/Documentation/ABI/testing/sysfs-class-remoteproc
-index f6c44fa..7368b50 100644
---- a/Documentation/ABI/testing/sysfs-class-remoteproc
-+++ b/Documentation/ABI/testing/sysfs-class-remoteproc
-@@ -82,3 +82,23 @@ Description:	Remote processor coredump configuration
- 		all data is read by usersapce.
- 
- 		"disabled" means no dump will be collected.
+Only warning with dtbs_check is on dm816x. What's the plan for
+converting that platform to ti,sysc?
+
+regards
+Suman
+
+ .../bindings/hwlock/omap-hwspinlock.txt       | 41 ----------
+ .../bindings/hwlock/ti,omap-hwspinlock.yaml   | 76 +++++++++++++++++++
+ 2 files changed, 76 insertions(+), 41 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/hwlock/omap-hwspinlock.txt
+ create mode 100644 Documentation/devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml
+
+diff --git a/Documentation/devicetree/bindings/hwlock/omap-hwspinlock.txt b/Documentation/devicetree/bindings/hwlock/omap-hwspinlock.txt
+deleted file mode 100644
+index 8d365f89694c..000000000000
+--- a/Documentation/devicetree/bindings/hwlock/omap-hwspinlock.txt
++++ /dev/null
+@@ -1,41 +0,0 @@
+-TI HwSpinlock for OMAP and K3 based SoCs
+-=========================================
+-
+-Required properties:
+-- compatible:		Should be one of the following,
+-			  "ti,omap4-hwspinlock" for
+-				OMAP44xx, OMAP54xx, AM33xx, AM43xx, DRA7xx SoCs
+-			  "ti,am654-hwspinlock" for
+-				K3 AM65x and J721E SoCs
+-- reg:			Contains the hwspinlock module register address space
+-			(base address and length)
+-- ti,hwmods:		Name of the hwmod associated with the hwspinlock device
+-			(for OMAP architecture based SoCs only)
+-- #hwlock-cells:	Should be 1. The OMAP hwspinlock users will use a
+-			0-indexed relative hwlock number as the argument
+-			specifier value for requesting a specific hwspinlock
+-			within a hwspinlock bank.
+-
+-Please look at the generic hwlock binding for usage information for consumers,
+-"Documentation/devicetree/bindings/hwlock/hwlock.txt"
+-
+-Example:
+-
+-1. OMAP4 SoCs
+-hwspinlock: spinlock@4a0f6000 {
+-	compatible = "ti,omap4-hwspinlock";
+-	reg = <0x4a0f6000 0x1000>;
+-	ti,hwmods = "spinlock";
+-	#hwlock-cells = <1>;
+-};
+-
+-2. AM65x SoCs and J721E SoCs
+-&cbass_main {
+-	cbass_main_navss: interconnect0 {
+-		hwspinlock: spinlock@30e00000 {
+-			compatible = "ti,am654-hwspinlock";
+-			reg = <0x00 0x30e00000 0x00 0x1000>;
+-			#hwlock-cells = <1>;
+-		};
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml
+new file mode 100644
+index 000000000000..2765758d95e1
+--- /dev/null
++++ b/Documentation/devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml
+@@ -0,0 +1,76 @@
++# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/hwlock/ti,omap-hwspinlock.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+What:		/sys/class/remoteproc/.../recovery
-+Date:		July 2020
-+Contact:	Bjorn Andersson <bjorn.andersson@linaro.org>, Ohad Ben-Cohen <ohad@wizery.com>
-+Description:	Remote processor recovery mechanism
++title: TI HwSpinlock for OMAP and K3 based SoCs
 +
-+		Reports the recovery mechanism of the remote processor,
-+		which will be one of:
++maintainers:
++  - Suman Anna <s-anna@ti.com>
 +
-+		"enabled"
-+		"disabled"
++properties:
++  compatible:
++    enum:
++      - ti,omap4-hwspinlock  # for OMAP44xx, OMAP54xx, AM33xx, AM43xx, DRA7xx SoCs
++      - ti,am654-hwspinlock  # for K3 AM65x, J721E and J7200 SoCs
 +
-+		"enabled" means, the remote processor will be automatically
-+		recovered whenever it crashes. Moreover, if the remote
-+		processor crashes while recovery is disabled, it will
-+		be automatically recovered too as soon as recovery is enabled.
++  reg:
++    maxItems: 1
 +
-+		"disabled" means, a remote processor will remain in a crashed
-+		state if it crashes. This is useful for debugging purposes;
-+		without it, debugging a crash is substantially harder.
-diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
-index 48dfd0a..415a9ff 100644
---- a/drivers/remoteproc/remoteproc_debugfs.c
-+++ b/drivers/remoteproc/remoteproc_debugfs.c
-@@ -174,6 +174,7 @@ static const struct file_operations rproc_name_ops = {
- 	.llseek	= generic_file_llseek,
- };
- 
-+#if (!IS_ENABLED(CONFIG_RPROC_SYSFS_CONFIGURATION_SUPPORT))
- /* expose recovery flag via debugfs */
- static ssize_t rproc_recovery_read(struct file *filp, char __user *userbuf,
- 				   size_t count, loff_t *ppos)
-@@ -249,6 +250,7 @@ static const struct file_operations rproc_recovery_ops = {
- 	.open = simple_open,
- 	.llseek = generic_file_llseek,
- };
-+#endif
- 
- /* expose the crash trigger via debugfs */
- static ssize_t
-@@ -419,8 +421,6 @@ void rproc_create_debug_dir(struct rproc *rproc)
- 
- 	debugfs_create_file("name", 0400, rproc->dbg_dir,
- 			    rproc, &rproc_name_ops);
--	debugfs_create_file("recovery", 0600, rproc->dbg_dir,
--			    rproc, &rproc_recovery_ops);
- 	debugfs_create_file("crash", 0200, rproc->dbg_dir,
- 			    rproc, &rproc_crash_ops);
- 	debugfs_create_file("resource_table", 0400, rproc->dbg_dir,
-@@ -430,6 +430,8 @@ void rproc_create_debug_dir(struct rproc *rproc)
- #if (!IS_ENABLED(CONFIG_RPROC_SYSFS_CONFIGURATION_SUPPORT))
- 	debugfs_create_file("coredump", 0600, rproc->dbg_dir,
- 			    rproc, &rproc_coredump_fops);
-+	debugfs_create_file("recovery", 0600, rproc->dbg_dir,
-+			    rproc, &rproc_recovery_ops);
- #endif
- }
- 
-diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
-index 89b301a..45cae4f 100644
---- a/drivers/remoteproc/remoteproc_sysfs.c
-+++ b/drivers/remoteproc/remoteproc_sysfs.c
-@@ -11,6 +11,63 @@
- #define to_rproc(d) container_of(d, struct rproc, dev)
- 
- #if IS_ENABLED(CONFIG_RPROC_SYSFS_CONFIGURATION_SUPPORT)
++  "#hwlock-cells":
++    const: 1
++    description: |
++      The OMAP hwspinlock users will use a 0-indexed relative hwlock number as
++      the argument specifier value for requesting a specific hwspinlock within
++      a hwspinlock bank.
 +
-+/* expose recovery flag via sysfs */
-+static ssize_t recovery_show(struct device *dev,
-+			     struct device_attribute *attr, char *buf)
-+{
-+	struct rproc *rproc = to_rproc(dev);
++      Please look at the generic hwlock binding for usage information for
++      consumers, "Documentation/devicetree/bindings/hwlock/hwlock.txt"
 +
-+	return sprintf(buf, "%s", rproc->recovery_disabled ? "disabled\n" : "enabled\n");
-+}
++required:
++  - compatible
++  - reg
++  - "#hwlock-cells"
 +
-+/*
-+ * By writing to the 'recovery' sysfs entry, we control the behavior of the
-+ * recovery mechanism dynamically. The default value of this entry is "enabled".
-+ *
-+ * The 'recovery' sysfs entry supports these commands:
-+ *
-+ * enabled:	When enabled, the remote processor will be automatically
-+ *		recovered whenever it crashes. Moreover, if the remote
-+ *		processor crashes while recovery is disabled, it will
-+ *		be automatically recovered too as soon as recovery is enabled.
-+ *
-+ * disabled:	When disabled, a remote processor will remain in a crashed
-+ *		state if it crashes. This is useful for debugging purposes;
-+ *		without it, debugging a crash is substantially harder.
-+ *
-+ * recover:	This function will trigger an immediate recovery if the
-+ *		remote processor is in a crashed state, without changing
-+ *		or checking the recovery state (enabled/disabled).
-+ *		This is useful during debugging sessions, when one expects
-+ *		additional crashes to happen after enabling recovery. In this
-+ *		case, enabling recovery will make it hard to debug subsequent
-+ *		crashes, so it's recommended to keep recovery disabled, and
-+ *		instead use the "recover" command as needed.
-+ */
-+static ssize_t recovery_store(struct device *dev,
-+			      struct device_attribute *attr,
-+			      const char *buf, size_t count)
-+{
-+	struct rproc *rproc = to_rproc(dev);
++additionalProperties: false
 +
-+	if (sysfs_streq(buf, "enabled")) {
-+		/* change the flag and begin the recovery process if needed */
-+		rproc->recovery_disabled = false;
-+		rproc_trigger_recovery(rproc);
-+	} else if (sysfs_streq(buf, "disabled")) {
-+		rproc->recovery_disabled = true;
-+	} else if (sysfs_streq(buf, "recover")) {
-+		/* begin the recovery process without changing the flag */
-+		rproc_trigger_recovery(rproc);
-+	} else {
-+		return -EINVAL;
-+	}
++examples:
 +
-+	return count;
-+}
-+static DEVICE_ATTR_RW(recovery);
++  - |
++    /* OMAP4 SoCs */
++    hwspinlock: spinlock@4a0f6000 {
++        compatible = "ti,omap4-hwspinlock";
++        reg = <0x4a0f6000 0x1000>;
++        #hwlock-cells = <1>;
++    };
 +
- /*
-  * A coredump-configuration-to-string lookup table, for exposing a
-  * human readable configuration via sysfs. Always keep in sync with
-@@ -205,6 +262,7 @@ static DEVICE_ATTR_RO(name);
- static struct attribute *rproc_attrs[] = {
- #if IS_ENABLED(CONFIG_RPROC_SYSFS_CONFIGURATION_SUPPORT)
- 	&dev_attr_coredump.attr,
-+	&dev_attr_recovery.attr,
- #endif
- 	&dev_attr_firmware.attr,
- 	&dev_attr_state.attr,
++  - |
++    / {
++        /* K3 AM65x SoCs */
++        model = "Texas Instruments K3 AM654 SoC";
++        compatible = "ti,am654";
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        bus@100000 {
++            compatible = "simple-bus";
++            #address-cells = <2>;
++            #size-cells = <2>;
++            ranges = <0x00 0x00100000 0x00 0x00100000 0x00 0x00020000>, /* ctrl mmr */
++                     <0x00 0x30800000 0x00 0x30800000 0x00 0x0bc00000>; /* Main NavSS */
++
++            main_navss@30800000 {
++                compatible = "simple-mfd";
++                #address-cells = <2>;
++                #size-cells = <2>;
++                ranges = <0x00 0x30800000 0x00 0x30800000 0x00 0x0bc00000>;
++
++                spinlock@30e00000 {
++                    compatible = "ti,am654-hwspinlock";
++                    reg = <0x00 0x30e00000 0x00 0x1000>;
++                    #hwlock-cells = <1>;
++                };
++            };
++        };
++    };
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.28.0
 
