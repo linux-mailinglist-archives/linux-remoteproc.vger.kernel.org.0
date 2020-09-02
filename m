@@ -2,100 +2,95 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA1A25ACF2
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  2 Sep 2020 16:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604C425B184
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  2 Sep 2020 18:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727903AbgIBOZP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 2 Sep 2020 10:25:15 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:35204 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728071AbgIBOY7 (ORCPT
+        id S1727827AbgIBQYk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 2 Sep 2020 12:24:40 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:21729 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727867AbgIBQYh (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 2 Sep 2020 10:24:59 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 082EOa2Z123302;
-        Wed, 2 Sep 2020 09:24:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1599056676;
-        bh=CqP4NhGh7o1w/3Pi3oiKGtX3gGAk0+fcZXuBWvmIbR0=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=d4G7qqP4sFoXC4+X/1sxQJNJnGvylvV9lWQCyodhulSJxWSGkqIx+FUbNrcQu5/fg
-         6LxhZfXHBOjeXMqWUeJsTbCIopLyNcGojMa05Tb+/DLl4bA1u8R44K4hK3qmkdY5A2
-         ux4+u04989jP8GnV9fO+h5c4kMI22mCShj4OZ9vg=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 082EOaMc119573
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Sep 2020 09:24:36 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 2 Sep
- 2020 09:24:35 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 2 Sep 2020 09:24:35 -0500
-Received: from [10.250.34.112] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 082EOZRi056117;
-        Wed, 2 Sep 2020 09:24:35 -0500
-Subject: Re: [PATCH -next] remoteproc: k3-dsp: Fix return value check in
- k3_dsp_rproc_of_get_memories()
-To:     YueHaibing <yuehaibing@huawei.com>, <ohad@wizery.com>,
-        <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20200902140614.28636-1-yuehaibing@huawei.com>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <53dc15d3-c101-77fc-c58d-f9634a649a48@ti.com>
-Date:   Wed, 2 Sep 2020 09:24:30 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200902140614.28636-1-yuehaibing@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        Wed, 2 Sep 2020 12:24:37 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1599063877; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=9ZiHvRjb2d9MQ1k+GNhy2aEJ5FomGrZtX8cr1c2a++U=; b=X8ZI70GympIYh17ChuRml8O4vQGFAo7RWP57OAaLRLng3StqgIiy9NjQx7+N7yX80JGM24wd
+ myqVX1GYJFxIu5GfUAT/KgvHRL8lSy7JrmEJIWHkXgEvH9en7TS7ZYIHJLkclnmxE4ghy0ie
+ uWoTwESg74smXbsTcGxyfi/mLvY=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 5f4fc735be06707b34fed67f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 02 Sep 2020 16:24:21
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 92929C433CB; Wed,  2 Sep 2020 16:24:21 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+Received: from deesin-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: deesin)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 10AD7C433C6;
+        Wed,  2 Sep 2020 16:24:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 10AD7C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=deesin@codeaurora.org
+From:   Deepak Kumar Singh <deesin@codeaurora.org>
+To:     bjorn.andersson@linaro.org, clew@codeaurora.org,
+        mathieu.poirier@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Deepak Kumar Singh <deesin@codeaurora.org>
+Subject: [PATCH V7 0/4] Signaling api support in glink/rpmsg clients
+Date:   Wed,  2 Sep 2020 21:54:03 +0530
+Message-Id: <1599063847-2347-1-git-send-email-deesin@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 9/2/20 9:06 AM, YueHaibing wrote:
-> In case of error, the function devm_ioremap_wc() returns NULL pointer
-> not ERR_PTR(). The IS_ERR() test in the return value check should be
-> replaced with NULL test.
+Change from version 6
+In last series(v6) i had put wrong version(v5) for cover note.
+Which led to confusion for patch set series.
 
-Thanks for the fix.
+In this series i have updated the label for cover letter(v7).
+There is no change in patches. Only cover note label is updated.
 
-> 
-> Fixes: 87218f96c21a ("remoteproc: k3-dsp: Add support for C71x DSPs")
+Change from version 5
+[V6,4/4] rpmsg: char: Add signal callback and POLLPRI support
+Updated for sparse warning. Replaced POLLPRI => EPOLLPRI to fix
+warning.
 
-This should instead be
-Fixes: 6edbe024ba17 ("remoteproc: k3-dsp: Add a remoteproc driver of K3 C66x DSPs")
+Change from version 4
+I am taking over these patches from aneela@codeaurora.org
+Fixed all the trivial review comments.
 
-With that,
-Acked-by: Suman Anna <s-anna@ti.com>
+Signal conversion to and from native signal as done in patch V4,2/4
+is intentional.
 
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> ---
->  drivers/remoteproc/ti_k3_dsp_remoteproc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/ti_k3_dsp_remoteproc.c b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-> index 9011e477290c..f373df35d7d0 100644
-> --- a/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-> +++ b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-> @@ -445,10 +445,10 @@ static int k3_dsp_rproc_of_get_memories(struct platform_device *pdev,
->  
->  		kproc->mem[i].cpu_addr = devm_ioremap_wc(dev, res->start,
->  							 resource_size(res));
-> -		if (IS_ERR(kproc->mem[i].cpu_addr)) {
-> +		if (!kproc->mem[i].cpu_addr) {
->  			dev_err(dev, "failed to map %s memory\n",
->  				data->mems[i].name);
-> -			return PTR_ERR(kproc->mem[i].cpu_addr);
-> +			return -EBUSY;
->  		}
->  		kproc->mem[i].bus_addr = res->start;
->  		kproc->mem[i].dev_addr = data->mems[i].dev_addr;
-> 
+Arun Kumar Neelakantam (3):
+  rpmsg: glink: Add support to handle signals command
+  rpmsg: char: Add TIOCMGET/TIOCMSET ioctl support
+  rpmsg: char: Add signal callback and POLLPRI support
+
+Deepak Kumar Singh (1):
+  rpmsg: core: Add signal API support
+
+ drivers/rpmsg/qcom_glink_native.c | 125 ++++++++++++++++++++++++++++++++++++++
+ drivers/rpmsg/rpmsg_char.c        |  76 ++++++++++++++++++++++-
+ drivers/rpmsg/rpmsg_core.c        |  40 ++++++++++++
+ drivers/rpmsg/rpmsg_internal.h    |   5 ++
+ include/linux/rpmsg.h             |  27 ++++++++
+ 5 files changed, 270 insertions(+), 3 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
