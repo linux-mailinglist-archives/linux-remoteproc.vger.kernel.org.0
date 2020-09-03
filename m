@@ -2,121 +2,82 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C4925B786
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  3 Sep 2020 02:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C70525B8E4
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  3 Sep 2020 04:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727784AbgICAIQ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 2 Sep 2020 20:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726594AbgICAIO (ORCPT
+        id S1726177AbgICCwB (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 2 Sep 2020 22:52:01 -0400
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:34057 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726528AbgICCwA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 2 Sep 2020 20:08:14 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55440C061245
-        for <linux-remoteproc@vger.kernel.org>; Wed,  2 Sep 2020 17:08:14 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id y3so747528vsn.1
-        for <linux-remoteproc@vger.kernel.org>; Wed, 02 Sep 2020 17:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vNGK0drLoWNgYFtnyo0bGiJC6OE4+o9KPc4VANTcGUU=;
-        b=ZVPNUDXf6tQVcgw8kkHHQyjEAOsLqycSIz1ehYZm+uVXTd9CN/j5btk5vfe+0MxcpN
-         z0MpYoLoq3SETJ9XNMrcemRwFcAyZQadJmVdpxOACzSkHQKavJzwtcVAxvf6+bGo337V
-         G47Y0VYQUWmV0mr4nvMqdD/QNGIE9tI4Bw3wQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vNGK0drLoWNgYFtnyo0bGiJC6OE4+o9KPc4VANTcGUU=;
-        b=KAqw2d2IbSec2SzKI6DFCDDDb3/KkbXLz+aVuqb3hAcj3HEsayolXr20ko8Py+N9yc
-         SxdgvHdwr2J9IaNYcbnmG621sXmH/Pq15C9GqWOKtUUGaxqWuXB1W5uSXZFRGXjiuL3L
-         4+7XtO5YKjN0ugK3dozCK8U1v5UFvdHsp8EaXjC98Tb1fsB1tpda2LA3cWBiFGzocu3z
-         y9nlbUzOrA+fuqC0KJWCfF1JZcy7SdMHgXQhCqf5JR68Bj4QQ99hipZPMTezjQFt/LFe
-         IBsqdnmrq7WCtN2/lx41S1irig7yDK9viwI1xmWOf6ZA4bA/CfFvVQIMUgg27dIJikp2
-         cP5g==
-X-Gm-Message-State: AOAM531C/bmDHrB3+V8clVZJGmrk5Yu4eOvYCm0W/bjj+mFtuRU9sLqK
-        t2tHQ/Kb5d9RfpFFM9zPuuoerfNwRfyp9yqWlrdqRA==
-X-Google-Smtp-Source: ABdhPJyyh8r00V5dnzC7J663uWgsb6bIr45zqffFvMVOa7JwQMs1QHsDUIoUGvYd0l5Gb33OEKfuJA9HIJBcdXdIKco=
-X-Received: by 2002:a05:6102:3d7:: with SMTP id n23mr164533vsq.57.1599091690996;
- Wed, 02 Sep 2020 17:08:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200902190709.v2.1.I56cf27cd59f4013bd074dc622c8b8248b034a4cc@changeid>
- <20200902165505.GA280378@xps15>
-In-Reply-To: <20200902165505.GA280378@xps15>
-From:   Nicolas Boichat <drinkcat@chromium.org>
-Date:   Thu, 3 Sep 2020 08:08:00 +0800
-Message-ID: <CANMq1KDcYRKWxQ6+AQ=eTRcHdkiWyzH7BTahXdag5=FdnF7e1g@mail.gmail.com>
-Subject: Re: [PATCH v2] rpmsg: Avoid double-free in mtk_rpmsg_register_device
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Pi-Hsun Shih <pihsun@chromium.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 2 Sep 2020 22:52:00 -0400
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 02 Sep 2020 19:51:58 -0700
+Received: from th-lint-039.qualcomm.com ([10.63.179.124])
+  by ironmsg01-sd.qualcomm.com with ESMTP; 02 Sep 2020 19:51:58 -0700
+Received: by th-lint-039.qualcomm.com (Postfix, from userid 2383757)
+        id 4F6E71B66; Wed,  2 Sep 2020 19:51:58 -0700 (PDT)
+From:   Gurbir Arora <gurbaror@codeaurora.org>
+To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
+        tsoni@codeaurora.org, psodagud@codeaurora.org,
+        sidgup@codeaurora.org, rishabhb@codeaurora.org,
+        Gurbir Arora <gurbaror@codeaurora.org>
+Subject: [PATCH v2 0/3] Introduce mini-dump support for remoteproc.
+Date:   Wed,  2 Sep 2020 19:51:53 -0700
+Message-Id: <1599101516-243760-1-git-send-email-gurbaror@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu, Sep 3, 2020 at 12:55 AM Mathieu Poirier
-<mathieu.poirier@linaro.org> wrote:
->
-> On Wed, Sep 02, 2020 at 07:07:15PM +0800, Nicolas Boichat wrote:
-> > If rpmsg_register_device fails, it will call
-> > mtk_rpmsg_release_device which already frees mdev.
-> >
-> > Fixes: 7017996951fde84 ("rpmsg: add rpmsg support for mt8183 SCP.")
->
-> The SHA should be 12 characters instead of 15.  With that:
+Sometimes firmware sizes can be in ten's of MB's and reading
+all the memory during coredump can consume lot of time and
+memory.
+Introducing support for mini-dumps. Mini-dump contains smallest
+amount of useful information, that could help to debug subsystem
+crashes.
+During bootup memory is allocated in SMEM (Shared memory)
+in the form of a table that contains the physical
+addresses and sizes of the regions that are supposed to be
+collected during coredump. This memory is shared amongst all
+processors in a Qualcomm platform, so all remoteprocs
+fill in their entry in the global table once they are out
+of reset.
+This patch series adds support for parsing the global minidump
+table and uses the current coredump frameork to expose this memory
+to userspace during remoteproc's recovery.
 
-Done in v3, thanks (and fixed my process for next time).
+This patch series also integrates the patch:
+https://patchwork.kernel.org/patch/11695541/ sent by Siddharth.
 
-> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
->
-> > Signed-off-by: Nicolas Boichat <drinkcat@chromium.org>
-> > ---
-> >
-> > Changes in v2:
-> >  - Drop useless if and ret variable (Markus Elfring)
-> >
-> >  drivers/rpmsg/mtk_rpmsg.c | 9 +--------
-> >  1 file changed, 1 insertion(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/rpmsg/mtk_rpmsg.c b/drivers/rpmsg/mtk_rpmsg.c
-> > index 83f2b8804ee989d..96a17ec2914011d 100644
-> > --- a/drivers/rpmsg/mtk_rpmsg.c
-> > +++ b/drivers/rpmsg/mtk_rpmsg.c
-> > @@ -200,7 +200,6 @@ static int mtk_rpmsg_register_device(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-> >       struct rpmsg_device *rpdev;
-> >       struct mtk_rpmsg_device *mdev;
-> >       struct platform_device *pdev = mtk_subdev->pdev;
-> > -     int ret;
-> >
-> >       mdev = kzalloc(sizeof(*mdev), GFP_KERNEL);
-> >       if (!mdev)
-> > @@ -219,13 +218,7 @@ static int mtk_rpmsg_register_device(struct mtk_rpmsg_rproc_subdev *mtk_subdev,
-> >       rpdev->dev.parent = &pdev->dev;
-> >       rpdev->dev.release = mtk_rpmsg_release_device;
-> >
-> > -     ret = rpmsg_register_device(rpdev);
-> > -     if (ret) {
-> > -             kfree(mdev);
-> > -             return ret;
-> > -     }
-> > -
-> > -     return 0;
-> > +     return rpmsg_register_device(rpdev);
-> >  }
-> >
-> >  static void mtk_register_device_work_function(struct work_struct *register_work)
-> > --
-> > 2.28.0.402.g5ffc5be6b7-goog
-> >
+Changelog: 
+
+v1 -> v2:
+- 3 kernel test robot warnings have been resolved.
+- Introduced priv_cleanup op in order to making the cleaning of
+private elements used by the remoteproc more readable.
+- Removed rproc_cleanup_priv as it is no longer needed.
+- Switched to if/else format for rproc_alloc in order to keep 
+the static const decalaration of adsp_minidump_ops.
+
+Gurbir Arora (3):
+  remoteproc: core: Add multiple components to remoteproc ops
+  remoteproc: qcom: Add capability to collect minidumps
+  remoteproc: qcom: Add minidump id for sm8150 modem remoteproc
+
+ drivers/remoteproc/qcom_minidump.h          |  64 +++++++++
+ drivers/remoteproc/qcom_q6v5_pas.c          |  36 ++++-
+ drivers/remoteproc/remoteproc_core.c        |   6 +-
+ drivers/remoteproc/remoteproc_coredump.c    | 203 +++++++++++++++++++++++++++-
+ drivers/remoteproc/remoteproc_elf_helpers.h |  27 ++++
+ drivers/remoteproc/remoteproc_internal.h    |   1 +
+ include/linux/remoteproc.h                  |   4 +
+ 7 files changed, 337 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/remoteproc/qcom_minidump.h
+
+-- 
+2.7.4
+
