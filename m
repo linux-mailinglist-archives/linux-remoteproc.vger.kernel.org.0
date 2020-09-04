@@ -2,355 +2,252 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B4A25D3A3
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  4 Sep 2020 10:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662DF25DBD4
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  4 Sep 2020 16:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729901AbgIDI27 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 4 Sep 2020 04:28:59 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:53966 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728636AbgIDI2z (ORCPT
+        id S1730513AbgIDOeK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 4 Sep 2020 10:34:10 -0400
+Received: from mail-bn8nam11on2054.outbound.protection.outlook.com ([40.107.236.54]:59552
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730548AbgIDOcV (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 4 Sep 2020 04:28:55 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0848STix015945;
-        Fri, 4 Sep 2020 10:28:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=k9jbDf+a89m98T0u0mG78qgihU+pWNX+2QSGeByO6dc=;
- b=n9Of3dZkV1ozEcNpAlwFgBtII3HKZXXWVXKkWXaz5OUQJrbLnEa4NO4dqssmbYz95+Sy
- tAvM5AvfPzJNGhFoAwgtFhkBJ1tnMs9xjOZGrkLlbhpUIcdNw6kyQjayy5TkorZoJUxE
- iayj3djDypiXEz92/CXu70pVJjoY1mfEugXbsY8njiAXe4513NItH2p5hzLbX6enlszE
- 1Exof2/2CRNOOSP+tGd2vOjQ+bZm6oG8d4cD/so6hzxgdf0i2tWnGwUNUxtRYf2IDzXM
- pscr1ij3/WwSWanTjD8ge17bxaZ2H2/SXHtlV8BhtbZAY6b4no/01KLCUaGIsXQZLlJY nw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 337dwhrcmv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 04 Sep 2020 10:28:49 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D2D4110002A;
-        Fri,  4 Sep 2020 10:28:48 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C16B821FEB9;
-        Fri,  4 Sep 2020 10:28:48 +0200 (CEST)
-Received: from lmecxl0889.tpe.st.com (10.75.127.51) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 4 Sep
- 2020 10:28:47 +0200
-Subject: Re: [PATCH v2 5/8] rpmsg: introduce reserved rpmsg driver for ns
- announcement
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20200825164907.3642-1-arnaud.pouliquen@st.com>
- <20200825164907.3642-6-arnaud.pouliquen@st.com>
- <20200903230009.GD333030@xps15>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Message-ID: <9f62520b-63b2-b3e5-feff-58142e92de2a@st.com>
-Date:   Fri, 4 Sep 2020 10:28:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Fri, 4 Sep 2020 10:32:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jGbgSA1+EZLtoN23ys11+CCQApbWNBtMJRXGrVHGa9jS11Ee1HX3My+f3F6c2WcnRFsNp5vuOWlL9LJaYrx4g684FrFBN23IaBKoOk5jsvqIGxunzoJ6GPhaeZxOBltwGQ2aGt60Jxvc1Z2H+lCi4ZVlAf2Y6M1C6Uk4mnsh+Hq5vEWfiLVK0L0fpUwOj4ccYkGjLXyTG4HhDMmUVdrRHIC24Ii2m7OTwJUCi5eLRf9fssD5rLHYdUF0qx/k1tyYSPyeVjNdpQ2BMUIX4DXdEM0+v5b1wELa7fjq0lLMQS05a4iuK8B7WNGJPBDm7BIFIhW5027xyX1OvP5S/jJuLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=07XKR6QXr5ihGnCleKWxvgqYHYTI30Z/Pw9H9PCjAOI=;
+ b=N8hCfyNoPEagNtHMeV4Q/aaXmbrXXSIOKLjwJ357C8xogWmBKOd0nJDEkyDBO/Z2KCNAmN44tuBol88gk0/u4Po4+wYcSbhVh8nhvli7lhspy8eNOIaA6nP/Ledq8sOFyyMiGI8Ovs+i7cwwZHZ28+QijKP2g3dqoozFiQwWES8RtgAVP4u27PAau0VAEHutg1S37PheD+2AWqdQ2C5+9OrdFJQf3O5mnB1+rXrAcUMBVwYFx9spd2UNcWu7MjuQvk8EgmsrfDWkSIJSoDS+Mwnsj4xn9x2Apwkd0BqXU/RAwoBNf/e513dJHR9aIVEWTOyvAFJJSN6Z2hMoDS6G6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=toshiba.co.jp smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=07XKR6QXr5ihGnCleKWxvgqYHYTI30Z/Pw9H9PCjAOI=;
+ b=rRckRABexgNyn/eEBkJ8URwJxuvEOmqWS97oHpBlxePZbwW8WxvS2p4y/HPyHSCoVb+Ari5jJDpG5vtrZeB09oJORV9eEXjgDNMcMgFm5VUYMjTmPgKUcLGuWUiM5Ob8HD+eo+zb2H/MpLOmLwxkxjGSB8aS33xA/ZPrDFmLA/s=
+Received: from MN2PR11CA0024.namprd11.prod.outlook.com (2603:10b6:208:23b::29)
+ by CH2PR02MB6421.namprd02.prod.outlook.com (2603:10b6:610:10::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19; Fri, 4 Sep
+ 2020 14:32:16 +0000
+Received: from BL2NAM02FT009.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:208:23b:cafe::c4) by MN2PR11CA0024.outlook.office365.com
+ (2603:10b6:208:23b::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15 via Frontend
+ Transport; Fri, 4 Sep 2020 14:32:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; toshiba.co.jp; dkim=none (message not signed)
+ header.d=none;toshiba.co.jp; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ BL2NAM02FT009.mail.protection.outlook.com (10.152.77.68) with Microsoft SMTP
+ Server id 15.20.3348.17 via Frontend Transport; Fri, 4 Sep 2020 14:32:16
+ +0000
+Received: from [149.199.38.66] (port=38245 helo=smtp.xilinx.com)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.90)
+        (envelope-from <ben.levinsky@xilinx.com>)
+        id 1kECl6-0002aU-7O; Fri, 04 Sep 2020 07:32:08 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by smtp.xilinx.com with smtp (Exim 4.63)
+        (envelope-from <ben.levinsky@xilinx.com>)
+        id 1kEClD-0003ng-NR; Fri, 04 Sep 2020 07:32:15 -0700
+Received: from [172.19.2.206] (helo=xsjblevinsk50.xilinx.com)
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <ben.levinsky@xilinx.com>)
+        id 1kECl7-0003lx-Ke; Fri, 04 Sep 2020 07:32:09 -0700
+From:   Ben Levinsky <ben.levinsky@xilinx.com>
+To:     punit1.agrawal@toshiba.co.jp, stefanos@xilinx.com,
+        michals@xilinx.com
+Cc:     michael.auchter@ni.com, devicetree@vger.kernel.org,
+        mathieu.poirier@linaro.org, emooring@xilinx.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jliang@xilinx.com, robh+dt@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v13 0/5] Provide basic driver to control Arm R5 co-processor found on Xilinx ZynqMP
+Date:   Fri,  4 Sep 2020 07:32:04 -0700
+Message-Id: <20200904143209.31235-1-ben.levinsky@xilinx.com>
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
 MIME-Version: 1.0
-In-Reply-To: <20200903230009.GD333030@xps15>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG4NODE1.st.com (10.75.127.10) To SFHDAG3NODE1.st.com
- (10.75.127.7)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-04_05:2020-09-04,2020-09-04 signatures=0
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: a982f139-933a-4589-55bb-08d850df5247
+X-MS-TrafficTypeDiagnostic: CH2PR02MB6421:
+X-Microsoft-Antispam-PRVS: <CH2PR02MB6421907BD33C912E4439DDEFB52D0@CH2PR02MB6421.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X7R3lGQMFOwzGr2fx5ziIaQpzYRb165d10H/kifO+FB3oXfqr04s903wm9GImlP640MzFmbgVxJx1PYh9t32cdEhCLJV8FGYMlF/MKvQObZ5xsOSR7NnpZMhy6f4MyKBVYOgtlUagIGYmnf9zTCmEEN1d3M3ELNbjy1ZPwWsGaJmvQvmU2OtmZcjU/hGSp0HX7meZAECimcFhz+4YbnFlooGeoA/M0ciYVcSWdUkhVu21NElNglMhmFaYhIrd/ALAX8TTxT6SPwsEQbau5YBPPqwW+zIo7N4uj2gRc42NdDXvzZ3csc1wq+OG2u2W4yK9o8D4dEzMLrWqaKYqiwTjuCQ5yvbRaCt2MsTLzO45P7663uAPsWFihHghtEXz3K1JRU7+uJtxLuhyfPhkAryJQ==
+X-Forefront-Antispam-Report: CIP:149.199.60.83;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapsmtpgw01;PTR:unknown-60-83.xilinx.com;CAT:NONE;SFS:(136003)(396003)(376002)(346002)(39860400002)(46966005)(5660300002)(336012)(2616005)(8936002)(9786002)(1076003)(36756003)(8676002)(26005)(7696005)(82310400003)(82740400003)(47076004)(70206006)(44832011)(316002)(186003)(4326008)(81166007)(2906002)(356005)(426003)(6666004)(83380400001)(6636002)(70586007)(478600001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2020 14:32:16.1161
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a982f139-933a-4589-55bb-08d850df5247
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-AuthSource: BL2NAM02FT009.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB6421
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Mathieu,
+The driver was tested on Xilinx ZynqMP QEMU
 
-On 9/4/20 1:00 AM, Mathieu Poirier wrote:
-> On Tue, Aug 25, 2020 at 06:49:04PM +0200, Arnaud Pouliquen wrote:
->> The name service announcement should not be linked to the RPMsg virtio bus
->> but to the RPMsg protocol itself.
->>
->> This patch proposes to break the dependency with the RPmsg virtio bus by
->> the introduction of the reserved RPMsg name service driver which will be in
->> charge of managing the RPMsg name service announcement.
->>
->> This first patch only implements the probe and the RPMsg endpoint to
->> manage create and release channels remote requests.
->>
->> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
->> ---
->>  drivers/rpmsg/Kconfig          |   8 ++
->>  drivers/rpmsg/Makefile         |   1 +
->>  drivers/rpmsg/rpmsg_internal.h |  17 +++++
->>  drivers/rpmsg/rpmsg_ns.c       | 135 +++++++++++++++++++++++++++++++++
->>  4 files changed, 161 insertions(+)
->>  create mode 100644 drivers/rpmsg/rpmsg_ns.c
->>
->> diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
->> index f96716893c2a..c3fc75e6514b 100644
->> --- a/drivers/rpmsg/Kconfig
->> +++ b/drivers/rpmsg/Kconfig
->> @@ -15,6 +15,14 @@ config RPMSG_CHAR
->>  	  in /dev. They make it possible for user-space programs to send and
->>  	  receive rpmsg packets.
->>  
->> +config RPMSG_NS
->> +	tristate "RPMSG name service announcement"
->> +	depends on RPMSG
->> +	help
->> +	  Say Y here to enable the support of the name service announcement
->> +	  channel that probes the associated RPMsg device on remote endpoint
->> +	  service announcement.
->> +
->>  config RPMSG_MTK_SCP
->>  	tristate "MediaTek SCP"
->>  	depends on MTK_SCP
->> diff --git a/drivers/rpmsg/Makefile b/drivers/rpmsg/Makefile
->> index ffe932ef6050..8d452656f0ee 100644
->> --- a/drivers/rpmsg/Makefile
->> +++ b/drivers/rpmsg/Makefile
->> @@ -1,6 +1,7 @@
->>  # SPDX-License-Identifier: GPL-2.0
->>  obj-$(CONFIG_RPMSG)		+= rpmsg_core.o
->>  obj-$(CONFIG_RPMSG_CHAR)	+= rpmsg_char.o
->> +obj-$(CONFIG_RPMSG_NS)		+= rpmsg_ns.o
->>  obj-$(CONFIG_RPMSG_MTK_SCP)	+= mtk_rpmsg.o
->>  qcom_glink-objs			:= qcom_glink_native.o qcom_glink_ssr.o
->>  obj-$(CONFIG_RPMSG_QCOM_GLINK) += qcom_glink.o
->> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
->> index d5ab286d0e5e..641b48f6bf2a 100644
->> --- a/drivers/rpmsg/rpmsg_internal.h
->> +++ b/drivers/rpmsg/rpmsg_internal.h
->> @@ -102,4 +102,21 @@ static inline int rpmsg_chrdev_register_device(struct rpmsg_device *rpdev)
->>  	return rpmsg_register_device(rpdev);
->>  }
->>  
->> +/**
->> + * rpmsg_ns_register_device() - register name service device based on rpdev
->> + * @rpdev: prepared rpdev to be used for creating endpoints
->> + *
->> + * This function wraps rpmsg_register_device() preparing the rpdev for use as
->> + * basis for the rpmsg name service device.
->> + */
->> +static inline int rpmsg_ns_register_device(struct rpmsg_device *rpdev)
->> +{
->> +	strcpy(rpdev->id.name, "rpmsg_ns");
->> +	rpdev->driver_override = "rpmsg_ns";
->> +	rpdev->src = RPMSG_NS_ADDR;
->> +	rpdev->dst = RPMSG_NS_ADDR;
->> +
->> +	return rpmsg_register_device(rpdev);
->> +}
->> +
->>  #endif
->> diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
->> new file mode 100644
->> index 000000000000..3c929b6976a6
->> --- /dev/null
->> +++ b/drivers/rpmsg/rpmsg_ns.c
->> @@ -0,0 +1,135 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
->> + */
->> +#include <linux/device.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/slab.h>
->> +#include "rpmsg_internal.h"
->> +
->> +/**
->> + * enum rpmsg_ns_flags - dynamic name service announcement flags
->> + *
->> + * @RPMSG_NS_CREATE: a new remote service was just created
->> + * @RPMSG_NS_DESTROY: a known remote service was just destroyed
->> + */
->> +enum rpmsg_ns_flags {
->> +	RPMSG_NS_CREATE		= 0,
->> +	RPMSG_NS_DESTROY	= 1,
->> +};
->> +
->> +/**
->> + * struct rpmsg_ns_msg - dynamic name service announcement message
->> + * @name: name of remote service that is published
->> + * @addr: address of remote service that is published
->> + * @flags: indicates whether service is created or destroyed
->> + *
->> + * This message is sent across to publish a new service, or announce
->> + * about its removal. When we receive these messages, an appropriate
->> + * rpmsg channel (i.e device) is created/destroyed. In turn, the ->probe()
->> + * or ->remove() handler of the appropriate rpmsg driver will be invoked
->> + * (if/as-soon-as one is registered).
->> + */
->> +struct rpmsg_ns_msg {
->> +	char name[RPMSG_NAME_SIZE];
->> +	__le32 addr;
->> +	__le32 flags;
-> 
-> This is about to get moved to a header file [1] so that the virtualisation people
-> can use the same structures.  As such we can't just assume their type is __le32
-> and we can't move them here either.  I suggest to move this to
-> include/linux/rpmsg/virtio.h as Guennadi did.
-> 
-> [1]. https://patchwork.kernel.org/patch/11749285/
+For sake of ease of review, only support ZynqMP. Once accepted, then
+add support for Versal platform and R5 loading onto OCM.
 
-The objective of this patch is to treat the ns annoucement as a service so it should not 
-depend on the virtio.
-From my POV we have to separate the header from the payload in term of endianness.
+v2:
+- remove domain struct
+v3:
+- add xilinx-related platform mgmt fn's instead of wrapping around
+  function pointer in xilinx eemi ops struct
+- update zynqmp_r5 yaml parsing to not raise warnings for extra
+  information in children of R5 node. The warning "node has a unit
+  name, but no reg or ranges property" will still be raised though 
+  as this particular node is needed to describe the
+  '#address-cells' and '#size-cells' information.
+v4:
+- add default values for enums
+- fix formatting as per checkpatch.pl --strict. Note that 1 warning and
+  1 check are still raised as each is due to fixing the warning
+  results in that particular line going over 80 characters.
+- remove warning '/example-0/rpu@ff9a0000/r5@0: 
+  node has a unit name, but no reg or ranges property'
+  by adding reg to r5 node.
+v5:
+- update device tree sample and yaml parsing to not raise any warnings
+- description for memory-region in yaml parsing
+- compatible string in yaml parsing for TCM
+- parse_fw change from use of rproc_of_resm_mem_entry_init to
+  rproc_mem_entry_init and use of alloc/release
+- var's of type zynqmp_r5_pdata all have same local variable name
+- use dev_dbg instead of dev_info
+v6:
+- adding memory carveouts is handled much more similarly.
+  All mem carveouts are now described in reserved memory as needed.
+  That is, TCM nodes are not coupled to remoteproc anymore.
+  This is reflected in the remoteproc R5 driver and the device tree
+  binding.
+- remove mailbox from device tree binding as it is not necessary for elf
+  loading 
+v7:
+- remove unused headers
+- zynqmp_r5_remoteproc_probe:lockstep_mode from u32* to u32
+- device-tree binding "lockstep-mode"  to "xlnx,cluster-mode"
+- remove zynqmp_r5_mem_probe and loop to Probe R5 memory devices at
+  probe()
+- remove is_r5_mode_set from  zynqmp rpu remote processor private data
+- do not error out if no mailbox is provided since mailboxes are optional
+- remove zynqmp_r5_remoteproc_probe call of platform_set_drvdata as pdata
+  is handled in zynqmp_r5_remoteproc_remove
+v8:
+- remove old acks, reviewed-by's in commit message
+v9:
+- if zynqmp_r5_remoteproc.c pdata->tx_mc_skbs not initialized, then do not
+  call skb_queue_empty
+- update arguments and documentation for zynqmp_pm_set_rpu_mode
+- in fn zynqmp_pm_force_powerdown, change arg 'target' to 'node'
+- zynqmp_pm_request_wakeup update code style
+- edit 3/5 patch commit message
+- document zynqmp_pm_set_tcm_config and zynqmp_pm_get_rpu_mode
+  documentation to include expected return val
+- remove unused fn zynqmp_pm_get_node_status
+- update 5/5 patch commit message to document supported configurations
+  and how they are booted by the driver.
+- remove copyrights other than SPDX from zynqmp_r5_remoteproc.c
+- compilation warnings no longer raised
+- remove unused includes from zynqmp_r5_remoteproc.c
+- remove unused  var autoboot from zynqmp_r5_remoteproc.c
+- reorder zynqmp_r5_pdata fpr small mem savings due to alignment
+- zynqmp_pm_set_tcm_config and zynqmp_pm_set_rpu_mode uses second arg
+- zynqmp_r5_remoteproc.c use of zynqmp_pm_set_tcm_config now does not
+  have output arg
+- in tcm handling, unconditionally use &= 0x000fffff mask since all nodes
+  in this fn are for tcm
+- update comments for translating dma field in tcm handling to device
+  address
+- update calls to rproc_mem_entry_init in parse_mem_regions so that there
+  are only 2 cases for types of carveouts instead of 3
+- in parse_mem_regions, check if device tree node is null before using it
+- add example device tree nodes used in parse_mem_regions and tcm parsing
+- add comment for vring id node length
+- add check for string length so that vring id is at least min length
+- move tcm nodes from reserved mem to instead own device tree nodes
+   and only use them if enabled in device tree
+- add comment for explaining handling of rproc_elf_load_rsc_table
+- remove obsolete check for "if (vqid < 0)" in zynqmp_r5_rproc_kick
+- remove unused field mems in struct zynqmp_r5_pdata
+- remove call to zynqmp_r5_mem_probe and the fn itself as tcm handling
+  is done by zyqmp_r5_pm_request_tcm
+- remove obsolete setting of dma_ops and parent device dma_mask
+- remove obsolete use of of_dma_configure
+- add comment for call to r5_set_mode fn
+- make mbox usage optional and gracefully inform user via dev_dbg if not
+  present
+- change lockstep_mode from u32* to u32
+- update zynqmp_pm_set_rpu_mode and zynqmp_pm_set_rpu_mode documentation
+  and remove unused args
+v10:
+- add include types.h to xlnx-zynqmp.h for compilation
+v11:
+- update usage of zynqmp_pm_get_rpu_mode to return rpu mode in enum
+- update zynqmp_pm_set_tcm_config and zynqmp_pm_set_rpu_mode arguments to
+  remove unused args
+- use enums instead of u32 where possible in zynqmp_r5_remoteproc
+- zynqmp_r5_remoteproc: update prints to not use carriage return, just
+  newline
+- zynqmp_r5_remoteproc: look up tcm banks via property instead of string
+  name
+- print device tree nodes with %pOF instead of %s with node name field
+- update tcm release to unmap VA
+- handle r5-1 use case
+- device tree binding r5 node to have link to TCMs via
+  meta-memory-regions property
+- fix device tree binding so no warnings from 'make dt_binding_check'
+v12:
+- update signed off by so that latest developer name is last
+- in drivers/firmware/zynqmp.c, update zynqmp_pm_set_rpu_mode so rpu_mode
+  is only set if no error
+- update args for zynqmp_pm_set_rpu_mode, zynqmp_pm_set_tcm_config fn
+  arg's to reflect what is expected in the function and the usage in
+  zynqmp_r5_remoteproc accordingly
+v13:
+- zynqmp_pm_get_rpu_mode argument zynqmp_pm_get_rpu_mode is
+  only set if no error
 
-That make sense that the rpmsg_hdr is virtio struct dependent. But the rpmsg_ns_msg  
-describes the payload message. The payload message should be fixed by the service itself
-and should not depend on the virualization.
-Here i proposed to fix the payload in little endian for compatibility with the legacy.
-But we also could decide to not fixe the endianess.
+Ben Levinsky (5):
+  firmware: xilinx: Add ZynqMP firmware ioctl enums for RPU
+    configuration.
+  firmware: xilinx: Add shutdown/wakeup APIs
+  firmware: xilinx: Add RPU configuration APIs
+  dt-bindings: remoteproc: Add documentation for ZynqMP R5 rproc
+    bindings
+  remoteproc: Add initial zynqmp R5 remoteproc driver
 
-> 
->> +} __packed;
->> +
->> +/* Invoked when a name service announcement arrives */
->> +static int rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
->> +		       void *priv, u32 src)
->> +{
->> +	struct rpmsg_ns_msg *msg = data;
->> +	struct rpmsg_device *newch;
->> +	struct rpmsg_channel_info chinfo;
->> +	struct device *dev = &rpdev->dev;
->> +	unsigned int flags = le32_to_cpu(msg->flags);
-> 
-> I've been staring at this for a long time and I suspect you did too.
-> 
-> Can we assume that a name service is running on a virtio implementation?  It
-> certainly has been the case so far, and doing so would make this patchset a lot
-> more simple.  Otherwise we need to find a way to make this work without
-> losing flexibility, which will make things more complex.
-> 
-> What do you think?
+ .../xilinx,zynqmp-r5-remoteproc.yaml          | 123 +++
+ drivers/firmware/xilinx/zynqmp.c              |  95 ++
+ drivers/remoteproc/Kconfig                    |  10 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/zynqmp_r5_remoteproc.c     | 898 ++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h          |  60 ++
+ 6 files changed, 1187 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/xilinx,zynqmp-r5-remoteproc.yaml
+ create mode 100644 drivers/remoteproc/zynqmp_r5_remoteproc.c
 
-I am not sure to understand your point...
-I'm also intertesting in understanding more in details what do you have in mind in term of 
-"losing flexibility"?
+-- 
+2.17.1
 
-The purpose of this patchset is to generalize the ns announcement so that it does
-not depend on the implementation. The goal is to avoid that implementations
-rewrite the service.
-
-The vhost patchset is an exemple which is also virtio based. But there are some other
-implementations (exemples below).
-
-Anyway I think the main question associated to this patchset is:
-Is the ns annoucement is a RPMsg service or a virtio RPMsg service?
-
-From my point of view it should be a RPMsg service, that is enbled or
-not, depending on the backend implementation.
-
-2 other ns annoucement service exemples:
-- the mtk_rpmsg driver[1].
-- In ST we have a PoC to extend the rpmsg over a physical serial link [2]. Notice that, with
-  this implementation we can have the LE-BE inter-communication use case. 
-  For this PoC we also defined a common file that does not depend on the virtio[3], so
-  an alternative to what Guennadi did in include/linux/rpmsg/virtio.h.
-
-[1]https://elixir.bootlin.com/linux/v5.9-rc3/source/drivers/rpmsg/mtk_rpmsg.c#L45 
-[2]https://github.com/arnopo/linux/blob/ELCE_demos/drivers/rpmsg/uart_rpmsg_bus.c
-[3]https://github.com/arnopo/linux/blob/ELCE_demos/drivers/rpmsg/rpmsg_bus_common.c
-
-Thanks,
-Arnaud
-
-> 
->> +	int ret;
->> +
->> +#if defined(CONFIG_DYNAMIC_DEBUG)
->> +	dynamic_hex_dump("NS announcement: ", DUMP_PREFIX_NONE, 16, 1,
->> +			 data, len, true);
->> +#endif
->> +
->> +	if (len != sizeof(*msg)) {
->> +		dev_err(dev, "malformed ns msg (%d)\n", len);
->> +		return -EINVAL;
->> +	}
->> +
->> +	/* Don't trust the remote processor for null terminating the name */
->> +	msg->name[RPMSG_NAME_SIZE - 1] = '\0';
->> +
->> +	strncpy(chinfo.name, msg->name, sizeof(chinfo.name));
->> +	chinfo.src = RPMSG_ADDR_ANY;
->> +	chinfo.dst = le32_to_cpu(msg->addr);
->> +
->> +	dev_info(dev, "%sing channel %s addr 0x%x\n",
->> +		 (flags & RPMSG_NS_DESTROY) ? "destroy" : "creat",
->> +		 msg->name, chinfo.dst);
->> +
->> +	if (flags & RPMSG_NS_DESTROY) {
->> +		ret = rpmsg_release_channel(rpdev, &chinfo);
->> +		if (ret)
->> +			dev_err(dev, "rpmsg_destroy_channel failed: %d\n", ret);
->> +	} else {
->> +		newch = rpmsg_create_channel(rpdev, &chinfo);
->> +		if (!newch)
->> +			dev_err(dev, "rpmsg_create_channel failed\n");
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static int rpmsg_ns_probe(struct rpmsg_device *rpdev)
->> +{
->> +	struct rpmsg_channel_info ns_chinfo;
->> +	struct rpmsg_endpoint *ns_ept;
->> +
->> +	ns_chinfo.src = RPMSG_NS_ADDR;
->> +	ns_chinfo.dst = RPMSG_NS_ADDR;
->> +	strcpy(ns_chinfo.name, "name_service");
->> +
->> +	/*
->> +	 * Create the NS announcement service endpoint associated to the RPMsg
->> +	 * device. The endpoint will be automatically destroyed when the RPMsg
->> +	 * device will be deleted.
->> +	 */
->> +	ns_ept = rpmsg_create_ept(rpdev, rpmsg_ns_cb, NULL, ns_chinfo);
->> +	if (!ns_ept) {
->> +		dev_err(&rpdev->dev, "failed to create the ns ept\n");
->> +		return -ENOMEM;
->> +	}
->> +	rpdev->ept = ns_ept;
->> +
->> +	return 0;
->> +}
->> +
->> +static struct rpmsg_driver rpmsg_ns_driver = {
->> +	.drv.name = "rpmsg_ns",
->> +	.probe = rpmsg_ns_probe,
->> +};
->> +
->> +static int rpmsg_ns_init(void)
->> +{
->> +	int ret;
->> +
->> +	ret = register_rpmsg_driver(&rpmsg_ns_driver);
->> +	if (ret < 0)
->> +		pr_err("%s: Failed to register rpmsg driver\n", __func__);
->> +
->> +	return ret;
->> +}
->> +postcore_initcall(rpmsg_ns_init);
->> +
->> +static void rpmsg_ns_exit(void)
->> +{
->> +	unregister_rpmsg_driver(&rpmsg_ns_driver);
->> +}
->> +module_exit(rpmsg_ns_exit);
->> +
->> +MODULE_DESCRIPTION("Name service announcement rpmsg Driver");
->> +MODULE_AUTHOR("Arnaud Pouliquen <arnaud.pouliquen@st.com>");
->> +MODULE_ALIAS("rpmsg_ns");
->> +MODULE_LICENSE("GPL v2");
->> -- 
->> 2.17.1
->>
