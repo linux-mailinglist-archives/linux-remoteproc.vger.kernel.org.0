@@ -2,21 +2,21 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0430263A3A
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 10 Sep 2020 04:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C00263A7A
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 10 Sep 2020 04:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730178AbgIJCYX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 9 Sep 2020 22:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S1730512AbgIJC37 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 9 Sep 2020 22:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730346AbgIJCMD (ORCPT
+        with ESMTP id S1730649AbgIJC1a (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 9 Sep 2020 22:12:03 -0400
-Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B046CC06179F
-        for <linux-remoteproc@vger.kernel.org>; Wed,  9 Sep 2020 16:22:04 -0700 (PDT)
-Received: by mail-vk1-xa42.google.com with SMTP id x142so1130771vke.0
-        for <linux-remoteproc@vger.kernel.org>; Wed, 09 Sep 2020 16:22:04 -0700 (PDT)
+        Wed, 9 Sep 2020 22:27:30 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D93C061573
+        for <linux-remoteproc@vger.kernel.org>; Wed,  9 Sep 2020 15:45:24 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id d9so3456301pfd.3
+        for <linux-remoteproc@vger.kernel.org>; Wed, 09 Sep 2020 15:45:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
@@ -33,14 +33,14 @@ X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
         bh=c5p8WBq1qtYrMuvvxqfHaHn+LepsJk3lGDjCppOmf40=;
-        b=LRVFxxbZ0Zbn4PQRwPce91kH0S3a44PpDTJ1etMRIDsZv7Rcv+agJpMrOszyfju7MS
-         QS4RvVsO5EYwH07PSIM0ziED/mgF/Sr5M8I/KSDs1Vdr61ABGY6qA+f4k8n74bGaN/Oo
-         ZrR1jMBu+CDa7zbtQ3ah7AiJLX8ClcZz9GtX0lUIfDhztsc2l6R3gMGl9guxmirwIA66
-         hiKbrsM3D9koVtRhXbVWSa8nUT9rxfvtXoPzzkjcuWYtjUq5p6mMC34LaCAl++3DXzuf
-         1ewrNFWEePWeQcuMbq974YxsSSkpi4tfcuVFDXY0EZCh/726AH3rtN1CJbQe/0f5VwdU
-         0VtQ==
-X-Gm-Message-State: AOAM532xoszekitKGCCwRlWj09e4ufaP2Z+jD1d9c5L+SzqUBm3kCyst
-        g2mWbyPFZMZtH9s4riAtQiMec8LHRXQDmw==
+        b=gW09evs+2kx6ZFm+tltHypbE50YIMYNM1gDdO72FyA4DJE5RfMli/ZkTy9Y8S79a4U
+         yMUXEGheOUDLKRkKuWchdLgt712gz2Kp3NENpw24osVFtHY03VdhheAczWW30nfBgD6z
+         tfmsDXIJn4hnC5Fx3rHk8Kwn/5SujInzlGNpAevQIzj3YfZCvCbSh/6fsdRa0q3kV+Ur
+         031Hw02/6wr9z7ayDBi4BfbdykIB7zBPbFjh1qoxbrr1mO/79Uj38ifugiRY+/zTPP3m
+         YuUUAaLDk4e/gFfftJCH9fowLyIlE+lHKr7CgACUggeLYSiPHYV4lJ4YhBt1BpdhsNnw
+         hVbg==
+X-Gm-Message-State: AOAM5308vcD9kCTvVqQ/OTpXJI7QMUPIZTqmN6HbDhEMYsPBoe7RHDAA
+        ufvBmbwcH+55WTXNHoy2v6bk7cQdzIC+0Q==
 X-Google-Smtp-Source: ABdhPJyLFnTKMqZCaScZAKIRwTEhSbQsApyF37uNABYJwF5hSOk5cB5ERfNlpt7X7bbBFCi4l+e1yA==
 X-Received: by 2002:a17:902:b686:: with SMTP id c6mr2834249pls.74.1599691523776;
         Wed, 09 Sep 2020 15:45:23 -0700 (PDT)
