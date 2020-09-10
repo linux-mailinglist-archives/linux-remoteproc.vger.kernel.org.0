@@ -2,114 +2,109 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B19F6264C54
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 10 Sep 2020 20:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B321C264E0F
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 10 Sep 2020 21:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726847AbgIJSIj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 10 Sep 2020 14:08:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36760 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726800AbgIJR7Q (ORCPT
+        id S1726871AbgIJS7i (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 10 Sep 2020 14:59:38 -0400
+Received: from a27-55.smtp-out.us-west-2.amazonses.com ([54.240.27.55]:48664
+        "EHLO a27-55.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726966AbgIJS5c (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 10 Sep 2020 13:59:16 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B0AE20BED;
-        Thu, 10 Sep 2020 17:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599760755;
-        bh=c2tztsNpwyNu1D1MBTKVqE3luU/B7LUoBEm+xm+5A7o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2E2+d3GeM49R0VN2KDJsfGVusvUohciSPnXQmvjkUOoKiwaFB8uKEqtoGErfm+O9B
-         tBeKn1rsXMX98zLwnXboGz9QXAMKfhuCRKONJIBRyHxoGpM1ZjggFrq0aht8xTr54w
-         1nOpQiWLxk4ryGTluyrIM2Mhee4w1PgJ0RZb4igI=
-Date:   Thu, 10 Sep 2020 19:59:23 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        Thu, 10 Sep 2020 14:57:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1599764251;
+        h=From:To:Cc:Subject:Date:Message-Id;
+        bh=gZLzm0B4dE7SUvs5JWxAhnR6HTanMjDb5ExqHSVTeGU=;
+        b=dcWvNpnbxFXDwVAqrcogY69CuvrRE3VerIHwLI3ZD0UIT7m72ozeJkXgUj1m13bT
+        hmFmxXUr8fWyMdjUUl4WLKQ/pBI/nuV9ZXiS29Rk36q4AcH5vcz3BVaKzdLoCxPDxyi
+        +AjUWLxlgKi8j9QyUYQH2v2GeyVJUzTK/N4g2SJs=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=hsbnp7p3ensaochzwyq5wwmceodymuwv; d=amazonses.com; t=1599764251;
+        h=From:To:Cc:Subject:Date:Message-Id:Feedback-ID;
+        bh=gZLzm0B4dE7SUvs5JWxAhnR6HTanMjDb5ExqHSVTeGU=;
+        b=Ip4z3F/yOUqLwQ2/C1fuBZ3653/ts6yJa4yjQqIy3eiYf8wM4cwbF5RtG04q13IW
+        4XJHW7tS3levmIAxAy4eXAcDGrQxXCoPl4qZ/EYH+G+N1U8tyb7NfOrPBWF0zUrGu/j
+        DvyQy8LhzyDGToBrEFFGoN6UL5Z1RqUV8aR4Kjb4=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C7771C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sidgup@codeaurora.org
+From:   Siddharth Gupta <sidgup@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, ohad@wizery.com
+Cc:     Siddharth Gupta <sidgup@codeaurora.org>,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tsoni@codeaurora.org, psodagud@codeaurora.org,
-        sidgup@codeaurora.org
-Subject: Re: [PATCH v2 0/3] Expose recovery/coredump configuration from sysfs
-Message-ID: <20200910175923.GB3076593@kroah.com>
-References: <1598557731-1566-1-git-send-email-rishabhb@codeaurora.org>
- <20200901220542.GA121362@xps15>
- <20200903235944.GC3715@yoga>
- <20200904220213.GA404035@xps15>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200904220213.GA404035@xps15>
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, rishabhb@codeaurora.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v4 0/3] Introduce mini-dump support for remoteproc
+Date:   Thu, 10 Sep 2020 18:57:31 +0000
+Message-ID: <01010174796142bd-a595147b-833a-48fe-b692-f8b6fe466146-000000@us-west-2.amazonses.com>
+X-Mailer: git-send-email 2.7.4
+X-SES-Outgoing: 2020.09.10-54.240.27.55
+Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, Sep 04, 2020 at 04:02:13PM -0600, Mathieu Poirier wrote:
-> On Thu, Sep 03, 2020 at 06:59:44PM -0500, Bjorn Andersson wrote:
-> > On Tue 01 Sep 17:05 CDT 2020, Mathieu Poirier wrote:
-> > 
-> > > Hi Rishabh,
-> > > 
-> > > On Thu, Aug 27, 2020 at 12:48:48PM -0700, Rishabh Bhatnagar wrote:
-> > > > From Android R onwards Google has restricted access to debugfs in user
-> > > > and user-debug builds. This restricts access to most of the features
-> > > > exposed through debugfs. This patch series adds a configurable option
-> > > > to move the recovery/coredump interfaces to sysfs. If the feature
-> > > > flag is selected it would move these interfaces to sysfs and remove
-> > > > the equivalent debugfs interface.
-> > > 
-> > > What I meant wast to move the coredump entry from debugfs to sysfs and from
-> > > there make it available to user space using a kernel config.
-> > 
-> > Why would we not always make this available in sysfs?
-> 
-> At this time the options are in debugfs and vendors can decide to make that
-> available on products if they want to.  The idea behind using a kernel
-> configuration once moved to sysfs was to give the same kind of options.
-> 
-> > 
-> > > But thinking further on this it may be better to simply provide an API
-> > > to set the coredump mode from the platform driver, the same way
-> > > rproc_coredump_set_elf_info() works.
-> > 
-> > Being able to invoke these from the platform drivers sounds like a new
-> > feature. What would trigger the platform drivers to call this? Or are
-> > you perhaps asking for the means of the drivers to be able to select the
-> > default mode?
-> 
-> My ultimate goal is to avoid needlessly stuffing things in sysfs.  My hope in
-> suggesting a new API was that platform drivers could recognise the kind of
-> build/environment they operate in and setup the coredump mode accordingly.  That
-> would have allowed us to leave debugfs options alone.
-> 
-> > 
-> > Regarding the default mode, I think it would make sense to make the
-> > default "disabled", because this is the most sensible configuration in a
-> > "production" environment. And the sysfs means we have a convenient
-> > mechanism to configure it, even on production environments.
-> >
-> 
-> I am weary of changing something that hasn't been requested.  
->  
-> > > That will prevent breaking a fair amount of user space code...
-> > > 
-> > 
-> > We typically don't guarantee that the debugfs interfaces are stable and
-> > if I understand the beginning of you reply you still want to move it
-> > from debugfs to sysfs - which I presume would break such scripts in the
-> > first place?
-> 
-> Correct - I am sure that moving coredump and recovery options to sysfs will
-> break user space scripts.  Even if debugfs is not part of the ABI it would be
-> nice to avoid disrupting people as much as possible.
+Sometimes firmware sizes can be in ten's of MB's and reading
+all the memory during coredump can consume lot of time and
+memory.
+Introducing support for mini-dumps. Mini-dump contains smallest
+amount of useful information, that could help to debug subsystem
+crashes.
+During bootup memory is allocated in SMEM (Shared memory)
+in the form of a table that contains the physical
+addresses and sizes of the regions that are supposed to be
+collected during coredump. This memory is shared amongst all
+processors in a Qualcomm platform, so all remoteprocs
+fill in their entry in the global table once they are out
+of reset.
+This patch series adds support for parsing the global minidump
+table and uses the current coredump frameork to expose this memory
+to userspace during remoteproc's recovery.
 
-Don't move the files, keep them in both places.  Lots of systems
-restrict debugfs, so moving "stable" stuff like this into sysfs makes
-sense.
+This patch series also integrates the patch:
+https://patchwork.kernel.org/patch/11695541/ sent by Siddharth.
 
-thanks,
+Changelog:
+v3 -> v4:
+- Made adsp_priv_cleanup a static function.
 
-greg k-h
+v2 -> v3:
+- Refactored code to remove dependency on Qualcomm configs.
+- Renamed do_rproc_minidump to rproc_minidump and marked as exported
+  symbol.
+
+v1 -> v2:
+- 3 kernel test robot warnings have been resolved.
+- Introduced priv_cleanup op in order to making the cleaning of
+  private elements used by the remoteproc more readable.
+- Removed rproc_cleanup_priv as it is no longer needed.
+- Switched to if/else format for rproc_alloc in order to keep 
+  the static const decalaration of adsp_minidump_ops.
+
+Siddharth Gupta (3):
+  remoteproc: core: Add ops to enable custom coredump functionality
+  remoteproc: qcom: Add capability to collect minidumps
+  remoteproc: qcom: Add minidump id for sm8150 modem remoteproc
+
+ drivers/remoteproc/qcom_minidump.h          |  64 +++++++++++++
+ drivers/remoteproc/qcom_q6v5_pas.c          | 107 ++++++++++++++++++++-
+ drivers/remoteproc/remoteproc_core.c        |   6 +-
+ drivers/remoteproc/remoteproc_coredump.c    | 138 ++++++++++++++++++++++++++++
+ drivers/remoteproc/remoteproc_elf_helpers.h |  27 ++++++
+ include/linux/remoteproc.h                  |   5 +
+ 6 files changed, 344 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/remoteproc/qcom_minidump.h
+
+-- 
+Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
