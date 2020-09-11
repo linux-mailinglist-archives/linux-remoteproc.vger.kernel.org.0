@@ -2,136 +2,226 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0788F26545E
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 10 Sep 2020 23:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B547726560C
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Sep 2020 02:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728365AbgIJVmo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 10 Sep 2020 17:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730726AbgIJNBv (ORCPT
+        id S1725774AbgIKAcF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 10 Sep 2020 20:32:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35016 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725290AbgIKAcF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 10 Sep 2020 09:01:51 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA5AC0617A9
-        for <linux-remoteproc@vger.kernel.org>; Thu, 10 Sep 2020 06:01:44 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id k15so6583781wrn.10
-        for <linux-remoteproc@vger.kernel.org>; Thu, 10 Sep 2020 06:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=HphHCPdJUs9HEUbW8jhDJPa14fS8feVjDMdm8pwKQX0=;
-        b=KTLKPAFfGEgTr2BImp+QKZGVPI0BzcHxU/2gi4Hz4aq6K/0m9lhzMmNEiW8wgtH2iJ
-         9mMpJYcT0vvo2wEb5v4jHjlftFwV7dVCl0Mszv4QdLfjxoQJ0psBeF6XCHqyLGq2iJGT
-         JG/RiC70ZixTF7vkGxFnCKBHpN8EYdTYJF8mpnSaVEfGQpo/ZvNn6b9KSpmSz6VQkZk8
-         hwwQIH7wRd612A+1kyQ9+Wo0SE/5kRVFTC+Feihkv7rQIanO+n8nGntYaPSdmWrgj1MD
-         7XrBCFG9+53zppoSdG3GdYpd3G32cYgfKwIU+0XDPXodzaDBsm1YhRNWsnb6pL+LeuLE
-         P0mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HphHCPdJUs9HEUbW8jhDJPa14fS8feVjDMdm8pwKQX0=;
-        b=d04dlj1u+yLJ8gvyAbGPTxEfpeqjYopy+zaULQdXVOhU1RXfXYDR+whH8ncd9wFBvQ
-         JX7QKtHW0tSwxg0mteU+l99iIv7rop6HOYW6I9Tnqov64Sl55DFW+Q5N+eHUUh1P0oB+
-         brtuTvPGofZk8XxTu5PJdNrDv3VNwL9aa30aYZVBRFMgNyNgU695mpxAtNtlw4ZxK0qY
-         yj4WgYRQpv+5SU7hibJv+epUF0vQndWH9FxPUaxN27a9lnB9bs/8DGiEIt+hP7TbcrC+
-         ZNnVaPEPeorxxVgrGsIjWyqRfcrTNAHlOT4DeMSdmNj+t00sVOREO4LeHBoUC9lA1JUx
-         57TA==
-X-Gm-Message-State: AOAM532rDFbG6bAJepT0/HnZq0LBhbvOe3CDvdaYeJfMLEW884Q/YCEX
-        16iGP4il3ZLHnngzX5q0Le0r5w==
-X-Google-Smtp-Source: ABdhPJxQ/7u8nEM7o5yIM0TqrL9dfyr46k2FRZOHqGju4TlGZTK0gY0DH16yhGiFzt+kO1B2bqgRGQ==
-X-Received: by 2002:adf:9f10:: with SMTP id l16mr9460647wrf.77.1599742902740;
-        Thu, 10 Sep 2020 06:01:42 -0700 (PDT)
-Received: from alex-xps13.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id y1sm9488269wru.87.2020.09.10.06.01.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 06:01:41 -0700 (PDT)
-From:   Alexandre Bailon <abailon@baylibre.com>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, mathieu.poirier@linaro.org
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stephane.leprovost@mediatek.com, gpain@baylibre.com,
-        Alexandre Bailon <abailon@baylibre.com>
-Subject: [PATCH v2 4/4] ARM64: mt8183: Add support of APU to mt8183
-Date:   Thu, 10 Sep 2020 15:01:48 +0200
-Message-Id: <20200910130148.8734-5-abailon@baylibre.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200910130148.8734-1-abailon@baylibre.com>
-References: <20200910130148.8734-1-abailon@baylibre.com>
+        Thu, 10 Sep 2020 20:32:05 -0400
+Received: from localhost (c-67-164-102-47.hsd1.ca.comcast.net [67.164.102.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B8D98208FE;
+        Fri, 11 Sep 2020 00:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599784324;
+        bh=UiJ+tjUwdN6I83bQ9lMpiASXNuSfegaRd4S0aUWadTU=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=Eu+3wmxKLdizAwL0WtecMunAz7AMBTRx0ZYAsLft15R+arAc7TxeCxdThSIFanSM8
+         T2X8/ijD01PUwmgb9eyNyA9v0csJNtrEuFJBrat5ofOKaKNf61vRT+qD+mXQIKbfec
+         xVHBtdz4/AsKGZAkyBQeA00hNWXWVmE/dTqa11mA=
+Date:   Thu, 10 Sep 2020 17:32:02 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@sstabellini-ThinkPad-T480s
+To:     Ben Levinsky <ben.levinsky@xilinx.com>
+cc:     punit1.agrawal@toshiba.co.jp, stefanos@xilinx.com,
+        michals@xilinx.com, devicetree@vger.kernel.org,
+        emooring@xilinx.com, michael.auchter@ni.com,
+        mathieu.poirier@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jliang@xilinx.com,
+        robh+dt@kernel.org, Jason Wu <j.wu@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v13 4/5] dt-bindings: remoteproc: Add documentation for
+ ZynqMP R5 rproc bindings
+In-Reply-To: <20200904143209.31235-5-ben.levinsky@xilinx.com>
+Message-ID: <alpine.DEB.2.21.2009101725520.28991@sstabellini-ThinkPad-T480s>
+References: <20200904143209.31235-1-ben.levinsky@xilinx.com> <20200904143209.31235-5-ben.levinsky@xilinx.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-This adds the support of APU to mt8183.
+On Fri, 4 Sep 2020, Ben Levinsky wrote:
+> Add binding for ZynqMP R5 OpenAMP.
+> 
+> Represent the RPU domain resources in one device node. Each RPU
+> processor is a subnode of the top RPU domain node.
+> 
+> Signed-off-by: Jason Wu <j.wu@xilinx.com>
+> Signed-off-by: Wendy Liang <jliang@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> 
+> Signed-off-by: Ben Levinsky <ben.levinsky@xilinx.com>
+> ---
+> v3:
+> - update zynqmp_r5 yaml parsing to not raise warnings for extra
+>   information in children of R5 node. The warning "node has a unit
+>   name, but no reg or ranges property" will still be raised though 
+>   as this particular node is needed to describe the
+>   '#address-cells' and '#size-cells' information.
+> v4::
+> - remove warning '/example-0/rpu@ff9a0000/r5@0: 
+>   node has a unit name, but no reg or ranges property'
+>   by adding reg to r5 node.
+> v5:
+> - update device tree sample and yaml parsing to not raise any warnings
+> - description for memory-region in yaml parsing
+> - compatible string in yaml parsing for TCM
+> v6:
+> - remove coupling TCM nodes with remoteproc 
+> - remove mailbox as it is optional not needed
+> v7:
+> - change lockstep-mode to xlnx,cluster-mode
+> v9:
+> - show example IPC nodes and tcm bank nodes
+> v11:
+> - add property meta-memory-regions to illustrate link
+>   between r5 and TCM banks
+> - update so no warnings from 'make dt_binding_check'
+> ---
+>  .../xilinx,zynqmp-r5-remoteproc.yaml          | 123 ++++++++++++++++++
+>  1 file changed, 123 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/xilinx,zynqmp-r5-remoteproc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/xilinx,zynqmp-r5-remoteproc.yaml b/Documentation/devicetree/bindings/remoteproc/xilinx,zynqmp-r5-remoteproc.yaml
+> new file mode 100644
+> index 000000000000..148374c61908
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/remoteproc/xilinx,zynqmp-r5-remoteproc.yaml
+> @@ -0,0 +1,123 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/remoteproc/xilinx,zynqmp-r5-remoteproc.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Xilinx R5 remote processor controller bindings
+> +
+> +description:
+> +  This document defines the binding for the remoteproc component that loads and
+> +  boots firmwares on the Xilinx Zynqmp and Versal family chipset.
+> +
+> +  Note that the Linux has global addressing view of the R5-related memory (TCM)
+> +  so the absolute address ranges are provided in TCM reg's.
+> +maintainers:
+> +  - Ed Mooring <ed.mooring@xilinx.com>
+> +  - Ben Levinsky <ben.levinsky@xilinx.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: "xlnx,zynqmp-r5-remoteproc-1.0"
+> +
+> +  lockstep-mode:
+> +    description:
+> +      R5 core configuration (split is 0 or lock-step and 1)
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description:
+> +      Interrupt mapping for remoteproc IPI. It is required if the
+> +      user uses the remoteproc driver with the RPMsg kernel driver.
+> +    maxItems: 6
+> +
+> +  memory-region:
+> +    description:
+> +      collection of memory carveouts used for elf-loading and inter-processor
+> +      communication.
+> +    maxItems: 4
+> +    minItems: 4
+> +  meta-memory-regions:
+> +    description:
+> +      collection of memories that are not present in the top level memory
+> +      nodes' mapping. For example, R5s' TCM banks. These banks are needed
+> +      for R5 firmware meta data such as the R5 firmware's heap and stack
+> +  pnode-id:
+> +    maxItems: 1
+> +  mboxes:
+> +    maxItems: 2
+> +  mbox-names:
+> +    maxItems: 2
+> +
+> +examples:
+> +  - |
+> +     reserved-memory {
+> +          #address-cells = <1>;
+> +          #size-cells = <1>;
+> +          ranges;
+> +          elf_load: rproc@3ed000000 {
+> +               no-map;
+> +               reg = <0x3ed00000 0x40000>;
+> +          };
+> +     };
+> +     rpu {
+> +          compatible = "xlnx,zynqmp-r5-remoteproc-1.0";
+> +          #address-cells = <1>;
+> +          #size-cells = <1>;
+> +          ranges;
+> +          lockstep-mode = <0>;
+> +          r5_0 {
+> +               ranges;
+> +               #address-cells = <1>;
+> +               #size-cells = <1>;
+> +               memory-region = <&elf_load>;
+> +               meta-memory-regions = <0x40 0x41>;
+> +               pnode-id = <0x7>;
 
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8183.dtsi | 39 ++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+I can see you are expecting a link from this node to the tcm nodes in
+the driver, but I can't find such a link in this example.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-index e215f1eb3eb2..28f75452961c 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-@@ -967,12 +967,51 @@ ipu_adl: syscon@19010000 {
- 			#clock-cells = <1>;
- 		};
- 
-+		apu0: apu@0x19100000 {
-+			compatible = "mediatek,mt8183-apu";
-+			reg = <0 0x19180000 0 0x14000>;
-+			interrupts = <GIC_SPI 292 IRQ_TYPE_LEVEL_LOW>;
-+
-+			iommus = <&iommu M4U_PORT_IMG_IPUO>,
-+				 <&iommu M4U_PORT_IMG_IPU3O>,
-+				 <&iommu M4U_PORT_IMG_IPUI>;
-+
-+			clocks = <&ipu_core0 CLK_IPU_CORE0_AXI>,
-+				 <&ipu_core0 CLK_IPU_CORE0_IPU>,
-+				 <&ipu_core0 CLK_IPU_CORE0_JTAG>;
-+
-+			clock-names = "axi", "ipu", "jtag";
-+
-+			power-domains = <&scpsys MT8183_POWER_DOMAIN_VPU_CORE0>;
-+			status = "disabled";
-+		};
-+
- 		ipu_core0: syscon@19180000 {
- 			compatible = "mediatek,mt8183-ipu_core0", "syscon";
- 			reg = <0 0x19180000 0 0x1000>;
- 			#clock-cells = <1>;
- 		};
- 
-+		apu1: apu@19200000 {
-+			compatible = "mediatek,mt8183-apu";
-+			reg = <0 0x19280000 0 0x14000>;
-+			interrupts = <GIC_SPI 293 IRQ_TYPE_LEVEL_LOW>;
-+
-+			iommus = <&iommu M4U_PORT_CAM_IPUO>,
-+				 <&iommu M4U_PORT_CAM_IPU2O>,
-+				 <&iommu M4U_PORT_CAM_IPU3O>,
-+				 <&iommu M4U_PORT_CAM_IPUI>,
-+				 <&iommu M4U_PORT_CAM_IPU2I>;
-+
-+			clocks = <&ipu_core0 CLK_IPU_CORE1_AXI>,
-+				 <&ipu_core0 CLK_IPU_CORE1_IPU>,
-+				 <&ipu_core0 CLK_IPU_CORE1_JTAG>;
-+
-+			clock-names = "axi", "ipu", "jtag";
-+
-+			power-domains = <&scpsys MT8183_POWER_DOMAIN_VPU_CORE1>;
-+		};
-+
- 		ipu_core1: syscon@19280000 {
- 			compatible = "mediatek,mt8183-ipu_core1", "syscon";
- 			reg = <0 0x19280000 0 0x1000>;
--- 
-2.26.2
 
+> +          };
+> +     };
+> +
+> +     /*
+> +      * Below nodes are required if using TCM to load R5 firmware
+> +      * if not, then either do not provide nodes are label as disabled in
+> +      * status property
+> +      */
+> +     tcm_0a@ffe00000 {
+> +         reg = <0xffe00000 0x10000>;
+> +         pnode-id = <0xf>;
+> +         no-map;
+> +         status = "okay";
+> +         phandle = <0x40>;
+> +         compatible = "xlnx,tcm";
+> +     };
+> +     tcm_1a@ffe20000 {
+> +         reg = <0xffe20000 0x10000>;
+> +         pnode-id = <0x10>;
+> +         no-map;
+> +         status = "okay";
+> +         compatible = "xlnx,tcm";
+> +         phandle = <0x41>;
+> +     };
+> +
+> +     /*
+> +      * Below nodes are required for IPC, as Xilinx Kernel
+> +      * can potentially have other applications that use CMA
+> +      * and conflict from hardware design. With that in mind,
+> +      * explicitly state the address spaces for the IPC remoteproc
+> +      * mechanisms.
+> +      *
+> +      * If IPC not required and only elf-loading then these are not needed.
+> +      */
+> +     rpu0vdev0vring0: rpu0vdev0vring0@3ed40000 {
+> +         no-map;
+> +         reg = <0x3ed40000 0x4000>;
+> +     };
+> +     rpu0vdev0vring1: rpu0vdev0vring1@3ed44000 {
+> +         no-map;
+> +         reg = <0x3ed44000 0x4000>;
+> +     };
+> +     rpu0vdev0buffer: rpu0vdev0buffer@3ed48000 {
+> +         no-map;
+> +         reg = <0x3ed48000 0x100000>;
+> +     };
+
+Shouldn't they be under reserved-memory?
