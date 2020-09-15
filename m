@@ -2,120 +2,145 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFBE26AC08
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 15 Sep 2020 20:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA40A26AE8F
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 15 Sep 2020 22:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727537AbgIOSd6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 15 Sep 2020 14:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44190 "EHLO
+        id S1727812AbgIOUDv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 15 Sep 2020 16:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727996AbgIOSdv (ORCPT
+        with ESMTP id S1727815AbgIOTzF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 15 Sep 2020 14:33:51 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A1EC06174A
-        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Sep 2020 11:33:50 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id e7so3950260qtj.11
-        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Sep 2020 11:33:50 -0700 (PDT)
+        Tue, 15 Sep 2020 15:55:05 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14223C06174A
+        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Sep 2020 12:55:05 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id u9so1900272plk.4
+        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Sep 2020 12:55:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+6blGfo45ddZLHqhdwQdwxW8NrcsjKKHRRn1ZBFXZLs=;
-        b=AiloNFxh5Cghl768jry20e5NlAprC5q+qXPjhNzSb/KwOQgDxHmLc9ijue0h3gEQTF
-         MIZnq7foK9H9nRgI2dh8JhQ8zTHaEc32/iGt+J4bdwCjnAMIpfc3xU/b2kN3dLLRqL9Y
-         Zq8Z4wwSsoSTMzRUqX4v+s3yey83bsIAVQwDnPdkff/f5Y7ReN/VcE9wz5HhRgn4T+UH
-         vgGKklp3Og6USdpBP/9SPua7hVtevCOnwf0/QM3PKs1Y1XKppuMRM0/Z2XhJO2wShq7c
-         z1GCh7w+BD7ha7y0v2YLHb/We7eErm7KoVQ0CUzWyLuX2zg9kNxpMx/OpTlaFtgptxsH
-         51Tw==
+        bh=ANJOfSdlpRaHSBBO4TQnqknbM6J+0XuYtQl6sOjOU6g=;
+        b=vbKyE1eGXl1ab37xPuCgN3XERmZgx8c72CmccznAaQT/qdPIFWgEvL2g7tdxHUje1+
+         uH3g5E43P/o9/UJXb7GQiTNIYyMi0BTbo9lWzld48up8d8Dpu5ogNRBAKeUa8TQgWld4
+         mXnM7bosw+BwFaU3OdjM3MkSleUZ0pAHWgLipyCpVaQWGWHMKkgE5EtkjCyhdPbfacRb
+         BF4zvVAEvnt46T2LrUiCt+Ej1O5VNJn4gCUeqdOMVp0NP959/LyLVZ2HbrBpysEqZZ7U
+         /glUHqltfoq9EtlZslQ0cG+F+Ocwp8nEhATulLHJinhygWWgTymGqXK7y09zkav+1GU6
+         8HAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+6blGfo45ddZLHqhdwQdwxW8NrcsjKKHRRn1ZBFXZLs=;
-        b=aEX1CcsRy/Q7H7WU+3rxcCsOthHp6d4fSxWGOoC+21BEa8QYAH/y9uu+anfNK7LdIR
-         W3JG0kBb1oXLL5/VMzSQYUB/ZlErbwMzVrF/ECxBae/OvRzNqrXfOLdqGhcbBbYbE3+0
-         YLZ7G7aLFIzH24PRQGeiYkccOJh6mfUHcDaTJnpfWaV+HRNmiPCvLXVwQWoneebgW7Iw
-         eb5I+LWJQe3fY/+lu+jBn6PJHqnakrxyatOTeum7nQZ2cEFOmfvZUUm587O4eHdQkOHZ
-         5GSMAMdufQdrvxP8vKGZiDkXQ7/Yk8RWyXJUfYIa4/DV9ovtHZxPSLG/LbzN3O/q2NXV
-         g0EQ==
-X-Gm-Message-State: AOAM531dh/pDOjEYYw18WrhkLjh8j4F5pVKm1f9u34Hkqf5GLEpIoLiX
-        Cx5xKDvwZMj/JidAk1UPyzEGvg==
-X-Google-Smtp-Source: ABdhPJz7sRn6Y1bEqWrjwHnF2W6Cm8ePoVdwzD3htSQpX6zknE/6OuWM79mb5tJYrZj8Ag5B/NZBUg==
-X-Received: by 2002:ac8:4f44:: with SMTP id i4mr19663393qtw.189.1600194829229;
-        Tue, 15 Sep 2020 11:33:49 -0700 (PDT)
-Received: from uller (ec2-34-197-84-77.compute-1.amazonaws.com. [34.197.84.77])
-        by smtp.gmail.com with ESMTPSA id 29sm17519013qkr.114.2020.09.15.11.33.48
+        bh=ANJOfSdlpRaHSBBO4TQnqknbM6J+0XuYtQl6sOjOU6g=;
+        b=VZTw29/eZlfwKAGpe9twfQti/cfhn0oyY6I1igqmv14ATrPFFryMtwV7GuWMBxqgaa
+         mYUZnjc4PDF5UKTNj7NgBaOUdZtwRcDZ5Vm2qc7VQ8jyuvyCx0t6mTBv9iP1HCvZ9fYC
+         1x5dr0J84OX2jYM/ycWHg+2RAPUke9CwyV79BGZO3tCnWLez15K5ClE+j5RMYsRAJwXA
+         y66PYx2V7bR9I7uiPvmb+FjrNJ1SHDnuCuSh4X47B0IvsFj5DnDMCg1sOG8pce905NE2
+         wdjC/Tuq41HOKiEyHFo4b8tTRYHZWMZSxX/cjMecMvfnOPltOaYe2s/m2hlnDLRCNCuu
+         3X8A==
+X-Gm-Message-State: AOAM531j+Qkg0pDQXtHiniGw+TsvfyL7zN6aNfzu9qAOLBTycqTHElA5
+        yt7zN5OXbX9j9fPS+mZetOnEIA==
+X-Google-Smtp-Source: ABdhPJypvLei95eAIfBf9YhOFqqQKZ1C34DJmEf5yt+0uB+ckb9ORNsADCaKLRMdqq9zVPIXlUuLOA==
+X-Received: by 2002:a17:902:9685:b029:d1:e5e7:be1b with SMTP id n5-20020a1709029685b02900d1e5e7be1bmr3266435plp.78.1600199704611;
+        Tue, 15 Sep 2020 12:55:04 -0700 (PDT)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id z4sm14594221pfr.197.2020.09.15.12.55.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 11:33:48 -0700 (PDT)
-Date:   Tue, 15 Sep 2020 18:33:47 +0000
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ohad@wizery.com, evgreen@chromium.org, swboyd@chromium.org
-Subject: Re: [PATCH] remoteproc: qcom_q6v5: Assign mpss region to Q6 before
- MBA cold boot
-Message-ID: <20200915183347.GJ478@uller>
-References: <20200915173713.28098-1-sibis@codeaurora.org>
+        Tue, 15 Sep 2020 12:55:04 -0700 (PDT)
+Date:   Tue, 15 Sep 2020 13:55:01 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     iommu@lists.linux-foundation.org,
+        Russell King <linux@armlinux.org.uk>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, devicetree@vger.kernel.org,
+        arnaud.pouliquen@st.com, loic.pallardy.st.com@xps15
+Subject: Re: [PATCH 6/6] dma-mapping: introduce DMA range map, supplanting
+ dma_pfn_offset
+Message-ID: <20200915195501.GA3666944@xps15>
+References: <20200914073343.1579578-1-hch@lst.de>
+ <20200914073343.1579578-7-hch@lst.de>
+ <20200914230147.GA3251212@xps15>
+ <20200915054122.GA18079@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200915173713.28098-1-sibis@codeaurora.org>
+In-Reply-To: <20200915054122.GA18079@lst.de>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue 15 Sep 17:37 UTC 2020, Sibi Sankar wrote:
+On Tue, Sep 15, 2020 at 07:41:22AM +0200, Christoph Hellwig wrote:
+> On Mon, Sep 14, 2020 at 05:01:47PM -0600, Mathieu Poirier wrote:
+> 
+> [700 lines of the fullquote deleted..]
+> 
+> > > +	for (r = map; r->size; r++)
+> > > +		num_ranges++;
+> > > +
+> > > +	new_map = kmemdup(map, array_size(num_ranges + 1, sizeof(*map)),
+> > > +			  GFP_KERNEL);
+> > > +	if (!new_map)
+> > > +		return -ENOMEM;
+> > > +	to->dma_range_map = new_map;
+> > > +	return 0;
+> > > +}
+> > > +
+> > 
+> > This patch seemed Ok to me but it broke the stm32 remoteproc implementation.  When
+> > I tested things out function dma_coerce_mask_and_cohenrent() returns -5 and the
+> > rest of the initialisation fails.  I isolated things to function dma_to_pfn()
+> > [2].  In the original implementation __bus_to_pfn() returns 0xfffff and
+> > dev->dma_pfn_offset is equal to 0x38000.  As such the function returns 0x137fff
+> > and dma_supported() a non-zero value[3].
+> > 
+> > With this set function dma_to_pfn() received a face lift.  Function
+> > __bus_to_pfn() still returns 0xfffff but translate_dma_to_phys() returns 0,
+> > which forces dma_supported() to also return 0 and that is where the -5 (-EIO)
+> > comes from.
+> > 
+> > Taking a futher look at translate_dma_to_phy(), @dma_addr never falls within the
+> > bus_dma_region ranges and returns 0.
+> > 
+> > I'm suspecting an initialisation problem and if it occurred here, it will
+> > likely show up elsewhere.
+> 
+> Can you try this incremental patch?
+> 
+> diff --git a/include/linux/dma-direct.h b/include/linux/dma-direct.h
+> index 088c97181ab146..c6b21acba7a459 100644
+> --- a/include/linux/dma-direct.h
+> +++ b/include/linux/dma-direct.h
+> @@ -46,7 +46,7 @@ static inline phys_addr_t translate_dma_to_phys(struct device *dev,
+>  		if (dma_addr >= m->dma_start && dma_addr - m->dma_start < m->size)
+>  			return (phys_addr_t)dma_addr + m->offset;
+>  
+> -	return 0;
+> +	return (phys_addr_t)-1;
 
-> On secure devices which support warm reset, the modem subsystem requires
-> access to the mpss region to clear them out. Hence assign the mpss region
-> to Q6 before MBA cold boot. This will be a nop during a modem SSR.
-> 
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-> ---
-> 
-> I didn't want to add any new flags for warm reset support because
-> calling xfer for mpss to q6 shouldn't have any side effects on
-> platforms that don't support warm resets.
-> 
+That did the trick - the stm32 platform driver's probe() function completes and
+the remote processor is operatinal. 
 
-As discussed offline, I don't see a problem with unconditionally handing
-over the ownership of the region during this time frame. So let's just
-generalize the comment below a little bit and I'm happy with this
-change.
+That being said the value returned by function dma_to_pfn()
+is 0x137fff in the original code and 0xfffff with your patches applied.
 
 Thanks,
-Bjorn
+Mathieu
 
->  drivers/remoteproc/qcom_q6v5_mss.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-> index c401bcc263fa5..cc5b7edc02c73 100644
-> --- a/drivers/remoteproc/qcom_q6v5_mss.c
-> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
-> @@ -931,6 +931,18 @@ static int q6v5_mba_load(struct q6v5 *qproc)
->  		goto assert_reset;
->  	}
+>  }
 >  
-> +	/**
-> +	 * On secure devices which support warm reboot, the modem subsystem's cold boot is similar
-> +	 * to an SSR sequence i.e the mba requires access to the modem memory to clear it out during
-> +	 * Q6 cold boot. For modem SSR it will be a nop.
-> +	 */
-> +	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mpss_perm, false, true,
-> +				      qproc->mpss_phys, qproc->mpss_size);
-> +	if (ret) {
-> +		dev_err(qproc->dev, "assigning Q6 access to mpss memory failed: %d\n", ret);
-> +		goto disable_active_clks;
-> +	}
-> +
->  	/* Assign MBA image access in DDR to q6 */
->  	ret = q6v5_xfer_mem_ownership(qproc, &qproc->mba_perm, false, true,
->  				      qproc->mba_phys, qproc->mba_size);
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+>  #ifdef CONFIG_ARCH_HAS_PHYS_TO_DMA
