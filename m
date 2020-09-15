@@ -2,145 +2,106 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA40A26AE8F
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 15 Sep 2020 22:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230D826B2FC
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Sep 2020 00:57:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727812AbgIOUDv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 15 Sep 2020 16:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
+        id S1727306AbgIOW5h (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 15 Sep 2020 18:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727815AbgIOTzF (ORCPT
+        with ESMTP id S1727257AbgIOPSo (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 15 Sep 2020 15:55:05 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14223C06174A
-        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Sep 2020 12:55:05 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id u9so1900272plk.4
-        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Sep 2020 12:55:05 -0700 (PDT)
+        Tue, 15 Sep 2020 11:18:44 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2097C061788
+        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Sep 2020 08:18:40 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id n18so3475573qtw.0
+        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Sep 2020 08:18:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=ANJOfSdlpRaHSBBO4TQnqknbM6J+0XuYtQl6sOjOU6g=;
-        b=vbKyE1eGXl1ab37xPuCgN3XERmZgx8c72CmccznAaQT/qdPIFWgEvL2g7tdxHUje1+
-         uH3g5E43P/o9/UJXb7GQiTNIYyMi0BTbo9lWzld48up8d8Dpu5ogNRBAKeUa8TQgWld4
-         mXnM7bosw+BwFaU3OdjM3MkSleUZ0pAHWgLipyCpVaQWGWHMKkgE5EtkjCyhdPbfacRb
-         BF4zvVAEvnt46T2LrUiCt+Ej1O5VNJn4gCUeqdOMVp0NP959/LyLVZ2HbrBpysEqZZ7U
-         /glUHqltfoq9EtlZslQ0cG+F+Ocwp8nEhATulLHJinhygWWgTymGqXK7y09zkav+1GU6
-         8HAA==
+        bh=HppPKgC5RTB1pHQaCQK7PTr1sh6hJlNgeHDMeLxU9Co=;
+        b=hPGZKnEYtz6Fi+Z3jak+pMkNRlyIq329o5LzsaYZCDD3GCdidRik0I5wt6pM71S5ov
+         r5y7KoS4D2DsDP2erYwWKqZT/rdwO6CwzgFZBsVwDjRaRxrGGK+pxq7Z7aDg5CWlM13g
+         cA3SjxpzczmA/D2HH7O1SX7RC76+0bYSbka8HsUpTSs9vS2M0LaBe+jtWg+jsu9hdGSz
+         ZT6mVyklkXrw278Gdgl21Ib1+QcVjjQCYSyJP4GU1s+v4Pca8fl+P9B8SUFfhDGbXZNd
+         Av/Rn/YIG2Ueyc8m4gMEdkVPNLgAd0mxpBFNpFXvV4ZjxJJnptv5KRgQr8s0gec7Bx1v
+         ggCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=ANJOfSdlpRaHSBBO4TQnqknbM6J+0XuYtQl6sOjOU6g=;
-        b=VZTw29/eZlfwKAGpe9twfQti/cfhn0oyY6I1igqmv14ATrPFFryMtwV7GuWMBxqgaa
-         mYUZnjc4PDF5UKTNj7NgBaOUdZtwRcDZ5Vm2qc7VQ8jyuvyCx0t6mTBv9iP1HCvZ9fYC
-         1x5dr0J84OX2jYM/ycWHg+2RAPUke9CwyV79BGZO3tCnWLez15K5ClE+j5RMYsRAJwXA
-         y66PYx2V7bR9I7uiPvmb+FjrNJ1SHDnuCuSh4X47B0IvsFj5DnDMCg1sOG8pce905NE2
-         wdjC/Tuq41HOKiEyHFo4b8tTRYHZWMZSxX/cjMecMvfnOPltOaYe2s/m2hlnDLRCNCuu
-         3X8A==
-X-Gm-Message-State: AOAM531j+Qkg0pDQXtHiniGw+TsvfyL7zN6aNfzu9qAOLBTycqTHElA5
-        yt7zN5OXbX9j9fPS+mZetOnEIA==
-X-Google-Smtp-Source: ABdhPJypvLei95eAIfBf9YhOFqqQKZ1C34DJmEf5yt+0uB+ckb9ORNsADCaKLRMdqq9zVPIXlUuLOA==
-X-Received: by 2002:a17:902:9685:b029:d1:e5e7:be1b with SMTP id n5-20020a1709029685b02900d1e5e7be1bmr3266435plp.78.1600199704611;
-        Tue, 15 Sep 2020 12:55:04 -0700 (PDT)
-Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id z4sm14594221pfr.197.2020.09.15.12.55.02
+        bh=HppPKgC5RTB1pHQaCQK7PTr1sh6hJlNgeHDMeLxU9Co=;
+        b=dB376KUzvWV948p6x0lui96XHm2ezsoBXs0gBiJL/Hs7GbPvzyyWgamApJ8yF28XEG
+         976QhuCI0rJsHoWdaNwdhePIIuel09XhvS9k11dFnmpNq+QfT3UvNP7vvN4uxc80+uhE
+         DDHfxZL8Mo4iyDrIkwdVwZ5cR2PbjHdMexpae0aR6oT7R+PZs72EyKcjyAymhfuug8ci
+         rartWTCrBSPLv7tT5viICtNSh8aGWuV/JxJK9yWf8Mo0Zc8cqnEI9TW8LfSX8w717vwr
+         eYz6grS39T575myym3iyhEUQqXFuK4uwIvSRX8f+2V2Mn00hUBbU9uVtyJT/nSjgZDBp
+         gQIw==
+X-Gm-Message-State: AOAM532TLpWU+auUmaVA4/iXPhG46TnrLlYaWyDFgorvuaRBRyWWembw
+        IhMAa/6729JrNi0Wb831MAC9Zg==
+X-Google-Smtp-Source: ABdhPJwEScs8pyK7BhkglGWQM4EvvVqJqUyNIi8N4BMtIjU88HefmksOthfAZsczpD70V/livF++bg==
+X-Received: by 2002:ac8:3ac4:: with SMTP id x62mr6216721qte.279.1600183119936;
+        Tue, 15 Sep 2020 08:18:39 -0700 (PDT)
+Received: from uller (ec2-34-197-84-77.compute-1.amazonaws.com. [34.197.84.77])
+        by smtp.gmail.com with ESMTPSA id u55sm18409673qtu.42.2020.09.15.08.18.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 12:55:04 -0700 (PDT)
-Date:   Tue, 15 Sep 2020 13:55:01 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     iommu@lists.linux-foundation.org,
-        Russell King <linux@armlinux.org.uk>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-acpi@vger.kernel.org, devicetree@vger.kernel.org,
-        arnaud.pouliquen@st.com, loic.pallardy.st.com@xps15
-Subject: Re: [PATCH 6/6] dma-mapping: introduce DMA range map, supplanting
- dma_pfn_offset
-Message-ID: <20200915195501.GA3666944@xps15>
-References: <20200914073343.1579578-1-hch@lst.de>
- <20200914073343.1579578-7-hch@lst.de>
- <20200914230147.GA3251212@xps15>
- <20200915054122.GA18079@lst.de>
+        Tue, 15 Sep 2020 08:18:39 -0700 (PDT)
+Date:   Tue, 15 Sep 2020 15:18:37 +0000
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     mathieu.poirier@linaro.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ohad@wizery.com,
+        rishabhb@codeaurora.org
+Subject: Re: [PATCH] remoteproc: Fixup coredump debugfs disable request
+Message-ID: <20200915151837.GC478@uller>
+References: <20200915073416.20864-1-sibis@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200915054122.GA18079@lst.de>
+In-Reply-To: <20200915073416.20864-1-sibis@codeaurora.org>
 Sender: linux-remoteproc-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 07:41:22AM +0200, Christoph Hellwig wrote:
-> On Mon, Sep 14, 2020 at 05:01:47PM -0600, Mathieu Poirier wrote:
+On Tue 15 Sep 07:34 UTC 2020, Sibi Sankar wrote:
+
+> Currently the coredump debugfs entry takes in "disable" to set the
+> coredump state to "disabled". Let's just accept the expected state
+> instead.
 > 
-> [700 lines of the fullquote deleted..]
+
+I like this patch, but rather than arguing that it should match the name
+of the internal state I think you should either argue that when read you
+get "disabled" back or that "disabled" would make it consistent with the
+recovery.
+
+Regards,
+Bjorn
+
+> Fixes: 3afdc59e43904 ("remoteproc: Add coredump debugfs entry")
+> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+> ---
+>  drivers/remoteproc/remoteproc_debugfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > > +	for (r = map; r->size; r++)
-> > > +		num_ranges++;
-> > > +
-> > > +	new_map = kmemdup(map, array_size(num_ranges + 1, sizeof(*map)),
-> > > +			  GFP_KERNEL);
-> > > +	if (!new_map)
-> > > +		return -ENOMEM;
-> > > +	to->dma_range_map = new_map;
-> > > +	return 0;
-> > > +}
-> > > +
-> > 
-> > This patch seemed Ok to me but it broke the stm32 remoteproc implementation.  When
-> > I tested things out function dma_coerce_mask_and_cohenrent() returns -5 and the
-> > rest of the initialisation fails.  I isolated things to function dma_to_pfn()
-> > [2].  In the original implementation __bus_to_pfn() returns 0xfffff and
-> > dev->dma_pfn_offset is equal to 0x38000.  As such the function returns 0x137fff
-> > and dma_supported() a non-zero value[3].
-> > 
-> > With this set function dma_to_pfn() received a face lift.  Function
-> > __bus_to_pfn() still returns 0xfffff but translate_dma_to_phys() returns 0,
-> > which forces dma_supported() to also return 0 and that is where the -5 (-EIO)
-> > comes from.
-> > 
-> > Taking a futher look at translate_dma_to_phy(), @dma_addr never falls within the
-> > bus_dma_region ranges and returns 0.
-> > 
-> > I'm suspecting an initialisation problem and if it occurred here, it will
-> > likely show up elsewhere.
-> 
-> Can you try this incremental patch?
-> 
-> diff --git a/include/linux/dma-direct.h b/include/linux/dma-direct.h
-> index 088c97181ab146..c6b21acba7a459 100644
-> --- a/include/linux/dma-direct.h
-> +++ b/include/linux/dma-direct.h
-> @@ -46,7 +46,7 @@ static inline phys_addr_t translate_dma_to_phys(struct device *dev,
->  		if (dma_addr >= m->dma_start && dma_addr - m->dma_start < m->size)
->  			return (phys_addr_t)dma_addr + m->offset;
+> diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
+> index 2e3b3e22e1d01..7ca823f6aa638 100644
+> --- a/drivers/remoteproc/remoteproc_debugfs.c
+> +++ b/drivers/remoteproc/remoteproc_debugfs.c
+> @@ -94,7 +94,7 @@ static ssize_t rproc_coredump_write(struct file *filp,
+>  		goto out;
+>  	}
 >  
-> -	return 0;
-> +	return (phys_addr_t)-1;
-
-That did the trick - the stm32 platform driver's probe() function completes and
-the remote processor is operatinal. 
-
-That being said the value returned by function dma_to_pfn()
-is 0x137fff in the original code and 0xfffff with your patches applied.
-
-Thanks,
-Mathieu
-
->  }
->  
->  #ifdef CONFIG_ARCH_HAS_PHYS_TO_DMA
+> -	if (!strncmp(buf, "disable", count)) {
+> +	if (!strncmp(buf, "disabled", count)) {
+>  		rproc->dump_conf = RPROC_COREDUMP_DISABLED;
+>  	} else if (!strncmp(buf, "inline", count)) {
+>  		rproc->dump_conf = RPROC_COREDUMP_INLINE;
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
