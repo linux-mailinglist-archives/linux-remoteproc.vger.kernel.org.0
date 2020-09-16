@@ -2,56 +2,53 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D048726C8E7
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Sep 2020 20:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CE926C924
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Sep 2020 21:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728280AbgIPS7u (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 16 Sep 2020 14:59:50 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:62532 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727751AbgIPS7t (ORCPT
+        id S1727472AbgIPTD6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 16 Sep 2020 15:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727407AbgIPRsG (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 16 Sep 2020 14:59:49 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1600282788; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=SSqTKliitikyhS2Hm4khYk3MaXTZpP0INBcLPuNG4D4=; b=l0d3pTCWnG3AtJMd50SHWOC7EUdq8tZ9vKHrDKccip513xR1oNUR4xVdT4ENrG+oJe2J+an2
- q34dlPSdc8qu4JhVGJbn0qA2z8Dwy4WdSHm0CwCmxPNN5dHoF3jYnKQl/PJSZrUTSQmVO7um
- SrH8IwCkHrVYcEgJnWcbeUov944=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5f62266d9a5950f997bf30f4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 16 Sep 2020 14:51:25
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id EB37DC433F1; Wed, 16 Sep 2020 14:51:24 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5492BC433CA;
-        Wed, 16 Sep 2020 14:51:21 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5492BC433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org
-Cc:     agross@kernel.org, linux-arm-msm@vger.zkernel.org,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ohad@wizery.com, rishabhb@codeaurora.org,
-        Sibi Sankar <sibis@codeaurora.org>, stable@vger.kernel.org
-Subject: [PATCH v2] remoteproc: Fixup coredump debugfs disable request
-Date:   Wed, 16 Sep 2020 20:21:00 +0530
-Message-Id: <20200916145100.15872-1-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.27.0
+        Wed, 16 Sep 2020 13:48:06 -0400
+Received: from mo6-p02-ob.smtp.rzone.de (mo6-p02-ob.smtp.rzone.de [IPv6:2a01:238:20a:202:5302::11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C766C061A2B;
+        Wed, 16 Sep 2020 04:14:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1600254283;
+        s=strato-dkim-0002; d=gerhold.net;
+        h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=TFNXvKJwdtFzCefcgMtOvafQoeaSFyYS/u0KKD5oVW8=;
+        b=gPzf3js/HWVP5uFH/poWB0INhXvEnj87wp526vurWlxAnhwDpUl85re7xFY6QflPR8
+        J1Gp15d6gpsX2HOKAMsg2X2WaZqLoybYIm8zZVeNnnDvISw4a9Y4AzcLdP0Zw6OjjgKj
+        e1Kc54fsCsd/NdXbkLODNKhfdyfzDlre0Con7GVzwGq2VwsnAqRnU3jfvegzsqdkxPwC
+        XX+hUkdFbbGltaZ1TlfyDBmHO0dpbHtz9VbjSi8i0OQ+uzMXJART2ATh2E/yaVNU/34F
+        IN15OIKq8MoUdEN+P/EjjWPiG+yw/EN/6ZM4w65qg8I+3gJY2A0NRiQR+Sxz6cgeG9jy
+        riug==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVORvLd4SsytBXS7IYBkLahKxB4W6Nahc="
+X-RZG-CLASS-ID: mo00
+Received: from localhost.localdomain
+        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
+        with ESMTPSA id g0b6c1w8GAfpzlQ
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Wed, 16 Sep 2020 12:41:51 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH 03/10] soc: qcom: rpmpd: Add MSM8916 power domains
+Date:   Wed, 16 Sep 2020 12:41:28 +0200
+Message-Id: <20200916104135.25085-4-stephan@gerhold.net>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200916104135.25085-1-stephan@gerhold.net>
+References: <20200916104135.25085-1-stephan@gerhold.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-remoteproc-owner@vger.kernel.org
@@ -59,34 +56,53 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Fix the discrepancy observed between accepted input and read back value
-while disabling remoteproc coredump through the coredump debugfs entry.
+MSM8916 has two RPM power domains: VDDCX and VDDMX.
+Add the necessary definitions to manage them with rpmpd.
 
-Fixes: 3afdc59e4390 ("remoteproc: Add coredump debugfs entry")
-Cc: stable@vger.kernel.org
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
+ drivers/soc/qcom/rpmpd.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-V2:
- * Fixup commit message [Bjorn].
-
- drivers/remoteproc/remoteproc_debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
-index 2e3b3e22e1d0..7ca823f6aa63 100644
---- a/drivers/remoteproc/remoteproc_debugfs.c
-+++ b/drivers/remoteproc/remoteproc_debugfs.c
-@@ -94,7 +94,7 @@ static ssize_t rproc_coredump_write(struct file *filp,
- 		goto out;
- 	}
+diff --git a/drivers/soc/qcom/rpmpd.c b/drivers/soc/qcom/rpmpd.c
+index 88eb458b13d0..daeea119d48a 100644
+--- a/drivers/soc/qcom/rpmpd.c
++++ b/drivers/soc/qcom/rpmpd.c
+@@ -116,6 +116,26 @@ struct rpmpd_desc {
  
--	if (!strncmp(buf, "disable", count)) {
-+	if (!strncmp(buf, "disabled", count)) {
- 		rproc->dump_conf = RPROC_COREDUMP_DISABLED;
- 	} else if (!strncmp(buf, "inline", count)) {
- 		rproc->dump_conf = RPROC_COREDUMP_INLINE;
+ static DEFINE_MUTEX(rpmpd_lock);
+ 
++/* msm8916 RPM Power Domains */
++DEFINE_RPMPD_PAIR(msm8916, vddcx, vddcx_ao, SMPA, CORNER, 1);
++DEFINE_RPMPD_PAIR(msm8916, vddmx, vddmx_ao, LDOA, CORNER, 3);
++
++DEFINE_RPMPD_VFC(msm8916, vddcx_vfc, SMPA, 1);
++
++static struct rpmpd *msm8916_rpmpds[] = {
++	[MSM8916_VDDCX] =	&msm8916_vddcx,
++	[MSM8916_VDDCX_AO] =	&msm8916_vddcx_ao,
++	[MSM8916_VDDCX_VFC] =	&msm8916_vddcx_vfc,
++	[MSM8916_VDDMX] =	&msm8916_vddmx,
++	[MSM8916_VDDMX_AO] =	&msm8916_vddmx_ao,
++};
++
++static const struct rpmpd_desc msm8916_desc = {
++	.rpmpds = msm8916_rpmpds,
++	.num_pds = ARRAY_SIZE(msm8916_rpmpds),
++	.max_state = MAX_CORNER_RPMPD_STATE,
++};
++
+ /* msm8976 RPM Power Domains */
+ DEFINE_RPMPD_PAIR(msm8976, vddcx, vddcx_ao, SMPA, LEVEL, 2);
+ DEFINE_RPMPD_PAIR(msm8976, vddmx, vddmx_ao, SMPA, LEVEL, 6);
+@@ -221,6 +241,7 @@ static const struct rpmpd_desc qcs404_desc = {
+ };
+ 
+ static const struct of_device_id rpmpd_match_table[] = {
++	{ .compatible = "qcom,msm8916-rpmpd", .data = &msm8916_desc },
+ 	{ .compatible = "qcom,msm8976-rpmpd", .data = &msm8976_desc },
+ 	{ .compatible = "qcom,msm8996-rpmpd", .data = &msm8996_desc },
+ 	{ .compatible = "qcom,msm8998-rpmpd", .data = &msm8998_desc },
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.28.0
 
