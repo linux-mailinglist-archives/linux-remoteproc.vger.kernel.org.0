@@ -2,490 +2,248 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CCB626F62B
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 18 Sep 2020 08:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D0026F751
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 18 Sep 2020 09:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726644AbgIRGok (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 18 Sep 2020 02:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726640AbgIRGoi (ORCPT
+        id S1726739AbgIRHsZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 18 Sep 2020 03:48:25 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:26748 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726649AbgIRHsZ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 18 Sep 2020 02:44:38 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44C8C061756
-        for <linux-remoteproc@vger.kernel.org>; Thu, 17 Sep 2020 23:44:38 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id k13so2488264plk.3
-        for <linux-remoteproc@vger.kernel.org>; Thu, 17 Sep 2020 23:44:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EVKdm5Gv+utgZ+5iUsGN0zIu+mBjiU04OhMu3Ey5z1s=;
-        b=cH0y7YYDMA942nNgtMo835r3cF3OF9DML5+N4MPDULlPw92yhYFAwVuipiNBrw1+gx
-         ld1deAIgxJMaW5bhp5bo4BDsed/C5ThKmeQhA5CjG0nbTBhiGjtPqCi5C29iJ3fyOCld
-         AR6RihnPaP3gY64K5KC+GG+0VAoRntIPePXxs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EVKdm5Gv+utgZ+5iUsGN0zIu+mBjiU04OhMu3Ey5z1s=;
-        b=i2bBbJalzvtro++Ug6Le5iJFDaWrrAf6lc6DoNpZpQcjvkR7URSk82Rpb29pEZiO1s
-         oIW8TtuHHvMydkRzhZPwXG6u8wr48yYlrnYDxBqPr7IIZBxKfQkSM420rT+u8B2TZHaX
-         JG94Ao9PM1GY3S+4Z5P9wrHaA43SpiJmB9N2EjNr+sgll5HCvdwzHBPJwAwb3yxkECGk
-         4a1MqcAdWm8V0XEJuqk/GP2G9dlOP7+m7Mq1RHphLMV339dr5O/8u6imi4UQbq4yFSVx
-         MPxOrDFTIKUvg36+c+L9W20RG6T4QxFeSGtUit97KHTExeVlICMX/0HGmHP0qE0vCZPe
-         Y0tQ==
-X-Gm-Message-State: AOAM531Oxf3bSMjauRu1IGR07bY9PJHc49sC1UXAjMhmW9BAVLWfF2k1
-        X+Ur0TD6G5enNkRXpcvR2Gx4AQ==
-X-Google-Smtp-Source: ABdhPJzww3FQtvgy7FBYF71lkzO3iZVrBMS4h7JE13BZZtaxlZTbrYKj100H0gWNUki/vKVd+yKc5Q==
-X-Received: by 2002:a17:902:c202:b029:d1:cbf4:c596 with SMTP id 2-20020a170902c202b02900d1cbf4c596mr21036621pll.27.1600411478014;
-        Thu, 17 Sep 2020 23:44:38 -0700 (PDT)
-Received: from kafuu-chino.c.googlers.com.com (105.219.229.35.bc.googleusercontent.com. [35.229.219.105])
-        by smtp.googlemail.com with ESMTPSA id f9sm1646859pjq.26.2020.09.17.23.44.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 23:44:37 -0700 (PDT)
-From:   Pi-Hsun Shih <pihsun@chromium.org>
-Cc:     Pi-Hsun Shih <pihsun@chromium.org>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tzung-Bi Shih <tzungbi@google.com>,
+        Fri, 18 Sep 2020 03:48:25 -0400
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08I7kr6B002419;
+        Fri, 18 Sep 2020 09:47:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=giXbDKgSiyCtqbTZJ17PIshG64TA8eKB36koF1fFacg=;
+ b=HPWv/mcCMbOzwHEj/XPWfi+30GIrLlxb1CaIKk9sL+HZrmkAgh07Yxg32h1uqy3pyFNZ
+ sOocKO6kH/q+jnwEGmDtYSyvGu0qpk9bDMzNX7ly0QimxWRs38BpvB93UJ8nY/+1ctxe
+ OTE7mLf0F+iDPC9oW80NzmHqM1wRDP28IMB8yhgR4FHVSO3E0KoSDwhzEFlg1cZ+9a64
+ wX8Cky2hm9l+iO6ZVycyZdjeu4uiHF08uLXEVLG2HATntpRtv797hEK2rhN88wptXLKp
+ fmA67UG12a1a1M2BZmkhVy5z8ldXZsQnFXfIefKnlUWKpLQOknAktcFTyQiB0wMrVzax aA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 33k67bygy6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Sep 2020 09:47:47 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B690610002A;
+        Fri, 18 Sep 2020 09:47:45 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8A2C620FA52;
+        Fri, 18 Sep 2020 09:47:45 +0200 (CEST)
+Received: from lmecxl0889.tpe.st.com (10.75.127.47) by SFHDAG3NODE1.st.com
+ (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 18 Sep
+ 2020 09:47:44 +0200
+Subject: Re: [PATCH v6 0/4] Add a vhost RPMsg API
+To:     Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "sound-open-firmware@alsa-project.org" 
+        <sound-open-firmware@alsa-project.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-remoteproc@vger.kernel.org (open list:REMOTE PROCESSOR
-        (REMOTEPROC) SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] remoteproc/mediatek: Add support for mt8192 SCP
-Date:   Fri, 18 Sep 2020 14:44:32 +0800
-Message-Id: <20200918064432.3117955-1-pihsun@chromium.org>
-X-Mailer: git-send-email 2.28.0.681.g6f77f65b4e-goog
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+References: <20200901151153.28111-1-guennadi.liakhovetski@linux.intel.com>
+ <9433695b-5757-db73-bd8a-538fd1375e2a@st.com> <20200917054705.GA11491@ubuntu>
+ <47a9ad01-c922-3b1c-84de-433f229ffba3@st.com> <20200918054420.GA19246@ubuntu>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Message-ID: <0b7d9004-d71b-8b9a-eaed-f92833ce113f@st.com>
+Date:   Fri, 18 Sep 2020 09:47:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20200918054420.GA19246@ubuntu>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG5NODE1.st.com (10.75.127.13) To SFHDAG3NODE1.st.com
+ (10.75.127.7)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-18_06:2020-09-16,2020-09-18 signatures=0
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add support for mt8192 SCP.
+Hi Guennadi,
 
-Signed-off-by: Pi-Hsun Shih <pihsun@chromium.org>
-Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
----
+On 9/18/20 7:44 AM, Guennadi Liakhovetski wrote:
+> Hi Arnaud,
+> 
+> On Thu, Sep 17, 2020 at 05:21:02PM +0200, Arnaud POULIQUEN wrote:
+>> Hi Guennadi,
+>>
+>>> -----Original Message-----
+>>> From: Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
+>>> Sent: jeudi 17 septembre 2020 07:47
+>>> To: Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+>>> Cc: kvm@vger.kernel.org; linux-remoteproc@vger.kernel.org;
+>>> virtualization@lists.linux-foundation.org; sound-open-firmware@alsa-
+>>> project.org; Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>; Liam
+>>> Girdwood <liam.r.girdwood@linux.intel.com>; Michael S. Tsirkin
+>>> <mst@redhat.com>; Jason Wang <jasowang@redhat.com>; Ohad Ben-Cohen
+>>> <ohad@wizery.com>; Bjorn Andersson <bjorn.andersson@linaro.org>; Mathieu
+>>> Poirier <mathieu.poirier@linaro.org>; Vincent Whitchurch
+>>> <vincent.whitchurch@axis.com>
+>>> Subject: Re: [PATCH v6 0/4] Add a vhost RPMsg API
+>>>
+>>> Hi Arnaud,
+>>>
+>>> On Tue, Sep 15, 2020 at 02:13:23PM +0200, Arnaud POULIQUEN wrote:
+>>>> Hi  Guennadi,
+>>>>
+>>>> On 9/1/20 5:11 PM, Guennadi Liakhovetski wrote:
+>>>>> Hi,
+>>>>>
+>>>>> Next update:
+>>>>>
+>>>>> v6:
+>>>>> - rename include/linux/virtio_rpmsg.h ->
+>>>>> include/linux/rpmsg/virtio.h
+>>>>>
+>>>>> v5:
+>>>>> - don't hard-code message layout
+>>>>>
+>>>>> v4:
+>>>>> - add endianness conversions to comply with the VirtIO standard
+>>>>>
+>>>>> v3:
+>>>>> - address several checkpatch warnings
+>>>>> - address comments from Mathieu Poirier
+>>>>>
+>>>>> v2:
+>>>>> - update patch #5 with a correct vhost_dev_init() prototype
+>>>>> - drop patch #6 - it depends on a different patch, that is currently
+>>>>>   an RFC
+>>>>> - address comments from Pierre-Louis Bossart:
+>>>>>   * remove "default n" from Kconfig
+>>>>>
+>>>>> Linux supports RPMsg over VirtIO for "remote processor" / AMP use
+>>>>> cases. It can however also be used for virtualisation scenarios,
+>>>>> e.g. when using KVM to run Linux on both the host and the guests.
+>>>>> This patch set adds a wrapper API to facilitate writing vhost
+>>>>> drivers for such RPMsg-based solutions. The first use case is an
+>>>>> audio DSP virtualisation project, currently under development, ready
+>>>>> for review and submission, available at
+>>>>> https://github.com/thesofproject/linux/pull/1501/commits
+>>>>
+>>>> Mathieu pointed me your series. On my side i proposed the rpmsg_ns_msg
+>>>> service[1] that does not match with your implementation.
+>>>> As i come late, i hope that i did not miss something in the history...
+>>>> Don't hesitate to point me the discussions, if it is the case.
+>>>
+>>> Well, as you see, this is a v6 only of this patch set, and apart from it there have
+>>> been several side discussions and patch sets.
+>>>
+>>>> Regarding your patchset, it is quite confusing for me. It seems that
+>>>> you implement your own protocol on top of vhost forked from the RPMsg
+>>> one.
+>>>> But look to me that it is not the RPMsg protocol.
+>>>
+>>> I'm implementing a counterpart to the rpmsg protocol over VirtIO as initially
+>>> implemented by drivers/rpmsg/virtio_rpmsg_bus.c for the "main CPU" (in case
+>>> of remoteproc over VirtIO) or the guest side in case of Linux virtualisation.
+>>> Since my implementation can talk to that driver, I don't think, that I'm inventing
+>>> a new protocol. I'm adding support for the same protocol for the opposite side
+>>> of the VirtIO divide.
+>>
+>> The main point I would like to highlight here is related to the use of the name "RPMsg"
+>> more than how you implement your IPC protocol.
+>> If It is a counterpart, it probably does not respect interface for RPMsg clients.
+>> A good way to answer this, might be to respond to this question:
+>> Is the rpmsg sample client[4] can be used on top of your vhost RPMsg implementation?
+>> If the response is no, describe it as a RPMsg implementation could lead to confusion...
+> 
+> Sorry, I don't quite understand your logic. RPMsg is a communication protocol, not an 
+> API. An RPMsg implementation has to be able to communicate with other compliant RPMsg 
+> implementations, it doesn't have to provide any specific API. Am I missing anything?
 
-Change since v1:
-* Remove unused register definitions.
+You are right nothing is written in stone that compliance with the user RPMsg API defined
+in the Linux Documentation [5] is mandatory.
+IMO, as this API is defined in the Linux documentation [5] we should respect it, to ensure
+one generic implementation. The RPMsg sample client[4] uses this user API, so seems to me
+a good candidate to verify this. 
 
----
- drivers/remoteproc/mtk_common.h  |  32 +++++
- drivers/remoteproc/mtk_scp.c     | 207 ++++++++++++++++++++++++++-----
- drivers/remoteproc/mtk_scp_ipi.c |   5 +-
- 3 files changed, 211 insertions(+), 33 deletions(-)
+That's said, shall we multiple the RPMsg implementations in Linux with several APIs,
+With the risk to make the RPMsg clients devices dependent on these implementations?
+That could lead to complex code or duplications...
 
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index 0066c83636d0..47b4561443a9 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -32,6 +32,23 @@
- #define MT8183_SCP_CACHESIZE_8KB	BIT(8)
- #define MT8183_SCP_CACHE_CON_WAYEN	BIT(10)
- 
-+#define MT8192_L2TCM_SRAM_PD_0		0x210C0
-+#define MT8192_L2TCM_SRAM_PD_1		0x210C4
-+#define MT8192_L2TCM_SRAM_PD_2		0x210C8
-+#define MT8192_L1TCM_SRAM_PDN		0x2102C
-+#define MT8192_CPU0_SRAM_PD		0x21080
-+
-+#define MT8192_SCP2APMCU_IPC_SET	0x24080
-+#define MT8192_SCP2APMCU_IPC_CLR	0x24084
-+#define MT8192_SCP_IPC_INT_BIT		BIT(0)
-+#define MT8192_SCP2SPM_IPC_CLR		0x24094
-+#define MT8192_GIPC_IN_SET		0x24098
-+#define MT8192_HOST_IPC_INT_BIT		BIT(0)
-+
-+#define MT8192_CORE0_SW_RSTN_CLR	0x30000
-+#define MT8192_CORE0_SW_RSTN_SET	0x30004
-+#define MT8192_CORE0_WDT_CFG		0x30034
-+
- #define SCP_FW_VER_LEN			32
- #define SCP_SHARE_BUFFER_SIZE		288
- 
-@@ -50,6 +67,19 @@ struct scp_ipi_desc {
- 	void *priv;
- };
- 
-+struct mtk_scp;
-+
-+struct mtk_scp_of_data {
-+	int (*scp_before_load)(struct mtk_scp *scp);
-+	void (*scp_irq_handler)(struct mtk_scp *scp);
-+	void (*scp_reset_assert)(struct mtk_scp *scp);
-+	void (*scp_reset_deassert)(struct mtk_scp *scp);
-+	void (*scp_stop)(struct mtk_scp *scp);
-+
-+	u32 host_to_scp_reg;
-+	u32 host_to_scp_int_bit;
-+};
-+
- struct mtk_scp {
- 	struct device *dev;
- 	struct rproc *rproc;
-@@ -58,6 +88,8 @@ struct mtk_scp {
- 	void __iomem *sram_base;
- 	size_t sram_size;
- 
-+	const struct mtk_scp_of_data *data;
-+
- 	struct mtk_share_obj __iomem *recv_buf;
- 	struct mtk_share_obj __iomem *send_buf;
- 	struct scp_run run;
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index ac13e7b046a6..f5f226a7b34c 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -124,9 +124,6 @@ static int scp_ipi_init(struct mtk_scp *scp)
- 	size_t send_offset = SCP_FW_END - sizeof(struct mtk_share_obj);
- 	size_t recv_offset = send_offset - sizeof(struct mtk_share_obj);
- 
--	/* Disable SCP to host interrupt */
--	writel(MT8183_SCP_IPC_INT_BIT, scp->reg_base + MT8183_SCP_TO_HOST);
--
- 	/* shared buffer initialization */
- 	scp->recv_buf =
- 		(struct mtk_share_obj __iomem *)(scp->sram_base + recv_offset);
-@@ -138,7 +135,7 @@ static int scp_ipi_init(struct mtk_scp *scp)
- 	return 0;
- }
- 
--static void scp_reset_assert(const struct mtk_scp *scp)
-+static void mt8183_scp_reset_assert(struct mtk_scp *scp)
- {
- 	u32 val;
- 
-@@ -147,7 +144,7 @@ static void scp_reset_assert(const struct mtk_scp *scp)
- 	writel(val, scp->reg_base + MT8183_SW_RSTN);
- }
- 
--static void scp_reset_deassert(const struct mtk_scp *scp)
-+static void mt8183_scp_reset_deassert(struct mtk_scp *scp)
- {
- 	u32 val;
- 
-@@ -156,17 +153,29 @@ static void scp_reset_deassert(const struct mtk_scp *scp)
- 	writel(val, scp->reg_base + MT8183_SW_RSTN);
- }
- 
--static irqreturn_t scp_irq_handler(int irq, void *priv)
-+static void mt8192_scp_reset_assert(struct mtk_scp *scp)
- {
--	struct mtk_scp *scp = priv;
--	u32 scp_to_host;
--	int ret;
-+	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
-+}
- 
--	ret = clk_prepare_enable(scp->clk);
--	if (ret) {
--		dev_err(scp->dev, "failed to enable clocks\n");
--		return IRQ_NONE;
--	}
-+static void mt8192_scp_reset_deassert(struct mtk_scp *scp)
-+{
-+	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_CLR);
-+}
-+
-+static void scp_reset_assert(struct mtk_scp *scp)
-+{
-+	scp->data->scp_reset_assert(scp);
-+}
-+
-+static void scp_reset_deassert(struct mtk_scp *scp)
-+{
-+	scp->data->scp_reset_deassert(scp);
-+}
-+
-+static void mt8183_scp_irq_handler(struct mtk_scp *scp)
-+{
-+	u32 scp_to_host;
- 
- 	scp_to_host = readl(scp->reg_base + MT8183_SCP_TO_HOST);
- 	if (scp_to_host & MT8183_SCP_IPC_INT_BIT)
-@@ -177,6 +186,40 @@ static irqreturn_t scp_irq_handler(int irq, void *priv)
- 	/* SCP won't send another interrupt until we set SCP_TO_HOST to 0. */
- 	writel(MT8183_SCP_IPC_INT_BIT | MT8183_SCP_WDT_INT_BIT,
- 	       scp->reg_base + MT8183_SCP_TO_HOST);
-+}
-+
-+static void mt8192_scp_irq_handler(struct mtk_scp *scp)
-+{
-+	u32 scp_to_host;
-+
-+	scp_to_host = readl(scp->reg_base + MT8192_SCP2APMCU_IPC_SET);
-+
-+	if (scp_to_host & MT8192_SCP_IPC_INT_BIT)
-+		scp_ipi_handler(scp);
-+	else
-+		scp_wdt_handler(scp, scp_to_host);
-+
-+	/*
-+	 * SCP won't send another interrupt until we clear
-+	 * MT8192_SCP2APMCU_IPC.
-+	 */
-+	writel(MT8192_SCP_IPC_INT_BIT,
-+	       scp->reg_base + MT8192_SCP2APMCU_IPC_CLR);
-+}
-+
-+static irqreturn_t scp_irq_handler(int irq, void *priv)
-+{
-+	struct mtk_scp *scp = priv;
-+	int ret;
-+
-+	ret = clk_prepare_enable(scp->clk);
-+	if (ret) {
-+		dev_err(scp->dev, "failed to enable clocks\n");
-+		return IRQ_NONE;
-+	}
-+
-+	scp->data->scp_irq_handler(scp);
-+
- 	clk_disable_unprepare(scp->clk);
- 
- 	return IRQ_HANDLED;
-@@ -238,20 +281,10 @@ static int scp_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
- 	return ret;
- }
- 
--static int scp_load(struct rproc *rproc, const struct firmware *fw)
-+static int mt8183_scp_before_load(struct mtk_scp *scp)
- {
--	const struct mtk_scp *scp = rproc->priv;
--	struct device *dev = scp->dev;
--	int ret;
--
--	ret = clk_prepare_enable(scp->clk);
--	if (ret) {
--		dev_err(dev, "failed to enable clocks\n");
--		return ret;
--	}
--
--	/* Hold SCP in reset while loading FW. */
--	scp_reset_assert(scp);
-+	/* Clear SCP to host interrupt */
-+	writel(MT8183_SCP_IPC_INT_BIT, scp->reg_base + MT8183_SCP_TO_HOST);
- 
- 	/* Reset clocks before loading FW */
- 	writel(0x0, scp->reg_base + MT8183_SCP_CLK_SW_SEL);
-@@ -272,6 +305,67 @@ static int scp_load(struct rproc *rproc, const struct firmware *fw)
- 	       scp->reg_base + MT8183_SCP_CACHE_CON);
- 	writel(MT8183_SCP_CACHESIZE_8KB, scp->reg_base + MT8183_SCP_DCACHE_CON);
- 
-+	return 0;
-+}
-+
-+static void mt8192_power_on_sram(void *addr)
-+{
-+	int i;
-+
-+	for (i = 31; i >= 0; i--)
-+		writel(GENMASK(i, 0), addr);
-+	writel(0, addr);
-+}
-+
-+static void mt8192_power_off_sram(void *addr)
-+{
-+	int i;
-+
-+	writel(0, addr);
-+	for (i = 0; i < 32; i++)
-+		writel(GENMASK(i, 0), addr);
-+}
-+
-+static int mt8192_scp_before_load(struct mtk_scp *scp)
-+{
-+	/* clear SPM interrupt, SCP2SPM_IPC_CLR */
-+	writel(0xff, scp->reg_base + MT8192_SCP2SPM_IPC_CLR);
-+
-+	writel(1, scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
-+
-+	dsb(sy);
-+
-+	readl(scp->reg_base + MT8192_CORE0_SW_RSTN_SET);
-+
-+	/* enable SRAM clock */
-+	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
-+	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
-+	mt8192_power_on_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
-+	mt8192_power_on_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
-+	mt8192_power_on_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
-+
-+	return 0;
-+}
-+
-+static int scp_load(struct rproc *rproc, const struct firmware *fw)
-+{
-+	struct mtk_scp *scp = rproc->priv;
-+	struct device *dev = scp->dev;
-+	int ret;
-+
-+	ret = clk_prepare_enable(scp->clk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable clocks\n");
-+		return ret;
-+	}
-+
-+	/* Hold SCP in reset while loading FW. */
-+	scp_reset_assert(scp);
-+
-+	ret = scp->data->scp_before_load(scp);
-+	if (ret < 0)
-+		return ret;
-+
- 	ret = scp_elf_load_segments(rproc, fw);
- 	clk_disable_unprepare(scp->clk);
- 
-@@ -309,6 +403,7 @@ static int scp_start(struct rproc *rproc)
- 		dev_err(dev, "wait SCP interrupted by a signal!\n");
- 		goto stop;
- 	}
-+
- 	clk_disable_unprepare(scp->clk);
- 	dev_info(dev, "SCP is ready. FW version %s\n", run->fw_ver);
- 
-@@ -329,7 +424,7 @@ static void *scp_da_to_va(struct rproc *rproc, u64 da, size_t len)
- 		offset = da;
- 		if (offset >= 0 && (offset + len) < scp->sram_size)
- 			return (void __force *)scp->sram_base + offset;
--	} else {
-+	} else if (scp->dram_size) {
- 		offset = da - scp->dma_addr;
- 		if (offset >= 0 && (offset + len) < scp->dram_size)
- 			return (void __force *)scp->cpu_addr + offset;
-@@ -338,6 +433,25 @@ static void *scp_da_to_va(struct rproc *rproc, u64 da, size_t len)
- 	return NULL;
- }
- 
-+static void mt8183_scp_stop(struct mtk_scp *scp)
-+{
-+	/* Disable SCP watchdog */
-+	writel(0, scp->reg_base + MT8183_WDT_CFG);
-+}
-+
-+static void mt8192_scp_stop(struct mtk_scp *scp)
-+{
-+	/* Disable SRAM clock */
-+	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_0);
-+	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_1);
-+	mt8192_power_off_sram(scp->reg_base + MT8192_L2TCM_SRAM_PD_2);
-+	mt8192_power_off_sram(scp->reg_base + MT8192_L1TCM_SRAM_PDN);
-+	mt8192_power_off_sram(scp->reg_base + MT8192_CPU0_SRAM_PD);
-+
-+	/* Disable SCP watchdog */
-+	writel(0, scp->reg_base + MT8192_CORE0_WDT_CFG);
-+}
-+
- static int scp_stop(struct rproc *rproc)
- {
- 	struct mtk_scp *scp = (struct mtk_scp *)rproc->priv;
-@@ -350,8 +464,7 @@ static int scp_stop(struct rproc *rproc)
- 	}
- 
- 	scp_reset_assert(scp);
--	/* Disable SCP watchdog */
--	writel(0, scp->reg_base + MT8183_WDT_CFG);
-+	scp->data->scp_stop(scp);
- 	clk_disable_unprepare(scp->clk);
- 
- 	return 0;
-@@ -443,6 +556,13 @@ static int scp_map_memory_region(struct mtk_scp *scp)
- 	int ret;
- 
- 	ret = of_reserved_mem_device_init(scp->dev);
-+
-+	/* reserved memory is optional. */
-+	if (ret == -ENODEV) {
-+		dev_info(scp->dev, "skipping reserved memory initialization.");
-+		return 0;
-+	}
-+
- 	if (ret) {
- 		dev_err(scp->dev, "failed to assign memory-region: %d\n", ret);
- 		return -ENOMEM;
-@@ -460,6 +580,9 @@ static int scp_map_memory_region(struct mtk_scp *scp)
- 
- static void scp_unmap_memory_region(struct mtk_scp *scp)
- {
-+	if (scp->dram_size == 0)
-+		return;
-+
- 	dma_free_coherent(scp->dev, scp->dram_size, scp->cpu_addr,
- 			  scp->dma_addr);
- 	of_reserved_mem_device_release(scp->dev);
-@@ -536,6 +659,7 @@ static int scp_probe(struct platform_device *pdev)
- 	scp = (struct mtk_scp *)rproc->priv;
- 	scp->rproc = rproc;
- 	scp->dev = dev;
-+	scp->data = of_device_get_match_data(dev);
- 	platform_set_drvdata(pdev, scp);
- 
- 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "sram");
-@@ -642,8 +766,29 @@ static int scp_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static const struct mtk_scp_of_data mt8183_of_data = {
-+	.scp_before_load = mt8183_scp_before_load,
-+	.scp_irq_handler = mt8183_scp_irq_handler,
-+	.scp_reset_assert = mt8183_scp_reset_assert,
-+	.scp_reset_deassert = mt8183_scp_reset_deassert,
-+	.scp_stop = mt8183_scp_stop,
-+	.host_to_scp_reg = MT8183_HOST_TO_SCP,
-+	.host_to_scp_int_bit = MT8183_HOST_IPC_INT_BIT,
-+};
-+
-+static const struct mtk_scp_of_data mt8192_of_data = {
-+	.scp_before_load = mt8192_scp_before_load,
-+	.scp_irq_handler = mt8192_scp_irq_handler,
-+	.scp_reset_assert = mt8192_scp_reset_assert,
-+	.scp_reset_deassert = mt8192_scp_reset_deassert,
-+	.scp_stop = mt8192_scp_stop,
-+	.host_to_scp_reg = MT8192_GIPC_IN_SET,
-+	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
-+};
-+
- static const struct of_device_id mtk_scp_of_match[] = {
--	{ .compatible = "mediatek,mt8183-scp"},
-+	{ .compatible = "mediatek,mt8183-scp", .data = &mt8183_of_data },
-+	{ .compatible = "mediatek,mt8192-scp", .data = &mt8192_of_data },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, mtk_scp_of_match);
-diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
-index 3d3d87210ef2..fb81df973566 100644
---- a/drivers/remoteproc/mtk_scp_ipi.c
-+++ b/drivers/remoteproc/mtk_scp_ipi.c
-@@ -182,7 +182,7 @@ int scp_ipi_send(struct mtk_scp *scp, u32 id, void *buf, unsigned int len,
- 			ret = -ETIMEDOUT;
- 			goto clock_disable;
- 		}
--	} while (readl(scp->reg_base + MT8183_HOST_TO_SCP));
-+	} while (readl(scp->reg_base + scp->data->host_to_scp_reg));
- 
- 	scp_memcpy_aligned(send_obj->share_buf, buf, len);
- 
-@@ -191,7 +191,8 @@ int scp_ipi_send(struct mtk_scp *scp, u32 id, void *buf, unsigned int len,
- 
- 	scp->ipi_id_ack[id] = false;
- 	/* send the command to SCP */
--	writel(MT8183_HOST_IPC_INT_BIT, scp->reg_base + MT8183_HOST_TO_SCP);
-+	writel(scp->data->host_to_scp_int_bit,
-+	       scp->reg_base + scp->data->host_to_scp_reg);
- 
- 	if (wait) {
- 		/* wait for SCP's ACK */
+I'm not the right person to answer, Bjorn and Mathieu are.
 
-base-commit: 5925fa68fe8244651b3f78a88c4af99190a88f0d
--- 
-2.28.0.681.g6f77f65b4e-goog
+[5] https://elixir.bootlin.com/linux/v5.8.10/source/Documentation/rpmsg.txt#L66
 
+Thanks,
+Arnaud
+
+  
+> 
+> Thanks
+> Guennadi
+> 
+>> [4] https://elixir.bootlin.com/linux/v5.9-rc5/source/samples/rpmsg/rpmsg_client_sample.c
+>>
+>> Regards,
+>> Arnaud
+>>
+>>>
+>>>> So i would be agree with Vincent[2] which proposed to switch on a
+>>>> RPMsg API and creating a vhost rpmsg device. This is also proposed in
+>>>> the "Enhance VHOST to enable SoC-to-SoC communication" RFC[3].
+>>>> Do you think that this alternative could match with your need?
+>>>
+>>> As I replied to Vincent, I understand his proposal and the approach taken in the
+>>> series [3], but I'm not sure I agree, that adding yet another virtual device /
+>>> driver layer on the vhost side is a good idea. As far as I understand adding new
+>>> completely virtual devices isn't considered to be a good practice in the kernel.
+>>> Currently vhost is just a passive "library"
+>>> and my vhost-rpmsg support keeps it that way. Not sure I'm in favour of
+>>> converting vhost to a virtual device infrastructure.
+>>>
+>>> Thanks for pointing me out at [3], I should have a better look at it.
+>>>
+>>> Thanks
+>>> Guennadi
+>>>
+>>>> [1].
+>>>> https://patchwork.kernel.org/project/linux-remoteproc/list/?series=338
+>>>> 335 [2].
+>>>> https://www.spinics.net/lists/linux-virtualization/msg44195.html
+>>>> [3]. https://www.spinics.net/lists/linux-remoteproc/msg06634.html
+>>>>
+>>>> Thanks,
+>>>> Arnaud
+>>>>
+>>>>>
+>>>>> Thanks
+>>>>> Guennadi
+>>>>>
+>>>>> Guennadi Liakhovetski (4):
+>>>>>   vhost: convert VHOST_VSOCK_SET_RUNNING to a generic ioctl
+>>>>>   rpmsg: move common structures and defines to headers
+>>>>>   rpmsg: update documentation
+>>>>>   vhost: add an RPMsg API
+>>>>>
+>>>>>  Documentation/rpmsg.txt          |   6 +-
+>>>>>  drivers/rpmsg/virtio_rpmsg_bus.c |  78 +------
+>>>>>  drivers/vhost/Kconfig            |   7 +
+>>>>>  drivers/vhost/Makefile           |   3 +
+>>>>>  drivers/vhost/rpmsg.c            | 373 +++++++++++++++++++++++++++++++
+>>>>>  drivers/vhost/vhost_rpmsg.h      |  74 ++++++
+>>>>>  include/linux/rpmsg/virtio.h     |  83 +++++++
+>>>>>  include/uapi/linux/rpmsg.h       |   3 +
+>>>>>  include/uapi/linux/vhost.h       |   4 +-
+>>>>>  9 files changed, 551 insertions(+), 80 deletions(-)  create mode
+>>>>> 100644 drivers/vhost/rpmsg.c  create mode 100644
+>>>>> drivers/vhost/vhost_rpmsg.h  create mode 100644
+>>>>> include/linux/rpmsg/virtio.h
+>>>>>
