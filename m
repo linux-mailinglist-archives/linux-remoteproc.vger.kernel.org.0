@@ -2,125 +2,71 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AA5273724
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 22 Sep 2020 02:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4BC2737CF
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 22 Sep 2020 03:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729143AbgIVAKS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 21 Sep 2020 20:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
+        id S1728750AbgIVBHS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 21 Sep 2020 21:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729131AbgIVAKO (ORCPT
+        with ESMTP id S1728518AbgIVBHS (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 21 Sep 2020 20:10:14 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94028C0613CF
-        for <linux-remoteproc@vger.kernel.org>; Mon, 21 Sep 2020 17:10:14 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id k14so10434739pgi.9
-        for <linux-remoteproc@vger.kernel.org>; Mon, 21 Sep 2020 17:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JYPr+7owzyzLplTCeGY50zAG7FlCrMEoUfNJS9GMOSU=;
-        b=X9B7jt/PocCFkpDLXpWEOeyS6Aa35CKU0xIQNF03K3hk2yt4jXmf4G7/A4sudY4IhD
-         gZ0F5XM+NKvO1ab/sBKJ/JGZH1yiV5WIG5lDEAv6P5Q0OjNL/w3iW7TO8l2DheRetixw
-         2FcT+LgUfCzP0tLE4PaOKkC0E1yG3GGHaNngv8PSpEEZlR/ptWg5ImH6GPMvzLTjXoOo
-         FkjBNbm4ERXiJFndrCa4anX3GxCXf6US0IOSitxZiSyZ5uKcBHIOae8Mhu22wN6R2DbP
-         eH3NqfysxwsnXf6ciepO+YAkXVxqL6Q8li/u+8ekfKTvwOJ80M0Z7vxGqAVTPmKw0WuT
-         rY5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JYPr+7owzyzLplTCeGY50zAG7FlCrMEoUfNJS9GMOSU=;
-        b=tiQ7SeZTjXJQz6k2bwaVdJLIll2jl4eW5lxkqMuGdz1nyeYsjMneMVNQtkJRCGBdR9
-         1N8M/nx/5tZ3jev3KjG95wbTE2OnxRlyzhK6XkY4+DVvx2TVgEaM6yenHyqC3P0SN9w9
-         d/gML6ZM9VFKVBT+S79nI9NYddmdXM/upJTJrxdJpzTENO0kLD5RphNOP/PLmmaFmOrj
-         dJapVEwNUUXVB++gKVGE1peYt0fdRasch384wMYWRg7lyKWScFpAIQKpM/+Vamx+YISC
-         1+1iucDmNgxlckRF/jI98JjW7T+yDhuVXXnzBmq4U8NExw1Xin2z7Eg9NGWUy873biHC
-         2EnA==
-X-Gm-Message-State: AOAM532Wws+G6FmHuf29jTwebzWxLeeDPd9fmmsjy/JGA8qL50r0Kme3
-        yv6gxHkRgQ5YRcFHddP1E11q4Q==
-X-Google-Smtp-Source: ABdhPJxLG4zVEFiTc0YFWJgvJVZU03YbD/HubJTEB7Pj5AzguknZki7gHWjxvQU3NiNWes3J4xnf3w==
-X-Received: by 2002:a63:d841:: with SMTP id k1mr1548724pgj.59.1600733414189;
-        Mon, 21 Sep 2020 17:10:14 -0700 (PDT)
-Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id c9sm12807953pfn.78.2020.09.21.17.10.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2020 17:10:13 -0700 (PDT)
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        guennadi.liakhovetski@linux.intel.com
+        Mon, 21 Sep 2020 21:07:18 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43021C061755;
+        Mon, 21 Sep 2020 18:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=IRyDuYDjojtg055tU3K1OwNhO7te0/xwWWHnR7nYvnI=; b=zS2t9I4YJ5PtaGYAW0Qbt849D8
+        RJLutzGjiuydQmJXlplbLoxfzBOHp11HQcfuOC1io4AVuI9mBeReML6lF2KBkCeLg0BkhfrLBuo7o
+        CamKKPvEwF5VRF4v7P6QdI2iqZCtJx5HlnuFGsh4O4IGlVp0nZML8nAQ9Hb2e2hyegvxczewEBP3i
+        VbXzIaYhs/J1M3L9y0LFpq6KnkMW1/OZSnS/YvRKRHjF8OqlOyRtc4L7Uao5QLPYsE4Wzdb0PTxeE
+        IaBquFLZKt4R5KA+oQWO4JIWgqCp9rBFtcAPaeaXc+dYPmzD3j9FYZGIp8HmQy4EvIoGcqlriFJ0z
+        RGdrRoNQ==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kKWm3-0004mA-Fe; Tue, 22 Sep 2020 01:07:15 +0000
+Subject: Re: [PATCH 08/10] rpmsg: core: Add RPMSG byte conversion operations
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>, ohad@wizery.com,
+        bjorn.andersson@linaro.org, guennadi.liakhovetski@linux.intel.com
 Cc:     loic.pallardy@st.com, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 10/10] rpmsg: ns: Make Name service module transport agnostic
-Date:   Mon, 21 Sep 2020 18:10:00 -0600
-Message-Id: <20200922001000.899956-11-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200922001000.899956-1-mathieu.poirier@linaro.org>
 References: <20200922001000.899956-1-mathieu.poirier@linaro.org>
+ <20200922001000.899956-9-mathieu.poirier@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <49d5921c-c619-f9de-3ff1-f2617d3c9594@infradead.org>
+Date:   Mon, 21 Sep 2020 18:07:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200922001000.899956-9-mathieu.poirier@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Make name service module transport agnostic by using the rpmsg
-device specific byte conversion routine.
+On 9/21/20 5:09 PM, Mathieu Poirier wrote:
+> +/**
 
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- drivers/rpmsg/rpmsg_ns.c | 10 ++++------
- include/linux/rpmsg_ns.h |  4 ++--
- 2 files changed, 6 insertions(+), 8 deletions(-)
+Hi,
+This block is not in kernel-doc format, so the comment block should not
+begin with /**.
 
-diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
-index b3318bf84433..1df3aaadfe10 100644
---- a/drivers/rpmsg/rpmsg_ns.c
-+++ b/drivers/rpmsg/rpmsg_ns.c
-@@ -18,9 +18,7 @@ static int rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
- 	struct rpmsg_ns_msg *msg = data;
- 	struct rpmsg_device *newch;
- 	struct rpmsg_channel_info chinfo;
--	struct virtio_rpmsg_channel *vch = to_virtio_rpmsg_channel(rpdev);
--	struct virtproc_info *vrp = vch->vrp;
--	struct device *dev = &vrp->vdev->dev;
-+	struct device *dev = &rpdev->dev;
- 	int ret;
- 
- #if defined(CONFIG_DYNAMIC_DEBUG)
-@@ -38,13 +36,13 @@ static int rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
- 
- 	strncpy(chinfo.name, msg->name, sizeof(chinfo.name));
- 	chinfo.src = RPMSG_ADDR_ANY;
--	chinfo.dst = virtio32_to_cpu(vrp->vdev, msg->addr);
-+	chinfo.dst = rpmsg32_to_cpu(rpdev, msg->addr);
- 
- 	dev_info(dev, "%sing channel %s addr 0x%x\n",
--		 virtio32_to_cpu(vrp->vdev, msg->flags) & RPMSG_NS_DESTROY ?
-+		 rpmsg32_to_cpu(rpdev, msg->flags) & RPMSG_NS_DESTROY ?
- 		 "destroy" : "creat", msg->name, chinfo.dst);
- 
--	if (virtio32_to_cpu(vrp->vdev, msg->flags) & RPMSG_NS_DESTROY) {
-+	if (rpmsg32_to_cpu(rpdev, msg->flags) & RPMSG_NS_DESTROY) {
- 		ret = rpmsg_release_channel(rpdev, &chinfo);
- 		if (ret)
- 			dev_err(dev, "rpmsg_destroy_channel failed: %d\n", ret);
-diff --git a/include/linux/rpmsg_ns.h b/include/linux/rpmsg_ns.h
-index aabc6c3c0d6d..9f3030b2145b 100644
---- a/include/linux/rpmsg_ns.h
-+++ b/include/linux/rpmsg_ns.h
-@@ -41,8 +41,8 @@ struct rpmsg_hdr {
-  */
- struct rpmsg_ns_msg {
- 	char name[RPMSG_NAME_SIZE];
--	__virtio32 addr;
--	__virtio32 flags;
-+	u32 addr;
-+	u32 flags;
- } __packed;
- 
- /**
+> + * rpmsg{16|32}_to_cpu()
+> + * cpu_to_rpmsg[16|32}() - rpmsg device specific byte conversion functions to
+> + *			   perform byte conversion between rpmsg device and the
+> + *			   transport layer it is operating on.
+> + */
+> +
+> +u16 rpmsg16_to_cpu(struct rpmsg_device *rpdev, u16 val)
+> +{
+
+
+thanks.
 -- 
-2.25.1
+~Randy
 
