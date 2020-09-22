@@ -2,96 +2,118 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF02427363E
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 22 Sep 2020 01:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C76273719
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 22 Sep 2020 02:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728813AbgIUXLc (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 21 Sep 2020 19:11:32 -0400
-Received: from mail.rusoil.net ([188.128.114.25]:57383 "EHLO mail.rusoil.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726457AbgIUXLb (ORCPT
+        id S1728497AbgIVAKC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 21 Sep 2020 20:10:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727407AbgIVAKC (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 21 Sep 2020 19:11:31 -0400
-X-Greylist: delayed 374 seconds by postgrey-1.27 at vger.kernel.org; Mon, 21 Sep 2020 19:11:22 EDT
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 3CFBD40D5B;
-        Tue, 22 Sep 2020 04:08:14 +0500 (YEKT)
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id EV4tl_rVLSS7; Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.rusoil.net (Postfix) with ESMTP id 2C0DD40CEA;
-        Tue, 22 Sep 2020 04:08:13 +0500 (YEKT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.rusoil.net 2C0DD40CEA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rusoil.net;
-        s=maildkim; t=1600729693;
-        bh=6R3BgBYiA7fkqGiiNDuwPskBnpH9JXyNAW/l3ZEA+wY=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=Vnjy6nBVnSTcINEW6kER3ugTxQ4KBYKS36YiGFr6YA3B4INc+KiGVhbak8MS9Qjs4
-         d1hbAool1vpcT5tqzIahdEndE3qiAPgBOX6jsmCcvHSMZhz19GFDJ1aQySn107enqY
-         lwxWqbZRY2a+BQ8VxoJh3Rpje7MgA+/fhr9SupmU=
-X-Virus-Scanned: amavisd-new at mail.rusoil.net
-Received: from mail.rusoil.net ([127.0.0.1])
-        by localhost (mail.rusoil.net [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id K7O08Fi_YWVd; Tue, 22 Sep 2020 04:08:12 +0500 (YEKT)
-Received: from mail.rusoil.net (mail.rusoil.net [172.16.7.34])
-        by mail.rusoil.net (Postfix) with ESMTP id 6147940C07;
-        Tue, 22 Sep 2020 04:08:10 +0500 (YEKT)
-Date:   Tue, 22 Sep 2020 04:08:09 +0500 (YEKT)
-From:   Blue Oak Mortgage and Loans <em@rusoil.net>
-Reply-To: Blue Oak Mortgage and Loans <info@bluelmtg.net>
-Message-ID: <2020026523.907101.1600729689731.JavaMail.zimbra@rusoil.net>
-Subject: Wir finanzieren Projekte und Unternehmen
+        Mon, 21 Sep 2020 20:10:02 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FC7C0613CF
+        for <linux-remoteproc@vger.kernel.org>; Mon, 21 Sep 2020 17:10:02 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id b124so10758474pfg.13
+        for <linux-remoteproc@vger.kernel.org>; Mon, 21 Sep 2020 17:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pplI8lBFdqylD+9AB3kyxEb1yGakx0V/9od+sbt5zHA=;
+        b=VksqWvA/jtwTVb3pd4p2bpDzqb5GG5Cqe1SKMbq1w3xn22KN/e4wonpFslbspRSxKX
+         G/BS/H0xhhE2HScngb6aDAAQLR+9hmVJ/2ncacKOFXNKvM/Yf4tlYKgJsmGL0Y6IJSej
+         UOlSn9PqA7k4rQSwp1UhkI9VrGl8ezyMnqehv3B2ZHGGdKN2yDNGwXaS9SxFUte6PBMy
+         J3Uua4vTQzz/JWhlUcP8+2EqNMquj6eh+rPCCfkCdlWdB0FGj5jGFcEjPGQhf6HGtsK7
+         Vq8qlOWo9qbc5p28kkt1c92eu8qj04wGoRO2OmA1ENxEmILcBVlRqfdQ3JqeTuiBRit3
+         uhhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pplI8lBFdqylD+9AB3kyxEb1yGakx0V/9od+sbt5zHA=;
+        b=TwMk0HT/MpvoSZ7P5nOFvKzabWpNbTE72zpLntbukFGvSqDG2FSqFtTojMCNPU7VO/
+         GE+IHVtOAEHk63r7aMBumRW6mPVsNoUFNOKIzwbyix3goX/0SH1T1EjFkemZYjvmMLYe
+         pX9j68DNVZuwV++V9CWZ7mM+I7mPaixhf08FOkNuNFnEnq7AQBfWidCZHB8Y9xoCx7la
+         hsRWCFhS0TAKXRKXnomd2YpQmJyN/TpFltbp+zNr4/UTDQqeW4ERzfW/oNvo6VcEdLSb
+         U85oHxsU4M+WzmgSZZuZI+3z+9GnX0X59UGmjdgiNuqkQB56O+rdX1PpXcKoY9yF0XPU
+         c9NQ==
+X-Gm-Message-State: AOAM5309+WHtVvKSWwyVeMqFQXnp7xFDPiEH/kUytCXXZocotm8K0Esg
+        9I+y1olACCsbLfYHjXG91XNLbw==
+X-Google-Smtp-Source: ABdhPJw5x3351y0RIzkxGyGNg4O6s7LFFkcabpH6zjb4HSBoqXG4rJMLX3u3+qi8aAVG5gWfb3n5Qw==
+X-Received: by 2002:a63:29c8:: with SMTP id p191mr1509418pgp.45.1600733401833;
+        Mon, 21 Sep 2020 17:10:01 -0700 (PDT)
+Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id c9sm12807953pfn.78.2020.09.21.17.10.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2020 17:10:01 -0700 (PDT)
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        guennadi.liakhovetski@linux.intel.com
+Cc:     loic.pallardy@st.com, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/10] rpmsg: Make RPMSG name service modular 
+Date:   Mon, 21 Sep 2020 18:09:50 -0600
+Message-Id: <20200922001000.899956-1-mathieu.poirier@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.210.183.69]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF79 (Win)/8.8.12_GA_3794)
-Thread-Index: IhGK+mMcCqn+S/Et9t28g8ApaUDaLg==
-Thread-Topic: Wir finanzieren Projekte und Unternehmen
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Hi all,
 
+After looking at Guennadi[1] and Arnaud's patchsets[2] it became
+clear that we need to go back to a generic rpmsg_ns_msg structure
+if we wanted to make progress.  To do that some of the work from
+Arnaud had to be modified in a way that common name service
+functionality was transport agnostic.
 
-Dies ist ein Newsletter von Blue Oak Mortgage and Loans. Bitte melden Sie s=
-ich ab, wenn Sie keine E-Mail mehr von uns erhalten m=C3=B6chten.
+This patchset is based on Arnaud's work but also include a patch
+from Guennadi and some input from me.  It should serve as a
+foundation for the next revision of [1].
 
+Applies on rpmsg-next (4e3dda0bc603) and tested on stm32mp157. I
+did not test the modularisation.   
 
-Eine kurze Einf=C3=BChrung.
+Comments and feedback would be greatly appreciated.
 
-Wir sind ein f=C3=BChrendes Finanzierungsunternehmen in Europa. Wir finanzi=
-eren Startups / etablierte Unternehmen, finanzieren Gro=C3=9Fprojekte (Bau,=
- Landwirtschaft, Immobilien und dergleichen) zu einem niedrigen Zinssatz vo=
-n 2% pro Jahr.
+Thanks,
+Mathieu 
 
+[1]. https://patchwork.kernel.org/project/linux-remoteproc/list/?series=346593
+[2]. https://patchwork.kernel.org/project/linux-remoteproc/list/?series=338335
 
-Darlehensverfahren
+Arnaud Pouliquen (5):
+  rpmsg: virtio: rename rpmsg_create_channel
+  rpmsg: core: Add channel creation internal API
+  rpmsg: virtio: Add rpmsg channel device ops
+  rpmsg: Turn name service into a stand alone driver
+  rpmsg: virtio: use rpmsg ns device for the ns announcement
 
-1. Sie m=C3=BCssen das Online-Bewerbungsformular ausf=C3=BCllen und eine or=
-dnungsgem=C3=A4=C3=9F unterschriebene Kopie an uns zur=C3=BCcksenden.
+Guennadi Liakhovetski (1):
+  rpmsg: Move common structures and defines to headers
 
-2. M=C3=B6glicherweise m=C3=BCssen Sie Finanzdokumente als unterst=C3=BCtze=
-nden Nachweis f=C3=BCr die F=C3=A4higkeit zur R=C3=BCckzahlung von Krediten=
- vorlegen.
+Mathieu Poirier (4):
+  rpmsg: virtio: Move virtio RPMSG structures to private header
+  rpmsg: core: Add RPMSG byte conversion operations
+  rpmsg: virtio: Make endianness conversion virtIO specific
+  rpmsg: ns: Make Name service module transport agnostic
 
-3. Wenn Ihr Darlehen genehmigt wurde, m=C3=BCssen Sie eine Versicherungsgar=
-antie f=C3=BCr die Darlehenssicherheit vorlegen. Wir empfehlen eine Versich=
-erungsgesellschaft. Sie sind allein verantwortlich f=C3=BCr die Zahlung und=
- den Erwerb der Anleihe, die als Sicherheit dienen. Die H=C3=B6he der Anlei=
-he h=C3=A4ngt von Ihrem Darlehensbetrag ab. Die Versicherungsgesellschaft w=
-ird Sie durch den Prozess f=C3=BChren. (F=C3=BCr Gro=C3=9Fprojekte)
+ drivers/rpmsg/Kconfig            |   9 +
+ drivers/rpmsg/Makefile           |   1 +
+ drivers/rpmsg/rpmsg_core.c       |  96 +++++++++++
+ drivers/rpmsg/rpmsg_internal.h   | 102 +++++++++++
+ drivers/rpmsg/rpmsg_ns.c         | 108 ++++++++++++
+ drivers/rpmsg/virtio_rpmsg_bus.c | 284 +++++++++----------------------
+ include/linux/rpmsg_ns.h         |  83 +++++++++
+ include/uapi/linux/rpmsg.h       |   3 +
+ 8 files changed, 487 insertions(+), 199 deletions(-)
+ create mode 100644 drivers/rpmsg/rpmsg_ns.c
+ create mode 100644 include/linux/rpmsg_ns.h
 
-4. Ihr =C3=9Cberweisungsprozess wird eingeleitet, sobald die Versicherungsa=
-nleihe =C3=BCberpr=C3=BCft wurde. Ihr Darlehensr=C3=BCckzahlungsplan wird i=
-m NC-Darlehensvertragsformular aufgef=C3=BChrt.
+-- 
+2.25.1
 
-Wenn die Bedingungen Sie beruhigen, k=C3=B6nnen Sie uns =C3=BCber die Whats=
-App-Nummer / E-Mail kontaktieren und auch unsere Website besuchen, um weite=
-re Informationen zu erhalten. Wir freuen uns darauf, von Ihnen zu h=C3=B6re=
-n.
-
-WhatsApp: + 90-552-365-3483
-E-Mail: info@bluelmtg.net
