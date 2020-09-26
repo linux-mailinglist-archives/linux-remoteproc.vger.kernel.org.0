@@ -2,87 +2,137 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F1A277C81
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 25 Sep 2020 01:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530E1279668
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 26 Sep 2020 05:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726704AbgIXXwZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 24 Sep 2020 19:52:25 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:33155 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726825AbgIXXwY (ORCPT
+        id S1728935AbgIZDfo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 25 Sep 2020 23:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbgIZDfo (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 24 Sep 2020 19:52:24 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1600991544; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=L7mXJDBu867OSTokvQfz0S7+yYLGG9rv1tZ7NHvcvOg=; b=MFpPGItPido9g/82fPiGD88nYESjwgeqU7t5zVeSq5gbMj/hO0yUZui5HAT9hnZ0ocfolCNx
- runf4fRLntiOrPluRf2g31dIi88mly9iHZzYuJe/ENFEnKE0EZliSNzYSHW1N5Lpj3OT6XMM
- yQWfdpe7Ikja0HJahtvc7qlauSw=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 5f6d310dd106659f8209ee5a (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 24 Sep 2020 23:51:41
- GMT
-Sender: sidgup=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 049E7C43385; Thu, 24 Sep 2020 23:51:41 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from sidgup-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sidgup)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B3602C433FE;
-        Thu, 24 Sep 2020 23:51:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B3602C433FE
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sidgup@codeaurora.org
-From:   Siddharth Gupta <sidgup@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, ohad@wizery.com,
-        linux-remoteproc@vger.kernel.org
-Cc:     Siddharth Gupta <sidgup@codeaurora.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, tsoni@codeaurora.org,
-        psodagud@codeaurora.org, rishabhb@codeaurora.org,
-        linux-doc@vger.kernel.org, Gurbir Arora <gurbaror@codeaurora.org>
-Subject: [PATCH v5 3/3] remoteproc: qcom: Add minidump id for sm8150 modem remoteproc
-Date:   Thu, 24 Sep 2020 16:51:28 -0700
-Message-Id: <1600991488-17877-4-git-send-email-sidgup@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1600991488-17877-1-git-send-email-sidgup@codeaurora.org>
-References: <1600991488-17877-1-git-send-email-sidgup@codeaurora.org>
+        Fri, 25 Sep 2020 23:35:44 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21555C0613CE
+        for <linux-remoteproc@vger.kernel.org>; Fri, 25 Sep 2020 20:35:44 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id h17so4273405otr.1
+        for <linux-remoteproc@vger.kernel.org>; Fri, 25 Sep 2020 20:35:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=r41cvb1N5LxHmvk4/Z1u+DVLxLHsiY0eJOMeFd/1FUI=;
+        b=H5Ew1dx9RWLp2Zv3wrDGwnWJ9kvtovj/or5SuxWG5TW34gvkP1WCt38X0STzwaQApU
+         GKIaAcgUbc9S4lHb9nOf889CwIuOKJOqT/pKmtmDVU6d/IznJ0qhGPtt73jl4KZcWqG3
+         wg3392eGxhSA0yu4/NnqKGS9Dm8qg4tcbOaMof9vZpTWjIW/Ps6wT2W7EWq5XIHg+b1V
+         hycKIor7N599PF/QigzHhsI2clYn1/SbwHkBorQeZExOShoxPuizepodAY0E6CL6/SE7
+         XHfiBtHiD+MmTIXfeJLKzgiaLRmNmqrNQ+F5gZSV9PAk4+aRZ87p5S06Jx7vzLMJqg9H
+         IrQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=r41cvb1N5LxHmvk4/Z1u+DVLxLHsiY0eJOMeFd/1FUI=;
+        b=PG+M2zyhrbXt8vBtemcKqFJwGZCA5Vcle8Wv375DaQw4Tv2Z26xUEU1StE7wBwmzJq
+         DMc52uxNOZyEAt3DJcsOOy7PHBY/ICae+bi7l/Njj1fLxDooLPjN+jToRF9dWkt9k38b
+         nUOZcwKtpzfKyA6ziJGHt5O31V052yztipuLuz7StIksp2rYqVir8GP8/w3IweVJyc2i
+         MKRmpyEV+Uoa8mTYYHKzyaX6LhDLXmAiuPOJMlKSoAIL6q8WiI0T4SzRZOQakE1yfKJn
+         sFax3CqU7AJyL7XKwmBIOZedX/Knw6LWgi9kPZ+exgn/pLq9FFP8ITzH02vIe4RVtmbZ
+         cwLw==
+X-Gm-Message-State: AOAM532+mYU4LIrRWyui2aYB6A6VtSZyXya6BXWzq023WcUF6fnuw+hO
+        y4ZTn7fNHJcfic8Ttrlc4s7B7BPMdZPoLvm/
+X-Google-Smtp-Source: ABdhPJxELpmDLw4ZXIMOtwbj8cask50ql1SmQRWsp4jnor195OOSpBobecmfpIme80ehkBSEJrmehw==
+X-Received: by 2002:a9d:6a8b:: with SMTP id l11mr2433175otq.273.1601091343437;
+        Fri, 25 Sep 2020 20:35:43 -0700 (PDT)
+Received: from builder.lan (99-135-181-32.lightspeed.austtx.sbcglobal.net. [99.135.181.32])
+        by smtp.gmail.com with ESMTPSA id z20sm333543oor.3.2020.09.25.20.35.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2020 20:35:42 -0700 (PDT)
+Date:   Fri, 25 Sep 2020 20:31:09 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Cc:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
+        "tsoni@codeaurora.org" <tsoni@codeaurora.org>,
+        "psodagud@codeaurora.org" <psodagud@codeaurora.org>,
+        "sidgup@codeaurora.org" <sidgup@codeaurora.org>
+Subject: Re: [PATCH v2 0/3] Expose recovery/coredump configuration from sysfs
+Message-ID: <20200926033109.GA10036@builder.lan>
+References: <1598557731-1566-1-git-send-email-rishabhb@codeaurora.org>
+ <7ad40d80-5ac4-97a5-5e05-c83dc08896a2@st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7ad40d80-5ac4-97a5-5e05-c83dc08896a2@st.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add minidump id for modem in sm8150 chipset.
+On Tue 15 Sep 02:51 PDT 2020, Arnaud POULIQUEN wrote:
 
-Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Signed-off-by: Gurbir Arora <gurbaror@codeaurora.org>
-Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
----
- drivers/remoteproc/qcom_q6v5_pas.c | 1 +
- 1 file changed, 1 insertion(+)
+> Hi Rishabh,
+> 
+> On 8/27/20 9:48 PM, Rishabh Bhatnagar wrote:
+> > From Android R onwards Google has restricted access to debugfs in user
+> > and user-debug builds. This restricts access to most of the features
+> > exposed through debugfs. This patch series adds a configurable option
+> > to move the recovery/coredump interfaces to sysfs. If the feature
+> > flag is selected it would move these interfaces to sysfs and remove
+> > the equivalent debugfs interface. 'Coredump' and 'Recovery' are critical
+> > interfaces that are required for remoteproc to work on Qualcomm Chipsets.
+> > Coredump configuration needs to be set to "inline" in debug/test build
+> > and "disabled" in production builds. Whereas recovery needs to be
+> > "disabled" for debugging purposes and "enabled" on production builds.
+> 
+> The remoteproc_cdev had been created to respond to some sysfs limitations.
 
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index 752c862..26958e1 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -709,6 +709,7 @@ static const struct adsp_data mpss_resource_init = {
- 	.crash_reason_smem = 421,
- 	.firmware_name = "modem.mdt",
- 	.pas_id = 4,
-+	.minidump_id = 3,
- 	.has_aggre2_clk = false,
- 	.auto_boot = false,
- 	.active_pd_names = (char*[]){
--- 
-Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+The limitation here is in debugfs not being available on all systems,
+sysfs is present and I really do like the idea of being able to change
+these things without having to compile a tool to invoke the ioctl...
 
+> I wonder if this evolution should not also be implemented in the cdev.
+> In this case an additional event could be addedd to inform the application
+> that a crash occurred and that a core dump is available.
+> 
+
+Specifically for userspace to know when a coredump is present there's
+already uevents being sent when the devcoredump is ready. That said,
+having some means to getting notified about remoteproc state changes
+does sounds reasonable. If there is a use case we should discuss that.
+
+> Of course it's only a suggestion... As it would be a redesign.
+
+A very valid suggestion. I don't think it's a redesign, but more of an
+extension of what we have today.
+
+Regards,
+Bjorn
+
+> I let Björn and Mathieu comment.
+> 
+> Regards,
+> Arnaud
+> 
+> > 
+> > Changelog:
+> > 
+> > v1 -> v2:
+> > - Correct the contact name in the sysfs documentation.
+> > - Remove the redundant write documentation for coredump/recovery sysfs
+> > - Add a feature flag to make this interface switch configurable.
+> > 
+> > Rishabh Bhatnagar (3):
+> >   remoteproc: Expose remoteproc configuration through sysfs
+> >   remoteproc: Add coredump configuration to sysfs
+> >   remoteproc: Add recovery configuration to sysfs
+> > 
+> >  Documentation/ABI/testing/sysfs-class-remoteproc |  44 ++++++++
+> >  drivers/remoteproc/Kconfig                       |  12 +++
+> >  drivers/remoteproc/remoteproc_debugfs.c          |  10 +-
+> >  drivers/remoteproc/remoteproc_sysfs.c            | 126 +++++++++++++++++++++++
+> >  4 files changed, 190 insertions(+), 2 deletions(-)
+> > 
