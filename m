@@ -2,198 +2,74 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 603FD27E7F4
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 30 Sep 2020 13:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B443927EB81
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 30 Sep 2020 16:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728235AbgI3Lxo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 30 Sep 2020 07:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729677AbgI3Lxn (ORCPT
+        id S1728496AbgI3Ozk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 30 Sep 2020 10:55:40 -0400
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:36102 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727426AbgI3Ozk (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 30 Sep 2020 07:53:43 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEB7C0613D8
-        for <linux-remoteproc@vger.kernel.org>; Wed, 30 Sep 2020 04:53:39 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id o5so1450217wrn.13
-        for <linux-remoteproc@vger.kernel.org>; Wed, 30 Sep 2020 04:53:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Qfj+TClPlVYbpelD2YZsoi79IQBZqKkdlSt5zFsjIAs=;
-        b=XsLsT1M+AlmtzTtVzfmpzEdnlyNhgSN9Vm8/VlqSDOFx3bzC+XKoQ6tfO8635GE2tB
-         K4vNvrMU0OcJbL5ljhMpoGtOKhgbOkp5FrOVTy+N0F82YWhBZHVCuDVdyGRE1fg1PgGn
-         jzTp9PjGVE07lHazWB3jPXMvDMVbJU+/5UQOaU5HwqXr3dI68pK7GE043+co0vkKxtw+
-         bpmODmoZ0zaZTG5p5ikahzCupx34VdUhGSItgXN754D+DE0eO5hlStfSH5xPGlO9LqwD
-         kKr6RQDtIOXnWwTkySeNkk2hKiAqaWuGQT2si3rGDyPrmvi2QX8DxX5HrBD4MxCEz4hG
-         BrDw==
+        Wed, 30 Sep 2020 10:55:40 -0400
+Received: by mail-ot1-f52.google.com with SMTP id 60so2103777otw.3;
+        Wed, 30 Sep 2020 07:55:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Qfj+TClPlVYbpelD2YZsoi79IQBZqKkdlSt5zFsjIAs=;
-        b=D+A0+6DYr3k5J8gyHndC0utTSdTgiAJnD0X3lGcgLmBcH2RS1BPMoh50zDPwDBPdmL
-         ThI3r5MlDwg+SbazuJ+XPVtQmk0hjA+iYVX47qi9//sMMBaDfJqaRP1KUVypJlD8xM30
-         BaCZ5Gjvu1s9Sv2bCH3MCR3qxCFGQRZQ9iE9MdfJ1JvVpeKFr8ivwhtUsYrfLTiFAt5L
-         wmtbKZcMRnjozw9ehM+j+BpBo6Y8+/bAY0A8Os7zT3CnOskVomJmsIhhKquqBQoUa50t
-         6eBUmCRpF3fkjOTxOYNDqtlp3jjIH56J0UPlbm4mx3/Jc2fAQgSrKdaXHGwiPz2pC7RY
-         jJ3g==
-X-Gm-Message-State: AOAM531oHGLNfKu94HEN/uB+MteWunmab+JUPUnsdyVKFnv1vjraQ9lm
-        cDPJgbSIN0O0gJR2cu1O53TqQ8xIvAGCExhC
-X-Google-Smtp-Source: ABdhPJxX79nVu9DHdEnVM3doUa5RIopeAThnQgQyTX9yOm+uhr5xThuu8COX5hYqqQapikbSC/0cAQ==
-X-Received: by 2002:adf:fd8c:: with SMTP id d12mr2696721wrr.283.1601466817417;
-        Wed, 30 Sep 2020 04:53:37 -0700 (PDT)
-Received: from alex-xps13.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id s12sm2222353wmd.20.2020.09.30.04.53.36
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jPAORAkrFyZ367lv0IoFMC2aORY/aaMYkwJJyCN1bP8=;
+        b=nxZ/EsVUThSULOXhcDG2rBvIQM7AQiYMNMLgaWNzYcHaNlBnhrJNVKtuTxgpMpeDFn
+         p/RJMp8I/xbh3AwRwywdG0WjOpYoRlm5t0zEobE8ny+rD9nPEc+HCX5clqGbpi+raDan
+         ugscE0JhfuPF783kezKyIGX6uLUAr3tpLKblwLglTDiCJJgxuRPZIqP0Y3wyhV3MJTeM
+         mQOYSORMyMZXqCq5f1E0AtMBSqY9D3z6+ww5av3nEOr7Sr1unD1XSUrKr6Kgs43eaAhN
+         2l3hWSQtrqQJxTDsKaYyLuev+joyHRoUp0eE1tSO9LiqHips2gMqdPba2rTYL450L68i
+         xv7g==
+X-Gm-Message-State: AOAM532E42XRVXRDNqkZKLaFDK55xAfP2CD8fpdefTAxg4Q72WBmTjVh
+        E4i6boA6IgyETRuy58274QA3vmIfNHYSsS0=
+X-Google-Smtp-Source: ABdhPJw4XUJWDoMHhegeUyWr1FcDEJQe2jfwOTyMUsd7XLyrRcBHLj+PQiDF5GTmqft0sdl9hT7+Ow==
+X-Received: by 2002:a05:6830:610:: with SMTP id w16mr1653371oti.353.1601477739000;
+        Wed, 30 Sep 2020 07:55:39 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id f29sm440483ook.44.2020.09.30.07.55.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2020 04:53:36 -0700 (PDT)
-From:   Alexandre Bailon <abailon@baylibre.com>
-To:     linux-remoteproc@vger.kernel.org
-Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        jstephan@baylibre.com, stephane.leprovost@mediatek.com,
-        gpain@baylibre.com, mturquette@baylibre.com,
-        Alexandre Bailon <abailon@baylibre.com>
-Subject: [RFC PATCH 4/4] rpmsg: apu_rpmsg: Add an IOCTL to request IOMMU mapping
-Date:   Wed, 30 Sep 2020 13:53:50 +0200
-Message-Id: <20200930115350.5272-5-abailon@baylibre.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200930115350.5272-1-abailon@baylibre.com>
-References: <20200930115350.5272-1-abailon@baylibre.com>
+        Wed, 30 Sep 2020 07:55:38 -0700 (PDT)
+Received: (nullmailer pid 2852145 invoked by uid 1000);
+        Wed, 30 Sep 2020 14:55:37 -0000
+Date:   Wed, 30 Sep 2020 09:55:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Suman Anna <s-anna@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>, devicetree@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH -next] dt-bindings: hwlock: omap: Fix warnings with
+ k3.yaml
+Message-ID: <20200930145537.GA2851296@bogus>
+References: <20200928225155.12432-1-s-anna@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200928225155.12432-1-s-anna@ti.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Currently, the kernel is automatically doing an IOMMU memory mapping.
-But we want to do it automatically for two reasons:
-- to reduce the overhead of each APU operation
-- to get the device address and use it as input for an operation
-This adds 2 IOCTL to manually IOMMU map and unmap memory.
+On Mon, Sep 28, 2020 at 05:51:55PM -0500, Suman Anna wrote:
+> Update the AM65x HwSpinlock example to fix couple of warnings
+> that started showing up after the conversion of K3 bindings to
+> YAML format in commit 66e06509aa37 ("dt-bindings: arm: ti:
+> Convert K3 board/soc bindings to DT schema").
+> 
+>  compatible: ['ti,am654'] is not valid under any of the given schemas (Possible causes of the failure):
+>  compatible: ['ti,am654'] is too short
+>  compatible:0: 'ti,am654' is not one of ['ti,am654-evm']
+> 
+> Also, fix one of the node names while at this.
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> ---
+>  .../devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml        | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
----
- drivers/rpmsg/apu_rpmsg.c      | 52 ++++++++++++++++++++++++++++++----
- include/uapi/linux/apu_rpmsg.h |  7 +++++
- 2 files changed, 53 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/rpmsg/apu_rpmsg.c b/drivers/rpmsg/apu_rpmsg.c
-index 343bd08a859a..4c064feddf5a 100644
---- a/drivers/rpmsg/apu_rpmsg.c
-+++ b/drivers/rpmsg/apu_rpmsg.c
-@@ -114,7 +114,7 @@ static int apu_rpmsg_callback(struct rpmsg_device *rpdev, void *data, int count,
- }
- 
- static struct apu_buffer *apu_device_memory_map(struct rpmsg_apu *apu,
--		uint32_t fd, struct rpmsg_request *rpmsg_req)
-+						uint32_t fd)
- {
- 	struct rpmsg_device *rpdev = apu->rpdev;
- 	struct apu_buffer *buffer;
-@@ -129,10 +129,6 @@ static struct apu_buffer *apu_device_memory_map(struct rpmsg_apu *apu,
- 	list_for_each_entry(buffer, &apu->buffers, node) {
- 		if (buffer->fd == fd) {
- 			kref_get(&buffer->refcount);
--			if (rpmsg_req)
--				list_add(&buffer->req_node,
--					 &rpmsg_req->buffers);
--
- 			return buffer;
- 		}
- 	}
-@@ -230,6 +226,44 @@ static void apu_device_memory_unmap(struct kref *ref)
- 	kfree(buffer);
- }
- 
-+static int apu_iommu_mmap_ioctl(struct rpmsg_apu *apu, void __user *argp)
-+{
-+	struct apu_iommu_mmap apu_iommu_mmap;
-+	struct apu_buffer *buffer;
-+	int ret;
-+
-+	if (copy_from_user(&apu_iommu_mmap, argp, sizeof(apu_iommu_mmap)))
-+		return -EFAULT;
-+
-+	buffer = apu_device_memory_map(apu, apu_iommu_mmap.fd);
-+	if (!buffer)
-+		return -ENOMEM;
-+
-+	apu_iommu_mmap.da = buffer->iova;
-+	if (copy_to_user(argp, &apu_iommu_mmap, sizeof(apu_iommu_mmap)))
-+		ret = -EFAULT;
-+
-+	return 0;
-+}
-+
-+static int apu_iommu_munmap_ioctl(struct rpmsg_apu *apu, void __user *argp)
-+{
-+	u32 fd;
-+	struct apu_buffer *buffer, *tmp;
-+
-+	if (copy_from_user(&fd, argp, sizeof(fd)))
-+		return -EFAULT;
-+
-+	list_for_each_entry_safe(buffer, tmp, &apu->buffers, node) {
-+		if (buffer->fd == fd) {
-+			kref_put(&buffer->refcount, apu_device_memory_unmap);
-+			return 0;
-+		}
-+	}
-+
-+	return -EINVAL;
-+}
-+
- static int apu_send_request(struct rpmsg_apu *apu,
- 			    struct apu_request *req)
- {
-@@ -266,7 +300,7 @@ static int apu_send_request(struct rpmsg_apu *apu,
- 
- 	INIT_LIST_HEAD(&rpmsg_req->buffers);
- 	for (i = 0; i < req->count; i++) {
--		buffer = apu_device_memory_map(apu, fd[i], rpmsg_req);
-+		buffer = apu_device_memory_map(apu, fd[i]);
- 		if (IS_ERR(buffer)) {
- 			ret = PTR_ERR(buffer);
- 			goto err_free_memory;
-@@ -417,6 +451,12 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
- 		}
- 		spin_unlock_irqrestore(&apu->ctx_lock, flags);
- 
-+		break;
-+	case APU_IOMMU_MMAP:
-+		ret = apu_iommu_mmap_ioctl(apu, argp);
-+		break;
-+	case APU_IOMMU_MUNMAP:
-+		ret = apu_iommu_munmap_ioctl(apu, argp);
- 		break;
- 	default:
- 		ret = -EINVAL;
-diff --git a/include/uapi/linux/apu_rpmsg.h b/include/uapi/linux/apu_rpmsg.h
-index f61207520254..e9b841dcbcb4 100644
---- a/include/uapi/linux/apu_rpmsg.h
-+++ b/include/uapi/linux/apu_rpmsg.h
-@@ -31,10 +31,17 @@ struct apu_request {
- 	__u8 data[0];
- };
- 
-+struct apu_iommu_mmap {
-+	__u32 fd;
-+	__u32 da;
-+};
-+
- /* Send synchronous request to an APU */
- 
- #define APU_SEND_REQ_IOCTL		_IOW(0xb7, 0x2, struct apu_request)
- #define APU_GET_NEXT_AVAILABLE_IOCTL	_IOR(0xb7, 0x3, __u16)
- #define APU_GET_RESP			_IOWR(0xb7, 0x4, struct apu_request)
-+#define APU_IOMMU_MMAP			_IOWR(0xb7, 0x5, struct apu_iommu_mmap)
-+#define APU_IOMMU_MUNMAP		_IOWR(0xb7, 0x6, __u32)
- 
- #endif
--- 
-2.26.2
-
+Reviewed-by: Rob Herring <robh@kernel.org>
