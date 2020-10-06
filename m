@@ -2,55 +2,44 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2F72854C5
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  7 Oct 2020 00:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 763BB285408
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  6 Oct 2020 23:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727333AbgJFWxl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 6 Oct 2020 18:53:41 -0400
-Received: from mx0a-00010702.pphosted.com ([148.163.156.75]:31544 "EHLO
-        mx0b-00010702.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726771AbgJFWxk (ORCPT
+        id S1726504AbgJFVqn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 6 Oct 2020 17:46:43 -0400
+Received: from mail-mw2nam10on2089.outbound.protection.outlook.com ([40.107.94.89]:7230
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725947AbgJFVqm (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 6 Oct 2020 18:53:40 -0400
-Received: from pps.filterd (m0098781.ppops.net [127.0.0.1])
-        by mx0a-00010702.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 096LJP5t007767;
-        Tue, 6 Oct 2020 16:31:51 -0500
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2052.outbound.protection.outlook.com [104.47.36.52])
-        by mx0a-00010702.pphosted.com with ESMTP id 33xnb0yr0h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Oct 2020 16:31:51 -0500
+        Tue, 6 Oct 2020 17:46:42 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iK17aP8cUs3Nx4duMFR99PvOGRkxiBqdq/aLqAGq7w8b1WC6/roDAXg2cDgjD+2GlIOIA1++ZWZp1/JEQfIMo2ytM+5F+J6TfunG3dl4LPv18tAdEJ2Is/grDfS5Fdf8LpXiTOopckDz4s2DpNYDuxFGd9pebhxQeiyuEQg1umrbSmQ8L/BbDOMaOwbnJydduB+4fD7MOaD3xRwi7IwrptrICER7G+urvqvKlMl4TO5CPHBNr94mecVk3URi/hLmmP0+zXCVOUldIT1PQ9OSJcVbb5EoH6Q5eCygtRGqYZcc9MrC1lRyA69oZyqBQpS1DehEk4DbHtZw3u4U/iEwjg==
+ b=W5jAnb5YbiRPAsbD0IdxXNeAulfKex1EDQMeqNFb/4U9UgwKr8j7DzO33MeJR+C2l3KR8c1S+GRvcqSlTlD5Rf3M7W0BcJAJKxzZf7+N93yscfQ1cMnxxNy4KlcFDxshm7idFYsngW8ZVE9obqU2Iwt5dXL0b3+6t0Im6i4x/seLk/KnDltedttNLQF2kO8o35RYZFxkoLoms6Bsw0Ss9Eyv5rQV5ukzXBt64Hmz/vbrAmkyZ6lzQBzxszsSnzfDVA0WlrZewBFurcDJfZo6GzOO6a3J+3Nih6ThhdEYMN815iFT540JXMCCLbHZXgHHwJMoraUZQEnLLhWrmSTzqw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+vgRO+C+EbzwLwKtvklhwp9pcOLtQhYuqDw0r0GECPg=;
- b=Wueh0y/QrnYHLqi/B19rmE7StI4szsZGsYqUkomUi2F9WtBI3gPgbo85wWM9rlSAzZo58tEduq+W8bWxwHnAqECzykg/r3shHvrcJsW2yZVVyCKf/itGclKQg4YXhXhJNVCsiHx+32wGdWBjDgCKy1874IGtD2rC61CQdOPIZ5II4CIWCUR27MrkS8mXQjYG0C0MnV3cOjP129JboGruGLq+nSxzJbzZR3xbbbhVYwNVR8x7KQ8rMSsGd7KhO/6ZZK9MCCon8Tk7n6qlbMm5VLCW+jYOEG2DePLDR2VsfW04PPDqzESqPStj7ZtOuZ+3h8wj2urZymgdRkhsU0RMmg==
+ bh=TdAD1nTQ87pa/VZRZFD0KrbHwszvwHDq8yWpbcgBG6o=;
+ b=UhcdFf79gf9OydRnOdSNdBfsAFhc1gc7p2vnIbGNCk/uEZb6wI9aZ+QDfP3VigCQzs8/inzBwFLsbxJfPadJTAsr2vCUzZgA+Kb9cmgeT7B2x9lixXua43hLf9x5D5+luuQBN+i1ewZVaUjNSldEYDKw3H7+q58PzYEye6+zUnYUz6ZsYDDloCwNn/p9tCjpSQZ5ak41sNBPsTTNz6ADEgklGYAs1JSVeUAF7g9hIsE6hl19OmPB4TCVRGUJqQh7ZizKeUka6n1CurNcLVkBsAeatB3VwfmRjhDEsAnvnSmbZoJI44va/FixeTCq6TrZPmQpuF5az1Ur/FbPIuMzQQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ni.com; dmarc=pass action=none header.from=ni.com; dkim=pass
- header.d=ni.com; arc=none
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nio365.onmicrosoft.com; s=selector2-nio365-onmicrosoft-com;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+vgRO+C+EbzwLwKtvklhwp9pcOLtQhYuqDw0r0GECPg=;
- b=lw3s12bt7uydILOzyk48Ze5bJ3W+JuVTvxKbVBgtEGiQ/G5Z/zRHpQPSAT9nqoOh3FWAaMz04jr9cj/Ms+Lyk+J90N1cuB5HDuafSXEsu8XViRgkZgORRMX29gzo3Sy36Ovv0zCVkvW58tYxUZhxdEnkGOHTr3BtPTr/6SOTJCc=
-Authentication-Results: xilinx.com; dkim=none (message not signed)
- header.d=none;xilinx.com; dmarc=none action=none header.from=ni.com;
-Received: from SN4PR0401MB3646.namprd04.prod.outlook.com
- (2603:10b6:803:4b::29) by SA0PR04MB7403.namprd04.prod.outlook.com
- (2603:10b6:806:e3::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.34; Tue, 6 Oct
- 2020 21:31:48 +0000
-Received: from SN4PR0401MB3646.namprd04.prod.outlook.com
- ([fe80::f4f0:f1bc:f09a:da84]) by SN4PR0401MB3646.namprd04.prod.outlook.com
- ([fe80::f4f0:f1bc:f09a:da84%7]) with mapi id 15.20.3433.043; Tue, 6 Oct 2020
- 21:31:48 +0000
-Date:   Tue, 6 Oct 2020 16:31:43 -0500
-From:   Michael Auchter <michael.auchter@ni.com>
-To:     Ben Levinsky <BLEVINSK@xilinx.com>
-Cc:     "Ed T. Mooring" <emooring@xilinx.com>,
-        "sunnyliangjy@gmail.com" <sunnyliangjy@gmail.com>,
-        "punit1.agrawal@toshiba.co.jp" <punit1.agrawal@toshiba.co.jp>,
+ bh=TdAD1nTQ87pa/VZRZFD0KrbHwszvwHDq8yWpbcgBG6o=;
+ b=hg9PMRw8onkUk64OGmfQEcaLm8K0FVk6HrXpAOdHW6OE5qnKtaYDzIDws7ZTkO/Up8+l00O5LyKloB90DArfuCK7q1S39gRrU/M25w6sEOpYCTauCFBGZiHNKHW2s/5cVppDWo7UVTF6Pd+pZRb2r0npc4aP9c9QceOLtJ3+cto=
+Received: from BYAPR02MB4407.namprd02.prod.outlook.com (2603:10b6:a03:55::31)
+ by BYAPR02MB4151.namprd02.prod.outlook.com (2603:10b6:a02:f2::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.38; Tue, 6 Oct
+ 2020 21:46:39 +0000
+Received: from BYAPR02MB4407.namprd02.prod.outlook.com
+ ([fe80::113d:722:5f93:d29e]) by BYAPR02MB4407.namprd02.prod.outlook.com
+ ([fe80::113d:722:5f93:d29e%6]) with mapi id 15.20.3433.044; Tue, 6 Oct 2020
+ 21:46:38 +0000
+From:   Ben Levinsky <BLEVINSK@xilinx.com>
+To:     Michael Auchter <michael.auchter@ni.com>
+CC:     "Ed T. Mooring" <emooring@xilinx.com>,
         Stefano Stabellini <stefanos@xilinx.com>,
         Michal Simek <michals@xilinx.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
@@ -60,91 +49,148 @@ Cc:     "Ed T. Mooring" <emooring@xilinx.com>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
-Message-ID: <20201006213143.GD701433@xaphan>
+Subject: RE: RE: [PATCH v18 5/5] remoteproc: Add initial zynqmp R5 remoteproc
+ driver
+Thread-Topic: RE: [PATCH v18 5/5] remoteproc: Add initial zynqmp R5 remoteproc
+ driver
+Thread-Index: AQHWmzGLZdXOwIwjxE6bV2X+UlYToKmJZsqAgAGMKFCAACbWgIAAAZmg
+Date:   Tue, 6 Oct 2020 21:46:38 +0000
+Message-ID: <BYAPR02MB4407B356B56B9A1D561950B7B50D0@BYAPR02MB4407.namprd02.prod.outlook.com>
 References: <20201005160614.3749-1-ben.levinsky@xilinx.com>
  <20201005160614.3749-6-ben.levinsky@xilinx.com>
  <20201005193449.GA701433@xaphan>
  <BYAPR02MB4407B7F06962DB30ED90761FB50D0@BYAPR02MB4407.namprd02.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR02MB4407B7F06962DB30ED90761FB50D0@BYAPR02MB4407.namprd02.prod.outlook.com>
-X-Originating-IP: [130.164.62.229]
-X-ClientProxiedBy: SA9PR10CA0004.namprd10.prod.outlook.com
- (2603:10b6:806:a7::9) To SN4PR0401MB3646.namprd04.prod.outlook.com
- (2603:10b6:803:4b::29)
+ <20201006213143.GD701433@xaphan>
+In-Reply-To: <20201006213143.GD701433@xaphan>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: ni.com; dkim=none (message not signed)
+ header.d=none;ni.com; dmarc=none action=none header.from=xilinx.com;
+x-originating-ip: [149.199.62.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 4681fa18-883b-4e78-caa3-08d86a414e25
+x-ms-traffictypediagnostic: BYAPR02MB4151:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR02MB4151C3620BA2F15343B7A5EFB50D0@BYAPR02MB4151.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AgwpODvDvDUW7ttFn0ow1MvmzuFozn5GymhcmLXNpOrzeI/c+CdXwEc5f5xSe/hkpodi1ZfRaF6Udd8yT1yULRqor7hUdsyOBm1dG9eEo5P77Ykvep79j9EdyJx69WKVnpEgTKcWWzm4JTKAWlhcTBPi2cOQOH5+ZQE/o7deH66vfPlNFPIvVwIjPpIJwFM33QUQAqa7KvtARf3r4XiS2KCNz42+Q86WsoJx0pZxcv05Zww0JY3lEe8UXjQQNUNuspOmZ+jm31tTfu+7HsK3I1RqEE4e1TlEw2UAOrg+sid6nZ10iQ9Rfi0rpuZrdP44
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR02MB4407.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(396003)(366004)(136003)(346002)(376002)(316002)(4326008)(66446008)(86362001)(76116006)(71200400001)(54906003)(478600001)(6506007)(53546011)(26005)(83380400001)(7696005)(186003)(2906002)(66556008)(66476007)(52536014)(64756008)(8676002)(9686003)(55016002)(66946007)(5660300002)(6916009)(33656002)(8936002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: mNFO8cP7N2NIC9e1Hm/ba3HSxBoxzOWwR9rIa7M2GpBt13x1exp72KK9UfxVxj0VAacUgXEOI8KiqfXoDGlUMZybFpB4vNyNN5nHubN/ZP6a1sHWjktUGeJ0/f1RiYNy2llqRcZUL0Sxs1cAXdYxETiOHnM83spdsZhmVvP0zq4SfbTTwkPix/JTaEsTc1ixSJnMaQQgDtyFzHQi0yIfeTZln70u/F7FplL+d9Nw/pgslzOlDpPCHYdyexLepXU/IIQItLzESIhNVYAPJ1s4TW5TZVtfhQ2J6cqO+ZRbnkkIQBEZZSHtYUtTP7rtC0LBkZT4hkapeQ6cv6CL9f1iNgWw+62wQohMBz0BN7sKtHTSpA6YjvXeE/vtDFUNhkeg9MSghs2xrTNtKRHw0KaBRdcyxuiETTaLp76NSIE53zzsNy4elO6x/JRogjinDBhbNnbGe4mZwRluMdI5tTt0AAgnqDNfStBaV6QCpGXmvoux3t7xhVhQ8I7DSOaTdoEwJRqHeyeWvL2m2dRS7ng4GZl1XiD3N9hcDzV83QuwGTWpCe13dEwTxS7O2ypB82zBNrGtf4N2tJLp/5Lck8BPuQg1EmDby2i6B3PeG1HOWF/cWGq6YVRwqPW/7n+6oNgWecilRkxk3oAoV7Lk4sJ9UQ==
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost (130.164.62.229) by SA9PR10CA0004.namprd10.prod.outlook.com (2603:10b6:806:a7::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.37 via Frontend Transport; Tue, 6 Oct 2020 21:31:47 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1c64963c-4e58-4701-e1c2-08d86a3f3ae5
-X-MS-TrafficTypeDiagnostic: SA0PR04MB7403:
-X-Microsoft-Antispam-PRVS: <SA0PR04MB74035DFBAC9D00587AC1FDF8870D0@SA0PR04MB7403.namprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: v8hCkRcVLKQ8vYehhKgVjaiKr1jXZjWXfu1OjANap6QeNVtc3Lr+hI4C3T29CmQWGrzBtrJM9xf8F2r2egG+Ywsn8bInCWEl7Y08EjbhZ+Cpzl7Mp+eNWMsHhJubNTtGhEdMseFKoNDuAsDW7WWHfhXhBsFYqUY8yTzY/X2L3BPZPBEH177CQIrwYv76wAnKN/5oZ14Ubo68sBtXgPMb8LQ9E2DoEBxJ/lOUDBA5aDTJoSsPoTW8gUouRF9CouRTkRl1fP4TZFot+GAk6Rh5fGHLFZP3m3zTcTXxRsvyJ+/FTYrrZIato1VmmnQuh5diGrGh5We4aOnxWxUJM51T4g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0401MB3646.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(7916004)(396003)(346002)(376002)(39860400002)(366004)(136003)(83380400001)(4326008)(7416002)(33716001)(86362001)(33656002)(8676002)(8936002)(6916009)(6486002)(9686003)(956004)(478600001)(54906003)(2906002)(26005)(44832011)(6496006)(5660300002)(186003)(1076003)(66556008)(66946007)(66476007)(316002)(6666004)(52116002)(16526019);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: ziU6Q/33Q2d53yJy4jXyYMos5meFUn6j7Vu12iH7IuTI8NAmqvkVHeAAyQp7+orNP8bS9mCsPHUVkr/9MemZQjEgJKRFENH8bzm8+ejOHTjQOau3iVt0apqGonnqku/YPpOMikMpN41SJ2emEJiihMcKPQApNlHH4k16roSfarFoC0/o09yBM6AmCcarONoWOhQJtBSkc6+jE1KqC8qr4F/k4/QwNB0T2RU9F8xnYesTztEmt2JzbN16Em5dpZR729Dxvy/0kPeOx2VKnhoy1vpfW4lTyRQck47K6EZhhxdEPFvJeDXUv5t8887p+Eb5SgjwcDVdOSxBtV9Qe5OUTP6HRE3haJf9e4XG7wPTMIVXCjJzHDovU2MP5uU0T6GisStHEnJbWiz7oWnpBY5PjqLLtgyyawD2Hs2Ci2a559Qta/T95e2OJC9nCbIVCwzoKbyw6wceRrnBf4dtfSMAquYyVIquism0pz9j2QHYqZ9xL9wX6IHbu6k9y8heD8xk2fmG7EPfojtXt3MbsaZZZBzfQGnVCZheSGQun2sBY8KAVT1uEo0BYPQh7tZ6HTTaQh/AD/WplmM5RgMj/QG/pXYPrXszvJSxdB4BYlrKnc3XFyLpu3SMXVlpGsulaKztH/LlIeE/8j0edIhoJEaazw==
-X-OriginatorOrg: ni.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c64963c-4e58-4701-e1c2-08d86a3f3ae5
-X-MS-Exchange-CrossTenant-AuthSource: SN4PR0401MB3646.namprd04.prod.outlook.com
+X-OriginatorOrg: xilinx.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2020 21:31:48.1220
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR02MB4407.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4681fa18-883b-4e78-caa3-08d86a414e25
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Oct 2020 21:46:38.8243
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 87ba1f9a-44cd-43a6-b008-6fdb45a5204e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j9Bb8OFc5Ebt1lPZ8WFol7/l9apdB6/Hk/YyF0XECFi9jlRK7NcxqpTXRe+Nc1e4QdX02EKDyGbIAtKZ41KsaA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR04MB7403
-Subject: Re: RE: [PATCH v18 5/5] remoteproc: Add initial zynqmp R5 remoteproc driver
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-06_14:2020-10-06,2020-10-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_policy_notspam policy=outbound_policy score=30 suspectscore=1
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
- impostorscore=0 clxscore=1015 adultscore=0 mlxlogscore=999 mlxscore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=30 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2010060141
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kA0TSkQRCLOZVLG9eUatAW8J3hm5mLvXEerwQfcqYk1CqBapdmLvD9NWaAslOLZWVUKn8uAYCcQzEIJ9hnir/w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4151
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Oct 06, 2020 at 07:15:49PM +0000, Ben Levinsky wrote:
-> 
-> Hi Michael,
-> 
-> Thanks for the review
-> 
 
-< ... snip ... >
 
-> > > +	z_rproc = rproc->priv;
-> > > +	z_rproc->dev.release = zynqmp_r5_release;
-> > 
-> > This is the only field of z_rproc->dev that's actually initialized, and
-> > this device is not registered with the core at all, so zynqmp_r5_release
-> > will never be called.
-> > 
-> > Since it doesn't look like there's a need to create this additional
-> > device, I'd suggest:
-> > 	- Dropping the struct device from struct zynqmp_r5_rproc
-> > 	- Performing the necessary cleanup in the driver remove
-> > 	  callback instead of trying to tie it to device release
-> 
-> For the most part I agree. I believe the device is still needed for
-> the mailbox client setup.
-> 
-> As the call to mbox_request_channel_byname() requires its own device
-> that has the corresponding child node with the corresponding
-> mbox-related properties.
-> 
-> With that in mind, is it still ok to keep the device node?
+> -----Original Message-----
+> From: Michael Auchter <michael.auchter@ni.com>
+> Sent: Tuesday, October 6, 2020 2:32 PM
+> To: Ben Levinsky <BLEVINSK@xilinx.com>
+> Cc: Ed T. Mooring <emooring@xilinx.com>; sunnyliangjy@gmail.com;
+> punit1.agrawal@toshiba.co.jp; Stefano Stabellini <stefanos@xilinx.com>;
+> Michal Simek <michals@xilinx.com>; devicetree@vger.kernel.org;
+> mathieu.poirier@linaro.org; linux-remoteproc@vger.kernel.org; linux-
+> kernel@vger.kernel.org; robh+dt@kernel.org; linux-arm-
+> kernel@lists.infradead.org
+> Subject: Re: RE: [PATCH v18 5/5] remoteproc: Add initial zynqmp R5
+> remoteproc driver
+>=20
+> On Tue, Oct 06, 2020 at 07:15:49PM +0000, Ben Levinsky wrote:
+> >
+> > Hi Michael,
+> >
+> > Thanks for the review
+> >
+>=20
+> < ... snip ... >
+>=20
+> > > > +	z_rproc =3D rproc->priv;
+> > > > +	z_rproc->dev.release =3D zynqmp_r5_release;
+> > >
+> > > This is the only field of z_rproc->dev that's actually initialized, a=
+nd
+> > > this device is not registered with the core at all, so zynqmp_r5_rele=
+ase
+> > > will never be called.
+> > >
+> > > Since it doesn't look like there's a need to create this additional
+> > > device, I'd suggest:
+> > > 	- Dropping the struct device from struct zynqmp_r5_rproc
+> > > 	- Performing the necessary cleanup in the driver remove
+> > > 	  callback instead of trying to tie it to device release
+> >
+> > For the most part I agree. I believe the device is still needed for
+> > the mailbox client setup.
+> >
+> > As the call to mbox_request_channel_byname() requires its own device
+> > that has the corresponding child node with the corresponding
+> > mbox-related properties.
+> >
+> > With that in mind, is it still ok to keep the device node?
+>=20
+> Ah, I see. Thanks for the clarification!
+>=20
+> Instead of manually dealing with the device node creation for the
+> individual processors, perhaps it makes more sense to use
+> devm_of_platform_populate() to create them. This is also consistent with
+> the way the TI K3 R5F remoteproc driver does things.
+>=20
+> Cheers,
+>  Michael
 
-Ah, I see. Thanks for the clarification!
+I've been working on this today for a way around it and found one that I th=
+ink works with your initial suggestion,
+- in z_rproc, change dev from struct device to struct device*
+	^ the above is shown the usage thereof below. It is there for the mailbox =
+setup.
+- in driver probe:
+	- add list_head to keep track of each core's z_rproc and for the driver re=
+move clean up
+	- in each core's probe (zynqmp_r5_probe) dothe following:
 
-Instead of manually dealing with the device node creation for the
-individual processors, perhaps it makes more sense to use
-devm_of_platform_populate() to create them. This is also consistent with
-the way the TI K3 R5F remoteproc driver does things.
 
-Cheers,
- Michael
+       rproc_ptr =3D rproc_alloc(dev, dev_name(dev), &zynqmp_r5_rproc_ops,
+                                                  NULL, sizeof(struct zynqm=
+p_r5_rproc));
+        if (!rproc_ptr)
+                return -ENOMEM;
+        z_rproc =3D rproc_ptr->priv;
+        z_rproc->dt_node =3D node;
+        z_rproc->rproc =3D rproc_ptr;
+        z_rproc->dev =3D &rproc_ptr->dev;
+        z_rproc->dev->of_node =3D node;=20
+where node is the specific R5 core's of_node/ Device tree node.
+=09
+the above preserves most of the mailbox setup code.
+
+
+With this, I have already successfully done the following in a v19 patch
+- move all the previous driver release code to remove
+- able to probe, start/stop r5, driver remove repeatedly
+
+Also, this mimics the TI R5 driver code as each core's rproc has a list_hea=
+d and they have a structure for the cluster which among other things mainta=
+ins a linked list of the cores' specific rproc information.
+
+Thanks
+Ben
