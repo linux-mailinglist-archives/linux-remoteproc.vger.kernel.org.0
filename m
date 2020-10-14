@@ -2,175 +2,108 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8FE28DD3D
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 14 Oct 2020 11:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D7528DEC8
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 14 Oct 2020 12:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730123AbgJNJXR (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 14 Oct 2020 05:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730456AbgJNJXN (ORCPT
+        id S1728411AbgJNKSf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 14 Oct 2020 06:18:35 -0400
+Received: from mga09.intel.com ([134.134.136.24]:36427 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727197AbgJNKSe (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:23:13 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A36C025248
-        for <linux-remoteproc@vger.kernel.org>; Tue, 13 Oct 2020 17:36:53 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id d28so1889406ote.1
-        for <linux-remoteproc@vger.kernel.org>; Tue, 13 Oct 2020 17:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=m8dkPNrPnat/ulZR4BhX2rjvSQ9vMbOQpXY1ZiSBI/I=;
-        b=PDdC4BUgiYDP1hxn+YZECP7HCOXdeJ3DGjXXxzBDTvhkgVZssSYMXEVsSBgSb26POR
-         KLgGxM4PW9typxtusN6Aea+3IL8pLu+eRgdPnA3GMSCr5Rlu5lGGMohOBu5vOPjQQDtr
-         eP6R8goQvM4a1deP5ILYiXbJEFcRWsQhQey5hDTfz6qIXvly7HHvi0whrp7SaYjfmNHj
-         cwJbtmK2h0NvWfRyz1EntM8Eh7KhIh4R1lsgTNkXyyr5R+e/HwhvOJq+mY5J8tGf0ukU
-         ha3wKCaEKVZgnYlDR88gpFtK38W8KZiKkHgAmoEcYPMrQgN14B/0VlE3DRS8pFv1wI5f
-         BQEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=m8dkPNrPnat/ulZR4BhX2rjvSQ9vMbOQpXY1ZiSBI/I=;
-        b=joNg7G0O3y1exMuvYJJtnGrwtE8fAak0PXsL26XCOYFsbHKQXpFNg/cMePEClyw493
-         WH7J1/jAhQj27GMMNEmTMLYTFSIfzYpHmXUjIjOCQ+F+C7XaYkpXf7/TGcTXI8fmmC1Y
-         qgTEXU1WuUCTJn7t+ZommcIq+lU7+gKekfhCiUtH2J57uOgk7j3wqivS4ejmK5maSjs6
-         BM0zcMThz/YXWbYynOzkJ20KwQyxCrLhDtVKzWosyx8NoRfEmGS6Cq7ujX4L0zM0a1O0
-         blZ+2ah8usglroN9lBzA4rhFzZ3qxslZXXtZIv7ve1XlFsyp0aM5FPThHUfKZ6mAWhY4
-         NUXQ==
-X-Gm-Message-State: AOAM533gWbnPpL1e0qdMTCiMVWefK2MmxtzbRHf4ycn/d+WumhMiFzLD
-        2AhYPtyWx2ZCqoqNif+tj0SOj6l+B4azDQ==
-X-Google-Smtp-Source: ABdhPJwc2YyomdDucoOv++PXtwIgFS7Hi8kw5KVLObNKYyGAZtqy84FvyNN3bU7y1nvk9YBqRCtTGQ==
-X-Received: by 2002:a9d:6005:: with SMTP id h5mr1560736otj.87.1602635813222;
-        Tue, 13 Oct 2020 17:36:53 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id s32sm560693otb.68.2020.10.13.17.36.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Oct 2020 17:36:52 -0700 (PDT)
-Date:   Tue, 13 Oct 2020 19:32:09 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Cc:     Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "tsoni@codeaurora.org" <tsoni@codeaurora.org>,
-        "psodagud@codeaurora.org" <psodagud@codeaurora.org>,
-        "sidgup@codeaurora.org" <sidgup@codeaurora.org>
-Subject: Re: [PATCH v2 0/3] Expose recovery/coredump configuration from sysfs
-Message-ID: <20201014003209.GB118858@builder.lan>
-References: <1598557731-1566-1-git-send-email-rishabhb@codeaurora.org>
- <7ad40d80-5ac4-97a5-5e05-c83dc08896a2@st.com>
- <20200926033109.GA10036@builder.lan>
- <41909da5-bc64-e81c-9a1d-99ab413461ec@st.com>
+        Wed, 14 Oct 2020 06:18:34 -0400
+IronPort-SDR: vAaXm0Km17k+48DzlVitgPaoiKprteD+QabqE2IYbfU3nywukBPBbHvPd3YyEJ3GVSX1XaG33G
+ yrEyngRdV4fw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9773"; a="166199072"
+X-IronPort-AV: E=Sophos;i="5.77,374,1596524400"; 
+   d="scan'208";a="166199072"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2020 03:18:34 -0700
+IronPort-SDR: viBr6PdzSDiLwxANqIGwkFKGrJYFhkvfS59lNtTyyDSNE81HGYJncwj8GkDcqspz5Dp/4iqOt7
+ BqZJFRL2dHbA==
+X-IronPort-AV: E=Sophos;i="5.77,374,1596524400"; 
+   d="scan'208";a="530768349"
+Received: from gliakhov-mobl2.ger.corp.intel.com (HELO ubuntu) ([10.249.36.119])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2020 03:18:32 -0700
+Date:   Wed, 14 Oct 2020 12:18:23 +0200
+From:   Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        arnaud.pouliquen@st.com, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/9] rpmsg: Make RPMSG name service modular
+Message-ID: <20201014101822.GA4847@ubuntu>
+References: <20201013232519.1367542-1-mathieu.poirier@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <41909da5-bc64-e81c-9a1d-99ab413461ec@st.com>
+In-Reply-To: <20201013232519.1367542-1-mathieu.poirier@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue 29 Sep 02:43 CDT 2020, Arnaud POULIQUEN wrote:
-
-> Hi Bjorn,
+On Tue, Oct 13, 2020 at 05:25:10PM -0600, Mathieu Poirier wrote:
+> Good afternoon,
 > 
-> On 9/26/20 5:31 AM, Bjorn Andersson wrote:
-> > On Tue 15 Sep 02:51 PDT 2020, Arnaud POULIQUEN wrote:
-> > 
-> >> Hi Rishabh,
-> >>
-> >> On 8/27/20 9:48 PM, Rishabh Bhatnagar wrote:
-> >>> From Android R onwards Google has restricted access to debugfs in user
-> >>> and user-debug builds. This restricts access to most of the features
-> >>> exposed through debugfs. This patch series adds a configurable option
-> >>> to move the recovery/coredump interfaces to sysfs. If the feature
-> >>> flag is selected it would move these interfaces to sysfs and remove
-> >>> the equivalent debugfs interface. 'Coredump' and 'Recovery' are critical
-> >>> interfaces that are required for remoteproc to work on Qualcomm Chipsets.
-> >>> Coredump configuration needs to be set to "inline" in debug/test build
-> >>> and "disabled" in production builds. Whereas recovery needs to be
-> >>> "disabled" for debugging purposes and "enabled" on production builds.
-> >>
-> >> The remoteproc_cdev had been created to respond to some sysfs limitations.
-> > 
-> > The limitation here is in debugfs not being available on all systems,
-> > sysfs is present and I really do like the idea of being able to change
-> > these things without having to compile a tool to invoke the ioctl...
+> This set starts by making the RPMSG protocol transport agnostic by
+> moving the headers it uses to generic types and using those in the
+> current implementation.  From there it re-uses the work that Arnaud
+> published[1] to make the name service modular. 
 > 
-> Right,
+> Tested on stm32mp157 with the RPMSG client sample application.  Applies
+> cleanly on v5.9.
+
+Reviewed-by: Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
+
+Thanks
+Guennadi
+
 > 
-> > 
-> >> I wonder if this evolution should not also be implemented in the cdev.
-> >> In this case an additional event could be addedd to inform the application
-> >> that a crash occurred and that a core dump is available.
-> >>
-> > 
-> > Specifically for userspace to know when a coredump is present there's
-> > already uevents being sent when the devcoredump is ready. That said,
-> > having some means to getting notified about remoteproc state changes
-> > does sounds reasonable. If there is a use case we should discuss that.
-> 
-> The main use case i have in mind is to inform the userspace that the remote
-> processor has crashed. This would allow applications to perform specific action
-> to avoid getting stuck and/or resetting it's environement befor restarting the
-> remote processor and associated IPC.
-> If i well remember QCOM has this kind of mechanism for its modem but this is
-> implemented in a platform driver.
-> We would be interested to have something more generic relying on the remoteproc
-> framework.
-> 
-
-I believe that there is such a notification mechanism implemented by
-Qualcomm downstream. Upstream we've so far relied on the fact that the
-interfaces exposed by the various rpmsg_devices would be torn down and
-re-registered as the remoteproc is restarted.
-
-Same goes with the few cases where we use rpmsg_char, as the channels
-are going down the IO operations on the rpmsg endpoint fails to allow
-userspace to detect the shutdown part. Then as the new channels appears
-userspace will be notified about the newly available channels through
-the standard uevents.
-
-Regards,
-Bjorn
-
 > Thanks,
-> Arnaud
+> Mathieu
 > 
-> > 
-> >> Of course it's only a suggestion... As it would be a redesign.
-> > 
-> > A very valid suggestion. I don't think it's a redesign, but more of an
-> > extension of what we have today.
-> > 
-> > Regards,
-> > Bjorn
-> > 
-> >> I let Björn and Mathieu comment.
-> >>
-> >> Regards,
-> >> Arnaud
-> >>
-> >>>
-> >>> Changelog:
-> >>>
-> >>> v1 -> v2:
-> >>> - Correct the contact name in the sysfs documentation.
-> >>> - Remove the redundant write documentation for coredump/recovery sysfs
-> >>> - Add a feature flag to make this interface switch configurable.
-> >>>
-> >>> Rishabh Bhatnagar (3):
-> >>>   remoteproc: Expose remoteproc configuration through sysfs
-> >>>   remoteproc: Add coredump configuration to sysfs
-> >>>   remoteproc: Add recovery configuration to sysfs
-> >>>
-> >>>  Documentation/ABI/testing/sysfs-class-remoteproc |  44 ++++++++
-> >>>  drivers/remoteproc/Kconfig                       |  12 +++
-> >>>  drivers/remoteproc/remoteproc_debugfs.c          |  10 +-
-> >>>  drivers/remoteproc/remoteproc_sysfs.c            | 126 +++++++++++++++++++++++
-> >>>  4 files changed, 190 insertions(+), 2 deletions(-)
-> >>>
+> [1]. https://patchwork.kernel.org/project/linux-remoteproc/list/?series=338335
+> 
+> ------
+> New for V2:
+> - Created new RPMSG types (Guennadi).
+> - Re-worked byte conversion functions(Guennadi).
+> - Added a single ->is_little_endian() operation (Arnaud).
+> - Fixed byte conversion before making name service modular.
+> 
+> Arnaud Pouliquen (4):
+>   rpmsg: virtio: Rename rpmsg_create_channel
+>   rpmsg: core: Add channel creation internal API
+>   rpmsg: virtio: Add rpmsg channel device ops
+>   rpmsg: Turn name service into a stand alone driver
+> 
+> Mathieu Poirier (5):
+>   rpmsg: Move rpmsg_endpoint_ops to rpmsg.h
+>   rpmsg: Introduce __rpmsg{16|32|64} types
+>   rpmsg: virtio: Move from virtio to rpmsg byte conversion
+>   rpmsg: Move rpmsg_hr and rpmsg_ns_msg to header file
+>   rpmsg: Make rpmsg_{register|unregister}_device() public
+> 
+>  drivers/rpmsg/Kconfig            |   8 ++
+>  drivers/rpmsg/Makefile           |   1 +
+>  drivers/rpmsg/rpmsg_core.c       |  44 +++++++
+>  drivers/rpmsg/rpmsg_internal.h   |  27 +---
+>  drivers/rpmsg/rpmsg_ns.c         | 110 +++++++++++++++++
+>  drivers/rpmsg/virtio_rpmsg_bus.c | 206 ++++++++++---------------------
+>  include/linux/rpmsg.h            |  93 ++++++++++++--
+>  include/linux/rpmsg_byteorder.h  |  67 ++++++++++
+>  include/linux/rpmsg_ns.h         |  79 ++++++++++++
+>  include/uapi/linux/rpmsg.h       |   3 +
+>  include/uapi/linux/rpmsg_types.h |  11 ++
+>  11 files changed, 481 insertions(+), 168 deletions(-)
+>  create mode 100644 drivers/rpmsg/rpmsg_ns.c
+>  create mode 100644 include/linux/rpmsg_byteorder.h
+>  create mode 100644 include/linux/rpmsg_ns.h
+>  create mode 100644 include/uapi/linux/rpmsg_types.h
+> 
+> -- 
+> 2.25.1
+> 
