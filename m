@@ -2,108 +2,89 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D7528DEC8
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 14 Oct 2020 12:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4511B28E0D5
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 14 Oct 2020 14:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728411AbgJNKSf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 14 Oct 2020 06:18:35 -0400
-Received: from mga09.intel.com ([134.134.136.24]:36427 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727197AbgJNKSe (ORCPT
+        id S1730997AbgJNMzf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 14 Oct 2020 08:55:35 -0400
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:41386 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728157AbgJNMzZ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 14 Oct 2020 06:18:34 -0400
-IronPort-SDR: vAaXm0Km17k+48DzlVitgPaoiKprteD+QabqE2IYbfU3nywukBPBbHvPd3YyEJ3GVSX1XaG33G
- yrEyngRdV4fw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9773"; a="166199072"
-X-IronPort-AV: E=Sophos;i="5.77,374,1596524400"; 
-   d="scan'208";a="166199072"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2020 03:18:34 -0700
-IronPort-SDR: viBr6PdzSDiLwxANqIGwkFKGrJYFhkvfS59lNtTyyDSNE81HGYJncwj8GkDcqspz5Dp/4iqOt7
- BqZJFRL2dHbA==
-X-IronPort-AV: E=Sophos;i="5.77,374,1596524400"; 
-   d="scan'208";a="530768349"
-Received: from gliakhov-mobl2.ger.corp.intel.com (HELO ubuntu) ([10.249.36.119])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2020 03:18:32 -0700
-Date:   Wed, 14 Oct 2020 12:18:23 +0200
-From:   Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        arnaud.pouliquen@st.com, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/9] rpmsg: Make RPMSG name service modular
-Message-ID: <20201014101822.GA4847@ubuntu>
-References: <20201013232519.1367542-1-mathieu.poirier@linaro.org>
+        Wed, 14 Oct 2020 08:55:25 -0400
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09ECqvba015323;
+        Wed, 14 Oct 2020 14:55:07 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=dnkYwDz5SS1iDJhEQKZPv8UZFz9BDhGoeNxvfvCK17U=;
+ b=oJf4wMO7MTpOWr0vouC5My5miUW9zEpWngcncd3sQaAZyzVMK8z9awfWZBEKAM8SoJ0u
+ XsNTEG3cWj6gALuT7/NiGj0c8zJOrdcLk56fIrM04kHGT/5+2S+H8tA173CKnN0eZv95
+ y5j5T4AH8Pz4dMr2WBaAy6TH5oRtIxeCSJRR1NP3zUq1QgjQILBkUQIATA2Vzq76ki5F
+ v4Y0aCIEkpatPNwQiquiBxVllDtZVvl/sMt7WbUC0EINvnZd04W8uZWXEv8C38f8CpRi
+ y1JsHdAP2Q3A3n26/4k/GpYP+RT2ophjJBS0uyAPUueTiye5UTEmelPGAmCeP/IRrjh9 Yw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 3455c8hqqk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Oct 2020 14:55:07 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 09480100034;
+        Wed, 14 Oct 2020 14:55:07 +0200 (CEST)
+Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E93D32DA529;
+        Wed, 14 Oct 2020 14:55:06 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SFHDAG3NODE1.st.com (10.75.127.7)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 14 Oct 2020 14:55:06
+ +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@st.com>
+To:     Rob Herring <robh@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: [PATCH v2 0/4] ARM: stm32: add DT properties for remote proc synchronisation
+Date:   Wed, 14 Oct 2020 14:54:37 +0200
+Message-ID: <20201014125441.2457-1-arnaud.pouliquen@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201013232519.1367542-1-mathieu.poirier@linaro.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG6NODE2.st.com (10.75.127.17) To SFHDAG3NODE1.st.com
+ (10.75.127.7)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-14_07:2020-10-14,2020-10-14 signatures=0
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 05:25:10PM -0600, Mathieu Poirier wrote:
-> Good afternoon,
-> 
-> This set starts by making the RPMSG protocol transport agnostic by
-> moving the headers it uses to generic types and using those in the
-> current implementation.  From there it re-uses the work that Arnaud
-> published[1] to make the name service modular. 
-> 
-> Tested on stm32mp157 with the RPMSG client sample application.  Applies
-> cleanly on v5.9.
+This series implements the DT part associated to the commit 9276536f455b3
+("remoteproc: stm32: Parse syscon that will manage M4 synchronisation")
 
-Reviewed-by: Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
+Delta vs V1 [1]
+- add Rob acked-by on patch 1/4
+- simplify yaml descriptions and align other syscon descriptions
 
-Thanks
-Guennadi
+[1]https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=339339
 
-> 
-> Thanks,
-> Mathieu
-> 
-> [1]. https://patchwork.kernel.org/project/linux-remoteproc/list/?series=338335
-> 
-> ------
-> New for V2:
-> - Created new RPMSG types (Guennadi).
-> - Re-worked byte conversion functions(Guennadi).
-> - Added a single ->is_little_endian() operation (Arnaud).
-> - Fixed byte conversion before making name service modular.
-> 
-> Arnaud Pouliquen (4):
->   rpmsg: virtio: Rename rpmsg_create_channel
->   rpmsg: core: Add channel creation internal API
->   rpmsg: virtio: Add rpmsg channel device ops
->   rpmsg: Turn name service into a stand alone driver
-> 
-> Mathieu Poirier (5):
->   rpmsg: Move rpmsg_endpoint_ops to rpmsg.h
->   rpmsg: Introduce __rpmsg{16|32|64} types
->   rpmsg: virtio: Move from virtio to rpmsg byte conversion
->   rpmsg: Move rpmsg_hr and rpmsg_ns_msg to header file
->   rpmsg: Make rpmsg_{register|unregister}_device() public
-> 
->  drivers/rpmsg/Kconfig            |   8 ++
->  drivers/rpmsg/Makefile           |   1 +
->  drivers/rpmsg/rpmsg_core.c       |  44 +++++++
->  drivers/rpmsg/rpmsg_internal.h   |  27 +---
->  drivers/rpmsg/rpmsg_ns.c         | 110 +++++++++++++++++
->  drivers/rpmsg/virtio_rpmsg_bus.c | 206 ++++++++++---------------------
->  include/linux/rpmsg.h            |  93 ++++++++++++--
->  include/linux/rpmsg_byteorder.h  |  67 ++++++++++
->  include/linux/rpmsg_ns.h         |  79 ++++++++++++
->  include/uapi/linux/rpmsg.h       |   3 +
->  include/uapi/linux/rpmsg_types.h |  11 ++
->  11 files changed, 481 insertions(+), 168 deletions(-)
->  create mode 100644 drivers/rpmsg/rpmsg_ns.c
->  create mode 100644 include/linux/rpmsg_byteorder.h
->  create mode 100644 include/linux/rpmsg_ns.h
->  create mode 100644 include/uapi/linux/rpmsg_types.h
-> 
-> -- 
-> 2.25.1
-> 
+Arnaud Pouliquen (4):
+  dt-bindings: arm: stm32: Add compatible for syscon tamp node
+  dt-bindings: remoteproc: stm32_rproc: update for firmware
+    synchronization
+  dt-bindings: remoteproc: stm32_rproc: update syscon descriptions
+  ARM: dts: stm32: update stm32mp151 for remote proc synchronization
+    support
+
+ .../bindings/arm/stm32/st,stm32-syscon.yaml   |  1 +
+ .../bindings/remoteproc/st,stm32-rproc.yaml   | 21 +++++++++++++------
+ arch/arm/boot/dts/stm32mp151.dtsi             |  7 +++++++
+ 3 files changed, 23 insertions(+), 6 deletions(-)
+
+-- 
+2.17.1
+
