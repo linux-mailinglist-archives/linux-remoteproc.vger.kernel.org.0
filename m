@@ -2,162 +2,53 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD9928EEBE
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 15 Oct 2020 10:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7F728F3E7
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 15 Oct 2020 15:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388348AbgJOIsn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 15 Oct 2020 04:48:43 -0400
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:52784 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388282AbgJOIsm (ORCPT
+        id S2387919AbgJONx7 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 15 Oct 2020 09:53:59 -0400
+Received: from edge.kilargo.pl ([77.252.52.110]:24065 "EHLO edge.kilargo.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729735AbgJONx6 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 15 Oct 2020 04:48:42 -0400
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09F8l3iL024871;
-        Thu, 15 Oct 2020 10:48:37 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=jjfPeig1mby3E/hahbOyXAhB1N7XsU9GNoeGmjs0sbE=;
- b=S+X9lM1OwTPmA2KQBwkJWsKnJVjYwGt/Sv1hSpInGE4MknyflyyQ+j4EEbiHcb4Pcj7j
- Mp3S51R8uqoAJh9iu5cgiIx34aOVuN1w5SL2Qc4nuxmkVmmSa95i4ESK2bG6ExWAjKxb
- NY8PnddAuJ/nL5fUKhFtAnexW5cwucbhnphkGPOeZEYoW3yoEJKK9WsiXFdTEs4Z7UCf
- JHk6tQS+ncTFCHT1EDCsUsqmhuPf/34Qiqw1o+h6spwZmKGFqkhV5kKmtH8VAT95wMun
- m7ZdF97ZaE/RrHErNGfQgDVBixBxn8XK5r227kA5mwef7hdTYinz3KDUx7TNeRUh7VKL qQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3455c8r3t5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Oct 2020 10:48:37 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DA9E410002A;
-        Thu, 15 Oct 2020 10:48:36 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C879F2067E7;
-        Thu, 15 Oct 2020 10:48:36 +0200 (CEST)
-Received: from lmecxl0889.tpe.st.com (10.75.127.48) by SFHDAG3NODE1.st.com
- (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 15 Oct
- 2020 10:48:36 +0200
-Subject: Re: [PATCH v2 1/9] rpmsg: Move rpmsg_endpoint_ops to rpmsg.h
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "ohad@wizery.com" <ohad@wizery.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>
-CC:     "guennadi.liakhovetski@linux.intel.com" 
-        <guennadi.liakhovetski@linux.intel.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20201013232519.1367542-1-mathieu.poirier@linaro.org>
- <20201013232519.1367542-2-mathieu.poirier@linaro.org>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Message-ID: <fe0a39c8-e6de-74da-d60e-dd35ff794ef1@st.com>
-Date:   Thu, 15 Oct 2020 10:48:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 15 Oct 2020 09:53:58 -0400
+X-Greylist: delayed 601 seconds by postgrey-1.27 at vger.kernel.org; Thu, 15 Oct 2020 09:53:22 EDT
+Received: from mail.kilargo.pl (77.252.52.107) by edge.kilargo.pl
+ (77.252.52.109) with Microsoft SMTP Server (TLS) id 8.3.485.1; Thu, 15 Oct
+ 2020 15:41:40 +0200
+Received: from User (185.248.12.71) by MAIL.kilargo.pl (172.22.0.36) with
+ Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 15 Oct 2020 14:54:55 +0200
+Reply-To: <kim.leang2011@yahoo.com>
+From:   Kim Leang <mechanik@kilargo.pl>
+Subject: Greeting! !!
+Date:   Thu, 15 Oct 2020 15:54:58 +0300
 MIME-Version: 1.0
-In-Reply-To: <20201013232519.1367542-2-mathieu.poirier@linaro.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG6NODE3.st.com (10.75.127.18) To SFHDAG3NODE1.st.com
- (10.75.127.7)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-15_03:2020-10-14,2020-10-15 signatures=0
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <b8fd632900dc4ad4a113512e7781e06f@mail.kilargo.pl>
+To:     Undisclosed recipients:;
+X-Originating-IP: [185.248.12.71]
+X-ClientProxiedBy: mail.kilargo.pl (172.22.0.36) To MAIL.kilargo.pl
+ (172.22.0.36)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A295AAB9B6B647163
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 10/14/20 1:25 AM, Mathieu Poirier wrote:
-> Move structure rpmsg_endpoint_ops to header rpmsg.h so that it can
-> be used by other entities.
-> 
-> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> ---
->  drivers/rpmsg/rpmsg_internal.h | 19 -------------------
->  include/linux/rpmsg.h          | 24 +++++++++++++++++++++---
->  2 files changed, 21 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-> index 3fc83cd50e98..094cf968d2d3 100644
-> --- a/drivers/rpmsg/rpmsg_internal.h
-> +++ b/drivers/rpmsg/rpmsg_internal.h
-> @@ -18,25 +18,6 @@
->  #define to_rpmsg_device(d) container_of(d, struct rpmsg_device, dev)
->  #define to_rpmsg_driver(d) container_of(d, struct rpmsg_driver, drv)
->  
-> -/**
-> - * struct rpmsg_device_ops - indirection table for the rpmsg_device operations
-> - * @create_ept:		create backend-specific endpoint, required
-> - * @announce_create:	announce presence of new channel, optional
-> - * @announce_destroy:	announce destruction of channel, optional
-> - *
-> - * Indirection table for the operations that a rpmsg backend should implement.
-> - * @announce_create and @announce_destroy are optional as the backend might
-> - * advertise new channels implicitly by creating the endpoints.
-> - */
-> -struct rpmsg_device_ops {
-> -	struct rpmsg_endpoint *(*create_ept)(struct rpmsg_device *rpdev,
-> -					    rpmsg_rx_cb_t cb, void *priv,
-> -					    struct rpmsg_channel_info chinfo);
-> -
-> -	int (*announce_create)(struct rpmsg_device *ept);
-> -	int (*announce_destroy)(struct rpmsg_device *ept);
-> -};
-> -
->  /**
->   * struct rpmsg_endpoint_ops - indirection table for rpmsg_endpoint operations
->   * @destroy_ept:	see @rpmsg_destroy_ept(), required
-> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-> index 9fe156d1c018..9fe1c54ae995 100644
-> --- a/include/linux/rpmsg.h
-> +++ b/include/linux/rpmsg.h
-> @@ -22,7 +22,6 @@
->  
->  struct rpmsg_device;
->  struct rpmsg_endpoint;
-> -struct rpmsg_device_ops;
->  struct rpmsg_endpoint_ops;
->  
->  /**
-> @@ -37,6 +36,27 @@ struct rpmsg_channel_info {
->  	u32 dst;
->  };
->  
-> +typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int, void *, u32);
-> +
-> +/**
-> + * struct rpmsg_device_ops - indirection table for the rpmsg_device operations
-> + * @create_ept:		create backend-specific endpoint, required
-> + * @announce_create:	announce presence of new channel, optional
-> + * @announce_destroy:	announce destruction of channel, optional
-> + *
-> + * Indirection table for the operations that a rpmsg backend should implement.
-> + * @announce_create and @announce_destroy are optional as the backend might
-> + * advertise new channels implicitly by creating the endpoints.
-> + */
-> +struct rpmsg_device_ops {
-> +	struct rpmsg_endpoint *(*create_ept)(struct rpmsg_device *rpdev,
-> +					    rpmsg_rx_cb_t cb, void *priv,
-> +					    struct rpmsg_channel_info chinfo);
-> +
-> +	int (*announce_create)(struct rpmsg_device *ept);
-> +	int (*announce_destroy)(struct rpmsg_device *ept);
-> +};
-> +
->  /**
->   * rpmsg_device - device that belong to the rpmsg bus
->   * @dev: the device struct
-> @@ -59,8 +79,6 @@ struct rpmsg_device {
->  	const struct rpmsg_device_ops *ops;
->  };
->  
-> -typedef int (*rpmsg_rx_cb_t)(struct rpmsg_device *, void *, int, void *, u32);
-> -
->  /**
->   * struct rpmsg_endpoint - binds a local rpmsg address to its user
->   * @rpdev: rpmsg channel device
-> 
+Greeting!
 
-Reviewed-by:  Arnaud Pouliquen <arnaud.pouliquen@st.com>
+I am contacting you to receive and share with me an abandoned fund ( $21,537.000.00 ) left in our bank by a deceased customer. I was going through the Internet search when I found your email address. My name is Mr. Kim Leang.
 
-Thanks,
-Arnaud
+I want to utilize this opportunity and make use of this fund if I should present your name to the bank to stand as his business associate/ trustee for the fund to be released to you via Visa card for easy withdrawals in any VISA ATM machine anywhere in the World.
+
+The bank will also give you international online transfer options. With these you can transfer the funds without any risk.
+
+Should you be interested in working with me in this project? Please reply back and let's benefit from this golden opportunity.You are my first contact. I shall wait a few days and if I do not hear from you, I shall look for another person.
+
+Thanks and have a nice day,
+Mr. Kim Leang.
