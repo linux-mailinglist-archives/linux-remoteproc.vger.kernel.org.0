@@ -2,28 +2,28 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF25299BEA
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 27 Oct 2020 00:54:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D09A299CB8
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 27 Oct 2020 01:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410347AbgJZXyL (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 26 Oct 2020 19:54:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59700 "EHLO mail.kernel.org"
+        id S2411151AbgJZX43 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 26 Oct 2020 19:56:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36234 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2410335AbgJZXyK (ORCPT
+        id S2411138AbgJZX42 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:54:10 -0400
+        Mon, 26 Oct 2020 19:56:28 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 22CDD221FC;
-        Mon, 26 Oct 2020 23:54:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8BFCA2222C;
+        Mon, 26 Oct 2020 23:56:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756450;
+        s=default; t=1603756587;
         bh=kSRjWKkqerygM1Ug3EBCrHCDhUr4RdXYzpftCIvXDsw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VA0XNm7Fvm7ik3t5iKsNaCiseWsAAKemY27FsRwEuEJhjUXs3OQFgHyUEFyXcpxpi
-         erxkhfE+uzS/+Qe81Of7sKamWHKIBW5KT3vF+ChtaGTZvKo0Kq9IPQi9ouRCCUSbUM
-         X2jROTllESsvslGZtI6hLjVWyzN4K9jiCj5hlPr0=
+        b=np8Z8v07aqhoDZU53+Ni6HErdXNrU7TbL/KgoActkvwdA1ciNhvCLz0kd+odOevng
+         ydP3LWnSWy93YFwr/AEt9aF9E3rkJzkgNoujonSyBdHS49N1TkHCgziHS4uQogVkWi
+         GhK/tDgjrAyLyrp/AQ/tI6xUycyjI1jfZOiX7hrk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Chris Lew <clew@codeaurora.org>,
@@ -32,12 +32,12 @@ Cc:     Chris Lew <clew@codeaurora.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-remoteproc@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 101/132] rpmsg: glink: Use complete_all for open states
-Date:   Mon, 26 Oct 2020 19:51:33 -0400
-Message-Id: <20201026235205.1023962-101-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 59/80] rpmsg: glink: Use complete_all for open states
+Date:   Mon, 26 Oct 2020 19:54:55 -0400
+Message-Id: <20201026235516.1025100-59-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026235205.1023962-1-sashal@kernel.org>
-References: <20201026235205.1023962-1-sashal@kernel.org>
+In-Reply-To: <20201026235516.1025100-1-sashal@kernel.org>
+References: <20201026235516.1025100-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
