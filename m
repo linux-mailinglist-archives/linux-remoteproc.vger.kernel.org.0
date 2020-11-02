@@ -2,108 +2,137 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B902A31F0
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 Nov 2020 18:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 692D42A345B
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 Nov 2020 20:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725926AbgKBRro (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 2 Nov 2020 12:47:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725817AbgKBRro (ORCPT
+        id S1726646AbgKBTje (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 2 Nov 2020 14:39:34 -0500
+Received: from mail-eopbgr700063.outbound.protection.outlook.com ([40.107.70.63]:18433
+        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726255AbgKBTjd (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 2 Nov 2020 12:47:44 -0500
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0259C061A48
-        for <linux-remoteproc@vger.kernel.org>; Mon,  2 Nov 2020 09:47:43 -0800 (PST)
-Received: by mail-oi1-x243.google.com with SMTP id d9so9515407oib.3
-        for <linux-remoteproc@vger.kernel.org>; Mon, 02 Nov 2020 09:47:43 -0800 (PST)
+        Mon, 2 Nov 2020 14:39:33 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZXb8skQPMbPVYMeRHzEl1u9z1zNnaX2QLaQo3+OM+hGBTw6lf2DtN0COQiECVNU5fz4il38uhhfT+AZhTHwSQEaEOuUad/z44tDf+PX2dBvCWrKBgVUG45OdVJ0ZyfWRBUxYD4oSTQkLZF55Soezu9Yvx1Eqwu5MM+CeUUuXrG/KTXbQTAaRNeFJIgaTA9vC2NoO2V0lu0/G6Ij68opWpIYNYQ4J2ovwn0tgJzBBkq+4D4jpdfVeASZvte5Wm6R7IDH2sYosddix0orIDfgCKwuFqgpyIvFrQxZHAmmCQh+7Wnwp4E/Ibu4s8543g0Nf00Hbs14tuW9VXRtiPdjOrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xkP8ZUs7NjshcIi46PxZCvaNq0WfiQSq2TeGOCWUXCY=;
+ b=kFd23VsU03evojqSJ0Pq/xUqruDz7iXWjmfknKV6hAr4quypel/Gyq7Hmlm/QVdbVMMDxKWOQpIQGE7PGWDLbxNbEkdIx9qoLOAiMTPgVNPVYYIUf49QxCbf2c3dV6KvngK46+R8ttIBc935Ey71O8jp//wVbop3l32IThMXcedYLrPZejHAnza7L+kLQkS38zs60nIMWdWpQN1ykDryOPlXHMjfvn2xYTjVkKKzLgdW9MRv2tOLuPrlPCEY+S69Xx7xOKDZkqLHpSU17o1RmPWRyRZDMHfXprL+eJAEwlbTtbb+jto/SEH5YYSBjQHTVaG8aqakiXh7avWEl6+Rrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=ni.com smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ta8nke5A5mobw52bQz/6c9ICTuEFY5bZssEx/BCuN+U=;
-        b=aPd+GJ7X7SpgqrcQU40H4fMr+1SBaIGBTLYglypXsKQf3Nx/gTNlZ5SPgt6G7O3ybS
-         2haR7/p6QYCrANpqnFpaFwUWysuD9yuJdn1q0XoHILq7HKBztKF44nLSFPpL8er3tIyn
-         Poa4Um7y3fL5e8o7IeroI9y1tez+RwdQSjg4Fknq5t9ESSBR2Pjr6Yv2M8K6pE3zlt0s
-         zqPZtuXoZaVmdNFgoAlMbYgc+IPhskrfPvQO+m+SHIvpJtPAXrcOjf6ZTjEOYwDS7wYY
-         rCZqdmNl/QFUhYKXLVnl9o/YptMDUIf4rqjxR/BF7dJQtV8g40W7VmK2BOZ3fyW8vwLs
-         xXxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ta8nke5A5mobw52bQz/6c9ICTuEFY5bZssEx/BCuN+U=;
-        b=rcCzv+hGl5ibiBeOu+KCr6Twp4KGhSkNONJ5aag7MKpKUau5Tj+ZhHUu+LavncNdHV
-         J5kmFQnGsz0d4IV1wtmScO7gNacWfHVRSmbQ6eOKQDp1oQ5gYa/sQOLuQevr4jgigxK7
-         WjaA8zCSztJsVe/rQ3HfdAwgA6ig7BQkGhd7JuXtybDLuQd8P4JiWRYOjxI6G5CZgFH/
-         mf7iFJVmosA9H8y0eLzKqPulGf08XOtkb/vdmtgoIcCdmyHHmG9GR6/EWoq8WtzOpIUS
-         weToQblvbUQOJ7zVPHJSQMcmsZHBzzxcia2/YYzZPMCuEEjMbS1/E5LfcQDqKBhAk+xk
-         vqYg==
-X-Gm-Message-State: AOAM530J85VUpf1RIB6e99SCb/S9oxEk1I5xq+5t9WFPmkApqaLD0Pt7
-        VUTbwMoJt+LAUvsT7ULyfpJqDQ==
-X-Google-Smtp-Source: ABdhPJxXvHPb/Z0m00NEXuUGbpnQdMiSETV2s6AftgGLyCuMxVSYXQjN11p6yK5xF1LNSrj3NSX0nA==
-X-Received: by 2002:aca:b145:: with SMTP id a66mr11230119oif.92.1604339263266;
-        Mon, 02 Nov 2020 09:47:43 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id w70sm748613oiw.29.2020.11.02.09.47.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Nov 2020 09:47:42 -0800 (PST)
-Date:   Mon, 2 Nov 2020 11:47:40 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Siddharth Gupta <sidgup@codeaurora.org>
-Cc:     agross@kernel.org, ohad@wizery.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, tsoni@codeaurora.org,
-        psodagud@codeaurora.org, rishabhb@codeaurora.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v6 2/4] remoteproc: coredump: Add minidump functionality
-Message-ID: <20201102174740.GA223412@builder.lan>
-References: <1601690757-25726-1-git-send-email-sidgup@codeaurora.org>
- <1601690757-25726-3-git-send-email-sidgup@codeaurora.org>
- <20201026210912.GA4611@builder.lan>
- <ad4c375b-7051-bcce-a86c-febb72267caa@codeaurora.org>
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xkP8ZUs7NjshcIi46PxZCvaNq0WfiQSq2TeGOCWUXCY=;
+ b=R7cLxULFs5ZnbejIFq4ToqWRJ7YMp4q8360pa4Fg+TAEca3GXexOw3t33eMYrZLFZV+3nfHJp8nnHdYeuoatmY6gRP2vA98sdRtpOav7nfoqcxjr7bwNEdwCXCvvRQNXQv+ZKldxukzLcLTsvF/FF84HJ3AONQAv2wllC4ZRUvc=
+Received: from CY4PR21CA0032.namprd21.prod.outlook.com (2603:10b6:903:12b::18)
+ by SN6PR02MB4591.namprd02.prod.outlook.com (2603:10b6:805:b0::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Mon, 2 Nov
+ 2020 19:39:31 +0000
+Received: from CY1NAM02FT017.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:903:12b:cafe::fc) by CY4PR21CA0032.outlook.office365.com
+ (2603:10b6:903:12b::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.6 via Frontend
+ Transport; Mon, 2 Nov 2020 19:39:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; ni.com; dkim=none (message not signed)
+ header.d=none;ni.com; dmarc=bestguesspass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
+Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
+ CY1NAM02FT017.mail.protection.outlook.com (10.152.75.181) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.3520.15 via Frontend Transport; Mon, 2 Nov 2020 19:39:31 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1913.5; Mon, 2 Nov 2020 11:38:59 -0800
+Received: from smtp.xilinx.com (172.19.127.95) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.1913.5 via Frontend Transport; Mon, 2 Nov 2020 11:38:59 -0800
+Envelope-to: stefanos@xilinx.com,
+ michael.auchter@ni.com,
+ mathieu.poirier@linaro.org,
+ devicetree@vger.kernel.org,
+ linux-remoteproc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Received: from [172.19.2.206] (port=58004 helo=xsjblevinsk50.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <ben.levinsky@xilinx.com>)
+        id 1kZffP-0005Vs-MV; Mon, 02 Nov 2020 11:38:59 -0800
+From:   Ben Levinsky <ben.levinsky@xilinx.com>
+To:     <michael.auchter@ni.com>, <stefanos@xilinx.com>,
+        <mathieu.poirier@linaro.org>
+CC:     <devicetree@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v21 0/5] Provide basic driver to control Arm R5 co-processor found on Xilinx ZynqMP
+Date:   Mon, 2 Nov 2020 11:38:54 -0800
+Message-ID: <20201102193859.31090-1-ben.levinsky@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ad4c375b-7051-bcce-a86c-febb72267caa@codeaurora.org>
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6ce9af34-0868-4c52-0998-08d87f6704bb
+X-MS-TrafficTypeDiagnostic: SN6PR02MB4591:
+X-Microsoft-Antispam-PRVS: <SN6PR02MB4591A4A84111F99EC7D85F4CB5100@SN6PR02MB4591.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:5516;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WVspPZgVuRw4i2nnk6u2piNBJDBUPwUb5dXFeKSliDJi7qik6PGoiS4250iFkA/BGQdv0fbCLyBdkp1OBGGtPmMycDiUcalDD9TkURPkTWmV+mX8eY8up97eWMhl6ypsi7NJyca82PT9QxlFtAGKjd9xCGAIxvOPHLdJT8wPJDocekqqXoHfp6z2XPu6q57/HitU59oyi3QB81ioWTRIBfZQ1e2YuC1vobYaWWd+ncIeHUIXsxowdC/N7bCizlikCTAmwOa0BHBNfUl51G6E70UxjHJDXfhIDGZlirskVpZ7Re+yQjIyoexJ+hW855046adHKY2Rf9VKqv9FApiJeXpGucc9oorm8jtoWEyCyV4oTIfzIO6iUGAdXuZMxm27dP29oYFUGHtZqGMsXfAxYq1NRz0iiL5tpDpphrC4rFBCYqWkJiJ08lIMQ+my1K82ox3Q6kR3XBttadQmdDTGCzsdf/lJbXG0fxUWVJMae/EQNhZzKJDBBkVIBE27GiSy
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(396003)(346002)(136003)(39860400002)(376002)(46966005)(186003)(8936002)(36906005)(1076003)(2906002)(8676002)(44832011)(5660300002)(9786002)(7696005)(26005)(6666004)(4326008)(336012)(426003)(316002)(110136005)(54906003)(2616005)(36756003)(356005)(966005)(70206006)(47076004)(83380400001)(7636003)(82740400003)(82310400003)(478600001)(70586007)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2020 19:39:31.0011
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ce9af34-0868-4c52-0998-08d87f6704bb
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY1NAM02FT017.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR02MB4591
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu 29 Oct 18:54 CDT 2020, Siddharth Gupta wrote:
+Update Xilinx R5 Remoteproc Driver as follows:
+- update documentation for zynqmp_r5_probe
+- restructure so that cluster initialization code is all in one place
+- add memory allocation check for cluster
+- add error handling in case of second core fails at probe but first core succeeded.
+- remove unneeded lines in zynqmp_r5_remoteproc_remove
 
-> 
-> On 10/26/2020 2:09 PM, Bjorn Andersson wrote:
-> > On Fri 02 Oct 21:05 CDT 2020, Siddharth Gupta wrote:
-[..]
-> > > diff --git a/drivers/remoteproc/remoteproc_elf_helpers.h b/drivers/remoteproc/remoteproc_elf_helpers.h
-> > > index 4b6be7b..d83ebca 100644
-> > > --- a/drivers/remoteproc/remoteproc_elf_helpers.h
-> > > +++ b/drivers/remoteproc/remoteproc_elf_helpers.h
-> > > @@ -11,6 +11,7 @@
-> > >   #include <linux/elf.h>
-> > >   #include <linux/types.h>
-> > > +#define MAX_NAME_LENGTH 16
-> > This name is too generic. Why is it 16?
-> 
-> I will update the name to  MAX_SHDR_NAME_LEN. In our usecase we didn't
-> expect a length of the section name to exceed
-> 16 characters (MAX_REGION_NAME_LENGTH defined in qcom_minidump.h in patch
-> 03/04). It might change later if users
-> want to increase the size. What would you prefer the max name length for the
-> section header to be?
-> 
+Previous version https://patchwork.kernel.org/project/linux-remoteproc/list/?series=374399
 
-If you calculate the size of the region based on the strings I don't see
-why you need to limit it here - and you shouldn't use a bounded version
-of strcpy in this case either.
+Ben Levinsky (5):
+  firmware: xilinx: Add ZynqMP firmware ioctl enums for RPU
+    configuration.
+  firmware: xilinx: Add shutdown/wakeup APIs
+  firmware: xilinx: Add RPU configuration APIs
+  dt-bindings: remoteproc: Add documentation for ZynqMP R5 rproc
+    bindings
+  remoteproc: Add initial zynqmp R5 remoteproc driver
 
-I don't think this part of the code should truncate the strings, if we
-need to sanitize the strings make sure to do that when you populate the
-list.
+ .../xilinx,zynqmp-r5-remoteproc.yaml          | 143 ++++
+ drivers/firmware/xilinx/zynqmp.c              |  96 +++
+ drivers/remoteproc/Kconfig                    |   8 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/zynqmp_r5_remoteproc.c     | 785 ++++++++++++++++++
+ include/linux/firmware/xlnx-zynqmp.h          |  60 ++
+ 6 files changed, 1093 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/xilinx,zynqmp-r5-remoteproc.yaml
+ create mode 100644 drivers/remoteproc/zynqmp_r5_remoteproc.c
 
-Thanks,
-Bjorn
+-- 
+2.17.1
+
