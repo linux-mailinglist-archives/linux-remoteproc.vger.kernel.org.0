@@ -2,99 +2,74 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 555E82A2569
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 Nov 2020 08:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E482A2CC0
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 Nov 2020 15:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727950AbgKBHkY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 2 Nov 2020 02:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727806AbgKBHkY (ORCPT
+        id S1726178AbgKBOYL (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 2 Nov 2020 09:24:11 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7575 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726120AbgKBOX4 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 2 Nov 2020 02:40:24 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C159C0617A6
-        for <linux-remoteproc@vger.kernel.org>; Sun,  1 Nov 2020 23:40:24 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id k9so8358842pgt.9
-        for <linux-remoteproc@vger.kernel.org>; Sun, 01 Nov 2020 23:40:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vZ7qWtE/JagD4wnKQ1Pjzyg8D2gT0S05CFs3Gnd0M1I=;
-        b=hi1XUKTo5mfu6hDc7B9CbqJ1S5iHE0fm5BGunRQMa3lG9icp3Z1sq9R+s69NyjUNqM
-         7NGV4ctg8GckjBBigieAWW2sJCYPnldsfSCQqY/UYuL/iev+iedpMwrqpikCA05GfOd8
-         ATfY1ldEAekqWqV8uRcE1/iJfzP41XIuxe5SI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vZ7qWtE/JagD4wnKQ1Pjzyg8D2gT0S05CFs3Gnd0M1I=;
-        b=orQCWw+7BAXn1nfkhhEg34cAr0HktKFNlZCpDGckdkWU8rCU2Yb7VcyxyWGQng5MFf
-         UdlTsGDV0Az+R/bctzCt0sS4ivRcFazzvvXYTo9F5gCh9WUHq9M6TkLuxy3lNKFETNJk
-         iMEcjT5q6aeS3z1fszlhu4ieNezcZxApVLiX2NCnuemE+FA9953mgVcbRKBD8VONFNLH
-         qt1Ba6a99dgxpz+2zK3nc9gGzuOl/3QsaFCV7T6/bh0k/Y0mIPBwlufWMK6481pzsjVv
-         ycCiVxZj14bFZQcLGATivGkoESNdXhC8jQXHhvbuAnwMCTSujlDqnS287qwjJoK12Vkn
-         WJcQ==
-X-Gm-Message-State: AOAM532xM2MiHPK8RNFanIPrejmaiSoRF+8SR/HhgpcoxLAbCnuY/A6G
-        EkabE5GbMFHwWEqRIGblg+XKfA==
-X-Google-Smtp-Source: ABdhPJwqXHxJ0TlTc7zOsutpjcl3H9A0kwABgaJlyjOtRmUbEPz0lR96rFtEy+ZMSAM0kUJj3hfnQw==
-X-Received: by 2002:a17:90a:f2c5:: with SMTP id gt5mr1001428pjb.66.1604302823903;
-        Sun, 01 Nov 2020 23:40:23 -0800 (PST)
-Received: from acourbot.tok.corp.google.com ([2401:fa00:8f:203:eeb1:d7ff:fe57:b7e5])
-        by smtp.gmail.com with ESMTPSA id t20sm13067787pfe.123.2020.11.01.23.40.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Nov 2020 23:40:23 -0800 (PST)
-From:   Alexandre Courbot <acourbot@chromium.org>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-remoteproc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] remoteproc/mtk_scp: surround DT device IDs with CONFIG_OF
-Date:   Mon,  2 Nov 2020 16:40:07 +0900
-Message-Id: <20201102074007.299222-1-acourbot@chromium.org>
-X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
+        Mon, 2 Nov 2020 09:23:56 -0500
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CPwBv44XNzLsJ3;
+        Mon,  2 Nov 2020 22:23:51 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.487.0; Mon, 2 Nov 2020
+ 22:23:49 +0800
+From:   Zhang Qilong <zhangqilong3@huawei.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <ohad@wizery.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+Subject: [PATCH] remoteproc: q6v5-mss: fix error handling in q6v5_pds_enable
+Date:   Mon, 2 Nov 2020 22:34:33 +0800
+Message-ID: <20201102143433.143996-1-zhangqilong3@huawei.com>
+X-Mailer: git-send-email 2.26.0.106.g9fadedd
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.225]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Now that this driver can be compiled with COMPILE_TEST, we have no
-guarantee that CONFIG_OF will also be defined. When that happens, a
-warning about mtk_scp_of_match being defined but unused will be reported
-so make sure this variable is only defined if of_match_ptr() actually
-uses it.
+If the pm_runtime_get_sync failed in q6v5_pds_enable when
+loop (i), The unroll_pd_votes will start from (i - 1), and
+it will resulted in following problems:
 
-Fixes: cbd2dca74926c0e4610c40923cc786b732c9e8ef remoteproc: scp: add COMPILE_TEST dependency
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+  1) pm_runtime_get_sync will increment pm usage counter even it
+     failed. Forgetting to pm_runtime_put_noidle will result in
+     reference leak.
+
+  2) Have not reset pds[i] performance state.
+
+Then we fix it.
+
+Fixes: 4760a896be88e ("remoteproc: q6v5-mss: Vote for rpmh power domains")
+Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
 ---
- drivers/remoteproc/mtk_scp.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/remoteproc/qcom_q6v5_mss.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index 577cbd5d421e..f74f22d4d1ff 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -772,12 +772,14 @@ static const struct mtk_scp_of_data mt8192_of_data = {
- 	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
- };
+diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+index eb3457a6c3b7..ba6f7551242d 100644
+--- a/drivers/remoteproc/qcom_q6v5_mss.c
++++ b/drivers/remoteproc/qcom_q6v5_mss.c
+@@ -349,8 +349,11 @@ static int q6v5_pds_enable(struct q6v5 *qproc, struct device **pds,
+ 	for (i = 0; i < pd_count; i++) {
+ 		dev_pm_genpd_set_performance_state(pds[i], INT_MAX);
+ 		ret = pm_runtime_get_sync(pds[i]);
+-		if (ret < 0)
++		if (ret < 0) {
++			pm_runtime_put_noidle(pds[i]);
++			dev_pm_genpd_set_performance_state(pds[i], 0);
+ 			goto unroll_pd_votes;
++		}
+ 	}
  
-+#if defined(CONFIG_OF)
- static const struct of_device_id mtk_scp_of_match[] = {
- 	{ .compatible = "mediatek,mt8183-scp", .data = &mt8183_of_data },
- 	{ .compatible = "mediatek,mt8192-scp", .data = &mt8192_of_data },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, mtk_scp_of_match);
-+#endif
- 
- static struct platform_driver mtk_scp_driver = {
- 	.probe = scp_probe,
+ 	return 0;
 -- 
-2.29.1.341.ge80a0c044ae-goog
+2.17.1
 
