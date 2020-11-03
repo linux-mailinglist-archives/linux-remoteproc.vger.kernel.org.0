@@ -2,141 +2,131 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BACC32A3A26
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Nov 2020 03:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C51712A45C2
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Nov 2020 13:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbgKCCB1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 2 Nov 2020 21:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbgKCCB1 (ORCPT
+        id S1729089AbgKCM63 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 3 Nov 2020 07:58:29 -0500
+Received: from z5.mailgun.us ([104.130.96.5]:50686 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729084AbgKCM63 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 2 Nov 2020 21:01:27 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCFCC0617A6;
-        Mon,  2 Nov 2020 18:01:26 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id 13so11220409wmf.0;
-        Mon, 02 Nov 2020 18:01:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QF7fWW6LYmjF3q2ZDZw47fAtapYJiUxs//4vM9wE3p8=;
-        b=HudkQ9pyZiiSUk4r4pe3Sufiw6yBkZUJzUWcnB/9jv9VClMUrPuML9ZhkWvMxOQBsb
-         9XorXYzdjpg3OE/97k6kPttePIfsqyFu4haSBP2rBET5Cuyk/H8TFnF4eult51u/HUVt
-         cE8rW4vqTX8ZKeciJ2RudGKFRhfXyELGpXubaRDJdy+m1QXK2cBTF3dCRXX1+qNLBfuT
-         Qw3wrT3Tsb0WNOW2nKLK+Et9Z4qteQQhkcZFYVu5uQynM4bIhPRR4Veq86YPtqCIfXgk
-         IiK73lZNI5Ca4i/FCjtvcR2kNYewSGVLl0ADqyIP03gQQKLrH7+E5iJvL6cCUXx4WgFo
-         CYdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QF7fWW6LYmjF3q2ZDZw47fAtapYJiUxs//4vM9wE3p8=;
-        b=m9uSDBw0ZKSCm9TFSwKuoF6ESf1vcPpaxP0Tr4Pj1/iGwo76jDeElMGCy6wuvHoomu
-         TggUiRFpXvOrIrEDdNuHpNh3m9njtYk70sn/8vGP77HIem3/lznW1nwVYx67w40EFygL
-         iXgP9EPy8xvgareSxdModDWm7RT3VktInPBQJWDkdj/sPcY5p1pRW+AQmjfgoaW1lHJF
-         iExeEUDRUzHxC/evtZ5Iy+c7eNWDLKAjhCEOqjj019gLj4hDLQJ1iWgpOICZJ2KL5Wnc
-         K9F8Ged0orEdt3iLN4MK1c8Tk0QTw8Gmj+oj4kldc/tTzGJTCjSYQBszGAJhKzylRf9q
-         7dRg==
-X-Gm-Message-State: AOAM532PFQfHUw4got3Ntgl7uOWqIOPKd7XaMy9xx6O4eWS3eYlfT+0O
-        RQn1P0rfR5FVCeFDDLPR9csm+P62nyir0rpP0Zk=
-X-Google-Smtp-Source: ABdhPJwWiK4U8R/rj0RCA2Np4AGCEP5D0qYN+yUx6BBuf+jxaJUJ+SDdgDV8X7fMjTPWerQ2ukcdRtunUIHu1/tRx+4=
-X-Received: by 2002:a1c:7916:: with SMTP id l22mr867162wme.3.1604368885616;
- Mon, 02 Nov 2020 18:01:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20201030034654.15775-1-zhang.lyra@gmail.com> <20201030034654.15775-2-zhang.lyra@gmail.com>
- <CADBw62oQj+K_-nyoZyMJSQ6VaqcNHbX9gbyLEzV9+Od1cVmC5A@mail.gmail.com> <20201102235824.GB223412@builder.lan>
-In-Reply-To: <20201102235824.GB223412@builder.lan>
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Tue, 3 Nov 2020 10:00:49 +0800
-Message-ID: <CAAfSe-vFxpQnkV95ySZpkzqhFLN2gh0YHSYuVvQpej0U7F3dow@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] hwspinlock: sprd: fixed warning of unused variable 'sprd_hwspinlock_of_match'
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Baolin Wang <baolin.wang7@gmail.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 3 Nov 2020 07:58:29 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1604408308; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=Vl1gSkuYNKu59mDRMCZ/CekkC7CyDy0hSBNDzA19YYI=; b=vifi6kFD0RI0DwYATPWpcZzMbPVay5IlUkg2YzJZNV7NnIhoNgohCYOm3/43upqtnR+Phj0m
+ DRV3ve8gVqea+P6zYzTXoABkZc6mO35ipl77u94gY4qfYXQnMKiT0n3QIqHAvn0ddEw0DF3T
+ VlS3UUjEbXvVLlv6VqwW6s3k/x8=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 5fa153ecb64b1c5b78f96c54 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 03 Nov 2020 12:58:20
+ GMT
+Sender: sidgup=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 46297C3853C; Tue,  3 Nov 2020 09:19:30 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from sidgup-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sidgup)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2C27CC38537;
+        Tue,  3 Nov 2020 09:19:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2C27CC38537
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sidgup@codeaurora.org
+From:   Siddharth Gupta <sidgup@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, ohad@wizery.com,
+        linux-remoteproc@vger.kernel.org
+Cc:     Siddharth Gupta <sidgup@codeaurora.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, rishabhb@codeaurora.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v7 0/4] Introduce mini-dump support for remoteproc
+Date:   Tue,  3 Nov 2020 01:19:16 -0800
+Message-Id: <1604395160-12443-1-git-send-email-sidgup@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, 3 Nov 2020 at 07:58, Bjorn Andersson <bjorn.andersson@linaro.org> wrote:
->
-> On Mon 02 Nov 17:34 CST 2020, Baolin Wang wrote:
->
-> > On Friday, October 30, 2020, Chunyan Zhang <zhang.lyra@gmail.com> wrote:
-> > > From: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> > >
-> > > The macro function of_match_ptr() is NULL if CONFIG_OF is not set, then
-> > > Clang compiler would complain the of_device_id variable is unused.
-> > >
-> > > But using of_match_ptr() is space saving, for this case, the unused
-> > structure
-> > > 'sprd_hwspinlock_of_match' would be not built into symbol table if
-> > CONFIG_OF
-> > > is not set, probably depends on the compiler though.
-> > >
-> > > So adding __maybe_unsed seems a good approach to fix this warning.
-> > >
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Fixes: d8c8bbbb1aba ("hwspinlock: sprd: Add hardware spinlock driver")
-> > > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> > > ---
-> >
-> > I'd like to remove this wrapper, and just depend on the CONFIG_OF. But I
-> > have no objection for this patch.  So
-> > Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
-> >
->
-> As noted on the first line of the probe function, this driver isn't
-> going to do anything when CONFIG_OF is disabled - and I don't think we
-> should worry too much about space savings during COMPILE_TEST.
->
-> So I would prefer that we simply drop the of_match_ptr()
+Sometimes firmware sizes can be in tens of MB's and reading all the memory
+during coredump can consume lot of time and memory.
 
-Ok, that's what the v1 does.
-Bjorn, could you please pick up the 1st patch in v1 [1]?
+Introducing support for mini-dumps. Mini-dump contains smallest amount of
+useful information, that could help to debug subsystem crashes.
 
-Thanks,
-Chunyan
+During bootup memory is allocated in SMEM (Shared memory) in the form of a
+table that contains the physical addresses and sizes of the regions that
+are supposed to be collected during coredump. This memory is shared amongst
+all processors in a Qualcomm platform, so all remoteprocs fill in their
+entry in the global table once they are out of reset.
 
-[1] https://lkml.org/lkml/2020/10/26/87
+This patch series adds support for parsing the global minidump table and
+uses the current coredump frameork to expose this memory to userspace
+during remoteproc's recovery.
 
+This patch series also integrates the patch:
+https://patchwork.kernel.org/patch/11695541/ sent by Siddharth.
 
->
-> But I believe that's what you're saying as well Baolin?
->
-> Regards,
-> Bjorn
->
-> >
-> > >  drivers/hwspinlock/sprd_hwspinlock.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/hwspinlock/sprd_hwspinlock.c
-> > b/drivers/hwspinlock/sprd_hwspinlock.c
-> > > index 36dc8038bbb4..4c63e2546064 100644
-> > > --- a/drivers/hwspinlock/sprd_hwspinlock.c
-> > > +++ b/drivers/hwspinlock/sprd_hwspinlock.c
-> > > @@ -138,7 +138,7 @@ static int sprd_hwspinlock_probe(struct
-> > platform_device *pdev)
-> > >                                          SPRD_HWLOCKS_NUM);
-> > >  }
-> > >
-> > > -static const struct of_device_id sprd_hwspinlock_of_match[] = {
-> > > +static const __maybe_unused struct of_device_id
-> > sprd_hwspinlock_of_match[] = {
-> > >         { .compatible = "sprd,hwspinlock-r3p0", },
-> > >         { /* sentinel */ }
-> > >  };
-> > > --
-> > > 2.20.1
-> > >
-> > >
-> >
-> > --
-> > Baolin Wang
+Changelog:
+v6 -> v7:
+- The STR_TAB size is calculated dynamically now instead of a predefined size.
+- Added comments to indicate details about the reserved null section header. More
+  details can be found at https://refspecs.linuxfoundation.org/elf/elf.pdf.
+
+v5 -> v6:
+- Removed priv_cleanup operation from rproc_ops. The dump_segments list is
+  updated and cleaned up each time minidump is invoked.
+- Split patch #2 into 2 parts - one that adds the rproc_minidump function, and
+  the other that uses the new function in the qcom_q6v5_pas driver.
+- Updated structs in qcom_minidump to explicitly indicate the endianness of the
+  data stored in SMEM, also updated member names.
+- Read the global table of contents in SMEM each time adsp_minidump is invoked.
+
+v4 -> v5:
+- Fixed adsp_add_minidump_segments to read IO memory using appropriate functions.
+
+v3 -> v4:
+- Made adsp_priv_cleanup a static function.
+
+v2 -> v3:
+- Refactored code to remove dependency on Qualcomm configs.
+- Renamed do_rproc_minidump to rproc_minidump and marked as exported
+  symbol.
+
+v1 -> v2:
+- 3 kernel test robot warnings have been resolved.
+- Introduced priv_cleanup op in order to making the cleaning of
+  private elements used by the remoteproc more readable.
+- Removed rproc_cleanup_priv as it is no longer needed.
+- Switched to if/else format for rproc_alloc in order to keep 
+  the static const decalaration of adsp_minidump_ops.
+
+Siddharth Gupta (4):
+  remoteproc: core: Add ops to enable custom coredump functionality
+  remoteproc: coredump: Add minidump functionality
+  remoteproc: qcom: Add capability to collect minidumps
+  remoteproc: qcom: Add minidump id for sm8150 modem
+
+ drivers/remoteproc/qcom_minidump.h          |  64 +++++++++++++
+ drivers/remoteproc/qcom_q6v5_pas.c          | 105 ++++++++++++++++++++-
+ drivers/remoteproc/remoteproc_core.c        |   6 +-
+ drivers/remoteproc/remoteproc_coredump.c    | 140 ++++++++++++++++++++++++++++
+ drivers/remoteproc/remoteproc_elf_helpers.h |  26 ++++++
+ include/linux/remoteproc.h                  |   3 +
+ 6 files changed, 341 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/remoteproc/qcom_minidump.h
+
+-- 
+Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
