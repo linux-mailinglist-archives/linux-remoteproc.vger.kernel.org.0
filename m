@@ -2,124 +2,115 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 968D02A769D
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  5 Nov 2020 05:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4262A2A76B8
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  5 Nov 2020 05:55:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731096AbgKEEuk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 4 Nov 2020 23:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38948 "EHLO
+        id S1729240AbgKEEzl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Nov 2020 23:55:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730986AbgKEEuf (ORCPT
+        with ESMTP id S1727107AbgKEEzl (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 4 Nov 2020 23:50:35 -0500
-Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71DFC0613CF
-        for <linux-remoteproc@vger.kernel.org>; Wed,  4 Nov 2020 20:50:35 -0800 (PST)
-Received: by mail-oo1-xc41.google.com with SMTP id j6so127980oot.3
-        for <linux-remoteproc@vger.kernel.org>; Wed, 04 Nov 2020 20:50:35 -0800 (PST)
+        Wed, 4 Nov 2020 23:55:41 -0500
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE51C0613D1
+        for <linux-remoteproc@vger.kernel.org>; Wed,  4 Nov 2020 20:55:41 -0800 (PST)
+Received: by mail-ot1-x341.google.com with SMTP id k3so267176otp.12
+        for <linux-remoteproc@vger.kernel.org>; Wed, 04 Nov 2020 20:55:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rkVPfPXhshaukUCMauMgnylUImITZ+1YVILqFo4Qmt8=;
-        b=qCL6DA3P2yHRwk3ltNkvjsvo01LdCn/n8WIEQp1D2XSx3n7ejscKF7XVTDSbGRL8Yw
-         pv9p3TxfK1aeisN4bJOHu5prWSC4G25cR18n5cvHQIeAbSAJuDrELKNuaUYnHpX9WPPI
-         Hb5j4E5XisP8RgNvSCAoZaf69DCpmdZN/19DlyNMaVoWOduMqzJSqgeArp3ecOOpHrEE
-         PrCdUsV9+K1+wPQUlKaA95b7yC4mP724i2NUY5W/JEgQUb+/RUKc/Ryr/OEInsDyQeML
-         /SCVv9veXdrIOIiMIcy9uIPgJPQhnGVObv0gCUifMNge7+FlaIbRooi1xBkOxj1hWchN
-         Uvug==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=i6MGr/Kg3VZyORAXNQIPSqeLnV8zx9yqFNyMUoSyDIg=;
+        b=QybcdYkGQifdwCUvS6mzcHt5x/ze6Uk+AU8hfeX5CCttAAjMJ9JixZwigksaFEM1U8
+         v/okucIqFFVU7VHHDOMk+/vW3ceFa/smhEYZKI3wHU4eN5TPV25FIT14cJgS7Zp7WLmJ
+         gcjWURKjGLYBgmYycdwu1V64hbzyatd/3umDLpv/6+FshkDeLD1qJ35IK7KNbXnaMmzR
+         SejanBqzPKxCy15mDtB2/KqyQTFGCQD0m/3N29NgrgYBsQyTWF4c0yWAvFBLe4RG+nYD
+         3jMfs8d6Njg8jo76DutCptIjzK9ankBp9i7CdLZpoN5UwGUOg/Q4j2mBtdUq8SavqrwZ
+         fRFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rkVPfPXhshaukUCMauMgnylUImITZ+1YVILqFo4Qmt8=;
-        b=TE5CxlIBdEt1uqu27EZIUGWs7fYNxnq3UohpyUdLASIOcz6FcqB7XclxvVLkPyAaEx
-         Ck1tiYmCXn5t/m+lwtor/kjxuTVGVi5l4jpCscm6OEPMyOm+ThIQPpVfaSJCVexfUbaf
-         2Y03YzbJ0+GJvT1/BBOV+liSxKAZcITkzswTlOO/WN0zjP+IwkIyIjWfpPTYyAvXtFQH
-         9NRUCJD2q53TRiML2NTqPQk8Kk0r3lmIZn+/REp44eSOYAqX6QszJ3IseZkVFGu1sPl8
-         ppOcHo+wwTTwmV9ZCKXRVN01WBoT4o6d77Yr44r9VFuABdndeCllTgoh1obC/nJKjUBf
-         OKGg==
-X-Gm-Message-State: AOAM533M7nkxLrof2Z2h9hzh5iqQFj6XovYD0j7Resf92PHWvOndUgVR
-        P5h4DYKGGixlyxzo6HRxDsCx6g==
-X-Google-Smtp-Source: ABdhPJymPbjeOprNtaxPp1W80QiilQg2qTlH5qqrfCx3DneU9oOQDfVxhbXUe3DfaOvFHsnRkoVR5Q==
-X-Received: by 2002:a4a:1d03:: with SMTP id 3mr534295oog.19.1604551835201;
-        Wed, 04 Nov 2020 20:50:35 -0800 (PST)
-Received: from localhost.localdomain (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id k13sm100553ooi.41.2020.11.04.20.50.34
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i6MGr/Kg3VZyORAXNQIPSqeLnV8zx9yqFNyMUoSyDIg=;
+        b=tDcas1kOeHkG4UDJSfZxSo10DZzAJn19zxMgL1cN4Ad/cQWFlPSaPIc8+XXA00BwC0
+         Q1Pj8hxJoPzE98/PiwdOPMly0hdfXiByTuriDkPNMggTcantlx8HZKi7Eya1rHVDNj+E
+         k+tdewKFtYPYE60SSwI5QMJQcKgJh/rBJ8fOYieP1iLx78fmggEJWQytRGjU80JHdOLU
+         uIO0BnqtLny+dhGmD4l28o32/FTR2qb3rpXEoM/QouDi7DofB9H4vUpQWlA9sUIc2Jvx
+         AhraIzvf7+T/kqq+hdJ+VpkSUBcJ+VLQdxOLel0OFCgaPinHBiRapDEYgBsMZ8jCCHP+
+         t1dg==
+X-Gm-Message-State: AOAM532fN7cTAPgRDyPfFiq2bp0MZL8FQ5U6l1TskKwZTS/J6K0AjHff
+        ButMTU8TlDdItMuUCj2aMh1u1Q==
+X-Google-Smtp-Source: ABdhPJx8wemuxHJ5PcafcR+3WSW0gpy0QWAV+NsA3hxjXU/Wnf4rhD2zTdNnzBM3zh6Mhoi0OJRe7g==
+X-Received: by 2002:a9d:7d87:: with SMTP id j7mr510237otn.356.1604552140570;
+        Wed, 04 Nov 2020 20:55:40 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id l23sm95998otk.68.2020.11.04.20.55.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 20:50:34 -0800 (PST)
+        Wed, 04 Nov 2020 20:55:39 -0800 (PST)
+Date:   Wed, 4 Nov 2020 22:55:38 -0600
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Alexandre Courbot <acourbot@chromium.org>,
         Ohad Ben-Cohen <ohad@wizery.com>,
-        Siddharth Gupta <sidgup@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] remoteproc: sysmon: Improve error messages
-Date:   Wed,  4 Nov 2020 20:50:51 -0800
-Message-Id: <20201105045051.1365780-5-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201105045051.1365780-1-bjorn.andersson@linaro.org>
-References: <20201105045051.1365780-1-bjorn.andersson@linaro.org>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-remoteproc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] remoteproc/mtk_scp: surround DT device IDs with CONFIG_OF
+Message-ID: <20201105045538.GA29931@builder.lan>
+References: <20201102074007.299222-1-acourbot@chromium.org>
+ <20201104190547.GD2893396@xps15>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201104190547.GD2893396@xps15>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Improve the style of a few of the error messages printed by the sysmon
-implementation and fix the copy-pasted shutdown error in the send-event
-function.
+On Wed 04 Nov 13:05 CST 2020, Mathieu Poirier wrote:
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
+> Hi Alexander,
+> 
+> On Mon, Nov 02, 2020 at 04:40:07PM +0900, Alexandre Courbot wrote:
+> > Now that this driver can be compiled with COMPILE_TEST, we have no
+> > guarantee that CONFIG_OF will also be defined. When that happens, a
+> > warning about mtk_scp_of_match being defined but unused will be reported
+> > so make sure this variable is only defined if of_match_ptr() actually
+> > uses it.
+> > 
+> > Fixes: cbd2dca74926c0e4610c40923cc786b732c9e8ef remoteproc: scp: add COMPILE_TEST dependency
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Alexandre Courbot <acourbot@chromium.org>
+> > ---
+> >  drivers/remoteproc/mtk_scp.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+> > index 577cbd5d421e..f74f22d4d1ff 100644
+> > --- a/drivers/remoteproc/mtk_scp.c
+> > +++ b/drivers/remoteproc/mtk_scp.c
+> > @@ -772,12 +772,14 @@ static const struct mtk_scp_of_data mt8192_of_data = {
+> >  	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
+> >  };
+> >  
+> > +#if defined(CONFIG_OF)
+> >  static const struct of_device_id mtk_scp_of_match[] = {
+> >  	{ .compatible = "mediatek,mt8183-scp", .data = &mt8183_of_data },
+> >  	{ .compatible = "mediatek,mt8192-scp", .data = &mt8192_of_data },
+> >  	{},
+> >  };
+> >  MODULE_DEVICE_TABLE(of, mtk_scp_of_match);
+> > +#endif
+> 
+> I think it is better to add a "depends on OF" in the Kconfig.
+> 
 
-Changes since v1:
-- New patch
+That would reduce the efficiency of COMPILE_TEST, so I would prefer that
+we drop of_match_ptr(), which will result in the pointer always being
+populated and this being referenced - although unused when built without
+OF.
 
- drivers/remoteproc/qcom_sysmon.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/remoteproc/qcom_sysmon.c b/drivers/remoteproc/qcom_sysmon.c
-index 1c42f00010d3..47683932512a 100644
---- a/drivers/remoteproc/qcom_sysmon.c
-+++ b/drivers/remoteproc/qcom_sysmon.c
-@@ -352,9 +352,9 @@ static bool ssctl_request_shutdown(struct qcom_sysmon *sysmon)
- 
- 	ret = qmi_txn_wait(&txn, 5 * HZ);
- 	if (ret < 0) {
--		dev_err(sysmon->dev, "failed receiving QMI response\n");
-+		dev_err(sysmon->dev, "timeout waiting for shutdown response\n");
- 	} else if (resp.resp.result) {
--		dev_err(sysmon->dev, "shutdown request failed\n");
-+		dev_err(sysmon->dev, "shutdown request rejected\n");
- 	} else {
- 		dev_dbg(sysmon->dev, "shutdown request completed\n");
- 		acked = true;
-@@ -397,18 +397,18 @@ static void ssctl_send_event(struct qcom_sysmon *sysmon,
- 			       SSCTL_SUBSYS_EVENT_REQ, 40,
- 			       ssctl_subsys_event_req_ei, &req);
- 	if (ret < 0) {
--		dev_err(sysmon->dev, "failed to send shutdown request\n");
-+		dev_err(sysmon->dev, "failed to send subsystem event\n");
- 		qmi_txn_cancel(&txn);
- 		return;
- 	}
- 
- 	ret = qmi_txn_wait(&txn, 5 * HZ);
- 	if (ret < 0)
--		dev_err(sysmon->dev, "failed receiving QMI response\n");
-+		dev_err(sysmon->dev, "timeout waiting for subsystem event response\n");
- 	else if (resp.resp.result)
--		dev_err(sysmon->dev, "ssr event send failed\n");
-+		dev_err(sysmon->dev, "subsystem event rejected\n");
- 	else
--		dev_dbg(sysmon->dev, "ssr event send completed\n");
-+		dev_dbg(sysmon->dev, "subsystem event accepted\n");
- }
- 
- /**
--- 
-2.28.0
-
+Regards,
+Bjorn
