@@ -2,76 +2,78 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC74F2AC8F2
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  9 Nov 2020 23:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBD92ACA4D
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Nov 2020 02:20:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730684AbgKIW5o convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 9 Nov 2020 17:57:44 -0500
-Received: from aposti.net ([89.234.176.197]:54864 "EHLO aposti.net"
+        id S1731181AbgKJBU4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 9 Nov 2020 20:20:56 -0500
+Received: from m42-4.mailgun.net ([69.72.42.4]:60204 "EHLO m42-4.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730539AbgKIW5n (ORCPT
+        id S1731095AbgKJBUz (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 9 Nov 2020 17:57:43 -0500
-X-Greylist: delayed 599 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Nov 2020 17:57:42 EST
-Date:   Mon, 09 Nov 2020 22:47:27 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH 1/2] remoteproc: ingenic: Constify ingenic_rproc_ops
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Message-Id: <3NWJJQ.S916PME9WPQT@crapouillou.net>
-In-Reply-To: <20201107233630.9728-2-rikard.falkeborn@gmail.com>
-References: <20201107233630.9728-1-rikard.falkeborn@gmail.com>
-        <20201107233630.9728-2-rikard.falkeborn@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+        Mon, 9 Nov 2020 20:20:55 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1604971254; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=t/aMaPilFWKPkOrUGWkhN1HWlqHvRzdumb+OAPpywOM=; b=u4Mg3b/F+VhiPWpfqqEQSiSqCZwyv/TwSAjsTcNJvEYeTTLM2FtTH3rIw84IO9UxK+iagvIs
+ d6Eui38uiDS8y5Dj9duJmwnE+WfYJnpCsItyDLUWC8og5IkxsMlZHKfm3VI1dStUDjpFCd21
+ 7DitJZ7K/ncPDMx33TTLZ8lhamw=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 5fa9eaf19d6b206d9423917c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 10 Nov 2020 01:20:49
+ GMT
+Sender: rishabhb=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D806BC433FF; Tue, 10 Nov 2020 01:20:48 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rishabhb)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id EE758C433C6;
+        Tue, 10 Nov 2020 01:20:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org EE758C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rishabhb@codeaurora.org
+From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
+To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bjorn.andersson@linaro.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, sidgup@codeaurora.org,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Subject: [PATCH 0/2] Add trace events to q6v5_pas and mdt_loader driver
+Date:   Mon,  9 Nov 2020 17:20:39 -0800
+Message-Id: <1604971241-29000-1-git-send-email-rishabhb@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi,
+Create and insert trace points in mdt_loader and qcom_q6v5_pas
+drivers. These tracepoints will be used to analyze the time taken
+at each step during bootup/shutdown of the remoteproc. Also 
+provide information about location and size of firmware segments
+being loaded.
 
-Le dim. 8 nov. 2020 à 0:36, Rikard Falkeborn 
-<rikard.falkeborn@gmail.com> a écrit :
-> The only usage of ingenic_rproc_ops is to pass its address to
-> devm_rproc_alloc(), which accepts a const pointer. Make it const to
-> allow the compiler to put it in read-only memory.
-> 
-> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Rishabh Bhatnagar (2):
+  soc: qcom: Add tracepoints to mdt loader
+  remoteproc: qcom: Add trace events for q6v5_pas driver
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+ drivers/remoteproc/qcom_q6v5_pas.c | 11 ++++++++
+ drivers/soc/qcom/mdt_loader.c      |  8 ++++++
+ include/trace/events/mdt_loader.h  | 57 ++++++++++++++++++++++++++++++++++++++
+ include/trace/events/q6v5_pas.h    | 34 +++++++++++++++++++++++
+ 4 files changed, 110 insertions(+)
+ create mode 100644 include/trace/events/mdt_loader.h
+ create mode 100644 include/trace/events/q6v5_pas.h
 
-Cheers,
--Paul
-
-> ---
->  drivers/remoteproc/ingenic_rproc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/ingenic_rproc.c 
-> b/drivers/remoteproc/ingenic_rproc.c
-> index 1c2b21a5d178..26e19e6143b7 100644
-> --- a/drivers/remoteproc/ingenic_rproc.c
-> +++ b/drivers/remoteproc/ingenic_rproc.c
-> @@ -135,7 +135,7 @@ static void *ingenic_rproc_da_to_va(struct rproc 
-> *rproc, u64 da, size_t len)
->  	return (__force void *)va;
->  }
-> 
-> -static struct rproc_ops ingenic_rproc_ops = {
-> +static const struct rproc_ops ingenic_rproc_ops = {
->  	.prepare = ingenic_rproc_prepare,
->  	.unprepare = ingenic_rproc_unprepare,
->  	.start = ingenic_rproc_start,
-> --
-> 2.29.2
-> 
-
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
