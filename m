@@ -2,57 +2,58 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC56D2B1625
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Nov 2020 08:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EEC2B1623
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Nov 2020 08:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726301AbgKMHCe (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 13 Nov 2020 02:02:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
+        id S1726295AbgKMHCZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 13 Nov 2020 02:02:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726134AbgKMHCe (ORCPT
+        with ESMTP id S1726134AbgKMHCZ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 13 Nov 2020 02:02:34 -0500
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A93C6C0613D1
-        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Nov 2020 23:02:21 -0800 (PST)
-Received: by mail-qt1-x84a.google.com with SMTP id h26so5238384qtm.2
-        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Nov 2020 23:02:21 -0800 (PST)
+        Fri, 13 Nov 2020 02:02:25 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D26C0613D6
+        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Nov 2020 23:02:25 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id o23so5629350pgv.13
+        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Nov 2020 23:02:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=j5FOq3cPnWx/ENlFWQJtCdT3iUWxaQSgARSmLQ/sveE=;
-        b=Fgm+y0VDBaeJl/93SSK4CkaNMA6QyIKahE2AcZJ1HXnZvwJtDFGUkNd6vJCgbvvfim
-         eTsss/fi86Tru4W4xfM+EIRy8o2NSgC8IIqnIb1sqQQl4Ilbsl3qnTztXnhT8ftAGfn0
-         H08qp1Sczclyd85gDGA++xeTo0K1Ywq2quqvwVe8Be2ExaMNtwq9QPa48gPgwYz0huwk
-         aiDlllSUNgpuIsOZNW+pZKiKKwgzn3UX3ebhIhk+D1OLezmA51eITU8PRiXwNy+FeGJx
-         TROnFAU/UTApCIFvMJ0IW1qOAUfyl5emoQHIm5k3IaBHgwgtVngI4ns+7fRV3Vb4NI17
-         /BfA==
+        bh=od5RzXQQDUYNdgHqpNLuL0ghCcmfAozESYAcDCe7NAo=;
+        b=vVZ4pBXYbM3nzNUI1cLnpzMC29BCXXpYtA5AMN+l263aJDpnRb2tDK+Ts1e7ULWBvH
+         L0NPUQTsoBc01RAQPpDr7iqR+uWyyn4oNauHZU55d1UHPgMzxVPDFe7JjBUCvWz+/yVI
+         935k29j8WUY2NO/EY38KYEFBIWOiBBEiVQ1JOglwOy7oNuI+dz6472ixF/ShVRqnchlu
+         mM8/dfep+ArTnx1ih6xHVBBBizLe7na/YmTjvZ2FkhNKOhqU0DctIDs84mZwOgbzXHVS
+         xWy3Qqh2YbAMwCAd1aVjjfATU6mqQ3tNcQ0FEsnJ3cPgfhQZnve17bfRDJE/x8FXpetc
+         ZrsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=j5FOq3cPnWx/ENlFWQJtCdT3iUWxaQSgARSmLQ/sveE=;
-        b=IvoNtyOuSJe6WGI07V++FYU9VwlPCZ3bbXSVewXzOwDNHspiROv14HsJagKKN6Pjrh
-         Bt5fpu7T3vqoGrMbiWj2LpfyzSCb/JuIG45PGiDyqOYMR4LLj2q3tTIhKKRIUa4SmX0l
-         DNqWeDzJJLCFneT+XiBAM6o1H+eBLq7zwW4nKSUP9OSe8ivo9hPOZz0RYVFahW0Uo96A
-         a/oW8+9pzanO9/GE7ZKLjjn6h6Ghw9i04jOLvEaC+W/LchqAWa1HL0TRGIA0d9zrvrnF
-         SXFuAYFF4DkZTaGThfJIrC6zLcl5+VxEsJz4KdK64WCEGTFbAiw+Q2F+2VLJPtn2wtVC
-         6qNA==
-X-Gm-Message-State: AOAM532Ih2p7hJfLS4TRjeLQhFTsPe5Oy7Q0P/x4bDc267JNCvPvJ+xr
-        ZYF0GLoi2wHPQDBAvg1d3NyUPRPUi/wB
-X-Google-Smtp-Source: ABdhPJy9eyFdefDqQi/665Hf0+8tbnO1qV+pedR+tnbIbh/u/9XgvyubpCvZ5r8O0m68VORkzGMOkKJ94m/t
+        bh=od5RzXQQDUYNdgHqpNLuL0ghCcmfAozESYAcDCe7NAo=;
+        b=oA09yjAtWYcc7V7FwW8jYnSL2EYAwjAbVGZqwXO+3EcDUQ67lohsyUBTLPvgylSmw/
+         qbeR/YsURQDaAaxcg53wAMbkOmYiOXyPcKiRpWA2rDwMyjEOfc2KvK4p9zQJeImmOLQR
+         Ij7HYaRRpKiRDkUdVy5ZmixpAWxrExNM9ZDDP7VmJ8+y80mo3nXzlFWtrRT4Yb/gjPv1
+         gI78WKPX2yMxem4Bls9WvBMKUg9fUzm1bP6/bRtUGlYo3bcEhGjm8JL7DEnzWvtjhRiV
+         gmg1vem4pQgqpjBJ+dMYgUWekkFOiNv7u2COYQYzTvLk+NYSiLDymzD+uN8UJiNcCvsX
+         NMcw==
+X-Gm-Message-State: AOAM531LsG6xZU7lU0jkBNGO/gOrTFdRTSMgo0ZBMCx0OW7QScm2CYJ9
+        KRHLhMXZnOnGSD8oxXxBgOomGVngx8p0
+X-Google-Smtp-Source: ABdhPJwTrEoI2V870amcgehFqHWitjg4WqLqzPkOKYCxwyxo0RZHFnPV/ysQuGnhBWchSZF6+jQjlqEeiqca
 Sender: "tzungbi via sendgmr" <tzungbi@tzungbi-z840.tpe.corp.google.com>
 X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:b:725a:fff:fe41:c6a5])
- (user=tzungbi job=sendgmr) by 2002:ad4:5483:: with SMTP id
- q3mr1020720qvy.24.1605250940904; Thu, 12 Nov 2020 23:02:20 -0800 (PST)
-Date:   Fri, 13 Nov 2020 15:02:05 +0800
+ (user=tzungbi job=sendgmr) by 2002:aa7:9e4e:0:b029:18b:7623:7cdb with SMTP id
+ z14-20020aa79e4e0000b029018b76237cdbmr790147pfq.45.1605250944835; Thu, 12 Nov
+ 2020 23:02:24 -0800 (PST)
+Date:   Fri, 13 Nov 2020 15:02:06 +0800
 In-Reply-To: <20201113070207.836613-1-tzungbi@google.com>
-Message-Id: <20201113070207.836613-2-tzungbi@google.com>
+Message-Id: <20201113070207.836613-3-tzungbi@google.com>
 Mime-Version: 1.0
 References: <20201113070207.836613-1-tzungbi@google.com>
 X-Mailer: git-send-email 2.29.2.299.gdc1121823c-goog
-Subject: [PATCH 1/3] remoteproc/mediatek: fix boundary check
+Subject: [PATCH 2/3] remoteproc/mediatek: skip if filesz is 0
 From:   Tzung-Bi Shih <tzungbi@google.com>
 To:     ohad@wizery.com, bjorn.andersson@linaro.org
 Cc:     linux-remoteproc@vger.kernel.org, matthias.bgg@gmail.com,
@@ -64,34 +65,50 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-It is valid if offset+length == sram_size.
+The main purpose of the loop is to load the memory to the SCP SRAM.
+If filesz is 0, can go to next program header directly.
 
-For example, sram_size=100, offset=99, length=1.  Accessing offset 99
-with length 1 is valid.
+We don't need to try to validate the FW binary for those filesz==0
+segments.
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
 ---
- drivers/remoteproc/mtk_scp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/remoteproc/mtk_scp.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index 577cbd5d421e..7ba00305009a 100644
+index 7ba00305009a..60ba4cece074 100644
 --- a/drivers/remoteproc/mtk_scp.c
 +++ b/drivers/remoteproc/mtk_scp.c
-@@ -408,11 +408,11 @@ static void *scp_da_to_va(struct rproc *rproc, u64 da, size_t len)
+@@ -234,12 +234,14 @@ static int scp_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
+ 		u32 offset = phdr->p_offset;
+ 		void __iomem *ptr;
  
- 	if (da < scp->sram_size) {
- 		offset = da;
--		if (offset >= 0 && (offset + len) < scp->sram_size)
-+		if (offset >= 0 && (offset + len) <= scp->sram_size)
- 			return (void __force *)scp->sram_base + offset;
- 	} else if (scp->dram_size) {
- 		offset = da - scp->dma_addr;
--		if (offset >= 0 && (offset + len) < scp->dram_size)
-+		if (offset >= 0 && (offset + len) <= scp->dram_size)
- 			return (void __force *)scp->cpu_addr + offset;
+-		if (phdr->p_type != PT_LOAD)
+-			continue;
+-
+ 		dev_dbg(dev, "phdr: type %d da 0x%x memsz 0x%x filesz 0x%x\n",
+ 			phdr->p_type, da, memsz, filesz);
+ 
++		if (phdr->p_type != PT_LOAD)
++			continue;
++		if (!filesz)
++			continue;
++
+ 		if (filesz > memsz) {
+ 			dev_err(dev, "bad phdr filesz 0x%x memsz 0x%x\n",
+ 				filesz, memsz);
+@@ -263,9 +265,7 @@ static int scp_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
+ 		}
+ 
+ 		/* put the segment where the remote processor expects it */
+-		if (phdr->p_filesz)
+-			scp_memcpy_aligned(ptr, elf_data + phdr->p_offset,
+-					   filesz);
++		scp_memcpy_aligned(ptr, elf_data + phdr->p_offset, filesz);
  	}
  
+ 	return ret;
 -- 
 2.29.2.299.gdc1121823c-goog
 
