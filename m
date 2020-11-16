@@ -2,58 +2,57 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D49D12B3EFB
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Nov 2020 09:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0562B3EFC
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Nov 2020 09:44:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727454AbgKPIok (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 16 Nov 2020 03:44:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
+        id S1727716AbgKPIoo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 16 Nov 2020 03:44:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726928AbgKPIok (ORCPT
+        with ESMTP id S1726928AbgKPIon (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 16 Nov 2020 03:44:40 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0596FC0613CF
-        for <linux-remoteproc@vger.kernel.org>; Mon, 16 Nov 2020 00:44:40 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id f12so3137555pgj.15
-        for <linux-remoteproc@vger.kernel.org>; Mon, 16 Nov 2020 00:44:40 -0800 (PST)
+        Mon, 16 Nov 2020 03:44:43 -0500
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D0AC0613CF
+        for <linux-remoteproc@vger.kernel.org>; Mon, 16 Nov 2020 00:44:43 -0800 (PST)
+Received: by mail-qt1-x849.google.com with SMTP id h26so9743273qtm.2
+        for <linux-remoteproc@vger.kernel.org>; Mon, 16 Nov 2020 00:44:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=U3Gi1qahwlJP98+q+DzLZd9zkdZHDpsmepdISgH+9NE=;
-        b=kehch9xJroI7LjWkkrpaK2y/pA8zVVNmlv6bS9Hbia0MVnrY0lfoB8heEZAxrT4eQq
-         fqe9MOaa7/zAwhOHo+YXMJR5NKRvjqcmt5RB+q7UMvH19i1c4vR4w+S5FAVQugwZRgeN
-         oODQ4xY8Xf0tbfWP08c2BW/dkJzdrkSJwhd91t+4DTd494czrp0MNGsUV940AjKk4FIF
-         0HuTUm9j5cKpr1eghbwhADpRLMY7r1JHk469OR3d5F7XJQb5YIApr8NFeNLukci6Jz9l
-         MdR2MBIPLn629hut04JnPig15lPf9BOIL6yaC/vjblJddFywFtcVD8he0amkWpjrkDyl
-         XyDQ==
+        bh=A53CN07MXASBO5jvUKHBpKj9L55WcyFviEc+clg6PhA=;
+        b=i/S6gd7Tg9y5CTA6qeQQf0oOlqA9kbS65lJTOiCbv103fuKCJpXUBCIDaWMlvpxWwT
+         UY3lrD8Btcvct2pd+Fgy15hCeUxRCDKlebTAJFjM+oeWZ/5eS4fSNUBOoML10d03tGcT
+         1l6YL/RDauxZpDKIcpffN45aoc4V2LDp6zK71sZDeDvT0OcCFx6euf6MJXGLlYMqAc2R
+         pkqNQWrrKBkURv4OnmYI4nYOwGx7rIgWaecbQbrnkH47bebB3qfbzgGOnXJAOfREIvBw
+         dQ7yYlQwG2eVxIpiOzWEAgJUvzZJQPFuOLamobP8hO5Iq1Dde3JThNyDqrMIor+QI2B+
+         f6sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=U3Gi1qahwlJP98+q+DzLZd9zkdZHDpsmepdISgH+9NE=;
-        b=swDjphUli9NS/M2DGbfZ83E/72O7yZ/zbRpOElvqP5aigZX9FHFzVQkzJhlComInlM
-         m/Cx6GccCGIaP8HNAjWcmFSuY48+yR++nC3d8PPqnzYdEhFS/FcIpjHiUVcm+bavK0jT
-         5rtipUtPL83UHc36j7dFJSZmApz1EjgnFCeJLbus808sESBPc40mqz2pqyImTlIhsKu6
-         VKwCjcgQQWqoK6Qsr/2LLaXwQ738K71kVa9jLMyV83nXAL1PKmBGqhWqF/07+Ws9URCS
-         7B+SgimMzBWeG0uB26uU5q74RAKEV3tuURGiPPyEmtxYE4WuGc031tGZWRTTGaF6Xdq0
-         pYzg==
-X-Gm-Message-State: AOAM533CjPbgiEZwUTGXKfIk2zL0jZ/mjwra3WTYrTm+MMgFFZECDy5m
-        0OYzchlHGPS6LuAkJC6MZrFyvL8L6U7A
-X-Google-Smtp-Source: ABdhPJxg+Z8Zu9B3dSqceVno3+Brgq9ObO149i6jMRBUlUkXml8qKyHkCmVunSfSYifJf7XSVOpNenMRFqPo
+        bh=A53CN07MXASBO5jvUKHBpKj9L55WcyFviEc+clg6PhA=;
+        b=Z0Je7ji1S1DuJErZQrUAwLuk+0X7DB8nLvhfIvueC+2UeNWOswkD7KocZs8T4FJcfL
+         OqsuD81ADqedoqXcRlTxikLPdw8QY002PZlW8vEW+hfOrOpToh6ogEgV1116/HW9RiL5
+         KqW3NoJ9rvSiPnY+lgBE4yECN6SOZeRBdgcwRFsOkI+HoxEDHR2x5J60zvYVduqclswY
+         7FZd4XFirdgKjCy3KdMagLj3wOLx6NtonM4wllyMX5aPq+JGjLnN9nT9JRhXXq/SXyrx
+         EhNmSRBct0sx4PQBjKph/XK9c8nZ3L+DiAQGJcqnSHjNbMoL/9mfTKPjaiCAt98DGWdA
+         0wJA==
+X-Gm-Message-State: AOAM531HHnbldVRzfOSfczooWGSftgTIioxK7DTWFM/rE5GLtX/Ir11s
+        fNE/wraZlHDixiOSwwO6BK/LY3PR0n4q
+X-Google-Smtp-Source: ABdhPJw38q3RH4TOjkGa40R3bWJx8iEXJezrd8qKsUYOP6fmVJWIttlc3MpvyHhW9eW1ykc9wTiFoTSO8eqZ
 Sender: "tzungbi via sendgmr" <tzungbi@tzungbi-z840.tpe.corp.google.com>
 X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:b:725a:fff:fe41:c6a5])
- (user=tzungbi job=sendgmr) by 2002:a17:902:a503:b029:d8:e685:3e58 with SMTP
- id s3-20020a170902a503b02900d8e6853e58mr5843637plq.68.1605516279549; Mon, 16
- Nov 2020 00:44:39 -0800 (PST)
-Date:   Mon, 16 Nov 2020 16:44:12 +0800
+ (user=tzungbi job=sendgmr) by 2002:a0c:b648:: with SMTP id
+ q8mr14586186qvf.33.1605516282945; Mon, 16 Nov 2020 00:44:42 -0800 (PST)
+Date:   Mon, 16 Nov 2020 16:44:13 +0800
 In-Reply-To: <20201116084413.3312631-1-tzungbi@google.com>
-Message-Id: <20201116084413.3312631-3-tzungbi@google.com>
+Message-Id: <20201116084413.3312631-4-tzungbi@google.com>
 Mime-Version: 1.0
 References: <20201116084413.3312631-1-tzungbi@google.com>
 X-Mailer: git-send-email 2.29.2.299.gdc1121823c-goog
-Subject: [PATCH v2 2/3] remoteproc/mediatek: skip if filesz is 0
+Subject: [PATCH v2 3/3] remoteproc/mediatek: read IPI buffer offset from FW
 From:   Tzung-Bi Shih <tzungbi@google.com>
 To:     ohad@wizery.com, bjorn.andersson@linaro.org
 Cc:     linux-remoteproc@vger.kernel.org, matthias.bgg@gmail.com,
@@ -65,50 +64,134 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The main purpose of the loop is to load the memory to the SCP SRAM.
-If filesz is 0, can go to next program header directly.
+Reads the IPI buffer offset from the FW binary.  The information resides
+in addr of .ipi_buffer section.
 
-We don't need to try to validate the FW binary for those filesz==0
-segments.
+Moves scp_ipi_init() to scp_load() phase.  The IPI buffer can be
+initialized only if the offset is clear.
 
 Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
 ---
- drivers/remoteproc/mtk_scp.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/remoteproc/mtk_scp.c | 73 ++++++++++++++++++++++++------------
+ 1 file changed, 49 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index 0abbeb62cf43..74ed675f61a6 100644
+index 74ed675f61a6..0ea3427cddc6 100644
 --- a/drivers/remoteproc/mtk_scp.c
 +++ b/drivers/remoteproc/mtk_scp.c
-@@ -234,12 +234,14 @@ static int scp_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
- 		u32 offset = phdr->p_offset;
- 		void __iomem *ptr;
+@@ -21,7 +21,7 @@
+ #include "remoteproc_internal.h"
  
--		if (phdr->p_type != PT_LOAD)
--			continue;
--
- 		dev_dbg(dev, "phdr: type %d da 0x%x memsz 0x%x filesz 0x%x\n",
- 			phdr->p_type, da, memsz, filesz);
+ #define MAX_CODE_SIZE 0x500000
+-#define SCP_FW_END 0x7C000
++#define SECTION_NAME_IPI_BUFFER ".ipi_buffer"
  
-+		if (phdr->p_type != PT_LOAD)
-+			continue;
-+		if (!filesz)
-+			continue;
+ /**
+  * scp_get() - get a reference to SCP.
+@@ -119,16 +119,24 @@ static void scp_ipi_handler(struct mtk_scp *scp)
+ 	wake_up(&scp->ack_wq);
+ }
+ 
+-static int scp_ipi_init(struct mtk_scp *scp)
++static int scp_elf_read_ipi_buf_addr(struct mtk_scp *scp,
++				     const struct firmware *fw,
++				     size_t *offset);
 +
- 		if (filesz > memsz) {
- 			dev_err(dev, "bad phdr filesz 0x%x memsz 0x%x\n",
- 				filesz, memsz);
-@@ -263,9 +265,7 @@ static int scp_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
- 		}
++static int scp_ipi_init(struct mtk_scp *scp, const struct firmware *fw)
+ {
+-	size_t send_offset = SCP_FW_END - sizeof(struct mtk_share_obj);
+-	size_t recv_offset = send_offset - sizeof(struct mtk_share_obj);
++	int ret;
++	size_t offset;
++
++	ret = scp_elf_read_ipi_buf_addr(scp, fw, &offset);
++	if (ret)
++		return ret;
++	dev_info(scp->dev, "IPI buf addr %#010zx\n", offset);
  
- 		/* put the segment where the remote processor expects it */
--		if (phdr->p_filesz)
--			scp_memcpy_aligned(ptr, elf_data + phdr->p_offset,
--					   filesz);
-+		scp_memcpy_aligned(ptr, elf_data + phdr->p_offset, filesz);
+-	/* shared buffer initialization */
+-	scp->recv_buf =
+-		(struct mtk_share_obj __iomem *)(scp->sram_base + recv_offset);
+-	scp->send_buf =
+-		(struct mtk_share_obj __iomem *)(scp->sram_base + send_offset);
++	scp->recv_buf = (struct mtk_share_obj __iomem *)
++			(scp->sram_base + offset);
++	scp->send_buf = (struct mtk_share_obj __iomem *)
++			(scp->sram_base + offset + sizeof(*scp->recv_buf));
+ 	memset_io(scp->recv_buf, 0, sizeof(*scp->recv_buf));
+ 	memset_io(scp->send_buf, 0, sizeof(*scp->send_buf));
+ 
+@@ -271,6 +279,32 @@ static int scp_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
+ 	return ret;
+ }
+ 
++static int scp_elf_read_ipi_buf_addr(struct mtk_scp *scp,
++				     const struct firmware *fw,
++				     size_t *offset)
++{
++	struct elf32_hdr *ehdr;
++	struct elf32_shdr *shdr, *shdr_strtab;
++	int i;
++	const u8 *elf_data = fw->data;
++	const char *strtab;
++
++	ehdr = (struct elf32_hdr *)elf_data;
++	shdr = (struct elf32_shdr *)(elf_data + ehdr->e_shoff);
++	shdr_strtab = shdr + ehdr->e_shstrndx;
++	strtab = (const char *)(elf_data + shdr_strtab->sh_offset);
++
++	for (i = 0; i < ehdr->e_shnum; i++, shdr++) {
++		if (strcmp(strtab + shdr->sh_name,
++			   SECTION_NAME_IPI_BUFFER) == 0) {
++			*offset = shdr->sh_addr;
++			return 0;
++		}
++	}
++
++	return -ENOENT;
++}
++
+ static int mt8183_scp_before_load(struct mtk_scp *scp)
+ {
+ 	/* Clear SCP to host interrupt */
+@@ -350,11 +384,15 @@ static int scp_load(struct rproc *rproc, const struct firmware *fw)
+ 
+ 	ret = scp->data->scp_before_load(scp);
+ 	if (ret < 0)
+-		return ret;
++		goto leave;
+ 
+ 	ret = scp_elf_load_segments(rproc, fw);
+-	clk_disable_unprepare(scp->clk);
++	if (ret)
++		goto leave;
+ 
++	ret = scp_ipi_init(scp, fw);
++leave:
++	clk_disable_unprepare(scp->clk);
+ 	return ret;
+ }
+ 
+@@ -680,19 +718,6 @@ static int scp_probe(struct platform_device *pdev)
+ 		goto release_dev_mem;
  	}
  
- 	return ret;
+-	ret = clk_prepare_enable(scp->clk);
+-	if (ret) {
+-		dev_err(dev, "failed to enable clocks\n");
+-		goto release_dev_mem;
+-	}
+-
+-	ret = scp_ipi_init(scp);
+-	clk_disable_unprepare(scp->clk);
+-	if (ret) {
+-		dev_err(dev, "Failed to init ipi\n");
+-		goto release_dev_mem;
+-	}
+-
+ 	/* register SCP initialization IPI */
+ 	ret = scp_ipi_register(scp, SCP_IPI_INIT, scp_init_ipi_handler, scp);
+ 	if (ret) {
 -- 
 2.29.2.299.gdc1121823c-goog
 
