@@ -2,34 +2,33 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2BC2B7F67
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Nov 2020 15:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BCF2B7F65
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Nov 2020 15:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgKROaI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 18 Nov 2020 09:30:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54834 "EHLO mail.kernel.org"
+        id S1726625AbgKROaH (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 18 Nov 2020 09:30:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54818 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726424AbgKROaH (ORCPT
+        id S1726274AbgKROaH (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
         Wed, 18 Nov 2020 09:30:07 -0500
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605709807;
-        bh=DC+TLipkLhZGha8CBH2IeShqIOYI1LDuP6ny5LpaExY=;
+        s=default; t=1605709806;
+        bh=DzKR1IxBRNfFBbKVrcp2FVgVkU5IPdafjLYH0S1jCdU=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=YEPZrrVjCoGRgchMBLVJg/S1ttzJeqlsIwH2DV28rrjre6kcIaDkJV5lL2kbCdxgK
-         mhdSin4hcpm5NdrBUTu+UVvoyJue65MDWkmUckGXx3CVlnUl8VAOyxPbabPXu8jCRs
-         3AlsxVRUDOOdjrLZU0R3ow8tYpf8dCUHHocDlxew=
+        b=QyJh500BUFEh/0wYZrUl8T1a0GZ76hDqyXQmAEfk8DbyfoaWapwww20XfN6YFbazW
+         FtJpSZ47HJ8+mJQMUejw9+oL66a1Y8+A7QNKiDgdyiKXDCD/FBA2Cjw+k60fnPE0LL
+         ulPNTLPPlIaWLBdFkoChM5oIrLbZdG4NIdvI8bXA=
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 -next] remoteproc: k3-dsp: Fix return value check in
- k3_dsp_rproc_of_get_memories()
+Subject: Re: [PATCH] remoteproc: q6v5-mss: fix error handling in q6v5_pds_enable
 From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <160570980693.9988.2805771949484833032.git-patchwork-notify@kernel.org>
+Message-Id: <160570980679.9988.5941145137372650117.git-patchwork-notify@kernel.org>
 Date:   Wed, 18 Nov 2020 14:30:06 +0000
-References: <20200905122503.17352-1-yuehaibing@huawei.com>
-In-Reply-To: <20200905122503.17352-1-yuehaibing@huawei.com>
-To:     YueHaibing <yuehaibing@huawei.com>
+References: <20201102143433.143996-1-zhangqilong3@huawei.com>
+In-Reply-To: <20201102143433.143996-1-zhangqilong3@huawei.com>
+To:     Zhang Qilong <zhangqilong3@huawei.com>
 Cc:     linux-remoteproc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
@@ -39,20 +38,20 @@ Hello:
 
 This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
 
-On Sat, 5 Sep 2020 20:25:03 +0800 you wrote:
-> In case of error, the function devm_ioremap_wc() returns NULL pointer
-> not ERR_PTR(). The IS_ERR() test in the return value check should be
-> replaced with NULL test.
+On Mon, 2 Nov 2020 22:34:33 +0800 you wrote:
+> If the pm_runtime_get_sync failed in q6v5_pds_enable when
+> loop (i), The unroll_pd_votes will start from (i - 1), and
+> it will resulted in following problems:
 > 
-> Fixes: 6edbe024ba17 ("remoteproc: k3-dsp: Add a remoteproc driver of K3 C66x DSPs")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-> Acked-by: Suman Anna <s-anna@ti.com>
+>   1) pm_runtime_get_sync will increment pm usage counter even it
+>      failed. Forgetting to pm_runtime_put_noidle will result in
+>      reference leak.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,-next] remoteproc: k3-dsp: Fix return value check in k3_dsp_rproc_of_get_memories()
-    https://git.kernel.org/andersson/remoteproc/c/9b3b3c9531e8
+  - remoteproc: q6v5-mss: fix error handling in q6v5_pds_enable
+    https://git.kernel.org/andersson/remoteproc/c/feb691e11283
 
 You are awesome, thank you!
 --
