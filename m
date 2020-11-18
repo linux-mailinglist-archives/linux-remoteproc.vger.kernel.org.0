@@ -2,59 +2,59 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4982B86DC
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Nov 2020 22:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6942B86E8
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Nov 2020 22:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727207AbgKRVhK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 18 Nov 2020 16:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S1727196AbgKRVhX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 18 Nov 2020 16:37:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725879AbgKRVhG (ORCPT
+        with ESMTP id S1727193AbgKRVhI (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 18 Nov 2020 16:37:06 -0500
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92EAC0613D6
-        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Nov 2020 13:37:05 -0800 (PST)
-Received: by mail-pg1-x541.google.com with SMTP id t21so2206015pgl.3
-        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Nov 2020 13:37:05 -0800 (PST)
+        Wed, 18 Nov 2020 16:37:08 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE875C061A4D
+        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Nov 2020 13:37:06 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id 62so2183863pgg.12
+        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Nov 2020 13:37:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JnwwhkWQ3GeoAyW3l6kwgfA23oecuiB8HGCIRs5X5Aw=;
-        b=UVxx0X4ffkJCsE72epSJzR4TY1Xiblhjo3GK7Hr0AXwSUItF10yfXOg2xQ6/3zwTuF
-         ptWujPQdLS+RmshGhMwkZAXh0bP8ZGDLRLRkZoiW48WTzthdjkY5obPF2EqbSinie6Ey
-         HfmMd9loEG7OYSvqY/16vR0Sgv3VMCrEra9gl8r+vkfNgBIkFL2VPNwJTte69O6jfN5i
-         b0BTiiE9+MqClh19y3XK1hzmWJoAAj/eLGmw6g2KLKccGH3gPOfvo/VsVbqy0dNbEYa7
-         LN8xr2zaV8wgvHjwB3ZFp0R8rUngS28c49DiiSwIlf+lcNWpu4qdzRY8tlPkcg3fmmEF
-         J6tA==
+        bh=C0V+Pj0ilaPOi+EzL05tF5APIQBX5vdWZzPetY3Iqd8=;
+        b=RVxSONmTmFchR5uxHhCtCS1pk7Imat+poXGbdY1TgW6KqZV+YZDteRSIRqKzzwK+T0
+         iuhwu+Cdm4dkHY7AbwjBWJuJMuK8f2M3y9w5gOrtAYCWmFc2Tyg+WGg1AizkzGbdZO/s
+         2K47lUg/Oy6/ozg1uNpuKB/eHllJJKVXFJo6QoPwOZ0676y7X8Z2KgnnXgO+4eQx5IxP
+         RuPt/Tuc5mg87P2HhOp64Exs20nQddcmIxE8Ca8i9kwAs7Fldn+3s3d7C6sJZ/1xrbFF
+         mm+W8/44Mn8HUwGM4K9JN5sb7JP3uTOmO3PxHq0ZliAs9oSDBygo1s5utEcT+/cFefGk
+         D71Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JnwwhkWQ3GeoAyW3l6kwgfA23oecuiB8HGCIRs5X5Aw=;
-        b=G/Zj2TGh73Vu/eLQmLiaNRKgI4qGXkUd6NTmKYa/OuHeOHmsAaZ06DP9q98GKhUHny
-         HaZWDTyjw0T6RAD7erUuQ1AhlSwAbKuhZUyTslKWezyetsgNSboISgy9HefDJDvCDeH1
-         m8thirx7izwTnTaeDBKuldADQvJP3p+OOfXVJ/eTKzPzHreEVdvgi1nUNqzUauIkNMfT
-         JDoXzMWRD+XUe/KzWWn9Hxpng54UxXXQQ6Qy2eg0ggOhZK36GccPsyTLsOFSobR2HA1G
-         BUNDoYs4E0UBDmSI4mXc6HbWDpG1HdKhQi+EWQtv6vcgZmhZh1d7ZUzFB0ROSJV6dMxm
-         1auQ==
-X-Gm-Message-State: AOAM532QmVbHutHgJbO3RnKw1zdfIG0r2T9/wJj23rMCMPg1ULqxnCBm
-        yPdqX5Ljfh3kcgLlCvATy90775+jdfmeEg==
-X-Google-Smtp-Source: ABdhPJzuARGK6O4ViGB4NkqtpYWeWIcnqrClZO2KrNEuBjTdyZ7HHr4kxS0KBLGRxR1zW8FvfDxOcQ==
-X-Received: by 2002:a63:1845:: with SMTP id 5mr9895754pgy.393.1605735425560;
-        Wed, 18 Nov 2020 13:37:05 -0800 (PST)
+        bh=C0V+Pj0ilaPOi+EzL05tF5APIQBX5vdWZzPetY3Iqd8=;
+        b=n99/EZ44fjiDl9FPfrbjIVJftu8Foxt1B39SrXuE6TMHBl+blJIwahFyBlo/seP27f
+         LFFrvewzYvKuKzYDw7IV1BGVfkMexLMLaSzFBs0aauiP/uDUqcX4zwrnPBgYbNVAvIQT
+         4vCESWGwe2rCoVnkT0++votS8gJcNCOmOlcEwBGopMvixcvzmsyb+nFcpA3r52q8KL7x
+         sR+YgWIYszUuF/XretMSFaWaq1yjXwtsXnFoXWpmEhx3pb0qEELrm0iuUlRkJU0frp3E
+         yI8LbSXoWvwwrDrdLlUMPGIA8gLIjPB3n3y+SqvPE7uPwBjMGYlzENeueGRVMEUqgDBd
+         2l2g==
+X-Gm-Message-State: AOAM530YvQgy7d5Ji5VPhdoHAu3xOcskpY7FvLddJtqHmwA/Q7N2pnUo
+        DgC6u0NJkPeNmwCPSNzatGprww==
+X-Google-Smtp-Source: ABdhPJzcZgsyf4S9HllU0iQptl/crimQpN5Uwf4Wk6kK4UwMpXkTGdhQSeH5/iYwpeFinpg0Sqy01w==
+X-Received: by 2002:a63:e146:: with SMTP id h6mr10367406pgk.0.1605735426604;
+        Wed, 18 Nov 2020 13:37:06 -0800 (PST)
 Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id e6sm26575694pfn.190.2020.11.18.13.37.04
+        by smtp.gmail.com with ESMTPSA id e6sm26575694pfn.190.2020.11.18.13.37.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2020 13:37:05 -0800 (PST)
+        Wed, 18 Nov 2020 13:37:06 -0800 (PST)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     ohad@wizery.com, bjorn.andersson@linaro.org
 Cc:     guennadi.liakhovetski@linux.intel.com, arnaud.pouliquen@st.com,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 3/8] rpmsg: Move structure rpmsg_ns_msg to header file
-Date:   Wed, 18 Nov 2020 14:36:55 -0700
-Message-Id: <20201118213700.74106-4-mathieu.poirier@linaro.org>
+Subject: [PATCH v6 4/8] rpmsg: virtio: Rename rpmsg_create_channel
+Date:   Wed, 18 Nov 2020 14:36:56 -0700
+Message-Id: <20201118213700.74106-5-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201118213700.74106-1-mathieu.poirier@linaro.org>
 References: <20201118213700.74106-1-mathieu.poirier@linaro.org>
@@ -64,122 +64,42 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Move structure rpmsg_ns_msg to its own header file so that
-it can be used by other entities.
+From: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 
+Rename the internal function as it is internal, and as
+the name will be used in rpmsg_core.
+
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
+Reviewed-by: Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
 ---
- drivers/rpmsg/virtio_rpmsg_bus.c | 32 +-----------------------
- include/linux/rpmsg/ns.h         | 42 ++++++++++++++++++++++++++++++++
- 2 files changed, 43 insertions(+), 31 deletions(-)
- create mode 100644 include/linux/rpmsg/ns.h
+ drivers/rpmsg/virtio_rpmsg_bus.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 5259fbbc8e68..20d0cf909bea 100644
+index 20d0cf909bea..2253936593c5 100644
 --- a/drivers/rpmsg/virtio_rpmsg_bus.c
 +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-@@ -20,6 +20,7 @@
- #include <linux/of_device.h>
- #include <linux/rpmsg.h>
- #include <linux/rpmsg/byteorder.h>
-+#include <linux/rpmsg/ns.h>
- #include <linux/scatterlist.h>
- #include <linux/slab.h>
- #include <linux/sched.h>
-@@ -93,34 +94,6 @@ struct rpmsg_hdr {
- 	u8 data[];
- } __packed;
- 
--/**
-- * struct rpmsg_ns_msg - dynamic name service announcement message
-- * @name: name of remote service that is published
-- * @addr: address of remote service that is published
-- * @flags: indicates whether service is created or destroyed
-- *
-- * This message is sent across to publish a new service, or announce
-- * about its removal. When we receive these messages, an appropriate
-- * rpmsg channel (i.e device) is created/destroyed. In turn, the ->probe()
-- * or ->remove() handler of the appropriate rpmsg driver will be invoked
-- * (if/as-soon-as one is registered).
-- */
--struct rpmsg_ns_msg {
--	char name[RPMSG_NAME_SIZE];
--	__rpmsg32 addr;
--	__rpmsg32 flags;
--} __packed;
--
--/**
-- * enum rpmsg_ns_flags - dynamic name service announcement flags
-- *
-- * @RPMSG_NS_CREATE: a new remote service was just created
-- * @RPMSG_NS_DESTROY: a known remote service was just destroyed
-- */
--enum rpmsg_ns_flags {
--	RPMSG_NS_CREATE		= 0,
--	RPMSG_NS_DESTROY	= 1,
--};
- 
- /**
-  * struct virtio_rpmsg_channel - rpmsg channel descriptor
-@@ -167,9 +140,6 @@ struct virtio_rpmsg_channel {
+@@ -365,8 +365,8 @@ static void virtio_rpmsg_release_device(struct device *dev)
+  * this function will be used to create both static and dynamic
+  * channels.
   */
- #define RPMSG_RESERVED_ADDRESSES	(1024)
- 
--/* Address 53 is reserved for advertising remote services */
--#define RPMSG_NS_ADDR			(53)
--
- static void virtio_rpmsg_destroy_ept(struct rpmsg_endpoint *ept);
- static int virtio_rpmsg_send(struct rpmsg_endpoint *ept, void *data, int len);
- static int virtio_rpmsg_sendto(struct rpmsg_endpoint *ept, void *data, int len,
-diff --git a/include/linux/rpmsg/ns.h b/include/linux/rpmsg/ns.h
-new file mode 100644
-index 000000000000..73ecc91dc26f
---- /dev/null
-+++ b/include/linux/rpmsg/ns.h
-@@ -0,0 +1,42 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef _LINUX_RPMSG_NS_H
-+#define _LINUX_RPMSG_NS_H
-+
-+#include <linux/mod_devicetable.h>
-+#include <linux/rpmsg/byteorder.h>
-+#include <linux/types.h>
-+
-+/**
-+ * struct rpmsg_ns_msg - dynamic name service announcement message
-+ * @name: name of remote service that is published
-+ * @addr: address of remote service that is published
-+ * @flags: indicates whether service is created or destroyed
-+ *
-+ * This message is sent across to publish a new service, or announce
-+ * about its removal. When we receive these messages, an appropriate
-+ * rpmsg channel (i.e device) is created/destroyed. In turn, the ->probe()
-+ * or ->remove() handler of the appropriate rpmsg driver will be invoked
-+ * (if/as-soon-as one is registered).
-+ */
-+struct rpmsg_ns_msg {
-+	char name[RPMSG_NAME_SIZE];
-+	__rpmsg32 addr;
-+	__rpmsg32 flags;
-+} __packed;
-+
-+/**
-+ * enum rpmsg_ns_flags - dynamic name service announcement flags
-+ *
-+ * @RPMSG_NS_CREATE: a new remote service was just created
-+ * @RPMSG_NS_DESTROY: a known remote service was just destroyed
-+ */
-+enum rpmsg_ns_flags {
-+	RPMSG_NS_CREATE		= 0,
-+	RPMSG_NS_DESTROY	= 1,
-+};
-+
-+/* Address 53 is reserved for advertising remote services */
-+#define RPMSG_NS_ADDR			(53)
-+
-+#endif
+-static struct rpmsg_device *rpmsg_create_channel(struct virtproc_info *vrp,
+-						 struct rpmsg_channel_info *chinfo)
++static struct rpmsg_device *__rpmsg_create_channel(struct virtproc_info *vrp,
++						   struct rpmsg_channel_info *chinfo)
+ {
+ 	struct virtio_rpmsg_channel *vch;
+ 	struct rpmsg_device *rpdev;
+@@ -842,7 +842,7 @@ static int rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
+ 		if (ret)
+ 			dev_err(dev, "rpmsg_destroy_channel failed: %d\n", ret);
+ 	} else {
+-		newch = rpmsg_create_channel(vrp, &chinfo);
++		newch = __rpmsg_create_channel(vrp, &chinfo);
+ 		if (!newch)
+ 			dev_err(dev, "rpmsg_create_channel failed\n");
+ 	}
 -- 
 2.25.1
 
