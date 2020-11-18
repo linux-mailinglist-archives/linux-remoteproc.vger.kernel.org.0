@@ -2,412 +2,314 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF372B86E0
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Nov 2020 22:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C49F72B87A9
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Nov 2020 23:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727237AbgKRVhQ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 18 Nov 2020 16:37:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S1726519AbgKRW0R (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 18 Nov 2020 17:26:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727235AbgKRVhL (ORCPT
+        with ESMTP id S1726255AbgKRW0R (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 18 Nov 2020 16:37:11 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472E8C0613D4
-        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Nov 2020 13:37:11 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id c66so2391473pfa.4
-        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Nov 2020 13:37:11 -0800 (PST)
+        Wed, 18 Nov 2020 17:26:17 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4180AC0613D6
+        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Nov 2020 14:26:17 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id g7so2505088pfc.2
+        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Nov 2020 14:26:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=IfJSGBCVk4goNi0VOu0iLazGHTRiVCH1JUbI/YhJhcs=;
-        b=BkCdRcDNrADcIg/Hw8kzIOjee5gFFy6PUDIzxBffDTQmvajqR+FT6tzAhweQjX1Kpq
-         dfBX57j4h6rfaoENgdK4emgrqwDp+N+2rmiDLKV6e9Pw9cGi0M/aAfv3oagp7kJXPhJj
-         y5iQ93vLRtCIRtK5BmUZGBdMLg81CDJ7fnIQDBeUD6lAJZbPv5wzHG8nMYL1r4J3Mwnt
-         yvd4/LMmTePJZQ4q1ZYz0mR2ZVlZmH6bj/UVMe+RfhTe7bRxDCSYijsMdHAcrxCK52W1
-         jRCorvEjyqtn9BFMbw+XIOn7nde+fAArP9QBY6IJOdVs4/eMnmQ2+qmqfMUCK/OIfEtG
-         93Sg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/ei20up2lfscrQesr+sFD5UNuMDQ0VaRFySN6eQPxNE=;
+        b=YdBUcbcD4XTCFMdpqH5/xHyNxBUNZTYvqT01kQwtH3JmkXqtQ6E7JnNXrh0BOWELMV
+         tkjpXscYHQxynFm0DVdJIdKzJujTlLmxUg3tyIYgiJDwWaem5M5cBOsXeBfECMUhsiEE
+         HqJNlHC7uTQDaA8gQO0w1EPjqQNrj9ow49KA/t0hmRf2c+OH68nXOWuCcVwXCnuq1VYF
+         KfI7kkxUfeUVHdHs0vYOcUK5BJFwblPWi4EcKX9ndnlZwON8uPz+RvZrXmmVIZ+Vucwb
+         JJTRdl+6i1kKQx7oYoEBQHRGcijEwJqxfexlPv0t6ey4IBtG7MgZYStfxMnkMvK2zKsG
+         goRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IfJSGBCVk4goNi0VOu0iLazGHTRiVCH1JUbI/YhJhcs=;
-        b=BW6YVrjLEFF1KT9bC0mysIu3ZG5eK/oCxvWAqlcTAr67df+aEsf9qw1E0REOaDmV7X
-         +ElnDdFJOeFRgeX8pVroEubAhpqMaS5YggdHgXynuVXSwUnQImF7FyJlnd/0DBTm5+Vs
-         jVE7RSyKOfZlxaAmY0DrOiHQzTrwkJUebYz7lq7PrCC38xsvOW0jdzr3tpJeZpSH/0FL
-         RNX7j6HJxM6GzY2DRVau78C/adj/NeG4HcJzkpnbxJA39qWpFdZJi+evto9dukBlsHcR
-         WfBhPv26Wrk4pPLN7lNIvQ1ithQ5SHnUdzpUeDsgpSTM14YVHGwj3gF+Digp+k2DnFP6
-         pJIQ==
-X-Gm-Message-State: AOAM530rtDNYp4kpS/J6SGJ/5MI41YvL0CjqbiRJ9vNxTOZX5aDo9x7k
-        vCUys1VaG3bbwW6WjbXbKClkHA==
-X-Google-Smtp-Source: ABdhPJwZEOArAXiCXidV901IcHjs6b4xqXZo17foWJquXY1k4YE5zNEAXgA/WAyuGpUNoJfihf9XSg==
-X-Received: by 2002:a63:fc56:: with SMTP id r22mr10320574pgk.247.1605735430790;
-        Wed, 18 Nov 2020 13:37:10 -0800 (PST)
-Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id e6sm26575694pfn.190.2020.11.18.13.37.09
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/ei20up2lfscrQesr+sFD5UNuMDQ0VaRFySN6eQPxNE=;
+        b=g0ShQDkJ7kAA5MzrQJgxT9FfX9idgV3ORk8y0t2Wy9TZmq8GqGLVUoij1QyIfIejco
+         Q3KRMS22A9FS+EHCDwwYlbL401y07ZR80znKWqEl1zzeMR6CG+cx/tfFZwyahtI13mhY
+         osT1HK4Yj8/GQHyrFMYlmjagAbUVkAMuEby+GLa7WC0bek9XS9gBNSG6+GgH95XlmBQH
+         Zh2zrjFBBecw4ub8V0z6IqpVFkRE7maT2jrOo5rBKNUqo2jBAXlH0QdpyEBpLB7w6TkI
+         C2ktaHofoXIIwG5Yu59Rid9uQW4WN8i9Q1Ksan6J0/5EXY8S/iz+HVmkO/JHL7UEFCLN
+         jEwA==
+X-Gm-Message-State: AOAM533RMzIUbpk/09V8v9iMfz+7tNBQiclmfQ4X1xTjrDebfm0yvPMI
+        sO9Mwg8J9uD5PSzLmlSwDhfJcg==
+X-Google-Smtp-Source: ABdhPJz/Tj/VnlCoc+pzDOA/mgoONTHwnYAQCGENHBF+RBCs3eb0qMJd/vnjBRid1d5P5Osw7YUnIg==
+X-Received: by 2002:a17:90a:9504:: with SMTP id t4mr1206011pjo.82.1605738376643;
+        Wed, 18 Nov 2020 14:26:16 -0800 (PST)
+Received: from xps15 (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id g6sm3807114pjd.3.2020.11.18.14.26.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Nov 2020 13:37:10 -0800 (PST)
+        Wed, 18 Nov 2020 14:26:15 -0800 (PST)
+Date:   Wed, 18 Nov 2020 15:26:14 -0700
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org
-Cc:     guennadi.liakhovetski@linux.intel.com, arnaud.pouliquen@st.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 8/8] rpmsg: Turn name service into a stand alone driver
-Date:   Wed, 18 Nov 2020 14:37:00 -0700
-Message-Id: <20201118213700.74106-9-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201118213700.74106-1-mathieu.poirier@linaro.org>
-References: <20201118213700.74106-1-mathieu.poirier@linaro.org>
+To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, sidgup@codeaurora.org
+Subject: Re: [PATCH v2 3/3] remoteproc: Add ftrace events to trace lifecycle
+ of remoteprocs
+Message-ID: <20201118222614.GA75192@xps15>
+References: <1605563084-30385-1-git-send-email-rishabhb@codeaurora.org>
+ <1605563084-30385-4-git-send-email-rishabhb@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1605563084-30385-4-git-send-email-rishabhb@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Arnaud Pouliquen <arnaud.pouliquen@st.com>
+On Mon, Nov 16, 2020 at 01:44:44PM -0800, Rishabh Bhatnagar wrote:
+> Add trace events to trace bootup/shutdown/recovery of remote
+> processors. These events are useful in analyzing the time
+> spent in each step in the life cycle and can be used for
+> performace analysis. Also these serve as standard checkpoints
+> in debugging.
+> 
+> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 19 +++++++-
+>  include/trace/events/remoteproc.h    | 91 ++++++++++++++++++++++++++++++++++++
+>  2 files changed, 109 insertions(+), 1 deletion(-)
+>  create mode 100644 include/trace/events/remoteproc.h
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index dab2c0f..39da409 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -42,6 +42,9 @@
+>  
+>  #include "remoteproc_internal.h"
+>  
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/remoteproc.h>
+> +
+>  #define HIGH_BITS_MASK 0xFFFFFFFF00000000ULL
+>  
+>  static DEFINE_MUTEX(rproc_list_mutex);
+> @@ -1164,6 +1167,7 @@ static int rproc_prepare_subdevices(struct rproc *rproc)
+>  	struct rproc_subdev *subdev;
+>  	int ret;
+>  
+> +	trace_rproc_subdevices("Prepare subdevices", rproc->name);
 
-Make the RPMSG name service announcement a stand alone driver so that it
-can be reused by other subsystems.  It is also the first step in making the
-functionatlity transport independent, i.e that is not tied to virtIO.
+I wouldn't add this to the core - after a while they become part of the ABI and
+we can't move things around.  I suppose they can stay in platform drivers but
+even that is going against the general trend in the kernel community to avoid them at
+all.  To me this should remain out of tree code but Bjorn will make the call.
 
-Co-developed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Co-developed-by: Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
-Signed-off-by: Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
----
- drivers/rpmsg/Kconfig            |   9 +++
- drivers/rpmsg/Makefile           |   1 +
- drivers/rpmsg/rpmsg_ns.c         | 126 +++++++++++++++++++++++++++++++
- drivers/rpmsg/virtio_rpmsg_bus.c |  86 +++++----------------
- include/linux/rpmsg/ns.h         |   3 +
- 5 files changed, 158 insertions(+), 67 deletions(-)
- create mode 100644 drivers/rpmsg/rpmsg_ns.c
+Thanks,
+Mathieu
 
-diff --git a/drivers/rpmsg/Kconfig b/drivers/rpmsg/Kconfig
-index f96716893c2a..0b4407abdf13 100644
---- a/drivers/rpmsg/Kconfig
-+++ b/drivers/rpmsg/Kconfig
-@@ -15,6 +15,14 @@ config RPMSG_CHAR
- 	  in /dev. They make it possible for user-space programs to send and
- 	  receive rpmsg packets.
- 
-+config RPMSG_NS
-+	tristate "RPMSG name service announcement"
-+	depends on RPMSG
-+	help
-+	  Say Y here to enable the support of the name service announcement
-+	  channel that probes the associated RPMsg device on remote endpoint
-+	  service announcement.
-+
- config RPMSG_MTK_SCP
- 	tristate "MediaTek SCP"
- 	depends on MTK_SCP
-@@ -62,6 +70,7 @@ config RPMSG_VIRTIO
- 	tristate "Virtio RPMSG bus driver"
- 	depends on HAS_DMA
- 	select RPMSG
-+	select RPMSG_NS
- 	select VIRTIO
- 
- endmenu
-diff --git a/drivers/rpmsg/Makefile b/drivers/rpmsg/Makefile
-index ffe932ef6050..8d452656f0ee 100644
---- a/drivers/rpmsg/Makefile
-+++ b/drivers/rpmsg/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_RPMSG)		+= rpmsg_core.o
- obj-$(CONFIG_RPMSG_CHAR)	+= rpmsg_char.o
-+obj-$(CONFIG_RPMSG_NS)		+= rpmsg_ns.o
- obj-$(CONFIG_RPMSG_MTK_SCP)	+= mtk_rpmsg.o
- qcom_glink-objs			:= qcom_glink_native.o qcom_glink_ssr.o
- obj-$(CONFIG_RPMSG_QCOM_GLINK) += qcom_glink.o
-diff --git a/drivers/rpmsg/rpmsg_ns.c b/drivers/rpmsg/rpmsg_ns.c
-new file mode 100644
-index 000000000000..66a22497d316
---- /dev/null
-+++ b/drivers/rpmsg/rpmsg_ns.c
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
-+ */
-+#include <linux/device.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/slab.h>
-+#include <linux/rpmsg.h>
-+#include <linux/rpmsg/ns.h>
-+
-+#include "rpmsg_internal.h"
-+
-+/**
-+ * rpmsg_ns_register_device() - register name service device based on rpdev
-+ * @rpdev: prepared rpdev to be used for creating endpoints
-+ *
-+ * This function wraps rpmsg_register_device() preparing the rpdev for use as
-+ * basis for the rpmsg name service device.
-+ */
-+int rpmsg_ns_register_device(struct rpmsg_device *rpdev)
-+{
-+	strcpy(rpdev->id.name, "rpmsg_ns");
-+	rpdev->driver_override = "rpmsg_ns";
-+	rpdev->src = RPMSG_NS_ADDR;
-+	rpdev->dst = RPMSG_NS_ADDR;
-+
-+	return rpmsg_register_device(rpdev);
-+}
-+EXPORT_SYMBOL(rpmsg_ns_register_device);
-+
-+/* invoked when a name service announcement arrives */
-+static int rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
-+		       void *priv, u32 src)
-+{
-+	struct rpmsg_ns_msg *msg = data;
-+	struct rpmsg_device *newch;
-+	struct rpmsg_channel_info chinfo;
-+	struct device *dev = rpdev->dev.parent;
-+	int ret;
-+
-+#if defined(CONFIG_DYNAMIC_DEBUG)
-+	dynamic_hex_dump("NS announcement: ", DUMP_PREFIX_NONE, 16, 1,
-+			 data, len, true);
-+#endif
-+
-+	if (len != sizeof(*msg)) {
-+		dev_err(dev, "malformed ns msg (%d)\n", len);
-+		return -EINVAL;
-+	}
-+
-+	/* don't trust the remote processor for null terminating the name */
-+	msg->name[RPMSG_NAME_SIZE - 1] = '\0';
-+
-+	strncpy(chinfo.name, msg->name, sizeof(chinfo.name));
-+	chinfo.src = RPMSG_ADDR_ANY;
-+	chinfo.dst = rpmsg32_to_cpu(rpdev, msg->addr);
-+
-+	dev_info(dev, "%sing channel %s addr 0x%x\n",
-+		 rpmsg32_to_cpu(rpdev, msg->flags) & RPMSG_NS_DESTROY ?
-+		 "destroy" : "creat", msg->name, chinfo.dst);
-+
-+	if (rpmsg32_to_cpu(rpdev, msg->flags) & RPMSG_NS_DESTROY) {
-+		ret = rpmsg_release_channel(rpdev, &chinfo);
-+		if (ret)
-+			dev_err(dev, "rpmsg_destroy_channel failed: %d\n", ret);
-+	} else {
-+		newch = rpmsg_create_channel(rpdev, &chinfo);
-+		if (!newch)
-+			dev_err(dev, "rpmsg_create_channel failed\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static int rpmsg_ns_probe(struct rpmsg_device *rpdev)
-+{
-+	struct rpmsg_endpoint *ns_ept;
-+	struct rpmsg_channel_info ns_chinfo = {
-+		.src = RPMSG_NS_ADDR,
-+		.dst = RPMSG_NS_ADDR,
-+		.name = "name_service",
-+	};
-+
-+	/*
-+	 * Create the NS announcement service endpoint associated to the RPMsg
-+	 * device. The endpoint will be automatically destroyed when the RPMsg
-+	 * device will be deleted.
-+	 */
-+	ns_ept = rpmsg_create_ept(rpdev, rpmsg_ns_cb, NULL, ns_chinfo);
-+	if (!ns_ept) {
-+		dev_err(&rpdev->dev, "failed to create the ns ept\n");
-+		return -ENOMEM;
-+	}
-+	rpdev->ept = ns_ept;
-+
-+	return 0;
-+}
-+
-+static struct rpmsg_driver rpmsg_ns_driver = {
-+	.drv.name = KBUILD_MODNAME,
-+	.probe = rpmsg_ns_probe,
-+};
-+
-+static int rpmsg_ns_init(void)
-+{
-+	int ret;
-+
-+	ret = register_rpmsg_driver(&rpmsg_ns_driver);
-+	if (ret < 0)
-+		pr_err("%s: Failed to register rpmsg driver\n", __func__);
-+
-+	return ret;
-+}
-+postcore_initcall(rpmsg_ns_init);
-+
-+static void rpmsg_ns_exit(void)
-+{
-+	unregister_rpmsg_driver(&rpmsg_ns_driver);
-+}
-+module_exit(rpmsg_ns_exit);
-+
-+MODULE_DESCRIPTION("Name service announcement rpmsg driver");
-+MODULE_AUTHOR("Arnaud Pouliquen <arnaud.pouliquen@st.com>");
-+MODULE_ALIAS("rpmsg:" KBUILD_MODNAME);
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 6ec299f7f790..338f16c6563d 100644
---- a/drivers/rpmsg/virtio_rpmsg_bus.c
-+++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-@@ -49,7 +49,6 @@
-  * @endpoints_lock: lock of the endpoints set
-  * @sendq:	wait queue of sending contexts waiting for a tx buffers
-  * @sleepers:	number of senders that are waiting for a tx buffer
-- * @ns_ept:	the bus's name service endpoint
-  *
-  * This structure stores the rpmsg state of a given virtio remote processor
-  * device (there might be several virtio proc devices for each physical
-@@ -68,7 +67,6 @@ struct virtproc_info {
- 	struct mutex endpoints_lock;
- 	wait_queue_head_t sendq;
- 	atomic_t sleepers;
--	struct rpmsg_endpoint *ns_ept;
- };
- 
- /* The feature bitmap for virtio rpmsg */
-@@ -815,69 +813,14 @@ static void rpmsg_xmit_done(struct virtqueue *svq)
- 	wake_up_interruptible(&vrp->sendq);
- }
- 
--/* invoked when a name service announcement arrives */
--static int rpmsg_ns_cb(struct rpmsg_device *rpdev, void *data, int len,
--		       void *priv, u32 src)
--{
--	struct rpmsg_ns_msg *msg = data;
--	struct rpmsg_device *newch;
--	struct rpmsg_channel_info chinfo;
--	struct virtproc_info *vrp = priv;
--	struct device *dev = &vrp->vdev->dev;
--	bool little_endian = virtio_is_little_endian(vrp->vdev);
--	int ret;
--
--#if defined(CONFIG_DYNAMIC_DEBUG)
--	dynamic_hex_dump("NS announcement: ", DUMP_PREFIX_NONE, 16, 1,
--			 data, len, true);
--#endif
--
--	if (len != sizeof(*msg)) {
--		dev_err(dev, "malformed ns msg (%d)\n", len);
--		return -EINVAL;
--	}
--
--	/*
--	 * the name service ept does _not_ belong to a real rpmsg channel,
--	 * and is handled by the rpmsg bus itself.
--	 * for sanity reasons, make sure a valid rpdev has _not_ sneaked
--	 * in somehow.
--	 */
--	if (rpdev) {
--		dev_err(dev, "anomaly: ns ept has an rpdev handle\n");
--		return -EINVAL;
--	}
--
--	/* don't trust the remote processor for null terminating the name */
--	msg->name[RPMSG_NAME_SIZE - 1] = '\0';
--
--	strncpy(chinfo.name, msg->name, sizeof(chinfo.name));
--	chinfo.src = RPMSG_ADDR_ANY;
--	chinfo.dst = __rpmsg32_to_cpu(little_endian, msg->addr);
--
--	dev_info(dev, "%sing channel %s addr 0x%x\n",
--		 __rpmsg32_to_cpu(little_endian, msg->flags) & RPMSG_NS_DESTROY ?
--		 "destroy" : "creat", msg->name, chinfo.dst);
--
--	if (__rpmsg32_to_cpu(little_endian, msg->flags) & RPMSG_NS_DESTROY) {
--		ret = rpmsg_unregister_device(&vrp->vdev->dev, &chinfo);
--		if (ret)
--			dev_err(dev, "rpmsg_destroy_channel failed: %d\n", ret);
--	} else {
--		newch = __rpmsg_create_channel(vrp, &chinfo);
--		if (!newch)
--			dev_err(dev, "rpmsg_create_channel failed\n");
--	}
--
--	return 0;
--}
--
- static int rpmsg_probe(struct virtio_device *vdev)
- {
- 	vq_callback_t *vq_cbs[] = { rpmsg_recv_done, rpmsg_xmit_done };
- 	static const char * const names[] = { "input", "output" };
- 	struct virtqueue *vqs[2];
- 	struct virtproc_info *vrp;
-+	struct virtio_rpmsg_channel *vch;
-+	struct rpmsg_device *rpdev_ns;
- 	void *bufs_va;
- 	int err = 0, i;
- 	size_t total_buf_space;
-@@ -953,14 +896,26 @@ static int rpmsg_probe(struct virtio_device *vdev)
- 
- 	/* if supported by the remote processor, enable the name service */
- 	if (virtio_has_feature(vdev, VIRTIO_RPMSG_F_NS)) {
--		/* a dedicated endpoint handles the name service msgs */
--		vrp->ns_ept = __rpmsg_create_ept(vrp, NULL, rpmsg_ns_cb,
--						vrp, RPMSG_NS_ADDR);
--		if (!vrp->ns_ept) {
--			dev_err(&vdev->dev, "failed to create the ns ept\n");
-+		vch = kzalloc(sizeof(*vch), GFP_KERNEL);
-+		if (!vch) {
- 			err = -ENOMEM;
- 			goto free_coherent;
- 		}
-+
-+		/* Link the channel to our vrp */
-+		vch->vrp = vrp;
-+
-+		/* Assign public information to the rpmsg_device */
-+		rpdev_ns = &vch->rpdev;
-+		rpdev_ns->ops = &virtio_rpmsg_ops;
-+		rpdev_ns->little_endian = virtio_is_little_endian(vrp->vdev);
-+
-+		rpdev_ns->dev.parent = &vrp->vdev->dev;
-+		rpdev_ns->dev.release = virtio_rpmsg_release_device;
-+
-+		err = rpmsg_ns_register_device(rpdev_ns);
-+		if (err)
-+			goto free_coherent;
- 	}
- 
- 	/*
-@@ -1013,9 +968,6 @@ static void rpmsg_remove(struct virtio_device *vdev)
- 	if (ret)
- 		dev_warn(&vdev->dev, "can't remove rpmsg device: %d\n", ret);
- 
--	if (vrp->ns_ept)
--		__rpmsg_destroy_ept(vrp, vrp->ns_ept);
--
- 	idr_destroy(&vrp->endpoints);
- 
- 	vdev->config->del_vqs(vrp->vdev);
-diff --git a/include/linux/rpmsg/ns.h b/include/linux/rpmsg/ns.h
-index 73ecc91dc26f..a7804edd6d58 100644
---- a/include/linux/rpmsg/ns.h
-+++ b/include/linux/rpmsg/ns.h
-@@ -4,6 +4,7 @@
- #define _LINUX_RPMSG_NS_H
- 
- #include <linux/mod_devicetable.h>
-+#include <linux/rpmsg.h>
- #include <linux/rpmsg/byteorder.h>
- #include <linux/types.h>
- 
-@@ -39,4 +40,6 @@ enum rpmsg_ns_flags {
- /* Address 53 is reserved for advertising remote services */
- #define RPMSG_NS_ADDR			(53)
- 
-+int rpmsg_ns_register_device(struct rpmsg_device *rpdev);
-+
- #endif
--- 
-2.25.1
-
+>  	list_for_each_entry(subdev, &rproc->subdevs, node) {
+>  		if (subdev->prepare) {
+>  			ret = subdev->prepare(subdev);
+> @@ -1188,6 +1192,7 @@ static int rproc_start_subdevices(struct rproc *rproc)
+>  	struct rproc_subdev *subdev;
+>  	int ret;
+>  
+> +	trace_rproc_subdevices("Start subdevices", rproc->name);
+>  	list_for_each_entry(subdev, &rproc->subdevs, node) {
+>  		if (subdev->start) {
+>  			ret = subdev->start(subdev);
+> @@ -1211,6 +1216,7 @@ static void rproc_stop_subdevices(struct rproc *rproc, bool crashed)
+>  {
+>  	struct rproc_subdev *subdev;
+>  
+> +	trace_rproc_subdevices("Stop subdevices", rproc->name);
+>  	list_for_each_entry_reverse(subdev, &rproc->subdevs, node) {
+>  		if (subdev->stop)
+>  			subdev->stop(subdev, crashed);
+> @@ -1221,6 +1227,7 @@ static void rproc_unprepare_subdevices(struct rproc *rproc)
+>  {
+>  	struct rproc_subdev *subdev;
+>  
+> +	trace_rproc_subdevices("Unprepare subdevices", rproc->name);
+>  	list_for_each_entry_reverse(subdev, &rproc->subdevs, node) {
+>  		if (subdev->unprepare)
+>  			subdev->unprepare(subdev);
+> @@ -1357,6 +1364,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+>  	struct device *dev = &rproc->dev;
+>  	int ret;
+>  
+> +	trace_rproc_boot("loading firmware segments into memory", rproc->name);
+>  	/* load the ELF segments to memory */
+>  	ret = rproc_load_segments(rproc, fw);
+>  	if (ret) {
+> @@ -1385,6 +1393,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+>  		goto reset_table_ptr;
+>  	}
+>  
+> +	trace_rproc_boot("starting remoteproc", rproc->name);
+>  	/* power up the remote processor */
+>  	ret = rproc->ops->start(rproc);
+>  	if (ret) {
+> @@ -1402,6 +1411,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+>  
+>  	rproc->state = RPROC_RUNNING;
+>  
+> +	trace_rproc_boot("remoteproc is up", rproc->name);
+>  	dev_info(dev, "remote processor %s is now up\n", rproc->name);
+>  
+>  	return 0;
+> @@ -1648,6 +1658,7 @@ static int rproc_stop(struct rproc *rproc, bool crashed)
+>  	/* the installed resource table is no longer accessible */
+>  	rproc->table_ptr = rproc->cached_table;
+>  
+> +	trace_rproc_shutdown("Stopping the remoteproc", rproc->name);
+>  	/* power off the remote processor */
+>  	ret = rproc->ops->stop(rproc);
+>  	if (ret) {
+> @@ -1697,6 +1708,7 @@ int rproc_trigger_recovery(struct rproc *rproc)
+>  	if (rproc->state != RPROC_CRASHED)
+>  		goto unlock_mutex;
+>  
+> +	trace_rproc_recovery("Recover remoteproc", rproc->name);
+>  	dev_err(dev, "recovering %s\n", rproc->name);
+>  
+>  	ret = rproc_stop(rproc, true);
+> @@ -1716,6 +1728,7 @@ int rproc_trigger_recovery(struct rproc *rproc)
+>  	/* boot the remote processor up again */
+>  	ret = rproc_start(rproc, firmware_p);
+>  
+> +	trace_rproc_recovery("Recovery completed", rproc->name);
+>  	release_firmware(firmware_p);
+>  
+>  unlock_mutex:
+> @@ -1796,6 +1809,7 @@ int rproc_boot(struct rproc *rproc)
+>  	/* skip the boot or attach process if rproc is already powered up */
+>  	if (atomic_inc_return(&rproc->power) > 1) {
+>  		ret = 0;
+> +		trace_rproc_boot("Incrementing ref count and exiting", rproc->name);
+>  		goto unlock_mutex;
+>  	}
+>  
+> @@ -1804,6 +1818,7 @@ int rproc_boot(struct rproc *rproc)
+>  
+>  		ret = rproc_actuate(rproc);
+>  	} else {
+> +		trace_rproc_boot("requesting firmware", rproc->name);
+>  		dev_info(dev, "powering up %s\n", rproc->name);
+>  
+>  		/* load firmware */
+> @@ -1858,8 +1873,10 @@ void rproc_shutdown(struct rproc *rproc)
+>  	}
+>  
+>  	/* if the remote proc is still needed, bail out */
+> -	if (!atomic_dec_and_test(&rproc->power))
+> +	if (!atomic_dec_and_test(&rproc->power)) {
+> +		trace_rproc_shutdown("Decrementing ref count and exiting", rproc->name);
+>  		goto out;
+> +	}
+>  
+>  	ret = rproc_stop(rproc, false);
+>  	if (ret) {
+> diff --git a/include/trace/events/remoteproc.h b/include/trace/events/remoteproc.h
+> new file mode 100644
+> index 0000000..341bf4b
+> --- /dev/null
+> +++ b/include/trace/events/remoteproc.h
+> @@ -0,0 +1,91 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM remoteproc
+> +
+> +#if !defined(_TRACE_REMOTEPROC_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_REMOTEPROC_H
+> +
+> +#include <linux/tracepoint.h>
+> +
+> +TRACE_EVENT(rproc_boot,
+> +
+> +	TP_PROTO(const char *event, const char *rproc_name),
+> +
+> +	TP_ARGS(event, rproc_name),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(event, event)
+> +		__string(rproc_name, rproc_name)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(event, event);
+> +		__assign_str(rproc_name, rproc_name);
+> +	),
+> +
+> +	TP_printk("rproc_boot: %s: %s", __get_str(rproc_name), __get_str(event))
+> +);
+> +
+> +TRACE_EVENT(rproc_shutdown,
+> +
+> +	TP_PROTO(const char *event, const char *rproc_name),
+> +
+> +	TP_ARGS(event, rproc_name),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(event, event)
+> +		__string(rproc_name, rproc_name)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(event, event);
+> +		__assign_str(rproc_name, rproc_name);
+> +	),
+> +
+> +	TP_printk("rproc_shutdown: %s: %s", __get_str(rproc_name), __get_str(event))
+> +);
+> +
+> +TRACE_EVENT(rproc_recovery,
+> +
+> +	TP_PROTO(const char *event, const char *rproc_name),
+> +
+> +	TP_ARGS(event, rproc_name),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(event, event)
+> +		__string(rproc_name, rproc_name)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(event, event);
+> +		__assign_str(rproc_name, rproc_name);
+> +	),
+> +
+> +	TP_printk("rproc_recovery: %s: %s", __get_str(rproc_name), __get_str(event))
+> +);
+> +
+> +TRACE_EVENT(rproc_subdevices,
+> +
+> +	TP_PROTO(const char *event, const char *rproc_name),
+> +
+> +	TP_ARGS(event, rproc_name),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(event, event)
+> +		__string(rproc_name, rproc_name)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(event, event);
+> +		__assign_str(rproc_name, rproc_name);
+> +	),
+> +
+> +	TP_printk("rproc_subdevices: %s: %s", __get_str(rproc_name), __get_str(event))
+> +);
+> +#endif
+> +#include <trace/define_trace.h>
+> +
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
