@@ -2,111 +2,192 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D9E2CF580
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  4 Dec 2020 21:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E402CF7E9
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  5 Dec 2020 01:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388174AbgLDUUY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 4 Dec 2020 15:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
+        id S1730692AbgLEARl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 4 Dec 2020 19:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388072AbgLDUUY (ORCPT
+        with ESMTP id S1730647AbgLEARl (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 4 Dec 2020 15:20:24 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57100C094251
-        for <linux-remoteproc@vger.kernel.org>; Fri,  4 Dec 2020 12:18:26 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id b4so1769613lfo.6
-        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Dec 2020 12:18:26 -0800 (PST)
+        Fri, 4 Dec 2020 19:17:41 -0500
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37931C061A4F
+        for <linux-remoteproc@vger.kernel.org>; Fri,  4 Dec 2020 16:17:01 -0800 (PST)
+Received: by mail-oi1-x242.google.com with SMTP id t205so8172098oib.12
+        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Dec 2020 16:17:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=u6TvCy/F7eRWtUNo/MxFFiMZO9h7izN6lekg9c6lpkc=;
-        b=zTJIsspapB64C5r5loN0+0GDKLFNDnEMlGm5RHOQgShnFOeXFexxBihVypXTdPf1n1
-         TcoPsxiTRkIZlexfVgyIdhu1JYBbMGlycaL3NBzLTldpom6UA6jl7BF02ALHZXNgg3/V
-         2zfG9moKzOBr5l3ppCWUh6kTsw9UhqC1tM2m6bQTJRq0x7DO1YgfPLSswbgpNr4KpgpI
-         miSL76z/9e4UCkjK/0H+g8awm2BPHn+Hf+zfm+k+ezxb8OQ5CMfwI9TGc+TizhmPD6wq
-         Tmkvwz3zxxWbVeoKvQfuly+EJ4XK9Ak+kSMTpa/NU7eIlmpLay2xmx5Qadj7s37igAAZ
-         2jfQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=utTeGzYjnre0QYpGB+o+Kx5Eh/EBZWte4MIpGCS97Mk=;
+        b=RnvGMIvVG6Xy37R27w0nFCZsfL8SMYfr1j2g6qflxujBDijVLd19buyf8rD4Nict9a
+         JYI9wOCh94Yhtz+hVW/NRKrwlNM+VygZrGeFtpzetbkMWcE5xrE1uJs0fURBEjLdGEui
+         gTaC9pGyXUYKYc7lv0jypQ9tygpmh/+h2bZyVq9Qo0t+CK4AFnm23uuxcSb0XBfs2OHs
+         RTXC5sWfQ0v5CQdk+RSPcRB8EOhoPcuQmj3c75PJoclm9PeOr2dHU81165ghKLCK+ETT
+         veCpidLi8ww6qq92kNe7xD9dhB+lWUoxD2BfNKKoJf9Ndc1NMSoAANI6yofqqiaR1n04
+         LFYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=u6TvCy/F7eRWtUNo/MxFFiMZO9h7izN6lekg9c6lpkc=;
-        b=USVPW3Xr4669MKGm3Cjzaqtse31lCAWnAoSXj8TqKYWl57vAL07lhvlI+uaoWDTnA9
-         Bf4ZiKVrxQfzbXLVUCyqygvjHXbhCf7sS5fH6dndV74OHfBUbP8XwbtFsSiiUqtC/hFm
-         rWQHd27bPgHIGFBztF+LpldjLZAG4wHPNPaguc7xNIHxh+pa5pMMaxY4lSRF6GlS3edc
-         kkbIvF/4fWTwVmrDnikdU0QvUThrVvwtF6wGcCgfztJpXv4bI6jiqKPbjCFV1QzD+2uB
-         UWYLqWm7YQ9mgL0WcNcspVGMOS6C/jtPhO0Wb8yydoWbdDGclpmpB2Zv6DXBekTug+un
-         iN2g==
-X-Gm-Message-State: AOAM533OHbz73PvT7PGpuXERCVZh0+T5TxeqM1JV0MLxGoKfBSsvP4zc
-        ixOrsF2o5kaOfgZYoRql4gTQBQ==
-X-Google-Smtp-Source: ABdhPJx86pDawmjihnBby2Ln8g2zAZeAcXoUgXGJVDzaLglJkBUW+wxsCPzW8TQpxT/Hm4XxtMCeDg==
-X-Received: by 2002:ac2:5307:: with SMTP id c7mr3694123lfh.28.1607113104899;
-        Fri, 04 Dec 2020 12:18:24 -0800 (PST)
-Received: from gilgamesh.semihalf.com (193-106-246-138.noc.fibertech.net.pl. [193.106.246.138])
-        by smtp.gmail.com with ESMTPSA id w21sm2036918lff.280.2020.12.04.12.18.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Dec 2020 12:18:24 -0800 (PST)
-From:   Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, s-anna@ti.com
-Cc:     grzegorz.jaszczyk@linaro.org, linux-remoteproc@vger.kernel.org,
-        robh+dt@kernel.org, lee.jones@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        praneeth@ti.com, rogerq@ti.com
-Subject: [PATCH v3 6/6] remoteproc: pru: Add support for various PRU cores on K3 J721E SoCs
-Date:   Fri,  4 Dec 2020 21:18:07 +0100
-Message-Id: <20201204201807.14716-7-grzegorz.jaszczyk@linaro.org>
-X-Mailer: git-send-email 2.29.0
-In-Reply-To: <20201204201807.14716-1-grzegorz.jaszczyk@linaro.org>
-References: <20201204201807.14716-1-grzegorz.jaszczyk@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=utTeGzYjnre0QYpGB+o+Kx5Eh/EBZWte4MIpGCS97Mk=;
+        b=GJxt86BjnjokNDQOvC7plJ6OZMdh8/QpmI0uDPyegNkYXC08AFiCQkdXpqaPz0u9fS
+         gkdVN2v4A2YICpHXahHGJ/PLrvmpI6tBASE27jijANUNshQQJXj8n1VnZssZ3qxogHVO
+         MWQVKTuiPxrYgnQp2ItacDvlNGgTdbJlo0Tdq2oMZcIflM0xiHCQ/NNpdGwLA4LZnEat
+         KbPs9ncx/5e+SJ5D1kcSd+0Ii5lSJPmrr0j3YTQPLTB078OL9xtdDgoLtAdEP53AEGr/
+         8soEZqCGJPbMC+QcavPe1oQcOQnQxGkLP04typJZE8HLKRoSNORdU5K5p0uyX9LsfveE
+         EUAQ==
+X-Gm-Message-State: AOAM533YkN9QuUxKpYIoeJvmYecF8ZDv3cmlVuhfT+5tEv+fHBG1wiKj
+        eJ58YKjdvPLeaEw8mmeuZApHJw==
+X-Google-Smtp-Source: ABdhPJxfhocvHXizIEP4tvs8LbPR8A8BuVXu9GscgqkwyR3FWCBYfhdQFs9rxANMhBsPduJ4JO39rQ==
+X-Received: by 2002:aca:6106:: with SMTP id v6mr5106782oib.158.1607127420378;
+        Fri, 04 Dec 2020 16:17:00 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id r7sm1013171oih.21.2020.12.04.16.16.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Dec 2020 16:16:59 -0800 (PST)
+Date:   Fri, 4 Dec 2020 18:16:57 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     ohad@wizery.com, mathieu.poirier@linaro.org,
+        o.rempel@pengutronix.de, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>, Richard Zhu <hongxing.zhu@nxp.com>
+Subject: Re: [PATCH V3 1/7] remoteproc: elf: support platform specific memory
+ hook
+Message-ID: <X8rRedNHet9gm5lJ@builder.lan>
+References: <20201204074036.23870-1-peng.fan@oss.nxp.com>
+ <20201204074036.23870-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201204074036.23870-2-peng.fan@oss.nxp.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Suman Anna <s-anna@ti.com>
+On Fri 04 Dec 01:40 CST 2020, Peng Fan (OSS) wrote:
 
-The K3 J721E family of SoCs have a revised version of the AM65x ICSSG IP
-and contains two instances of this newer ICSSG IP. Each ICSSG processor
-subsystem contains 2 primary PRU cores, 2 auxiliary PRU cores called RTUs,
-and 2 new auxiliary cores called Transmit PRUs (Tx_PRUs).
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> To arm64, "dc      zva, dst" is used in memset.
+> Per ARM DDI 0487A.j, chapter C5.3.8 DC ZVA, Data Cache Zero by VA,
+> 
+> "If the memory region being zeroed is any type of Device memory,
+> this instruction can give an alignment fault which is prioritized
+> in the same way as other alignment faults that are determined
+> by the memory type."
+> 
+> On i.MX platforms, when elf is loaded to onchip TCM area, the region
+> is ioremapped, so "dc zva, dst" will trigger abort. And ioremap_wc()
+> on i.MX not able to write correct data to TCM area.
+> 
+> So we need to use io helpers, and extend the elf loader to support
+> platform specific memory functions.
+> 
+> Acked-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> ---
+>  drivers/remoteproc/remoteproc_elf_loader.c | 20 ++++++++++++++++++--
+>  include/linux/remoteproc.h                 |  4 ++++
+>  2 files changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
+> index df68d87752e4..6cb71fe47261 100644
+> --- a/drivers/remoteproc/remoteproc_elf_loader.c
+> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
+> @@ -129,6 +129,22 @@ u64 rproc_elf_get_boot_addr(struct rproc *rproc, const struct firmware *fw)
+>  }
+>  EXPORT_SYMBOL(rproc_elf_get_boot_addr);
+>  
+> +static void rproc_elf_memcpy(struct rproc *rproc, void *dest, const void *src, size_t count)
+> +{
+> +	if (!rproc->ops->elf_memcpy)
+> +		memcpy(dest, src, count);
+> +
+> +	rproc->ops->elf_memcpy(rproc, dest, src, count);
 
-Enhance the existing PRU remoteproc driver to support these new PRU
-and RTU cores by using specific compatibles. The cores have the same
-memory copying limitations as on AM65x, so reuses the custom memcpy
-function within the driver's ELF loader implementation. The initial
-names for the firmware images for each PRU core are retrieved from
-DT nodes, and can be adjusted through sysfs if required.
+Looking at the current set of remoteproc drivers I get a feeling that
+we'll end up with a while bunch of functions that all just wraps
+memcpy_toio(). And the reason for this is that we are we're "abusing" the
+carveout to carry the __iomem pointer without keeping track of it.
 
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
-v2->v3:
-- Add Reviewed-by: tag
----
- drivers/remoteproc/pru_rproc.c | 3 +++
- 1 file changed, 3 insertions(+)
+And this is not the only time we're supposed to use an io-accessor,
+another example is rproc_copy_segment() in rproc_coredump.c
 
-diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-index f76423792acb..e32123c099de 100644
---- a/drivers/remoteproc/pru_rproc.c
-+++ b/drivers/remoteproc/pru_rproc.c
-@@ -849,6 +849,9 @@ static const struct of_device_id pru_rproc_match[] = {
- 	{ .compatible = "ti,am654-pru",		.data = &k3_pru_data },
- 	{ .compatible = "ti,am654-rtu",		.data = &k3_rtu_data },
- 	{ .compatible = "ti,am654-tx-pru",	.data = &k3_tx_pru_data },
-+	{ .compatible = "ti,j721e-pru",		.data = &k3_pru_data },
-+	{ .compatible = "ti,j721e-rtu",		.data = &k3_rtu_data },
-+	{ .compatible = "ti,j721e-tx-pru",	.data = &k3_tx_pru_data },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, pru_rproc_match);
--- 
-2.29.0
+It also means that if a platform driver for some reason where to support
+both ioremap and normal carveouts the elf_memcpy op would be quite
+quirky.
 
+
+So I would prefer if we track the knowledge about void *va being a
+__iomem or not in the struct rproc_mem_entry and make rproc_da_to_va()
+return this information as well.
+
+Then instead of extending the ops we can make this simply call memcpy or
+memcpy_toio() depending on this.
+
+Regards,
+Bjorn
+
+> +}
+> +
+> +static void rproc_elf_memset(struct rproc *rproc, void *s, int c, size_t count)
+> +{
+> +	if (!rproc->ops->elf_memset)
+> +		memset(s, c, count);
+> +
+> +	rproc->ops->elf_memset(rproc, s, c, count);
+> +}
+> +
+>  /**
+>   * rproc_elf_load_segments() - load firmware segments to memory
+>   * @rproc: remote processor which will be booted using these fw segments
+> @@ -214,7 +230,7 @@ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
+>  
+>  		/* put the segment where the remote processor expects it */
+>  		if (filesz)
+> -			memcpy(ptr, elf_data + offset, filesz);
+> +			rproc_elf_memcpy(rproc, ptr, elf_data + offset, filesz);
+>  
+>  		/*
+>  		 * Zero out remaining memory for this segment.
+> @@ -224,7 +240,7 @@ int rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
+>  		 * this.
+>  		 */
+>  		if (memsz > filesz)
+> -			memset(ptr + filesz, 0, memsz - filesz);
+> +			rproc_elf_memset(rproc, ptr + filesz, 0, memsz - filesz);
+>  	}
+>  
+>  	return ret;
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index e8ac041c64d9..06c52f88a3fd 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -373,6 +373,8 @@ enum rsc_handling_status {
+>   *			expects to find it
+>   * @sanity_check:	sanity check the fw image
+>   * @get_boot_addr:	get boot address to entry point specified in firmware
+> + * @elf_memcpy:		platform specific elf loader memcpy
+> + * @elf_memset:		platform specific elf loader memset
+>   * @panic:	optional callback to react to system panic, core will delay
+>   *		panic at least the returned number of milliseconds
+>   */
+> @@ -392,6 +394,8 @@ struct rproc_ops {
+>  	int (*load)(struct rproc *rproc, const struct firmware *fw);
+>  	int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
+>  	u64 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
+> +	void (*elf_memcpy)(struct rproc *rproc, void *dest, const void *src, size_t count);
+> +	void (*elf_memset)(struct rproc *rproc, void *s, int c, size_t count);
+>  	unsigned long (*panic)(struct rproc *rproc);
+>  };
+>  
+> -- 
+> 2.28.0
+> 
