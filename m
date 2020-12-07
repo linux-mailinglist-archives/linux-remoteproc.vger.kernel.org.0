@@ -2,36 +2,37 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B442D1A4E
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  7 Dec 2020 21:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FD22D1A4F
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  7 Dec 2020 21:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbgLGUKr (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        id S1727062AbgLGUKr (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
         Mon, 7 Dec 2020 15:10:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39642 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:39644 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725879AbgLGUKq (ORCPT
+        id S1726733AbgLGUKq (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
         Mon, 7 Dec 2020 15:10:46 -0500
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1607371806;
-        bh=tXebTqbgX0dwje1h67EVKJldoI6Yo5yhvwDt+jk/f74=;
+        bh=g5Dysvuyl5H+MV0ClJHJlItnqzPdB+hTDGSRPCFK6wk=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=e7oFgu0cWob4NKRPJY4ZM3I62hTyrxgJ0XG2HozN5w9m3mQlpXTeLsypAgMUDVswN
-         sj2mWAqo7PNaUceqWe4zk/HdYmDmlBWPWHKiVaFh5z+kbvIHTebL0mwFvvVztNggwa
-         is09t/aUxrfMFY4KBY8qWKl8V9c4uwM62SySqjt/gk858B+O3dDLcdLiDQ8SyA61Jh
-         TrmyvqgY/ArqbRB5CRXyL2u3qPYtifaltLHI/XfEKbgeiI41iyOq3n5LMT/bXgCoSE
-         xAG8WQipR3zcUbTL6f84rvkyhBg5+pMZ1IdiPHiUgKnfVHFDRg54kz2b2Cr0DUOuUN
-         0hmPL24EStGaQ==
+        b=ZLa8oaJHDlWKyN45kSLhjbGas7EXSXfItE2DkNLn7juDxjO9ZsyZ/a5GWOvPV/01W
+         Uxa7VSTpSLomdqq4LhrjN6f30ukfvLVC+fOXA4gIifHjYfdjg3E5eCtkN3wYwKZG+i
+         sWgVGHsNgnakvrur/ev7WoRJJH6WjKBlJKD5e2TjFERA11BJwKGZWrIfh9hPg057bY
+         BvJGSEAf/0x3OQiTVH6SlNFTiZIiCucHUlkNKIrU3ZJ2j3VqBoZcCBGdybScrhjS8c
+         0MUDdOaI8tQJUk7vqiCPz2QN70IUXsx2LusJwcENrdQtdYtDvoOLjIxmLD4KTrs1eQ
+         GXShzEKUNbgtw==
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] remoteproc: sysmon: fix shutdown_acked state
+Subject: Re: [PATCH] remoteproc: fix spelling mistake "Peripherial" ->
+ "Peripherial" in Kconfig
 From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <160737180619.4672.16101646874828308886.git-patchwork-notify@kernel.org>
+Message-Id: <160737180624.4672.5768120935495093248.git-patchwork-notify@kernel.org>
 Date:   Mon, 07 Dec 2020 20:10:06 +0000
-References: <20201204193740.3162065-1-arnd@kernel.org>
-In-Reply-To: <20201204193740.3162065-1-arnd@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
+References: <20201204193411.1152006-1-colin.king@canonical.com>
+In-Reply-To: <20201204193411.1152006-1-colin.king@canonical.com>
+To:     Colin King <colin.king@canonical.com>
 Cc:     linux-remoteproc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
@@ -41,25 +42,19 @@ Hello:
 
 This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
 
-On Fri,  4 Dec 2020 20:37:35 +0100 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Fri,  4 Dec 2020 19:34:11 +0000 you wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> The latest version of sysmon_stop() starts by initializing
-> the sysmon->shutdown_acked variable, but then overwrites it
-> with an uninitialized variable later:
+> There is a spelling mistake in the Kconfig help text. Fix it.
 > 
-> drivers/remoteproc/qcom_sysmon.c:551:11: error: variable 'acked' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->         else if (sysmon->ept)
->                  ^~~~~~~~~~~
-> drivers/remoteproc/qcom_sysmon.c:554:27: note: uninitialized use occurs here
->         sysmon->shutdown_acked = acked;
->                                  ^~~~~
-> 
-> [...]
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  drivers/remoteproc/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
 Here is the summary with links:
-  - remoteproc: sysmon: fix shutdown_acked state
-    https://git.kernel.org/andersson/remoteproc/c/9d7b4a40387d
+  - remoteproc: fix spelling mistake "Peripherial" -> "Peripherial" in Kconfig
+    https://git.kernel.org/andersson/remoteproc/c/d247d1855aca
 
 You are awesome, thank you!
 --
