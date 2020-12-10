@@ -2,37 +2,36 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7846F2D6BAA
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Dec 2020 00:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5630E2D6BA3
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Dec 2020 00:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389346AbgLJXLx (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        id S2390583AbgLJXLx (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
         Thu, 10 Dec 2020 18:11:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33936 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:33920 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390334AbgLJWav (ORCPT
+        id S2390212AbgLJWav (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
         Thu, 10 Dec 2020 17:30:51 -0500
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1607639410;
-        bh=k9C4V7fkkOoOu4YfjouchYVOeOYyXJ3y4UxyuHJH15s=;
+        bh=xpqwBVhdCMv0yaXJ8gVz+ZJWB4fIeBohOMoYBr7f04I=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=LbsEG1YTVM6mAuGe8NT5i+rtUwAbsePHaB4aMiXOqqcLBEsUKKKI+s1gZG+F1Eu+N
-         bBzw/EjKIRJinCQJ45gFgHcIrHViTsmUD2wSQT7JVO25lien2wq+d/VsH7lDiskiBP
-         KrlgbxlqJFBS2lyaOY/3F/LTDR+tWvpEnJYDaPTGe6dkz37S2tFUO6y+mfa4JqAEGL
-         giy4+m8TofPIi4c3KJ5+WkKVZh/S24BjTsL2z8nZAVvo5ZNlGMEQhEiFxodrgcEsdy
-         ut7K/7OdywacZ03KEihPOQi1/6Do2sKXC76O9RgZ51ZUbZLTvLG6Yc+6p5Tg6CRnOx
-         FfXLFqCxDBSDw==
+        b=NDoe0rfvPRd+pt8oglnVAvmjhVXNK0tQKVccDifaEijR5N/E/wFX/uxaB4ff+Ob22
+         wAFHLXd0oVze6Gm8iN9b1OHxjUQ9BUE9Sk9gQkmL4ulTxfL3XTgFf3cD61yd4r0OVE
+         zCVUjj3zFOTp7fseTwy3hq0mPCoRyF5b/Mx1F1Zo17yp86JxI1QsKDYEB5ydsX+MTn
+         g3tiZOohIWK6uiM2RZfscRxNi9ch6058Ys2ugKFa6o/bGnuRnB+bt9BeQzYC8u5vkO
+         iFcU2xXcbk4/eUivey8gkMf/OPCWIgGiml/YLunIMU4m0z33bOr9V+A+Jz8Rf2U1/P
+         ggljuAmqZ4+XA==
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] remoteproc/mediatek: unprepare clk if scp_before_load
- fails
+Subject: Re: [PATCH v4 0/6] Add a PRU remoteproc driver
 From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <160763941072.7130.11898124608766989751.git-patchwork-notify@kernel.org>
+Message-Id: <160763941062.7130.7734825178066404732.git-patchwork-notify@kernel.org>
 Date:   Thu, 10 Dec 2020 22:30:10 +0000
-References: <20201203155914.3844426-1-tzungbi@google.com>
-In-Reply-To: <20201203155914.3844426-1-tzungbi@google.com>
-To:     Tzung-Bi Shih <tzungbi@google.com>
+References: <20201208141002.17777-1-grzegorz.jaszczyk@linaro.org>
+In-Reply-To: <20201208141002.17777-1-grzegorz.jaszczyk@linaro.org>
+To:     Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
 Cc:     linux-remoteproc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
@@ -40,22 +39,37 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 
 Hello:
 
-This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
+This series was applied to andersson/remoteproc.git (refs/heads/for-next):
 
-On Thu,  3 Dec 2020 23:59:14 +0800 you wrote:
-> Fixes the error handling to unprepare clk if scp_before_load fails.
+On Tue,  8 Dec 2020 15:09:56 +0100 you wrote:
+> Hi All,
 > 
-> Fixes: fd0b6c1ff85a ("remoteproc/mediatek: Add support for mt8192 SCP")
-> Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
-> ---
-> Changes from v2[2]:
-> - fix the "Fixes" tag format
+> The Programmable Real-Time Unit and Industrial Communication Subsystem
+> (PRU-ICSS or simply PRUSS) on various TI SoCs consists of dual 32-bit
+> RISC cores (Programmable Real-Time Units, or PRUs) for program execution.
+> 
+> The K3 AM65x and J721E SoCs have the next generation of the PRU-ICSS IP,
+> commonly called ICSSG. The ICSSG IP on AM65x SoCs has two PRU cores,
+> two auxiliary custom PRU cores called Real Time Units (RTUs). The K3
+> AM65x SR2.0 and J721E SoCs have a revised version of the ICSSG IP, and
+> include two additional custom auxiliary PRU cores called Transmit PRUs
+> (Tx_PRUs).
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3] remoteproc/mediatek: unprepare clk if scp_before_load fails
-    https://git.kernel.org/andersson/remoteproc/c/22c3df6f5574
+  - [v4,1/6] dt-bindings: remoteproc: Add binding doc for PRU cores in the PRU-ICSS
+    https://git.kernel.org/andersson/remoteproc/c/d570d05ea92d
+  - [v4,2/6] remoteproc: pru: Add a PRU remoteproc driver
+    https://git.kernel.org/andersson/remoteproc/c/d4ce2de7e4af
+  - [v4,3/6] remoteproc: pru: Add support for PRU specific interrupt configuration
+    https://git.kernel.org/andersson/remoteproc/c/c75c9fdac66e
+  - [v4,4/6] remoteproc: pru: Add pru-specific debugfs support
+    https://git.kernel.org/andersson/remoteproc/c/20ad1de0f14f
+  - [v4,5/6] remoteproc: pru: Add support for various PRU cores on K3 AM65x SoCs
+    https://git.kernel.org/andersson/remoteproc/c/1d39f4d19921
+  - [v4,6/6] remoteproc: pru: Add support for various PRU cores on K3 J721E SoCs
+    https://git.kernel.org/andersson/remoteproc/c/b44786c9bdc4
 
 You are awesome, thank you!
 --
