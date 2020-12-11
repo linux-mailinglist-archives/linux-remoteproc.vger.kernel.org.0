@@ -2,138 +2,126 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8C32D6BA6
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Dec 2020 00:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9A72D77DF
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Dec 2020 15:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391219AbgLJXLx (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 10 Dec 2020 18:11:53 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49374 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389345AbgLJXLa (ORCPT
+        id S2394276AbgLKObh (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 11 Dec 2020 09:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732697AbgLKObY (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 10 Dec 2020 18:11:30 -0500
-X-Gm-Message-State: AOAM531u9jIXpKuhEDHnYCx1lG6NqCpVqiZxkm/neSfPtPqkYQ31ca0B
-        NEFaiY4uAWktETvPQo01fhulC7NTNtkLwPOuTw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607641849;
-        bh=PCQQKOjc6YjZumEOD1HngXXOffpY7WJSVffGBmVE2eY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TnrcK/moE7nkwoA3Zz9FgXqwnQlEGkMjC7dyAIYEyp2dwR1PKUkk2X8Wb3bhY0+K8
-         cS4FeGf5HoRyJmhDcyJgPk0Osl8ZPnv2OUnMbuVOtkLK13FsRVFNsaQxriZnynzOgF
-         UVJ96bMZKQq3Em7/+bk/3SeY1JXlEPZyAmU0GDJ7NfkWDAOoPZdN8OfOi0RomumxpU
-         5aIY2eK92ra5Qq6STHHjPMCc0bT0lB890owNxnlBAdCq/bEpgHO6SjhF0vMNDr4OAE
-         9GxbTEg2FisGYERWI5hR1XT/2aVNH4u6Ji6XIN2NUwSs/UNHvw9rxy5m7/DJkfzu1d
-         SDJqGXjRmKGOg==
-X-Google-Smtp-Source: ABdhPJwWbOKC/meXbDaIc6eEzcVZ1Jra1FcOfktJmaatdpoXHxeOHbOdTyqqLAwgi9t9ioSO0lTzDdmMwZ7T5b0MOt8=
-X-Received: by 2002:a05:6402:1841:: with SMTP id v1mr9392182edy.194.1607641848145;
- Thu, 10 Dec 2020 15:10:48 -0800 (PST)
+        Fri, 11 Dec 2020 09:31:24 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B36C0613D6
+        for <linux-remoteproc@vger.kernel.org>; Fri, 11 Dec 2020 06:30:43 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id b10so8780820ljp.6
+        for <linux-remoteproc@vger.kernel.org>; Fri, 11 Dec 2020 06:30:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vMLkq6TErLQR5vl7wxICpib93GEBHjpKENXEhX4v8c8=;
+        b=kvhdV0PCnbzmkIJAaCEZ3dsAnkIQvSsDvvJTYVCHZC4CI19JDyqXcede+Oor6XRB5j
+         9RTmcz+B8PBhHF2FvHIZZv5Je++tCM1N1p9uLRF+YTS+JVXJqTTJk2ooqmA3co/WQzKd
+         ZazFfrOeijWGnHdjFo3paTzvSMAhqbphCjtnrSYZv4UQ2rTNfD3zH3F2P8gDrRD7hr5G
+         kclJ2o7NOSMFgXEoFZ3WzJ1BLspGVFSOKQAxwQkKfmX9yc7Yv8IA+zyDgPt5iKJf80YM
+         pzgzPnEH3rf7gcVCPOJmi8nL+xnrTblTgfW5mn4Rnqe9pmSrPwk9DZ6qjUI/dLHAOIPT
+         efDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vMLkq6TErLQR5vl7wxICpib93GEBHjpKENXEhX4v8c8=;
+        b=ds73JJWdybgU5LDhBYJfZyrbK6VLsa/jN9iS089uflUQMJgp1yV9GUq/YwU+kjsITg
+         kKk7QdvPEjG9DGEqcSO0syPRpve0nkBMsPygVaKzQ6tpCmCSwjWbvHpRZhiNkHmmw2hj
+         hxLWUftWxABym4VAjQnmFlqnc8GK3XnsB3g+CgSUNNAvx4HSfUZGC4YwKjrEE/b5MzJF
+         NlIROJR1wUUySSoYK9HlR/xx15x+bkdCMiLbQFf549AvJDw3pC6FZWhAuV33OtcpNYr+
+         M2myJV1BOBG0wT22om4MQGId8ReO42RofmDiGkYPeX7n/KtKkxFPBaABNFGomzpUMp7Z
+         9M6Q==
+X-Gm-Message-State: AOAM531Tu/uN15N5NgjRh6c271r6PBQlE4iL9AIpKuzhda2p0k5/iI8e
+        3gF5CKk5LJLPsE3/9tV2gW+oqw==
+X-Google-Smtp-Source: ABdhPJzrp7FD+oZWEwUT74Mzv+wIVpgVHhKRUDwchTjcreY+7vEBHLOcTh+vZ1yeB1g8R0GH/5kj9A==
+X-Received: by 2002:a05:651c:112c:: with SMTP id e12mr1047555ljo.66.1607697042013;
+        Fri, 11 Dec 2020 06:30:42 -0800 (PST)
+Received: from gilgamesh.semihalf.com (193-106-246-138.noc.fibertech.net.pl. [193.106.246.138])
+        by smtp.gmail.com with ESMTPSA id x26sm906491lfq.112.2020.12.11.06.30.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 11 Dec 2020 06:30:41 -0800 (PST)
+From:   Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, robh+dt@kernel.org, s-anna@ti.com,
+        ssantosh@kernel.org
+Cc:     grzegorz.jaszczyk@linaro.org, linux-remoteproc@vger.kernel.org,
+        lee.jones@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, praneeth@ti.com,
+        rogerq@ti.com
+Subject: [PATCH 0/5] Introduce PRU remoteproc consumer API
+Date:   Fri, 11 Dec 2020 15:29:28 +0100
+Message-Id: <20201211142933.25784-1-grzegorz.jaszczyk@linaro.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-References: <20201126210642.897302-1-mathieu.poirier@linaro.org>
- <20201126210642.897302-2-mathieu.poirier@linaro.org> <20201130173321.GB2662913@robh.at.kernel.org>
- <20201201234327.GA1248055@xps15>
-In-Reply-To: <20201201234327.GA1248055@xps15>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 10 Dec 2020 17:10:36 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKq1zM569nPLYNgj9WUHWO98nYYt6dBvHzLRMCKq5=T8g@mail.gmail.com>
-Message-ID: <CAL_JsqKq1zM569nPLYNgj9WUHWO98nYYt6dBvHzLRMCKq5=T8g@mail.gmail.com>
-Subject: Re: [PATCH v3 01/15] dt-bindings: remoteproc: Add bindind to support
- autonomous processors
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnaud POULIQUEN <arnaud.pouliquen@st.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Dec 1, 2020 at 5:43 PM Mathieu Poirier
-<mathieu.poirier@linaro.org> wrote:
->
-> Hi Rob,
->
-> On Mon, Nov 30, 2020 at 10:33:21AM -0700, Rob Herring wrote:
-> > On Thu, Nov 26, 2020 at 02:06:28PM -0700, Mathieu Poirier wrote:
-> > > This patch adds a binding to guide the remoteproc core on how to deal with
-> > > remote processors in two cases:
-> > >
-> > > 1) When an application holding a reference to a remote processor character
-> > >    device interface crashes.
-> > >
-> > > 2) when the platform driver for a remote processor is removed.
-> > >
-> > > In both cases if "autonomous-on-core-reboot" is specified in the remote
-> > > processor DT node, the remoteproc core will detach the remote processor
-> > > rather than switching it off.
-> > >
-> > > Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > > ---
-> > >  .../bindings/remoteproc/remoteproc-core.yaml  | 25 +++++++++++++++++++
-> > >  1 file changed, 25 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/remoteproc/remoteproc-core.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/remoteproc/remoteproc-core.yaml b/Documentation/devicetree/bindings/remoteproc/remoteproc-core.yaml
-> > > new file mode 100644
-> > > index 000000000000..3032734f42a3
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/remoteproc/remoteproc-core.yaml
-> > > @@ -0,0 +1,25 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: "http://devicetree.org/schemas/remoteproc/remoteproc-core.yaml#"
-> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > > +
-> > > +title: Binding for the remoteproc core applicable to all remote processors
-> > > +
-> > > +maintainers:
-> > > +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > +  - Mathieu Poirier <mathieu.poirier@linaro.org>
-> > > +
-> > > +description:
-> > > +  This document defines the binding recognised by the remoteproc core that can
-> > > +  be used by any remote processor in the subsystem.
-> > > +
-> > > +properties:
-> > > +  autonomous-on-core-reboot:
-> > > +    $ref: /schemas/types.yaml#/definitions/flag
-> > > +    description:
-> > > +      Used in two situations, i.e when a user space application releases the
-> > > +      handle it has on the remote processor's character driver interface and
-> > > +      when a remote processor's platform driver is being removed.  If defined,
-> > > +      this flag instructs the remoteproc core to detach the remote processor
-> > > +      rather than turning it off.
-> >
-> > Userspace? character driver? platform driver? remoteproc core? Please
-> > explain this without OS specific terms.
->
-> The remoteproc state machine is gaining in complexity and having technical terms
-> in the binding's description helps understand when and how it should be used.  I
-> could make it more generic but that will lead to confusion and abuse.
+Hi All,
 
-Explaining in Linux specific terms will confuse any other OS user.
+The Programmable Real-Time Unit and Industrial Communication Subsystem
+(PRU-ICSS or simply PRUSS) on various TI SoCs consists of dual 32-bit
+RISC cores (Programmable Real-Time Units, or PRUs) for program execution.
 
->  Should I
-> make it "rproc,autonomous-on-core-reboot" ?
+There are 3 foundation component for PRUSS subsystem: the PRUSS platform driver,
+the PRUSS INTC driver and the PRUSS remoteproc driver. Two first were already
+merged and can be found under:
+1) drivers/soc/ti/pruss.c
+   Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+2) drivers/irqchip/irq-pruss-intc.c
+   Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
 
-No, 'rproc' is not a vendor.
+The third one [1] was accepted and applied to andersson/remoteproc.git
+(refs/heads/for-next): [2] but is not merged yet.
 
-> >
-> > Seems to me this would be implied by functionality the remote proc
-> > provides.
->
-> Exactly - this binding is used by the remoteproc core itself.  It is specified
-> in the remote processor DT nodes but the individual platform drivers don't do
-> anything with it - the core takes care of enacting the desired behavior on their
-> behalf.  Otherwise each platform driver would end up adding the same code, which
-> nobody wants to see happening.
+The programmable nature of the PRUs provide flexibility to implement custom
+peripheral interfaces, fast real-time responses, or specialized data handling.
+Example of a PRU consumer drivers will be:
+  - Software UART over PRUSS
+  - PRU-ICSS Ethernet EMAC
 
-The platform drivers just need to set a flag to enable some behavior
-that the core code checks and handles. That should be 1 to a few lines
-in the drivers. It's not really any different, just a question of
-where the flag lives.
+In order to make usage of common PRU resources and allow the consumer drivers to
+configure the PRU hardware for specific usage the PRU API is introduced.
 
-Rob
+This patch set depends on not merged (but applied to remoteproc/for-next) PRUSS
+remoteproc driver [1][2] and two remoteproc related patches [3] and [4].
+
+[1] https://patchwork.kernel.org/project/linux-arm-kernel/cover/20201208141002.17777-1-grzegorz.jaszczyk@linaro.org/
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git/commit/?h=for-next&id=b44786c9bdc46eac8388843f0a6116369cb18bca
+[3] https://patchwork.kernel.org/project/linux-remoteproc/patch/20201121032042.6195-1-s-anna@ti.com/
+[4] https://patchwork.kernel.org/project/linux-remoteproc/patch/20201121030156.22857-3-s-anna@ti.com/
+
+Best regards,
+Grzegorz
+
+Roger Quadros (1):
+  remoteproc: pru: Add pru_rproc_set_ctable() function
+
+Suman Anna (2):
+  dt-bindings: remoteproc: Add PRU consumer bindings
+  remoteproc: pru: Deny rproc sysfs ops for PRU client driven boots
+
+Tero Kristo (2):
+  remoteproc: pru: Add APIs to get and put the PRU cores
+  remoteproc: pru: Configure firmware based on client setup
+
+ .../bindings/remoteproc/ti,pru-consumer.yaml  |  64 +++++
+ drivers/remoteproc/pru_rproc.c                | 221 +++++++++++++++++-
+ include/linux/pruss.h                         |  78 +++++++
+ 3 files changed, 360 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+ create mode 100644 include/linux/pruss.h
+
+-- 
+2.29.0
+
