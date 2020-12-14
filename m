@@ -2,114 +2,82 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E15B2D8A04
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 12 Dec 2020 21:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5070B2D9268
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 14 Dec 2020 06:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726884AbgLLUta (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 12 Dec 2020 15:49:30 -0500
-Received: from so254-31.mailgun.net ([198.61.254.31]:49024 "EHLO
-        so254-31.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725879AbgLLUta (ORCPT
+        id S1726883AbgLNFGY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 14 Dec 2020 00:06:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725385AbgLNFGY (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 12 Dec 2020 15:49:30 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1607806147; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=/AJJdvvgcxzEk2iIh8Q9OM+WIMHQvzRBydUe39VSYsA=; b=ZT091r0iNtPQ3ocmMKOJNGjNAfmeQH48czhjyPhKYqa2YJRddZMy2CEtJi/RAHaeXQ9eizBx
- aHuPl9CpyuYGKKDZTiTQxX5HvjkA+aBT0/rJUf68u0FySomvF6yPKUDAfYZ+WAH0F0UBtFxl
- ts7eHCkv2L593YJ4oweOCGCsv1k=
-X-Mailgun-Sending-Ip: 198.61.254.31
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
- 5fd52c8f35a25d1b164a9461 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 12 Dec 2020 20:48:15
- GMT
-Sender: rishabhb=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id BB760C43461; Sat, 12 Dec 2020 20:48:14 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from rishabhb-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rishabhb)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 89FC3C433C6;
-        Sat, 12 Dec 2020 20:48:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 89FC3C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rishabhb@codeaurora.org
-From:   Rishabh Bhatnagar <rishabhb@codeaurora.org>
-To:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     tsoni@codeaurora.org, bjorn.andersson@linaro.org,
-        psodagud@codeaurora.org, sidgup@codeaurora.org,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>
-Subject: [PATCH] remoteproc: Create a separate workqueue for recovery tasks
-Date:   Sat, 12 Dec 2020 12:48:07 -0800
-Message-Id: <1607806087-27244-1-git-send-email-rishabhb@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        Mon, 14 Dec 2020 00:06:24 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8FEC0613CF
+        for <linux-remoteproc@vger.kernel.org>; Sun, 13 Dec 2020 21:05:44 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id h75so19477835ybg.18
+        for <linux-remoteproc@vger.kernel.org>; Sun, 13 Dec 2020 21:05:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=4jvDXGubsRxhn2wRkLBIdD8iEb/d8966gxDD6ar7m8g=;
+        b=KlDtMcMyuXTNxGUbetGWjtd3p7hpvDYcz1yB/r9pWRwYbw/uRunc0oLBIoTyedZka/
+         +uuHMnhMMyBV7rLugg+K5pmhAH0HTPVj2ACp8VNveYiyt1bsViUM4EH5sbY46MFSXwBy
+         gkSSUCqzVQeUMEG8jbZtx+UiCUAiJy/73YoqXfJA0oLwxQXS1Qv1d9081Dg4F162E95u
+         XwQBFC5e5B18uSMlsZ+EUEcGl+d2tO6Y8wQSpjEl9ddpnAhw8OBOpVyYZNo+7VTezreg
+         UVCGtaSnTN62Yf/xe9on+NX/47S1JMoMzXs4G20PMxuQkomLERygpELc1ZVfSv+Pn+sM
+         60gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=4jvDXGubsRxhn2wRkLBIdD8iEb/d8966gxDD6ar7m8g=;
+        b=VhvAuyjgJMtEFzH2bXyeh7ewjB3S6f0BycLV0wzDX2X8RdM7IiDwz62YKRthnC62V3
+         qkMq/TaS9fp/F3mrmT7w/6Q2nO4WxPvaqFYJzjXNiMnCBxPUysImgMkErYmjZQJVxBjD
+         TGrW1wdspsPiaw1+7+pUCEDh0AALzw3CSbOEBmKR19Z7bJxlIYRCbB7J7OL1Hsk4N098
+         6MKVVJgTuRUKprTNR9tf+RhCCLW8ZTVJ1IwVhYYO0ns2y7k3p3ymAW2t3RsRgnJpJCS7
+         Qj5jSdR40m38j9mxx0IBgLCjHo+365iCfNk1zbfiYG5fwtG2tgQMmuK5pFjvkvGoEXyo
+         yI4Q==
+X-Gm-Message-State: AOAM530Xjy8CM2NAKUOhxcw/fQ7vP1pq5myYlrFPKea16Ji3vEA7uOCY
+        r6jlAs/1wD6kVG23mDYvKKyONn2pFrt5
+X-Google-Smtp-Source: ABdhPJxUP6w2FBmL9+7gdOpsdC3JE0U//nSrm7jMotOm88ZfM8KsOD/SRblH+17axFBMDd5+7SSemS/Ft2pS
+Sender: "tzungbi via sendgmr" <tzungbi@tzungbi-z840.tpe.corp.google.com>
+X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:b:725a:fff:fe41:c6a5])
+ (user=tzungbi job=sendgmr) by 2002:a25:25c7:: with SMTP id
+ l190mr4045475ybl.177.1607922343460; Sun, 13 Dec 2020 21:05:43 -0800 (PST)
+Date:   Mon, 14 Dec 2020 13:05:19 +0800
+Message-Id: <20201214050521.845396-1-tzungbi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.29.2.684.gfbc64c5ab5-goog
+Subject: [PATCH 0/2] remoteproc/mediatek: support L1TCM for MT8192 SCP
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org, robh+dt@kernel.org
+Cc:     linux-remoteproc@vger.kernel.org, matthias.bgg@gmail.com,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        tzungbi@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Create an unbound high priority workqueue for recovery tasks.
-Recovery time is an important parameter for a subsystem and there
-might be situations where multiple subsystems crash around the same
-time. Scheduling into an unbound workqueue increases parallelization
-and avoids time impact. Also creating a high priority workqueue
-will utilize separate worker threads with higher nice values than
-normal ones.
+The series supports L1TCM which is a high performance memory region in
+MT8192 SCP.
 
-Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
----
- drivers/remoteproc/remoteproc_core.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+The 1st patch adds a new reg-name "l1tcm" for L1TCM.
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 46c2937..8fd8166 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -48,6 +48,8 @@ static DEFINE_MUTEX(rproc_list_mutex);
- static LIST_HEAD(rproc_list);
- static struct notifier_block rproc_panic_nb;
- 
-+static struct workqueue_struct *rproc_wq;
-+
- typedef int (*rproc_handle_resource_t)(struct rproc *rproc,
- 				 void *, int offset, int avail);
- 
-@@ -2475,7 +2477,7 @@ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type)
- 		rproc->name, rproc_crash_to_string(type));
- 
- 	/* create a new task to handle the error */
--	schedule_work(&rproc->crash_handler);
-+	queue_work(rproc_wq, &rproc->crash_handler);
- }
- EXPORT_SYMBOL(rproc_report_crash);
- 
-@@ -2520,6 +2522,10 @@ static void __exit rproc_exit_panic(void)
- 
- static int __init remoteproc_init(void)
- {
-+	rproc_wq = alloc_workqueue("rproc_wq", WQ_UNBOUND | WQ_HIGHPRI, 0);
-+	if (!rproc_wq)
-+		return -ENOMEM;
-+
- 	rproc_init_sysfs();
- 	rproc_init_debugfs();
- 	rproc_init_cdev();
-@@ -2536,6 +2542,7 @@ static void __exit remoteproc_exit(void)
- 	rproc_exit_panic();
- 	rproc_exit_debugfs();
- 	rproc_exit_sysfs();
-+	destroy_workqueue(rproc_wq);
- }
- module_exit(remoteproc_exit);
- 
+The 2nd patch supports L1TCM in the firmware loader.  Note that MT8192
+SCP is still under development.  The 2nd patch breaks early MT8192 SCP
+firmware which should only break our development environment.
+
+Tzung-Bi Shih (2):
+  dt-bindings: remoteproc: mediatek: add L1TCM memory region
+  remoteproc/mediatek: support L1TCM
+
+ .../bindings/remoteproc/mtk,scp.txt           |  8 +--
+ drivers/remoteproc/mtk_common.h               |  5 ++
+ drivers/remoteproc/mtk_scp.c                  | 54 ++++++++++++++++++-
+ 3 files changed, 61 insertions(+), 6 deletions(-)
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.29.2.684.gfbc64c5ab5-goog
 
