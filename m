@@ -2,112 +2,147 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 379C12DB34B
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 15 Dec 2020 19:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1929A2DB6B1
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 15 Dec 2020 23:56:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730337AbgLOSI5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 15 Dec 2020 13:08:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S1730170AbgLOWzw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 15 Dec 2020 17:55:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729656AbgLOSIh (ORCPT
+        with ESMTP id S1729921AbgLOWzq (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 15 Dec 2020 13:08:37 -0500
-Received: from mail-oo1-xc44.google.com (mail-oo1-xc44.google.com [IPv6:2607:f8b0:4864:20::c44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913B7C06138C
-        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Dec 2020 10:07:51 -0800 (PST)
-Received: by mail-oo1-xc44.google.com with SMTP id y14so1754373oom.10
-        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Dec 2020 10:07:51 -0800 (PST)
+        Tue, 15 Dec 2020 17:55:46 -0500
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F1CC061793
+        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Dec 2020 14:55:05 -0800 (PST)
+Received: by mail-ot1-x341.google.com with SMTP id b24so3575621otj.0
+        for <linux-remoteproc@vger.kernel.org>; Tue, 15 Dec 2020 14:55:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=awpfnaoCuOfpiA9hFwy8M6uoUGEHYcKA+Gcyax3vkEU=;
-        b=SLdbi27kWMyEok3alqZe20qkyd4B3CnVaAdIyEDPHD2vz0Gv0dwKJ1Gm6MFxx1DDSM
-         xncXwtmCZPUcRw17HtC/OXEwXsiw/QOPLw37/d14RQHEO3Z0H6hRPFdfOhaQ45GmZrwf
-         tztIUBHriOjGYSSWbU++5Qm1xQdFd/AkinC0U+ggnaoYezEIq2YYUYCw9RRltVip/+HX
-         lhMeZd1XZ+t529RAHdoZJU3ubhgmeqA2qqM+QrBVNNJyq6wsSThMWO1B2NKXgOML8LBc
-         T8mtEvl9YkZFt4yh/mOYFTMO3Vi5+ulrXmqmGJx3Gy82+FzLc3bK9up90bEBVBtk/40X
-         2L5g==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WfTxGeZcQbEkDfESo7Zide/rgubu463P4yV1OlAr/Es=;
+        b=wvVXfUa/Q1rbsphDSY8y1GB2Fih6ml2zI7YmbQnNhd9+P9IFpx2LKDa+2kiTnL4W0a
+         3pFRWyvZODNQcP77Fkddq3FXpfJFgzUPIssb6f/9UN4ToMmjbTAmrrTuQIYTDbBAZ8kU
+         a/eqVE0xDKBdUF/8DbxjOHJTByS2R0oofrA2U99bRvw3ZoNWRnhkcK497qXbKRUbFP4g
+         B7TOMZi6sWBMyjGkEmO7x1eGGc21/elGiRWWqH0Neoyg/e6rv8YlOKKhAzQKWrQtZXiE
+         fpeqkTuFFjKQuzF1xTpaIiHLYzVZ6LrZDt2DWu/ZfMCAQPaqs8/7z09BCmuYLEEPyGBe
+         I5Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=awpfnaoCuOfpiA9hFwy8M6uoUGEHYcKA+Gcyax3vkEU=;
-        b=ggoEhbGGpfLdxP0XWwn+YDNcq7g1Q7WVvwdNdfzwiJdEspFznyioIMUaJGcfUd4n0h
-         6SywEVaAuJY87vQj4AA61IBJ60xpA8svIFp6+LPhgFpT1ceouZ58jnSSL2Bov02gqsH8
-         W95Wp+D6ni6oUZlT6yEfqELG/ZdgEDVhHb3oo2njGka9mCIwxV2AsT6p7KwfoHo8V0CR
-         ep+uN8eQajM8/jsg5W1TINTdr3I1LFG9JTScaLAekEVWHL5juSrJ/I2ueOnxgGNI1QRQ
-         O9ayUTD3eiJGpLyhZ6G0whl19sju4iU1Gw3Uhes8zhdDj8RX6bxLSDRV9+D6BRiZxUG6
-         Qa4Q==
-X-Gm-Message-State: AOAM532scC0/aD+nUDAhU20G74jjM6JQnJ5JRf3U1SIZVyAOjnsNm3o9
-        PqfhFJD5TS0o5J9X5jSh/L19sg==
-X-Google-Smtp-Source: ABdhPJwTB7icEqbXpYRJR956FFUcB0QEiMvrok0dKNuzUQl6DCJ4w/MCFiEArZdT1/cuajSh7cNQXQ==
-X-Received: by 2002:a4a:97a3:: with SMTP id w32mr5262043ooi.81.1608055670983;
-        Tue, 15 Dec 2020 10:07:50 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WfTxGeZcQbEkDfESo7Zide/rgubu463P4yV1OlAr/Es=;
+        b=nWZAkkiWZTYOQovlYhxQ6r4oHXisjk7RYQLHU1C5pFvg7dajLVh8fVzIhVTzlLAhCu
+         EYJNi/bJk9vE9VIwpyloJiLMewZ+laPbIUbGeo36tRIty7Of0FflSSvXGsB+h/G4H2ks
+         GLXeTxH19d4/N/mhoDf0Y26rCoqJOg6j5/8xU5MKwH5uSVVduzwtZHXOvPFb5GnLSQCc
+         5n3xXMaw5ehfJoE7DRr/EO9AKE5xujgwlyQ6du2tG5yiJS0XbanMJ4kXLTRoOXsaOcdS
+         YG+BwGaJev0xdS4o62h96kL4ANh+ycTL4qsA1oFXNu1QUgE5woku92ZKXktIfBvDSkNl
+         GX6w==
+X-Gm-Message-State: AOAM532ycJwJ1YMCDI9Gqn5SHDD2GyClKoQXcQyq/8tyeq9ewvvfWPKF
+        igeMNaCSCgK7cESqsD4BkMkg9Q==
+X-Google-Smtp-Source: ABdhPJwkom0uuTtRSsvlyvDYFUcA87mN0YNXvKqstkNhDakeOds/pc5oYPozNb5OSZl9bi8HHhWbZQ==
+X-Received: by 2002:a9d:27a7:: with SMTP id c36mr24529265otb.59.1608072905203;
+        Tue, 15 Dec 2020 14:55:05 -0800 (PST)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id z38sm4437434ooi.34.2020.12.15.10.07.49
+        by smtp.gmail.com with ESMTPSA id 8sm58567oii.45.2020.12.15.14.55.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Dec 2020 10:07:50 -0800 (PST)
+        Tue, 15 Dec 2020 14:55:04 -0800 (PST)
+Date:   Tue, 15 Dec 2020 16:55:02 -0600
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Arnaud Pouliquen <arnaud.pouliquen@st.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: [GIT PULL] rpmsg updates for v5.11
-Date:   Tue, 15 Dec 2020 12:07:49 -0600
-Message-Id: <20201215180749.1528593-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.29.2
+To:     Rishabh Bhatnagar <rishabhb@codeaurora.org>
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tsoni@codeaurora.org, psodagud@codeaurora.org,
+        sidgup@codeaurora.org, elder@linaro.org
+Subject: Re: [PATCH] remoteproc: Create a separate workqueue for recovery
+ tasks
+Message-ID: <X9k+xmg9SULEbJXe@builder.lan>
+References: <1607806087-27244-1-git-send-email-rishabhb@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1607806087-27244-1-git-send-email-rishabhb@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The following changes since commit 3650b228f83adda7e5ee532e2b90429c03f7b9ec:
+On Sat 12 Dec 14:48 CST 2020, Rishabh Bhatnagar wrote:
 
-  Linux 5.10-rc1 (2020-10-25 15:14:11 -0700)
+> Create an unbound high priority workqueue for recovery tasks.
 
-are available in the Git repository at:
+This simply repeats $subject
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/rpmsg-v5.11
+> Recovery time is an important parameter for a subsystem and there
+> might be situations where multiple subsystems crash around the same
+> time.  Scheduling into an unbound workqueue increases parallelization
+> and avoids time impact.
 
-for you to fetch changes up to 950a7388f02bf775515d13dc508cb9d749bd6d91:
+You should be able to write this more succinctly. The important part is
+that you want an unbound work queue to allow recovery to happen in
+parallel - which naturally implies that you care about recovery latency.
 
-  rpmsg: Turn name service into a stand alone driver (2020-11-24 10:11:59 -0600)
+> Also creating a high priority workqueue
+> will utilize separate worker threads with higher nice values than
+> normal ones.
+> 
 
-----------------------------------------------------------------
-rpmsg updates for v5.11
+This doesn't describe why you need the higher priority.
 
-This extracts the "nameserver" previoiusly used only by the virtio rpmsg
-transport to work ontop of any rpmsg implementation and clarifies the
-endianness of the data types used in rpmsg.
 
-----------------------------------------------------------------
-Arnaud Pouliquen (4):
-      rpmsg: virtio: Rename rpmsg_create_channel
-      rpmsg: core: Add channel creation internal API
-      rpmsg: virtio: Add rpmsg channel device ops
-      rpmsg: Turn name service into a stand alone driver
+I believe, and certainly with the in-line coredump, that we're running
+our recovery work for way too long to be queued on the system_wq. As
+such the content of the patch looks good!
 
-Mathieu Poirier (4):
-      rpmsg: Introduce __rpmsg{16|32|64} types
-      rpmsg: virtio: Move from virtio to rpmsg byte conversion
-      rpmsg: Move structure rpmsg_ns_msg to header file
-      rpmsg: Make rpmsg_{register|unregister}_device() public
+Regards,
+Bjorn
 
- drivers/rpmsg/Kconfig            |   9 ++
- drivers/rpmsg/Makefile           |   1 +
- drivers/rpmsg/rpmsg_core.c       |  44 +++++++++
- drivers/rpmsg/rpmsg_internal.h   |  14 ++-
- drivers/rpmsg/rpmsg_ns.c         | 126 ++++++++++++++++++++++++++
- drivers/rpmsg/virtio_rpmsg_bus.c | 186 ++++++++++++++-------------------------
- include/linux/rpmsg.h            |  63 ++++++++++++-
- include/linux/rpmsg/byteorder.h  |  67 ++++++++++++++
- include/linux/rpmsg/ns.h         |  45 ++++++++++
- include/uapi/linux/rpmsg_types.h |  11 +++
- 10 files changed, 439 insertions(+), 127 deletions(-)
- create mode 100644 drivers/rpmsg/rpmsg_ns.c
- create mode 100644 include/linux/rpmsg/byteorder.h
- create mode 100644 include/linux/rpmsg/ns.h
- create mode 100644 include/uapi/linux/rpmsg_types.h
+> Signed-off-by: Rishabh Bhatnagar <rishabhb@codeaurora.org>
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 46c2937..8fd8166 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -48,6 +48,8 @@ static DEFINE_MUTEX(rproc_list_mutex);
+>  static LIST_HEAD(rproc_list);
+>  static struct notifier_block rproc_panic_nb;
+>  
+> +static struct workqueue_struct *rproc_wq;
+> +
+>  typedef int (*rproc_handle_resource_t)(struct rproc *rproc,
+>  				 void *, int offset, int avail);
+>  
+> @@ -2475,7 +2477,7 @@ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type)
+>  		rproc->name, rproc_crash_to_string(type));
+>  
+>  	/* create a new task to handle the error */
+> -	schedule_work(&rproc->crash_handler);
+> +	queue_work(rproc_wq, &rproc->crash_handler);
+>  }
+>  EXPORT_SYMBOL(rproc_report_crash);
+>  
+> @@ -2520,6 +2522,10 @@ static void __exit rproc_exit_panic(void)
+>  
+>  static int __init remoteproc_init(void)
+>  {
+> +	rproc_wq = alloc_workqueue("rproc_wq", WQ_UNBOUND | WQ_HIGHPRI, 0);
+> +	if (!rproc_wq)
+> +		return -ENOMEM;
+> +
+>  	rproc_init_sysfs();
+>  	rproc_init_debugfs();
+>  	rproc_init_cdev();
+> @@ -2536,6 +2542,7 @@ static void __exit remoteproc_exit(void)
+>  	rproc_exit_panic();
+>  	rproc_exit_debugfs();
+>  	rproc_exit_sysfs();
+> +	destroy_workqueue(rproc_wq);
+>  }
+>  module_exit(remoteproc_exit);
+>  
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
