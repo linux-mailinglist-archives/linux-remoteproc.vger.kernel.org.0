@@ -2,59 +2,190 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFC22DB92E
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Dec 2020 03:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBBE2DC38F
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Dec 2020 16:56:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725208AbgLPCdF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 15 Dec 2020 21:33:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47524 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725274AbgLPCdF (ORCPT
+        id S1726652AbgLPP4T (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 16 Dec 2020 10:56:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbgLPP4T (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 15 Dec 2020 21:33:05 -0500
-Subject: Re: [GIT PULL] hwspinlock updates for v5.11
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608085945;
-        bh=0jc66jFzW8IwJy88Jqa5L+zXZrM/HD+s5h8qkcliUdk=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=JTHicyGlmDuPFbGBi2O0jmLD9eqf4j/MC6i7jkgmIE0f8/6I61ioI0SFXfMg/irBD
-         Fn8FZ2CeVYcwRscBYVI6lzm9d/E8UiKxKhgAllM+N1CIVXh5aN9+WthteftXZCrAxR
-         HKEpl7fMegaHkaamnQJnntDec5RP5pX3k0AQmRwgyzq/WBcj37+z9TJ+772tjz/A1S
-         mzUUwcT2dwXOR+qXy799+ajFREBH26IpHf6b3RGSplx6kSwhD83tjp1yTCEoJjPPBP
-         H4FmrH4+FFHbNrcOCzYWlCdyHmA5CZdeTAAP0eWtszrcGH1Fr7suGy2Y0w14NRp/mG
-         GECCk9cQYZ3BA==
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20201215180735.1528535-1-bjorn.andersson@linaro.org>
-References: <20201215180735.1528535-1-bjorn.andersson@linaro.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20201215180735.1528535-1-bjorn.andersson@linaro.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/hwlock-v5.11
-X-PR-Tracked-Commit-Id: c3e9b463b41b45c4556a13043265097e2184226e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0e10f9c89332def4288b33866a1b793ffc94107b
-Message-Id: <160808594508.10422.4308407825889022330.pr-tracker-bot@kernel.org>
-Date:   Wed, 16 Dec 2020 02:32:25 +0000
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>
+        Wed, 16 Dec 2020 10:56:19 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F732C061794
+        for <linux-remoteproc@vger.kernel.org>; Wed, 16 Dec 2020 07:55:38 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id z11so22918439qkj.7
+        for <linux-remoteproc@vger.kernel.org>; Wed, 16 Dec 2020 07:55:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7Lrr0F4DYTiqu5q7pa2WeMJbEO+sTjt6K5vXhRq26Lw=;
+        b=ssigaWNbMLRE6xPkXPODGln3bD/p0Ti2op/Z+RZ8zwhLxxQcY1yRTnZljKZqHAjEkm
+         QOmCRdEa0jq6enFzV+KSakNFQ+1VnSoPJT77gjhWOJzYRyKpY8yJR0Cepk2awciumUye
+         lLL3NRZPQTTiGJxNaV2dyvgXPStX0xFYvSmrqkbOwRP26cAIhqeG0OQ79ryX//b2F0Ar
+         i4hdIKBoIrXGW6znwbGLMQ2BywBQfsft/uFntTs+i/5/Sm6kF9HibOtzOS13QSShBcIG
+         YuOOUdoBGXK8VP7DhrKJIK6vg9jWDxh5vzzT7VVXxDz6oxF7yQR/9h7BEkVHitJs46dq
+         uuKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7Lrr0F4DYTiqu5q7pa2WeMJbEO+sTjt6K5vXhRq26Lw=;
+        b=L7gmrgTTavCl88hdnFAcKGrv94wAV9TRY6bgbG/IgTNbl4iTVieRo+9u8LNKs3cROB
+         Ygg45pv6UY/l6A/KZJsw+JDWFFvqWLPnnn+VL5rAKAVPdnpflmxVIXly8w3KL/C+8Osr
+         ri3AvLVjl85a4WtYy4l1CeVGUCy0gnFFUR5nDWGAlWDLgcN2LYO9EbYSqCvMC4EcPeIZ
+         3cuBKbWniMmLbzioWW+jWqsjbRYTGO84avct8KO8TN6O3NQsDPTVM/Q6HHPMZS+QrEkf
+         /wkRkFMdX7P/o/UoAZYr1nsCGS5/3FypRFF3Z66CA/aq+XU/I8K7C2MRwz5E35V/3mwH
+         leaA==
+X-Gm-Message-State: AOAM533f872VXcLhsuBCB+I7rcwOhd3q5mX/FW4+kkaR+T7eXKFdOInE
+        A4/xXER3c445o2/5A4N8f5t4Ouj+7EhSjp08PQ5sOw==
+X-Google-Smtp-Source: ABdhPJz8IdFwoMCUGVhbIBauOoQfDl7hiHRrTFY6xSHTSAEoIDWiwK5tREXU/yHC+b+0r0lBo/fmh4QuarzKRUZLY7A=
+X-Received: by 2002:a37:7487:: with SMTP id p129mr43538264qkc.306.1608134137648;
+ Wed, 16 Dec 2020 07:55:37 -0800 (PST)
+MIME-Version: 1.0
+References: <20201211142933.25784-1-grzegorz.jaszczyk@linaro.org>
+ <20201211142933.25784-2-grzegorz.jaszczyk@linaro.org> <20201214225842.GA2537432@robh.at.kernel.org>
+In-Reply-To: <20201214225842.GA2537432@robh.at.kernel.org>
+From:   Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+Date:   Wed, 16 Dec 2020 16:55:26 +0100
+Message-ID: <CAMxfBF65ve2Pk5Uz5V1V_LfOLFUFKebVE8bzSjLT0nonuH8TDg@mail.gmail.com>
+Subject: Re: [PATCH 1/5] dt-bindings: remoteproc: Add PRU consumer bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Ohad Ben Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Anna, Suman" <s-anna@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-remoteproc@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "Bajjuri, Praneeth" <praneeth@ti.com>,
+        Roger Quadros <rogerq@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The pull request you sent on Tue, 15 Dec 2020 12:07:35 -0600:
+Hi Rob,
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/hwlock-v5.11
+On Mon, 14 Dec 2020 at 23:58, Rob Herring <robh@kernel.org> wrote:
+>
+> On Fri, Dec 11, 2020 at 03:29:29PM +0100, Grzegorz Jaszczyk wrote:
+> > From: Suman Anna <s-anna@ti.com>
+> >
+> > Add a YAML binding document for PRU consumers. The binding includes
+> > all the common properties that can be used by different PRU consumer
+> > or application nodes and supported by the PRU remoteproc driver.
+> > These are used to configure the PRU hardware for specific user
+> > applications.
+> >
+> > The application nodes themselves should define their own bindings.
+> >
+> > Co-developed-by: Tero Kristo <t-kristo@ti.com>
+> > Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> > Signed-off-by: Suman Anna <s-anna@ti.com>
+> > Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> > Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> > ---
+> >  .../bindings/remoteproc/ti,pru-consumer.yaml  | 64 +++++++++++++++++++
+> >  1 file changed, 64 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> > new file mode 100644
+> > index 000000000000..2c5c5e2b6159
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> > @@ -0,0 +1,64 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Common TI PRU Consumer Binding
+> > +
+> > +maintainers:
+> > +  - Suman Anna <s-anna@ti.com>
+> > +
+> > +description: |
+> > +  A PRU application/consumer/user node typically uses one or more PRU device
+> > +  nodes to implement a PRU application/functionality. Each application/client
+> > +  node would need a reference to at least a PRU node, and optionally define
+> > +  some properties needed for hardware/firmware configuration. The below
+> > +  properties are a list of common properties supported by the PRU remoteproc
+> > +  infrastructure.
+> > +
+> > +  The application nodes shall define their own bindings like regular platform
+> > +  devices, so below are in addition to each node's bindings.
+> > +
+> > +properties:
+> > +  prus:
+>
+> ti,prus
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0e10f9c89332def4288b33866a1b793ffc94107b
+Thank you - I will change and post v2 but with this I will run into
+issues when this binding will be referenced by some consumer YAML
+binding. Running dtbs_check in such case throws:
+... k3-am654-base-board.dt.yaml: serial@28000: 'ti,prus' does not
+match any of the regexes: 'pinctrl-[0-9]+'
+In the same time if I will remove this property from that node I am getting:
+... k3-am654-base-board.dt.yaml: serial@28000: 'ti,prus' is a required property
+as expected.
 
-Thank you!
+Getting rid of the comma from this property name workarounds mentioned
+problem (which is not proper but allows me to correctly test this
+binding): e.g. s/ti,prus/ti-pruss/ or using the previous name without
+a comma.
+It seems to be an issue with dtbs_check itself which we will encounter
+in the future.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Best regards,
+Grzegorz
+
+>
+> > +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > +    description: phandles to the PRU, RTU or Tx_PRU nodes used
+> > +
+> > +  firmware-name:
+> > +    $ref: /schemas/types.yaml#/definitions/string-array
+> > +    description: |
+> > +      firmwares for the PRU cores, the default firmware for the core from
+> > +      the PRU node will be used if not provided. The firmware names should
+> > +      correspond to the PRU cores listed in the 'prus' property
+> > +
+> > +  ti,pruss-gp-mux-sel:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +    enum: [0, 1, 2, 3, 4]
+> > +    description: |
+> > +      array of values for the GP_MUX_SEL under PRUSS_GPCFG register for a PRU.
+> > +      This selects the internal muxing scheme for the PRU instance. Values
+> > +      should correspond to the PRU cores listed in the 'prus' property. The
+> > +      GP_MUX_SEL setting is a per-slice setting (one setting for PRU0, RTU0,
+> > +      and Tx_PRU0 on K3 SoCs). Use the same value for all cores within the
+> > +      same slice in the associative array. If the array size is smaller than
+> > +      the size of 'prus' property, the default out-of-reset value (0) for the
+> > +      PRU core is used.
+> > +
+> > +required:
+> > +  - prus
+> > +
+> > +dependencies:
+> > +  firmware-name: [ prus ]
+> > +  ti,pruss-gp-mux-sel: [ prus ]
+> > +
+> > +additionalProperties: true
+> > +
+> > +examples:
+> > +  - |
+> > +    /* PRU application node example */
+> > +    pru-app {
+> > +        prus = <&pru0>, <&pru1>;
+> > +        firmware-name = "pruss-app-fw0", "pruss-app-fw1";
+> > +        ti,pruss-gp-mux-sel = <2>, <1>;
+> > +    };
+> > --
+> > 2.29.0
+> >
