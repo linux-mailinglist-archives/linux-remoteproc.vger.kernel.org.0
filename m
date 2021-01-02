@@ -2,180 +2,138 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 060472E81BF
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 31 Dec 2020 20:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB4F2E8897
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  2 Jan 2021 22:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726317AbgLaTPn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 31 Dec 2020 14:15:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38266 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726210AbgLaTPn (ORCPT
+        id S1726699AbhABVAf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 2 Jan 2021 16:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726667AbhABU76 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 31 Dec 2020 14:15:43 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6212F2078D;
-        Thu, 31 Dec 2020 19:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1609442101;
-        bh=9zoM/7G7js3JqYInb1BS1ScayBgVQxVJWIjM4J6DmSY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TGxZU6X2YVV9phxSKoDhqVgV3tv5+qOEsz2nZ9qC3zexMqGLPYpd/f2zQV3wH8Om1
-         6exJL9Qqb+UWerLTEhI1jJNo5e6P/D27sjyFcUeU7Vi6B1NTBFYkikNqp0kWbziYv3
-         V7QYD3pWltIFJRkrcbdrTQWfu9jhplZRnpMXDcw8s4WMB5YBuok943wV6lxLebqXef
-         0w8aO7xcFwi0DG643ijYdmhUDmZSIsnz1bnIUK92ivX0p1+idjRVqY6QsNtORNjl7X
-         oaEw9GA11i34/CiTSrdAB2wh0utMMB0sfXbB6nWxLJvYkcF8Ihzr+hbqoCdTGdXTDv
-         taUDsO8v+pk+g==
-Received: by mail-ej1-f44.google.com with SMTP id n26so26279347eju.6;
-        Thu, 31 Dec 2020 11:15:01 -0800 (PST)
-X-Gm-Message-State: AOAM530vyWTVSrUZUEV34UOAsrmdJ1nkdTPP+VdIdjKZVunbaMRXI5bO
-        dNwbZGClj9xVYzFdtqWpOfQhT2BD9smNBUEbAA==
-X-Google-Smtp-Source: ABdhPJyQ7WBlxre6XJVdjyLF/2wFIDim27bM3bkbje9oeTHcsPkTbkMzDGQfDN+T5fVAZVB+GL+3CAskssn7ou4WjLM=
-X-Received: by 2002:a17:906:d784:: with SMTP id pj4mr52904735ejb.360.1609442099991;
- Thu, 31 Dec 2020 11:14:59 -0800 (PST)
+        Sat, 2 Jan 2021 15:59:58 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8BCC0613C1;
+        Sat,  2 Jan 2021 12:59:17 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id 6so31447622ejz.5;
+        Sat, 02 Jan 2021 12:59:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZXTaInf+Yo5LsKCyI11wuDAzV+8zs5s3fKU7mcWEjLM=;
+        b=iMtMm8AENs9yq4HSoLVRH5uCuHA4CxeZ7ZjC6hsG46JVXFGIggBgB1Chn/sx83BQDB
+         EifmK1hdCuB5Zf2++3WS7V5cs2jOIwFblHALQnONN69vTDSE+1wsqhkLIV3zHsrVMjYS
+         R+aKPeLJGUBw6u5eYuPHVrFonNMaLvdxRtkeBQ/jEpGNOewxWC1CgJ2q4iixzxvUzwu2
+         zN774PybVeaky+S46eAzr2xs+AHbWsUAL5tv2qs0br7YcekHnpH00dQSXGc1rF4qeU2E
+         n95MoM3+vjAh92+OLyYcjp91QsKh6g1TqrHgdU6z2kC4SN5LEN8BovBs8B9WmAJ9Xa6a
+         M+KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZXTaInf+Yo5LsKCyI11wuDAzV+8zs5s3fKU7mcWEjLM=;
+        b=Lkk0nX4qbx7+vsriw/GK0kxZlmAvcGVybHUEY/Kf8gO+j7MNDAyheF83RXqEdj1zHS
+         sMT0UoegFnMMPlmgjHFMPRyX0zZIh/UCdXcKNOxhLc3uKwu4pzRvTaMj7CgkOOoq4E1D
+         YquqW/hJOdMv1iSTjU0AZdgQvPcxKXsdWpSug865pmpmwEumcUbXC7Mi89gsbH+8RBYn
+         OGpfvsZ3eu8+rqeYibwMjo5L3TIy1mgP63+2X9pobfeGMCvXvWxRcseVFzXqN0+SyGI4
+         hvbOM4Swn/yXUPyVDYsIDhNr+y70cQ5IX5UzQAka0Wf8jeFUo8hTJPGdEXuLCmItC1Ha
+         dRcQ==
+X-Gm-Message-State: AOAM532NcH5OzAfg4iQpxmZshBwP5eHzUYqnWKaAInsu5TCGTHWguB69
+        plRCDtfKKn4a/oCVUkczWoL91Gq5/Xc=
+X-Google-Smtp-Source: ABdhPJzosbgg4ui+GXvaroIAhnbnYvuiBqMtlxkx3Df4uX6nAlSVLgQ1IV+RkkHV0fcRbc7EjNG/7A==
+X-Received: by 2002:a17:906:9250:: with SMTP id c16mr62319967ejx.355.1609621155067;
+        Sat, 02 Jan 2021 12:59:15 -0800 (PST)
+Received: from localhost.localdomain (p200300f13724fd00428d5cfffeb99db8.dip0.t-ipconnect.de. [2003:f1:3724:fd00:428d:5cff:feb9:9db8])
+        by smtp.googlemail.com with ESMTPSA id v18sm41420617edx.30.2021.01.02.12.59.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Jan 2021 12:59:14 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-remoteproc@vger.kernel.org, linux-amlogic@lists.infradead.org
+Cc:     ohad@wizery.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 0/5] Amlogic Meson Always-On ARC remote-processor support
+Date:   Sat,  2 Jan 2021 21:58:59 +0100
+Message-Id: <20210102205904.2691120-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-References: <20201211142933.25784-1-grzegorz.jaszczyk@linaro.org>
- <20201211142933.25784-2-grzegorz.jaszczyk@linaro.org> <20201214225842.GA2537432@robh.at.kernel.org>
- <CAMxfBF65ve2Pk5Uz5V1V_LfOLFUFKebVE8bzSjLT0nonuH8TDg@mail.gmail.com>
- <CAL_JsqKpzZvdWJodzbqQBLZ-v98n3KaoTaYM-0iQ-_71hCbW8Q@mail.gmail.com> <CAMxfBF5q2hjiYANZNtxz-PD=pR73EpXBpnWuB4dqXD1a=f2=gg@mail.gmail.com>
-In-Reply-To: <CAMxfBF5q2hjiYANZNtxz-PD=pR73EpXBpnWuB4dqXD1a=f2=gg@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Thu, 31 Dec 2020 12:14:48 -0700
-X-Gmail-Original-Message-ID: <CAL_Jsq+W8GuqKdqSxt7bKcfpK3Wg35V9R-3+UzNi_+3uRqA=AQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+W8GuqKdqSxt7bKcfpK3Wg35V9R-3+UzNi_+3uRqA=AQ@mail.gmail.com>
-Subject: Re: [PATCH 1/5] dt-bindings: remoteproc: Add PRU consumer bindings
-To:     Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Cc:     Ohad Ben Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Anna, Suman" <s-anna@ti.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        "Bajjuri, Praneeth" <praneeth@ti.com>,
-        Roger Quadros <rogerq@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Dec 22, 2020 at 8:57 AM Grzegorz Jaszczyk
-<grzegorz.jaszczyk@linaro.org> wrote:
->
-> Hi Rob,
->
-> On Fri, 18 Dec 2020 at 23:51, Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Wed, Dec 16, 2020 at 9:55 AM Grzegorz Jaszczyk
-> > <grzegorz.jaszczyk@linaro.org> wrote:
-> > >
-> > > Hi Rob,
-> > >
-> > > On Mon, 14 Dec 2020 at 23:58, Rob Herring <robh@kernel.org> wrote:
-> > > >
-> > > > On Fri, Dec 11, 2020 at 03:29:29PM +0100, Grzegorz Jaszczyk wrote:
-> > > > > From: Suman Anna <s-anna@ti.com>
-> > > > >
-> > > > > Add a YAML binding document for PRU consumers. The binding includes
-> > > > > all the common properties that can be used by different PRU consumer
-> > > > > or application nodes and supported by the PRU remoteproc driver.
-> > > > > These are used to configure the PRU hardware for specific user
-> > > > > applications.
-> > > > >
-> > > > > The application nodes themselves should define their own bindings.
-> > > > >
-> > > > > Co-developed-by: Tero Kristo <t-kristo@ti.com>
-> > > > > Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> > > > > Signed-off-by: Suman Anna <s-anna@ti.com>
-> > > > > Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> > > > > Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> > > > > ---
-> > > > >  .../bindings/remoteproc/ti,pru-consumer.yaml  | 64 +++++++++++++++++++
-> > > > >  1 file changed, 64 insertions(+)
-> > > > >  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> > > > > new file mode 100644
-> > > > > index 000000000000..2c5c5e2b6159
-> > > > > --- /dev/null
-> > > > > +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> > > > > @@ -0,0 +1,64 @@
-> > > > > +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
-> > > > > +%YAML 1.2
-> > > > > +---
-> > > > > +$id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
-> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > > +
-> > > > > +title: Common TI PRU Consumer Binding
-> > > > > +
-> > > > > +maintainers:
-> > > > > +  - Suman Anna <s-anna@ti.com>
-> > > > > +
-> > > > > +description: |
-> > > > > +  A PRU application/consumer/user node typically uses one or more PRU device
-> > > > > +  nodes to implement a PRU application/functionality. Each application/client
-> > > > > +  node would need a reference to at least a PRU node, and optionally define
-> > > > > +  some properties needed for hardware/firmware configuration. The below
-> > > > > +  properties are a list of common properties supported by the PRU remoteproc
-> > > > > +  infrastructure.
-> > > > > +
-> > > > > +  The application nodes shall define their own bindings like regular platform
-> > > > > +  devices, so below are in addition to each node's bindings.
-> > > > > +
-> > > > > +properties:
-> > > > > +  prus:
-> > > >
-> > > > ti,prus
-> > >
-> > > Thank you - I will change and post v2 but with this I will run into
-> > > issues when this binding will be referenced by some consumer YAML
-> > > binding. Running dtbs_check in such case throws:
-> > > ... k3-am654-base-board.dt.yaml: serial@28000: 'ti,prus' does not
-> > > match any of the regexes: 'pinctrl-[0-9]+'
-> > > In the same time if I will remove this property from that node I am getting:
-> > > ... k3-am654-base-board.dt.yaml: serial@28000: 'ti,prus' is a required property
-> > > as expected.
-> >
-> > Sounds like you didn't update 'ti,prus' in whatever schema you include
-> > this one from.
-> >
-> > >
-> > > Getting rid of the comma from this property name workarounds mentioned
-> > > problem (which is not proper but allows me to correctly test this
-> > > binding): e.g. s/ti,prus/ti-pruss/ or using the previous name without
-> > > a comma.
-> > > It seems to be an issue with dtbs_check itself which we will encounter
-> > > in the future.
-> >
-> > If not, can you point me to a branch having this problem.
->
-> Sure, here is temporary branch with 4 last commits demonstrating
-> mentioned issues (when property name contains comma):
-> https://git.linaro.org/people/grzegorz.jaszczyk/linux.git/log/?h=ti-pruss-binding-issue
->
-> The last commit gets rid of the comma from properties names which
-> successfully w/a the problem.
->
-> Please note that those are only TEMP commits which demonstrates the
-> mentioned issue. I've put error logs with some notes in commit log to
-> ease understanding what issues are seen when.
+Amlogic Meson6/8/8b/8m2 come with an ARC core in the Always-On (AO)
+power-domain. This is typically used for waking up the ARM CPU after
+powering it down for system suspend.
 
-The problem is any property with a vendor prefix has to define a type.
-There's not a way to define a 'common vendor property' and distinguish
-both cases in the meta-schemas. I'd like to come up with a more robust
-mechanism where we just detect if a property has a defined type or
-not. It should be possible to extract that. (Related, I also want to
-check for conflicting types.)
+The exact ARC core used on Meson6 and earlier is not known. I believe
+it is an ARC625, but I am not sure about this. Meson8/8b/8m2 uses an
+ARC EM4 core.
+They all have in common that they use a section of the SoCs SRAM for
+running code on the ARC core.
 
-How many cases of 'ti,prus' do you expect to have and what's the range
-of number of phandles? Either you should just not have the common
-schema and just define the properties in each consumer or don't put
-additional constraints into the consumer schemas (i.e omit the
-properties in 'properties' and use 'unevaluatedProperties').
+Unfortunately there's no information about the remote-processor control
+registers in the public Meson8b (S805) datasheet. All information is
+either taken from Amlogic's 3.10 kernel and 2011-03 u-boot or found by
+testing (for example the clock input is not mentioned anywhere in the
+reference code, but disabling it stops the AO ARC core from working).
 
-Also, I think you can get rid of 'ti,pruss-gp-mux-sel'. Can't it just
-be an arg cell in 'ti,prus' entries?
+This series consists of five patches:
+ 1: dt-bindings for the SRAM section
+ 2: dt-bindings for the SECBUS2 syscon region which contains a few
+    bits for controlling this remote processor
+ 3: dt-bindings for the AO ARC remote processor
+ 4: the driver for booting code on the AO ARC remote processor
+ 5: (only included for documentation purposes) dts changes (these will
+    be re-sent separately)
 
-Rob
+Patches #3 and #4 should go through the remoteproc tree. Patches #1
+and #2 may go through Rob's (devicetree) tree, Kevin's linux-amlogic
+tree or through the remoteproc tree. Personally I have no preference
+here.
+
+To test this series I ported the Amlogic serial driver and added the
+board files for the Amlogic AO ARC EM4 to the Zephyr RTOS. The code can
+be found here: [0] (the resulting zephyr.elf can then be loaded as
+remote-processor firmware from Linux).
+
+
+Changes since v1 at [1]:
+- fixed yamllint warnings (after installing the package these now also
+  show up on my build machine) in patches #2 and #3. Thanks for the
+  hint Rob
+- dropped the explicit "select" statement from the dt-bindings in patch
+  #2 as suggested by Rob (thanks)
+
+
+[0] https://github.com/xdarklight/zephyr-rtos/commits/amlogic_ao_em4-20201229
+[1] https://patchwork.kernel.org/project/linux-amlogic/list/?series=407349
+
+
+Martin Blumenstingl (5):
+  dt-bindings: sram: Add compatible strings for the Meson AO ARC SRAM
+  dt-bindings: Amlogic: add the documentation for the SECBUS2 registers
+  dt-bindings: remoteproc: Add the documentation for Meson AO ARC rproc
+  remoteproc: meson-mx-ao-arc: Add a driver for the AO ARC remote
+    procesor
+  ARM: dts: meson: add the AO ARC remote processor
+
+ .../arm/amlogic/amlogic,meson-mx-secbus2.yaml |  42 +++
+ .../remoteproc/amlogic,meson-mx-ao-arc.yaml   |  87 +++++++
+ .../devicetree/bindings/sram/sram.yaml        |   2 +
+ arch/arm/boot/dts/meson.dtsi                  |   7 +
+ arch/arm/boot/dts/meson8.dtsi                 |  21 ++
+ arch/arm/boot/dts/meson8b.dtsi                |  21 ++
+ drivers/remoteproc/Kconfig                    |  11 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/meson_mx_ao_arc.c          | 240 ++++++++++++++++++
+ 9 files changed, 432 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/amlogic/amlogic,meson-mx-secbus2.yaml
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/amlogic,meson-mx-ao-arc.yaml
+ create mode 100644 drivers/remoteproc/meson_mx_ao_arc.c
+
+-- 
+2.30.0
+
