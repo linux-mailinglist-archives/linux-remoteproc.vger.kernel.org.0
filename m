@@ -2,93 +2,78 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D28A2E9BD5
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  4 Jan 2021 18:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1D0B2E9EC6
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  4 Jan 2021 21:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbhADRRB (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 4 Jan 2021 12:17:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726896AbhADRRB (ORCPT
+        id S1728057AbhADUVh (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 4 Jan 2021 15:21:37 -0500
+Received: from vern.gendns.com ([98.142.107.122]:50040 "EHLO vern.gendns.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727783AbhADUVh (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 4 Jan 2021 12:17:01 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A26C061793
-        for <linux-remoteproc@vger.kernel.org>; Mon,  4 Jan 2021 09:16:20 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id v19so19427116pgj.12
-        for <linux-remoteproc@vger.kernel.org>; Mon, 04 Jan 2021 09:16:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jjOs6LGR9BzFtb9WyecLB0AUz/XSu0O5wA5oQbJ4FlM=;
-        b=lOo/XzwqYMVGKsrTCZPlZXtQTRkReKeLcybKCge7YWK2zggLKwH3k6u6GW3L9CpWID
-         iL95BzJHXXMHXpPQ4xJyCz6JeBOZRgjOkUaPMjqdpJhoTI6uK6wf4ssQAKYnp66Paj4T
-         /7hzfwGHC1dQk5qIDdRWdRwdWivoYJ09z/s4ESi0GWfMyArTp6Qz2IM+Qq1KPl10Cbzk
-         MnCJa1SxiWSwBr74CV8CSTgDTOWn13bPNH6Mr9WiN82MTAyqibiyc61MHzjzD9QK7Qoa
-         uc5zkKW8mw6DZ817I82nBDXSK/08sRQL2hE2lrQ2isn8SdevqK8FwyvIcxeu7GJiwxIq
-         0fKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jjOs6LGR9BzFtb9WyecLB0AUz/XSu0O5wA5oQbJ4FlM=;
-        b=alhvshnQoAxx6ucjmkrdtTsq4rCAG+qRmLdawGIhmmiRI92WQO7AWNmDBKgIUhm0eX
-         f/AN0qHPnVJtGKRx1bYye+CO8dOXkTm6AgHxQEc/ApfyMxTssqXtIeaVhF3fx1F9pzxw
-         0FMXxtqiuW170LUZf0qqP9ALBiKwCS31+yfmQuxtyfwFGX5b/pLv8qFRqZ+K3Ui4DHD+
-         B3SMiyugDGOSpFuiiWf7q2pOWez9o8vsdqIFBmn33PGOmzSzyAUiH1X2wCTcz+HFsWah
-         YOpLx7PRadDdWVGmrymZ3jgWzlCrzNfJC0ovsA5opCJ9bo5w3ERwwD5l1xTR6njxdcEH
-         QIAg==
-X-Gm-Message-State: AOAM533PYqkn1bdBhHti8Pob0IHjy9ofxCodpWyFqXLrV8j8d7NGmwz5
-        eABo6ulWgAym48HDpWeDBbTv1cqRUzYOUA==
-X-Google-Smtp-Source: ABdhPJwEE5CG603nglRi/PhtwYgUwWCBOcj6TL6PDpX2sU/fBvE/ZNVz9xqabNiYEhnD507/ptg+Tw==
-X-Received: by 2002:aa7:810a:0:b029:1a6:501b:19ed with SMTP id b10-20020aa7810a0000b02901a6501b19edmr45701657pfi.17.1609780580403;
-        Mon, 04 Jan 2021 09:16:20 -0800 (PST)
-Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id o140sm55920429pfd.26.2021.01.04.09.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Jan 2021 09:16:19 -0800 (PST)
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: Add co-maintainer for remoteproc/RPMSG subsystems
-Date:   Mon,  4 Jan 2021 10:16:18 -0700
-Message-Id: <20210104171618.2702461-1-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Mon, 4 Jan 2021 15:21:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:Subject:From:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=bJlwvAcTP6n9JlqTMododdUIqadilk9NCyhFDpB28QM=; b=oejsnWkewMFuL0K3OfU/1ZVdud
+        lHDUUVgj8utlNwF/oaBQQ28cGZGupfAkluRFJd71E2ux0p081glR2WFV3O2JM9Tvo1so8ZdS8CyiD
+        fcKkn75N3GUW08mEzKm/dpbf/pvNuVGcuImrHc4qfrw2kV33ofJznQPFHnTifVfbgd97485j1FFka
+        0xh0ed5I+cw0SZAh1BcPnxPs+/jn62KwkNAtdkilq10Q1MQqpMyaFibef0cTjB0ehy3JuH1/gbqVT
+        RD61ieBYnKDv7BsdLYDEGVWh9Yen4dlh6wfwGUjHTteM7Tz9sSkacC73gv4gtWEg4QbGxRCauHUkY
+        7EYJLm0A==;
+Received: from 108-198-5-147.lightspeed.okcbok.sbcglobal.net ([108.198.5.147]:53450 helo=[192.168.0.134])
+        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <david@lechnology.com>)
+        id 1kwVxT-0008EX-4A; Mon, 04 Jan 2021 14:56:03 -0500
+From:   David Lechner <david@lechnology.com>
+Subject: Re: [PATCH 1/5] dt-bindings: remoteproc: Add PRU consumer bindings
+To:     robh@kernel.org
+Cc:     bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
+        grzegorz.jaszczyk@linaro.org, lee.jones@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        mathieu.poirier@linaro.org, ohad@wizery.com, praneeth@ti.com,
+        rogerq@ti.com, s-anna@ti.com, ssantosh@kernel.org
+References: <CAL_Jsq+W8GuqKdqSxt7bKcfpK3Wg35V9R-3+UzNi_+3uRqA=AQ@mail.gmail.com>
+Message-ID: <4fd5d68a-830a-83df-fc7a-1070e2619a86@lechnology.com>
+Date:   Mon, 4 Jan 2021 13:56:01 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_Jsq+W8GuqKdqSxt7bKcfpK3Wg35V9R-3+UzNi_+3uRqA=AQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - vern.gendns.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lechnology.com
+X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-After discussing with Bjorn, stepping forward to help with the
-maintenance of the remoteproc and RPMSG subsystems.
 
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+> Also, I think you can get rid of 'ti,pruss-gp-mux-sel'. Can't it just
+> be an arg cell in 'ti,prus' entries?
+> 
+> Rob
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6eff4f720c72..6fa304038f2d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15087,6 +15087,7 @@ F:	fs/reiserfs/
- REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM
- M:	Ohad Ben-Cohen <ohad@wizery.com>
- M:	Bjorn Andersson <bjorn.andersson@linaro.org>
-+M:	Mathieu Poirier <mathieu.poirier@linaro.org>
- L:	linux-remoteproc@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git rproc-next
-@@ -15100,6 +15101,7 @@ F:	include/linux/remoteproc/
- REMOTE PROCESSOR MESSAGING (RPMSG) SUBSYSTEM
- M:	Ohad Ben-Cohen <ohad@wizery.com>
- M:	Bjorn Andersson <bjorn.andersson@linaro.org>
-+M:	Mathieu Poirier <mathieu.poirier@linaro.org>
- L:	linux-remoteproc@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git rpmsg-next
--- 
-2.25.1
++1 for using cells instead of a separate property.
 
+FYI, we will have a similar issue with the PRUSSEVTSEL signal for the
+interrupt controller on the AM18XX. I am still of the opinion (described
+in more detail at [1]) that using a cell for this makes for both better
+device tree bindings and easier driver implementation. So I am interested
+to see what the resolution is here.
+
+[1]: https://patchwork.kernel.org/project/linux-arm-kernel/patch/20190708035243.12170-5-s-anna@ti.com/
