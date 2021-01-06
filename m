@@ -2,98 +2,92 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 925302EB7D4
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  6 Jan 2021 02:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D672C2EB82A
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  6 Jan 2021 03:40:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbhAFB4S (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 5 Jan 2021 20:56:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51952 "EHLO
+        id S1726499AbhAFCjf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 5 Jan 2021 21:39:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbhAFB4R (ORCPT
+        with ESMTP id S1726171AbhAFCje (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 5 Jan 2021 20:56:17 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 227A9C061382;
-        Tue,  5 Jan 2021 17:55:37 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id b5so770884pjk.2;
-        Tue, 05 Jan 2021 17:55:37 -0800 (PST)
+        Tue, 5 Jan 2021 21:39:34 -0500
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6300DC06134F
+        for <linux-remoteproc@vger.kernel.org>; Tue,  5 Jan 2021 18:38:16 -0800 (PST)
+Received: by mail-io1-xd32.google.com with SMTP id q137so1387077iod.9
+        for <linux-remoteproc@vger.kernel.org>; Tue, 05 Jan 2021 18:38:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=M2SnuavxPcXUJasCexKnjXWwhRBi46twzYFZCFVtxIA=;
-        b=jaDmkjxUvv933vnXaE4le+w+4C0Bd4foHxhGcP6dcW/tNQyBdvdC1uMwWxXqUJtanL
-         h/JnWWeoprKpQ5HR8NxHvwUySBVL7w0jELn2jUrKjC7FlK89tbyez+y1IiScIIvPhxc8
-         AiXvSOYqXH3Np15o8MSmUnThKxABfQxLT4vZq83I3lWVJISw1kh2vfPKoNvJc1xvaOJB
-         fEPXTm6XgOztjw7QJS08uxTdw6zqn8T3nnquHMHqFjI5ukqv+HRTwSJmCpQOx1bV3Xkd
-         NG2cHtrZOP+7buEgNt6n5rNGFG8hzxitWbJV1V3FRmCJPCs/DS99SJmJmqTU06qHid4e
-         DJsw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FprZVVjHWClp4VohDC7RbHGxUkIy86bNYcrNdkcWEq8=;
+        b=zueZzXDY6pjPDUB3+sujDQ5uZGOiDuLJpxMkfjcSJ/iX0tSJjxU63hioGWp+S/dcHN
+         1ZNaTrJERtbv1xFZDuKvblHoB5E2BWGntK84/VZzPvWnMTJqVRtC4+Gk7j1sEQ7pNeJR
+         kawtI8pME6V8vkjetmHSYKBaX5/5l4vw+xoSf0eaeKuEwJYAxWzmDyJsXKOUVOhMvkwt
+         nHqFuz9CazeHTFUcB1q3UmpmKMniUzimhUm1nFANP7fuARC10Ho47YiTvc1n7Qb1qkLK
+         nByXp0fv5baQIs91agseAPCEfSnkB1Qp9YJ/puLcsT3lSKSYx76RsE1qlPMdnVBUc/Gy
+         V4pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=M2SnuavxPcXUJasCexKnjXWwhRBi46twzYFZCFVtxIA=;
-        b=Gm4NK1HjAkIyZFrndQ4RKI0zXoUbRudM6Lpluk6pub1t8h/Vq6MjsNUKWhXzdb/k4i
-         fgUDbhR12HmfZB5qdgRnEIf8lqAV3+m3ywDb1jda2G5wuo2jRUQTG3dgUuhUitJsm2h7
-         O2wTqqrcizMbELImebwFqAWTn8qL052zC0zIgnvMpyXc01XRGyTpvbj7Wtzm23AXqVjq
-         rBqHMChSQlG4zwzoz/V8QfhwLUN8cz32BmLUOhXFbKcJerrajq8PHPd3qbwHO+P3Fmbj
-         gpIAySaZ8EUdr5+qKPYV1vXxSAxuJqE897Rt9papNXkiuWTUCUinzqu8UwH9rSbeFbZl
-         j2jQ==
-X-Gm-Message-State: AOAM5335hddFYcwt693gwDcgKmDbd9S+lEdw6CiNR0Y3lo5vJe4R8b/+
-        Sf/5sOuuL5PjHb5t9X2s9JfibKu+uNA=
-X-Google-Smtp-Source: ABdhPJyBKCiWl8KqpA3d/9qhuLzYJM2/8URZ+PH/AyWme2ojcsE4nRsA6SZa1w/6+Y6vqjUiBP87Hg==
-X-Received: by 2002:a17:902:6e02:b029:dc:8e14:a928 with SMTP id u2-20020a1709026e02b02900dc8e14a928mr1938073plk.24.1609898136435;
-        Tue, 05 Jan 2021 17:55:36 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id gm18sm425052pjb.55.2021.01.05.17.55.33
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FprZVVjHWClp4VohDC7RbHGxUkIy86bNYcrNdkcWEq8=;
+        b=geIc/L20pTDzecVO1nU0iN7HVwF2nMxdlN5zwp4Qj2RYidDyiRz7Tjp1NDOZdG/ve+
+         S8BUz5p37/JV3uOkLVum8U1iUtvOC44GPhtY8izgd4Ipm2oaed14cLCXfULRdBNdvGbi
+         cAuiEjDdOxlTJJvLQ6zzwpRiKR5MzShEfhXfVHXCps3A5ywFAF0QjUdJOKxyRGLQPjKo
+         iuRj1rVISvXJg86E+G7srp7FS2/XiWvmlsALd3k2b4fjdFvIAX8UnlVq7zH2rnDlx4NN
+         T3KNiF8S5i/ym5D/xIUFEjnoVBZunuW2+WPyLf+0tyCn9NhYgQVeGFs9mMiWPt96F1oZ
+         O0MQ==
+X-Gm-Message-State: AOAM531MWYUAWxqvi2Os1QBHfLxvkxqHolbjitu1PaQiP7XbLzaiB/x1
+        ybrQwcpdOSo7gXXIJvzwWEiExw==
+X-Google-Smtp-Source: ABdhPJxVKl1PVA4lvMThTDUj6ztVYEAs4ympo6aqd7rVbQrKTcxfDjebXjzflktSAlazPE9RRyYOSQ==
+X-Received: by 2002:a05:6602:59e:: with SMTP id v30mr1528894iox.37.1609900695619;
+        Tue, 05 Jan 2021 18:38:15 -0800 (PST)
+Received: from beast.localdomain (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.gmail.com with ESMTPSA id x2sm631755ior.42.2021.01.05.18.38.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Jan 2021 17:55:35 -0800 (PST)
-Date:   Tue, 5 Jan 2021 17:55:31 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Add missing array size constraints
-Message-ID: <X/UYk4RESSfjCIPI@google.com>
-References: <20210104230253.2805217-1-robh@kernel.org>
+        Tue, 05 Jan 2021 18:38:14 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, kuba@kernel.org, bjorn.andersson@linaro.org,
+        agross@kernel.org, ohad@wizery.com
+Cc:     evgreen@chromium.org, cpratapa@codeaurora.org,
+        subashab@codeaurora.org, netdev@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 0/3] net: ipa: support COMPILE_TEST
+Date:   Tue,  5 Jan 2021 20:38:09 -0600
+Message-Id: <20210106023812.2542-1-elder@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210104230253.2805217-1-robh@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, Jan 04, 2021 at 04:02:53PM -0700, Rob Herring wrote:
->  .../input/touchscreen/elan,elants_i2c.yaml    |  1 +
+This series adds the IPA driver as a possible target when
+the COMPILE_TEST configuration is enabled.  Two small changes to
+dependent subsystems needed to be made for this to work.
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+David/Jakub, it would be best to take all three of these patches
+through the same tree.  I have discussed this with Bjorn and he
+agreed to ack them, and I request that you take them through
+net-next.
+
+Thanks.
+
+					-Alex
+
+Alex Elder (3):
+  remoteproc: qcom: expose types for COMPILE_TEST
+  soc: qcom: mdt_loader: define stubs for COMPILE_TEST
+  net: ipa: support COMPILE_TEST
+
+ drivers/net/ipa/Kconfig               | 10 +++++---
+ include/linux/remoteproc/qcom_rproc.h |  4 +--
+ include/linux/soc/qcom/mdt_loader.h   | 35 +++++++++++++++++++++++++++
+ 3 files changed, 43 insertions(+), 6 deletions(-)
 
 -- 
-Dmitry
+2.20.1
+
