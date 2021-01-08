@@ -2,218 +2,135 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FF892EEE79
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Jan 2021 09:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E402EF9E1
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Jan 2021 22:05:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727396AbhAHITS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 8 Jan 2021 03:19:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725793AbhAHITS (ORCPT
+        id S1729437AbhAHVD7 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 8 Jan 2021 16:03:59 -0500
+Received: from m43-15.mailgun.net ([69.72.43.15]:22122 "EHLO
+        m43-15.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728614AbhAHVD7 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 8 Jan 2021 03:19:18 -0500
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5081C0612FE
-        for <linux-remoteproc@vger.kernel.org>; Fri,  8 Jan 2021 00:18:08 -0800 (PST)
-Received: by mail-qt1-x84a.google.com with SMTP id l7so7744701qth.15
-        for <linux-remoteproc@vger.kernel.org>; Fri, 08 Jan 2021 00:18:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=LPy4kNss0vjaYMzm9yB8ZiYIGPp2YbxLPVEf6yAWf0E=;
-        b=svCkAik61y2tqlI8QaAncQGfiqLGdx5ZK5/6jZwHf12GHTZ4tQSTP+82FWBOi0RfRY
-         kHHnn5asv2m5TUtnsm/WXAjaf7y6sC8QUobHAXRKLBePbWoFeANyfK4fSDYosMcDQN3q
-         fHABjoi4xqsrNzSpz61bjhugyeGHkYg+gxbvjouet+cJsMxu/clNaKRgSaUWSv4Au7nW
-         Netk0E+Vw8siXB+M+rQ5K6CWnhaHYi3tdI/64hm9ShUzdauoHMijY/7rtEDf3wBk8yCj
-         HyEHrnn1umGjn4zYtKv/ZRXHBTPy7eLsLbsIO/8pfpR4fR/aKzvwk/G7qH49x5i+slcM
-         3F0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=LPy4kNss0vjaYMzm9yB8ZiYIGPp2YbxLPVEf6yAWf0E=;
-        b=rKQDXkeRa8zZ4/Ts7gJTnyQTqB08wgEdaa1meC5Wvl/kLn6YvuP3AsTdXjlaFHV/UA
-         CNVL39AJStLWPxOioYSlHM4Ffmk9oAIccfeE7efcrRj/4juDgX+ZpHnGqc/MDQeYAzmk
-         80c8XGkmGTnthXIJzBXlsp6pYK59FSYTOuTKq42xFoEV8H3poVOiR2HaR+1qLOrJ+/xO
-         5ruW6PfJ30tSainJDkrLy6cTTzae1Jp2DV0dsuJTO/eEekJ/9aQXTEjggKogwPSD0/0S
-         OfaAMDQMWlbVG3UPfERY75qmjD+CgrqgEw9466R3JVcAp2yPCsTPnq3CBHtt0TxKDtfz
-         L/jw==
-X-Gm-Message-State: AOAM5316Mg7pO4p1bW8k9PX92Nu+bH2UVCdI4t/40psj/P3cpfzEDEBe
-        SQjs4MXm7+4P/rj8gYh/lsXc1hfyTwhM
-X-Google-Smtp-Source: ABdhPJwCuBbyszBJxL/WGIggEGfWdYN2ks6dq347se1rJMLcshWX3ZB6Svohs/cFLFVUi1NxZfF6HQDb5DBm
-Sender: "tzungbi via sendgmr" <tzungbi@tzungbi-z840.tpe.corp.google.com>
-X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:b:725a:fff:fe41:c6a5])
- (user=tzungbi job=sendgmr) by 2002:a0c:8445:: with SMTP id
- l63mr2381601qva.60.1610093887875; Fri, 08 Jan 2021 00:18:07 -0800 (PST)
-Date:   Fri,  8 Jan 2021 16:17:38 +0800
-In-Reply-To: <20210108081738.2175224-1-tzungbi@google.com>
-Message-Id: <20210108081738.2175224-5-tzungbi@google.com>
-Mime-Version: 1.0
-References: <20210108081738.2175224-1-tzungbi@google.com>
-X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
-Subject: [PATCH v2 4/4] remoteproc/mediatek: support L1TCM
-From:   Tzung-Bi Shih <tzungbi@google.com>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org, robh+dt@kernel.org
-Cc:     linux-remoteproc@vger.kernel.org, matthias.bgg@gmail.com,
-        linux-mediatek@lists.infradead.org, mathieu.poirier@linaro.org,
-        devicetree@vger.kernel.org, tzungbi@google.com
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 8 Jan 2021 16:03:59 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1610139814; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=P2i/w2NGM6kNbgN8vyY6XxmXd+fcd/x2L+FLno+MqfE=;
+ b=Mm+SvarPs81VykYyb7bm2LQMLjJk5u06n1PH72NvZe+mtFc3aPHN2Cgc9Tuw1D0cVXiq5TDk
+ Ldr0xQEoL1c6HhPSFeHpbfXFPZ2yob8wtYgDvVEdaLo/hjjRZ3EJeXIu8kKlSgmlvFUK0pfl
+ 8M1SbRwkVeVmZetXZpstvf8N8+s=
+X-Mailgun-Sending-Ip: 69.72.43.15
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 5ff8c888415a6293c51dd1cf (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 08 Jan 2021 21:03:04
+ GMT
+Sender: rishabhb=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B0D3AC433CA; Fri,  8 Jan 2021 21:03:03 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: rishabhb)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DD5FBC433C6;
+        Fri,  8 Jan 2021 21:03:02 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Fri, 08 Jan 2021 13:03:02 -0800
+From:   rishabhb@codeaurora.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Alex Elder <elder@linaro.org>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tsoni@codeaurora.org,
+        psodagud@codeaurora.org, sidgup@codeaurora.org
+Subject: Re: [PATCH] remoteproc: Create a separate workqueue for recovery
+ tasks
+In-Reply-To: <X+E/W2Sf6fkNaiTC@builder.lan>
+References: <1607806087-27244-1-git-send-email-rishabhb@codeaurora.org>
+ <X9k+xmg9SULEbJXe@builder.lan>
+ <dc9940f0-7fe3-d1da-acb5-580ae7366c9b@linaro.org>
+ <87c3f902b94bc243fc28e0ce79303dd4@codeaurora.org>
+ <35e2106f-d738-4018-50f2-17afcbc627f7@linaro.org>
+ <X+E/W2Sf6fkNaiTC@builder.lan>
+Message-ID: <65cb9eb0837cd4edee2f2902055f412c@codeaurora.org>
+X-Sender: rishabhb@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-L1TCM is a high performance memory region in MT8192 SCP.
-
-Reads L1TCM memory region from DTS to determine if the machine supports.
-Loads L1TCM memory region to SCP sys if the firmware provides.
-
-Starts from MT8192 SCP, the firmware contains physical addresses for
-each memory region, for instance:
-
-Program Headers:
-  Type   Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
-  LOAD   0xXXXXXX 0xXXXXXXXX 0x10500000 0xXXXXX 0xXXXXX XXX 0xXXXX
-  LOAD   0xXXXXXX 0xXXXXXXXX 0x10700000 0xXXXXX 0xXXXXX XXX 0xXXXX
-  LOAD   0xXXXXXX 0xXXXXXXXX 0x50000000 0xXXXXX 0xXXXXX XXX 0xXXXX
-
-Kernel driver can use the "PhysAddr" (i.e. da in the da_to_va callbacks)
-to know the ELF segment belongs to which region.
-
-To backward compatible to MT8183 SCP, separates the da_to_va callbacks
-for new and legacy version.
-
-Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
----
-Changes from v1[1]:
-- Uses -EINVAL to determine the memory region isn't specified to make
-  the intent more clear.
-
-[1]: https://patchwork.kernel.org/project/linux-remoteproc/patch/20201214050521.845396-3-tzungbi@google.com/
-
- drivers/remoteproc/mtk_common.h |  5 +++
- drivers/remoteproc/mtk_scp.c    | 56 +++++++++++++++++++++++++++++++--
- 2 files changed, 59 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index 661c998288d7..5f7cd2336cef 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -76,6 +76,7 @@ struct mtk_scp_of_data {
- 	void (*scp_reset_assert)(struct mtk_scp *scp);
- 	void (*scp_reset_deassert)(struct mtk_scp *scp);
- 	void (*scp_stop)(struct mtk_scp *scp);
-+	void *(*scp_da_to_va)(struct mtk_scp *scp, u64 da, size_t len);
- 
- 	u32 host_to_scp_reg;
- 	u32 host_to_scp_int_bit;
-@@ -90,6 +91,10 @@ struct mtk_scp {
- 	void __iomem *reg_base;
- 	void __iomem *sram_base;
- 	size_t sram_size;
-+	phys_addr_t sram_phys;
-+	void __iomem *l1tcm_base;
-+	size_t l1tcm_size;
-+	phys_addr_t l1tcm_phys;
- 
- 	const struct mtk_scp_of_data *data;
- 
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index c33c41fe54cd..96ee61bf9245 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -461,9 +461,8 @@ static int scp_start(struct rproc *rproc)
- 	return ret;
- }
- 
--static void *scp_da_to_va(struct rproc *rproc, u64 da, size_t len)
-+static void *mt8183_scp_da_to_va(struct mtk_scp *scp, u64 da, size_t len)
- {
--	struct mtk_scp *scp = (struct mtk_scp *)rproc->priv;
- 	int offset;
- 
- 	if (da < scp->sram_size) {
-@@ -479,6 +478,42 @@ static void *scp_da_to_va(struct rproc *rproc, u64 da, size_t len)
- 	return NULL;
- }
- 
-+static void *mt8192_scp_da_to_va(struct mtk_scp *scp, u64 da, size_t len)
-+{
-+	int offset;
-+
-+	if (da >= scp->sram_phys &&
-+	    (da + len) <= scp->sram_phys + scp->sram_size) {
-+		offset = da - scp->sram_phys;
-+		return (void __force *)scp->sram_base + offset;
-+	}
-+
-+	/* optional memory region */
-+	if (scp->l1tcm_size &&
-+	    da >= scp->l1tcm_phys &&
-+	    (da + len) <= scp->l1tcm_phys + scp->l1tcm_size) {
-+		offset = da - scp->l1tcm_phys;
-+		return (void __force *)scp->l1tcm_base + offset;
-+	}
-+
-+	/* optional memory region */
-+	if (scp->dram_size &&
-+	    da >= scp->dma_addr &&
-+	    (da + len) <= scp->dma_addr + scp->dram_size) {
-+		offset = da - scp->dma_addr;
-+		return scp->cpu_addr + offset;
-+	}
-+
-+	return NULL;
-+}
-+
-+static void *scp_da_to_va(struct rproc *rproc, u64 da, size_t len)
-+{
-+	struct mtk_scp *scp = (struct mtk_scp *)rproc->priv;
-+
-+	return scp->data->scp_da_to_va(scp, da, len);
-+}
-+
- static void mt8183_scp_stop(struct mtk_scp *scp)
- {
- 	/* Disable SCP watchdog */
-@@ -717,6 +752,21 @@ static int scp_probe(struct platform_device *pdev)
- 		goto free_rproc;
- 	}
- 	scp->sram_size = resource_size(res);
-+	scp->sram_phys = res->start;
-+
-+	/* l1tcm is an optional memory region */
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "l1tcm");
-+	scp->l1tcm_base = devm_ioremap_resource(dev, res);
-+	if (IS_ERR((__force void *)scp->l1tcm_base)) {
-+		ret = PTR_ERR((__force void *)scp->l1tcm_base);
-+		if (ret != -EINVAL) {
-+			dev_err(dev, "Failed to map l1tcm memory\n");
-+			goto free_rproc;
-+		}
-+	} else {
-+		scp->l1tcm_size = resource_size(res);
-+		scp->l1tcm_phys = res->start;
-+	}
- 
- 	mutex_init(&scp->send_lock);
- 	for (i = 0; i < SCP_IPI_MAX; i++)
-@@ -805,6 +855,7 @@ static const struct mtk_scp_of_data mt8183_of_data = {
- 	.scp_reset_assert = mt8183_scp_reset_assert,
- 	.scp_reset_deassert = mt8183_scp_reset_deassert,
- 	.scp_stop = mt8183_scp_stop,
-+	.scp_da_to_va = mt8183_scp_da_to_va,
- 	.host_to_scp_reg = MT8183_HOST_TO_SCP,
- 	.host_to_scp_int_bit = MT8183_HOST_IPC_INT_BIT,
- 	.ipi_buf_offset = 0x7bdb0,
-@@ -816,6 +867,7 @@ static const struct mtk_scp_of_data mt8192_of_data = {
- 	.scp_reset_assert = mt8192_scp_reset_assert,
- 	.scp_reset_deassert = mt8192_scp_reset_deassert,
- 	.scp_stop = mt8192_scp_stop,
-+	.scp_da_to_va = mt8192_scp_da_to_va,
- 	.host_to_scp_reg = MT8192_GIPC_IN_SET,
- 	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
- };
--- 
-2.29.2.729.g45daf8777d-goog
-
+On 2020-12-21 16:35, Bjorn Andersson wrote:
+> On Thu 17 Dec 12:49 CST 2020, Alex Elder wrote:
+> 
+>> On 12/17/20 12:21 PM, rishabhb@codeaurora.org wrote:
+>> > On 2020-12-17 08:12, Alex Elder wrote:
+>> > > On 12/15/20 4:55 PM, Bjorn Andersson wrote:
+>> > > > On Sat 12 Dec 14:48 CST 2020, Rishabh Bhatnagar wrote:
+>> > > >
+>> > > > > Create an unbound high priority workqueue for recovery tasks.
+>> > >
+>> > > I have been looking at a different issue that is caused by
+>> > > crash notification.
+>> > >
+>> > > What happened was that the modem crashed while the AP was
+>> > > in system suspend (or possibly even resuming) state.  And
+>> > > there is no guarantee that the system will have called a
+>> > > driver's ->resume callback when the crash notification is
+>> > > delivered.
+>> > >
+>> > > In my case (in the IPA driver), handling a modem crash
+>> > > cannot be done while the driver is suspended; i.e. the
+>> > > activities in its ->resume callback must be completed
+>> > > before we can recover from the crash.
+>> > >
+>> > > For this reason I might like to change the way the
+>> > > crash notification is handled, but what I'd rather see
+>> > > is to have the work queue not run until user space
+>> > > is unfrozen, which would guarantee that all drivers
+>> > > that have registered for a crash notification will
+>> > > be resumed when the notification arrives.
+>> > >
+>> > > I'm not sure how that interacts with what you are
+>> > > looking for here.  I think the workqueue could still
+>> > > be unbound, but its work would be delayed longer before
+>> > > any notification (and recovery) started.
+>> > >
+>> > >                     -Alex
+>> > >
+>> > >
+>> > In that case, maybe adding a "WQ_FREEZABLE" flag might help?
+>> 
+>> Yes, exactly.  But how does that affect whatever you were
+>> trying to do with your patch?
+>> 
+> 
+> I don't see any impact on Rishabh's change in particular, syntactically
+> it would just be a matter of adding another flag and the impact would 
+> be
+> separate from his patch.
+> 
+> In other words, creating a separate work queue to get the long running
+> work off the system_wq and making sure that these doesn't run during
+> suspend & resume seems very reasonable to me.
+> 
+> The one piece that I'm still contemplating is the HIPRIO, I would like
+> to better understand the actual impact - or perhaps is this a result of
+> everyone downstream moving all their work to HIPRIO work queues,
+> starving the recovery?
+> 
+Hi Bjorn,
+You are right, this is a result of downstream having HIPRIO workqueues
+therefore starving recovery. I don't have actual data to support the 
+flag
+as of now. If needed for now we can skip this flag and add it later with
+sufficient data?
+> Regards,
+> Bjorn
