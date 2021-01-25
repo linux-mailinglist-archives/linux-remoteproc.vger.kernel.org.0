@@ -2,264 +2,245 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D232303F69
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 26 Jan 2021 14:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB3F30479D
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 26 Jan 2021 20:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405356AbhAZN4a (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 26 Jan 2021 08:56:30 -0500
-Received: from mail-vi1eur05on2041.outbound.protection.outlook.com ([40.107.21.41]:36033
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2405324AbhAZNt6 (ORCPT
+        id S1728857AbhAZF67 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 26 Jan 2021 00:58:59 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:26680 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728007AbhAYMZc (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 26 Jan 2021 08:49:58 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JDGOQQpmG1+rMPmNyT3U8Q/3UAv0wdpiZ2Usf4U/8rfAhC2Cty9qQ7e7x8daeABcrmHdTfrWkwZ8cO0cxeP1r+MZOQFyde4WBcsqo0GdAHsszayLrZrHulnotf6Cwj2Rv8E9NO3sIU+UgMVGUfAFbDX10DYHcU++45TCH+zH5pjQKe1Wa6v/sILaB6g6khe4dakgWjYxPN5cYMYaVMoFtdSU2U8JWChy9AbC7jybEC/twmgZlM9bvqMrqWlwyDaUKNS5YUp/z+BkuBt3cIOvOieS8UXX1+QZH6D4K4JIKliDh75DJAGf+lk4MJAxfzb0MsQBF3XxsIhoH1L+F5P41A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M1JA0sJy9eutZnQlJ+efnB8pueuNZzGjwaZdaGFH5p8=;
- b=lT6Ckm5t5iVgClN1o1wBLIY+xeJ+siNqi8DKuBOLnvkegVxIFhNofLtXXr/Y1PKx9XX1dXhnZY6ncjPfOwQ7Z/F410qx2wWf2Ot2cUC2zaAJYC9LTK0DJ29eZbI24b+ShEfa3/bRhUfupH6rCffEJvrx7wMS+o7/K33HUVUbBp2OscxBwf8VE3nXR7/URRNJNSnFDHcA4Ardq1KzTToTuaH9DmMCcdKYCtH5NxkdFKuqt/9ghhtCaqysDGJf6NZyQP/HbjuGYbdEkZ3Kvj3g7LIGAtFt8aIVlL6oKt8VhCDJ4KxA7HZnzWr0ByvY65vzydH3hC7duWyvzpsOVJ9mbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M1JA0sJy9eutZnQlJ+efnB8pueuNZzGjwaZdaGFH5p8=;
- b=sEnqeT4ZS3MsZ4srTuJZi5u1bWWU708SYerRPteL/HoDF2K+C2iWpU4Alhw622nl1zLgqv2pIck67gGTNTqCMxSn5aqoUmqpXEN1BeulPDsmuK7StPHv53I5kqQFAdJfGALArf+FziZsFgHSjwfmA0mE1jsWtOj8fr1Fnry+iLI=
-Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com (2603:10a6:4:a1::14)
- by DBBPR04MB7593.eurprd04.prod.outlook.com (2603:10a6:10:20c::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.15; Tue, 26 Jan
- 2021 13:49:07 +0000
-Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com
- ([fe80::d58c:d479:d094:43d0]) by DB6PR0402MB2760.eurprd04.prod.outlook.com
- ([fe80::d58c:d479:d094:43d0%9]) with mapi id 15.20.3784.019; Tue, 26 Jan 2021
- 13:49:07 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     "ohad@wizery.com" <ohad@wizery.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "o.rempel@pengutronix.de" <o.rempel@pengutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paul@crapouillou.net" <paul@crapouillou.net>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "patrice.chotard@st.com" <patrice.chotard@st.com>
-Subject: RE: [PATCH V9 01/10] dt-bindings: remoteproc: convert imx rproc
- bindings to json-schema
-Thread-Topic: [PATCH V9 01/10] dt-bindings: remoteproc: convert imx rproc
- bindings to json-schema
-Thread-Index: AQHW75K8L0MhP7c9CUeTrDqB4eKp76o59BSg
-Date:   Tue, 26 Jan 2021 13:49:06 +0000
-Message-ID: <DB6PR0402MB2760432F84DC98247148477288BC0@DB6PR0402MB2760.eurprd04.prod.outlook.com>
-References: <1611191015-22584-1-git-send-email-peng.fan@nxp.com>
- <1611191015-22584-2-git-send-email-peng.fan@nxp.com>
-In-Reply-To: <1611191015-22584-2-git-send-email-peng.fan@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: wizery.com; dkim=none (message not signed)
- header.d=none;wizery.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [49.65.215.117]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 3c8e9e31-7c09-4962-a0a0-08d8c2012690
-x-ms-traffictypediagnostic: DBBPR04MB7593:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DBBPR04MB7593258F75E249A01CA00E8388BC0@DBBPR04MB7593.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0JOOZWF4Nz35AsUM9ZSZwW5kEtJXkGD/JYCbaObNtlvITgKorLRmPegkWHpIDk0QIBkf4p7fTLX+DFbr3EMI0HXtUajiuf+eoN5psKbiqpX72wc5TISCmaAIraJxHlBasE0vm6wGOd/UuOgueg6JQz2jbF6/2tSJ/Fq1/rAsLJCeXi3Ki4+7Qlfdw9cGPZv+SRpAuWl+9RPS6MyBgLTBYv5+q6GCKV5CCzmb8sjdW5GeKgUQps89YSdAhKLEUxCBprKq27kT+Lx7r+ZlVv2Un1qCSHeRj7Bm11ZJ8+Wze6GsZjINT6gblCbH9E3zWs5DNTNv2gWl9xrhPZJyanVf4/T9fWEtNsaAb+UXZKHvyY4bQmvBmOdLMCoCkK92wM58P/6WjoVCnJrEZ+4aUQYetRYHVbdDI2yMHFYl1z7zKogIKbRkt1KDMW3QPleJQvu9grDOXOsPdfubWXH+66zQiUlwzuYJ3HRwhbs37QM5XdEYNXVzJr5Oui4PgTZQWmlK33Wy6E7R1g3ngllg4X0Fz+liXeZqa0tylBmgs53quV5kmuZpuWqekY9UhwLv1l3v+BFGqSl5kGMO0uashKpI3sbInbvCYYX/kaco1iZLC/Y=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2760.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(396003)(39850400004)(376002)(346002)(366004)(6506007)(110136005)(186003)(71200400001)(33656002)(4326008)(8936002)(8676002)(7696005)(83380400001)(54906003)(316002)(26005)(9686003)(44832011)(76116006)(55016002)(2906002)(478600001)(7416002)(966005)(52536014)(64756008)(66446008)(86362001)(66476007)(5660300002)(66946007)(66556008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?5nZDlHUnn/dRg+VqAGGv6pCfzGMxRBMwhg7G2GeYbvYlZ3BGzf9aPzh+SITE?=
- =?us-ascii?Q?B/ZUj3cUjDrtfO5s6MCF7cq2qMP30q9Qqe05Rxu4Votn11/snjjP7eicmkpd?=
- =?us-ascii?Q?rDOKjB30ad02fiPgtmzMGNxt+gJYGQEO687NZTD6pVepCy9p1enXzAXX/oRZ?=
- =?us-ascii?Q?nI+o4tFtcO6nevI4r6o6Yo8v5IgCY7fOe2zx1HH4ahkIzl7CL61VjGkNRucx?=
- =?us-ascii?Q?w+7IXxgwtJ4kQScfWagMkH7GzlgNDYNdEPCTl2xAsryuTePwzWD/12Vqlemv?=
- =?us-ascii?Q?vB8CgY212j0uuHc/BWd3Mz1QfMXfpR6w17vsXW31/WR/jc72aNedISQuVSI7?=
- =?us-ascii?Q?s+CAbKFsJbbZybDP1JRnOWO5j3TuhIrBvCupnM6f++HinaBEiVp0zmC7phOh?=
- =?us-ascii?Q?YHBFqWnThC6hXidk3/9F8hnwehUuhx8eKmcc1xoKHWchmKoJtR8AUuxJr2gQ?=
- =?us-ascii?Q?fo+txG+bQIpeGRO71WMW+80NNjkF0jtUw4NeiksakroTYPEfrfDiGDPdLA+0?=
- =?us-ascii?Q?Qk6tTCSYMgYA1zPmCFlFAhfdEgdP7xHgXUcFwQ/QbHvjpyNWzv6VKYysqN8E?=
- =?us-ascii?Q?GGCMuNLZwOtCttx4DS8aEPI9+TbjoQZws/N4J2ncLWfgR2gs+Isl9sUj/O7H?=
- =?us-ascii?Q?lHTjONhNrRN7sTvhU5N3Eh6fgPxKqCXTE/N1OKKqu61NwZFVfuJ1M0KX+ryG?=
- =?us-ascii?Q?9neZQThPhVbuExIamKIwq6FvktCuM7xiIWf26nWikA7JEwHRVf2hbLb6AN7f?=
- =?us-ascii?Q?EYPNTLxPE2EGkRDdIWnXIQ4lKuX0paDB3hYLLFMntRi1N3RZFLls75/5tcWt?=
- =?us-ascii?Q?mg1diZxVqCbKkUekHAi1XN1B4hl41M6PfK1J/G4NcLg1Bu5w4hLREh5fxgEH?=
- =?us-ascii?Q?KNh5bG6zfsaQOEXTzr9IQ0J2z/uJJPe50lPlqJ73Bz56lsWeyRQjFmEQLoQK?=
- =?us-ascii?Q?7jFBRgAUIODK8b3emX390mI+G1voYJDxFZYI7J0ui0Qd9yriqzdGyVE+Bf8t?=
- =?us-ascii?Q?jrrvVF+7W381mh20wl27a+PzDVP3OlfJmDd4KSzwd8p8I8kKgRi5BZGeE3Ea?=
- =?us-ascii?Q?Nsyt4792?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 25 Jan 2021 07:25:32 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10PAh1DN022642;
+        Mon, 25 Jan 2021 11:52:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=tXd3M2ItuZ7tpZg66nEEuBS/rKqYkgB3GdCw/VU5/cs=;
+ b=2DOcuIft/jK7bqI9H7ePVgL1XWZR4adtOa4kig4Rdz8Oz/APCiTqyO1A31UBunC5PIVJ
+ rYeZEeVybn4HjgqbSpKF96RIL8Ftukg0i8sMYHdYr35QuNFXo9wNPKguaa+I2Cdtd2yA
+ UCEP6VvcKfpjJZfDbGeEEY4ZDWiho+ijtElHFtIsm7A5+d8dAE8N1Xiu8uXHZH4CwvzG
+ ukq0sueHtLbhf8rlJuKfkVvT3pGaupz45UDVQNP7aWDBM0k79Luj/R3MIdZ6kBqx9oz/
+ RI13iXxgAwKHruCUKPylyzOu3wlP0ZAN5x5FiqdXDl+sZD+uOAZ4p9NYGBu1iUodiLZX dw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 368a56afqt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Jan 2021 11:52:14 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EA302100038;
+        Mon, 25 Jan 2021 11:52:13 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BDA5D23BD5C;
+        Mon, 25 Jan 2021 11:52:13 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.49) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 25 Jan
+ 2021 11:52:13 +0100
+Subject: Re: [PATCH v2 04/16] rpmsg: ctrl: implement the ioctl function to
+ create device
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Andy Gross <agross@kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20201222105726.16906-1-arnaud.pouliquen@foss.st.com>
+ <20201222105726.16906-5-arnaud.pouliquen@foss.st.com>
+ <20210121235258.GG611676@xps15>
+ <1b76bf93-9647-c658-b4dd-1b10264a1189@foss.st.com>
+ <20210122205934.GA866146@xps15>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <3ad1b5e8-3b16-bfd2-bfd9-2d8d0ac8e8d5@foss.st.com>
+Date:   Mon, 25 Jan 2021 11:52:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2760.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c8e9e31-7c09-4962-a0a0-08d8c2012690
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jan 2021 13:49:06.8404
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tvUThoRxXw/j+JW2s1W9p423RCMS3//lXhehtpbx0iDlgOUCeRcGkVd6Q0kVeHisRxqFE6fNgFFhuI5iw+4YYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7593
+In-Reply-To: <20210122205934.GA866146@xps15>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-25_03:2021-01-25,2021-01-25 signatures=0
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Rob,
+Hi Mathieu,
 
-> Subject: [PATCH V9 01/10] dt-bindings: remoteproc: convert imx rproc
-> bindings to json-schema
+On 1/22/21 9:59 PM, Mathieu Poirier wrote:
+> On Fri, Jan 22, 2021 at 02:05:27PM +0100, Arnaud POULIQUEN wrote:
+>> Hi Mathieu,
+>>
+>> On 1/22/21 12:52 AM, Mathieu Poirier wrote:
+>>> On Tue, Dec 22, 2020 at 11:57:14AM +0100, Arnaud Pouliquen wrote:
+>>>> Implement the ioctl function that parses the list of
+>>>> rpmsg drivers registered to create an associated device.
+>>>> To be ISO user API, in a first step, the driver_override
+>>>> is only allowed for the RPMsg raw service, supported by the
+>>>> rpmsg_char driver.
+>>>>
+>>>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+>>>> ---
+>>>>  drivers/rpmsg/rpmsg_ctrl.c | 43 ++++++++++++++++++++++++++++++++++++--
+>>>>  1 file changed, 41 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/rpmsg/rpmsg_ctrl.c b/drivers/rpmsg/rpmsg_ctrl.c
+>>>> index 065e2e304019..8381b5b2b794 100644
+>>>> --- a/drivers/rpmsg/rpmsg_ctrl.c
+>>>> +++ b/drivers/rpmsg/rpmsg_ctrl.c
+>>>> @@ -56,12 +56,51 @@ static int rpmsg_ctrl_dev_open(struct inode *inode, struct file *filp)
+>>>>  	return 0;
+>>>>  }
+>>>>  
+>>>> +static const char *rpmsg_ctrl_get_drv_name(u32 service)
+>>>> +{
+>>>> +	struct rpmsg_ctl_info *drv_info;
+>>>> +
+>>>> +	list_for_each_entry(drv_info, &rpmsg_drv_list, node) {
+>>>> +		if (drv_info->ctrl->service == service)
+>>>> +			return drv_info->ctrl->drv_name;
+>>>> +	}
+>>>> +
+>>>
+>>> I'm unsure about the above... To me this looks like what the .match() function
+>>> of a bus would do.  And when I read Bjorn's comment he brought up the
+>>> auxiliary_bus.  I don't know about the auxiliary_bus but it is worth looking
+>>> into.  Registering with a bus would streamline a lot of the code in this
+>>> patchset.
+>>
+>> As answered Bjorn, we already have the RPMsg bus to manage the rpmsg devices.
+>> Look like duplication from my POV, except if the IOCTL does not manage channel
+>> but only endpoint.
+>>
+>> In my design I considered that the rpmsg_ctrl creates a channel associated to a
+>> rpmsg_device such as the RPMsg ns_announcement.
+>>
+>> Based on this assumption, if we implement the auxiliary_bus (or other) for the
+>> rpmsg_ctrl a RPMsg driver will have to manage the probe by rpmsg_bus and by the
+>> auxillary bus. The probe from the auxiliary bus would lead to the creation of an
+>> RPMsg device on the rpmsg_bus, so a duplication with cross dependencies and
+>> would probably make tricky the remove part.
+>>
+>> That said, I think the design depends on the functionality that should be
+>> implemented in the rpmsg_ctrl. Here is an alternative approach based on the
+>> auxiliary bus, which I'm starting to think about:
+>>
+>> The current approach of the rpmsg_char driver is to use the IOCTRL interface to
+>> instantiate a cdev with an endpoint (the RPMsg device is associated with the
+>> ioctl dev). This would correspond to the use of an auxiliary bus to manage local
+>> endpoint creations.
+>>
+>> We could therefore consider an RPMsg name service based on an RPmsg device. This
+>> RPMsg device would register a kind of "RPMsg service endpoint" driver on the
+>> auxiliary rpmsg_ioctl bus.
+>> The rpmsg_ctrl will be used to instantiate the endpoints for this RPMsg device.
+>> on user application request the rpmsg_ctrl will call the appropriate auxiliary
+>> device to create an endpoint.
+>>
+>> If we consider that one objective of this series is to allow application to
+>> initiate the communication with the remote processor, so to be able to initiate
+>> the service (ns announcement sent to the remote processor).
+>> This implies that:
+>> -either the RPMsg device has been probed first by a remote ns announcement or by
+>> a Linux kernel driver using the "driver_override", to register an auxiliary
+>> device. In this case an endpoint will be created associated to the RPMsg service
+>> - or create a RPMsg device on first ioctl endpoint creation request, if it does
+>> not exist (that could trig a NS announcement to remote processor).
+>>
+>> But I'm not sure that this approach would work with QCOM RPMsg backends...
+>>
+> 
+> I don't think there is a way forward with this set without a clear understanding
+> of the Glink and SMD drivers.  I have already spent a fair amount of time in the
+> Glink driver and will continue on Monday with SMD.  
+> 
+>>>
+>>> I'm out of time for today - I will continue tomorrow.
+>>
+>> It seems to me that the main point to step forward is to clarify the global
+>> design and features of the rpmsg-ctrl.
+>> Depending on the decision taken, this series could be trashed and rewritten from
+>> a blank page...To not lost to much time on the series don't hesitate to limit
+>> the review to the minimum.
+>>
+> 
+> I doubt you will ever get clear guidelines on the whole solution.  I will get
+> back to you once I am done with the SMD driver, which should be in the
+> latter part of next week.
 
-Do you have time to give a look and including
-https://patchwork.kernel.org/project/linux-remoteproc/
-patch/1611191015-22584-3-git-send-email-peng.fan@nxp.com/
 
-If could get your R-b or A-b tag, we could have the whole patchset
-merge into remoteproc tree.
+Thanks for your time past on this topic!
+
+I don't expect a clear guidance but that we clarify the objective of this RPMsg
+IOCTL. A first step would be sure that we are in line with the objective of the
+RPMsg IOCTL.
+For instance should we continue in a way to have the rpmsg_char more "rpmsg
+service" generic, relying on a rpmsg_ioctl for the control part? Or should we
+implement something independent (with is own API) to limit dependency with QCOM
+backends constraints?
+At the end, if implementing a IOCTL interface directly in the RPMsg TTY seems to
+you and Bjorn simpler, I can also go on this way...
+
+On my side I expect to find time this week to prototype a RPMSg ioctl using the
+auxiliary bus to better understand involved mechanism.
 
 Thanks,
-Peng.
+Arnaud
 
->=20
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> Convert the imx rproc binding to DT schema format using json-schema.
->=20
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../bindings/remoteproc/fsl,imx-rproc.yaml    | 59 +++++++++++++++++++
->  .../bindings/remoteproc/imx-rproc.txt         | 33 -----------
->  2 files changed, 59 insertions(+), 33 deletions(-)  create mode 100644
-> Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
->  delete mode 100644
-> Documentation/devicetree/bindings/remoteproc/imx-rproc.txt
->=20
-> diff --git
-> a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> new file mode 100644
-> index 000000000000..bce6ccfe1538
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause) %YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/remoteproc/fsl,imx-rproc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: NXP iMX6SX/iMX7D Co-Processor Bindings
-> +
-> +description:
-> +  This binding provides support for ARM Cortex M4 Co-processor found on
-> some NXP iMX SoCs.
-> +
-> +maintainers:
-> +  - Peng Fan <peng.fan@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - fsl,imx7d-cm4
-> +      - fsl,imx6sx-cm4
-> +
-> +  clocks:
-> +    description:
-> +      Clock for co-processor (See ../clock/clock-bindings.txt)
-> +
-> +  syscon:
-> +    description:
-> +      Phandle to syscon block which provide access to System Reset
-> + Controller
-> +
-> +  memory-region:
-> +    description:
-> +      list of phandels to the reserved memory regions.
-> +      (see ../reserved-memory/reserved-memory.txt)
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - syscon
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/imx7d-clock.h>
-> +    m4_reserved_sysmem1: cm4@80000000 {
-> +      reg =3D <0x80000000 0x80000>;
-> +    };
-> +
-> +    m4_reserved_sysmem2: cm4@81000000 {
-> +      reg =3D <0x81000000 0x80000>;
-> +    };
-> +
-> +    imx7d-cm4 {
-> +      compatible	=3D "fsl,imx7d-cm4";
-> +      memory-region	=3D <&m4_reserved_sysmem1>,
-> <&m4_reserved_sysmem2>;
-> +      syscon		=3D <&src>;
-> +      clocks		=3D <&clks IMX7D_ARM_M4_ROOT_CLK>;
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/remoteproc/imx-rproc.txt
-> b/Documentation/devicetree/bindings/remoteproc/imx-rproc.txt
-> deleted file mode 100644
-> index fbcefd965dc4..000000000000
-> --- a/Documentation/devicetree/bindings/remoteproc/imx-rproc.txt
-> +++ /dev/null
-> @@ -1,33 +0,0 @@
-> -NXP iMX6SX/iMX7D Co-Processor Bindings
-> -----------------------------------------
-> -
-> -This binding provides support for ARM Cortex M4 Co-processor found on
-> some -NXP iMX SoCs.
-> -
-> -Required properties:
-> -- compatible		Should be one of:
-> -				"fsl,imx7d-cm4"
-> -				"fsl,imx6sx-cm4"
-> -- clocks		Clock for co-processor (See: ../clock/clock-bindings.txt)
-> -- syscon		Phandle to syscon block which provide access to
-> -			System Reset Controller
-> -
-> -Optional properties:
-> -- memory-region		list of phandels to the reserved memory regions.
-> -			(See: ../reserved-memory/reserved-memory.txt)
-> -
-> -Example:
-> -	m4_reserved_sysmem1: cm4@80000000 {
-> -		reg =3D <0x80000000 0x80000>;
-> -	};
-> -
-> -	m4_reserved_sysmem2: cm4@81000000 {
-> -		reg =3D <0x81000000 0x80000>;
-> -	};
-> -
-> -	imx7d-cm4 {
-> -		compatible	=3D "fsl,imx7d-cm4";
-> -		memory-region	=3D <&m4_reserved_sysmem1>,
-> <&m4_reserved_sysmem2>;
-> -		syscon		=3D <&src>;
-> -		clocks		=3D <&clks IMX7D_ARM_M4_ROOT_CLK>;
-> -	};
-> --
-> 2.28.0
-
+> 
+>> Thanks,
+>> Arnaud
+>>
+>>>
+>>> Thanks,
+>>> Mathieu
+>>>
+>>>> +	return NULL;
+>>>> +}
+>>>> +
+>>>>  static long rpmsg_ctrl_dev_ioctl(struct file *fp, unsigned int cmd,
+>>>>  				 unsigned long arg)
+>>>>  {
+>>>>  	struct rpmsg_ctrl_dev *ctrldev = fp->private_data;
+>>>> -
+>>>> -	dev_info(&ctrldev->dev, "Control not yet implemented\n");
+>>>> +	void __user *argp = (void __user *)arg;
+>>>> +	struct rpmsg_channel_info chinfo;
+>>>> +	struct rpmsg_endpoint_info eptinfo;
+>>>> +	struct rpmsg_device *newch;
+>>>> +
+>>>> +	if (cmd != RPMSG_CREATE_EPT_IOCTL)
+>>>> +		return -EINVAL;
+>>>> +
+>>>> +	if (copy_from_user(&eptinfo, argp, sizeof(eptinfo)))
+>>>> +		return -EFAULT;
+>>>> +
+>>>> +	/*
+>>>> +	 * In a frst step only the rpmsg_raw service is supported.
+>>>> +	 * The override is foorced to RPMSG_RAW_SERVICE
+>>>> +	 */
+>>>> +	chinfo.driver_override = rpmsg_ctrl_get_drv_name(RPMSG_RAW_SERVICE);
+>>>> +	if (!chinfo.driver_override)
+>>>> +		return -ENODEV;
+>>>> +
+>>>> +	memcpy(chinfo.name, eptinfo.name, RPMSG_NAME_SIZE);
+>>>> +	chinfo.name[RPMSG_NAME_SIZE - 1] = '\0';
+>>>> +	chinfo.src = eptinfo.src;
+>>>> +	chinfo.dst = eptinfo.dst;
+>>>> +
+>>>> +	newch = rpmsg_create_channel(ctrldev->rpdev, &chinfo);
+>>>> +	if (!newch) {
+>>>> +		dev_err(&ctrldev->dev, "rpmsg_create_channel failed\n");
+>>>> +		return -ENXIO;
+>>>> +	}
+>>>>  
+>>>>  	return 0;
+>>>>  };
+>>>> -- 
+>>>> 2.17.1
+>>>>
