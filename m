@@ -2,213 +2,180 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CB03055E7
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 27 Jan 2021 09:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D61D305613
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 27 Jan 2021 09:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbhA0Igu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 27 Jan 2021 03:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbhA0Iep (ORCPT
+        id S232525AbhA0Ire (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 27 Jan 2021 03:47:34 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:49519 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232016AbhA0Ip2 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 27 Jan 2021 03:34:45 -0500
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA19C061793
-        for <linux-remoteproc@vger.kernel.org>; Wed, 27 Jan 2021 00:32:41 -0800 (PST)
-Received: by mail-qk1-x74a.google.com with SMTP id v190so917185qkc.15
-        for <linux-remoteproc@vger.kernel.org>; Wed, 27 Jan 2021 00:32:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=RaHwNMHy6Q38UiSowCFhrFgySXI51I5XcIPwGHCFzHA=;
-        b=gt9CAJsB4pywidn35l9GS7kegoCleTTUcDZQcAThNVCvSLsL96zDlM02lHQsGfKQ4c
-         nsHoKonjbw5h9LIEPq4EboL2a1/SsfYSAUu/BUE/cwZnBWXda+GTE9VNTxAl1MQ9ztOQ
-         6gc8/U7UN3d21+aj9xiGZGioe1yftTZmpYLKQN9YWg+z/TRqfPjgCc+2macCjkKVx28A
-         qHAjRc8Qs0f8MmcSNqAu9+fZnYQ5UW0EQT8ibFMEem5CnFSMe5v62wxmy9417Kk0613z
-         8zigCiHr9ge6GEe+D6moVsmhYHXFMeVM4b0IJnK/ECA6/6A/j6higCoRvB91xZxYNpkB
-         lwgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=RaHwNMHy6Q38UiSowCFhrFgySXI51I5XcIPwGHCFzHA=;
-        b=U5ZzOqPWB7sxhZd1Ixv181bMsS9AWkadNR0GDX84MiVlU50wVinR/8NivWGyTlW9PC
-         iJejnNXs03shADiI6OMXPHBrGnyZv42LGqYS5qYmmmkyw4UM+Z2mjUnLdqBEagxojiUE
-         llCltbSkjKS/55+aAmkXkCjOknXapw5zslf1rXBlmEjzVq9yXvnDoiWVG20l7WQdgBKa
-         Y7YFOVirh4cHAB3+VjoySpy8c2DECWggUdVoOBi2eLy+00bFnxLPo273zyCqaWlmwUaR
-         sz5wHCJIh8MzCra4J+HbJqhApXOST10dYJF9tQ+BzvGTgSrttDOOJ/yrKse8ulvW0OVK
-         Xf5A==
-X-Gm-Message-State: AOAM5315ZfbDvDtIPyJ7EJF/PKcyUGqYD4jFTxTMxfbITLO2WRs8o9lQ
-        HK5DWdaAVd4Ib44u+373kEU0nGue9ekM
-X-Google-Smtp-Source: ABdhPJxPwHBmIFY24IEnCMNSrpm1zBwNilXq7JcimT+k2/ombKudG+h8PD0tqcATpEqofEfIQ5a7TWoIaljj
-Sender: "tzungbi via sendgmr" <tzungbi@tzungbi-z840.tpe.corp.google.com>
-X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:b:d17d:c7bb:69a2:7e2f])
- (user=tzungbi job=sendgmr) by 2002:ad4:4cd0:: with SMTP id
- i16mr2727580qvz.49.1611736360511; Wed, 27 Jan 2021 00:32:40 -0800 (PST)
-Date:   Wed, 27 Jan 2021 16:31:36 +0800
-In-Reply-To: <20210127083136.3745652-1-tzungbi@google.com>
-Message-Id: <20210127083136.3745652-5-tzungbi@google.com>
-Mime-Version: 1.0
-References: <20210127083136.3745652-1-tzungbi@google.com>
-X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
-Subject: [PATCH v3 4/4] remoteproc/mediatek: support L1TCM
-From:   Tzung-Bi Shih <tzungbi@google.com>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org, robh+dt@kernel.org
-Cc:     linux-remoteproc@vger.kernel.org, matthias.bgg@gmail.com,
-        linux-mediatek@lists.infradead.org, mathieu.poirier@linaro.org,
-        devicetree@vger.kernel.org, tzungbi@google.com
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 27 Jan 2021 03:45:28 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10R8hH9e004369;
+        Wed, 27 Jan 2021 09:44:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=4IEIopuOEfQJiYhnjKN0EjyncVxzU70XFQFpS6nSA7U=;
+ b=fmHCYGSazGXpW3x3YUc2OTQVj+i183eHNiBZ6QEzIdz0l8inbX+ntRgQh8FzrpF3HFaj
+ /FAysAhU5UkfQaczcYfniC5SaywPfQr4EIKG09XswSJjb89eHhYeEB/BE1sMHZmLJ+aC
+ rmZ/f+yZck5GDwVja9yoeHEJ4iZ+OUZUlEzqWw/tW/+DtXfpDK8w+i11rWuVDOs5WrWx
+ QHnE8848bUftUO9zUv83AYm5SLHw2pa0dx6T6seJEXRXl0PHfrV1UBzMAiquo8YUA6BM
+ trt3LEsypwBUFtapF76lQ+brYbGL0Dcx0kB7BgcvMVh/mTSg1jDRgqqBsCTA+sGvTj+v 2g== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 368a56pnv0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 27 Jan 2021 09:44:30 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A830810002A;
+        Wed, 27 Jan 2021 09:44:29 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node1.st.com [10.75.127.7])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 92710226269;
+        Wed, 27 Jan 2021 09:44:29 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.47) by SFHDAG3NODE1.st.com
+ (10.75.127.7) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 27 Jan
+ 2021 09:44:29 +0100
+Subject: Re: [PATCH v4 05/17] remoteproc: Add new get_loaded_rsc_table()
+ remoteproc operation
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "ohad@wizery.com" <ohad@wizery.com>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>
+CC:     "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20201218173228.2277032-1-mathieu.poirier@linaro.org>
+ <20201218173228.2277032-6-mathieu.poirier@linaro.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@st.com>
+Message-ID: <47edac31-2f5f-efa9-2699-9fbec7f0d263@st.com>
+Date:   Wed, 27 Jan 2021 09:44:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20201218173228.2277032-6-mathieu.poirier@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG1NODE1.st.com (10.75.127.1) To SFHDAG3NODE1.st.com
+ (10.75.127.7)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-27_03:2021-01-26,2021-01-27 signatures=0
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-L1TCM is a high performance memory region in MT8192 SCP.
+Hi Mathieu,
 
-Reads L1TCM memory region from DTS to determine if the machine supports.
-Loads L1TCM memory region to SCP sys if the firmware provides.
+Come back on you series...
 
-Starts from MT8192 SCP, the firmware contains physical addresses for
-each memory region, for instance:
+On 12/18/20 6:32 PM, Mathieu Poirier wrote:
+> Add an new get_loaded_rsc_table() operation in order to support
+> scenarios where the remoteproc core has booted a remote processor
+> and detaches from it.  When re-attaching to the remote processor,
+> the core needs to know where the resource table has been placed
+> in memory.
+> 
+> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> ---
+>  drivers/remoteproc/remoteproc_core.c     | 6 ++++++
+>  drivers/remoteproc/remoteproc_internal.h | 8 ++++++++
+>  include/linux/remoteproc.h               | 5 ++++-
+>  3 files changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index d0f6b39b56f9..3d87c910aca7 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -1556,6 +1556,12 @@ static int rproc_attach(struct rproc *rproc)
+>  		return ret;
+>  	}
+>  
+> +	ret = rproc_get_loaded_rsc_table(rproc);
+> +	if (ret) {
+> +		dev_err(dev, "can't load resource table: %d\n", ret);
+> +		goto disable_iommu;
+> +	}
+> +
 
-Program Headers:
-  Type   Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
-  LOAD   0xXXXXXX 0xXXXXXXXX 0x10500000 0xXXXXX 0xXXXXX XXX 0xXXXX
-  LOAD   0xXXXXXX 0xXXXXXXXX 0x10700000 0xXXXXX 0xXXXXX XXX 0xXXXX
-  LOAD   0xXXXXXX 0xXXXXXXXX 0x50000000 0xXXXXX 0xXXXXX XXX 0xXXXX
+This function is rather ambiguous. Without the example of stm32, it is not
+obvious what the platform driver has to do in this ops. And the update of rproc
+in the in the core instead of in platform driver seems to me more reliable.
 
-Kernel driver can use the "PhysAddr" (i.e. da in the da_to_va callbacks)
-to know the ELF segment belongs to which region.
+Here is a suggestion considering that ->cached_table is always NULL:
 
-To backward compatible to MT8183 SCP, separates the da_to_va callbacks
-for new and legacy version.
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
----
- drivers/remoteproc/mtk_common.h |  5 +++
- drivers/remoteproc/mtk_scp.c    | 56 +++++++++++++++++++++++++++++++--
- 2 files changed, 59 insertions(+), 2 deletions(-)
+struct resource_table *rproc_get_loaded_rsc_table(struct rproc *rproc,
+                                                  size_t* size)
+{
 
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index 204691138677..61901f5efa05 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -77,6 +77,7 @@ struct mtk_scp_of_data {
- 	void (*scp_reset_assert)(struct mtk_scp *scp);
- 	void (*scp_reset_deassert)(struct mtk_scp *scp);
- 	void (*scp_stop)(struct mtk_scp *scp);
-+	void *(*scp_da_to_va)(struct mtk_scp *scp, u64 da, size_t len);
- 
- 	u32 host_to_scp_reg;
- 	u32 host_to_scp_int_bit;
-@@ -91,6 +92,10 @@ struct mtk_scp {
- 	void __iomem *reg_base;
- 	void __iomem *sram_base;
- 	size_t sram_size;
-+	phys_addr_t sram_phys;
-+	void __iomem *l1tcm_base;
-+	size_t l1tcm_size;
-+	phys_addr_t l1tcm_phys;
- 
- 	const struct mtk_scp_of_data *data;
- 
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index 05b157689121..ce727598c41c 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -463,9 +463,8 @@ static int scp_start(struct rproc *rproc)
- 	return ret;
- }
- 
--static void *scp_da_to_va(struct rproc *rproc, u64 da, size_t len)
-+static void *mt8183_scp_da_to_va(struct mtk_scp *scp, u64 da, size_t len)
- {
--	struct mtk_scp *scp = (struct mtk_scp *)rproc->priv;
- 	int offset;
- 
- 	if (da < scp->sram_size) {
-@@ -481,6 +480,42 @@ static void *scp_da_to_va(struct rproc *rproc, u64 da, size_t len)
- 	return NULL;
- }
- 
-+static void *mt8192_scp_da_to_va(struct mtk_scp *scp, u64 da, size_t len)
-+{
-+	int offset;
-+
-+	if (da >= scp->sram_phys &&
-+	    (da + len) <= scp->sram_phys + scp->sram_size) {
-+		offset = da - scp->sram_phys;
-+		return (void __force *)scp->sram_base + offset;
-+	}
-+
-+	/* optional memory region */
-+	if (scp->l1tcm_size &&
-+	    da >= scp->l1tcm_phys &&
-+	    (da + len) <= scp->l1tcm_phys + scp->l1tcm_size) {
-+		offset = da - scp->l1tcm_phys;
-+		return (void __force *)scp->l1tcm_base + offset;
-+	}
-+
-+	/* optional memory region */
-+	if (scp->dram_size &&
-+	    da >= scp->dma_addr &&
-+	    (da + len) <= scp->dma_addr + scp->dram_size) {
-+		offset = da - scp->dma_addr;
-+		return scp->cpu_addr + offset;
-+	}
-+
-+	return NULL;
-+}
-+
-+static void *scp_da_to_va(struct rproc *rproc, u64 da, size_t len)
-+{
-+	struct mtk_scp *scp = (struct mtk_scp *)rproc->priv;
-+
-+	return scp->data->scp_da_to_va(scp, da, len);
-+}
-+
- static void mt8183_scp_stop(struct mtk_scp *scp)
- {
- 	/* Disable SCP watchdog */
-@@ -719,6 +754,21 @@ static int scp_probe(struct platform_device *pdev)
- 		goto free_rproc;
- 	}
- 	scp->sram_size = resource_size(res);
-+	scp->sram_phys = res->start;
-+
-+	/* l1tcm is an optional memory region */
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "l1tcm");
-+	scp->l1tcm_base = devm_ioremap_resource(dev, res);
-+	if (IS_ERR((__force void *)scp->l1tcm_base)) {
-+		ret = PTR_ERR((__force void *)scp->l1tcm_base);
-+		if (ret != -EINVAL) {
-+			dev_err(dev, "Failed to map l1tcm memory\n");
-+			goto free_rproc;
-+		}
-+	} else {
-+		scp->l1tcm_size = resource_size(res);
-+		scp->l1tcm_phys = res->start;
-+	}
- 
- 	mutex_init(&scp->send_lock);
- 	for (i = 0; i < SCP_IPI_MAX; i++)
-@@ -807,6 +857,7 @@ static const struct mtk_scp_of_data mt8183_of_data = {
- 	.scp_reset_assert = mt8183_scp_reset_assert,
- 	.scp_reset_deassert = mt8183_scp_reset_deassert,
- 	.scp_stop = mt8183_scp_stop,
-+	.scp_da_to_va = mt8183_scp_da_to_va,
- 	.host_to_scp_reg = MT8183_HOST_TO_SCP,
- 	.host_to_scp_int_bit = MT8183_HOST_IPC_INT_BIT,
- 	.ipi_buf_offset = 0x7bdb0,
-@@ -818,6 +869,7 @@ static const struct mtk_scp_of_data mt8192_of_data = {
- 	.scp_reset_assert = mt8192_scp_reset_assert,
- 	.scp_reset_deassert = mt8192_scp_reset_deassert,
- 	.scp_stop = mt8192_scp_stop,
-+	.scp_da_to_va = mt8192_scp_da_to_va,
- 	.host_to_scp_reg = MT8192_GIPC_IN_SET,
- 	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
- };
--- 
-2.30.0.280.ga3ce27912f-goog
+	if (rproc->ops->get_loaded_rsc_table) {
+		return rproc->ops->get_loaded_rsc_table(rproc, size);
 
+	*size = 0;
+	return NULL;
+}
+
+then in rproc_attach:
+
+	table_ptr = rproc_get_loaded_rsc_table(rproc, &tab_size);
+	if (PTR_ERR(table_ptr) {
+		dev_err(dev, "can't load resource table: %d\n", ret);
+		goto disable_iommu;
+	}
+ 	rproc->cached_table = NULL;
+ 	rproc->table_ptr = table_ptr;
+ 	rproc->table_sz = table_sz;
+
+
+Thanks,
+Arnaud
+
+>  	/* reset max_notifyid */
+>  	rproc->max_notifyid = -1;
+>  
+> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+> index c34002888d2c..c48b301d6ad1 100644
+> --- a/drivers/remoteproc/remoteproc_internal.h
+> +++ b/drivers/remoteproc/remoteproc_internal.h
+> @@ -177,6 +177,14 @@ struct resource_table *rproc_find_loaded_rsc_table(struct rproc *rproc,
+>  	return NULL;
+>  }
+>  
+> +static inline int rproc_get_loaded_rsc_table(struct rproc *rproc)
+> +{
+> +	if (rproc->ops->get_loaded_rsc_table)
+> +		return rproc->ops->get_loaded_rsc_table(rproc);
+> +
+> +	return 0;
+> +}
+> +
+>  static inline
+>  bool rproc_u64_fit_in_size_t(u64 val)
+>  {
+> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+> index 3fa3ba6498e8..571615e77e6f 100644
+> --- a/include/linux/remoteproc.h
+> +++ b/include/linux/remoteproc.h
+> @@ -368,7 +368,9 @@ enum rsc_handling_status {
+>   * RSC_HANDLED if resource was handled, RSC_IGNORED if not handled and a
+>   * negative value on error
+>   * @load_rsc_table:	load resource table from firmware image
+> - * @find_loaded_rsc_table: find the loaded resouce table
+> + * @find_loaded_rsc_table: find the loaded resource table from firmware image
+> + * @get_loaded_rsc_table: get resource table installed in memory
+> + *			  by external entity
+>   * @load:		load firmware to memory, where the remote processor
+>   *			expects to find it
+>   * @sanity_check:	sanity check the fw image
+> @@ -389,6 +391,7 @@ struct rproc_ops {
+>  			  int offset, int avail);
+>  	struct resource_table *(*find_loaded_rsc_table)(
+>  				struct rproc *rproc, const struct firmware *fw);
+> +	int (*get_loaded_rsc_table)(struct rproc *rproc);
+>  	int (*load)(struct rproc *rproc, const struct firmware *fw);
+>  	int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
+>  	u64 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
+> 
