@@ -2,98 +2,118 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E73330479C
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 26 Jan 2021 20:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE4C305590
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 27 Jan 2021 09:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730156AbhAZF7E (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 26 Jan 2021 00:59:04 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:38760 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730339AbhAYPpS (ORCPT
+        id S231741AbhA0IXB (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 27 Jan 2021 03:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231709AbhA0IVc (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 25 Jan 2021 10:45:18 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 10PFhJOw068695;
-        Mon, 25 Jan 2021 09:43:19 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1611589399;
-        bh=vpK8KsGh4di2NeiKW/oNr1WDemKXSP0tZVJsjl+yK2I=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Pm76+CeI0lFGxKuMy53JoY+o4Um3hoRNRan78X6YFK0td+dwpiEPKQEL6Y2rY+jSq
-         dN58ujcgdNdYXFPFzCpVMx3GcHeVf8HePFsVsZ+p36uw1rSl4vzzOaZ793XoJ3BJHz
-         DQTJ0BRf2KRPpmmUE0W4ZGktfal7c3aEFEn2iHDA=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 10PFhJ8v042342
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 25 Jan 2021 09:43:19 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 25
- Jan 2021 09:43:19 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 25 Jan 2021 09:43:19 -0600
-Received: from [10.250.35.71] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 10PFhIGL112819;
-        Mon, 25 Jan 2021 09:43:19 -0600
-Subject: Re: [PATCH v2 0/5] Introduce PRU remoteproc consumer API
-To:     "santosh.shilimkar@oracle.com" <santosh.shilimkar@oracle.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
-        <ohad@wizery.com>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <ssantosh@kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <lee.jones@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <praneeth@ti.com>,
-        <rogerq@kernel.org>
-References: <20201216165239.2744-1-grzegorz.jaszczyk@linaro.org>
- <20210106232704.GE9149@xps15> <11303a1b-5ab4-def5-77b1-c500894c9c87@ti.com>
- <20210107224448.GB43045@xps15> <75365443-57e3-e2e0-5865-f78af9d5890b@ti.com>
- <b0e32ad0-487f-9d57-7287-835eee836514@oracle.com>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <c5252e8d-094a-dcb7-7ccb-172e58ab3413@ti.com>
-Date:   Mon, 25 Jan 2021 09:43:18 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <b0e32ad0-487f-9d57-7287-835eee836514@oracle.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        Wed, 27 Jan 2021 03:21:32 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F4AC0613D6
+        for <linux-remoteproc@vger.kernel.org>; Wed, 27 Jan 2021 00:20:51 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id f127so1609423ybf.12
+        for <linux-remoteproc@vger.kernel.org>; Wed, 27 Jan 2021 00:20:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=m63EAmeXqIPZihoN5M7lU0BGu+fGoCuFKs5wvqm9uCA=;
+        b=A38tSlugr9efDA+LeHkBD/HUda1hBTlNbl7J32yuQz1GqzRWG8F58h/i1UGyDUEepF
+         +ClPSZhqCa0Mu2UWQl4mFrhisFN2pM+cto10cgBLwrZFkG4+dlu97XDYTRGx7Dj48N1n
+         fWYGVmUrPGwPkqomLxlUN+TGFAYnmZSnNgQbtOky9TVF7dxVAtR8hY0NDmcdcB1dZoMA
+         O7u4Ii3AYfhqAG6E2MozUXAIBh4+/23JhFRQiij3ZgSq9OyCSSTBASlk1NbRN7lc635s
+         x9xjeZWshFWULgKzpV56PWfVpX3Xgnn/y940vBQ8Ygb+wUuxwo6VyYEERswUpILwKICU
+         fBNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=m63EAmeXqIPZihoN5M7lU0BGu+fGoCuFKs5wvqm9uCA=;
+        b=Wxmcgc441O1XDDi3EmtnpW58GvYD9A+G4Ys4E/uA7SC6KeksOLPE3clLsMLBfi0LD9
+         +exCUV26Flm+SDvQ/ake0FvoBnaH6FQ3UaFdo4qDae0bNiQ47F2y8NQsebu8NlE42pGE
+         Cg1yLEkofzZAlsvdSgm+ClZWYxuvg9YH+ytAsBP1moAArJFul8+t1EmGpmVkLzktluuA
+         aYAf5tRFA8yojcNnonTLqZzJTKry2Bvh2PdBMNZp+vOALwmkEJD9uTsTlXg6XKupr0bx
+         VnsTbW2xWd4jX2InPMKntHhSQFdr/86IN//GONUM2zNXBamO/dp55PoFahwbmaXSpll2
+         SQ9w==
+X-Gm-Message-State: AOAM532Y79jzBWcRrPIYKl5TFQQCNhQQ23BoiKUzawg3gqF/Ft6TRaA5
+        USBMpL0ad74IIsj/kHv1Fm6z0NipP1He
+X-Google-Smtp-Source: ABdhPJynQgwplEBxjt9UAAah6WMRYX2BQntT4VDdhIhRFxcAABTS8xP8M0U6ru671sdENwBgDKegwjsfmrsK
+Sender: "tzungbi via sendgmr" <tzungbi@tzungbi-z840.tpe.corp.google.com>
+X-Received: from tzungbi-z840.tpe.corp.google.com ([2401:fa00:1:b:d17d:c7bb:69a2:7e2f])
+ (user=tzungbi job=sendgmr) by 2002:a25:b8ca:: with SMTP id
+ g10mr13488161ybm.517.1611735651150; Wed, 27 Jan 2021 00:20:51 -0800 (PST)
+Date:   Wed, 27 Jan 2021 16:20:46 +0800
+Message-Id: <20210127082046.3735157-1-tzungbi@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.280.ga3ce27912f-goog
+Subject: [PATCH] remoteproc/mediatek: acknowledge watchdog IRQ after handled
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org
+Cc:     linux-remoteproc@vger.kernel.org, matthias.bgg@gmail.com,
+        linux-mediatek@lists.infradead.org, tzungbi@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Santosh,
+Acknowledges watchdog IRQ after handled or kernel keeps receiving the
+interrupt.
 
-On 1/24/21 10:34 PM, santosh.shilimkar@oracle.com wrote:
-> Hi Suman, Mathieu,
-> 
-> On 1/7/21 2:49 PM, Suman Anna wrote:
->> On 1/7/21 4:44 PM, Mathieu Poirier wrote:
->>> On Wed, Jan 06, 2021 at 06:03:25PM -0600, Suman Anna wrote:
->>>> Hi Mathieu,
->>>>
-> [...]
->>> I only see input from Andy and Lars in the thread you point out, nothing from
->>> Greg.  I have also taken a look at the patch [1] that made checkpatch complain
->>> about ENOTSUPP.  From what I see in that commit log the goal is to prevent new
->>> additions of ENOTSUPP to the kernel.
->>>
->>> Please modify and resend, otherwise I'm sure someone will send another patch to
->>> fix it before the end of the cycle.
->>
->> Yeah ok. I will send out a v3.
->>
-> I haven't seen v3 of this series yet. Please post it
-> if you would like to include it for 5.12.
+Fixes: fd0b6c1ff85a ("remoteproc/mediatek: Add support for mt8192 SCP")
+Signed-off-by: Tzung-Bi Shih <tzungbi@google.com>
+---
+ drivers/remoteproc/mtk_common.h |  1 +
+ drivers/remoteproc/mtk_scp.c    | 20 +++++++++++---------
+ 2 files changed, 12 insertions(+), 9 deletions(-)
 
-This series is dependent on couple of patches that would have to come through
-the remoteproc tree first, and I need to post the next versions of those as
-well. So, let me sort out those first. You can drop this from your queue for 5.12.
+diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
+index 988edb4977c3..bcab38511bf3 100644
+--- a/drivers/remoteproc/mtk_common.h
++++ b/drivers/remoteproc/mtk_common.h
+@@ -47,6 +47,7 @@
+ 
+ #define MT8192_CORE0_SW_RSTN_CLR	0x10000
+ #define MT8192_CORE0_SW_RSTN_SET	0x10004
++#define MT8192_CORE0_WDT_IRQ		0x10030
+ #define MT8192_CORE0_WDT_CFG		0x10034
+ 
+ #define SCP_FW_VER_LEN			32
+diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
+index e0c235690361..eba825b46696 100644
+--- a/drivers/remoteproc/mtk_scp.c
++++ b/drivers/remoteproc/mtk_scp.c
+@@ -197,17 +197,19 @@ static void mt8192_scp_irq_handler(struct mtk_scp *scp)
+ 
+ 	scp_to_host = readl(scp->reg_base + MT8192_SCP2APMCU_IPC_SET);
+ 
+-	if (scp_to_host & MT8192_SCP_IPC_INT_BIT)
++	if (scp_to_host & MT8192_SCP_IPC_INT_BIT) {
+ 		scp_ipi_handler(scp);
+-	else
+-		scp_wdt_handler(scp, scp_to_host);
+ 
+-	/*
+-	 * SCP won't send another interrupt until we clear
+-	 * MT8192_SCP2APMCU_IPC.
+-	 */
+-	writel(MT8192_SCP_IPC_INT_BIT,
+-	       scp->reg_base + MT8192_SCP2APMCU_IPC_CLR);
++		/*
++		 * SCP won't send another interrupt until we clear
++		 * MT8192_SCP2APMCU_IPC.
++		 */
++		writel(MT8192_SCP_IPC_INT_BIT,
++		       scp->reg_base + MT8192_SCP2APMCU_IPC_CLR);
++	} else {
++		scp_wdt_handler(scp, scp_to_host);
++		writel(1, scp->reg_base + MT8192_CORE0_WDT_IRQ);
++	}
+ }
+ 
+ static irqreturn_t scp_irq_handler(int irq, void *priv)
+-- 
+2.30.0.280.ga3ce27912f-goog
 
-regards
-Suman
