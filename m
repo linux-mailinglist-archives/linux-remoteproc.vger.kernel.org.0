@@ -2,101 +2,235 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34287307F31
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 28 Jan 2021 21:10:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B3C30819A
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 28 Jan 2021 23:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbhA1UJ5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 28 Jan 2021 15:09:57 -0500
-Received: from spe6-3.ucebox.co.za ([197.242.159.209]:33672 "EHLO
-        spe6-3.ucebox.co.za" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbhA1UH4 (ORCPT
+        id S231310AbhA1W6F (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 28 Jan 2021 17:58:05 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:53084 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231646AbhA1W5f (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 28 Jan 2021 15:07:56 -0500
-X-Greylist: delayed 6416 seconds by postgrey-1.27 at vger.kernel.org; Thu, 28 Jan 2021 15:07:02 EST
-Received: from cornucopia.aserv.co.za ([154.0.175.203])
-        by spe4.ucebox.co.za with esmtps (TLSv1.2:AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <manornutgrovemanor@gmail.com>)
-        id 1l5Brs-0002Dc-Q5; Thu, 28 Jan 2021 20:18:43 +0200
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by cornucopia.aserv.co.za (Postfix) with ESMTPA id 37618C1250;
-        Thu, 28 Jan 2021 20:17:07 +0200 (SAST)
+        Thu, 28 Jan 2021 17:57:35 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 10SMt95U097208;
+        Thu, 28 Jan 2021 16:55:09 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1611874510;
+        bh=jonMZv526fvLfzZM6MKHRBQrNWc4O0SRB31532W4+KU=;
+        h=Subject:From:To:CC:References:Date:In-Reply-To;
+        b=xUhqGDFTyCN3lfJIhQ+XBxnZZ2SrDFbAvF5aHn2SW7RO6f+2d/qXXFR6z12fqGNLM
+         N+uwpJ7etWS13zGb0aqCvS18Vzq0PZUe6+5baqHU9vIqwz3DvVzleAOnaExKgav1ax
+         5be3EmHpe0st499SsQwLKO/qru3ZttPh1WA2Dhs4=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 10SMt9j5015626
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 28 Jan 2021 16:55:09 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 28
+ Jan 2021 16:55:09 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 28 Jan 2021 16:55:09 -0600
+Received: from [10.250.35.71] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 10SMt9KI010966;
+        Thu, 28 Jan 2021 16:55:09 -0600
+Subject: Re: [PATCH] remoteproc: pru: future-proof PRU ID matching
+From:   Suman Anna <s-anna@ti.com>
+To:     David Lechner <david@lechnology.com>,
+        <linux-remoteproc@vger.kernel.org>
+CC:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20210104211816.420602-1-david@lechnology.com>
+ <ccc1ee4b-ed73-f7c8-ca1e-f15eedeeb84b@ti.com>
+Message-ID: <e2a0a40d-f720-8139-29f3-39a473c69119@ti.com>
+Date:   Thu, 28 Jan 2021 16:55:04 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <ccc1ee4b-ed73-f7c8-ca1e-f15eedeeb84b@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Date:   Thu, 28 Jan 2021 20:17:07 +0200
-From:   Nut Grove Manor <manornutgrovemanor@gmail.com>
-To:     undisclosed-recipients:;
-Subject: Invitation To Quote
-User-Agent: Roundcube Webmail/1.4.1
-Message-ID: <b09951c581c69bcd4c3d48c21f6885b3@gmail.com>
-X-Sender: manornutgrovemanor@gmail.com
-X-Originating-IP: 154.0.175.203
-X-Afrihost-Domain: pesci.aserv.co.za
-X-Afrihost-Username: 154.0.175.203
-Authentication-Results: ucebox.co.za; auth=pass smtp.auth=154.0.175.203@pesci.aserv.co.za
-X-Afrihost-Outgoing-Class: unsure
-X-Afrihost-Outgoing-Evidence: Combined (0.71)
-X-Recommended-Action: accept
-X-Filter-ID: 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
- F2m4bBx/YCvbzEWyHpfJdFJnGm+sTRDggxgVxQ==
-X-Report-Abuse-To: spam@spe1.ucebox.co.za
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Good Day Sir
+Hi David,
 
-We are please to invite you/your company to quote the following item
-listed
-below:
+On 1/15/21 6:53 PM, Suman Anna wrote:
+> On 1/4/21 3:18 PM, David Lechner wrote:
+>> Currently, to determine the ID (0 or 1) of a PRU core, the last 19 bits
+>> of the physical address of the cores IRAM are compared to known values.
+>> However, the PRUs on TI AM18XX have IRAM at 0x01c38000 and 0x01c3c000
+>> respectively. The former conflicts with PRU1_IRAM_ADDR_MASK which could
+>> cause PRU0 to be detected as PRU1. (The latter also conflicts with
+>> TX_PRU1_IRAM_ADDR_MASK but it would still be correctly detected as
+>> PRU1.)
+>>
+>> This fixes the problem by moving the address matching offset values to
+>> the device-specific data. This way the compatible string does half of
+>> the work of narrowing down the addresses to two possibilities instead
+>> of checking the address against all possible PRU types. This also lets
+>> us narrow down the scope of the match from 19 bits to 16 bits for all
+>> PRU types.
+>>
+>> After this, the TI AM18XX PRUs will be able to be added without running
+>> into the problems stated above.
+>>
+>> We can also drop the local ret variable while touching this code.
+>>
+>> Signed-off-by: David Lechner <david@lechnology.com>
+> 
+> Will test this patch on Mon/Tue on various platforms.
+> 
+> Bjorn,
+> Please wait for my Ack on this before you pick this up.
+> 
+> regards
+> Suman
+> 
+>> ---
+>>  drivers/remoteproc/pru_rproc.c | 49 ++++++++++++++--------------------
+>>  1 file changed, 20 insertions(+), 29 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
+>> index 2667919d76b3..94ce48df2f48 100644
+>> --- a/drivers/remoteproc/pru_rproc.c
+>> +++ b/drivers/remoteproc/pru_rproc.c
+>> @@ -46,15 +46,6 @@
+>>  #define PRU_DEBUG_GPREG(x)	(0x0000 + (x) * 4)
+>>  #define PRU_DEBUG_CT_REG(x)	(0x0080 + (x) * 4)
+>>  
+>> -/* PRU/RTU/Tx_PRU Core IRAM address masks */
+>> -#define PRU_IRAM_ADDR_MASK	0x3ffff
+>> -#define PRU0_IRAM_ADDR_MASK	0x34000
+>> -#define PRU1_IRAM_ADDR_MASK	0x38000
+>> -#define RTU0_IRAM_ADDR_MASK	0x4000
+>> -#define RTU1_IRAM_ADDR_MASK	0x6000
+>> -#define TX_PRU0_IRAM_ADDR_MASK	0xa000
+>> -#define TX_PRU1_IRAM_ADDR_MASK	0xc000
+>> -
+>>  /* PRU device addresses for various type of PRU RAMs */
+>>  #define PRU_IRAM_DA	0	/* Instruction RAM */
+>>  #define PRU_PDRAM_DA	0	/* Primary Data RAM */
+>> @@ -96,10 +87,14 @@ enum pru_type {
+>>  /**
+>>   * struct pru_private_data - device data for a PRU core
+>>   * @type: type of the PRU core (PRU, RTU, Tx_PRU)
+>> + * @pru0_iram_offset: used to identify PRU core 0
+>> + * @pru1_iram_offset: used to identify PRU core 1
+>>   * @is_k3: flag used to identify the need for special load handling
+>>   */
+>>  struct pru_private_data {
+>>  	enum pru_type type;
+>> +	u16 pru0_iram_offset;
+>> +	u16 pru1_iram_offset;
+>>  	unsigned int is_k3 : 1;
+>>  };
+>>  
+>> @@ -693,33 +688,21 @@ static int pru_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
+>>  }
+>>  
+>>  /*
+>> - * Compute PRU id based on the IRAM addresses. The PRU IRAMs are
+>> + * Compute PRU id based on the last 16 bits of IRAM addresses. The PRU IRAMs are
+>>   * always at a particular offset within the PRUSS address space.
+>>   */
+>>  static int pru_rproc_set_id(struct pru_rproc *pru)
+>>  {
+>> -	int ret = 0;
+>> -
+>> -	switch (pru->mem_regions[PRU_IOMEM_IRAM].pa & PRU_IRAM_ADDR_MASK) {
+>> -	case TX_PRU0_IRAM_ADDR_MASK:
+>> -		fallthrough;
+>> -	case RTU0_IRAM_ADDR_MASK:
+>> -		fallthrough;
+>> -	case PRU0_IRAM_ADDR_MASK:
+>> +	u16 offset = pru->mem_regions[PRU_IOMEM_IRAM].pa;
+>> +
+>> +	if (offset == pru->data->pru0_iram_offset)
+>>  		pru->id = 0;
+>> -		break;
+>> -	case TX_PRU1_IRAM_ADDR_MASK:
+>> -		fallthrough;
+>> -	case RTU1_IRAM_ADDR_MASK:
+>> -		fallthrough;
+>> -	case PRU1_IRAM_ADDR_MASK:
+>> +	else if (offset == pru->data->pru1_iram_offset)
+>>  		pru->id = 1;
+>> -		break;
+>> -	default:
+>> -		ret = -EINVAL;
+>> -	}
+>> +	else
+>> +		return -EINVAL;
+>>  
+>> -	return ret;
+>> +	return 0;
 
-Product/Model No: TM9653 PRESSURE REGULATOR
-Product Name:MEKO
-Qty. 30 units
+While this logic does work, it is a bit convoluted IMO for any one reading the
+code. The offset here is kind of a misnomer, this logic is relying on only the
+least 16-bits of the address.
 
-Compulsory,Kindly send your quotation
-for immediate approval.
+I have actually used a different logic in our downstream code, and we chose the
+current approach to minimize the static data.
 
-Kind Regards,
-Albert Bourla
-PFIZER B.V Supply Chain Manager
-Tel: +31(0)208080 880
-ADDRESS: Rivium Westlaan 142, 2909 LD
-Capelle aan den IJssel, Netherlands
+https://git.ti.com/gitweb?p=rpmsg/remoteproc.git;a=blob;f=drivers/remoteproc/pru_rproc.c;h=cbcd8a6e420e61d60218a01ea0e76f0c9989a337;hb=refs/heads/rproc-linux-5.4.y#l1135
+
+>>  }
+>>  
+>>  static int pru_rproc_probe(struct platform_device *pdev)
+>> @@ -825,20 +808,28 @@ static int pru_rproc_remove(struct platform_device *pdev)
+>>  
+>>  static const struct pru_private_data pru_data = {
+>>  	.type = PRU_TYPE_PRU,
+>> +	.pru0_iram_offset = 0x4000,
+>> +	.pru1_iram_offset = 0x8000,
+
+The offsets for the PRU cores are actually 0x34000 and 0x38000 respectively from
+the base of the PRUSS on non-Davinci SoCs.
+
+If we were to use this static data approach, then we might as well continue to
+use the current address masking logic with the appropriate masks for Davinci
+(0x38000 and 0x3C000, not true offsets but as masks they would work). Davinci
+PRUSS is the only one with its differences being the first PRUSS IP, and I would
+prefer to keep the logic aligned to the IPs on all the recent SoCs on 3
+different TI SoC families (OMAP, Keystone 2 and K3).
+
+Let me know what you think.
+
+regards
+Suman
+
+>>  };
+>>  
+>>  static const struct pru_private_data k3_pru_data = {
+>>  	.type = PRU_TYPE_PRU,
+>> +	.pru0_iram_offset = 0x4000,
+>> +	.pru1_iram_offset = 0x8000,
+>>  	.is_k3 = 1,
+>>  };
+>>  
+>>  static const struct pru_private_data k3_rtu_data = {
+>>  	.type = PRU_TYPE_RTU,
+>> +	.pru0_iram_offset = 0x4000,
+>> +	.pru1_iram_offset = 0x6000,
+>>  	.is_k3 = 1,
+>>  };
+>>  
+>>  static const struct pru_private_data k3_tx_pru_data = {
+>>  	.type = PRU_TYPE_TX_PRU,
+>> +	.pru0_iram_offset = 0xa000,
+>> +	.pru1_iram_offset = 0xc000,
+>>  	.is_k3 = 1,
+>>  };
+>>  
+>>
+> 
+
