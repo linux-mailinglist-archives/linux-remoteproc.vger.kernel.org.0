@@ -2,66 +2,70 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA119315554
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  9 Feb 2021 18:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F245331586C
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  9 Feb 2021 22:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbhBIRlX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 9 Feb 2021 12:41:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59676 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233319AbhBIRks (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 9 Feb 2021 12:40:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1692764EB4;
-        Tue,  9 Feb 2021 17:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612892408;
-        bh=6C6yRfAXHu8No0ZW1DOAiRLNG5lxFYQP7q/uAymydjc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=MgVCoxrf8AOQ+3qoKVuGZORrTUhCT2fG6WwnyarCQdc2sDH9705PsvxAiSEr/8p2h
-         MxniD7xa+PbCjmsVEAT+v1Dr2XAB/kCNkDYCpBdniDwelyrFYAUNWQmMO7uUwDuxDq
-         QQubS9RhXEjS700mv+vgDj5KpJ81dxHrunzeAdr6yWiSYKKgAPKo9oyln2ngtZR7ge
-         82pba1wop3Fs/ESdto+hZn+gzLVTzncm9bnFg95rje4Y1jwwbrEacw/T9cRoBOMymn
-         dQE6bX5ZgYVKWgdv2E0w7zF0AX8s3UfXK1poTYw+thZI20Hf45yeMB8fdZduwagvyI
-         dsppsFdOKRO2Q==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0DB0C609F1;
-        Tue,  9 Feb 2021 17:40:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S234108AbhBIVPE (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 9 Feb 2021 16:15:04 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:34894 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233931AbhBIUnm (ORCPT
+        <rfc822;linux-remoteproc@vger.kernel.org>);
+        Tue, 9 Feb 2021 15:43:42 -0500
+Received: by mail-oi1-f181.google.com with SMTP id l3so10949996oii.2;
+        Tue, 09 Feb 2021 12:43:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Di0YvPKm/59BJaf3ZJnWx4wP6aCe6n3LSpohUxDF3jU=;
+        b=fp++cp4dv1Yjl1N68/nJCKKp2+S+Gs2S1TAdhrSXVFdjXCwijDYtTOZY9WEs0mlcMh
+         i6xX1MytZvl6yWZyR+8P08efrGCXypgCREQh5aqjBRaFh9wb6NjJWX/l4FaxcQ+KTGUE
+         F8jEjLgBu3gFXBlB27lgPbe71Lr19vUTOxeBWQQah81ZM5QKSMBtG33tMba0W5FG7p7/
+         hTJyPi1sB/wkKoxLOHEDdp49C2Yld9a0jvdNTDVYNLK2qQR9vVK6dJIZFicm+qWOSCSB
+         nPD0KCumBCpCckpv4IeuDxZ/MdEH3NL4t+BZ6/oFx4WIrECYa7H3ynlsUFQDSMLJNFW2
+         kM/A==
+X-Gm-Message-State: AOAM532ZaUWp90iq2zss4zey+UIaJHoxJzWnCUr9ntUPy3hma8rszVqf
+        aZrrdR1IrUJzbeAuc4uidANqJnjn1g==
+X-Google-Smtp-Source: ABdhPJwpkXK7E8OdkjL/79Yw6UN1he5ZXXuBaD4uI9rnhQjjLTvCFqbBLcSYEPn1Z5es3HvXPL4f/Q==
+X-Received: by 2002:aca:3807:: with SMTP id f7mr3734125oia.140.1612901123615;
+        Tue, 09 Feb 2021 12:05:23 -0800 (PST)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id q7sm4484930oif.1.2021.02.09.12.05.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Feb 2021 12:05:22 -0800 (PST)
+Received: (nullmailer pid 75330 invoked by uid 1000);
+        Tue, 09 Feb 2021 20:05:20 -0000
+Date:   Tue, 9 Feb 2021 14:05:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
+Cc:     linux-arm-msm@vger.kernel.org, robh+dt@kernel.org,
+        sboyd@kernel.org, agross@kernel.org, jassisinghbrar@gmail.com,
+        bjorn.andersson@linaro.org, mturquette@baylibre.com,
+        mark.rutland@arm.com, sricharan@codeaurora.org,
+        devicetree@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, david.brown@linaro.org,
+        linux-clk@vger.kernel.org, ohad@wizery.com
+Subject: Re: [PATCH 1/3] dt-bindings: remoteproc: qcom: Add Q6V5 Modem PIL
+ binding for IPQ6018
+Message-ID: <20210209200520.GA75242@robh.at.kernel.org>
+References: <1611940320-24830-1-git-send-email-gokulsri@codeaurora.org>
+ <1611940320-24830-2-git-send-email-gokulsri@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] remoteproc: qcom_wcnss: remove unneeded semicolon
-From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <161289240805.27941.17929418053996951409.git-patchwork-notify@kernel.org>
-Date:   Tue, 09 Feb 2021 17:40:08 +0000
-References: <1612320402-3313-1-git-send-email-yang.lee@linux.alibaba.com>
-In-Reply-To: <1612320402-3313-1-git-send-email-yang.lee@linux.alibaba.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     linux-remoteproc@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1611940320-24830-2-git-send-email-gokulsri@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello:
-
-This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
-
-On Wed,  3 Feb 2021 10:46:42 +0800 you wrote:
-> Eliminate the following coccicheck warning:
-> ./drivers/remoteproc/qcom_wcnss.c:573:2-3: Unneeded semicolon
+On Fri, 29 Jan 2021 22:41:58 +0530, Gokul Sriram Palanisamy wrote:
+> Add a new modem compatible string for IPQ6018 SoCs
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> Signed-off-by: Gokul Sriram Palanisamy <gokulsri@codeaurora.org>
 > ---
->  drivers/remoteproc/qcom_wcnss.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
 
-Here is the summary with links:
-  - remoteproc: qcom_wcnss: remove unneeded semicolon
-    https://git.kernel.org/andersson/remoteproc/c/9a1d27148543
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Acked-by: Rob Herring <robh@kernel.org>
