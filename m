@@ -2,40 +2,40 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0484315558
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  9 Feb 2021 18:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 398C0315555
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  9 Feb 2021 18:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbhBIRlf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 9 Feb 2021 12:41:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59658 "EHLO mail.kernel.org"
+        id S233319AbhBIRl3 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 9 Feb 2021 12:41:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59678 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233365AbhBIRkv (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 9 Feb 2021 12:40:51 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id F064F64E15;
-        Tue,  9 Feb 2021 17:40:07 +0000 (UTC)
+        id S233352AbhBIRks (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Tue, 9 Feb 2021 12:40:48 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 1F81864EB8;
+        Tue,  9 Feb 2021 17:40:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1612892408;
-        bh=TZlAa5+6wcouYskQioJR0/2V5lg283Gwd9ZBs5XrzlE=;
+        bh=76LQMP+d430MZUrBJslwJFKZh8Mj6Q0OgMdquTLoFy4=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=vLnXhKO6GizIGGVfivQ3yzT8aLZVJwOTtd5sMsvP0wXOAVJll8JcUD34Dgcw+0P9F
-         W61tG12VqSPiPQFq+en3cadigW7vxq8th+zZChKRe7zpOWJGSysWG9W6HtGRPH9Jr9
-         swu8I7DwaTCScbGmnSJfydC1E/Zv1jLIzwU3T4yeqSN3/IVtUNDYz2lVvJj9AWXClQ
-         eNVF/bxpN3zv39J4qHWJKBHvGfeQoLc9bGv9gMVu7sYbTL8fPEWU3Y/iyWG6/WK78L
-         YICkTQYMN0QK6Y8pefBPw6GjNXrbZ+NAMMhdyI5GJjftea38li7x3AD+x6On/jRcWB
-         sl2e84WG+RLaw==
+        b=tZorWE6ht1QXgCgoEc5T9G36jwoM0J5NparDSVp1tfoGpRgIqeVwd3ocfVQerr097
+         9uDq5LNGnSPxvNcBAK6PVhx7BdW7JDSyFR48quiOTmIuwi0TRkQiA2fwWrUC/i+IUW
+         KW5ee5+vciab2Be1nkJZASH7BZlUqab8tQaxVme/jq/0AhUJ6Gd2vTtwuCBzvl7Mcu
+         7ak9ggWC7mYKeQxQlhX6I5YjCBFd9w5h+ArRz9AvBLZ+uBeRbErH0+ZzMFobPLo+Wv
+         FZi0CQ9zY3sdBCzJm3Yylpww33wLq7MS+NTqNsahB64z0lC5dtjPSsxM6I65Nnfm+e
+         Pa6g5gw4shTxw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E5920609D6;
-        Tue,  9 Feb 2021 17:40:07 +0000 (UTC)
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 187D0609D6;
+        Tue,  9 Feb 2021 17:40:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/4] remoteproc/mediatek: support L1TCM for MT8192 SCP
+Subject: Re: [PATCH v2] remoteproc: stm32: improve debug using dev_err_probe
 From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <161289240793.27941.5123530480508289882.git-patchwork-notify@kernel.org>
-Date:   Tue, 09 Feb 2021 17:40:07 +0000
-References: <20210127083136.3745652-1-tzungbi@google.com>
-In-Reply-To: <20210127083136.3745652-1-tzungbi@google.com>
-To:     Tzung-Bi Shih <tzungbi@google.com>
+Message-Id: <161289240809.27941.7088751960645148206.git-patchwork-notify@kernel.org>
+Date:   Tue, 09 Feb 2021 17:40:08 +0000
+References: <20201217144125.12903-1-arnaud.pouliquen@foss.st.com>
+In-Reply-To: <20201217144125.12903-1-arnaud.pouliquen@foss.st.com>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
 Cc:     linux-remoteproc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
@@ -43,28 +43,21 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 
 Hello:
 
-This series was applied to andersson/remoteproc.git (refs/heads/for-next):
+This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
 
-On Wed, 27 Jan 2021 16:31:32 +0800 you wrote:
-> The series applies after [1].
+On Thu, 17 Dec 2020 15:41:25 +0100 you wrote:
+> From: Arnaud Pouliquen <arnaud.pouliquen@foss-st.com>
 > 
-> The series supports L1TCM which is a high performance memory region in
-> MT8192 SCP.
-> 
-> The 1st patch replaces platform_get_resource_byname() and
-> devm_ioremap_resource() pairs per [2] suggested.
+> When possible use dev_err_probe help to properly deal with the
+> PROBE_DEFER error.
+> The benefit is that DEFER issue will be logged in the devices_deferred
+> debugfs file.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v3,1/4] remoteproc/mediatek: use devm_platform_ioremap_resource_byname
-    https://git.kernel.org/andersson/remoteproc/c/2e88e8fcdfcd
-  - [v3,2/4] remoteproc/mediatek: enable MPU for all memory regions in MT8192 SCP
-    https://git.kernel.org/andersson/remoteproc/c/ff3ea536023e
-  - [v3,3/4] dt-bindings: remoteproc: mediatek: add L1TCM memory region
-    https://git.kernel.org/andersson/remoteproc/c/503c64cc42f1
-  - [v3,4/4] remoteproc/mediatek: support L1TCM
-    https://git.kernel.org/andersson/remoteproc/c/ca23ecfdbd44
+  - [v2] remoteproc: stm32: improve debug using dev_err_probe
+    https://git.kernel.org/andersson/remoteproc/c/cf34838d591f
 
 You are awesome, thank you!
 --
