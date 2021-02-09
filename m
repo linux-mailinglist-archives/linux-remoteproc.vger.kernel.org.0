@@ -2,68 +2,80 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42536315A4A
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 10 Feb 2021 00:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 099F4316177
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 10 Feb 2021 09:49:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234141AbhBIXvd (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 9 Feb 2021 18:51:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40458 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234861AbhBIXQ5 (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 9 Feb 2021 18:16:57 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4CD2964DED;
-        Tue,  9 Feb 2021 22:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1612911007;
-        bh=wUs9WTuVmgOAUO4SpCTeHJAMDwmlRdDl37A6r3KJYeY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Hn+wEcjgo7PshdHBkvVQ65lRW4B6DIBzP2McAqKQ0WbEcF05viZHpzIepc0hVUqR5
-         gJulPLAc4Ki1obE/qHkL1/V5ID2OFH+Z09m8/Epi1n+NahcsMCbZdD9XI7PX8D1+UL
-         6LUcaD3SlFXtI54GeoCFTWow877SQOPyTDfmeOmm03XqMH1MzV6NmE++lBQMFPDUXQ
-         TtChl8RbbKWwDlfSqXkWiAsg7RAuJuiOKDro6dpSq6VxWPga7kY5LsHdYgVnw7xY1A
-         WfXYBdy5FO2w5jAqcBGyJkLJEm3MtsmbZa8SY8WuCny4kQmE/EmBJAwRf5q09eQirN
-         a1bBB8YLk10+A==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 40F31609E2;
-        Tue,  9 Feb 2021 22:50:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S229784AbhBJItL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 10 Feb 2021 03:49:11 -0500
+Received: from spam.auroraoh.com ([24.56.89.101]:42434 "EHLO
+        barracuda.auroraoh.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230191AbhBJIqW (ORCPT
+        <rfc822;linux-remoteproc@vger.kernel.org>);
+        Wed, 10 Feb 2021 03:46:22 -0500
+X-ASG-Debug-ID: 1612946710-112c0d6a799ccd0001-CKeD3t
+Received: from COASRV-MAIL2.auroraoh.loc (coasrv-mail2.auroraoh.loc [10.3.1.15]) by barracuda.auroraoh.com with ESMTP id A5d5JaKnY6Ad7YUD; Wed, 10 Feb 2021 03:45:10 -0500 (EST)
+X-Barracuda-Envelope-From: JanuskaD@auroraoh.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.3.1.15
+Received: from [172.20.10.5] (197.210.29.8) by COASRV-MAIL2.auroraoh.loc
+ (10.3.1.15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 9 Feb 2021
+ 02:44:47 -0500
+Content-Type: text/plain; charset="iso-8859-1"
+X-Barracuda-RBL-Trusted-Forwarder: 172.20.10.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] remoteproc: core: Fix rproc->firmware free in
- rproc_set_firmware()
-From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <161291100726.6282.7146787273205980697.git-patchwork-notify@kernel.org>
-Date:   Tue, 09 Feb 2021 22:50:07 +0000
-References: <20210118165904.719999-1-daniele.alessandrelli@linux.intel.com>
-In-Reply-To: <20210118165904.719999-1-daniele.alessandrelli@linux.intel.com>
-To:     Daniele Alessandrelli <daniele.alessandrelli@linux.intel.com>
-Cc:     linux-remoteproc@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: We are a registered Private Loan Investment Company in the United Kingdom,
+ we also registered with the Turkish British Chamber of Commerce and Industry
+ (TBCCI) we have operations in Europe and Asia.
+To:     Recipients <januskad@auroraoh.com>
+X-ASG-Orig-Subj: We are a registered Private Loan Investment Company in the United Kingdom,
+ we also registered with the Turkish British Chamber of Commerce and Industry
+ (TBCCI) we have operations in Europe and Asia.
+From:   <januskad@auroraoh.com>
+Date:   Tue, 9 Feb 2021 15:44:01 +0800
+Reply-To: <cfolimiited@gmail.com>
+X-Priority: 1 (High)
+X-Antivirus: Avast (VPS 210207-2, 02/07/2021), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <abfae655-38d9-4867-92bb-3c2732a507cb@COASRV-MAIL2.auroraoh.loc>
+X-Originating-IP: [197.210.29.8]
+X-ClientProxiedBy: COASRV-MAIL3.auroraoh.loc (10.3.1.13) To
+ COASRV-MAIL2.auroraoh.loc (10.3.1.15)
+X-Barracuda-Connect: coasrv-mail2.auroraoh.loc[10.3.1.15]
+X-Barracuda-Start-Time: 1612946710
+X-Barracuda-URL: https://10.3.1.12:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at auroraoh.com
+X-Barracuda-Scan-Msg-Size: 755
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 1.61
+X-Barracuda-Spam-Status: No, SCORE=1.61 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=5.0 tests=BSF_SC0_SA609_NRN, BSF_SC0_SA912_RP_FR, BSF_SC0_SA_TO_FROM_ADDR_MATCH, NO_REAL_NAME
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.87881
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+        0.00 NO_REAL_NAME           From: does not include a real name
+        0.01 BSF_SC0_SA912_RP_FR    Custom Rule BSF_SC0_SA912_RP_FR
+        0.50 BSF_SC0_SA_TO_FROM_ADDR_MATCH Sender Address Matches Recipient
+                                   Address
+        1.10 BSF_SC0_SA609_NRN      Custom Rule SA609_NRN
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello:
+We are seeking for beneficiaries who source for fund to expand/relocating their business interest abroad. We are ready to fund projects outside Turkey and United Kingdom in the form of Soft Loan. We grant loans to both corporate and private entities at a low interest rate of 2% R.O.I per annul.
 
-This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
+We like to grant loan in the following sectors: oil/Gas, banking, real estate, stock speculation and mining, transportation, health sector and tobacco, Communication Services, Agriculture Forestry & Fishing, thus any sector. The terms are very flexible and interesting.
 
-On Mon, 18 Jan 2021 16:59:04 +0000 you wrote:
-> From: Daniele Alessandrelli <daniele.alessandrelli@intel.com>
-> 
-> rproc_alloc_firmware() (called by rproc_alloc()) can allocate
-> rproc->firmware using kstrdup_const() and therefore should be freed
-> using kfree_const(); however, rproc_set_firmware() frees it using the
-> simple kfree(). This causes a kernel oops if a constant string is passed
-> to rproc_alloc() and rproc_set_firmware() is subsequently called.
-> 
-> [...]
+Please contact us for more details;
 
-Here is the summary with links:
-  - remoteproc: core: Fix rproc->firmware free in rproc_set_firmware()
-    https://git.kernel.org/andersson/remoteproc/c/43d3f2c715ce
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Kind regards,
 
+Paul McCann
+
+-- 
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
 
