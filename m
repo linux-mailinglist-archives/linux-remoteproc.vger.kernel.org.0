@@ -2,137 +2,124 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4D9A319286
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 11 Feb 2021 19:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C66E3196F4
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Feb 2021 00:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbhBKSwq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 11 Feb 2021 13:52:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
+        id S230311AbhBKXr5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 11 Feb 2021 18:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbhBKSwo (ORCPT
+        with ESMTP id S230228AbhBKXrJ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 11 Feb 2021 13:52:44 -0500
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC3FC061788
-        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 10:52:04 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id k10so6133475otl.2
-        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 10:52:04 -0800 (PST)
+        Thu, 11 Feb 2021 18:47:09 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980B6C061786
+        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 15:46:29 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id t29so4709574pfg.11
+        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 15:46:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OVkOWiTcef92BZcXSFNKI6urGv4ClWKqZ2aHBAwr9WI=;
-        b=OcKtPxTMPJ/pI5h/KaWloIQ13BI9MrFfYMnPg8duScubygGcThI6E2xXB64LlL6ubT
-         l6A6w3WjIxITYaBdZvnWhSpbX3kEGtxW/lS84byVX6UzXpL78+Suf8SNIYStVsamPob/
-         4TywyNhn7bkqLbDxNxNWkPxWBxOBI/fC0uP/GEZ1JYSJOmrYVAZ7v2mXU2OJVyJJkJfQ
-         FBoBD9I2C2ogJ/YmvzqfQUueaAbKAgNBGXNqO+KWrlNB1Nin66InnfiYX01UFOrA+or2
-         e1ym18sWol82D+9QLEBkjfSrLZcYkk77QtbbSIQn54G4kDYzKphdrSHM/JglFmm8qNvX
-         L2TA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EkrytJ9LzBZQeMfRS4wLQprxHkYkItxpKGh4h54tQFM=;
+        b=Oc6IEf1NnavzFlmiOhR4OVBYD33muPM4q1z/iKRkQxt10gl+5ZoYuYo4/r1DKNyJmr
+         MFC0GIIU2/Iu+3D3DukC25EvTRCx8CmpnbdMRW7aEuF9TdVJ3uj2rBtpM4kC/9MpiVcJ
+         iI9iz8yoavYbxR25JET4iDGqfdYM3adlNpGNfckZQerBIq5BTRSvZSZWFbP17KG7WaIS
+         wpLXhupm8CNI5EEgwCqu4fQ5gNIkAFg0znnBU5Nl29aNqia6lr7UhMAWXbHD7xNqldgI
+         PZNGT0D7eXzdcWvMy8bsun/XvdOeU2Ir0wXRc4XHe07F1CakLCO+D6Sy/b9g4i8ynBne
+         Jmig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OVkOWiTcef92BZcXSFNKI6urGv4ClWKqZ2aHBAwr9WI=;
-        b=GPUcq6Ch3wQBLzQYChXIwhJnLlVMnsGgoYmy2+ss/EywhWUaTSIpQrenbbJlX7heFm
-         06PpJdORUI27bonfu38uJ7OATn4KRh0jqc5t0j6z08u2RLbnQUcdvPGUiDbfQhPxNhgx
-         Uvb4FwuzTEUbbpzPgceTwld+BNvczG2YMf+7o7SCPyxGcfh4nIWggFt2dUmHj7XEvDur
-         xTXbOj2NJrg1fvg/rABu779Fh3O0KeD9VQJUU2pdsHfDB9BndkzO5A8N/UF1ONOYygwY
-         tj+foQlhMzGB8EVHNgL1IYA3zX4O13XaajWVnPUES5Ec1gn2bFqSp/uYDtC8UANps9hy
-         0P6Q==
-X-Gm-Message-State: AOAM530sLb/gYLjwj33Jh1bxqATDMrwaEQf9jMtxNG55+ZJLZSmx1qsB
-        i9dENAH4+dvedH9EovKG+fbrMg==
-X-Google-Smtp-Source: ABdhPJwf6gkTQIas5Mts7gamBTwBrwhQ9GsZm1U8X195GnlW/kAkgV8Ivieym0/0ILPnR3HQuoP/Vg==
-X-Received: by 2002:a9d:77d6:: with SMTP id w22mr6796757otl.145.1613069523801;
-        Thu, 11 Feb 2021 10:52:03 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id b21sm122655otq.4.2021.02.11.10.52.02
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EkrytJ9LzBZQeMfRS4wLQprxHkYkItxpKGh4h54tQFM=;
+        b=qXIMDEaNqPOdLb4VRtTnn7h+CYHbatz1F35sTB/sG4yKCVKmS5cm2cXp3Em4S7yjqe
+         nDHNlybieJqliziFQyq/LNf0FkZs517IceO63iqv31JT/47ALNoCKGoOpJLQeIRKqU+B
+         NwIR2426NvEfRZhfKR/clrhCVgwhHe838HjLST1vvQsYcPKCiNJOQov9U9sv/MPV8qa2
+         KMk73VJFJz+QATXSU+/PMCVAgCOzp+wmtLAv6CSVok1ybTWz50AVD2fnbcUyH3jb6b1v
+         NLj3qjDiPAXPYfAwk5RlR4vKKAzy4tjdDapDfAaYQqU/mHDakcHkC5HaK/Lo5YIodnh6
+         jFMQ==
+X-Gm-Message-State: AOAM532c4f/Pnkv2jlK15lEz/Deofu2tirIMp0DH9yQ3ZyE9+mGb/W2b
+        ksGvk1ZtKDGD8C6lTx8s6DZIPQ==
+X-Google-Smtp-Source: ABdhPJy63E2JbTR7H47TOu+Msa/uRIC/V7BtGQA5Rn57FaeDRQtdVEqLTQ2Axcs0hq87m/0HtRYufQ==
+X-Received: by 2002:a63:ff57:: with SMTP id s23mr563333pgk.90.1613087189038;
+        Thu, 11 Feb 2021 15:46:29 -0800 (PST)
+Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id iq6sm5932740pjb.6.2021.02.11.15.46.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 10:52:03 -0800 (PST)
-Date:   Thu, 11 Feb 2021 12:52:01 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: qcom: pas: Add SM8350
- remoteprocs
-Message-ID: <YCV80dfkxXEPBveo@builder.lan>
-References: <20210210104539.340349-1-vkoul@kernel.org>
+        Thu, 11 Feb 2021 15:46:28 -0800 (PST)
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        arnaud.pouliquen@st.com
+Cc:     robh+dt@kernel.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v5 00/19] remoteproc: Add support for detaching a remote processor 
+Date:   Thu, 11 Feb 2021 16:46:08 -0700
+Message-Id: <20210211234627.2669674-1-mathieu.poirier@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210210104539.340349-1-vkoul@kernel.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed 10 Feb 04:45 CST 2021, Vinod Koul wrote:
+Following the work done here [1], this set provides support for the
+remoteproc core to release resources associated with a remote processor
+without having to switch it off. That way a platform driver can be removed
+or the application processor power cycled while the remote processor is
+still operating.
 
-> Add the SM8350 audio, compute, modem and sensor remoteprocs to the PAS
-> DT binding.
-> 
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  .../devicetree/bindings/remoteproc/qcom,adsp.txt     | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt
-> index 54737024da20..41eaa2466aab 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.txt
-> @@ -25,6 +25,10 @@ on the Qualcomm ADSP Hexagon core.
->  		    "qcom,sm8250-adsp-pas"
->  		    "qcom,sm8250-cdsp-pas"
->  		    "qcom,sm8250-slpi-pas"
-> +		    "qcom,sm8350-adsp-pas"
-> +		    "qcom,sm8350-cdsp-pas"
-> +		    "qcom,sm8350-slpi-pas"
-> +		    "qcom,sm8350-mpss-pas"
->  
->  - interrupts-extended:
->  	Usage: required
-> @@ -51,10 +55,14 @@ on the Qualcomm ADSP Hexagon core.
->  	qcom,sm8250-adsp-pas:
->  	qcom,sm8250-cdsp-pas:
->  	qcom,sm8250-slpi-pas:
-> +	qcom,sm8350-adsp-pas:
-> +	qcom,sm8350-cdsp-pas:
-> +	qcom,sm8350-slpi-pas:
->  		    must be "wdog", "fatal", "ready", "handover", "stop-ack"
->  	qcom,qcs404-wcss-pas:
->  	qcom,sc7180-mpss-pas:
->  	qcom,sm8150-mpss-pas:
-> +	qcom,sm8350-mpss-pas:
->  		    must be "wdog", "fatal", "ready", "handover", "stop-ack",
->  		    "shutdown-ack"
->  
-> @@ -113,14 +121,18 @@ on the Qualcomm ADSP Hexagon core.
->  	qcom,sdm845-cdsp-pas:
->  	qcom,sm8150-adsp-pas:
->  	qcom,sm8150-cdsp-pas:
-> +	qcom,sm8250-cdsp-pas:
+Modifications for this revision are detailed in the changelog of each patch but
+the main enhancement is the setup of a clean resource table when a remote
+processor is detached from.
 
-This should be sm8350, I fixed this up and applied the patch.
+I have tested scenarios where the processor is detached and re-attached when
+booted from an external entity and the remoteproc core.  I was also able
+to confirm that removing the platform driver of a detached remote processor
+works.  Re-attaching the remote processor after re-inserting the platorm driver
+also works properly.
+
+Applies cleanly on rproc-next (43d3f2c715ce). 
 
 Thanks,
-Bjorn
+Mathieu
 
->  	qcom,sm8250-cdsp-pas:
->  		    must be "cx", "load_state"
->  	qcom,sc7180-mpss-pas:
->  	qcom,sm8150-mpss-pas:
-> +	qcom,sm8350-mpss-pas:
->  		    must be "cx", "load_state", "mss"
->  	qcom,sm8250-adsp-pas:
-> +	qcom,sm8350-adsp-pas:
->  	qcom,sm8150-slpi-pas:
->  	qcom,sm8250-slpi-pas:
-> +	qcom,sm8350-slpi-pas:
->  		    must be "lcx", "lmx", "load_state"
->  
->  - memory-region:
-> -- 
-> 2.26.2
-> 
+Arnaud POULIQUEN (1):
+  remoteproc: stm32: Move memory parsing to rproc_ops
+
+Mathieu Poirier (18):
+  dt-bindings: remoteproc: Add bindind to support autonomous processors
+  remoteproc: Re-check state in rproc_shutdown()
+  remoteproc: Remove useless check in rproc_del()
+  remoteproc: Rename function rproc_actuate()
+  remoteproc: Add new RPROC_ATTACHED state
+  remoteproc: Properly represent the attached state
+  remoteproc: Add new get_loaded_rsc_table() to rproc_ops
+  remoteproc: stm32: Move resource table setup to rproc_ops
+  remoteproc: Add new detach() remoteproc operation
+  remoteproc: Introduce function __rproc_detach()
+  remoteproc: Introduce function rproc_detach()
+  remoteproc: Properly deal with the resource table
+  remoteproc: Add return value to function rproc_shutdown()
+  remoteproc: Properly deal with a kernel panic when attached
+  remoteproc: Properly deal with a stop request when attached
+  remoteproc: Properly deal with a start request when attached
+  remoteproc: Properly deal with detach request
+  remoteproc: Refactor rproc delete and cdev release path
+
+ .../bindings/remoteproc/remoteproc-core.yaml  |  27 ++
+ drivers/remoteproc/remoteproc_cdev.c          |  32 +-
+ drivers/remoteproc/remoteproc_core.c          | 307 ++++++++++++++++--
+ drivers/remoteproc/remoteproc_elf_loader.c    |  24 +-
+ drivers/remoteproc/remoteproc_internal.h      |  10 +
+ drivers/remoteproc/remoteproc_sysfs.c         |  20 +-
+ drivers/remoteproc/stm32_rproc.c              | 168 +++++-----
+ include/linux/remoteproc.h                    |  27 +-
+ 8 files changed, 465 insertions(+), 150 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/remoteproc-core.yaml
+
+-- 
+2.25.1
+
