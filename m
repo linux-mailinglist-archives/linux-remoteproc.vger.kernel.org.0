@@ -2,52 +2,52 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A1F3196F8
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Feb 2021 00:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD943196F2
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Feb 2021 00:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbhBKXsM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 11 Feb 2021 18:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S230194AbhBKXry (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 11 Feb 2021 18:47:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbhBKXrN (ORCPT
+        with ESMTP id S230219AbhBKXrF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 11 Feb 2021 18:47:13 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F73C06178B
-        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 15:46:30 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id o38so5060056pgm.9
-        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 15:46:30 -0800 (PST)
+        Thu, 11 Feb 2021 18:47:05 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A988CC061797
+        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 15:46:31 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id n10so5057739pgl.10
+        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 15:46:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Gwpmc0x1+3eFyR/7BUUjdFio04J+RxJRu7OO5iEL6OM=;
-        b=WO0wSo3j+XaM9YaYHbZhCBQTUA7k48YCAkeLLXG/SjngCPEgOa+wAvMxV2TPCD/qvh
-         0fkme8eCctnok0ahmPDDDgxEkD+RW1+4aJueNg1Y3ZPvt3IjOHEnKDID7ewATFrq9zpo
-         fSj9BxnHyc7QZOdKJlXLnF4keh6RIAzIl5WS07h44J9qG26IR4DBd5uNzHeFwbXP/puE
-         B29RUK5RkBKvLKNJulOKT0aSt7EiuqK3kMRDlrR2pmEDpTJPC9AM+ocTJZltBa1sQNhQ
-         wV8C90YueHgfVHmAI9NIue9ErJ0P0DgASlEgwmEyfS+qbuKRuY3vqs8gub33yAtz94wp
-         y5kg==
+        bh=2KYl68Dz1gSnngZXwIN4sqByIS0YQQztG8qhw3LioGM=;
+        b=zIatSa7CJYFApIdlA+4ilgXNyRLDat4ml/F/f4McziCPqJX/qShgyLX1ikZm1Hx8L9
+         ogLgeKsFhOGJqUsy/9s7dsqrPpsb58CdyJtW4xpXr4AHoqgsOOVhKDGUJ2GWAF4jNRHS
+         SFy2Qm8eNeRt0gF6tugmbnUwJOHDorASZOeV11ZeoqIep9k8QOlPN4bEnWpu0nEM+jag
+         h/dJCsLpRCCXnAf+QYGOxitC4pyrYUUXIt6Qpb/03n37zjB5ZdfVMDHNX+TPNV7wANH8
+         FO5sPFiNQoLsIBIaiHBzjSGH64MyFuqyKxIY+mWI7cHXP6QXVuCOFHCZdGVHYRrLbX3F
+         aH5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Gwpmc0x1+3eFyR/7BUUjdFio04J+RxJRu7OO5iEL6OM=;
-        b=gqIZiL4hJGCz0twZJOyXxcJ4krOU/vjvDOsXGSevAKUqn7DgVe/WfXh6VkLjQjYcFx
-         4SoZTlA2SPAmBCfA9AwKiwxNui7h7rjCDTH2apsSTpaeXbxbdBSlP6AqR9JK5i9gkDmC
-         OxEHkXbuXffYtqNiOnP6UfVjcb7NLPsbH47huAT7ppiyCrqcuPkNF43NQc1zFmE2W8bj
-         VhwLklN1bajA3Qswk3IFNm+YlW6Az81HuqnvGL4WKPwX8ALP3+hIV22EOrqt3CsdLz0J
-         kR0dmCRxtd5Vcppke02wUDkY6SZ4SK6csGHmhg6V3FJEigtTz9QY2wbO/4H8iAv15RwM
-         hfnA==
-X-Gm-Message-State: AOAM530dw+4TBzd6n5ncsfKPideniHERnU3DiT/LfjppXrRs9/Yx4T/N
-        3NI7MpNnn8tlmj+fzBAkOkoshA==
-X-Google-Smtp-Source: ABdhPJyoshmN5hyMIWVnq14r/Vp9QrsrpigZcMtxfRIKShVYx5fnja/+wwPeHN7sZeaMkTBfgb2VSQ==
-X-Received: by 2002:a63:43c6:: with SMTP id q189mr505041pga.245.1613087190012;
+        bh=2KYl68Dz1gSnngZXwIN4sqByIS0YQQztG8qhw3LioGM=;
+        b=QAV7qCBZMF/bSAV7wWeALoYQzAOSqxlmzWt5fD4InM5j9zqjinCwBezGXu3dTc9Fo0
+         O/Fltq0jhy/EamnnyFESWNgmX5p8OpZrIJmPDQsAk+WfVbtdlYD7rHJ4DHOZ9PUlJznl
+         M4vXrEtMCWL6YVEcjP0bIcRZJOVm5ToooUA+dyuifLJSnzqqrBlvtyToCf73vUAvlVRI
+         GlpeJxuGPQ2bHvUEUWcqUxoHjkq0b3d2mxT7rW07D37wCzd3poCi+lJH9btpC9/aPq1K
+         rf2HZWWt5ayBjH5d5smx9LWSn43QaJNnl8VeJFRqApXIu6f+wXOm7uAQKfW1rXx3KDft
+         ZPcQ==
+X-Gm-Message-State: AOAM531ucl8smJ/7bbDj5eY5CJtsl/4skoYgsz41NG4B2j2lUgUg8TOS
+        pgl2ujFOor8u8xsnFiCVgJxiNg==
+X-Google-Smtp-Source: ABdhPJwimie60L2qE+VDXtDsRyA3fx/afzXxDMnPnvMXXaaUYPUehkvHoQwKs/gicTDp11o+U93fgw==
+X-Received: by 2002:a63:f95b:: with SMTP id q27mr567144pgk.82.1613087190926;
         Thu, 11 Feb 2021 15:46:30 -0800 (PST)
 Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id iq6sm5932740pjb.6.2021.02.11.15.46.29
+        by smtp.gmail.com with ESMTPSA id iq6sm5932740pjb.6.2021.02.11.15.46.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 15:46:29 -0800 (PST)
+        Thu, 11 Feb 2021 15:46:30 -0800 (PST)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     ohad@wizery.com, bjorn.andersson@linaro.org,
         arnaud.pouliquen@st.com
@@ -55,9 +55,9 @@ Cc:     robh+dt@kernel.org, mcoquelin.stm32@gmail.com,
         alexandre.torgue@st.com, linux-remoteproc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 01/19] dt-bindings: remoteproc: Add bindind to support autonomous processors
-Date:   Thu, 11 Feb 2021 16:46:09 -0700
-Message-Id: <20210211234627.2669674-2-mathieu.poirier@linaro.org>
+Subject: [PATCH v5 02/19] remoteproc: Re-check state in rproc_shutdown()
+Date:   Thu, 11 Feb 2021 16:46:10 -0700
+Message-Id: <20210211234627.2669674-3-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210211234627.2669674-1-mathieu.poirier@linaro.org>
 References: <20210211234627.2669674-1-mathieu.poirier@linaro.org>
@@ -67,58 +67,33 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-This patch adds a binding to guide the remoteproc core on how to deal with
-remote processors in two cases:
+The state of the remote processor may have changed between the
+time a call to rproc_shutdown() was made and the time it is
+executed.  To avoid moving forward with an operation that may
+have been cancelled, recheck while holding the mutex.
 
-1) When an application holding a reference to a remote processor character
-   device interface crashes.
-
-2) when the platform driver for a remote processor is removed.
-
-In both cases if "autonomous-on-core-reboot" is specified in the remote
-processor DT node, the remoteproc core will detach the remote processor
-rather than switching it off.
-
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 ---
- .../bindings/remoteproc/remoteproc-core.yaml  | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/remoteproc/remoteproc-core.yaml
+ drivers/remoteproc/remoteproc_core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/remoteproc-core.yaml b/Documentation/devicetree/bindings/remoteproc/remoteproc-core.yaml
-new file mode 100644
-index 000000000000..e8bb8ef9031a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/remoteproc/remoteproc-core.yaml
-@@ -0,0 +1,27 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/remoteproc/remoteproc-core.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 2394eef383e3..f1c097572e01 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -1857,6 +1857,9 @@ void rproc_shutdown(struct rproc *rproc)
+ 		return;
+ 	}
+ 
++	if (rproc->state != RPROC_RUNNING)
++		goto out;
 +
-+title: Binding(s) for a primary processor applicable to all ancillary
-+       processors
-+
-+maintainers:
-+  - Bjorn Andersson <bjorn.andersson@linaro.org>
-+  - Mathieu Poirier <mathieu.poirier@linaro.org>
-+
-+description:
-+  This document defines the bindings used by a primary processor to determine
-+  the state it should leave an ancillary processor when the former is no longer
-+  functioning.
-+
-+properties:
-+  autonomous-on-core-reboot:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description:
-+      When specified the ancillary processor should be left operational when
-+      the primary processor is no longer available.  Otherwise the ancillary
-+      processor should be made inoperative.
-+
-+additionalProperties: true
+ 	/* if the remote proc is still needed, bail out */
+ 	if (!atomic_dec_and_test(&rproc->power))
+ 		goto out;
 -- 
 2.25.1
 
