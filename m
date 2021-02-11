@@ -2,52 +2,52 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD943196F2
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Feb 2021 00:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879483196FB
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Feb 2021 00:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbhBKXry (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 11 Feb 2021 18:47:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
+        id S230063AbhBKXsj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 11 Feb 2021 18:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbhBKXrF (ORCPT
+        with ESMTP id S230260AbhBKXr2 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 11 Feb 2021 18:47:05 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A988CC061797
-        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 15:46:31 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id n10so5057739pgl.10
-        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 15:46:31 -0800 (PST)
+        Thu, 11 Feb 2021 18:47:28 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1DEC0617A7
+        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 15:46:32 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id lw17so5358526pjb.0
+        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Feb 2021 15:46:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2KYl68Dz1gSnngZXwIN4sqByIS0YQQztG8qhw3LioGM=;
-        b=zIatSa7CJYFApIdlA+4ilgXNyRLDat4ml/F/f4McziCPqJX/qShgyLX1ikZm1Hx8L9
-         ogLgeKsFhOGJqUsy/9s7dsqrPpsb58CdyJtW4xpXr4AHoqgsOOVhKDGUJ2GWAF4jNRHS
-         SFy2Qm8eNeRt0gF6tugmbnUwJOHDorASZOeV11ZeoqIep9k8QOlPN4bEnWpu0nEM+jag
-         h/dJCsLpRCCXnAf+QYGOxitC4pyrYUUXIt6Qpb/03n37zjB5ZdfVMDHNX+TPNV7wANH8
-         FO5sPFiNQoLsIBIaiHBzjSGH64MyFuqyKxIY+mWI7cHXP6QXVuCOFHCZdGVHYRrLbX3F
-         aH5Q==
+        bh=yDRxGrQMToW3Vor3njhDmnUs8pFP7mgJszB9Khz+OuE=;
+        b=pZyDs0BtrY8aWl00bxfY7/rUW4h0wlDAGZF0GeV3Qjiz2SqmaEQrAI4QSlfRj8N+9t
+         PoVI/WLAZ3NDxNM5hkalhv6HF2k3fvD7jDtXfybSOhTpY4bDRLir4Cf1R2adpqvrhGQy
+         5khsgwhoFSfmPZcXdo7/JDewtBmkZAk1IYQdDFq2cTDIxiiUEkd9nye2qvckKooNB/X2
+         QJ+5nOWUGzNlS5whigrKloP656FOAc5MvLSt0LX1/X4B2rtoZN04Ktd/b0f5gVc669ws
+         TQHICqjLS0U3PlKZMtwHKwDQIusCVq0qcEa4zKMWQwM1hLfrNnCcIOmKkw+mH/c/EZev
+         jddg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2KYl68Dz1gSnngZXwIN4sqByIS0YQQztG8qhw3LioGM=;
-        b=QAV7qCBZMF/bSAV7wWeALoYQzAOSqxlmzWt5fD4InM5j9zqjinCwBezGXu3dTc9Fo0
-         O/Fltq0jhy/EamnnyFESWNgmX5p8OpZrIJmPDQsAk+WfVbtdlYD7rHJ4DHOZ9PUlJznl
-         M4vXrEtMCWL6YVEcjP0bIcRZJOVm5ToooUA+dyuifLJSnzqqrBlvtyToCf73vUAvlVRI
-         GlpeJxuGPQ2bHvUEUWcqUxoHjkq0b3d2mxT7rW07D37wCzd3poCi+lJH9btpC9/aPq1K
-         rf2HZWWt5ayBjH5d5smx9LWSn43QaJNnl8VeJFRqApXIu6f+wXOm7uAQKfW1rXx3KDft
-         ZPcQ==
-X-Gm-Message-State: AOAM531ucl8smJ/7bbDj5eY5CJtsl/4skoYgsz41NG4B2j2lUgUg8TOS
-        pgl2ujFOor8u8xsnFiCVgJxiNg==
-X-Google-Smtp-Source: ABdhPJwimie60L2qE+VDXtDsRyA3fx/afzXxDMnPnvMXXaaUYPUehkvHoQwKs/gicTDp11o+U93fgw==
-X-Received: by 2002:a63:f95b:: with SMTP id q27mr567144pgk.82.1613087190926;
-        Thu, 11 Feb 2021 15:46:30 -0800 (PST)
+        bh=yDRxGrQMToW3Vor3njhDmnUs8pFP7mgJszB9Khz+OuE=;
+        b=D/cz5QdWHQbanwsszWPrgMZfZ5bNPQtkSrPzqlKEGH4P0mq60ZMMDgl2QL7h+d05Q7
+         M0GO70hQaZuTJN8Xn8MR0FERwNQVBR+586l95fa0A3sGikYJL1vTnTT605nZe7rzmSk/
+         317RATR+c0O3oqLnqFVHL3KUHiG3E8VHCXH/tRlePnJdJXrPEQBg8colQG9C1Pp6wuV/
+         7nM/bvgyn02mYpN8lHpMnpfr44KOQHoF+vkIpy2e5LR8rKQZ+vmqN8adPLebnvALQPGR
+         t29xMcYiE8Qxb0fJ60gwi/gRkEt3StlNN0HRg+jVAGR3FztD+k5bCaYZoaoX6r8Dfh8O
+         UWEA==
+X-Gm-Message-State: AOAM533hW5chznH0SHL8KfFS2vXkN79cZqJceeDXHAXVc8TFy2TH8cwk
+        cpw9sfRCa08Z5GPXT/dZj7a2C2WRDYbf7A==
+X-Google-Smtp-Source: ABdhPJxLsHBBc4Hj7/zp8fSObveC7Gc5G+rloz07Pb/qyttL9SyyFfR9mw9l7nxeJl8Dn3HHTIye3A==
+X-Received: by 2002:a17:90b:945:: with SMTP id dw5mr186517pjb.34.1613087191843;
+        Thu, 11 Feb 2021 15:46:31 -0800 (PST)
 Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id iq6sm5932740pjb.6.2021.02.11.15.46.30
+        by smtp.gmail.com with ESMTPSA id iq6sm5932740pjb.6.2021.02.11.15.46.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Feb 2021 15:46:30 -0800 (PST)
+        Thu, 11 Feb 2021 15:46:31 -0800 (PST)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     ohad@wizery.com, bjorn.andersson@linaro.org,
         arnaud.pouliquen@st.com
@@ -55,9 +55,9 @@ Cc:     robh+dt@kernel.org, mcoquelin.stm32@gmail.com,
         alexandre.torgue@st.com, linux-remoteproc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v5 02/19] remoteproc: Re-check state in rproc_shutdown()
-Date:   Thu, 11 Feb 2021 16:46:10 -0700
-Message-Id: <20210211234627.2669674-3-mathieu.poirier@linaro.org>
+Subject: [PATCH v5 03/19] remoteproc: Remove useless check in rproc_del()
+Date:   Thu, 11 Feb 2021 16:46:11 -0700
+Message-Id: <20210211234627.2669674-4-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210211234627.2669674-1-mathieu.poirier@linaro.org>
 References: <20210211234627.2669674-1-mathieu.poirier@linaro.org>
@@ -67,33 +67,40 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The state of the remote processor may have changed between the
-time a call to rproc_shutdown() was made and the time it is
-executed.  To avoid moving forward with an operation that may
-have been cancelled, recheck while holding the mutex.
+Whether started at probe() time or thereafter from the command
+line, a remote processor needs to be shutdown before the final
+cleanup phases can happen.  Otherwise the system may be left in
+an unpredictable state where the remote processor is expecting
+the remoteproc core to be providing services when in fact it
+no longer exist.
 
-Cc: <stable@vger.kernel.org>
+Invariably calling rproc_shutdown() is fine since it will return
+immediately if the remote processor has already been switched
+off.
+
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 Reviewed-by: Peng Fan <peng.fan@nxp.com>
 Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 ---
- drivers/remoteproc/remoteproc_core.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/remoteproc/remoteproc_core.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 2394eef383e3..f1c097572e01 100644
+index f1c097572e01..86bd66955060 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1857,6 +1857,9 @@ void rproc_shutdown(struct rproc *rproc)
- 		return;
- 	}
+@@ -2350,10 +2350,8 @@ int rproc_del(struct rproc *rproc)
+ 	if (!rproc)
+ 		return -EINVAL;
  
-+	if (rproc->state != RPROC_RUNNING)
-+		goto out;
-+
- 	/* if the remote proc is still needed, bail out */
- 	if (!atomic_dec_and_test(&rproc->power))
- 		goto out;
+-	/* if rproc is marked always-on, rproc_add() booted it */
+ 	/* TODO: make sure this works with rproc->power > 1 */
+-	if (rproc->auto_boot)
+-		rproc_shutdown(rproc);
++	rproc_shutdown(rproc);
+ 
+ 	mutex_lock(&rproc->lock);
+ 	rproc->state = RPROC_DELETED;
 -- 
 2.25.1
 
