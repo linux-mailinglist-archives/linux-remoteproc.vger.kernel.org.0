@@ -2,146 +2,145 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D8731EF40
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 18 Feb 2021 20:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD9B31F823
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 19 Feb 2021 12:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbhBRTIW (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 18 Feb 2021 14:08:22 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:45526 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234821AbhBRRx4 (ORCPT
+        id S230318AbhBSLTL (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 19 Feb 2021 06:19:11 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:58869 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230239AbhBSLSt (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 18 Feb 2021 12:53:56 -0500
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11IHpepq004881;
-        Thu, 18 Feb 2021 18:52:46 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=XODayXtjSQ8qofzvOfGATQFA0V7gz/yaN0JIYBsK+cY=;
- b=JWDvVsYkU4wO3UVeVliMiM9ZUzRGkLUwXdUvmgr8TyNKc7CD3Cj7hSEKh7EV5gCXP7bA
- qJpAoP/GVbNDZGZENZZUh3KFCJcj3jCVCgjCY1AFs6CtksjA7bj/nythFokXORckyfLS
- oxqKUM9gLwxu5Z0tuHtfhNDowwU0AGAq9ImubXXEPgYLsbw3UuL6e6L6OPA6ysbv5myK
- mJeW1cEkROBfQDzIYYvYugTVFU4II0cJvcqqI+hpaBXy4pHbFHBgg1VC+tO/HiRpj/ou
- xr7NrFQg858EDsmWVmJhFJ90kzu8pWxdH4oTcYOd5axItl2QD3wxOYIoLSHBPn6aCzga OQ== 
+        Fri, 19 Feb 2021 06:18:49 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 11JBCOi5009228;
+        Fri, 19 Feb 2021 12:17:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=aNSiq1WuZ5PT7Y3v8+mQF2IY08hpA6ycnBtHBmLuxKI=;
+ b=VDjFFxmOTtTMt5hIWGnNdA6OM5xDDe+ivSbjqjy2D88iaBhJc65JNI7gSZ1ztgYQUxws
+ cUDe6JeRF+Ep7YgaeRbDRBqcdhSAXJGC7eZjcaPWy4FAkUCqOm+YEO/n8ci7Layw8UnI
+ IaTqw51Fm9AbcHasZzgsURnZteIeTOqzG14OZJ0SHGwpQ0lilzgTu4WR4VWesoQly595
+ H9UYH6bDmwg5v6CoSAuCBsHPm2misoy86xfwMbx8h6+7Mpq95JIDu9VdZdpLEmDo6cJ2
+ h9pzt5BQlDfGbev77iaWkFtcPToixBARNQxGOZKhi2+gdc+F+eGei4LkHJGig3Rhfam6 FA== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 36p6hq029x-1
+        by mx07-00178001.pphosted.com with ESMTP id 36sqadeymx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Feb 2021 18:52:46 +0100
+        Fri, 19 Feb 2021 12:17:59 +0100
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 11E9610002A;
-        Thu, 18 Feb 2021 18:52:45 +0100 (CET)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D282110002A;
+        Fri, 19 Feb 2021 12:17:58 +0100 (CET)
 Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E34FE2C41F6;
-        Thu, 18 Feb 2021 18:52:44 +0100 (CET)
-Received: from lmecxl0889.lme.st.com (10.75.127.50) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 18 Feb
- 2021 18:52:44 +0100
-Subject: Re: [PATCH v4 14/16] rpmsg: char: introduce a RPMsg driver for the
- RPMsg char device
-To:     Dan Carpenter <dan.carpenter@oracle.com>, <kbuild@lists.01.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BEDA82266D7;
+        Fri, 19 Feb 2021 12:17:58 +0100 (CET)
+Received: from localhost (10.75.127.44) by SFHDAG2NODE3.st.com (10.75.127.6)
+ with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 19 Feb 2021 12:17:58
+ +0100
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Ohad Ben-Cohen <ohad@wizery.com>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Andy Gross <agross@kernel.org>
-CC:     <lkp@intel.com>, <kbuild-all@lists.01.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20210218123333.GK2087@kadam>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Message-ID: <dbfb7ced-bc0c-5e47-a937-3fe07a4129bf@foss.st.com>
-Date:   Thu, 18 Feb 2021 18:52:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        <linux-arm-msm@vger.kernel.org>, <arnaud.pouliquen@foss.st.com>
+Subject: [PATCH v5 00/16] introduce a generic IOCTL interface for RPMsg channels management
+Date:   Fri, 19 Feb 2021 12:14:45 +0100
+Message-ID: <20210219111501.14261-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20210218123333.GK2087@kadam>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG3NODE2.st.com (10.75.127.8) To SFHDAG2NODE3.st.com
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.44]
+X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG2NODE3.st.com
  (10.75.127.6)
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
- definitions=2021-02-18_09:2021-02-18,2021-02-18 signatures=0
+ definitions=2021-02-19_04:2021-02-18,2021-02-19 signatures=0
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Dan,
+This series restructures the RPMsg char driver to decorrelate the control part and to
+create a generic RPMsg ioctl interface compatible with other RPMsg services.
 
-On 2/18/21 1:33 PM, Dan Carpenter wrote:
-> Hi Arnaud,
-> 
-> url:    https://github.com/0day-ci/linux/commits/Arnaud-Pouliquen/introduce-a-generic-IOCTL-interface-for-RPMsg-channels-management/20210217-214044
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git f40ddce88593482919761f74910f42f4b84c004b
-> config: riscv-randconfig-m031-20210215 (attached as .config)
-> compiler: riscv32-linux-gcc (GCC) 9.3.0
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> 
-> smatch warnings:
-> drivers/rpmsg/rpmsg_char.c:429 rpmsg_chrdev_probe() error: we previously assumed 'rpdev->ept' could be null (see line 423)
-> 
-> vim +429 drivers/rpmsg/rpmsg_char.c
-> 
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  413  static int rpmsg_chrdev_probe(struct rpmsg_device *rpdev)
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  414  {
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  415  	struct rpmsg_channel_info chinfo;
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  416  	struct rpmsg_eptdev *eptdev;
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  417  
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  418  	memcpy(chinfo.name, RPMSG_CHAR_DEVNAME, sizeof(RPMSG_CHAR_DEVNAME));
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  419  	chinfo.src = rpdev->src;
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  420  	chinfo.dst = rpdev->dst;
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  421  
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  422  	eptdev = __rpmsg_chrdev_create_eptdev(rpdev, &rpdev->dev, chinfo);
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17 @423  	if (IS_ERR(eptdev) && rpdev->ept) {
->                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> This condition is strange.
+The V4 and V5 fix compilation issues reported by the kernel test robot <lkp@intel.com>
+and analyzed by Dan Carpenter <dan.carpenter@oracle.com>.
 
-> 
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  424  		rpmsg_destroy_ept(rpdev->ept);
->                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> What?  Why are we undoing this when it's not something that we created?
-> This seems like a layering violation...
+The V3 is based on the guideline proposed by Mathieu Poirier to keep as much as possible
+the legacy implementation of the rpmsg_char used by the GLINK and SMD platforms.
 
-Right,something is not clean here, I need to crosscheck, but should be
-	if (IS_ERR(eptdev) && ) {
-		return PTR_ERR(eptdev);
-	}
-The endpoint is already destroyed by rpmsg_dev_probe on error.
+Objectives of the series:
+- Allow to create a service from Linux user application:
+  - with a specific name
+  - with or without name service announcement.
+- Allow to probe the same service by receiving either a NS announcement from the remote firmware
+  or a Linux user application request.
+- Use these services independently of the RPMsg transport implementation (e.g be able to use
+  RPMSg char with the RPMsg virtio bus).
 
-> 
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  425  		return PTR_ERR(eptdev);
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  426  	}
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  427  
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  428  	/* Set the private field of the default endpoint to retrieve context on callback. */
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17 @429  	rpdev->ept->priv = eptdev;
->                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
-> If "rpdev->ept" is NULL this will Oops.  If "eptdev" is an error pointer
-> that seems wrong as well.
+Steps in the series:
+  - Extract the control part of the char dev and create the rpmsg_ctrl.c file (patches 1 to 6)
+  - Enable the use of the chardev with the virtio backend (patches 7 to 11)
+  - Introduce the RPMSG_CREATE_DEV_IOCTL IOCTL to instantiate RPMsg devices (patch 12)
+    The application can then create or release a channel by specifying:
+       - the name service of the device to instantiate.   
+       - the source address.
+       - the destination address.
+  - Instantiate the /dev/rpmsg interface on remote NS announcement (patches 13 to 16)
 
-rpdev->ept is set in rpmsg_dev_probe as the callback is defined so can not be
-null, so probably a false positive here.
-eptdev can not be an error pointer here for the same reason.
+In this revision, I do not divide the series into several parts in order to show a complete
+picture of the proposed evolution. To simplify the review, if requested, I can send it in
+several steps listed above.
 
-Anyway adding a check on the pointer, is not a big work and can prevent from
-future issue.
+Known current Limitations:
+- Tested only with virtio RPMsg bus. The glink and smd drivers adaptations have not been tested
+  (not able to test it).
+- For the virtio backend: No NS announcement is sent to the remote processor if the source
+  address is set to RPMSG_ADDR_ANY.
+- For the virtio backend: the existing RPMSG_CREATE_EPT_IOCTL is working but the endpoints are
+  not attached to an exiting channel.
+- to limit patches the pending RPMSG_DESTROY_DEV_IOCTL has not ben implemented. This will be
+  proposed in a second step.
 
-As consequence of you multi-reports I have installed your smatch tool on my PC
-and added it in my compilation chain. :)
+This series can be applied on git/andersson/remoteproc.git for-next branch (d9ff3a5789cb).
 
-Thanks for the review and the tool,
-Arnaud
+This series can be tested using rpmsgexport, rpmsgcreatedev and ping tools available here:
+https://github.com/arnopo/rpmsgexport.git
 
-> 
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  430  
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  431  	return 0;
-> 7337f30f7a4426 Arnaud Pouliquen 2021-02-17  432  }
-> 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
-> 
+Reference to the V4 discussion thread: https://lkml.org/lkml/2021/2/17/384
+
+Arnaud Pouliquen (16):
+  rpmsg: char: rename rpmsg_char_init to rpmsg_chrdev_init
+  rpmsg: move RPMSG_ADDR_ANY in user API
+  rpmsg: add short description of the IOCTL defined in UAPI.
+  rpmsg: char: export eptdev create an destroy functions
+  rpmsg: char: dissociate the control device from the rpmsg class
+  rpmsg: move the rpmsg control device from rpmsg_char to rpmsg_ctrl
+  rpmsg: update rpmsg_chrdev_register_device function
+  rpmsg: glink: add sendto and trysendto ops
+  rpmsg: smd: add sendto and trysendto ops
+  rpmsg: char: use sendto to specify the message destination address
+  rpmsg: virtio: register the rpmsg_ctrl device
+  rpmsg: ctrl: introduce RPMSG_CREATE_DEV_IOCTL
+  rpmsg: char: introduce __rpmsg_chrdev_create_eptdev function
+  rpmsg: char: introduce a RPMsg driver for the RPMsg char device
+  rpmsg: char: no dynamic endpoint management for the default one
+  rpmsg: char: return an error if device already open
+
+ drivers/rpmsg/Kconfig             |   9 ++
+ drivers/rpmsg/Makefile            |   1 +
+ drivers/rpmsg/qcom_glink_native.c |  18 ++-
+ drivers/rpmsg/qcom_smd.c          |  18 ++-
+ drivers/rpmsg/rpmsg_char.c        | 237 +++++++++++-------------------
+ drivers/rpmsg/rpmsg_char.h        |  51 +++++++
+ drivers/rpmsg/rpmsg_ctrl.c        | 229 +++++++++++++++++++++++++++++
+ drivers/rpmsg/rpmsg_internal.h    |  10 +-
+ drivers/rpmsg/virtio_rpmsg_bus.c  |  57 ++++++-
+ include/linux/rpmsg.h             |   3 +-
+ include/uapi/linux/rpmsg.h        |  18 ++-
+ 11 files changed, 485 insertions(+), 166 deletions(-)
+ create mode 100644 drivers/rpmsg/rpmsg_char.h
+ create mode 100644 drivers/rpmsg/rpmsg_ctrl.c
+
+-- 
+2.17.1
+
