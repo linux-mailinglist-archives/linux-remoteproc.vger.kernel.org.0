@@ -2,61 +2,61 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EF6323445
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Feb 2021 00:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F27C323449
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Feb 2021 00:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232818AbhBWXhT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 23 Feb 2021 18:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33758 "EHLO
+        id S233626AbhBWXja (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 23 Feb 2021 18:39:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbhBWXf7 (ORCPT
+        with ESMTP id S232136AbhBWXgA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 23 Feb 2021 18:35:59 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF58FC061786
-        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 15:35:18 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id e9so52936pjj.0
-        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 15:35:18 -0800 (PST)
+        Tue, 23 Feb 2021 18:36:00 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A454DC06178B
+        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 15:35:19 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id z5so62776pfe.3
+        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 15:35:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=2KkXz7Q+zlIq4fjTeJz23Qytt+RMPnrKFr7q6Kz46gw=;
-        b=VT3vWAAA1/nWsaEJw5qwCO0P0+fsf/zztlHgIz27KF6UqyOj3/o4QRT+ZnBkifIFFl
-         ijt3TjrVTXgRdMiNE41ZaxRFrnMsB1WHCc9NZ0oXoNjAgETLSILe1CDqHduMyCQXX5WZ
-         tgaIZBHWoNk0/2CmLsXaS8226jUShwMzLeIRL3iOSfMFCKB6x0TvF6Z7psLOoOsMx/q0
-         kgVnboJxNpRg0aE/NIZPJ54I0lteJH8hVC6XX0i8bTCpXFAIdpXSnUBdOeCEz6gXWehw
-         Kbn/fgeQBcml5A9IzvpUTOWr7CHq21nbbBZIjwoEUME24CAp4lSupkH95NZIMs4Hzetc
-         l2Cg==
+        bh=eI1kKtC7UxMHnJr2s3EPvhdO8fxk/LLGwiTP5XOosV0=;
+        b=JYeh3wnybb4/m/UUR8LYuWcMywXegKKe2DxENoFrS8xZIgUWNzlNef/Jz6v/hiVsiP
+         vQeR+YNRluWGmPtmVcduAElrCxHj/amtzcAQsk7k1opnA3cxk1NPbEEfW28RCmrCFU+i
+         xinri+qaJjiwsZi+zvHwsgM6I4diKQaopxwU8k4vT4g4pPqHGollzxJtHQv+bfp2WUtv
+         qcPJsmhxv+NsT4KYpMXyR77TxvcPjIZc2Zq2dF8STNuhPSr3n1dbBPBvmYz6z+LfOEEh
+         uUNSv5lOQLVrFtQ81NC0TcOfgxgJloEjFPkP4RS2+8BeivYwe2Zr8/jqxEdYyVWy6qnP
+         YnOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=2KkXz7Q+zlIq4fjTeJz23Qytt+RMPnrKFr7q6Kz46gw=;
-        b=CZf1XDrlsLUtnv7r2jc3rQdbkwPsWPFpKNgAs4Xubj0zGe9blGXy59anBP+sdw8Hjt
-         ypmHzrtxHET0xuzw7kxihClyGyaq1ArLOHnvntC5DVjCPRjRJ0LBq0fXQvkSRYC4prth
-         mw0nzjgm11e13KCYs89AU+9yezZtn2SdL9E0Fnb6DRRBZGO+wvd7ldnAWMA7hpBEJ1sA
-         hD2pV8v8p+bzOosT5jPfYVh2mg7lJgjwIlWPDKrddVRVMIQPMr9fAi2RLxmzUPYohmhz
-         mniMkOiOt+p65d4oRo3iQq8H9FYAuMsSFzlUoXJBJoeTyAT851xBtoMVRIjXGJpknOfj
-         h4JQ==
-X-Gm-Message-State: AOAM531Ghuj1JBPCbtvHBG/3xMZaZfb00/QFi+IXrOowiSOtcIxc7KdI
-        WM25nuHvQbJljbtYKD8IQmdG9w==
-X-Google-Smtp-Source: ABdhPJzME6ROr47/MgtNT8Vns+S4eE+gd/rS7UXIX0eua10m+gAhj0BDo1+R5PHgYg8wdAG3+u1+bA==
-X-Received: by 2002:a17:902:c789:b029:e3:dcbd:843b with SMTP id w9-20020a170902c789b02900e3dcbd843bmr4832710pla.61.1614123318320;
-        Tue, 23 Feb 2021 15:35:18 -0800 (PST)
+        bh=eI1kKtC7UxMHnJr2s3EPvhdO8fxk/LLGwiTP5XOosV0=;
+        b=ZdWzHMG0sSIjFRgx1X98Wmlo6odIiXJK/37vVzLVQEMRalOUXZQSMZkAJUAeiDoc9E
+         MaDm2DM9BoacxZq0jz/SBq1BKiMJpjQtlwL/BF3TMKCOzNgacLxDiq1L9104Xs942xSF
+         RZ//d4yiCQ46JSN2yu2AzJB8NlnnMpp2qH1UCjlwgew/a32hG2D/YKwEDtbH6XVdMlbd
+         CLW7u6Cb3cGcXbIypH8Q80LCDb36x/U8HD0+RKiZODDil0mUV/IVJfuw2niWy22D+YkO
+         5rOp9WUo6bjavD5bIUVkQmISOr/TL78Be4jmvhAXRrpXEtb08ltW8mF1wVizSqcK5y0u
+         GabA==
+X-Gm-Message-State: AOAM5324iKokRccUZJ4hDtsIhGmZmIb6eJbNHj1GeeUc055CyOpLd+SQ
+        FQYb+ErLkV3hfn0bdJynYFhe/A==
+X-Google-Smtp-Source: ABdhPJzsi6TXNp0kZzJEbaem3F4zHgJtQu4fTQYb8U7x7qnmSjpWBBr5dEjDShlaI4BKVzv+X/STLQ==
+X-Received: by 2002:a62:7c15:0:b029:1ed:9e29:5998 with SMTP id x21-20020a627c150000b02901ed9e295998mr12313479pfc.22.1614123319231;
+        Tue, 23 Feb 2021 15:35:19 -0800 (PST)
 Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id c24sm311999pfd.11.2021.02.23.15.35.17
+        by smtp.gmail.com with ESMTPSA id c24sm311999pfd.11.2021.02.23.15.35.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Feb 2021 15:35:17 -0800 (PST)
+        Tue, 23 Feb 2021 15:35:18 -0800 (PST)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     ohad@wizery.com, bjorn.andersson@linaro.org,
         arnaud.pouliquen@st.com
 Cc:     mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v6 01/16] remoteproc: Remove useless check in rproc_del()
-Date:   Tue, 23 Feb 2021 16:35:00 -0700
-Message-Id: <20210223233515.3468677-2-mathieu.poirier@linaro.org>
+Subject: [PATCH v6 02/16] remoteproc: Rename function rproc_actuate()
+Date:   Tue, 23 Feb 2021 16:35:01 -0700
+Message-Id: <20210223233515.3468677-3-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210223233515.3468677-1-mathieu.poirier@linaro.org>
 References: <20210223233515.3468677-1-mathieu.poirier@linaro.org>
@@ -66,40 +66,56 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Whether started at probe() time or thereafter from the command
-line, a remote processor needs to be shut down before the final
-cleanup phases can happen.  Otherwise the system may be left in
-an unpredictable state where the remote processor is expecting
-the remoteproc core to be providing services when in fact it
-no longer exist.
-
-Invariably calling rproc_shutdown() is fine since it will return
-immediately if the remote processor has already been switched
-off.
+Rename function rproc_actuate() to rproc_attach().  That way it is
+easy to understand that it does the opposite of rproc_detach().
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 Reviewed-by: Peng Fan <peng.fan@nxp.com>
 Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 ---
- drivers/remoteproc/remoteproc_core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/remoteproc/remoteproc_core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index ab150765d124..d2704501b653 100644
+index d2704501b653..7b66e1e96e4a 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
-@@ -2347,10 +2347,8 @@ int rproc_del(struct rproc *rproc)
- 	if (!rproc)
- 		return -EINVAL;
+@@ -1416,7 +1416,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+ 	return ret;
+ }
  
--	/* if rproc is marked always-on, rproc_add() booted it */
- 	/* TODO: make sure this works with rproc->power > 1 */
--	if (rproc->auto_boot)
--		rproc_shutdown(rproc);
-+	rproc_shutdown(rproc);
+-static int rproc_attach(struct rproc *rproc)
++static int __rproc_attach(struct rproc *rproc)
+ {
+ 	struct device *dev = &rproc->dev;
+ 	int ret;
+@@ -1541,7 +1541,7 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
+  * Attach to remote processor - similar to rproc_fw_boot() but without
+  * the steps that deal with the firmware image.
+  */
+-static int rproc_actuate(struct rproc *rproc)
++static int rproc_attach(struct rproc *rproc)
+ {
+ 	struct device *dev = &rproc->dev;
+ 	int ret;
+@@ -1581,7 +1581,7 @@ static int rproc_actuate(struct rproc *rproc)
+ 		goto clean_up_resources;
+ 	}
  
- 	mutex_lock(&rproc->lock);
- 	rproc->state = RPROC_DELETED;
+-	ret = rproc_attach(rproc);
++	ret = __rproc_attach(rproc);
+ 	if (ret)
+ 		goto clean_up_resources;
+ 
+@@ -1802,7 +1802,7 @@ int rproc_boot(struct rproc *rproc)
+ 	if (rproc->state == RPROC_DETACHED) {
+ 		dev_info(dev, "attaching to %s\n", rproc->name);
+ 
+-		ret = rproc_actuate(rproc);
++		ret = rproc_attach(rproc);
+ 	} else {
+ 		dev_info(dev, "powering up %s\n", rproc->name);
+ 
 -- 
 2.25.1
 
