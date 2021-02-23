@@ -2,119 +2,112 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DEA322FAF
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Feb 2021 18:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A103323447
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Feb 2021 00:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbhBWRdM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 23 Feb 2021 12:33:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        id S231734AbhBWXhb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 23 Feb 2021 18:37:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233708AbhBWRdL (ORCPT
+        with ESMTP id S231706AbhBWXf7 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 23 Feb 2021 12:33:11 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED30C061574
-        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 09:32:31 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id y202so17992676iof.1
-        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 09:32:31 -0800 (PST)
+        Tue, 23 Feb 2021 18:35:59 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888FFC06174A
+        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 15:35:18 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d16so25920plg.0
+        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 15:35:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0sCzg+nKVxIuCagcfYdWxuIEnUuuQqfinjAUu5/j1YI=;
-        b=HY5ll+63utPg958PzpC+i8JM7QhPmHqigip37BLFjKnX5XT478VILpqKcgs8iYpGFO
-         HN0nVkDqRo/rGPNfeQgu0V2baqGLNx0MMVwEzm57EeDqGl44IGdLWB3bk+iMCgIJ3TX4
-         5ENjgC8usx5r7M2TZW3Wcvhhjgmqx8vtNAWCL7dgUKiA8r3fXevwPT5TqTLwtQ6If4Da
-         f3n7IcZKeAv8+ov6DVC0bC+hJ9DRNIQpRwKdKaC8TfGzlzVG/00fmjamSinRAIf7Cjyh
-         s8cQGcDvsm0dGZtxiqedZDalM+PlQpwU4y+LCjVM3JgI855hd2qRJw5Iy+a/gPP25D+c
-         aRrQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SHL5XDAIKj8MSKK6Z+vTePkWS1Indwf4AZBtBlAyi64=;
+        b=KBWghAnPjbcmDLzHTQQy4PpOC2g3Spr7nGT1p3HLpvMZVu/ke5G5tEf+tkyMc7Jboo
+         ivAxl5EHjttgPBa0UmYIe89AYRDLeNi1P1/6VSDFCe9evBg1cDyxEVPs7emDJyHs6Dhr
+         R5dDFRqgP5Nf6mMqpXqi5F4NB5cbmGDJgocrQ2ctRzoZZwV7gVECqgVkygYJRgxfvBce
+         1t4RBo86MY51bj/RQMz5FbCfBihWCsacxOEawPxkbsoYWQE25jThNUNPaAZRPwkcWb1a
+         JVQ4vTSqwknbEVP5C0U6jz9PRge9UhGF1pUZ7B9R7tu2MR21gF7hPAxRardks5lf7P/w
+         9V3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0sCzg+nKVxIuCagcfYdWxuIEnUuuQqfinjAUu5/j1YI=;
-        b=OdcHOsOIdMGrC8PypTaJsJ3OFtKHzfuiofRsJhO68XwE4K3oMki9H1TJ7SoGi8Q1hw
-         04OaosTJnNHceeNj1weG1C8kkzSMMHWH8x2tqVdXObC2TeqHqGlecTvoXat3RrIX2dm2
-         q7Gd49skzJLZdx00dhGFq77EDDwe5KNeciJZbx+aLuPKOeclabdSeDOoGKQKjp/ENtC0
-         VajzYWhi52Yvji7uzJdQA/kldrv/I2NJpQED/OR5cSDV+UCDD0cyBYEyxxsQV8u8NzIX
-         YxsscAvC1yffJJavDZxTDm3a3M5wXJKyqMEVQwJJJN8jKLTVA308UFLeQYK1XoxjATpG
-         AlZg==
-X-Gm-Message-State: AOAM53367LAaG38MI7OqU/iY+ixSiKtGQxGNUJh8MNdfC/PJHKPf+CcV
-        PdUfKVSPxVvazqohFO1PoERfAx1UVUfe2PGwG4jgpg==
-X-Google-Smtp-Source: ABdhPJz2j5az4KiW7kby7Dt0obvVh8ftfw8CWNaHRcOKVpSbWP24TNkLATI8qFyxclmqIDWvy9uIT1N0L2lVfyQ6GMA=
-X-Received: by 2002:a05:6638:1390:: with SMTP id w16mr710607jad.83.1614101550799;
- Tue, 23 Feb 2021 09:32:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20210222072217.15633-1-jindong.yue@nxp.com> <CABCJKudwajnmHAEC1XAH=pouCoOXq7q6NmpLST5pba8ejU6FtA@mail.gmail.com>
- <CANLsYkx0Y_f8tdeioUFrwBRV8M6OtLcSuPDZbgb6noPgrfyjOA@mail.gmail.com> <CABCJKuemAmeaSshvb=B6D1kBt-n_unEx11rwzOZmDxAd+EQ31g@mail.gmail.com>
-In-Reply-To: <CABCJKuemAmeaSshvb=B6D1kBt-n_unEx11rwzOZmDxAd+EQ31g@mail.gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=SHL5XDAIKj8MSKK6Z+vTePkWS1Indwf4AZBtBlAyi64=;
+        b=Tnf5QHD7R2Q6+JlPUz5tKcja+1X2an3cfc11kJ09MjYU+qfhYCClSHO1ufQWPKTOeB
+         TFAGOIMHtOB80ntprq0xuIPtO1gkuDoRs5Vlyfsce52yrrBYSUyrceERrZYaRj1IUi6L
+         /KcvPFfW+9Z/WQ81Au1QxzJbu6pRxpYyjotgEasdR3BxhkcwJD6Q/oh6bjquaxEWHTiz
+         xRpk3aoLxVicgpsXllnak7k0KeOFgxOqoY/rS7FD9Xh7BMNLou5jSqZob8yqOI1/BZO0
+         r1/Rvu7JUJrfGSATOIew9/XPwIkUVd1hBWqSAmfNMSWTdHewxmqBn1EgJmC68hkQ+SCO
+         FX/w==
+X-Gm-Message-State: AOAM532dySu8bTcMIob4iRdRy9EkJ1DO06nrubeksCtWMvBXsxdb7H2I
+        FyftovHzJBAU+YMLX+S/5j6pQw==
+X-Google-Smtp-Source: ABdhPJwifdDLsrVJqk5R17vjdzA8fqNWlkWyr2tPKLL5zlQQ5O9oaEDIxoxVXdeN+c91+tEOj63K9Q==
+X-Received: by 2002:a17:90a:ae14:: with SMTP id t20mr1194420pjq.90.1614123317354;
+        Tue, 23 Feb 2021 15:35:17 -0800 (PST)
+Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id c24sm311999pfd.11.2021.02.23.15.35.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Feb 2021 15:35:16 -0800 (PST)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Tue, 23 Feb 2021 10:32:19 -0700
-Message-ID: <CANLsYkz+ZZS-gGL8uK9cR46PreF5to0PRk_nGGmZiNKUkToYdw@mail.gmail.com>
-Subject: Re: [PATCH] remoteproc: core: Remove casting to rproc_handle_resource_t
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     Jindong Yue <jindong.yue@nxp.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-remoteproc <linux-remoteproc@vger.kernel.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        arnaud.pouliquen@st.com
+Cc:     mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v6 00/16] remoteproc: Add support for detaching a remote processor
+Date:   Tue, 23 Feb 2021 16:34:59 -0700
+Message-Id: <20210223233515.3468677-1-mathieu.poirier@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, 23 Feb 2021 at 09:49, Sami Tolvanen <samitolvanen@google.com> wrote:
->
-> On Tue, Feb 23, 2021 at 8:41 AM Mathieu Poirier
-> <mathieu.poirier@linaro.org> wrote:
-> >
-> > On Mon, 22 Feb 2021 at 15:48, Sami Tolvanen <samitolvanen@google.com> wrote:
-> > >
-> > > Hi,
-> > >
-> > > On Sun, Feb 21, 2021 at 11:18 PM Jindong Yue <jindong.yue@nxp.com> wrote:
-> > > >
-> > > > There are four different callback functions that are used for the
-> > > > rproc_handle_resource_t callback that all have different second
-> > > > parameter types.
-> > > >
-> > > > rproc_handle_vdev -> struct fw_rsc_vdev
-> > > > rproc_handle_trace -> struct fw_rsc_trace
-> > > > rproc_handle_devmem -> struct fw_rsc_devmem
-> > > > rproc_handle_carveout -> struct fw_rsc_carveout
-> > > >
-> > > > These callbacks are cast to rproc_handle_resource_t so that there is no
-> > > > error about incompatible pointer types. Unfortunately, this is a control
-> > > > flow integrity violation, which verifies that the callback function's
-> > > > types match the prototypes exactly before jumping.
-> > >
-> > > Thank you for sending the patch! It might be worth noting that Clang's
-> > > Control-Flow Integrity checking is currently used only in Android
-> > > kernels, so while the type mismatches are real and should be fixed,
-> > > they don't result in runtime errors without this feature.
-> > >
-> > > > To fix this, change the second parameter of all functions to void * and
-> > > > use a local variable with the correct type so that everything works
-> > > > properly. With this, we can remove casting to rproc_handle_resource_t
-> > > > for these functions.
-> > > >
-> > > > Signed-off-by: Jindong Yue <jindong.yue@nxp.com>
-> > > > Reviewed-by: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > This looks correct to me. Please feel free to add:
-> > >
-> > > Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-> >
-> > Where is the original patch?  I can't find it on the linux-remoteproc
-> > and linux-kernel mailing lists.
->
-> Looks like it was sent to linux-remoteproc, but I also don't see it in
-> lore.kernel.org. Not sure what happened there. Jindong, perhaps it's
-> worth resending and including linux-kernel too?
+Following the work done here [1], this set provides support for the
+remoteproc core to release resources associated with a remote processor
+without having to switch it off. That way a platform driver can be removed
+or the application processor power cycled while the remote processor is
+still operating.
 
-Something definitely happened because I can't find anything from
-Jindong on the linux-remoteproc list...  A resend it indeed in order.
+Modifications for this revision are detailed in the changelog of each patch
+but the main difference is that going from RPROC_RUNNING -> RPROC_DETACHED
+is no longer supported to avoid dealing tricky resource table issues.
 
->
-> Sami
+Applies cleanly on rproc-next (e8b4e9a21af7).  I will rebase on 5.12-rc1 when it
+comes out next week.
+
+Thanks,
+Mathieu
+
+Arnaud POULIQUEN (1):
+  remoteproc: stm32: Move memory parsing to rproc_ops
+
+Mathieu Poirier (15):
+  remoteproc: Remove useless check in rproc_del()
+  remoteproc: Rename function rproc_actuate()
+  remoteproc: Add new RPROC_ATTACHED state
+  remoteproc: Properly represent the attached state
+  remoteproc: Add new get_loaded_rsc_table() to rproc_ops
+  remoteproc: stm32: Move resource table setup to rproc_ops
+  remoteproc: Add new detach() remoteproc operation
+  remoteproc: Introduce function __rproc_detach()
+  remoteproc: Introduce function rproc_detach()
+  remoteproc: Properly deal with the resource table when attached
+  remoteproc: Properly deal with a kernel panic when attached
+  remoteproc: Properly deal with a start request when attached
+  remoteproc: Properly deal with a stop request when attached
+  remoteproc: Properly deal with a detach request when attached
+  remoteproc: Refactor rproc delete and cdev release path
+
+ drivers/remoteproc/remoteproc_cdev.c     |  21 +-
+ drivers/remoteproc/remoteproc_core.c     | 263 ++++++++++++++++++++---
+ drivers/remoteproc/remoteproc_internal.h |  10 +
+ drivers/remoteproc/remoteproc_sysfs.c    |  17 +-
+ drivers/remoteproc/stm32_rproc.c         | 168 +++++++--------
+ include/linux/remoteproc.h               |  21 +-
+ 6 files changed, 362 insertions(+), 138 deletions(-)
+
+-- 
+2.25.1
+
