@@ -2,97 +2,60 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09347322256
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 22 Feb 2021 23:47:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0FA7322A06
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Feb 2021 13:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232096AbhBVWrT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 22 Feb 2021 17:47:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbhBVWrG (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 22 Feb 2021 17:47:06 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D736C06174A
-        for <linux-remoteproc@vger.kernel.org>; Mon, 22 Feb 2021 14:46:26 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id i3so4910119uai.3
-        for <linux-remoteproc@vger.kernel.org>; Mon, 22 Feb 2021 14:46:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y2HpjzAoLzLCmlgkDfl/tSuUlKCcUXEeVTAgdZrf5xA=;
-        b=K6loj0eyjFQktbWgQSlaqcz0cJ9HJQxnJHRO8jplLVCX/ibIdtI1yYvK8qZCHrMrRX
-         kRlgFRetRZq4pEyJDY2VsRofVyaoXoJz7A19lTEuN5Yq0/0KFbUdCyVbgAp+Z5mYSbGK
-         +ficRGKmQKGqj/vV+pFO1qOzMLwTbHTjFV3h4NwETuXjJwg1jZTQWuGHZbTJrel8XJVG
-         v7naLAOmbfnyysXbaIjA+FmFYj78IEWyoRE1zWWLmtQQ3ouHyz/pAf23+DEXSPR1vcS5
-         Wp2ATsPT9VLnn6FP3SgHwFF/+kCcU76VXAqal04fAzLnz5rXZr2e0oJYAyN7xs4tSbL+
-         ujuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y2HpjzAoLzLCmlgkDfl/tSuUlKCcUXEeVTAgdZrf5xA=;
-        b=OctXRAi9ArJFjwVtwxpIQ91i8/SE585cKvRnfRV6pazc18CfUiNIWPVILdFuiuvOQi
-         xeThtnB+g8Wy/By/yIePMzrwurJaGV90fRn9NeYgELPYFzKLZChzrS2JWZi00PqyIy1i
-         2DU9ExUqnFfAvh19SJt+/sDyX5ntFVhe3dpRn1WFj2/uZVICKrAnveFBnT5fv96//4s/
-         tMsfeJR9Us55V5kWk4cb8u/hiMxbBzl3MkO0s9RDlr2e/f9xQWOXm/xCI3xPgPTEJH4J
-         TIY87GeAYSmVMMVc2OEg4olCtVjQ+unD3kaAqXI5kTqD1m3J/KNpLb/cEli+fbF1S5yU
-         dBvg==
-X-Gm-Message-State: AOAM531bHw+TYAlqhUWFccv8viiFxJWVpQkzoWyzduIXbNRuwoZSmNVT
-        ZOxd3snv6WX9MA44D1C9nyg8F8ztcNpTpE12gplCjg==
-X-Google-Smtp-Source: ABdhPJwSkGW+oV9LW436LGwuZxz9jgcyYsjgp3ZlJ4etIku1PAyDjKKkaa7dO7iRZYFD+Y4XSA+IPCQcUBPBsvC1yio=
-X-Received: by 2002:ab0:6ecf:: with SMTP id c15mr16126581uav.52.1614033985087;
- Mon, 22 Feb 2021 14:46:25 -0800 (PST)
+        id S232735AbhBWL5P (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 23 Feb 2021 06:57:15 -0500
+Received: from mail.jvpinto.com ([65.49.11.60]:54491 "EHLO mail.JVPinto.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232501AbhBWLyb (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Tue, 23 Feb 2021 06:54:31 -0500
+Received: from RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) by
+ RW-EXC1.JVPinto.com (2002:ac20:10d::ac20:10d) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.2; Tue, 23 Feb 2021 03:52:35 -0800
+Received: from User (52.231.198.195) by RW-EXC1.JVPinto.com (172.32.1.13) with
+ Microsoft SMTP Server id 15.0.1497.2 via Frontend Transport; Tue, 23 Feb 2021
+ 03:52:20 -0800
+Reply-To: <ms.reem@yandex.com>
+From:   "Ms. Reem" <johnpinto@jvpinto.com>
+Subject: Hello okay
+Date:   Tue, 23 Feb 2021 11:52:34 +0000
 MIME-Version: 1.0
-References: <20210222072217.15633-1-jindong.yue@nxp.com>
-In-Reply-To: <20210222072217.15633-1-jindong.yue@nxp.com>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Mon, 22 Feb 2021 14:46:14 -0800
-Message-ID: <CABCJKudwajnmHAEC1XAH=pouCoOXq7q6NmpLST5pba8ejU6FtA@mail.gmail.com>
-Subject: Re: [PATCH] remoteproc: core: Remove casting to rproc_handle_resource_t
-To:     Jindong Yue <jindong.yue@nxp.com>
-Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        linux-remoteproc@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <933f089f49b04946b97b7d0f2a305064@RW-EXC1.JVPinto.com>
+To:     Undisclosed recipients:;
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi,
+Hello,
 
-On Sun, Feb 21, 2021 at 11:18 PM Jindong Yue <jindong.yue@nxp.com> wrote:
->
-> There are four different callback functions that are used for the
-> rproc_handle_resource_t callback that all have different second
-> parameter types.
->
-> rproc_handle_vdev -> struct fw_rsc_vdev
-> rproc_handle_trace -> struct fw_rsc_trace
-> rproc_handle_devmem -> struct fw_rsc_devmem
-> rproc_handle_carveout -> struct fw_rsc_carveout
->
-> These callbacks are cast to rproc_handle_resource_t so that there is no
-> error about incompatible pointer types. Unfortunately, this is a control
-> flow integrity violation, which verifies that the callback function's
-> types match the prototypes exactly before jumping.
+My name is Ms. Reem Ebrahim Al-Hashimi, I am the "Minister of state
+and Petroleum" also "Minister of State for International Cooperation"
+in UAE. I write to you on behalf of my other "three (3) colleagues"
+who has approved me to solicit for your "partnership in claiming of
+{us$47=Million}" from a Financial Home in Cambodia on their behalf and
+for our "Mutual Benefits".
 
-Thank you for sending the patch! It might be worth noting that Clang's
-Control-Flow Integrity checking is currently used only in Android
-kernels, so while the type mismatches are real and should be fixed,
-they don't result in runtime errors without this feature.
+The Fund {us$47=Million} is our share from the (over-invoiced) Oil/Gas
+deal with Cambodian/Vietnam Government within 2013/2014, however, we
+don't want our government to know about the fund. If this proposal
+interests you, let me know, by sending me an email and I will send to
+you detailed information on how this business would be successfully
+transacted. Be informed that nobody knows about the secret of this
+fund except us, and we know how to carry out the entire transaction.
+So I am compelled to ask, that you will stand on our behalf and
+receive this fund into any account that is solely controlled by you.
 
-> To fix this, change the second parameter of all functions to void * and
-> use a local variable with the correct type so that everything works
-> properly. With this, we can remove casting to rproc_handle_resource_t
-> for these functions.
->
-> Signed-off-by: Jindong Yue <jindong.yue@nxp.com>
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
+We will compensate you with 15% of the total amount involved as
+gratification for being our partner in this transaction. Reply to:
+ms.reem@yandex.com
 
-This looks correct to me. Please feel free to add:
-
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-
-Sami
+Regards,
+Ms. Reem.
