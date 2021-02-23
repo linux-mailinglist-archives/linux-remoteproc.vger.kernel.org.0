@@ -2,61 +2,61 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D73FB32345A
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Feb 2021 00:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3F532348C
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Feb 2021 01:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbhBWXp3 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 23 Feb 2021 18:45:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35020 "EHLO
+        id S232578AbhBWX60 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 23 Feb 2021 18:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233922AbhBWXma (ORCPT
+        with ESMTP id S234110AbhBWXuG (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 23 Feb 2021 18:42:30 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB51C061A29
-        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 15:35:33 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id e9so16366plh.3
-        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 15:35:33 -0800 (PST)
+        Tue, 23 Feb 2021 18:50:06 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B6AC0611C0
+        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 15:35:30 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id a4so208831pgc.11
+        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Feb 2021 15:35:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9dNXLfIEwaBmyxdvGPLcXIZoYDoiye95/dFOxo0lMe4=;
-        b=FacrPQa+2h15QlpIr28yddn6IuvoguAmRAZYlTCp41sRk7VfSbFMMi2D9zF2VeoMVT
-         lvlrXDCraOoq8hw/Hd6ybksPaLxpOFGajiMU2ieGncuh6NybqdpyvHRRkwXU/UjOBGM+
-         TUQgRGVRW4k05wOMkgzVXIYlWss60zHMqwZvLSiwQsmkXhgVszeak0UuXk5E6Iw8z7Hd
-         wu1QmI7wa2PfmOxwH1qiYm/V8xlSYqdvXwvMgazNhLtLuLOwSiPZN3DdNyRAgga/VkdD
-         END38q1jtAVeC7pWOVX2IAEp9taTPnTKdHNiWUZ89mdX6PgHv+/nG5g/As1233+t08MD
-         YRBw==
+        bh=70JCEwLX10Z8DU4ByYhqbD5Bs/NYPpdr+UeUH0EROyg=;
+        b=N88XbmgPFY0tBL+nREjZof5xI3M2ZNmAG8U2gcExz3QoFVbxPON6BETexyL4v5/axT
+         NMvkJeeyOx/gXRHMZKTpGuV2CrN/cYTde9bOUTYNlrOjcwrROSGin9JWiFSbNskLAG2z
+         g+n7hzn5LtTJ7SWRABd+hnyBF3rWONLrJt9/7b0Re0SjI7kMF6ZyzXqUy2yKiZMcQ+uo
+         Mc9wgFqCHhAppyFeuJUW0XqXLG7V0xqTJK/wGe2WhfK1rz0qK/tFwQtV4Ztf2EmJebmD
+         pmDFdOS8mCjz1F3UaEbjiH85CTJSMNxEU/xeioeWcY93f5WYGMqhvmsCWH5t4dnMVGir
+         LBYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9dNXLfIEwaBmyxdvGPLcXIZoYDoiye95/dFOxo0lMe4=;
-        b=dzDVChQVGPYCI0Ym2INGEHtjAjTkar2U91MUDqwesGaWCeQwBUysIeKwJ7rOPSsVLc
-         FXHBXd12LXkzC46Ic9fhHKLbeDQR+AXWIkMr6SrGxAckHQkNSmEQ0FZodmZ7j7KYetu1
-         2D2HNPuEP3dZTK/OpltyoKCLFXL1DslLNLbllETAyxdnxnbwx98BbOAM9EsEb6H/d3jc
-         xpTQdUz9OY0fxwybpVs6woGVDBCC6ifDYe4H4nJdRx3Sa+x5zAxiRRe5n/oKWJXnz76J
-         EUCwkSg/1RbHKvATemCHXLMPWIAtYmZ6LnmLCq6qMzlkibZjEq4Z0/iUjdjAWlyVoFSy
-         rygQ==
-X-Gm-Message-State: AOAM5303jzrsjRujnKeBjuET5QJaIbITlOeEOjuF/INHgtY6fO4R/6Kl
-        m1hU1ORSJDH8AEQdRhSiRDC5Uw==
-X-Google-Smtp-Source: ABdhPJzDAGh6wh3Npt8Bm/YQ7HhxIWxiSdzM/fQpCszCDx97I+KOxtsQXnMjbwrn7gO/M6IugUvOzA==
-X-Received: by 2002:a17:90a:4a0a:: with SMTP id e10mr1161914pjh.112.1614123333381;
-        Tue, 23 Feb 2021 15:35:33 -0800 (PST)
+        bh=70JCEwLX10Z8DU4ByYhqbD5Bs/NYPpdr+UeUH0EROyg=;
+        b=c4y+GB1QZiSIP8PSaBQhkmIR4I1bGiibjOFMXds5PvSDH/LQcvzEmFHhBtI/cOU82l
+         IdpKqFv1psxaLFWnc2cyChZyHIMYZiTGUIxvykL50CvZtB7QX5+GcigGk2FnGAq4oye3
+         kyPK43NXTlKcH130loNMDnVS1RB1MZ6TSNRlKvwDtuNthNOzDKdiwbo33j/GuwNL7k23
+         Ei6LXJUmC9dp+WAqgD3semgEjBcTydnf4lwWWz3MzEjsecnQueOXyxMsfiQW76BT87Kt
+         8F9IF+iP1ovEjjJ0Z/lz95g7DmkWKQs45oG7kJIZcIFFyUbaUom4l7uzbJoBmDH7xFK9
+         nwDA==
+X-Gm-Message-State: AOAM533go21fMAcVpCCBEsehOuv+i0RONUqrbeoi1wcIGNg9PCTt5m/e
+        XPRt0nepQAyzs9ek/3xLhhuADQ==
+X-Google-Smtp-Source: ABdhPJxktytv7llBIEju6a5H8h+Ul5Vrj9GmHcU8b1aSOP67/rAzaK7GrW6MDJiRmAWPqcQkjT+Qlw==
+X-Received: by 2002:a63:a22:: with SMTP id 34mr23087036pgk.328.1614123329746;
+        Tue, 23 Feb 2021 15:35:29 -0800 (PST)
 Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id c24sm311999pfd.11.2021.02.23.15.35.32
+        by smtp.gmail.com with ESMTPSA id c24sm311999pfd.11.2021.02.23.15.35.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Feb 2021 15:35:33 -0800 (PST)
+        Tue, 23 Feb 2021 15:35:29 -0800 (PST)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     ohad@wizery.com, bjorn.andersson@linaro.org,
         arnaud.pouliquen@st.com
 Cc:     mcoquelin.stm32@gmail.com, alexandre.torgue@st.com,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v6 16/16] remoteproc: Refactor rproc delete and cdev release path
-Date:   Tue, 23 Feb 2021 16:35:15 -0700
-Message-Id: <20210223233515.3468677-17-mathieu.poirier@linaro.org>
+Subject: [PATCH v6 12/16] remoteproc: Properly deal with a kernel panic when attached
+Date:   Tue, 23 Feb 2021 16:35:11 -0700
+Message-Id: <20210223233515.3468677-13-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210223233515.3468677-1-mathieu.poirier@linaro.org>
 References: <20210223233515.3468677-1-mathieu.poirier@linaro.org>
@@ -66,79 +66,34 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Refactor function rproc_del() and rproc_cdev_release() to take
-into account the current state of the remote processor when choosing
-the state to transition to.
+The panic handler operation of registered remote processors
+should also be called when remote processors have been
+attached to.
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 ---
-New for V6:
-- The RPROC_RUNNING -> RPROC_DETACHED transition is no longer permitted.
-  to avoid dealing with complex resource table management problems.
-- Transition to the next state is no longer dictated by a DT binding for
-  the same reason as above.
-- Removed Peng and Arnaud's RB tags because of the above.
----
+ drivers/remoteproc/remoteproc_core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
- drivers/remoteproc/remoteproc_cdev.c | 10 ++++++++--
- drivers/remoteproc/remoteproc_core.c |  9 +++++++--
- 2 files changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/remoteproc/remoteproc_cdev.c b/drivers/remoteproc/remoteproc_cdev.c
-index 2db494816d5f..0b8a84c04f76 100644
---- a/drivers/remoteproc/remoteproc_cdev.c
-+++ b/drivers/remoteproc/remoteproc_cdev.c
-@@ -86,11 +86,17 @@ static long rproc_device_ioctl(struct file *filp, unsigned int ioctl, unsigned l
- static int rproc_cdev_release(struct inode *inode, struct file *filp)
- {
- 	struct rproc *rproc = container_of(inode->i_cdev, struct rproc, cdev);
-+	int ret = 0;
-+
-+	if (!rproc->cdev_put_on_release)
-+		return 0;
- 
--	if (rproc->cdev_put_on_release && rproc->state == RPROC_RUNNING)
-+	if (rproc->state == RPROC_RUNNING)
- 		rproc_shutdown(rproc);
-+	else if (rproc->state == RPROC_ATTACHED)
-+		ret = rproc_detach(rproc);
- 
--	return 0;
-+	return ret;
- }
- 
- static const struct file_operations rproc_fops = {
 diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 00452da25fba..a05d5fec43b1 100644
+index 3a4692cc5220..0dc518a24104 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
-@@ -2542,11 +2542,16 @@ EXPORT_SYMBOL(rproc_put);
-  */
- int rproc_del(struct rproc *rproc)
- {
-+	int ret = 0;
+@@ -2684,7 +2684,11 @@ static int rproc_panic_handler(struct notifier_block *nb, unsigned long event,
+ 
+ 	rcu_read_lock();
+ 	list_for_each_entry_rcu(rproc, &rproc_list, node) {
+-		if (!rproc->ops->panic || rproc->state != RPROC_RUNNING)
++		if (!rproc->ops->panic)
++			continue;
 +
- 	if (!rproc)
- 		return -EINVAL;
++		if (rproc->state != RPROC_RUNNING &&
++		    rproc->state != RPROC_ATTACHED)
+ 			continue;
  
- 	/* TODO: make sure this works with rproc->power > 1 */
--	rproc_shutdown(rproc);
-+	if (rproc->state == RPROC_RUNNING)
-+		rproc_shutdown(rproc);
-+	else if (rproc->state == RPROC_ATTACHED)
-+		ret = rproc_detach(rproc);
- 
- 	mutex_lock(&rproc->lock);
- 	rproc->state = RPROC_DELETED;
-@@ -2565,7 +2570,7 @@ int rproc_del(struct rproc *rproc)
- 
- 	device_del(&rproc->dev);
- 
--	return 0;
-+	return ret;
- }
- EXPORT_SYMBOL(rproc_del);
- 
+ 		d = rproc->ops->panic(rproc);
 -- 
 2.25.1
 
