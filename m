@@ -2,129 +2,252 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A10C3328CEA
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  1 Mar 2021 20:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A4732B69F
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  3 Mar 2021 11:32:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240601AbhCATB4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 1 Mar 2021 14:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S237796AbhCCKbn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 3 Mar 2021 05:31:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235993AbhCAS7i (ORCPT
+        with ESMTP id S1345665AbhCBSHF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 1 Mar 2021 13:59:38 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B3BC06178A
-        for <linux-remoteproc@vger.kernel.org>; Mon,  1 Mar 2021 10:58:57 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id o188so5474994pfg.2
-        for <linux-remoteproc@vger.kernel.org>; Mon, 01 Mar 2021 10:58:57 -0800 (PST)
+        Tue, 2 Mar 2021 13:07:05 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73150C061222
+        for <linux-remoteproc@vger.kernel.org>; Tue,  2 Mar 2021 09:57:05 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id ba1so12482734plb.1
+        for <linux-remoteproc@vger.kernel.org>; Tue, 02 Mar 2021 09:57:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=dehH1srb5wSCPruG5pLg/y+gFzUjxYT/97pbvVhtQ+s=;
-        b=g3raq5ssPuzA1FpBLkGMU/18l9aA0Skg7LNPeqhbhybLfEtc1pez9y1E4hpdxIj6vg
-         VTtPogVFHdmNGHgXE/dcoqA91O9vP4huZzkfJz6iXTnC1xIcRfx+VfwWH4GRWl5anWqs
-         IjbnTAU41YC5fPJYZ6jhEZqNfOdrjs4mgaBEdOjOjki6DImVSzZy/XXca5nqk4bCzTle
-         DF+Y+Kblk26ejRZlLGQwOPZUh2lT16QvwyiyAAsIv/KRGR/GCmbj8hEKKR+EuQiGRoDL
-         VS2+nvUbNVr5WBLoRzJ4EEshQpc/iCE4ZSJXIGY2svdmfUR6L0sVkTUCKejV9dD2HTfi
-         3Jsw==
+        bh=XZv1luet9j7TnZYm7Gox6kRSD9fWpPc1LUY0U6nOa5s=;
+        b=Y+h9s4snrD/QHKXvqv+wG3eyoISyFrn0nHCU03dBFCu4kWrSxrqR+GKZ5JfysTORMG
+         MH8rvIDadTd/v5GVH1qTkG4L6F+NL6UXnSe0HkQhGGIlf+OzX9FUUKpZ4u583YvETHZi
+         DhYOTLffSolLB90COxzoR36lseOVvxRRXC7Y5X07q7tOrIorLcxOK9lmGNfsU4cvpgi8
+         gSd+/C9V1atQernhfZgMrtKUAEJY5IUnFbolqEoyo6Yuh4BC77TEdptTze/jyLB4oqbe
+         Tj+J7zuo1PHekHvyxyUD9SVE6bOyVjrEGqCt/XbbSMbHqDCyrex4VFcZ2wQJ+MWlXWNQ
+         meLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=dehH1srb5wSCPruG5pLg/y+gFzUjxYT/97pbvVhtQ+s=;
-        b=j2vtm13UBVZpXTWps8ovvAl43x0b01eU2QjkJP1Ib8GAH/6d2dCxMF/Qz9aODtCB3W
-         dbVWY2CbJvT9P6DgaMIcCtjG+RzV1Pz3RKPgT2MR3d+W9RsyqEyRp/w0FWtBiztPEWs2
-         bFx3Skv5UBZw4gf1UEkO7KEBd736dbbpD+PZBa6O4kWF0JLex8QsVUnKPT/VBEjyW8b6
-         fmFbgnSPdgUm0xBsomWMvKrIZQZyd9SsUYvxu8AcgQ0ZOpPtWhdKJGnjjjyrz0DfaAPL
-         b9rDl5/v2bUaQs1R7Y85qB+cDYHmE8jne3o77fbFzXiqju4e4zXMwcNf/KYu6D/GcX/B
-         m/PQ==
-X-Gm-Message-State: AOAM531GM5OY50WaIvHlyqaN7w+cLKRvFfeRK4UPOiqv/5V19Ad9VFOk
-        59X7FuU9U5JoypBlupoImTX6ig==
-X-Google-Smtp-Source: ABdhPJwwTm+u781GASjPu1pnPgIKPgjBt/7cKp9kBiSMZqrPMimTSqcojwFli98kEyvrUICgHaY53Q==
-X-Received: by 2002:a63:4c55:: with SMTP id m21mr15119963pgl.29.1614625136714;
-        Mon, 01 Mar 2021 10:58:56 -0800 (PST)
+        bh=XZv1luet9j7TnZYm7Gox6kRSD9fWpPc1LUY0U6nOa5s=;
+        b=GwNZVmpMrP/vWLPOE/njiojIxZDokphhAacxcEZSAjGgRfE7FkoqeaJtxFt1quNejF
+         ElyEpOlUd8MIohNhHh4sgG5vAgEWuVQ0R1wsUjz/Q+lNsycOcphwv/Mwg4ZQB2TlSpjA
+         XUfUUOVh7lZP5C3GhSqR8ZtibzkGVNtuVgkyMPD5NctcaRf7hCE0yRN24jZt4L1lA89C
+         QBOsVN9MmK2mqM6qGN6RB0A/aqciydqMlgcefaYUTzklVlwcSF24TOmqQDOvULCLga1A
+         PeOfMSAbf6z4tAvJ6o34N6fhZ1fp17oqZPXqRO1c9wi/c0tHTk+jnaCnb1Xis/TrHKMy
+         TLVg==
+X-Gm-Message-State: AOAM5323Dz+2hr+O5YglQ1+SEBW+3MgmSGPzYi242HFjrjtVFQ1OUE66
+        CAW5UGmE23pbBJaTpeZf894ekg==
+X-Google-Smtp-Source: ABdhPJzhE3kmzqmnRAdBHhvi8PKjBDxeIyYMxd8MW1Xbh5UIAuhxNlntYswLfIUB9Ai5UTENrKKy6Q==
+X-Received: by 2002:a17:902:ff0d:b029:e4:a497:fdad with SMTP id f13-20020a170902ff0db02900e4a497fdadmr12476777plj.33.1614707824846;
+        Tue, 02 Mar 2021 09:57:04 -0800 (PST)
 Received: from xps15 (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id 9sm16806400pgw.61.2021.03.01.10.58.55
+        by smtp.gmail.com with ESMTPSA id u2sm3277561pjy.14.2021.03.02.09.57.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Mar 2021 10:58:56 -0800 (PST)
-Date:   Mon, 1 Mar 2021 11:58:54 -0700
+        Tue, 02 Mar 2021 09:57:04 -0800 (PST)
+Date:   Tue, 2 Mar 2021 10:57:02 -0700
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Cc:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        arnaud.pouliquen@st.com, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@st.com, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 00/16] remoteproc: Add support for detaching a remote
- processor
-Message-ID: <20210301185854.GD3690389@xps15>
-References: <20210223233515.3468677-1-mathieu.poirier@linaro.org>
- <af614b83-de31-f8fe-8b7d-181a71886aa0@foss.st.com>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Andy Gross <agross@kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v5 04/16] rpmsg: char: export eptdev create an destroy
+ functions
+Message-ID: <20210302175702.GA3791957@xps15>
+References: <20210219111501.14261-1-arnaud.pouliquen@foss.st.com>
+ <20210219111501.14261-5-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <af614b83-de31-f8fe-8b7d-181a71886aa0@foss.st.com>
+In-Reply-To: <20210219111501.14261-5-arnaud.pouliquen@foss.st.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, Feb 26, 2021 at 05:40:49PM +0100, Arnaud POULIQUEN wrote:
-> Hi Mathieu,
-> 
-> On 2/24/21 12:34 AM, Mathieu Poirier wrote:
-> > Following the work done here [1], this set provides support for the
-> > remoteproc core to release resources associated with a remote processor
-> > without having to switch it off. That way a platform driver can be removed
-> > or the application processor power cycled while the remote processor is
-> > still operating.
-> > 
-> > Modifications for this revision are detailed in the changelog of each patch
-> > but the main difference is that going from RPROC_RUNNING -> RPROC_DETACHED
-> > is no longer supported to avoid dealing tricky resource table issues.
-> 
-> This seems reasonable to me. If necessary, this could be part of a separate series.
-> 
-> From test point of view, it is working pretty well on my side.
+Good morning,
 
-Thanks for taking a look a this.
-Mathieu
+I have started to review this set - comments will be staggered over several
+days.
 
+On Fri, Feb 19, 2021 at 12:14:49PM +0100, Arnaud Pouliquen wrote:
+> To prepare the split code related to the control and the endpoint
+> devices in separate files:
+> - suppress the dependency with the rpmsg_ctrldev struct,
+> - rename and export the functions in rpmsg_char.h.
 > 
-> Thanks,
-> Arnaud
+> Suggested-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+>  drivers/rpmsg/rpmsg_char.c | 22 ++++++++++------
+>  drivers/rpmsg/rpmsg_char.h | 51 ++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 66 insertions(+), 7 deletions(-)
+>  create mode 100644 drivers/rpmsg/rpmsg_char.h
 > 
-> > 
-> > Applies cleanly on rproc-next (e8b4e9a21af7).  I will rebase on 5.12-rc1 when it
-> > comes out next week.
-> > 
-> > Thanks,
-> > Mathieu
-> > 
-> > Arnaud POULIQUEN (1):
-> >   remoteproc: stm32: Move memory parsing to rproc_ops
-> > 
-> > Mathieu Poirier (15):
-> >   remoteproc: Remove useless check in rproc_del()
-> >   remoteproc: Rename function rproc_actuate()
-> >   remoteproc: Add new RPROC_ATTACHED state
-> >   remoteproc: Properly represent the attached state
-> >   remoteproc: Add new get_loaded_rsc_table() to rproc_ops
-> >   remoteproc: stm32: Move resource table setup to rproc_ops
-> >   remoteproc: Add new detach() remoteproc operation
-> >   remoteproc: Introduce function __rproc_detach()
-> >   remoteproc: Introduce function rproc_detach()
-> >   remoteproc: Properly deal with the resource table when attached
-> >   remoteproc: Properly deal with a kernel panic when attached
-> >   remoteproc: Properly deal with a start request when attached
-> >   remoteproc: Properly deal with a stop request when attached
-> >   remoteproc: Properly deal with a detach request when attached
-> >   remoteproc: Refactor rproc delete and cdev release path
-> > 
-> >  drivers/remoteproc/remoteproc_cdev.c     |  21 +-
-> >  drivers/remoteproc/remoteproc_core.c     | 263 ++++++++++++++++++++---
-> >  drivers/remoteproc/remoteproc_internal.h |  10 +
-> >  drivers/remoteproc/remoteproc_sysfs.c    |  17 +-
-> >  drivers/remoteproc/stm32_rproc.c         | 168 +++++++--------
-> >  include/linux/remoteproc.h               |  21 +-
-> >  6 files changed, 362 insertions(+), 138 deletions(-)
-> > 
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index 9e33b53bbf56..78a6d19fdf82 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> + * Copyright (C) 2021, STMicroelectronics
+>   * Copyright (c) 2016, Linaro Ltd.
+>   * Copyright (c) 2012, Michal Simek <monstr@monstr.eu>
+>   * Copyright (c) 2012, PetaLogix
+> @@ -22,6 +23,7 @@
+>  #include <linux/uaccess.h>
+>  #include <uapi/linux/rpmsg.h>
+>  
+> +#include "rpmsg_char.h"
+>  #include "rpmsg_internal.h"
+>  
+>  #define RPMSG_DEV_MAX	(MINORMASK + 1)
+> @@ -78,7 +80,7 @@ struct rpmsg_eptdev {
+>  	wait_queue_head_t readq;
+>  };
+>  
+> -static int rpmsg_eptdev_destroy(struct device *dev, void *data)
+> +static int rpmsg_eptdev_destroy(struct device *dev)
+>  {
+>  	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
+>  
+> @@ -277,7 +279,7 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
+>  	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
+>  		return -EINVAL;
+>  
+> -	return rpmsg_eptdev_destroy(&eptdev->dev, NULL);
+> +	return rpmsg_eptdev_destroy(&eptdev->dev);
+>  }
+>  
+>  static const struct file_operations rpmsg_eptdev_fops = {
+> @@ -336,10 +338,15 @@ static void rpmsg_eptdev_release_device(struct device *dev)
+>  	kfree(eptdev);
+>  }
+>  
+> -static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
+> +int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
+> +{
+> +	return rpmsg_eptdev_destroy(dev);
+> +}
+> +EXPORT_SYMBOL(rpmsg_chrdev_eptdev_destroy);
+
+Below we have rpmsg_chrdev_create_eptdev() so it would make sense to have
+rpmsg_chrdev_destroy_ept().
+
+I would also rename rpmsg_eptdev_destroy() to rpmsg_chrdev_destroy_ept() and
+export that symbol rather than introducing a function that only calls another
+one.  You did exactly that for rpmsg_chrdev_create_eptdev().
+
+> +
+> +int rpmsg_chrdev_create_eptdev(struct rpmsg_device *rpdev, struct device *parent,
+>  			       struct rpmsg_channel_info chinfo)
+>  {
+> -	struct rpmsg_device *rpdev = ctrldev->rpdev;
+>  	struct rpmsg_eptdev *eptdev;
+>  	struct device *dev;
+>  	int ret;
+> @@ -359,7 +366,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
+>  
+>  	device_initialize(dev);
+>  	dev->class = rpmsg_class;
+> -	dev->parent = &ctrldev->dev;
+> +	dev->parent = parent;
+>  	dev->groups = rpmsg_eptdev_groups;
+>  	dev_set_drvdata(dev, eptdev);
+>  
+> @@ -402,6 +409,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
+>  
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL(rpmsg_chrdev_create_eptdev);
+>  
+>  static int rpmsg_ctrldev_open(struct inode *inode, struct file *filp)
+>  {
+> @@ -441,7 +449,7 @@ static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
+>  	chinfo.src = eptinfo.src;
+>  	chinfo.dst = eptinfo.dst;
+>  
+> -	return rpmsg_eptdev_create(ctrldev, chinfo);
+> +	return rpmsg_chrdev_create_eptdev(ctrldev->rpdev, &ctrldev->dev, chinfo);
+
+Not sure why we have to change the signature of rpmsg_eptdev_create() but I may
+find an answer to that question later on in the patchset.
+
+>  };
+>  
+>  static const struct file_operations rpmsg_ctrldev_fops = {
+> @@ -527,7 +535,7 @@ static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
+>  	int ret;
+>  
+>  	/* Destroy all endpoints */
+> -	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_eptdev_destroy);
+> +	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
+>  	if (ret)
+>  		dev_warn(&rpdev->dev, "failed to nuke endpoints: %d\n", ret);
+>  
+> diff --git a/drivers/rpmsg/rpmsg_char.h b/drivers/rpmsg/rpmsg_char.h
+> new file mode 100644
+> index 000000000000..0feb3ea9445c
+> --- /dev/null
+> +++ b/drivers/rpmsg/rpmsg_char.h
+> @@ -0,0 +1,51 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +/*
+> + * Copyright (C) STMicroelectronics 2021.
+> + */
+> +
+> +#ifndef __RPMSG_CHRDEV_H__
+> +#define __RPMSG_CHRDEV_H__
+> +
+> +#if IS_ENABLED(CONFIG_RPMSG_CHAR)
+> +/**
+> + * rpmsg_chrdev_create_eptdev() - register char device based on an endpoint
+> + * @rpdev:  prepared rpdev to be used for creating endpoints
+> + * @parent: parent device
+> + * @chinfo: assiated endpoint channel information.
+> + *
+> + * This function create a new rpmsg char endpoint device to instantiate a new
+> + * endpoint based on chinfo information.
+> + */
+> +int rpmsg_chrdev_create_eptdev(struct rpmsg_device *rpdev, struct device *parent,
+> +			       struct rpmsg_channel_info chinfo);
+> +
+> +/**
+> + * rpmsg_chrdev_eptdev_destroy() - destroy created char device
+> + * @data: parent device
+> + * @chinfo: assiated endpoint channel information.
+> + *
+> + * This function create a new rpmsg char endpoint device to instantiate a new
+> + * endpoint based on chinfo information.
+> + */
+> +int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data);
+> +
+> +#else  /*IS_ENABLED(CONFIG_RPMSG_CHAR) */
+> +
+> +static inline int rpmsg_chrdev_create_eptdev(struct rpmsg_device *rpdev,
+> +					     struct device *parent,
+> +					     struct rpmsg_channel_info chinfo)
+> +{
+> +	return -EINVAL;
+> +}
+> +
+> +static inline int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
+> +{
+> +	/* This shouldn't be possible */
+> +	WARN_ON(1);
+> +
+> +	return 0;
+> +}
+> +
+> +#endif /*IS_ENABLED(CONFIG_RPMSG_CHAR) */
+> +
+> +#endif /*__RPMSG_CHRDEV_H__ */
+> -- 
+> 2.17.1
+> 
