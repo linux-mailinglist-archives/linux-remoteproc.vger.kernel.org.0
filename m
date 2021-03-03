@@ -2,270 +2,271 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEAF32B710
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  3 Mar 2021 12:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9782532C878
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  4 Mar 2021 02:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239530AbhCCKbu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 3 Mar 2021 05:31:50 -0500
-Received: from mail-vi1eur05on2088.outbound.protection.outlook.com ([40.107.21.88]:16129
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1355581AbhCCGyL (ORCPT
+        id S232083AbhCDAty (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 3 Mar 2021 19:49:54 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:47334 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241960AbhCCNZu (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 3 Mar 2021 01:54:11 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mG8Gz1waPjdyWZFyT9hC+p38BeMF8383feinelq1mpbO7lt23w6yQj5I1kv2SwBxx0zE+nCYZa8KAOzAVLaFCN70Wo1zaL2z+4kuRiBoC1Y8ldfTwF2+GIFRyf0DSNw5In93ZncOdGq8Ld7MEHGuMTBmigXjqNpVDWqXexCfQaKNY81iVqBO7HVqgq4RvcSoxiqP1yk95iZJJWSztonKxDQ+9eAdCXaUYuZzMLKiX7toPX8zgvu4+BjClbZpdg3GHa5uZCpYaWe0bGI6tuWXFoDwsK/sxnPk9Z/XjrMBgIdhArw30jzq9ZU+8TfgzXMrHbQRUAYLZCfblf4eqi2e5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FzpZKG+f0hBd/FY7Ge1sUwo1g0iScX5i/Z/T2NKcVXI=;
- b=L6EYeYFKmvjm/jPWgVp0WUQ7gC4F2ycL7Mp9BWWl77aO34xENxliA+z9b1Lni8IsbkTOS6M3f9u2ooQfHVldgXIoXXVaB18waajiCImIiHlDUtJHsxQm6VGUVkTFD/ip22HbCjPQQedzOZZN5SGo0WFA9oSDg+OAc2pIjamfrjc5qIa/Xv22NaYPR884F1bRia8GIktO3KiIXCuFUDyGwU3cEF409FtFM/0hVxEmIk7SzvKK0OHR7Fmy935KAoRReHMCpivgTg6QJ8jZGomyy/GtLQRjCZeMG5oc0FOnh4cU0NxuzpX5b46dhVnYo2s0p1JNk6E6kwvqHnfpi1N6BA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FzpZKG+f0hBd/FY7Ge1sUwo1g0iScX5i/Z/T2NKcVXI=;
- b=gYIEZ0rNPvzZuExaXbQxeGhltxUJrOUrbQi/2TNPoln4qbISzBWqAQd2wg9tnvThxzVVVrC2rNFlwmSQ6wqH88BU+5DwgwYyrfaEp0kYtk/W4qwlpjpycc3l44EmLpJv5v1MAsYtmlSKZxgnanGPOVqjtbSRcG0OQZQeDhuQWNE=
-Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com (2603:10a6:4:a1::14)
- by DB3PR0402MB3916.eurprd04.prod.outlook.com (2603:10a6:8:10::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3890.20; Wed, 3 Mar
- 2021 06:53:16 +0000
-Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com
- ([fe80::d58c:d479:d094:43d0]) by DB6PR0402MB2760.eurprd04.prod.outlook.com
- ([fe80::d58c:d479:d094:43d0%9]) with mapi id 15.20.3846.049; Wed, 3 Mar 2021
- 06:53:16 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "ohad@wizery.com" <ohad@wizery.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "o.rempel@pengutronix.de" <o.rempel@pengutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-CC:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "paul@crapouillou.net" <paul@crapouillou.net>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "patrice.chotard@st.com" <patrice.chotard@st.com>
-Subject: RE: [PATCH V12 01/10] dt-bindings: remoteproc: convert imx rproc
- bindings to json-schema
-Thread-Topic: [PATCH V12 01/10] dt-bindings: remoteproc: convert imx rproc
- bindings to json-schema
-Thread-Index: AQHXBZaNexj5F8BzH0O9WCmBOi8HDqpx6Jag
-Date:   Wed, 3 Mar 2021 06:53:16 +0000
-Message-ID: <DB6PR0402MB2760F2258DD869DC6001BD8F88989@DB6PR0402MB2760.eurprd04.prod.outlook.com>
-References: <1613611500-12414-1-git-send-email-peng.fan@oss.nxp.com>
- <1613611500-12414-2-git-send-email-peng.fan@oss.nxp.com>
-In-Reply-To: <1613611500-12414-2-git-send-email-peng.fan@oss.nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: oss.nxp.com; dkim=none (message not signed)
- header.d=none;oss.nxp.com; dmarc=none action=none header.from=oss.nxp.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 7461e3bd-caec-4e7c-87a8-08d8de1105c1
-x-ms-traffictypediagnostic: DB3PR0402MB3916:
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB3PR0402MB3916542154A98480DEC8ACD9C9989@DB3PR0402MB3916.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3968;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: IB+9365KlShDZFymxowQg6DIu3SbBiuevircDiVuBDe3h94UOmvO8LpFDrePCJy1pcZ8Ewa2AowD43bxgW8UGURaW8bSpesQlwRaSNKbwn+jLIZBs7S1AmRi7sTNsO2BJ5a/+fU6pewIKrNGdiQtbzaPy9EIBw36nnj3qqlB5M7vFBo4ytrR6Y1S084PAFdZls3B+gL4288zzg76V+4gMj2jQjAsM085djY48QG8wUVaBa6iKC5hDJXRHuD11KEpZogdS2XtokcyA0udkQQKEvqQPRjZdeqcyutZeelrdQ65oBqfV3qmLS2OImPSqriglG2cu/U6Jwn1lLmPiB/wFoufaW1DXHw7fCBFUZZzAwvX+jQalHu8cTAKiyPZvhEJWq8oXGfVgQSVi4vysbQ6+5/jVWOkzzhH8zR2GOsc1/nL4zSHSu/vxq5TlEsPCGXAYGzDZg/O8J4PQhKxj+qulnwVqy956WsGjh18g0ZIvrNnu0UQc066mFyns1lhLykVmCvhzvcQhrQGpvuu2pBvDM8gq9asIcb/fpxXQwNvC9rE57VB9K0b8a+RM7YGjaJ4eeLGaZsBBrGfnFdebwyQcvW33K9+wrBcvPIr8i5ntRc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2760.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(376002)(346002)(39860400002)(396003)(366004)(5660300002)(66946007)(66556008)(66446008)(64756008)(66476007)(71200400001)(52536014)(186003)(86362001)(76116006)(7416002)(8676002)(26005)(9686003)(55016002)(478600001)(8936002)(6506007)(54906003)(316002)(83380400001)(33656002)(2906002)(110136005)(4326008)(7696005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?2/UVdxogGTv2Exe3JrixG6NAbE2A+Lp/sqkzG2/pYv3Wedz9Ta/1z2YVKYwd?=
- =?us-ascii?Q?FRYHcjQOKdZ6Y5csjPX9xdK4LvhpD1PkSHXnqpUkSkZIjWmFlldlvNfmAVlI?=
- =?us-ascii?Q?hZYADez0XpWo8kXr1Wxa4e8bWBxoEFLv4tXCo7GikkL+r1t5cdoNQJADkOqy?=
- =?us-ascii?Q?lYb2V7o6PaRejZKKYfbmqjqS4EXfDIoam5OpyRT3+agbwi6eKdNhAqAwNZWf?=
- =?us-ascii?Q?Gpc4mMc7ymMlid+XbomLNkzRBRrOuW0hyhk3MWEm9nr88she+S1WlDBiMz4j?=
- =?us-ascii?Q?u/xKdHOzGwVQ+k6cyXqnTURA0hXKJ271cOsOOpnn2l80io+f2LJNx9rEmR9Z?=
- =?us-ascii?Q?cDzTzwU4NL0xzRW1WdcuOg2YFrzMhwzIKkDcGF/YN4i1+VHehY1mvAyhfMPn?=
- =?us-ascii?Q?Pbmw9MLOZVyMFDyW2uhz+ULXDK5JObtZMH4q75EYdDp5yJ9cfX44mF1N7ejw?=
- =?us-ascii?Q?ZASfqWE8mwmmmvY9GPyVNBp7Vt1Sh8sq5RNNpXPVZlpjzkO//joDPV5ozG9l?=
- =?us-ascii?Q?XuOKJzMHtyBfsg0TODhD+Z4/QCmJehUqavnRo/C7CeZjbBBm1K5AKtTwGyqp?=
- =?us-ascii?Q?99dlyZayO+9PJFhT3u72wv/7wgkJ2e5BqpA7GkuLsJMBKwAbdYYQHWOa/Tcn?=
- =?us-ascii?Q?FPRa7wdm1K93HY5r3TgZDc80Mv6Db1EMsxrlNMVd3WqKgMTmgre1tol71P94?=
- =?us-ascii?Q?UBwDZvEMhe7OEDoBDXDi1qwDsgP8VNl+xDYMREY3oPmZVQUeDT6FXgG8ScYe?=
- =?us-ascii?Q?p/XFs92Gt59wIh5/3RDyi2FYAc+oyaAau/LsQHrQh2uPLTug+AMLyYJTS7OK?=
- =?us-ascii?Q?76gOCgqy0iSzbyBp7hfjFpWRkvkvgJls1q96J1HjoDsSAKjx/UgBjaU4/qU6?=
- =?us-ascii?Q?VKAqxQhYz98QiiyRpez4gK0QxD0MpUPTOAjkBNVuoL+h0WdbRTmIQY7J8pP8?=
- =?us-ascii?Q?pCulWdoGvu7uch7v5PJQ7pQuFNeuEuBEcJ2USVkon+c/cuij6bk8BN220LjP?=
- =?us-ascii?Q?9RlzXzE1PRwkIzAMVPJVYmTWSAXhJJBnq6Pv0SNE6zMARopzH7TxWmWg3dgV?=
- =?us-ascii?Q?v2+0KMCW7FcrRhjRDGy6V9belIpn9Exk9fjmMPwEZRA+fu+x62ZbmzuNRl9V?=
- =?us-ascii?Q?Wu9pZf+OwyUUwl3WP+Px5B/vfgHalUN0gu05NSLepDfoDpy5EGo5u9O6M6HZ?=
- =?us-ascii?Q?tYvSw5JSyNpGklbVRI96mINB0ctQh/9ksYg0xlsZVBTr7zAOj2Gh2JSoYQBR?=
- =?us-ascii?Q?PQhJtHeqpjMZjeqYaOk+RM7TRQ75SWJwbb2EZQ9iughd8SF2utbxbmr+goMg?=
- =?us-ascii?Q?UHfdFkmTPR5IA3kn/rtoYuq2?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 3 Mar 2021 08:25:50 -0500
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 123DL0Ep003994;
+        Wed, 3 Mar 2021 14:22:39 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=iWcMqaioAbOcEOUYc2PgX4sjLWX0rmRYYIEX6Aexrls=;
+ b=7mMxG78oxY9mNZQEcSHcjvnffXSccMz7nMDgWejxe1zgpIdl4axXFV0pH4dKSOuYi02F
+ Hg9q5zXQuZfPVEBx1Ultdruu3DV3GyYXF4kOXzXt2HXOBxHjDdIMuU+hZU43bVqHOZXU
+ qDUhXYjCyTMq15Z94noWyt1GP+SxL2Gw0Ogzhhd4giwM2GT9zBNEdbg7GX5OP9n0DiWZ
+ +7t/M3ZtmRFTWjIkeINY8va0AW6bbmDLhJc2lWtp5/pU0G350DDnyJU0HWQ1J/FLY0Wt
+ rbvDUUeZ3TiKqUgimjKZ6MmtZUjK3KMZ6ioBkjoN5C8k7wQBe3SQ4WjrJegKj1+ms25a +w== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 370xehwtgp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Mar 2021 14:22:39 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6E81010002A;
+        Wed,  3 Mar 2021 14:22:38 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 52E0D246CF5;
+        Wed,  3 Mar 2021 14:22:38 +0100 (CET)
+Received: from lmecxl0889.lme.st.com (10.75.127.47) by SFHDAG2NODE3.st.com
+ (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 3 Mar
+ 2021 14:22:37 +0100
+Subject: Re: [PATCH v5 04/16] rpmsg: char: export eptdev create an destroy
+ functions
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Andy Gross <agross@kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-msm@vger.kernel.org>
+References: <20210219111501.14261-1-arnaud.pouliquen@foss.st.com>
+ <20210219111501.14261-5-arnaud.pouliquen@foss.st.com>
+ <20210302175702.GA3791957@xps15>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Message-ID: <4b361c08-09ad-b353-4896-97af3edfc9c6@foss.st.com>
+Date:   Wed, 3 Mar 2021 14:22:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2760.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7461e3bd-caec-4e7c-87a8-08d8de1105c1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Mar 2021 06:53:16.3975
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 4cW/xDFp8AEO6pJlKaUu9Z40C7Vptuv+Sv7cSqNdWtroaxZd4ETESidlAx5MD0y1nnp1vZQyDrnPTA7LzhDxdA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3916
+In-Reply-To: <20210302175702.GA3791957@xps15>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE3.st.com
+ (10.75.127.6)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.369,18.0.761
+ definitions=2021-03-03_04:2021-03-03,2021-03-03 signatures=0
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Rob,
+Hi Mathieu,
 
-> Subject: [PATCH V12 01/10] dt-bindings: remoteproc: convert imx rproc
-> bindings to json-schema
+On 3/2/21 6:57 PM, Mathieu Poirier wrote:
+> Good morning,
+> 
+> I have started to review this set - comments will be staggered over several
+> days.
+> 
+> On Fri, Feb 19, 2021 at 12:14:49PM +0100, Arnaud Pouliquen wrote:
+>> To prepare the split code related to the control and the endpoint
+>> devices in separate files:
+>> - suppress the dependency with the rpmsg_ctrldev struct,
+>> - rename and export the functions in rpmsg_char.h.
+>>
+>> Suggested-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+>> ---
+>>  drivers/rpmsg/rpmsg_char.c | 22 ++++++++++------
+>>  drivers/rpmsg/rpmsg_char.h | 51 ++++++++++++++++++++++++++++++++++++++
+>>  2 files changed, 66 insertions(+), 7 deletions(-)
+>>  create mode 100644 drivers/rpmsg/rpmsg_char.h
+>>
+>> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+>> index 9e33b53bbf56..78a6d19fdf82 100644
+>> --- a/drivers/rpmsg/rpmsg_char.c
+>> +++ b/drivers/rpmsg/rpmsg_char.c
+>> @@ -1,5 +1,6 @@
+>>  // SPDX-License-Identifier: GPL-2.0
+>>  /*
+>> + * Copyright (C) 2021, STMicroelectronics
+>>   * Copyright (c) 2016, Linaro Ltd.
+>>   * Copyright (c) 2012, Michal Simek <monstr@monstr.eu>
+>>   * Copyright (c) 2012, PetaLogix
+>> @@ -22,6 +23,7 @@
+>>  #include <linux/uaccess.h>
+>>  #include <uapi/linux/rpmsg.h>
+>>  
+>> +#include "rpmsg_char.h"
+>>  #include "rpmsg_internal.h"
+>>  
+>>  #define RPMSG_DEV_MAX	(MINORMASK + 1)
+>> @@ -78,7 +80,7 @@ struct rpmsg_eptdev {
+>>  	wait_queue_head_t readq;
+>>  };
+>>  
+>> -static int rpmsg_eptdev_destroy(struct device *dev, void *data)
+>> +static int rpmsg_eptdev_destroy(struct device *dev)
+>>  {
+>>  	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
+>>  
+>> @@ -277,7 +279,7 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
+>>  	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
+>>  		return -EINVAL;
+>>  
+>> -	return rpmsg_eptdev_destroy(&eptdev->dev, NULL);
+>> +	return rpmsg_eptdev_destroy(&eptdev->dev);
+>>  }
+>>  
+>>  static const struct file_operations rpmsg_eptdev_fops = {
+>> @@ -336,10 +338,15 @@ static void rpmsg_eptdev_release_device(struct device *dev)
+>>  	kfree(eptdev);
+>>  }
+>>  
+>> -static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
+>> +int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
+>> +{
+>> +	return rpmsg_eptdev_destroy(dev);
+>> +}
+>> +EXPORT_SYMBOL(rpmsg_chrdev_eptdev_destroy);
+> 
+> Below we have rpmsg_chrdev_create_eptdev() so it would make sense to have
+> rpmsg_chrdev_destroy_ept().
+> 
+> I would also rename rpmsg_eptdev_destroy() to rpmsg_chrdev_destroy_ept() and
+> export that symbol rather than introducing a function that only calls another
+> one.  You did exactly that for rpmsg_chrdev_create_eptdev().
 
-Are you fine with patch 1, 2?
+This function is used in rpmsg_ctrl to remove eptdev devices.
+As device_for_each_child request a specific function prototype I do not only
+export but change function prototype.
+
+I can squash all in one function but that means that the "data" parameter is
+just always unused.
+
+> 
+>> +
+>> +int rpmsg_chrdev_create_eptdev(struct rpmsg_device *rpdev, struct device *parent,
+>>  			       struct rpmsg_channel_info chinfo)
+>>  {
+>> -	struct rpmsg_device *rpdev = ctrldev->rpdev;
+>>  	struct rpmsg_eptdev *eptdev;
+>>  	struct device *dev;
+>>  	int ret;
+>> @@ -359,7 +366,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
+>>  
+>>  	device_initialize(dev);
+>>  	dev->class = rpmsg_class;
+>> -	dev->parent = &ctrldev->dev;
+>> +	dev->parent = parent;
+>>  	dev->groups = rpmsg_eptdev_groups;
+>>  	dev_set_drvdata(dev, eptdev);
+>>  
+>> @@ -402,6 +409,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
+>>  
+>>  	return ret;
+>>  }
+>> +EXPORT_SYMBOL(rpmsg_chrdev_create_eptdev);
+>>  
+>>  static int rpmsg_ctrldev_open(struct inode *inode, struct file *filp)
+>>  {
+>> @@ -441,7 +449,7 @@ static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
+>>  	chinfo.src = eptinfo.src;
+>>  	chinfo.dst = eptinfo.dst;
+>>  
+>> -	return rpmsg_eptdev_create(ctrldev, chinfo);
+>> +	return rpmsg_chrdev_create_eptdev(ctrldev->rpdev, &ctrldev->dev, chinfo);
+> 
+> Not sure why we have to change the signature of rpmsg_eptdev_create() but I may
+> find an answer to that question later on in the patchset.
+
+Here I need to break dependency with rpmsg_ctrldev that will move to the
+rpmsg_ctrl.c. rpmsg_eptdev_create doesn't need it but just parent devices to be
+attached to.
+
+I will add more explicit information about this, in the commit message.
 
 Thanks,
-Peng.
+Arnaud
 
->=20
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> Convert the imx rproc binding to DT schema format using json-schema.
->=20
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../bindings/remoteproc/fsl,imx-rproc.yaml    | 61 +++++++++++++++++++
->  .../bindings/remoteproc/imx-rproc.txt         | 33 ----------
->  2 files changed, 61 insertions(+), 33 deletions(-)  create mode 100644
-> Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
->  delete mode 100644
-> Documentation/devicetree/bindings/remoteproc/imx-rproc.txt
->=20
-> diff --git
-> a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> new file mode 100644
-> index 000000000000..54d2456530a6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> @@ -0,0 +1,61 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause) %YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/remoteproc/fsl,imx-rproc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: NXP iMX6SX/iMX7D Co-Processor Bindings
-> +
-> +description:
-> +  This binding provides support for ARM Cortex M4 Co-processor found on
-> some NXP iMX SoCs.
-> +
-> +maintainers:
-> +  - Peng Fan <peng.fan@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - fsl,imx7d-cm4
-> +      - fsl,imx6sx-cm4
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Phandle to syscon block which provide access to System Reset
-> + Controller
-> +
-> +  memory-region:
-> +    description:
-> +      If present, a phandle for a reserved memory area that used for vde=
-v
-> buffer,
-> +      resource table, vring region and others used by remote processor.
-> +    minItems: 1
-> +    maxItems: 32
-> +
-> +required:
-> +  - compatible
-> +  - clocks
-> +  - syscon
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/imx7d-clock.h>
-> +    m4_reserved_sysmem1: cm4@80000000 {
-> +      reg =3D <0x80000000 0x80000>;
-> +    };
-> +
-> +    m4_reserved_sysmem2: cm4@81000000 {
-> +      reg =3D <0x81000000 0x80000>;
-> +    };
-> +
-> +    imx7d-cm4 {
-> +      compatible	=3D "fsl,imx7d-cm4";
-> +      memory-region	=3D <&m4_reserved_sysmem1>,
-> <&m4_reserved_sysmem2>;
-> +      syscon		=3D <&src>;
-> +      clocks		=3D <&clks IMX7D_ARM_M4_ROOT_CLK>;
-> +    };
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/remoteproc/imx-rproc.txt
-> b/Documentation/devicetree/bindings/remoteproc/imx-rproc.txt
-> deleted file mode 100644
-> index fbcefd965dc4..000000000000
-> --- a/Documentation/devicetree/bindings/remoteproc/imx-rproc.txt
-> +++ /dev/null
-> @@ -1,33 +0,0 @@
-> -NXP iMX6SX/iMX7D Co-Processor Bindings
-> -----------------------------------------
-> -
-> -This binding provides support for ARM Cortex M4 Co-processor found on
-> some -NXP iMX SoCs.
-> -
-> -Required properties:
-> -- compatible		Should be one of:
-> -				"fsl,imx7d-cm4"
-> -				"fsl,imx6sx-cm4"
-> -- clocks		Clock for co-processor (See: ../clock/clock-bindings.txt)
-> -- syscon		Phandle to syscon block which provide access to
-> -			System Reset Controller
-> -
-> -Optional properties:
-> -- memory-region		list of phandels to the reserved memory regions.
-> -			(See: ../reserved-memory/reserved-memory.txt)
-> -
-> -Example:
-> -	m4_reserved_sysmem1: cm4@80000000 {
-> -		reg =3D <0x80000000 0x80000>;
-> -	};
-> -
-> -	m4_reserved_sysmem2: cm4@81000000 {
-> -		reg =3D <0x81000000 0x80000>;
-> -	};
-> -
-> -	imx7d-cm4 {
-> -		compatible	=3D "fsl,imx7d-cm4";
-> -		memory-region	=3D <&m4_reserved_sysmem1>,
-> <&m4_reserved_sysmem2>;
-> -		syscon		=3D <&src>;
-> -		clocks		=3D <&clks IMX7D_ARM_M4_ROOT_CLK>;
-> -	};
-> --
-> 2.30.0
-
+> 
+>>  };
+>>  
+>>  static const struct file_operations rpmsg_ctrldev_fops = {
+>> @@ -527,7 +535,7 @@ static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
+>>  	int ret;
+>>  
+>>  	/* Destroy all endpoints */
+>> -	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_eptdev_destroy);
+>> +	ret = device_for_each_child(&ctrldev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
+>>  	if (ret)
+>>  		dev_warn(&rpdev->dev, "failed to nuke endpoints: %d\n", ret);
+>>  
+>> diff --git a/drivers/rpmsg/rpmsg_char.h b/drivers/rpmsg/rpmsg_char.h
+>> new file mode 100644
+>> index 000000000000..0feb3ea9445c
+>> --- /dev/null
+>> +++ b/drivers/rpmsg/rpmsg_char.h
+>> @@ -0,0 +1,51 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>> +/*
+>> + * Copyright (C) STMicroelectronics 2021.
+>> + */
+>> +
+>> +#ifndef __RPMSG_CHRDEV_H__
+>> +#define __RPMSG_CHRDEV_H__
+>> +
+>> +#if IS_ENABLED(CONFIG_RPMSG_CHAR)
+>> +/**
+>> + * rpmsg_chrdev_create_eptdev() - register char device based on an endpoint
+>> + * @rpdev:  prepared rpdev to be used for creating endpoints
+>> + * @parent: parent device
+>> + * @chinfo: assiated endpoint channel information.
+>> + *
+>> + * This function create a new rpmsg char endpoint device to instantiate a new
+>> + * endpoint based on chinfo information.
+>> + */
+>> +int rpmsg_chrdev_create_eptdev(struct rpmsg_device *rpdev, struct device *parent,
+>> +			       struct rpmsg_channel_info chinfo);
+>> +
+>> +/**
+>> + * rpmsg_chrdev_eptdev_destroy() - destroy created char device
+>> + * @data: parent device
+>> + * @chinfo: assiated endpoint channel information.
+>> + *
+>> + * This function create a new rpmsg char endpoint device to instantiate a new
+>> + * endpoint based on chinfo information.
+>> + */
+>> +int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data);
+>> +
+>> +#else  /*IS_ENABLED(CONFIG_RPMSG_CHAR) */
+>> +
+>> +static inline int rpmsg_chrdev_create_eptdev(struct rpmsg_device *rpdev,
+>> +					     struct device *parent,
+>> +					     struct rpmsg_channel_info chinfo)
+>> +{
+>> +	return -EINVAL;
+>> +}
+>> +
+>> +static inline int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
+>> +{
+>> +	/* This shouldn't be possible */
+>> +	WARN_ON(1);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +#endif /*IS_ENABLED(CONFIG_RPMSG_CHAR) */
+>> +
+>> +#endif /*__RPMSG_CHRDEV_H__ */
+>> -- 
+>> 2.17.1
+>>
