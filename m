@@ -2,203 +2,94 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3247632C87F
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  4 Mar 2021 02:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D76E032C87E
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  4 Mar 2021 02:15:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbhCDAuG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        id S233110AbhCDAuG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
         Wed, 3 Mar 2021 19:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382968AbhCCSoa (ORCPT
+Received: from z11.mailgun.us ([104.130.96.11]:64188 "EHLO z11.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1387474AbhCCUCg (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 3 Mar 2021 13:44:30 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B5FC06175F
-        for <linux-remoteproc@vger.kernel.org>; Wed,  3 Mar 2021 10:43:48 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id s16so14532392plr.9
-        for <linux-remoteproc@vger.kernel.org>; Wed, 03 Mar 2021 10:43:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gVzR7oLstl6ac4ZTkA4CIGL1WR32C+kvWFg+bT72InI=;
-        b=Kdp0z6TouC9vsp6Gaa4T0X4l/lsXsHfBSgHsbjgBgBPnZs72XvLOn3wMnlX2wWvV+U
-         zAMijtl3Db+skGKokSbjFctHPeDghD+JPckIzTRM+Fx2LFOFfIymQelQrxwLgZlOYD4j
-         YO2yBXWtCdBIUxFcBE1BbMM/MVUOP60rUwUdqaOe9MTiaIxQZBVKN3o3iJyV5pEm3h1U
-         pz+M9M2KJbAiQoZiDGGSSqkcchEre8O5f/3u2SuaFDxXZBbBV4J74E4O05bgZTa54tad
-         9oD8BVbYvPaWNc7HCsQkWiYbEST7gerlhWe9ONUT1GMXJcWy7IjXVQfVNn3IHTPjp0rS
-         lpjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gVzR7oLstl6ac4ZTkA4CIGL1WR32C+kvWFg+bT72InI=;
-        b=n3O7WXEz92IUAjKpsY9wisY7jBh8mfHHJeImpuC6L7+g9pru+r9daVWdSzFCFvrews
-         WkItOPwcOtkJD/sPCm4PwmeziksBs1/pMXVp2y7FP0pCTasDR1LuIK23dR3Z8TUdZ7c2
-         uLlgceQ8Kl0chfhcYZif/8ktqAEPD25k7XhcUERCD6eK2wz0y+ZAC6I9LvXI28UwYKwK
-         NHuYcQa47Dz5AoVUCDBg1F80e9mt4CgtIKYXZeAMQyrnTlvD2I5xZ6bUm/0FqONzORqK
-         mxx/mT0h5rZx4b9DmtHIoIoJqJsLpfCuUCX8mS69aaCussJHnxVUyZIWvEJA8ppyadBW
-         WkLA==
-X-Gm-Message-State: AOAM533muABlkqPPHMHVd+v4YsxMm/Pxeo5khVBHGa61FfYvFZnZUvQD
-        sP5kV2ErOGcNnvqZc29t1WFH2Q==
-X-Google-Smtp-Source: ABdhPJyaZX7NAFW2wCjv1k35xfC/hJogQ35MtOZEOH1TxdzZzw44BBaFYPLSKZlYUZq4CWNEHQPUwQ==
-X-Received: by 2002:a17:90a:4882:: with SMTP id b2mr474911pjh.69.1614797028306;
-        Wed, 03 Mar 2021 10:43:48 -0800 (PST)
-Received: from xps15 (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id v126sm23944372pfv.163.2021.03.03.10.43.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Mar 2021 10:43:47 -0800 (PST)
-Date:   Wed, 3 Mar 2021 11:43:45 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Andy Gross <agross@kernel.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v5 11/16] rpmsg: virtio: register the rpmsg_ctrl device
-Message-ID: <20210303184345.GD3817330@xps15>
-References: <20210219111501.14261-1-arnaud.pouliquen@foss.st.com>
- <20210219111501.14261-12-arnaud.pouliquen@foss.st.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210219111501.14261-12-arnaud.pouliquen@foss.st.com>
+        Wed, 3 Mar 2021 15:02:36 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1614801737; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=K6mawvdpQdOxwjMF5rdf/APlmSOmG3tRL7olNo2nmNI=; b=p31qAsKwkg51bp8/6fg4bEcZsgTxarD/ukD4OyLB1++Vf7QjwfUXrVJ2ZdYIT7Lvef57JrEG
+ XUnkRkPgTqYzpUKyWngM2PYXC1l7fdTeUfHXO1QRCuUdWq7IEwG8VlC0nvZchSr/yz+h8M26
+ wPHoRIh3Ho40NEyBAXXGWspaULo=
+X-Mailgun-Sending-Ip: 104.130.96.11
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 603feb2ac862e1b9fd4edf21 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 03 Mar 2021 20:01:46
+ GMT
+Sender: sidgup=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 25DACC43462; Wed,  3 Mar 2021 20:01:46 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from sidgup-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sidgup)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1DECFC43461;
+        Wed,  3 Mar 2021 20:01:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1DECFC43461
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sidgup@codeaurora.org
+From:   Siddharth Gupta <sidgup@codeaurora.org>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Raghavendra Rao Ananta <rananta@codeaurora.org>,
+        Siddharth Gupta <sidgup@codeaurora.org>
+Subject: [PATCH] remoteproc: sysfs: Use scnprintf instead of sprintf
+Date:   Wed,  3 Mar 2021 12:01:38 -0800
+Message-Id: <1614801698-25987-1-git-send-email-sidgup@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, Feb 19, 2021 at 12:14:56PM +0100, Arnaud Pouliquen wrote:
-> Instantiate the rpmsg_ioctl device on virtio RPMsg bus creation.
+From: Raghavendra Rao Ananta <rananta@codeaurora.org>
 
-s/rpmsg_ioctl/rpmsg_ctrl
+For security reasons scnprintf() is preferred over sprintf().
+Hence, convert the remoteproc's sysfs show functions accordingly.
 
-Now I understand what you meant in patch 05.
+Signed-off-by: Raghavendra Rao Ananta <rananta@codeaurora.org>
+Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
+---
+ drivers/remoteproc/remoteproc_sysfs.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> This provides the possibility to expose the RPMSG_CREATE_EPT_IOCTL
-> to create RPMsg chdev endpoints.
+diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
+index 1dbef89..853f569 100644
+--- a/drivers/remoteproc/remoteproc_sysfs.c
++++ b/drivers/remoteproc/remoteproc_sysfs.c
+@@ -15,7 +15,8 @@ static ssize_t recovery_show(struct device *dev,
+ {
+ 	struct rproc *rproc = to_rproc(dev);
+ 
+-	return sprintf(buf, "%s", rproc->recovery_disabled ? "disabled\n" : "enabled\n");
++	return scnprintf(buf, PAGE_SIZE, "%s",
++			 rproc->recovery_disabled ? "disabled\n" : "enabled\n");
+ }
+ 
+ /*
+@@ -82,7 +83,7 @@ static ssize_t coredump_show(struct device *dev,
+ {
+ 	struct rproc *rproc = to_rproc(dev);
+ 
+-	return sprintf(buf, "%s\n", rproc_coredump_str[rproc->dump_conf]);
++	return scnprintf(buf, PAGE_SIZE, "%s\n", rproc_coredump_str[rproc->dump_conf]);
+ }
+ 
+ /*
+-- 
+Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-You mean RPMSG device endpoints, i.e rpmsg_eptdev?  If so I think it should be
-added to the changelog.  Otherwiser someone could be tempted to look for "chdev"
-and find anything but a rpmsg_eptdev.
-
-> 
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> 
-> ---
-> V5:
-> Fix compilation issue
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
->  drivers/rpmsg/virtio_rpmsg_bus.c | 57 +++++++++++++++++++++++++++++---
->  1 file changed, 52 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-> index e87d4cf926eb..2e6b34084012 100644
-> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
-> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-> @@ -813,14 +813,52 @@ static void rpmsg_xmit_done(struct virtqueue *svq)
->  	wake_up_interruptible(&vrp->sendq);
->  }
->  
-> +static struct rpmsg_device *rpmsg_virtio_add_ctrl_dev(struct virtio_device *vdev)
-> +{
-> +	struct virtproc_info *vrp = vdev->priv;
-> +	struct virtio_rpmsg_channel *vch;
-> +	struct rpmsg_device *rpdev_ctrl;
-> +	int err = 0;
-> +
-> +	vch = kzalloc(sizeof(*vch), GFP_KERNEL);
-> +	if (!vch)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	/* Link the channel to the vrp */
-> +	vch->vrp = vrp;
-> +
-> +	/* Assign public information to the rpmsg_device */
-> +	rpdev_ctrl = &vch->rpdev;
-> +	rpdev_ctrl->ops = &virtio_rpmsg_ops;
-> +
-> +	rpdev_ctrl->dev.parent = &vrp->vdev->dev;
-> +	rpdev_ctrl->dev.release = virtio_rpmsg_release_device;
-> +	rpdev_ctrl->little_endian = virtio_is_little_endian(vrp->vdev);
-> +
-> +	err = rpmsg_ctrl_register_device(rpdev_ctrl);
-> +	if (err) {
-> +		kfree(vch);
-> +		return ERR_PTR(err);
-> +	}
-> +
-> +	return rpdev_ctrl;
-> +}
-> +
-> +static void rpmsg_virtio_del_ctrl_dev(struct rpmsg_device *rpdev_ctrl)
-> +{
-> +	if (!rpdev_ctrl)
-> +		return;
-> +	kfree(to_virtio_rpmsg_channel(rpdev_ctrl));
-> +}
-> +
->  static int rpmsg_probe(struct virtio_device *vdev)
->  {
->  	vq_callback_t *vq_cbs[] = { rpmsg_recv_done, rpmsg_xmit_done };
->  	static const char * const names[] = { "input", "output" };
->  	struct virtqueue *vqs[2];
->  	struct virtproc_info *vrp;
-> -	struct virtio_rpmsg_channel *vch;
-> -	struct rpmsg_device *rpdev_ns;
-> +	struct virtio_rpmsg_channel *vch = NULL;
-> +	struct rpmsg_device *rpdev_ns = NULL, *rpdev_ctrl;
-
-As far as I can tell @rpdev_ns doesn't have to be initialized.
-
->  	void *bufs_va;
->  	int err = 0, i;
->  	size_t total_buf_space;
-> @@ -894,12 +932,18 @@ static int rpmsg_probe(struct virtio_device *vdev)
->  
->  	vdev->priv = vrp;
->  
-> +	rpdev_ctrl = rpmsg_virtio_add_ctrl_dev(vdev);
-> +	if (IS_ERR(rpdev_ctrl)) {
-> +		err = PTR_ERR(rpdev_ctrl);
-> +		goto free_coherent;
-> +	}
-> +
->  	/* if supported by the remote processor, enable the name service */
->  	if (virtio_has_feature(vdev, VIRTIO_RPMSG_F_NS)) {
->  		vch = kzalloc(sizeof(*vch), GFP_KERNEL);
->  		if (!vch) {
->  			err = -ENOMEM;
-> -			goto free_coherent;
-> +			goto free_ctrldev;
->  		}
->  
->  		/* Link the channel to our vrp */
-> @@ -915,7 +959,7 @@ static int rpmsg_probe(struct virtio_device *vdev)
->  
->  		err = rpmsg_ns_register_device(rpdev_ns);
->  		if (err)
-> -			goto free_coherent;
-> +			goto free_vch;
->  	}
->  
->  	/*
-> @@ -939,8 +983,11 @@ static int rpmsg_probe(struct virtio_device *vdev)
->  
->  	return 0;
->  
-> -free_coherent:
-> +free_vch:
->  	kfree(vch);
-> +free_ctrldev:
-> +	rpmsg_virtio_del_ctrl_dev(rpdev_ctrl);
-> +free_coherent:
->  	dma_free_coherent(vdev->dev.parent, total_buf_space,
->  			  bufs_va, vrp->bufs_dma);
->  vqs_del:
-> -- 
-> 2.17.1
-> 
