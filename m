@@ -2,156 +2,111 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBA4334386
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 10 Mar 2021 17:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8ED334983
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 10 Mar 2021 22:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbhCJQrx (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 10 Mar 2021 11:47:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
+        id S231628AbhCJVKz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 10 Mar 2021 16:10:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbhCJQrr (ORCPT
+        with ESMTP id S231670AbhCJVK2 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 10 Mar 2021 11:47:47 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597FFC061762
-        for <linux-remoteproc@vger.kernel.org>; Wed, 10 Mar 2021 08:47:47 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id y131so16904482oia.8
-        for <linux-remoteproc@vger.kernel.org>; Wed, 10 Mar 2021 08:47:47 -0800 (PST)
+        Wed, 10 Mar 2021 16:10:28 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E5AC061574
+        for <linux-remoteproc@vger.kernel.org>; Wed, 10 Mar 2021 13:10:28 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id w8so2330199pjf.4
+        for <linux-remoteproc@vger.kernel.org>; Wed, 10 Mar 2021 13:10:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cgRubcZ8gr18dJhcvKQdRz6M5SF9Mz8KCxOcwqh5JmQ=;
-        b=cqnjaqFB0OmWcdCXsjguLAYjjyYyP82rMBcE4lKkkX/QiviAZO8XzI4j9luqkOiBIP
-         mhoGQ0yM6NIoNOrNsSnBEKfMbH/b0QUQYPtpvJD1IBKbMPqcMZ0Bu+58bi0PQr/b5z6/
-         3mOga/X6KVAKsz7Qn55+ALzzXgbds2yV0aMITdx11vPYqpHJXNb56rNxgZ3cH0MlQqKg
-         uqKPuPK4nOza1aPJU9HqyXGCTC6kj+6FUxweBnnoVFzn9/A+s3a1TbJJi3FtrL0oClmg
-         /CMsvabp8KaRDfnePh6mRkWQkazFC61OjThNEskGPBsL7ndR211vkPcK92FimrfqDDx+
-         UmNQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O30AauLLCCWTiPzSso6IXev67cYW6S1/IqV74YHyhWQ=;
+        b=FriG3dvtnkFMjLm8sZa8Oy0H4+IJZKzMN2i5TDzv3wnwRbG5qEUL5LWRJ+nUqu1crD
+         gAabEJXuCjclUlvnm6CKTratENHDMeCpOXDPFY21F9kuEl9KR22S9Dlen8aJfLovVJB2
+         GgDI5GLcXg8RUT/EgPnnBJk2KiH6Iv7ij+0HpAa8NKkeKmlFvec6BKB6KvsiSYYvvY6a
+         KJmGWwDCbCXfMF6pGVXZLxcVJAnFS/i8SR0dPsrgClKULwnJ4Zo7SGY7OaGFqgH3OTjx
+         m5+8EJjfv9uJ93aPMOVIRObo2c/bKqQ9KTYR/ObcYBK4hIIsDthRK/FAIlDn85EJ78r4
+         mBkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cgRubcZ8gr18dJhcvKQdRz6M5SF9Mz8KCxOcwqh5JmQ=;
-        b=TTgG8kDcbF1tCHO+gHIy8P43BbbSfrPcdCc46/6KLF7ll+mRgQs96O0+B8sqkP2n5B
-         CiHWityuIFERiITmdNaNpafwL9r+Tzzad9L0g4gbCtqxJlgqvChRAHrBHoRbwrint7ti
-         YvjO06YCSMYj7KrYYq1PmsGMt41U0n26nEeNJ9ZdvFOTjVN3OuRoLOlAJKTuf338v8cs
-         zcjxiDO/nQAQ+XIqnXYIUKA3Rar/wM482otc5MAMS3pH7xkQy8OR2Ww9YKs3pGEDxO9J
-         Xan+IazYDctiFA/0d1OAgmW3YJi5gFzE/VhQSecCp9lcgVeIhi6j85l0s72PNgdqATz7
-         IeXw==
-X-Gm-Message-State: AOAM532pOF0PWfoL59gtTLgiXS0QGVmoapCCKWEMtjcAJm6tXfQxfR3v
-        jf2ySj60dN9EgKye8R28H6vgJA==
-X-Google-Smtp-Source: ABdhPJztaVdC+W5hHxektR9FJRuokTIP9WnnTNOujKJ5N09MgSgrQaMoN1U+uNB3eubmcsr7K0n9UA==
-X-Received: by 2002:aca:bf8a:: with SMTP id p132mr2935725oif.9.1615394866584;
-        Wed, 10 Mar 2021 08:47:46 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id b21sm3588101oot.34.2021.03.10.08.47.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O30AauLLCCWTiPzSso6IXev67cYW6S1/IqV74YHyhWQ=;
+        b=pdG1GxZGimjQWWBB5AdPy0SSyYvEqCvJVsEzzwOH6FQ4ip+bLd7ziqU6bmPu1FnMkE
+         jpa/rzb9M0tmZgXogeZM33rP+PU5Rghz8iMURvnRqm6tOoJK1LrxlVVQk6f9Q25C2/9i
+         kq8HQN6gSQ+z0aHf09CnPt4hUkSTwTt4fr7si4/hQMu6OpU2p2LIUNy2u3FxJ5l9hcYl
+         IlIU1XwdrnqzoAG6JdhN4qMs/kICivhu6j50EK1ZH1c8BCp2BuoKw3YoUbXux1c3tdXy
+         KMGZ01IPHk+D/s60Re+qs5mP8jhQ3R828xTKIKZMO0N+ohiyXrJOpWWig2XOZFPQaRXq
+         7oKQ==
+X-Gm-Message-State: AOAM5335jcbadf+gjfnZJT7rQjFVryFSoT1Kl8HBb9S/JyMwFqMdWOtY
+        VvzCwTp1is12EzTSKsvKm8ASwg==
+X-Google-Smtp-Source: ABdhPJwzBTPelGYUKqKxucbpmDS8MIjmdhCIWUnH1q2YfqvTIX/zU2DFb2Q6rmajFgiuydqlckaZgQ==
+X-Received: by 2002:a17:90b:4d0f:: with SMTP id mw15mr5468392pjb.92.1615410627547;
+        Wed, 10 Mar 2021 13:10:27 -0800 (PST)
+Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id j21sm371508pfc.114.2021.03.10.13.10.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Mar 2021 08:47:46 -0800 (PST)
-Date:   Wed, 10 Mar 2021 10:47:44 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Rakesh Pillai <pillair@codeaurora.org>
-Cc:     agross@kernel.org, ohad@wizery.com, mathieu.poirier@linaro.org,
-        robh+dt@kernel.org, p.zabel@pengutronix.de, sibis@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: qcom: Add SC7280 WPSS
- support
-Message-ID: <YEj4MKMervDzUO6k@builder.lan>
-References: <1615361290-19238-1-git-send-email-pillair@codeaurora.org>
- <1615361290-19238-2-git-send-email-pillair@codeaurora.org>
+        Wed, 10 Mar 2021 13:10:26 -0800 (PST)
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org
+Cc:     arnaud.pouliquen@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v7 00/17] remoteproc: Add support for detaching a remote processor 
+Date:   Wed, 10 Mar 2021 14:10:08 -0700
+Message-Id: <20210310211025.1084636-1-mathieu.poirier@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1615361290-19238-2-git-send-email-pillair@codeaurora.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed 10 Mar 01:28 CST 2021, Rakesh Pillai wrote:
+This set provides support for the remoteproc core to release resources
+associated with a remote processor without having to switch it off. That
+way a platform driver can be removed or the application processor power
+cycled while the remote processor is still operating.
 
-> Add WPSS PIL loading support for SC7280 SoCs.
-> 
+The main difference in this revision is patch 11/16 (in V6).  It was split
+split in two part in order to simplify handling of the resource table when
+the remote processor is detached or stopped.  Other modifications are
+detailed in the changelog of each patch.
 
-Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Applies cleanly on v5.12-rc2.
 
-But can you please follow up with a patch that converts this to yaml?
+Thanks,
+Mathieu
 
-Regards,
-Bjorn
+Arnaud POULIQUEN (1):
+  remoteproc: stm32: Move memory parsing to rproc_ops
 
-> Signed-off-by: Rakesh Pillai <pillair@codeaurora.org>
-> ---
->  .../bindings/remoteproc/qcom,hexagon-v56.txt       | 35 ++++++++++++----------
->  1 file changed, 20 insertions(+), 15 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,hexagon-v56.txt b/Documentation/devicetree/bindings/remoteproc/qcom,hexagon-v56.txt
-> index 1337a3d..edad5e8 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/qcom,hexagon-v56.txt
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,hexagon-v56.txt
-> @@ -9,6 +9,7 @@ on the Qualcomm Technology Inc. Hexagon v56 core.
->  	Definition: must be one of:
->  		    "qcom,qcs404-cdsp-pil",
->  		    "qcom,sdm845-adsp-pil"
-> +		    "qcom,sc7280-wpss-pil"
->  
->  - reg:
->  	Usage: required
-> @@ -24,7 +25,13 @@ on the Qualcomm Technology Inc. Hexagon v56 core.
->  - interrupt-names:
->  	Usage: required
->  	Value type: <stringlist>
-> -	Definition: must be "wdog", "fatal", "ready", "handover", "stop-ack"
-> +	Definition: The interrupts needed depends on the compatible string
-> +	qcom,sdm845-adsp-pil:
-> +	qcom,qcs404-cdsp-pil:
-> +		must be "wdog", "fatal", "ready", "handover", "stop-ack"
-> +	qcom,sc7280-wpss-pil:
-> +		must be "wdog", "fatal", "ready", "handover", "stop-ack"
-> +		"shutdown-ack"
->  
->  - clocks:
->  	Usage: required
-> @@ -35,19 +42,17 @@ on the Qualcomm Technology Inc. Hexagon v56 core.
->  - clock-names:
->  	Usage: required for SDM845 ADSP
->  	Value type: <stringlist>
-> -	Definition: List of clock input name strings sorted in the same
-> -		    order as the clocks property. Definition must have
-> -		    "xo", "sway_cbcr", "lpass_ahbs_aon_cbcr",
-> -		    "lpass_ahbm_aon_cbcr", "qdsp6ss_xo", "qdsp6ss_sleep"
-> -		    and "qdsp6ss_core".
-> -
-> -- clock-names:
-> -	Usage: required for QCS404 CDSP
-> -	Value type: <stringlist>
-> -	Definition: List of clock input name strings sorted in the same
-> -		    order as the clocks property. Definition must have
-> -		    "xo", "sway", "tbu", "bimc", "ahb_aon", "q6ss_slave",
-> -		    "q6ss_master", "q6_axim".
-> +	Definition: The clocks needed depends on the compatible string
-> +	qcom,sdm845-adsp-pil:
-> +		must be "xo", "sway_cbcr", "lpass_ahbs_aon_cbcr",
-> +		"lpass_ahbm_aon_cbcr", "qdsp6ss_xo", "qdsp6ss_sleep",
-> +		"qdsp6ss_core"
-> +	qcom,qcs404-cdsp-pil:
-> +		must be "xo", "sway", "tbu", "bimc", "ahb_aon", "q6ss_slave",
-> +		"q6ss_master", "q6_axim"
-> +	qcom,sc7280-wpss-pil:
-> +		must be "gcc_wpss_ahb_bdg_mst_clk", "gcc_wpss_ahb_clk",
-> +		"gcc_wpss_rscp_clk"
->  
->  - power-domains:
->  	Usage: required
-> @@ -65,7 +70,7 @@ on the Qualcomm Technology Inc. Hexagon v56 core.
->          Definition: must be "pdc_sync" and "cc_lpass"
->  
->  - reset-names:
-> -        Usage: required for QCS404 CDSP
-> +        Usage: required for QCS404 CDSP, SC7280 WPSS
->          Value type: <stringlist>
->          Definition: must be "restart"
->  
-> -- 
-> 2.7.4
-> 
+Mathieu Poirier (16):
+  remoteproc: Remove useless check in rproc_del()
+  remoteproc: Rename function rproc_actuate()
+  remoteproc: Add new RPROC_ATTACHED state
+  remoteproc: Properly represent the attached state
+  remoteproc: Add new get_loaded_rsc_table() to rproc_ops
+  remoteproc: stm32: Move resource table setup to rproc_ops
+  remoteproc: Add new detach() remoteproc operation
+  remoteproc: Introduce function __rproc_detach()
+  remoteproc: Introduce function rproc_detach()
+  remoteproc: Properly deal with the resource table when detaching
+  remoteproc: Properly deal with the resource table when stopping
+  remoteproc: Properly deal with a kernel panic when attached
+  remoteproc: Properly deal with a start request when attached
+  remoteproc: Properly deal with a stop request when attached
+  remoteproc: Properly deal with a detach request when attached
+  remoteproc: Refactor function rproc_cdev_release()
+
+ drivers/remoteproc/remoteproc_cdev.c     |  21 +-
+ drivers/remoteproc/remoteproc_core.c     | 302 ++++++++++++++++++++---
+ drivers/remoteproc/remoteproc_internal.h |  10 +
+ drivers/remoteproc/remoteproc_sysfs.c    |  17 +-
+ drivers/remoteproc/stm32_rproc.c         | 168 ++++++-------
+ include/linux/remoteproc.h               |  21 +-
+ 6 files changed, 401 insertions(+), 138 deletions(-)
+
+-- 
+2.25.1
+
