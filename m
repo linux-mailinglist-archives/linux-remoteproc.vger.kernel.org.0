@@ -2,67 +2,117 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 206FD33817E
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Mar 2021 00:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C85338195
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Mar 2021 00:39:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229476AbhCKXcc (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 11 Mar 2021 18:32:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57450 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229602AbhCKXcC (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 11 Mar 2021 18:32:02 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 6FF3B64FA3;
-        Thu, 11 Mar 2021 23:32:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1615505522;
-        bh=xYzc1E5s5yTfc7/34iUHr/qIxPwKuPOm/XsGzWtt1AE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=BpeKcW6d4o6rE6QWdDtHtKpSo1EBKFDiWKJFKLzRJZJKLU4O50xMY4iPf7ey459Ct
-         /KmoGZ44v+iP0kBjtfESqQ5UJGAnXFBpoamtM05t6OCPQW/Qp2so01xzftTXfQcOGK
-         T/6CTlNCRiaSfbs+Fopt21WsOS7WsZ0UxSBzLc3mgZjBye9SIsfdP3euFyAa4eCIuT
-         X1f7cJ6pgnfGT1fk32wKyZNzQPdLK1kmQmQMUSd7QX//sMQXttVmLUHqxNQ6Yh38tK
-         pvbdCy5DBCIL0oe28mufGjWHuFnpVrY7nGyHQlGF9tPjZV+s/uMdQu/z1OnwNsJhHw
-         bRtJcBm6j4WoA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6009C609E7;
-        Thu, 11 Mar 2021 23:32:02 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S229470AbhCKXih (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 11 Mar 2021 18:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230228AbhCKXiF (ORCPT
+        <rfc822;linux-remoteproc@vger.kernel.org>);
+        Thu, 11 Mar 2021 18:38:05 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EAFC061761
+        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Mar 2021 15:38:04 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id d20so24997708oiw.10
+        for <linux-remoteproc@vger.kernel.org>; Thu, 11 Mar 2021 15:38:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=y7PZLngnSiOO6tUFoYHe7nczWb/djDzvqn8CynT2y7o=;
+        b=b2rJ6NYdtpvRsYrTydu07Hbmx4KuucnrL02ilCVLMbWyGoSCM5JuPNA0SIk20Buxrw
+         Oh7oUZvjjjC0iQHpcwiYsGwSmlZp3cPbWR34ABrpQwzFL/BM3NX+sV+8FPYzCPOw+ofi
+         VzULisEMofG367pN45L/GSPzAd+IR9TP6WzLklrASPitwJGBnwKsB41AUiiYv8Af4Oag
+         soqwhhbg7skLH9mj/+yzDctmKgkUlK/mjPc53IbweQF4YwS39hFqhrrVqT4JQC8twf9n
+         tzySqGOhOX9aVvGEGiQM9cPpOxzOmfyLIsxdAoV+ujtciMM/eNpufnB5In28l9oJdP0X
+         QWqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y7PZLngnSiOO6tUFoYHe7nczWb/djDzvqn8CynT2y7o=;
+        b=l2iCoVzusA0cGARUhNqriPpStSGjzu3CoJHxQW6CgwPuo0gUo4j6iWZZQ+gSkysaz3
+         5YAtOWcssIDYOzcGWUp1iFAJgT4BJDLr4WF38v5H25qmUWtWrEsqQXpr71sCj5gu+Hxj
+         HRxVnmWiWPHKT1229xfc2ByUomuSmX1HLgdSYDpAAhhwNM35WBZge1gOFXs0ZTfIJk8Q
+         Bg5Z4mOmvNychuQSHDxK+23OGJXuzRSv0dDD35nnfvjUuoL7pFBdX0zMsv13ILDePzLm
+         7E1kieeiPnAnVPT2rlAe1wLQSyUqbPhJ3LukLRkn+6qhiagF34Qo/BSeXZ8CNWKqZYG9
+         A8RQ==
+X-Gm-Message-State: AOAM532RrNjEoWaeqU2dLCV/OLWOE14RqsmdKudjmNoJ24/OgKcdLXZ8
+        Tg2j8z0YiBRMlCYoSKaKdsscsWFye2iXJg==
+X-Google-Smtp-Source: ABdhPJy3trbQfPJf8Jw30MXwWRENujdAMmMOYHCnCoFk8D7mpra/ivKmRip+qDmcJtYBYf2nNtZqnw==
+X-Received: by 2002:a05:6808:140e:: with SMTP id w14mr8230991oiv.176.1615505883760;
+        Thu, 11 Mar 2021 15:38:03 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id z8sm987590otp.14.2021.03.11.15.38.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Mar 2021 15:38:03 -0800 (PST)
+Date:   Thu, 11 Mar 2021 17:38:01 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 0/6] rpmsg: enable the use of the rpmsg_char device for
+ the Virtio backend
+Message-ID: <YEqp2US8OykaUAa/@builder.lan>
+References: <20210311140413.31725-1-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] rpmsg: qcom_glink_native: fix error return code of
- qcom_glink_rx_data()
-From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <161550552238.25923.14991588824258170071.git-patchwork-notify@kernel.org>
-Date:   Thu, 11 Mar 2021 23:32:02 +0000
-References: <20210306133624.17237-1-baijiaju1990@gmail.com>
-In-Reply-To: <20210306133624.17237-1-baijiaju1990@gmail.com>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     linux-remoteproc@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210311140413.31725-1-arnaud.pouliquen@foss.st.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello:
+On Thu 11 Mar 08:04 CST 2021, Arnaud Pouliquen wrote:
 
-This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
-
-On Sat,  6 Mar 2021 05:36:24 -0800 you wrote:
-> When idr_find() returns NULL to intent, no error return code of
-> qcom_glink_rx_data() is assigned.
-> To fix this bug, ret is assigned with -ENOENT in this case.
+> This series is the first step in the division of the series: 
+> "Introduce a generic IOCTL interface for RPMsg channels management"[1]
 > 
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+> The main goal here is to enable the RPMsg char interface for
+> the virtio RPMsg backend. 
 > 
-> [...]
+> In addition some patches have been includes in order to document the
+> interface and rename the rpmsg_char_init function.
+> 
+> It also includes Mathieu Poirier's comments made on [1]
+> 
+> Patchsets that should be the next steps:
+>  - Extract the control part of the char dev and create the rpmsg_ctrl.c
+>    file
+>  - Introduce the RPMSG_CREATE_DEV_IOCTL IOCTL to instantiate RPMsg devices
+> 
+> 
+> [1]: https://patchwork.kernel.org/project/linux-remoteproc/list/?series=435523
+> 
 
-Here is the summary with links:
-  - rpmsg: qcom_glink_native: fix error return code of qcom_glink_rx_data()
-    https://git.kernel.org/andersson/remoteproc/c/d9a69846241c
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Regards,
+Bjorn
 
-
+> Arnaud Pouliquen (6):
+>   rpmsg: char: Rename rpmsg_char_init to rpmsg_chrdev_init
+>   rpmsg: Move RPMSG_ADDR_ANY in user API
+>   rpmsg: Add short description of the IOCTL defined in UAPI.
+>   rpmsg: char: Use rpmsg_sendto to specify the message destination
+>     address
+>   rpmsg: virtio: Register the rpmsg_char device
+>   rpmsg: char: Return an error if device already open
+> 
+>  drivers/rpmsg/qcom_glink_native.c | 16 ++++++++
+>  drivers/rpmsg/qcom_smd.c          | 16 ++++++++
+>  drivers/rpmsg/rpmsg_char.c        | 11 ++++--
+>  drivers/rpmsg/virtio_rpmsg_bus.c  | 62 ++++++++++++++++++++++++++++---
+>  include/linux/rpmsg.h             |  3 +-
+>  include/uapi/linux/rpmsg.h        | 13 ++++++-
+>  6 files changed, 108 insertions(+), 13 deletions(-)
+> 
+> -- 
+> 2.17.1
+> 
