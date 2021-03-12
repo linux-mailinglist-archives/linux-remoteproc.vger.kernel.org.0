@@ -2,60 +2,60 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6713B33933A
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Mar 2021 17:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 549E7339340
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Mar 2021 17:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbhCLQZi (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        id S232781AbhCLQZi (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
         Fri, 12 Mar 2021 11:25:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbhCLQZJ (ORCPT
+        with ESMTP id S232736AbhCLQZL (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 12 Mar 2021 11:25:09 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3D5C061761
-        for <linux-remoteproc@vger.kernel.org>; Fri, 12 Mar 2021 08:25:09 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id s7so12150466plg.5
-        for <linux-remoteproc@vger.kernel.org>; Fri, 12 Mar 2021 08:25:09 -0800 (PST)
+        Fri, 12 Mar 2021 11:25:11 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7218C061574
+        for <linux-remoteproc@vger.kernel.org>; Fri, 12 Mar 2021 08:25:10 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id a24so12142651plm.11
+        for <linux-remoteproc@vger.kernel.org>; Fri, 12 Mar 2021 08:25:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=z++nDe1KbxQOwXuMBZocx2SGGQIMJC2S/9LC839MlY0=;
-        b=dEFpi8aTE2Hk60yckTPByYR568S6yUjP9+TvhjVa2Mk/l9ACJ1m2UU4R6sSPSxPSMO
-         RaV70NJQvdzkpX8/C98C7Uj+/Q46X9YPeunzqGsOfwYAQ+gykm43WATfCAszb5tyFmuv
-         GST6g8cm1qQW1r8kYic1vLYpwNJdc1FL4JIX62mBrpdQj4+Vqvw7XVXCuYVNWd4uEPev
-         lhue/blcKkOvz80iV6ApuJ1owjRkcHIYeDhPeGwwiMGO4ZzMpSNTWycONfAano5e7HMn
-         rdAWBdkYF1PmTMf4Ejo0EJDDkh75vUmkeF0vJyuScsqy4vdbwwUtyP92yMSb+66mPMwu
-         SbcA==
+        bh=y4yyaBEGVAJuF1cE5I5KagCnyr0kxeqqDbz8hFkGXj4=;
+        b=wCNDAmgVCqt2qIVMTG/QwQDP3qUWhxwn+eKFtTYBxSagINdG3dJtOLkpPvgRxGwavE
+         T0E7P3teqFNvCRACI9e+CDt0fDTXOIiduA7xjT0HCzDTz2gZSR9mlIpPbTUxYLIm0bSW
+         vkqy8RFMSVInXsgKXfrzAgaIIXq5Q725TQ5cqpXHnHxao5LxTY4ePygVKyuYSSVTmlE2
+         R66Llg+Pf9H0/+/glN2URVQ/31SIcc0M9tQ3Y4gWkCMP8AN0qhTNH3qw7EY4NJv73RpS
+         segUMbKSmCxJDuyKydU4mSfBeV4exNmLS7qYtG55gH+nN94d5Fj3nIZ6XPw+fuejh3YY
+         VgUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=z++nDe1KbxQOwXuMBZocx2SGGQIMJC2S/9LC839MlY0=;
-        b=n4W0Oz0uFbMwaJHeqUGq8zHjojg0OzF1RBpVxNntz88ydJ7fMBP1wDBXbjB/pu76z4
-         aTJ5rfHZ7xTFNWgOMZCZ6bWyOKr7W7exH4k/u0F9fvigg3G7PDdgcmQ0TZYj6GxQICe4
-         0RJ0maxW43Rs9NrJZSRhkCgUqdXQO8cC3Ii+pwJAkstxdaGjBIINyd6dyF/Ao/lF/W33
-         nQlLOgweZTAtQ6uzxijnA0aEj7/qRzijewYiLamcviakKahTYAKZQSl6i6S2Gxj20DnL
-         Moo0XLadgqrvp0N5l+GL0RLfphqLVl2yXW9tGvbhcdt+meWl9M2JN5NskhXJeav4xcZC
-         5uaQ==
-X-Gm-Message-State: AOAM531MykTNGCX7LkOlHar/1kCbvzu3+8z3aWp1JE7/rHtd8H4buNKJ
-        kFXGOxXxbmNdooltkblK7yPDBA==
-X-Google-Smtp-Source: ABdhPJwOn+TVghc8Zxb7SvYP0+bKSsV+pl4TagUXNGdkFQEe3TVTEiXDzb5Y0svsD+5a3xOP4wykMQ==
-X-Received: by 2002:a17:902:e5c8:b029:e4:c22d:4da6 with SMTP id u8-20020a170902e5c8b02900e4c22d4da6mr14523152plf.10.1615566309105;
-        Fri, 12 Mar 2021 08:25:09 -0800 (PST)
+        bh=y4yyaBEGVAJuF1cE5I5KagCnyr0kxeqqDbz8hFkGXj4=;
+        b=Ssq0d8a0n2p/ww9Y4/vsRD6psDQkmyR7Ybzj12qOyiPIYsRv2SJNfAuWC1FgSAskuI
+         PXr+xqvFolAku96tYY8F+5zhmRgIAfSH7KRZmbtBIFnwRYgiDnr8MvzriQqdIEkmqhVL
+         sn9FBJiFsvfnXituIZ+Xa8sdUWBUlWJO/jCQHmKEsrtB7S2BdBLcMLuD6Ygy8olJfmKc
+         GGn9VrTO+2qZCmMKmJw9abH6lEvOedO5wJOU+ZnkT4Wu6C5hUb0rRf5RJWmqbPXYm8PV
+         oB6zI4RCGKKR2lbJOvYBU5t4jBLMocOVkAG2nLv+xWMKE8QnR2LA+XfHJJZ7urzyEoDr
+         qCFw==
+X-Gm-Message-State: AOAM530exwJIuwp9lUtnCG/ShY00LgsvV+duEbXdWCFBL6zP3nOn/n/9
+        NYRPpaxkB9M6mk5V4do/+Hkhpw==
+X-Google-Smtp-Source: ABdhPJxNuWURTnTc59nPIWCjU7CDO/E+RwrjkAMSR1hUaTIxUWU+BEPdBm+lexHx4pqNd0tHS82zFg==
+X-Received: by 2002:a17:903:30cd:b029:e4:93b5:3547 with SMTP id s13-20020a17090330cdb02900e493b53547mr13731867plc.53.1615566310435;
+        Fri, 12 Mar 2021 08:25:10 -0800 (PST)
 Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id e8sm5899599pgb.35.2021.03.12.08.25.08
+        by smtp.gmail.com with ESMTPSA id e8sm5899599pgb.35.2021.03.12.08.25.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 08:25:08 -0800 (PST)
+        Fri, 12 Mar 2021 08:25:09 -0800 (PST)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     bjorn.andersson@linaro.org, ohad@wizery.com
 Cc:     arnaud.pouliquen@st.com, mcoquelin.stm32@gmail.com,
         alexandre.torgue@st.com, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v8 12/17] remoteproc: Properly deal with the resource table when stopping
-Date:   Fri, 12 Mar 2021 09:24:48 -0700
-Message-Id: <20210312162453.1234145-13-mathieu.poirier@linaro.org>
+Subject: [PATCH v8 13/17] remoteproc: Properly deal with a kernel panic when attached
+Date:   Fri, 12 Mar 2021 09:24:49 -0700
+Message-Id: <20210312162453.1234145-14-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210312162453.1234145-1-mathieu.poirier@linaro.org>
 References: <20210312162453.1234145-1-mathieu.poirier@linaro.org>
@@ -65,91 +65,34 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-When a remote processor that was attached to is stopped, special care
-must be taken to make sure the shutdown process is similar to what
-it would be had it been started by the remoteproc core.
-
-This patch takes care of that by making a copy of the resource
-table currently used by the remote processor.  From that point on
-the copy is used, as if the remote processor had been started by
-the remoteproc core.
+The panic handler operation of registered remote processors
+should also be called when remote processors have been
+attached to.
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
 Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
-Reported-by: kernel test robot <lkp@intel.com>
 ---
-New for V8:
-  - Removed variable @table_ptr as it served no purpose.
----
- drivers/remoteproc/remoteproc_core.c | 48 +++++++++++++++++++++++++++-
- 1 file changed, 47 insertions(+), 1 deletion(-)
+ drivers/remoteproc/remoteproc_core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 0f151dbcdc36..37b3b7d494e5 100644
+index 37b3b7d494e5..c00f3f8bdfcc 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1634,6 +1634,47 @@ static int rproc_reset_rsc_table_on_detach(struct rproc *rproc)
- 	return 0;
- }
+@@ -2728,7 +2728,11 @@ static int rproc_panic_handler(struct notifier_block *nb, unsigned long event,
  
-+static int rproc_reset_rsc_table_on_stop(struct rproc *rproc)
-+{
-+	/* A resource table was never retrieved, nothing to do here */
-+	if (!rproc->table_ptr)
-+		return 0;
+ 	rcu_read_lock();
+ 	list_for_each_entry_rcu(rproc, &rproc_list, node) {
+-		if (!rproc->ops->panic || rproc->state != RPROC_RUNNING)
++		if (!rproc->ops->panic)
++			continue;
 +
-+	/*
-+	 * If a cache table exists the remote processor was started by
-+	 * the remoteproc core.  That cache table should be used for
-+	 * the rest of the shutdown process.
-+	 */
-+	if (rproc->cached_table)
-+		goto out;
-+
-+	/*
-+	 * If we made it here the remote processor was started by another
-+	 * entity and a cache table doesn't exist.  As such make a copy of
-+	 * the resource table currently used by the remote processor and
-+	 * use that for the rest of the shutdown process.  The memory
-+	 * allocated here is free'd in rproc_shutdown().
-+	 */
-+	rproc->cached_table = kmemdup(rproc->table_ptr,
-+				      rproc->table_sz, GFP_KERNEL);
-+	if (!rproc->cached_table)
-+		return -ENOMEM;
-+
-+	/*
-+	 * Since the remote processor is being switched off the clean table
-+	 * won't be needed.  Allocated in rproc_set_rsc_table().
-+	 */
-+	kfree(rproc->clean_table);
-+
-+out:
-+	/*
-+	 * Use a copy of the resource table for the remainder of the
-+	 * shutdown process.
-+	 */
-+	rproc->table_ptr = rproc->cached_table;
-+	return 0;
-+}
-+
- /*
-  * Attach to remote processor - similar to rproc_fw_boot() but without
-  * the steps that deal with the firmware image.
-@@ -1759,7 +1800,12 @@ static int rproc_stop(struct rproc *rproc, bool crashed)
- 	rproc_stop_subdevices(rproc, crashed);
++		if (rproc->state != RPROC_RUNNING &&
++		    rproc->state != RPROC_ATTACHED)
+ 			continue;
  
- 	/* the installed resource table is no longer accessible */
--	rproc->table_ptr = rproc->cached_table;
-+	ret = rproc_reset_rsc_table_on_stop(rproc);
-+	if (ret) {
-+		dev_err(dev, "can't reset resource table: %d\n", ret);
-+		return ret;
-+	}
-+
- 
- 	/* power off the remote processor */
- 	ret = rproc->ops->stop(rproc);
+ 		d = rproc->ops->panic(rproc);
 -- 
 2.25.1
 
