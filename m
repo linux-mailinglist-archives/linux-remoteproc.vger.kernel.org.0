@@ -2,60 +2,60 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FDF339335
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Mar 2021 17:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6E2339332
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Mar 2021 17:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbhCLQZd (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 12 Mar 2021 11:25:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55878 "EHLO
+        id S231922AbhCLQZe (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 12 Mar 2021 11:25:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232623AbhCLQZA (ORCPT
+        with ESMTP id S232493AbhCLQZC (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 12 Mar 2021 11:25:00 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A6DC061762
-        for <linux-remoteproc@vger.kernel.org>; Fri, 12 Mar 2021 08:25:00 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id a22-20020a17090aa516b02900c1215e9b33so10967604pjq.5
-        for <linux-remoteproc@vger.kernel.org>; Fri, 12 Mar 2021 08:25:00 -0800 (PST)
+        Fri, 12 Mar 2021 11:25:02 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8D8C061763
+        for <linux-remoteproc@vger.kernel.org>; Fri, 12 Mar 2021 08:25:02 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id x7-20020a17090a2b07b02900c0ea793940so10975853pjc.2
+        for <linux-remoteproc@vger.kernel.org>; Fri, 12 Mar 2021 08:25:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EmIttTOsgDNM++s8zt1RjF9fKLTZIPRgfTRmynUwSgM=;
-        b=bCHKr0/GSeFFSxm8Q4Nwz8kF8pe3oKPrzq/jVKb2PSnmVfo+sAl1PzrKRkSdZ8LMT0
-         GF+I7XJa+Ui+EG+02L631CsvB+VbdRTXD1Uoxg5OMvP2oDDElK7xUZi7v43MjutF7rhz
-         4TLz3TPulv8R10hGSYB4nDswd1dLCCl9+8d5TQyA6nE7N4Lm+9hL/N2AJI7w8618goxY
-         5SrjZqWdA+PG0KdaZ3bM6uukXKrEewTRQMkrGFM5Ql7eBdas5UGg/gdcwFhN+ONnsHS/
-         AXtilX1TdXRzHwsgaxg9kyaIAjz8kE22D9jLbk4iP1knKvwMZvjYP6g7UFp4Jb0ra+to
-         GRxw==
+        bh=kdHxs7JLHKePLMQLEfdUiVSo/tj85hv+zhe9KF+ZdIk=;
+        b=l7LAZxN9TdM84y6XXmSm1YUoVCBEHA/A7MD8+YJVgECWfDXYoyUjw/BJMkp2K2hbE7
+         jggP91z7N1uweUd6crM7s34B80FgnhpMHuROZ+CNPwUk/r7x42UQbj8WQJ/xFeZDyUmk
+         29zdD2iK3QUkNBuBmIkrneNmmEUL48kFUca9e+lib02FLexcVDD5unHCTICOM2TlaSe9
+         pNnfevgn94/uUM6rXqMJNUe5nPmpE7OLJF3W7qXzZpljPx/bF/WYFNQe7p9CnXOLnsRD
+         2qPbdcT0lIh5pPSM1M/cOkeceXB/WQo9Ycn5g8NKa/pbKAKh9WT2ZpRJ2w7LKgPLMXoK
+         eFOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EmIttTOsgDNM++s8zt1RjF9fKLTZIPRgfTRmynUwSgM=;
-        b=gDYnlSTasV5v8cuabyVpipaWs76ok+66YxuFvtw2XU/zP9GIo+9L+pkuZvofCh8axD
-         4cMxixc8305zxoYdx3Uij0rULN9vn+x/3Ml/F/SqaMdTZJiewDg0uWZxQDMemnUUOyKs
-         3+WPaMoMdWEyIFtydcvWHNZy9EUq74/nU6EiIO3Dtq5eNk8ObZC9RIIFNTgeC+0PEOjs
-         xKZx0eTpAcuBP1PyL6CS/Y0wS88hMNb1wWWICag7fmVxkVFNYJ4tvBkBKA08OsRGwfDa
-         0B4Yi+GXrrGkbSOgDkFNScZ8/LW+iNNRS46U+hqZJhk82hfJfga4Oi3ZVAEaY7mpwFkl
-         L8jA==
-X-Gm-Message-State: AOAM531HnGfln4QhMU5Rt7t3H2L9jnRiuPPT/IUUT5gr+Ofy/i9zEoO7
-        j44F7bWkBxHM4NkBa7IkVPcJ8A==
-X-Google-Smtp-Source: ABdhPJxXJe5hKTDd4WF93xA2jimdLPApISq00YSPw79YUIexUQRALtvGUMqeh8UWjTrWHXuHQImaJg==
-X-Received: by 2002:a17:90b:100e:: with SMTP id gm14mr14916331pjb.217.1615566299668;
-        Fri, 12 Mar 2021 08:24:59 -0800 (PST)
+        bh=kdHxs7JLHKePLMQLEfdUiVSo/tj85hv+zhe9KF+ZdIk=;
+        b=H3ZSd8/BR+Ugay5K/yduf5WdCIQ1ojOpww3IBDOcm+cHcquXACHq3rEoXHZjOB4LFz
+         weYIhFDVcHWO9m4mmphTVaKrSvuIuLOhYWSUwdi0wBS8c9/Db3tuo0iLRneIvlAH3C2i
+         WQhHAy/wRJN8epNKZ/+ZpmPuSpCecYIaPooFUspFE8be+ux1M86k6GgRvkGGUw1F++iQ
+         dLT5XykmzKIAIsVehpOQmoVaVI8Vsze/ytZn99vkFmfp9wTnh83Pfeqrz1dbi7WnFxl9
+         MoYvH7+/eBYZ5zeL8Kz0WT2cxTsbxq9lV1d4XAQuN+SeOkQgQhzZSQiuOvTbJkKbba/+
+         jb3Q==
+X-Gm-Message-State: AOAM531JvRXdGYLQo7JuRSPD/DD43J3DbUFPiaoyd4Wj9vpEbO48zEFu
+        Ww4WxsSCb4bfu5IR9g6JYKla6A==
+X-Google-Smtp-Source: ABdhPJwzIwsGCTHOunkv0cp96iuqqyuE9PCc+MYDxioKGcPZFRhCoV/IxRGWTzXDS8FwK7PnVBH8zQ==
+X-Received: by 2002:a17:902:344:b029:e4:a7ab:2e55 with SMTP id 62-20020a1709020344b02900e4a7ab2e55mr14592293pld.63.1615566300733;
+        Fri, 12 Mar 2021 08:25:00 -0800 (PST)
 Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id e8sm5899599pgb.35.2021.03.12.08.24.58
+        by smtp.gmail.com with ESMTPSA id e8sm5899599pgb.35.2021.03.12.08.24.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Mar 2021 08:24:59 -0800 (PST)
+        Fri, 12 Mar 2021 08:25:00 -0800 (PST)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     bjorn.andersson@linaro.org, ohad@wizery.com
 Cc:     arnaud.pouliquen@st.com, mcoquelin.stm32@gmail.com,
         alexandre.torgue@st.com, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v8 04/17] remoteproc: Properly represent the attached state
-Date:   Fri, 12 Mar 2021 09:24:40 -0700
-Message-Id: <20210312162453.1234145-5-mathieu.poirier@linaro.org>
+Subject: [PATCH v8 05/17] remoteproc: Add new get_loaded_rsc_table() to rproc_ops
+Date:   Fri, 12 Mar 2021 09:24:41 -0700
+Message-Id: <20210312162453.1234145-6-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210312162453.1234145-1-mathieu.poirier@linaro.org>
 References: <20210312162453.1234145-1-mathieu.poirier@linaro.org>
@@ -65,103 +65,115 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-There is a need to know when a remote processor has been attached
-to rather than booted by the remoteproc core.  In order to avoid
-manipulating two variables, i.e rproc::autonomous and
-rproc::state, get rid of the former and simply use the newly
-introduced RPROC_ATTACHED state.
+Add a new get_loaded_rsc_table() operation in order to support
+scenarios where the remoteproc core has booted a remote processor
+and detaches from it.  When re-attaching to the remote processor,
+the core needs to know where the resource table has been placed
+in memory.
 
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
 Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@st.com>
 ---
- drivers/remoteproc/remoteproc_core.c  | 20 +-------------------
- drivers/remoteproc/remoteproc_sysfs.c |  5 +----
- include/linux/remoteproc.h            |  2 --
- 3 files changed, 2 insertions(+), 25 deletions(-)
+ drivers/remoteproc/remoteproc_core.c     | 32 ++++++++++++++++++++++++
+ drivers/remoteproc/remoteproc_internal.h | 10 ++++++++
+ include/linux/remoteproc.h               |  6 ++++-
+ 3 files changed, 47 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 7b66e1e96e4a..8c7e9f1d50d7 100644
+index 8c7e9f1d50d7..bf6f6d15b1c3 100644
 --- a/drivers/remoteproc/remoteproc_core.c
 +++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1444,7 +1444,7 @@ static int __rproc_attach(struct rproc *rproc)
- 		goto stop_rproc;
+@@ -1537,6 +1537,32 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
+ 	return ret;
+ }
+ 
++static int rproc_set_rsc_table(struct rproc *rproc)
++{
++	struct resource_table *table_ptr;
++	struct device *dev = &rproc->dev;
++	size_t table_sz;
++	int ret;
++
++	table_ptr = rproc_get_loaded_rsc_table(rproc, &table_sz);
++	if (!table_ptr) {
++		/* Not having a resource table is acceptable */
++		return 0;
++	}
++
++	if (IS_ERR(table_ptr)) {
++		ret = PTR_ERR(table_ptr);
++		dev_err(dev, "can't load resource table: %d\n", ret);
++		return ret;
++	}
++
++	rproc->cached_table = NULL;
++	rproc->table_ptr = table_ptr;
++	rproc->table_sz = table_sz;
++
++	return 0;
++}
++
+ /*
+  * Attach to remote processor - similar to rproc_fw_boot() but without
+  * the steps that deal with the firmware image.
+@@ -1556,6 +1582,12 @@ static int rproc_attach(struct rproc *rproc)
+ 		return ret;
  	}
  
--	rproc->state = RPROC_RUNNING;
-+	rproc->state = RPROC_ATTACHED;
++	ret = rproc_set_rsc_table(rproc);
++	if (ret) {
++		dev_err(dev, "can't load resource table: %d\n", ret);
++		goto disable_iommu;
++	}
++
+ 	/* reset max_notifyid */
+ 	rproc->max_notifyid = -1;
  
- 	dev_info(dev, "remote processor %s is now attached\n", rproc->name);
+diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+index c34002888d2c..4f73aac7e60d 100644
+--- a/drivers/remoteproc/remoteproc_internal.h
++++ b/drivers/remoteproc/remoteproc_internal.h
+@@ -177,6 +177,16 @@ struct resource_table *rproc_find_loaded_rsc_table(struct rproc *rproc,
+ 	return NULL;
+ }
  
-@@ -1659,14 +1659,6 @@ static int rproc_stop(struct rproc *rproc, bool crashed)
- 
- 	rproc->state = RPROC_OFFLINE;
- 
--	/*
--	 * The remote processor has been stopped and is now offline, which means
--	 * that the next time it is brought back online the remoteproc core will
--	 * be responsible to load its firmware.  As such it is no longer
--	 * autonomous.
--	 */
--	rproc->autonomous = false;
--
- 	dev_info(dev, "stopped remote processor %s\n", rproc->name);
- 
- 	return 0;
-@@ -2077,16 +2069,6 @@ int rproc_add(struct rproc *rproc)
- 	if (ret < 0)
- 		return ret;
- 
--	/*
--	 * Remind ourselves the remote processor has been attached to rather
--	 * than booted by the remoteproc core.  This is important because the
--	 * RPROC_DETACHED state will be lost as soon as the remote processor
--	 * has been attached to.  Used in firmware_show() and reset in
--	 * rproc_stop().
--	 */
--	if (rproc->state == RPROC_DETACHED)
--		rproc->autonomous = true;
--
- 	/* if rproc is marked always-on, request it to boot */
- 	if (rproc->auto_boot) {
- 		ret = rproc_trigger_auto_boot(rproc);
-diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
-index 4b4aab0d4c4b..f9694def9b54 100644
---- a/drivers/remoteproc/remoteproc_sysfs.c
-+++ b/drivers/remoteproc/remoteproc_sysfs.c
-@@ -138,11 +138,8 @@ static ssize_t firmware_show(struct device *dev, struct device_attribute *attr,
- 	 * If the remote processor has been started by an external
- 	 * entity we have no idea of what image it is running.  As such
- 	 * simply display a generic string rather then rproc->firmware.
--	 *
--	 * Here we rely on the autonomous flag because a remote processor
--	 * may have been attached to and currently in a running state.
- 	 */
--	if (rproc->autonomous)
-+	if (rproc->state == RPROC_ATTACHED)
- 		firmware = "unknown";
- 
- 	return sprintf(buf, "%s\n", firmware);
++static inline
++struct resource_table *rproc_get_loaded_rsc_table(struct rproc *rproc,
++						  size_t *size)
++{
++	if (rproc->ops->get_loaded_rsc_table)
++		return rproc->ops->get_loaded_rsc_table(rproc, size);
++
++	return NULL;
++}
++
+ static inline
+ bool rproc_u64_fit_in_size_t(u64 val)
+ {
 diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index b0a57ff73849..6b0a0ed30a03 100644
+index 6b0a0ed30a03..51538a7d120d 100644
 --- a/include/linux/remoteproc.h
 +++ b/include/linux/remoteproc.h
-@@ -512,7 +512,6 @@ struct rproc_dump_segment {
-  * @table_sz: size of @cached_table
-  * @has_iommu: flag to indicate if remote processor is behind an MMU
-  * @auto_boot: flag to indicate if remote processor should be auto-started
-- * @autonomous: true if an external entity has booted the remote processor
-  * @dump_segments: list of segments in the firmware
-  * @nb_vdev: number of vdev currently handled by rproc
-  * @char_dev: character device of the rproc
-@@ -549,7 +548,6 @@ struct rproc {
- 	size_t table_sz;
- 	bool has_iommu;
- 	bool auto_boot;
--	bool autonomous;
- 	struct list_head dump_segments;
- 	int nb_vdev;
- 	u8 elf_class;
+@@ -368,7 +368,9 @@ enum rsc_handling_status {
+  * RSC_HANDLED if resource was handled, RSC_IGNORED if not handled and a
+  * negative value on error
+  * @load_rsc_table:	load resource table from firmware image
+- * @find_loaded_rsc_table: find the loaded resouce table
++ * @find_loaded_rsc_table: find the loaded resource table from firmware image
++ * @get_loaded_rsc_table: get resource table installed in memory
++ *			  by external entity
+  * @load:		load firmware to memory, where the remote processor
+  *			expects to find it
+  * @sanity_check:	sanity check the fw image
+@@ -390,6 +392,8 @@ struct rproc_ops {
+ 			  int offset, int avail);
+ 	struct resource_table *(*find_loaded_rsc_table)(
+ 				struct rproc *rproc, const struct firmware *fw);
++	struct resource_table *(*get_loaded_rsc_table)(
++				struct rproc *rproc, size_t *size);
+ 	int (*load)(struct rproc *rproc, const struct firmware *fw);
+ 	int (*sanity_check)(struct rproc *rproc, const struct firmware *fw);
+ 	u64 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
 -- 
 2.25.1
 
