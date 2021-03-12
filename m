@@ -2,72 +2,110 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD853386E1
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Mar 2021 08:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 764C6339329
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 12 Mar 2021 17:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231778AbhCLH40 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 12 Mar 2021 02:56:26 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:13149 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbhCLHzx (ORCPT
+        id S232238AbhCLQZB (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 12 Mar 2021 11:25:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232303AbhCLQY4 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 12 Mar 2021 02:55:53 -0500
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4DxdNV06BWzmWWb;
-        Fri, 12 Mar 2021 15:53:30 +0800 (CST)
-Received: from localhost.localdomain (10.175.102.38) by
- DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
- 14.3.498.0; Fri, 12 Mar 2021 15:55:36 +0800
-From:   'Wei Yongjun <weiyongjun1@huawei.com>
-To:     <weiyongjun1@huawei.com>, Ohad Ben-Cohen <ohad@wizery.com>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next] remoteproc: imx_rproc: fix return value check in imx_rproc_addr_init()
-Date:   Fri, 12 Mar 2021 08:04:20 +0000
-Message-ID: <20210312080420.277151-1-weiyongjun1@huawei.com>
+        Fri, 12 Mar 2021 11:24:56 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF55C061761
+        for <linux-remoteproc@vger.kernel.org>; Fri, 12 Mar 2021 08:24:55 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id g4so16194371pgj.0
+        for <linux-remoteproc@vger.kernel.org>; Fri, 12 Mar 2021 08:24:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GLPYqdvg9MFVJ4vgEAAqaEwpKmLxtxoj80nZ7ASbFTw=;
+        b=gGBk5i2sXg8XfPoDZIGwKeoBZ3o+Q2za8Akb+lk6i8b0iin+UFMLlkD86TAEbW0h50
+         2pHwcpvBWGcACPe2uapXqofrp9XZpB/dU8I/WuqJRgo6eYFOobgJ2a0bY3m3FAbamCNr
+         eJmEg5cAlZO1k52FhpswI+Nm9v13XUJhTWPcW4HTr+/V/G7IcK7KLY01rSHGrJEeVqIT
+         eLmlozDgdi36Ema2omChbE9LcgPpxi/8om4ytlsKXRxaxMHJhEkha2/CHv96Tx/GgU7a
+         PM6fAvU2Chub8oQDDV23TXxTiJyv9WzyBlZrUiXAhMW/o7TTW3mjVK2x13MlBeikTtzo
+         Wgeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GLPYqdvg9MFVJ4vgEAAqaEwpKmLxtxoj80nZ7ASbFTw=;
+        b=F6fNgscViIIEY2OJWmanxwstCDRVvCsTkjrSItMyk4N8whivFChTjQLA/yzq+O0Q1V
+         JPmSFTT1XikCCPgVmMdeFfwKuxkUl83WgZpfpzmufbuHXXF/kQLgxU07T4uXefHJLlpi
+         lYl51t+vCIt3+cRO31sv9m4rPi1Nmgc4cim6qmCJwn2Hr4LqWsfbq43ay7DK70QVgiIu
+         pChnZLuMo5ZGnqidzGsC+YCRWj+01JAs+JnlAhk8plQx2iHhi2fM6kYbB5vnAKW9vpO1
+         vG89DKDml3+VpaJdWpBnXbEPHNApPPrK/TbdGoWFnLX1y8zKMGXEAUa4Vbmt9LRg9u3t
+         ueVA==
+X-Gm-Message-State: AOAM533Pv+hZS9wqDzgHripaytg8NSNXPxgx5kQqjN7Vt/YWc80uFkOk
+        BGjYK8PuWvrceU6SKxFlLqxlBw==
+X-Google-Smtp-Source: ABdhPJwSpltrCO0OnpdZMIJb8pP+93hJhPCIK5TilQeex21X3PF2rwNf/G+LSkE/z7+rsuAaQIu6yQ==
+X-Received: by 2002:a65:5a0a:: with SMTP id y10mr12576669pgs.285.1615566295421;
+        Fri, 12 Mar 2021 08:24:55 -0800 (PST)
+Received: from xps15.cg.shawcable.net (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id e8sm5899599pgb.35.2021.03.12.08.24.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Mar 2021 08:24:55 -0800 (PST)
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     bjorn.andersson@linaro.org, ohad@wizery.com
+Cc:     arnaud.pouliquen@st.com, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@st.com, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v8 00/17] remoteproc: Add support for detaching a remote processor
+Date:   Fri, 12 Mar 2021 09:24:36 -0700
+Message-Id: <20210312162453.1234145-1-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.102.38]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Wei Yongjun <weiyongjun1@huawei.com>
+This set provides support for the remoteproc core to release resources
+associated with a remote processor without having to switch it off. That
+way a platform driver can be removed or the application processor power
+cycled while the remote processor is still operating.
 
-In case of error, the function devm_ioremap() returns NULL pointer
-not ERR_PTR(). The IS_ERR() test in the return value check should
-be replaced with NULL test.
+This revision fixes a couple of minor problems with patch 11 and 12 as
+pointed out by Arnaud and the kernel test robot (detailed in the change
+log for each patch).  Other patches have not changed.
 
-Fixes: ecadcc47492c ("remoteproc: imx_rproc: use devm_ioremap")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/remoteproc/imx_rproc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Applies cleanly on rproc-next and v5.12-rc2.
 
-diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-index 5ebb9f57d3e0..3ba4b6ba47aa 100644
---- a/drivers/remoteproc/imx_rproc.c
-+++ b/drivers/remoteproc/imx_rproc.c
-@@ -464,9 +464,9 @@ static int imx_rproc_addr_init(struct imx_rproc *priv,
- 
- 		/* Not use resource version, because we might share region */
- 		priv->mem[b].cpu_addr = devm_ioremap(&pdev->dev, res.start, resource_size(&res));
--		if (IS_ERR(priv->mem[b].cpu_addr)) {
-+		if (!priv->mem[b].cpu_addr) {
- 			dev_err(dev, "failed to remap %pr\n", &res);
--			err = PTR_ERR(priv->mem[b].cpu_addr);
-+			err = -ENOMEM;
- 			return err;
- 		}
- 		priv->mem[b].sys_addr = res.start;
+Thanks,
+Mathieu 
+
+Arnaud POULIQUEN (1):
+  remoteproc: stm32: Move memory parsing to rproc_ops
+
+Mathieu Poirier (16):
+  remoteproc: Remove useless check in rproc_del()
+  remoteproc: Rename function rproc_actuate()
+  remoteproc: Add new RPROC_ATTACHED state
+  remoteproc: Properly represent the attached state
+  remoteproc: Add new get_loaded_rsc_table() to rproc_ops
+  remoteproc: stm32: Move resource table setup to rproc_ops
+  remoteproc: Add new detach() remoteproc operation
+  remoteproc: Introduce function __rproc_detach()
+  remoteproc: Introduce function rproc_detach()
+  remoteproc: Properly deal with the resource table when detaching
+  remoteproc: Properly deal with the resource table when stopping
+  remoteproc: Properly deal with a kernel panic when attached
+  remoteproc: Properly deal with a start request when attached
+  remoteproc: Properly deal with a stop request when attached
+  remoteproc: Properly deal with a detach request when attached
+  remoteproc: Refactor function rproc_cdev_release()
+
+ drivers/remoteproc/remoteproc_cdev.c     |  21 +-
+ drivers/remoteproc/remoteproc_core.c     | 302 ++++++++++++++++++++---
+ drivers/remoteproc/remoteproc_internal.h |  10 +
+ drivers/remoteproc/remoteproc_sysfs.c    |  17 +-
+ drivers/remoteproc/stm32_rproc.c         | 168 ++++++-------
+ include/linux/remoteproc.h               |  21 +-
+ 6 files changed, 401 insertions(+), 138 deletions(-)
+
+-- 
+2.25.1
 
