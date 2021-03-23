@@ -2,157 +2,102 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5ADD346B96
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Mar 2021 23:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BE4346D54
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Mar 2021 23:39:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233762AbhCWWCn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 23 Mar 2021 18:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233742AbhCWWCU (ORCPT
+        id S234006AbhCWWj2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 23 Mar 2021 18:39:28 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:44578 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233738AbhCWWi4 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 23 Mar 2021 18:02:20 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050A0C061574;
-        Tue, 23 Mar 2021 15:02:19 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id h10so25244922edt.13;
-        Tue, 23 Mar 2021 15:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ivsOqhW2+D74/AwbFBvEr85D6ijorwLO62zcbAkI7IE=;
-        b=pfidhFKkrp9+ErXwBRySo2qrCGaZXS1BMWpyiAx/mUSvRCRwg4rfu6+S5MGpZgqo5e
-         REJYv8v/rI+L2JleN4kwi8GidBQmXKlFpTfbKcRxAgs2y834qEaCAasWV/jfIj0QRvgI
-         MC4thxv/rR87ULMU+jI0OL240wfOxmvasxZrTp8SM3h3O2HjTPhnbyIalC9zBBJFTnB/
-         FM5LA7ZVsPrn8e+EZMz00Ux9S/yT8VcSbXwZQeZ65q4y9usjmCRFysFiLY5g8/dZSW/8
-         feBAtP64lG1CHojzlKsYAy7fTAOevofQedTKO8zopesOUKUfRHOxTaKL939ubFM5dE9t
-         Qb/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ivsOqhW2+D74/AwbFBvEr85D6ijorwLO62zcbAkI7IE=;
-        b=S258RetiPFeK9UowIij57rzAek4thFYKw/N3jsFBrrG3TCNFFGEvs61K+1vBtSy2+s
-         1oTu7sKfkrxLli2drtNx95Hct0uDgm5zWPHSdwitTRJM/cUeinB8I2nvO8OhF1gdVsjA
-         fhbznZaMmeJNDKsS1OvkiDR9c0w5B6GryOM0xhhcji0d2KmidQ9DKJq85fvCSB4sVU6l
-         L44M5lKlqLj4jYGPRopReKcopj/2MAiauE1rRDYZATFxdkPtEGc0R4hpG6szj58m/F1E
-         dxbtgrrqd/aMe30X2nbSH0BGEj+rT8EHbQ+/+IdOX0SI8pj9N8PhoF/HAjxzGb5/hHRj
-         wkGQ==
-X-Gm-Message-State: AOAM53316REkDtJ6B1Q37jHB6ZGkfScKdrBoKWk74Ld99PF2CUWZZ+Aa
-        XT3W7z8zMEGOxvQYlMK8/GpZSInB7HJGbHPUGwk=
-X-Google-Smtp-Source: ABdhPJzbfUqdJeS4YDqyzcGjKwLZHPdc+wof3W4AtN2VMMnnLPKG6WhLpXgerC4ow+tdldg7A331UdrsC6FNbRlJScU=
-X-Received: by 2002:a50:f747:: with SMTP id j7mr6500507edn.338.1616536937737;
- Tue, 23 Mar 2021 15:02:17 -0700 (PDT)
+        Tue, 23 Mar 2021 18:38:56 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 12NMce1b129789;
+        Tue, 23 Mar 2021 17:38:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1616539120;
+        bh=TvscpToZMQACxUA/dOzxJjIy1byQa47pq+p1H55TNi8=;
+        h=From:To:CC:Subject:Date;
+        b=Wc8eJbE1OLP2lGt/6l+ILJAaz44jaqQfI9kBhbGAgPBVIjbOJ/DWLu3ABUGxLZk4D
+         EC7WIO7WfY1eC/j7DOx+xsw61lR15QrBSTN3zYxYVhqfB0T3wv3ufAlDTKp1PC4GAI
+         7DGHdeIVwZTTg2dSUG8w71UEYjOEk1On/0KD+qf8=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 12NMceEU034124
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 23 Mar 2021 17:38:40 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Tue, 23
+ Mar 2021 17:38:40 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Tue, 23 Mar 2021 17:38:40 -0500
+Received: from lelv0597.itg.ti.com (lelv0597.itg.ti.com [10.181.64.32])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 12NMcewV058842;
+        Tue, 23 Mar 2021 17:38:40 -0500
+Received: from localhost ([10.250.221.195])
+        by lelv0597.itg.ti.com (8.14.7/8.14.7) with ESMTP id 12NMcdSS102209;
+        Tue, 23 Mar 2021 17:38:39 -0500
+From:   Suman Anna <s-anna@ti.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        <linux-remoteproc@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/3] PRU firmware event/interrupt mapping fixes
+Date:   Tue, 23 Mar 2021 17:38:36 -0500
+Message-ID: <20210323223839.17464-1-s-anna@ti.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-References: <20201230012724.1326156-1-martin.blumenstingl@googlemail.com>
- <20201230012724.1326156-4-martin.blumenstingl@googlemail.com> <YFLBPGNQpT9mM3AJ@builder.lan>
-In-Reply-To: <YFLBPGNQpT9mM3AJ@builder.lan>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Tue, 23 Mar 2021 23:02:06 +0100
-Message-ID: <CAFBinCA92411o5+AGApr8+nkMdmzJ4ddzVY+Cb5FLBez+-92nA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] dt-bindings: remoteproc: Add the documentation for
- Meson AO ARC rproc
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-remoteproc@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, ohad@wizery.com, robh+dt@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Bjorn,
+Hi,
 
-On Thu, Mar 18, 2021 at 3:55 AM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
-[...]
-> > +examples:
-> > +  - |
-> > +    remoteproc@1c {
-> > +      compatible= "amlogic,meson8-ao-arc", "amlogic,meson-mx-ao-arc";
-> > +      reg = <0x1c 0x8>, <0x38 0x8>;
->
-> I'm generally not in favor of mapping "individual" registers, do you
-> know what hardware block this is part of? Can you express the whole
-> block as an single entity in your DT?
-the answer is unfortunately not easy :-)
+The following series includes fixes for various different issues
+associated with the PRU firmware event/interrupt mapping configuration
+logic added in the same commit c75c9fdac66e ("remoteproc: pru: Add
+support for PRU specific interrupt configuration"). The fixes are
+agnostic of SoC family.
 
-some background information:
-Amlogic SoCs have two power domains:
-- AO (Always-On)
-- EE (Everything-Else)
+Following is the summary of issues and fixes:
+ - Patch #1 fixes the interrupt node finding logic to always use the
+   inherent sibling relationship between a PRU/RTU/Tx_PRU node and its
+   corresponding PRUSS INTC node. This fixes the firmware event mappings
+   for cases when the PRU nodes do not have an 'interrupt-parent' property
+   (this is the norm, the property is neither required nor added in the DT
+   nodes normally).
+ - Patch #2 fixes a minor issue with returning a success value to the
+   caller on a fw event mapping failure.
+ - Patch #3 fixes a kernel crash due to switching of firmwares between
+   consecutive runs, the first one with events and the second one without
+   events. There are no issues when the same firmwares are run or if they
+   are run in reverse order.
 
-AO includes (at least) one ARC core for which this remoteproc dt-binding is.
-EE includes ARM Cortex-A7/15/... cores
+Patches should apply cleanly on top of the current rproc-fixes branch
+commit 9afeefcf06fc ("remoteproc: pru: Fix firmware loading crashes on K3 SoCs")
 
-The AO registers can be accessed from the EE power-domain and vice versa
+regards
+Suman
 
-Following is an extract (with comments added by me) for the AO
-registers (taken from the GPL vendor kernel):
-#define AO_RTI_STATUS_REG0 ((0x00 << 10) | (0x00 << 2))
-#define AO_RTI_STATUS_REG1 ((0x00 << 10) | (0x01 << 2))
-#define AO_RTI_STATUS_REG2 ((0x00 << 10) | (0x02 << 2))
-these three are used for communication with the firmware on the AO ARC core
-I am not sure into which Linux subsystem these would fit into best
+Suman Anna (3):
+  remoteproc: pru: Fixup interrupt-parent logic for fw events
+  remoteproc: pru: Fix wrong success return value for fw events
+  remoteproc: pru: Fix and cleanup firmware interrupt mapping logic
 
-#define AO_RTI_PWR_CNTL_REG1 ((0x00 << 10) | (0x03 << 2))
-#define AO_RTI_PWR_CNTL_REG0 ((0x00 << 10) | (0x04 << 2))
-this includes various power-domains for the following functionality
-(and probably more):
-- DDR PHY I/O
-- AHB SRAM
-- video encoder/decoders
-- EE domain isolation
+ drivers/remoteproc/pru_rproc.c | 33 +++++++++++++++++++++++++--------
+ 1 file changed, 25 insertions(+), 8 deletions(-)
 
-#define AO_RTI_PIN_MUX_REG ((0x00 << 10) | (0x05 << 2))
-first part of the pin controller registers for the "AO" bank pads
-this includes various GPIOs, UART, I2C for communication with a PMIC,
-infrared remote decoder, two PWMs, etc.
-all (known) functionality can be used by Linux as well.
-especially the UART, I2C, IR decoder and GPIOs are functionality that
-we use with Linux today - without involving the AO ARC
-remote-processor.
+-- 
+2.30.1
 
-#define AO_WD_GPIO_REG ((0x00 << 10) | (0x06 << 2))
-(I think this is related to the watchdog being able to trigger the
-SoC's reset line, but there's no documentation on this register)
-
-#define AO_REMAP_REG0 ((0x00 << 10) | (0x07 << 2))
-#define AO_REMAP_REG1 ((0x00 << 10) | (0x08 << 2))
-remap registers for the AO ARC remote-processor as used in this binding
-
-#define AO_GPIO_O_EN_N ((0x00 << 10) | (0x09 << 2))
-#define AO_GPIO_I ((0x00 << 10) | (0x0A << 2))
-GPIO controller registers for the "AO" bank pads
-
-#define AO_RTI_PULL_UP_REG ((0x00 << 10) | (0x0B << 2))
-second part of the pin controller registers for the "AO" bank pads
-
-#define AO_RTI_WD_MARK ((0x00 << 10) | (0x0D << 2))
-again, I think this is somehow related to the watchdog but there's no
-documentation on this
-
-#define AO_CPU_CNTL ((0x00 << 10) | (0x0E << 2))
-#define AO_CPU_STAT ((0x00 << 10) | (0x0F << 2))
-used for booting the AO ARC remote-processor
-
-#define AO_RTI_GEN_CNTL_REG0 ((0x00 << 10) | (0x10 << 2))
-seems to be a multi purpose register as it (seems to) contains some
-reset bits (for the AO UART and RTC) - not documented
-
-(more registers are following)
-
-to summarize this: I think there's indeed three different sets of registers
-having one big device-tree node spanning all of these registers seems
-incorrect to me as the other IPs are independent of the AO ARC
-remote-processor.
-so the way I have done it in the original patch is the best I could
-come up with.
-
-Please let me know what you think!
-
-
-Best regards,
-Martin
