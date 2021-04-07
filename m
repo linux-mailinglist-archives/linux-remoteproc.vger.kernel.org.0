@@ -2,136 +2,153 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAB0356EAA
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  7 Apr 2021 16:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE62356F11
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  7 Apr 2021 16:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352941AbhDGOay (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 7 Apr 2021 10:30:54 -0400
-Received: from mail-pj1-f46.google.com ([209.85.216.46]:42761 "EHLO
-        mail-pj1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352939AbhDGOaw (ORCPT
+        id S1344971AbhDGOnn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 7 Apr 2021 10:43:43 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:34880 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348773AbhDGOn2 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 7 Apr 2021 10:30:52 -0400
-Received: by mail-pj1-f46.google.com with SMTP id j6-20020a17090adc86b02900cbfe6f2c96so1415205pjv.1;
-        Wed, 07 Apr 2021 07:30:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1vVuZ4MvRzeF+pr2v0xmBFFQwK6hdMJanVjlk9hErro=;
-        b=p1KK1cOkqF4vkjiGQlQyjZrd/3svw7AsHzTRVm3MhKvVkKR6Dwx4Dfm6sdCjc9Sjqs
-         e9RPRL7lF7O2aTAFYFcgFp91u55IRZM+NAVgSg3WTaHfN7rlTs3eMe0+euKVBIXgJ3j9
-         Dx7tezCIPDcT5myzik9AmqF8mNzgjQnKa2P1oH64IpJA2yYdZcHqX0zanidKaX0AiS4t
-         rhmEmvIfDKDx+m7h6PfV0SxFb7d6VhzZI1lt0LOypBaHz7Io+8kmdqx8DA71pNVQj8F4
-         jPzUAMGalLGzmQ6k7AK911TjafA0Gc3OqjWJtEV96H8Ty8DiN14TDbhUigG4+ngbU61s
-         UaRw==
-X-Gm-Message-State: AOAM531J1WRsK/PlO1ajFnlQH3WLMDcsFiNsNR0QtAUYWNmZSZZxz0uS
-        WHPuV3DT84I9B+teB69JxaU=
-X-Google-Smtp-Source: ABdhPJytaBCeu/N78G2ItU1as7w8fUmjf8wbl8aAQkobTbao0e2hHv5pq8RooRp01fzv5LCBwmpFDg==
-X-Received: by 2002:a17:90a:6343:: with SMTP id v3mr3482681pjs.153.1617805842980;
-        Wed, 07 Apr 2021 07:30:42 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id k11sm5779292pjs.1.2021.04.07.07.30.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Apr 2021 07:30:41 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 09D07402D7; Wed,  7 Apr 2021 14:30:41 +0000 (UTC)
-Date:   Wed, 7 Apr 2021 14:30:40 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Joerg Roedel <jroedel@suse.de>, Wei Liu <wei.liu@kernel.org>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Corey Minyard <cminyard@mvista.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux on Hyper-V List <linux-hyperv@vger.kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        linux-remoteproc@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        kexec@lists.infradead.org, rcu@vger.kernel.org,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Corey Minyard <minyard@acm.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-Subject: Re: [PATCH v1 1/1] kernel.h: Split out panic and oops helpers
-Message-ID: <20210407143040.GB4332@42.do-not-panic.com>
-References: <20210406133158.73700-1-andriy.shevchenko@linux.intel.com>
- <20210406165108.GA4332@42.do-not-panic.com>
- <CAHp75Ve9vBQqSegM2-ch9NUN-MdevxxOs5ZdHkk1W7AacN+Wrw@mail.gmail.com>
+        Wed, 7 Apr 2021 10:43:28 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 137EWMlD081494;
+        Wed, 7 Apr 2021 09:32:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1617805942;
+        bh=/ZE3NClD3KqnjT4ROQ1TsBEaHGQZKlKWPea6oZsVB5s=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=uGmHAP1EdO5bHcQhm8Mv+BUmRytLIH1lXKUQ8ha/vXJzZszJg+g3thRoZHCfzUsjO
+         nRb8tupTlEjMU8WCI2dwTSXgblZ5Rx6zPeZP0nvgW3Yh3PlorKvkS3fZPHhxcQUBnd
+         wL4K79yJrIz9iBK7nzad1fSOYKKzk4LQpLSWQjjU=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 137EWMvV045630
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 7 Apr 2021 09:32:22 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 7 Apr
+ 2021 09:32:22 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Wed, 7 Apr 2021 09:32:22 -0500
+Received: from [10.250.37.105] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 137EWLMA070655;
+        Wed, 7 Apr 2021 09:32:22 -0500
+Subject: Re: [PATCH 1/3] remoteproc: pru: Fixup interrupt-parent logic for fw
+ events
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        <linux-remoteproc@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20210323223839.17464-1-s-anna@ti.com>
+ <20210323223839.17464-2-s-anna@ti.com> <20210406232837.GA330882@xps15>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <00b3fcf3-c3ed-9c2c-712e-952af019f16b@ti.com>
+Date:   Wed, 7 Apr 2021 09:32:21 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Ve9vBQqSegM2-ch9NUN-MdevxxOs5ZdHkk1W7AacN+Wrw@mail.gmail.com>
+In-Reply-To: <20210406232837.GA330882@xps15>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed, Apr 07, 2021 at 10:33:44AM +0300, Andy Shevchenko wrote:
-> On Wed, Apr 7, 2021 at 10:25 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Tue, Apr 06, 2021 at 04:31:58PM +0300, Andy Shevchenko wrote:
-> > > diff --git a/include/linux/panic_notifier.h b/include/linux/panic_notifier.h
-> > > new file mode 100644
-> > > index 000000000000..41e32483d7a7
-> > > --- /dev/null
-> > > +++ b/include/linux/panic_notifier.h
-> > > @@ -0,0 +1,12 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +#ifndef _LINUX_PANIC_NOTIFIERS_H
-> > > +#define _LINUX_PANIC_NOTIFIERS_H
-> > > +
-> > > +#include <linux/notifier.h>
-> > > +#include <linux/types.h>
-> > > +
-> > > +extern struct atomic_notifier_head panic_notifier_list;
-> > > +
-> > > +extern bool crash_kexec_post_notifiers;
-> > > +
-> > > +#endif       /* _LINUX_PANIC_NOTIFIERS_H */
-> >
-> > Why is it worth it to add another file just for this?
+On 4/6/21 6:28 PM, Mathieu Poirier wrote:
+> On Tue, Mar 23, 2021 at 05:38:37PM -0500, Suman Anna wrote:
+>> The PRU firmware interrupt mapping logic in pru_handle_intrmap() uses
+>> of_irq_find_parent() with PRU device node to get a handle to the PRUSS
+>> Interrupt Controller at present. This logic however requires that the
+>> PRU nodes always define a interrupt-parent property. This property is
+>> neither a required/defined property as per the PRU remoteproc binding,
+>> nor is relevant from a DT node point of view without any associated
+>> interrupts. The curret logic finds a wrong interrupt controller and
+>> fails to perform proper mapping without any interrupt-parent property
+>> in the PRU nodes.
+>>
+>> Fix this logic to always find and use the sibling interrupt controller.
+>> Also, while at this, fix the acquired interrupt controller device node
+>> reference properly.
+>>
+>> Fixes: c75c9fdac66e ("remoteproc: pru: Add support for PRU specific interrupt configuration")
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> ---
+>>  drivers/remoteproc/pru_rproc.c | 15 ++++++++++++---
+>>  1 file changed, 12 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
+>> index 16979c1cd2f4..a9d07c0751be 100644
+>> --- a/drivers/remoteproc/pru_rproc.c
+>> +++ b/drivers/remoteproc/pru_rproc.c
+>> @@ -284,7 +284,7 @@ static int pru_handle_intrmap(struct rproc *rproc)
+>>  	struct pru_rproc *pru = rproc->priv;
+>>  	struct pru_irq_rsc *rsc = pru->pru_interrupt_map;
+>>  	struct irq_fwspec fwspec;
+>> -	struct device_node *irq_parent;
+>> +	struct device_node *parent, *irq_parent;
+>>  	int i, ret = 0;
+>>  
+>>  	/* not having pru_interrupt_map is not an error */
+>> @@ -312,9 +312,16 @@ static int pru_handle_intrmap(struct rproc *rproc)
+>>  
+>>  	/*
+>>  	 * parse and fill in system event to interrupt channel and
+>> -	 * channel-to-host mapping
+>> +	 * channel-to-host mapping. The interrupt controller to be used
+>> +	 * for these mappings for a given PRU remoteproc is always its
+>> +	 * corresponding sibling PRUSS INTC node.
+>>  	 */
+>> -	irq_parent = of_irq_find_parent(pru->dev->of_node);
 > 
-> The main point is to break tons of loops that prevent having clean
-> headers anymore.
->
-> In this case, see bug.h, which is very important in this sense.
+> If I understand correctly when an interrupt controller node wasn't speficied in
+> the parent this was unwinding until it found one...
 
-OK based on the commit log this was not clear, it seemed more of moving
-panic stuff to its own file, so just cleanup.
+Correct if not specified in each PRU node, and ends up finding the complete
+wrong interrupt controller (GIC) as it walks up the tree.
 
-> >  Seems like a very
-> > small file.
 > 
-> If it is an argument, it's kinda strange. We have much smaller headers.
+>> +	parent = of_get_parent(dev_of_node(pru->dev));
+>> +	if (!parent)
+>> +		return -ENODEV;
+>> +
+>> +	irq_parent = of_get_child_by_name(parent, "interrupt-controller");
+>> +	of_node_put(parent);
+>>  	if (!irq_parent) {
+>>  		kfree(pru->mapped_irq);
+>>  		return -ENODEV;
+>> @@ -337,11 +344,13 @@ static int pru_handle_intrmap(struct rproc *rproc)
+>>  			goto map_fail;
+>>  		}
+>>  	}
+>> +	of_node_put(irq_parent);
+>>  
+>>  	return ret;
+>>  
+>>  map_fail:
+>>  	pru_dispose_irq_mapping(pru);
+>> +	of_node_put(irq_parent);
+> 
+> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-The motivation for such separate file was just not clear on the commit
-log.
+Thanks,
+Suman
 
-  Luis
+> 
+>>  
+>>  	return ret;
+>>  }
+>> -- 
+>> 2.30.1
+>>
+
