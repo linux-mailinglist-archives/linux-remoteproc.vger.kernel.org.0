@@ -2,65 +2,47 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED9F372FA8
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 May 2021 20:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FF2372FBD
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 May 2021 20:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbhEDSXk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 4 May 2021 14:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231635AbhEDSXk (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 4 May 2021 14:23:40 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0961C061574
-        for <linux-remoteproc@vger.kernel.org>; Tue,  4 May 2021 11:22:44 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 12so14615049lfq.13
-        for <linux-remoteproc@vger.kernel.org>; Tue, 04 May 2021 11:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=95tKEyQCRjctWNwfrxHZvLv9YtVr1nyw8aN8qwe62ek=;
-        b=DfmgA0a2l67EFPmtb/aEWt6XaeBFKai/W5LbfSGCLk41/gVTTY8y1dx24hHl8MoY1c
-         D7AF4rCyuVObdpCyKlGU1SIvQZgZMNnJr2054NtjuOwX9qTknRQISNVFAWl1xjEB+8sl
-         d3ukkMTAydjJSDP9Y1te1EWdizvDDWyakizNg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=95tKEyQCRjctWNwfrxHZvLv9YtVr1nyw8aN8qwe62ek=;
-        b=iWRijmj6xzUmHjFlAJvoqmyygZjsWhz7NIeWcgujqQx+VZ0T969H6+grvaKPhGBvqr
-         pDgxfoU+OincjTV13Cq/0jA8+4m2lYLHEad1q78lnanesjCb98R9bE2VyHZw+TLbl0wy
-         dJONjxfZkqtHihb576twwU0rID+EzRvWSlsuvwUXll1jceNeXDSmFRrg/0zUkhWxhxI7
-         fVzZSdh27oQ2Fpb506VeeaHRTICxSu3UQRgm1DSNcWTAqikv0Zx4k54UJkA41jIXdfR5
-         tLqS70QUvmfKl1eJu8wTMxa5311EPvAPJLq2bVLjTIFzmS0rqOkQp7YFLGqY4jYGwTXN
-         q5VQ==
-X-Gm-Message-State: AOAM532yP9vrGXmJFG5iuN6m4NVb7xGFDPPBpcks+OAJc94PI1SNqjGd
-        PYzyzwvN7K5lug87cvNH7DS6xhQNVsKaM0Lr
-X-Google-Smtp-Source: ABdhPJxvtMy7D5pl9AxqXUDHvP53mgbAfByW8HsfrKKzpNc5wL1Sg16E2vIpzp9JlO5Tuaaf165gDg==
-X-Received: by 2002:ac2:4f86:: with SMTP id z6mr18141467lfs.156.1620152563217;
-        Tue, 04 May 2021 11:22:43 -0700 (PDT)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id b11sm326520lfi.292.2021.05.04.11.22.42
-        for <linux-remoteproc@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 May 2021 11:22:42 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id w4so3687184ljw.9
-        for <linux-remoteproc@vger.kernel.org>; Tue, 04 May 2021 11:22:42 -0700 (PDT)
-X-Received: by 2002:a2e:9251:: with SMTP id v17mr4541263ljg.507.1620152561717;
- Tue, 04 May 2021 11:22:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210504150351.1468612-1-bjorn.andersson@linaro.org>
-In-Reply-To: <20210504150351.1468612-1-bjorn.andersson@linaro.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 4 May 2021 11:22:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgea9bo-j4+LAvZF7OKPAXKqrGgiBAhXTJ3Jv5JAZgA+A@mail.gmail.com>
-Message-ID: <CAHk-=wgea9bo-j4+LAvZF7OKPAXKqrGgiBAhXTJ3Jv5JAZgA+A@mail.gmail.com>
+        id S232049AbhEDSbI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 4 May 2021 14:31:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34040 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230385AbhEDSbC (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Tue, 4 May 2021 14:31:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 000A4613D1;
+        Tue,  4 May 2021 18:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620153007;
+        bh=CjqjLgBiQa/xjUUTwGphcFmuQGbAhfSmeaIuRbTG/IM=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ldeXxR808q9Y7A+HIrCAwG0VT4NkvjyOiCIbz87wrsutoxvrPxr0BubsDfUU3RjW3
+         6DYXI5+0bSdji7YXhB4eaE9EcfuyOdilCjm8mdhdKoFCwv3FpJXslYlGtr9YeQJaD4
+         rjLRjzHOUaSeyjBUvVcQSTS1m0Ozv7In9/7QTT7zWKsDosabrgrElScKcfXU0evAYo
+         /a45jEUaRV10oltqY86ZfZzM4CdkdA0qTn85W+BdkHPhg3NGrYZcW9UP0Pbi8nsw4E
+         4QR99UJP+T/L48nN5YJ7YbeGj46qnnWF9Zz7hH913IgH1TWzGJjte/f4ePLwbampUh
+         VUna3Qq9zMpuQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E6DB760987;
+        Tue,  4 May 2021 18:30:06 +0000 (UTC)
 Subject: Re: [GIT PULL] remoteproc updates for v5.13
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20210504150351.1468612-1-bjorn.andersson@linaro.org>
+References: <20210504150351.1468612-1-bjorn.andersson@linaro.org>
+X-PR-Tracked-List-Id: <linux-remoteproc.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20210504150351.1468612-1-bjorn.andersson@linaro.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/rproc-v5.13
+X-PR-Tracked-Commit-Id: edf696f26855788cdff832ac83319e1f2aafcc90
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 8796ac1d031ad0d9346fd62841c8eb359570ba48
+Message-Id: <162015300693.4328.1761711581437301808.pr-tracker-bot@kernel.org>
+Date:   Tue, 04 May 2021 18:30:06 +0000
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Peng Fan <peng.fan@nxp.com>,
         Govind Singh <govinds@codeaurora.org>,
@@ -72,30 +54,19 @@ Cc:     Ohad Ben-Cohen <ohad@wizery.com>, linux-remoteproc@vger.kernel.org,
         Junlin Yang <yangjunlin@yulong.com>,
         Raghavendra Rao Ananta <rananta@codeaurora.org>,
         Yang Li <yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, May 4, 2021 at 8:03 AM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> This adds support to the remoteproc core for detaching Linux from a
-> running remoteproc, e.g. to reboot Linux while leaving the remoteproc
-> running, and it enable this support in the stm32 remoteproc driver.
+The pull request you sent on Tue,  4 May 2021 10:03:51 -0500:
 
-Honestly, when explaining new functionality like this, it would be
-lovely to also give an example of the _why_, not just the what.
+> https://git.kernel.org/pub/scm/linux/kernel/git/andersson/remoteproc.git tags/rproc-v5.13
 
-Ie, some concrete example of "this is useful to have the remoteproc
-continue scanning wireless networks" or whatever.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/8796ac1d031ad0d9346fd62841c8eb359570ba48
 
-I'm sure there's some actual use-case for this all, but neither the
-pull request nor the individual commits seem to actually explain that
-"why", only the "what".
+Thank you!
 
-I've pulled this, but hope that these kinds of issues can be explained
-better.. I think a lot of people care more about "why" than some
-implementation detail "what" cases.
-
-              Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
