@@ -2,269 +2,252 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D10B374E46
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  6 May 2021 06:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335F037583F
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  6 May 2021 18:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbhEFEMr (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 6 May 2021 00:12:47 -0400
-Received: from mail-eopbgr50074.outbound.protection.outlook.com ([40.107.5.74]:8566
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229756AbhEFEMr (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 6 May 2021 00:12:47 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JHyfyvURTZV4Avg8HHind6Gfde2EO0oOU+hsA9qkovb5cvTY1EavrJUjAveHwPp1mLYxh1y6SNAd0XJXPHOaJANmjQH/HmXnlljAhJXXqM4rRaAiDLfIvXe0eSAFDIH8jEjSWkudTbeJh9eJchTr/vnINdqzgav/Pg3dVAJ/kJeyOtSiuRQzLJGRtgztZatENVZ/f7RT6f7FlNcG9//9g/k4tjHrojE6aiTtMnC2fUd9lYUslW0ehIti91fW1sIFbFID1VUVVz+vCSJmpxs39XBjAz/nh8KYxWD5CvPohEcTTMF8eO8cM7dTIN8pNtCamzGugzwEULU2jMCpPFkdlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p+gQwfy+M1VVyrtjnI0AZSn4l+th0u8/XFU4xuSAeP0=;
- b=OzlDZ8zLevErOrMC/JG57fpLot1c1EMNc0oOk84RrbZ9CXGRWaQf5k27T9/7ehbti+s+UI1jyCq/GQ3RAEa/QQwy3wqNjaF7hH3QRc5ofmR7PShTrCPEHGnkQkVqWUCXUQlkmNFG8Xz8vK/uh8a1OSbv0HEgJZ9bTBkqdsOXEyf7C20glSyelBzrPAWAvID4zqAsB8QLx779O2eASwjICGyB820drk5d8Jh4h30tXUQq8zTCjIrXCixyKijGnZdtPUnbUIuzCe5lbhxx2bWsCUdiUBv/KzLEBdvmW673+HdmaQIupVpzhdEN2sZp9/7BPjU+fk/ZIB83YVfeyVK4uQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p+gQwfy+M1VVyrtjnI0AZSn4l+th0u8/XFU4xuSAeP0=;
- b=h48ZTwvzjukgQ+tIw5cin1GxjmsN1yEiRent1aNMdhYczQDw/Nh/TAf72Qska8h8j8GbSd0NoAeJUoZpgTcpDoCdx9U5uoz6771jcFU66H78q+wVyC3YH+LL4Q6H30woDd5dTvDZWkGzkBxixyw07yPY4xYxzKt78Xh1PbxLzj0=
-Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com (2603:10a6:4:a1::14)
- by DB6PR0401MB2376.eurprd04.prod.outlook.com (2603:10a6:4:51::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.41; Thu, 6 May
- 2021 04:11:47 +0000
-Received: from DB6PR0402MB2760.eurprd04.prod.outlook.com
- ([fe80::45b9:c993:87ec:9a64]) by DB6PR0402MB2760.eurprd04.prod.outlook.com
- ([fe80::45b9:c993:87ec:9a64%8]) with mapi id 15.20.4065.039; Thu, 6 May 2021
- 04:11:46 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-CC:     "ohad@wizery.com" <ohad@wizery.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "o.rempel@pengutronix.de" <o.rempel@pengutronix.de>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH V5 7/8] remoteproc: imx_rproc: support i.MX7ULP
-Thread-Topic: [PATCH V5 7/8] remoteproc: imx_rproc: support i.MX7ULP
-Thread-Index: AQHXNlcbdnM4ul09mECETdVhOJQp4KrSBlOAgAPoqiA=
-Date:   Thu, 6 May 2021 04:11:46 +0000
-Message-ID: <DB6PR0402MB2760B8377D023ACFFED9F51988589@DB6PR0402MB2760.eurprd04.prod.outlook.com>
-References: <1618971622-30539-1-git-send-email-peng.fan@oss.nxp.com>
- <1618971622-30539-8-git-send-email-peng.fan@oss.nxp.com>
- <20210503162935.GB1699665@xps15>
-In-Reply-To: <20210503162935.GB1699665@xps15>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linaro.org; dkim=none (message not signed)
- header.d=none;linaro.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [92.121.68.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d0104854-1e9a-43a3-4075-08d9104510c1
-x-ms-traffictypediagnostic: DB6PR0401MB2376:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DB6PR0401MB2376B1784566522833400D4B88589@DB6PR0401MB2376.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Jv7WQFT8vtYVGGStlGXHp9X9uD7OZki/++bWwhlLsoKOC2U8JCJLiI9Ll/R8xQN7dmm82s/fAzDlXrOEQnm5zzVa3kfaVZ/ZEWneh7EuVlOiMHhuGZ70rM77OCuMOklDGdPXDbjApn71apaOYAdrzar7EbmJ6tzQhbJUOk7S20qQ9ON9A+8bfjABDm69JjT1WPPZWU9IqO57ymrCHAPkWD391ZrfwiVpS/G2mymBOBEg6LMBtehBXY/QL4sWY8ABjvw+FuYn9oQaMg8+ozRdA0eemJmRknqRqyAbsTr9rEqyhYALJcr6Pj/RJo5aOuuScR1IXt6DZgRtlC74+pWR3YLSi2n7/Y7JUVM3Vw+14BP93RmX+2hmf61AD/A+mn6nCeUUGKpT815ucDzaegzcCl4wi+Zej8FuPjo/L4CIyDSbFdq5nTfg31lr+RBTVfjs3YMehoUzlmgzrKwh+R/rESE0nXm25wdGX1DYNr3bbXzu6urGVM905NG7S0lbH72+KdBosE5hFU+jSdaNy4IszMZQp+ayEm1E8wBjGpJwEetwu9bg1n1J6xgLDl7/giQjle54GAcjGfAqpbuf8YJPq190OlvSV6KmBB/B/RxxJVc=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR0402MB2760.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(346002)(396003)(376002)(39850400004)(366004)(66446008)(64756008)(83380400001)(76116006)(8676002)(7696005)(2906002)(54906003)(33656002)(86362001)(5660300002)(8936002)(44832011)(478600001)(55016002)(66556008)(66476007)(9686003)(38100700002)(52536014)(186003)(316002)(26005)(4326008)(7416002)(110136005)(122000001)(71200400001)(66946007)(6506007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?6TliBCz+quSe2WUuRb0rjfo+5u5B78AXNMxJVCNpgAchjIRO0bZ3UCxkDK+E?=
- =?us-ascii?Q?aR+8NS7iS7Fwqyna+EmX1qTxLiyZemDXnPqTHBk8YZjDaGIW6VGiW/F1qWQV?=
- =?us-ascii?Q?PKfNDN+0t9u6RXZUkHK4wSf8Q6uB4YFKCg0IoKTdr2mCMUhb6OGwVFJxnGka?=
- =?us-ascii?Q?Pvb90PkBWfsKNiAZR7u6cSgEfOtbbWn235svWCg9klShR1JVAepeXGEYzgR3?=
- =?us-ascii?Q?vbg3w15exJLRx6XC3HLdrJa7PmHWqXPj1Rhm6QmsmQVnU6lT67IQgiIPIGxF?=
- =?us-ascii?Q?+twFMO1BO/ztrs6p2r+9k2vBmE35cuLo2PProycAOU5Fy7A6XT94M/nwkgEQ?=
- =?us-ascii?Q?lpgT5qMnHwU9WhYBRVpADx8pVDpuXFA00fAjr+bGmShr1Rl2/6IYd3lV7EUX?=
- =?us-ascii?Q?n1iyGwwnLuMDATcyzKCiEJgW7J+FZ+TDkPI6kM7YrDNjsqsWJxTRJ344Ju1Z?=
- =?us-ascii?Q?3jsvPYucW/gf5inx0zCvWFOk/49Bql5QzClxMxeqVDJMynhIx1iuwPV9MO0s?=
- =?us-ascii?Q?RpXJCU9cz1xKFLnqFIduYekdbXKiCE2pQCR595f+XdlZIBibQcZyQSq0oXar?=
- =?us-ascii?Q?AsQt+nSRaZBIUjvBO2HD83m2amhJ0SO8HqjLTW4B9ljJiWdy7/HQ40KHdwx+?=
- =?us-ascii?Q?lo04pZqHMRuSr53SmRp+4JfbVGsyr8rjbrHoMi8gW59vGOHVxpZJ2w4LK5HZ?=
- =?us-ascii?Q?k5CnuD56A4Vuo0Ja6vdfLYL9GOyAZkhWH5qhGfMRro4YdV0KjYYdmCPOTUka?=
- =?us-ascii?Q?RY7sRTL3VDKzz4AXq2mrxXUl4+Hryi10YJqG9R3DH4/qsWg3PDC2+uaHSlY9?=
- =?us-ascii?Q?tImAHGxX9MkeADKDex0LJGOTG0ISQCXvGiVGwwTaQ8smQ76wwWtmZ2GM6MY3?=
- =?us-ascii?Q?Ljr0kkyTKFY7Nfp5VdwwH/fMTNXuFfWTEx2RBVrNsOodYeJtEFNK9zQLCx0f?=
- =?us-ascii?Q?wZN2RjJsqSDhZJNxcj/B9W9bPBA2ak+wPXwWJFzJcFFM/hmqpJ+xt0qWpV6F?=
- =?us-ascii?Q?KrZ9JeXG2o1gX0INGk2MJb5wzgEITvxjepSTzY/bIPwiNVWc2er2vDHeqaFY?=
- =?us-ascii?Q?tBYzHYYEI4JUG8fVOu0+H/49kLgRLRB0r4OPGgaAV+GGTfLorb7GGQQcU3SE?=
- =?us-ascii?Q?kFkaJx9wgykbqAt2bTcDYnHGNu9QciSgJuq3EA9SO25we9Pg/FPqzLGhibUE?=
- =?us-ascii?Q?BL8BQgPacvlSbFEaDJvX+DcB/gXb56lnuPa52R1Pp/HxgIuiKHdt3lBjjbg4?=
- =?us-ascii?Q?lfFFHNc0FBlomo9HQXEazG9Nw9JqQTVYVwN47m/l2+ocg6i37sk1t/jDCZt0?=
- =?us-ascii?Q?jAN0JzDu868/kvQNijxcrsOV?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S235395AbhEFQM2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 6 May 2021 12:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235246AbhEFQM2 (ORCPT
+        <rfc822;linux-remoteproc@vger.kernel.org>);
+        Thu, 6 May 2021 12:12:28 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E265C061761
+        for <linux-remoteproc@vger.kernel.org>; Thu,  6 May 2021 09:11:29 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id lj11-20020a17090b344bb029015bc3073608so3744709pjb.3
+        for <linux-remoteproc@vger.kernel.org>; Thu, 06 May 2021 09:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=joBZO2EuUGmN/P5upzQHQzAEiuX94k7ShmHvJ9FOemo=;
+        b=ZD6h9R+F4/uMQWTdK41klFKGncWIdr39EC1I0XnlWWb2kMqVfRP0piB6Reht3xWpzI
+         qsc/YzJ+ZEf7E31IAFWjBlpYXQtswOUNv0r8otDjCayOzMWkrjlWj7dfgoYpeGBoaHyt
+         2MyV78sRt17LSUWaSfrGg3XER3fjKGONW+bzptAJvULiMLkqB5ttbPESQEslGgaQh3tL
+         ELddIEPvT+knJaYrY8BS/OoEo/P32uLxg46f40ujDOzRnmXhBLF3NigTda9xSo2LqR24
+         jFV9oSfB6mP1gszI1ti+9KToOS6WT0TFVCMpkYd/GiW9cDCdLNcQIwaPyAq6Fy1HWQOy
+         Ck6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=joBZO2EuUGmN/P5upzQHQzAEiuX94k7ShmHvJ9FOemo=;
+        b=IanBxxLXPC89zyzRkgmVPWc3P0fQGVhk4C+e4Rcy5vg2jomQVCRMO7i3VC5yLgx/DK
+         B9obeEHe9CLUXE2hndWKYkXMX9jrudN/j4Amm4PZPayYZam6OXXrsBB0yjab0jNKo01z
+         gISNpSaBqqh9fMopqqW3nqenDlb3vF+erg1NxpGspZCx1XzuayYGN3JVeogkQXkiFeZd
+         RLF7tnOECDQwg17qdbCpVonpiUSwOCzrvnnmoO3LWNPY+eG6lCBJVbhHdIsuYy6Zl9Rq
+         ldr9LIBNk7Ixmt0yuQVGt6vvwWKa0+TYn8VKIBajxPjTkJOsy0rjdJGOruKgABj4TOyS
+         DkDA==
+X-Gm-Message-State: AOAM5306ufNW5us8SujwB8VWoVFHbynBMJ8lNwMuWlvw2m3ecPkHFgJ5
+        kIDoZryFoRXK+BS5WqgPOD6B2jCrnbov0g==
+X-Google-Smtp-Source: ABdhPJzObUur+TjQiT6SzsHBylqtcJ8knSBvnsqzTLAPKU54bXpp8bUj7Gt7vbmUASD20WyJfQiMuQ==
+X-Received: by 2002:a17:902:b683:b029:ee:f0e3:7a50 with SMTP id c3-20020a170902b683b02900eef0e37a50mr5549593pls.7.1620317488726;
+        Thu, 06 May 2021 09:11:28 -0700 (PDT)
+Received: from xps15 (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id b21sm2455098pfl.82.2021.05.06.09.11.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 May 2021 09:11:27 -0700 (PDT)
+Date:   Thu, 6 May 2021 10:11:25 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v3 5/6] rpmsg: char: Introduce a rpmsg driver for the
+ rpmsg char device
+Message-ID: <20210506161125.GA1804623@xps15>
+References: <20210429135507.8264-1-arnaud.pouliquen@foss.st.com>
+ <20210429135507.8264-6-arnaud.pouliquen@foss.st.com>
+ <20210505164159.GB1766375@xps15>
+ <5a41e653-4d75-c5d5-a8e3-e247a50507f3@foss.st.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB6PR0402MB2760.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0104854-1e9a-43a3-4075-08d9104510c1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 May 2021 04:11:46.7495
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: C4jLiuvXA+E6+FW18+YVN9hlgzAEweSs4n+2t9awwLPHUWbeLUteoT9CqoYivK7HJbf5MZDm2wqa4ed/quyt4w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0401MB2376
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5a41e653-4d75-c5d5-a8e3-e247a50507f3@foss.st.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-> Subject: Re: [PATCH V5 7/8] remoteproc: imx_rproc: support i.MX7ULP
->=20
-> On Wed, Apr 21, 2021 at 10:20:21AM +0800, peng.fan@oss.nxp.com wrote:
-> > From: Peng Fan <peng.fan@nxp.com>
-> >
-> > i.MX7ULP A7 core runs under control of M4 core, M4 core starts by ROM
-> > and powers most serivces used by A7 core, so A7 core has no power to
->=20
-> s/serivces/services
->=20
-> I pointed that out on V4 - why do I have to do so again?
+Good day,
 
-I forgot that comment, sorry. Thanks for your time.
+On Wed, May 05, 2021 at 08:25:24PM +0200, Arnaud POULIQUEN wrote:
+> Hi Mathieu,
+> 
+> On 5/5/21 6:41 PM, Mathieu Poirier wrote:
+> > Hi Arnaud,
+> > 
+> > On Thu, Apr 29, 2021 at 03:55:06PM +0200, Arnaud Pouliquen wrote:
+> >> A rpmsg char device allows to probe the endpoint device on a remote name
+> >> service announcement.
+> >>
+> >> With this patch the /dev/rpmsgX interface is created either by a user
+> >> application or by the remote firmware.
+> >>
+> >> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> >>
+> >> ---
+> >> update from V1:
+> >>
+> >>  - add missing unregister_rpmsg_driver call on module exit.
+> >> ---
+> >>  drivers/rpmsg/rpmsg_char.c | 53 +++++++++++++++++++++++++++++++++++++-
+> >>  1 file changed, 52 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> >> index 5c6a7da6e4d7..9166454c1310 100644
+> >> --- a/drivers/rpmsg/rpmsg_char.c
+> >> +++ b/drivers/rpmsg/rpmsg_char.c
+> >> @@ -18,6 +18,8 @@
+> >>  
+> >>  #include "rpmsg_char.h"
+> >>  
+> >> +#define RPMSG_CHAR_DEVNAME "rpmsg-raw"
+> >> +
+> >>  static dev_t rpmsg_major;
+> >>  static struct class *rpmsg_class;
+> >>  
+> >> @@ -413,6 +415,40 @@ int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent
+> >>  }
+> >>  EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
+> >>  
+> >> +static int rpmsg_chrdev_probe(struct rpmsg_device *rpdev)
+> >> +{
+> >> +	struct rpmsg_channel_info chinfo;
+> >> +
+> >> +	memcpy(chinfo.name, RPMSG_CHAR_DEVNAME, sizeof(RPMSG_CHAR_DEVNAME));
+> >> +	chinfo.src = rpdev->src;
+> >> +	chinfo.dst = rpdev->dst;
+> >> +
+> >> +	return __rpmsg_chrdev_eptdev_create(rpdev, &rpdev->dev, chinfo, true);
+> >> +}
+> >> +
+> >> +static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
+> >> +{
+> >> +	int ret;
+> >> +
+> >> +	ret = device_for_each_child(&rpdev->dev, NULL, rpmsg_chrdev_eptdev_destroy);
+> >> +	if (ret)
+> >> +		dev_warn(&rpdev->dev, "failed to destroy endpoints: %d\n", ret);
+> >> +}
+> >> +
+> >> +static struct rpmsg_device_id rpmsg_chrdev_id_table[] = {
+> >> +	{ .name	= RPMSG_CHAR_DEVNAME },
+> >> +	{ },
+> >> +};
+> >> +
+> >> +static struct rpmsg_driver rpmsg_chrdev_driver = {
+> >> +	.probe = rpmsg_chrdev_probe,
+> >> +	.remove = rpmsg_chrdev_remove,
+> >> +	.id_table = rpmsg_chrdev_id_table,
+> >> +	.drv = {
+> >> +		.name = "rpmsg_chrdev",
+> >> +	},
+> >> +};
+> > 
+> > The sole purpose of doing this is to create instances of rpmsg_chrdevs from the
+> > name service - but is it really needed?  Up to now and aside from GLINK and SMD,
+> > there asn't been other users of it so I'm wondering if it is worth going through
+> > all this trouble.
+> 
+> It is a good point.
+> 
+> Just as a reminder, the need of ST and, I assume, some other companies, is to
+> have a basic/generic communication channel to control a remote processor
+> application.
+> 
+> Nothing generic exists today for a virtio transport based implementation.
+> Companies have to create their own driver.
+> 
+> The purpose of my work is to allow our customer to use RPMsg without developing
+> a specific driver to control remote applications.
+> 
+> The rpmsg_chrdev char is a good candidate for this. No protocol, just a simple
+> inter-processor link to send and receive data. The rpmsg_tty is another one.
+> 
+> Focusing on the rpmsg_chrdev:
+> We did a part of the work with the first patch set that would be in 5.13.
+> But is it simple to use it for virtio transport based platforms?
+> If we don't implement the NS announcement support in rpmsg_chrdev, using
+> rpmsg_chrdev for a user application seems rather tricky.
+> How to instantiate the communication?
 
-Thanks,
-Peng.
+Since we already have /dev/rpmsg_ctrlX user space can instantiate an rpmsg_chrdev
+using that interface, which is how things are done in the GLINK/SMD world.
 
->=20
-> With that:
->=20
-> Reviwed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
->=20
-> > start and stop M4 core. And the M4 core's state is default
-> > RPROC_DETACHED and remoteproc framework not able to stop the M4
-> core.
-> >
-> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> > ---
-> >  drivers/remoteproc/imx_rproc.c | 49
-> > ++++++++++++++++++++++++++--------
-> >  1 file changed, 38 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/drivers/remoteproc/imx_rproc.c
-> > b/drivers/remoteproc/imx_rproc.c index e9d9860e4fce..d26254609a52
-> > 100644
-> > --- a/drivers/remoteproc/imx_rproc.c
-> > +++ b/drivers/remoteproc/imx_rproc.c
-> > @@ -136,6 +136,14 @@ static const struct imx_rproc_att
-> imx_rproc_att_imx8mq[] =3D {
-> >  	{ 0x40000000, 0x40000000, 0x80000000, 0 },  };
-> >
-> > +static const struct imx_rproc_att imx_rproc_att_imx7ulp[] =3D {
-> > +	{0x1FFD0000, 0x1FFD0000, 0x30000, ATT_OWN},
-> > +	{0x20000000, 0x20000000, 0x10000, ATT_OWN},
-> > +	{0x2F000000, 0x2F000000, 0x20000, ATT_OWN},
-> > +	{0x2F020000, 0x2F020000, 0x20000, ATT_OWN},
-> > +	{0x60000000, 0x60000000, 0x40000000, 0} };
-> > +
-> >  static const struct imx_rproc_att imx_rproc_att_imx7d[] =3D {
-> >  	/* dev addr , sys addr  , size	    , flags */
-> >  	/* OCRAM_S (M4 Boot code) - alias */ @@ -196,6 +204,12 @@ static
-> > const struct imx_rproc_dcfg imx_rproc_cfg_imx8mq =3D {
-> >  	.method		=3D IMX_RPROC_MMIO,
-> >  };
-> >
-> > +static const struct imx_rproc_dcfg imx_rproc_cfg_imx7ulp =3D {
-> > +	.att		=3D imx_rproc_att_imx7ulp,
-> > +	.att_size	=3D ARRAY_SIZE(imx_rproc_att_imx7ulp),
-> > +	.method		=3D IMX_RPROC_NONE,
-> > +};
-> > +
-> >  static const struct imx_rproc_dcfg imx_rproc_cfg_imx7d =3D {
-> >  	.src_reg	=3D IMX7D_SRC_SCR,
-> >  	.src_mask	=3D IMX7D_M4_RST_MASK,
-> > @@ -238,6 +252,9 @@ static int imx_rproc_stop(struct rproc *rproc)
-> >  	struct device *dev =3D priv->dev;
-> >  	int ret;
-> >
-> > +	if (dcfg->method =3D=3D IMX_RPROC_NONE)
-> > +		return -EOPNOTSUPP;
-> > +
-> >  	ret =3D regmap_update_bits(priv->regmap, dcfg->src_reg,
-> >  				 dcfg->src_mask, dcfg->src_stop);
-> >  	if (ret)
-> > @@ -573,12 +590,31 @@ static void imx_rproc_free_mbox(struct rproc
-> > *rproc)
-> >
-> >  static int imx_rproc_detect_mode(struct imx_rproc *priv)  {
-> > +	struct regmap_config config =3D { .name =3D "imx-rproc" };
-> >  	const struct imx_rproc_dcfg *dcfg =3D priv->dcfg;
-> >  	struct device *dev =3D priv->dev;
-> > +	struct regmap *regmap;
-> >  	int ret;
-> >  	u32 val;
-> >
-> > -	ret =3D regmap_read(priv->regmap, dcfg->src_reg, &val);
-> > +	switch (dcfg->method) {
-> > +	case IMX_RPROC_NONE:
-> > +		priv->rproc->state =3D RPROC_DETACHED;
-> > +		return 0;
-> > +	default:
-> > +		break;
-> > +	}
-> > +
-> > +	regmap =3D syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
-> > +	if (IS_ERR(regmap)) {
-> > +		dev_err(dev, "failed to find syscon\n");
-> > +		return PTR_ERR(regmap);
-> > +	}
-> > +
-> > +	priv->regmap =3D regmap;
-> > +	regmap_attach_dev(dev, regmap, &config);
-> > +
-> > +	ret =3D regmap_read(regmap, dcfg->src_reg, &val);
-> >  	if (ret) {
-> >  		dev_err(dev, "Failed to read src\n");
-> >  		return ret;
-> > @@ -625,18 +661,9 @@ static int imx_rproc_probe(struct platform_device
-> *pdev)
-> >  	struct device_node *np =3D dev->of_node;
-> >  	struct imx_rproc *priv;
-> >  	struct rproc *rproc;
-> > -	struct regmap_config config =3D { .name =3D "imx-rproc" };
-> >  	const struct imx_rproc_dcfg *dcfg;
-> > -	struct regmap *regmap;
-> >  	int ret;
-> >
-> > -	regmap =3D syscon_regmap_lookup_by_phandle(np, "syscon");
-> > -	if (IS_ERR(regmap)) {
-> > -		dev_err(dev, "failed to find syscon\n");
-> > -		return PTR_ERR(regmap);
-> > -	}
-> > -	regmap_attach_dev(dev, regmap, &config);
-> > -
-> >  	/* set some other name then imx */
-> >  	rproc =3D rproc_alloc(dev, "imx-rproc", &imx_rproc_ops,
-> >  			    NULL, sizeof(*priv));
-> > @@ -651,7 +678,6 @@ static int imx_rproc_probe(struct platform_device
-> > *pdev)
-> >
-> >  	priv =3D rproc->priv;
-> >  	priv->rproc =3D rproc;
-> > -	priv->regmap =3D regmap;
-> >  	priv->dcfg =3D dcfg;
-> >  	priv->dev =3D dev;
-> >
-> > @@ -720,6 +746,7 @@ static int imx_rproc_remove(struct platform_device
-> > *pdev)  }
-> >
-> >  static const struct of_device_id imx_rproc_of_match[] =3D {
-> > +	{ .compatible =3D "fsl,imx7ulp-cm4", .data =3D &imx_rproc_cfg_imx7ulp=
- },
-> >  	{ .compatible =3D "fsl,imx7d-cm4", .data =3D &imx_rproc_cfg_imx7d },
-> >  	{ .compatible =3D "fsl,imx6sx-cm4", .data =3D &imx_rproc_cfg_imx6sx }=
-,
-> >  	{ .compatible =3D "fsl,imx8mq-cm4", .data =3D &imx_rproc_cfg_imx8mq }=
-,
-> > --
-> > 2.30.0
-> >
+Wouldn't that cover the usecases you had in mind?
+
+As you pointed out above rpmsg_chrdev should be light and simple - eliminating
+patches 4, 5 and 6 would yield that.
+
+> The application will probably has to scan the /sys/bus/rpmsg/devices/ folder to
+> determine the services and associated remote address.
+> 
+> I don't think the QCOM drivers have the same problem because they seems to
+> initiate the communication and work directly with the RPMsg endpoints ( new
+> channel creation on endpoint creation) while Virtio works with the RPMsg channel.
+> 
+> By introducing the ability to instantiate rpmsg_chrdevs through the NS
+> announcement, we make this easy for applications to use.
+> 
+> And without rpmsg_chrdevs instantiation, It also means that we can't create an
+> RPMsg channel for the rpmsg_chrdevs using a new RPMSG_CREATE_DEV_IOCTL control,
+> right?
+> 
+> That said, If we consider that the aim was only to extract the rpmsg_ctrl part,
+> I'm not against leaving the rpmsg_char in this state and switching to the
+> rpmsg_tty driver upstream including the work on the rpmsg_ctrl to create rpmsg
+> channels.
+> 
+> We could come back on this if requested by someone else.
+> 
+> Thanks,
+> Arnaud
+> 
+> > 
+> > As such I suggest we don't go out of our way to expose rpmsg_chrdevs to the name
+> > service.  That way patches 4, 5 and 6 of this set can be dropped.
+> > 
+> > Thanks,
+> > Mathieu
+> > 
+> >> +
+> >>  static int rpmsg_chrdev_init(void)
+> >>  {
+> >>  	int ret;
+> >> @@ -427,15 +463,30 @@ static int rpmsg_chrdev_init(void)
+> >>  	if (IS_ERR(rpmsg_class)) {
+> >>  		pr_err("failed to create rpmsg class\n");
+> >>  		unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+> >> -		return PTR_ERR(rpmsg_class);
+> >> +		ret = PTR_ERR(rpmsg_class);
+> >> +		goto free_region;
+> >> +	}
+> >> +
+> >> +	ret = register_rpmsg_driver(&rpmsg_chrdev_driver);
+> >> +	if (ret < 0) {
+> >> +		pr_err("rpmsg: failed to register rpmsg raw driver\n");
+> >> +		goto free_class;
+> >>  	}
+> >>  
+> >>  	return 0;
+> >> +
+> >> +free_class:
+> >> +	class_destroy(rpmsg_class);
+> >> +free_region:
+> >> +	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+> >> +
+> >> +	return ret;
+> >>  }
+> >>  postcore_initcall(rpmsg_chrdev_init);
+> >>  
+> >>  static void rpmsg_chrdev_exit(void)
+> >>  {
+> >> +	unregister_rpmsg_driver(&rpmsg_chrdev_driver);
+> >>  	class_destroy(rpmsg_class);
+> >>  	unregister_chrdev_region(rpmsg_major, RPMSG_DEV_MAX);
+> >>  }
+> >> -- 
+> >> 2.17.1
+> >>
