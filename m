@@ -2,63 +2,74 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AEC375C5A
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  6 May 2021 22:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AADC8375CB7
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  6 May 2021 23:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbhEFUrD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 6 May 2021 16:47:03 -0400
-Received: from smtp01.smtpout.orange.fr ([80.12.242.123]:29580 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbhEFUrD (ORCPT
+        id S229796AbhEFVSn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 6 May 2021 17:18:43 -0400
+Received: from mail-41103.protonmail.ch ([185.70.41.103]:28963 "EHLO
+        mail-41103.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229572AbhEFVSm (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 6 May 2021 16:47:03 -0400
-Received: from localhost.localdomain ([86.243.172.93])
-        by mwinf5d54 with ME
-        id 1Ym32500121Fzsu03Ym3uY; Thu, 06 May 2021 22:46:04 +0200
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 06 May 2021 22:46:04 +0200
-X-ME-IP: 86.243.172.93
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, s-anna@ti.com
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] remoteproc: k3-r5: Fix an error message
-Date:   Thu,  6 May 2021 22:46:01 +0200
-Message-Id: <d6e29d903b48957bf59c67229d54b0fc215e31ae.1620333870.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.30.2
+        Thu, 6 May 2021 17:18:42 -0400
+Received: from mail-02.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        by mail-41103.protonmail.ch (Postfix) with ESMTPS id 4Fbmd30Cxpz4wy4c
+        for <linux-remoteproc@vger.kernel.org>; Thu,  6 May 2021 21:17:43 +0000 (UTC)
+Authentication-Results: mail-41103.protonmail.ch;
+        dkim=pass (1024-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="tly7cjq4"
+Date:   Thu, 06 May 2021 21:17:34 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1620335858;
+        bh=WbErNjctHFDeme6xYOOtYWUvtSVdvDm3QyjUvzqlOV8=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=tly7cjq45DGKYenjoeYa32Qj3TY8BscAKPwFP96TIc9zq8K5amMwzS2W8eeq8dbiq
+         0k20FmTzwXoA8lZ19eR0DKzAMAt1ucePbuQFqy5fhWLDS836w4/A0CubZQLS8czTCN
+         nBk6FPlNqfWuwQiCLQoQ7AhuhrPryyVCj4f8Defg=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH 0/3] msm8996: Add qcom_q6v5_pas power domains
+Message-ID: <5JzviCPueYdcC0mDxsTnsVrkpfSjvvZ1QR0o8bMMEs@cp4-web-040.plabs.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-'ret' is known to be 0 here.
-Reorder the code so that the expected error code is printed.
+This patchset adds power domains required by ADSP and SLPI.
 
-Fixes: 6dedbd1d5443 ("remoteproc: k3-r5: Add a remoteproc driver for R5F subsystem")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/remoteproc/ti_k3_r5_remoteproc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yassine Oudjana (3):
+  remoteproc: qcom: pas: Use the same init resources for MSM8996 and
+    MSM8998
+  dt-bindings: remoteproc: qcom: pas: Add power domains for MSM8996
+  arm64: dts: qcom: msm8996: Disable ADSP and add power domains
 
-diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-index 5cf8d030a1f0..4104e4846dbf 100644
---- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-@@ -1272,9 +1272,9 @@ static int k3_r5_core_of_init(struct platform_device *pdev)
- 
- 	core->tsp = k3_r5_core_of_get_tsp(dev, core->ti_sci);
- 	if (IS_ERR(core->tsp)) {
-+		ret = PTR_ERR(core->tsp);
- 		dev_err(dev, "failed to construct ti-sci proc control, ret = %d\n",
- 			ret);
--		ret = PTR_ERR(core->tsp);
- 		goto err;
- 	}
- 
--- 
-2.30.2
+ .../devicetree/bindings/remoteproc/qcom,adsp.yaml |  2 ++
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dtsi      |  4 ++++
+ arch/arm64/boot/dts/qcom/msm8996.dtsi             |  6 ++++++
+ drivers/remoteproc/qcom_q6v5_pas.c                | 15 ++-------------
+ 4 files changed, 14 insertions(+), 13 deletions(-)
+
+--=20
+2.31.1
+
 
