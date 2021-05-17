@@ -2,166 +2,76 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 557C9383AF8
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 17 May 2021 19:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 136E4386B9C
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 17 May 2021 22:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236130AbhEQRRM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 17 May 2021 13:17:12 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:39230 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236154AbhEQRRL (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 17 May 2021 13:17:11 -0400
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14HHFrU3027860;
-        Mon, 17 May 2021 19:15:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=+F7Xr6qALoUxqaGq+sgbE7ucOObFrRnc+ROq2YE54Ps=;
- b=YPl5wR5s55za35JFay4p4jeW6guPH60OZ4Ng4vHNsIDZwhMdXkww8DL4DyEMtqo0N7Ew
- 5wZdDMBDQ/rJMlDnkUtr3nCf27YibjVc2VdpCcgz9OYcVrOHYkguLdj9fTZgbKtb9tEO
- MW11401SDgBJM7yZD6qNQK4SfnlSlSEC2SupnTH1oMw2BlDwaqG1seUD7l2HkK+yz5A/
- 1740EmfTO1wjJux9Lvayi9dZYHR4tquYjV9Arp9boWHUYj5Xgw2QE8BqvyZ/YA1zraEB
- ZJ5dDCssNFXZkEdxauIQR8g8keqFrfsoVQRqfrlkOQXsuG2Z8tPjsnrmu0mOtsCJpulC 0w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 38k5dq63xn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 17 May 2021 19:15:53 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EDEDF100039;
-        Mon, 17 May 2021 19:15:45 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E39AD212FAB;
-        Mon, 17 May 2021 19:15:45 +0200 (CEST)
-Received: from localhost (10.75.127.50) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 17 May 2021 19:15:45
- +0200
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH v4 4/4] rpmsg: Update rpmsg_chrdev_register_device function
-Date:   Mon, 17 May 2021 19:15:31 +0200
-Message-ID: <20210517171531.21205-5-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210517171531.21205-1-arnaud.pouliquen@foss.st.com>
-References: <20210517171531.21205-1-arnaud.pouliquen@foss.st.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-17_08:2021-05-17,2021-05-17 signatures=0
+        id S244374AbhEQUrd (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 17 May 2021 16:47:33 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:53033 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244292AbhEQUrd (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Mon, 17 May 2021 16:47:33 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1621284376; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=4SGrzUY934ekLMWc7G4RlWFCO0gM3MOAxtdWYLTL6i0=; b=PYOVL+OdTDdQCmwcEhci/WT6IYG66poOW4eMnwgd5+hkK3t5x5uX/LqTprimQV/mod/0QetU
+ rxiGDNz4acC7dKAfDl+nS0DOrlI2NnXAcrnMkuhyA9rbqyqUn0mqle5hI7ke3itqtXYyPwFG
+ YzYKv3H0r6JXa56RcQmBQI5AANw=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 60a2d60d60c53c8c9dec132b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 17 May 2021 20:46:05
+ GMT
+Sender: sidgup=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8344CC4323A; Mon, 17 May 2021 20:46:04 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from sidgup-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sidgup)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8A7C4C433F1;
+        Mon, 17 May 2021 20:46:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 8A7C4C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sidgup@codeaurora.org
+From:   Siddharth Gupta <sidgup@codeaurora.org>
+To:     bjorn.andersson@linaro.org, ohad@wizery.com,
+        linux-remoteproc@vger.kernel.org
+Cc:     Siddharth Gupta <sidgup@codeaurora.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, psodagud@codeaurora.org,
+        stable@vger.kernel.org
+Subject: [PATCH 0/3] remoteproc: core: Fixes for rproc cdev and add
+Date:   Mon, 17 May 2021 13:45:46 -0700
+Message-Id: <1621284349-22752-1-git-send-email-sidgup@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The rpmsg_chrdev driver has been replaced by the rpmsg_ctrl driver
-for the /dev/rpmsg_ctrlX devices management. The reference for the
-driver override is now the rpmsg_ctrl.
+This patch series contains stability fixes and error handling for remoteproc.
 
-Update the rpmsg_chrdev_register_device function to reflect the update,
-and rename the function to use the rpmsg_ctrldev prefix.
+The changes included in this series do the following:
+Patch 1: Fixes the creation of the rproc character device.
+Patch 2: Validates rproc as the first step of rproc_add().
+Patch 3: Adds error handling in rproc_add().
 
-The platform drivers are updated accordingly.
+Siddharth Gupta (3):
+  remoteproc: core: Move cdev add before device add
+  remoteproc: core: Move validate before device add
+  remoteproc: core: Cleanup device in case of failure
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+ drivers/remoteproc/remoteproc_core.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
----
-Update from V3:
-- s/rpmsg_chrdev_register_device/rpmsg_ctrldev_register_device in
-  header comment.
----
- drivers/rpmsg/qcom_glink_native.c | 2 +-
- drivers/rpmsg/qcom_smd.c          | 2 +-
- drivers/rpmsg/rpmsg_ctrl.c        | 2 +-
- drivers/rpmsg/rpmsg_internal.h    | 8 ++++----
- drivers/rpmsg/virtio_rpmsg_bus.c  | 2 +-
- 5 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-index 05533c71b10e..7d7e809800ec 100644
---- a/drivers/rpmsg/qcom_glink_native.c
-+++ b/drivers/rpmsg/qcom_glink_native.c
-@@ -1642,7 +1642,7 @@ static int qcom_glink_create_chrdev(struct qcom_glink *glink)
- 	rpdev->dev.parent = glink->dev;
- 	rpdev->dev.release = qcom_glink_device_release;
- 
--	return rpmsg_chrdev_register_device(rpdev);
-+	return rpmsg_ctrldev_register_device(rpdev);
- }
- 
- struct qcom_glink *qcom_glink_native_probe(struct device *dev,
-diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
-index 8da1b5cb31b3..d223e438d17c 100644
---- a/drivers/rpmsg/qcom_smd.c
-+++ b/drivers/rpmsg/qcom_smd.c
-@@ -1113,7 +1113,7 @@ static int qcom_smd_create_chrdev(struct qcom_smd_edge *edge)
- 	qsdev->rpdev.dev.parent = &edge->dev;
- 	qsdev->rpdev.dev.release = qcom_smd_release_device;
- 
--	return rpmsg_chrdev_register_device(&qsdev->rpdev);
-+	return rpmsg_ctrldev_register_device(&qsdev->rpdev);
- }
- 
- /*
-diff --git a/drivers/rpmsg/rpmsg_ctrl.c b/drivers/rpmsg/rpmsg_ctrl.c
-index 87a1746367eb..eeb1708548c1 100644
---- a/drivers/rpmsg/rpmsg_ctrl.c
-+++ b/drivers/rpmsg/rpmsg_ctrl.c
-@@ -179,7 +179,7 @@ static struct rpmsg_driver rpmsg_ctrldev_driver = {
- 	.probe = rpmsg_ctrldev_probe,
- 	.remove = rpmsg_ctrldev_remove,
- 	.drv = {
--		.name = "rpmsg_chrdev",
-+		.name = "rpmsg_ctrl",
- 	},
- };
- 
-diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-index a76c344253bf..d6056f09bcd8 100644
---- a/drivers/rpmsg/rpmsg_internal.h
-+++ b/drivers/rpmsg/rpmsg_internal.h
-@@ -82,16 +82,16 @@ struct rpmsg_device *rpmsg_create_channel(struct rpmsg_device *rpdev,
- int rpmsg_release_channel(struct rpmsg_device *rpdev,
- 			  struct rpmsg_channel_info *chinfo);
- /**
-- * rpmsg_chrdev_register_device() - register chrdev device based on rpdev
-+ * rpmsg_ctrldev_register_device() - register a char device for control based on rpdev
-  * @rpdev:	prepared rpdev to be used for creating endpoints
-  *
-  * This function wraps rpmsg_register_device() preparing the rpdev for use as
-  * basis for the rpmsg chrdev.
-  */
--static inline int rpmsg_chrdev_register_device(struct rpmsg_device *rpdev)
-+static inline int rpmsg_ctrldev_register_device(struct rpmsg_device *rpdev)
- {
--	strcpy(rpdev->id.name, "rpmsg_chrdev");
--	rpdev->driver_override = "rpmsg_chrdev";
-+	strcpy(rpdev->id.name, "rpmsg_ctrl");
-+	rpdev->driver_override = "rpmsg_ctrl";
- 
- 	return rpmsg_register_device(rpdev);
- }
-diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 8e49a3bacfc7..e42234a3e2ab 100644
---- a/drivers/rpmsg/virtio_rpmsg_bus.c
-+++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-@@ -840,7 +840,7 @@ static struct rpmsg_device *rpmsg_virtio_add_ctrl_dev(struct virtio_device *vdev
- 	rpdev_ctrl->dev.release = virtio_rpmsg_release_device;
- 	rpdev_ctrl->little_endian = virtio_is_little_endian(vrp->vdev);
- 
--	err = rpmsg_chrdev_register_device(rpdev_ctrl);
-+	err = rpmsg_ctrldev_register_device(rpdev_ctrl);
- 	if (err) {
- 		kfree(vch);
- 		return ERR_PTR(err);
 -- 
-2.17.1
+Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
