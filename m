@@ -2,197 +2,159 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F4B38CF30
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 21 May 2021 22:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579EA38D233
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 22 May 2021 02:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbhEUUmW (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 21 May 2021 16:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbhEUUmV (ORCPT
+        id S230017AbhEVAFD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 21 May 2021 20:05:03 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:58096 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230190AbhEVAE7 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 21 May 2021 16:42:21 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BED1C061574
-        for <linux-remoteproc@vger.kernel.org>; Fri, 21 May 2021 13:40:57 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id s4so10044562plg.12
-        for <linux-remoteproc@vger.kernel.org>; Fri, 21 May 2021 13:40:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LifjFlNevEXf+WuKNhiQrz3mqG/Jd9zYX3dDwRq7SGk=;
-        b=WCaKMjCsxiNGPZhMpMhVU+dPqE4x64hY/0Q7f9YFw6kUF+nlWrIZRB4A0iTRNNISbp
-         teG/wWKXFuvqlcTXIzIseoGpjJd/fWkFMTQDHv1srK6OEtQtYOYI34Vk0HeF7llHWa0e
-         d8SLV49fKteEREhUmvRzjV0I+Z8HEDPO/n6Q6nWUOpyjiX/aC5ZsdOJlrSWuQh29ms40
-         HTEfArJFtY8IMdY/ooVcNzb31so73/cXORp9jXo34QFD+NuPICLBsFXNvDlQZeYlUwCC
-         7XQYZbN9T4ziR1vFqKfMcjhKewTYLCVJIRQte5lCUSglut+uCKf2tSM5bzpl7fK1xgR4
-         4x2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LifjFlNevEXf+WuKNhiQrz3mqG/Jd9zYX3dDwRq7SGk=;
-        b=q4GoOj2TCjFxzuhuBU0/xZtpmncQwNsfnwLpfB5AXmGRO47lm/YcXB80zAm39Ti+xN
-         T97bWK2E7rDfpJMHS1HXi4tZ3fgxwItD6OoU8UM+62sZHHRo3ERDCdBm9T7MYor59QVT
-         KbOZ0tBZ7vGCxjWn+5Eo14mLSKxrDOFU0zDFpiNuTj1+gefUMQF6iv+qb8HkQKdBPfFv
-         3gkMcxAdTeqG2hMwhdrn/cDJDWYV0Gnj/eQQgEln8N4HiBMB/ExrqilEEDJEWBkDZS9Q
-         CfoeNMGiCcjrWOYd3oyM4R4t62OA7HBan8aF/c5tQ/oCU2jiho65LN5aeW8tqHoPC0X4
-         q4aA==
-X-Gm-Message-State: AOAM533U4LKz8abR8AT7KKYJb4vyuzfRV97+u8SJM9OmIOEh5+EYKILI
-        HR2apsXZqDAyI20ZaGVQMYeqtg==
-X-Google-Smtp-Source: ABdhPJxoCN0sZ9yBL76WTujQukSyTuxAZKG4LMMR29tS9iSt6lYMoSjrF+QXe4OKP2DdBPh2ERv24w==
-X-Received: by 2002:a17:902:34f:b029:ef:3d14:1c27 with SMTP id 73-20020a170902034fb02900ef3d141c27mr14083008pld.65.1621629656594;
-        Fri, 21 May 2021 13:40:56 -0700 (PDT)
-Received: from xps15 (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id d10sm4878429pfo.65.2021.05.21.13.40.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 May 2021 13:40:55 -0700 (PDT)
-Date:   Fri, 21 May 2021 14:40:53 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Suman Anna <s-anna@ti.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: remoteproc: k3-r5f: Update bindings
- for AM64x SoCs
-Message-ID: <20210521204053.GA1011163@xps15>
-References: <20210327143117.1840-1-s-anna@ti.com>
- <20210327143117.1840-2-s-anna@ti.com>
- <8948a30c-1a2f-1fb0-05bb-37be9c02c5d5@ti.com>
- <ff8edffb-d926-9641-740b-2c292139aa07@ti.com>
+        Fri, 21 May 2021 20:04:59 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14M03L1e026975;
+        Fri, 21 May 2021 19:03:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1621641801;
+        bh=/Dda2Enr1NOVMTMDbxwZnH3VUCymyUFTjOOqOuep2F8=;
+        h=From:To:CC:Subject:Date;
+        b=rFBkXQ+1XeD16j0IM3K1PAFz/PXq0Gc+ozhJJ1s7pEy6TPVsBjWBdT8MqploQKSLC
+         XYr9W6UgFuHI+8rreChjr/Tp3zsR6rW+p1Dle1kg/UyczYd0a+X67G1F9HsASVfUr0
+         BKW7QiWyhxPmueWrb9jywzbV578eRadvo0lx4j0U=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14M03LQP123688
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 21 May 2021 19:03:21 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 21
+ May 2021 19:03:21 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Fri, 21 May 2021 19:03:21 -0500
+Received: from fllv0103.dal.design.ti.com (fllv0103.dal.design.ti.com [10.247.120.73])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14M03LsE113279;
+        Fri, 21 May 2021 19:03:21 -0500
+Received: from localhost ([10.250.35.153])
+        by fllv0103.dal.design.ti.com (8.14.7/8.14.7) with ESMTP id 14M03LMI091510;
+        Fri, 21 May 2021 19:03:21 -0500
+From:   Suman Anna <s-anna@ti.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Lokesh Vutla <lokeshvutla@ti.com>, Tero Kristo <kristo@kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Suman Anna <s-anna@ti.com>
+Subject: [PATCH 0/6] K3 R5F & DSP IPC-only mode support
+Date:   Fri, 21 May 2021 19:03:03 -0500
+Message-ID: <20210522000309.26134-1-s-anna@ti.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ff8edffb-d926-9641-740b-2c292139aa07@ti.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi suman,
+Hi All,
 
-On Wed, May 12, 2021 at 09:47:44PM -0500, Suman Anna wrote:
-> Hi Rob,
-> 
-> On 4/19/21 8:55 AM, Suman Anna wrote:
-> > Hi Rob,
-> > 
-> > On 3/27/21 9:31 AM, Suman Anna wrote:
-> >> The K3 AM64x SoCs have two dual-core Arm R5F clusters/subsystems, with
-> >> 2 R5F cores each, both in the MAIN voltage domain.
-> >>
-> >> These clusters are a revised IP version compared to those present on
-> >> J721E and J7200 SoCs, and supports a new "Single-CPU" mode instead of
-> >> LockStep mode. Update the K3 R5F remoteproc bindings with the compatible
-> >> info relevant to these R5F clusters/subsystems on K3 AM64x SoCs.
-> >>
-> >> Signed-off-by: Suman Anna <s-anna@ti.com>
-> >> ---
-> >> v2: No changes
-> >>
-> >>  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml  | 31 ++++++++++++++++---
-> > 
-> > Looks like this patch has fallen through the cracks, can you please review and
-> > give your ack for this patch so that Bjorn can pick up the series for 5.13?
-> 
-> Gentle reminder, do you have any comments on this patch. Appreciate your ack so
-> that we can get this in for 5.14?
+The following series adds the IPC-only mode support for the TI K3 R5F
+and DSP (C66x and C71x) remoteprocs covering AM65x, J721E, J7200 and
+AM64x SoCs. Patches are on top of 5.13-rc1 + Minor remoteproc cleanup
+series [1] + TI K3 R5F remoteproc support on AM64x series [2].
 
-If memory serves me well Rob indicated that he would not review or comment on
-bindings related to multi-core remote processors.  On the flip side he also
-mentioned that he would not object to their presence.  And since this is an
-increment to an existing binding rather than a new one, I think it is fair for
-us to pick it up.  
+The 'IPC-only' mode terminology essentially means establishing only the
+IPC rpmsg stack for remoteprocs that are booted early by bootloaders and
+supporting only 'attach' and 'detach' of the remoteprocs. The existing
+remoteproc infrastructure does support 'stop' of an early-booted remote
+processor, and the TI K3 remoteprocs are intentionally being limited to
+'detach', and are designed to only establish and tear apart IPC (the 
+virtio devices that provide the IPC transport) without ever shutting
+down the core. This is done by introducing a new flag in remoteproc core
+in Patch 2. Support for the regular 'stop' can be enhanced in the future
+easily by adding a new sysfs or configfs file that changes this flag,
+but IPC-only is the expected usage model for now on K3 SoCs.
 
-Rob - please intervene if my recollections are not accurate and accept my honest
-apologies.  Otherwise: 
+Following is a summary of some of the design details:
+ - The TI K3 SoCs use a dedicated system processor for Power and Clocks
+   and the IPC-only mode is detected by communicating with this central
+   processor and checking on the power status of remoteprocs.
+ - The driver support is provided through the recently added .attach(),
+  .detach() and .get_loaded_rsc_table() rproc ops, and new RPROC_ATTACHED
+   and RPROC_DETACHED state flags.
+ - The default kernel dts cluster modes and TCM configuration for R5Fs
+   are ignored and overridden by querying this config from the system
+   processor in IPC-only mode. Any core not booted earlier will fall back
+   to using the kernel dts (eg: R5F Core0 can be booted by bootloader, and
+   R5F Core1 will be booted using kernel).
+ - The remoteproc firmwares are not loaded again in kernel to retrieve
+   the resource table. This allows early-boot to be done from different
+   boot media such as OSPI or eMMC, and be completely independent of the
+   rootfs in SDCard or NFS.
+ - The IPC-only mode support follows a design-by-contract (DBC) approach
+   to achieve the above. The resource tables are always expected to be at
+   the base on the DDR memory region reserved for firmwares (base of the
+   second memory-region property in the remoteproc dts node). This also
+   eliminates the need for dts properties being dynamically updated to
+   provide the resource table address (there are no dedicated h/w
+   registers either like with the ST SoCs). This scales to designs where
+   either U-Boot is not involved or a different processor is used to
+   load the various remoteprocs.
+ - The "stop" command results in a failure when the remoteproc is in
+   IPC-only mode, and "detach" serves as the corresponding replacement.
+   Note that there is no equivalent "attach" command, and "start" command
+   also serves as "attach" for remoteprocs that are in detached state.
+ - The remoteproc sysfs 'state' file shows the mode as "detached"
+   when the early-booted remoteproc is detached. "offline" continues
+   to be shown when the remoteproc is powered off.
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>  
+Following is the summary of patches:
+ - Patch 1 is a minor cleanup patch in remoteproc core to make the 
+   helper functions look symmetric.
+ - Patch 2 introduces a new flag 'detach_on_shutdown' and enhances
+   the remoteproc core to restrict stop on early-booted remoteprocs.
+   This patch provides the required behavior for K3 IPC-only mode (no
+   stopping of early-booted rprocs). The default behavior continues
+   to support stopping of remoteproc like with the existing code.
+ - Patches 3 and 5 refactor the mailbox request code out of start
+   for reuse in the new attach callbacks.
+ - Patch 4 adds the IPC-only mode support for R5F.
+ - Patch 6 adds the IPC-only mode support for both K3 C66x and C71x
+   DSPs.
 
-> 
-> regards
-> Suman
-> 
-> > 
-> > regards
-> > Suman
-> > 
-> >>  1 file changed, 26 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-> >> index d905d614502b..130fbaacc4b1 100644
-> >> --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-> >> +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-> >> @@ -14,8 +14,12 @@ description: |
-> >>    processor subsystems/clusters (R5FSS). The dual core cluster can be used
-> >>    either in a LockStep mode providing safety/fault tolerance features or in a
-> >>    Split mode providing two individual compute cores for doubling the compute
-> >> -  capacity. These are used together with other processors present on the SoC
-> >> -  to achieve various system level goals.
-> >> +  capacity on most SoCs. These are used together with other processors present
-> >> +  on the SoC to achieve various system level goals.
-> >> +
-> >> +  AM64x SoCs do not support LockStep mode, but rather a new non-safety mode
-> >> +  called "Single-CPU" mode, where only Core0 is used, but with ability to use
-> >> +  Core1's TCMs as well.
-> >>  
-> >>    Each Dual-Core R5F sub-system is represented as a single DTS node
-> >>    representing the cluster, with a pair of child DT nodes representing
-> >> @@ -33,6 +37,7 @@ properties:
-> >>        - ti,am654-r5fss
-> >>        - ti,j721e-r5fss
-> >>        - ti,j7200-r5fss
-> >> +      - ti,am64-r5fss
-> >>  
-> >>    power-domains:
-> >>      description: |
-> >> @@ -56,11 +61,12 @@ properties:
-> >>  
-> >>    ti,cluster-mode:
-> >>      $ref: /schemas/types.yaml#/definitions/uint32
-> >> -    enum: [0, 1]
-> >>      description: |
-> >>        Configuration Mode for the Dual R5F cores within the R5F cluster.
-> >> -      Should be either a value of 1 (LockStep mode) or 0 (Split mode),
-> >> -      default is LockStep mode if omitted.
-> >> +      Should be either a value of 1 (LockStep mode) or 0 (Split mode) on
-> >> +      most SoCs (AM65x, J721E, J7200), default is LockStep mode if omitted;
-> >> +      and should be either a value of 0 (Split mode) or 2 (Single-CPU mode)
-> >> +      on AM64x SoCs, default is Split mode if omitted.
-> >>  
-> >>  # R5F Processor Child Nodes:
-> >>  # ==========================
-> >> @@ -97,6 +103,7 @@ patternProperties:
-> >>            - ti,am654-r5f
-> >>            - ti,j721e-r5f
-> >>            - ti,j7200-r5f
-> >> +          - ti,am64-r5f
-> >>  
-> >>        reg:
-> >>          items:
-> >> @@ -198,6 +205,20 @@ patternProperties:
-> >>  
-> >>      unevaluatedProperties: false
-> >>  
-> >> +if:
-> >> +  properties:
-> >> +    compatible:
-> >> +      enum:
-> >> +        - ti,am64-r5fss
-> >> +then:
-> >> +  properties:
-> >> +    ti,cluster-mode:
-> >> +      enum: [0, 2]
-> >> +else:
-> >> +  properties:
-> >> +    ti,cluster-mode:
-> >> +      enum: [0, 1]
-> >> +
-> >>  required:
-> >>    - compatible
-> >>    - power-domains
-> >>
-> > 
-> 
+Patches 1, 3 and 5 can be considered cleanup, so I suggest these be
+picked up if there are any major comments on the others.
+
+I have verified the different combinations on J721E, J7200 and AM65x
+SoCs. AM64x currently lacks early-boot support, but the logic is ready
+for Single-CPU and Split modes that are specific to AM64x SoCs. 
+
+regards
+Suman
+
+[1] https://patchwork.kernel.org/project/linux-remoteproc/list/?series=485235
+[2] https://patchwork.kernel.org/project/linux-remoteproc/list/?series=456755 
+
+Suman Anna (6):
+  remoteproc: Introduce rproc_detach_device() wrapper
+  remoteproc: Add support for detach-only during shutdown
+  remoteproc: k3-r5: Refactor mbox request code in start
+  remoteproc: k3-r5: Add support for IPC-only mode for all R5Fs
+  remoteproc: k3-dsp: Refactor mbox request code in start
+  remoteproc: k3-dsp: Add support for IPC-only mode for all K3 DSPs
+
+ drivers/remoteproc/remoteproc_cdev.c      |   7 +
+ drivers/remoteproc/remoteproc_core.c      |   7 +-
+ drivers/remoteproc/remoteproc_internal.h  |   8 +
+ drivers/remoteproc/remoteproc_sysfs.c     |   6 +
+ drivers/remoteproc/ti_k3_dsp_remoteproc.c | 214 ++++++++++++++---
+ drivers/remoteproc/ti_k3_r5_remoteproc.c  | 279 ++++++++++++++++++++--
+ include/linux/remoteproc.h                |   3 +
+ 7 files changed, 459 insertions(+), 65 deletions(-)
+
+-- 
+2.30.1
+
