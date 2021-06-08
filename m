@@ -2,93 +2,98 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C93339E574
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  7 Jun 2021 19:31:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817DB39F1AC
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  8 Jun 2021 11:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbhFGRco (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 7 Jun 2021 13:32:44 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:51855 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230241AbhFGRcn (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 7 Jun 2021 13:32:43 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 157HLm45016429;
-        Mon, 7 Jun 2021 19:30:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=CDVD7M01wEBcqMQ1jQJ1wiIBy36JXvQyVTr33SbnrQA=;
- b=TCS+yIlPZ3nZHhJ2ddQo5a2U9wsmio3ScCG4ItnrJ5iZFrdWREh0RrlxhvsgfX/zfaby
- 8ZU/1+jfQrcbQH81IrC4fA1VY+NVvM8ahWMU4HEe4ZiccuAHU9qvuTOsyZHAXoToabZ+
- rBta0+2XLFzZywO7WM/zvq+X5N5bBSNumN8hJwVtAccpWbL+9uzhZlVA43FuSKXQqAvl
- RGJlHoHZRv1vAbyvtpVljHC+m3bIL42E76NwOEGL79u6YazMe+wGP40SkTkVdoPsO59G
- Kz+cgldl4UDvt5tp7/orOBIToCyhynO8wJlDsIpEsqylFY3l4gD7uYQaBop3bBRf/NLH 0w== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 391evfbb2a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 07 Jun 2021 19:30:41 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9E77C10002A;
-        Mon,  7 Jun 2021 19:30:40 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8585D2142B6;
-        Mon,  7 Jun 2021 19:30:40 +0200 (CEST)
-Received: from localhost (10.75.127.49) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 7 Jun 2021 19:30:40
- +0200
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S229724AbhFHJJz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 8 Jun 2021 05:09:55 -0400
+Received: from mail.iot.bzh ([51.75.236.24]:52801 "EHLO mail.iot.bzh"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229657AbhFHJJz (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Tue, 8 Jun 2021 05:09:55 -0400
+Received: from localhost.localdomain (lfbn-ren-1-1868-231.w83-199.abo.wanadoo.fr [83.199.51.231])
+        by mail.iot.bzh (Postfix) with ESMTPSA id C5E0940081;
+        Tue,  8 Jun 2021 11:07:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iot.bzh; s=20180822;
+        t=1623143279;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RstX5K6XZCEekqSBLBKXhSYsL5WzEMK2zaZ0jTY6khU=;
+        b=tm+rCUB9f9l4wf3L0Lbg9qS2pGscYdvzAd0HuZDfOxdD2JoXGWLw/UZoyuuEguV0MDUeVO
+        Vft2nqCLDB9zdC9Ybz5Zb6/gTEtxBHbjNdIyCjuxrTeNmMb5/fRA714qqiPDDK+u8lTUH4
+        b+EehnJwjj/pObY1pwShtya3ieU2Xhnqq6G00c67I4XYgyH04ZiyyOlDOdQXN0HsODQ+C5
+        O0z53YOl+zIkiy56OpCQZTj4TByAruiAsdCI2TsLnEI/pvkNQqVRskEhtK3HkEIka4Lp3F
+        2fjVpFZ0nfDNoUrZ3nlU74i4fGzxELhWKJBBbcvita9auk/lWOZWJuVarmAtbA==
+Subject: Re: [PATCH 0/4] rpmsg: char: introduce the rpmsg-raw channel
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Ohad Ben-Cohen <ohad@wizery.com>,
         Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <julien.massot@iot.bzh>, <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH 4/4] rpmsg: char: Return error if user tries to destroy a default endpoint.
-Date:   Mon, 7 Jun 2021 19:30:32 +0200
-Message-ID: <20210607173032.30133-5-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210607173032.30133-1-arnaud.pouliquen@foss.st.com>
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
 References: <20210607173032.30133-1-arnaud.pouliquen@foss.st.com>
+From:   Julien Massot <julien.massot@iot.bzh>
+Message-ID: <6aedbe64-9c5d-b738-ad99-0a33733be82d@iot.bzh>
+Date:   Tue, 8 Jun 2021 11:08:13 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-07_14:2021-06-04,2021-06-07 signatures=0
+In-Reply-To: <20210607173032.30133-1-arnaud.pouliquen@foss.st.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Using the RPMSG_DESTROY_EPT_IOCTL control, user application can
-destroy an endpoint. This patch prevents to destroy a default endpoint
-associated to a channel.
+Hi,
 
-This update is needed to manage the "rpmsg-raw" channel. In this
-case a default endpoint is used, destroying it without the
-channel does not make sense.
+On 6/7/21 7:30 PM, Arnaud Pouliquen wrote:
+> Purpose:
+>    Allow the remote processor to instantiate a /dev/rpmsgX interface relying on the NS announcement
+>    of the "rpmsg-raw" service.
+>    This patchet is extracted from  the series [1] with rework to add rpmsg_create_default_ept helper.
+> 
+>    
+> Aim:
+>    There is no generic sysfs interface based on RPMsg that allows a user application to communicate
+>    with a remote processor in a simple way.
+>    The rpmsg_char dev solves a part of this problem by allowing an endpoint to be created on the
+>    local side. But it does not take advantage of the NS announcement mechanism implemented for some
+>    backends such as the virtio backend. So it is not possible to probe it from  a remote initiative.
+>    Extending the char rpmsg device to support NS announcement makes the rpmsg_char more generic.
+>    By announcing a "rpmg-raw" service, the firmware of a remote processor will be able to
+>    instantiate a /dev/rpmsgX interface providing to the user application a basic link to communicate
+>    with it without any knowledge of the rpmsg protocol.
+> 
+> Implementation details:
+>    - Register a rpmsg driver for the rpmsg_char driver, associated to the "rpmsg-raw" channel service.
+>    - In case of rpmsg char device instantiated by the rpmsg bus (on NS announcement) manage the
+>      channel default endpoint to ensure a stable default endpoint address, for communication with
+>      the remote processor.
+> 
+> How to test it:
+>    - This series can be applied on git/andersson/remoteproc.git for-next branch (dc0e14fa833b)
+>      + the "Restructure the rpmsg char to decorrelate the control part" series[2]
+> 
+> [1] https://patchwork.kernel.org/project/linux-remoteproc/list/?series=475217
+> [2] https://patchwork.kernel.org/project/linux-remoteproc/list/?series=483793
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
- drivers/rpmsg/rpmsg_char.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Just tested this whole series on remoteproc for-next branch + [2].
+Works for me, /dev/rpmsg0 is created on NS announcement, and removed when stopping the remote processor.
+I can do a repeated series of open /read/write/close, and got EBUSY if I try to open it more than once
+at a time.
 
-diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index 3b850b218eb0..8c78a5a192c1 100644
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -285,6 +285,10 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
- 	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
- 		return -EINVAL;
- 
-+	/* Don't allow to destroy a default endpoint. */
-+	if (!eptdev->rpdev || eptdev->ept == eptdev->rpdev->ept)
-+		return -EPERM;
-+
- 	return rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
- }
- 
+Firmware used for testing is derived from:
+https://github.com/zephyrproject-rtos/zephyr/tree/main/samples/subsys/ipc/openamp_rsc_table
+with:
+#define RPMSG_CHAN_NAME "rpmsg-raw"
+
+Thanks Arnaud for your work.
+
+Tested-by: Julien Massot <julien.massot@iot.bzh>
+
 -- 
-2.17.1
-
+Julien Massot [IoT.bzh]
