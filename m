@@ -2,114 +2,104 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5BF93A709E
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 14 Jun 2021 22:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD673A70EC
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 14 Jun 2021 23:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235649AbhFNUnK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 14 Jun 2021 16:43:10 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:50416 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235509AbhFNUnG (ORCPT
+        id S234214AbhFNVCd (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 14 Jun 2021 17:02:33 -0400
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:46906 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229771AbhFNVCd (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 14 Jun 2021 16:43:06 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1623703263; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=5kbW/WbGQ5vlvRQKgWyutzmdItpsAX8FhZZHChGUKuo=; b=sf3+OU17s4UgqdboX6uscDDuvWQ3+GyeRdI7xYjq1zZg9WMg4zgLbnGt042mawkjF7uWnHa3
- 7Qf70uk+vL/nmRB9ZoAn9YvuPE1QiyiZFpxVVGX+M0szcB1pLr6f5pZOOJZMxxgFSejRq80K
- s5xeorsuBqJay4i7WiOLOTf7juc=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 60c7bedaabfd22a3dc97cd13 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 14 Jun 2021 20:40:58
- GMT
-Sender: sidgup=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id DE728C43217; Mon, 14 Jun 2021 20:40:57 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from sidgup-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sidgup)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1508EC4323A;
-        Mon, 14 Jun 2021 20:40:57 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1508EC4323A
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sidgup@codeaurora.org
-From:   Siddharth Gupta <sidgup@codeaurora.org>
-To:     bjorn.andersson@linaro.org, ohad@wizery.com,
-        linux-remoteproc@vger.kernel.org
-Cc:     Siddharth Gupta <sidgup@codeaurora.org>,
+        Mon, 14 Jun 2021 17:02:33 -0400
+Received: by mail-oi1-f178.google.com with SMTP id c13so15769517oib.13
+        for <linux-remoteproc@vger.kernel.org>; Mon, 14 Jun 2021 14:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/6pKbYj2ed0f0UaEFoaaIUYpFQjvxwrfEa8r7ccecLg=;
+        b=VUcpHcO5+69x+UmFhBX81AvNnV4yZG99MUIPNECFwsScWTK9TaiV0hoCkGfUU7392i
+         IdO3v0bqNtQ1pwOSOr5vbmkySR/9FlzDmozXlGeRfxcECdSsPUtEdGP3mmVqo+gbFuSx
+         I/hgEmF4rADrAYt7llABIPizW00BM03GI/jxEkEFQMC+ceuxqkSY3x0i97Kt4IXrHsd4
+         i7QlXM1QDPv+NcO410O/yjq72NZY5qV2iCblFogQg9l3bPUMsde5DdeS/BiL7PNGRux8
+         woxP/GxKqD7irINk0gd14N5PWdLSw9pnWtKhqYVsYiQzD1BvT2DSP5aLiqSVf7hdMCDs
+         yR7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/6pKbYj2ed0f0UaEFoaaIUYpFQjvxwrfEa8r7ccecLg=;
+        b=aGJr3RK5taFrYuZkLodY6OfxFvR6L/aQ1sxuAv3Zq1jm9AOEISLrmiAM6TNaOdUjoD
+         oc+T8mRFt+I5bapKZRIrmNjNTBb4g5uDmT4mPtPLCrcFmbIB+8hHcuL5LnYFfZZDMeOe
+         0Hq0wc4Qx9VNBxaMTJ+1oi3D7308j5Y3HeQhixg8b/0vRydVG2AmlGXxA3lriVOBf20f
+         byIVvrF+u7kRn+xFB7faeE1azIbwCYJQswHYwVK+dPcoKrKZPTzpL6kwwOYQSFbD1ZZX
+         2zjjyBxwWH+J9BpTPqdqpPyclS78NrwIzbzmTLR5wVlb3PvMx8w84fI2IjbIQAovoEsk
+         Ir5Q==
+X-Gm-Message-State: AOAM532QMk+uBXAmUM6LDedQqw5+ZH9PyOEQtcTV3h1Wt0yw49eKcLd5
+        i5Vpo/LgwMe62Qt27kvzHMxe1A==
+X-Google-Smtp-Source: ABdhPJyGwTQzDPCtsM1dRKOQR3lJJwgBKHzl/HwiNMhRIvnaoQC31Qzw/GHpYHI9LCZcyYFGlq/1kg==
+X-Received: by 2002:a05:6808:352:: with SMTP id j18mr672718oie.122.1623704356727;
+        Mon, 14 Jun 2021 13:59:16 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id h1sm3583245otq.59.2021.06.14.13.59.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jun 2021 13:59:16 -0700 (PDT)
+Date:   Mon, 14 Jun 2021 15:59:14 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Siddharth Gupta <sidgup@codeaurora.org>
+Cc:     ohad@wizery.com, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, psodagud@codeaurora.org,
         stable@vger.kernel.org
-Subject: [PATCH v2 4/4] remoteproc: core: Cleanup device in case of failure
-Date:   Mon, 14 Jun 2021 13:40:44 -0700
-Message-Id: <1623703244-26814-5-git-send-email-sidgup@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1623703244-26814-1-git-send-email-sidgup@codeaurora.org>
+Subject: Re: [PATCH v2 0/4] remoteproc: core: Fixes for rproc cdev and add
+Message-ID: <YMfDItBIwGtyqAEd@builder.lan>
 References: <1623703244-26814-1-git-send-email-sidgup@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1623703244-26814-1-git-send-email-sidgup@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-When a failure occurs in rproc_add() it returns an error, but does
-not cleanup after itself. This change adds the failure path in such
-cases.
+On Mon 14 Jun 15:40 CDT 2021, Siddharth Gupta wrote:
 
-Signed-off-by: Siddharth Gupta <sidgup@codeaurora.org>
----
- drivers/remoteproc/remoteproc_core.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+> This patch series contains stability fixes and error handling for remoteproc.
+> 
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index b874280..d823f70 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -2343,8 +2343,10 @@ int rproc_add(struct rproc *rproc)
- 		return ret;
- 
- 	ret = device_add(dev);
--	if (ret < 0)
--		return ret;
-+	if (ret < 0) {
-+		put_device(dev);
-+		goto rproc_remove_cdev;
-+	}
- 
- 	dev_info(dev, "%s is available\n", rproc->name);
- 
-@@ -2355,7 +2357,7 @@ int rproc_add(struct rproc *rproc)
- 	if (rproc->auto_boot) {
- 		ret = rproc_trigger_auto_boot(rproc);
- 		if (ret < 0)
--			return ret;
-+			goto rproc_remove_dev;
- 	}
- 
- 	/* expose to rproc_get_by_phandle users */
-@@ -2364,6 +2366,13 @@ int rproc_add(struct rproc *rproc)
- 	mutex_unlock(&rproc_list_mutex);
- 
- 	return 0;
-+
-+rproc_remove_dev:
-+	rproc_delete_debug_dir(rproc);
-+	device_del(dev);
-+rproc_remove_cdev:
-+	rproc_char_device_remove(rproc);
-+	return ret;
- }
- EXPORT_SYMBOL(rproc_add);
- 
--- 
-Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Thanks for respinning this Sid, I think patch 3 looks good now as well,
+but it seems you accidentally got an additional file in the same patch.
 
+Can you please fix that up and resend the patches?
+
+Regards,
+Bjorn
+
+> The changes included in this series do the following:
+> Patch 1: Fixes the creation of the rproc character device.
+> Patch 2: Validates rproc as the first step of rproc_add().
+> Patch 3: Fixes the rproc cdev remove and the order of dev_del() and cdev_del().
+> Patch 4: Adds error handling in rproc_add().
+> 
+> v1 -> v2:
+> - Added extra patch which addresses Bjorn's comments on patch 3
+>   from v1.
+> - Fixed commit text for patch 2 (s/calling making/making).
+> 
+> Siddharth Gupta (4):
+>   remoteproc: core: Move cdev add before device add
+>   remoteproc: core: Move validate before device add
+>   remoteproc: core: Fix cdev remove and rproc del
+>   remoteproc: core: Cleanup device in case of failure
+> 
+>  0000-cover-letter.patch.backup       | 26 ++++++++++++++++++++++++++
+>  drivers/remoteproc/remoteproc_cdev.c |  2 +-
+>  drivers/remoteproc/remoteproc_core.c | 27 ++++++++++++++++++---------
+>  3 files changed, 45 insertions(+), 10 deletions(-)
+>  create mode 100644 0000-cover-letter.patch.backup
+> 
+> -- 
+> Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
