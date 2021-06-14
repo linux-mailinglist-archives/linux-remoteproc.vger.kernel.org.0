@@ -2,92 +2,101 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 618763A6C64
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 14 Jun 2021 18:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7453A6EAC
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 14 Jun 2021 21:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234738AbhFNQxA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 14 Jun 2021 12:53:00 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:24270 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234668AbhFNQw7 (ORCPT
+        id S233846AbhFNTRr (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 14 Jun 2021 15:17:47 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:37582 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233169AbhFNTRq (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 14 Jun 2021 12:52:59 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15EGmfTX004542;
-        Mon, 14 Jun 2021 18:50:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=GoahTkcTk5wuiGE9EDQMY+hff3YTZLJJ0yuw8GM4ms4=;
- b=g6/ZEKetMygJ84zCpW/3K6iLqJHXYxnWFeDkYeWZ7jKukLkE3J5nn8980zjhaO8nOboc
- omiHbuiNBHNepv23qFrp2UFOUJl45p03bk0NzMB/jVq2e24k1ZlBXi2DQys4Q3lyBwbg
- b8qzWGtDRf6A9DauWC845P7H+Uurh3YuOvKGrjSJrE4y1fXgxRpF7QAb/KvsF2NouJ01
- hogp4FW0FSYo79TEGB0UdrRa5h+42YoOeiqVzSm3HKqjbS9vp1onwT/T45zCue5/BUGV
- wNueaJqJi1A6716AklQ8cR2hQVLQsBrP4TDIFc0geIQi5lRJOQ1BMDW3g8MTijR/rurQ Iw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 3962pntrr5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Jun 2021 18:50:44 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 7D593100039;
-        Mon, 14 Jun 2021 18:50:43 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6D46D21CE26;
-        Mon, 14 Jun 2021 18:50:43 +0200 (CEST)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE3.st.com (10.75.127.6)
- with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 14 Jun 2021 18:50:42
- +0200
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Rob Herring <robh@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH 2/2] ARM: dts: stm32: Add coprocessor detach mbox on stm32mp15x-dkx boards
-Date:   Mon, 14 Jun 2021 18:49:40 +0200
-Message-ID: <20210614164940.27153-3-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210614164940.27153-1-arnaud.pouliquen@foss.st.com>
-References: <20210614164940.27153-1-arnaud.pouliquen@foss.st.com>
+        Mon, 14 Jun 2021 15:17:46 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 15EJFOB8042719;
+        Mon, 14 Jun 2021 14:15:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1623698124;
+        bh=45zAPLvQCJnaXG/Xt6NAJCtou400q1d7LTyzDd2Q70c=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=AG0VBXIdeICzBJk0cSMUut2tcmYZKRpgYlYEI9/EGxBReEfvo6lf1mpvTKao+AM2c
+         8Qgsy4smY61YxETRYJ98jSqV13KjQHdb5wVoAmRcwP+LaHUn9V53Na18f1l1eSjOYY
+         +1oZBeqW7lxnV0JYdQVz0WnXJf4Jm5nOkVY/wjNI=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 15EJFOmF039932
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 14 Jun 2021 14:15:24 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Mon, 14
+ Jun 2021 14:15:24 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Mon, 14 Jun 2021 14:15:24 -0500
+Received: from [10.250.35.153] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 15EJFNau072913;
+        Mon, 14 Jun 2021 14:15:23 -0500
+Subject: Re: [RFC PATCH] dt-bindings: hwlock: sun6i: Fix various warnings in
+ binding
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, <devicetree@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+References: <20210603144216.10327-1-s-anna@ti.com>
+ <CAL_Jsq+mhJgFZniXYTVf5ZEM84APhm2w_ozLJg_pFtgz+W_wYw@mail.gmail.com>
+From:   Suman Anna <s-anna@ti.com>
+Message-ID: <cd7ab36e-76f3-3d13-6896-6d812c66b0e3@ti.com>
+Date:   Mon, 14 Jun 2021 14:15:23 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-06-14_10:2021-06-14,2021-06-14 signatures=0
+In-Reply-To: <CAL_Jsq+mhJgFZniXYTVf5ZEM84APhm2w_ozLJg_pFtgz+W_wYw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-To support the detach feature, add a new mailbox channel to inform
-the remote processor on a detach. This signal allows the remote processor
-firmware to stop IPC communication and to reinitialize the resources for
-a re-attach.
+Hi Bjorn,
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
- arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 6/7/21 8:19 AM, Rob Herring wrote:
+> On Thu, Jun 3, 2021 at 9:42 AM Suman Anna <s-anna@ti.com> wrote:
+>>
+>> The allwinner,sun6i-a31-hwspinlock.yaml binding has a mismatched
+>> $id and fails to compile the example due to undefined args specifier
+>> values for clocks and resets. Fix both of these issues.
+>>
+>> Fixes: f9e784dcb63f ("dt-bindings: hwlock: add sun6i_hwspinlock")
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> ---
+>> Hi Wilken,
+>>
+>> This fixes the warnings for now on linux-next, but I think the example
+>> should be including sun6i-a31-ccu.h files instead to be accurate, and
+>> those files are missing the definitions for CLK_BUS_SPINLOCK and
+>> RST_BUS_SPINLOCK. Feel free to send a newer version or do an incremental
+>> patch on top.
+>>
+>> regards
+>> Suman
+>>
+>>  .../bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml      | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+> 
 
-diff --git a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-index 59f18846cf5d..06c11bad882a 100644
---- a/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-+++ b/arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
-@@ -470,8 +470,8 @@
- &m4_rproc {
- 	memory-region = <&retram>, <&mcuram>, <&mcuram2>, <&vdev0vring0>,
- 			<&vdev0vring1>, <&vdev0buffer>;
--	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>;
--	mbox-names = "vq0", "vq1", "shutdown";
-+	mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>, <&ipcc 3>;
-+	mbox-names = "vq0", "vq1", "shutdown", "detach";
- 	interrupt-parent = <&exti>;
- 	interrupts = <68 1>;
- 	status = "okay";
--- 
-2.17.1
+Gentle ping, can you pick up this patch and the remoteproc pas binding
+indentations fixes please so that linux-next is sane w.r.t these?
 
+regards
+Suman
