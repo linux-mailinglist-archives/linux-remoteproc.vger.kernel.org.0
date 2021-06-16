@@ -2,202 +2,234 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 413E53AA242
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Jun 2021 19:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7ED63AA361
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Jun 2021 20:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbhFPRRf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 16 Jun 2021 13:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbhFPRRe (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 16 Jun 2021 13:17:34 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE78C06175F
-        for <linux-remoteproc@vger.kernel.org>; Wed, 16 Jun 2021 10:15:28 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 13-20020a17090a08cdb029016eed209ca4so2166383pjn.1
-        for <linux-remoteproc@vger.kernel.org>; Wed, 16 Jun 2021 10:15:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cbFd9VGkU/VodN4LCL42j3YyfuKjRzk/7odzn76WIYo=;
-        b=awdDSl1Jc86u5VWSLchHd8xFPLI6amTQ/jTqkSWOEB2yQuoWSg6m951yIxR4GH0Pan
-         kya5M978TfAeXV4vjsyvCIe06m9CqUxvYtrQq6oLBDbjkGSI2b1A85kbLZ5/U18dJhGN
-         ztRlclau1vHHV1ONlbgcBxOovzAv0Ori6hYA4shmZkMSSf1tcjqUTP8oenMGmlpDJ0fC
-         LYe1cEilhVYtkfRUg0hMnaIUenEtKE/MgRigJj2dAQg0mWiPASweS70+/ZgBZXrQ53Sl
-         8Cym318cmCxTYXi6uiVol1jWwnzQdyjcf+FWZDaYg4rnCfRNn/QEMWDLbHV1Rim1Q2zy
-         Rh2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cbFd9VGkU/VodN4LCL42j3YyfuKjRzk/7odzn76WIYo=;
-        b=Wi7nMC8oNx0C6mmdZ/pluVRCsFyh5fQWoo8KP00GrGMov81fUIps9PL0TNexEcNkJZ
-         bdrjbhtQNUrDVGcvAbmJH9QPtA3l03BrBXPPEO93dB4t7AbVx96teawX1jZeNlPKRyqD
-         dnec9Cw5ybCaA2JjDNJ1v5D9fyPU9PuCdFJwcDXMkCYDxRnmh1VsLeOC73qali4HXBe9
-         rKgp/oPDirEQdE6Fvye9Ht3GlOyFQaDQB22+V2xTL7E2W4kNPJDmG2Ag+iYV1Vy8Jybg
-         ALUhAFAjUIBlVbkKKOGEtSofQEi9IsStiynQrb3LUuHsrIymjEknWTBjLbUgHU2lY9Wy
-         icdQ==
-X-Gm-Message-State: AOAM533naeL/UoFhzrbT5QpKCS52qu46e9bFNuy197wm5F8zJsl7jTJX
-        8hi94lu1cnIFHffC2BSXUDMtew==
-X-Google-Smtp-Source: ABdhPJyx+Va4Bgmi/xW5n3chd0Wp9e11ZyJBBlTUSkzJJt+F9dMyoGKRbUjgimAfeb5P2AGsJM6I/Q==
-X-Received: by 2002:a17:90a:7891:: with SMTP id x17mr11843022pjk.106.1623863727983;
-        Wed, 16 Jun 2021 10:15:27 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id g204sm2702800pfb.107.2021.06.16.10.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jun 2021 10:15:26 -0700 (PDT)
-Date:   Wed, 16 Jun 2021 11:15:24 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S231985AbhFPSoI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 16 Jun 2021 14:44:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42396 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231892AbhFPSoD (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Wed, 16 Jun 2021 14:44:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3914E610A3;
+        Wed, 16 Jun 2021 18:41:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623868917;
+        bh=A/u+qgoYDIfPJH2nR7TN1MVSs3c34aZySloJGmF3DxI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XW7Y4X4BrA5t9ijeAkMM5QcCdVYTcPYigARzxXFbf+hvb/uvp+9Mh4a34b6q7DC/i
+         sftLrmCBohcI5jLH7tRhCQG0oRbDHxXeJk4RnxcA6Ul46XtSEkqfRY8t/XGFaIFk86
+         qALO4rJMHfSIQDqcWwSZq03gCR35QANxOrYdPBiBe/2o4ooVhYHO++ff/Wjl3yD1k0
+         5+AqyA7gDeMM/vaNpWgsQ3+LVyhh+c7BqwX1vaXN+fU88HSnc2YCtVPrtUbPSvo8Oo
+         6qWAuSvjwilO69NivBQSK/Tx5fcLWTIvpS50NkVkCoknp6Umst4ITXs8YCSnSw0png
+         hRSa7JSohypWw==
+Date:   Wed, 16 Jun 2021 20:41:50 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
         Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH 3/4] rpmsg: ctrl: Add check on rpmsg device removability
- from user space
-Message-ID: <20210616171524.GA637642@p14s>
-References: <20210604091406.15901-1-arnaud.pouliquen@foss.st.com>
- <20210604091406.15901-4-arnaud.pouliquen@foss.st.com>
- <20210615174634.GB604521@p14s>
- <b7dc5207-643b-b5e6-2bee-106b2eb87555@foss.st.com>
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+Message-ID: <YMpF7gkpbNQYX5EB@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+        iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Lee Jones <lee.jones@linaro.org>, Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20210615191543.1043414-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ul4MnuDBL/PvPlAZ"
 Content-Disposition: inline
-In-Reply-To: <b7dc5207-643b-b5e6-2bee-106b2eb87555@foss.st.com>
+In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 11:30:51AM +0200, Arnaud POULIQUEN wrote:
-> 
-> 
-> On 6/15/21 7:46 PM, Mathieu Poirier wrote:
-> > On Fri, Jun 04, 2021 at 11:14:05AM +0200, Arnaud Pouliquen wrote:
-> >> Using the RPMSG_RELEASE_DEV_IOCTL is possible to remove any
-> >> rpmsg device (such as the rpmsg ns or the rpmsg ctrldev).
-> >>
-> >> Add a new field to store the removability of the device.
-> >>
-> >> By default the rpmsg device can not be removed by user space. It is
-> >> set to 1 by the rpmsg ctrl on RPMSG_CREATE_DEV_IOCTL request, but
-> >> could also be set by an rpmsg driver during probe.
-> >>
-> >> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> >> ---
-> >>  drivers/rpmsg/rpmsg_ctrl.c | 17 ++++++++++++++++-
-> >>  include/linux/rpmsg.h      |  2 ++
-> >>  2 files changed, 18 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/rpmsg/rpmsg_ctrl.c b/drivers/rpmsg/rpmsg_ctrl.c
-> >> index cb19e32d05e1..e93c6ec49038 100644
-> >> --- a/drivers/rpmsg/rpmsg_ctrl.c
-> >> +++ b/drivers/rpmsg/rpmsg_ctrl.c
-> >> @@ -74,6 +74,7 @@ static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
-> >>  	struct rpmsg_endpoint_info eptinfo;
-> >>  	struct rpmsg_channel_info chinfo;
-> >>  	struct rpmsg_device *rpdev;
-> >> +	struct device *dev;
-> >>  	int ret = 0;
-> >>  
-> >>  	if (copy_from_user(&eptinfo, argp, sizeof(eptinfo)))
-> >> @@ -95,11 +96,25 @@ static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
-> >>  		if (!rpdev) {
-> >>  			dev_err(&ctrldev->dev, "failed to create %s channel\n", chinfo.name);
-> >>  			ret = -ENXIO;
-> >> +		} else {
-> >> +			/* Allow user space to release the device. */
-> >> +			rpdev->us_removable = 1;
-> > 
-> > As a rule of thumb I try really hard to avoid introducing new flags.  In this case we
-> > can attain the same result by looking at chinfo->name, chinfo->src and
-> > chinfo->dst.  I would introduce a new inline function in rpmsg_internal.h,
-> > something like rpmsg_chrdev_is_ctrl_dev(), and compare the specifics in chinfo
-> > to rpdev->id.name, rpdev->src and rpdev->dst.  If they all match then the
-> > operation is refused.
-> 
-> Something must have escaped me, because i turn around your your proposal,
-> without understand it.
-> 
-> The "us_removable" flag is not only for the rpmsg_ctrl, but for any rpmsg device
-> that have not to be released by user application. Either because there are core
-> ( rpmsg_ctrl, rpmsg_ns) or because a rpmsg driver don't allow to unbind its
-> rpmsg devices.
->
 
-I don't see how the current patch would allow a driver to prevent user space
-from releasing a rpmsg device since the sysfs attribute can be changed at will.
-So even if the driver sets the flag user space can still revert it.
+--Ul4MnuDBL/PvPlAZ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> look to me that rpmsg_chrdev_is_ctrl_dev just prevents rpmsg ctrl to be released
-> by the RPMSG_RELEASE_DEV_IOCTL.
+On Tue, Jun 15, 2021 at 01:15:43PM -0600, Rob Herring wrote:
+> If a property has an 'items' list, then a 'minItems' or 'maxItems' with t=
+he
+> same size as the list is redundant and can be dropped. Note that is DT
+> schema specific behavior and not standard json-schema behavior. The tooli=
+ng
+> will fixup the final schema adding any unspecified minItems/maxItems.
+>=20
+> This condition is partially checked with the meta-schema already, but
+> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> An improved meta-schema is pending.
+>=20
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: David Airlie <airlied@linux.ie>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Lars-Peter Clausen <lars@metafoo.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Joerg Roedel <joro@8bytes.org>
+> Cc: Jassi Brar <jassisinghbrar@gmail.com>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Wolfgang Grandegger <wg@grandegger.com>
+> Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Vivien Didelot <vivien.didelot@gmail.com>
+> Cc: Vladimir Oltean <olteanv@gmail.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: "Uwe Kleine-K=C3=B6nig" <u.kleine-koenig@pengutronix.de>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> Cc: Albert Ou <aou@eecs.berkeley.edu>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-That is correct.  I did not address rpmsg_ns to keep things simple but it would
-also have to be handled properly.
+Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
 
-> 
-> Please, could you clarify what you have in mind here?
 
-Other than rpmsg_ctrl and rpmsg_ns I don't think we should introduce any
-mechanism to prevent users from releasing an rpmsg.  Doing so needs root access
-- if a user space process with root privileges can't be trusted then we have
-bigger problems than unwanted releases of registered rpmsg devices.
+--Ul4MnuDBL/PvPlAZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> Thanks,
-> Arnaud
-> 
-> > 
-> > That way we don't introduce a new flag and there is also no need to call
-> > rpmsg_find_device() twice.
-> 
-> 
-> 
-> > 
-> > Thanks,
-> > Mathieu
-> > 
-> >>  		}
-> >>  		break;
-> >>  
-> >>  	case RPMSG_RELEASE_DEV_IOCTL:
-> >> -		ret = rpmsg_release_channel(ctrldev->rpdev, &chinfo);
-> >> +		dev = rpmsg_find_device(ctrldev->rpdev->dev.parent, &chinfo);
-> >> +		if (!dev)
-> >> +			ret =  -ENXIO;
-> >> +
-> >> +		/* Verify that rpmsg device removal is allowed. */
-> >> +		if (!ret) {
-> >> +			rpdev = to_rpmsg_device(dev);
-> >> +			if (!rpdev->us_removable)
-> >> +				ret = -EACCES;
-> >> +		}
-> >> +		if (!ret)
-> >> +			ret = rpmsg_release_channel(ctrldev->rpdev, &chinfo);
-> >>  		if (ret)
-> >>  			dev_err(&ctrldev->dev, "failed to release %s channel (%d)\n",
-> >>  				chinfo.name, ret);
-> >> diff --git a/include/linux/rpmsg.h b/include/linux/rpmsg.h
-> >> index d97dcd049f18..3642aad1a789 100644
-> >> --- a/include/linux/rpmsg.h
-> >> +++ b/include/linux/rpmsg.h
-> >> @@ -47,6 +47,7 @@ struct rpmsg_channel_info {
-> >>   * @ept: the rpmsg endpoint of this channel
-> >>   * @announce: if set, rpmsg will announce the creation/removal of this channel
-> >>   * @little_endian: True if transport is using little endian byte representation
-> >> + * @us_removable: True if userspace application has permission to remove the rpmsg device
-> >>   */
-> >>  struct rpmsg_device {
-> >>  	struct device dev;
-> >> @@ -57,6 +58,7 @@ struct rpmsg_device {
-> >>  	struct rpmsg_endpoint *ept;
-> >>  	bool announce;
-> >>  	bool little_endian;
-> >> +	bool us_removable;
-> >>  
-> >>  	const struct rpmsg_device_ops *ops;
-> >>  };
-> >> -- 
-> >> 2.17.1
-> >>
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDKRekACgkQFA3kzBSg
+KbbFdA/+J6slaN90bvqrl9Kylr+F1vWPHBVKSRdA0mnhK09uqqdE0YEx3nLRBJYG
+zGjhfQY+0UCubghvsI8mYBKj+jv5fkzM8D2Mr13GL5b+zVFOML1f24o8y9Fwsi6A
+qbgTfoI0FaRdGTd1ocYLkYtywYrM9XmSeG9QuXBLIufeQsnOspjtQQ+WYRNM4qzw
+Qa+FkuAJZPED0sG7wbpPkzaA4eNfoKn0YQNwk8tIDdl5qvrw6W0cZ6lhog5v5kPB
+c3gC2OJzR4fXzt+uA2rIWWF9rujLHaiWT0nWXSz93ViX9pZPZ77kDSK4xEz8h3Rr
+mRX25SXmSnOf3xLGGkw6fx86sT5dZ6HlhWbhHbXdGzeYBeCfrgXwgj3wHXlyHA5S
+jIgGUlAeT9uMSmv3lmSQ4Lx3tUvKupZ8zX9N6/ay+2kiIei931x+sP73627hNjwz
+Tnbj1JBDeNgP0Oukiq6xMGyT5VxQk1rgh0garZvFZoPVEr/ae1Z5A8/mNKSwhOVj
+4PRKHuz72zpDbx7LuMaG6EnY5fzhDSGVRCSIeNs4yRX1cnVbtEGbsI7yOmrUx+wl
+3kAkYFZYbin5oRO36gDyYg5ZUyFDy4s+Jh5a8kPFANPY2ToOS8Ssa1hFNu0SSgve
+uONICGgcQoHO4Jbvea809td91bvqtiCieKCCX19GqJa37ktj2Ww=
+=EWxK
+-----END PGP SIGNATURE-----
+
+--Ul4MnuDBL/PvPlAZ--
