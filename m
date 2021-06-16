@@ -2,386 +2,297 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 369493A9E65
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Jun 2021 17:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40E43AA24B
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Jun 2021 19:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234293AbhFPPCz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 16 Jun 2021 11:02:55 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:54704 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234291AbhFPPCz (ORCPT
+        id S231374AbhFPRSy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 16 Jun 2021 13:18:54 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.50]:35312 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231405AbhFPRSx (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 16 Jun 2021 11:02:55 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 15GF0hHp009501;
-        Wed, 16 Jun 2021 10:00:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1623855643;
-        bh=fj8hSh8E/TPVlBc1XmCjHK/jC0hsEpWHX5Y2BH1HYaA=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=vgsxF3EwHAtYRIAcR25l6iJBjmfjfs2GPzpLn1g1EUekzVZlN0qYkys8zPv5nsJiJ
-         1ZPBPvPuy0VgBOwb+F6IF+f8wf5+vhLydh3hgLXcIIhTiFsVlz7vImbpkHL3g9f5Rb
-         kwynSFU6fLZz2OIMP5yKZHzdwLVgX5C4hlj4HRcw=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 15GF0hb6092171
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 16 Jun 2021 10:00:43 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Wed, 16
- Jun 2021 10:00:43 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Wed, 16 Jun 2021 10:00:43 -0500
-Received: from [10.250.35.153] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 15GF0g9T067446;
-        Wed, 16 Jun 2021 10:00:43 -0500
-Subject: Re: [PATCH 6/6] remoteproc: k3-dsp: Add support for IPC-only mode for
- all K3 DSPs
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20210522000309.26134-1-s-anna@ti.com>
- <20210522000309.26134-7-s-anna@ti.com> <20210602160715.GB1797307@xps15>
- <5ef182f0-cb68-2872-dde2-0ef7b152c92b@ti.com> <20210607163344.GA292026@p14s>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <6c2c4fdb-e4c5-05aa-10aa-0dd57cb26921@ti.com>
-Date:   Wed, 16 Jun 2021 10:00:42 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Wed, 16 Jun 2021 13:18:53 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1623863626; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=tFAoIyJpluUM1HCZZzgLY5TY44fZU3rqhoyEReXlUfT6U/ZZ00+cIju4Rpnvc48fGc
+    H8P27Kft1pxKFD1FZJD0UojlhV/3GZmjA9JvkbihdauxFGOqnM0evZ8vgG7SiV5mdnQE
+    CIsogcSiqn1Ok02ZBSb4qWbhjYNtzFCVRJFl6M6vvXSZbTnPv203pwz2Kyc7JQhEiLaC
+    2SQd0EIeHhDRRbC0aoaS/9xgKilAMKr+gYfEoeSGWjXSoet8dagoiJBq7n8LzvBC8KoC
+    l2x364+oAAhFmiUB09qdMF4b8JHA0sa3VzobFXahMx2+6r7lXa0K0DBqBCTQpVONbAFT
+    XaZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1623863626;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=RDg1xSQ6mX0ylsSTt2fF3oHZQADxjAmoO8Kg/tTJSiY=;
+    b=ObmqocqlpKqFqf/ry4MMzME9NYN2lkXgBDm30X2cJ+/EwncafhgyDSLUfQmbX46/+B
+    x6O8POCgwf7xvb7hxiRSwGyZnaWGVU7YOUMPtcN0FeP23CJlZ0asmhB3T3/hT6v3bHDQ
+    fCB47JJoMXqhNGEU46mV3j+rU2vSoUB42pitYeP1AtkCqtggd4x2gtt6AvcpmjDF6dez
+    60tOcv+wcWOhLWmb/fIvBt/jf5Xrb0b+wwqxLMhR51f7uA+ra1+bT+3om4zQ+FRDdCkR
+    r0CYZmmHQy8VnUz8rfLs2f0wkrRhPaFwP+rweUq/b8J3TL1n+VHh8oNEfl6I2fM1jfH9
+    Qq7A==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1623863626;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=RDg1xSQ6mX0ylsSTt2fF3oHZQADxjAmoO8Kg/tTJSiY=;
+    b=kRnCmt3lQ955BKBXGoZQkjftJ0ColV+KUz38afNjzoZGjYeQ49qTmDY3f431c/oz+C
+    kTuMAdcZZac+kdFXBAlXEedt2r3NEh/u1yGu8RVZ+Ue9qOV8aT0le4VDi+JsH9QLE7Gt
+    1D7LQoN9fZF/3J8hZnzPSGEoyQqGTGTHF1gLhH9AljW4rS6MQOIN+pemoFNEUx0YV64I
+    6lZy+0ybYjCxTkAcrgeOVTnyh9TNQoR+K4c2lbtIHm/coQrZAO3zEBpsXeXivbGNVCMH
+    tYU3PgScx+RKtQmKsN9lvHMB5dlNX4CTXOTHrPA1LAGWJiUlCTvLYKYz7IiYdkLyu4Rr
+    3y2g==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8nxIc3GBg=="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 47.27.2 DYNA|AUTH)
+    with ESMTPSA id y01375x5GHDjZg5
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 16 Jun 2021 19:13:45 +0200 (CEST)
+Date:   Wed, 16 Jun 2021 19:13:41 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Loic Poulain <loic.poulain@linaro.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Aleksander Morgado <aleksander@aleksander.es>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        M Chetan Kumar <m.chetan.kumar@intel.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        phone-devel@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH net-next 3/3] net: wwan: Allow WWAN drivers to provide
+ blocking tx and poll function
+Message-ID: <YMoxRRNXLNPRBdhy@gerhold.net>
+References: <20210615133229.213064-1-stephan@gerhold.net>
+ <20210615133229.213064-4-stephan@gerhold.net>
+ <CAMZdPi8JuyqoF3GwJHcdXhdn0e7ks_f2WiUFpmn3E8HH7T_Gng@mail.gmail.com>
+ <YMkkUM3fHcWhYhmV@gerhold.net>
+ <CAMZdPi877Qu5F+mYqD0tAm5-gewpHHwpa2Xp7DAn8OM8rxVLMA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210607163344.GA292026@p14s>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMZdPi877Qu5F+mYqD0tAm5-gewpHHwpa2Xp7DAn8OM8rxVLMA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Mathieu,
-
-On 6/7/21 11:33 AM, Mathieu Poirier wrote:
-> On Thu, Jun 03, 2021 at 09:57:06AM -0500, Suman Anna wrote:
->> Hi Mathieu,
->>
->> On 6/2/21 11:07 AM, Mathieu Poirier wrote:
->>> On Fri, May 21, 2021 at 07:03:09PM -0500, Suman Anna wrote:
->>>> Add support to the K3 DSP remoteproc driver to configure all the C66x
->>>> and C71x cores on J721E SoCs to be either in IPC-only mode or the
->>>> traditional remoteproc mode. The IPC-only mode expects that the remote
->>>> processors are already booted by the bootloader, and only perform the
->>>> minimum steps required to initialize and deinitialize the virtio IPC
->>>> transports. The remoteproc mode allows the kernel remoteproc driver to
->>>> do the regular load and boot and other device management operations for
->>>> a DSP.
->>>>
->>>> The IPC-only mode for a DSP is detected and configured at driver probe
->>>> time by querying the System Firmware for the DSP power and reset state
->>>> and/or status and making sure that the DSP is indeed started by the
->>>> bootloaders, otherwise the device is configured for remoteproc mode.
->>>>
->>>> Support for IPC-only mode is achieved through .attach(), .detach() and
->>>> .get_loaded_rsc_table() callback ops and various other flags in both
->>>> remoteproc core and the K3 DSP remoteproc driver. The resource table
->>>> follows a design-by-contract approach and is expected to be at the base
->>>> of the DDR firmware region reserved for each remoteproc, it is mostly
->>>> expected to contain only the virtio device and trace resource entries.
->>>>
->>>> NOTE:
->>>> The driver cannot configure a DSP core for remoteproc mode by any
->>>> means without rebooting the kernel if that R5F core has been started
->>>> by a bootloader.
->>>>
->>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>> ---
->>>>  drivers/remoteproc/ti_k3_dsp_remoteproc.c | 151 ++++++++++++++++++++--
->>>>  1 file changed, 138 insertions(+), 13 deletions(-)
->>>>
->>>> diff --git a/drivers/remoteproc/ti_k3_dsp_remoteproc.c b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
->>>> index faf60a274e8d..b154a52f1fa6 100644
->>>> --- a/drivers/remoteproc/ti_k3_dsp_remoteproc.c
->>>> +++ b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
->>>> @@ -76,6 +76,7 @@ struct k3_dsp_dev_data {
->>>>   * @ti_sci_id: TI-SCI device identifier
->>>>   * @mbox: mailbox channel handle
->>>>   * @client: mailbox client to request the mailbox channel
->>>> + * @ipc_only: flag to indicate IPC-only mode
->>>>   */
->>>>  struct k3_dsp_rproc {
->>>>  	struct device *dev;
->>>> @@ -91,6 +92,7 @@ struct k3_dsp_rproc {
->>>>  	u32 ti_sci_id;
->>>>  	struct mbox_chan *mbox;
->>>>  	struct mbox_client client;
->>>> +	bool ipc_only;
->>>>  };
->>>>  
->>>>  /**
->>>> @@ -268,6 +270,10 @@ static int k3_dsp_rproc_prepare(struct rproc *rproc)
->>>>  	struct device *dev = kproc->dev;
->>>>  	int ret;
->>>>  
->>>> +	/* IPC-only mode does not require the core to be released from reset */
->>>> +	if (kproc->ipc_only)
->>>> +		return 0;
->>>> +
->>>>  	ret = kproc->ti_sci->ops.dev_ops.get_device(kproc->ti_sci,
->>>>  						    kproc->ti_sci_id);
->>>>  	if (ret)
->>>> @@ -292,6 +298,10 @@ static int k3_dsp_rproc_unprepare(struct rproc *rproc)
->>>>  	struct device *dev = kproc->dev;
->>>>  	int ret;
->>>>  
->>>> +	/* do not put back the cores into reset in IPC-only mode */
->>>> +	if (kproc->ipc_only)
->>>> +		return 0;
->>>> +
->>>>  	ret = kproc->ti_sci->ops.dev_ops.put_device(kproc->ti_sci,
->>>>  						    kproc->ti_sci_id);
->>>>  	if (ret)
->>>> @@ -314,6 +324,12 @@ static int k3_dsp_rproc_start(struct rproc *rproc)
->>>>  	u32 boot_addr;
->>>>  	int ret;
->>>>  
->>>> +	if (kproc->ipc_only) {
->>>> +		dev_err(dev, "%s cannot be invoked in IPC-only mode\n",
->>>> +			__func__);
->>>> +		return -EINVAL;
->>>> +	}
->>>> +
->>>>  	ret = k3_dsp_rproc_request_mbox(rproc);
->>>>  	if (ret)
->>>>  		return ret;
->>>> @@ -351,6 +367,13 @@ static int k3_dsp_rproc_start(struct rproc *rproc)
->>>>  static int k3_dsp_rproc_stop(struct rproc *rproc)
->>>>  {
->>>>  	struct k3_dsp_rproc *kproc = rproc->priv;
->>>> +	struct device *dev = kproc->dev;
->>>> +
->>>> +	if (kproc->ipc_only) {
->>>> +		dev_err(dev, "%s cannot be invoked in IPC-only mode\n",
->>>> +			__func__);
->>>> +		return -EINVAL;
->>>> +	}
->>>>  
->>>>  	mbox_free_channel(kproc->mbox);
->>>>  
->>>> @@ -359,6 +382,85 @@ static int k3_dsp_rproc_stop(struct rproc *rproc)
->>>>  	return 0;
->>>>  }
->>>>  
->>>> +/*
->>>> + * Attach to a running DSP remote processor (IPC-only mode)
->>>> + *
->>>> + * This rproc attach callback only needs to request the mailbox, the remote
->>>> + * processor is already booted, so there is no need to issue any TI-SCI
->>>> + * commands to boot the DSP core.
->>>> + */
->>>> +static int k3_dsp_rproc_attach(struct rproc *rproc)
->>>> +{
->>>> +	struct k3_dsp_rproc *kproc = rproc->priv;
->>>> +	struct device *dev = kproc->dev;
->>>> +	int ret;
->>>> +
->>>> +	if (!kproc->ipc_only || rproc->state != RPROC_DETACHED) {
->>>> +		dev_err(dev, "DSP is expected to be in IPC-only mode and RPROC_DETACHED state\n");
->>>> +		return -EINVAL;
->>>> +	}
->>>> +
->>>> +	ret = k3_dsp_rproc_request_mbox(rproc);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	dev_err(dev, "DSP initialized in IPC-only mode\n");
->>>> +	return 0;
->>>> +}
->>>> +
->>>> +/*
->>>> + * Detach from a running DSP remote processor (IPC-only mode)
->>>> + *
->>>> + * This rproc detach callback performs the opposite operation to attach callback
->>>> + * and only needs to release the mailbox, the DSP core is not stopped and will
->>>> + * be left to continue to run its booted firmware.
->>>> + */
->>>> +static int k3_dsp_rproc_detach(struct rproc *rproc)
->>>> +{
->>>> +	struct k3_dsp_rproc *kproc = rproc->priv;
->>>> +	struct device *dev = kproc->dev;
->>>> +
->>>> +	if (!kproc->ipc_only || rproc->state != RPROC_ATTACHED) {
->>>> +		dev_err(dev, "DSP is expected to be in IPC-only mode and RPROC_ATTACHED state\n");
->>>> +		return -EINVAL;
->>>> +	}
->>>> +
->>>> +	mbox_free_channel(kproc->mbox);
->>>> +	dev_err(dev, "DSP deinitialized in IPC-only mode\n");
->>>> +	return 0;
->>>> +}
->>>
->>> Same comment as patch 4/6 regarding k3_dsp_rproc::ipc_only and setting the right
->>> rproc_ops based on the scenario.
->>
->> OK, I will make the switch since both you and Bjorn prefer it this way. And we
->> can revisit later when we want to scale it to support proper shutdown as well.
->> FWIW, I have given my reasons for doing it the current way in a previous
->> response to Bjorn for similar comments.
->>
->> Note that I won't be able to define a separate ops structure but rather
->> overwrite the ops upon detection of IPC-only mode, since I won't be able to
->> detect the mode until I parse the dt and query our central system processor. The
->> dt parsing is all done post rproc_alloc, and I need to supply a rproc_ops first.
+On Wed, Jun 16, 2021 at 11:28:46AM +0200, Loic Poulain wrote:
+> On Wed, 16 Jun 2021 at 00:06, Stephan Gerhold <stephan@gerhold.net> wrote:
+> >
+> > On Tue, Jun 15, 2021 at 11:24:41PM +0200, Loic Poulain wrote:
+> > > On Tue, 15 Jun 2021 at 15:34, Stephan Gerhold <stephan@gerhold.net> wrote:
+> > > >
+> > > > At the moment, the WWAN core provides wwan_port_txon/off() to implement
+> > > > blocking writes. The tx() port operation should not block, instead
+> > > > wwan_port_txon/off() should be called when the TX queue is full or has
+> > > > free space again.
+> > > >
+> > > > However, in some cases it is not straightforward to make use of that
+> > > > functionality. For example, the RPMSG API used by rpmsg_wwan_ctrl.c
+> > > > does not provide any way to be notified when the TX queue has space
+> > > > again. Instead, it only provides the following operations:
+> > > >
+> > > >   - rpmsg_send(): blocking write (wait until there is space)
+> > > >   - rpmsg_trysend(): non-blocking write (return error if no space)
+> > > >   - rpmsg_poll(): set poll flags depending on TX queue state
+> > > >
+> > > > Generally that's totally sufficient for implementing a char device,
+> > > > but it does not fit well to the currently provided WWAN port ops.
+> > > >
+> > > > Most of the time, using the non-blocking rpmsg_trysend() in the
+> > > > WWAN tx() port operation works just fine. However, with high-frequent
+> > > > writes to the char device it is possible to trigger a situation
+> > > > where this causes issues. For example, consider the following
+> > > > (somewhat unrealistic) example:
+> > > >
+> > > >  # dd if=/dev/zero bs=1000 of=/dev/wwan0p2QMI
+> > > >  dd: error writing '/dev/wwan0p2QMI': Resource temporarily unavailable
+> > > >  1+0 records out
+> > > >
+> > > > This fails immediately after writing the first record. It's likely
+> > > > only a matter of time until this triggers issues for some real application
+> > > > (e.g. ModemManager sending a lot of large QMI packets).
+> > > >
+> > > > The rpmsg_char device does not have this problem, because it uses
+> > > > rpmsg_trysend() and rpmsg_poll() to support non-blocking operations.
+> > > > Make it possible to use the same in the RPMSG WWAN driver by extending
+> > > > the tx() operation with a "nonblock" parameter and adding an optional
+> > > > poll() callback. This integrates nicely with the RPMSG API and does
+> > > > not break other WWAN drivers.
+> > > >
+> > > > With these changes, the dd example above blocks instead of exiting
+> > > > with an error.
+> > > >
+> > > > Cc: Loic Poulain <loic.poulain@linaro.org>
+> > > > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> > > > ---
+> > > > Note that rpmsg_poll() is an optional callback currently only implemented
+> > > > by the qcom_smd RPMSG provider. However, it should be easy to implement
+> > > > this for other RPMSG providers when needed.
+> > > >
+> > > > Another potential solution suggested by Loic Poulain in [1] is to always
+> > > > use the blocking rpmsg_send() from a workqueue/kthread and disable TX
+> > > > until it is done. I think this could also work (perhaps a bit more
+> > > > difficult to implement) but the main disadvantage is that I don't see
+> > > > a way to return any kind of error to the client with this approach.
+> > > > I assume we return immediately from the write() to the char device
+> > > > after scheduling the rpmsg_send(), so we already reported success
+> > > > when rpmsg_send() returns.
+> > > >
+> > > > At the end all that matters to me is that it works properly, so I'm
+> > > > open for any other suggestions. :)
+> > > >
+> > > > [1]: https://lore.kernel.org/linux-arm-msm/CAMZdPi_-Qa=JnThHs_h-144dAfSAjF5s+QdBawdXZ3kk8Mx8ng@mail.gmail.com/
+> > > > ---
+> > > >  drivers/net/wwan/iosm/iosm_ipc_port.c |  3 ++-
+> > > >  drivers/net/wwan/mhi_wwan_ctrl.c      |  3 ++-
+> > > >  drivers/net/wwan/rpmsg_wwan_ctrl.c    | 17 +++++++++++++++--
+> > > >  drivers/net/wwan/wwan_core.c          |  9 ++++++---
+> > > >  drivers/net/wwan/wwan_hwsim.c         |  3 ++-
+> > > >  include/linux/wwan.h                  | 13 +++++++++----
+> > > >  6 files changed, 36 insertions(+), 12 deletions(-)
+> > > >
+> > > > diff --git a/drivers/net/wwan/iosm/iosm_ipc_port.c b/drivers/net/wwan/iosm/iosm_ipc_port.c
+> > > > index beb944847398..2f874e41ceff 100644
+> > > > --- a/drivers/net/wwan/iosm/iosm_ipc_port.c
+> > > > +++ b/drivers/net/wwan/iosm/iosm_ipc_port.c
+> > > > @@ -31,7 +31,8 @@ static void ipc_port_ctrl_stop(struct wwan_port *port)
+> > > >  }
+> > > >
+> > > >  /* transfer control data to modem */
+> > > > -static int ipc_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+> > > > +static int ipc_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb,
+> > > > +                           bool nonblock)
+> > > >  {
+> > > >         struct iosm_cdev *ipc_port = wwan_port_get_drvdata(port);
+> > > >
+> > > > diff --git a/drivers/net/wwan/mhi_wwan_ctrl.c b/drivers/net/wwan/mhi_wwan_ctrl.c
+> > > > index 1bc6b69aa530..9754f014d348 100644
+> > > > --- a/drivers/net/wwan/mhi_wwan_ctrl.c
+> > > > +++ b/drivers/net/wwan/mhi_wwan_ctrl.c
+> > > > @@ -139,7 +139,8 @@ static void mhi_wwan_ctrl_stop(struct wwan_port *port)
+> > > >         mhi_unprepare_from_transfer(mhiwwan->mhi_dev);
+> > > >  }
+> > > >
+> > > > -static int mhi_wwan_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+> > > > +static int mhi_wwan_ctrl_tx(struct wwan_port *port, struct sk_buff *skb,
+> > > > +                           bool nonblock)
+> > > >  {
+> > > >         struct mhi_wwan_dev *mhiwwan = wwan_port_get_drvdata(port);
+> > > >         int ret;
+> > > > diff --git a/drivers/net/wwan/rpmsg_wwan_ctrl.c b/drivers/net/wwan/rpmsg_wwan_ctrl.c
+> > > > index de226cdb69fd..63f431eada39 100644
+> > > > --- a/drivers/net/wwan/rpmsg_wwan_ctrl.c
+> > > > +++ b/drivers/net/wwan/rpmsg_wwan_ctrl.c
+> > > > @@ -54,12 +54,16 @@ static void rpmsg_wwan_ctrl_stop(struct wwan_port *port)
+> > > >         rpwwan->ept = NULL;
+> > > >  }
+> > > >
+> > > > -static int rpmsg_wwan_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+> > > > +static int rpmsg_wwan_ctrl_tx(struct wwan_port *port, struct sk_buff *skb,
+> > > > +                             bool nonblock)
+> > > >  {
+> > > >         struct rpmsg_wwan_dev *rpwwan = wwan_port_get_drvdata(port);
+> > > >         int ret;
+> > > >
+> > > > -       ret = rpmsg_trysend(rpwwan->ept, skb->data, skb->len);
+> > > > +       if (nonblock)
+> > > > +               ret = rpmsg_trysend(rpwwan->ept, skb->data, skb->len);
+> > > > +       else
+> > > > +               ret = rpmsg_send(rpwwan->ept, skb->data, skb->len);
+> > > >         if (ret)
+> > > >                 return ret;
+> > > >
+> > > > @@ -67,10 +71,19 @@ static int rpmsg_wwan_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
+> > > >         return 0;
+> > > >  }
+> > > >
+> > > > +static __poll_t rpmsg_wwan_ctrl_poll(struct wwan_port *port, struct file *filp,
+> > > > +                                    poll_table *wait)
+> > > > +{
+> > > > +       struct rpmsg_wwan_dev *rpwwan = wwan_port_get_drvdata(port);
+> > > > +
+> > > > +       return rpmsg_poll(rpwwan->ept, filp, wait);
+> > > > +}
+> > > > +
+> > > >  static const struct wwan_port_ops rpmsg_wwan_pops = {
+> > > >         .start = rpmsg_wwan_ctrl_start,
+> > > >         .stop = rpmsg_wwan_ctrl_stop,
+> > > >         .tx = rpmsg_wwan_ctrl_tx,
+> > > > +       .poll = rpmsg_wwan_ctrl_poll,
+> > > >  };
+> > > >
+> > > >  static struct device *rpmsg_wwan_find_parent(struct device *dev)
+> > > > diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
+> > > > index 7e728042fc41..c7fd0b897f87 100644
+> > > > --- a/drivers/net/wwan/wwan_core.c
+> > > > +++ b/drivers/net/wwan/wwan_core.c
+> > > > @@ -500,7 +500,8 @@ static void wwan_port_op_stop(struct wwan_port *port)
+> > > >         mutex_unlock(&port->ops_lock);
+> > > >  }
+> > > >
+> > > > -static int wwan_port_op_tx(struct wwan_port *port, struct sk_buff *skb)
+> > > > +static int wwan_port_op_tx(struct wwan_port *port, struct sk_buff *skb,
+> > > > +                          bool nonblock)
+> > > >  {
+> > > >         int ret;
+> > > >
+> > > > @@ -510,7 +511,7 @@ static int wwan_port_op_tx(struct wwan_port *port, struct sk_buff *skb)
+> > > >                 goto out_unlock;
+> > > >         }
+> > > >
+> > > > -       ret = port->ops->tx(port, skb);
+> > > > +       ret = port->ops->tx(port, skb, nonblock);
+> > > >
+> > > >  out_unlock:
+> > > >         mutex_unlock(&port->ops_lock);
+> > > > @@ -637,7 +638,7 @@ static ssize_t wwan_port_fops_write(struct file *filp, const char __user *buf,
+> > > >                 return -EFAULT;
+> > > >         }
+> > > >
+> > > > -       ret = wwan_port_op_tx(port, skb);
+> > > > +       ret = wwan_port_op_tx(port, skb, !!(filp->f_flags & O_NONBLOCK));
+> > > >         if (ret) {
+> > > >                 kfree_skb(skb);
+> > > >                 return ret;
+> > > > @@ -659,6 +660,8 @@ static __poll_t wwan_port_fops_poll(struct file *filp, poll_table *wait)
+> > > >                 mask |= EPOLLIN | EPOLLRDNORM;
+> > > >         if (!port->ops)
+> > > >                 mask |= EPOLLHUP | EPOLLERR;
+> > > > +       else if (port->ops->poll)
+> > > > +               mask |= port->ops->poll(port, filp, wait);
+> > >
+> > > I'm not sure it useful here because EPOLLOUT flag is already set above, right?
+> > >
+> >
+> > Oops, you're right - sorry! I thought the flags are inverted (only set
+> > if (is_write_blocked())), then it would have worked fine. :)
+> >
+> > I think this should be easy to fix though, I can just make the
+> >
+> >         if (!is_write_blocked(port))
+> >                 mask |= EPOLLOUT | EPOLLWRNORM;
+> >
+> > if statement conditional to (port->ops->poll == NULL). It only makes
+> > sense to supply the poll() op if the built-in write-blocking cannot be
+> > used easily (like in my case).
 > 
-> As far as I can tell for both R5 and DSP, rproc_alloc() could be done after the
-> system processor is probed.  What am I missing?
-
-The detection requires parsing the various ti,sci properties, and all the R5F OF
-properties are parsed and directly stored in the driver-specific remoteproc
-private structure that is allocated as part of rproc_alloc(). Moving the
-rproc_alloc() for later just for the sake of supplying different ops just makes
-the whole probe function cumbersome. We already do dynamic plugging of ops
-between C66x and C71x DSPs in the ti_k3_dsp_remoteproc driver, so simplest would
-be to follow the same approach here.
-
->>
->> Btw, any comments on patch 1 which is just a cleanup patch.
+> Yes, so maybe in that case poll ops should be renamed to something like tx_poll?
 > 
-> That patch perplexed me.  If ops->detach() is not implemented and the detach
-> process is allowed to carry on, how does the remote processor know the
-> remoteproc core is no longer available? 
 
-See my response to Bjorn's comments on Patch 1. I am merely adding the wrapper
-similar to rproc_attach_device(). If the point is that we are using the wrong
-default return value, then I can fix that up and we ought to fix the same in
-rproc_attach_device() as well.
+Sounds good! I will rename it to tx_poll() in v2. :)
 
-regards
-Suman
-
-
-> 
->>
->> regards
->> Suman
->>
->>>
->>> Thanks,
->>> Mathieu
->>>
->>>> +
->>>> +/*
->>>> + * This function implements the .get_loaded_rsc_table() callback and is used
->>>> + * to provide the resource table for a booted DSP in IPC-only mode. The K3 DSP
->>>> + * firmwares follow a design-by-contract approach and are expected to have the
->>>> + * resource table at the base of the DDR region reserved for firmware usage.
->>>> + * This provides flexibility for the remote processor to be booted by different
->>>> + * bootloaders that may or may not have the ability to publish the resource table
->>>> + * address and size through a DT property.
->>>> + */
->>>> +static struct resource_table *k3_dsp_get_loaded_rsc_table(struct rproc *rproc,
->>>> +							  size_t *rsc_table_sz)
->>>> +{
->>>> +	struct k3_dsp_rproc *kproc = rproc->priv;
->>>> +	struct device *dev = kproc->dev;
->>>> +
->>>> +	if (!kproc->rmem[0].cpu_addr) {
->>>> +		dev_err(dev, "memory-region #1 does not exist, loaded rsc table can't be found");
->>>> +		return ERR_PTR(-ENOMEM);
->>>> +	}
->>>> +
->>>> +	/*
->>>> +	 * NOTE: The resource table size is currently hard-coded to a maximum
->>>> +	 * of 256 bytes. The most common resource table usage for K3 firmwares
->>>> +	 * is to only have the vdev resource entry and an optional trace entry.
->>>> +	 * The exact size could be computed based on resource table address, but
->>>> +	 * the hard-coded value suffices to support the IPC-only mode.
->>>> +	 */
->>>> +	*rsc_table_sz = 256;
->>>> +	return (struct resource_table *)kproc->rmem[0].cpu_addr;
->>>> +}
->>>> +
->>>>  /*
->>>>   * Custom function to translate a DSP device address (internal RAMs only) to a
->>>>   * kernel virtual address.  The DSPs can access their RAMs at either an internal
->>>> @@ -421,8 +523,11 @@ static void *k3_dsp_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len, bool
->>>>  static const struct rproc_ops k3_dsp_rproc_ops = {
->>>>  	.start		= k3_dsp_rproc_start,
->>>>  	.stop		= k3_dsp_rproc_stop,
->>>> +	.attach		= k3_dsp_rproc_attach,
->>>> +	.detach		= k3_dsp_rproc_detach,
->>>>  	.kick		= k3_dsp_rproc_kick,
->>>>  	.da_to_va	= k3_dsp_rproc_da_to_va,
->>>> +	.get_loaded_rsc_table = k3_dsp_get_loaded_rsc_table,
->>>>  };
->>>>  
->>>>  static int k3_dsp_rproc_of_get_memories(struct platform_device *pdev,
->>>> @@ -605,6 +710,8 @@ static int k3_dsp_rproc_probe(struct platform_device *pdev)
->>>>  	struct k3_dsp_rproc *kproc;
->>>>  	struct rproc *rproc;
->>>>  	const char *fw_name;
->>>> +	bool r_state = false;
->>>> +	bool p_state = false;
->>>>  	int ret = 0;
->>>>  	int ret1;
->>>>  
->>>> @@ -683,19 +790,37 @@ static int k3_dsp_rproc_probe(struct platform_device *pdev)
->>>>  		goto release_tsp;
->>>>  	}
->>>>  
->>>> -	/*
->>>> -	 * ensure the DSP local reset is asserted to ensure the DSP doesn't
->>>> -	 * execute bogus code in .prepare() when the module reset is released.
->>>> -	 */
->>>> -	if (data->uses_lreset) {
->>>> -		ret = reset_control_status(kproc->reset);
->>>> -		if (ret < 0) {
->>>> -			dev_err(dev, "failed to get reset status, status = %d\n",
->>>> -				ret);
->>>> -			goto release_mem;
->>>> -		} else if (ret == 0) {
->>>> -			dev_warn(dev, "local reset is deasserted for device\n");
->>>> -			k3_dsp_rproc_reset(kproc);
->>>> +	ret = kproc->ti_sci->ops.dev_ops.is_on(kproc->ti_sci, kproc->ti_sci_id,
->>>> +					       &r_state, &p_state);
->>>> +	if (ret) {
->>>> +		dev_err(dev, "failed to get initial state, mode cannot be determined, ret = %d\n",
->>>> +			ret);
->>>> +		goto release_mem;
->>>> +	}
->>>> +
->>>> +	/* configure J721E devices for either remoteproc or IPC-only mode */
->>>> +	if (p_state) {
->>>> +		dev_err(dev, "configured DSP for IPC-only mode\n");
->>>> +		rproc->state = RPROC_DETACHED;
->>>> +		rproc->detach_on_shutdown = true;
->>>> +		kproc->ipc_only = true;
->>>> +	} else {
->>>> +		dev_err(dev, "configured DSP for remoteproc mode\n");
->>>> +		/*
->>>> +		 * ensure the DSP local reset is asserted to ensure the DSP
->>>> +		 * doesn't execute bogus code in .prepare() when the module
->>>> +		 * reset is released.
->>>> +		 */
->>>> +		if (data->uses_lreset) {
->>>> +			ret = reset_control_status(kproc->reset);
->>>> +			if (ret < 0) {
->>>> +				dev_err(dev, "failed to get reset status, status = %d\n",
->>>> +					ret);
->>>> +				goto release_mem;
->>>> +			} else if (ret == 0) {
->>>> +				dev_warn(dev, "local reset is deasserted for device\n");
->>>> +				k3_dsp_rproc_reset(kproc);
->>>> +			}
->>>>  		}
->>>>  	}
->>>>  
->>>> -- 
->>>> 2.30.1
->>>>
->>
-
+Thanks!
+Stephan
