@@ -2,104 +2,67 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 881A23ADEAA
-	for <lists+linux-remoteproc@lfdr.de>; Sun, 20 Jun 2021 15:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF353ADFFE
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 20 Jun 2021 21:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbhFTNiD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sun, 20 Jun 2021 09:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        id S229905AbhFTTdy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 20 Jun 2021 15:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbhFTNiC (ORCPT
+        with ESMTP id S230083AbhFTTdt (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sun, 20 Jun 2021 09:38:02 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44AEC061767
-        for <linux-remoteproc@vger.kernel.org>; Sun, 20 Jun 2021 06:35:46 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id s19so6092764ioc.3
-        for <linux-remoteproc@vger.kernel.org>; Sun, 20 Jun 2021 06:35:46 -0700 (PDT)
+        Sun, 20 Jun 2021 15:33:49 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17320C061280
+        for <linux-remoteproc@vger.kernel.org>; Sun, 20 Jun 2021 12:31:35 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a11so13364376lfg.11
+        for <linux-remoteproc@vger.kernel.org>; Sun, 20 Jun 2021 12:31:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=sec9fLKaTeyUvI3U/9cH5uXh5khwaRmiJ3Slq1YZSCexwKlBLvi58L8DBu55CdJDji
-         U+HuEZd9onOgJ+OTF2rj1+rkaNRkmc9mUKozs32zG54utaQ749Tn8dwDfGRCa86Y13h3
-         aTPzQqGcbZM/EAbe2+YYkP8IzEtm7OFmKWqXTdVfNhb2VSah4cfQXUGVQ0X59BkXxqUT
-         4pZGErCa13JdLdCIRor4r89BUHwblkmYb4cwi8/7Nzr0zyCOHjauEmAl4PRZ8S1C6dv6
-         acCJLW1ZaLruky9plyyHKip4E8d31xV8uUpmSHsk2ZsjBfcQBVTL2OilqasULeboqC8n
-         0h/w==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=a2zlJLb2cHVJ/vhYiwd0h6Ss03bH4wa1SiOeNNr1qqA=;
+        b=bkPS4yFR98020frGZuTqkshvNSWXl0Z6aTQyqDBQOYRNn8mNj5ss4TtiudbSrK7ff/
+         QNZJY25CiO+MAZJaIbw2u0HDwtyse9WT3A0cEIgMb7BhAc5Gi6ayNLOmqZZccWa+fNBh
+         k61qS4LmcyXeqJul4RPlYtrHntUAvOZQNCldFK4euecaucVDQIZPJo6OCRHDFo8n8io6
+         y/wykfU9I/qPBsaSVZvRbHpzbXcDYmsqOM+wVrXUhyO/jptCVxl1LpxYgYbXKqQg0pGJ
+         jrhELtWISoo7lLKraKAHFp1ru6KpHU4ePpKhtD5yFuFfQm9+elaj+smp5+MyUD/KdPaP
+         Ef2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
-        b=tnvneESdkVoXNh4WE9/jf8ZaH6Jlv5SKSrmsOLoKsdaO+UBTtT3KRY9r5fuRDyMJ2t
-         CMx73/xo/w4cHfYIItAe2Vwlge+jsrvXSNWUgIiX+I8L2inGnvQEbxQvApM9f3oWkKHx
-         PN4sZXVux9+m+EqzxznW0TYQv4a0ToLGSm856jafP7ggFBmO+z8oXHpqJGm8gUdOb4YS
-         740Fjfw9FxXAZVZmcdAnY087hge21DEdh0CFCUarATiHi6oNEFx0UkVHxJC4frHGrYj7
-         Ymv0/lTQ8UFsdQ7h2pAgxctQlh3Jh19KYfLz+qRZXFIdi+zSE5PGfBiVXOTZRHTlKNCL
-         rb/A==
-X-Gm-Message-State: AOAM530bWCnNyZ23Us53PiKcKKnghX5CXivojvKwc8D7vHg2D1l8B6XI
-        E/Pj4HwgnTQjXbZz7CkyMHzONrpvRFiKicGTXno=
-X-Google-Smtp-Source: ABdhPJwO76FoleXtHusTIesxM2cuIvE9VdIlMyNt5WPTfvQkSUUR8O1MTtP/waIv/m9vsUoacT9Q2gT5SJ41poXCB/Q=
-X-Received: by 2002:a05:6602:1810:: with SMTP id t16mr15654363ioh.48.1624196145888;
- Sun, 20 Jun 2021 06:35:45 -0700 (PDT)
+         :subject:to:content-transfer-encoding;
+        bh=a2zlJLb2cHVJ/vhYiwd0h6Ss03bH4wa1SiOeNNr1qqA=;
+        b=dAyMoLaZ+KHJz2M1qYTn2z6EffSsucCB9Qadg6KCIH0w0S7uRL8FXYBMck00BYhbGn
+         pAPU61/UYc7r2shL9SRgDUZzTM170wfIhtazlo1RY3QG0lzqG67ZUbNZURCd10B1LWgT
+         2o0xKl2nmoM34LuCZ2YZIEabmGShzrz+w8vjcouztxB9vVdGAcPFsNJq3yoQmqTpxjAP
+         kOlgbainVonDehU0OgyNkteNHt29NuB6+GXcGqD9OOmTEAE4kYGlSmgO20QHH51aqjDY
+         Csz0q8KHj1FZ0+YAzduUWT52QGz12fYfVn2rH9dEeTaerGXiyU7Mw7fV3PDQ6v8l9iR4
+         XrfA==
+X-Gm-Message-State: AOAM533RWdAD1r5La2XmvgzkxyG2nZMrGM3FfbvpCxY5lO3u72EtZvuA
+        Fs72Nfn07hH4YpCUcncCngTvX3XH/7zE1u1wb08=
+X-Google-Smtp-Source: ABdhPJyRr8xkKh1v74sSXR4glyEviCtgGMwIox16xrJwn4HhjsAH3AQXF/kC87XZ0K1UcvikGGPprpK4pH75Np6p+uM=
+X-Received: by 2002:ac2:499d:: with SMTP id f29mr6724142lfl.602.1624217492479;
+ Sun, 20 Jun 2021 12:31:32 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1baf:0:0:0:0 with HTTP; Sun, 20 Jun 2021 06:35:45
- -0700 (PDT)
-Reply-To: sarahkoffi389@yahoo.co.jp
-From:   Sarah Koffi <sarah.koffi101@gmail.com>
-Date:   Sun, 20 Jun 2021 15:35:45 +0200
-Message-ID: <CA+ifgLGSH5KW9J+Z85axgUznJEQcab5mED6rZZnS3OBzXTnaxw@mail.gmail.com>
-Subject: Greetings From Mrs. Sarah Koffi
-To:     sarahkoffi389@yahoo.co.jp
+Received: by 2002:aa6:da47:0:b029:fa:6d7d:24c with HTTP; Sun, 20 Jun 2021
+ 12:31:32 -0700 (PDT)
+Reply-To: contactcenter@gnbinvestorsb.com
+From:   Gnb Investors Bank <sandraquntoo@gmail.com>
+Date:   Sun, 20 Jun 2021 22:31:32 +0300
+Message-ID: <CAPu=tC5n-=M7EGJZV++m9omRBkAZZ+M9gcWgQjJkA4Y9N6hVBQ@mail.gmail.com>
+Subject: Brauchen Sie einen Kredit?
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Greetings From Mrs. Sarah Koffi
+--=20
+Brauchen Sie einen Kredit? Unsere Bank vergibt Kredite zu einem Zinssatz vo=
+n 2%
 
-I'm contacting you based on your good profiles I read and for a good
-reasons, I am in search of a property to buy in your country as I
-intended to come over to your
-country for investment, Though I have not meet with you before but I
-believe that one has to risk confiding in someone to succeed sometimes
-in life.
+Melden Sie sich f=C3=BCr weitere Informationen bei uns.
 
-My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
-Federal Government of Sudan and he has a personal Oil firm in Bentiu
-Oil zone town and Upper
-Nile city. What I have experience physically, I don't wish to
-experience it again in my life due to the recent civil Ethnic war
-cause by our President Mr. Salva Kiir
-and the rebel leader Mr Riek Machar, I have been Under United Nation
-refuge camp in chad to save my life and that of my little daughter.
-
-Though, I do not know how you will feel to my proposal, but the truth
-is that I sneaked into Chad our neighboring country where I am living
-now as a refugee.
-I escaped with my little daughter when the rebels bust into our house
-and killed my husband as one of the big oil dealers in the country,
-ever since then, I have being on the run.
-
-I left my country and move to Chad our neighboring country with the
-little ceasefire we had, due to the face to face peace meeting accord
-coordinated by the US Secretary of State, Mr John Kerry and United
-Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
-and the rebel leader Mr Riek Machar to stop this war.
-
-I want to solicit for your partnership with trust to invest the $8
-million dollars deposited by my late husband in Bank because my life
-is no longer safe in our country, since the rebels are looking for the
-families of all the oil business men in the country to kill, saying
-that they are they one that is milking the country dry.
-
-I will offer you 20% of the total fund for your help while I will
-partner with you for the investment in your country.
-If I get your reply.
-
-I will wait to hear from you so as to give you details.With love from
-
- i need you to contact me here sarahkoffi389@yahoo.co.jp
-
-Mrs. Sarah Koffi
+E-Mail: contactcenter@gnbinvestorsb.com
