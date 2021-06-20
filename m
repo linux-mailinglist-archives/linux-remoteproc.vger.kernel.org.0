@@ -2,74 +2,104 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 158283AD3E3
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 18 Jun 2021 22:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881A23ADEAA
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 20 Jun 2021 15:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbhFRUw0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 18 Jun 2021 16:52:26 -0400
-Received: from mail-oi1-f171.google.com ([209.85.167.171]:42918 "EHLO
-        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234095AbhFRUw0 (ORCPT
+        id S229607AbhFTNiD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 20 Jun 2021 09:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229632AbhFTNiC (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 18 Jun 2021 16:52:26 -0400
-Received: by mail-oi1-f171.google.com with SMTP id s23so11916014oiw.9;
-        Fri, 18 Jun 2021 13:50:15 -0700 (PDT)
+        Sun, 20 Jun 2021 09:38:02 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44AEC061767
+        for <linux-remoteproc@vger.kernel.org>; Sun, 20 Jun 2021 06:35:46 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id s19so6092764ioc.3
+        for <linux-remoteproc@vger.kernel.org>; Sun, 20 Jun 2021 06:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=sec9fLKaTeyUvI3U/9cH5uXh5khwaRmiJ3Slq1YZSCexwKlBLvi58L8DBu55CdJDji
+         U+HuEZd9onOgJ+OTF2rj1+rkaNRkmc9mUKozs32zG54utaQ749Tn8dwDfGRCa86Y13h3
+         aTPzQqGcbZM/EAbe2+YYkP8IzEtm7OFmKWqXTdVfNhb2VSah4cfQXUGVQ0X59BkXxqUT
+         4pZGErCa13JdLdCIRor4r89BUHwblkmYb4cwi8/7Nzr0zyCOHjauEmAl4PRZ8S1C6dv6
+         acCJLW1ZaLruky9plyyHKip4E8d31xV8uUpmSHsk2ZsjBfcQBVTL2OilqasULeboqC8n
+         0h/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L4LtPggW7wvPnjUlNRBXXdn1hi2ZE+tMVWYTEK9xv38=;
-        b=DJ3VLXMvDhsCaguYPRg7XJjnweDhuoD6R+3DHjALYSm/D3Md3ZQ0lJxxP83cwrWmT9
-         DTXlU1PWlVF4UTp81Xt1uWCSv8V+PeL3hcKwMlIq6FwuR+l2fPXetJhSosmvtl8JUh4U
-         QTt/u74UWtux+kbVs9n0ONb17XNcu/HPC6CqyGHlsuI+zCNUmUPlN9wxdqlxgb/1j3NE
-         EZX60CvK3IQUsHga0+iwdUUK03oHhXmGTlSxzmupamIKz2UEmGsKRzZefHTeNwhHbZeN
-         56zO1/D5mtkUaR1YvmK72pog+/3uaeOdRQUsI9g+WIMmds1dYCLqPhQoGA9ZiJJFwSvu
-         fsZg==
-X-Gm-Message-State: AOAM532gNBR/b9bpipp5FEFcTrNQJHnRrBHIU2YDTaUEp1Qf7kQt2E1r
-        SBm+IN84ACuojGJb/LqTAw==
-X-Google-Smtp-Source: ABdhPJwCOlKuuRdR95kemB3u4Pg0nnwc98yxBEAvptV6v0cIeDEJeZgovpBvppTduCWTCRcJMHui2w==
-X-Received: by 2002:aca:d603:: with SMTP id n3mr8740640oig.17.1624049414979;
-        Fri, 18 Jun 2021 13:50:14 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o20sm2187997otl.2.2021.06.18.13.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Jun 2021 13:50:14 -0700 (PDT)
-Received: (nullmailer pid 2851931 invoked by uid 1000);
-        Fri, 18 Jun 2021 20:50:11 -0000
-Date:   Fri, 18 Jun 2021 14:50:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: remoteproc: qcom: pas: Add SC8180X
- adsp, cdsp and mpss
-Message-ID: <20210618205011.GA2851898@robh.at.kernel.org>
-References: <20210608174944.2045215-1-bjorn.andersson@linaro.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=D7l/Y2nU4ivOXB3kYNarWKNDy1SUWuawPt7q4q/Bhv4=;
+        b=tnvneESdkVoXNh4WE9/jf8ZaH6Jlv5SKSrmsOLoKsdaO+UBTtT3KRY9r5fuRDyMJ2t
+         CMx73/xo/w4cHfYIItAe2Vwlge+jsrvXSNWUgIiX+I8L2inGnvQEbxQvApM9f3oWkKHx
+         PN4sZXVux9+m+EqzxznW0TYQv4a0ToLGSm856jafP7ggFBmO+z8oXHpqJGm8gUdOb4YS
+         740Fjfw9FxXAZVZmcdAnY087hge21DEdh0CFCUarATiHi6oNEFx0UkVHxJC4frHGrYj7
+         Ymv0/lTQ8UFsdQ7h2pAgxctQlh3Jh19KYfLz+qRZXFIdi+zSE5PGfBiVXOTZRHTlKNCL
+         rb/A==
+X-Gm-Message-State: AOAM530bWCnNyZ23Us53PiKcKKnghX5CXivojvKwc8D7vHg2D1l8B6XI
+        E/Pj4HwgnTQjXbZz7CkyMHzONrpvRFiKicGTXno=
+X-Google-Smtp-Source: ABdhPJwO76FoleXtHusTIesxM2cuIvE9VdIlMyNt5WPTfvQkSUUR8O1MTtP/waIv/m9vsUoacT9Q2gT5SJ41poXCB/Q=
+X-Received: by 2002:a05:6602:1810:: with SMTP id t16mr15654363ioh.48.1624196145888;
+ Sun, 20 Jun 2021 06:35:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210608174944.2045215-1-bjorn.andersson@linaro.org>
+Received: by 2002:a05:6e02:1baf:0:0:0:0 with HTTP; Sun, 20 Jun 2021 06:35:45
+ -0700 (PDT)
+Reply-To: sarahkoffi389@yahoo.co.jp
+From:   Sarah Koffi <sarah.koffi101@gmail.com>
+Date:   Sun, 20 Jun 2021 15:35:45 +0200
+Message-ID: <CA+ifgLGSH5KW9J+Z85axgUznJEQcab5mED6rZZnS3OBzXTnaxw@mail.gmail.com>
+Subject: Greetings From Mrs. Sarah Koffi
+To:     sarahkoffi389@yahoo.co.jp
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, 08 Jun 2021 10:49:43 -0700, Bjorn Andersson wrote:
-> Add compatibles for the Audio DSP, Compute DSP and Modem subsystem found
-> in the Qualcomm SC8180x to the Peripheral Authentication Service
-> remoteproc binding.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-> 
-> Changes since v1:
-> - "Rebased" on yaml conversion
-> 
->  .../devicetree/bindings/remoteproc/qcom,adsp.yaml     | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
+Greetings From Mrs. Sarah Koffi
 
-Acked-by: Rob Herring <robh@kernel.org>
+I'm contacting you based on your good profiles I read and for a good
+reasons, I am in search of a property to buy in your country as I
+intended to come over to your
+country for investment, Though I have not meet with you before but I
+believe that one has to risk confiding in someone to succeed sometimes
+in life.
+
+My name is Mrs. Sarah Koffi. My late husband deals on Crude Oil with
+Federal Government of Sudan and he has a personal Oil firm in Bentiu
+Oil zone town and Upper
+Nile city. What I have experience physically, I don't wish to
+experience it again in my life due to the recent civil Ethnic war
+cause by our President Mr. Salva Kiir
+and the rebel leader Mr Riek Machar, I have been Under United Nation
+refuge camp in chad to save my life and that of my little daughter.
+
+Though, I do not know how you will feel to my proposal, but the truth
+is that I sneaked into Chad our neighboring country where I am living
+now as a refugee.
+I escaped with my little daughter when the rebels bust into our house
+and killed my husband as one of the big oil dealers in the country,
+ever since then, I have being on the run.
+
+I left my country and move to Chad our neighboring country with the
+little ceasefire we had, due to the face to face peace meeting accord
+coordinated by the US Secretary of State, Mr John Kerry and United
+Nations in Ethiopia (Addis Ababa) between our President Mr Salva Kiir
+and the rebel leader Mr Riek Machar to stop this war.
+
+I want to solicit for your partnership with trust to invest the $8
+million dollars deposited by my late husband in Bank because my life
+is no longer safe in our country, since the rebels are looking for the
+families of all the oil business men in the country to kill, saying
+that they are they one that is milking the country dry.
+
+I will offer you 20% of the total fund for your help while I will
+partner with you for the investment in your country.
+If I get your reply.
+
+I will wait to hear from you so as to give you details.With love from
+
+ i need you to contact me here sarahkoffi389@yahoo.co.jp
+
+Mrs. Sarah Koffi
