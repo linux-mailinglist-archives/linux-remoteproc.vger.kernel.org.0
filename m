@@ -2,203 +2,98 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C993AF911
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 22 Jun 2021 01:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062E03AFB7B
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 22 Jun 2021 05:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbhFUXSw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 21 Jun 2021 19:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
+        id S230118AbhFVDpP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 21 Jun 2021 23:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbhFUXSv (ORCPT
+        with ESMTP id S229904AbhFVDpP (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 21 Jun 2021 19:18:51 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2D3C061574
-        for <linux-remoteproc@vger.kernel.org>; Mon, 21 Jun 2021 16:16:36 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id g24so10864359pji.4
-        for <linux-remoteproc@vger.kernel.org>; Mon, 21 Jun 2021 16:16:36 -0700 (PDT)
+        Mon, 21 Jun 2021 23:45:15 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF605C061574;
+        Mon, 21 Jun 2021 20:42:58 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id i1so6618480lfe.6;
+        Mon, 21 Jun 2021 20:42:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=o38KzSQf9bk0w4H1R0wVtOAX95R/HHsV6qoW4ydXw+4=;
-        b=Y52wWIe+5PSkZscV4l4zndjTceFusvppikvaZXHKCtsxUv1L8hByVc26U04LgF7QIg
-         XpKk5xmflRzxBgkJxQPYwo6/5Adnf6f8dnNwNCWvDJ3TGa9xMuGXF5/rkQJIVL6bYj/8
-         IshpVIuUWX6RQhpEKrbFTPmDDGCs2260NApQqevq9I2GR7csiOovxNE6ItezXrtaCqWB
-         rbNLX3FkKHgZsIb1aLqGLZLazCt6SLL0cOEGFiv6XD3UHRnVvANYDC7z8oAi7aENWxJj
-         HMVSKkNPecKOW6tDlvGmXMRpSdp8C0XGajSKA8U2wcZ/zpogBS679AAIQDZhl1TGbLFo
-         73VQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gOJ2XOwgzJaAX7+MzbRKuet1BGzeJOpemDowi0aJYVk=;
+        b=Y7wi6lmvHQpbJ7EK6nvbdgGT7ZZZ9ntJh/8i58YRNY+ghJTPVRBjVbnHyg7ZMvYVvz
+         VV9geBnpzZibZb9HXbUnjL1d2dh0n7tq9cYohruTCEQj8mWXG7essiSRQ0pVVWJV2Yox
+         4NcGXTglSFe0wovTxsZGWSUbPkPSmDh7oS/6oiPKexfY9naEFZuDFKCsVpOWvDTKKDaj
+         F3tKOwkwD7ICxgz/L0AjG7HyEYaWEFGC9ZPDsRh2YRKPw0CQMudXanLTawYW44//Ftu0
+         Cf8fh5BAZRXYupjdmauRylodpdbCgvt5EtUvL6WlJzEkbJjfvsdjU5/t0zPIOaS895h/
+         gA9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o38KzSQf9bk0w4H1R0wVtOAX95R/HHsV6qoW4ydXw+4=;
-        b=avJfNII/jdvtiB2AY/NOqnrAxQ0JLJSNOSA1dMZPgAHnm6IY4BMtA06HaoBwlENzkg
-         JkgGPUjRgmIeeCXEvmbknI0vf/GJTGCHpmodwSlOosRJpnZ9z2xSyS+Jf4phtplD/xFk
-         KFekY+Xzy0OuvzzG9XjaTM/lY3lFOOW+cK58hdc1zug9/S5Sb9LnIGPqzRuMUbnNlaM1
-         gaTrkQsHupfUSIzjQwQ2R09QGNdjSz0mJuXLxHyIF5IC47B1UmC0nLECRm5eDeuJNu5l
-         RotZuqjE56ULmZ90WaidgcGlSpQan/zQWYx79F9Kc4ruSD9SBbjbXzD+RjmBYpGL/VZL
-         9cng==
-X-Gm-Message-State: AOAM533OxC5K9suolG+XQvzcpiGQLD7Iv/PL7C+cJywkIH5mnmzLl68b
-        1hfyomiwgXpZ/Oxfg39YlyuCJA==
-X-Google-Smtp-Source: ABdhPJzvZNwZ5ttzMbcP5RAWrMfd1TwySMuBxZi2MrHX6mW1Virrq+UUkD7969Grh1YJRoBbIrn48A==
-X-Received: by 2002:a17:902:c1cd:b029:121:3424:fcd5 with SMTP id c13-20020a170902c1cdb02901213424fcd5mr19098076plc.77.1624317396394;
-        Mon, 21 Jun 2021 16:16:36 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id z17sm16635456pfq.218.2021.06.21.16.16.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 16:16:35 -0700 (PDT)
-Date:   Mon, 21 Jun 2021 17:16:33 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v2 1/1] rpmsg: ctrl: Introduce new
- RPMSG_CREATE/RELEASE_DEV_IOCTL controls
-Message-ID: <20210621231633.GC980846@p14s>
-References: <20210621125800.27696-1-arnaud.pouliquen@foss.st.com>
- <20210621125800.27696-2-arnaud.pouliquen@foss.st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gOJ2XOwgzJaAX7+MzbRKuet1BGzeJOpemDowi0aJYVk=;
+        b=bZjNqX45ars/kjmb/N4X/u4/qQ22bp777GgXBARGfyn3coa1jY9yTiv0dZnPF67Bhx
+         FLguRvoO/vuhFJUdINQVqxNSCse1K3daLos2hss4Zyb7lAZ/mbOdeX3u5clcmakHw43h
+         j1rFc+e4L0PTkLA9FF6xrwDibZYmkT3O78fM/aYK0DrIq23dCiWvJjxjUZ0rnkTOnbbC
+         lUujq1VFI1vR9UuMSf5p58lQqZv9gZLUk92EjZmqJtn+Aj91oDQwL87DlKjGiJu/1FEx
+         /97VZvQTj54lDGTMDda18CNxJZTqW/rzjEVIzrkQqEXYQ3cCVZEjXE8lHjvt2aSnzsUD
+         I3xQ==
+X-Gm-Message-State: AOAM5333GYCQakivEFilnJynvkop6NpY5p8hlCWiAnJA9fUYzuKnGAkn
+        Ir2KlHwsEES9GhCoPUuuRJzhaaye8tawGFzQarE=
+X-Google-Smtp-Source: ABdhPJzIbryMsmYkjd9L2BdMlA/D3pcFpJV/SJ93tJJyjfEfOHMWCvl9svIm2JLcUO6tXqw8kwsE+Txv4D9szW8bla8=
+X-Received: by 2002:a05:6512:219:: with SMTP id a25mr1224607lfo.295.1624333377086;
+ Mon, 21 Jun 2021 20:42:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210621125800.27696-2-arnaud.pouliquen@foss.st.com>
+References: <20210622041413.16992-1-peng.fan@oss.nxp.com> <20210622041413.16992-2-peng.fan@oss.nxp.com>
+In-Reply-To: <20210622041413.16992-2-peng.fan@oss.nxp.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 22 Jun 2021 00:42:45 -0300
+Message-ID: <CAOMZO5AkBd1M69G_bjjS_um=BUVTGxj7-o1eU6dAmV7JbukADg@mail.gmail.com>
+Subject: Re: [PATCH V2 1/2] dt-bindings: remoteproc: imx_rproc: support i.MX8ULP
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     Ohad Ben Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-remoteproc@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 02:58:00PM +0200, Arnaud Pouliquen wrote:
-> Allow the user space application to create and release an rpmsg device
-> by adding RPMSG_CREATE_DEV_IOCTL and RPMSG_RELEASE_DEV_IOCTL ioctrls to
-> the /dev/rpmsg_ctrl interface
-> 
-> The RPMSG_CREATE_DEV_IOCTL Ioctl can be used to instantiate a local rpmsg
-> device.
-> Depending on the back-end implementation, the associated rpmsg driver is
-> probed and a NS announcement can be sent to the remote processor.
-> 
-> The RPMSG_RELEASE_DEV_IOCTL allows the user application to release a
-> rpmsg device created either by the remote processor or with the
-> RPMSG_CREATE_DEV_IOCTL call.
-> Depending on the back-end implementation, the associated rpmsg driver is
-> removed and a NS destroy rpmsg can be sent to the remote processor.
-> 
-> Suggested-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Hi Peng,
+
+On Tue, Jun 22, 2021 at 12:40 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> Add i.MX8ULP remote processor(Cortex-M33) compatible string
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  drivers/rpmsg/rpmsg_ctrl.c | 37 +++++++++++++++++++++++++++++++++----
->  include/uapi/linux/rpmsg.h | 10 ++++++++++
->  2 files changed, 43 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_ctrl.c b/drivers/rpmsg/rpmsg_ctrl.c
-> index eeb1708548c1..cb19e32d05e1 100644
-> --- a/drivers/rpmsg/rpmsg_ctrl.c
-> +++ b/drivers/rpmsg/rpmsg_ctrl.c
-> @@ -23,6 +23,7 @@
->  #include <uapi/linux/rpmsg.h>
->  
->  #include "rpmsg_char.h"
-> +#include "rpmsg_internal.h"
->  
->  static dev_t rpmsg_major;
->  
-> @@ -37,11 +38,13 @@ static DEFINE_IDA(rpmsg_minor_ida);
->   * @rpdev:	underlaying rpmsg device
->   * @cdev:	cdev for the ctrl device
->   * @dev:	device for the ctrl device
-> + * @ctrl_lock:	serialize the ioctrls.
->   */
->  struct rpmsg_ctrldev {
->  	struct rpmsg_device *rpdev;
->  	struct cdev cdev;
->  	struct device dev;
-> +	struct mutex ctrl_lock;
->  };
->  
->  static int rpmsg_ctrldev_open(struct inode *inode, struct file *filp)
-> @@ -70,9 +73,8 @@ static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
->  	void __user *argp = (void __user *)arg;
->  	struct rpmsg_endpoint_info eptinfo;
->  	struct rpmsg_channel_info chinfo;
-> -
-> -	if (cmd != RPMSG_CREATE_EPT_IOCTL)
-> -		return -EINVAL;
-> +	struct rpmsg_device *rpdev;
-> +	int ret = 0;
->  
->  	if (copy_from_user(&eptinfo, argp, sizeof(eptinfo)))
->  		return -EFAULT;
-> @@ -82,7 +84,33 @@ static long rpmsg_ctrldev_ioctl(struct file *fp, unsigned int cmd,
->  	chinfo.src = eptinfo.src;
->  	chinfo.dst = eptinfo.dst;
->  
-> -	return rpmsg_chrdev_eptdev_create(ctrldev->rpdev, &ctrldev->dev, chinfo);
-> +	mutex_lock(&ctrldev->ctrl_lock);
+>  Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> index 1dc34cf5a4ea..c28b767d246f 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> @@ -15,6 +15,7 @@ maintainers:
+>  properties:
+>    compatible:
+>      enum:
+> +      - fsl,imx8ulp-cm33
+>        - fsl,imx8mq-cm4
 
-Have you been able to verify the VFS layer doesn't take care of serializing
-ioctl() and file accesses in general?  I did a quick search in the drivers/
-directory and the vast majority of implementations don't use a lock.
-
-Thanks,
-Mathieu
-
-> +	switch (cmd) {
-> +	case RPMSG_CREATE_EPT_IOCTL:
-> +		ret = rpmsg_chrdev_eptdev_create(ctrldev->rpdev, &ctrldev->dev, chinfo);
-> +		break;
-> +
-> +	case RPMSG_CREATE_DEV_IOCTL:
-> +		rpdev = rpmsg_create_channel(ctrldev->rpdev, &chinfo);
-> +		if (!rpdev) {
-> +			dev_err(&ctrldev->dev, "failed to create %s channel\n", chinfo.name);
-> +			ret = -ENXIO;
-> +		}
-> +		break;
-> +
-> +	case RPMSG_RELEASE_DEV_IOCTL:
-> +		ret = rpmsg_release_channel(ctrldev->rpdev, &chinfo);
-> +		if (ret)
-> +			dev_err(&ctrldev->dev, "failed to release %s channel (%d)\n",
-> +				chinfo.name, ret);
-> +		break;
-> +
-> +	default:
-> +		ret = -EINVAL;
-> +	}
-> +	mutex_unlock(&ctrldev->ctrl_lock);
-> +
-> +	return ret;
->  };
->  
->  static const struct file_operations rpmsg_ctrldev_fops = {
-> @@ -119,6 +147,7 @@ static int rpmsg_ctrldev_probe(struct rpmsg_device *rpdev)
->  	device_initialize(dev);
->  	dev->parent = &rpdev->dev;
->  
-> +	mutex_init(&ctrldev->ctrl_lock);
->  	cdev_init(&ctrldev->cdev, &rpmsg_ctrldev_fops);
->  	ctrldev->cdev.owner = THIS_MODULE;
->  
-> diff --git a/include/uapi/linux/rpmsg.h b/include/uapi/linux/rpmsg.h
-> index f5ca8740f3fb..1637e68177d9 100644
-> --- a/include/uapi/linux/rpmsg.h
-> +++ b/include/uapi/linux/rpmsg.h
-> @@ -33,4 +33,14 @@ struct rpmsg_endpoint_info {
->   */
->  #define RPMSG_DESTROY_EPT_IOCTL	_IO(0xb5, 0x2)
->  
-> +/**
-> + * Instantiate a new local rpmsg service device.
-> + */
-> +#define RPMSG_CREATE_DEV_IOCTL	_IOW(0xb5, 0x3, struct rpmsg_endpoint_info)
-> +
-> +/**
-> + * Release a local rpmsg device.
-> + */
-> +#define RPMSG_RELEASE_DEV_IOCTL	_IOW(0xb5, 0x4, struct rpmsg_endpoint_info)
-> +
->  #endif
-> -- 
-> 2.17.1
-> 
+Please keep the entries in alphabetical order.
