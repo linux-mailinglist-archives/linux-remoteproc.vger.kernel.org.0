@@ -2,139 +2,70 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB80C3B20B0
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 23 Jun 2021 20:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990043B22BE
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 23 Jun 2021 23:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbhFWS66 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 23 Jun 2021 14:58:58 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:41145 "EHLO m43-7.mailgun.net"
+        id S229774AbhFWVwY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 23 Jun 2021 17:52:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229523AbhFWS66 (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 23 Jun 2021 14:58:58 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1624474599; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=raM5yy7Fixm9SBjgzY+GjFB9SPnrp4+WIjv/dKrKXH8=; b=GBWjoKLEgLyvYVv6zH06zlnz4iM9xsisZfTGu7XslBVa1NIHBrsK9030gFD9BmWB3LPSiJhC
- D9DJTQ0s6ioZS9laSg0lSXFFPE51yK4TTt/Zt2nuBlMj+gFpnLkVuElIiHFcXye6kk8ULECR
- bhvAocpxqXumpi8U6vjZzs3XecY=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 60d383df638039e9976a6a48 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 23 Jun 2021 18:56:31
- GMT
-Sender: sidgup=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3EC04C43217; Wed, 23 Jun 2021 18:56:31 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [192.168.1.10] (cpe-75-83-25-192.socal.res.rr.com [75.83.25.192])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sidgup)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 81904C433D3;
-        Wed, 23 Jun 2021 18:56:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 81904C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sidgup@codeaurora.org
-Subject: Re: [PATCH v3 1/4] remoteproc: core: Move cdev add before device add
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     bjorn.andersson@linaro.org, ohad@wizery.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, psodagud@codeaurora.org,
-        stable@vger.kernel.org
-References: <1623723671-5517-1-git-send-email-sidgup@codeaurora.org>
- <1623723671-5517-2-git-send-email-sidgup@codeaurora.org>
- <YMgy7eg3wde0eVfe@kroah.com>
- <0a196786-f624-d9bb-8ef9-55c04ed57497@codeaurora.org>
- <YMmTGD6hAKbpGWMp@kroah.com>
- <f81acd52-fe59-a296-b221-febbf8281606@codeaurora.org>
- <YNLibU0/kMfZ3Hio@kroah.com>
-From:   Siddharth Gupta <sidgup@codeaurora.org>
-Message-ID: <7e8ee1c3-e11e-52fc-068d-34fe036e132f@codeaurora.org>
-Date:   Wed, 23 Jun 2021 11:56:28 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S229796AbhFWVwX (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Wed, 23 Jun 2021 17:52:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id AE9DA613C2;
+        Wed, 23 Jun 2021 21:50:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624485005;
+        bh=qmHmnj5eYH4W2LG+a82CHATaUE3veTPE7AkgdF6yaSM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Xz6AFCvYhRKJn2IPhs1eUi2MRkRgqPIFmIJRdVPYG/MtyFrvJ4+8nDy/+JfTx/4uB
+         Rs7/ZPxDgGvvg2NM4cdnBA6PU7L6Cb0FpG7JDEhkeaKfCgrjqMiWPxFmUAQbThB2i5
+         Z4M3RydS5ml5jdtSLXTwdTWZfTzolH19w7Hda2UMtrfya/O8JzeNWSMjxiCOmLzOlR
+         sW7xZeN6SkBMQ1yrWtmPE0xNUiVJzfOJpjoeSjFqNoYJHfF6JNiAQ/JGOuZKW54m5K
+         GPieDt+2iPYSl9NrkEAr9E1U5la6XPUJhVfzqKK1n4Mn+vWbTx83UxYSbXymMY7tjB
+         OaZx4FfOHzc2g==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id A30B560A71;
+        Wed, 23 Jun 2021 21:50:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <YNLibU0/kMfZ3Hio@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH V3 0/2] remoteproc: imx_rproc: support i.MX8ULP
+From:   patchwork-bot+linux-remoteproc@kernel.org
+Message-Id: <162448500566.18278.11746200316594733150.git-patchwork-notify@kernel.org>
+Date:   Wed, 23 Jun 2021 21:50:05 +0000
+References: <20210622060148.18411-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20210622060148.18411-1-peng.fan@oss.nxp.com>
+To:     Peng Fan (OSS) <peng.fan@oss.nxp.com>
+Cc:     linux-remoteproc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Hello:
 
-On 6/23/2021 12:27 AM, Greg KH wrote:
-> On Wed, Jun 16, 2021 at 11:47:01AM -0700, Siddharth Gupta wrote:
->> On 6/15/2021 10:58 PM, Greg KH wrote:
->>> On Tue, Jun 15, 2021 at 12:03:26PM -0700, Siddharth Gupta wrote:
->>>> On 6/14/2021 9:56 PM, Greg KH wrote:
->>>>> On Mon, Jun 14, 2021 at 07:21:08PM -0700, Siddharth Gupta wrote:
->>>>>> When cdev_add is called after device_add has been called there is no
->>>>>> way for the userspace to know about the addition of a cdev as cdev_add
->>>>>> itself doesn't trigger a uevent notification, or for the kernel to
->>>>>> know about the change to devt. This results in two problems:
->>>>>>     - mknod is never called for the cdev and hence no cdev appears on
->>>>>>       devtmpfs.
->>>>>>     - sysfs links to the new cdev are not established.
->>>>>>
->>>>>> The cdev needs to be added and devt assigned before device_add() is
->>>>>> called in order for the relevant sysfs and devtmpfs entries to be
->>>>>> created and the uevent to be properly populated.
->>>>> So this means no one ever ran this code on a system that used devtmpfs?
->>>>>
->>>>> How was it ever tested?
->>>> My testing was done with toybox + Android's ueventd ramdisk.
->>>> As I mentioned in the discussion, the race became evident
->>>> recently. I will make sure to test all such changes without
->>>> systemd/ueventd in the future.
->>> It isn't an issue of systemd/ueventd, those do not control /dev on a
->>> normal system, that is what devtmpfs is for.
->> I am not fully aware of when devtmpfs is enabled or not, but in
->> case it is not - systemd/ueventd will create these files with
->> mknod, right?
-> No, systemd does not create device nodes, and neither does udev.  Hasn't
-> done so for well over 10 years now.
-Oh okay. I thought ueventd does it because it allows setting
-the node permissions through ueventd.rc:
-https://android.googlesource.com/platform/system/core/+/master/rootdir/ueventd.rc
->
->> I was even manually able to call mknod from the
->> terminal when some of the remoteproc character device entries
->> showed up (using major number from there, and minor number being
->> the remoteproc id), and that allowed me to boot up the
->> remoteprocs as well.
-> Yes, that is fine, but that also means that this was not working from
-> the very beginning :(
-Right. To clarify, I did this after we started seeing the problem
-on our devices, which led me to believe there was a race between
-ueventd and cdev_add(). Not sure anymore if that is not the case.
->
->>> And devtmpfs nodes are only created if you create a struct device
->>> somewhere with a proper major/minor, which you were not doing here, so
->>> you must have had a static /dev on your test systems, right?
->> I am not sure of what you mean by a static /dev? Could you
->> explain? In case you mean the character device would be
->> non-functional, that is not the case. They have been working
->> for us since the beginning.
-> /dev on modern systems is managed by devtmpfs, which knows to create the
-> device nodes when you properly register the device with the driver core.
-> A "static" /dev is managed by mknod from userspace, like you did "by
-> hand", and that is usually only done by older systems.
-Thanks for the explanation! As I mentioned earlier - I was under
-the impression that ueventd does it. I will go through our older
-builds where this was working (without this patch) and try to see
-how the dev nodes were being populated.
+This series was applied to andersson/remoteproc.git (refs/heads/for-next):
 
-Thanks,
-Sid
-> thanks,
->
-> greg k-h
+On Tue, 22 Jun 2021 14:01:46 +0800 you wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> V3:
+>  Per Fabio's comment, keep the entries in alphabetical order in Patch 1.
+> 
+> V2:
+>  Add R-b from Mathieu
+>  Add Rob in Cc for dt-bindings
+> 
+> [...]
+
+Here is the summary with links:
+  - [V3,1/2] dt-bindings: remoteproc: imx_rproc: support i.MX8ULP
+    https://git.kernel.org/andersson/remoteproc/c/5f5fb97491b9
+  - [V3,2/2] remoteproc: imx_rproc: support i.MX8ULP
+    https://git.kernel.org/andersson/remoteproc/c/d59eedc0e408
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
