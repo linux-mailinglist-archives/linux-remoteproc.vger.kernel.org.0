@@ -2,39 +2,39 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FC7D3B22C1
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 23 Jun 2021 23:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7DC23B22BF
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 23 Jun 2021 23:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbhFWVwY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        id S229688AbhFWVwY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
         Wed, 23 Jun 2021 17:52:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41304 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:41298 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229800AbhFWVwX (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        id S229774AbhFWVwX (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
         Wed, 23 Jun 2021 17:52:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id B6F07613D1;
+Received: by mail.kernel.org (Postfix) with ESMTPS id AAE34613BE;
         Wed, 23 Jun 2021 21:50:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1624485005;
-        bh=2aojuLw2hFoqOuX4cGOYJvZ3wwKCzP0N9CSPM+yhNe0=;
+        bh=RIGXKk0iGSt4B0KK8QuQIrF2tnlUSbYDYsAYJLD6cns=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lAjGVe01UZZO+2q9CzEn1WY+jfmO6zQmv3/djJtjblQXruzGdL5qvUCzSGn+bV2TM
-         9U3H89mjcQfn6AfHSCjULSXWR1gD4YfU0HqYqeMGiZvBsw7U8KogVSs4EgHV6kyE16
-         3e/8Z6x7Bm1E7Oywd6lwLkv2PPr68sC5EE2ekUjsqNTcPWnav3W/iUnmoRxSCFqhot
-         GgnMZG95+56ynYQ8KlnFjf8ZLp4JI0XaA/y19Ym65HDTeF3blKWjjW2jm2qbCNkbTB
-         BhePU1UK1xuvI4s2QIAnMa3YkJ5akwL/LYosko1ks2oCt2SPbv57XDtcaroBgUjo0S
-         jCiFhKvffihJg==
+        b=E4f6q+YM5iKNP43GPcCN7RVRCIqAh7p2DadG27Nh34hiGaCKT1fAvL469k/Xz3eBi
+         Jufi1rbDlUVTkHD4BH2cyV0nwyju+qB/59QpOXzRBChcT94dl84jgECCSM4pwQVpoC
+         tYH/gr293y7d89kMoZ6n/H9jbGMTyOgj2bAFg+WqyLVaMCQGsgMsuyF9aEzzqIu0o0
+         6hQZumFZOUurfGuMvuA5m13sqS9SNV0EZvScpBgbqbGzz5BFhkDUiO3tWRVAYmXmG1
+         6dRVNXDwpwnN+ACY8bQiK6Ksdbo7GQ4xniWuSmb4K+XEGBGJBwnoGf0nbt2q1I5I8X
+         7qlXM+fZTgDfg==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id ACE5960A02;
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 99A9A609B1;
         Wed, 23 Jun 2021 21:50:05 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] remoteproc: core: Move cdev add before device add
+Subject: Re: [PATCH v4 0/4] remoteproc: core: Fixes for rproc cdev and add
 From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <162448500570.18278.8235199339523096069.git-patchwork-notify@kernel.org>
+Message-Id: <162448500562.18278.2587332241995479556.git-patchwork-notify@kernel.org>
 Date:   Wed, 23 Jun 2021 21:50:05 +0000
-References: <1618946805-26970-1-git-send-email-sidgup@codeaurora.org>
-In-Reply-To: <1618946805-26970-1-git-send-email-sidgup@codeaurora.org>
+References: <1623783824-13395-1-git-send-email-sidgup@codeaurora.org>
+In-Reply-To: <1623783824-13395-1-git-send-email-sidgup@codeaurora.org>
 To:     Siddharth Gupta <sidgup@codeaurora.org>
 Cc:     linux-remoteproc@vger.kernel.org
 Precedence: bulk
@@ -43,22 +43,28 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 
 Hello:
 
-This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
+This series was applied to andersson/remoteproc.git (refs/heads/for-next):
 
-On Tue, 20 Apr 2021 12:26:45 -0700 you wrote:
-> When cdev_add is called after device_add has been called there is no
-> way for the userspace to know about the addition of a cdev as cdev_add
-> itself doesn't trigger a uevent notification, or for the kernel to
-> know about the change to devt. This results in two problems:
->  - mknod is never called for the cdev and hence no cdev appears on
->    devtmpfs.
->  - sysfs links to the new cdev are not established.
+On Tue, 15 Jun 2021 12:03:40 -0700 you wrote:
+> This patch series contains stability fixes and error handling for remoteproc.
+> 
+> The changes included in this series do the following:
+> Patch 1: Fixes the creation of the rproc character device.
+> Patch 2: Validates rproc as the first step of rproc_add().
+> Patch 3: Fixes rproc cdev remove and the order of dev_del() and cdev_del().
+> Patch 4: Adds error handling in rproc_add().
 > 
 > [...]
 
 Here is the summary with links:
-  - remoteproc: core: Move cdev add before device add
+  - [v4,1/4] remoteproc: core: Move cdev add before device add
     https://git.kernel.org/andersson/remoteproc/c/c6659ee893e2
+  - [v4,2/4] remoteproc: core: Move validate before device add
+    https://git.kernel.org/andersson/remoteproc/c/519346ecabd3
+  - [v4,3/4] remoteproc: core: Fix cdev remove and rproc del
+    https://git.kernel.org/andersson/remoteproc/c/930eec0be20c
+  - [v4,4/4] remoteproc: core: Cleanup device in case of failure
+    https://git.kernel.org/andersson/remoteproc/c/7dbdb8bd7c02
 
 You are awesome, thank you!
 --
