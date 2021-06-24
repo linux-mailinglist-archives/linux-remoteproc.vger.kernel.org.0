@@ -2,73 +2,63 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7DC23B22BF
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 23 Jun 2021 23:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8F73B3468
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 24 Jun 2021 19:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbhFWVwY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 23 Jun 2021 17:52:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41298 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229774AbhFWVwX (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 23 Jun 2021 17:52:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id AAE34613BE;
-        Wed, 23 Jun 2021 21:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624485005;
-        bh=RIGXKk0iGSt4B0KK8QuQIrF2tnlUSbYDYsAYJLD6cns=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=E4f6q+YM5iKNP43GPcCN7RVRCIqAh7p2DadG27Nh34hiGaCKT1fAvL469k/Xz3eBi
-         Jufi1rbDlUVTkHD4BH2cyV0nwyju+qB/59QpOXzRBChcT94dl84jgECCSM4pwQVpoC
-         tYH/gr293y7d89kMoZ6n/H9jbGMTyOgj2bAFg+WqyLVaMCQGsgMsuyF9aEzzqIu0o0
-         6hQZumFZOUurfGuMvuA5m13sqS9SNV0EZvScpBgbqbGzz5BFhkDUiO3tWRVAYmXmG1
-         6dRVNXDwpwnN+ACY8bQiK6Ksdbo7GQ4xniWuSmb4K+XEGBGJBwnoGf0nbt2q1I5I8X
-         7qlXM+fZTgDfg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 99A9A609B1;
-        Wed, 23 Jun 2021 21:50:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S232441AbhFXRL4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 24 Jun 2021 13:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232400AbhFXRLw (ORCPT
+        <rfc822;linux-remoteproc@vger.kernel.org>);
+        Thu, 24 Jun 2021 13:11:52 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2821C061768
+        for <linux-remoteproc@vger.kernel.org>; Thu, 24 Jun 2021 10:09:31 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id v3so9109868ioq.9
+        for <linux-remoteproc@vger.kernel.org>; Thu, 24 Jun 2021 10:09:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to;
+        bh=ANhbTggsY3NFhRZExKMwUmb3VzJqye8XLvWVXSvNBkQ=;
+        b=p95plxgcKdT8+TUJCmcKdAyJL6L8C+j3muAeTI6tbvEOMwKUFZvBH22Z3GEGxdnUZH
+         d9XkDasjcz/bUj2n1PkWxPPQL/Sxtf1a7ckN43IkWwU4a9v6DYeOi9Tg8DPYHl700hH/
+         xlmv54Ir2NUVB8zwaX1UsxTzP5GUW3mdywmszCeflzWKbXzDgkMNhx+qVsi3FklHnD5x
+         fSDWvxz3POXOJ/0yZM+F2G99rPMTFJK+bPA5TWYu0VJpvpEjmQwRSgXLB6dx+kXpC0Uz
+         JX+JhI0lSB7VkwJTdkbApCrUx6TGzp99N5mAm/d0lil4hmexz93RFAPSpMzmwkjNchKB
+         rXTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to;
+        bh=ANhbTggsY3NFhRZExKMwUmb3VzJqye8XLvWVXSvNBkQ=;
+        b=Sw3EERVaFlUhgNLnZhVIL2eJYBVquxWVZ6iSNrqY4kjDMnkRJo/Ne/7PgbQs5D7eQD
+         pZXM4kojUDtqN9nQHPBJB0v4QTFdCL9Qv+pq3aPyqOrK+T1XUQgo3FFyAZ46CXaG/s3p
+         8WRFhbsnK6obsu4yGdu2gUKtC4wnOQcgP+0xyhQKcP5bZk4SbzWcY/pljTSW6vQNHf1j
+         TU6Yw3qOXk7cvOo4ADHN42Jp1MaM4+wOEuenSO08sjwbJub1mtE9tIPBJh17MiVHZ3/y
+         +wuwKRsCqujvDeMBLCUxoW4dWsu10ZqeA6eOPQqXUQFVZi75uTgvIV3kNit58qJ7BIR0
+         33yg==
+X-Gm-Message-State: AOAM530/YMw8Lr7QavoJteSN82cELRWBhOP85TQTxfdzIIKSLHkMrD8u
+        inl6pmJKId5vnaaRoUwNgIGVNR8pY51MvuLGKmkWdH7ZibHZLA==
+X-Google-Smtp-Source: ABdhPJzkYUuO368jts0QgMQyJe9SHzg0U698qd8KdfojEfYsXnHtwMfPGxVHmw7fwQ64+IhHRhAEJH5nusdeW4BWzcA=
+X-Received: by 2002:a05:6e02:524:: with SMTP id h4mr4098121ils.255.1624554560853;
+ Thu, 24 Jun 2021 10:09:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 0/4] remoteproc: core: Fixes for rproc cdev and add
-From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <162448500562.18278.2587332241995479556.git-patchwork-notify@kernel.org>
-Date:   Wed, 23 Jun 2021 21:50:05 +0000
-References: <1623783824-13395-1-git-send-email-sidgup@codeaurora.org>
-In-Reply-To: <1623783824-13395-1-git-send-email-sidgup@codeaurora.org>
-To:     Siddharth Gupta <sidgup@codeaurora.org>
-Cc:     linux-remoteproc@vger.kernel.org
+Received: by 2002:a05:6638:3aa:0:0:0:0 with HTTP; Thu, 24 Jun 2021 10:09:20
+ -0700 (PDT)
+Reply-To: tutywoolgar021@gmail.com
+In-Reply-To: <CADB47+4Wa3T59Vq_==GTXEfHrX5x-2vQFxaTBO0dTdyAweCVpw@mail.gmail.com>
+References: <CADB47+4Wa3T59Vq_==GTXEfHrX5x-2vQFxaTBO0dTdyAweCVpw@mail.gmail.com>
+From:   tuty woolgar <faridaamadoubas@gmail.com>
+Date:   Thu, 24 Jun 2021 17:09:20 +0000
+Message-ID: <CADB47+607zNBfYFb4bj0nUhuuYgAdwT=G_wJ9-EeV0ESHe56Jg@mail.gmail.com>
+Subject: greetings,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello:
-
-This series was applied to andersson/remoteproc.git (refs/heads/for-next):
-
-On Tue, 15 Jun 2021 12:03:40 -0700 you wrote:
-> This patch series contains stability fixes and error handling for remoteproc.
-> 
-> The changes included in this series do the following:
-> Patch 1: Fixes the creation of the rproc character device.
-> Patch 2: Validates rproc as the first step of rproc_add().
-> Patch 3: Fixes rproc cdev remove and the order of dev_del() and cdev_del().
-> Patch 4: Adds error handling in rproc_add().
-> 
-> [...]
-
-Here is the summary with links:
-  - [v4,1/4] remoteproc: core: Move cdev add before device add
-    https://git.kernel.org/andersson/remoteproc/c/c6659ee893e2
-  - [v4,2/4] remoteproc: core: Move validate before device add
-    https://git.kernel.org/andersson/remoteproc/c/519346ecabd3
-  - [v4,3/4] remoteproc: core: Fix cdev remove and rproc del
-    https://git.kernel.org/andersson/remoteproc/c/930eec0be20c
-  - [v4,4/4] remoteproc: core: Cleanup device in case of failure
-    https://git.kernel.org/andersson/remoteproc/c/7dbdb8bd7c02
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+My greetings to you my friend i hope you are fine and good please respond
+back to me thanks,
