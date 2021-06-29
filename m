@@ -2,54 +2,84 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EA83B72A8
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 29 Jun 2021 14:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 188943B74CA
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 29 Jun 2021 17:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233115AbhF2M5K convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 29 Jun 2021 08:57:10 -0400
-Received: from [218.75.92.58] ([218.75.92.58]:65498 "EHLO WIN-VTPUBHNS72V"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232755AbhF2M5K (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 29 Jun 2021 08:57:10 -0400
-Received: from [192.168.43.47] (Unknown [197.210.79.43])
-        by WIN-VTPUBHNS72V with ESMTPA
-        ; Thu, 24 Jun 2021 20:46:48 +0800
-Message-ID: <0A856EF2-99AA-4469-B00F-1B6EFFF8EBE5@WIN-VTPUBHNS72V>
-Content-Type: text/plain; charset="iso-8859-1"
+        id S233791AbhF2PE1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 29 Jun 2021 11:04:27 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41500 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234583AbhF2PE0 (ORCPT
+        <rfc822;linux-remoteproc@vger.kernel.org>);
+        Tue, 29 Jun 2021 11:04:26 -0400
+X-UUID: 016235ef35a0485eb01b979f11d6978f-20210629
+X-UUID: 016235ef35a0485eb01b979f11d6978f-20210629
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <phil.chang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1076631800; Tue, 29 Jun 2021 23:01:52 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 29 Jun 2021 23:01:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 29 Jun 2021 23:01:50 +0800
+From:   Phil Chang <phil.chang@mediatek.com>
+To:     <linux-remoteproc@vger.kernel.org>
+CC:     <ohad@wizery.com>, <bjorn.andersson@linaro.org>,
+        <mathieu.poirier@linaro.org>, <matthias.bgg@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <yj.chiang@mediatek.com>,
+        <mark-pk.tsai@mediatek.com>, <weiting.tsai@mediatek.com>,
+        Phil Chang <phil.chang@mediatek.com>
+Subject: [PATCH] remoteproc: export rproc re/unregister to virtio device APIs
+Date:   Tue, 29 Jun 2021 23:00:02 +0800
+Message-ID: <20210629150002.8050-1-phil.chang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: URGENT ATTENTION
-To:     Recipients <wjjt@wjjt.cn>
-From:   "Andres Auchincloss" <wjjt@wjjt.cn>
-Date:   Thu, 24 Jun 2021 14:46:23 +0200
-Reply-To: andresauchincloss926@gmail.com
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi,
+In some case, the remote processor already boot up on previous state,
+but still need register to virtio device, so that exported those APIs.
 
-I will like to use this opportunity to wish you a productive time in 2021 and also confide in you to finalize this transaction of mutual benefits. It may seem strange to you, but it is real. This is a transaction that has no risk at all, due process shall be followed and it shall be carried out under the ambit of the financial laws. Being the Chief Financial Officer, BP Plc. I want to trust and put in your care Eighteen Million British Pounds Sterling, The funds were acquired from an over-invoiced payment from a past contract executed in one of my departments.
+Signed-off-by: Phil Chang <phil.chang@mediatek.com>
+Signed-off-by: YJ chiang <yj.chiang@mediatek.com>
+---
+Hi
 
-I can't successfully achieve this transaction without presenting you as foreign contractor who will provide a bank account to receive the funds.
+In our case, the remote processor is already boot up in u-boot,
+we don't want to boot again or load fw in driver but register to virtio
+device for rpmsg. so that needs those API exported.
+Furthermore, the rproc_vq_interrupt is exported, so those functions
+should be exported also.
 
-Documentation for the claim of the funds will be legally processed and documented, so I will need your full cooperation on this matter for our mutual benefits. We will discuss details if you are interested to work with me to secure this funds. I will appreciate your prompt response in every bit of our communication. Stay Blessed and Stay Safe.
+thanks
 
+ drivers/remoteproc/remoteproc_virtio.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-Best Regards
-
-
-
-
-Tel: +1 (587) 770-0485
-Andres .B. Auchincloss
-Chief financial officerBP Petroleum p.l.c.
-
-
-
-
-                                  Copyright ©? 1996-2021
+diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+index 0cc617f76068..e23658a76f5e 100644
+--- a/drivers/remoteproc/remoteproc_virtio.c
++++ b/drivers/remoteproc/remoteproc_virtio.c
+@@ -425,6 +425,7 @@ int rproc_add_virtio_dev(struct rproc_vdev *rvdev, int id)
+ out:
+ 	return ret;
+ }
++EXPORT_SYMBOL(rproc_add_virtio_dev);
+ 
+ /**
+  * rproc_remove_virtio_dev() - remove an rproc-induced virtio device
+@@ -440,3 +441,4 @@ int rproc_remove_virtio_dev(struct device *dev, void *data)
+ 	unregister_virtio_device(vdev);
+ 	return 0;
+ }
++EXPORT_SYMBOL(rproc_remove_virtio_dev);
+-- 
+2.18.0
 
