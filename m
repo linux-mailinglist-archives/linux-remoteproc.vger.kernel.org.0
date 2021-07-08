@@ -2,47 +2,70 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B65573C1468
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  8 Jul 2021 15:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4843C1795
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  8 Jul 2021 18:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbhGHNlI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 8 Jul 2021 09:41:08 -0400
-Received: from mx-n08.wc2.phx1.stabletransit.com ([207.246.242.254]:47676 "HELO
-        mx-n08.wc2.phx1.stabletransit.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S231747AbhGHNlH (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 8 Jul 2021 09:41:07 -0400
-X-Greylist: delayed 354 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 09:41:07 EDT
-Received: by mx-n08.wc2.phx1.stabletransit.com (Postfix, from userid 114)
-        id A8EC4B41B2; Thu,  8 Jul 2021 08:32:31 -0500 (CDT)
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
-        mx-n08.wc2.phx1.stabletransit.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.6 required=6.0 tests=BAYES_50,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_SHORT,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.2
-X-Spam-Virus: No
-Received: from php-v027.wc2.phx1.stabletransit.com (unknown [10.40.206.156])
-        by mx-n08.wc2.phx1.stabletransit.com (Postfix) with ESMTP id 9A55EB41AE
-        for <linux-remoteproc@vger.kernel.org>; Thu,  8 Jul 2021 08:32:30 -0500 (CDT)
-Received: from digilu (uid 2914979)
-        (envelope-from mabeljohnson@citromail.hu)
-        id 2017e
-        by php-v027.wc2.phx1.stabletransit.com (DragonFly Mail Agent v0.11);
-        Thu, 08 Jul 2021 08:32:30 -0500
-To:     linux-remoteproc@vger.kernel.org
-Subject: WORK OF GOD.
-X-PHP-Originating-Script: 2914979:class.engine.php(12) : runtime-created function
-Date:   Thu, 8 Jul 2021 08:32:30 -0500
-From:   MARY JOHNSON <mabeljohnson@citromail.hu>
-Reply-To: mj224294@gmail.com
-Message-ID: <5c24f283a3ce59c2e44b15870fe4deb4@jackieleestudio.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        id S229866AbhGHRBa (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 8 Jul 2021 13:01:30 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:17184 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229815AbhGHRB3 (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Thu, 8 Jul 2021 13:01:29 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1625763528; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=CdKAtOicPcmHu+CUWLoTIqa7VrY/40zPjKj7i68UcTc=; b=okRUC8AuWF+XUq3yPeSVbwKdp34Y0BOfEG+P0ZGb70XqjynQwnE4AurKnz8ba6CFGMTFKLfh
+ +AtS/TR9dVgtrugE118xctZpe4jHq/OYXo++KFu6GLxw7V5ovsNH8Ij1lEW4m6Spuy1n0f8f
+ 7qxS4aAC6LxWg4n3gPq9RRWf69E=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 60e72ec01938941955b309b1 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 08 Jul 2021 16:58:39
+ GMT
+Sender: deesin=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 22BCCC433D3; Thu,  8 Jul 2021 16:58:38 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from deesin-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: deesin)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AF6AEC433F1;
+        Thu,  8 Jul 2021 16:58:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org AF6AEC433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=deesin@codeaurora.org
+From:   Deepak Kumar Singh <deesin@codeaurora.org>
+To:     bjorn.andersson@linaro.org, clew@codeaurora.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        Deepak Kumar Singh <deesin@codeaurora.org>
+Subject: [PATCH V2 0/2] smem partition remap and bound check changes
+Date:   Thu,  8 Jul 2021 22:28:20 +0530
+Message-Id: <1625763502-22806-1-git-send-email-deesin@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-I am Mrs. Mary Johnson,78years,an aging widow suffering from cancer, I am on admission at a hospital.I would like to willfully entrust the rest of my monetary assets to you, Kindly reply back with your full Name, cellphone, address, to enable me to send you a letter of authorization to contact my bank first inland bank nigeria plc so that they can transfer my funds to your account for the purpose of helping the poor as indicated on my WILL.
+Change from[V1]
+Addressed most of the review comments in V1.
+Also changed the patch order.
+
+Deepak Kumar Singh (2):
+  soc: qcom: smem: map only partitions used by local HOST
+  soc: qcom: smem: validate fields of shared structures
+
+ drivers/soc/qcom/smem.c | 290 ++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 229 insertions(+), 61 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
