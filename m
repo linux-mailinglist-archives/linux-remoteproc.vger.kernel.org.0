@@ -2,109 +2,86 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B39C63C27FF
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  9 Jul 2021 19:04:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9907E3C347B
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 10 Jul 2021 14:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbhGIRGf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 9 Jul 2021 13:06:35 -0400
-Received: from mail-0301.mail-europe.com ([188.165.51.139]:38154 "EHLO
-        mail-0301.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbhGIRGe (ORCPT
+        id S232735AbhGJM16 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 10 Jul 2021 08:27:58 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:41490 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232689AbhGJM1v (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 9 Jul 2021 13:06:34 -0400
-Date:   Fri, 09 Jul 2021 17:03:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail; t=1625850228;
-        bh=GNiNsS3JF8fmKTOzoUgaNOicb7Ez8mimdpLZnDv3tNY=;
-        h=Date:To:From:Cc:Reply-To:Subject:From;
-        b=ecPSiiTT34ql7TP1r6LFB7xJIQYcYn2DgrLbAbrxRQ8Q8kSgF+uoMVhfX88rKys++
-         ZzE7KLPEdbaXeX345MLC7n0sCJ38m2AFJ9unGycMB7OGrvFTTwaNCB5uYooq/aMrck
-         aKm6k33tbbXbK0JXN2RO4J6BTQUnBbwk2tLz4nzM=
-To:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org
-From:   Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Dr. Git" <drgitx@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH 5/5] arm64: dts: qcom: msm8996: Add SLPI PIL
-Message-ID: <Kkl8iDciL84dIO3pxBJycNYGjkvZQkVTj3YKjPg8I@cp4-web-032.plabs.ch>
+        Sat, 10 Jul 2021 08:27:51 -0400
+X-UUID: ebdcc82543b0451bb65d8a10da3d97d4-20210710
+X-UUID: ebdcc82543b0451bb65d8a10da3d97d4-20210710
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1292515639; Sat, 10 Jul 2021 20:25:03 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 10 Jul 2021 20:25:01 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 10 Jul 2021 20:25:01 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     <ohad@wizery.com>, <bjorn.andersson@linaro.org>,
+        <mathieu.poirier@linaro.org>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <tzungbi@google.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: [v2 1/2] dt-bindings: remoteproc: mediatek: Add binding for mt8195 scp
+Date:   Sat, 10 Jul 2021 20:24:45 +0800
+Message-ID: <20210710122446.5439-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.15.GIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
-        autolearn=disabled version=3.4.4
-X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
-        mailout.protonmail.ch
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add a node for the SLPI peripheral image loader.
+Add mt8195 compatible to binding document. The description of required
+properties are also modified to reflect the hardware change between
+mt8183 and mt8195. The mt8195 doesn't have to control the scp clock on
+kernel side.
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 39 +++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+changes in v2:
+- fix missing 'compatible' line in binding document
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qc=
-om/msm8996.dtsi
-index bb6bfd24256f..1f4125ef5512 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -1285,6 +1285,45 @@ lpass_q6_smmu: iommu@1600000 {
- =09=09=09clock-names =3D "iface", "bus";
- =09=09};
-=20
-+=09=09slpi_pil: remoteproc@1c00000 {
-+=09=09=09compatible =3D "qcom,msm8996-slpi-pil";
-+=09=09=09reg =3D <0x01c00000 0x4000>;
-+
-+=09=09=09interrupts-extended =3D <&intc 0 390 IRQ_TYPE_EDGE_RISING>,
-+=09=09=09=09=09      <&slpi_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-+=09=09=09=09=09      <&slpi_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-+=09=09=09=09=09      <&slpi_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-+=09=09=09=09=09      <&slpi_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
-+=09=09=09interrupt-names =3D "wdog",
-+=09=09=09=09=09  "fatal",
-+=09=09=09=09=09  "ready",
-+=09=09=09=09=09  "handover",
-+=09=09=09=09=09  "stop-ack";
-+
-+=09=09=09clocks =3D <&xo_board>,
-+=09=09=09         <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
-+=09=09=09clock-names =3D "xo", "aggre2";
-+
-+=09=09=09memory-region =3D <&slpi_mem>;
-+
-+=09=09=09qcom,smem-states =3D <&slpi_smp2p_out 0>;
-+=09=09=09qcom,smem-state-names =3D "stop";
-+
-+=09=09=09power-domains =3D <&rpmpd MSM8996_VDDSSCX>;
-+=09=09=09power-domain-names =3D "ssc_cx";
-+
-+=09=09=09status =3D "disabled";
-+
-+=09=09=09smd-edge {
-+=09=09=09=09interrupts =3D <GIC_SPI 176 IRQ_TYPE_EDGE_RISING>;
-+
-+=09=09=09=09label =3D "dsps";
-+=09=09=09=09mboxes =3D <&apcs_glb 25>;
-+=09=09=09=09qcom,smd-edge =3D <3>;
-+=09=09=09=09qcom,remote-pid =3D <3>;
-+=09=09=09};
-+=09=09};
-+
- =09=09mss_pil: remoteproc@2080000 {
- =09=09=09compatible =3D "qcom,msm8996-mss-pil";
-=20
---=20
-2.32.0
+ Documentation/devicetree/bindings/remoteproc/mtk,scp.txt | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt b/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
+index 3f5f78764b60..d64466eefbe3 100644
+--- a/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
++++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
+@@ -5,13 +5,15 @@ This binding provides support for ARM Cortex M4 Co-processor found on some
+ Mediatek SoCs.
+ 
+ Required properties:
+-- compatible		Should be "mediatek,mt8183-scp"
++- compatible		Should be one of:
++				"mediatek,mt8183-scp"
++				"mediatek,mt8195-scp"
+ - reg			Should contain the address ranges for memory regions:
+ 			SRAM, CFG, and L1TCM.
+ - reg-names		Contains the corresponding names for the memory regions:
+ 			"sram", "cfg", and "l1tcm".
+-- clocks		Clock for co-processor (See: ../clock/clock-bindings.txt)
+-- clock-names		Contains the corresponding name for the clock. This
++- clocks		Required by mt8183. Clock for co-processor (See: ../clock/clock-bindings.txt)
++- clock-names		Required by mt8183. Contains the corresponding name for the clock. This
+ 			should be named "main".
+ 
+ Subnodes
+-- 
+2.18.0
 
