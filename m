@@ -2,96 +2,77 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFBE33CA150
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 15 Jul 2021 17:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1413CA415
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 15 Jul 2021 19:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238643AbhGOPUF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 15 Jul 2021 11:20:05 -0400
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:51766 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232994AbhGOPUF (ORCPT
+        id S235126AbhGOR2P (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 15 Jul 2021 13:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229624AbhGOR2P (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 15 Jul 2021 11:20:05 -0400
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 16FFCAr2025316;
-        Thu, 15 Jul 2021 17:17:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=6AuPIvPC0e4Jj6MaY2nbVdaznRVtBzyFnECY1u8Uo40=;
- b=i4vi2MHt7MEUOlYT/yLTfYf8/eNpnqujEbk7OIShASyW3UPqBWFFlkq4KeOBDFc01Jy7
- 4+983uBaf+L1wRnReOouKw4OnAnoyFPim+CC0AmMh88u597HstRGQIp6FZpHfqxtZJ8D
- 9mcaBmBok4Y8tZXMy4dqP0RxI2NU5QJ76SKubMTo45dG3VMap4qSoL/xJlATye64z+of
- iz6rT3er60l9tdSvcT6YlGAZFnh+d7NIn+XD4k+RkJqRzhfJFOqmRLDPZz8O8SpAlhtr
- nB2JDgVHtQ2LXHkovynHo5A2yt1lGspmcUvRTEUMMUNMMoo+9yCgY9P6qRA0mlf2EI74 DQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 39tac3v6au-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Jul 2021 17:17:02 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8023A10002A;
-        Thu, 15 Jul 2021 17:17:01 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node3.st.com [10.75.127.6])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6C2A02291D7;
-        Thu, 15 Jul 2021 17:17:01 +0200 (CEST)
-Received: from lmecxl0912.lme.st.com (10.75.127.46) by SFHDAG2NODE3.st.com
- (10.75.127.6) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 15 Jul
- 2021 17:16:35 +0200
-Subject: Re: [PATCH 0/2] Add new IPCC mailbox to support the coprocessor
- detach on some stm32mp15x boards
-To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Rob Herring <robh@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20210614164940.27153-1-arnaud.pouliquen@foss.st.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-Message-ID: <40d3f649-f56e-15bd-f7ef-59c62028c317@foss.st.com>
-Date:   Thu, 15 Jul 2021 17:16:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Thu, 15 Jul 2021 13:28:15 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06C4C06175F
+        for <linux-remoteproc@vger.kernel.org>; Thu, 15 Jul 2021 10:25:21 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id z9so5933655qkg.5
+        for <linux-remoteproc@vger.kernel.org>; Thu, 15 Jul 2021 10:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=VEbievBeLXzXz2IFTCJlfsSW3SGnPx5BRLHAunZVXukgfJX3HSSAUxCtdiKf61hv/8
+         dEjk1vTJjxHihT0WA1OL/uEOLbisu+eOZ9QBM+pSgOr0g3iviST/L7UaXer3M8NeFmjI
+         cUcDXANijM5RzePSgHNEUg4tiAZJvw7xY2717+o5bCXGYbN3j0in5RSdJSiv5QmZpfXV
+         xJwXiiE0C1Gs4ldNfG+SItE+RoyPJtAgR4hB34JMXRrPZxzy82ifiVVChBVQnRUKYafC
+         pLvyRURLCMNCEs5zTTafGrQe1zI12ARsnWy7gNJNMcFCKTa1+89JJPFI0mohmLMeae0x
+         ASdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Ibb5KNEw1DKqJEg9n4gJy5KnzVasBofn6QaWYsu9UCQ=;
+        b=E9VCm4L/Ixdu3MdfjLn88okLZdGrNhGO5oXZjy+zYjLLkaWt6Z8SLHupqZMAXhbVXe
+         6z/c5gPYhKFJpXrIKfh3Z8pdUCM/vOscUzh0jKH5E+Fc/JNvnW/uEI0IHOS1d4eUsjfA
+         JNfirKCPsWLWhzY0L6wdBR0BK+ec8+6x2xuRFe6j7UbRxDR7EVCLc11V30INJV4M33US
+         IZAJQx3IQCSKaEgKFHxY5t1yovwlc+laLjtjEaUhh2J83VhiDEuVVW56rB77VRETs90Z
+         yrmPXJa5aVorMENFY0VZUkHD1s5NRQrAQHM51apZmBgjX3c9JfdzW0qMyov+t8nC6HxB
+         K/dQ==
+X-Gm-Message-State: AOAM533nXsDAyk+RtHueMzKVpFbpqdtg+yDAhG2fMjwNsFUpakFbzjJ+
+        5+BWOa9NKUrJKc0cJNLsp7hvzW1g7G3fkf5Kddk=
+X-Google-Smtp-Source: ABdhPJyVA6gR/njuabWs2C2fW8gelCsYJFEl6/1qckwAKb5sFvak5SWUy5PHC6/Yk0GlmffBpcH6FQwcd62hdQoqBbA=
+X-Received: by 2002:a37:9947:: with SMTP id b68mr5263725qke.56.1626369920992;
+ Thu, 15 Jul 2021 10:25:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210614164940.27153-1-arnaud.pouliquen@foss.st.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG2NODE2.st.com (10.75.127.5) To SFHDAG2NODE3.st.com
- (10.75.127.6)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-15_10:2021-07-14,2021-07-15 signatures=0
+Received: by 2002:a0c:e502:0:0:0:0:0 with HTTP; Thu, 15 Jul 2021 10:25:20
+ -0700 (PDT)
+Reply-To: faty.muhamad@gmail.com
+From:   Ms Fatima Muhammad <steveokoh.fedexdeliveryagent@gmail.com>
+Date:   Thu, 15 Jul 2021 17:25:20 +0000
+Message-ID: <CAFKwDuBfMzCdHqoenSL2rqjnW5tE27dPjiWKbgxM_hjsa-G7pg@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Arnaud
+Hello Dear,
 
-On 6/14/21 6:49 PM, Arnaud Pouliquen wrote:
-> Purpose:
->    Add the IPCC channel 4 as "detach" mailbox to support the remoteproc the feature added in [1].
-> 
->    The enable of this feature is a design choice. As consequence, the new mbox is declared
->    only for stm32mp157c-ed1 & stm32mp15x-dkx boards maintained by ST Microelectronics.
-> 
-> Aim:
->    Allow to send to the remote processor a HW signal on IPCC channel 4 when user space requests
->    to detach the main processor from the remote processor (e.g. a reboot of the  Linux processor
->    on a crash).
-> 
-> [1] https://patchwork.ozlabs.org/project/devicetree-bindings/cover/20210331073347.8293-1-arnaud.pouliquen@foss.st.com/
-> 
-> Arnaud Pouliquen (2):
->    ARM: dts: stm32: Add coprocessor detach mbox on stm32mp157c-ed1 board
->    ARM: dts: stm32: Add coprocessor detach mbox on stm32mp15x-dkx boards
-> 
->   arch/arm/boot/dts/stm32mp157c-ed1.dts  | 4 ++--
->   arch/arm/boot/dts/stm32mp15xx-dkx.dtsi | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
+My name is Ms.Fatima Muhammad., Please forgive me for stressing you
+with my predicaments and I sorry to approach you through this media
+because is serves the fastest means of  my communication right now,
 
-Series Applied on stm32-next;
+I came across your Email from my personal search and I decided to
+contact you believing you will be honest to fulfill my business
+proposal which I believe that will be a very good opportunity for both
+of us. Please it is my pleasure to contact you today for a business
+partnership investments projects worth $4.6 million USD which I intend
+to establish in your country..
 
-thanks
-Alex
+Pls If this business proposal offends your moral and ethic values do
+accept my apology. therefore kindly contact me immediately if you are
+interested for more details.
+
+Thank you for your wiliness to help me
+Yours Sincerely Fatima Muhammad
