@@ -2,45 +2,54 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14C893D2D52
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 22 Jul 2021 22:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2400A3D2F8F
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 23 Jul 2021 00:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbhGVT3Q (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 22 Jul 2021 15:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbhGVT3P (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 22 Jul 2021 15:29:15 -0400
-Received: from 68-252-206-104.staticrdns.eonix.net (unknown [IPv6:2607:ff28:b005:2a:ec52:75ff:fe50:d321])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 677C0C061575;
-        Thu, 22 Jul 2021 13:09:50 -0700 (PDT)
-Received: from User (localhost [IPv6:::1])
-        by 68-252-206-104.staticrdns.eonix.net (Postfix) with SMTP id DC7298F1F52;
-        Mon, 19 Jul 2021 22:13:42 -0400 (EDT)
-Reply-To: <mrs_hannah@rediffmail.com>
-From:   "Mrs. Hajia Hannah Ahmed" <info@247vidz.com>
-Subject: Re: I WANT TO INVESTMENT IN YOUR COUNTRY?
-Date:   Tue, 20 Jul 2021 05:13:14 -0700
+        id S231962AbhGVVcS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 22 Jul 2021 17:32:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52514 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231536AbhGVVcR (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Thu, 22 Jul 2021 17:32:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8427C60E9C;
+        Thu, 22 Jul 2021 22:12:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626991971;
+        bh=nJS9TxZk48LUjS6XEUSs3f10U77VVU1bhEqRVdXsDtE=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=F5dupHf7pZL8QS52sAqMikG7RxTLen5KI0F9OD5z32E+0uv+opmK4C95cpcOyBP8G
+         ao+8eYgdIxG7sR1Ej0x/FErqRyJmJe+7/BMwjpr4DOzHzbuHe6byRPwyARyS6ZUx25
+         CCGyOoftKje9wvQ9xNzuL4RFijquLeXQ3vjGuhYsNF9TWAhLGvk5oc4foHHekH/SkP
+         OXx4hcjztKqhIyWrkH64McFJ25qKNk2HHqwugQ+NQYfOj/ACwclBzsGBHCq4YpKz7c
+         z/lP34r59o1Y4gr2llLlXvfQUrvyQxhtnJ8pwiz0sy11YwO4r0wiaO3tXcq46HGziF
+         0crj1smdYF1pA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20210720021342.DC7298F1F52@68-252-206-104.staticrdns.eonix.net>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1615361290-19238-1-git-send-email-pillair@codeaurora.org>
+References: <1615361290-19238-1-git-send-email-pillair@codeaurora.org>
+Subject: Re: [PATCH 0/2] Add support for sc7280 WPSS PIL loading
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     sibis@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Rakesh Pillai <pillair@codeaurora.org>
+To:     Rakesh Pillai <pillair@codeaurora.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
+        ohad@wizery.com, p.zabel@pengutronix.de, robh+dt@kernel.org
+Date:   Thu, 22 Jul 2021 15:12:50 -0700
+Message-ID: <162699197027.2679160.6825677812017791100@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Attn:
- 
-I am Mrs. Hajia Hannah Ahmed I am a Widow and member of the contract award committee and 14 project allocation manager, of the Department of Minerals and Natural Resources in Syria;
- 
-Due to the war in Syria, I am in search of an agent or company to assist me to invest my fund  (USD$35Million) and subsequent investment in properties in your country. You will be required to. If you decide to render your service to me in this regard, 30% of the total sum of USD$35M will be given to you for your service. 
- 
-Yours Faithfully,
-Mrs. Hajia Hannah Ahmed
+Quoting Rakesh Pillai (2021-03-09 23:28:08)
+> Add support for PIL loading of WPSS co-processor for SC7280 SOCs.
+>=20
+> Rakesh Pillai (2):
+>   dt-bindings: remoteproc: qcom: Add SC7280 WPSS support
+>   remoteproc: qcom: q6v5_wpss: Add support for sc7280 WPSS
+>=20
+
+Is this patch series going to be resent?
