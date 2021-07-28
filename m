@@ -2,79 +2,71 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 857C33D699F
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 27 Jul 2021 00:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500FB3D861F
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 28 Jul 2021 05:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233824AbhGZV5W (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 26 Jul 2021 17:57:22 -0400
-Received: from mail-il1-f174.google.com ([209.85.166.174]:36686 "EHLO
-        mail-il1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233775AbhGZV5U (ORCPT
+        id S233721AbhG1Djw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 27 Jul 2021 23:39:52 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:58020 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233481AbhG1Djw (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 26 Jul 2021 17:57:20 -0400
-Received: by mail-il1-f174.google.com with SMTP id c3so10473061ilh.3;
-        Mon, 26 Jul 2021 15:37:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jhQiogE/zeQBOwAh8kG8uDNGFLp4MbNyTgySdYg4ow4=;
-        b=TocQWa9ip9/xoSreBpRxxoKomP3QfbnPknY5MelMcBwGvOPTH7zDa6WeDf0xelKt26
-         5cZEAk0LlewQEit8X97JIA8j0cdAFHV1JgrdbagKluGhSsBdCxtss1fIzbK3bHBaDLme
-         uRuL58fEowFWnbpKD0QAoRwdv1v4o3wP62ylREjQbQhHlonFP0VKhvY+kVlQ8XBdeirM
-         x7HbRCF6xaTQ3BIfmGZtzd6MeR9bMeCJhwjeu+h4dVgu1rU8jbKTCWOLiRwUicqsr42A
-         pJ5SvAURqiCs0rlvnFw2geeAWidDFJrH/Q9DCVI0iIlZGdE8KbZ/zbF6uSAfqXDrvOxd
-         GAbw==
-X-Gm-Message-State: AOAM531s8TCeFYOlAdfIlXMv8hTeGSZvauQDM5GAVIZZ8iXUNKLqnRoF
-        ANlqmpAYi/hYCZLfJXPlAXjV2Rkk3Q==
-X-Google-Smtp-Source: ABdhPJyVtrHqYPjIilDfqErTtViORlAkmWMthFR2B1uXTchtbhmi29nCNdMxW6IA+JC7hKaJdxzPUg==
-X-Received: by 2002:a92:c60c:: with SMTP id p12mr14394951ilm.7.1627339067336;
-        Mon, 26 Jul 2021 15:37:47 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id v18sm607434iln.49.2021.07.26.15.37.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 15:37:46 -0700 (PDT)
-Received: (nullmailer pid 1002097 invoked by uid 1000);
-        Mon, 26 Jul 2021 22:37:42 -0000
-Date:   Mon, 26 Jul 2021 16:37:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     rishabhb@codeaurora.org, devicetree@vger.kernel.org,
-        dianders@chromium.org, linux-kernel@vger.kernel.org,
-        agross@kernel.org, mathieu.poirier@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        sidgup@codeaurora.org, ohad@wizery.com, swboyd@chromium.org,
-        bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
-        robh+dt@kernel.org, rjw@rjwysocki.net, mka@chromium.org
-Subject: Re: [PATCH v4 01/13] dt-bindings: soc: qcom: aoss: Drop the load
- state power-domain
-Message-ID: <20210726223742.GA1002063@robh.at.kernel.org>
-References: <1626755807-11865-1-git-send-email-sibis@codeaurora.org>
- <1626755807-11865-2-git-send-email-sibis@codeaurora.org>
+        Tue, 27 Jul 2021 23:39:52 -0400
+X-UUID: 06901bbc26b9437287306031bd83b926-20210728
+X-UUID: 06901bbc26b9437287306031bd83b926-20210728
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 44931842; Wed, 28 Jul 2021 11:39:46 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 28 Jul 2021 11:39:45 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 28 Jul 2021 11:39:45 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     <ohad@wizery.com>, <bjorn.andersson@linaro.org>,
+        <mathieu.poirier@linaro.org>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <tzungbi@google.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: [PATCH 0/4] Mediatek MT8195 SCP support
+Date:   Wed, 28 Jul 2021 11:39:26 +0800
+Message-ID: <20210728033930.5269-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.15.GIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1626755807-11865-2-git-send-email-sibis@codeaurora.org>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, 20 Jul 2021 10:06:35 +0530, Sibi Sankar wrote:
-> The power-domains exposed by AOSS QMP node are used to notify the Always
-> on Subsystem (AOSS) that a particular co-processor is up/down. These
-> co-processors enter low-power modes independent to that of the application
-> processor and their states are expected to remain unaltered across system
-> suspend/resume cycles. To achieve this behavior let's drop the load
-> power-domain and replace them with generic qmp_send interface instead.
-> 
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-> ---
-> 
-> v4:
->  * Rebase patch due to the recent aoss-qmp yaml conversion (Dropping Rb).
-> 
->  Documentation/devicetree/bindings/soc/qcom/qcom,aoss-qmp.yaml | 11 +----------
->  1 file changed, 1 insertion(+), 10 deletions(-)
-> 
+Changes since v2:
+- Add compatible for mt8192
+- Convert mtk,scp.txt to mtk,scp.yaml 
+- Refine clock checking method
 
-Acked-by: Rob Herring <robh@kernel.org>
+Changes since v1:
+- Fix missing 'compatible' line in binding document
+
+Tinghan Shen (4):
+  dt-bindings: remoteproc: mediatek: Add binding for mt8195 scp
+  dt-bindings: remoteproc: mediatek: Add binding for mt8192 scp
+  dt-bindings: remoteproc: mediatek: Convert mtk,scp to json-schema
+  remoteproc: mediatek: Support mt8195 scp
+
+ .../bindings/remoteproc/mtk,scp.txt           | 36 --------
+ .../bindings/remoteproc/mtk,scp.yaml          | 85 +++++++++++++++++++
+ drivers/remoteproc/mtk_scp.c                  |  3 +-
+ 3 files changed, 87 insertions(+), 37 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+
+-- 
+2.18.0
+
