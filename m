@@ -2,66 +2,118 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CDD3E08E1
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Aug 2021 21:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B138A3E09D1
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Aug 2021 23:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbhHDTcD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 4 Aug 2021 15:32:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39484 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234064AbhHDTcC (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 4 Aug 2021 15:32:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id A230C60F58;
-        Wed,  4 Aug 2021 19:31:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628105509;
-        bh=32dhI4Lq82bDWZ6lQpM5yPOqjeufvXnb6PvyxRfng5E=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=VfDpcbX+EpFN9MICXyLR+cIiabkhCtOFV3mPQYQxPfZuI0eU5L18sbgE/Gqkhcj5J
-         bgrNHu8h3DUhCWSYxaRpa7niAeMYUbna62atK8s9WriEjcHSoC1JLTgnGV+p64wJEn
-         TjbZy/W4mL+cLjBBReyhzRDMK8LuzUd2WzhEO41KdXhXzwNUenueLt/x2aqw6C89Ht
-         NU3KmUOe1w6iwzVOdriPOzIB/plPOFhl5gs8flrg9TzpUgKWPSt1QHMQDnEo99tMLv
-         rkVoKtQnUE1fF/Asl7gHKmApFOH0P0f8RC6dVKML3GRj8FqBCjQ0e2ev+hPpGITNQo
-         +FGMg8hDeBokQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8E30860A72;
-        Wed,  4 Aug 2021 19:31:49 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S240021AbhHDVEX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Aug 2021 17:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240082AbhHDVEX (ORCPT
+        <rfc822;linux-remoteproc@vger.kernel.org>);
+        Wed, 4 Aug 2021 17:04:23 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203FDC0613D5;
+        Wed,  4 Aug 2021 14:04:10 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id f42so6734003lfv.7;
+        Wed, 04 Aug 2021 14:04:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bRgs0NPKh4Mw3gD6S/OL3j4+WTypBMMGrOvKDK40lo0=;
+        b=DbK0lw1BL42tvqX/clZcnrxev3xx9WcpJBvlbzNzaBPpeLoZ/66un1phJ20lQtU7mp
+         3ovVprD8QmuPl5Ah3Z08GKO+RIJoHWc44HDT5iF3n812zdjNKCpywqzK1dYgOkeetMnZ
+         aYlQSuwI2I3MXm8L+NuqZ7fYD8mQXyN83hsk0+4XMNtDPw7JelN0ENd9taOeknSMXtKY
+         TfYQuFxzYrTd4+2qVKRQHmdRGOhCWliGByO9S8IUrk/OaQMnLJtZci9HA8rTyLfHDyPM
+         nU6gl32lzkb5v0PXtk42himNI538Ad4HYhgm7Rw/UNe7a9986mYTW+jAGt52HCdCnTBV
+         qupA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bRgs0NPKh4Mw3gD6S/OL3j4+WTypBMMGrOvKDK40lo0=;
+        b=LvUuXI5oYrf3jZ4jSRLZ5DMR1QIFfDpv8qVEK4y0gWsUt/37Q0/YLpkLJL8k/UUmfq
+         ZZJL9rYo358gUjYAZkmVPqAMcgB6bAQ0LLEXb2+en9se6eV3IcIwYlAPRVQc8ygykts7
+         1DGOq5aAvrbdX5BIRRDv/WrCnCw9+SV4QN5Z7ziztnsxaYGkOSp4HkgbUvgCGbPYzzGK
+         DEffYe2xOG5KsmwwsvTpWXuxbMCOrbSmxBCckIJKIAZEKffK1s0JsuJHiMb6AMYDbvfX
+         szAqEiMTNIww0txNfd23xl++bqFMTqDPD7Ie73CIvHM6wpaitNjNcotH430qxz+gwvJ6
+         MDwg==
+X-Gm-Message-State: AOAM532proK+WBvru59n32UoLpxnMHs314/PLxvsre6gXgIR1QNHvWXo
+        rrsPV4npR+su8cueaWYTZLvCrxesAOmZinLWw/s=
+X-Google-Smtp-Source: ABdhPJxCGu1zBOUwbc3sME3niD4I85/4MNH4QCPLuk+2DyDyECbtIPi3zXHPCvRxAGKTz1kM4LV2nrn+dLtUad1+fOc=
+X-Received: by 2002:a19:c202:: with SMTP id l2mr812180lfc.276.1628111048404;
+ Wed, 04 Aug 2021 14:04:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/1] remoteproc: avoid notification when suspended
-From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <162810550957.17752.12206541568388699220.git-patchwork-notify@kernel.org>
-Date:   Wed, 04 Aug 2021 19:31:49 +0000
-References: <20210519234418.1196387-1-elder@linaro.org>
-In-Reply-To: <20210519234418.1196387-1-elder@linaro.org>
-To:     Alex Elder <elder@linaro.org>
-Cc:     linux-remoteproc@vger.kernel.org
+References: <20210717234859.351911-1-martin.blumenstingl@googlemail.com>
+ <20210717234859.351911-3-martin.blumenstingl@googlemail.com> <20210728175823.GA2766167@p14s>
+In-Reply-To: <20210728175823.GA2766167@p14s>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Wed, 4 Aug 2021 23:03:57 +0200
+Message-ID: <CAFBinCB0-bAa7Y+YhscczarGrGuio37F8vRyfW6U2DiiDAvr-g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] remoteproc: meson-mx-ao-arc: Add a driver for the
+ AO ARC remote procesor
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org, ohad@wizery.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello:
+Hi Mathieu,
 
-This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
+thanks for taking the time to look into this!
 
-On Wed, 19 May 2021 18:44:17 -0500 you wrote:
-> I added a cover page for this single patch to provide a little more
-> explanation about testing.
-> 
-> I have verified that, when this patch is applied, the IPA driver
-> receives the desired crash notification after the modem has crashed.
-> It recovers properly, and functions correctly following the crash.
-> 
-> [...]
+(I will address any of your comments that I am not mentioning in this
+email anymore. Thanks a lot for the suggestions!)
 
-Here is the summary with links:
-  - [1/1] remoteproc: use freezable workqueue for crash notifications
-    https://git.kernel.org/andersson/remoteproc/c/3ad51c1743eb
+On Wed, Jul 28, 2021 at 7:58 PM Mathieu Poirier
+<mathieu.poirier@linaro.org> wrote:
+[...]
+> > +     writel(FIELD_PREP(AO_REMAP_REG0_REMAP_AHB_SRAM_BITS_17_14_FOR_ARM_CPU,
+> > +                            priv->sram_pa >> 14),
+> Indentation problem
+The idea here is to align priv->sram_pa with AO_REMAP_REG0... which
+are both arguments to FIELD_PREP
+Maybe using something like this will make that easier to read:
+    tmp = FIELD_PREP(AO_REMAP_REG0_REMAP_AHB_SRAM_BITS_17_14_FOR_ARM_CPU,
+                                     priv->sram_pa >> 14);
+    writel(tmp, priv->remap_base + AO_REMAP_REG0);
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+What do you think: leave it as is or use a separate variable?
+
+[...]
+> > +     usleep_range(10, 100);
+>
+> I've seen this kind of mysterious timeouts in other patchset based vendor trees.
+> You likely don't know why it is needed so I won't ask.
+unfortunately this is also the case here
+
+[...]
+> > +     priv->arc_reset = devm_reset_control_get_exclusive(dev, NULL);
+> > +     if (IS_ERR(priv->arc_reset)) {
+>
+> Function __reset_control_get() in __devm_reset_control_get() can return NULL so
+> this should be IS_ERR_OR_NULL().
+The logic in there is: return optional ? NULL : ERR_PTR(-...);
+I am requesting a mandatory reset line here, so reset core will never
+return NULL
+See also [0]
+
+For this reason I am not planning to change this
+
+[...]
+> This driver is squeaky clean. With the above:
+>
+> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+awesome, thank you!
 
 
+Best regards,
+Martin
+
+
+[0] https://elixir.bootlin.com/linux/v5.14-rc4/source/include/linux/reset.h#L227
