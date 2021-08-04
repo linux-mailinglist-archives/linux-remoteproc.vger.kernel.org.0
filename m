@@ -2,40 +2,40 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 214873E08DE
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3EE3E08DF
 	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Aug 2021 21:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234371AbhHDTcC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 4 Aug 2021 15:32:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39474 "EHLO mail.kernel.org"
+        id S229725AbhHDTcD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Aug 2021 15:32:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39482 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229697AbhHDTcC (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        id S229775AbhHDTcC (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
         Wed, 4 Aug 2021 15:32:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 81FA560F22;
+Received: by mail.kernel.org (Postfix) with ESMTPS id 9D9E661002;
         Wed,  4 Aug 2021 19:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1628105509;
-        bh=7Qz8IoZZMTdPd6jLVsxw+9RrZpqDx0ExSDYg/pTS4D0=;
+        bh=N9sd+Cp2GrbNr0+04IkO+2iwj78bR3E31boofhVG9Rw=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=U+SwrXCvLNJac2smpcsZnr+lYLdP0kvEwHJ/i1OV4khb9dTL3EnmSBMAgar1c3kEN
-         2lWyx4mZrA9nLGr2mpxC3fzU1TMqLZXRQlLcgffsVpkcPaBoWbnY6k3CJVDCeyd0pZ
-         VUDEe2lK4XlYDzFYXIK/WAijFFQFWxiKUuQIIzUAF2UsSGJ66EAg5A0SaCRqdOMjj2
-         fNjcVKAOfzf3OzrfbQva1xRj3XVeASu2NnuDH3ehGAlmzuvpIB9/5SvoTmWR7gXA7l
-         9XnWQ41AW4JSVhQplXT43mizpvP5OE5u0gFGp9L9Xp4Pq93Ij98tFYg7sl8vNo7vgb
-         UGx7wE0KFS7GA==
+        b=iLio736+B8dI7IW4rrYXsJ/iKs4fAnpq/+GM4W6/YDSNLTLNqZWjei58YaFzmZGwq
+         JbcBZcl/5HkKnixjhFPIcJoo+dPXi6uo0igt1xHK89s6FFf9FD6PasQ1j30805Gi7R
+         dgINAiZqMl2AQ9ftDbSLGChz5WFfQhjV5UoUi88Yd/mjvq0sA6XFs9nZUoAd9OlL80
+         CDGiN9JMINK8HNhS1nCFW8qkIUoYYHCtQcjBp/UY1mK55aosjCTr9xldKkJDKZsTa2
+         WztyJ+RAtNCrHNLMlu8tbqaFsSEYjkKPaRQB9AIz1UdR3VdbPaYTak5tRne3ba41Yc
+         veRdsdmAWhznA==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 73E8360A6A;
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 86C2B60A7C;
         Wed,  4 Aug 2021 19:31:49 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/3] net: wwan: Add RPMSG WWAN CTRL driver
+Subject: Re: [PATCH] firmware: replace HOTPLUG with UEVENT in FW_ACTION defines
 From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <162810550946.17752.8700428934484647436.git-patchwork-notify@kernel.org>
+Message-Id: <162810550954.17752.2865055055925632242.git-patchwork-notify@kernel.org>
 Date:   Wed, 04 Aug 2021 19:31:49 +0000
-References: <20210618173611.134685-1-stephan@gerhold.net>
-In-Reply-To: <20210618173611.134685-1-stephan@gerhold.net>
-To:     Stephan Gerhold <stephan@gerhold.net>
+References: <20210425020024.28057-1-shawn.guo@linaro.org>
+In-Reply-To: <20210425020024.28057-1-shawn.guo@linaro.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
 Cc:     linux-remoteproc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
@@ -43,25 +43,21 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 
 Hello:
 
-This series was applied to andersson/remoteproc.git (refs/heads/for-next):
+This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
 
-On Fri, 18 Jun 2021 19:36:08 +0200 you wrote:
-> This patch series adds a WWAN "control" driver for the remote processor
-> messaging (rpmsg) subsystem. This subsystem allows communicating with
-> an integrated modem DSP on many Qualcomm SoCs, e.g. MSM8916 or MSM8974.
+On Sun, 25 Apr 2021 10:00:24 +0800 you wrote:
+> With commit 312c004d36ce ("[PATCH] driver core: replace "hotplug" by
+> "uevent"") already in the tree over a decade, update the name of
+> FW_ACTION defines to follow semantics, and reflect what the defines are
+> really meant for, i.e. whether or not generate user space event.
 > 
-> The driver is a fairly simple glue layer between WWAN and RPMSG
-> and is mostly based on the existing mhi_wwan_ctrl.c and rpmsg_char.c.
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v3,1/3] rpmsg: core: Add driver_data for rpmsg_device_id
-    https://git.kernel.org/andersson/remoteproc/c/60302ce4ea07
-  - [net-next,v3,2/3] net: wwan: Add RPMSG WWAN CTRL driver
-    https://git.kernel.org/andersson/remoteproc/c/5e90abf49c2a
-  - [net-next,v3,3/3] net: wwan: Allow WWAN drivers to provide blocking tx and poll function
-    https://git.kernel.org/andersson/remoteproc/c/31c143f71275
+  - firmware: replace HOTPLUG with UEVENT in FW_ACTION defines
+    https://git.kernel.org/andersson/remoteproc/c/0733d8390532
 
 You are awesome, thank you!
 --
