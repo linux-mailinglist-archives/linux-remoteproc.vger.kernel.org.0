@@ -2,40 +2,40 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3EE3E08DF
+	by mail.lfdr.de (Postfix) with ESMTP id D6CDD3E08E1
 	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Aug 2021 21:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbhHDTcD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        id S229775AbhHDTcD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
         Wed, 4 Aug 2021 15:32:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39482 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:39484 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229775AbhHDTcC (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        id S234064AbhHDTcC (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
         Wed, 4 Aug 2021 15:32:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9D9E661002;
+Received: by mail.kernel.org (Postfix) with ESMTPS id A230C60F58;
         Wed,  4 Aug 2021 19:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1628105509;
-        bh=N9sd+Cp2GrbNr0+04IkO+2iwj78bR3E31boofhVG9Rw=;
+        bh=32dhI4Lq82bDWZ6lQpM5yPOqjeufvXnb6PvyxRfng5E=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iLio736+B8dI7IW4rrYXsJ/iKs4fAnpq/+GM4W6/YDSNLTLNqZWjei58YaFzmZGwq
-         JbcBZcl/5HkKnixjhFPIcJoo+dPXi6uo0igt1xHK89s6FFf9FD6PasQ1j30805Gi7R
-         dgINAiZqMl2AQ9ftDbSLGChz5WFfQhjV5UoUi88Yd/mjvq0sA6XFs9nZUoAd9OlL80
-         CDGiN9JMINK8HNhS1nCFW8qkIUoYYHCtQcjBp/UY1mK55aosjCTr9xldKkJDKZsTa2
-         WztyJ+RAtNCrHNLMlu8tbqaFsSEYjkKPaRQB9AIz1UdR3VdbPaYTak5tRne3ba41Yc
-         veRdsdmAWhznA==
+        b=VfDpcbX+EpFN9MICXyLR+cIiabkhCtOFV3mPQYQxPfZuI0eU5L18sbgE/Gqkhcj5J
+         bgrNHu8h3DUhCWSYxaRpa7niAeMYUbna62atK8s9WriEjcHSoC1JLTgnGV+p64wJEn
+         TjbZy/W4mL+cLjBBReyhzRDMK8LuzUd2WzhEO41KdXhXzwNUenueLt/x2aqw6C89Ht
+         NU3KmUOe1w6iwzVOdriPOzIB/plPOFhl5gs8flrg9TzpUgKWPSt1QHMQDnEo99tMLv
+         rkVoKtQnUE1fF/Asl7gHKmApFOH0P0f8RC6dVKML3GRj8FqBCjQ0e2ev+hPpGITNQo
+         +FGMg8hDeBokQ==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 86C2B60A7C;
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8E30860A72;
         Wed,  4 Aug 2021 19:31:49 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] firmware: replace HOTPLUG with UEVENT in FW_ACTION defines
+Subject: Re: [PATCH 0/1] remoteproc: avoid notification when suspended
 From:   patchwork-bot+linux-remoteproc@kernel.org
-Message-Id: <162810550954.17752.2865055055925632242.git-patchwork-notify@kernel.org>
+Message-Id: <162810550957.17752.12206541568388699220.git-patchwork-notify@kernel.org>
 Date:   Wed, 04 Aug 2021 19:31:49 +0000
-References: <20210425020024.28057-1-shawn.guo@linaro.org>
-In-Reply-To: <20210425020024.28057-1-shawn.guo@linaro.org>
-To:     Shawn Guo <shawn.guo@linaro.org>
+References: <20210519234418.1196387-1-elder@linaro.org>
+In-Reply-To: <20210519234418.1196387-1-elder@linaro.org>
+To:     Alex Elder <elder@linaro.org>
 Cc:     linux-remoteproc@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
@@ -45,19 +45,19 @@ Hello:
 
 This patch was applied to andersson/remoteproc.git (refs/heads/for-next):
 
-On Sun, 25 Apr 2021 10:00:24 +0800 you wrote:
-> With commit 312c004d36ce ("[PATCH] driver core: replace "hotplug" by
-> "uevent"") already in the tree over a decade, update the name of
-> FW_ACTION defines to follow semantics, and reflect what the defines are
-> really meant for, i.e. whether or not generate user space event.
+On Wed, 19 May 2021 18:44:17 -0500 you wrote:
+> I added a cover page for this single patch to provide a little more
+> explanation about testing.
 > 
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> I have verified that, when this patch is applied, the IPA driver
+> receives the desired crash notification after the modem has crashed.
+> It recovers properly, and functions correctly following the crash.
 > 
 > [...]
 
 Here is the summary with links:
-  - firmware: replace HOTPLUG with UEVENT in FW_ACTION defines
-    https://git.kernel.org/andersson/remoteproc/c/0733d8390532
+  - [1/1] remoteproc: use freezable workqueue for crash notifications
+    https://git.kernel.org/andersson/remoteproc/c/3ad51c1743eb
 
 You are awesome, thank you!
 --
