@@ -2,117 +2,107 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 052E43E1CE3
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  5 Aug 2021 21:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32CC3E1E4C
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  6 Aug 2021 00:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236333AbhHETkZ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 5 Aug 2021 15:40:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S236777AbhHEWEb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 5 Aug 2021 18:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235494AbhHETkY (ORCPT
+        with ESMTP id S235794AbhHEWE3 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 5 Aug 2021 15:40:24 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4BAC0613D5
-        for <linux-remoteproc@vger.kernel.org>; Thu,  5 Aug 2021 12:40:10 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 61-20020a9d0d430000b02903eabfc221a9so6355108oti.0
-        for <linux-remoteproc@vger.kernel.org>; Thu, 05 Aug 2021 12:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=u516B4IDOq5HPZ3Fekbj0IXtz4ADHjdylXCRO6f+AtE=;
-        b=Mj7GAi0LhIrpfGb8uOKnGR/1zqnyjRwyav0vcbe0Y2ll2nJVjdD3w5fZLmJac1xna5
-         cBnIfhhuhtP9c2xQQoTF7mNLscEpuTlg1IHdvxFvr8P7rQ+mwFDPbUoNftn96DU+s/RI
-         6N+4Zs4ZI3Z+K6hgwc9kBUK41Isvxa6/s52ZE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=u516B4IDOq5HPZ3Fekbj0IXtz4ADHjdylXCRO6f+AtE=;
-        b=Mbj/eycH9DOYFdkChlFfRBMJNqP8gOuiZxyYdP7XvDYyrTbEW1P8Z/gIGxCyarBapZ
-         qiVSLXKVpblSizxn3MO64uo3VV2sc+GQUJENo/AA/Of+0GiM7QYfqQQtoNxSoBJ7fBAh
-         2sDRZHZShRn4z2ynxQYOFLAffD0xnowp9eNqMTHgdlMZxnyXUnyOOPiAyGxMLXcFrIMw
-         6WInbPU8w7SAR+gy81Uw02LG5cXpRhbfkeUB1NnLSdansPq92lFRDQBz3NWcwOaYKrKt
-         gLvtaRhtpyqRkQBBqLyY0JrumuO38Ucaiux34dkd8SalEdH8ldkeZbpElcIYQzP5rN3z
-         1spQ==
-X-Gm-Message-State: AOAM530gMHJZ8v/WThR0gbKjK7r53QZNRAxLAqpxwGmijn5HWBKGaPxR
-        Cq6T3VAaFVngXGEJ4lDZVIh3yHuklNk0lqlCVdUovw==
-X-Google-Smtp-Source: ABdhPJwSKh/dCjbC1x/LRZpD3rrmsUjweEJ0zHyBAS26I7atE8009pKiiiZweJ5j1Tia6FY8WUQO0zSJaxd9F3lNYn4=
-X-Received: by 2002:a05:6830:1490:: with SMTP id s16mr5020325otq.233.1628192409655;
- Thu, 05 Aug 2021 12:40:09 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 5 Aug 2021 12:40:09 -0700
+        Thu, 5 Aug 2021 18:04:29 -0400
+X-Greylist: delayed 107203 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Aug 2021 15:04:14 PDT
+Received: from server.example.com (unknown [IPv6:2001:41d0:8:808d::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4270BC061798
+        for <linux-remoteproc@vger.kernel.org>; Thu,  5 Aug 2021 15:04:13 -0700 (PDT)
+Received: by server.example.com (Postfix, from userid 1023)
+        id DEC25D4423C; Thu,  5 Aug 2021 21:14:45 +0000 (UTC)
+To:     linux-remoteproc@vger.kernel.org
+Subject: {Spam?} =?UTF-8?Q?Z._HD,Sehr_geehrte_/_r_Fondsempf=C3=A4nger?=
+Date:   Thu, 5 Aug 2021 21:14:45 +0000
+From:   "ANWALT BILBAO &EMMA ASSOZIIERT & CO..." 
+        <support@quali.speed.hebergement-com4design.fr>
+Reply-To: buroLotto.es@spainmail.com
+Message-ID: <e1685de70f6eb9a3692f3462ddf521d1@www.quali.speed.hebergement-com4design.fr>
 MIME-Version: 1.0
-In-Reply-To: <1628180254-758-1-git-send-email-deesin@codeaurora.org>
-References: <1628180254-758-1-git-send-email-deesin@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Thu, 5 Aug 2021 12:40:09 -0700
-Message-ID: <CAE-0n5203g4CkF5WP1fQYU57fntXbdyVBsMsTKU_xPkgvbt+7Q@mail.gmail.com>
-Subject: Re: [PATCH V1 1/1] soc: qcom: smp2p: Add wakeup capability to SMP2P IRQ
-To:     Deepak Kumar Singh <deesin@codeaurora.org>,
-        bjorn.andersson@linaro.org, clew@codeaurora.org,
-        sibis@codeaurora.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, Andy Gross <agross@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-Information: Please contact the ISP for more information
+X-yoursite-MailScanner-ID: DEC25D4423C.AB202
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-SpamCheck: spam, SpamAssassin (cached, score=7.061,
+        required 6, ADVANCE_FEE_2_NEW_MONEY 0.15,
+        FREEMAIL_FORGED_REPLYTO 2.50, FREEMAIL_REPLYTO 1.00,
+        LOTS_OF_MONEY 0.00, MONEY_FREEMAIL_REPTO 2.43, MONEY_NOHTML 0.97,
+        NO_RELAYS -0.00, T_FILL_THIS_FORM_SHORT 0.01, XFER_LOTSA_MONEY 0.00)
+X-yoursite-MailScanner-SpamScore: sssssss
+X-yoursite-MailScanner-From: support@quali.speed.hebergement-com4design.fr
+X-Spam-Status: Yes
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Quoting Deepak Kumar Singh (2021-08-05 09:17:33)
-> Some use cases require SMP2P interrupts to wake up the host
-> from suspend.
+Rechtsanwältin BILBAO &EMMA ASSOZIIERT & CO...
+#########################################
+AV/DE GRAN VIA NO.38k, 28008 MADRID.   SPAIN 
+TEL. ( 34) 602 810 185 FAX: ( 34) 931-702-120
+Eingetragener Fall NR: GY/Q3J63753 / SQQ/93000XS10.
 
-Please elaborate on this point so we understand what sort of scenarios
-want to wakeup from suspend.
+Ihnen wird empfohlen, die folgenden Informationen an Ihre Bevollmächtigte zu senden. Rechtsanwältin  BILBAO & EMMA  ASSOZIIERT CO ERMÖGLICHT IHNEN DIE FREIGABE IHRES FONDS:Wir bitten dringend, Ihre E-Mails an unsere Büro-E-Mail zu beantworten, buroLotto.es@spainmail.com, 
 
-> Mark smp2p interrupt as wakeup capable to abort
-> the suspend.
->
-> Signed-off-by: Deepak Kumar Singh <deesin@codeaurora.org>
-> ---
->  drivers/soc/qcom/smp2p.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->
-> diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
-> index 2df4883..f8659b0 100644
-> --- a/drivers/soc/qcom/smp2p.c
-> +++ b/drivers/soc/qcom/smp2p.c
-> @@ -18,6 +18,7 @@
->  #include <linux/soc/qcom/smem.h>
->  #include <linux/soc/qcom/smem_state.h>
->  #include <linux/spinlock.h>
-> +#include <linux/pm_wakeirq.h>
->
->  /*
->   * The Shared Memory Point to Point (SMP2P) protocol facilitates communication
-> @@ -538,9 +539,19 @@ static int qcom_smp2p_probe(struct platform_device *pdev)
->                 goto unwind_interfaces;
->         }
->
-> +       ret = device_init_wakeup(&pdev->dev, true);
+Wir gratulieren und informieren Sie über die Auswahl des Geldpreises €935.470,00 EUROS, SOMMERBONANZA, EL GORDO DE LA PRIMITIVA LOTTERIE IN VERBINDUNG MIT EUROMILLIONS ESPAÑA INTERNATIONAL LOTTERIE BEFÖRDERUNG  PROGRAMM Madrid Spanien
 
-Is smp2p supposed to wake up the device by default? If not, then this
-should be device_set_wakeup_capable() instead so that userspace can
-decide if it wants to get the wakeup.
+ Sehr Geehrter  Begünstigten, 
+Wir möchten Sie informieren, dass das Büro des nicht Beanspruchten Preisgeldes in Spanien,unsere Anwaltskanzlei ernannt hat, als gesetzliche Berater zu handeln, in der Verarbeitung und der Zahlung eines Preisgeldes, das auf Ihrem Namen gutgeschrieben wurde, und nun seit über zwei Jahren nicht beansprucht wurde.
 
-> +       if (ret)
-> +               goto unwind_interfaces;
-> +
-> +       ret = dev_pm_set_wake_irq(&pdev->dev, irq);
-> +       if (ret)
-> +               goto set_wakeup_failed;
+ Der Gesamtbetrag der ihnen zusteht beträgt momentan €935, 470, 15, cent.
 
-Otherwise this looks good to me.
+Der Gesamtbetrag der ihnen zusteht beträgt momentan  €935, 470, 15, neunhundert fünfunddreißigtausend, vierhundertsiebzig und fünfzehn Cent, Das ursprüngliche Preisgeld bertug €785.810, 15.00 EUROS. Siebenhundert Fünfundachtzigtausend Acht Hundertzehn Euro und fünfzehn Cent Diese Summe wurde fuer nun mehr als zwei Jahre,Gewinnbringend  angelegt,daher die aufstockung auf die oben genannte Gesamtsumme.Entsprechend dem Büros des nicht Beanspruchten  Preisgeldes,wurde dieses Geld als nicht beanspruchten Gewinn einer Lotterie Firma bei ihnen zum verwalten niedergelegt und  in ihrem namen versichert. Nach Ansicht der Lotterie Firma wurde ihnen das Geld nach einer Weihnachts Förderung Lotterie  zugesprochen. 
 
->
->         return 0;
->
-> +set_wakeup_failed:
-> +       device_init_wakeup(&pdev->dev, false);
-> +
->  unwind_interfaces:
->         list_for_each_entry(entry, &smp2p->inbound, node)
->                 irq_domain_remove(entry->domain);
+ Die Kupons wurden von einer Investmentgesellschaft gekauft.Nach Ansicht der Lotterie Firma wurden sie damals Angeschrieben um Sie über dieses Geld zu informieren es hat sich aber leider bis zum Ablauf  der  gesetzten  Frist  keiner gemeldet um den Gewinn zu Beanspruchen. Dieses war der Grund weshalb das Geld zum verwalten niedergelegt wurde. Gemab des Spanischen Gesetzes muss der inhaber alle zwei Jahre ueber seinen vorhanden Gewinn informiert werden.Sollte dass Geld wieder nicht beansprucht werden,.wird der Gewinn abermals ueber eine Investierung gesellschaft fur eine weitere Periode von zwei Jahren angelegt werden.Wir sind daher, durch das Buro des nicht Beanspruchten Preisgelds beauftragt worden sie anzuschreiben.Dies ist eine Notifikation für das Beanspruchen dieses Gelds.
+
+Wir möchten sie darauf hinweisen, dass die Lotteriegesellschaft überprüfen und bestätigen wird ob ihre Identität  übereinstimmt bevor ihnen ihr Geld ausbezahlt wird.Wir werden sie beraten wie sie ihren Anspruch geltend machen.Bitte  setzen sie sich dafuer mit unserer Deutsch Spanisch oder Englisch Sprachigen Rechtsanwalt in Verbindung Rechtsanwältin: Bilbao & Emma ASSOZIIERT & CO.., TEL( 34) 602 810 185 & email,( Ihre Antwort sollte an diese E-MAIL-Adresse gerichtet, (promolottooffice@spainmail.com  )ist zustaendig fuer  Auszahlungen ins Ausland und wird ihnen in dieser sache zur seite stehen. Der Anspruch sollte vor den 30 August 2021 geltend  gemacht werden,da sonst dass Geld wieder angelegt werden wuerde.Wir freuen uns, von Ihnen zu hören, während wir Ihnen  unsere Rechtshilfe Versichern.
+
+Nachdem Sie die von Ihnen geforderten Daten bereitgestellt haben, können Sie davon ausgehen, dass Sie innerhalb weniger  Stunden direkt von diesem Büro erfahren werden. Bis dahin müssen wir Ihre Informationen verarbeitet und Ihre Fonds Akte für  die Zustellung vorbereitet haben, um Verzögerungen zu vermeiden. 
+Wir gehen davon aus, dass Sie die erläuternden Anweisungen und Anweisungen für den Erhalt Ihrer Prämien (935 €, 470, 15 Cent) verstehen, die Ihnen von der spanischen Euro Millones /El Gordo de la Primitiva International lotterie Madrid Spain legal zugesprochen werden.
+
+HINWEIS: Um unnötige Verzögerungen zu vermeiden, wenn es eine Änderung Ihrer Adresse oder Komplikationen geben, informieren Sie Ihren Agenten so schnell wie möglich, Ihr Agent wird 10% des Premium Preises bezahlt, da die Provision NACH Dem, was Sie Ihr Geld auf Ihr kostenpflichtiges Konto erhalten haben. Das Zahlungsbearbeitung Formular ist mit einer Fotokopie Ihres Ausweises auszufüllen und zur Überprüfung per Faxnummer zu senden: ( 34) 935457490 & E-Mail: Wir bitten dringend, Ihre E-Mails an unsere Büro-E-Mail zu beantworten  promolottooffice@spainmail.com
+
+Mit Freundlichen Grüßen
+Rechtsanwältin Bilbao & Emma ASSOZIIERT & CO..
+
+ANMELDEFORMULAR FÜR DEN GEWINNANSPRUCH Vom 28. Juni bis 30. August 2021
+Hinweis bitte geben Sie die folgenden Informationen, wie unten gefordert, faxen   34935457490 oder e mail: promolottooffice@spainmail.com ,es zurück in mein Büro sofort für uns in der Lage zu sein die Legalisierung Prozess Ihrer  Persönliche investiertes Preisgeld zu vervollständigen, und das Geld wird Ihnen von Zentralbank spain Int  ausgezahlt.  Alle Prozess Überprüfung durch unsere Kanzlei ist für Sie kostenlos, weil unsere Kosten werden von der internationalen  Lotto Kommission am Ende des Prozesses zu zahlen, wenn Sie Ihr Geld erhalten.Wenn Sie nicht die erforderlichen  Informationen vor der Zeit gegeben hat, können ist Anwaltskanzlei nicht haftbar gemacht werden, wenn Ihr Geld reinvestiert  wurde.
+
+Ein Bestätigungsschreiben wird Ihnen gefaxt werden sofort wenn wir komplette Überprüfung der Informationen die Sie uns zur  Verfügung stellen habe, Ich werde die Investmentbank unverzüglich über die von Ihnen angegebene Informationen zu kommen,  bevor sie werden mit Ihnen Kontakt aufnehmen für die ausZahlung von Ihrem Geld . Ihre Daten werden vertraulich gehalten  nach der Europäischen Union Datenschutzrecht.
+
+"Antworten Sie nicht auf die Absenderadresse oder die Quell-E-Mail-Adresse, es wird über den Computer gesendet virtuelle  Hilfe für die Antwort wird  nicht meine menschliche sondern Computer" Daher müssen Sie die Treuhänder über Telefon und E- Mail-Adresse oben" (ACHTUNG Wir (bitten Sie, auf diese E-Mail-Adresse zu antworten, (promolottooffice@spainmail.com )
+########################################################
+
+REF.NR:………………………………STAPELN Sie NR:…………………………
+Vorname:……………………Vor-NACHNAME…………………………………
+GEBURTSDATUM:……………………………BERUF:……………………………
+STRASSE:………………………………………PLZ/ORT…………………………
+ADRESSE:……………………………………………………………………………
+TELEFON:(___)……………………HANDY:(__)………………FAX (__)………
+EMAIL:…………………………………………………………Nationalitit:……
+
+HINWEIS: BANKVERBINDUNG IST NUR ERFORDERLICH, WENN SIE BESCHLIEßEN, IHREN GEWINN ZU ERHALTEN PER ÜBERWEISUNG
+
+Nachdem Sie die von Ihnen geforderten Daten bereitgestellt haben, können Sie davon ausgehen, dass Sie innerhalb weniger  Stunden direkt von diesem Büro erfahren werden. Bis dahin müssen wir Ihre Informationen verarbeitet und Ihre Fonds Akte für  die Zustellung vorbereitet haben, um Verzögerungen zu vermeiden. Wir gehen davon aus, dass Sie die erklärenden Anweisungen  und Anweisungen zum Einholen und Einholen Ihrer Auszeichnungen (€935,470,15 EUROS) verstehen, die Ihnen vom spanischen Euro Millones de La Primitiva International Madrid legal zugesprochen wurden
+
+BANK ZAHLUNGSOPTIONEN: A / BANKÜBERWEISUNG Oder BANK CERTIFIED CHECK (BANKDATEN SIND NUR NOTWENDIG, WENN SIE SICH FÜR EINE  BANKÜBERWEISUNG ENTSCHIEDEN HABEN)
+ZAHLUNGSOPTION: (A) BESTÄTIGTER SCHECK (BEZAHLEN Sie ÜBERTRAGUNG EIN
+
+BETRÄGE GEWONNEN: ……………………………………………………
+NAME DER BANK:……………………………………………………………
+KONTONUMMER:…………………………SWIFT-CODE:…………………
+ADRESSE DER BANK …………………………………………………………
+GEB-DATUM:…………Unterschrift …………(Erst bei hmeAbna)
+
+Rechtsanwältin  Bilbao & Emma Asociados, Abogados, Fiscal Y Accesorios horario de consultas Lunes.bis Samstag De. 09 - 16.30 Uhr  654280 / MLA & (Seien Sie informiert, dass Ihr Vertreter 10% des Preises als Provision erhält, wenn Sie Ihr Geld auf Ihrem  angegebenen Konto erhalten haben) Mitglied des Consejo de Constitucional de España, (ACHTUNG Wir bitten Sie, auf diese E-Mail-Adresse zu antworten (promolottooffice@spainmail.com) BÜRO-KONTOINFORMATIONEN- BANK NAME: P.F.S.SPAIN SL SWIFT CODE: PFSSESM1 IBAN: ES17 6713   0002 5700 0584 3906)COPYRIGHT 2019.LOTERIA SPANIEN. Alle Rechte vorbehalten. NUTZUNGSBEDINGUNGEN HANDELSPOLITIK DATENSCHUTZ VON BESCHWERDEN....
+ 
+Diese E-Mail ist für den vorgesehenen Empfänger bestimmt und enthält Informationen, die vertraulich sein können. Wenn Sie nicht der beabsichtigte Empfänger sind, benachrichtigen Sie bitte den Absender per E-Mail und löschen Sie diese E-Mail aus Ihrem Posteingang. Jede unbefugte Nutzung oder Verbreitung dieser E-Mail, ganz oder teilweise, ist strengstens untersagt und kann rechtswidrig sein. Alle in dieser E-Mail enthaltenen Preisangebote sind nur indikativ und führen zu keiner rechtlich bindenden oder durchsetzbaren Verpflichtung. Sofern nicht ausdrücklich als beabsichtigter E-Vertrag bezeichnet, stellt diese E-Mail kein Vertragsangebot, keine Vertragsänderung oder eine Annahme eines Vertragsangebots dar.
+WWW.GORDO/ EUROMILLIONS ESPAÑA  Sitz der Gesellschaft: Torre Europa Paseo de la Barcelona 15. Planta 16 28006 • Madrid. (Spanien)
+
