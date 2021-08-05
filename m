@@ -2,154 +2,145 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9CB3E139C
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  5 Aug 2021 13:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDCC63E194E
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  5 Aug 2021 18:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240887AbhHELNw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 5 Aug 2021 07:13:52 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:54022 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240768AbhHELNw (ORCPT
+        id S229931AbhHEQPY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 5 Aug 2021 12:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229842AbhHEQPX (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 5 Aug 2021 07:13:52 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628162018; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=qPcpN9NQyxrV+wjCTwJrY2/3PkHEbQq5DmexGizOL5A=; b=XFdLksZMApnxhymehCxz/D7dsalZ/Ytlx4FDOgTfQw84YdRoZcBTNE4I4oEX/DdXBmTrMspB
- BZ/fo4QMu7yeZxZrKQBJQQnNfORuFCKVFuMkJZ4di3Oz2Dn4STumb6nJ6sUMB/H/9uopomUn
- V9HBMy0CBPvwvXkspm3tgjgGDI4=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 610bc7e2b4dfc4b0ef7135b4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 05 Aug 2021 11:13:38
- GMT
-Sender: deesin=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 552F5C433D3; Thu,  5 Aug 2021 11:13:36 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from deesin-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: deesin)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 33275C433F1;
-        Thu,  5 Aug 2021 11:13:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 33275C433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=deesin@codeaurora.org
-From:   Deepak Kumar Singh <deesin@codeaurora.org>
-To:     bjorn.andersson@linaro.org, swboyd@chromium.org,
-        clew@codeaurora.org, sibis@codeaurora.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        Deepak Kumar Singh <deesin@codeaurora.org>,
-        Andy Gross <agross@kernel.org>
-Subject: [PATCH V5 2/2] soc: qcom: aoss: Add debugfs entry
-Date:   Thu,  5 Aug 2021 16:42:54 +0530
-Message-Id: <1628161974-7182-3-git-send-email-deesin@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1628161974-7182-1-git-send-email-deesin@codeaurora.org>
-References: <1628161974-7182-1-git-send-email-deesin@codeaurora.org>
+        Thu, 5 Aug 2021 12:15:23 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8F2C061765
+        for <linux-remoteproc@vger.kernel.org>; Thu,  5 Aug 2021 09:15:09 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id u13-20020a17090abb0db0290177e1d9b3f7so16028612pjr.1
+        for <linux-remoteproc@vger.kernel.org>; Thu, 05 Aug 2021 09:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rEg1BTCMGoRn0sjT3rWRNvHqW2LLrM0T5szYW+iprlY=;
+        b=JeySS7sbmS28Oav7betiVjBrAJfEXz59ZQYfOpmK1BIP4wTxeWcTPwIoEpmFlC09DF
+         rbWKjGUpowb+0LbpjNn5vITPzDzxcWs0S/r9mrYuq96fFbuQu3KzHqoI4u9De7IL7Jvs
+         nSXt1j0MdcvtfEvJ2l/mKCUUMgFZ2rEN9MeZQX+ADKPIj6qRP4sJlewmGiF7TEk8RQ/a
+         retiI4410BAKlfZSLIR3R5vhs/IlPxB6QTl7vYhseT+ggiXZVkgwOyg3d2ZiTJxFsqso
+         EglMHVeuXVWvstLFr8v5Mn7Y6gZEvE9BMv4IqnTVfWITZmwiYum5VyWqhDTC02DvqtCF
+         Reew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=rEg1BTCMGoRn0sjT3rWRNvHqW2LLrM0T5szYW+iprlY=;
+        b=YEgHUpPvDSNZuhAaPiq33DN7XAWPn5gUlGt7+R4YpHqR30Ns6YJSSmBuEpjei+jdBR
+         cJACR6yft7I+yVfcAs2zHvGATDp8Jf1qRYrrhRpfnJXWXR/dRdbEUvMcc+aqOKe47Pjy
+         mRDvRRhbYEhntsA8Ajr77IrAKcBddMfz/uCygmZBcvfXWqF0acdXgwDxkqfMSHCAHRKR
+         iYwGk/idqgFzTf0+OP4mjaABGxBLqjOvvrbFqoJn9Tx2rDxmpdbHWAdR5W/dmefopJ5r
+         e+PMGV5Y1vv6fNvlVjaToREl2zznQi+Vdn4JZPKXaoswvIfTtZ04fRpbsMIxLft82ieu
+         6y8Q==
+X-Gm-Message-State: AOAM531IVV6olqHzoWkJmA8PdE06Noz8+ax64XmEyrhga2KdNENln9IQ
+        V3HhYrBKrHGxP3JmLWYNw2Xi5A==
+X-Google-Smtp-Source: ABdhPJyKLIfgIfNToEP9h1rMAx3XgFEHEXDEu9ACbcrjUhWRC7r4z1IJzJr2ZOY+2Xn5CCrJoNVmVA==
+X-Received: by 2002:a65:6099:: with SMTP id t25mr48063pgu.85.1628180109269;
+        Thu, 05 Aug 2021 09:15:09 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id q17sm8753280pgd.39.2021.08.05.09.15.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Aug 2021 09:15:08 -0700 (PDT)
+Date:   Thu, 5 Aug 2021 10:15:06 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bjorn.andersson@linaro.org, ohad@wizery.com
+Subject: Re: [PATCH v3 2/2] remoteproc: meson-mx-ao-arc: Add a driver for the
+ AO ARC remote procesor
+Message-ID: <20210805161506.GA3205691@p14s>
+References: <20210717234859.351911-1-martin.blumenstingl@googlemail.com>
+ <20210717234859.351911-3-martin.blumenstingl@googlemail.com>
+ <20210728175823.GA2766167@p14s>
+ <CAFBinCB0-bAa7Y+YhscczarGrGuio37F8vRyfW6U2DiiDAvr-g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFBinCB0-bAa7Y+YhscczarGrGuio37F8vRyfW6U2DiiDAvr-g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-It can be useful to control the different power states of various
-parts of hardware for device testing. Add a debugfs node for qmp so
-messages can be sent to aoss for debugging and testing purposes.
+On Wed, Aug 04, 2021 at 11:03:57PM +0200, Martin Blumenstingl wrote:
+> Hi Mathieu,
+> 
+> thanks for taking the time to look into this!
+> 
+> (I will address any of your comments that I am not mentioning in this
+> email anymore. Thanks a lot for the suggestions!)
+> 
+> On Wed, Jul 28, 2021 at 7:58 PM Mathieu Poirier
+> <mathieu.poirier@linaro.org> wrote:
+> [...]
+> > > +     writel(FIELD_PREP(AO_REMAP_REG0_REMAP_AHB_SRAM_BITS_17_14_FOR_ARM_CPU,
+> > > +                            priv->sram_pa >> 14),
+> > Indentation problem
+> The idea here is to align priv->sram_pa with AO_REMAP_REG0... which
+> are both arguments to FIELD_PREP
 
-Signed-off-by: Chris Lew <clew@codeaurora.org>
-Signed-off-by: Deepak Kumar Singh <deesin@codeaurora.org>
----
- drivers/soc/qcom/qcom_aoss.c | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+Right, this is what I would have expected.  When I applied the patch on my side
+"priv->sram_pa ..." was aligned wiht the 'M' of "AO_REMAP_ ...".  
 
-diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
-index b84cb31..16e3d65 100644
---- a/drivers/soc/qcom/qcom_aoss.c
-+++ b/drivers/soc/qcom/qcom_aoss.c
-@@ -4,6 +4,7 @@
-  */
- #include <dt-bindings/power/qcom-aoss-qmp.h>
- #include <linux/clk-provider.h>
-+#include <linux/debugfs.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/mailbox_client.h>
-@@ -86,6 +87,9 @@ struct qmp {
- 	struct clk_hw qdss_clk;
- 	struct genpd_onecell_data pd_data;
- 	struct qmp_cooling_device *cooling_devs;
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+	struct dentry *debugfs_file;
-+#endif /* CONFIG_DEBUG_FS */
- };
- 
- struct qmp_pd {
-@@ -558,6 +562,33 @@ void qmp_put(struct qmp *qmp)
- }
- EXPORT_SYMBOL(qmp_put);
- 
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+static ssize_t aoss_dbg_write(struct file *file, const char __user *userstr,
-+			      size_t len, loff_t *pos)
-+{
-+	struct qmp *qmp = file->private_data;
-+	char buf[QMP_MSG_LEN] = {};
-+	int ret;
-+
-+	if (!len || len >= QMP_MSG_LEN)
-+		return -EINVAL;
-+
-+	ret  = copy_from_user(buf, userstr, len);
-+	if (ret) {
-+		return -EFAULT;
-+	}
-+
-+	ret = qmp_send(qmp, buf, QMP_MSG_LEN);
-+
-+	return ret ? ret : len;
-+}
-+
-+static const struct file_operations aoss_dbg_fops = {
-+	.open = simple_open,
-+	.write = aoss_dbg_write,
-+};
-+#endif /* CONFIG_DEBUG_FS */
-+
- static int qmp_probe(struct platform_device *pdev)
- {
- 	struct resource *res;
-@@ -612,6 +643,11 @@ static int qmp_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, qmp);
- 
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+	qmp->debugfs_file = debugfs_create_file("aoss_send_message", 0220, NULL,
-+						qmp, &aoss_dbg_fops);
-+#endif /* CONFIG_DEBUG_FS */
-+
- 	return 0;
- 
- err_remove_qdss_clk:
-@@ -628,6 +664,10 @@ static int qmp_remove(struct platform_device *pdev)
- {
- 	struct qmp *qmp = platform_get_drvdata(pdev);
- 
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+	debugfs_remove(qmp->debugfs_file);
-+#endif /* CONFIG_DEBUG_FS */
-+
- 	qmp_qdss_clk_remove(qmp);
- 	qmp_pd_remove(qmp);
- 	qmp_cooling_devices_remove(qmp);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> Maybe using something like this will make that easier to read:
+>     tmp = FIELD_PREP(AO_REMAP_REG0_REMAP_AHB_SRAM_BITS_17_14_FOR_ARM_CPU,
+>                                      priv->sram_pa >> 14);
+>     writel(tmp, priv->remap_base + AO_REMAP_REG0);
 
+I think the main problem is that
+AO_REMAP_REG0_REMAP_AHB_SRAM_BITS_17_14_FOR_ARM_CPU is simply too long.  I
+suggest making is shorter and add a comment to describe exactly what it does.
+
+> 
+> What do you think: leave it as is or use a separate variable?
+> 
+> [...]
+> > > +     usleep_range(10, 100);
+> >
+> > I've seen this kind of mysterious timeouts in other patchset based vendor trees.
+> > You likely don't know why it is needed so I won't ask.
+> unfortunately this is also the case here
+> 
+> [...]
+> > > +     priv->arc_reset = devm_reset_control_get_exclusive(dev, NULL);
+> > > +     if (IS_ERR(priv->arc_reset)) {
+> >
+> > Function __reset_control_get() in __devm_reset_control_get() can return NULL so
+> > this should be IS_ERR_OR_NULL().
+> The logic in there is: return optional ? NULL : ERR_PTR(-...);
+
+Ok, so you meant to do that.  And I just checked reset_control_reset() and it does
+account for a NULL parameter.  I'm good with this one but add a comment to
+make sure future readers don't think you've omitted to properly deal with the
+NULL return value.
+
+> I am requesting a mandatory reset line here, so reset core will never
+> return NULL
+> See also [0]
+
+Indeed, I've read that too.  Nonetheless __reset_control_get() can return NULL
+by way of __reset_control_get_from_lookup().
+
+> 
+> For this reason I am not planning to change this
+> 
+> [...]
+> > This driver is squeaky clean. With the above:
+> >
+> > Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> awesome, thank you!
+> 
+> 
+> Best regards,
+> Martin
+> 
+> 
+> [0] https://elixir.bootlin.com/linux/v5.14-rc4/source/include/linux/reset.h#L227
