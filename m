@@ -2,74 +2,68 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E90C03EBDAE
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Aug 2021 22:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABE673EC514
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Aug 2021 22:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234558AbhHMU5b (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 13 Aug 2021 16:57:31 -0400
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:43597 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbhHMU5a (ORCPT
+        id S231745AbhHNUej (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 14 Aug 2021 16:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229489AbhHNUeg (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 13 Aug 2021 16:57:30 -0400
-Received: by mail-oi1-f182.google.com with SMTP id bf25so8989145oib.10;
-        Fri, 13 Aug 2021 13:57:03 -0700 (PDT)
+        Sat, 14 Aug 2021 16:34:36 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88850C061764;
+        Sat, 14 Aug 2021 13:34:07 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id h24-20020a1ccc180000b029022e0571d1a0so9067140wmb.5;
+        Sat, 14 Aug 2021 13:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=VbcC5ppI4dqErkDqigIZaMrHECxjRJCjXWpXlzE8gFEOdkf2IKRgLvyZd4kEphKm7E
+         D9rfkXREK7E8Co6xqM3wly15xR38v5oBkLn1gnYSalFfYm3ThuSe8O4MfWf+RkJu0czF
+         008s+R7BPqDjeV1oGrYDs116Ktt2o5Oj5JAnj/53kDfh6sIhJMnhvu6L7zHzwxKki4v1
+         1Xt7dd13OBCuWQ39h4zZp4oDJeTQSQZSadDj5s720rNHB8lU/p5jXNqqkkkdDlOPZDmV
+         5UMAfKJIughxRBQ/v66quzThQ9IvJMzKF+bvrH2EZC9sHORUOs+EujU3chNvVG4vXLvu
+         cQlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3wvmf7DOu12lxJGmuxwNus8Ei0TqBPYTO/Ya0rfIezM=;
-        b=XZ4bez+jEoD0nxwvVfnM7MR6X5KngPCcAVyh01S50NBYomgdsYxQG3MhZJvS2LzrKR
-         HRbhANSVwS9Z6Rq2PyXKsSadVqIWprYl8dD8SdQRvhytBHd6UF9AaHJY+9QNZNEsEdbV
-         pznvHDWPDwuzEUDzGjv3ZD0PdTTiymf4FFdoZ0tfMwaT4gpPHVgLzw0GjmdKcn6UOMKE
-         dZbx211SMpCTP0mNQw2RsDQQYgqsxKCFO0WLNtzNSD7xaOynv5sWdec3Zrnio/dpCakk
-         riFbRxeYCXE2RrUEjkzGeiS4xcXRER+6spdsX0NYJ0Y2zzcf2o0bLOkeJZq7BWtwXiQU
-         Nd4A==
-X-Gm-Message-State: AOAM5325oswN6YB45jD6kq0OdRve/6wh+uLedNEkr0k746KPJfx7lfou
-        boiaFekHDdsCXENek8jvVg==
-X-Google-Smtp-Source: ABdhPJzEqww+nuVlBCG4CJ4QIjNt2ny8eoAF/xFTGVu66sG0M0ICoNa+C3HT50atfQpNHUR72XfXZw==
-X-Received: by 2002:a05:6808:85:: with SMTP id s5mr3627786oic.31.1628888223215;
-        Fri, 13 Aug 2021 13:57:03 -0700 (PDT)
-Received: from robh.at.kernel.org (2603-8080-2a06-ed00-a2a6-2d62-395f-9378.res6.spectrum.com. [2603:8080:2a06:ed00:a2a6:2d62:395f:9378])
-        by smtp.gmail.com with ESMTPSA id l9sm530729otr.34.2021.08.13.13.57.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Aug 2021 13:57:02 -0700 (PDT)
-Received: (nullmailer pid 4019042 invoked by uid 1000);
-        Fri, 13 Aug 2021 20:57:00 -0000
-Date:   Fri, 13 Aug 2021 15:57:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     devicetree@vger.kernel.org, krzysztof.kozlowski@canonical.com,
-        robh+dt@kernel.org, matthias.bgg@gmail.com, shawnguo@kernel.org,
-        sam@ravnborg.org, geert+renesas@glider.be, fanghao11@huawei.com,
-        daniel@0x0f.com, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, ohad@wizery.com,
-        linux@rempel-privat.de, bjorn.andersson@linaro.org,
-        linux-kernel@vger.kernel.org, Max.Merchel@tq-group.com,
-        linux-mediatek@lists.infradead.org, mathieu.poirier@linaro.org
-Subject: Re: [PATCH v6 3/6] dt-bindings: remoteproc: mediatek: Convert
- mtk,scp to json-schema
-Message-ID: <YRbcnKLx43UcJNSm@robh.at.kernel.org>
-References: <20210809051959.31136-1-tinghan.shen@mediatek.com>
- <20210809051959.31136-4-tinghan.shen@mediatek.com>
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=Whip/3h6/J5DaaZO0nDhVJxHy5nP1fVpewugw6/f2/xcshw3URIXkOp7qBhIoTWTNx
+         1tuX6PoFtpZRvXHMJExpj77YAlr0ieF2Plwo4d5EdFKFNqxuyJdBT1THEA4PiCKlrlim
+         Ns/T+VGc0BKqsgDsOQMDifvjHoF3hji7mDnErOsOSl8Xbk4dvQOyH3nFsbvr9EnDInZ6
+         EXqckkEFfO+5K6KSG7s7Y3fMw3/QKnByFWHdOsBzyI29OvAyqKUAMHZ9S3s3yeIqNG3k
+         yddFQxfCy+OhVtI/AhUZORwmY9tPl3ZAJcjC0vGxKzk3HaVgdHzTOqsw11EukBCIQNQw
+         AJvg==
+X-Gm-Message-State: AOAM5321SArZn0P2iLtJLE/oRZgVprswZPyh1qBqCLWfaBVTL9QskZr8
+        L2V1Co5x8OULmH4vF8X7SwQ=
+X-Google-Smtp-Source: ABdhPJyPKg3yjEdmPMFhoNWl7US801kfv6IIEs4sOrluuzwJjwOsMBxeT2cuJ/zdXVe/oNPbrJSnXg==
+X-Received: by 2002:a1c:2747:: with SMTP id n68mr8455383wmn.100.1628973246208;
+        Sat, 14 Aug 2021 13:34:06 -0700 (PDT)
+Received: from [192.168.1.70] ([102.64.221.122])
+        by smtp.gmail.com with ESMTPSA id e17sm5604100wrs.78.2021.08.14.13.34.00
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sat, 14 Aug 2021 13:34:05 -0700 (PDT)
+Message-ID: <611828bd.1c69fb81.4ddf7.f260@mx.google.com>
+From:   Vanina curth <curtisvani0028@gmail.com>
+X-Google-Original-From: Vanina curth
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210809051959.31136-4-tinghan.shen@mediatek.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Sir,
+To:     Recipients <Vanina@vger.kernel.org>
+Date:   Sat, 14 Aug 2021 20:33:48 +0000
+Reply-To: curtisvani9008@gmail.com
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, 09 Aug 2021 13:19:56 +0800, Tinghan Shen wrote:
-> Convert the mtk,scp binding to DT schema format using json-schema.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->  .../bindings/remoteproc/mtk,scp.txt           | 41 ---------
->  .../bindings/remoteproc/mtk,scp.yaml          | 92 +++++++++++++++++++
->  2 files changed, 92 insertions(+), 41 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+How are you? I'm Vanina. I'm interested to know you and I would like to kno=
+w more about you and establish relationship with you. i will wait for your =
+response. thank you.
