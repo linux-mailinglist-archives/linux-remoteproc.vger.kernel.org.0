@@ -2,68 +2,106 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABE673EC514
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Aug 2021 22:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9022E3ED19A
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Aug 2021 12:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbhHNUej (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 14 Aug 2021 16:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbhHNUeg (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 14 Aug 2021 16:34:36 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88850C061764;
-        Sat, 14 Aug 2021 13:34:07 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id h24-20020a1ccc180000b029022e0571d1a0so9067140wmb.5;
-        Sat, 14 Aug 2021 13:34:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:from:mime-version:content-transfer-encoding
-         :content-description:subject:to:date:reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=VbcC5ppI4dqErkDqigIZaMrHECxjRJCjXWpXlzE8gFEOdkf2IKRgLvyZd4kEphKm7E
-         D9rfkXREK7E8Co6xqM3wly15xR38v5oBkLn1gnYSalFfYm3ThuSe8O4MfWf+RkJu0czF
-         008s+R7BPqDjeV1oGrYDs116Ktt2o5Oj5JAnj/53kDfh6sIhJMnhvu6L7zHzwxKki4v1
-         1Xt7dd13OBCuWQ39h4zZp4oDJeTQSQZSadDj5s720rNHB8lU/p5jXNqqkkkdDlOPZDmV
-         5UMAfKJIughxRBQ/v66quzThQ9IvJMzKF+bvrH2EZC9sHORUOs+EujU3chNvVG4vXLvu
-         cQlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:from:mime-version
-         :content-transfer-encoding:content-description:subject:to:date
-         :reply-to;
-        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
-        b=Whip/3h6/J5DaaZO0nDhVJxHy5nP1fVpewugw6/f2/xcshw3URIXkOp7qBhIoTWTNx
-         1tuX6PoFtpZRvXHMJExpj77YAlr0ieF2Plwo4d5EdFKFNqxuyJdBT1THEA4PiCKlrlim
-         Ns/T+VGc0BKqsgDsOQMDifvjHoF3hji7mDnErOsOSl8Xbk4dvQOyH3nFsbvr9EnDInZ6
-         EXqckkEFfO+5K6KSG7s7Y3fMw3/QKnByFWHdOsBzyI29OvAyqKUAMHZ9S3s3yeIqNG3k
-         yddFQxfCy+OhVtI/AhUZORwmY9tPl3ZAJcjC0vGxKzk3HaVgdHzTOqsw11EukBCIQNQw
-         AJvg==
-X-Gm-Message-State: AOAM5321SArZn0P2iLtJLE/oRZgVprswZPyh1qBqCLWfaBVTL9QskZr8
-        L2V1Co5x8OULmH4vF8X7SwQ=
-X-Google-Smtp-Source: ABdhPJyPKg3yjEdmPMFhoNWl7US801kfv6IIEs4sOrluuzwJjwOsMBxeT2cuJ/zdXVe/oNPbrJSnXg==
-X-Received: by 2002:a1c:2747:: with SMTP id n68mr8455383wmn.100.1628973246208;
-        Sat, 14 Aug 2021 13:34:06 -0700 (PDT)
-Received: from [192.168.1.70] ([102.64.221.122])
-        by smtp.gmail.com with ESMTPSA id e17sm5604100wrs.78.2021.08.14.13.34.00
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Sat, 14 Aug 2021 13:34:05 -0700 (PDT)
-Message-ID: <611828bd.1c69fb81.4ddf7.f260@mx.google.com>
-From:   Vanina curth <curtisvani0028@gmail.com>
-X-Google-Original-From: Vanina curth
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Sir,
-To:     Recipients <Vanina@vger.kernel.org>
-Date:   Sat, 14 Aug 2021 20:33:48 +0000
-Reply-To: curtisvani9008@gmail.com
+        id S233423AbhHPKIu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 16 Aug 2021 06:08:50 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:45569 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232210AbhHPKIs (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Mon, 16 Aug 2021 06:08:48 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629108497; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=stLY7GkwYgSHcjhNXA7SopqN29wNOpHyzuWjB7u9WJA=; b=DQsJSrthZRoHTIdXYt4RwzB8HgzX19BKAAGc67dfx3RNeHFN/5gYaPocS8RvwvH+LYTqfRWO
+ XrKS+vIljzTjZUbya+YRAiFVoUvS1O3XL923RnlNMG0CRUVpM33bho6Alh1+1dSMI8Cy/Rt9
+ ewlfCs75i6h/tXv4cNuAW/WwxWA=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 611a3883f746c298d97e22c3 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 16 Aug 2021 10:05:55
+ GMT
+Sender: deesin=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 95F14C4360C; Mon, 16 Aug 2021 10:05:54 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from deesin-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: deesin)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id ED5FDC4338F;
+        Mon, 16 Aug 2021 10:05:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org ED5FDC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Deepak Kumar Singh <deesin@codeaurora.org>
+To:     bjorn.andersson@linaro.org, swboyd@chromium.org,
+        clew@codeaurora.org, sibis@codeaurora.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        Deepak Kumar Singh <deesin@codeaurora.org>,
+        Andy Gross <agross@kernel.org>
+Subject: [PATCH V2 1/1] soc: qcom: smp2p: Add wakeup capability to SMP2P IRQ
+Date:   Mon, 16 Aug 2021 15:35:35 +0530
+Message-Id: <1629108335-23463-1-git-send-email-deesin@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-How are you? I'm Vanina. I'm interested to know you and I would like to kno=
-w more about you and establish relationship with you. i will wait for your =
-response. thank you.
+Remote susbsystems notify fatal crash throught smp2p interrupt.
+When modem/wifi crashes it can cause soc to come out of low power state
+and may not allow again to enter in low power state until crash is handled.
+
+Mark smp2p interrupt wakeup capable so that interrupt handler is executed
+and remote susbsystem crash can be handled in system  resume path.
+
+Signed-off-by: Deepak Kumar Singh <deesin@codeaurora.org>
+---
+ drivers/soc/qcom/smp2p.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
+index 2df4883..646848b 100644
+--- a/drivers/soc/qcom/smp2p.c
++++ b/drivers/soc/qcom/smp2p.c
+@@ -18,6 +18,7 @@
+ #include <linux/soc/qcom/smem.h>
+ #include <linux/soc/qcom/smem_state.h>
+ #include <linux/spinlock.h>
++#include <linux/pm_wakeirq.h>
+ 
+ /*
+  * The Shared Memory Point to Point (SMP2P) protocol facilitates communication
+@@ -538,9 +539,20 @@ static int qcom_smp2p_probe(struct platform_device *pdev)
+ 		goto unwind_interfaces;
+ 	}
+ 
++	/* Setup smp2p interrupt as wakeup source */
++	ret = device_init_wakeup(&pdev->dev, true);
++	if (ret)
++		goto unwind_interfaces;
++
++	ret = dev_pm_set_wake_irq(&pdev->dev, irq);
++	if (ret)
++		goto set_wakeup_failed;
+ 
+ 	return 0;
+ 
++set_wakeup_failed:
++	device_init_wakeup(&pdev->dev, false);
++
+ unwind_interfaces:
+ 	list_for_each_entry(entry, &smp2p->inbound, node)
+ 		irq_domain_remove(entry->domain);
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
