@@ -2,154 +2,113 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E41FA3ED335
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Aug 2021 13:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158643EDD17
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Aug 2021 20:31:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236249AbhHPLkm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 16 Aug 2021 07:40:42 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:17435 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236262AbhHPLkl (ORCPT
+        id S230122AbhHPScY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 16 Aug 2021 14:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230105AbhHPScY (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 16 Aug 2021 07:40:41 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629114010; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=O00qtUAUcZvqR44D1MBcAC4U2OqiP9I4qUt+ug4VUP4=; b=T+qTVdaT1GA+on+93JOMPvDZUYnIxjs7UvyDSbx7kVyeOT9B0XVC7kBTfqRYIs3UeUny9iAs
- f4o7zLTHWp4/eQHlAbR5Ow9mLZ6k2tmO2BAsxl5ybS4CN/BY9qwvcsyR9QrBCYmgNiM3GzZU
- a4dfQKkGE4G6hKtoh42j+aDrgFg=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 611a4e82b3873958f5957d16 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 16 Aug 2021 11:39:45
- GMT
-Sender: deesin=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3DB0CC4360C; Mon, 16 Aug 2021 11:39:45 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from deesin-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: deesin)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A0F7EC4360C;
-        Mon, 16 Aug 2021 11:39:41 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org A0F7EC4360C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Deepak Kumar Singh <deesin@codeaurora.org>
-To:     bjorn.andersson@linaro.org, swboyd@chromium.org,
-        clew@codeaurora.org, sibis@codeaurora.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        Deepak Kumar Singh <deesin@codeaurora.org>,
-        Andy Gross <agross@kernel.org>
-Subject: [PATCH V6 2/2] soc: qcom: aoss: Add debugfs entry
-Date:   Mon, 16 Aug 2021 17:09:14 +0530
-Message-Id: <1629113954-14084-3-git-send-email-deesin@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1629113954-14084-1-git-send-email-deesin@codeaurora.org>
-References: <1629113954-14084-1-git-send-email-deesin@codeaurora.org>
+        Mon, 16 Aug 2021 14:32:24 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C73C0613CF
+        for <linux-remoteproc@vger.kernel.org>; Mon, 16 Aug 2021 11:31:52 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id om1-20020a17090b3a8100b0017941c44ce4so111404pjb.3
+        for <linux-remoteproc@vger.kernel.org>; Mon, 16 Aug 2021 11:31:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=P8DIXUMiWfpgr4xiz7M1lZjbV422f4u1f8RA8daYKwY=;
+        b=Y1bHjiUg1/uo6UKofntGpU/ZbEsHifM0SwBLuaQ7Jw5m72bq+BPsNs+BRugmgUNIeX
+         gocGufpnx8xIAoqbwpdmXw00bpDw7Wxtbh0XIJyjcBkLR4e/6K/WhFEY4FImr7QUl2E/
+         TtsQrBOdEXsTxxCaauBKdfznYy6uo0w2uITDo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=P8DIXUMiWfpgr4xiz7M1lZjbV422f4u1f8RA8daYKwY=;
+        b=FHZgcQ6hfb+30GDi8/hIKNEAe7V2eyi83m8E5mgWPF3P01C6JO6b0o4SSWRmR4/L9v
+         2V+OS9QpMAhYRuTUoyNO+mkq8qkaTjgZXezr3cy9XTnLNhyWv274eDtogYCccZaCC+6Z
+         XaBQsH6zQhrEwxi7ZPQRvVMiB1eA4CfT5yI9CWIGWbGLzRNAGbrgqHACXVMOJ6OCHfrK
+         Wj7cV9o1YRRxFVqc/NcLmL5PucBpovPLbkN1njinh14+RnT5xBonWf7ASygeCx8P8ndb
+         iegiy5jJego+QH5Kt9sRs6xm+8zcSjI2GF/x2ER4KME+RcPqBH5VPnpny8UL9Nn7q0Uf
+         4lUw==
+X-Gm-Message-State: AOAM533We1uj5Mq+TzgHhyNPSG3MQb31MnFon0qvgHXV6fap202DxHPJ
+        QmOI3lTOz/mIUkImW2ZU9yBvQw==
+X-Google-Smtp-Source: ABdhPJwP0+ppbwzuAALtAJstVM8BY2ZJK6ehuGRK7VCp/BFOHhAvQ06CxsU9A8S2m8rrl2QBn4w+tw==
+X-Received: by 2002:aa7:98da:0:b029:3e0:8b98:df83 with SMTP id e26-20020aa798da0000b02903e08b98df83mr81603pfm.63.1629138711918;
+        Mon, 16 Aug 2021 11:31:51 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:5cff:3a19:755c:1b91])
+        by smtp.gmail.com with UTF8SMTPSA id g26sm114755pgb.45.2021.08.16.11.31.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Aug 2021 11:31:51 -0700 (PDT)
+Date:   Mon, 16 Aug 2021 11:31:49 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Deepak Kumar Singh <deesin@codeaurora.org>
+Cc:     bjorn.andersson@linaro.org, swboyd@chromium.org,
+        clew@codeaurora.org, sibis@codeaurora.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH V2 1/1] soc: qcom: smp2p: Add wakeup capability to SMP2P
+ IRQ
+Message-ID: <YRqvFVw1EJl+dnM+@google.com>
+References: <1629108335-23463-1-git-send-email-deesin@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1629108335-23463-1-git-send-email-deesin@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-It can be useful to control the different power states of various
-parts of hardware for device testing. Add a debugfs node for qmp so
-messages can be sent to aoss for debugging and testing purposes.
+On Mon, Aug 16, 2021 at 03:35:35PM +0530, Deepak Kumar Singh wrote:
+> Remote susbsystems notify fatal crash throught smp2p interrupt.
+> When modem/wifi crashes it can cause soc to come out of low power state
+> and may not allow again to enter in low power state until crash is handled.
+> 
+> Mark smp2p interrupt wakeup capable so that interrupt handler is executed
+> and remote susbsystem crash can be handled in system  resume path.
+> 
+> Signed-off-by: Deepak Kumar Singh <deesin@codeaurora.org>
+> ---
+>  drivers/soc/qcom/smp2p.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
+> index 2df4883..646848b 100644
+> --- a/drivers/soc/qcom/smp2p.c
+> +++ b/drivers/soc/qcom/smp2p.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/soc/qcom/smem.h>
+>  #include <linux/soc/qcom/smem_state.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/pm_wakeirq.h>
+>  
+>  /*
+>   * The Shared Memory Point to Point (SMP2P) protocol facilitates communication
+> @@ -538,9 +539,20 @@ static int qcom_smp2p_probe(struct platform_device *pdev)
+>  		goto unwind_interfaces;
+>  	}
+>  
+> +	/* Setup smp2p interrupt as wakeup source */
+> +	ret = device_init_wakeup(&pdev->dev, true);
+> +	if (ret)
+> +		goto unwind_interfaces;
+> +
+> +	ret = dev_pm_set_wake_irq(&pdev->dev, irq);
+> +	if (ret)
+> +		goto set_wakeup_failed;
+>  
+>  	return 0;
+>  
+> +set_wakeup_failed:
+> +	device_init_wakeup(&pdev->dev, false);
+> +
 
-Signed-off-by: Chris Lew <clew@codeaurora.org>
-Signed-off-by: Deepak Kumar Singh <deesin@codeaurora.org>
----
- drivers/soc/qcom/qcom_aoss.c | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
-index a43c22c..080bc2e 100644
---- a/drivers/soc/qcom/qcom_aoss.c
-+++ b/drivers/soc/qcom/qcom_aoss.c
-@@ -4,6 +4,7 @@
-  */
- #include <dt-bindings/power/qcom-aoss-qmp.h>
- #include <linux/clk-provider.h>
-+#include <linux/debugfs.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/mailbox_client.h>
-@@ -86,6 +87,9 @@ struct qmp {
- 	struct clk_hw qdss_clk;
- 	struct genpd_onecell_data pd_data;
- 	struct qmp_cooling_device *cooling_devs;
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+	struct dentry *debugfs_file;
-+#endif /* CONFIG_DEBUG_FS */
- };
- 
- struct qmp_pd {
-@@ -563,6 +567,33 @@ void qmp_put(struct qmp *qmp)
- }
- EXPORT_SYMBOL(qmp_put);
- 
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+static ssize_t aoss_dbg_write(struct file *file, const char __user *userstr,
-+			      size_t len, loff_t *pos)
-+{
-+	struct qmp *qmp = file->private_data;
-+	char buf[QMP_MSG_LEN] = {};
-+	int ret;
-+
-+	if (!len || len >= QMP_MSG_LEN)
-+		return -EINVAL;
-+
-+	ret  = copy_from_user(buf, userstr, len);
-+	if (ret) {
-+		return -EFAULT;
-+	}
-+
-+	ret = qmp_send(qmp, buf, QMP_MSG_LEN);
-+
-+	return ret ? ret : len;
-+}
-+
-+static const struct file_operations aoss_dbg_fops = {
-+	.open = simple_open,
-+	.write = aoss_dbg_write,
-+};
-+#endif /* CONFIG_DEBUG_FS */
-+
- static int qmp_probe(struct platform_device *pdev)
- {
- 	struct resource *res;
-@@ -617,6 +648,11 @@ static int qmp_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, qmp);
- 
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+	qmp->debugfs_file = debugfs_create_file("aoss_send_message", 0220, NULL,
-+						qmp, &aoss_dbg_fops);
-+#endif /* CONFIG_DEBUG_FS */
-+
- 	return 0;
- 
- err_remove_qdss_clk:
-@@ -633,6 +669,10 @@ static int qmp_remove(struct platform_device *pdev)
- {
- 	struct qmp *qmp = platform_get_drvdata(pdev);
- 
-+#if IS_ENABLED(CONFIG_DEBUG_FS)
-+	debugfs_remove(qmp->debugfs_file);
-+#endif /* CONFIG_DEBUG_FS */
-+
- 	qmp_qdss_clk_remove(qmp);
- 	qmp_pd_remove(qmp);
- 	qmp_cooling_devices_remove(qmp);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+I think you need to call dev_pm_clear_wake_irq() and
+device_init_wakeup(..., false) in qcom_smp2p_remove()
+to free all resources.
 
