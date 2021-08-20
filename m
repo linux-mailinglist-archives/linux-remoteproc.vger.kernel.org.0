@@ -2,70 +2,179 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E57733F28E5
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 20 Aug 2021 11:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A683F2A13
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 20 Aug 2021 12:25:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235201AbhHTJKY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 20 Aug 2021 05:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234684AbhHTJKU (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 20 Aug 2021 05:10:20 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABFEC0617A8
-        for <linux-remoteproc@vger.kernel.org>; Fri, 20 Aug 2021 02:09:42 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id f22so491518qkm.5
-        for <linux-remoteproc@vger.kernel.org>; Fri, 20 Aug 2021 02:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WuDQPRa1pRZEmgy3rMsrN6WxMhN/6RZwdTFnT+vP0Q4=;
-        b=hFJnYYN6W4CsDcIVyUx2ldgP3beMW4jLNH/SGyYzXZ7BCc0KGd1k2ND/ddXkVyFBzR
-         guIjkcbm1NmdCLbZe8HMFSijx65jRHp/SdEKwlTl1Wrrm5GfFB+4ZVS5sv8x1a29xP5U
-         THsPNWQYsSJ5yPuhXe5CCySbf3d8KHk4ieqNWU1QRBTQFpIYNevU0ISY6bHFs3nh/n2S
-         aeYB/F9nFQwaieLCZI54fOmj0REUKAHwNOHq6pxHqVkFNAYAR1ZrLiFgkhfJD1EtDH4X
-         GpetBqXCAI10TRHamsMBRTUQpFk6zzmcbkWEi4ufFi/59ztBcLqf45Sb9NTW5DLLfDf/
-         UjVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WuDQPRa1pRZEmgy3rMsrN6WxMhN/6RZwdTFnT+vP0Q4=;
-        b=kHa0Qqh0lIcFDxtALtBq6MUbO25Jp0AoATYZhS6Np89S4sshHaU+HoVoY+tPfZ0Tyz
-         LwyvJIYp3B1R93lOB8EDd5pJwZTgtnqlzUSNGcYt1AcqBryt9NIGogEkfaFWNg9Zs5Ow
-         ASHeE5UycaXCr2LR0wuSxIf3SjJjoPV5JkK/0bfuJSdzjHCYe+NairqiLrLmVzddv8Va
-         ouyzrpbDOWmwNR1yTsr4TEqww5ZklmfNwOLt5ZaAOl9/EaonT8tr4R/aunxFgRW/hjXH
-         6uTST6An2uSVHjI39FQY+/TK+Dpo5S8c+7bQn8TvITFlkrkJh8JO05kElXFyFk6pxqI2
-         SxrQ==
-X-Gm-Message-State: AOAM530xyyzcJsW5GQaKVMEJiaB1b91XmmAMYbsqR5648zwPEL3cq+uo
-        A3v2DYQiqfLUyENFUcf/BTUPidiHiuiICmytC18=
-X-Google-Smtp-Source: ABdhPJyG2xEmxAYbVbw0iUlOEmdXfXcy24m7DXEexS/mITfNOxQp5Wtr3TQ/AKKjTgQq+sXNyeHYc24WCQSN0Ret/HU=
-X-Received: by 2002:a37:846:: with SMTP id 67mr7997191qki.167.1629450581284;
- Fri, 20 Aug 2021 02:09:41 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:ac8:5184:0:0:0:0:0 with HTTP; Fri, 20 Aug 2021 02:09:40
- -0700 (PDT)
-Reply-To: geomic123@yahoo.com
-From:   George Micheal <philipowiredu77@gmail.com>
-Date:   Fri, 20 Aug 2021 10:09:40 +0100
-Message-ID: <CAGkcCGHZMGrNP48LcZn4sRuaLsMHSeJnxJjFCOZvC71-qdJ4xg@mail.gmail.com>
-Subject: Waiting for response
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S239016AbhHTKZt (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 20 Aug 2021 06:25:49 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:40650 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237258AbhHTKZs (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Fri, 20 Aug 2021 06:25:48 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B4EC0200C20;
+        Fri, 20 Aug 2021 12:25:09 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 52198200C1E;
+        Fri, 20 Aug 2021 12:25:09 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id A01B3183AD26;
+        Fri, 20 Aug 2021 18:25:07 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com
+Cc:     linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, shengjiu.wang@gmail.com
+Subject: [PATCH 1/2] dt-bindings: remoteproc: Add fsl,imx-dsp-rproc binding document
+Date:   Fri, 20 Aug 2021 18:03:10 +0800
+Message-Id: <1629453791-10580-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Define the compatible string and properties needed by imx_dsp_rproc
+driver.
+
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ .../remoteproc/fsl,imx-dsp-rproc.yaml         | 123 ++++++++++++++++++
+ 1 file changed, 123 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/fsl,imx-dsp-rproc.yaml
+
+diff --git a/Documentation/devicetree/bindings/remoteproc/fsl,imx-dsp-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/fsl,imx-dsp-rproc.yaml
+new file mode 100644
+index 000000000000..7eba49aa959e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-dsp-rproc.yaml
+@@ -0,0 +1,123 @@
++# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/remoteproc/fsl,imx-dsp-rproc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: i.MX DSP Remoteproc Devices
++
++maintainers:
++  - Shengjiu Wang <shengjiu.wang@nxp.com>
++
++description:
++  This binding provides support for DSP processors found on i.mX family of SoCs
++
++properties:
++  compatible:
++    enum:
++      - fsl,imx8qxp-hifi4
++      - fsl,imx8qm-hifi4
++      - fsl,imx8mp-hifi4
++      - fsl,imx8ulp-hifi4
++
++  clocks:
++    description: |
++      Main functional clock for the remote processor
++    minItems: 1
++    maxItems: 32
++
++  clock-names:
++    description:
++      List of clock names for the remote processor.
++      dsp_clkx for clocks of dsp itself.
++      per_clkx for clocks of peripherals used by dsp.
++    minItems: 1
++    maxItems: 32
++
++  syscon:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to syscon block which provide access for processor enablement
++
++  mbox-names:
++    items:
++      - const: tx
++      - const: rx
++      - const: rxdb
++
++  mboxes:
++    description:
++      This property is required only if the rpmsg/virtio functionality is used.
++      List of <&phandle type channel> - 1 channel for TX, 1 channel for RX, 1 channel for RXDB.
++      (see mailbox/fsl,mu.yaml)
++    minItems: 1
++    maxItems: 3
++
++  firmware-name:
++    description: |
++      Default name of the firmware to load to the remote processor.
++
++  memory-region:
++    description:
++      If present, a phandle for a reserved memory area that used for vdev buffer,
++      resource table, vring region and others used by remote processor.
++    minItems: 1
++    maxItems: 32
++
++  reg:
++    description: |
++      Address space for any remoteproc memories present on the SoC.
++
++  power-domains:
++    minItems: 1
++    maxItems: 32
++
++required:
++  - compatible
++  - reg
++  - mboxes
++  - mbox-names
++  - clocks
++  - clock-names
++  - firmware-name
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/imx8mp-clock.h>
++    dsp_reserved: dsp@92400000 {
++      reg = <0x92400000 0x1000000>;
++      no-map;
++    };
++    dsp_vdev0vring0: vdev0vring0@942f0000 {
++      reg = <0x942f0000 0x8000>;
++      no-map;
++    };
++    dsp_vdev0vring1: vdev0vring1@942f8000 {
++      reg = <0x942f8000 0x8000>;
++      no-map;
++    };
++    dsp_vdev0buffer: vdev0buffer@94300000 {
++      compatible = "shared-dma-pool";
++      reg = <0x94300000 0x100000>;
++      no-map;
++    };
++
++    dsp: dsp@3b6e8000 {
++      compatible = "fsl,imx8mp-hifi4";
++      reg = <0x3B6E8000 0x88000>;
++      clocks = <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_OCRAMA_IPG>,
++               <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_DSP_ROOT>,
++               <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_DSPDBG_ROOT>;
++      clock-names = "dsp_clk1", "dsp_clk2", "dsp_clk3";
++      firmware-name = "imx/dsp/hifi4.bin";
++      power-domains = <&audiomix_pd>;
++      mbox-names = "tx", "rx", "rxdb";
++      mboxes = <&mu2 0 0>,
++               <&mu2 1 0>,
++               <&mu2 3 0>;
++      memory-region = <&dsp_vdev0buffer>, <&dsp_vdev0vring0>,
++                      <&dsp_vdev0vring1>, <&dsp_reserved>;
++      syscon = <&audio_blk_ctrl>;
++    };
 -- 
-Dear Sir/Madam
+2.17.1
 
-My name is Mr George Michael,i am the Personal Aid to former
-President Baba Yahya Abdul-Aziz Jemus Jammeh the Republic of Gambia in
-west Africa, who is currently in exile with his farmily. I have been
-trying on how to get in touch with you over an important issue
-concerning a project that will be profitable. I anticipate hearing
-from you for more details.
-
-Yours faithfully
-Mr George Michael
