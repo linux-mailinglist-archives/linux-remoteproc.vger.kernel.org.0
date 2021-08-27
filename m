@@ -2,85 +2,72 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 865C53F87A3
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Aug 2021 14:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC783F95EF
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Aug 2021 10:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241878AbhHZMiY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 26 Aug 2021 08:38:24 -0400
-Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:56148
-        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241261AbhHZMiX (ORCPT
+        id S244511AbhH0IWo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 Aug 2021 04:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244569AbhH0IWk (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 26 Aug 2021 08:38:23 -0400
-Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id BD0673F245;
-        Thu, 26 Aug 2021 12:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1629981455;
-        bh=8sFGVg+g2UkWDPsJWhC3mA0fD7X/I5c9eQbr5g4WoBs=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
-        b=vKmFcEbilp8tNcVPatyFCMn1BJvAoxsUhtxrZRVp3WwbGu9UBkoBcu2NTcS84FJta
-         YwcAHgHJxwgSc5BiXVoMedGXmTJkEO/7+vShI63pPKYFA/EZsVqlixmOs6yiwyaLzz
-         RoOkbN72JKLtoPBGhuXQfCt8MrPChIi5zgz+HX0o2dKbgJZdlhr223MBzPw5jStObQ
-         nPTmT/pyIQdlqQh2PMDf+ckQVS0y1rh7KbM4pbGNrvyEcaPUtGT75XkRe9VLD3EaC2
-         UhOyr8qXtfBITPpBPOVd7QBaJnHpcHeVgNfTvUcaaaH0WuDN/mtH1f+h62qoTU0XBO
-         3H296puhfnZEw==
-From:   Colin King <colin.king@canonical.com>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] remoteproc: Fix spelling mistake "atleast" -> "at least"
-Date:   Thu, 26 Aug 2021 13:37:35 +0100
-Message-Id: <20210826123735.14650-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.32.0
+        Fri, 27 Aug 2021 04:22:40 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2425C061757
+        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Aug 2021 01:21:51 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id x5so6255357ill.3
+        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Aug 2021 01:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=Ta9KGZrEXdXbBbrP5+76a5dJyHsEL2M26EYd/ydrx6w=;
+        b=NKte3HupZHm2rWF1kBSm55UGkVoRF9l79AkwheeCza/4o2TTqrB7/biNSbnL0e1X+L
+         lVVOdflBJuJtEFFgu5OFwLHVAF4qCnY4nHZrTZi5Nooeqc4Bx95FcPjtG3vjvoaMVV67
+         r/W6sGx6U20DpjUaVCECBRL5XMJHAsWJgLQ8FVIW02UcG4llFLsnUZV04fxP5Mvaa3Gd
+         9fbvUzEUq6wQMbchwJV8jJVH8R1u5QDb+GhNeUFUR8cDR/4DrwzJPkePpgdKtGvm+ev6
+         qZnLpJGLzk7ho53hY0LeA3iaBWCOHEwqYt1KRj6O4EF8p7he5cJKEHcbHLYLwgF/RF4R
+         Wj+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=Ta9KGZrEXdXbBbrP5+76a5dJyHsEL2M26EYd/ydrx6w=;
+        b=bdFYaR8pTdJcJcrJqV7RhrHVAKo2hcpL72PCBBTeQaGcONpTBFKZkmIrJMgekqBMJT
+         clAKHreWG4g22gONZbI5i/iaTSLzSC9ULav0mrWEtyKOFvOIIUyfocqKjmK4zVSEr4Pt
+         pQuO8lTlzj6EaVIgaa3y/Ye6spdqNJL1ttE7+udnymOLv0QikscC7/DN9OaRypqFG94o
+         laM58w4kdP3AZWPxiaBgT0kQ90jMA+uTYbux6QFy7+vKXSCNRYS6P4mumJ9+wGMwNhDO
+         7qq0yypyEqgTFNRadpce5XxdSNRqUdBH1DWQpc7tEnWwpMIjjHtdBHiiKF0kj02w2Qkc
+         9sLg==
+X-Gm-Message-State: AOAM531mk0UcdOKDT6ZuGIbqVf/ZwTZH/9wNLpDVvIx/lzwqFkZOvcAA
+        4YvG3lynpyJ+4x+4K1tra6zhm3582wOswH6fjgY=
+X-Google-Smtp-Source: ABdhPJy17WFk0ETyBBAPaNU931/4TtLa/92Ttoq5p4nKWPe3AjLLXrCc7SF6Ge8LrwVXU9BRE68OdztEn6dHcHzJX2Y=
+X-Received: by 2002:a92:440c:: with SMTP id r12mr5715044ila.174.1630052511356;
+ Fri, 27 Aug 2021 01:21:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6602:2bf3:0:0:0:0 with HTTP; Fri, 27 Aug 2021 01:21:50
+ -0700 (PDT)
+From:   Hassan Duku <zinabhassan91@gmail.com>
+Date:   Fri, 27 Aug 2021 01:21:50 -0700
+Message-ID: <CAENewnZ7YUZ3-X1uLUkq0C-MwA1dBwBeovYNsHbTS+ot7Ns9Mg@mail.gmail.com>
+Subject: Greeting to you,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Greetings to you,
 
-There are spelling mistakes dev_err messages. Fix them.
+How are you doing today?, my name is Hassan Duku, I live in Ghana and
+work for the Operational Manager with Royal Bank Ghana Limited.
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/remoteproc/ti_k3_dsp_remoteproc.c | 2 +-
- drivers/remoteproc/ti_k3_r5_remoteproc.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I am glad to be connected with you. I have a business proposal I would
+like to discuss with you in private. It involves a business
+opportunity that will be of huge financial benefit to both us. further
+details will be shared after I receive your response.
 
-diff --git a/drivers/remoteproc/ti_k3_dsp_remoteproc.c b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-index fd4eb67a6681..c352fa277c8d 100644
---- a/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-@@ -481,7 +481,7 @@ static int k3_dsp_reserved_mem_init(struct k3_dsp_rproc *kproc)
- 		return -EINVAL;
- 	}
- 	if (num_rmems < 2) {
--		dev_err(dev, "device needs atleast two memory regions to be defined, num = %d\n",
-+		dev_err(dev, "device needs at least two memory regions to be defined, num = %d\n",
- 			num_rmems);
- 		return -EINVAL;
- 	}
-diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-index 71615210df3e..6499302d00c3 100644
---- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-@@ -876,7 +876,7 @@ static int k3_r5_reserved_mem_init(struct k3_r5_rproc *kproc)
- 		return -EINVAL;
- 	}
- 	if (num_rmems < 2) {
--		dev_err(dev, "device needs atleast two memory regions to be defined, num = %d\n",
-+		dev_err(dev, "device needs at least two memory regions to be defined, num = %d\n",
- 			num_rmems);
- 		return -EINVAL;
- 	}
--- 
-2.32.0
+Kindly reply with your full name and your country of Origin/residence,
 
+Yours Truly,
+
+Hassan Duku
+Operational Manager.
