@@ -2,72 +2,77 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC783F95EF
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Aug 2021 10:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241B53FB4AF
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 30 Aug 2021 13:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244511AbhH0IWo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 Aug 2021 04:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49306 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244569AbhH0IWk (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 27 Aug 2021 04:22:40 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2425C061757
-        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Aug 2021 01:21:51 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id x5so6255357ill.3
-        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Aug 2021 01:21:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=Ta9KGZrEXdXbBbrP5+76a5dJyHsEL2M26EYd/ydrx6w=;
-        b=NKte3HupZHm2rWF1kBSm55UGkVoRF9l79AkwheeCza/4o2TTqrB7/biNSbnL0e1X+L
-         lVVOdflBJuJtEFFgu5OFwLHVAF4qCnY4nHZrTZi5Nooeqc4Bx95FcPjtG3vjvoaMVV67
-         r/W6sGx6U20DpjUaVCECBRL5XMJHAsWJgLQ8FVIW02UcG4llFLsnUZV04fxP5Mvaa3Gd
-         9fbvUzEUq6wQMbchwJV8jJVH8R1u5QDb+GhNeUFUR8cDR/4DrwzJPkePpgdKtGvm+ev6
-         qZnLpJGLzk7ho53hY0LeA3iaBWCOHEwqYt1KRj6O4EF8p7he5cJKEHcbHLYLwgF/RF4R
-         Wj+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=Ta9KGZrEXdXbBbrP5+76a5dJyHsEL2M26EYd/ydrx6w=;
-        b=bdFYaR8pTdJcJcrJqV7RhrHVAKo2hcpL72PCBBTeQaGcONpTBFKZkmIrJMgekqBMJT
-         clAKHreWG4g22gONZbI5i/iaTSLzSC9ULav0mrWEtyKOFvOIIUyfocqKjmK4zVSEr4Pt
-         pQuO8lTlzj6EaVIgaa3y/Ye6spdqNJL1ttE7+udnymOLv0QikscC7/DN9OaRypqFG94o
-         laM58w4kdP3AZWPxiaBgT0kQ90jMA+uTYbux6QFy7+vKXSCNRYS6P4mumJ9+wGMwNhDO
-         7qq0yypyEqgTFNRadpce5XxdSNRqUdBH1DWQpc7tEnWwpMIjjHtdBHiiKF0kj02w2Qkc
-         9sLg==
-X-Gm-Message-State: AOAM531mk0UcdOKDT6ZuGIbqVf/ZwTZH/9wNLpDVvIx/lzwqFkZOvcAA
-        4YvG3lynpyJ+4x+4K1tra6zhm3582wOswH6fjgY=
-X-Google-Smtp-Source: ABdhPJy17WFk0ETyBBAPaNU931/4TtLa/92Ttoq5p4nKWPe3AjLLXrCc7SF6Ge8LrwVXU9BRE68OdztEn6dHcHzJX2Y=
-X-Received: by 2002:a92:440c:: with SMTP id r12mr5715044ila.174.1630052511356;
- Fri, 27 Aug 2021 01:21:51 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6602:2bf3:0:0:0:0 with HTTP; Fri, 27 Aug 2021 01:21:50
- -0700 (PDT)
-From:   Hassan Duku <zinabhassan91@gmail.com>
-Date:   Fri, 27 Aug 2021 01:21:50 -0700
-Message-ID: <CAENewnZ7YUZ3-X1uLUkq0C-MwA1dBwBeovYNsHbTS+ot7Ns9Mg@mail.gmail.com>
-Subject: Greeting to you,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S236581AbhH3LjP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 30 Aug 2021 07:39:15 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:54510 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236542AbhH3LjN (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Mon, 30 Aug 2021 07:39:13 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1630323499; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=Hk+iwrjCrFy+LpqAj/ekV8lghLzWqj2rVYGU/ecRJdc=; b=fZ3essqq7VJJNmOIAD0nvSPYNX6dTSvLC5mNPB83O7KnmW1dc2+nclGM9jgOhnXuaZOhmhvb
+ FgSlRYgMOl9xShl9APlfkOY+oYHRsOrbXkXprOrIil6TFSoA3wARYe4CSNOhd2L765A6WGnN
+ LzCvqjzNdOxYS1EFFv8L6nzCtc0=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 612cc3094cd9015037be341e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 30 Aug 2021 11:37:45
+ GMT
+Sender: deesin=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 4AB7AC4360D; Mon, 30 Aug 2021 11:37:45 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from deesin-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: deesin)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 22F01C43460;
+        Mon, 30 Aug 2021 11:37:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 22F01C43460
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Deepak Kumar Singh <deesin@codeaurora.org>
+To:     bjorn.andersson@linaro.org, swboyd@chromium.org,
+        clew@codeaurora.org, sibis@codeaurora.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        Deepak Kumar Singh <deesin@codeaurora.org>
+Subject: [PATCH V7 0/2] qcom aoss qmp_get and debugfs support patches
+Date:   Mon, 30 Aug 2021 17:07:29 +0530
+Message-Id: <1630323451-7160-1-git-send-email-deesin@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Greetings to you,
+[Change from V6]
+soc: qcom: aoss: Expose send for generic usecase
+  Changed comment for qmp_put
+  Added comment after put_device in qmp_put
 
-How are you doing today?, my name is Hassan Duku, I live in Ghana and
-work for the Operational Manager with Royal Bank Ghana Limited.
+soc: qcom: aoss: Add debugfs entry
+  Removed CONFIG_DEBUG_FS check
 
-I am glad to be connected with you. I have a business proposal I would
-like to discuss with you in private. It involves a business
-opportunity that will be of huge financial benefit to both us. further
-details will be shared after I receive your response.
+Deepak Kumar Singh (2):
+  soc: qcom: aoss: Expose send for generic usecase
+  soc: qcom: aoss: Add debugfs entry
 
-Kindly reply with your full name and your country of Origin/residence,
+ drivers/soc/qcom/qcom_aoss.c       | 86 +++++++++++++++++++++++++++++++++++++-
+ include/linux/soc/qcom/qcom_aoss.h | 38 +++++++++++++++++
+ 2 files changed, 123 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/soc/qcom/qcom_aoss.h
 
-Yours Truly,
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-Hassan Duku
-Operational Manager.
