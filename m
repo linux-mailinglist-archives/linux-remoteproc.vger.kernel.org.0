@@ -2,105 +2,82 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBD640095F
-	for <lists+linux-remoteproc@lfdr.de>; Sat,  4 Sep 2021 04:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF372400B30
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  4 Sep 2021 13:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237162AbhIDC7o (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 3 Sep 2021 22:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbhIDC7n (ORCPT
+        id S235615AbhIDLij (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 4 Sep 2021 07:38:39 -0400
+Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:18043 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235943AbhIDLii (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 3 Sep 2021 22:59:43 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C584AC061575;
-        Fri,  3 Sep 2021 19:58:42 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id ew6so801614qvb.5;
-        Fri, 03 Sep 2021 19:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aT7fAjhBnMScunMdGoTyQJ33IupYZGm7kjNq4WANd6s=;
-        b=FK61RgghBQFOJhuduTOz63OD8TelkAw4kYshKwxWr/JJ/+4VFqNW6RzPdV+BzWraJY
-         KtcXS435uG1OnNUofzTa99WNpXTzqLE1iiECvPnKrQ9EirEfC9eOOKCa6Gjmyk2FQ2Di
-         1CaeS7bolX1le302tnyB2AYHNNTdhTL2uYon+mvTKc57thWAd744XovDnq+hB3M9Psgw
-         gXShJi6WXGGejGMGw0XKicKTqLyCfo5hCN1NcFk8GvmZn5na/CDiBs1uQed+00Ha7d1P
-         QKLMzuu5WZ3rs37gp5Zy5kkm9jKZYelOhaCv1HebwCXIAFAybsNAGP443St4J9bWQU3z
-         fO3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aT7fAjhBnMScunMdGoTyQJ33IupYZGm7kjNq4WANd6s=;
-        b=Dq8dBu0f8DpmvuHApiOOSn6lVsQ/xVHR0/E4UAxUUt1GncS2AteT+64tS5RhPlnNlz
-         fA58bn4SVAUAQRUR5O3NyOrXeZ75qqOLCIHwAzN2sHXecPbkyeAK6oLCWL8P4u0lTLh4
-         JMR27MH1wwF+BKUAvXS4IYiUKBTBjjfECisDxUsPecW0uFKKBkXrs63868OfyxH6iGLG
-         jR+e4NxW29xzWCwhaFjF70/B3W6Uj0nMX+qMuAPfuQGoo7xXSrvGoizTgghekmBjcQMz
-         CR7U+yP7dAVl4Fqf3Sv4HMxb3LsViOn+MBwdEipeO3CeFFhi+JDbDfSksM6aMPSx2xhO
-         FRGQ==
-X-Gm-Message-State: AOAM5324fK6A5SURWf6nBLITRFyYbSX0XdKFvnGyA1rnEfm94xqQZ7BI
-        xh+520sh0tCXLVeMj+sdws0zmMKVdbIew59PsvQ=
-X-Google-Smtp-Source: ABdhPJwVK96P+Skpxb+nksrGIb1NbFe0ar9Y+PD32hZ2w9uoRH9k8OQXfDoEY28NEelHIVl7ZeKIHM//nZ8mHOkqmsw=
-X-Received: by 2002:a0c:aac5:: with SMTP id g5mr2176290qvb.23.1630724321945;
- Fri, 03 Sep 2021 19:58:41 -0700 (PDT)
+        Sat, 4 Sep 2021 07:38:38 -0400
+Received: from pop-os.home ([90.126.253.178])
+        by mwinf5d31 with ME
+        id pndZ250093riaq203ndZ3n; Sat, 04 Sep 2021 13:37:35 +0200
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 04 Sep 2021 13:37:35 +0200
+X-ME-IP: 90.126.253.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, james.quinlan@broadcom.com
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] remoteproc: Fix a memory leak in an error handling path in 'rproc_handle_vdev()'
+Date:   Sat,  4 Sep 2021 13:37:32 +0200
+Message-Id: <e6d0dad6620da4fdf847faa903f79b735d35f262.1630755377.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <1630661377-31244-1-git-send-email-shengjiu.wang@nxp.com>
- <1630661377-31244-4-git-send-email-shengjiu.wang@nxp.com> <YTJQcIOU1mMxoIpF@robh.at.kernel.org>
- <CAL_JsqL_5U0QB5d5VmgX3PMa9LNkyFa+RHWSAzeeTzq6xR=_nA@mail.gmail.com>
-In-Reply-To: <CAL_JsqL_5U0QB5d5VmgX3PMa9LNkyFa+RHWSAzeeTzq6xR=_nA@mail.gmail.com>
-From:   Shengjiu Wang <shengjiu.wang@gmail.com>
-Date:   Sat, 4 Sep 2021 10:58:31 +0800
-Message-ID: <CAA+D8ANSR49juFDvPxHECKv7-uSowjdxruqnb=z6vu_CEkujjg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] dt-bindings: remoteproc: Add fsl,imx-dsp-rproc
- binding document
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Rob
+If 'copy_dma_range_map() fails, the memory allocated for 'rvdev' will leak.
+Move the 'copy_dma_range_map()' call after the device registration so
+that 'rproc_rvdev_release()' can be called to free some resources.
 
-On Sat, Sep 4, 2021 at 12:50 AM Rob Herring <robh+dt@kernel.org> wrote:
->
-> On Fri, Sep 3, 2021 at 11:42 AM Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Fri, 03 Sep 2021 17:29:36 +0800, Shengjiu Wang wrote:
-> > > Define the compatible string and properties needed by imx_dsp_rproc
-> > > driver.
-> > >
-> > > Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> > > ---
-> > >  .../remoteproc/fsl,imx-dsp-rproc.yaml         | 131 ++++++++++++++++++
-> > >  1 file changed, 131 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/remoteproc/fsl,imx-dsp-rproc.yaml
-> > >
-> >
-> > Reviewed-by: Rob Herring <robh@kernel.org>
->
-> I take that back. What's the difference with this binding and
-> Documentation/devicetree/bindings/dsp/fsl,dsp.yaml?
+Also, branch to the error handling path if 'copy_dma_range_map()' instead
+of a direct return to avoid some other leaks.
 
-Some devices, but two kinds of driver. one for remoteproc
-framework,  another one is for ALSA.
-So should I merge fsl,imx-dsp-rproc.yaml to fsl,dsp.yaml?
+Fixes: e0d072782c73 ("dma-mapping: introduce DMA range map, supplanting dma_pfn_offset")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Compile tested only.
+Review with care. I don't like to move code around because of possible
+side-effect.
+---
+ drivers/remoteproc/remoteproc_core.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Best regards
-Wang shengjiu
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 502b6604b757..775df165eb45 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -556,9 +556,6 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+ 	/* Initialise vdev subdevice */
+ 	snprintf(name, sizeof(name), "vdev%dbuffer", rvdev->index);
+ 	rvdev->dev.parent = &rproc->dev;
+-	ret = copy_dma_range_map(&rvdev->dev, rproc->dev.parent);
+-	if (ret)
+-		return ret;
+ 	rvdev->dev.release = rproc_rvdev_release;
+ 	dev_set_name(&rvdev->dev, "%s#%s", dev_name(rvdev->dev.parent), name);
+ 	dev_set_drvdata(&rvdev->dev, rvdev);
+@@ -568,6 +565,11 @@ static int rproc_handle_vdev(struct rproc *rproc, void *ptr,
+ 		put_device(&rvdev->dev);
+ 		return ret;
+ 	}
++
++	ret = copy_dma_range_map(&rvdev->dev, rproc->dev.parent);
++	if (ret)
++		goto free_rvdev;
++
+ 	/* Make device dma capable by inheriting from parent's capabilities */
+ 	set_dma_ops(&rvdev->dev, get_dma_ops(rproc->dev.parent));
+ 
+-- 
+2.30.2
+
