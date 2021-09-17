@@ -2,100 +2,113 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F8840F882
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 17 Sep 2021 14:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF63040F9A5
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 17 Sep 2021 15:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244979AbhIQM72 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 17 Sep 2021 08:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244992AbhIQM7Y (ORCPT
+        id S242159AbhIQN5f (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 17 Sep 2021 09:57:35 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:36844 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242072AbhIQN5a (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 17 Sep 2021 08:59:24 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1357DC0613DE
-        for <linux-remoteproc@vger.kernel.org>; Fri, 17 Sep 2021 05:58:02 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id d207-20020a1c1dd8000000b00307e2d1ec1aso6811258wmd.5
-        for <linux-remoteproc@vger.kernel.org>; Fri, 17 Sep 2021 05:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=plrOrvIZM2TLyxiMQcIWBN+4lREuMv3pRG/Sh7a1xC8=;
-        b=A1XyPdxcOquLxN0aX50A1ZFpsIYqi3fOAj7lTpkAapmpB6s0I7t5BtLQBntoT5o/gC
-         LTk3U5iGqZXV00d7UWu1zJeHwNQUIaZQXm49I9GxJIR/4y18GU6Nvyoikkh2w2l4zgcp
-         B3UYoAnqDqm9GVkUY9hqfwcQPouBjXs+iZX47NO/QJ/t4wb1kggMVtkvmAtzd4qzJFRW
-         7nWbDttoNJXmYKodYdihre5foSUAr0yPacNcyWtLspR5zCXh9y8npouXY1dRxKM6UQcn
-         WZ3a9DrYMmZAVwaW7QgPnDaW9jP4k2Ex3PG5EKtnNHZgrO8bzEd2qcrTOZ99BSIM62Lu
-         8eYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=plrOrvIZM2TLyxiMQcIWBN+4lREuMv3pRG/Sh7a1xC8=;
-        b=htGh3/XbzuE4XpzVFu3ewN2Y5gSGFf3iyWuGRml82HLjicm9qEZboA5uB0vR9OXrUw
-         TmYB+TvyW5/pphmcrKTFQiKWhLkHDqUXPiIEavTMKmqN5f0NrN8N4JHKGxk55uPVxcN4
-         cHnyNN9dgPJoMY8zXpXA4DuXeNxCseckTQ4fI7JvUAmGD3fWb7854NiG9YkMW8/KzQ0E
-         sgGpkP2HAGlOFeZludyqQf+4lBRp6OOBcr73f8NXLgNa1GZSm5Ta2MwLs04WpMqGQT6g
-         PbxadysdY1x8qKgfPv6E7cOHoVocD0lnDpjLmHd4xLjM4u/Wc04/EVRs1SY4wMqzGV7E
-         Z2Kw==
-X-Gm-Message-State: AOAM533fIOMKWn4rwq+eQPfFFuirlJCCcTR/sTgXBjCtsMxCxd88aD98
-        iu50pRDuGhxmV4bN1Ow3XeH6pQ==
-X-Google-Smtp-Source: ABdhPJxTbG15Mr23ALcQTVgBRPbbO7jTynJgRBVrKM9JKm3YI/iNB4vjrE9aSV9fhOwwMUSmYbl5Hw==
-X-Received: by 2002:a7b:c086:: with SMTP id r6mr10257667wmh.46.1631883480653;
-        Fri, 17 Sep 2021 05:58:00 -0700 (PDT)
-Received: from localhost.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id f3sm6358636wmj.28.2021.09.17.05.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Sep 2021 05:58:00 -0700 (PDT)
-From:   Alexandre Bailon <abailon@baylibre.com>
-To:     airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
-        matthias.bgg@gmail.com, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de, ohad@wizery.com,
-        bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
-        sumit.semwal@linaro.org
-Cc:     christian.koenig@amd.com, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, khilman@baylibre.com,
-        gpain@baylibre.com, Alexandre Bailon <abailon@baylibre.com>
-Subject: [RFC PATCH 4/4] ARM64: mt8183-pumpkin: Add the APU DRM device
-Date:   Fri, 17 Sep 2021 14:59:45 +0200
-Message-Id: <20210917125945.620097-5-abailon@baylibre.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210917125945.620097-1-abailon@baylibre.com>
-References: <20210917125945.620097-1-abailon@baylibre.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Fri, 17 Sep 2021 09:57:30 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1631886968; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=JBVHCkLtM4/xMQKfljMOWqvD4lNbxvM3MaLwQGSzXBA=; b=o0Uu8PdXOmguRIzXqdQVELeU/GtVewIWIRz1fCjQUk2ivF/syUwPFNThM0GPhFMrOZ7T0eBb
+ /7rtXPWwCG/MMh47J8Af0OWGGKHB6Dn3EA9+4tWVJ1iih5lRC7lZsA74EzEK5pmSvmNoiVt5
+ xeSIBOtVfC/aruN69/gD49vAsZI=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 61449e67e0f78151d6bbf6dc (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 17 Sep 2021 13:55:51
+ GMT
+Sender: sibis=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 11C6BC4338F; Fri, 17 Sep 2021 13:55:50 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-87.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F0994C4338F;
+        Fri, 17 Sep 2021 13:55:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org F0994C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     bjorn.andersson@linaro.org, robh+dt@kernel.org, will@kernel.org,
+        saiprakash.ranjan@codeaurora.org, swboyd@chromium.org,
+        mka@chromium.org
+Cc:     ohad@wizery.com, agross@kernel.org, mathieu.poirier@linaro.org,
+        robin.murphy@arm.com, joro@8bytes.org, p.zabel@pengutronix.de,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, evgreen@chromium.org,
+        dianders@chromium.org, Sibi Sankar <sibis@codeaurora.org>
+Subject: [PATCH v5 00/10] Add Modem support on SC7280 SoCs
+Date:   Fri, 17 Sep 2021 19:25:25 +0530
+Message-Id: <1631886935-14691-1-git-send-email-sibis@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-This add the APU DRM device to pumkpin.
+This patch series adds support for booting the Modem Q6 DSP found on
+Qualcomm's SC7280 SoCs.
 
-Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts | 6 ++++++
- 1 file changed, 6 insertions(+)
+Depends on:
+qmp_send: https://patchwork.kernel.org/project/linux-arm-msm/cover/1630420228-31075-1-git-send-email-deesin@codeaurora.org/
+rproc qmp: https://patchwork.kernel.org/project/linux-arm-msm/cover/1631800770-371-1-git-send-email-sibis@codeaurora.org/
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-index 7fbed2b7bc6f8..c540dbfe30151 100644
---- a/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts
-@@ -98,6 +98,12 @@ ntc {
- 		pulldown-ohm = <0>;
- 		io-channels = <&auxadc 0>;
- 	};
-+
-+	apu_drm@0 {
-+		compatible = "mediatek,apu-drm";
-+		remoteproc = <&apu0>, <&apu1>;
-+		iova = <0 0x60000000 0 0x10000000>;
-+	};
- };
- 
- &auxadc {
+V5:
+ * Rebased to linux-next and picked up Rbs.
+ * Add pka to the clock list to boot secure modem devices.
+
+V4:
+ * Rebased to linux-next and picked up Rbs.
+ * Fixed typo (patch 10).
+
+V3:
+ * Keep the memory map version in commit message (patch 6). [Bjorn]
+ * Rename tcsr node and add qualifying compatibles to tcsr and imem nodes
+   (patch 8). [Bjorn]
+ * Place remoteproc_mpss node in alphabetical order above pinctrl
+   section (patch 10). [Stephen]
+
+V2:
+ * Misc. typos (patch 3). [Matthias]
+ * Document the q-channel takedown procedure (patch 5). [Matthias]
+ * Split reserved memory updates between SoC and platform (patch 6). [Matthias]
+
+Sibi Sankar (10):
+  dt-bindings: remoteproc: qcom: pas: Add SC7280 MPSS support
+  remoteproc: qcom: pas: Add SC7280 Modem support
+  dt-bindings: remoteproc: qcom: Update Q6V5 Modem PIL binding
+  iommu/arm-smmu-qcom: Request direct mapping for modem device
+  remoteproc: mss: q6v5-mss: Add modem support on SC7280
+  arm64: dts: qcom: sc7280: Update reserved memory map
+  arm64: dts: qcom: sc7280: Add/Delete/Update reserved memory nodes
+  arm64: dts: qcom: sc7280: Add nodes to boot modem
+  arm64: dts: qcom: sc7280: Add Q6V5 MSS node
+  arm64: dts: qcom: sc7280: Update Q6V5 MSS node
+
+ .../devicetree/bindings/remoteproc/qcom,adsp.yaml  |   5 +
+ .../devicetree/bindings/remoteproc/qcom,q6v5.txt   |  32 ++-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           |  59 +++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 107 +++++++++
+ drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |   1 +
+ drivers/remoteproc/qcom_q6v5_mss.c                 | 253 ++++++++++++++++++++-
+ drivers/remoteproc/qcom_q6v5_pas.c                 |   1 +
+ 7 files changed, 452 insertions(+), 6 deletions(-)
+
 -- 
-2.31.1
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
