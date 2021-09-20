@@ -2,131 +2,113 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 723374127CF
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 20 Sep 2021 23:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BAE7412BA6
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 21 Sep 2021 04:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbhITVSE (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 20 Sep 2021 17:18:04 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:39088 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbhITVQE (ORCPT
+        id S1348533AbhIUCXh (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 20 Sep 2021 22:23:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346502AbhIUCS1 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 20 Sep 2021 17:16:04 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 18KLEU91124230;
-        Mon, 20 Sep 2021 16:14:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1632172470;
-        bh=dc0vdpYZrdrZqs1wDGFW6RFX3Ev+Zts4gHAzBSwfteM=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=siUsHRn/GNMLY/0e/qLscVmhS2R9lieNZ1K3Y6GsC81fa/mDxo6pijb9VTuZAUEZl
-         oWNtsQWG4pcz0k3+ritwFjxD2qKkyC02nyC63ALzk79y/zsIs1EfHRTZCuEM2f1Jha
-         U/saZZ9PNk7GkCpGCZbj8a/x456nAiIwydY3xOAU=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 18KLEUsL066541
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 20 Sep 2021 16:14:30 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 20
- Sep 2021 16:14:29 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 20 Sep 2021 16:14:29 -0500
-Received: from [10.250.37.219] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 18KLETRd051683;
-        Mon, 20 Sep 2021 16:14:29 -0500
-Subject: Re: [PATCH] dt-bindings: hwlock: omap: Remove board-specific
- compatible from DT example
-To:     Nishanth Menon <nm@ti.com>,
-        Sinthu Raja <sinthu.raja@mistralsolutions.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Sinthu Raja <sinthu.raja@ti.com>
-References: <20210917094740.18891-1-sinthu.raja@ti.com>
- <20210917144455.nj6bc2enytlgqmzn@studied>
-From:   Suman Anna <s-anna@ti.com>
-Message-ID: <ba7e9eff-6cd1-2705-4c27-f3a700345ed2@ti.com>
-Date:   Mon, 20 Sep 2021 16:14:28 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 20 Sep 2021 22:18:27 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087F7C19B987
+        for <linux-remoteproc@vger.kernel.org>; Mon, 20 Sep 2021 11:37:29 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id v10so8861275oic.12
+        for <linux-remoteproc@vger.kernel.org>; Mon, 20 Sep 2021 11:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=jmXZy3ZYvnQVJiuweO1D44zeGFgPGw08yvPDo3Pbv3I=;
+        b=XC/luEuyaaVLTUmi5opLPnA6doYbam6Ho1XLD8rcmdYqJh3aNOv0BdhgEwj5+kFa6a
+         W8dqAsWR2A15gn0ryUMmKW9v6l5p9RKxU3wGWDR9gYHSWg5jtxe0vfozBmPhNX5psSJF
+         H7pZnBexjPRejL4f/Fv8aVmTQoZUXpmjOY+Nw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=jmXZy3ZYvnQVJiuweO1D44zeGFgPGw08yvPDo3Pbv3I=;
+        b=aoTi+3J4Pj+0AWK5Eq7mpFOdY7tBfKJNeuyLEYnQG3kgw4+azribcDnyZ+mCFun1/p
+         CDUmZ61PFAQx1Si522b74+LyULyEq6Tv9pO2IeGxAppBq03XYLTX3oqFWn/yyCNkVpZM
+         qXQHuG3bGG4IdYSfofcy/8Lp06qxj697k3+BL7YgDSwXloqxBRXICL5XrVGZsCENql37
+         0iQuloG+R4unLaD4LqTvGFzs+K6GIYBuIL7p78pw62F3Ey1veEv8l6fYVZrWoXaGI5YY
+         wlidDWY4dJXuOTPabHOtymldDX38TyPBvEO19Xc0EyWqQV3oBlL3D8TkKc4QQZWDyeud
+         PpPA==
+X-Gm-Message-State: AOAM531enGDCK7YLDQl9gAd8e5wd7BBqbakbFOT7d81Qw9Lh36wi6vk4
+        zFkCuFvlaiFdQYWXSVTf1gYKTmrxFMMFc0Lde47X9A==
+X-Google-Smtp-Source: ABdhPJwTEOlyaEX2x1B4YxNYuz+/kb9trz+bEZyg85Y6kB+G2b1jo3lw9p6nhwOGPHG8hiStsXeknZg1kStsTv/bazU=
+X-Received: by 2002:aca:1a11:: with SMTP id a17mr384978oia.164.1632163048399;
+ Mon, 20 Sep 2021 11:37:28 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 20 Sep 2021 11:37:28 -0700
 MIME-Version: 1.0
-In-Reply-To: <20210917144455.nj6bc2enytlgqmzn@studied>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <1631991735-18920-1-git-send-email-deesin@codeaurora.org>
+References: <1631991735-18920-1-git-send-email-deesin@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Mon, 20 Sep 2021 11:37:27 -0700
+Message-ID: <CAE-0n52Gqossa9V-tPLHsgggQ_MHt_zD7gzrjUVrU7Rno-4f8w@mail.gmail.com>
+Subject: Re: [PATCH V4 1/1] soc: qcom: smp2p: Add wakeup capability to SMP2P IRQ
+To:     Deepak Kumar Singh <deesin@codeaurora.org>,
+        bjorn.andersson@linaro.org, clew@codeaurora.org,
+        sibis@codeaurora.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, Andy Gross <agross@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 9/17/21 9:44 AM, Nishanth Menon wrote:
-> On 15:17-20210917, Sinthu Raja wrote:
->> From: Sinthu Raja <sinthu.raja@ti.com>
->>
->> The example includes a board-specific compatible property, this is
->> wrong as the example should be board agnostic. Replace the same with a
->> generic soc node.
->>
->> Fixes: d8db9dc34871 ("dt-bindings: hwlock: omap: Convert binding to YAML")
->> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
->> ---
->>
->> This patch was triggered by discussions in [1].
->>
->> When applying the patch, if you could provide an immutable tag for the
->> bindings, it would help line things up for new platforms to be added for
->> us. See [2] for the context
-> 
-> 
-> Aah yes, thanks.. Bjorn.. once Rob acks ofcourse (since this is
-> bindings).
+Quoting Deepak Kumar Singh (2021-09-18 12:02:15)
+> diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
+> index 2df4883..60ad632 100644
+> --- a/drivers/soc/qcom/smp2p.c
+> +++ b/drivers/soc/qcom/smp2p.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/pm_wakeirq.h>
+>  #include <linux/regmap.h>
+>  #include <linux/soc/qcom/smem.h>
+>  #include <linux/soc/qcom/smem_state.h>
+> @@ -538,9 +539,26 @@ static int qcom_smp2p_probe(struct platform_device *pdev)
+>                 goto unwind_interfaces;
+>         }
+>
+> +       /*
+> +        * Treat smp2p interrupt as wakeup source, but keep it disabled
+> +        * by default. User space can decide enabling it depending on its
+> +        * use cases. For example if remoteproc crashes and device wants
+> +        * to handle it immediatedly (e.g. to not miss phone calls) it can
+> +        * enable wakeup source from user space, while other devices which
+> +        * do not have proper autosleep feature may want to handle it with
+> +        * other wakeup events (e.g. Power button) instead waking up immediately.
+> +        */
+> +       device_set_wakeup_capable(&pdev->dev, true);
+> +
+> +       ret = dev_pm_set_wake_irq(&pdev->dev, irq);
+> +       if (ret)
+> +               goto set_wake_irq_fail;
+>
+>         return 0;
+>
+> +set_wake_irq_fail:
+> +       dev_pm_clear_wake_irq(&pdev->dev);
+> +
+>  unwind_interfaces:
+>         list_for_each_entry(entry, &smp2p->inbound, node)
+>                 irq_domain_remove(entry->domain);
+> @@ -565,6 +583,9 @@ static int qcom_smp2p_remove(struct platform_device *pdev)
+>         struct qcom_smp2p *smp2p = platform_get_drvdata(pdev);
+>         struct smp2p_entry *entry;
+>
+> +       dev_pm_clear_wake_irq(&pdev->dev);
+> +       device_init_wakeup(&pdev->dev, false);
 
-Hmm, I don't think an immutable tag is needed for this patch. This is just
-cleanup, what is your exact dependency here?
-
-The relevant HwSpinlock dts nodes are all upstream on all applicable platforms
-already.
-
-regards
-Suman
-
-
-> 
-> Reviewed-by: Nishanth Menon <nm@ti.com>
-> 
-> 
->>
->> [1] https://lore.kernel.org/all/20210818074030.1877-1-sinthu.raja@ti.com/
->> [2] https://lore.kernel.org/linux-arm-kernel/20210125141642.4yybjnklk3qsqjdy@steersman/
->>
->>  .../devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml        | 4 +---
->>  1 file changed, 1 insertion(+), 3 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml
->> index ae1b37dbee75..d56dc1bebdc6 100644
->> --- a/Documentation/devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml
->> +++ b/Documentation/devicetree/bindings/hwlock/ti,omap-hwspinlock.yaml
->> @@ -47,10 +47,8 @@ examples:
->>      };
->>  
->>    - |
->> -    / {
->> +    soc {
->>          /* K3 AM65x SoCs */
->> -        model = "Texas Instruments K3 AM654 SoC";
->> -        compatible = "ti,am654-evm", "ti,am654";
->>          #address-cells = <2>;
->>          #size-cells = <2>;
->>  
->> -- 
->> 2.32.0
->>
-> 
-
+Is this device_init_wakeup() call necessary? It looks like we can get
+away without it and then once this driver probes the device will have
+the wakeup capability set on it. Future binding/unbinding of the driver
+will keep working.
