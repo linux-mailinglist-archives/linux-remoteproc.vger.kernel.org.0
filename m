@@ -2,89 +2,99 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C246C4166B5
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 23 Sep 2021 22:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5201F416A80
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 24 Sep 2021 05:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243189AbhIWUcd (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 23 Sep 2021 16:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243188AbhIWUcd (ORCPT
+        id S244060AbhIXDlR (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 23 Sep 2021 23:41:17 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:46956 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S244042AbhIXDlP (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 23 Sep 2021 16:32:33 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FBB1C061756
-        for <linux-remoteproc@vger.kernel.org>; Thu, 23 Sep 2021 13:31:01 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 97-20020a9d006a000000b00545420bff9eso10214197ota.8
-        for <linux-remoteproc@vger.kernel.org>; Thu, 23 Sep 2021 13:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jrQFnds+enloHfbnp7JiG8L1TA0qPsvDwBgojFxND+Q=;
-        b=nccO5lqvS//QTh5SlYby7k5r8WGPEH2qrdntZZueS9PBJ/kNcUUyyscIQAedeb9Zi7
-         rKzaBZ3kv8EeRzkzRiDuutE2hh40P8jTdUKsLo3SIsulLUT1z/v+qxDiJK9rPHqHvF7B
-         5Utcd0QU9dK4U2fgZkBECtU4msOizit6SckVwoSMJhWhwCpcncNaLDOewvqVrfvMM3Le
-         TDCBhJ6zcNKLHm8TpTefczUDfR1DNc2FIWZUvkZ+y2WI+bc5L5BbWXnCrXAAV/+sLmwz
-         /KpFZcwHGK9I5hQQkABgG0EBzE3uEXzT8xfEMSMJgZ6PcWsXT3gvhF+g8hDr38pjT85j
-         1OUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jrQFnds+enloHfbnp7JiG8L1TA0qPsvDwBgojFxND+Q=;
-        b=hmwcvotp6c3EAq3voGK6C8QYl6VgVJaDSZjByoEN8nynU9spu379GX7BnIDpIOavu/
-         xhFN1lKHXPRPlZRHu1SntkVGeOVJbrDbYogE6NDZOp0/EeMDGxdzCFHhIlF+vW4/zS7r
-         9QOQnhjSlzJ5BysOL8q0Imjwg0nbZGS/YjZIA1SlgwCeqXDZxX30tuJoi0eU2BReu14F
-         L6KJ84vAbTJCLduEleHoRRg9A6FvE/mmuTOZMgK4l2b5Ix+4g232rHAp3+c7bshPg1TD
-         hJ7ypntLydPMk3KfolmaIGeYN13zKUoclCjfPbx36niXCv8a/L9YDkb6uYb279Lj32kj
-         03Kg==
-X-Gm-Message-State: AOAM533+HzrBg71vthawtGKlemdd+16IrZ1Fp/vrpDmZP0sYLOy7LVEj
-        Olwqh6I63v5PRePNga1bStFDeA==
-X-Google-Smtp-Source: ABdhPJxUf5eO7r2N/fQhBxg6FPAUzflU7DkCc2cdcpBbZpmn/8zckffn1DG/Ln2HKz/m1nZjs7ePDw==
-X-Received: by 2002:a05:6830:805:: with SMTP id r5mr549124ots.209.1632429060685;
-        Thu, 23 Sep 2021 13:31:00 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id i1sm1583036ooo.15.2021.09.23.13.31.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Sep 2021 13:31:00 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     sibis@codeaurora.org, swboyd@chromium.org, clew@codeaurora.org,
-        Deepak Kumar Singh <deesin@codeaurora.org>
-Cc:     linux-remoteproc@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH V5 1/1] soc: qcom: smp2p: Add wakeup capability to SMP2P IRQ
-Date:   Thu, 23 Sep 2021 15:30:58 -0500
-Message-Id: <163242893971.825761.9497807239519479301.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1632220467-27410-1-git-send-email-deesin@codeaurora.org>
-References: <1632220467-27410-1-git-send-email-deesin@codeaurora.org>
+        Thu, 23 Sep 2021 23:41:15 -0400
+X-UUID: f41acd261c1349da9bb366197fbd01c0-20210924
+X-UUID: f41acd261c1349da9bb366197fbd01c0-20210924
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 632914846; Fri, 24 Sep 2021 11:39:39 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 24 Sep 2021 11:39:37 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 24 Sep 2021 11:39:37 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     <ohad@wizery.com>, <bjorn.andersson@linaro.org>,
+        <mathieu.poirier@linaro.org>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+Subject: [PATCH v7 0/6] Mediatek MT8195 SCP support
+Date:   Fri, 24 Sep 2021 11:39:29 +0800
+Message-ID: <20210924033935.2127-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.15.GIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, 21 Sep 2021 16:04:27 +0530, Deepak Kumar Singh wrote:
-> Remote susbsystems notify fatal crash throught smp2p interrupt.
-> When remoteproc crashes it can cause soc to come out of low power
-> state and may not allow again to enter in low power state until
-> crash is handled.
-> 
-> Mark smp2p interrupt wakeup capable so that interrupt handler is
-> executed and remoteproc crash can be handled in system  resume path.
-> This patch marks interrupt wakeup capable but keeps wakeup disabled
-> by default. User space can enable it based on its requirement for
-> wakeup from suspend.
-> 
-> [...]
+Change since v6:
+- no change (rebased to 5.15-rc1)
 
-Applied, thanks!
+Change since v5:
+- Drop adding new vendor-prefix
+- Rename rpmsg property from "mtk," to "mediatek," to use the name
+  defined in 
+  vendor-prefix.yaml for Mediatek Co.
 
-[1/1] soc: qcom: smp2p: Add wakeup capability to SMP2P IRQ
-      commit: 1a561c521ba901ac86acaf698e79ad6ecedbec2b
+Changes since v4:
+- Move clock acquirement to mtk_scp_of_data
+- Add new vendor-prefix for Mediatek SCP
+- Refine mtk,scp.yaml
+  - Remove '|' in 'description'
+  - Add 'items' to replace 'description' in reg-names property
+  - Add 'const' to replace 'description' in clock-names property
+  - Add required property for mt8183 and mt8192
+  - Rewrite 'patternProperties' by 'additionalProperties'
+  - Rewrite example with 1 address and size-cell.
+  - Drop dts label from example 
 
-Best regards,
+Changes since v3:
+- Add missing patch version in mail subject
+- No change to patches.
+
+Changes since v2:
+- Add compatible for mt8192
+- Convert mtk,scp.txt to mtk,scp.yaml 
+- Refine clock checking method
+
+Changes since v1:
+- Fix missing 'compatible' line in binding document
+
+Tinghan Shen (6):
+  dt-bindings: remoteproc: mediatek: Add binding for mt8195 scp
+  dt-bindings: remoteproc: mediatek: Add binding for mt8192 scp
+  dt-bindings: remoteproc: mediatek: Convert mtk,scp to json-schema
+  remoteproc: mediatek: Support mt8195 scp
+  rpmsg: change naming of mediatek rpmsg property
+  arm64: dts: mt8183: change rpmsg property name
+
+ .../bindings/remoteproc/mtk,scp.txt           | 36 --------
+ .../bindings/remoteproc/mtk,scp.yaml          | 92 +++++++++++++++++++
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |  2 +-
+ drivers/remoteproc/mtk_common.h               |  1 +
+ drivers/remoteproc/mtk_scp.c                  | 48 +++++++++-
+ drivers/rpmsg/mtk_rpmsg.c                     |  2 +-
+ 6 files changed, 138 insertions(+), 43 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/remoteproc/mtk,scp.txt
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+
 -- 
-Bjorn Andersson <bjorn.andersson@linaro.org>
+2.18.0
+
