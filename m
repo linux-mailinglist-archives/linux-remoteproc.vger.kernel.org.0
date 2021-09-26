@@ -2,191 +2,83 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1678418609
-	for <lists+linux-remoteproc@lfdr.de>; Sun, 26 Sep 2021 05:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1977A418AA3
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 26 Sep 2021 21:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbhIZDcu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 25 Sep 2021 23:32:50 -0400
-Received: from inva021.nxp.com ([92.121.34.21]:58242 "EHLO inva021.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230371AbhIZDcr (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 25 Sep 2021 23:32:47 -0400
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B8DCC2035F1;
-        Sun, 26 Sep 2021 05:31:10 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 55D3F200EB2;
-        Sun, 26 Sep 2021 05:31:10 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 884C3183AD14;
-        Sun, 26 Sep 2021 11:31:08 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     ohad@wizery.com, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, robh+dt@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com
-Cc:     linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, shengjiu.wang@gmail.com
-Subject: [PATCH v5 4/4] dt-bindings: dsp: fsl: update binding document for remote proc driver
-Date:   Sun, 26 Sep 2021 11:07:10 +0800
-Message-Id: <1632625630-784-5-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1632625630-784-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1632625630-784-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S229844AbhIZTIE (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 26 Sep 2021 15:08:04 -0400
+Received: from mail-0201.mail-europe.com ([51.77.79.158]:38017 "EHLO
+        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229846AbhIZTIE (ORCPT
+        <rfc822;linux-remoteproc@vger.kernel.org>);
+        Sun, 26 Sep 2021 15:08:04 -0400
+Date:   Sun, 26 Sep 2021 19:06:09 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1632683176;
+        bh=lTmKN+WNUyYt6gy0Mw6k/pJmZMjur5+0ACFflivi3Z4=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=k7RnTLj7WfrdTiPaJ35j0ZgEodtPtNE8CsmH+Kx7CebVv8fveGv/PSCpYK/JwANCz
+         cmw9JnqlMFI6N2uHSk/lGEkMiYqyEDMqySPALiTobmz6z97Mj6ikeTN1LNVf2Gmqtf
+         47K3woLhCBa8TThLc0HO+6u19V4w0J0ZNWuKMwmI=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Raffaele Tranquillini <raffaele.tranquillini@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: [PATCH v2 0/5] msm8996: Enable support for MSS and SLPI
+Message-ID: <20210926190555.278589-1-y.oudjana@protonmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-As there are two drivers for DSP on i.MX, one is for sound open
-firmware, another is for remote processor framework. In order to
-distinguish two kinds of driver, defining different compatible strings.
+This series fixes reserved memory regions, adds a missing power domain
+for SLPI in qcom_q6v5_pas, and enables support for MSS and SLPI in DTS.
 
-For remote proc driver, the properties firmware-name and fsl,dsp-ctrl
-are needed and the mailbox channel is different with SOF.
+Changes since v1:
+ - Rebase on latest linux-next
+ - Rewrite MSS node
+ - Enable MSS and SLPI in some devices
+Changes since v1 (2/5 remoteproc: qcom: pas: Use the same init resources fo=
+r MSM8996 and MSM8998):
+ - Rename msm8998_adsp_resource to msm8996_adsp_resource
+ - Add power domains to slpi_resource_init and use that instead of msm8998_=
+slpi_resource
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Acked-by: Daniel Baluta <daniel.baluta@nxp.com>
----
- .../devicetree/bindings/dsp/fsl,dsp.yaml      | 81 +++++++++++++++++--
- 1 file changed, 75 insertions(+), 6 deletions(-)
+Yassine Oudjana (5):
+  arm64: dts: qcom: msm8996: Revamp reserved memory
+  remoteproc: qcom: pas: Use the same init resources for MSM8996 and
+    MSM8998
+  arm64: dts: qcom: msm8996: Unify smp2p naming
+  arm64: dts: qcom: msm8996: Add MSS and SLPI
+  arm64: dts: qcom: msm8996-xiaomi-*: Enable MSS and SLPI
 
-diff --git a/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml b/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml
-index 7afc9f2be13a..51ea657f6d42 100644
---- a/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml
-+++ b/Documentation/devicetree/bindings/dsp/fsl,dsp.yaml
-@@ -8,6 +8,7 @@ title: NXP i.MX8 DSP core
- 
- maintainers:
-   - Daniel Baluta <daniel.baluta@nxp.com>
-+  - Shengjiu Wang <shengjiu.wang@nxp.com>
- 
- description: |
-   Some boards from i.MX8 family contain a DSP core used for
-@@ -19,6 +20,10 @@ properties:
-       - fsl,imx8qxp-dsp
-       - fsl,imx8qm-dsp
-       - fsl,imx8mp-dsp
-+      - fsl,imx8qxp-hifi4
-+      - fsl,imx8qm-hifi4
-+      - fsl,imx8mp-hifi4
-+      - fsl,imx8ulp-hifi4
- 
-   reg:
-     maxItems: 1
-@@ -28,37 +33,63 @@ properties:
-       - description: ipg clock
-       - description: ocram clock
-       - description: core clock
-+      - description: debug interface clock
-+      - description: message unit clock
-+    minItems: 3
-+    maxItems: 5
- 
-   clock-names:
-     items:
-       - const: ipg
-       - const: ocram
-       - const: core
-+      - const: debug
-+      - const: mu
-+    minItems: 3
-+    maxItems: 5
- 
-   power-domains:
-     description:
-       List of phandle and PM domain specifier as documented in
-       Documentation/devicetree/bindings/power/power_domain.txt
-+    minItems: 1
-     maxItems: 4
- 
-   mboxes:
-     description:
-       List of <&phandle type channel> - 2 channels for TXDB, 2 channels for RXDB
-+      or - 1 channel for TX, 1 channel for RX, 1 channel for RXDB
-       (see mailbox/fsl,mu.txt)
-+    minItems: 3
-     maxItems: 4
- 
-   mbox-names:
--    items:
--      - const: txdb0
--      - const: txdb1
--      - const: rxdb0
--      - const: rxdb1
-+    oneOf:
-+      - items:
-+          - const: txdb0
-+          - const: txdb1
-+          - const: rxdb0
-+          - const: rxdb1
-+      - items:
-+          - const: tx
-+          - const: rx
-+          - const: rxdb
- 
-   memory-region:
-     description:
-       phandle to a node describing reserved memory (System RAM memory)
-       used by DSP (see bindings/reserved-memory/reserved-memory.txt)
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 4
-+
-+  firmware-name:
-+    description: |
-+      Default name of the firmware to load to the remote processor.
-+
-+  fsl,dsp-ctrl:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      Phandle to syscon block which provide access for processor enablement
- 
- required:
-   - compatible
-@@ -91,3 +122,41 @@ examples:
-         mboxes = <&lsio_mu13 2 0>, <&lsio_mu13 2 1>, <&lsio_mu13 3 0>, <&lsio_mu13 3 1>;
-         memory-region = <&dsp_reserved>;
-     };
-+  - |
-+    #include <dt-bindings/clock/imx8mp-clock.h>
-+    dsp_reserved: dsp@92400000 {
-+      reg = <0x92400000 0x1000000>;
-+      no-map;
-+    };
-+    dsp_vdev0vring0: vdev0vring0@942f0000 {
-+      reg = <0x942f0000 0x8000>;
-+      no-map;
-+    };
-+    dsp_vdev0vring1: vdev0vring1@942f8000 {
-+      reg = <0x942f8000 0x8000>;
-+      no-map;
-+    };
-+    dsp_vdev0buffer: vdev0buffer@94300000 {
-+      compatible = "shared-dma-pool";
-+      reg = <0x94300000 0x100000>;
-+      no-map;
-+    };
-+
-+    dsp: dsp@3b6e8000 {
-+      compatible = "fsl,imx8mp-hifi4";
-+      reg = <0x3B6E8000 0x88000>;
-+      clocks = <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_DSP_ROOT>,
-+               <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_OCRAMA_IPG>,
-+               <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_DSP_ROOT>,
-+               <&audio_blk_ctrl IMX8MP_CLK_AUDIOMIX_DSPDBG_ROOT>;
-+      clock-names = "ipg", "ocram", "core", "debug";
-+      firmware-name = "imx/dsp/hifi4.bin";
-+      power-domains = <&audiomix_pd>;
-+      mbox-names = "tx", "rx", "rxdb";
-+      mboxes = <&mu2 0 0>,
-+               <&mu2 1 0>,
-+               <&mu2 3 0>;
-+      memory-region = <&dsp_vdev0buffer>, <&dsp_vdev0vring0>,
-+                      <&dsp_vdev0vring1>, <&dsp_reserved>;
-+      fsl,dsp-ctrl = <&audio_blk_ctrl>;
-+    };
--- 
-2.17.1
+ .../dts/qcom/msm8996-sony-xperia-tone.dtsi    |  18 +-
+ .../boot/dts/qcom/msm8996-xiaomi-common.dtsi  |  30 ++-
+ .../boot/dts/qcom/msm8996-xiaomi-gemini.dts   |   9 +
+ .../boot/dts/qcom/msm8996-xiaomi-scorpio.dts  |   9 +
+ arch/arm64/boot/dts/qcom/msm8996.dtsi         | 195 ++++++++++++++----
+ drivers/remoteproc/qcom_q6v5_pas.c            |  27 +--
+ 6 files changed, 209 insertions(+), 79 deletions(-)
+
+--=20
+2.33.0
+
 
