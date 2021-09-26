@@ -2,107 +2,85 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CFD4182E4
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 25 Sep 2021 16:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E078418601
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 26 Sep 2021 05:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343783AbhIYOyU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 25 Sep 2021 10:54:20 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:49924 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234173AbhIYOyT (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 25 Sep 2021 10:54:19 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 18PEqYs2015433;
-        Sat, 25 Sep 2021 09:52:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1632581554;
-        bh=uJ7DvnEmGCuz4FVCDrHQuDOi+qqLDfXdcIzC2WTH42o=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=PA7N5/5P964G7xnovC9ZGpoJD4Oe9P2C7PzJX9CEjGrbL8gKUVyUSiUBRbOD97HG2
-         JKtyR1TaSasVgKyp4HmJa1z1qm+YPofgZkZ1lxo0IPD2WRhZbhjcEXcNFH8m0mgf3x
-         fBZAzdb8qGG2xx6U1WdoND00Xj+bRBVTRjT5i0IM=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 18PEqYSR101790
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 25 Sep 2021 09:52:34 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Sat, 25
- Sep 2021 09:52:33 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Sat, 25 Sep 2021 09:52:33 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 18PEqXfY085824;
-        Sat, 25 Sep 2021 09:52:33 -0500
-Date:   Sat, 25 Sep 2021 09:52:33 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Suman Anna <s-anna@ti.com>
-CC:     Sinthu Raja <sinthu.raja@mistralsolutions.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Sinthu Raja <sinthu.raja@ti.com>,
-        "Nagalla, Hari" <hnagalla@ti.com>
-Subject: Re: [PATCH V3 2/2] dt-bindings: remoteproc: k3-dsp: Remove
- board-specific compatible from DT example
-Message-ID: <20210925145233.vczhgui6cchkih5m@oxidize>
-References: <20210917095426.19277-1-sinthu.raja@ti.com>
- <20210917095426.19277-3-sinthu.raja@ti.com>
- <4d43e927-3998-e9a9-87a6-6036b769a975@ti.com>
- <20210924162920.mvnzcibfm7s265us@boxing>
- <dcb0b95f-92a9-a5f5-ee91-1b1d7123bd8d@ti.com>
- <6a6a0d3a-522c-d01c-d3b8-a13488d0c736@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <6a6a0d3a-522c-d01c-d3b8-a13488d0c736@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        id S230412AbhIZDco (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 25 Sep 2021 23:32:44 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:58052 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230371AbhIZDcm (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Sat, 25 Sep 2021 23:32:42 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7CFFE2035EF;
+        Sun, 26 Sep 2021 05:31:05 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 43E952035F2;
+        Sun, 26 Sep 2021 05:31:05 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 92592183AD0B;
+        Sun, 26 Sep 2021 11:31:03 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, robh+dt@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com
+Cc:     linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, shengjiu.wang@gmail.com
+Subject: [PATCH v5 0/4] Add remoteproc driver for DSP on i.MX
+Date:   Sun, 26 Sep 2021 11:07:06 +0800
+Message-Id: <1632625630-784-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 12:54-20210924, Suman Anna wrote:
-> Hi Sinthu,
-> 
-> On 9/24/21 12:25 PM, Suman Anna wrote:
-> > On 9/24/21 11:29 AM, Nishanth Menon wrote:
-> >> On 11:10-20210924, Suman Anna wrote:
-> >>> Hi Sinthu,
-> >>>
-> >>> On 9/17/21 4:54 AM, Sinthu Raja wrote:
-> >>>> From: Sinthu Raja <sinthu.raja@ti.com>
-> >>>>
-> >>>> The example includes a board-specific compatible property, this is
-> >>>> wrong as the example should be board agnostic and gets in the way of
-> >>>> additions for newer platforms. Replace the same with a generic soc
-> >>>> node.
-> >>>
-> >>> What board specific property? This description looks wrong.
-> 
-> Can you please repost dropping the Fixes line, and modifying the patch
-> description as follows:
-> 
-> dt-bindings: remoteproc: k3-dsp: Cleanup SoC compatible from DT example
-> 
-> The K3 DSP binding example used the root-node with a SoC compatible
-> property originally to address the dt_binding_check warnings resulting
-> from using a value of 2 for #address-cells and #size-cells as per most
-> common usage on K3 SoCs. Clean this up and replace it with a generic soc
-> node to keep it agnostic of the SoC or board compatibles that are outside
-> the scope of this binding.
+Provide a basic driver to control DSP processor found on NXP i.MX8QM,
+i.MX8QXP, i.MX8MP and i.MX8ULP.
 
+Currently it is able to resolve addresses between DSP and main CPU,
+start and stop the processor, suspend and resume.
 
-This looks good to me as well. Thanks.
+The communication between DSP and main CPU is based on mailbox, there
+are three mailbox channels (tx, rx, rxdb).
+
+This driver was tested on NXP i.MX8QM, i.MX8QXP, i.MX8MP and i.MX8ULP.
+
+changes in v5:
+- refine driver according to Mathieu's comments
+
+changes in v4:
+- merge binding doc to fsl,dsp.yaml for Rob's comments
+
+changes in v3:
+- Add this cover letter
+- refine clock-names according to Rob's comments
+- move common struct from imx_rproc.c to header file
+- add IMX_RPROC_SCU_API enum item
+- refine driver according to Mathieu's comments
+
+changes in v2:
+- change syscon to fsl,dsp-ctrl
+- add items for clock-names
+
+Shengjiu Wang (4):
+  remoteproc: imx_rproc: Move common structure to header file
+  remoteproc: imx_rproc: Add IMX_RPROC_SCU_API method
+  remoteproc: imx_dsp_rproc: Add remoteproc driver for DSP on i.MX
+  dt-bindings: dsp: fsl: update binding document for remote proc driver
+
+ .../devicetree/bindings/dsp/fsl,dsp.yaml      |   81 +-
+ drivers/remoteproc/Kconfig                    |   11 +
+ drivers/remoteproc/Makefile                   |    1 +
+ drivers/remoteproc/imx_dsp_rproc.c            | 1206 +++++++++++++++++
+ drivers/remoteproc/imx_rproc.c                |   28 +-
+ drivers/remoteproc/imx_rproc.h                |   39 +
+ 6 files changed, 1333 insertions(+), 33 deletions(-)
+ create mode 100644 drivers/remoteproc/imx_dsp_rproc.c
+ create mode 100644 drivers/remoteproc/imx_rproc.h
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D)/Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.17.1
+
