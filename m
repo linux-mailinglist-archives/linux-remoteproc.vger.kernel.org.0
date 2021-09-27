@@ -2,68 +2,68 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E978F41A3A8
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 28 Sep 2021 01:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49FE041A3B7
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 28 Sep 2021 01:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238122AbhI0XPg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 27 Sep 2021 19:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        id S238226AbhI0XPm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 27 Sep 2021 19:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbhI0XPe (ORCPT
+        with ESMTP id S238158AbhI0XPf (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 27 Sep 2021 19:15:34 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63822C061740
-        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Sep 2021 16:13:56 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id e24so17805971oig.11
-        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Sep 2021 16:13:56 -0700 (PDT)
+        Mon, 27 Sep 2021 19:15:35 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B73FC061769
+        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Sep 2021 16:13:57 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id r43-20020a05683044ab00b0054716b40005so19724126otv.4
+        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Sep 2021 16:13:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=niIrNi7ZEXmmT1P2sO90W0rGG9yNmD2ghXA/EbvlFCY=;
-        b=ucT871Br3zat/1ft3J6FaAumRF7Uc7ihWVsne6GnYBTmXCbfrHEmQrtsoV7tccCZw0
-         MUY3X9Vk3XEwy1WN8F3YyZDpuGqCCmlpio3Ng/NnJLTsNCkHYgMz20TB7/YyHI8n6pkW
-         oXOHaKc8z5WFpF+PW03F+yIDlkvxcz/391kRegOITkmCztPsBN4jr/B67StP5aGSKatZ
-         EL16w6oJgXhttZKL2gvuFk7XXuTcTy9lxnq86M9EXLz0wTG/iueFawErzrGJX7nVirUK
-         jBm/B5dpUhy28tCOWt7trqtJg5vrNJjlS1O4kzYHO9NhNZof1kaKaKUaLmzuJhtGW5W5
-         2I0w==
+        bh=w5Ooxkd/2W1SVsL+c5obIKvuXLUkHc42IA8RpQ4EDLQ=;
+        b=Z6Jv9VYlNPiF/0AetlI99EUo9Ktni9ivJQxXUhXF3l3rNQ+IPouCnzlNJV2eDkAXmi
+         DRiIVhl7D9ikwaVvo8iBsNDynIqvJKVfN28rZMTJumP2dUKsTpVpwEaz1Asx2xY/T/qi
+         cKDURMDxAcuPKaJkuzkN/Ywu4cEixBleADZrrQdL1+tX1ZCI2C9S8uTqSjKiR8NCDu2Y
+         mT5vOttM7T9ehmWr6E8u6bCbUoSP8/SRASiyoQ24uxLaedHHNyImMeSPDA8GXlez2yVk
+         o3fhw5TjetOYcQ9pYnzycepjRbtcHpUJJnVVmt5BBglmcFwCufginf3/yEXh1ziUwxyp
+         0mMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=niIrNi7ZEXmmT1P2sO90W0rGG9yNmD2ghXA/EbvlFCY=;
-        b=OLFJFAbeRd2PCC7Sxh2Z6FJSY650mFzE6p9fW9UVqfjhfwtWRyKO8NSpEgNXaAME51
-         Jd0pWtfW0QkJ3vPILmsLh0HNZlMgu96n/loitfOLjkapGoot/yY42xSUwTMha2+5cvXA
-         6U2kKhclSKrWkNzsjpdrQaITa4jO1N7A3gX2vO8GSAjtsQ6/ESjw+jco8hiJy09DTOND
-         kBhWC3cjOf9nQaQL9l9J2fgula3ZQdaoG9K1sjKkKxc531YIxTbZTc0FPD0q3lepYPK4
-         CMCIpIpREDB9CSCJAr8/PIrCa1NLIlCwWESv4sTaW4Jpc6F27JCWz5W1cy6MRAcGimih
-         5rkg==
-X-Gm-Message-State: AOAM530P8Z9vzDNh2ajDmSIAOvc9gBXxu42J4ZYnbN3R79Tt82JR4yap
-        DA4hamLgS5m2DjtXObNG6vZNrA==
-X-Google-Smtp-Source: ABdhPJxSUnIZoRp+dkcW7CUZbWKyJJ0FFCKouYpAg1IHtjVJbEk6lsiyuIAAXLt+dt9HNplY1pEIPw==
-X-Received: by 2002:aca:2415:: with SMTP id n21mr1199826oic.27.1632784435780;
-        Mon, 27 Sep 2021 16:13:55 -0700 (PDT)
+        bh=w5Ooxkd/2W1SVsL+c5obIKvuXLUkHc42IA8RpQ4EDLQ=;
+        b=CPyXX/Y7R6cb7VKEBKwLhsEIyoKbpTVFU5Jwqwh+5Xe+ENK/mbodjX3h9Wz0ZBqZc4
+         r3a6Q6TZ2/ksAQRj8OilDZ2q2GbeM9mA7AubgoA3xehzpcV9bieqkNsRuhEY27qS5eyq
+         JmLrrLWGyd3ncKKalJBaHg/JFSSeXvRzSPey2F/eBoheAnt3eKHeALPWxcbicaj2Cm+u
+         wxfzvJtFAyw1VtQrg3FdkaAMn+8uT1k3ZLwTruphtwN7rWEb5ePpmNgwtvWCkUMoeCt6
+         8pfNT/knQfLc8TbqBDyePO0Cc4XJb0fa2LWGzgi4ss+SOJnF7YEAmpCv7TJKKBtW/BvW
+         epHQ==
+X-Gm-Message-State: AOAM533x/NdUM6sfv6G/VZzso+DbWcwkRklVCmQpaFNcvXD4Za1s49p/
+        UDfBk4rnFah5nT85Ox/2XeafKg==
+X-Google-Smtp-Source: ABdhPJxeBCaW9TMScB7Aysl+CgjuywcQ9o3FrkqVMpbqGG4yG6C9KR1etUxDWenaB2Td71JySDDkeg==
+X-Received: by 2002:a9d:7751:: with SMTP id t17mr2284713otl.276.1632784436673;
+        Mon, 27 Sep 2021 16:13:56 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id p21sm4162268oip.28.2021.09.27.16.13.54
+        by smtp.gmail.com with ESMTPSA id p21sm4162268oip.28.2021.09.27.16.13.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Sep 2021 16:13:55 -0700 (PDT)
+        Mon, 27 Sep 2021 16:13:56 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     robh+dt@kernel.org, mka@chromium.org, will@kernel.org,
         Sibi Sankar <sibis@codeaurora.org>, swboyd@chromium.org,
         saiprakash.ranjan@codeaurora.org
 Cc:     evgreen@chromium.org, linux-remoteproc@vger.kernel.org,
         robin.murphy@arm.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        p.zabel@pengutronix.de, devicetree@vger.kernel.org,
-        joro@8bytes.org, agross@kernel.org, dianders@chromium.org,
+        joro@8bytes.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        agross@kernel.org, p.zabel@pengutronix.de, dianders@chromium.org,
         ohad@wizery.com, mathieu.poirier@linaro.org
-Subject: Re: (subset) [PATCH v5 02/10] remoteproc: qcom: pas: Add SC7280 Modem support
-Date:   Mon, 27 Sep 2021 18:13:50 -0500
-Message-Id: <163278440375.1524647.12737308797302207774.b4-ty@linaro.org>
+Subject: Re: (subset) [PATCH v5 03/10] dt-bindings: remoteproc: qcom: Update Q6V5 Modem PIL binding
+Date:   Mon, 27 Sep 2021 18:13:51 -0500
+Message-Id: <163278440375.1524647.11521640589539342548.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1631886935-14691-3-git-send-email-sibis@codeaurora.org>
-References: <1631886935-14691-1-git-send-email-sibis@codeaurora.org> <1631886935-14691-3-git-send-email-sibis@codeaurora.org>
+In-Reply-To: <1631886935-14691-4-git-send-email-sibis@codeaurora.org>
+References: <1631886935-14691-1-git-send-email-sibis@codeaurora.org> <1631886935-14691-4-git-send-email-sibis@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -71,15 +71,17 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, 17 Sep 2021 19:25:27 +0530, Sibi Sankar wrote:
-> Add support for booting the Modem DSP found on QTI SC7280 SoCs.
+On Fri, 17 Sep 2021 19:25:28 +0530, Sibi Sankar wrote:
+> Add a new modem compatible string for QTI SC7280 SoCs and introduce the
+> "qcom,ext-regs" and "qcom,qaccept-regs" properties needed by the modem
+> sub-system running on SC7280 SoCs.
 > 
 > 
 
 Applied, thanks!
 
-[02/10] remoteproc: qcom: pas: Add SC7280 Modem support
-        commit: dacce1c92b3d13232ac72a0e1edc8cfb693400f9
+[03/10] dt-bindings: remoteproc: qcom: Update Q6V5 Modem PIL binding
+        commit: b577e51c8c2afc8e00dc99c0a3bd7d67cd06de44
 
 Best regards,
 -- 
