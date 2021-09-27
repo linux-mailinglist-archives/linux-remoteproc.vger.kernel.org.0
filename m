@@ -2,68 +2,69 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FE041A3B7
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 28 Sep 2021 01:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BBE41A3AC
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 28 Sep 2021 01:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238226AbhI0XPm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 27 Sep 2021 19:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
+        id S238203AbhI0XPi (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 27 Sep 2021 19:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238158AbhI0XPf (ORCPT
+        with ESMTP id S238144AbhI0XPg (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 27 Sep 2021 19:15:35 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B73FC061769
-        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Sep 2021 16:13:57 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id r43-20020a05683044ab00b0054716b40005so19724126otv.4
-        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Sep 2021 16:13:57 -0700 (PDT)
+        Mon, 27 Sep 2021 19:15:36 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35803C061575
+        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Sep 2021 16:13:58 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id g62-20020a9d2dc4000000b0054752cfbc59so20917534otb.1
+        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Sep 2021 16:13:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=w5Ooxkd/2W1SVsL+c5obIKvuXLUkHc42IA8RpQ4EDLQ=;
-        b=Z6Jv9VYlNPiF/0AetlI99EUo9Ktni9ivJQxXUhXF3l3rNQ+IPouCnzlNJV2eDkAXmi
-         DRiIVhl7D9ikwaVvo8iBsNDynIqvJKVfN28rZMTJumP2dUKsTpVpwEaz1Asx2xY/T/qi
-         cKDURMDxAcuPKaJkuzkN/Ywu4cEixBleADZrrQdL1+tX1ZCI2C9S8uTqSjKiR8NCDu2Y
-         mT5vOttM7T9ehmWr6E8u6bCbUoSP8/SRASiyoQ24uxLaedHHNyImMeSPDA8GXlez2yVk
-         o3fhw5TjetOYcQ9pYnzycepjRbtcHpUJJnVVmt5BBglmcFwCufginf3/yEXh1ziUwxyp
-         0mMA==
+        bh=fGTt2hnfWiF6e7IYGzXXWDUKyh0sx2hrjsxfMx+frmk=;
+        b=bqDgmGGkGcNjFJyVl93eWsMtetWorm4Y5NpIDD6z8sKlV/AAZrMxEToHIVeiAlqoUU
+         8lGHMB6zWrpHjYLEc//Ur49ue1GQJZP8598jcs8uv/Z1kjtDy7F7vnoXotv0GVTm8Hbg
+         7Dy9FL84QNA8O7IAnoDeoVRF6TOcvW5MAdRSw0x3TFR9xgzPo7uYXKIv9dlmO+vXQeol
+         RBWH7ccRfEyk62GSNtMDKcqt5eNr/S0KhH8NMc9jfGWBWrA9OWFTyO2cJL/Y0cFFwl6U
+         CurhskZAxcY+Vdg3jiIkwyaB+brt0wgenOr+9hKNIGZpwcfEDabnKXs/0DQWuyAGlBu5
+         AKUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=w5Ooxkd/2W1SVsL+c5obIKvuXLUkHc42IA8RpQ4EDLQ=;
-        b=CPyXX/Y7R6cb7VKEBKwLhsEIyoKbpTVFU5Jwqwh+5Xe+ENK/mbodjX3h9Wz0ZBqZc4
-         r3a6Q6TZ2/ksAQRj8OilDZ2q2GbeM9mA7AubgoA3xehzpcV9bieqkNsRuhEY27qS5eyq
-         JmLrrLWGyd3ncKKalJBaHg/JFSSeXvRzSPey2F/eBoheAnt3eKHeALPWxcbicaj2Cm+u
-         wxfzvJtFAyw1VtQrg3FdkaAMn+8uT1k3ZLwTruphtwN7rWEb5ePpmNgwtvWCkUMoeCt6
-         8pfNT/knQfLc8TbqBDyePO0Cc4XJb0fa2LWGzgi4ss+SOJnF7YEAmpCv7TJKKBtW/BvW
-         epHQ==
-X-Gm-Message-State: AOAM533x/NdUM6sfv6G/VZzso+DbWcwkRklVCmQpaFNcvXD4Za1s49p/
-        UDfBk4rnFah5nT85Ox/2XeafKg==
-X-Google-Smtp-Source: ABdhPJxeBCaW9TMScB7Aysl+CgjuywcQ9o3FrkqVMpbqGG4yG6C9KR1etUxDWenaB2Td71JySDDkeg==
-X-Received: by 2002:a9d:7751:: with SMTP id t17mr2284713otl.276.1632784436673;
-        Mon, 27 Sep 2021 16:13:56 -0700 (PDT)
+        bh=fGTt2hnfWiF6e7IYGzXXWDUKyh0sx2hrjsxfMx+frmk=;
+        b=FK/DuwXZp6owenK9Wpu1rwUSotYLqq7AzCjXpmny1vqluXcyZ3mqdoQzUQ1VpNjMGw
+         Ox6wVOlFPWKUMyk8e/N1VdY/YmWRJpN/Jp4lcyLLddQkGmQFAW8rrgNawapFTXtcriJr
+         6WcO5KwqqSEdLKpDnHSlsNKBM9s4DmjRSEnnTmVK7eT/Cga5E/w/4iJ+6xqUteCU3Aat
+         KXc9IMPrPdWxfPcKJE9VBAyCnmHnCRbSTIf5m4eEmLY/RohFfz9OY4bondi6kHTtPYKv
+         XGuqL3L3yx9d48x829EzGV4J/0OjaxdQy5oc7ykdBQGL0SQ2FfYU+5K6mNOkv0OPkeRO
+         MrPA==
+X-Gm-Message-State: AOAM530KCYd5wXZPEp6lZ577iQ0QAJ8gcKSty6NvO7jVepvJKGGFXr51
+        3WpTL2KwinzU+Xzi1MylX6JDv21L7xjZ8w==
+X-Google-Smtp-Source: ABdhPJwHC7Lr7HpBuR21ixlUXCwVbpfVNFO9RX/rYG9B2yRCe1NnnWqO5rDMMr1PT1LNN01H2Inukw==
+X-Received: by 2002:a9d:6347:: with SMTP id y7mr2206399otk.241.1632784437605;
+        Mon, 27 Sep 2021 16:13:57 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id p21sm4162268oip.28.2021.09.27.16.13.55
+        by smtp.gmail.com with ESMTPSA id p21sm4162268oip.28.2021.09.27.16.13.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Sep 2021 16:13:56 -0700 (PDT)
+        Mon, 27 Sep 2021 16:13:57 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     robh+dt@kernel.org, mka@chromium.org, will@kernel.org,
         Sibi Sankar <sibis@codeaurora.org>, swboyd@chromium.org,
         saiprakash.ranjan@codeaurora.org
 Cc:     evgreen@chromium.org, linux-remoteproc@vger.kernel.org,
-        robin.murphy@arm.com, linux-arm-msm@vger.kernel.org,
-        joro@8bytes.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        agross@kernel.org, p.zabel@pengutronix.de, dianders@chromium.org,
-        ohad@wizery.com, mathieu.poirier@linaro.org
-Subject: Re: (subset) [PATCH v5 03/10] dt-bindings: remoteproc: qcom: Update Q6V5 Modem PIL binding
-Date:   Mon, 27 Sep 2021 18:13:51 -0500
-Message-Id: <163278440375.1524647.11521640589539342548.b4-ty@linaro.org>
+        robin.murphy@arm.com, linux-kernel@vger.kernel.org,
+        joro@8bytes.org, p.zabel@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        devicetree@vger.kernel.org, dianders@chromium.org, ohad@wizery.com,
+        mathieu.poirier@linaro.org
+Subject: Re: (subset) [PATCH v5 05/10] remoteproc: mss: q6v5-mss: Add modem support on SC7280
+Date:   Mon, 27 Sep 2021 18:13:52 -0500
+Message-Id: <163278440375.1524647.12772375211634032908.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1631886935-14691-4-git-send-email-sibis@codeaurora.org>
-References: <1631886935-14691-1-git-send-email-sibis@codeaurora.org> <1631886935-14691-4-git-send-email-sibis@codeaurora.org>
+In-Reply-To: <1631886935-14691-6-git-send-email-sibis@codeaurora.org>
+References: <1631886935-14691-1-git-send-email-sibis@codeaurora.org> <1631886935-14691-6-git-send-email-sibis@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -71,17 +72,18 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, 17 Sep 2021 19:25:28 +0530, Sibi Sankar wrote:
-> Add a new modem compatible string for QTI SC7280 SoCs and introduce the
-> "qcom,ext-regs" and "qcom,qaccept-regs" properties needed by the modem
-> sub-system running on SC7280 SoCs.
+On Fri, 17 Sep 2021 19:25:30 +0530, Sibi Sankar wrote:
+> Add out of reset sequence support for modem sub-system on SC7280 SoCs.
+> It requires access to an additional set of qaccept registers, external
+> power/clk control registers and halt vq6 register to put the modem back
+> into reset.
 > 
 > 
 
 Applied, thanks!
 
-[03/10] dt-bindings: remoteproc: qcom: Update Q6V5 Modem PIL binding
-        commit: b577e51c8c2afc8e00dc99c0a3bd7d67cd06de44
+[05/10] remoteproc: mss: q6v5-mss: Add modem support on SC7280
+        commit: 529a0113177abe487614a0cba462d9973caa8c2a
 
 Best regards,
 -- 
