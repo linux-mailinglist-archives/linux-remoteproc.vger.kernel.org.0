@@ -2,174 +2,321 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F8841DD98
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 30 Sep 2021 17:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6054C41DDE4
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 30 Sep 2021 17:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344527AbhI3Peg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 30 Sep 2021 11:34:36 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:60279 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344459AbhI3Ped (ORCPT
+        id S1345740AbhI3Pqv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 30 Sep 2021 11:46:51 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:58249 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346003AbhI3Pqu (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 30 Sep 2021 11:34:33 -0400
+        Thu, 30 Sep 2021 11:46:50 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1633015971; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=R/mHK1i/fnTfkiq3fb7H0zHVfvOwMlnRIUyhhoj5zNo=; b=PAhZrpbBZk5jzGDq2XXTM4XdsQdDrtxpN08oliDLSca8k6+GLr/fXjhu8NFjO/NNkbcIMOVK
- NaACMnmcgLffv2+2NN2U3BjBrN5uxyhravYeShtAUY5EV3getTT57GB+HxiJrezeCkbYcOqe
- rpIyvZmdlgYQIR3/6hK2MKgPAd0=
-X-Mailgun-Sending-Ip: 69.72.43.7
+ s=smtp; t=1633016708; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=uGUTYZfYt5gnSnL/YNTvC3u00AGC/+SA5QqjzrPCBbg=; b=NscLEzfT1fKPhL/oPbhF4nPMMwExNnsLlzJARLbYYdf8//TZD1lYYgQcPu7gIqw2I+J7Qb/h
+ XC07SmzhDN+xlC6toyMmbcXdrBiJyafgRnnUNJujiWmdNDvlMuHYfM82cI7YMw3xoidFYKwq
+ gCcaySW+xyii2lLFMjkAoS71Lx0=
+X-Mailgun-Sending-Ip: 198.61.254.9
 X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 6155d89a47d64efb6d66241e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 30 Sep 2021 15:32:42
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 6155db72713d5d6f9605bf0c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 30 Sep 2021 15:44:50
  GMT
 Sender: deesin=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6EEC0C4361A; Thu, 30 Sep 2021 15:32:42 +0000 (UTC)
+        id 27C1DC43616; Thu, 30 Sep 2021 15:44:50 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from deesin-linux.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+X-Spam-Status: No, score=-4.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.1.3] (unknown [122.163.140.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: deesin)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8D897C43619;
-        Thu, 30 Sep 2021 15:32:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 8D897C43619
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3C0C4C43460;
+        Thu, 30 Sep 2021 15:44:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 3C0C4C43460
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Deepak Kumar Singh <deesin@codeaurora.org>
+Subject: Re: [PATCH 1/1] soc: qcom: smp2p: add feature negotiation and ssr ack
+ feature support
 To:     bjorn.andersson@linaro.org, swboyd@chromium.org,
         clew@codeaurora.org, mathieu.poirier@linaro.org
 Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        Deepak Kumar Singh <deesin@codeaurora.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>
-Subject: [PATCH V1 3/3] rpmsg: char: Add TIOCMGET/TIOCMSET ioctl support
-Date:   Thu, 30 Sep 2021 21:02:04 +0530
-Message-Id: <1633015924-881-5-git-send-email-deesin@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1633015924-881-1-git-send-email-deesin@codeaurora.org>
+        linux-remoteproc@vger.kernel.org, Andy Gross <agross@kernel.org>
 References: <1633015924-881-1-git-send-email-deesin@codeaurora.org>
+ <1633015924-881-3-git-send-email-deesin@codeaurora.org>
+From:   Deepak Kumar Singh <deesin@codeaurora.org>
+Message-ID: <c9dd7bc4-a1a6-b6c4-874c-8eebdd206196@codeaurora.org>
+Date:   Thu, 30 Sep 2021 21:14:43 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <1633015924-881-3-git-send-email-deesin@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add TICOMGET and TIOCMSET ioctl support for rpmsg char device nodes
-to get/set the low level transport signals.
+Please ignore this patch. This is inadvertently uploaded.
 
-Signed-off-by: Chris Lew <clew@codeaurora.org>
-Signed-off-by: Deepak Kumar Singh <deesin@codeaurora.org>
----
- drivers/rpmsg/rpmsg_char.c | 43 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+Thanks,
 
-diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index 2bebc9b..60a889b 100644
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -19,6 +19,7 @@
- #include <linux/rpmsg.h>
- #include <linux/skbuff.h>
- #include <linux/slab.h>
-+#include <linux/termios.h>
- #include <linux/uaccess.h>
- #include <uapi/linux/rpmsg.h>
- 
-@@ -76,6 +77,9 @@ struct rpmsg_eptdev {
- 	spinlock_t queue_lock;
- 	struct sk_buff_head queue;
- 	wait_queue_head_t readq;
-+
-+	u32 rsigs;
-+	bool sig_pending;
- };
- 
- static int rpmsg_eptdev_destroy(struct device *dev, void *data)
-@@ -120,6 +124,18 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
- 	return 0;
- }
- 
-+static int rpmsg_sigs_cb(struct rpmsg_device *rpdev, void *priv, u32 sigs)
-+{
-+	struct rpmsg_eptdev *eptdev = priv;
-+
-+	eptdev->rsigs = sigs;
-+	eptdev->sig_pending = true;
-+
-+	/* wake up any blocking processes, waiting for signal notification */
-+	wake_up_interruptible(&eptdev->readq);
-+	return 0;
-+}
-+
- static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
- {
- 	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
-@@ -139,6 +155,7 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
- 		return -EINVAL;
- 	}
- 
-+	ept->sig_cb = rpmsg_sigs_cb;
- 	eptdev->ept = ept;
- 	filp->private_data = eptdev;
- 
-@@ -157,6 +174,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
- 		eptdev->ept = NULL;
- 	}
- 	mutex_unlock(&eptdev->ept_lock);
-+	eptdev->sig_pending = false;
- 
- 	/* Discard all SKBs */
- 	skb_queue_purge(&eptdev->queue);
-@@ -267,6 +285,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
- 	if (!skb_queue_empty(&eptdev->queue))
- 		mask |= EPOLLIN | EPOLLRDNORM;
- 
-+	if (eptdev->sig_pending)
-+		mask |= EPOLLPRI;
-+
- 	mask |= rpmsg_poll(eptdev->ept, filp, wait);
- 
- 	return mask;
-@@ -276,10 +297,32 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
- 			       unsigned long arg)
- {
- 	struct rpmsg_eptdev *eptdev = fp->private_data;
-+	bool set;
-+	u32 val;
-+	int ret;
- 
- 	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
- 		return -EINVAL;
- 
-+	switch (cmd) {
-+	case TIOCMGET:
-+		eptdev->sig_pending = false;
-+		ret = put_user(eptdev->rsigs, (int __user *)arg);
-+		break;
-+	case TIOCMSET:
-+		ret = get_user(val, (int __user *)arg);
-+		if (ret)
-+			break;
-+		set = (val & TIOCM_DTR) ? true : false;
-+		ret = rpmsg_set_flow_control(eptdev->ept, set);
-+		break;
-+	case RPMSG_DESTROY_EPT_IOCTL:
-+		ret = rpmsg_eptdev_destroy(&eptdev->dev, NULL);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
-+
- 	return rpmsg_eptdev_destroy(&eptdev->dev, NULL);
- }
- 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Deepak
 
+On 9/30/2021 9:02 PM, Deepak Kumar Singh wrote:
+> This patch adds feature negotiation and ssr ack feature between
+> local and remote host. Local host can negotiate on common features
+> supported with remote host.
+> ---
+>   drivers/soc/qcom/smp2p.c | 151 ++++++++++++++++++++++++++++++++---------------
+>   1 file changed, 104 insertions(+), 47 deletions(-)
+>
+> diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
+> index 38585a7..1c6ad1c 100644
+> --- a/drivers/soc/qcom/smp2p.c
+> +++ b/drivers/soc/qcom/smp2p.c
+> @@ -14,7 +14,6 @@
+>   #include <linux/mfd/syscon.h>
+>   #include <linux/module.h>
+>   #include <linux/platform_device.h>
+> -#include <linux/pm_wakeirq.h>
+>   #include <linux/regmap.h>
+>   #include <linux/soc/qcom/smem.h>
+>   #include <linux/soc/qcom/smem_state.h>
+> @@ -41,8 +40,11 @@
+>   #define SMP2P_MAX_ENTRY_NAME 16
+>   
+>   #define SMP2P_FEATURE_SSR_ACK 0x1
+> +#define SMP2P_FLAGS_RESTART_DONE_BIT 0
+> +#define SMP2P_FLAGS_RESTART_ACK_BIT 1
+>   
+>   #define SMP2P_MAGIC 0x504d5324
+> +#define SMP2P_FEATURES	SMP2P_FEATURE_SSR_ACK
+>   
+>   /**
+>    * struct smp2p_smem_item - in memory communication structure
+> @@ -113,7 +115,6 @@ struct smp2p_entry {
+>    * struct qcom_smp2p - device driver context
+>    * @dev:	device driver handle
+>    * @in:		pointer to the inbound smem item
+> - * @out:	pointer to the outbound smem item
+>    * @smem_items:	ids of the two smem items
+>    * @valid_entries: already scanned inbound entries
+>    * @local_pid:	processor id of the inbound edge
+> @@ -136,6 +137,10 @@ struct qcom_smp2p {
+>   
+>   	unsigned valid_entries;
+>   
+> +	bool ssr_ack_enabled;
+> +	bool ssr_ack;
+> +	bool open;
+> +
+>   	unsigned local_pid;
+>   	unsigned remote_pid;
+>   
+> @@ -163,22 +168,59 @@ static void qcom_smp2p_kick(struct qcom_smp2p *smp2p)
+>   	}
+>   }
+>   
+> -/**
+> - * qcom_smp2p_intr() - interrupt handler for incoming notifications
+> - * @irq:	unused
+> - * @data:	smp2p driver context
+> - *
+> - * Handle notifications from the remote side to handle newly allocated entries
+> - * or any changes to the state bits of existing entries.
+> - */
+> -static irqreturn_t qcom_smp2p_intr(int irq, void *data)
+> +static bool qcom_smp2p_check_ssr(struct qcom_smp2p *smp2p)
+> +{
+> +	struct smp2p_smem_item *in = smp2p->in;
+> +	bool restart;
+> +
+> +	if (!smp2p->ssr_ack_enabled)
+> +		return false;
+> +
+> +	restart = in->flags & BIT(SMP2P_FLAGS_RESTART_DONE_BIT);
+> +	if (restart == smp2p->ssr_ack)
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+> +static void qcom_smp2p_do_ssr_ack(struct qcom_smp2p *smp2p)
+> +{
+> +	struct smp2p_smem_item *out = smp2p->out;
+> +	u32 ack;
+> +	u32 val;
+> +
+> +	ack = !smp2p->ssr_ack;
+> +	smp2p->ssr_ack = ack;
+> +	ack = ack << SMP2P_FLAGS_RESTART_ACK_BIT;
+> +
+> +	val = out->flags & ~BIT(SMP2P_FLAGS_RESTART_ACK_BIT);
+> +	val |= ack;
+> +	out->flags = val;
+> +
+> +	qcom_smp2p_kick(smp2p);
+> +}
+> +
+> +static void qcom_smp2p_negotiate(struct qcom_smp2p *smp2p)
+> +{
+> +	struct smp2p_smem_item *out = smp2p->out;
+> +	struct smp2p_smem_item *in = smp2p->in;
+> +	u32 features;
+> +
+> +	if (in->version == out->version) {
+> +		features = in->features & out->features;
+> +		out->features = features;
+> +
+> +		if (features & SMP2P_FEATURE_SSR_ACK)
+> +			smp2p->ssr_ack_enabled = true;
+> +
+> +		smp2p->open = true;
+> +	}
+> +}
+> +
+> +static void qcom_smp2p_notify_in(struct qcom_smp2p *smp2p)
+>   {
+>   	struct smp2p_smem_item *in;
+>   	struct smp2p_entry *entry;
+> -	struct qcom_smp2p *smp2p = data;
+> -	unsigned smem_id = smp2p->smem_items[SMP2P_INBOUND];
+> -	unsigned pid = smp2p->remote_pid;
+> -	size_t size;
+>   	int irq_pin;
+>   	u32 status;
+>   	char buf[SMP2P_MAX_ENTRY_NAME];
+> @@ -187,18 +229,6 @@ static irqreturn_t qcom_smp2p_intr(int irq, void *data)
+>   
+>   	in = smp2p->in;
+>   
+> -	/* Acquire smem item, if not already found */
+> -	if (!in) {
+> -		in = qcom_smem_get(pid, smem_id, &size);
+> -		if (IS_ERR(in)) {
+> -			dev_err(smp2p->dev,
+> -				"Unable to acquire remote smp2p item\n");
+> -			return IRQ_HANDLED;
+> -		}
+> -
+> -		smp2p->in = in;
+> -	}
+> -
+>   	/* Match newly created entries */
+>   	for (i = smp2p->valid_entries; i < in->valid_entries; i++) {
+>   		list_for_each_entry(entry, &smp2p->inbound, node) {
+> @@ -210,7 +240,7 @@ static irqreturn_t qcom_smp2p_intr(int irq, void *data)
+>   		}
+>   	}
+>   	smp2p->valid_entries = i;
+> -
+> +	
+>   	/* Fire interrupts based on any value changes */
+>   	list_for_each_entry(entry, &smp2p->inbound, node) {
+>   		/* Ignore entries not yet allocated by the remote side */
+> @@ -237,7 +267,52 @@ static irqreturn_t qcom_smp2p_intr(int irq, void *data)
+>   			}
+>   		}
+>   	}
+> +}
+> +
+> +/**
+> + * qcom_smp2p_intr() - interrupt handler for incoming notifications
+> + * @irq:	unused
+> + * @data:	smp2p driver context
+> + *
+> + * Handle notifications from the remote side to handle newly allocated entries
+> + * or any changes to the state bits of existing entries.
+> + */
+> +static irqreturn_t qcom_smp2p_intr(int irq, void *data)
+> +{
+> +	struct smp2p_smem_item *in;
+> +	struct qcom_smp2p *smp2p = data;
+> +	unsigned int smem_id = smp2p->smem_items[SMP2P_INBOUND];
+> +	unsigned int pid = smp2p->remote_pid;
+> +	size_t size;
+>   
+> +	in = smp2p->in;
+> +
+> +	/* Acquire smem item, if not already found */
+> +	if (!in) {
+> +		in = qcom_smem_get(pid, smem_id, &size);
+> +		if (IS_ERR(in)) {
+> +			dev_err(smp2p->dev,
+> +				"Unable to acquire remote smp2p item\n");
+> +			goto out;
+> +		}
+> +
+> +		smp2p->in = in;
+> +	}
+> +
+> +	if (!smp2p->open)
+> +		qcom_smp2p_negotiate(smp2p);
+> +
+> +	if (smp2p->open) {
+> +		bool do_restart;
+> +
+> +		do_restart = qcom_smp2p_check_ssr(smp2p);
+> +		qcom_smp2p_notify_in(smp2p);
+> +
+> +		if (do_restart)
+> +			qcom_smp2p_do_ssr_ack(smp2p);
+> +	}
+> +
+> +out:
+>   	return IRQ_HANDLED;
+>   }
+>   
+> @@ -393,6 +468,7 @@ static int qcom_smp2p_alloc_outbound_item(struct qcom_smp2p *smp2p)
+>   	out->remote_pid = smp2p->remote_pid;
+>   	out->total_entries = SMP2P_MAX_ENTRY;
+>   	out->valid_entries = 0;
+> +	out->features = SMP2P_FEATURES;
+>   
+>   	/*
+>   	 * Make sure the rest of the header is written before we validate the
+> @@ -539,26 +615,9 @@ static int qcom_smp2p_probe(struct platform_device *pdev)
+>   		goto unwind_interfaces;
+>   	}
+>   
+> -	/*
+> -	 * Treat smp2p interrupt as wakeup source, but keep it disabled
+> -	 * by default. User space can decide enabling it depending on its
+> -	 * use cases. For example if remoteproc crashes and device wants
+> -	 * to handle it immediatedly (e.g. to not miss phone calls) it can
+> -	 * enable wakeup source from user space, while other devices which
+> -	 * do not have proper autosleep feature may want to handle it with
+> -	 * other wakeup events (e.g. Power button) instead waking up immediately.
+> -	 */
+> -	device_set_wakeup_capable(&pdev->dev, true);
+> -
+> -	ret = dev_pm_set_wake_irq(&pdev->dev, irq);
+> -	if (ret)
+> -		goto set_wake_irq_fail;
+>   
+>   	return 0;
+>   
+> -set_wake_irq_fail:
+> -	dev_pm_clear_wake_irq(&pdev->dev);
+> -
+>   unwind_interfaces:
+>   	list_for_each_entry(entry, &smp2p->inbound, node)
+>   		irq_domain_remove(entry->domain);
+> @@ -583,8 +642,6 @@ static int qcom_smp2p_remove(struct platform_device *pdev)
+>   	struct qcom_smp2p *smp2p = platform_get_drvdata(pdev);
+>   	struct smp2p_entry *entry;
+>   
+> -	dev_pm_clear_wake_irq(&pdev->dev);
+> -
+>   	list_for_each_entry(entry, &smp2p->inbound, node)
+>   		irq_domain_remove(entry->domain);
+>   
