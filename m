@@ -2,90 +2,70 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D9642189D
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  4 Oct 2021 22:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34AC2422271
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  5 Oct 2021 11:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235191AbhJDUth (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 4 Oct 2021 16:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235098AbhJDUth (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 4 Oct 2021 16:49:37 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99E1C061745;
-        Mon,  4 Oct 2021 13:47:47 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id r18so69717550edv.12;
-        Mon, 04 Oct 2021 13:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PZROPLbkgGkkjkMADvnO2kcNu6rrLVkHkBnoU7UsJGg=;
-        b=eJusRH+fhZ47Ow4sRjAPQOFvfITwMYrS483XVEFDHUFZYyigwo8RjNUy58Jfw/MGJx
-         N90yOkgE13VC8/tz0i8RrniNEiPAh36DMNKy0LBZz5oZNQjnmnhLZVu3LZ8Dum8h9xp2
-         8RZAz5+M1gPevZGsqLKm0r09UkoZpcerFbLgkKCkNatEdb7D3l+tb9KTUDdTj9HoZyNG
-         8X5aroSJ7luiQG8K6uuKCq/v0Z1wGUe3oA3AaRD9IHl/beAjPj6D9oqFblRN8cHciJ2k
-         ZWal90uaATGAUutwauosvq5tIi7nJbow/so85PZHSgeqHFmd+qjgmDIjflksKvXwViSg
-         YR5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PZROPLbkgGkkjkMADvnO2kcNu6rrLVkHkBnoU7UsJGg=;
-        b=g23LjLxw8YlKyQHodQWNl2oHf86lj5IOzEPtIP+ZugrOgtTtYabZatB9OTDZJou4eL
-         opo0pl96dy0qwfYZ9ePwy7jjf1ovKY8lAOLpg2aeDjUATvuJyPLDyG4MVoQVVX31oQkz
-         h3VYtTXfE3qV/d0p2D0Rb64oa3kzsPAa0lRmECYnZn9xmL0ESSyjLlxQ7FeXnx1OB5AQ
-         tpl+2wzdWsMVL+xASrjBjLFSKK4W86CaHv6hs5m+JAORbCdvd0jAaNk3DytAJfaOXb2k
-         ze27kOBGMtdq/IlcgKscz0FcZz7YFV33FMbSFDwzRkVvPaiTsFX7IsIOaYw/aTdXWgbq
-         nkzQ==
-X-Gm-Message-State: AOAM533f+TVl+MqpLb7ZDr/5QJ351hvaSligLEq94UAb+6NSoV0BQaD0
-        77gBKkFRsXk87ZLW3ky8BoY69j42ksWe+7GgKMc=
-X-Google-Smtp-Source: ABdhPJyHseqJsLA+Xd5nzZlA+nH89bmxZ8SBNdzs2relZVLGbPv6O+T0M/pHhE/Z1dFczNHQ+3t6OX3JGEVBkWVG9yI=
-X-Received: by 2002:a17:906:f92:: with SMTP id q18mr19469483ejj.353.1633380466100;
- Mon, 04 Oct 2021 13:47:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20211004105257.GA27301@kili>
-In-Reply-To: <20211004105257.GA27301@kili>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 4 Oct 2021 22:47:35 +0200
-Message-ID: <CAFBinCAB5rvAS27Q-TXdp8d6qAyNFooKE1v3XRPFsBvm+9_kOQ@mail.gmail.com>
-Subject: Re: [PATCH] remoteproc: meson-mx-ao-arc: fix a bit test
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
+        id S233722AbhJEJiT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 5 Oct 2021 05:38:19 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:50426 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233738AbhJEJiS (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Tue, 5 Oct 2021 05:38:18 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1633426588; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=KaSalnUjb5bYB5nzUZGviPCTJ+b536awjhauFlLkpmY=; b=Do7JMrGyRywVcEIHfSCV500H8wdgmCU7vdgymmErdNp7/lEOd90x+c9TrHQRbAiJlRqKTYna
+ fCyIeEmtZ7GQ3V8tutDAD9GT0kEpdsTVGfEODJiZdz090JbRRwqfyJMFccBLSY6NzxcJ6GXj
+ 3wcCiq+kEa7ZdTFNgmGbikR8POo=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI4ZWZiZiIsICJsaW51eC1yZW1vdGVwcm9jQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 615c1c8147d64efb6d0602aa (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 05 Oct 2021 09:36:01
+ GMT
+Sender: deesin=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 11912C4360C; Tue,  5 Oct 2021 09:36:01 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from deesin-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: deesin)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2D823C4338F;
+        Tue,  5 Oct 2021 09:35:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 2D823C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Deepak Kumar Singh <deesin@codeaurora.org>
+To:     bjorn.andersson@linaro.org, clew@codeaurora.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Deepak Kumar Singh <deesin@codeaurora.org>
+Subject: [PATCH V3 0/2] smem partition remap and bound check changes
+Date:   Tue,  5 Oct 2021 15:02:43 +0530
+Message-Id: <1633426371-4827-1-git-send-email-deesin@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Dan,
+Addressed pointer conversion error in previous set and devm_iounmap
+code reordering. Corrected code for calculating global partition size,
+added code inside hardware mutex p_size = avilable + free.
 
-thank you for this patch!
+Deepak Kumar Singh (2):
+  soc: qcom: smem: map only partitions used by local HOST
+  soc: qcom: smem: validate fields of shared structures
 
-On Mon, Oct 4, 2021 at 12:53 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> The MESON_AO_RPROC_SRAM_USABLE_BITS macro is used like this:
->
->         if (priv->sram_pa & ~MESON_AO_RPROC_SRAM_USABLE_BITS) {
->                 dev_err(dev, "SRAM address contains unusable bits\n");
->
-> The problem is that "->sram_pa" is type phys_addr_t which is potentially
-> 64 bits.  That means the MESON_AO_RPROC_SRAM_USABLE_BITS macro needs to
-> be a 64 bit type as well to ensure that high 32 bits are cleared.
->
-> Fixes: 6cb58ea897dd ("remoteproc: meson-mx-ao-arc: Add a driver for the AO ARC remote procesor")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-even though it's already applied, here's my:
-Tested-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+ drivers/soc/qcom/smem.c | 317 +++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 245 insertions(+), 72 deletions(-)
 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-Best regards,
-Martin
