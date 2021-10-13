@@ -2,76 +2,99 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC9D42C3AD
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 13 Oct 2021 16:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2511742C4D8
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 13 Oct 2021 17:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236719AbhJMOnu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 13 Oct 2021 10:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S233073AbhJMPgU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 13 Oct 2021 11:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbhJMOnt (ORCPT
+        with ESMTP id S229903AbhJMPgT (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 13 Oct 2021 10:43:49 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B441AC061570
-        for <linux-remoteproc@vger.kernel.org>; Wed, 13 Oct 2021 07:41:45 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id v17so9138455wrv.9
-        for <linux-remoteproc@vger.kernel.org>; Wed, 13 Oct 2021 07:41:45 -0700 (PDT)
+        Wed, 13 Oct 2021 11:36:19 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B76C061746
+        for <linux-remoteproc@vger.kernel.org>; Wed, 13 Oct 2021 08:34:16 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id q19so2814014pfl.4
+        for <linux-remoteproc@vger.kernel.org>; Wed, 13 Oct 2021 08:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=szeolAqmJqd0hJn5d47PHeNOyZWuU1CeFrejo0YAi2g=;
-        b=gl3VZVP1TqNkHsgFq0ACejnEoaUglc0W3z7d1po11LFGQf7s90pMcfrlQHwAoS3Rr8
-         h8IgwfnvH+XzjqGY2PXrU7/45m+AT/eH3cGwqU1EHay+5bR72teET8XlFIbJxGvbHU4s
-         Rp5sxnmIuHYpSSc/e+kT6L1zFAWHjzeFsampg2z5rwI0OGFjPtW0Ux2AdznYO1cVmmfJ
-         g+FB7GZgo6PdNSubqLpqeWUt7fDeBnpGECKuV1DsP0sJ3sYuoTa07tbIrnCDmnTMUOeL
-         ft1lDTDwtl/QHQUBCE0t2BreR5qrpPc/KXpEyrXOa5x9W1hmukQt7jaqYx8YIe6SunJZ
-         d1dA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QqZTBfg3/QOuM5T2ZYO9ec8lSodF69mZtRRrLvQ5Gfg=;
+        b=bwlGOxIr7XIuC25JE0sXW96+DAR4tBZkoc4cTzBClGIvv/CT0jHFDTCoJ8EoTdwa4u
+         5AWys82W0ENXsXAxlng2zjJpvSftLKHB9qGJWmmHYDulwIQRzH//WJPcN3mfPelAhdZK
+         AJIb3iaIsOIBPS2YL/IWt6kSS9r6nHqMp0Fw3BeaRUoyYzAjHzkTf7zcTRoS2wkh7YAy
+         lyW/1ykD4bjw0yTjtS+ykWQ+7PJc43SGk6Q9gqhcQXJMi2ZF4OCDgP4C952qRUgmxy9J
+         U52FLQElZCFUvGGrCvFOL3iwTSPkx6q9O1+a7m2E/avbpYSo7ww1vZ2kzjZMb12SkcuI
+         yhVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=szeolAqmJqd0hJn5d47PHeNOyZWuU1CeFrejo0YAi2g=;
-        b=4Zegt46n0MM9VGHYOa3BOXHBknKjkBwgr1h6PMrKl1S4v+U1oRpRcV4wSBu9SWmRtD
-         OqZu3+OZoV88wHAXsV/RfCt7yXStdR+zhyafeFa29mVTDGeioWpd9ucH8ShpuLE155Vx
-         xHaWD+Jezp92YCAxKDXS0ZxnzNZST+wo5P6um8K2iaoO0Y/ACraYUPmY9z8MHxZz5D1t
-         ckqjz3SHD0hTx50bmosB26diIS7lfrftLvEnuwgvhjizqZMechOyQJWdnLK/RB1uyHeR
-         mYzToDuOWkfJUDrkrtQBgbz2mxxRQKlIXWMUlADjL91f4NxmZ7uG14OBaCbiJfkdfZtD
-         5JOw==
-X-Gm-Message-State: AOAM530yhPjXwB3QAtE47/b8mLPUnZsxjCKcJbCfcVicq8SbVoUFW5XO
-        hjNq2/4SZo/pK6iwmi671o+lqtdz32DowzNFvpQ=
-X-Google-Smtp-Source: ABdhPJyCvyq/9C6wna728xWxFAGllf0V5EJrzGiocYtunJSd7tQ3YDO5D6KjmYh9kOoO6r8wNhQIM8CAr0Sg1XhvGak=
-X-Received: by 2002:adf:aa96:: with SMTP id h22mr40916603wrc.405.1634136104284;
- Wed, 13 Oct 2021 07:41:44 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QqZTBfg3/QOuM5T2ZYO9ec8lSodF69mZtRRrLvQ5Gfg=;
+        b=JkMETHLbgAp23/jT/8EwaOhQXfMxMVxY/jd66Alvc7aMym3T1RJQUKLWqCjwPM0iwf
+         Kvl6Ug1JMgV0w3RZFcqYeQJrhpeQm0MOz8Ge1e+e2a1fhx63QrTt/tpJbimoNYJuwAG/
+         vIHSShmK+1HSohf5hmxHVeRo+w4D6y2QfgSF6sfa/Fa7zfwLuVM8pIhFbvq/6EzeeZDB
+         kx454nx4rCwi+Hf3vI2+CIZ/EnFJtPwO7XfP771bPY5VaPx7MqS0CXitS8nJPm6+kU8F
+         aQN6T5WinHpYQKRdM7CXm+4rS57IdqJdc61FK7Z54YpLLLGnzoXUKQgqMI4u/uEaUbXW
+         IDBQ==
+X-Gm-Message-State: AOAM530Cqom0G8KBBDWNd7luzawKgxSN9k13zqcZNC/hx+yt36nsFhrL
+        JJ8rzkuLc+3qihvnkEyvtjdX6Q==
+X-Google-Smtp-Source: ABdhPJyPXPZb1/+CaHCnBr8Ol7WULnfQkgqWGf4T4Nr8NuvNfEd/PW9dkr0l7RbAfIRcQU2v2AWLDw==
+X-Received: by 2002:aa7:9287:0:b0:44c:767e:4e71 with SMTP id j7-20020aa79287000000b0044c767e4e71mr46146pfa.76.1634139255958;
+        Wed, 13 Oct 2021 08:34:15 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id j4sm15968517pfu.94.2021.10.13.08.34.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Oct 2021 08:34:15 -0700 (PDT)
+Date:   Wed, 13 Oct 2021 09:34:13 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     ohad@wizery.com, bjorn.andersson@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        shengjiu.wang@gmail.com
+Subject: Re: [PATCH] remoteproc: imx_dsp_rproc: Correct the comment style of
+ copyright
+Message-ID: <20211013153413.GA4135908@p14s>
+References: <1634092749-3707-1-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6000:1146:0:0:0:0 with HTTP; Wed, 13 Oct 2021 07:41:43
- -0700 (PDT)
-Reply-To: mrsaishag45@gmail.com
-From:   Mrs Aisha Al-Qaddafi <mrsaishag31@gmail.com>
-Date:   Wed, 13 Oct 2021 07:41:43 -0700
-Message-ID: <CANoeRo4SZ8P6brVT1fZB8X001bdSyBsU9+92dqKnbkTL5LXu4Q@mail.gmail.com>
-Subject: Friend,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1634092749-3707-1-git-send-email-shengjiu.wang@nxp.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Dear Friend,
+On Wed, Oct 13, 2021 at 10:39:09AM +0800, Shengjiu Wang wrote:
+> Change '//' on copyright line to C style comments.
+> 
+> Fixes: ec0e5549f358 ("remoteproc: imx_dsp_rproc: Add remoteproc driver for DSP on i.MX")
+> Reported-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+>  drivers/remoteproc/imx_dsp_rproc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+> index 63749cfcf22f..6f306fbd3448 100644
+> --- a/drivers/remoteproc/imx_dsp_rproc.c
+> +++ b/drivers/remoteproc/imx_dsp_rproc.c
+> @@ -1,5 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+> -// Copyright 2021 NXP
+> +/* Copyright 2021 NXP */
+> 
 
-I came across your e-mail contact prior to a private search while in
-need of your assistance. I am Aisha Al-Qaddafi, the only biological
-Daughter of Former President of Libya Col. Muammar Al-Qaddafi. Am a
-single Mother and a Widow with three Children.
+I have applied your patch.
 
-I have investment funds worth Twenty Seven Million Five Hundred
-Thousand United State Dollar ($27.500.000.00 ) and i need a trusted
-investment Manager/Partner because of my current refugee status,
-however, I am interested in you for investment project assistance in
-your country, may be from there, we can build business relationship in
-the nearest future.
+Thanks,
+Mathieu
 
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits.
-Best Regards
-Mrs Aisha Al-Qaddafi
+>  #include <dt-bindings/firmware/imx/rsrc.h>
+>  #include <linux/arm-smccc.h>
+> -- 
+> 2.17.1
+> 
