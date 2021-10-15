@@ -2,63 +2,69 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE9E42FA28
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 15 Oct 2021 19:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C028142FA2E
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 15 Oct 2021 19:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242498AbhJORZw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 15 Oct 2021 13:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
+        id S242516AbhJORZz (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 15 Oct 2021 13:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242347AbhJORZZ (ORCPT
+        with ESMTP id S242457AbhJORZ1 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 15 Oct 2021 13:25:25 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EA5C0617AF
-        for <linux-remoteproc@vger.kernel.org>; Fri, 15 Oct 2021 10:22:29 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id a17-20020a4a6851000000b002b59bfbf669so3199851oof.9
-        for <linux-remoteproc@vger.kernel.org>; Fri, 15 Oct 2021 10:22:29 -0700 (PDT)
+        Fri, 15 Oct 2021 13:25:27 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0818DC061764
+        for <linux-remoteproc@vger.kernel.org>; Fri, 15 Oct 2021 10:22:32 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id p6-20020a9d7446000000b0054e6bb223f3so13791923otk.3
+        for <linux-remoteproc@vger.kernel.org>; Fri, 15 Oct 2021 10:22:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kJaOC+igESCxHZ0vSXJ7r3WczPiGs7VUV72llPTS2Uk=;
-        b=A+aVvtFyb8ZzRtWmDzfa0VG6m5m4ixVZqdZL3S7A65QKwyzPJw22PbxU3xVHazGm9R
-         gSmmpldx8T7i8XJssZooB9Cg18uPB+UOETODn9SpBtw5rKCox7UYjbpOpOR8bWgYKznr
-         qpSsYXnA5H/7MGyEbgczWuxqaXxbH8f9fRbIqc3Lf4sAyLySXIFpwo8kIqGShi7EWZ9d
-         skqRN9I3HI6yuc2eIvOBLKXtw3cY7bNrnHXd6zJqZviQglX1A3iyLFX6+rUyJXRDzfqv
-         m50wiFxiUxls3fnjiVZFeUJzJnCZ2UspX1y6s2B7/rvQks6+O2iM1G57dog9O6y0/VQz
-         BDWg==
+        bh=8GXf6iIkeLSmbnCwp/TnDsH3fwbQUD1XiOH8muSbIdM=;
+        b=AzlT/VF3vNrvaXMA6yupvoTzvJVIPoxbKtPfW8YnVJaJ6TvF75GPEm8I4v8TBAuHwD
+         xXYMe3/F5qzdc2toQmMpBJSi9ufh/kCygFWvbceu3OB5hvfjZenyOaoDv/DaCxg8Pr5b
+         b3A+1O8vmB3bA6FY9c4XPjwoTNYLEvt4DEKLfLyVisJRLl/sj4+qjBYAS4JL+Aje633l
+         UJ6BvkSmhvdUJYWiRgjmsebeqbbwUFMELtCNLmRyjheSv8M6Sq2bsWw1onXUQEIWWN++
+         693DPX65oIdROYAMmDNG8DTq/cOg5xD9+/IHzoeqmtl72bYa+FJHBSrFOwpyxe+bKkmY
+         g5Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kJaOC+igESCxHZ0vSXJ7r3WczPiGs7VUV72llPTS2Uk=;
-        b=s0AeoWinPGUDRFoxOUmT4acHYW2aznR/qeLe1QW5u4+wFlTBHzz3cgMI4SmC/nUvRs
-         FC+0IQTscDYxQJNDimY1fbkifm40OHEEbIkxiBPa/BeGlQuRo8xUUC+IrsA07Py8G9v5
-         VN1B2WMuKYpmsn2cnhSzS/kacFDh3DU9/c00riKffF4CTA48r3Skq+spXJGVUC3Yuvr4
-         ilzqTjPoN1dX8krEWK918xFZ7QwSs8VcqpunEqwgWso7GK7JxKwkX8FA8dAXCbcUNCZL
-         Vv6IEwNv5e7wzrSyM/e5ZzHGb5DXTuyFKCmFFDsdKM1J6xWT4pJgAZ8iKXklK4XAsIwg
-         2jDw==
-X-Gm-Message-State: AOAM5300gY64+V4103xP2LNN0B+6cO6GKYHr5Kz3PeZn4sFzsg23APNm
-        7Jd9/J0B6rKqMBMINShlNbjdJFHv1OwUmg==
-X-Google-Smtp-Source: ABdhPJzAgZdCsdlc8CdqRpH5laQZnFJ2Ly1chA6vVUc/nvd52UGsVuCVUlWZXSr1DTZCvOIMT6rQLw==
-X-Received: by 2002:a4a:d5c8:: with SMTP id a8mr9422889oot.18.1634318548918;
-        Fri, 15 Oct 2021 10:22:28 -0700 (PDT)
+        bh=8GXf6iIkeLSmbnCwp/TnDsH3fwbQUD1XiOH8muSbIdM=;
+        b=T31gkrmrh6Z0PpuAzYvCrVXqwRi5dBJdxqSWeXTo9tmV/CjStAOQ1bCAIsOBb+WiN0
+         Zqvrw0NOfa+xrnPpQnDGyHQ8KqFXLOtZpdC5u3CiyQDETlRcq4ApMaD4GsROXtO2DBbf
+         Tmqr16nNR+sl6DxcamZcPtDEfdwZhLXQ87wzKkc/mKNU2j9u30PTQrrcBBVOzGSca9QY
+         DkHjxhyDhr8wxuRFrE109MzJGiEOrnBc1yq8mwXm5L814cFxVFu1e/LbN0jMHgL53hSe
+         I+xhrm7x/+TW4hAgHTd0nzNxgoTXqHCLK5IfmEYaS/zBm6Qr/08QleDZ8Vh/BAoRJTJh
+         4/Fw==
+X-Gm-Message-State: AOAM5306kj6ownbLuxQ7uD1kLc6EYqkR+4xTNF7V5WQ4Stv4P9/2qgT8
+        Aj7lERSWd6yorGWX/FKjinlg3w==
+X-Google-Smtp-Source: ABdhPJw43C2jPHke2r6UygEFoXfBVXJc2rkJUM25RFmbv18wSheOEBVNo3sZzMCBhf8p+nKZSpfNiQ==
+X-Received: by 2002:a05:6830:2805:: with SMTP id w5mr9028837otu.248.1634318549944;
+        Fri, 15 Oct 2021 10:22:29 -0700 (PDT)
 Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id s206sm1289635oia.33.2021.10.15.10.22.28
+        by smtp.gmail.com with ESMTPSA id s206sm1289635oia.33.2021.10.15.10.22.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Oct 2021 10:22:28 -0700 (PDT)
+        Fri, 15 Oct 2021 10:22:29 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     mathieu.poirier@linaro.org, agross@kernel.org,
-        zhaoxiao <long870912@gmail.com>, ohad@wizery.com
-Cc:     linux-remoteproc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH] remoteproc: qcom_q6v5_mss: Use devm_platform_ioremap_resource_byname() to simplify code
-Date:   Fri, 15 Oct 2021 12:22:19 -0500
-Message-Id: <163431847249.251657.1271402903289939838.b4-ty@linaro.org>
+Cc:     dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-gpio@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 0/9] treewide: simplify getting .driver_data
+Date:   Fri, 15 Oct 2021 12:22:20 -0500
+Message-Id: <163431847249.251657.9669509178222541492.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210906071147.9095-1-long870912@gmail.com>
-References: <20210906071147.9095-1-long870912@gmail.com>
+In-Reply-To: <20210920090522.23784-1-wsa+renesas@sang-engineering.com>
+References: <20210920090522.23784-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -66,16 +72,37 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, 6 Sep 2021 15:11:47 +0800, zhaoxiao wrote:
-> In this function, devm_platform_ioremap_resource_byname() should be
-> suitable to simplify code.
+On Mon, 20 Sep 2021 11:05:12 +0200, Wolfram Sang wrote:
+> I got tired of fixing this in Renesas drivers manually, so I took the big
+> hammer. Remove this cumbersome code pattern which got copy-pasted too much
+> already:
 > 
+> -	struct platform_device *pdev = to_platform_device(dev);
+> -	struct ep93xx_keypad *keypad = platform_get_drvdata(pdev);
+> +	struct ep93xx_keypad *keypad = dev_get_drvdata(dev);
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] remoteproc: qcom_q6v5_mss: Use devm_platform_ioremap_resource_byname() to simplify code
-      commit: 9db9c738ac89fb1c408c4ec819633540856ea62f
+[1/9] dmaengine: stm32-dmamux: simplify getting .driver_data
+      (no commit info)
+[2/9] firmware: meson: simplify getting .driver_data
+      (no commit info)
+[3/9] gpio: xilinx: simplify getting .driver_data
+      (no commit info)
+[4/9] drm/msm: simplify getting .driver_data
+      (no commit info)
+[5/9] drm/panfrost: simplify getting .driver_data
+      (no commit info)
+[6/9] iio: common: cros_ec_sensors: simplify getting .driver_data
+      (no commit info)
+[7/9] net: mdio: mdio-bcm-iproc: simplify getting .driver_data
+      (no commit info)
+[8/9] platform: chrome: cros_ec_sensorhub: simplify getting .driver_data
+      (no commit info)
+[9/9] remoteproc: omap_remoteproc: simplify getting .driver_data
+      commit: c34bfafd7c6ce8bdb5205aa990973b6ec7a6557c
 
 Best regards,
 -- 
