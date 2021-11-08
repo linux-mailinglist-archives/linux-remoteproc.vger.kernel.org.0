@@ -2,62 +2,54 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7BB447AD8
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  8 Nov 2021 08:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CC2447D0F
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  8 Nov 2021 10:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235433AbhKHH3n (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 8 Nov 2021 02:29:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235571AbhKHH3k (ORCPT
+        id S236758AbhKHJu6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 8 Nov 2021 04:50:58 -0500
+Received: from mailgw01.mediatek.com ([60.244.123.138]:39542 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232818AbhKHJu5 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 8 Nov 2021 02:29:40 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E696C06120C
-        for <linux-remoteproc@vger.kernel.org>; Sun,  7 Nov 2021 23:26:56 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id g14so58048976edz.2
-        for <linux-remoteproc@vger.kernel.org>; Sun, 07 Nov 2021 23:26:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
-        b=PnTjqCg/4dLlfwZvkIw5TCFiXXqI7eQL3D+17+RauQ+gPkf2k9hY9S+Ii/M5IA0uoj
-         tcY9XkBE8UoWnMFVRIdA+q744Hmx7Z0JsFaVREssmf6KamM5Bd6A03cMP5bTAvPf1/y/
-         DwxXsJaTEuCfFdzSQFJTUHpZB56hO6UBVJPo7/S7fIQbraF2JB9fnNx0H/YOCyXyn5Fv
-         TpIbuoc9MhMDHEy5d5ztUWIHQVhdvbVN+KOKXsEiQg7QzXSruhiqF9yWAy+A70V6Qa0U
-         ve8aiam44Pcv5P2919T2rRvgnVW0nPh2s7GY8MWiotEmFwjxJpYnpgBFa5LZ/bTsndTX
-         N0eA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=gS+G2bXPLTc8QV9oSOsVFPfildfSifO+gabOlUjPn+8=;
-        b=a2uJqKalzHvlpKTwWMPkV/mi5qo4iQ7cTd3cgr5TSZkBPwpwmkf1wsF3L3Wf9oAS6n
-         i66cCkS4oHS4bY+InkMEdjPbifoE98Vqvv+xLs1/jNrqZbdWDIPSeEY1GzPM+yraaOIV
-         jJEO2U8hcIDplvPoQJ+H4dcmBSr1z2Bpbj28JvxsFCqzxWt8rUCY16ywKbK34zE822WZ
-         Satvm/esSkM+NKyBWdM0beQWK5csMfLE24juys1m8XQhqSABYPNT/6lwrX+EfM4rUS9l
-         +r/oJ7g9942osfjmQQj5qSw16xPs7WLqhqFaveLltS3TVOH5Q64s8Wd9adM8DjQX2To2
-         OkIw==
-X-Gm-Message-State: AOAM532Y8O5IG0xfwqW7ltsaegiM0cJG2eV+iwWQ3HXJpOaqa896KhQx
-        GNjhY2lTXT5JtWiOFhKWS7Fv5//wwraGkQr610o=
-X-Google-Smtp-Source: ABdhPJz9Akl6xfGwwFGOOyIMXLWznjij6kDDSEQ53AjVdYeVh/nfgX+la012XOuUHhNctlqPhGJ9oR9znvMO/9Cv6/o=
-X-Received: by 2002:a50:930b:: with SMTP id m11mr83450378eda.133.1636356414537;
- Sun, 07 Nov 2021 23:26:54 -0800 (PST)
+        Mon, 8 Nov 2021 04:50:57 -0500
+X-UUID: 3ee690613a8d4cecb71755dac53b3aae-20211108
+X-UUID: 3ee690613a8d4cecb71755dac53b3aae-20211108
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <mark-pk.tsai@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1011212809; Mon, 08 Nov 2021 17:48:08 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Mon, 8 Nov 2021 17:48:08 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs10n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Mon, 8 Nov 2021 17:48:08 +0800
+From:   Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+To:     <ohad@wizery.com>, <bjorn.andersson@linaro.org>,
+        <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <mark-pk.tsai@mediatek.com>, <yj.chiang@mediatek.com>
+Subject: remoteproc: rproc_va_to_pa returns invalid physical address when using sparse memory model
+Date:   Mon, 8 Nov 2021 17:48:08 +0800
+Message-ID: <20211108094808.1993-1-mark-pk.tsai@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Received: by 2002:a50:2501:0:0:0:0:0 with HTTP; Sun, 7 Nov 2021 23:26:54 -0800 (PST)
-Reply-To: mariaschaefler@gmx.com
-From:   Maria Schaefler <ziskoraa@gmail.com>
-Date:   Mon, 8 Nov 2021 07:26:54 +0000
-Message-ID: <CAJh0FjiDs5_oQE4K3AME-kH_RMPNXEEapYKvrR9As+S+Dzwh5Q@mail.gmail.com>
-Subject: MY HEART CHOOSE YOU.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Given my current state of health, I have decided to donate what I
-inherited from my late husband to you to help the poor and needy. I am
-Mrs Maria Schaefler,a 57years old dying woman. I was diagnosed for
-cancer about 2 years ago and I have few months to live according to
-medical experts. Email me for my directives
+On my arm platform with CONFIG_SPARSEMEM=y, when the virtual address comes
+from ioremap, which map to a reserved memory region, rproc_va_to_pa
+returns a invalid address. (no iommu)
+
+It's because the corresponding struct page and section not present.
+And then __page_to_pfn read the page->flags in the returned page which
+is actually an invalid address.
+(When CONFIG_SPARSMEM=y && CONFIG_SPARSEMEM_VMEMMAP=n, kernel get the
+section the page belong to in flags field.)
+
+I'm looking for suggestion to properly fix this problem.
+Could you please give us some suggestion?
