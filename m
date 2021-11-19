@@ -2,95 +2,59 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 712F2458E58
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 22 Nov 2021 13:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240584592C0
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 22 Nov 2021 17:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235119AbhKVMdG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 22 Nov 2021 07:33:06 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:59114 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233240AbhKVMdG (ORCPT
+        id S239906AbhKVQOh (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 22 Nov 2021 11:14:37 -0500
+Received: from mx08-00227901.pphosted.com ([91.207.212.184]:52378 "EHLO
+        mx08-00227901.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229955AbhKVQOf (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 22 Nov 2021 07:33:06 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AMCTuaC110096;
-        Mon, 22 Nov 2021 06:29:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1637584196;
-        bh=HkO7IvYUeIEpfOuzz+wJ7e4lEw9YlwMoFgvzm1eI1xQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=gj5yOcQdpk5Bap8MQFQ/mGcBS7/bEiypHP305ZLQCiAIUtxqth5DoQuwnX0VSHyxJ
-         Z6Wd5jjth2V6oCVMh78l1bZ0F6dqNN5gfOHLS5/KKG+VH12yhkE/LOPfpgWvkwO3VZ
-         jaF3xUssImdrx7CSDLJiYn3CWFiJXlicd7P+vC88=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AMCTuF4114661
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 22 Nov 2021 06:29:56 -0600
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 22
- Nov 2021 06:27:49 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 22 Nov 2021 06:27:49 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AMCRn15063556;
-        Mon, 22 Nov 2021 06:27:49 -0600
-From:   Hari Nagalla <hnagalla@ti.com>
-To:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
-        <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <a-govindraju@ti.com>
-Subject: [PATCH 4/4] remoteproc: k3-r5: Extend support for R5F clusters on J721S2 SoCs
-Date:   Mon, 22 Nov 2021 06:27:26 -0600
-Message-ID: <20211122122726.8532-5-hnagalla@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211122122726.8532-1-hnagalla@ti.com>
-References: <20211122122726.8532-1-hnagalla@ti.com>
+        Mon, 22 Nov 2021 11:14:35 -0500
+Received: from pps.filterd (m0097674.ppops.net [127.0.0.1])
+        by mx08-.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AJ7wixf018132;
+        Fri, 19 Nov 2021 10:27:13 +0100
+Received: from zbw2k16ex01.bardusch.net ([185.80.186.174])
+        by mx08-.pphosted.com (PPS) with ESMTPS id 3cdmdm1455-6
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Fri, 19 Nov 2021 10:27:13 +0100
+Received: from zbw2k16ex02.bardusch.net (172.25.1.2) by
+ ZBW2K16EX01.bardusch.net (172.25.1.1) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA) id 15.1.2308.20;
+ Fri, 19 Nov 2021 10:27:11 +0100
+Received: from User (172.25.1.131) by zbw2k16ex02.bardusch.net (172.25.1.2)
+ with Microsoft SMTP Server id 15.1.2308.20 via Frontend Transport; Fri, 19
+ Nov 2021 10:27:00 +0100
+Reply-To: <josechoondak@gmail.com>
+From:   Joseph Choondak <info@ndd.co.mz>
+Subject: I hope this email finds you well.
+Date:   Fri, 19 Nov 2021 01:27:14 -0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <e36b6b33-d3b3-4f08-8033-0aba2c4cece8@zbw2k16ex02.bardusch.net>
+To:     Undisclosed recipients:;
+X-Proofpoint-GUID: TLQLmM0KGMyKZ2pptUvqji1PrJ_tMJCL
+X-Proofpoint-ORIG-GUID: TLQLmM0KGMyKZ2pptUvqji1PrJ_tMJCL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-19_08,2021-11-17_01,2020-04-07_01
+X-Proofpoint-Spam-Reason: orgsafe
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The K3 J721S2 SoCs have three dual-core R5F subsystems, one in MCU voltage
-domain and the other two in MAIN voltage domain. These R5F clusters are
-similar to the R5F clusters in J7200 SoCs.
+May I please ask with considerable urgency for your kind assistance with the following matter.
+I'm a financial person, I think  I have something huge you might be interested in.
 
-Compatible Info is updated to support J721S2 SoCs.
+Looking forward to hearing from you.
 
-Signed-off-by: Hari Nagalla <hnagalla@ti.com>
----
- drivers/remoteproc/ti_k3_r5_remoteproc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-index 6499302d00c3..969531c05b13 100644
---- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-@@ -1535,7 +1535,7 @@ static const struct k3_r5_soc_data am65_j721e_soc_data = {
- 	.single_cpu_mode = false,
- };
- 
--static const struct k3_r5_soc_data j7200_soc_data = {
-+static const struct k3_r5_soc_data j7200_j721s2_soc_data = {
- 	.tcm_is_double = true,
- 	.tcm_ecc_autoinit = true,
- 	.single_cpu_mode = false,
-@@ -1550,8 +1550,9 @@ static const struct k3_r5_soc_data am64_soc_data = {
- static const struct of_device_id k3_r5_of_match[] = {
- 	{ .compatible = "ti,am654-r5fss", .data = &am65_j721e_soc_data, },
- 	{ .compatible = "ti,j721e-r5fss", .data = &am65_j721e_soc_data, },
--	{ .compatible = "ti,j7200-r5fss", .data = &j7200_soc_data, },
-+	{ .compatible = "ti,j7200-r5fss", .data = &j7200_j721s2_soc_data, },
- 	{ .compatible = "ti,am64-r5fss",  .data = &am64_soc_data, },
-+	{ .compatible = "ti,j721s2-r5fss",  .data = &j7200_j721s2_soc_data, },
- 	{ /* sentinel */ },
- };
- MODULE_DEVICE_TABLE(of, k3_r5_of_match);
--- 
-2.17.1
-
+Respectfully!!
+Joseph Choondak
+Account Executive.
