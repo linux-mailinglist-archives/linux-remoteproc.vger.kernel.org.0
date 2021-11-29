@@ -2,115 +2,118 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A887746225C
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 29 Nov 2021 21:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AE946269F
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 29 Nov 2021 23:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231788AbhK2UoY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 29 Nov 2021 15:44:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
+        id S234789AbhK2Wz2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 29 Nov 2021 17:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233886AbhK2UmY (ORCPT
+        with ESMTP id S235845AbhK2WzD (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 29 Nov 2021 15:42:24 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B12C0C0846
-        for <linux-remoteproc@vger.kernel.org>; Mon, 29 Nov 2021 09:17:25 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id x5so17637280pfr.0
-        for <linux-remoteproc@vger.kernel.org>; Mon, 29 Nov 2021 09:17:25 -0800 (PST)
+        Mon, 29 Nov 2021 17:55:03 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB29C0D8CBB
+        for <linux-remoteproc@vger.kernel.org>; Mon, 29 Nov 2021 09:58:08 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id y8so12812907plg.1
+        for <linux-remoteproc@vger.kernel.org>; Mon, 29 Nov 2021 09:58:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=KemDiumlbcxPouh3L3ClUWKSB7PfWKN1Cz/0fv3QOaw=;
-        b=UQv0URHo8nxtKCt7je9Sq9wTHqcHzxkUrRHbShEspIK7Q2+HbT9hOSF9OYliMQixPa
-         J7omcX6U6626oz7bKQIPyuaiAk6pa+MNUMQfd9wVzpqr5CgNkcxkEhLcN8bFupEu3FOV
-         NtsrjAC/343kTFrG6/WiKShdz/bf5AcOVy9dWIxPehQYL+MRRJ8+qR9OTO/3a2L2qaN+
-         bB3jbveAWsbGg8OA9LsO/wrDmelR6CLYifZbdlk/MOeRwLF5oVmjhzcLpfTGmLolLJcI
-         AxwyDax7GFz/ZNTZzg8znPdhuF3iZqXC+fxRxEb33evOP/jZ4NgT4VA//M/L37JGUWYo
-         scDA==
+         :content-disposition:in-reply-to;
+        bh=6It/2ISLAKNQvBJXXzqk/ndWM40f+A12E22VByGFlnU=;
+        b=nS106YFkM5gyIjOZPhOPz+p3/cnoYYOu/pEivIUr7GVRtzvr79cA+8LlgyvqQrxQBR
+         6/AUIbJ9XiR7PS1xvUppMN+pCMv8R5PxCiqTu9EjBxSRnf8Ok6SAqadwlDYDBvQck5iX
+         7wGthJYcGJUje1/BCQTbq0DH8KsgFUMQoypvjV/8LLLwe88GtyYFc+3JUIS5pmn1QbZK
+         g450IqHzeGCBU+jnw0m8KUdo42rPPRDWTys4sIc1V+Vh5OoWcmzOj2he72xYyZ4AvZIs
+         LNKcKgkgRn/ANJ8xYfs+avMeMkVZY7rAdqZTe0nXyPUDH5XFM3KbT2ypeaOvifjjKWIG
+         VaEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=KemDiumlbcxPouh3L3ClUWKSB7PfWKN1Cz/0fv3QOaw=;
-        b=F/7eJ00lE1GAAyGOJbi+FOmxTHBhKOgzCb9P+i1CVXKCIPLGUBEkOeKbdxJGM/GkjH
-         ol4qKGzawObyEDSEkuk8iRrCaQJ/wAxLV+PAwhYrnXUHrLR+VKvUKaZdBzMirjCFWA03
-         NwyZ3qotXjhFPe+1SM06WDSD5dSr6HgGHLF+MAsTjlWJjQDFGkKd0/Je09FWphXJHzI7
-         d92bXIqR32Gzf68rKUhjRoPjuHWrbJCcicOjbfiChXaT5t8h2O4Y5yoOE/m2O5GliunL
-         i2hhtuoL/c4P/Dk7XXMcyTUhu4XBL5hW4aoCQvHcfsistoEVsZt7MggyJ/b3JbiTLgB5
-         zMqw==
-X-Gm-Message-State: AOAM532LqAsdS54M9UworG8ixByO82OP9wGLoBDtEFft1yERbvg646a+
-        GFHPhYSs/nTBKEIWLsgfZwQWcQ==
-X-Google-Smtp-Source: ABdhPJweaCP3RA/mL6V/zy5lv6zuvs50a2hfob+eURt3NfLVY9uZ16ZmI/IdVVr97/nlSBGArcLYpg==
-X-Received: by 2002:a05:6a00:2188:b0:4a7:ec46:349c with SMTP id h8-20020a056a00218800b004a7ec46349cmr33274369pfi.26.1638206245157;
-        Mon, 29 Nov 2021 09:17:25 -0800 (PST)
+         :mime-version:content-disposition:in-reply-to;
+        bh=6It/2ISLAKNQvBJXXzqk/ndWM40f+A12E22VByGFlnU=;
+        b=MzNUZE09jjIIy5bOM+NEPI/MjFLc3jVqNfXMF+XRWpNN/BYCWmjShagRqxeEKtJMzT
+         epMzghXHLLzt2Z74yEsJwDqq9T6J+kyW/AWApLRzu5n4p6MK92hUdlPzoUgfeIbluW4K
+         7NbA23YfmfvJGD7kNRjueHdqH+23TaqYHMOE5TU7lYSxWLo5iOrTOzjqM79gqDp7kedi
+         w1jvGjN9h/Y9Venf6hI7W3EJxBMV9zmX5ymQa48R2cD1ilwo355098w9ybAWC4C5Sftg
+         l8gSp97tGN7myyxFnBOVhD7zzGqhiskuN7XynAweVSXWXd14Vc9jjUIGdGh9aGHE6cxf
+         fiMA==
+X-Gm-Message-State: AOAM532Qt117yAWKnbBIeO09lKK8Qg2PDBKbpqc9UMKvC/mpddi4VjtE
+        MwvPtL5/9m+JnHRcgRUVyq3QsQ==
+X-Google-Smtp-Source: ABdhPJyZ+fcPwBQDF8IlB1PBWVERDgsdIyQ/faAUOYEpDKk7V6N92iyUvf7cg5TEkO19F/fZSn61Pg==
+X-Received: by 2002:a17:902:d28a:b0:142:61ce:ae4c with SMTP id t10-20020a170902d28a00b0014261ceae4cmr61362408plc.35.1638208687947;
+        Mon, 29 Nov 2021 09:58:07 -0800 (PST)
 Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id h3sm18914739pjz.43.2021.11.29.09.17.23
+        by smtp.gmail.com with ESMTPSA id n71sm18032644pfd.50.2021.11.29.09.58.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 09:17:24 -0800 (PST)
-Date:   Mon, 29 Nov 2021 10:17:21 -0700
+        Mon, 29 Nov 2021 09:58:06 -0800 (PST)
+Date:   Mon, 29 Nov 2021 10:58:03 -0700
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Hari Nagalla <hnagalla@ti.com>
-Cc:     bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        a-govindraju@ti.com
-Subject: Re: [PATCH 0/4] TI K3 R5F and C71x support on J721S2
-Message-ID: <20211129171721.GA676889@p14s>
-References: <20211122122726.8532-1-hnagalla@ti.com>
+To:     Tanmay Shah <tanmay.shah@xilinx.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ben Levinsky <ben.levinsky@xilinx.com>,
+        Bill Mills <bill.mills@linaro.org>,
+        Sergei Korneichuk <sergei.korneichuk@xilinx.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/6] arm64: dts: xilinx: zynqmp: Add RPU subsystem
+ device node
+Message-ID: <20211129175803.GB676889@p14s>
+References: <20211123062050.1442712-1-tanmay.shah@xilinx.com>
+ <20211123062050.1442712-3-tanmay.shah@xilinx.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211122122726.8532-1-hnagalla@ti.com>
+In-Reply-To: <20211123062050.1442712-3-tanmay.shah@xilinx.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Good morning Hari,
-
-On Mon, Nov 22, 2021 at 06:27:22AM -0600, Hari Nagalla wrote:
-> Hi All,
+On Mon, Nov 22, 2021 at 10:20:46PM -0800, Tanmay Shah wrote:
+> RPU subsystem can be configured in cluster-mode or split mode.
+> Also each r5 core has separate power domains.
 > 
-> The following series enhances the K3 R5F and DSP remoteproc drivers to
-> add support for the R5F clusters and C71x DSP on the newer TI K3 J721S2
-> SoC family. The J721S2 SoCs have 3 R5FSS clusters, one in MCU voltage
-> domain and the other two in MAIN voltage domain. There are also 2 C71x
-> DSP subsystems in MAIN voltage domain. The R5FSS is similar to the R5FSS
-> in J7200 SoCs, while the C71x DSPs are similar to the C71x DSP on J721e
-> SoCs.
+> Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
+> ---
+>  arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
 > 
-> See J721S2 Technical Reference Manual (SPRUJ28 – NOVEMBER 2021)
-> for further details: http://www.ti.com/lit/pdf/spruj28
-> 
-> Regards
-> Hari
-> 
-> Hari Nagalla (4):
->   dt-bindings: remoteproc: k3-r5f: Update bindings for J721S2 SoCs
->   dt-bindings: remoteproc: k3-dsp: Update bindings for J721S2 SoCs
->   remoteproc: k3-dsp: Extend support for C71x DSPs on J721S2 SoCs
->   remoteproc: k3-r5: Extend support for R5F clusters on J721S2 SoCs
-> 
->  .../devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml   | 3 +++
->  .../devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml   | 8 +++++---
->  drivers/remoteproc/ti_k3_dsp_remoteproc.c                 | 1 +
->  drivers/remoteproc/ti_k3_r5_remoteproc.c                  | 5 +++--
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> index 28dccb891a53..f4fb98ccb1b5 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> @@ -654,6 +654,23 @@ qspi: spi@ff0f0000 {
+>  			power-domains = <&zynqmp_firmware PD_QSPI>;
+>  		};
+>  
+> +		r5fss: r5fss@ff9a0000 {
+> +			compatible = "xlnx,zynqmp-r5fss";
+> +			xlnx,cluster-mode = <1>;
+> +
+> +                        reg = <0x0 0Xff9a0000 0x0 0x228>;
 
-For all 4 patches:
+This line is giving me an obvious checkpatch warning.  Please make sure you run
+checkpatch.pl before sending out a patchset.
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-
-It was a holiday last week in the US so I'll give more time for Rob to review this (should
-he want to) before publishing.
-
-Thanks,
-Mathieu
-
-
->  4 files changed, 12 insertions(+), 5 deletions(-)
-> 
+> +
+> +			r5f_core0: r5f-0 {
+> +				compatible = "xlnx,zynqmp-r5f";
+> +				power-domains = <&zynqmp_firmware PD_RPU_0>;
+> +			};
+> +
+> +			r5f_core1: r5f-1 {
+> +				compatible = "xlnx,zynqmp-r5f";
+> +				power-domains = <&zynqmp_firmware PD_RPU_1>;
+> +			};
+> +		};
+> +
+>  		psgtr: phy@fd400000 {
+>  			compatible = "xlnx,zynqmp-psgtr-v1.1";
+>  			status = "disabled";
 > -- 
-> 2.17.1
+> 2.25.1
 > 
