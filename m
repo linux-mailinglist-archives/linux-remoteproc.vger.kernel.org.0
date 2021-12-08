@@ -2,93 +2,122 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5CA746CC06
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  8 Dec 2021 05:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B5E46D99E
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  8 Dec 2021 18:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244141AbhLHEOw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 7 Dec 2021 23:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40930 "EHLO
+        id S234952AbhLHRan (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 8 Dec 2021 12:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244107AbhLHEOv (ORCPT
+        with ESMTP id S234755AbhLHRam (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 7 Dec 2021 23:14:51 -0500
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53249C061746
-        for <linux-remoteproc@vger.kernel.org>; Tue,  7 Dec 2021 20:11:20 -0800 (PST)
-Received: by mail-il1-x143.google.com with SMTP id h16so1075764ila.4
-        for <linux-remoteproc@vger.kernel.org>; Tue, 07 Dec 2021 20:11:20 -0800 (PST)
+        Wed, 8 Dec 2021 12:30:42 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE2AC0617A2
+        for <linux-remoteproc@vger.kernel.org>; Wed,  8 Dec 2021 09:27:10 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id b13so1991238plg.2
+        for <linux-remoteproc@vger.kernel.org>; Wed, 08 Dec 2021 09:27:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=CutUi/r6lKIoJjLP2bKTPbdDwhETyEFLP1nH/f7tvCrk1D7qPFSC5JRsw7j8CoO0zm
-         dRYtIvSq3VBVEHuI4jhmwDm1IURo7ecEVE5W+U5L5VzEnrHmt1Y8ZB3G9Fy10YLjnPAm
-         Ek0r5KC4mvOY2CD/U3S6pkqBE6iv+0uQFzHwIuOl76VfJxuUPH0WSMZVjZcautTMYmTn
-         1RQobfMFgSDgYXJGHFPA3aOzPm+SH+ajl7dL2+W7XuIR8J8S/V1ffF/4nkQzM3Y6yUpn
-         yaDKfHXr8AruzzSPerufLyIVTAFov2PGYSu3+4YGiZiI00GL7ra4uTn/Wd6Rh9zmXkQc
-         MhnA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=m8VpMd4QQt4Wgj7pyIRFiqXG6HSsK0frykwiCUZYPoE=;
+        b=JaLaINinRsMmtnSF2KBDAcNmbP2oYmHFn0f7RfloS4CbaAXYj18vgZ2O/+lQ8QKj7y
+         76dFhKZKkg15t25eSZu0aobxxt4lcXy2Ad29GMxTO+h4JkQYzzOL+7Zxb4xx2Fi0d0iE
+         YnqSm7MFlb+tZLEjG4CrkvqAeZxWvjWLKUFXyBfQx85Dqu75oO/6VZVAyVoJBIswK90E
+         LXP/ttWqRihx82SqtI3BqYGfmePYWAUE0f0X/tU5Li6Jqbvu8CplYhmoZL4NMOTPjC0d
+         x+0YnExbCw+36g1KFi9xXRQqr8xVwUR2HSzPtz/K/3eUWvMorfhCbnhvc6sw3599MAyt
+         XfoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=w0n14T57zPuvlg1YaFYy3gRfrUPFN1bDHGIrct+fXgc=;
-        b=Ry6/sdOPg9se8/UvBYSaMzALn5OK2Qcs45V0aw2I/lF4Pi9MJ8Q3lwTqejeD9jhfyO
-         JMUJVH/okLnZr6c5gv2o9SuLu97KVV+gmskAG7BGjBMF4bSkU7e45TTNNWqGEemYQ+7X
-         gUg06X7yuVEPVzTg8XAlB9mpUbkkqLck2TWgiySvlm28JfN4zPp7udRBpbRJgjWvPdS8
-         Tr6+6zAkqI+/pUjjZvkJsI69N3uIf3WBhYmiAG26z2f8gl117Oa9iaxs1LCgRB8Ap6zD
-         Fx46/9MK3riwwiNUIADJr64BXPefsVIZmyXksYlDhgHiqTfREp20i8L5sBmVRtCGl4km
-         8nhg==
-X-Gm-Message-State: AOAM532/6Py86Kc41LAgzx9uGLqDdJlh4h1Kj77+/ykYZpwGq526mWMD
-        EH4+X1n15uKG1SsHXTdieg1naCiiShe6K57CkKI=
-X-Google-Smtp-Source: ABdhPJzhb1y1AIlUvd97u1v5bkva7AmRbKBstEOI25Zv9QP//bzNtmStIOPnKQrCUoF0WLInKwt2YXin8B2MhgoyPAI=
-X-Received: by 2002:a92:600f:: with SMTP id u15mr3948508ilb.292.1638936679742;
- Tue, 07 Dec 2021 20:11:19 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=m8VpMd4QQt4Wgj7pyIRFiqXG6HSsK0frykwiCUZYPoE=;
+        b=Usv7Tcdl3HkrIo5QBq/LUJM04Z4/jhJZbqa/05ctOEgm/itZ48LfXDxBwA5vztXpNt
+         8aUMr2pkkFY2gMbCl6uw9E/WmaqrmzmZy3RyCppn3zf080DqG/z9xHsgg5olA5GvaYJr
+         /wYkwc946B1LZxijYxL0Y3C43xIYx7ECgsAg8VJL5lvMnrzPsD94wDVH1mPVzI4TNk4g
+         MBYcM+eqJtmn0nHHZcYfhbVE2sozy8zto+VvHyY8JN6whSdHLffzv/oHQ6omlEeiFD2x
+         99v7yLz2iH9NrOZRG3jkVQEgo7Etz0Op/46+bCj1SUAW+30/CGUFgHStnXIurJ8BF31P
+         zjyw==
+X-Gm-Message-State: AOAM5322hjqxFa+0epHZ/wz1reo04hoFy/j31LJ2st+bBQtpc6oTqqFZ
+        KDbem6Ii8MSMtYOlW4X+n6KsHw==
+X-Google-Smtp-Source: ABdhPJyaN+OyXY6UATU6r9jVTHsuum3aXZi5+UaSOv8+1kBsGUDZzxcsazbrHVbedPScGMFsPHBz8w==
+X-Received: by 2002:a17:903:285:b0:142:21ba:2191 with SMTP id j5-20020a170903028500b0014221ba2191mr60809773plr.28.1638984430273;
+        Wed, 08 Dec 2021 09:27:10 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id on5sm3714725pjb.23.2021.12.08.09.27.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Dec 2021 09:27:08 -0800 (PST)
+Date:   Wed, 8 Dec 2021 10:27:06 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] rpmsg: core: Clean up resources on announce_create
+ failure.
+Message-ID: <20211208172706.GA1138949@p14s>
+References: <20211206190758.10004-1-arnaud.pouliquen@foss.st.com>
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1a07:0:0:0:0 with HTTP; Tue, 7 Dec 2021 20:11:19
- -0800 (PST)
-Reply-To: dj0015639@gmail.com
-From:   David Jackson <enkenpaul@gmail.com>
-Date:   Wed, 8 Dec 2021 05:11:19 +0100
-Message-ID: <CAG7-cQ8DY3yKJUkHdXFz5B2Npn4frRu3Q4JJjd1c=_NMoWd7tw@mail.gmail.com>
-Subject: FEDERAL BUREAU OF INVESTIGATION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211206190758.10004-1-arnaud.pouliquen@foss.st.com>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Our Ref: RTB /SNT/STB
-To: Beneficiary
+On Mon, Dec 06, 2021 at 08:07:58PM +0100, Arnaud Pouliquen wrote:
+> During the rpmsg_dev_probe, if rpdev->ops->announce_create returns an
+> error, the rpmsg device and default endpoint should be freed before
+> exiting the function.
+> 
+> Fixes: 5e619b48677c ("rpmsg: Split rpmsg core and virtio backend")
+> Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+>  drivers/rpmsg/rpmsg_core.c | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> index 27aad6baf7c5..12d7b7c6e5f9 100644
+> --- a/drivers/rpmsg/rpmsg_core.c
+> +++ b/drivers/rpmsg/rpmsg_core.c
+> @@ -612,13 +612,25 @@ static int rpmsg_dev_probe(struct device *dev)
+>  	err = rpdrv->probe(rpdev);
+>  	if (err) {
+>  		dev_err(dev, "%s: failed: %d\n", __func__, err);
+> -		if (ept)
+> -			rpmsg_destroy_ept(ept);
+> -		goto out;
+> +		goto destroy_ept;
+>  	}
+>  
+> -	if (ept && rpdev->ops->announce_create)
+> +	if (ept && rpdev->ops->announce_create) {
+>  		err = rpdev->ops->announce_create(rpdev);
+> +		if (err) {
+> +			dev_err(dev, "failed to announce creation\n");
+> +			goto remove_rpdev;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +
+> +remove_rpdev:
+> +	if (rpdrv->remove)
+> +		rpdrv->remove(rpdev);
+> +destroy_ept:
+> +	if (ept)
+> +		rpmsg_destroy_ept(ept);
+>  out:
+>  	return err;
 
-This is FBI special agents, David Jackson. I was delegated along side
-others by the United Nations to investigate scammers who has been in
-the business of swindling foreigners especially those that has one
-form of transaction/contracts and another. Please be informed that in
-the course of our investigation, we detected that your name and
-details in our Scammed Monitoring Network. We also found out that you
-were scammed of a huge sum of money by scammers via Western union and
-MoneyGram. Be informed here that in a bid to alleviate the suffering
-of scammed victims, the United Nations initiated this compensation
-program and therefore, you are entitled to the sum of Five Million Two
-Hundred Thousand United States Dollars ($5,200,000.00 USD) for being a
-victim.
+Applied.
 
-Note that the said fund will be transfer to you via the Citibank being
-the paying bank mandated by the United Nations officials.
+Thanks,
+Mathieu
 
-However, we have to inform you that we have been able to arrest some
-of the swindlers who has been in this illicit business and will all be
-prosecuted accordingly. Be informed as well that we have limited time
-to stay back here, so we will advice that you urgently respond to this
-message ASAP. And do not inform any of the people that collected money
-from you before now about this new development to avoid jeopardizing
-our investigation. All you need to do is to follow our instruction and
-receive your compensation accordingly as directed by the United
-Nations.
-
-We urgently wait to receive your response.
-
-Regards,
-DAVID JACKSON
-FEDERAL BUREAU OF INVESTIGATION
-INVESTIGATION ON ALL ONLINE WIRE TRANSFER
+>  }
+> -- 
+> 2.17.1
+> 
