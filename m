@@ -2,86 +2,72 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D64F34770C5
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Dec 2021 12:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 167614776DE
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Dec 2021 17:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbhLPLmy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 16 Dec 2021 06:42:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbhLPLmb (ORCPT
-        <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 16 Dec 2021 06:42:31 -0500
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74014C061785
-        for <linux-remoteproc@vger.kernel.org>; Thu, 16 Dec 2021 03:42:29 -0800 (PST)
-Received: by mail-qt1-x82c.google.com with SMTP id a1so4229629qtx.11
-        for <linux-remoteproc@vger.kernel.org>; Thu, 16 Dec 2021 03:42:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=XAiY5JQCbKhUV3kfV68NxknTY8076aQ+jZiIG+NNSnrj8SbWsLA5ZyVis9Hv7MDsX5
-         Wp1aJ8rEmDfQ1U3vhA+W5Q6fUW0sQxhqwaHiosPbQFbyYijHt4Icvm/T0vEK5/kKmBc+
-         QqELCOAj0es+5TzRQyWwGBhwQGehjbOewfhMN3/S4hQw7QoR6Y3+tDzh1TbUcqm1TT9t
-         NYT2/qpfB6ahTcpnyVYoBu/0br0EmuZ66fyA68h0ieuZcBkGcxPgfheRqd2GHCJMPyzP
-         6QgpFUXd/uCVTtz1/hZUUGudKd9Q0ZImcSJeB1tjd8lIsCPvJkt1eKVnbTcB60Kk9v0/
-         CoRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xre5um49Rnqa1tZMCD58Cd6UlD4MleswKAp3tzt2gjo=;
-        b=2taZGqW5mV+hLyy3wVesuHfoL+PIRzPHlvP/Gz08wX5Ezvx06x16FNLyPgqHXIGzq2
-         IGgdmFcL0PjqiXqGmCIJ50EuFEGGn0GVKEASoQ+uIgi8JEHK2enQcCtHni3YL8f3fm9S
-         jqqNhLWD1GLQhno0+3r138mRZGS9cyl8Mw7nCmJoQ/lsLCUdi9BDLwgDwbFYaDz7Xnxa
-         evaLd9qBtdlZQiDRc3GNb3dwOR5yacoiI/I92psvfnofuUKxFL30NLobjlOadpTuMdPk
-         /2OSQ0CUnzz/6cAuFiM/V5+D5ykiqr0m7U1o5dTRufHTH6anfraK0JMX5l+4q+eP7iDL
-         0osQ==
-X-Gm-Message-State: AOAM533ZN+7vNU5ELRD0mf6mYkI49jDX3WdoocJWw5XK3UCGuK+QOqlS
-        1emWqmD0E4/521Yfxf4kcNgf92lbP5L4yYO4njs=
-X-Google-Smtp-Source: ABdhPJxzAaV5DauAecsJzqBWmheSvDxk3ghiLfb6YRovClVg4kL4yUlGwYUFAnV+1q8jYrfo3AT6l8iJutzsg/2jTPA=
-X-Received: by 2002:a05:622a:1d4:: with SMTP id t20mr16497208qtw.84.1639654948506;
- Thu, 16 Dec 2021 03:42:28 -0800 (PST)
+        id S238876AbhLPQHP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 16 Dec 2021 11:07:15 -0500
+Received: from mail.iot.bzh ([51.75.236.24]:64067 "EHLO frontal.iot.bzh"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238898AbhLPQHM (ORCPT <rfc822;linux-remoteproc@vger.kernel.org>);
+        Thu, 16 Dec 2021 11:07:12 -0500
+Received: from frontal.iot.bzh (localhost [127.0.0.1])
+        by frontal.iot.bzh (Proxmox) with ESMTP id D633310308;
+        Thu, 16 Dec 2021 17:07:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iot.bzh; h=cc:cc
+        :content-transfer-encoding:date:from:from:message-id
+        :mime-version:reply-to:subject:subject:to:to; s=iot.bzh; bh=DV8D
+        SOsgN21ssw6Dl4edg2TiykDN2Fiu/h2qfb7vOWw=; b=jOm92vhN6veL9BXgoN8H
+        Z+hdpxEqyGlGfYDmaX7G/GIhbRPJc0w4cx59fe02rDYtXdqkQPkPkzVmeAALMrHN
+        HP5wV7gWE1B+/wC+lhISfEshrdNbtTW7Qoj299L7TbCctdcEuUIyEyebgEyQlKdT
+        W+tjql6NXORQpurdpUoN00suy/Asq3NX+TjVEpH9tJvaC6+a6yIWnOuJ44CHRDk8
+        7YQEumbl6MRpawpybpSk3kgLeh1bcgbs/+WNe04f348UKQzOiCIk+R79NDlGQ4wr
+        Z61r0TiiGVupBglf9iH2C+X8uUi1+hdqUEf2+lTcaA8A1+JbXqbRmQnt/cL9TUHF
+        JA==
+From:   Julien Massot <julien.massot@iot.bzh>
+To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
+        geert+renesas@glider.be, dan.carpenter@oracle.com
+Cc:     linux-renesas-soc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        Julien Massot <julien.massot@iot.bzh>
+Subject: [PATCH 1/2] remoteproc: rcar_rproc: fix pm_runtime_get_sync error check
+Date:   Thu, 16 Dec 2021 17:06:53 +0100
+Message-Id: <20211216160653.203768-1-julien.massot@iot.bzh>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Received: by 2002:a05:622a:199c:0:0:0:0 with HTTP; Thu, 16 Dec 2021 03:42:28
- -0800 (PST)
-Reply-To: selviasantiago1@gmail.com
-From:   Selvia Santiago <mariamatinez119@gmail.com>
-Date:   Thu, 16 Dec 2021 11:42:28 +0000
-Message-ID: <CAONDhKOtxcgjB1YEPd0RXNOVbbQ8k-9k32v_cdFxEKFzk62kJg@mail.gmail.com>
-Subject: Urgent
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+pm_runtime_get_sync can also return 1 on success, change
+to use pm_runtime_resume_and_get which return 0 only on
+success.
+
+This bug has been discovered by Dan Carpenter by using Smatch
+static checker.
+
+Fixes: 285892a74f13 ("remoteproc: Add Renesas rcar driver")
+
+Signed-off-by: Julien Massot <julien.massot@iot.bzh>
+---
+ drivers/remoteproc/rcar_rproc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/rcar_rproc.c b/drivers/remoteproc/rcar_rproc.c
+index 34fd867f9f8c..3408c6e51a7c 100644
+--- a/drivers/remoteproc/rcar_rproc.c
++++ b/drivers/remoteproc/rcar_rproc.c
+@@ -167,7 +167,7 @@ static int rcar_rproc_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	pm_runtime_enable(dev);
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret) {
+ 		dev_err(dev, "failed to power up\n");
+ 		return ret;
 -- 
-Urgent
+2.33.1
 
-I am Mrs. Selvia Santiago from Abidjan, Cote D'Ivoire, I am a widow
-suffering from long time illness (Cancer), there is funds I inherited
-from my late loving husband Mr. Santiago Carlos, the sum of (US$2.7
-Million Dollars) which he deposited in bank before his death, I need a
-honest and Faithful person that can use these funds for humanity work.
 
-I took this decision because I don't have any child that will inherit
-this money and I don't want a situation where this money will be used
-in an ungodly way. That is why I am taking this decision, and my
-doctor has confirmed to me that I have less than two weeks to live,
-having known my condition I decided to donate this fund to a charity
-or individual that will utilize this money to assist the poor and the
-needy in accordance to my instructions.
-
-I want you to use 70% of this funds for orphanages, school, church,
-widows, propagating the word and other humanity works,The remaining
-30% should be yours for your efforts as the new beneficiary.
-
-Please if you would be able to use these funds for humanity work
-kindly reply me. As soon as I have received your response, I will give
-you further directives on how you are to go about the claims of the
-said funds.
-
-Remain blessed.
-Mrs Selvia Santiago.
