@@ -2,65 +2,85 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1280447F9C1
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 27 Dec 2021 03:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC2447FB32
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 27 Dec 2021 10:06:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbhL0CZw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sun, 26 Dec 2021 21:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
+        id S235726AbhL0JGv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 27 Dec 2021 04:06:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234973AbhL0CZw (ORCPT
+        with ESMTP id S232561AbhL0JGu (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sun, 26 Dec 2021 21:25:52 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353ACC061759
-        for <linux-remoteproc@vger.kernel.org>; Sun, 26 Dec 2021 18:25:52 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id p4so23403288oia.9
-        for <linux-remoteproc@vger.kernel.org>; Sun, 26 Dec 2021 18:25:52 -0800 (PST)
+        Mon, 27 Dec 2021 04:06:50 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE0AC06173E;
+        Mon, 27 Dec 2021 01:06:50 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id gj24so12997866pjb.0;
+        Mon, 27 Dec 2021 01:06:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=M3RDnFS87Rs2xfWEmf0S5mKyB2iU85F0yqKK4aZcCZBgCFm6vNGXVy/Y2l04/5ZZdm
-         IOo2ELMV348IckktM0TqlAaezm9whByO17X4ZxODDfes7W5YPtP5VhHVPSsTr/ttcR20
-         RNA14ulINXE9tq0Gq9n39qCMjFW/J2N0Gyz8bYe93ClJDxGSlZigCt/OVMb/l8Zmfwst
-         WFAR9MeZqXQcoKY3bPYkBQ2rxyXyOkdGjr7dODkUjBhkOq+QIgETRP0+i2URl2eMvW2I
-         /pWhStD6xJMsYj0vYeXh7SFxrik5TpD1hjMReAArASQ55BVyORFFwohZryz1u2k1VtIS
-         HxYw==
+        h=from:to:cc:subject:date:message-id;
+        bh=3D8vbQ9qKo6LF9O+DoOS9tr7PDla/HO9+uH+KuCqSe0=;
+        b=DEWSsmmMFYIswFxycNafQNmYpClD1/S/NAHUHAsIqJQhh0/T+dazeQt4K7m+rnfElJ
+         s86k7SLS5Ey2p7jyb7DQKyBs5YRi2x/+aWsRaV7dOfrlqBNyRrgPqXjLN4JiwjWALcTw
+         29s0uPeVemwTmgaYbISKBE/Fmgta9+wNElhUbheCTnQJeM+Ck4EZwC7oZlbRqrXqtvrX
+         QJ0/v63yqR0sm6lTf9jQbfbDogL6or48G0wIcsxhZ8jY7dPDLrukue/w4KlL7o3rOYsi
+         v3v9Q1UmEClroFrkhiygrgy61UKHhB7Li8OiDNhkyQMHmpG70X8tarJ98rK3ZSE2xDU9
+         Ee1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=uOr4FsDWOc2Dc+DnZHytvqbUHx/WT0qLGwd9O3fgCSzOILNj7dccD/PCEpuPRABqex
-         E6W5To9B9hDN6WAbU8jOPnuJsZuIE8IHyt81aBJArUUD7wOPYIXviB7Z6qlL/hMmJnZV
-         2Oq6FvLDEg3sAdmRFcPVg0av+q3trUiNCeXexAB+YYyXuPZ0yiwcdl3uDNejxyOWLXhu
-         j4OxB+GV4MEGdloq8RYTxKtQo/0z8GV4IRVEetBXa1ZzdGeKL4Vs+3SWSSDzVw9Yxx02
-         5OGZnJ/H2JnFgwG7gIyS0dd+xT0Eqndch0QKjxoslf8SAAGk/OT2gspH8qUy/cfotNh0
-         CaMg==
-X-Gm-Message-State: AOAM5309898soRtM1ccfsb2YSsiErXT4G6eUyLU+edRqtpOqrm/Rbk2I
-        mRHxZaYjjLvcyrVDL+A1whyj7cc7nFmoa79J/Gk=
-X-Google-Smtp-Source: ABdhPJy9n6gHfuOCgclRWsxDoePee/408f3dZ8qSNiqhNGMDBexa5uq9QX9YNJDsDUTwFTz2LODOTfJkJ5E7yOWZeVw=
-X-Received: by 2002:a05:6808:171c:: with SMTP id bc28mr11761730oib.102.1640571951292;
- Sun, 26 Dec 2021 18:25:51 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6838:5cd1:0:0:0:0 with HTTP; Sun, 26 Dec 2021 18:25:50
- -0800 (PST)
-Reply-To: avamedicinemed3@gmail.com
-From:   Dr Ava Smith <doctortracywilliam@gmail.com>
-Date:   Sun, 26 Dec 2021 18:25:50 -0800
-Message-ID: <CAJiqmQFvHW1zQZFfiOG3OzruHaMv7R5i0xWAyUu+D-D1+Sap9Q@mail.gmail.com>
-Subject: From Dr Ava Smith from United States
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3D8vbQ9qKo6LF9O+DoOS9tr7PDla/HO9+uH+KuCqSe0=;
+        b=J4XwUQegR9WKPpBAAHkyti6GMX794F763r5e1Yck5zsw5kmVR6KJAhYQeXC8zEm/Zj
+         MDqQsZcORB5I2XU3a6X0Gg6v/KsOWQ6r9IlePURjjpOlNOxKt9ih4TXG4+FaanUhqD1D
+         wSPHaOZ7HBDukJNnIrUx36K7V5Wxua2dZxBHlvKMsQLeKvDoWJGyJ4Mql5I0dSlAaXoy
+         OYdFV4MwZsqm1HF1uDM0LAYXrPa9rlXS12BWM9A18ZjPT8tJLyOMHhaQmXn0ITmiDRUL
+         PvdAaIlm1Xb6Fn9VKZsKlKZMZBkCQZrViiovxedDk+8fL1f1K7KNRjz4/ITCT1skUm/e
+         vWEw==
+X-Gm-Message-State: AOAM532/VGmd87kbtpOXWnCmoM3y42mdXeVr+eHyYZEqP5UTrQq7BxxF
+        Mt2tLnJkbZ5AjnZnCupQijjATB72qUf3ew0X
+X-Google-Smtp-Source: ABdhPJxwbV5ca35CixfpCV/cxi6L+U4E2RoEC7FsSMO/PFEwMOpcgDcOU77nFWtukdxfxVjciUHxmA==
+X-Received: by 2002:a17:90a:c68a:: with SMTP id n10mr20140084pjt.119.1640596010318;
+        Mon, 27 Dec 2021 01:06:50 -0800 (PST)
+Received: from localhost.localdomain ([159.226.95.43])
+        by smtp.googlemail.com with ESMTPSA id l1sm13679029pgn.35.2021.12.27.01.06.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Dec 2021 01:06:50 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+Cc:     linmq006@gmail.com, Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] remoteproc: Fix NULL vs IS_ERR() checking in rproc_create_trace_file
+Date:   Mon, 27 Dec 2021 09:06:45 +0000
+Message-Id: <20211227090645.18600-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.17.1
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+The debugfs_create_file() function doesn't return NULL.
+It returns error pointers.
+
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/remoteproc/remoteproc_debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
+index b5a1e3b697d9..a2409fe2f57b 100644
+--- a/drivers/remoteproc/remoteproc_debugfs.c
++++ b/drivers/remoteproc/remoteproc_debugfs.c
+@@ -390,7 +390,7 @@ struct dentry *rproc_create_trace_file(const char *name, struct rproc *rproc,
+ 
+ 	tfile = debugfs_create_file(name, 0400, rproc->dbg_dir, trace,
+ 				    &trace_rproc_ops);
+-	if (!tfile) {
++	if (IS_ERR(tfile)) {
+ 		dev_err(&rproc->dev, "failed to create debugfs trace entry\n");
+ 		return NULL;
+ 	}
 -- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+2.17.1
+
