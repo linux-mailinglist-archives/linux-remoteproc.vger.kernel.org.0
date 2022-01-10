@@ -2,140 +2,111 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C03048998D
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Jan 2022 14:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E11AA489DD1
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Jan 2022 17:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232100AbiAJNMK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 10 Jan 2022 08:12:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231601AbiAJNLs (ORCPT
+        id S237687AbiAJQtC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 10 Jan 2022 11:49:02 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:37655 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229864AbiAJQtB (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 10 Jan 2022 08:11:48 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A136C03325A
-        for <linux-remoteproc@vger.kernel.org>; Mon, 10 Jan 2022 05:11:47 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h10so16532502wrb.1
-        for <linux-remoteproc@vger.kernel.org>; Mon, 10 Jan 2022 05:11:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
-        b=Bgie3w5lZXcUpEJsNUNnYT9D80sz6831OKMgWSWMpAMR4c04HQM1hwHkoZ1AqHgJ5M
-         pQJfhFBsNTGc+jfMsWTuSDXhNBe5XPwJ8/UQZKbYcWTDQ68Eu4MBBVsHf0V3Baa+27Pp
-         IUJW/950IUGNsTto2NnsTW49/Cy4Vf+KfgzDT0+KZ2gcb/QkEKg3LEIj8qPJpiII0Qbk
-         buE3CbPl0T8T6omQLXT3KYJBxN98pPIrfxDam1Qs0diPFN43pWVugWbd8LU8WaIGviK3
-         O/t/NLMKhR03EdE8rMi5c8T5epCw09Yzc4YmAU5QrO9ZaREbayNwAtpm1SWYSR1IiBuY
-         5w9A==
+        Mon, 10 Jan 2022 11:49:01 -0500
+Received: by mail-oi1-f180.google.com with SMTP id i9so19497836oih.4;
+        Mon, 10 Jan 2022 08:49:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=STst/NZz7XpLuhkw/fjT1YooCLQUEgoChj9j28RAYfs=;
-        b=zUiJcjFZvxgguklWloH0Z5PeytMEfBC5C3FFgA20zetE3AqB5FWIII9yiDEjnKspaD
-         S8C37ElTB/eC+3RUfqq6azhS1JjnrO5NgjI9aHn0Hcdg4jDX8V8oeYfA7/l0t/lRPRK7
-         eTwxyA8nKVNMk7tVK540V5ourU5dQgqtZaw2tPsFH0e1LRwkWgiKx/RpGS/U70lADpPx
-         kOUse4s5/LbVHMWFWvQm+5nl8cDfYWVhxGMQxomuW0uUrHktItgn9HEj+vdaQ2Ay9A53
-         w6ywfEZnkYomhXWf56xFoDigh8+CE82ju2l6+uwnPErIrGWhvGrV96IXLkLNXl5gy6uP
-         aApw==
-X-Gm-Message-State: AOAM531oLuSxSQeTESbH3Y4/dJiAZxqM5MBZ8l3DZsLq8aTV63wxM5mt
-        qRHsda14qxIjGwxxo2qcqXl+i2ihE2f6Rz067Ue+36Eojfg=
-X-Google-Smtp-Source: ABdhPJyUuzfRq9+VAp3YIslVsNF7E8r6u+SDvjtiaFw6sfTA9uOxrmlrl9JDay/jDh10uqplhgk07a+YHTpM3Ge0znw=
-X-Received: by 2002:ac2:4c51:: with SMTP id o17mr60639917lfk.558.1641820293776;
- Mon, 10 Jan 2022 05:11:33 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a05:6504:15d1:0:0:0:0 with HTTP; Mon, 10 Jan 2022 05:11:32
- -0800 (PST)
-Reply-To: gtbank107@yahoo.com
-From:   Barr Robert Richter <westernunion.benin982@gmail.com>
-Date:   Mon, 10 Jan 2022 14:11:32 +0100
-Message-ID: <CAP=nHBK9zHzp_=-EVswWQiLxEoc+HV4oqddgtnEqf-9qYab_4Q@mail.gmail.com>
-Subject: Contact GT Bank-Benin to receive your transfer amount of $18.5m US Dollars.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=PcweNAAyqTtCgPxQQaHXUvqxCWk/Vwq0k3RGXJnNlJo=;
+        b=c+D1SPgv8VE+7ixpSITfmmHeVLUQLgaLdpNLlR01gH0I4RjQWIe/9Z+WKFhSfddq9b
+         uju12dslFksw/fhIfM6q18FZEtC4JnlFA1MQ3LkRTwilv4sBWpnwpMvee+ZIsO1P4GnC
+         ZDkI/DBqniUjerjUBoeOc7affBzYOcYSNnldJQHdlcqpYzE5PQSx8ytwJa+KIWHrBQxt
+         Bm+kfncjyoMTU2j1vnVtz0aQc74HVXeQ+hRuZ2riDAuiL99nZQljbLuBG8OBcW8jDGU5
+         /aBxhZQ5NNdg5mJKGhiG2QTyC8rDMdPLIrmRMCvdaliu8t4ncTotW1ykanV/e55upiiO
+         Xamg==
+X-Gm-Message-State: AOAM531KOaMGOpJ6l3DBd2w4Eeuy5eWkAiC8katRtAagaiLTv6QqvK1A
+        DiBnCX2SAdcJr0QmSIpQyg==
+X-Google-Smtp-Source: ABdhPJzmfBgp0bKgpoqASyCFdgI+r5ioWFa75FF5Ozek+i/mv86mQuy/p6hZZ6ozGyUSF/tQwF6kdg==
+X-Received: by 2002:aca:1811:: with SMTP id h17mr17991649oih.178.1641833341058;
+        Mon, 10 Jan 2022 08:49:01 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id c6sm1538169oto.19.2022.01.10.08.49.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jan 2022 08:49:00 -0800 (PST)
+Received: (nullmailer pid 1067451 invoked by uid 1000);
+        Mon, 10 Jan 2022 16:48:59 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Hari Nagalla <hnagalla@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220110040650.18186-2-hnagalla@ti.com>
+References: <20220110040650.18186-1-hnagalla@ti.com> <20220110040650.18186-2-hnagalla@ti.com>
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: k3-m4f: Add bindings for K3 AM64x SoCs
+Date:   Mon, 10 Jan 2022 10:48:59 -0600
+Message-Id: <1641833339.676351.1067450.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Attn,Dear
-I need you to know that the fear of the LORD is
-the beginning of wisdom, and knowledge of the Holy One is
-understanding. As power of God Most High. And This is the confidence
-we have in approaching God, that if we ask anything according to his
-will, he hears us. I will make you know that Slow and steady wins the race.
-It is your turn to receive your overdue compensation funds total
-amount $18.5Milion  USD.
-I actualized that you will receive your transfer today without any more delay
-No More fee OK, Believe me , I am your Attorney standing here on your favor.
-I just concluded conversation with the Gt Bank Director, Mrs Mary Gate
-And She told me that your transfer is ready today
+On Sun, 09 Jan 2022 22:06:49 -0600, Hari Nagalla wrote:
+> K3 AM64x SoC has a Cortex M4F subsystem in the MCU volatge domain.
+> The remote processor's life cycle management and IPC mechanisms are
+> similar across the R5F and M4F cores from remote processor driver
+> point of view. However, there are subtle differences in image loading
+> and starting the M4F subsystems.
+> 
+> The YAML binding document provides the various node properties to be
+> configured by the consumers of the M4F subsystem.
+> 
+> Signed-off-by: Hari Nagalla <hnagalla@ti.com>
+> ---
+>  .../bindings/remoteproc/ti,k3-m4f-rproc.yaml  | 121 ++++++++++++++++++
+>  1 file changed, 121 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml
+> 
 
-So the Bank Asked you to contact them immediately by re-confirming
-your Bank details asap.
-Because this is the Only thing holding this transfer
-If you did not trust me and Mrs Mary Gate,Who Else will you Trust?
-For we are the ones trying to protect your funds here
-and make sure that your funds is secure.
-So Promisingly, I am here to assure you, that Grate Miracle is coming on
-your way, and this funds total amount of $18.500,000 is your
-compensation, entitlement inheritance overdue funds on your name.
-Which you cannot let anything delay you from receiving your funds now,
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Finally i advised you to try your possible best and contact Gt Bank Benin
-once you get this message to receive your transfer $18.5 USD today.
-I know that a journey of thousand miles begins with a single step.
-Always put your best foot forward
-Try as hard as you can, God give you best.
-take my advice and follow the due process of your payment, the
-transfer will be released to
-you smoothly without any hitches or hindrance.
+yamllint warnings/errors:
 
-Contact DR.MRS MARY GATE, Director Gt bank-Benin to receive your
-transfer amount of $18.5m US Dollars
-It was deposited and registered to your name this morning.
-Contact the Bank now to know when they will transfer to your
-country today
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml: properties:memory-region: 'anyOf' conditional failed, one must be fixed:
+	'minItems' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'additionalItems' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	'unevaluatedProperties' is not one of ['maxItems', 'description', 'deprecated']
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	Additional properties are not allowed ('unevaluatedProperties' was unexpected)
+		hint: Arrays must be described with a combination of minItems/maxItems/items
+	'minItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref']
+	'maxItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref']
+	'additionalItems' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref']
+	'unevaluatedProperties' is not one of ['description', 'deprecated', 'const', 'enum', 'minimum', 'maximum', 'multipleOf', 'default', '$ref']
+	1 was expected
+		hint: Only "maxItems" is required for a single entry if there are no constraints defined for the values.
+	hint: cell array properties must define how many entries and what the entries are when there is more than one entry.
+	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml: ignoring, error in schema: properties: memory-region
+Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.example.dts:19.31-36.11: Warning (unit_address_vs_reg): /example-0/bus@f4000: node has a unit name, but no reg or ranges property
+Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.example.dt.yaml:0:0: /example-0/bus@f4000/m4fss@5000000: failed to match any schema with compatible: ['ti,am64-m4fss']
 
-Email id: gtbank107@yahoo.com
-Tel/mobile, +229 99069872
-Contact person, Mrs Mary Gate,Director Gt bank-Benin.
-Among the blind the one-eyed man is king
+doc reference errors (make refcheckdocs):
 
-As you sow, so you shall reap, i want you to receive your funds
-Best things in life are free
-Send to her your Bank Details as i listed here.
+See https://patchwork.ozlabs.org/patch/1577759
 
-Your account name-------------
-Your Bank Name----------------
-Account Number----------
-your Bank address----------
-Country-----------
-Your private phone number---------
-Routing Numbers-------------
-Swift Code-----------
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-Note, Your funds is %100 Percent ready for
-transfer.
-Everything you do remember that Good things come to those who wait.
-I have done this work for you with my personally effort, Honesty is
-the best policy.
-now your transfer is currently deposited with paying bank this morning.
-It is by the grace of God that I received Christ, having known the truth.
-I had no choice than to do what is lawful and justice in the
-sight of God for eternal life and in the sight of man for witness of
-God & His Mercies and glory upon my life.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-send this needed bank details to the bank today, so that you receive
-your transfer today as
-it is available for your confirmation today.
-Please do your best as a serious person and send the fee urgent, Note
-that this transfer of $18.500.000 M USD is a Gift from God to Bless
-you.
+pip3 install dtschema --upgrade
 
-If you did not contact the bank urgent, finally the Bank will release
-your transfer of $18.500.000M USD to  Mr. David Bollen as your
-representative.
-So not allow another to claim your Money.
-Thanks For your Understanding.
+Please check and re-submit.
 
-Barr Robert Richter, UN Attorney At Law Court-Benin
