@@ -2,73 +2,83 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A42849AD05
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 25 Jan 2022 08:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE37449BF22
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 25 Jan 2022 23:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1392175AbiAYHGD (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 25 Jan 2022 02:06:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+        id S234366AbiAYWvA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 25 Jan 2022 17:51:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376630AbiAYHEF (ORCPT
+        with ESMTP id S234186AbiAYWui (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 25 Jan 2022 02:04:05 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DEEC02B777
-        for <linux-remoteproc@vger.kernel.org>; Mon, 24 Jan 2022 21:41:53 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id h14so58329566ybe.12
-        for <linux-remoteproc@vger.kernel.org>; Mon, 24 Jan 2022 21:41:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=omchJdYJcVvbnbx3iWDsqNfzfvgFxRY5UV8d5JFHFd0Qxp4Fs99oOTWbnsLJvmkGLO
-         KJ9h0aIZipzZCxLYUC1EbKJQXjsTnrYD4skWPu5L6KEa7WwksJ/DgfAKn2I//FvNz16e
-         yvRSMjBJIkfJOiN7QosmIFzfX6t0OymUxXq/kzoldmt5Tk4SMXy3poAlzZfnj4tLqkCO
-         r1uVZjBjIcfKcTHUm4yIRwmNGijXGA0OAhFYRol/6hiAAZJ37V1K6a3bLM+XpGdFXGos
-         hPiIHyT9XSW8aiVFGjIdHRgRcnWLHkX21ZW87GvspRwlXlL9xuI6dXFZXWxBZnRTJWgA
-         Bk5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KeMi8W+p20zdR41YZoRj2EapY7imNsLYkAgQIQsIzqY=;
-        b=Rbb/Pox070LdyzROuBIhTsK1OE/8vE1EnZGYzryq+Img5bU+wu/glBzAAXb+H+piOx
-         C1+NyWF3h4MNvai5Ua0YsyjcEKOzwy2+NqcYzr328iuaDKAnP0erVrC5BG1hFmMeh9xN
-         aCsWNtKQgRnb8COLo/qiPDub6q2Q1PlULqm66P2Iq3lhb4IgyyKZJomOlc1oJP+gIICg
-         Rf/EOWObMsDLwfyE/98h777EJG5/vEpVzm/bf/6gxZOfudLQ8ObzG1933k5am6gbReER
-         nuVX4kRQnnSzbRVHAwubYHMdOuHhbO+5S7lAjnrScXP8Fjhi2yulK1sQvKDIRzmWxBZq
-         Z0nA==
-X-Gm-Message-State: AOAM530a2BNw3UYJSphJ3utBmFHoDZO2Fm4pgBQbnmqk/PnYDcgejUpL
-        psulCD+IilOXZ0D72UuhYq/v+58Ouu2OihWxuLmzB2IWEBQ=
-X-Google-Smtp-Source: ABdhPJwywiwyTtOCXfovmJIEM7Vqt+PFDzMW3tzxRj90P3fJDPhIlV2jOd/vI9WPw47eCab8Z7S4n4qldrLRD5Ly+Sc=
-X-Received: by 2002:a25:d783:: with SMTP id o125mr27594671ybg.710.1643089301256;
- Mon, 24 Jan 2022 21:41:41 -0800 (PST)
+        Tue, 25 Jan 2022 17:50:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A0AC061753;
+        Tue, 25 Jan 2022 14:50:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA45960C0B;
+        Tue, 25 Jan 2022 22:50:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48474C340EB;
+        Tue, 25 Jan 2022 22:50:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1643151037;
+        bh=A+6x5HIcipmLX7MAIl49Tcq4C1TNDEakGFm4cHaCy3I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AnfpOrC3lCetTI4n+HRBoIh7HG9pgRM8yewmybCi3yHD8Nvv/eDlCC9QiHYEpMO0g
+         dUUwgsSvNX1Qa7GYR84ZPiLdcv9Fru5v1UX/Xy2q6u+o6T+k+uT9Dsc/RXUtg7ZoGP
+         n9SgRTBKqnmGJ2AYq+tAEAkFegU/+NezUZYGS6ApjO6UijQ0iYWzEHkcVs4AxVH+sV
+         Z51ujurEa+5pgcYE7a3qC9qibJFOgzu8iq+jcb8ZQlnhjbkBZUlegxKmv5u7NydHMf
+         9YA4K3g3GL3wECSEdjsH+6GYlSgrNAbqcbn9vUlEbPAlw3mU3kcSFufkrDOevRf6Gr
+         YWezmOJy64jdQ==
+Date:   Tue, 25 Jan 2022 16:57:23 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] hwspinlock: sprd: Use struct_size() helper in
+ devm_kzalloc()
+Message-ID: <20220125225723.GA78256@embeddedor>
 MIME-Version: 1.0
-Received: by 2002:a05:7000:ad9d:0:0:0:0 with HTTP; Mon, 24 Jan 2022 21:41:40
- -0800 (PST)
-Reply-To: danielseyba@yahoo.com
-From:   Seyba Daniel <mrssuzaramaling19@gmail.com>
-Date:   Tue, 25 Jan 2022 06:41:40 +0100
-Message-ID: <CAKN-9XgQjuMspSnu-F01fv+Bgr6eZEygpsR3pZ-5cF=m78av-Q@mail.gmail.com>
-Subject: Hello,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello,
+Make use of the struct_size() helper instead of an open-coded version,
+in order to avoid any potential type mistakes or integer overflows that,
+in the worst scenario, could lead to heap overflows.
 
-I am so sorry contacting you in this means especially when we have never
-met before. I urgently seek your service to represent me in investing in
-your region / country and you will be rewarded for your service without
-affecting your present job with very little time invested in it.
+Also, address the following sparse warnings:
+drivers/hwspinlock/sprd_hwspinlock.c:96:36: warning: using sizeof on a flexible structure
 
-My interest is in buying real estate, private schools or companies with
-potentials for rapid growth in long terms.
+Link: https://github.com/KSPP/linux/issues/174
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/hwspinlock/sprd_hwspinlock.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-So please confirm interest by responding back.
+diff --git a/drivers/hwspinlock/sprd_hwspinlock.c b/drivers/hwspinlock/sprd_hwspinlock.c
+index d221fc9d756d..22e2ffb91743 100644
+--- a/drivers/hwspinlock/sprd_hwspinlock.c
++++ b/drivers/hwspinlock/sprd_hwspinlock.c
+@@ -93,8 +93,7 @@ static int sprd_hwspinlock_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 
+ 	sprd_hwlock = devm_kzalloc(&pdev->dev,
+-				   sizeof(struct sprd_hwspinlock_dev) +
+-				   SPRD_HWLOCKS_NUM * sizeof(*lock),
++				   struct_size(sprd_hwlock, bank.lock, SPRD_HWLOCKS_NUM),
+ 				   GFP_KERNEL);
+ 	if (!sprd_hwlock)
+ 		return -ENOMEM;
+-- 
+2.27.0
 
-My dearest regards
-
-Seyba Daniel
