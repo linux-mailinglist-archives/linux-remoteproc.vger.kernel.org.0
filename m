@@ -2,50 +2,50 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB3249F187
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Jan 2022 03:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC01549F178
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Jan 2022 03:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345644AbiA1CzR (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 27 Jan 2022 21:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
+        id S1345622AbiA1CzE (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 27 Jan 2022 21:55:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345630AbiA1Cy4 (ORCPT
+        with ESMTP id S1345632AbiA1Cy4 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
         Thu, 27 Jan 2022 21:54:56 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A3CC061755
-        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Jan 2022 18:54:53 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id v67so9774732oie.9
-        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Jan 2022 18:54:53 -0800 (PST)
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061D9C061757
+        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Jan 2022 18:54:54 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id u25-20020a4ad0d9000000b002e8d4370689so1136845oor.12
+        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Jan 2022 18:54:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IX/6o0DNz8KpbzZNUAXJ5OCF6o57UhTURqBBpR2QBLU=;
-        b=UCSlOJZdiIT64LV6o4on6GMRKl/xaVOIO1jgQzgLv9dWajLqdoO4xH19JdCZhyHtZm
-         88IuFHRgM/Zf1EX8Nb4SfwY8jz176aQiu+uKkJKpfsx93Yyr/WIo8E1EU05tNmBzQuMh
-         D8KHrMLA+1WEXZhV/ofE1xMrVymkFy8v/YTc11V3c61Egyu+JhyMrq7Rvr/+6H9ORtR5
-         1ySr62wm3IC9+fVWWSKtJEu8F2bMzd/9z+lSkF7gZGaYLiUtU6ftk7evqtN27vCjct3W
-         Ad8wSf/IvRk0KtAyxDGSYljSk+BEWh18yCG1/8Pfiz0Pbi4myJAsln/AsqGwyX346kY/
-         /aag==
+        bh=RTwg5KvKYjsTu6x08Cr32D16DOEKvzcD7sbsXNJ+uXY=;
+        b=K8V/09ysiH0Fouxf5Tc2rZDy8N8WIUIQDQ8VPe4/cUpLFW9HQpJZ7Uj3Wbjyw5gPE2
+         QIz6xbpoCcfcX5fKtHAkx6bcEapm3uxtJveoRK5Z8y0IruuB+u1j1MolkvZBVLXqrM2R
+         dBYhHr9gPLSBM5qeG1W+NV5c/ZgJs+7DnCRFcn2V8ItQRlwUzkt1gke2xJLrd6DziEOl
+         Emri/hIyeKIcunM9XtWYzUWazakwo5reUPYMPjEIQyKKywOt+HmHIXrihIQcyySpn5HL
+         QKIk1B4WtMmJR7abmuQYk0IfKlRdr64gW4oDwMglZHwWzBQv/RmIfkiU2hRP+RM78wod
+         A/1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IX/6o0DNz8KpbzZNUAXJ5OCF6o57UhTURqBBpR2QBLU=;
-        b=JKASB9njtTUStzudZAjHX+13BOWQwYcQNcGyyFmtNjAsPQ1PAzJXumHmStAR7OKbgB
-         8ELIG3bypwPAHvWjDT5+8haEPO3rJWFGNLG4hq9aNOyBXARzs3V3zBY7kOhnEccK+L0U
-         4wBYzn6iPf0hwqfnGj34MTQ5FCXd4dh/BlnIAA81pcN9Wx1TEeMt33f29f533oRgrtgO
-         q46M+XZc1aD40XGbK7TewmifSgDmjBm5b5Qs/tlnpP3ALtljBy5WJP7iUJWTxckZQhCL
-         S1rnp6gzcvXWGv0XTvkQBGNHV0FBvMArNbgvsZvBWq9ktQja+HWLfBeGx8lN8KgtQxrl
-         MApA==
-X-Gm-Message-State: AOAM5313OGbTDas2kvDPEa8t5MTr/OAIpu++ZGpnPdtggbkCb1uGr0vA
-        4w6LZt0wQyl1pGOtgKRc7DKr3A==
-X-Google-Smtp-Source: ABdhPJxyhXlzOWWv7hGC76FfpQaXeONf5obcU8ghwyGUPLsHBSFHTTvy/aaNanP1yvViTrrmiJ+Xvw==
-X-Received: by 2002:a05:6808:118a:: with SMTP id j10mr4651836oil.85.1643338492495;
-        Thu, 27 Jan 2022 18:54:52 -0800 (PST)
+        bh=RTwg5KvKYjsTu6x08Cr32D16DOEKvzcD7sbsXNJ+uXY=;
+        b=zy/nlnWyf3hvfshucdC85iwkWtLAQRZFkZmPlrlBE99PMurNbDxUu6qAIhwUZi1qk4
+         G7q1lT0DwykKM43VJ9yJOqwxne2e4RWNdu/bJPBvZ2uxNdHGeGhkZH4Gw6iAFDITu+zz
+         5pAD4yUaatY7ojP0UWMgF4ODfxzEdy06DKpJCLsdDvn1X7CP2SXX/lWvSGjdaiRrop4C
+         /dqZE0P0gPGYHJyjIAMi3lBUD2gozm9kTMmaXqSmEY+3TkF4Fqzp0lgAWvlVQk+TYLuf
+         W1ek6rZ69cL3PzAOh+D6+V/qclLtHohOCE4j57WBh0e7VfhdgacGTCcIHQGvZbRCipRD
+         nStg==
+X-Gm-Message-State: AOAM5327R45XMVYp7qosbqt0aaNdzOKNuJO3aJX/U7baZJlxTX3rcngD
+        N5CYC5mHCvNqcaG09YFkitZhsQ==
+X-Google-Smtp-Source: ABdhPJxuOarBgKU/g5GByZEi1kS52yQcDBSu+8HKDr3z0ak7bPikqPYdBhTJzL7n/TKmQdGTusvNXQ==
+X-Received: by 2002:a4a:aa0e:: with SMTP id x14mr3373194oom.98.1643338493375;
+        Thu, 27 Jan 2022 18:54:53 -0800 (PST)
 Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id k6sm5677352oop.28.2022.01.27.18.54.51
+        by smtp.gmail.com with ESMTPSA id k6sm5677352oop.28.2022.01.27.18.54.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 27 Jan 2022 18:54:52 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
@@ -54,9 +54,9 @@ To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
 Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
         linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 05/13] soc: qcom: mdt_loader: Extend check for split firmware
-Date:   Thu, 27 Jan 2022 18:55:05 -0800
-Message-Id: <20220128025513.97188-6-bjorn.andersson@linaro.org>
+Subject: [PATCH 06/13] soc: qcom: mdt_loader: Reorder parts of __qcom_mdt_load()
+Date:   Thu, 27 Jan 2022 18:55:06 -0800
+Message-Id: <20220128025513.97188-7-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20220128025513.97188-1-bjorn.andersson@linaro.org>
 References: <20220128025513.97188-1-bjorn.andersson@linaro.org>
@@ -66,32 +66,65 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Some of the Qualcomm SM8450 firmware files are padded such that the
-start of the first segment falls within the .mdt file but the segment to
-be loaded is stored as a separate .bNN file.
-
-Extend the condition to only attempt to read a segment inline if the
-entire segment would be available.
+Move the traversal of the program headers to the start of the function,
+to make sure that min_ and max_addr are in scope as the call to
+qcom_scm_pas_mem_setup() is moved in the next commit.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/soc/qcom/mdt_loader.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/soc/qcom/mdt_loader.c | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-index c5bd13b05c1a..37e2e734bc5d 100644
+index 37e2e734bc5d..ee991784a738 100644
 --- a/drivers/soc/qcom/mdt_loader.c
 +++ b/drivers/soc/qcom/mdt_loader.c
-@@ -297,7 +297,8 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
+@@ -213,6 +213,22 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
+ 	ehdr = (struct elf32_hdr *)fw->data;
+ 	phdrs = (struct elf32_phdr *)(ehdr + 1);
  
- 		ptr = mem_region + offset;
++	for (i = 0; i < ehdr->e_phnum; i++) {
++		phdr = &phdrs[i];
++
++		if (!mdt_phdr_valid(phdr))
++			continue;
++
++		if (phdr->p_flags & QCOM_MDT_RELOCATABLE)
++			relocate = true;
++
++		if (phdr->p_paddr < min_addr)
++			min_addr = phdr->p_paddr;
++
++		if (phdr->p_paddr + phdr->p_memsz > max_addr)
++			max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
++	}
++
+ 	if (pas_init) {
+ 		metadata = qcom_mdt_read_metadata(fw, &metadata_len, fw_name, dev);
+ 		if (IS_ERR(metadata)) {
+@@ -233,22 +249,6 @@ static int __qcom_mdt_load(struct device *dev, const struct firmware *fw,
+ 		}
+ 	}
  
--		if (phdr->p_filesz && phdr->p_offset < fw->size) {
-+		if (phdr->p_filesz && phdr->p_offset < fw->size &&
-+		    phdr->p_offset + phdr->p_filesz < fw->size) {
- 			/* Firmware is large enough to be non-split */
- 			if (phdr->p_offset + phdr->p_filesz > fw->size) {
- 				dev_err(dev, "file %s segment %d would be truncated\n",
+-	for (i = 0; i < ehdr->e_phnum; i++) {
+-		phdr = &phdrs[i];
+-
+-		if (!mdt_phdr_valid(phdr))
+-			continue;
+-
+-		if (phdr->p_flags & QCOM_MDT_RELOCATABLE)
+-			relocate = true;
+-
+-		if (phdr->p_paddr < min_addr)
+-			min_addr = phdr->p_paddr;
+-
+-		if (phdr->p_paddr + phdr->p_memsz > max_addr)
+-			max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
+-	}
+-
+ 	if (relocate) {
+ 		if (pas_init) {
+ 			ret = qcom_scm_pas_mem_setup(pas_id, mem_phys,
 -- 
 2.33.1
 
