@@ -2,109 +2,67 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC3349F180
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 28 Jan 2022 03:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCA04A33D9
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 30 Jan 2022 05:28:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345682AbiA1CzJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 27 Jan 2022 21:55:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
+        id S1354161AbiA3E2f (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 29 Jan 2022 23:28:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345688AbiA1CzA (ORCPT
+        with ESMTP id S1354204AbiA3E23 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 27 Jan 2022 21:55:00 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5131CC061753
-        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Jan 2022 18:55:00 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id m9so9745929oia.12
-        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Jan 2022 18:55:00 -0800 (PST)
+        Sat, 29 Jan 2022 23:28:29 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C8FC061770
+        for <linux-remoteproc@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id e21-20020a9d0195000000b005a3cd7c1e09so3028717ote.6
+        for <linux-remoteproc@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZFOGW+nVn/EM1Z2BztmM+/jCRAogoevTBkpE6moeqjw=;
-        b=HdaemvutluNp99sWBlcuaC1SxIFeOm3iywNN8TxBxGmC62cU911Ph2uHk4jsJU7vqY
-         S6Lqs1ibqhqQ0VOetBb7NOuUAkTRN6ewV2zYblA6uxhpSr4ZNiZzsvJShmsf8PQGwXRJ
-         B8SvZAD5yKdQ7G1QwWL8v/kCPmuWxLNHmBM3/tu0MkC2ZES2V7u6e1b5g9NI/Pz4fkNw
-         iuMzWiq8diKFZtwomPbEWZvTz5e17SMdd9JmmCYTyMdnqrMxXUUMH690uJs/DyFcVhe3
-         opbiv2mJVOxuBH5ORq9/uj3wEJmsIaZleoW5sQeVkjV2SsMUtkZO7fNVcR0wgKKSJcTF
-         syUA==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=QI2firgHOSt+2ZiRAEUqBnRqfCndbuygIyUz1kdYlPzS6AXkdk+mfMubksdM+6U8hJ
+         A4UbXdfo0bhasYFmsw5ceBBj4ub2bgaEqkI+Cp5foQd/M11l9HiEax3hX9+hB29fNDF1
+         4XtAbOKK0Jrn48roHo8mUNvKaz7FG0Csy4DWdnw8Q+/oXs7GbWFZBjN+ifwhy6Rfe8k0
+         Pzhs5uXUX+5v6iQyGpPCJWV84GisQUz+5cfOraMc3PalgV6vYI9t2Z4JMkhIMshepKV2
+         BM+Zj3o1QTUTRt1Kxwo+5vz+cvvR7n44irHUjPq0LbDCW52O0lwQK7qPtMHxw7vn0Id9
+         5U2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZFOGW+nVn/EM1Z2BztmM+/jCRAogoevTBkpE6moeqjw=;
-        b=qAb65Judg3FvjS87VLBFnP9gdMKUVPyOizpW+RnI58akE6n7uBUqq75sA9EjGq3Gqd
-         5fpc5ENVW15l3LCdBjghNQlJSNQO+MHGkuAdlJ6gKfYF8MANuiJMmN5TgBVImys+RzOI
-         1IWTNtCBc6K4rYn9OdceS0r5q/NoWEe31GT/zMOfNAO9VBhq8pTD64XEGCgxvqUnRHjq
-         cDls+eT9x9GiAWBQr9E0Fue+t5u5k6ZtNnnBa0kWTybZuHRcNBhO2tfq6pmQtTE1Db8B
-         MfJuUtwMvxUwVvxki7sGcgtzuBZMXtPAmqNrKSu4JDV2WokWLYTZhL4JQFUXUmuJXMr4
-         uDlQ==
-X-Gm-Message-State: AOAM533DtR+hKXlESQtBiWdxmINvtm1YnRdnzwP8QoDWYDAui3VLOxa2
-        /FYJvip0ogGQ5HDz0VOX/FnbsQ==
-X-Google-Smtp-Source: ABdhPJzK2qMTXj7NERh/AtWEIFGTW3DUbZtlsOUyoBZqt+PngY65GEw549w2aJ2kvxJIo8FmPw5UqA==
-X-Received: by 2002:aca:ad0c:: with SMTP id w12mr4128987oie.287.1643338499659;
-        Thu, 27 Jan 2022 18:54:59 -0800 (PST)
-Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
-        by smtp.gmail.com with ESMTPSA id k6sm5677352oop.28.2022.01.27.18.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jan 2022 18:54:59 -0800 (PST)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 13/13] arm64: dts: qcom: sm8450-qrd: Enable remoteproc instances
-Date:   Thu, 27 Jan 2022 18:55:13 -0800
-Message-Id: <20220128025513.97188-14-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20220128025513.97188-1-bjorn.andersson@linaro.org>
-References: <20220128025513.97188-1-bjorn.andersson@linaro.org>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
+        b=jg+ElTGECrdTOI8QdcgOakpyYmudUewoxbi2hrQ4WlZJHxZcvTyq4dsgYFLZtdJa8O
+         3IrbUbZ9yDWm2ItxsB+7ZDljhdr6KM6/MDtv9BzJNwtbx3crQIlHlNfbqMtUfWMgdbfT
+         +ag0ZWTAyI2ns1byVs2Y3qSwmdpObxW3OhFXjB4xvMKzQaaDdMpyHYKWRsp0DrY47FvI
+         EiNai0RO69yoFW9yq1+4YTyu13loAE27EzuNOTKwtQq9EwCzd6V/dvFqB8HznSmNj4O5
+         UVWUy/8zZ3vJLD29xVIXJlVL87h1M/2zkYMmjfhonfnzCJ09wYbfjoF6wnxnWoNH3/Ay
+         NG6g==
+X-Gm-Message-State: AOAM531RxKbTwweM36o6eDOO7u3drhN8AAeGiYck5aQyhfyCVTc9rkHM
+        low6XfMiCc2B33IHdi9xhWK92J5WCBV3/OC/g7L+OZrmcR8=
+X-Google-Smtp-Source: ABdhPJz3bgso8viJFkNwiW8XigzdjL6JZBPDE3NfxKOCgEqvWjdU/qagorQKM5joSRLXylFmq9/zlHP85rUYuZ5fTGQ=
+X-Received: by 2002:a25:6d45:: with SMTP id i66mr23246397ybc.352.1643516893721;
+ Sat, 29 Jan 2022 20:28:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:7010:2312:b0:201:cd76:102e with HTTP; Sat, 29 Jan 2022
+ 20:28:13 -0800 (PST)
+Reply-To: mrs.bill.chantalone01@gmail.com
+From:   "Mrs.Bill.Chantal" <grassroot309@gmail.com>
+Date:   Sun, 30 Jan 2022 05:28:13 +0100
+Message-ID: <CAO3iUMDzg_ZovNWXtuQhU6sDXk7LsNwvNc2pOb7zvX7pPCdMAw@mail.gmail.com>
+Subject: Hello....
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Enable the audio, compute, sensor and modem remoteproc and specify
-firmware path for these on the Qualcomm SM8450 QRD.
+You have been compensated with the sum of 9.5 million dollars in this
+united nation the payment will be issue into atm visa  card and send
+to you from the santander bank we need your address and your
+Whatsapp number  + 1 6465853907  this my email.ID
+( mrs.bill.chantal.roland@gmail.com )  contact  me
 
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8450-qrd.dts | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Thanks my
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-index b68ab247e6ae..9526632d4029 100644
---- a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-@@ -346,6 +346,26 @@ &qupv3_id_0 {
- 	status = "okay";
- };
- 
-+&remoteproc_adsp {
-+	status = "okay";
-+	firmware-name = "qcom/sm8450/adsp.mbn";
-+};
-+
-+&remoteproc_cdsp {
-+	status = "okay";
-+	firmware-name = "qcom/sm8450/cdsp.mbn";
-+};
-+
-+&remoteproc_mpss {
-+	status = "okay";
-+	firmware-name = "qcom/sm8450/modem.mbn";
-+};
-+
-+&remoteproc_slpi {
-+	status = "okay";
-+	firmware-name = "qcom/sm8450/slpi.mbn";
-+};
-+
- &tlmm {
- 	gpio-reserved-ranges = <28 4>, <36 4>;
- };
--- 
-2.33.1
-
+mrs bill chantal
