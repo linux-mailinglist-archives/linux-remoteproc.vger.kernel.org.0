@@ -2,67 +2,151 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCA04A33D9
-	for <lists+linux-remoteproc@lfdr.de>; Sun, 30 Jan 2022 05:28:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B924A4508
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 31 Jan 2022 12:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354161AbiA3E2f (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 29 Jan 2022 23:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S1359551AbiAaLfv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 31 Jan 2022 06:35:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354204AbiA3E23 (ORCPT
+        with ESMTP id S1376986AbiAaLcv (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 29 Jan 2022 23:28:29 -0500
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C8FC061770
-        for <linux-remoteproc@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
-Received: by mail-ot1-x333.google.com with SMTP id e21-20020a9d0195000000b005a3cd7c1e09so3028717ote.6
-        for <linux-remoteproc@vger.kernel.org>; Sat, 29 Jan 2022 20:28:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
-        b=QI2firgHOSt+2ZiRAEUqBnRqfCndbuygIyUz1kdYlPzS6AXkdk+mfMubksdM+6U8hJ
-         A4UbXdfo0bhasYFmsw5ceBBj4ub2bgaEqkI+Cp5foQd/M11l9HiEax3hX9+hB29fNDF1
-         4XtAbOKK0Jrn48roHo8mUNvKaz7FG0Csy4DWdnw8Q+/oXs7GbWFZBjN+ifwhy6Rfe8k0
-         Pzhs5uXUX+5v6iQyGpPCJWV84GisQUz+5cfOraMc3PalgV6vYI9t2Z4JMkhIMshepKV2
-         BM+Zj3o1QTUTRt1Kxwo+5vz+cvvR7n44irHUjPq0LbDCW52O0lwQK7qPtMHxw7vn0Id9
-         5U2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=B5teSI3NqSzeGu7ngV/22RiyR60khzQ8THYZDZ9DX3Q=;
-        b=jg+ElTGECrdTOI8QdcgOakpyYmudUewoxbi2hrQ4WlZJHxZcvTyq4dsgYFLZtdJa8O
-         3IrbUbZ9yDWm2ItxsB+7ZDljhdr6KM6/MDtv9BzJNwtbx3crQIlHlNfbqMtUfWMgdbfT
-         +ag0ZWTAyI2ns1byVs2Y3qSwmdpObxW3OhFXjB4xvMKzQaaDdMpyHYKWRsp0DrY47FvI
-         EiNai0RO69yoFW9yq1+4YTyu13loAE27EzuNOTKwtQq9EwCzd6V/dvFqB8HznSmNj4O5
-         UVWUy/8zZ3vJLD29xVIXJlVL87h1M/2zkYMmjfhonfnzCJ09wYbfjoF6wnxnWoNH3/Ay
-         NG6g==
-X-Gm-Message-State: AOAM531RxKbTwweM36o6eDOO7u3drhN8AAeGiYck5aQyhfyCVTc9rkHM
-        low6XfMiCc2B33IHdi9xhWK92J5WCBV3/OC/g7L+OZrmcR8=
-X-Google-Smtp-Source: ABdhPJz3bgso8viJFkNwiW8XigzdjL6JZBPDE3NfxKOCgEqvWjdU/qagorQKM5joSRLXylFmq9/zlHP85rUYuZ5fTGQ=
-X-Received: by 2002:a25:6d45:: with SMTP id i66mr23246397ybc.352.1643516893721;
- Sat, 29 Jan 2022 20:28:13 -0800 (PST)
+        Mon, 31 Jan 2022 06:32:51 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B7BC0604CB;
+        Mon, 31 Jan 2022 03:21:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7D0C0B82A66;
+        Mon, 31 Jan 2022 11:21:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 936C1C340E8;
+        Mon, 31 Jan 2022 11:21:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1643628111;
+        bh=zq0eIqyEOraPAsidksoElf7gEdCbjdbpAhnUeeYukTw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=oEgZCusmyeFjGePPuDzLFacT88J2wNspfxsEIH2g7DIzOEt3dx6mML/64YJ7fmaYB
+         RPT+/DDTCqTQyjggqKTnkvAnqZqVKEwFN/dXt0nkyAeW+nhuNeLuBhTG+X7eIWn46L
+         IJDUftr/sSVLBm1BzhivAhpL08QXNd1LK7KFtdk8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.16 127/200] remoteproc: qcom: q6v5: fix service routines build errors
+Date:   Mon, 31 Jan 2022 11:56:30 +0100
+Message-Id: <20220131105237.835248185@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220131105233.561926043@linuxfoundation.org>
+References: <20220131105233.561926043@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Received: by 2002:a05:7010:2312:b0:201:cd76:102e with HTTP; Sat, 29 Jan 2022
- 20:28:13 -0800 (PST)
-Reply-To: mrs.bill.chantalone01@gmail.com
-From:   "Mrs.Bill.Chantal" <grassroot309@gmail.com>
-Date:   Sun, 30 Jan 2022 05:28:13 +0100
-Message-ID: <CAO3iUMDzg_ZovNWXtuQhU6sDXk7LsNwvNc2pOb7zvX7pPCdMAw@mail.gmail.com>
-Subject: Hello....
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-You have been compensated with the sum of 9.5 million dollars in this
-united nation the payment will be issue into atm visa  card and send
-to you from the santander bank we need your address and your
-Whatsapp number  + 1 6465853907  this my email.ID
-( mrs.bill.chantal.roland@gmail.com )  contact  me
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Thanks my
+[ Upstream commit eee412e968f7b950564880bc6a7a9f00f49034da ]
 
-mrs bill chantal
+When CONFIG_QCOM_AOSS_QMP=m and CONFIG_QCOM_Q6V5_MSS=y, the builtin
+driver cannot call into the loadable module's low-level service
+functions. Trying to build with that config combo causes linker errors.
+
+There are two problems here. First, drivers/remoteproc/qcom_q6v5.c
+should #include <linux/soc/qcom/qcom_aoss.h> for the definitions of
+the service functions, depending on whether CONFIG_QCOM_AOSS_QMP is
+set/enabled or not. Second, the qcom remoteproc drivers should depend
+on QCOM_AOSS_QMP iff it is enabled (=y or =m) so that the qcom
+remoteproc drivers can be built properly.
+
+This prevents these build errors:
+
+aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `q6v5_load_state_toggle':
+qcom_q6v5.c:(.text+0xc4): undefined reference to `qmp_send'
+aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `qcom_q6v5_deinit':
+(.text+0x2e4): undefined reference to `qmp_put'
+aarch64-linux-ld: drivers/remoteproc/qcom_q6v5.o: in function `qcom_q6v5_init':
+(.text+0x778): undefined reference to `qmp_get'
+aarch64-linux-ld: (.text+0x7d8): undefined reference to `qmp_put'
+
+Fixes: c1fe10d238c0 ("remoteproc: qcom: q6v5: Use qmp_send to update co-processor load state")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: linux-remoteproc@vger.kernel.org
+Cc: Sibi Sankar <sibis@codeaurora.org>
+Cc: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220115011338.2973-1-rdunlap@infradead.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/remoteproc/Kconfig     | 4 ++++
+ drivers/remoteproc/qcom_q6v5.c | 1 +
+ 2 files changed, 5 insertions(+)
+
+diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
+index f2e961f998ca2..341156e2a29b9 100644
+--- a/drivers/remoteproc/Kconfig
++++ b/drivers/remoteproc/Kconfig
+@@ -180,6 +180,7 @@ config QCOM_Q6V5_ADSP
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+ 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
++	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select MFD_SYSCON
+ 	select QCOM_PIL_INFO
+ 	select QCOM_MDT_LOADER
+@@ -199,6 +200,7 @@ config QCOM_Q6V5_MSS
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+ 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
++	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select MFD_SYSCON
+ 	select QCOM_MDT_LOADER
+ 	select QCOM_PIL_INFO
+@@ -218,6 +220,7 @@ config QCOM_Q6V5_PAS
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+ 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
++	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select MFD_SYSCON
+ 	select QCOM_PIL_INFO
+ 	select QCOM_MDT_LOADER
+@@ -239,6 +242,7 @@ config QCOM_Q6V5_WCSS
+ 	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+ 	depends on QCOM_SYSMON || QCOM_SYSMON=n
+ 	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
++	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select MFD_SYSCON
+ 	select QCOM_MDT_LOADER
+ 	select QCOM_PIL_INFO
+diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+index eada7e34f3af5..442a388f81028 100644
+--- a/drivers/remoteproc/qcom_q6v5.c
++++ b/drivers/remoteproc/qcom_q6v5.c
+@@ -10,6 +10,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
++#include <linux/soc/qcom/qcom_aoss.h>
+ #include <linux/soc/qcom/smem.h>
+ #include <linux/soc/qcom/smem_state.h>
+ #include <linux/remoteproc.h>
+-- 
+2.34.1
+
+
+
