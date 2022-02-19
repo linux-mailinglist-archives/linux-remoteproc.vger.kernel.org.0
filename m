@@ -2,52 +2,52 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F04B4BCAC8
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 19 Feb 2022 22:55:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB2B4BCAD4
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 19 Feb 2022 22:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236444AbiBSV4C (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 19 Feb 2022 16:56:02 -0500
-Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55118 "EHLO
+        id S243172AbiBSV4J (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 19 Feb 2022 16:56:09 -0500
+Received: from mxb-00190b01.gslb.pphosted.com ([23.128.96.19]:55226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234690AbiBSV4B (ORCPT
+        with ESMTP id S243169AbiBSV4I (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 19 Feb 2022 16:56:01 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C10154188
-        for <linux-remoteproc@vger.kernel.org>; Sat, 19 Feb 2022 13:55:42 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id v4so11570053pjh.2
-        for <linux-remoteproc@vger.kernel.org>; Sat, 19 Feb 2022 13:55:42 -0800 (PST)
+        Sat, 19 Feb 2022 16:56:08 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E1753B7F
+        for <linux-remoteproc@vger.kernel.org>; Sat, 19 Feb 2022 13:55:44 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id t4-20020a17090a510400b001b8c4a6cd5dso11642966pjh.5
+        for <linux-remoteproc@vger.kernel.org>; Sat, 19 Feb 2022 13:55:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:subject:date:message-id:in-reply-to:references:mime-version
          :content-transfer-encoding;
-        bh=tlXNd4WfVV+N9MiUaNSDYcpKd5QnvzkHB2jHSyxHiSE=;
-        b=5CsPhfBVJpIWa/x8rm2/nRs+N1fPus18cLloeaRd9q55k67hSctSfb4OPSgzhhJRKN
-         ds1xDXNKBbrg/YjO4G0VLVCjHl3B+o1j4RfesE2fybq4r4tYeUdXsR+h9I0zKcJRX1in
-         ANy2eEEcRhi4ELUpvbxjt5gssa2HV/zXKk2xsUk1RXisQDOuDCvNlCnLYGYeJ6jUPjfR
-         MxSpYh+aNtu+Y1K6tIqqytBwhlY1/fikjip6nBX029rlIymhVbR4Sj+dMNh/5faVGfUM
-         EeXF5jv0IbknANDnNMHFurfvscQuwqwHttIU0niSRoEwE97/ecOlUqR7CWReYDyAIxo/
-         Fbkg==
+        bh=DPqC7sk0jXG3KL4pgR3flZBRy+4blHrbIS6/yBS27Mg=;
+        b=RCOdYH6WIaW2xVqRGFA32u3oOOKisUBbxh2bQZ6OLEuubkB37e/DLlUPUI/qS7ZsPp
+         K9vvLxcUrbv9BMjXSg9sciDkhvYNEdsasmZcb9Ita6e1im3+L2SufG4wk2DJXmvo5pK+
+         Wx2IcMPhbQ1baTb9PqWZsTEBmfmjFo8u1nF5FRQu3fsbnEslXRYQAawKzZ/FeLpMmYU+
+         P3YLroiH1jtnPz8t/uPk7nZkuRosB1f+3Lu82Nd6FqbNMUN3ETXpC3qUUkI2D6KutTCV
+         MvLoFxsc1KMYD2sK6O4571yQv32Zu02CNtmn8AKwLrNsFHFGSBRAnJHyhvH6+ZTianzC
+         Gd9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=tlXNd4WfVV+N9MiUaNSDYcpKd5QnvzkHB2jHSyxHiSE=;
-        b=QqAiOr7Lgn/EcaoeNgsdKvJex2XjwjeGqadRULXAxVIp7qq8We3u5Q6+PSIz0PdVpv
-         WN4MBFfvz/EAYUn7z7t1chup45tyOWwbh6+LqoGfOKs4ytT5i8yfy0L1cRZ7JLJOyjec
-         8rn9HG2029Df5H6n6PkvaSJcPQ+hs8lQDQLZFm+hsChGj34aFEJnVvbY2zODi3ieZ3Ez
-         VZooKQjFoaYE3s/gDnMHWrCYikfDhoreNtme2JFSAxAMR4f4Ivo3zDwYqcgFtEc7btl5
-         D5Iha34HXPJU8leYqK12qMRl8mps8vpzTLQprQ2D3EWRfyjshjqbc0sCOvbybdlXXdSN
-         0MfA==
-X-Gm-Message-State: AOAM531YQ/6Hb5A0REDdT6Em5c61Ta92OH5CtSEE0IJxJSqFeBAj600b
-        cgCc/S43A3L9mR9/kgvhelE7Lw==
-X-Google-Smtp-Source: ABdhPJxlo3caslaF3DdogQsF2CNkabNAPdTzgIT92VlqtQMgcaudXdsWCY5mLtbEZK5i64FQjhgHfg==
-X-Received: by 2002:a17:90b:4cc6:b0:1bc:210d:b6fa with SMTP id nd6-20020a17090b4cc600b001bc210db6famr741799pjb.104.1645307741905;
-        Sat, 19 Feb 2022 13:55:41 -0800 (PST)
+        bh=DPqC7sk0jXG3KL4pgR3flZBRy+4blHrbIS6/yBS27Mg=;
+        b=T89TBs8S3bfdD6DggBIl4jXgzGlcuYiRO3CthxoEisjGLgGjYXh77vH+9qTGdULIrv
+         LrUzDsOpwDZwl6NJnggtQ1l07KFzCUmkuxYjkh06FdQZ5d6NdpEuyZ9hn8I01CItEk9Z
+         ofsmUooDwrPhvDuqe8nzr2FDWEk6bwmGecMEgOZvgzj+00gy2VCAZB3n+L9m6oY3rtHk
+         fKZuy04/u4qRTbB9YYtiSD5ElL6U4J2YFYkp3sr55PHsoGcnsXFCoF+upF4JZf8dcbPs
+         5xKAgUEVtflVN6Ja4Y+3MDQG9WZPrNgmbW8qAAQkMfQxKnyIIiCf6SvYs3JpczxYBrbu
+         6PLA==
+X-Gm-Message-State: AOAM533K8lE5fCxS/f8Bg0T0RySv0RFxfh1ILR5FqDJAZqTTvvr2yAHR
+        yDRYJiSR8ibxaEjRY5JHMQSmqg==
+X-Google-Smtp-Source: ABdhPJyrjgGWD8uK2oJsFpdirNDfgtzWoV5CCSu0s9ORmrFOQ1CeFPo+nYa0r4tS45fI/XS//g8JLQ==
+X-Received: by 2002:a17:90a:9309:b0:1bc:1bf1:dad4 with SMTP id p9-20020a17090a930900b001bc1bf1dad4mr1336912pjo.169.1645307744093;
+        Sat, 19 Feb 2022 13:55:44 -0800 (PST)
 Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:31ab:1e81:9550:f30a])
-        by smtp.gmail.com with ESMTPSA id i17sm13447337pgn.82.2022.02.19.13.55.40
+        by smtp.gmail.com with ESMTPSA id i17sm13447337pgn.82.2022.02.19.13.55.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Feb 2022 13:55:41 -0800 (PST)
+        Sat, 19 Feb 2022 13:55:43 -0800 (PST)
 From:   Drew Fustini <dfustini@baylibre.com>
 To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -61,9 +61,9 @@ To:     =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
         Santosh Shilimkar <ssantosh@kernel.org>,
         Tony Lindgren <tony@atomide.com>, s-anna@ti.com,
         khilman@baylibre.com
-Subject: [PATCH 02/11] dt-bindings: wkup_m3_ipc: Add vtt toggling bindings
-Date:   Sat, 19 Feb 2022 13:53:19 -0800
-Message-Id: <20220219215328.485660-3-dfustini@baylibre.com>
+Subject: [PATCH 03/11] soc: ti: wkup_m3_ipc: Add support for toggling VTT regulator
+Date:   Sat, 19 Feb 2022 13:53:20 -0800
+Message-Id: <20220219215328.485660-4-dfustini@baylibre.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220219215328.485660-1-dfustini@baylibre.com>
 References: <20220219215328.485660-1-dfustini@baylibre.com>
@@ -71,7 +71,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,57 +81,115 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 
 From: Dave Gerlach <d-gerlach@ti.com>
 
-Add description of the wkup_m3_ipc DT properties that can be used to
-toggle VTT regulator during low power mode transitions.
+Some boards (currently AM335x EVM-SK) provides s/w control via
+GPIO to toggle VTT regulator to reduce power consumption in low
+power state.
+
+The VTT regulator should be disabled after enabling self-refresh on
+suspend, and should be enabled before disabling self-refresh on resume.
+This is to allow proper self-refresh entry/exit commands to be
+transmitted to the memory.
+
+Add support for toggling VTT regulator using DT properties.
+Actual toggling happens in CM3 Firmware. The enable option & the GPIO
+pin used is collected in A8 Core and then sent to CM3 using IPC
+registers.
+
+Note:
+Here it is assumed that VTT Toggle will be done using a pin on GPIO-0
+Instance. The reason is GPIO-0 is in wakeup domain.
 
 Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+Signed-off-by: Keerthy <j-keerthy@ti.com>
 Signed-off-by: Drew Fustini <dfustini@baylibre.com>
 ---
- .../bindings/soc/ti/wkup_m3_ipc.txt           | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ drivers/soc/ti/wkup_m3_ipc.c | 27 +++++++++++++++++++++++++--
+ include/linux/wkup_m3_ipc.h  |  1 +
+ 2 files changed, 26 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt b/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt
-index 401550487ed6..4cdbb60fd0d0 100644
---- a/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt
-+++ b/Documentation/devicetree/bindings/soc/ti/wkup_m3_ipc.txt
-@@ -55,3 +55,37 @@ Example:
- 			...
- 		};
- 	};
+diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
+index 72386bd393fe..974b4118a893 100644
+--- a/drivers/soc/ti/wkup_m3_ipc.c
++++ b/drivers/soc/ti/wkup_m3_ipc.c
+@@ -40,6 +40,13 @@
+ #define M3_FW_VERSION_MASK		0xffff
+ #define M3_WAKE_SRC_MASK		0xff
+ 
++#define IPC_MEM_TYPE_SHIFT		(0x0)
++#define IPC_MEM_TYPE_MASK		(0x7 << 0)
++#define IPC_VTT_STAT_SHIFT		(0x3)
++#define IPC_VTT_STAT_MASK		(0x1 << 3)
++#define IPC_VTT_GPIO_PIN_SHIFT		(0x4)
++#define IPC_VTT_GPIO_PIN_MASK		(0x3f << 4)
 +
-+Support for VTT Toggle
-+==================================
-+In order to enable the support for VTT toggle during Suspend/Resume
-+sequence needed by some boards (like AM335x EVM-SK & AM437x GP EVM),
-+the below DT properties are required. It is possible to toggle VTT
-+using one of two methods depending on the SoC being used, either
-+GPIO0 toggle (AM335x and AM437x), or any GPIO with DS_PAD_CONFIG
-+bits in the control module (AM437x only).
+ #define M3_STATE_UNKNOWN		0
+ #define M3_STATE_RESET			1
+ #define M3_STATE_INITED			2
+@@ -215,6 +222,12 @@ static int wkup_m3_is_available(struct wkup_m3_ipc *m3_ipc)
+ 		(m3_ipc->state != M3_STATE_UNKNOWN));
+ }
+ 
++static void wkup_m3_set_vtt_gpio(struct wkup_m3_ipc *m3_ipc, int gpio)
++{
++	m3_ipc->vtt_conf = (1 << IPC_VTT_STAT_SHIFT) |
++			    (gpio << IPC_VTT_GPIO_PIN_SHIFT);
++}
 +
-+VTT Toggle using GPIO0
-+----------------------------------
-+Supported by: AM335x and AM437x
-+Used on: AM335x EVM-SK
+ /* Public functions */
+ /**
+  * wkup_m3_set_mem_type - Pass wkup_m3 which type of memory is in use
+@@ -294,7 +307,8 @@ static int wkup_m3_prepare_low_power(struct wkup_m3_ipc *m3_ipc, int state)
+ 	/* Program each required IPC register then write defaults to others */
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->resume_addr, 0);
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, m3_power_state, 1);
+-	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->mem_type, 4);
++	wkup_m3_ctrl_ipc_write(m3_ipc, m3_ipc->mem_type |
++			       m3_ipc->vtt_conf, 4);
+ 
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 2);
+ 	wkup_m3_ctrl_ipc_write(m3_ipc, DS_IPC_DEFAULT, 3);
+@@ -433,12 +447,13 @@ static int wkup_m3_rproc_boot_thread(void *arg)
+ static int wkup_m3_ipc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	int irq, ret;
++	int irq, ret, temp;
+ 	phandle rproc_phandle;
+ 	struct rproc *m3_rproc;
+ 	struct resource *res;
+ 	struct task_struct *task;
+ 	struct wkup_m3_ipc *m3_ipc;
++	struct device_node *np = dev->of_node;
+ 
+ 	m3_ipc = devm_kzalloc(dev, sizeof(*m3_ipc), GFP_KERNEL);
+ 	if (!m3_ipc)
+@@ -496,6 +511,14 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
+ 
+ 	m3_ipc->ops = &ipc_ops;
+ 
++	if (of_find_property(np, "ti,needs-vtt-toggle", NULL) &&
++	    !(of_property_read_u32(np, "ti,vtt-gpio-pin", &temp))) {
++		if (temp >= 0 && temp <= 31)
++			wkup_m3_set_vtt_gpio(m3_ipc, temp);
++		else
++			dev_warn(dev, "Invalid VTT GPIO(%d) pin\n", temp);
++	}
 +
-+Optional properties:
-+- ti,needs-vtt-toggle:	Indicates that the boards requires VTT toggling
-+			during suspend/resume.
-+- ti,vtt-gpio-pin:	Specifies the GPIO0 pin used for VTT toggle.
-+
-+Important Note:
-+- Here it is assumed that VTT Toggle will be done using a pin on GPIO-0 Instance.
-+  It will not work on any other GPIO using the above properties, regardless of
-+  which part is being used.
-+
-+Example:
-+	wkup_m3_ipc: wkup_m3_ipc@1324 {
-+		compatible = "ti,am3352-wkup-m3-ipc";
-+		...
-+		...
-+		ti,needs-vtt-toggle;
-+		ti,vtt-gpio-pin = <7>;
-+		...
-+	};
+ 	/*
+ 	 * Wait for firmware loading completion in a thread so we
+ 	 * can boot the wkup_m3 as soon as it's ready without holding
+diff --git a/include/linux/wkup_m3_ipc.h b/include/linux/wkup_m3_ipc.h
+index 3f496967b538..2bc52c6381d5 100644
+--- a/include/linux/wkup_m3_ipc.h
++++ b/include/linux/wkup_m3_ipc.h
+@@ -33,6 +33,7 @@ struct wkup_m3_ipc {
+ 
+ 	int mem_type;
+ 	unsigned long resume_addr;
++	int vtt_conf;
+ 	int state;
+ 
+ 	struct completion sync_complete;
 -- 
 2.32.0
 
