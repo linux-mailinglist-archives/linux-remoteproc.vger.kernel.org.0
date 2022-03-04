@@ -2,174 +2,135 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6964F4CD546
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  4 Mar 2022 14:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E2E4CD8D8
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  4 Mar 2022 17:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233959AbiCDNhb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 4 Mar 2022 08:37:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57472 "EHLO
+        id S236159AbiCDQQQ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 4 Mar 2022 11:16:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbiCDNha (ORCPT
+        with ESMTP id S234190AbiCDQQQ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 4 Mar 2022 08:37:30 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72E91B762C
-        for <linux-remoteproc@vger.kernel.org>; Fri,  4 Mar 2022 05:36:42 -0800 (PST)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id E73013F610
-        for <linux-remoteproc@vger.kernel.org>; Fri,  4 Mar 2022 13:36:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1646401000;
-        bh=G8BoUtDwWRG/T6yTrFWDQ38LNVbbwgFUxvn7b9NKrcg=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=p2sqZf6zeFWkI9WbU+Uiv4kofVFXQWKWBFHH7MBNKlfAF5dKC5lkuW8oTJh5FdwD7
-         8ijxwIiJSMFTRFybcBmoF21UA30Aui1pC6RVOYh0MD0aAbKiud3u9iYareIawk1k2S
-         +srM8HXGMNpxWMGbODADb1KG07bwsnFLUlzUXtjHilr2OgqitAz7N50P3qEHE3VsWT
-         yvHu5Uou15Rap0iR/FQwqVe15yK+iyuzVAwxgIR9MjlUsVKWEC0eTUbwy3oXgxhUC3
-         7yxhD9t5JwLj0JR8lq4NUs1E4rlcv0O20US0ugXcoEGCJwaIS8Ig5xd1ed0jaEksov
-         qHK+7BkoHIPIA==
-Received: by mail-ed1-f71.google.com with SMTP id h17-20020a05640250d100b004133863d836so4604606edb.0
-        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Mar 2022 05:36:40 -0800 (PST)
+        Fri, 4 Mar 2022 11:16:16 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9A61B8CA8
+        for <linux-remoteproc@vger.kernel.org>; Fri,  4 Mar 2022 08:15:27 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id u1so13387482wrg.11
+        for <linux-remoteproc@vger.kernel.org>; Fri, 04 Mar 2022 08:15:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=lrMkWfnep54u5iNgaB4r+dAM8d1KFFgig+FJrYuk0pk=;
+        b=BkiMi6QmBvXGp9TotIl0ob62+e/h6JsMQPZM3+y5rzZZJCBsHJxpaaaOjoXBA8rkK2
+         r8r1pfp0/szpXWvqKiXjt3t4MPV1T2w82B6u6dLDyR5B+1jhu3PEJp5glLmIcCA2jtyu
+         9RNoMu3D73Tw1im9wuhPGSmXNf1/5ZLMI4yekxVC6TQx4VTNQEByZ2OjIAUci2P/OFxF
+         oX1swUgh/0s8jZMoZrdxMDkRk+7UbO6M5zgK096GY+itx49fUVAoQd1byRcon7r4k3tQ
+         bTEmZlQL5UsxpOR0KnH58n6vHHJpyzujgEnj/1Bk4yDnbs702oZVl3K6spPdUH1RJ6QI
+         6JuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=G8BoUtDwWRG/T6yTrFWDQ38LNVbbwgFUxvn7b9NKrcg=;
-        b=nH3YMhDdDZCBnNYwyLAUw0q1U+rEKf9s6A7urCbAuH18osWpehyYAFjk6M92YuxaWP
-         svCDa1qY3CcvFsUq1L8ij1PVUMe8m+rHvSRwLXskGrxcIPXBkdYc34eSagwLfmcFbbf3
-         SZrFJx0hpR9toDOmPho7SrQ44SuaX2fhFbQVFVCJCbh8hobPAZNWSZYcdHmqUewNVbBg
-         RL+ts7QxU+3oyMsC9pZJHFWOdfU/ZRspT1t3qjcB8buHkPv+uR4GWAzUITlVj4Ac2NlS
-         eO+pM/VqqI362M2lP/4GlwnWeqEZML0cTnQ9fXF4mKel2msdJa70A9hc6ymkKxCAp/Fa
-         9tcQ==
-X-Gm-Message-State: AOAM533hC4vKQNztS58XBK1FRQY9nWmZrrtVUV00q5i+pw0uuachhG5m
-        CxbctWVyYVkGUBzSGGiqNZxXiS9OymYldRhvljZ/ajGcOTGsHrc8M6KxIUK4zkxh8Y+7pcCVZAf
-        Y2tLdzsvfSOHJZyr1IB8zGGowY9tuHu8/l7OFJNOaHsHWQFs=
-X-Received: by 2002:a17:906:5d08:b0:6da:b4ea:937 with SMTP id g8-20020a1709065d0800b006dab4ea0937mr2982746ejt.446.1646401000568;
-        Fri, 04 Mar 2022 05:36:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxXSloxVKU/uB+P+Qe8lxuU0aSrsdcd2j1OAvPHH2N5wZJyWjhLLLr1TExNVWeKR3YLHFUbvg==
-X-Received: by 2002:a17:906:5d08:b0:6da:b4ea:937 with SMTP id g8-20020a1709065d0800b006dab4ea0937mr2982729ejt.446.1646401000352;
-        Fri, 04 Mar 2022 05:36:40 -0800 (PST)
-Received: from [192.168.0.139] (xdsl-188-155-181-108.adslplus.ch. [188.155.181.108])
-        by smtp.gmail.com with ESMTPSA id s5-20020a170906284500b006cc551d6cabsm1774511ejc.63.2022.03.04.05.36.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Mar 2022 05:36:39 -0800 (PST)
-Message-ID: <f58869e3-8b5c-ed4b-c11c-27a8e465c3a2@canonical.com>
-Date:   Fri, 4 Mar 2022 14:36:39 +0100
+        bh=lrMkWfnep54u5iNgaB4r+dAM8d1KFFgig+FJrYuk0pk=;
+        b=CVTBLyXAd6TIzbqfA8zrBDhVLsEjhaa5y7YzeHayJC3AdQ6cUvjOeZVDzMYfifqc9Z
+         gQbRYEsDaQB5/Vwe0Y/M8kmu9u8aIR7S5fmnTQoD2btT75Rw8Kb3Eh3cOTrG0JSNPg/F
+         1h5fEg8AHT/0uAY9deUzz9dDWJ0aIKBpYzvbaYm4Ys1TXlT3mHNISh/fy5LSm35T2/hc
+         tq++sDURIaHIijwOPtjJi0EDh5h5QWlR6+IFqDmgCSn0Pt6jHFl6NuQevefFRfPGXCY+
+         XjQsyUzojKz7IJ4Kw1dxE2eBWEs3tiotGebRJCfb9tyIu9CKcMbyIBI03Gl0ECIt6L/Q
+         Wcig==
+X-Gm-Message-State: AOAM530clcrd/2rafg6kZYQx9Sdt+4DnIjaTLu+EZ1Ykdm8qPmUgkCrJ
+        vGId2o1cC8M2DpnXzyddN/rk9w==
+X-Google-Smtp-Source: ABdhPJw+BrScSKY8cwPtWMHO+wpbI7pfRZr8TVd35OrIpG0qohLrXCNbxANPMJ2W58OrVGmXFPO0ig==
+X-Received: by 2002:adf:a34e:0:b0:1f0:1a15:c9b2 with SMTP id d14-20020adfa34e000000b001f01a15c9b2mr13213798wrb.662.1646410525632;
+        Fri, 04 Mar 2022 08:15:25 -0800 (PST)
+Received: from xps-9300.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id g6-20020a5d5406000000b001f049726044sm4937307wrv.79.2022.03.04.08.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Mar 2022 08:15:25 -0800 (PST)
+From:   Alexandre Bailon <abailon@baylibre.com>
+To:     ohad@wizery.com, bjorn.andersson@linaro.org,
+        mathieu.poirier@linaro.org, robh+dt@kernel.or
+Cc:     matthias.bgg@gmail.com, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stephane.leprovost@mediatek.com, khilman@baylibre.com,
+        Alexandre Bailon <abailon@baylibre.com>
+Subject: [PATCH v4 0/7] Add support of mt8183 APU
+Date:   Fri,  4 Mar 2022 17:15:07 +0100
+Message-Id: <20220304161514.994128-1-abailon@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v2 2/3] dt-bindings: remoteproc: Add AVM WASP
-Content-Language: en-US
-To:     Daniel Kestrel <kestrelseventyfour@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220227115832.13490-1-kestrelseventyfour@gmail.com>
- <20220227115832.13490-3-kestrelseventyfour@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220227115832.13490-3-kestrelseventyfour@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 27/02/2022 12:58, Daniel Kestrel wrote:
-> AVM Fritzbox router boards may contain an additional ATH79
-> based SoC that has the wifi cards connected.
-> This patch adds bindings for this remote processor.
-> 
-> Signed-off-by: Daniel Kestrel <kestrelseventyfour@gmail.com>
-> ---
->  .../bindings/remoteproc/avm,wasp-rproc.yaml   | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml
-> new file mode 100644
-> index 000000000000..8b39fafc60aa
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/avm,wasp-rproc.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/avm,wasp-rproc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: AVM WASP processor controller bindings
-> +
-> +maintainers:
-> +  - Daniel Kestrel <kestrelseventyfour@gmail.com>
-> +
-> +description: |
-> +  This document defines the bindings for the remoteproc component that loads and
-> +  boots firmwares on the AVM Wireless Assistent Support Processor (WASP) SoC
-> +  that is attached to some AVM Fritzbox devices (3390, 3490, 5490, 5491, 7490).
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - avm,fritzbox3390-wasp
-> +      - avm,fritzboxx490-wasp
+Some Mediatek's SoC have an AI Processing Unit.
+This adds support of the one available in the mt8183
+(aswell some derivative SoC).
 
-This should be specific compatible instead of wildcard "x490".
+This v4 rework again the memory management.
+Now, vdev buffer and vring buffer are declared in device tree with a fixed
+physical address.
+Using a new property named "memory-region-da", the driver can map the vdev and
+vring buffers and make them available to the APU.
+The physical address must be fixed so the firmware can convert the physical
+address into APU device address.
+Using fixed address is not flexible but this is acceptable since the buffer
+addresses and size are not expected to be changed without a goog reason.
 
-> +
-> +  avm,wasp-mdio:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Lantiq GSWIP switch mdio.
-> +
-> +  avm,wasp-port:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Network port, where the WASP SoC is connected to.
-> +
-> +  avm,reset-gpios:
-> +    description: Reset gpio of the WASP SoC.
-
-maxItems
-
-> +
-> +  avm,startup-gpios:
-> +    description: Startup gpio of the WASP SoC.
-
-maxItems
-
-> +
-> +required:
-> +  - compatible
-> +  - avm,wasp-mdio
-> +  - avm,wasp-port
-> +  - avm,reset-gpios
-> +  - avm,startup-gpios
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    remoteproc {
-> +        compatible = "avm,fritzboxx490-wasp";
-> +        avm,wasp-mdio = <&gswip_mdio>;
-> +        avm,wasp-port = <&port5>;
-> +        avm,reset-gpios = <&gpio 34 GPIO_ACTIVE_HIGH>;
-> +        avm,startup-gpios = <&gpio 5 GPIO_ACTIVE_HIGH>;
-> +    };
+Changes in v4:
+- Update the way to allocate and map the vdev and vring buffers
+- Simplfy the code
+- Add support of a second SoC (mt8365)
+- fix the dt bindings error detected by the bot
+- still use the threaded irq. calling rproc_vq_interrupt from irq causes
+  a scheduling while atomic isssue
+Changes in v3:
+- Remove IOMMU hack. Instead, manage the IOMMU directly from the driver
+- Update the device tree bindings: only use reserved memory for virtio.
+  All the other memory allocation will be done using DMA API.
+  This sould simplify the memory management.
+- Add more comments
+Changes in v2:
+- Drop the workarounds needed to load bad firmwares
+- There are many name for the APU (most common one is VPU).
+  Rename many functions and dts nodes to be more consistent.
+- Use the bulk clock API, and enable / disable clock at a better place
+- add few comments explaining how to start the APU
+- update the way to use pinctl for JTAG
+- fix some minors issues
+- fix device tree bindings
 
 
-Best regards,
-Krzysztof
+Alexandre Bailon (5):
+  dt bindings: remoteproc: Add bindings for the MT8183 APU
+  dt-bindings: remoteproc: Add bindings for the MT8365 APU
+  remoteproc: Add a remoteproc driver for the MT8183's APU
+  remoteproc: mtk_apu: Add support of JTAG
+  ARM64: mt8183: Add support of APU to mt8183
+
+Julien STEPHAN (2):
+  remoteproc: mtk_apu: Use match_data
+  remoteproc: mtk-apu: Add support of MT8365
+
+ .../bindings/remoteproc/mtk,apu.yaml          | 155 ++++
+ .../boot/dts/mediatek/mt8183-pumpkin.dts      |  50 ++
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |  40 ++
+ drivers/remoteproc/Kconfig                    |  19 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/mtk_apu.c                  | 671 ++++++++++++++++++
+ 6 files changed, 936 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/mtk,apu.yaml
+ create mode 100644 drivers/remoteproc/mtk_apu.c
+
+-- 
+2.34.1
+
