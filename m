@@ -2,62 +2,60 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16C34D0E33
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  8 Mar 2022 04:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFC74D104B
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  8 Mar 2022 07:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240927AbiCHDNY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 7 Mar 2022 22:13:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
+        id S242263AbiCHGcF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 8 Mar 2022 01:32:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240534AbiCHDNY (ORCPT
+        with ESMTP id S237589AbiCHGcF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 7 Mar 2022 22:13:24 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EB81160;
-        Mon,  7 Mar 2022 19:12:27 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id c11so2845093pgu.11;
-        Mon, 07 Mar 2022 19:12:27 -0800 (PST)
+        Tue, 8 Mar 2022 01:32:05 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921193C731;
+        Mon,  7 Mar 2022 22:31:09 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id 9so16177069pll.6;
+        Mon, 07 Mar 2022 22:31:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id;
-        bh=T4Ldh9wP6NrK55uA0+WDFo63kUJzzU3JlOSL2h2P1mk=;
-        b=PDQt0K+4JI0d9CJfngLON56gnSZBseP33imtVIA1IINB0GjO2bpqdMaSsP5N3ge9vT
-         pJLJsCWuKCEEzA44XZTqDlySXahQgCh1cvuaN+0QPWMoi7GBKgIqL6I9h1Dvf+ZDFUM9
-         ImTTZ1DI+ipqKDy5PBhdQ24EaPsM0MYsCZbwgJGFDfMUqdZ+fpqwAyMlG8oWtP2xUVxs
-         yoh+AIU8IuAkgnpBBEWPhr10WHVZiZqpbbulzPHytr+HhiN30FOEkbvMAI7gxRzM8Ip4
-         xIQNTAh9n9JIiua9cU0aApWEiHmZWBpNc6hklNCsKnJsCmNGYRacdL+4Vgcebh4v6edN
-         qy9A==
+        bh=zPzSRXxZk2VC9jWykSmXu8LF33ueEsQ/fABYAzEXDDI=;
+        b=KMJeSAAKr3pqDe84nYoboqzx6SSUVoC6Ne8MLR03OGjLd7bbDk5BCdqkiEpD3OKBz5
+         9Jmov3apkDOAHs3pdNu2U4MJKXam7ynjz8Y6smRCFyjW36RiaaOZajxV1UuKMpc18ynf
+         jVYwwjc2bBlIGXusgVv/UolUpggiDoD3No/d7v5WLDRbOhtvObXbWq/d4rccE9ZsRh0B
+         6ROaBKS3B+oBKG//yNtjzKuHvjM9KuUxfKsnvtHv54SIiWIAIsm3LRbd6hRKZ60c6kwK
+         ZNAgoJq1lfOPtt6M1BN422aMu5fkk+gCPvg2ARP8kw/Fq4vKe7IOGnR+bkPebY1UCfdM
+         MooQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=T4Ldh9wP6NrK55uA0+WDFo63kUJzzU3JlOSL2h2P1mk=;
-        b=MgF/gCMIRSKnMLIZawHhIv+c3cLKRmuP70KB5pELH9/TV5b1d8fv8rQoPgtJjwjP7N
-         mfRxg63IUwJC/02G4J1VtV7M34QY4fBi69kkTXzZjOAXK/Q/ES6dk/kZN8FAA/NwrwkH
-         MUqIeNB7mJR+H5ZoEnrPa7mNecpkQYpbt5NYQYs61MRPaay4mAVMAw8kQges0gZAazGE
-         xnYIABntUdGrqaYFNtCfuICpVYplnyahCtMXReu42U9PSYUXBo69RuC/PEtcjIUIy1WT
-         cWcf1Yo9LkMpuvm50722b5ku26svjfSFmTQtNKvuPQSMTfE3x8otG03RBzZkIgH5iB3c
-         d3DA==
-X-Gm-Message-State: AOAM53021HJa8AtMYBh9biFuujt80neY0eafzPayTZloZe7MZLXCWD/x
-        Kv2OYqgE+kBRmQBKyhlZZLY=
-X-Google-Smtp-Source: ABdhPJw96EciYF9gDT4HQ7IT8e1ZtgTYP/ty/zMjL8Ml8IqRNfwzcDPsJul8Xt25SBl+X7u3zzKffw==
-X-Received: by 2002:a63:e60:0:b0:374:6620:f372 with SMTP id 32-20020a630e60000000b003746620f372mr12423978pgo.557.1646709147212;
-        Mon, 07 Mar 2022 19:12:27 -0800 (PST)
+        bh=zPzSRXxZk2VC9jWykSmXu8LF33ueEsQ/fABYAzEXDDI=;
+        b=sqOXmRcueFxM35lzWkJneYdvB0YBO0Ga85B3pUn0SQ54N0vtzYx4doMPrfKsE3BR32
+         6xdJFEPjdpgbYy5gI2VMFAp6a/SbrX9CaceE4X0EGvB8mD4RtyXJaSrSELMUTIYQPO+U
+         RYAFuUdjQ3l4weocq1i71qAOJfja4a5/adVTKFUksdxsMpoxmrxqZf1g7qNmIb3taaPB
+         2XmPsSgVDsOYDaEc2hUYYQZV+ZO3WHToF264hVmdZy8fzCKt+WdxNiqyQrO+o3Ug+JY+
+         IU3DwEvveVXdYoLbxZSbv4GyrMOwxeDHyv2D1S7htcpn47CUkY1YfpT6NNP03KMXMb2f
+         YLsg==
+X-Gm-Message-State: AOAM533oe3V2kUY/DiZk9zcH9kyyIBmPm89RW1ylK5VhfRRmIYgHx1lU
+        nxJNnUaKhoQmHvZxzNNT7Ck=
+X-Google-Smtp-Source: ABdhPJxZFsbiWC5NfKH9m8ycoR+aWyya1YCHYsR7qW1MIa3wLSL+XVDCjWig3pm6OBo6+FL2eBF4wA==
+X-Received: by 2002:a17:902:d4c9:b0:151:e99e:48b with SMTP id o9-20020a170902d4c900b00151e99e048bmr9077659plg.165.1646721069060;
+        Mon, 07 Mar 2022 22:31:09 -0800 (PST)
 Received: from localhost.localdomain ([159.226.95.43])
-        by smtp.googlemail.com with ESMTPSA id bi29-20020a056a00311d00b004f6fa51e70dsm5445580pfb.196.2022.03.07.19.12.24
+        by smtp.googlemail.com with ESMTPSA id j13-20020a63594d000000b003639cf2f9c7sm13915809pgm.71.2022.03.07.22.31.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Mar 2022 19:12:26 -0800 (PST)
+        Mon, 07 Mar 2022 22:31:08 -0800 (PST)
 From:   Miaoqian Lin <linmq006@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rohit kumar <rohitkr@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
         linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     linmq006@gmail.com
-Subject: [PATCH] remoteproc: qcom: Fix missing of_node_put in adsp_alloc_memory_region
-Date:   Tue,  8 Mar 2022 03:12:19 +0000
-Message-Id: <20220308031219.4718-1-linmq006@gmail.com>
+Subject: [PATCH] remoteproc: qcom_wcnss: Add missing of_node_put() in wcnss_alloc_memory_region
+Date:   Tue,  8 Mar 2022 06:31:02 +0000
+Message-Id: <20220308063102.10049-1-linmq006@gmail.com>
 X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
@@ -72,17 +70,17 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 The device_node pointer is returned by of_parse_phandle()  with refcount
 incremented. We should use of_node_put() on it when done.
 
-Fixes: dc160e449122 ("remoteproc: qcom: Introduce Non-PAS ADSP PIL driver")
+Fixes: aed361adca9f ("remoteproc: qcom: Introduce WCNSS peripheral image loader")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 ---
- drivers/remoteproc/qcom_q6v5_adsp.c | 1 +
+ drivers/remoteproc/qcom_wcnss.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-index 098362e6e233..7c02bc132247 100644
---- a/drivers/remoteproc/qcom_q6v5_adsp.c
-+++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-@@ -408,6 +408,7 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
+diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
+index 80bbafee9846..9a223d394087 100644
+--- a/drivers/remoteproc/qcom_wcnss.c
++++ b/drivers/remoteproc/qcom_wcnss.c
+@@ -500,6 +500,7 @@ static int wcnss_alloc_memory_region(struct qcom_wcnss *wcnss)
  	}
  
  	ret = of_address_to_resource(node, 0, &r);
