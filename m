@@ -2,330 +2,149 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EEF74D2CFB
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  9 Mar 2022 11:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0392D4D2C49
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  9 Mar 2022 10:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiCIKVl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 9 Mar 2022 05:21:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S232019AbiCIJmG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 9 Mar 2022 04:42:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiCIKVk (ORCPT
+        with ESMTP id S229774AbiCIJmF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 9 Mar 2022 05:21:40 -0500
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F881688FD;
-        Wed,  9 Mar 2022 02:20:40 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0V6jFsoZ_1646821234;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V6jFsoZ_1646821234)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 09 Mar 2022 18:20:35 +0800
-Message-ID: <1646821007.3534708-15-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH v7 24/26] virtio_net: support rx/tx queue reset
-Date:   Wed, 9 Mar 2022 18:16:47 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-References: <20220308123518.33800-1-xuanzhuo@linux.alibaba.com>
- <20220308123518.33800-25-xuanzhuo@linux.alibaba.com>
- <7ff78ff8-bdd0-bb5e-1cea-cf1126226feb@redhat.com>
-In-Reply-To: <7ff78ff8-bdd0-bb5e-1cea-cf1126226feb@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 9 Mar 2022 04:42:05 -0500
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50048.outbound.protection.outlook.com [40.107.5.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703CA106CA7;
+        Wed,  9 Mar 2022 01:41:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ExLzqNAcAWWE0XONpYALixxPjA5+C1qML5a2HriEJoTWOgqkUYPeLHaOrjITWDINeD93Ua8kfE867yE48bWoLRuL2yAlhNnzgW73pH3z0MRIfvV5Vk2Q6tDecWHHDTwrVKnxXila69WDSgm4uy5yJqKVLa45jqCmR81XBglxbCr0lBHgPSf52bZHwM8Oi/4uUzGcOur+2BzF1887wRQpNFvQGMid1owaFGIYWB5ip6gS8p/aCiFZoskoHCDTuOgJEVSiHrBZsLH1SNh6cg76N9UnL0ajYaLPOTG//i52mI9vdYibAaG2rhJ/mXr+uluWRABTVRWJFWynBll6OJ0Hzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kNqHSPKxL3oC1pudsU1hWIqe0O8qhQwnJwtiPnDEpjE=;
+ b=JOz7lVubav0VE/FcXVD1p7DQlptQqUdR7c4/BqZIKFgHX+IcpGFp4hyP6T1n48+X8lFM/EnXJoUV3Nn9HJCADQf5XHzCyXR1rdrpIDnyUOFgwY7ey3oHd8LdUX24Y7gVd2d3mBPzKgb7ImlLs+rXfjlUABkvbHd0eGNPEQslURSsvTb5qUOfUYixhylmW7uGPH1pGTcHAMjZiRIhJ64PLf23lQM5LGeyaOnxDmyQNK8x9KI7WCIpS77GdkOpK8Qq2bNIpJBiTN+y7oYIVdW4PHDiavZme1o78lhfkX2afE/oyXq88f8VYx5sv/thFMwlK2GNwViVJs1PdFhzWRUZjg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kNqHSPKxL3oC1pudsU1hWIqe0O8qhQwnJwtiPnDEpjE=;
+ b=JGpMAhXjtS1eC1J5E+sMCXEfEJsYd0FnTHVNe3k3fSu3seawA8fF8h+kY+Imd8ol3KKMMfwBHkIvF78+2qfZ+axtKi3clDn3Ge5SA8du0bzB9oO2cgER/IhHx+mbg3r8o5YcP1ZZYrLTHaK/8CTbD0s84uf24HuJmNUWWXOVn6c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by DBBPR04MB6043.eurprd04.prod.outlook.com (2603:10a6:10:c5::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5038.14; Wed, 9 Mar
+ 2022 09:41:04 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::5538:7e34:6843:2bc7]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::5538:7e34:6843:2bc7%6]) with mapi id 15.20.5038.027; Wed, 9 Mar 2022
+ 09:41:04 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski@canonical.com
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V2 0/6] remoteproc: imx_rproc: support i.MX8QM/QXP
+Date:   Wed,  9 Mar 2022 18:21:12 +0800
+Message-Id: <20220309102118.8131-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.30.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR04CA0002.apcprd04.prod.outlook.com
+ (2603:1096:4:197::17) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 664ed3f3-38ba-4ebb-c57f-08da01b0ed4d
+X-MS-TrafficTypeDiagnostic: DBBPR04MB6043:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-Microsoft-Antispam-PRVS: <DBBPR04MB60434ED0DC95943E7C551919C90A9@DBBPR04MB6043.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NBDwRqHKtozxI0aFbdAbr4Avb3uyFOufEtr7ENdDu/hB9CpAo0Cel4JCq1Le4E7CIGmTq0lvYZCey+rwyolvQscGoilDe6x//e39txrkySo29lZ+Zj9t8GeaiiyWx6AozOlPxJwjDW2Ba1djc2mFxQwj4bx2EBLFH1uROwMeBzibxxG0T7gysIw/usrU7tJg1tgVQjJuAF/Cds2TiU9yoM9taq9TSdVZAydEYUJGgfJk20TWSKk7iA9CUZScPS6RMXKluJuqm3B19mcKhBriWw3vlwkOyrId7roZJjizFU9xCRqIbvcAzTfw/db4wUA7xyvPbXNEVssnl39VMk9/o86w+aylODT0p8fXDFKDw99kzoEAmQUI8IbnaLqPe5wv8v0p9M28vFJAyiAgArkOovmlKZHdlJ7HaTIVX/8pMfC+o5bbou19lxOLDcU2MGN5s0rCR5RfVRe9av0qVwbNOlAAvM0qVCLzgwomREHxUNoQKeJe6DaIFRLr9XpEa/EMzcBmCHX3xutchKTyt2BZVar6WFMVjWZuiJiWqt9zV5vwRl3VxqdMn31918wCsRXLjeov1XOx3/uquqIDEdJwYMadYBoUNW+DnoXseJHBo9sLnRHxXAs7mOyZ3aEUq+weod26Vvsk8GygPUQUeBBXQAvJq1k6ysg8NjQDZzDElMbfdJ6MNsaSet/Lz2QnQqz5lMB3JjVrUER4sB0XIJBOu7/OCmWLdiCYwv/IbeyVYKdK8Xpqg8IpYkoob3uCFqYK3+7bObEie3fgl2uq6GAtylQb82Dvff5tMFqGqjQ2Kms=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(86362001)(52116002)(66476007)(66556008)(66946007)(6512007)(8676002)(966005)(8936002)(7416002)(2906002)(6506007)(4326008)(6666004)(6486002)(38350700002)(38100700002)(5660300002)(498600001)(1076003)(186003)(26005)(2616005)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FYA9rswvJcb06jSUuCxJRvGPEWLeY+Yq8TZYwIIWMWPgzNB0bGcVDHf3TXwM?=
+ =?us-ascii?Q?mRB1emhM3WQ6Tq0/qeTNelL76M8KpUF3ucbk65ZFLdWvQ7GzaPWmPY5gkv2g?=
+ =?us-ascii?Q?ptYwtsXFTsdMPxUQRq2z3lDxIVmmCbyz4Fvqn/0pJ+gPamuzCADFFcqTKJH/?=
+ =?us-ascii?Q?FHZlesUUOkJBlK5b7Z8mT1yaS+oAUJyWsBPnDcQE6zB/4fO8Z+dJsJ1o9fKv?=
+ =?us-ascii?Q?FTvyAuW5OtYywt602piVvjdaYjhHjXcTx2wz8tg0TC5Suc5avdn4ch+Sw+UK?=
+ =?us-ascii?Q?ZjmHgp+FqCXfNj7AtTrjI77npSYaTxL+qmpWJlyCt7wCl1be+5EKgtO/AA7S?=
+ =?us-ascii?Q?4n7SRpm0PxNTT0tPHfQQEW2hfUk4ZssEL9iclC97HuE3IC1RXh1HeP9H4Gs3?=
+ =?us-ascii?Q?F7h4EHdYrQLRPLbpTB5WeREAWwA0jjG4E/YndVhballmxsuwcXyBwV8A2zDs?=
+ =?us-ascii?Q?hwQWUjXU0zDO9r12oCaJMuT2N7Y6zLMYReVG7SLvADYggL502lQmYvqEsszw?=
+ =?us-ascii?Q?9Z5nxIuwUe+zgx5TxcGAPZKSZ+pR7oH6vAziWbTZw7lz86QDB2LqSQkKB903?=
+ =?us-ascii?Q?hB6CMMEtIXnY0xWgVpPJz0M6Ghk8Exz9QVjjkovdhCdJm2XqNAO4nbqdIxvq?=
+ =?us-ascii?Q?7zOFD+RB2YweRgY3UsG5bgc9UiNsXue0AbiE3VT/RBYVooitTGuYakJJ9del?=
+ =?us-ascii?Q?f4hhC2K20YZXpAh9Nz0oQGAGS58fKHMrIzAPD2mpMrpHEPsd6ArfFVfACffo?=
+ =?us-ascii?Q?N3sWs1J/IQzYBgNbDZWNa3hKPXM3dPt7wAqPlYmyRGF16oapD5AhbsAVUSfU?=
+ =?us-ascii?Q?0v9QqjCoKkqf/avETtgCGX8ZfnOrZvXTeWNrNi/Cja+DmKxeZvwIoMtlyJsC?=
+ =?us-ascii?Q?29kFyzNqCLr3VDvGsEVkvjQABKk8P3sSBHGOUtREzl7p3+SFH/wZDZCeJWCS?=
+ =?us-ascii?Q?+di0ULjvb7kToClLj1GPWD8h3GEV8D+HD1ydXVz1nC4MnwwzNduzD5EC9Ovd?=
+ =?us-ascii?Q?dJuC7IBidHIE9DqEJMx8EALWm6tOgQ7vP9KMbbG8lWEqMo+WdknWKfpLzPBM?=
+ =?us-ascii?Q?hymGBJKp/XOksHS5rBp8nnjvZabI+2JorKnrfvJPlwrGrsGU1t5BUtfFr3w2?=
+ =?us-ascii?Q?AASoByJnQhArzp7BcsNhjO1BSjyUSLoe0KMmsZa3axAZtBwC840T9S7X+/9t?=
+ =?us-ascii?Q?I080n3w7g/Uu05NDXoFXBBamydsQ/C1I9qvExw/cDlEnQ00qcPGL1nzlv57J?=
+ =?us-ascii?Q?us6YhQ37ef7wNwRQeNeldeyyMcdOv6o5MJ6hVpwKZJbYCBzR3WGgpiEyci2j?=
+ =?us-ascii?Q?pQDQPv5oeqEA6MFC5kzb+MbemdkQuUO89O4NJxw/HOA+7YGoAgpdjQ9xqvo0?=
+ =?us-ascii?Q?dVDMHFauL0ik/72snjqwD2jStA2RlWWG029z0oa7atXJm00g3mD7BuMrANM2?=
+ =?us-ascii?Q?UCRqXCk9I1TTwbPjRPOEC5baAQVD2IPOZr3glbHzqKLk1WyNjBL3guY/ebjp?=
+ =?us-ascii?Q?dM8gkWgxy2tr6OJ8jVdFwS87OP8M+ApmNRZswaXxWOm1AJmbJcasf+4MbZdG?=
+ =?us-ascii?Q?mtr512eIsAxslcYb+aQev2dh90UfR2AY4LBO4EyOF8FY231F/bWbVrjZpK4+?=
+ =?us-ascii?Q?8YYC1EOZNCW8/jJJHoe15OI=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 664ed3f3-38ba-4ebb-c57f-08da01b0ed4d
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Mar 2022 09:41:03.8514
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: t3iHxzA72Tlb9GqpYglG0kkSYpnL8JIEEeyYwJ2cvTuPfjzmmpB2UVKWzcEKl5vVLlzQmxXp/wVSQ5I3/N64gQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6043
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Sorry, the last reply email was too fast, with some Chinese mixed in. So se=
-nd
-another email.
+From: Peng Fan <peng.fan@nxp.com>
 
-On Wed, 9 Mar 2022 17:14:34 +0800, Jason Wang <jasowang@redhat.com> wrote:
->
-> =E5=9C=A8 2022/3/8 =E4=B8=8B=E5=8D=888:35, Xuan Zhuo =E5=86=99=E9=81=93:
-> > This patch implements the reset function of the rx, tx queues.
-> >
-> > Based on this function, it is possible to modify the ring num of the
-> > queue. And quickly recycle the buffer in the queue.
-> >
-> > In the process of the queue disable, in theory, as long as virtio
-> > supports queue reset, there will be no exceptions.
-> >
-> > However, in the process of the queue enable, there may be exceptions du=
-e to
-> > memory allocation.  In this case, vq is not available, but we still have
-> > to execute napi_enable(). Because napi_disable is similar to a lock,
-> > napi_enable must be called after calling napi_disable.
-> >
-> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > ---
-> >   drivers/net/virtio_net.c | 107 +++++++++++++++++++++++++++++++++++++++
-> >   1 file changed, 107 insertions(+)
-> >
-> > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > index 409a8e180918..ffff323dcef0 100644
-> > --- a/drivers/net/virtio_net.c
-> > +++ b/drivers/net/virtio_net.c
-> > @@ -251,6 +251,11 @@ struct padded_vnet_hdr {
-> >   	char padding[4];
-> >   };
-> >
-> > +static void virtnet_sq_free_unused_bufs(struct virtnet_info *vi,
-> > +					struct send_queue *sq);
-> > +static void virtnet_rq_free_unused_bufs(struct virtnet_info *vi,
-> > +					struct receive_queue *rq);
-> > +
-> >   static bool is_xdp_frame(void *ptr)
-> >   {
-> >   	return (unsigned long)ptr & VIRTIO_XDP_FLAG;
-> > @@ -1369,6 +1374,9 @@ static void virtnet_napi_enable(struct virtqueue =
-*vq, struct napi_struct *napi)
-> >   {
-> >   	napi_enable(napi);
-> >
-> > +	if (vq->reset)
-> > +		return;
-> > +
->
->
-> Let's WARN_ONCE() here?
->
->
-> >   	/* If all buffers were filled by other side before we napi_enabled, =
-we
-> >   	 * won't get another interrupt, so process any outstanding packets n=
-ow.
-> >   	 * Call local_bh_enable after to trigger softIRQ processing.
-> > @@ -1413,6 +1421,10 @@ static void refill_work(struct work_struct *work)
-> >   		struct receive_queue *rq =3D &vi->rq[i];
-> >
-> >   		napi_disable(&rq->napi);
-> > +		if (rq->vq->reset) {
-> > +			virtnet_napi_enable(rq->vq, &rq->napi);
-> > +			continue;
-> > +		}
->
->
-> This seems racy and it's a hint that we need sync with the refill work
-> during reset like what we did in virtnet_close():
->
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Make sure refill_work does=
-n't re-enable napi! */
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cancel_delayed_work_sync(&vi-=
->refill);
->
->
-> >   		still_empty =3D !try_fill_recv(vi, rq, GFP_KERNEL);
-> >   		virtnet_napi_enable(rq->vq, &rq->napi);
-> >
-> > @@ -1523,6 +1535,9 @@ static void virtnet_poll_cleantx(struct receive_q=
-ueue *rq)
-> >   	if (!sq->napi.weight || is_xdp_raw_buffer_queue(vi, index))
-> >   		return;
-> >
-> > +	if (sq->vq->reset)
-> > +		return;
->
->
-> It looks to me we'd better either WARN or just remove this. Since it
-> looks like a workaround for the un-synchronized NAPI somehow.
+V2:
+ Depends on https://patchwork.kernel.org/project/linux-remoteproc/list/?series=621311
+ Tested on i.MX8QXP/QM/8MP
+ Addressed Mathieu's comments
+ Drop V1 patch 5/9, patch 3/9 is replaced with upper dependency patchset
+ Move V1 patch 4/9 out to https://patchwork.kernel.org/project/linux-remoteproc/patch/20220308065754.3355-1-peng.fan@oss.nxp.com/
+ Update commit log
+ Drop magic number to get entry address from device tree in patch 4/6
 
-During the reset process, both ring reset and enable may fail. In the case =
-of
-failure, vq will be unavailable. All three cases prevent this situation.
+The V1 patchset:
+https://patchwork.kernel.org/project/linux-remoteproc/patch/20220111033333.403448-4-peng.fan@oss.nxp.com/
 
-Even if it fails, napi still needs to be enabled. This is to prevent
-napi_disable from being stuck when the network card is closed.
+Peng Fan (6):
+  dt-bindings: remoteproc: imx_rproc: support i.MX8QXP
+  dt-bindings: remoteproc: imx_rproc: support i.MX8QM
+  remoteproc: imx_rproc: support attaching to i.MX8QXP M4
+  remoteproc: imx_rproc: support kicking Mcore from Linux for i.MX8QXP
+  remoteproc: imx_rproc: support i.MX8QM
+  remoteproc: imx_rproc: request mbox channel later
 
+ .../bindings/remoteproc/fsl,imx-rproc.yaml    |  19 ++
+ drivers/remoteproc/imx_rproc.c                | 240 +++++++++++++++++-
+ 2 files changed, 246 insertions(+), 13 deletions(-)
 
-So the first and second cases above are that napi is enabled, but vq has not
-been reset successfully or is still in reset.
+-- 
+2.30.0
 
-And the third case is to deal with tx in reset, and rx is in working state,=
- then
-here will access the vq of sq.
-
->
->
-> > +
-> >   	if (__netif_tx_trylock(txq)) {
-> >   		do {
-> >   			virtqueue_disable_cb(sq->vq);
-> > @@ -1769,6 +1784,98 @@ static netdev_tx_t start_xmit(struct sk_buff *sk=
-b, struct net_device *dev)
-> >   	return NETDEV_TX_OK;
-> >   }
-> >
-> > +static int virtnet_rx_vq_reset(struct virtnet_info *vi,
-> > +			       struct receive_queue *rq, u32 ring_num)
->
->
-> It's better to rename this as virtnet_rx_resize().
-
-I don't think resize is good enough, because I think resize is an effect of
-reset. Inside af_xdp, we will call it just to reset to free the buffer with=
-out
-resize with ring_num =3D=3D 0.
-
-So virtnet_rx_reset() might be better.
-
-
->
->
-> > +{
-> > +	int err;
-> > +
-> > +	/* stop napi */
-> > +	napi_disable(&rq->napi);
-> > +
->
->
-> Here, as discussed above, we need synchronize with the refill work.
->
->
-> > +	/* reset the queue */
-> > +	err =3D virtio_reset_vq(rq->vq);
-> > +	if (err)
-> > +		goto err;
->
->
-> Btw, most comment of this function seems useless since code already
-> explain themselves.
->
-
-OK, I will remove these.
-
->
-> > +
-> > +	/* free bufs */
-> > +	virtnet_rq_free_unused_bufs(vi, rq);
-> > +
-> > +	/* reset vring. */
-> > +	err =3D virtqueue_reset_vring(rq->vq, ring_num);
-> > +	if (err)
-> > +		goto err;
-> > +
-> > +	/* enable reset queue */
-> > +	err =3D virtio_enable_resetq(rq->vq);
-> > +	if (err)
-> > +		goto err;
-> > +
-> > +	/* fill recv */
-> > +	if (!try_fill_recv(vi, rq, GFP_KERNEL))
-> > +		schedule_delayed_work(&vi->refill, 0);
-> > +
-> > +	/* enable napi */
-> > +	virtnet_napi_enable(rq->vq, &rq->napi);
-> > +	return 0;
-> > +
-> > +err:
-> > +	netdev_err(vi->dev,
-> > +		   "reset rx reset vq fail: rx queue index: %ld err: %d\n",
-> > +		   rq - vi->rq, err);
-> > +	virtnet_napi_enable(rq->vq, &rq->napi);
-> > +	return err;
-> > +}
-> > +
-> > +static int virtnet_tx_vq_reset(struct virtnet_info *vi,
-> > +			       struct send_queue *sq, u32 ring_num)
-> > +{
->
->
-> It looks to me it's better to rename this as "virtnet_rx_resize()"
->
->
-> > +	struct netdev_queue *txq;
-> > +	int err, qindex;
-> > +
-> > +	qindex =3D sq - vi->sq;
-> > +
-> > +	txq =3D netdev_get_tx_queue(vi->dev, qindex);
-> > +	__netif_tx_lock_bh(txq);
-> > +
-> > +	/* stop tx queue and napi */
-> > +	netif_stop_subqueue(vi->dev, qindex);
-> > +	virtnet_napi_tx_disable(&sq->napi);
->
->
-> There's no need to hold tx lock for napi disable.
-
-The main purpose of tx lock is to wait for other xmit calls to end. And set
-netif_stop_subqueue()
-
-Thanks.
-
->
-> Thanks
->
->
-> > +
-> > +	__netif_tx_unlock_bh(txq);
-> > +
-> > +	/* reset the queue */
-> > +	err =3D virtio_reset_vq(sq->vq);
-> > +	if (err) {
-> > +		netif_start_subqueue(vi->dev, qindex);
-> > +		goto err;
-> > +	}
-> > +
-> > +	/* free bufs */
-> > +	virtnet_sq_free_unused_bufs(vi, sq);
-> > +
-> > +	/* reset vring. */
-> > +	err =3D virtqueue_reset_vring(sq->vq, ring_num);
-> > +	if (err)
-> > +		goto err;
-> > +
-> > +	/* enable reset queue */
-> > +	err =3D virtio_enable_resetq(sq->vq);
-> > +	if (err)
-> > +		goto err;
-> > +
-> > +	/* start tx queue and napi */
-> > +	netif_start_subqueue(vi->dev, qindex);
-> > +	virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
-> > +	return 0;
-> > +
-> > +err:
-> > +	netdev_err(vi->dev,
-> > +		   "reset tx reset vq fail: tx queue index: %ld err: %d\n",
-> > +		   sq - vi->sq, err);
-> > +	virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
-> > +	return err;
-> > +}
-> > +
-> >   /*
-> >    * Send command via the control virtqueue and check status.  Commands
-> >    * supported by the hypervisor, as indicated by feature bits, should
->
