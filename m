@@ -2,87 +2,92 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50AA4EBE7D
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 30 Mar 2022 12:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6324ECBF6
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 30 Mar 2022 20:25:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239965AbiC3KSq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 30 Mar 2022 06:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53700 "EHLO
+        id S1350598AbiC3S0L (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 30 Mar 2022 14:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbiC3KSp (ORCPT
+        with ESMTP id S1350501AbiC3S0F (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 30 Mar 2022 06:18:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985B419E382
-        for <linux-remoteproc@vger.kernel.org>; Wed, 30 Mar 2022 03:17:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37926B81BE2
-        for <linux-remoteproc@vger.kernel.org>; Wed, 30 Mar 2022 10:16:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74DC4C340EC;
-        Wed, 30 Mar 2022 10:16:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1648635416;
-        bh=6kdp8lN1mCI7pDX5PtQ/Vo+adBzSxqa4JFXDPgjrpVY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qI3npp0XOj7tfbPaI56RpqDFuHmO1iFXNYpaejeMn8kg08AAsQTcC6G06a3ysnHhi
-         y2I8eyQ7GhyXvWXFulnb3srAKU/RBJl54L317yOPPQ0t+EayG1/VoPzkJdH8I7XkKq
-         7xsgraEOYGvUY5ZrwCQrfb1lDrPkK7cC9OWYe02s=
-Date:   Wed, 30 Mar 2022 12:16:54 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-remoteproc@vger.kernel.org
-Subject: Re: Possible case of Race in kobject_get_path()
-Message-ID: <YkQuFohIp2jSLCcz@kroah.com>
-References: <0410ceda-cbdd-43a9-7d9b-4079bcdb6237@quicinc.com>
+        Wed, 30 Mar 2022 14:26:05 -0400
+X-Greylist: delayed 8185 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Mar 2022 11:23:08 PDT
+Received: from zsmtp-out1.bppt.go.id (mail.bppt.go.id [103.224.137.202])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728B53FBD7;
+        Wed, 30 Mar 2022 11:23:07 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zsmtp-out1.bppt.go.id (Postfix) with ESMTP id 19B9C87671;
+        Wed, 30 Mar 2022 22:35:40 +0700 (WIB)
+Received: from zsmtp-out1.bppt.go.id ([127.0.0.1])
+        by localhost (zsmtp-out1.bppt.go.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 9c7HwdizIHJN; Wed, 30 Mar 2022 22:35:39 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by zsmtp-out1.bppt.go.id (Postfix) with ESMTP id 511AB8756B;
+        Wed, 30 Mar 2022 22:35:37 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zsmtp-out1.bppt.go.id 511AB8756B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bppt.go.id;
+        s=selector; t=1648654537;
+        bh=W5OBf/pcqsI4R4ZVP+6553vqwfG2usLrrRoBYAMFLCQ=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=l6QiyCChAyfWB/kcczT+0U+p5oeXKeGzmNWztIA1JQFux02v1dd+JtisRjz06pIni
+         f3tp7zMi238ZIJX+trWnL+GuQUsVAAchgMymKV9BI1STiWEU2TbJVbh+oH5WoR0RP+
+         RAXRNljYTPIhMjnbENKKspQb+v1y9fMX02BuIwj8=
+X-Amavis-Modified: Mail body modified (using disclaimer) -
+        zsmtp-out1.bppt.go.id
+X-Virus-Scanned: amavisd-new at bppt.go.id
+Received: from zsmtp-out1.bppt.go.id ([127.0.0.1])
+        by localhost (zsmtp-out1.bppt.go.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 2rLpHvSZDEwL; Wed, 30 Mar 2022 22:35:37 +0700 (WIB)
+Received: from mta1.bppt.go.id (mta1.bppt.go.id [10.10.180.6])
+        by zsmtp-out1.bppt.go.id (Postfix) with ESMTPS id 65D21872EE;
+        Wed, 30 Mar 2022 22:35:34 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta1.bppt.go.id (Postfix) with ESMTP id B4CBF253B4;
+        Wed, 30 Mar 2022 22:35:32 +0700 (WIB)
+Received: from mta1.bppt.go.id ([127.0.0.1])
+        by localhost (mta1.bppt.go.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id g-YTUd6H-wKW; Wed, 30 Mar 2022 22:35:32 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta1.bppt.go.id (Postfix) with ESMTP id E04AD25405;
+        Wed, 30 Mar 2022 22:35:29 +0700 (WIB)
+X-Virus-Scanned: amavisd-new at mta1.bppt.go.id
+Received: from mta1.bppt.go.id ([127.0.0.1])
+        by localhost (mta1.bppt.go.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id PNjMvEiXNB7Y; Wed, 30 Mar 2022 22:35:28 +0700 (WIB)
+Received: from mbox2.bppt.go.id (mbox2.bppt.go.id [10.10.180.5])
+        by mta1.bppt.go.id (Postfix) with ESMTP id 6B0B724F4D;
+        Wed, 30 Mar 2022 22:35:20 +0700 (WIB)
+Date:   Wed, 30 Mar 2022 22:35:20 +0700 (WIB)
+From:   Nadirah <nadirah@bppt.go.id>
+Reply-To: huangjinping@winghang.info
+Message-ID: <342392754.4896193.1648654520349.JavaMail.zimbra@bppt.go.id>
+Subject: Aw:Dringende Antwort erforderlich
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0410ceda-cbdd-43a9-7d9b-4079bcdb6237@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Zimbra 8.8.15_GA_4101 (zclient/8.8.15_GA_4101)
+Thread-Index: RP7QbHaLlZ3G2nK9zJZYN/8O1GyCNg==
+Thread-Topic: Dringende Antwort erforderlich
+X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_QP_LONG_LINE,
+        MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed, Mar 30, 2022 at 03:41:04PM +0530, Mukesh Ojha wrote:
-> Hi All,
-> 
-> We are facing one issue where one driver (p1) is trying to register its
-> device from driver probe
-> and from another path (p2) dev_set_name(new name) done from driver probe of
-> the added device whose
-> new name length can be more than earlier done in (p1 path) which could
-> result in redzone overwritten issue.
+Es tut mir leid, dass ich Ihnen diese E-Mail, die in Ihrem Junk-Ordner eing=
+egangen ist, als unerw=C3=BCnschte E-Mail gesendet habe. Ich hei=C3=9Fe Hua=
+ng Jinping. Ich habe einen Gesch=C3=A4ftsvorschlag f=C3=BCr Sie. Ich wei=C3=
+=9F, dass dieser Gesch=C3=A4ftsvorschlag f=C3=BCr Sie von Interesse sein w=
+=C3=BCrde. F=C3=BCr weitere Informationen kontaktieren Sie mich bitte *****=
+***************************************************************************=
+**********#################################################################=
+####################################
+Isi e-mail ini mungkin bersifat rahasia dan penyalahgunaan, penyalinan, atau penyebaran dari e-mail ini dan semua attachment dari e-mail ini dilarang. Komunikasi internet tidak aman dan oleh karena itu Badan Pengkajian dan Penerapan Teknologi tidak menerima tanggung jawab hukum atas isi pesan ini atau untuk setiap kerusakan yang disebabkan oleh virus. Pendapat-pendapat yang diungkapkan di sini tidak selalu mewakili Badan Pengkajian dan Penerapan Teknologi.
 
-I do not understand, what specific driver is doing this so that we can
-see an example of this problem?
-
-> Can we get your suggestion here ? is this case of a race here ?
-> 
->             p1                                                   p2
-> 
->  device_register()
->     kobject_get_path()
->             =>  get_kobj_path_length
->             (length is calculated from this path)
-> 
->                                                  dev_set_name()
-> 
->             => fill_kobj_path
->               (path is copied here)
-> 
-
-I can not understand this example, any specific code you can point me
-at?
-
-thanks,
-
-greg k-h
