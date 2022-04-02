@@ -2,78 +2,66 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846AE4EFAE6
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  1 Apr 2022 22:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AA44F02DE
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  2 Apr 2022 15:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351812AbiDAUNA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 1 Apr 2022 16:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S1355579AbiDBNss (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 2 Apr 2022 09:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351832AbiDAUMy (ORCPT
+        with ESMTP id S240004AbiDBNsr (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 1 Apr 2022 16:12:54 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0C92228DF
-        for <linux-remoteproc@vger.kernel.org>; Fri,  1 Apr 2022 13:10:59 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id x34so4225780ede.8
-        for <linux-remoteproc@vger.kernel.org>; Fri, 01 Apr 2022 13:10:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=AvfLRaJBW6E1M5nvBx02fvTqKdSpIJZJoIrrhvppE/c=;
-        b=biZjMi8Gi9Wa+XAWZfKljcKy6CGsNOfMCuvMA1MN2UQ2gQ7qRM1zytyuuCisemvT4n
-         eKVC3DRJur0w9NnJtl4JtehrItD1Z9STJe0cKv3h7Y9LFLg+fc/NSDp2+OcZdc3MORUc
-         ArC2Tx3XIBcrbxS2UJjJT/ztOLXwdl536GAcdsgkXGy7JlRxiGNuVlNsB/bxLAQiP6RB
-         SXBUBk7fUgmWbpC1zJkBjFOE0RkbJgdVnAPNFDRL18XYpILCww7uBZgyZTHV/xmFTMYm
-         5T4I0hQpJ/sRm88tKr/wqceEgF5V02ZBoXGjS7RNcGf3wlIZ9uBWFfafyBVZTjIPUPJO
-         DvXg==
+        Sat, 2 Apr 2022 09:48:47 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3F415DABB;
+        Sat,  2 Apr 2022 06:46:54 -0700 (PDT)
+Received: by mail-oi1-f175.google.com with SMTP id b188so5462633oia.13;
+        Sat, 02 Apr 2022 06:46:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=AvfLRaJBW6E1M5nvBx02fvTqKdSpIJZJoIrrhvppE/c=;
-        b=xPy+VGA2Qq9Wv/7LteIUFaGMKifHprtJUQyEp+tStWXoHC8xIRxePSaIg2jN7ql35x
-         suyLsYE7xelmNtHMQpx+UR5B4q3KJyvEOWDMJtTVxrz/jgIyx8Vxg+Jjl0Y9h36XVONT
-         SUUv37B2CSEt2EHaQpCLbs31Bk0WjIZg9OfsPyDN5zkT/6htpHGpKrZ+R8/fnXR5/S+h
-         BNCGV4belToxQLINzQKyE9pkkPjW+gPVYzc8i8Bt/vi/z4r58X8CXfEShrZfrTRR/+WP
-         cb5y3zFh+UYrV6f9C8dS5djjh9y1dPpdBoyYR3uLLCRbyIYzhQAXuARxjTNsgSYocGGf
-         10LA==
-X-Gm-Message-State: AOAM530Uah1uumBRdpuF+ktRGynJMkwUAmpPb3j53OwLwwHFmSgrgM9K
-        iMCXtNruippiPAq8r/VyObhH7df4OppJNBDY
-X-Google-Smtp-Source: ABdhPJzpUkQ6LrIZFlL2INaIFr88n0WL3JjUr/av2XB8sIX4zOzgm2+AQvyGZeA5W7bXKfcLuNLhBw==
-X-Received: by 2002:a05:6402:14b:b0:418:d06e:5d38 with SMTP id s11-20020a056402014b00b00418d06e5d38mr22375521edu.90.1648843858064;
-        Fri, 01 Apr 2022 13:10:58 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id bx5-20020a0564020b4500b00418fca53406sm1509041edb.27.2022.04.01.13.10.56
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=PYegHaEuhlY2VhKGl3I3pW9pPdgl7qRkG8VHF5n6JTw=;
+        b=FYPHnBWqroeBrbArtZQBD1Q3KEmj8oF0r9EHenL1v5o1HGQ5GSL+IF7sNvBSBaKidb
+         /Ak5Ra8JWE9owNnc0cK+diNu9keodYYrq2RE71FIYbEQps9FFXB89bzj/OoDE65qsDCm
+         aYTfcMuW7GZ2w5mAdEI7iMYq2XX18oTnB1rLBp1znY3cf+pMET8pXpIskMIKjtxBfZ2q
+         9RN2/u3y0HOla1VzI94nk0ybRBhT147OMgI37dWlXzeyaxbk113HRQZql/SUyvsVvI4I
+         UTDRCiPoXvjlI8F8+558ksDn9QNR3BgGlisZoJnqIdiHvw3x2z9k/ojT+7oZGYwazI2S
+         eCyQ==
+X-Gm-Message-State: AOAM532Reml2u8bo2nLFA9CLp5A0+Jydykh0Yqw+0y7Z+bVjZB39Lc2n
+        d7BRaV+6YjSb50wGHttRjGo48YS13Q==
+X-Google-Smtp-Source: ABdhPJx1x7E35z39ft+D4POeguSDa0gubfQC2fnl4EmTmsyuU+lI7tGV/uos8UwZuGXiMoWb3u+Qsg==
+X-Received: by 2002:a05:6808:2008:b0:2da:5b12:83ff with SMTP id q8-20020a056808200800b002da5b1283ffmr6521278oiw.216.1648907214036;
+        Sat, 02 Apr 2022 06:46:54 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l12-20020a056870d3cc00b000ddeb925982sm2101659oag.38.2022.04.02.06.46.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Apr 2022 13:10:57 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Sat, 02 Apr 2022 06:46:53 -0700 (PDT)
+Received: (nullmailer pid 903502 invoked by uid 1000);
+        Sat, 02 Apr 2022 13:46:51 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
         Kathiravan T <kathirav@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-clk@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 10/10] dt-bindings: clock: qcom,rpmcc: add clocks property
-Date:   Fri,  1 Apr 2022 22:10:35 +0200
-Message-Id: <20220401201035.189106-11-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220401201035.189106-1-krzysztof.kozlowski@linaro.org>
-References: <20220401201035.189106-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Michael Turquette <mturquette@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>
+In-Reply-To: <20220401201035.189106-9-krzysztof.kozlowski@linaro.org>
+References: <20220401201035.189106-1-krzysztof.kozlowski@linaro.org> <20220401201035.189106-9-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 08/10] dt-bindings: soc: qcom,smd: convert to dtschema
+Date:   Sat, 02 Apr 2022 08:46:51 -0500
+Message-Id: <1648907211.831405.903501.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,31 +69,48 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The RPM clock controller receive input clock ("xo").  It is modelled on
-only one chip - MSM8953.
+On Fri, 01 Apr 2022 22:10:33 +0200, Krzysztof Kozlowski wrote:
+> Convert the Qualcomm Shared Memory Driver bindings to DT Schema.
+> 
+> Changes against original bindings: enforce only specific names of child
+> nodes, instead of any names.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../regulator/qcom,smd-rpm-regulator.yaml     |   2 +-
+>  .../bindings/remoteproc/qcom,q6v5.txt         |   2 +-
+>  .../bindings/remoteproc/qcom,wcnss-pil.txt    |   2 +-
+>  .../bindings/soc/qcom/qcom,smd-rpm.yaml       |   4 +-
+>  .../devicetree/bindings/soc/qcom/qcom,smd.txt |  98 -------------
+>  .../bindings/soc/qcom/qcom,smd.yaml           | 137 ++++++++++++++++++
+>  6 files changed, 142 insertions(+), 103 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smd.txt
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml
+> 
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml b/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
-index 6a492b1ebc7c..9d296b89a8d0 100644
---- a/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,rpmcc.yaml
-@@ -48,6 +48,12 @@ properties:
-   '#clock-cells':
-     const: 1
- 
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: xo
-+
- required:
-   - compatible
-   - '#clock-cells'
--- 
-2.32.0
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,smd.example.dt.yaml: rpm-requests: 'clock-controller' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+Documentation/devicetree/bindings/soc/qcom/qcom,smd.example.dt.yaml:0:0: /example-0/shared-memory/rpm/rpm-requests/clock-controller: failed to match any schema with compatible: ['qcom,rpmcc-msm8974', 'qcom,rpmcc']
+Documentation/devicetree/bindings/soc/qcom/qcom,smd.example.dt.yaml:0:0: /example-0/shared-memory/rpm/rpm-requests/clock-controller: failed to match any schema with compatible: ['qcom,rpmcc-msm8974', 'qcom,rpmcc']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
