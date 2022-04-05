@@ -2,56 +2,73 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0437E4F4962
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  6 Apr 2022 02:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56684F495F
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  6 Apr 2022 02:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241963AbiDEWMV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 5 Apr 2022 18:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57894 "EHLO
+        id S229952AbiDEWMJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 5 Apr 2022 18:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1389781AbiDEP0q (ORCPT
+        with ESMTP id S1456661AbiDEQB6 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 5 Apr 2022 11:26:46 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AE1EEA43;
-        Tue,  5 Apr 2022 06:37:32 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id C01181F4512B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649165850;
-        bh=plGTTyi7O6qDtXxCe+h/xQcs9ltHnMhWtxjOqkuVZDA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=c7CbAeTNu93R+wac0xUo8wYt5JHYwVPd64SEqW/SDwK8otS4ZmnyP2OT8Zetat059
-         odFY4s7LLMRKdZx+u9DgJ+6R76/bmNzUrxwpPJMv+KYldaKtX0rVOinXvHBuewmHCd
-         GPiHBfHg9bzOyApLYuAlAGJ54YI1ZvRFGvvu31CzQMNaPh7/FpmEf6WgCoWWVghk0v
-         n7+V4pbW+bbDbiuVhQ74MTamguMKsNtXVYQJBaVZkV4tM1g6haDmp3nJBTJhcq+6me
-         SGNpIoCdUfJATVmysl7Ianu9MVm7k8Y6RobJ0fX1h6SE+SehjaHHxv8XRMMnf90Yif
-         lU13kvmJsV8CA==
-Message-ID: <9999f731-1e95-ef51-4b09-c88222320696@collabora.com>
-Date:   Tue, 5 Apr 2022 15:37:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] remoteproc: mtk_scp: Fix a potential double free
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Tue, 5 Apr 2022 12:01:58 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C945FAC
+        for <linux-remoteproc@vger.kernel.org>; Tue,  5 Apr 2022 08:24:05 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id n9so6499950plc.4
+        for <linux-remoteproc@vger.kernel.org>; Tue, 05 Apr 2022 08:24:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gaL4daNNx5XyRwsMGVTXgsIpDqFV20lGzvAcOxT5Pxc=;
+        b=XR1rWqooB4cSqOX8klL6QQ5bXML0D9I+c8LZZPvcQC5WHjNtDpu6uiH3xRMe9SG3EM
+         7SxO+lji/FWVuTuv5VEz7GvwQNKIHrtlZzJKLLFIU6+HJJXyqhF1jSbfitjAk4mU56UD
+         2670KEMuz0XBfTmwuShwUTicuUBYggSdXdEA6JObiHzPIlQ+rQqnHR6g0BwxTVNDAz4A
+         Yd18Z3C5x9IfXlytxfT+s4nlS3OnFhYLfdGYV9cLG886o3mC6RQM4O93eH0GJH9LgwRJ
+         +4KocmB/vX4MTyF46d7tbLOyctLs5r7+tSLD2R532rtJddPEojgDZGRVpqBJ44vDBg5i
+         z3nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gaL4daNNx5XyRwsMGVTXgsIpDqFV20lGzvAcOxT5Pxc=;
+        b=FdYfmDzbPesdGABwii2GzqqAmFtCR6oIGkNs5N6VRx7GNJwwjsGbmzWfR6mT0NyrKB
+         40Eh6+O4RJG4fu8mBHpXmiPhExJ75gEXeYqc6s39/PhmVAdfb/hx6Mqrz43uJxlGsfoE
+         tjLE2CrjA0E1nKi8tYRp40XaESP6yCe+ypOXLHYhFX0B6XT5zKuqHE3rw2CxfUyjpwj6
+         SxFvgGb6jW1wAuOCMFCMYG4pdIw00EuhRKh9RIMrOULyYAJfH40PhgDX7aUXNvlEQgGK
+         fUpUVy+Ox00Nv6Z6RfeBFzZjTefO9rYDLLYSeA2ObcPrDbVObHUiJq5SIKS/ziwNFNK9
+         oyVA==
+X-Gm-Message-State: AOAM533rjz79JjzebM4tVxCkuH3qPJMLwKNxDdi45qKhdKZUcx0K4UQQ
+        1NXLkxHjYv2JyrZl+XXqdW0bhQ==
+X-Google-Smtp-Source: ABdhPJyIKhb+o+uPOTXcPrUrIAiRm/siuew4fl4U5FXEjG2l5owGW5KhZ9LBJ1W3hSxv+OVRouj7aQ==
+X-Received: by 2002:a17:90a:1941:b0:1ca:a28b:6744 with SMTP id 1-20020a17090a194100b001caa28b6744mr4858515pjh.50.1649172245357;
+        Tue, 05 Apr 2022 08:24:05 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id b4-20020a17090a550400b001ca38abb248sm2770940pji.53.2022.04.05.08.24.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Apr 2022 08:24:04 -0700 (PDT)
+Date:   Tue, 5 Apr 2022 09:24:02 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <1d15923b4ffb94531435c48482fef276a11b9a67.1648981531.git.christophe.jaillet@wanadoo.fr>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <1d15923b4ffb94531435c48482fef276a11b9a67.1648981531.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v2] arm: configs: Configs that had RPMSG_CHAR now get
+ RPMSG_CTRL
+Message-ID: <20220405152402.GA4147585@p14s>
+References: <20220405115236.1019955-1-arnaud.pouliquen@foss.st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220405115236.1019955-1-arnaud.pouliquen@foss.st.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,18 +76,42 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Il 03/04/22 12:25, Christophe JAILLET ha scritto:
-> 'scp->rproc' is allocated using devm_rproc_alloc(), so there is no need
-> to free it explicitly in the remove function.
+On Tue, Apr 05, 2022 at 01:52:36PM +0200, Arnaud Pouliquen wrote:
+> In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
+> from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
+> By default give everyone who had the old driver enabled the rpmsg_ctrl
+> driver too.
 > 
-> Fixes: c1407ac1099a ("remoteproc: mtk_scp: Use devm variant of rproc_alloc()")
+> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> ---
+> 
+> This patch is extracted from the series [1] that has been partially
+> integrated in the Linux Kernel 5.18-rc1.
+> 
+> Update vs previous version:
+> - remove "Fixes:" tag in commit, requested by Mathieu Poirier in [2]
+> 
+> [1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
+> [2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
+> ---
+>  arch/arm/configs/qcom_defconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
+> index 9981566f2096..2e7e9a4f31f6 100644
+> --- a/arch/arm/configs/qcom_defconfig
+> +++ b/arch/arm/configs/qcom_defconfig
+> @@ -241,6 +241,7 @@ CONFIG_QCOM_Q6V5_PAS=y
+>  CONFIG_QCOM_Q6V5_PIL=y
+>  CONFIG_QCOM_WCNSS_PIL=y
+>  CONFIG_RPMSG_CHAR=y
+> +CONFIG_RPMSG_CTRL=y
+>  CONFIG_RPMSG_QCOM_GLINK_SMEM=y
+>  CONFIG_RPMSG_QCOM_SMD=y
+>  CONFIG_QCOM_COMMAND_DB=y
 
-Hello Cristophe,
-thanks for the patch!
+Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-I agree with what you're doing here, but you forgot to add your Signed-off-by.
-Please resend it with your signoff, then I will give you my R-b.
-Also, please make sure to add me to the Ccs so that I can see your v2 sooner!
-
-Thanks,
-Angelo
+> -- 
+> 2.25.1
+> 
