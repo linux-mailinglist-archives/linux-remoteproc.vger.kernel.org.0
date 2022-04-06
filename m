@@ -2,106 +2,117 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE044F495A
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  6 Apr 2022 02:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E304F5B49
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  6 Apr 2022 12:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232396AbiDEWLN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 5 Apr 2022 18:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S245674AbiDFKUp (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 6 Apr 2022 06:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1457599AbiDEQOF (ORCPT
+        with ESMTP id S1377512AbiDFKSm (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 5 Apr 2022 12:14:05 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FF315701;
-        Tue,  5 Apr 2022 09:12:07 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 235Dkb0A024619;
-        Tue, 5 Apr 2022 18:11:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=YYuFJUbBGAhIAF7jE0NLyDCpsVggjgUfUTeXHBPg+6w=;
- b=ED8nOSlV3isg8Qq3bH+Bvfd8Zt5/XefkPF98Txb9noYRKAH3Rze4l63NHwHyqa/6URl/
- lw9ENLxj1Fi62hSYxf3QHs5jELIVPXwwMl2GvTkMLEswQTUWO8npUP6GWqOpLqqRnBc1
- j32HrcFyGLFc1j8MVcnl3PaIj56tqvgDb3EorPiUaQ4mie5YPtoxtbSyeBQgHQUfE1rm
- k51gX6HAfaqEDv2u72GkKrYuRuEBreAllIlID8GwFealdE6fX3x03an97GDAl8IPwfQD
- PYWJmxCyRZJNZWl1ZLQ6GvEHP7T7U7MEIDVl0iXE7K9fUgbSlrcmN/g3VTD4vOajfvuJ +g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3f6dcgu3xw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Apr 2022 18:11:52 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4A0EE10002A;
-        Tue,  5 Apr 2022 18:11:52 +0200 (CEST)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3CE962278AC;
-        Tue,  5 Apr 2022 18:11:52 +0200 (CEST)
-Received: from localhost (10.75.127.50) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 5 Apr 2022 18:11:51
- +0200
-From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
+        Wed, 6 Apr 2022 06:18:42 -0400
+Received: from out30-45.freemail.mail.aliyun.com (out30-45.freemail.mail.aliyun.com [115.124.30.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930F023190E;
+        Tue,  5 Apr 2022 20:44:01 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0V9JmraU_1649216635;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V9JmraU_1649216635)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 06 Apr 2022 11:43:56 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     virtualization@lists.linux-foundation.org
+Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Vadim Pasternak <vadimp@nvidia.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <arnaud.pouliquen@foss.st.com>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>
-Subject: [PATCH v3] arm64: defconfig: Config that had RPMSG_CHAR now gets RPMSG_CTRL
-Date:   Tue, 5 Apr 2022 18:11:14 +0200
-Message-ID: <20220405161114.1107745-1-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+        Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        linux-um@lists.infradead.org, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v9 04/32] virtio_ring: remove the arg vq of vring_alloc_desc_extra()
+Date:   Wed,  6 Apr 2022 11:43:18 +0800
+Message-Id: <20220406034346.74409-5-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20220406034346.74409-1-xuanzhuo@linux.alibaba.com>
+References: <20220406034346.74409-1-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
+X-Git-Hash: 881cb3483d12
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.850,Hydra:6.0.425,FMLib:17.11.64.514
- definitions=2022-04-05_04,2022-04-05_01,2022-02-23_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-In the commit 617d32938d1b ("rpmsg: Move the rpmsg control device
-from rpmsg_char to rpmsg_ctrl"), we split the rpmsg_char driver in two.
-By default give everyone who had the old driver enabled the rpmsg_ctrl
-driver too.
+The parameter vq of vring_alloc_desc_extra() is useless. This patch
+removes this parameter.
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Subsequent patches will call this function to avoid passing useless
+arguments.
+
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
+ drivers/virtio/virtio_ring.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-This patch is extracted from the series [1] that has been partially
-integrated in the Linux Kernel 5.18-rc1.
-
-Update vs previous version:
-- Add missing "---" separation marker after "Signed-off-by".
-
-[1]https://lore.kernel.org/lkml/15be2f08-ba03-2b80-6f53-2056359d5c41@gmail.com/T/
-[2]https://lore.kernel.org/linux-arm-kernel/CANLsYky1_b80qPbgOaLGVYD-GEr21V6C653iGEB7VCU=GbGvAQ@mail.gmail.com/T/
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 50aa3d75ab4f..3f8906b8a2ca 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1053,6 +1053,7 @@ CONFIG_QCOM_Q6V5_PAS=m
- CONFIG_QCOM_SYSMON=m
- CONFIG_QCOM_WCNSS_PIL=m
- CONFIG_RPMSG_CHAR=m
-+CONFIG_RPMSG_CTRL=m
- CONFIG_RPMSG_QCOM_GLINK_RPM=y
- CONFIG_RPMSG_QCOM_GLINK_SMEM=m
- CONFIG_RPMSG_QCOM_SMD=y
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index f1807f6b06a5..cb6010750a94 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -1636,8 +1636,7 @@ static void *virtqueue_detach_unused_buf_packed(struct virtqueue *_vq)
+ 	return NULL;
+ }
+ 
+-static struct vring_desc_extra *vring_alloc_desc_extra(struct vring_virtqueue *vq,
+-						       unsigned int num)
++static struct vring_desc_extra *vring_alloc_desc_extra(unsigned int num)
+ {
+ 	struct vring_desc_extra *desc_extra;
+ 	unsigned int i;
+@@ -1755,7 +1754,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+ 	/* Put everything in free lists. */
+ 	vq->free_head = 0;
+ 
+-	vq->packed.desc_extra = vring_alloc_desc_extra(vq, num);
++	vq->packed.desc_extra = vring_alloc_desc_extra(num);
+ 	if (!vq->packed.desc_extra)
+ 		goto err_desc_extra;
+ 
+@@ -2233,7 +2232,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+ 	if (!vq->split.desc_state)
+ 		goto err_state;
+ 
+-	vq->split.desc_extra = vring_alloc_desc_extra(vq, vring.num);
++	vq->split.desc_extra = vring_alloc_desc_extra(vring.num);
+ 	if (!vq->split.desc_extra)
+ 		goto err_extra;
+ 
 -- 
-2.25.1
+2.31.0
 
