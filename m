@@ -2,23 +2,23 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE114F5B4E
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  6 Apr 2022 12:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0994F6025
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  6 Apr 2022 15:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378693AbiDFKUA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 6 Apr 2022 06:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
+        id S233525AbiDFNdN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 6 Apr 2022 09:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377555AbiDFKSn (ORCPT
+        with ESMTP id S234014AbiDFNdC (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 6 Apr 2022 06:18:43 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F317FABD6;
-        Tue,  5 Apr 2022 20:44:57 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R691e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0V9JnaX5_1649216691;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V9JnaX5_1649216691)
+        Wed, 6 Apr 2022 09:33:02 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B9A2128C9;
+        Tue,  5 Apr 2022 20:43:55 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0V9KCOAc_1649216628;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0V9KCOAc_1649216628)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 06 Apr 2022 11:44:52 +0800
+          Wed, 06 Apr 2022 11:43:49 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     virtualization@lists.linux-foundation.org
 Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
@@ -50,9 +50,9 @@ Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
         platform-driver-x86@vger.kernel.org,
         linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
         kvm@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v9 30/32] virtio_net: split free_unused_bufs()
-Date:   Wed,  6 Apr 2022 11:43:44 +0800
-Message-Id: <20220406034346.74409-31-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH v9 01/32] virtio: add helper virtqueue_get_vring_max_size()
+Date:   Wed,  6 Apr 2022 11:43:15 +0800
+Message-Id: <20220406034346.74409-2-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.31.0
 In-Reply-To: <20220406034346.74409-1-xuanzhuo@linux.alibaba.com>
 References: <20220406034346.74409-1-xuanzhuo@linux.alibaba.com>
@@ -70,81 +70,177 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-This patch separates two functions for freeing sq buf and rq buf from
-free_unused_bufs().
+Record the maximum queue num supported by the device.
 
-When supporting the enable/disable tx/rq queue in the future, it is
-necessary to support separate recovery of a sq buf or a rq buf.
+virtio-net can display the maximum (supported by hardware) ring size in
+ethtool -g eth0.
+
+When the subsequent patch implements vring reset, it can judge whether
+the ring size passed by the driver is legal based on this.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 41 ++++++++++++++++++++++++----------------
- 1 file changed, 25 insertions(+), 16 deletions(-)
+ arch/um/drivers/virtio_uml.c             |  1 +
+ drivers/platform/mellanox/mlxbf-tmfifo.c |  2 ++
+ drivers/remoteproc/remoteproc_virtio.c   |  2 ++
+ drivers/s390/virtio/virtio_ccw.c         |  3 +++
+ drivers/virtio/virtio_mmio.c             |  2 ++
+ drivers/virtio/virtio_pci_legacy.c       |  2 ++
+ drivers/virtio/virtio_pci_modern.c       |  2 ++
+ drivers/virtio/virtio_ring.c             | 14 ++++++++++++++
+ drivers/virtio/virtio_vdpa.c             |  2 ++
+ include/linux/virtio.h                   |  2 ++
+ 10 files changed, 32 insertions(+)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 96d96c666c8c..b8bf00525177 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2804,6 +2804,27 @@ static void free_receive_page_frags(struct virtnet_info *vi)
- 			put_page(vi->rq[i].alloc_frag.page);
- }
+diff --git a/arch/um/drivers/virtio_uml.c b/arch/um/drivers/virtio_uml.c
+index ba562d68dc04..904993d15a85 100644
+--- a/arch/um/drivers/virtio_uml.c
++++ b/arch/um/drivers/virtio_uml.c
+@@ -945,6 +945,7 @@ static struct virtqueue *vu_setup_vq(struct virtio_device *vdev,
+ 		goto error_create;
+ 	}
+ 	vq->priv = info;
++	vq->num_max = num;
+ 	num = virtqueue_get_vring_size(vq);
  
-+static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf)
-+{
-+	if (!is_xdp_frame(buf))
-+		dev_kfree_skb(buf);
-+	else
-+		xdp_return_frame(ptr_to_xdp(buf));
-+}
-+
-+static void virtnet_rq_free_unused_buf(struct virtqueue *vq, void *buf)
-+{
-+	struct virtnet_info *vi = vq->vdev->priv;
-+	int i = vq2rxq(vq);
-+
-+	if (vi->mergeable_rx_bufs)
-+		put_page(virt_to_head_page(buf));
-+	else if (vi->big_packets)
-+		give_pages(&vi->rq[i], buf);
-+	else
-+		put_page(virt_to_head_page(buf));
-+}
-+
- static void free_unused_bufs(struct virtnet_info *vi)
- {
- 	void *buf;
-@@ -2811,26 +2832,14 @@ static void free_unused_bufs(struct virtnet_info *vi)
+ 	if (vu_dev->protocol_features &
+diff --git a/drivers/platform/mellanox/mlxbf-tmfifo.c b/drivers/platform/mellanox/mlxbf-tmfifo.c
+index 38800e86ed8a..1ae3c56b66b0 100644
+--- a/drivers/platform/mellanox/mlxbf-tmfifo.c
++++ b/drivers/platform/mellanox/mlxbf-tmfifo.c
+@@ -959,6 +959,8 @@ static int mlxbf_tmfifo_virtio_find_vqs(struct virtio_device *vdev,
+ 			goto error;
+ 		}
  
- 	for (i = 0; i < vi->max_queue_pairs; i++) {
- 		struct virtqueue *vq = vi->sq[i].vq;
--		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL) {
--			if (!is_xdp_frame(buf))
--				dev_kfree_skb(buf);
--			else
--				xdp_return_frame(ptr_to_xdp(buf));
--		}
-+		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
-+			virtnet_sq_free_unused_buf(vq, buf);
++		vq->num_max = vring->num;
++
+ 		vqs[i] = vq;
+ 		vring->vq = vq;
+ 		vq->priv = vring;
+diff --git a/drivers/remoteproc/remoteproc_virtio.c b/drivers/remoteproc/remoteproc_virtio.c
+index 70ab496d0431..7611755d0ae2 100644
+--- a/drivers/remoteproc/remoteproc_virtio.c
++++ b/drivers/remoteproc/remoteproc_virtio.c
+@@ -125,6 +125,8 @@ static struct virtqueue *rp_find_vq(struct virtio_device *vdev,
+ 		return ERR_PTR(-ENOMEM);
  	}
  
- 	for (i = 0; i < vi->max_queue_pairs; i++) {
- 		struct virtqueue *vq = vi->rq[i].vq;
--
--		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL) {
--			if (vi->mergeable_rx_bufs) {
--				put_page(virt_to_head_page(buf));
--			} else if (vi->big_packets) {
--				give_pages(&vi->rq[i], buf);
--			} else {
--				put_page(virt_to_head_page(buf));
--			}
--		}
-+		while ((buf = virtqueue_detach_unused_buf(vq)) != NULL)
-+			virtnet_rq_free_unused_buf(vq, buf);
- 	}
- }
++	vq->num_max = len;
++
+ 	rvring->vq = vq;
+ 	vq->priv = rvring;
  
+diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+index d35e7a3f7067..468da60b56c5 100644
+--- a/drivers/s390/virtio/virtio_ccw.c
++++ b/drivers/s390/virtio/virtio_ccw.c
+@@ -529,6 +529,9 @@ static struct virtqueue *virtio_ccw_setup_vq(struct virtio_device *vdev,
+ 		err = -ENOMEM;
+ 		goto out_err;
+ 	}
++
++	vq->num_max = info->num;
++
+ 	/* it may have been reduced */
+ 	info->num = virtqueue_get_vring_size(vq);
+ 
+diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+index 56128b9c46eb..a41abc8051b9 100644
+--- a/drivers/virtio/virtio_mmio.c
++++ b/drivers/virtio/virtio_mmio.c
+@@ -390,6 +390,8 @@ static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned index,
+ 		goto error_new_virtqueue;
+ 	}
+ 
++	vq->num_max = num;
++
+ 	/* Activate the queue */
+ 	writel(virtqueue_get_vring_size(vq), vm_dev->base + VIRTIO_MMIO_QUEUE_NUM);
+ 	if (vm_dev->version == 1) {
+diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci_legacy.c
+index 34141b9abe27..b68934fe6b5d 100644
+--- a/drivers/virtio/virtio_pci_legacy.c
++++ b/drivers/virtio/virtio_pci_legacy.c
+@@ -135,6 +135,8 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ 	if (!vq)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	vq->num_max = num;
++
+ 	q_pfn = virtqueue_get_desc_addr(vq) >> VIRTIO_PCI_QUEUE_ADDR_SHIFT;
+ 	if (q_pfn >> 32) {
+ 		dev_err(&vp_dev->pci_dev->dev,
+diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci_modern.c
+index 5455bc041fb6..86d301f272b8 100644
+--- a/drivers/virtio/virtio_pci_modern.c
++++ b/drivers/virtio/virtio_pci_modern.c
+@@ -218,6 +218,8 @@ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ 	if (!vq)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	vq->num_max = num;
++
+ 	/* activate the queue */
+ 	vp_modern_set_queue_size(mdev, index, virtqueue_get_vring_size(vq));
+ 	vp_modern_queue_address(mdev, index, virtqueue_get_desc_addr(vq),
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 962f1477b1fa..b87130c8f312 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -2371,6 +2371,20 @@ void vring_transport_features(struct virtio_device *vdev)
+ }
+ EXPORT_SYMBOL_GPL(vring_transport_features);
+ 
++/**
++ * virtqueue_get_vring_max_size - return the max size of the virtqueue's vring
++ * @_vq: the struct virtqueue containing the vring of interest.
++ *
++ * Returns the max size of the vring.
++ *
++ * Unlike other operations, this need not be serialized.
++ */
++unsigned int virtqueue_get_vring_max_size(struct virtqueue *_vq)
++{
++	return _vq->num_max;
++}
++EXPORT_SYMBOL_GPL(virtqueue_get_vring_max_size);
++
+ /**
+  * virtqueue_get_vring_size - return the size of the virtqueue's vring
+  * @_vq: the struct virtqueue containing the vring of interest.
+diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
+index 7767a7f0119b..39e4c08eb0f2 100644
+--- a/drivers/virtio/virtio_vdpa.c
++++ b/drivers/virtio/virtio_vdpa.c
+@@ -183,6 +183,8 @@ virtio_vdpa_setup_vq(struct virtio_device *vdev, unsigned int index,
+ 		goto error_new_virtqueue;
+ 	}
+ 
++	vq->num_max = max_num;
++
+ 	/* Setup virtqueue callback */
+ 	cb.callback = virtio_vdpa_virtqueue_cb;
+ 	cb.private = info;
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index 72292a62cd90..d59adc4be068 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -31,6 +31,7 @@ struct virtqueue {
+ 	struct virtio_device *vdev;
+ 	unsigned int index;
+ 	unsigned int num_free;
++	unsigned int num_max;
+ 	void *priv;
+ };
+ 
+@@ -80,6 +81,7 @@ bool virtqueue_enable_cb_delayed(struct virtqueue *vq);
+ 
+ void *virtqueue_detach_unused_buf(struct virtqueue *vq);
+ 
++unsigned int virtqueue_get_vring_max_size(struct virtqueue *vq);
+ unsigned int virtqueue_get_vring_size(struct virtqueue *vq);
+ 
+ bool virtqueue_is_broken(struct virtqueue *vq);
 -- 
 2.31.0
 
