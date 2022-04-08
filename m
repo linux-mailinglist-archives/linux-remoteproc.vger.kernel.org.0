@@ -2,196 +2,147 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB284F8560
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  7 Apr 2022 18:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20EF4F9F75
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  9 Apr 2022 00:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345892AbiDGRAl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 7 Apr 2022 13:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
+        id S236832AbiDHWF2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 8 Apr 2022 18:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232076AbiDGRAl (ORCPT
+        with ESMTP id S235128AbiDHWF0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 7 Apr 2022 13:00:41 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CA816BCE1;
-        Thu,  7 Apr 2022 09:58:39 -0700 (PDT)
+        Fri, 8 Apr 2022 18:05:26 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EC59E9DA
+        for <linux-remoteproc@vger.kernel.org>; Fri,  8 Apr 2022 15:03:20 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id e4so10228078oif.2
+        for <linux-remoteproc@vger.kernel.org>; Fri, 08 Apr 2022 15:03:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1649350719; x=1680886719;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lChw7ZZ4f2hLuY+s+NBoCPVu6Fj9AVLboT3sRkPZWA4=;
-  b=BPJO2K8DOCpvtx5uHPFidvlHSoJUmh7KkAyNs44uDO4YLTU40Sq2qZlr
-   l8p6xyunhfaF6103bVhGy0fdQq+mdAyuae4H+Bzoily3r+RFoYEfhydEl
-   kdO8VIurz/iOpE5yvFJHdoAV7eb18nYE8z1mNKFCjC+2Wr0paRjWNIo0/
-   I=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 07 Apr 2022 09:58:39 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Apr 2022 09:58:38 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 7 Apr 2022 09:58:38 -0700
-Received: from [10.216.58.168] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 7 Apr 2022
- 09:58:32 -0700
-Message-ID: <fef7733c-deb6-71a6-1b4f-3452257bc662@quicinc.com>
-Date:   Thu, 7 Apr 2022 22:28:27 +0530
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Eewg3H1xy6qXGWRPZTaCTNl8Vpw97TxspgFq5EUBMRA=;
+        b=fOpVelIK08yCmnuMNNzlwgP+fy2zs5w4WJxU2/loihlzUnWt7lcEDyNs59vDCVvWHs
+         Q0CbB5QfOFnw5CDbkZN/teoiV8cBLYV2HpdMXtwlYBfT6ViiCKpBHC6ef8Bb43WvB5PF
+         lucDNe4WcvGCNSeIdHo/ST6Kucf2ZELgLqL8e49XYLH75b4d55Vkkb00AKeQynFLNDPf
+         AqbjgDqEt1h6K9eoDNVpXL6wz77cjcx1G4YVshpe3CjPd2s3Efg2JtzkafwxUsXFskNR
+         69RNaSfBVj7EtunmGzzf/DXIjjWAEIIp9rd4fE2l2UlFPsWNhlscTf5J9RVHNECVXnBK
+         Cqhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Eewg3H1xy6qXGWRPZTaCTNl8Vpw97TxspgFq5EUBMRA=;
+        b=664HbvgCbJCYOf8NWjvguILK6pxqi3Rw3XmZJhDVudE9O+vr8yflPTDVs+pOI2zODh
+         rHkVLyZLPWoHMUWQiUeqyXnEPBBWHyPlHO3a0sLhZpp1dDgUigVWAB2Civm9GAGL1b1R
+         95ah5ICB09u7toz470M5dq2LnWwDyduaUf6/0IbIOuHBa+msaCSlCT4ylSb4pMx11wpk
+         MqJymtcF95YhZymiX52j3ZD/z9kjviWOLiGYOQzp2q+IaIqVGuT48h6C9VTWAgcl7lON
+         tVnV+bLgxXvYfy34CEqj1kXPZYW90SDhKmww39K86MFPNfLA+w6JKM1dllwptp4abUJJ
+         TLaA==
+X-Gm-Message-State: AOAM531mI84bd1GU83oqS58NNH5qfnBqBJtmr5Ba8fncQWC8NrnQtPZ/
+        R4byylqTXwLo1QSyAZIxNX9smQ==
+X-Google-Smtp-Source: ABdhPJw7B8pf6MakGL0WWtA4jRzGyZlx3cel8YeUFC2Wxm1VAnkL64p5UbLlW46Ysmdnw7RGS8hnzw==
+X-Received: by 2002:a05:6808:114d:b0:2f7:59fd:2f18 with SMTP id u13-20020a056808114d00b002f759fd2f18mr848289oiu.113.1649455399908;
+        Fri, 08 Apr 2022 15:03:19 -0700 (PDT)
+Received: from ripper.. ([2600:1700:a0:3dc8:205:1bff:fec0:b9b3])
+        by smtp.gmail.com with ESMTPSA id d1-20020a056830138100b005cf2f29d89csm9212635otq.77.2022.04.08.15.03.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Apr 2022 15:03:19 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: remoteproc: qcom: pas: Add sc8280xp adsp and nsp pair
+Date:   Fri,  8 Apr 2022 15:05:38 -0700
+Message-Id: <20220408220539.625301-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH V1 2/3] rpmsg: glink: Add lock to avoid race when rpmsg
- device is released
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <swboyd@chromium.org>, <quic_clew@quicinc.com>,
-        <mathieu.poirier@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        "Ohad Ben-Cohen" <ohad@wizery.com>
-References: <1643223886-28170-1-git-send-email-quic_deesin@quicinc.com>
- <1643223886-28170-3-git-send-email-quic_deesin@quicinc.com>
- <Yiu2nawUPxWYaIY3@builder.lan>
-From:   Deepak Kumar Singh <quic_deesin@quicinc.com>
-In-Reply-To: <Yiu2nawUPxWYaIY3@builder.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Add the Qualcomm sc8280xp ADSP and NSP pairs to the binding.
 
-On 3/12/2022 2:22 AM, Bjorn Andersson wrote:
-> On Wed 26 Jan 13:04 CST 2022, Deepak Kumar Singh wrote:
->
->> When remote host goes down glink char device channel is freed,
->> At the same time user space apps can still try to open rpmsg_char
->> device which will result in calling rpmsg_create_ept. This may cause
->> reference to already freed context of glink chardev channel.
->>
-> Hi Deepak,
->
-> Could you please be a little bit more specific on the details of where
-> you're seeing this race? Perhaps I'm just missing something obvious?
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ .../bindings/remoteproc/qcom,adsp.yaml        | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Crash is observed in reboot test case.
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+index a4409c398193..df8286296c37 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+@@ -29,6 +29,9 @@ properties:
+       - qcom,sc8180x-adsp-pas
+       - qcom,sc8180x-cdsp-pas
+       - qcom,sc8180x-mpss-pas
++      - qcom,sc8280xp-adsp-pas
++      - qcom,sc8280xp-nsp0-pas
++      - qcom,sc8280xp-nsp1-pas
+       - qcom,sdm660-adsp-pas
+       - qcom,sdm845-adsp-pas
+       - qcom,sdm845-cdsp-pas
+@@ -169,6 +172,9 @@ allOf:
+               - qcom,sc8180x-adsp-pas
+               - qcom,sc8180x-cdsp-pas
+               - qcom,sc8180x-mpss-pas
++              - qcom,sc8280xp-adsp-pas
++              - qcom,sc8280xp-nsp0-pas
++              - qcom,sc8280xp-nsp1-pas
+               - qcom,sdm845-adsp-pas
+               - qcom,sdm845-cdsp-pas
+               - qcom,sm6350-adsp-pas
+@@ -284,6 +290,9 @@ allOf:
+               - qcom,qcs404-wcss-pas
+               - qcom,sc8180x-adsp-pas
+               - qcom,sc8180x-cdsp-pas
++              - qcom,sc8280xp-adsp-pas
++              - qcom,sc8280xp-nsp0-pas
++              - qcom,sc8280xp-nsp1-pas
+               - qcom,sdm845-adsp-pas
+               - qcom,sdm845-cdsp-pas
+               - qcom,sm6350-adsp-pas
+@@ -471,6 +480,7 @@ allOf:
+             enum:
+               - qcom,sc8180x-adsp-pas
+               - qcom,sc8180x-cdsp-pas
++              - qcom,sc8280xp-adsp-pas
+               - qcom,sm6350-adsp-pas
+               - qcom,sm8150-slpi-pas
+               - qcom,sm8250-adsp-pas
+@@ -508,6 +518,22 @@ allOf:
+             - const: cx
+             - const: mxc
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,sc8280xp-nsp0-pas
++              - qcom,sc8280xp-nsp1-pas
++    then:
++      properties:
++        power-domains:
++          items:
++            - description: NSP power domain
++        power-domain-names:
++          items:
++            - const: nsp
++
+   - if:
+       properties:
+         compatible:
+-- 
+2.35.1
 
-Log prints suggested that ept was destroyed just before crash in 
-rpmsg_eptdev_create().
-
-Below code was executed before crash -
-
-static int rpmsg_eptdev_destroy(struct device *dev, void *data)
-{
-     struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
-
-     mutex_lock(&eptdev->ept_lock);
-     if (eptdev->ept) {
-         rpmsg_destroy_ept(eptdev->ept);
-         eptdev->ept = NULL;
-     }
-     mutex_unlock(&eptdev->ept_lock);
-
-     /* wake up any blocked readers */
-     wake_up_interruptible(&eptdev->readq);
-
-     device_del(&eptdev->dev);
-     put_device(&eptdev->dev);
-
-     return 0;
-}
-
-one crash was observed in rpmsg_eptdev_create() and other in 
-rpmsg_eptdev_poll() -
-
-1)
-
-rpmsg_create_ept+0x40/0xa0
-rpmsg_eptdev_open+0x88/0x138
-chrdev_open+0xc4/0x1c8
-do_dentry_open+0x230/0x378
-vfs_open+0x3c/0x48
-path_openat+0x93c/0xa78
-do_filp_open+0x98/0x118
-do_sys_openat2+0x90/0x220
-do_sys_open+0x64/0x8c
-
-2)
-
-rpmsg_poll+0x5c/0x80
-rpmsg_eptdev_poll+0x84/0xa4
-do_sys_poll+0x22c/0x5c8
-
->> Use per ept lock to avoid race between rpmsg_destroy_ept and
->> rpmsg_destory_ept.
-> I presume one of these should say rpmsg_eptdev_open().
-yes, i will correct this in next patch.
-> Regards,
-> Bjorn
->
->> ---
->>   drivers/rpmsg/rpmsg_char.c | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
->> index 72ee101..2108ef8 100644
->> --- a/drivers/rpmsg/rpmsg_char.c
->> +++ b/drivers/rpmsg/rpmsg_char.c
->> @@ -85,6 +85,7 @@ static int rpmsg_eptdev_destroy(struct device *dev, void *data)
->>   	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
->>   
->>   	mutex_lock(&eptdev->ept_lock);
->> +	eptdev->rpdev = NULL;
->>   	if (eptdev->ept) {
->>   		rpmsg_destroy_ept(eptdev->ept);
->>   		eptdev->ept = NULL;
->> @@ -145,15 +146,24 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
->>   
->>   	get_device(dev);
->>   
->> +	mutex_lock(&eptdev->ept_lock);
->> +	if (!eptdev->rpdev) {
->> +		put_device(dev);
->> +		mutex_unlock(&eptdev->ept_lock);
->> +		return -ENETRESET;
->> +	}
->> +
->>   	ept = rpmsg_create_ept(rpdev, rpmsg_ept_cb, eptdev, eptdev->chinfo);
->>   	if (!ept) {
->>   		dev_err(dev, "failed to open %s\n", eptdev->chinfo.name);
->> +		mutex_unlock(&eptdev->ept_lock);
->>   		put_device(dev);
->>   		return -EINVAL;
->>   	}
->>   
->>   	ept->sig_cb = rpmsg_sigs_cb;
->>   	eptdev->ept = ept;
->> +	mutex_unlock(&eptdev->ept_lock);
->>   	filp->private_data = eptdev;
->>   
->>   	return 0;
->> @@ -285,7 +295,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
->>   	if (eptdev->sig_pending)
->>   		mask |= EPOLLPRI;
->>   
->> +	mutex_lock(&eptdev->ept_lock);
->>   	mask |= rpmsg_poll(eptdev->ept, filp, wait);
->> +	mutex_unlock(&eptdev->ept_lock);
->>   
->>   	return mask;
->>   }
->> -- 
->> 2.7.4
->>
