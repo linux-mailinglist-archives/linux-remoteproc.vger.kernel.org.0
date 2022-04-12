@@ -2,253 +2,199 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879F84FCF7E
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Apr 2022 08:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D254FD103
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Apr 2022 08:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348799AbiDLGbC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 12 Apr 2022 02:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S1350844AbiDLG4z (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 12 Apr 2022 02:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346058AbiDLGbB (ORCPT
+        with ESMTP id S1351486AbiDLGxn (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 12 Apr 2022 02:31:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 995F335865
-        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Apr 2022 23:28:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649744923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=96mvZW2N60Bc/yiEAvufsCeVXhKGkkUOXQ1a79/ykgI=;
-        b=RGhzfReoqB/wQyNd03K1DtA6aXWtbe6IR44LY9uB8UWrYJh74JmJAdbveIsWA8D05sArKR
-        4Id3Dow0ogAmLLXD7+LYq+hSxVfEGASEfR7Pk8kNueE2B8JBBgymlaIOdruH08vM13Xn5k
-        Dk+JtTciTTK4cX+5cuLXC0fRStM+BSs=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-118-KakEoDObPSmaPeiFQg9mJg-1; Tue, 12 Apr 2022 02:28:42 -0400
-X-MC-Unique: KakEoDObPSmaPeiFQg9mJg-1
-Received: by mail-pf1-f199.google.com with SMTP id w187-20020a6282c4000000b00505dfdb4613so1196674pfd.0
-        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Apr 2022 23:28:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=96mvZW2N60Bc/yiEAvufsCeVXhKGkkUOXQ1a79/ykgI=;
-        b=inaxOmcKZj5YdM75LIjthbIzzs67zaA7LiBVpm1LJRl0A1fdAx+Y0il+92XrM2AgTz
-         MeTVV8/PDfXBM//Tz3ryqW8vIAErY0S6oEqLjtmGJ786tlTCSq3vgtI2jHLGwqBTdp+f
-         aUmQionKJDHqkZym3o3ajPCWNBc+uIWztm64vCYdEfqOvdtouuwOJsBvwbhr0QYTLd/I
-         UpLJXEipGJjfy0l6kpYpwTrxhRZT1fBFW4LuR71bbwuuRJS+g66S8greUH8Ab5oVWtPZ
-         Gw+pFP+m8DPzGB7eMozAygoXNeCeykQmxIcrt3vWsA079bgHvnd4sQ4tTUlC8wnFaGRL
-         9Knw==
-X-Gm-Message-State: AOAM531cL3fe/IpG7vOl//ZLvXm4JD9NuNSfx8IQsD69uY6mDMO7O1ZM
-        NMvwxItUY6OnXMned7c0Nh3pyHYVC2JKxpaTwsMipYdVpuYEE9o4giZfOuXuii3cVZCaAyERt9f
-        EobJ/+5N3aAKJBBEEqVFo3k8tKZCp3A==
-X-Received: by 2002:a17:90a:600b:b0:1cb:8ba5:d3bc with SMTP id y11-20020a17090a600b00b001cb8ba5d3bcmr3322150pji.42.1649744921378;
-        Mon, 11 Apr 2022 23:28:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzsTZb815vqxK0EhXJcoHB9RSXY3UmD7WoV1CP0Y3EhajIsat86IZWa2d15JEEcfRFMnydtCQ==
-X-Received: by 2002:a17:90a:600b:b0:1cb:8ba5:d3bc with SMTP id y11-20020a17090a600b00b001cb8ba5d3bcmr3322121pji.42.1649744921156;
-        Mon, 11 Apr 2022 23:28:41 -0700 (PDT)
-Received: from [10.72.14.5] ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id md4-20020a17090b23c400b001cb66e3e1f8sm1483400pjb.0.2022.04.11.23.28.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Apr 2022 23:28:40 -0700 (PDT)
-Message-ID: <4da7b8dc-74ca-fc1b-fbdb-21f9943e8d45@redhat.com>
-Date:   Tue, 12 Apr 2022 14:28:24 +0800
+        Tue, 12 Apr 2022 02:53:43 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C161834B;
+        Mon, 11 Apr 2022 23:41:22 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23C6fB6d126223;
+        Tue, 12 Apr 2022 01:41:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1649745671;
+        bh=ryFspbi7U5eOpPSWkofesym52c9XFNMHay0/UVI/cCA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=e0T7Sd2XbL7Jlur/ULNsmnXo1drOOWWKiPEp8LzOLxLrTUpvBUXpeUJ1MyQaow1SG
+         N7VG77gkGDvyxo4tPRvB4G0sfDzUzxHFaN1v1KnF3sEJOOKooNj+yV5bBwf2Psp+U4
+         niiRQTx61IJyLp1IeJPDgjp5kHemcsS2hveXbtis=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23C6fBtU097102
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 12 Apr 2022 01:41:11 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 12
+ Apr 2022 01:41:10 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 12 Apr 2022 01:41:10 -0500
+Received: from [172.24.222.151] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23C6f2wV057949;
+        Tue, 12 Apr 2022 01:41:03 -0500
+Message-ID: <b1f3a81b-8384-981b-5207-01deaa6037c5@ti.com>
+Date:   Tue, 12 Apr 2022 12:11:02 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH v9 12/32] virtio_ring: packed: extract the logic of alloc
- queue
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC 01/13] dt-bindings: remoteproc: Add PRU consumer bindings
 Content-Language: en-US
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        virtualization@lists.linux-foundation.org
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org
-References: <20220406034346.74409-1-xuanzhuo@linux.alibaba.com>
- <20220406034346.74409-13-xuanzhuo@linux.alibaba.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <20220406034346.74409-13-xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <bjorn.andersson@linaro.org>,
+        <mathieu.poirier@linaro.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>, <davem@davemloft.net>,
+        <kuba@kernel.org>, <netdev@vger.kernel.org>, <vigneshr@ti.com>,
+        <kishon@ti.com>
+References: <20220406094358.7895-1-p-mohan@ti.com>
+ <20220406094358.7895-2-p-mohan@ti.com> <Yk7+wXwDHrtjFo9s@robh.at.kernel.org>
+From:   Puranjay Mohan <p-mohan@ti.com>
+In-Reply-To: <Yk7+wXwDHrtjFo9s@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Hi Rob,
 
-在 2022/4/6 上午11:43, Xuan Zhuo 写道:
-> Separate the logic of packed to create vring queue.
->
-> For the convenience of passing parameters, add a structure
-> vring_packed.
->
-> This feature is required for subsequent virtuqueue reset vring.
->
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> ---
->   drivers/virtio/virtio_ring.c | 70 ++++++++++++++++++++++++++++--------
->   1 file changed, 56 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-> index 33864134a744..ea451ae2aaef 100644
-> --- a/drivers/virtio/virtio_ring.c
-> +++ b/drivers/virtio/virtio_ring.c
-> @@ -1817,19 +1817,17 @@ static struct vring_desc_extra *vring_alloc_desc_extra(unsigned int num)
->   	return desc_extra;
->   }
->   
-> -static struct virtqueue *vring_create_virtqueue_packed(
-> -	unsigned int index,
-> -	unsigned int num,
-> -	unsigned int vring_align,
-> -	struct virtio_device *vdev,
-> -	bool weak_barriers,
-> -	bool may_reduce_num,
-> -	bool context,
-> -	bool (*notify)(struct virtqueue *),
-> -	void (*callback)(struct virtqueue *),
-> -	const char *name)
-> +static int vring_alloc_queue_packed(struct virtio_device *vdev,
-> +				    u32 num,
-> +				    struct vring_packed_desc **_ring,
-> +				    struct vring_packed_desc_event **_driver,
-> +				    struct vring_packed_desc_event **_device,
-> +				    dma_addr_t *_ring_dma_addr,
-> +				    dma_addr_t *_driver_event_dma_addr,
-> +				    dma_addr_t *_device_event_dma_addr,
-> +				    size_t *_ring_size_in_bytes,
-> +				    size_t *_event_size_in_bytes)
->   {
-> -	struct vring_virtqueue *vq;
->   	struct vring_packed_desc *ring;
->   	struct vring_packed_desc_event *driver, *device;
->   	dma_addr_t ring_dma_addr, driver_event_dma_addr, device_event_dma_addr;
-> @@ -1857,6 +1855,52 @@ static struct virtqueue *vring_create_virtqueue_packed(
->   	if (!device)
->   		goto err_device;
->   
-> +	*_ring                   = ring;
-> +	*_driver                 = driver;
-> +	*_device                 = device;
-> +	*_ring_dma_addr          = ring_dma_addr;
-> +	*_driver_event_dma_addr  = driver_event_dma_addr;
-> +	*_device_event_dma_addr  = device_event_dma_addr;
-> +	*_ring_size_in_bytes     = ring_size_in_bytes;
-> +	*_event_size_in_bytes    = event_size_in_bytes;
+On 07/04/22 20:39, Rob Herring wrote:
+> On Wed, Apr 06, 2022 at 03:13:46PM +0530, Puranjay Mohan wrote:
+>> From: Suman Anna <s-anna@ti.com>
+>>
+>> Add a YAML binding document for PRU consumers. The binding includes
+>> all the common properties that can be used by different PRU consumer
+>> or application nodes and supported by the PRU remoteproc driver.
+>> These are used to configure the PRU hardware for specific user
+>> applications.
+>>
+>> The application nodes themselves should define their own bindings.
+>>
+>> Co-developed-by: Tero Kristo <t-kristo@ti.com>
+>> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>> ---
+>>  .../bindings/remoteproc/ti,pru-consumer.yaml  | 66 +++++++++++++++++++
+>>  1 file changed, 66 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+>> new file mode 100644
+>> index 000000000000..c245fe1de656
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+>> @@ -0,0 +1,66 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Common TI PRU Consumer Binding
+>> +
+>> +maintainers:
+>> +  - Suman Anna <s-anna@ti.com>
+>> +
+>> +description: |
+>> +  A PRU application/consumer/user node typically uses one or more PRU device
+>> +  nodes to implement a PRU application/functionality. Each application/client
+>> +  node would need a reference to at least a PRU node, and optionally define
+>> +  some properties needed for hardware/firmware configuration. The below
+>> +  properties are a list of common properties supported by the PRU remoteproc
+>> +  infrastructure.
+>> +
+>> +  The application nodes shall define their own bindings like regular platform
+>> +  devices, so below are in addition to each node's bindings.
+>> +
+>> +properties:
+>> +  ti,prus:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> 
+> Needs contraints. A phandle-array is really a matrix of phandles and 
+> args. If no args, something like this:
+> 
+> minItems: ??
+> maxItems: ??
+> items:
+>   maxItems: 1
+
+So, I can add:
+minItems: 1
+as max items can't be constrained.
+Also, there are no args.
+
+> 
+>> +    description: phandles to the PRU, RTU or Tx_PRU nodes used
+>> +
+>> +  firmware-name:
+>> +    $ref: /schemas/types.yaml#/definitions/string-array
+>> +    description: |
+>> +      firmwares for the PRU cores, the default firmware for the core from
+>> +      the PRU node will be used if not provided. The firmware names should
+>> +      correspond to the PRU cores listed in the 'ti,prus' property
+>> +
+>> +  ti,pruss-gp-mux-sel:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>> +    maxItems: 6
+>> +    items:
+>> +        enum: [0, 1, 2, 3, 4]
+>> +    description: |
+>> +      array of values for the GP_MUX_SEL under PRUSS_GPCFG register for a PRU.
+>> +      This selects the internal muxing scheme for the PRU instance. Values
+>> +      should correspond to the PRU cores listed in the 'ti,prus' property. The
+>> +      GP_MUX_SEL setting is a per-slice setting (one setting for PRU0, RTU0,
+>> +      and Tx_PRU0 on K3 SoCs). Use the same value for all cores within the
+>> +      same slice in the associative array. If the array size is smaller than
+>> +      the size of 'ti,prus' property, the default out-of-reset value (0) for the
+>> +      PRU core is used.
+>> +
+>> +required:
+>> +  - ti,prus
+>> +
+>> +dependencies:
+>> +  firmware-name: [ 'ti,prus' ]
+>> +  ti,pruss-gp-mux-sel: [ 'ti,prus' ]
+>> +
+>> +additionalProperties: true
+> 
+> This must be false unless it is a common, shared schema.
+
+This is a shared schema, so I made it true.
+
+> 
+>> +
+>> +examples:
+>> +  - |
+>> +    /* PRU application node example */
+>> +    pru-app {
+>> +        ti,prus = <&pru0>, <&pru1>;
+>> +        firmware-name = "pruss-app-fw0", "pruss-app-fw1";
+>> +        ti,pruss-gp-mux-sel = <2>, <1>;
+>> +    };
+>> -- 
+>> 2.17.1
+>>
+>>
 
 
-I wonder if we can simply factor out split and packed from struct 
-vring_virtqueue:
-
-struct vring_virtqueue {
-     union {
-         struct {} split;
-         struct {} packed;
-     };
-};
-
-to
-
-struct vring_virtqueue_split {};
-struct vring_virtqueue_packed {};
-
-Then we can do things like:
-
-vring_create_virtqueue_packed(struct virtio_device *vdev, u32 num, 
-struct vring_virtqueue_packed *packed);
-
-and
-
-vring_vritqueue_attach_packed(struct vring_virtqueue *vq, struct 
-vring_virtqueue_packed packed);
-
-Thanks
-
-
-> +
-> +	return 0;
-> +
-> +err_device:
-> +	vring_free_queue(vdev, event_size_in_bytes, driver, driver_event_dma_addr);
-> +
-> +err_driver:
-> +	vring_free_queue(vdev, ring_size_in_bytes, ring, ring_dma_addr);
-> +
-> +err_ring:
-> +	return -ENOMEM;
-> +}
-> +
-> +static struct virtqueue *vring_create_virtqueue_packed(
-> +	unsigned int index,
-> +	unsigned int num,
-> +	unsigned int vring_align,
-> +	struct virtio_device *vdev,
-> +	bool weak_barriers,
-> +	bool may_reduce_num,
-> +	bool context,
-> +	bool (*notify)(struct virtqueue *),
-> +	void (*callback)(struct virtqueue *),
-> +	const char *name)
-> +{
-> +	dma_addr_t ring_dma_addr, driver_event_dma_addr, device_event_dma_addr;
-> +	struct vring_packed_desc_event *driver, *device;
-> +	size_t ring_size_in_bytes, event_size_in_bytes;
-> +	struct vring_packed_desc *ring;
-> +	struct vring_virtqueue *vq;
-> +
-> +	if (vring_alloc_queue_packed(vdev, num, &ring, &driver, &device,
-> +				     &ring_dma_addr, &driver_event_dma_addr,
-> +				     &device_event_dma_addr,
-> +				     &ring_size_in_bytes,
-> +				     &event_size_in_bytes))
-> +		goto err_ring;
-> +
->   	vq = kmalloc(sizeof(*vq), GFP_KERNEL);
->   	if (!vq)
->   		goto err_vq;
-> @@ -1939,9 +1983,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
->   	kfree(vq);
->   err_vq:
->   	vring_free_queue(vdev, event_size_in_bytes, device, device_event_dma_addr);
-> -err_device:
->   	vring_free_queue(vdev, event_size_in_bytes, driver, driver_event_dma_addr);
-> -err_driver:
->   	vring_free_queue(vdev, ring_size_in_bytes, ring, ring_dma_addr);
->   err_ring:
->   	return NULL;
-
+Thanks,
+Puranjay
