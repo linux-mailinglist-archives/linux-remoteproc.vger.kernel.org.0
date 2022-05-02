@@ -2,72 +2,62 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F5B5163C5
-	for <lists+linux-remoteproc@lfdr.de>; Sun,  1 May 2022 12:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9DF516C41
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 May 2022 10:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236402AbiEAKkB (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sun, 1 May 2022 06:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S241207AbiEBIoL (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 2 May 2022 04:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345533AbiEAKjD (ORCPT
+        with ESMTP id S1383852AbiEBIoF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sun, 1 May 2022 06:39:03 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44DABE43
-        for <linux-remoteproc@vger.kernel.org>; Sun,  1 May 2022 03:35:37 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id a1so13713012edt.3
-        for <linux-remoteproc@vger.kernel.org>; Sun, 01 May 2022 03:35:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=h9YZjRwoHC6GaFFb1SDwA29ZxpNfUjxNdlL96hvSsO0=;
-        b=YY6qFncodP37LtEhEAtatrQ82fz/hPWy6G+dDcAafnW8/Lila7XInflVXwajnJNKcS
-         JNYDc9UkVSLbYrChCHIcyMzmc+UtYg1jLNiWSa69AIrTB2M9yt89MNKI6DPyNAWHXUJz
-         pwozzUisJWWhvadt+p3BEcDySyWLYXssYSrxwKbPNS9ZwcM5FUzofRSuru894YsOguUf
-         NyZ9gBJJCi6X6WdjNIv/ph4MaIZ8Ou0xvZFPDZCsFZQSB7cBXMTFoiz+EJ4bpZrSpmAI
-         XynyMXuzVv0orW+ui+Pb/4HlIwEjDklhauFgP+++nn8JAAYppqEIc5bRVgS0pORJrKN0
-         WQeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=h9YZjRwoHC6GaFFb1SDwA29ZxpNfUjxNdlL96hvSsO0=;
-        b=fYSstB4Etl0UZSTnDxg19i6mUoHurEvSfRdQyTJ8bWWz4dcSKnRO9yEI5zWjuZzPWq
-         kXzeSFjbBktn8j5HLGu1BcecGgIaq6aWAtXSj3QhUPtxrwbCH3PkiMrSILqy+HQ2R05A
-         J9CjJVKfCH0upZx1+P4HTIs2nVFu1JGw+wSqGSKg6SVFU21QGyXcwQd0nMjcxO7iXE8K
-         r2ni45ocNvs7MskxGDyp6LLxm+OSfZs37o+4BxAGiD5NTvk4sF1AufOvkhW6+NcJkCf/
-         jEaUubdDU49c+BuBr2ccCzrJhiQOmzO3PGvqxSBlzdqrOdKunMeq1g7wBXI3YjcL1m5D
-         vn4w==
-X-Gm-Message-State: AOAM533TYMZ1698mhrRxVUICYgWdS86As7qzKpzLAL4fjUqLxPJyE2Ry
-        3XX97iTjdmzA3FT7eZZrbwQZkw==
-X-Google-Smtp-Source: ABdhPJw7iJwj9jQ5tU/50tMqagxdWh7joTS/ou6UwmV14fytS26n1/8N5nLzSNI34O3clqBJelNflQ==
-X-Received: by 2002:a05:6402:2d6:b0:425:ed85:46bf with SMTP id b22-20020a05640202d600b00425ed8546bfmr8106806edx.6.1651401335819;
-        Sun, 01 May 2022 03:35:35 -0700 (PDT)
-Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id zp1-20020a17090684e100b006f3ef214df1sm2464438ejb.87.2022.05.01.03.35.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 May 2022 03:35:35 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 8/8] soc: qcom: correct kerneldoc
-Date:   Sun,  1 May 2022 12:35:20 +0200
-Message-Id: <20220501103520.111561-8-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220501103520.111561-1-krzysztof.kozlowski@linaro.org>
-References: <20220501103520.111561-1-krzysztof.kozlowski@linaro.org>
+        Mon, 2 May 2022 04:44:05 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F8BF0E;
+        Mon,  2 May 2022 01:40:36 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id A72391F403D6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651480835;
+        bh=D8YJoc2PcRQjfbBcH+ipLbCMGp+67jgyWRLQdA5wU+s=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eZD9I7wAOF04f5zspCYpe65S9Eff6SOO/P1vrulREbaNgS3u4xjfQwNN0Xg9jfUWl
+         u/hph2fpECj1BcIARGI8l++FijaIqEPW/EFarfvY0FApsLceAotL2mk9o1SFZl4AF9
+         uD07tMnmYx2dZa6qNVx9CSeSJlhqSOWTrE0G6aB+uKTmi34TocvgUAJRD5R6cGpDyJ
+         3PxGoeqkD2ulgsLtZgX2v9VNhBI3KLZmB3UrKRSb3DCw5BbncAq782jJFNSkXI9Iup
+         s7T3rKRFYC5kT5+WVi6EIKc1alhQikleCHWrxe0i1Fpvi4DNXA7UVLY1Pp5ZtVEEeA
+         0SKIEJlkNE8oQ==
+Message-ID: <0b7101ec-96a2-cb02-7026-aa706dfef4cf@collabora.com>
+Date:   Mon, 2 May 2022 10:40:32 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] dt-bindings: remoteproc: mediatek: Add optional
+ memory-region to mtk,scp
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+References: <20220429211111.2214119-1-nfraprado@collabora.com>
+ <20220429211111.2214119-3-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220429211111.2214119-3-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,53 +65,11 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Correct kerneldoc warnings like:
+Il 29/04/22 23:11, Nícolas F. R. A. Prado ha scritto:
+> The SCP co-processor can optionally be passed a reserved memory region
+> to use. Add this property in the dt-binding.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-  drivers/soc/qcom/mdt_loader.c:126:
-    warning: Function parameter or member 'fw_name' not described in 'qcom_mdt_read_metadata'
-
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/soc/qcom/mdt_loader.c | 4 +++-
- drivers/soc/qcom/smp2p.c      | 3 +++
- 2 files changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/soc/qcom/mdt_loader.c b/drivers/soc/qcom/mdt_loader.c
-index 366db493579b..3f11554df2f3 100644
---- a/drivers/soc/qcom/mdt_loader.c
-+++ b/drivers/soc/qcom/mdt_loader.c
-@@ -108,6 +108,8 @@ EXPORT_SYMBOL_GPL(qcom_mdt_get_size);
-  * qcom_mdt_read_metadata() - read header and metadata from mdt or mbn
-  * @fw:		firmware of mdt header or mbn
-  * @data_len:	length of the read metadata blob
-+ * @fw_name:	name of the firmware, for construction of segment file names
-+ * @dev:	device handle to associate resources with
-  *
-  * The mechanism that performs the authentication of the loading firmware
-  * expects an ELF header directly followed by the segment of hashes, with no
-@@ -192,7 +194,7 @@ EXPORT_SYMBOL_GPL(qcom_mdt_read_metadata);
-  * qcom_mdt_pas_init() - initialize PAS region for firmware loading
-  * @dev:	device handle to associate resources with
-  * @fw:		firmware object for the mdt file
-- * @firmware:	name of the firmware, for construction of segment file names
-+ * @fw_name:	name of the firmware, for construction of segment file names
-  * @pas_id:	PAS identifier
-  * @mem_phys:	physical address of allocated memory region
-  * @ctx:	PAS metadata context, to be released by caller
-diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
-index 59dbf4b61e6c..d9c28a8a7cbf 100644
---- a/drivers/soc/qcom/smp2p.c
-+++ b/drivers/soc/qcom/smp2p.c
-@@ -119,6 +119,9 @@ struct smp2p_entry {
-  * @out:	pointer to the outbound smem item
-  * @smem_items:	ids of the two smem items
-  * @valid_entries: already scanned inbound entries
-+ * @ssr_ack_enabled: SMP2P_FEATURE_SSR_ACK feature is supported and was enabled
-+ * @ssr_ack: current cached state of the local ack bit
-+ * @negotiation_done: whether negotiating finished
-  * @local_pid:	processor id of the inbound edge
-  * @remote_pid:	processor id of the outbound edge
-  * @ipc_regmap:	regmap for the outbound ipc
--- 
-2.32.0
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
