@@ -2,98 +2,95 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B5451E0A4
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  6 May 2022 23:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24C651E11E
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  6 May 2022 23:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1444349AbiEFVJf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 6 May 2022 17:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S1444487AbiEFVgS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 6 May 2022 17:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1444408AbiEFVJU (ORCPT
+        with ESMTP id S1444485AbiEFVgS (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 6 May 2022 17:09:20 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CF61C90F
-        for <linux-remoteproc@vger.kernel.org>; Fri,  6 May 2022 14:05:35 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so7885706pjf.0
-        for <linux-remoteproc@vger.kernel.org>; Fri, 06 May 2022 14:05:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to;
-        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
-        b=gmmgqd2enKSblS7bCmnm2ivMD5ZTgpfnW/j/MNizwci6pH3rJEQXq3L9+ZdKL4HUTr
-         YB+Dhjpe2MkKztjhU+UDqenquKjwj+pPKOCMhVrtxmSec4u8GzSTlKnYmXQROsqwJ7YF
-         fpyt4ZWxoGKOIdNHSzn6X8527WsL9seFFIUc417Aceaz0HyqyfLzhrTyiK1hfEoe7bgf
-         O66BH+VPp/USBREXReLf48zIB9vdsgcsn+kPDpodP7afE/7TIv51GGMLWkNAhK51uLVF
-         lGR5deZqynPeLivFeL+j4lPiytJOppTfXKPKuEkvtzBoRNP5faKFInL0FLuVz9LTzW90
-         0CuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to;
-        bh=VSSUIwdzgxQxnEkB7+u7pnweyPajIQMP3nQqWYs8VX0=;
-        b=0M/GV5+h295S2RcnE24nR9W5JhMwv2Xlf0XPAyC9hrESl1bHHmJYTJxCFvtvZcpyKX
-         /Hf1Ppxtw6IXSsQacamg+qntLgcZ6I7UQILmSGNAsRp9yE9HBn7+mw1iyLNlL8vup0aF
-         UKI/B3UiQpKKey43nn/SFpLIwoM69bxLnR/7RVe7tI66VRaixg45KAmkHL2Bo9dkt9ap
-         KBQGkQerGaD0RRPqvF7fnuROyDa6tuUEAyU3TdfZqA/PWjUvYqotRikNycYfah5z72mM
-         uuHY0RCJllIsIuWFe54E0tg6hH2HYBvgXrzOPSdmsXDU72lgQ0OzRh2ZkO947XnTLLWt
-         mLSA==
-X-Gm-Message-State: AOAM532iBPRTnny35ANeGa0yWwb5OhvxYA+f/mHRuUxbtK2f85d+dw08
-        jgKDphIRAWACIRqNygrV3BTnQA6SfLjJdfolnw==
-X-Google-Smtp-Source: ABdhPJyqTkc39jIaJ9/Rbqdi6sONfGmoHQRCW6ADRHNTA3OhSOJwlsoTVRnEtva6v71BUuTBbiWSrg7BAnP42QBwIqU=
-X-Received: by 2002:a17:902:a501:b0:153:f956:29f0 with SMTP id
- s1-20020a170902a50100b00153f95629f0mr5598333plq.120.1651871135500; Fri, 06
- May 2022 14:05:35 -0700 (PDT)
+        Fri, 6 May 2022 17:36:18 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341D25DBEC;
+        Fri,  6 May 2022 14:32:34 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id 9E66A1F46F11
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1651872752;
+        bh=Feax7TqOjAak8vTxXHyo5w7ldHLoCzV9bRYJ4gdOnQg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=g741dTAEheu8gAyBHmVs9pPhsTV8SLjFD/30iAXzEMsv5dlyqXfxA5pU3Os51NBoC
+         +76a4ARigQobUXpXAw8ofmdCAZZbTTLRkRx/2J4wi5CG/dzclT+Pz1/JCxJaQt5OcF
+         qFTHxF2f4bfgjETuXod5jHS0Fc9yjfN6HbeDFbLO9jCEZq7Dna+FIvBappQJswuCMt
+         Gqk+/+5ax1Qh3bjl2SPrWZOF3nX+0rlUmaSxsy0NbKZT6OHvUkrzzEn7+PlTIhHELi
+         vPQx1G/8HvFaaIdkVAWuSqh1H+zSrBAsPs+EEnmgu4/lJcV2VE/Q2sClu0k3+Cqn6b
+         jAnyejeU3VJmw==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH v4 0/2] Mediatek SCP dt-binding tweaks
+Date:   Fri,  6 May 2022 17:32:24 -0400
+Message-Id: <20220506213226.257859-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Received: by 2002:ac4:9906:0:b0:4ba:807b:b8f3 with HTTP; Fri, 6 May 2022
- 14:05:33 -0700 (PDT)
-Reply-To: warren001buffett@gmail.com
-In-Reply-To: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
-References: <CAD_xG_pvNZK6BFCW+28Xv4DE=_5rbDZXDok2BYNn9xw6Ma7iow@mail.gmail.com>
-From:   Warren Buffett <guidayema@gmail.com>
-Date:   Fri, 6 May 2022 21:05:33 +0000
-Message-ID: <CAD_xG_o-NeOti3yu7R9R5-myJ=Pi4nnU5Tuumw-xPcT-nT8e=Q@mail.gmail.com>
-Subject: Fwd: My name is Warren Buffett, an American businessman.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1043 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4937]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [guidayema[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.5 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-My name is Warren Buffett, an American businessman and investor I have
-something important to discuss with you.
 
-Mr. Warren Buffett
-warren001buffett@gmail.com
-Chief Executive Officer: Berkshire Hathaway
-aphy/Warren-Edward-Buffett
+Two simple patches for the Mediatek SCP dt-binding. The first fixes the
+reg/reg-names property while the second adds a new optional
+memory-region property.
+
+v3: https://lore.kernel.org/all/20220503211114.2656099-1-nfraprado@collabora.com
+v2: https://lore.kernel.org/all/20220502192420.2548512-1-nfraprado@collabora.com
+v1: https://lore.kernel.org/all/20220429211111.2214119-1-nfraprado@collabora.com
+
+Changes in v4:
+- Reworked presence of l1tcm reg to be if:then: based and present only
+  on mt8192/mt8195
+
+Changes in v3:
+- Made the cfg reg required again. After looking again into the mtk-scp
+  driver, only l1tcm is optional.
+
+Changes in v2:
+- Dropped type and description from memory-region since it's a
+  well-known property
+- Set memory-region maxItems to 1
+
+Nícolas F. R. A. Prado (2):
+  dt-bindings: remoteproc: mediatek: Make l1tcm reg exclusive to mt819x
+  dt-bindings: remoteproc: mediatek: Add optional memory-region to
+    mtk,scp
+
+ .../bindings/remoteproc/mtk,scp.yaml          | 72 ++++++++++++++-----
+ 1 file changed, 53 insertions(+), 19 deletions(-)
+
+-- 
+2.36.0
+
