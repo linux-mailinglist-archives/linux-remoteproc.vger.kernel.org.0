@@ -2,110 +2,106 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B4C521D57
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 May 2022 16:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2C8521D9E
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 May 2022 17:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345245AbiEJPDp (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 10 May 2022 11:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
+        id S1345417AbiEJPMV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 10 May 2022 11:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345496AbiEJPDe (ORCPT
+        with ESMTP id S1346127AbiEJPLx (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 10 May 2022 11:03:34 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C51731361;
-        Tue, 10 May 2022 07:28:24 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 3A6AE1F896;
-        Tue, 10 May 2022 14:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1652192903; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Vk/8pdLWJKvC1pkcnRQ/HwoU2ABECojPYTjSUx9JWI=;
-        b=qCuBe8399OKc/XhS2YM19THr9x0w+LK3v0+yrYrVMx1O5y8bO2nhr7ld/xwzdNWpoeMnQv
-        KDbf9vzeiGs4Zk4jc5/KyT1Cq3WiPlflRqYiR6m11RKyyC/hq4LcZ09p+y2XB4Mv583rFK
-        /mj4yXQtU5XfZ45MAwfj3oDOrq6/m9Q=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 344FF2C141;
-        Tue, 10 May 2022 14:28:22 +0000 (UTC)
-Date:   Tue, 10 May 2022 16:28:21 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, coresight@lists.linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
-        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
-        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
-        andriy.shevchenko@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        corbet@lwn.net, d.hatayama@jp.fujitsu.com,
-        dave.hansen@linux.intel.com, dyoung@redhat.com,
-        feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard@nod.at>
-Subject: Re: [PATCH 11/30] um: Improve panic notifiers consistency and
- ordering
-Message-ID: <Ynp2hRodh04K3pzK@alley>
-References: <20220427224924.592546-1-gpiccoli@igalia.com>
- <20220427224924.592546-12-gpiccoli@igalia.com>
+        Tue, 10 May 2022 11:11:53 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B149825B05B;
+        Tue, 10 May 2022 07:45:21 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id kq17so33443077ejb.4;
+        Tue, 10 May 2022 07:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c+hsJzreaFfLVPyymmLrJkbyzmNJnJu0qYLtB9ahG6I=;
+        b=Pvlrqisa1HswCwseRK15nENZEWQjoMc6spitn2A60Toeq2u4wyRG+3D8kZNYnnyuDY
+         9B9drOlmdCDl44n0mlLh/ePzcVnHgzvsmA62fzw4U5HS0e3OpUiHr5zEOTf0wTBqLx2w
+         npSUuQ19m0y2UrlY2sVD7f3VanQHN3FNAsHvhJmswelBFq0dnTJlrsZbePKQ2cdDwxKn
+         FFs+aWCv83G8Vx7PImReftM1vgLqU6Hf0GElXyWqNRvaVy2Nw3uZU9EyNWrmLOsmfzA8
+         U7NVEoxvhVTyYIegJb4iGIid9ZrGAmZGpm5Ubn4q+d+baPRupiqJotuFWPgCnzIpllWA
+         ZQ3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=c+hsJzreaFfLVPyymmLrJkbyzmNJnJu0qYLtB9ahG6I=;
+        b=brsOaKtHX94TyV7vErNm5kiEFf1J7vuUYBA1lSPxjA21EXxyC0LmrAfXd0WyG5mdkT
+         SxebNjSe4jvmtFCA2mV3iZaS2KsWmINufKxUo7r1GJUlu562euiOD74hlRxnz+X2RMSD
+         9E1ZwTgF7t8qKf5N2NsrUgRZCeuGmbYcTKDo7KWbiWAKT4ipp5OWd8GCtiBNgiLv0ESq
+         HKio74NXFK7hx4JDXDzkWfo2opPulmCM3fDDNbaRtrm9D8mWWQ6VIiwXWDu8xIVK7rlc
+         1uU9FN27nPwsjbCiHp4ed/lt32a+MxBu71zAmaO9VFKzkWUtAq5fY3Y+2M8fH4s1tiXp
+         d8Kg==
+X-Gm-Message-State: AOAM533qv9V6DD8TLxWvgTdMqhxW4aKl9x2szXV7i5OAP2oS6xHa8BqG
+        ouifin2kgIGF3HbTexMq+m8=
+X-Google-Smtp-Source: ABdhPJzbwex+ryg9LpRDhemVltmdQwfI6oaKvTEX7Dp179Go73CpJYXZYcOYN8rQYQA8rk/O4g1ujw==
+X-Received: by 2002:a17:907:6d1f:b0:6fc:309f:8363 with SMTP id sa31-20020a1709076d1f00b006fc309f8363mr3370782ejc.655.1652193920050;
+        Tue, 10 May 2022 07:45:20 -0700 (PDT)
+Received: from localhost.localdomain (89-38-99-188.hosted-by-worldstream.net. [89.38.99.188])
+        by smtp.gmail.com with ESMTPSA id z16-20020a170906241000b006fb6d9d25bfsm829652eja.22.2022.05.10.07.45.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 May 2022 07:45:19 -0700 (PDT)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [RFC PATCH 0/2] Make qcom-ngd-ctrl not wait indefinitely for already booted ADSP
+Date:   Tue, 10 May 2022 18:42:17 +0400
+Message-Id: <20220510144219.806391-1-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220427224924.592546-12-gpiccoli@igalia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed 2022-04-27 19:49:05, Guilherme G. Piccoli wrote:
-> Currently the panic notifiers from user mode linux don't follow
-> the convention for most of the other notifiers present in the
-> kernel (indentation, priority setting, numeric return).
-> More important, the priorities could be improved, since it's a
-> special case (userspace), hence we could run the notifiers earlier;
-> user mode linux shouldn't care much with other panic notifiers but
-> the ordering among the mconsole and arch notifier is important,
-> given that the arch one effectively triggers a core dump.
+Commit a899d324863a3 ("slimbus: qcom-ngd-ctrl: add Sub System Restart support")
+made qcom-ngd-ctrl wait for ADSP to become ready before starting to do its work.
+Due to how the SSR notifications currently work though, if qcom-ngd-ctrl probes
+after ADSP boots and becomes ready, it never receives a QCOM_SSR_AFTER_POWERUP
+event notification and keeps waiting indefinitely, making SLIMbus never come up.
 
-It is not clear to me why user mode linux should not care about
-the other notifiers. It might be because I do not know much
-about the user mode linux.
+This series makes qcom_register_ssr_notifier call the notifier_call of the newly
+registered notifier block with the last SSR event received from the remoteproc,
+basically reporting the event that qcom-ngd-ctrl missed by registering late,
+stopping it from waiting for an event that has already happened.
 
-Is the because they always create core dump or are never running
-in a hypervisor or ...?
+I'm not sure if this approach would have any unwanted consequences in other
+drivers relying on SSR events however, hence I'm sending this as a RFC. This
+can also be considered a bug report, so if anyone has a better fix then I'd
+appreciate it getting applied instead of this one.
 
-AFAIK, the notifiers do many different things. For example, there
-is a notifier that disables RCU watchdog, print some extra
-information. Why none of them make sense here?
+The second patch is a general fix that became necessary after the first patch,
+and should likely be applied anyway.
 
-> This patch fixes that by running the mconsole notifier as the first
-> panic notifier, followed by the architecture one (that coredumps).
-> Also, we remove a useless header inclusion.
+Yassine Oudjana (2):
+  remoteproc: qcom: Report last event on SSR notifier registration
+  slimbus: qcom-ngd-ctrl: Initialize ngd_up_work before it can be
+    scheduled
 
+ drivers/remoteproc/qcom_common.c | 17 +++++++++++++----
+ drivers/slimbus/qcom-ngd-ctrl.c  |  3 ++-
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
-Best Regards,
-Petr
+-- 
+2.36.0
+
