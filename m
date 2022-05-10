@@ -2,73 +2,65 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B892D521D99
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 May 2022 17:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4B0521DAA
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 May 2022 17:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244256AbiEJPMP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 10 May 2022 11:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S241038AbiEJPNQ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 10 May 2022 11:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345583AbiEJPLz (ORCPT
+        with ESMTP id S1345511AbiEJPMV (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 10 May 2022 11:11:55 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BFE659E;
-        Tue, 10 May 2022 07:45:39 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id ks9so27013744ejb.2;
-        Tue, 10 May 2022 07:45:38 -0700 (PDT)
+        Tue, 10 May 2022 11:12:21 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D17A5A17B
+        for <linux-remoteproc@vger.kernel.org>; Tue, 10 May 2022 07:46:01 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id g23so20297245edy.13
+        for <linux-remoteproc@vger.kernel.org>; Tue, 10 May 2022 07:46:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=eGTN6aMN0s/KhqZVZqbtoSr5BOPu4zHPp3TT3ztEYwQ=;
-        b=gRi76ycWfaYj+DC25eRDShAGPnPSRBQtz4hKna7OLzNJqQFxUfaZqLK5rMatNpo+Xt
-         OPYUMyOpLJM6QsTiZbA/DVzp7wIDRp2Ss2VWbS2G+vKzgZKATIfvZn6N4sxmosUXP8Y6
-         p+20OI+1VBjQGsdqkMtq8ANdsjTYlUL4Q0jvD3FdM0lLJanQzBZB02p1VAlQZecjuzG9
-         mvsmd9JK5ELIzkdno43Yd59DehKPp8OvEDAq+YBQ6hSo7mEI5kqKSPVp0NAtqSAmQo+I
-         OvXHsYnfIvdcgRAggH9QifrSa4Hc0BSrA7VqOlA+LGceJgGmdiRbAaENatxJJdhHTKfm
-         TzsQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=m3/At7y3DpyH1xn4UVfn5ukqMWdZeC51Z6nb713nrEM=;
+        b=fmwv+DkIw7qBc9dQvmK6dD2y9go7fNS8TbsYEOs3Z/4JbUN88xgE0dOxW7G7zdd0aL
+         MtXMnd/Quc7Q+xJcY2adZVj6BpixNyMeZ0zWlmwjLzOw+CTiOetT3F5GIQoDgNnH5/FH
+         hb90U2G6cv0nTLk7m4OQ5HvqH1rxUybdg3ZbaoyQnZT7Fs8I6DgT/rNyn6wVUJOJ/ijG
+         0rqEQOixxhf65y7+OF13MiCIQ3Qpdn9iOpVYKpzuhtEWg1AQyqRTieyGjwF0KUytAOrN
+         Nah5IxqwAgCEdSPr4dIVWQxzlUjRd5KSHA/mV+xxpktq9Te0SQqawc5ohTRuQdAXo8XT
+         IbbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=eGTN6aMN0s/KhqZVZqbtoSr5BOPu4zHPp3TT3ztEYwQ=;
-        b=j12soXoiUdoYson0fHeXanLvSgk1ymvooWZYUMW8OImxurAFviVmJe8aE8/yOw/HSA
-         5YYLG9x9GjYlokScDAjljY39i2ACL/CmDoHlul1SOQs/PW5K5bIXmy2PykJ6zspXJ8eT
-         3dIqCuGjD/WFHUn7c5Sy0kjPVRKadL0+nqNJ3dPCOnQKTBND/HWA97msCGmOKY+19+E+
-         7u+Bo54lqlJkOiKXixWAwi+htssqQcDtHGldVCEQY+uukOE3WC/uzFK2e+jIGIRuUxYA
-         Y0HRFMCmEsT5K3CXnhr5OeTX8wboA9zjPA6VO5E5ZM2CyHnSSWSY2RNiA9x5nP4jNw0u
-         o1mw==
-X-Gm-Message-State: AOAM530Btm9PeMaTula9JiLSKZBaZrHvNiJ9heuO286NgcJG2QguaIAo
-        2A9G7eNY6QCXRqdwfUNlJhY=
-X-Google-Smtp-Source: ABdhPJxqZSKXdWSVeTuLaqUhIC+S7MYZ+4pUf5FWmkaMNwvzSXpE7agGc7utHZ28cZ4QcKHb6o+t8w==
-X-Received: by 2002:a17:907:2da2:b0:6f4:7395:568b with SMTP id gt34-20020a1709072da200b006f47395568bmr20115064ejc.766.1652193937643;
-        Tue, 10 May 2022 07:45:37 -0700 (PDT)
-Received: from localhost.localdomain (89-38-99-188.hosted-by-worldstream.net. [89.38.99.188])
-        by smtp.gmail.com with ESMTPSA id z16-20020a170906241000b006fb6d9d25bfsm829652eja.22.2022.05.10.07.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 May 2022 07:45:37 -0700 (PDT)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [RFC PATCH 2/2] slimbus: qcom-ngd-ctrl: Initialize ngd_up_work before it can be scheduled
-Date:   Tue, 10 May 2022 18:42:19 +0400
-Message-Id: <20220510144219.806391-3-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.36.0
-In-Reply-To: <20220510144219.806391-1-y.oudjana@protonmail.com>
-References: <20220510144219.806391-1-y.oudjana@protonmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=m3/At7y3DpyH1xn4UVfn5ukqMWdZeC51Z6nb713nrEM=;
+        b=sp4l/RpOaeRcR6OoD2NoNKmKPRPamw45bF7ncAxcaxDAcQz0NhwhOtCcJGeN3MOciz
+         M93g/4+ce0HPLMV7lE/vdVGaLTsvohLENrFV7gVKaYg1sVPTMDmFPE+ifihinmWy/t6T
+         /2JYisUb0vtqIHIrL+gdRvoK41Cqo/IjNrZv31iqIJ8G4rdQN5U57VkKgcHAIXDMLeHC
+         e/ZOojHSM189fYlPLyBRYNiieLXOgMeAAHJuyrLB7EuzadhPqC0usrg6AUpSxpFEWvtQ
+         /Jjp2odeZLkVqalEHiKaEEGUyR4aoIGvYkDN7t6KoSDXPY3dxdOqT8tIyzloy0tGnlNf
+         enKQ==
+X-Gm-Message-State: AOAM532eT8glKY7fzqAhy9G/s+2Jj4E5pLJYek149Wj5AmoXg3S2v4f4
+        PR4RZXi8uJWxq2/zO7tATtakfhclEwni/w9u8rgrc2N98Vo=
+X-Google-Smtp-Source: ABdhPJyx8gmtrp9VEPth+GApYG51c0O501gkymHP+UpTVpU/3iDCq4sfkmvUz/9lxc3bdD5ilhpOQLuDyT6XFLRbsmk=
+X-Received: by 2002:a05:6402:335:b0:425:e3e0:5a90 with SMTP id
+ q21-20020a056402033500b00425e3e05a90mr23350271edw.14.1652193960197; Tue, 10
+ May 2022 07:46:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220315153856.3117676-1-arnaud.pouliquen@foss.st.com>
+ <20220506171222.GA2816011@p14s> <b7a3db59-201d-a5fb-f416-e1d60d79762f@foss.st.com>
+In-Reply-To: <b7a3db59-201d-a5fb-f416-e1d60d79762f@foss.st.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Tue, 10 May 2022 08:45:48 -0600
+Message-ID: <CANLsYkzEXQbcWBEOecVa2jkJFLY4a_sXm1ig-HA_OMb7u=R7Ww@mail.gmail.com>
+Subject: Re: [PATCH] rpmsg: virtio: set dst address on first message received
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,39 +68,127 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Yassine Oudjana <y.oudjana@protonmail.com>
+On Mon, 9 May 2022 at 03:18, Arnaud POULIQUEN
+<arnaud.pouliquen@foss.st.com> wrote:
+>
+> Hello Mathieu,
+>
+> On 5/6/22 19:12, Mathieu Poirier wrote:
+> > On Tue, Mar 15, 2022 at 04:38:56PM +0100, Arnaud Pouliquen wrote:
+> >> when a rpmsg channel has been locally created with a destination address
+> >
+> > s/when/Wen
+> >
+> > Also, please be more specific about the "locally created" part, i.e
+> > rpmsg_ctrldev_ioctl() -> rpmsg_create_channel().  Otherwise it is really hard to
+> > understand the context of this change.
+> >
+> >> set to RPMSG_ADDR_ANY, a name service announcement message is sent to
+> >> the remote side. Then the destination address is never updated, making it
+> >> impossible to send messages to the remote.
+> >>
+> >> An example of kernel trace observed:
+> >> rpmsg_tty virtio0.rpmsg-tty.29.-1: invalid addr (src 0x1d, dst 0xffffffff)
+> >>
+> >> Implement same strategy than the open-amp library:
+> >> On the reception of the first message, if the destination address is
+> >> RPMSG_ADDR_ANY, then set it to address of the remote endpoint that
+> >> send the message.
+> >>
+> >
+> > I would have expected a "Fixes:" tag.
+>
+> Difficult to give a reference. For me the issue exists since the creation
+> of the rpmsg virtio bus. A driver can create a channel that generates a NS
+> announcement leading to this issue.
+> The issue as been highlighted by the creation of the  RPMSG_CREATE_DEV_IOCTL
+> control.
+>
 
-ngd_up_work can be scheduled by the SSR notifier, which is registered
-before it is initialized. Move initialization of ngd_up_work before
-SSR notifier registration.
+Ok
 
-Fixes: a899d324863a3 ("slimbus: qcom-ngd-ctrl: add Sub System Restart support")
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
----
- drivers/slimbus/qcom-ngd-ctrl.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> >> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+> >>
+> >> ---
+> >> Remark:
+> >> An alternative (or a complement?) could be to add a NS bind/unbind in
+> >> the NS announcement channel (in rpmsg_ns.c).
+> >> This would allow the local and/or the remote processor to inform the
+> >> remote side the the service announced in bound.
+> >> ---
+> >>  drivers/rpmsg/virtio_rpmsg_bus.c | 10 ++++++++++
+> >>  1 file changed, 10 insertions(+)
+> >>
+> >> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+> >> index 3ede25b1f2e4..99d2119cc164 100644
+> >> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> >> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> >> @@ -708,6 +708,7 @@ static ssize_t virtio_rpmsg_get_mtu(struct rpmsg_endpoint *ept)
+> >>  static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
+> >>                           struct rpmsg_hdr *msg, unsigned int len)
+> >>  {
+> >> +    struct rpmsg_device *rpdev;
+> >>      struct rpmsg_endpoint *ept;
+> >>      struct scatterlist sg;
+> >>      bool little_endian = virtio_is_little_endian(vrp->vdev);
+> >> @@ -746,6 +747,15 @@ static int rpmsg_recv_single(struct virtproc_info *vrp, struct device *dev,
+> >>      mutex_unlock(&vrp->endpoints_lock);
+> >>
+> >>      if (ept) {
+> >> +            rpdev = ept->rpdev;
+> >> +            if (rpdev->ept == ept && rpdev->dst == RPMSG_ADDR_ANY) {
+> >
+> > Please add a comment to explain the first part of the if() clause.  It took me
+> > quite some time to understand.
+> >
+> >> +                    /*
+> >> +                     * First message received from the remote side on the default endpoint,
+> >> +                     * update channel destination address.
+> >> +                     */
+> >> +                    rpdev->dst = msg->src;
+> >
+> > This triggers a bot warning and should be addressed.  If it can't be addressed add
+> > a comment that clearly explains why so that we don't end up receiving patches
+> > for it every 4 weeks.
+>
+> Oops, I missed it, thanks for pointing it out.
+>
+>
+> Concerning the patch itself as discussed in RP open-amp meeting. I wonder if this issue
+> could be addressed by the flow control[1][2][3], or if needed in any case.
+>
+> I propose to send a V2 when ready to propose in parallel the flow control.
+> So both can be addressed at same time to have a global picture of the way to address the
+> use case..
+>
 
-diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-index 7040293c2ee8..73b9abba305f 100644
---- a/drivers/slimbus/qcom-ngd-ctrl.c
-+++ b/drivers/slimbus/qcom-ngd-ctrl.c
-@@ -1490,7 +1490,6 @@ static int qcom_slim_ngd_probe(struct platform_device *pdev)
- 	}
- 
- 	INIT_WORK(&ctrl->m_work, qcom_slim_ngd_master_worker);
--	INIT_WORK(&ctrl->ngd_up_work, qcom_slim_ngd_up_worker);
- 	ctrl->mwq = create_singlethread_workqueue("ngd_master");
- 	if (!ctrl->mwq) {
- 		dev_err(&pdev->dev, "Failed to start master worker\n");
-@@ -1539,6 +1538,8 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	INIT_WORK(&ctrl->ngd_up_work, qcom_slim_ngd_up_worker);
-+
- 	ctrl->nb.notifier_call = qcom_slim_ngd_ssr_notify;
- 	ctrl->notifier = qcom_register_ssr_notifier("lpass", &ctrl->nb);
- 	if (IS_ERR(ctrl->notifier))
--- 
-2.36.0
+It will be one or the other, we can't have two ways to do things.  If
+the flow control patchset addresses this problem on top of adding more
+functionality then we should go with that one.
 
+> Thanks,
+> Arnaud
+>
+> [1] POC Linux code:
+> https://github.com/arnopo/linux/commits/signalling
+>
+> [2] openamp library associated code:
+> https://github.com/arnopo/open-amp/commits/flow_ctrl
+>
+> [3] overview presentation
+> https://drive.google.com/file/d/1CLU3ybI3oSBGvor18AQ-HOzOJ2nOppEb/view
+>
+>
+> >
+> > Thanks,
+> > Mathieu
+> >
+> >> +            }
+> >> +
+> >>              /* make sure ept->cb doesn't go away while we use it */
+> >>              mutex_lock(&ept->cb_lock);
+> >>
+> >> --
+> >> 2.25.1
+> >>
