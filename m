@@ -2,81 +2,91 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F1E52058C
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  9 May 2022 21:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C219F520CD8
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 May 2022 06:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240742AbiEIT7F (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 9 May 2022 15:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
+        id S236596AbiEJEdG (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 10 May 2022 00:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240711AbiEIT7A (ORCPT
+        with ESMTP id S236690AbiEJEbl (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 9 May 2022 15:59:00 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774AC7223A
-        for <linux-remoteproc@vger.kernel.org>; Mon,  9 May 2022 12:55:05 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id qe3-20020a17090b4f8300b001dc24e4da73so327261pjb.1
-        for <linux-remoteproc@vger.kernel.org>; Mon, 09 May 2022 12:55:05 -0700 (PDT)
+        Tue, 10 May 2022 00:31:41 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D231FD877;
+        Mon,  9 May 2022 21:27:19 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id iq2-20020a17090afb4200b001d93cf33ae9so1023615pjb.5;
+        Mon, 09 May 2022 21:27:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Kh+QQ/TxXS1NVKYU2dj8970PKcONRYGyMb573yL70Zs=;
-        b=DB5AMq154uPVEABPd/Ht20m9xAuHdLPAIpLNbV2AUd+Xl3o5PSogp22tXDaf8adH/V
-         thnCPnxPBairN5psa5Q3YUT6K4ogh3mhaBxf8XJNroaaR0CdTMSXlGfdIopfPo7ebDAN
-         AEoxTBUl1A2BS1estbYeGlGjmqCX74SR2d4XY=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4u/RzkeXys0EMuELTFpzcOuvMIBYe4ncU5xl9El+u4o=;
+        b=lh6e00EZoQ+eTQpYgYU1qFSGjsvbjIEuoeOVnwDqoGbGxxQG0BdC9IBhQvOGscIgjA
+         EDEo9YvAmkhED4LbYTn9KJTR7H3Sl7KO8PCe9UKbzKYE76nqs9qK2Grp/wlkI07Ew2ZV
+         TxbPIWf6oe9dl7Ht7XdezDfLZMQwBJ2JqIX+DHgiguyGWC3FxLAMv0rO/5RPFQ4wtf3w
+         KcJ4iK9HvoYFBPpRiV/6HOmaj9H9Xgyre09OjKa7X6nl7KIKfWL2SvQ/W9DUAtqXpFGZ
+         hyEaEySqF2K79pm0ClB+C+nuqCsbr1/wczmYRqxwW/sMBhUvqVwNdE+mFgChR4d0VtYM
+         ddyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Kh+QQ/TxXS1NVKYU2dj8970PKcONRYGyMb573yL70Zs=;
-        b=EkLh2qUhPsMoeDOTrlM7e7e6flylyiXt43H5IKYtakMfjrY46FDpZUJBwACfDOgnt0
-         k04KWj/KKconJ/xsLknYqocLvyl/ARLCRI+YjcQpL4awqiI4XpBW2f4VYspOHwTvMstM
-         MJ3xAQAIJvXwV5kz9Nc/ULr+mN+sZhUKTYwo5+9BYj4PwU2ZXA1Tg0yoSH/ooZFmjM6d
-         aLc71M/6WRLmfAh/6OrhrNB5t4MAxqZ/lqGBsS3jUSOOGRxrsIsjNijKitc7HAR00nzt
-         0MyBqQTkBTAqj1IEOQF5ENCN00zQErJsCWOhyOQ9OkIDWDliqIHH1SjR+Ima8YXMIEOL
-         8E0w==
-X-Gm-Message-State: AOAM531wDfrVN1yUlaMjNI3otmSH/3k9vMHJ5BmHDwZgWw8IKI9Pp/qW
-        4zYbZUkD0HzYxGFzeyBaVYGDPg==
-X-Google-Smtp-Source: ABdhPJweHWgd7qc2MqEdODa2jlyfVzb0XNyTHa8rV9JgRxEzF16wLYb7GsZAb9n2TCoNDkBKkyCnUw==
-X-Received: by 2002:a17:90b:314e:b0:1dc:d143:a15d with SMTP id ip14-20020a17090b314e00b001dcd143a15dmr20698782pjb.111.1652126105085;
-        Mon, 09 May 2022 12:55:05 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:753:614a:caf8:e14d])
-        by smtp.gmail.com with UTF8SMTPSA id w19-20020a170903311300b0015e8d4eb2a2sm229445plc.236.2022.05.09.12.55.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 May 2022 12:55:04 -0700 (PDT)
-Date:   Mon, 9 May 2022 12:55:03 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     bjorn.andersson@linaro.org, robh+dt@kernel.org, ohad@wizery.com,
-        agross@kernel.org, mathieu.poirier@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        evgreen@chromium.org, dianders@chromium.org, swboyd@chromium.org,
-        krzysztof.kozlowski@canonical.com
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: sc7280: Add proxy interconnect
- requirements for modem
-Message-ID: <Ynlxlz7brLWZFRnd@google.com>
-References: <1652082798-5855-1-git-send-email-quic_sibis@quicinc.com>
- <1652082798-5855-3-git-send-email-quic_sibis@quicinc.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4u/RzkeXys0EMuELTFpzcOuvMIBYe4ncU5xl9El+u4o=;
+        b=KskHZSIQDtsyD5B2vvfsCHkx2GBGbD/xjC+2rgp8y9zsKGiNT5uVvrU7hhJmwQNa0j
+         H+t8XlFeZhVRWJo/DjVkKra8LpZ5DhNl2zrvWFTsM7AGPGfLWLly6sjnQZ+47A0MBEB3
+         DKagwBKkSImDLIzv12KR/ls955kHMUOxwt+VKXXVt7TtMfDT4/XBKAF+8FInQ037UVHf
+         /5v32d2axItmnQyqck4ajHGtPbl8bLJ7ajg2RJ2Fvf2Rr3UZt0fMpybsA1ZBenWO9MVY
+         /WV6STXHELjhX/lxUo4X6MRHCaQ7JXYu8/EQHMheQ5Qmbw+HRDMO3IigzraxbUhpHXgk
+         QEsw==
+X-Gm-Message-State: AOAM5305gI061fZsJBugrp570TnR3EtLugzBxI8E9bS8c+aSxx/+8oxw
+        DaYxH65czgXubsKidnltnigpCY87O5FBnQ==
+X-Google-Smtp-Source: ABdhPJznbQP8rceqpEitUK4xljll9kCPLkyWendrilqrLKk+iP0/GScYWhUPD/6FQn1fYqjZjIiD4w==
+X-Received: by 2002:a17:90b:210a:b0:1db:cbc6:ca57 with SMTP id kz10-20020a17090b210a00b001dbcbc6ca57mr29635611pjb.69.1652156838989;
+        Mon, 09 May 2022 21:27:18 -0700 (PDT)
+Received: from skynet-linux.local ([2401:4900:33a2:808d:da42:4e61:10ad:478d])
+        by smtp.googlemail.com with ESMTPSA id x4-20020a1709028ec400b0015e8d4eb2aesm741263plo.248.2022.05.09.21.27.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 May 2022 21:27:17 -0700 (PDT)
+From:   Sireesh Kodali <sireeshkodali1@gmail.com>
+To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+Cc:     bjorn.andersson@linaro.org,
+        Sireesh Kodali <sireeshkodali1@gmail.com>
+Subject: [PATCH 0/2] remoteproc: qcom: Fix handling of WCNSS IRQs
+Date:   Tue, 10 May 2022 09:56:52 +0530
+Message-Id: <20220510042654.71152-1-sireeshkodali1@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1652082798-5855-3-git-send-email-quic_sibis@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, May 09, 2022 at 01:23:18PM +0530, Sibi Sankar wrote:
-> Add interconnects that are required to be proxy voted upon during modem
-> bootup on SC7280 SoCs.
-> 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+Hi,
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Due to a bug in the code that fetches the IRQs from the device tree, the
+optional "stop-ack" IRQ was never used, even if it was defined in the
+device tree. This also allowed a typo in the MSM8916 SoC device tree,
+where the "stop-ack" irq was instead labeled "stop".
+
+The attached patches fix the handling of IRQs in the code, and fix the
+typo in the MSM8916 device tree.
+
+Sireesh Kodali (2):
+  remoteproc: qcom: wcnss: Fix handling of IRQs
+  arm64: dts: qcom: msm8916: Fix typo in pronto remoteproc node
+
+ arch/arm64/boot/dts/qcom/msm8916.dtsi |  4 ++--
+ drivers/remoteproc/qcom_wcnss.c       | 10 ++++++++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+-- 
+2.36.0
+
