@@ -2,105 +2,182 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36ED5522B4B
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 May 2022 06:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D0F522BE9
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 May 2022 07:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240551AbiEKEkf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 11 May 2022 00:40:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
+        id S238588AbiEKFvy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 11 May 2022 01:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239470AbiEKEkH (ORCPT
+        with ESMTP id S232213AbiEKFvx (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 11 May 2022 00:40:07 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E00153526
-        for <linux-remoteproc@vger.kernel.org>; Tue, 10 May 2022 21:39:24 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-e93bbb54f9so1441024fac.12
-        for <linux-remoteproc@vger.kernel.org>; Tue, 10 May 2022 21:39:24 -0700 (PDT)
+        Wed, 11 May 2022 01:51:53 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663F285656;
+        Tue, 10 May 2022 22:51:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
-        b=nrkBIDyCffFbQz5WNhQU88q5l+bx8m1CoLNL/nRcxBFZRgp3B2RwRJzpJi69hjmFPQ
-         Eotn36CVTQor8sTwq84btYhQQ+OsypTpYdHIfGkC/Ekjg8a9U0HkQq0T/gbcQg5/if4Y
-         i1yzcJYhTRMm8ny1NIiOYUNRazrfloxlCC/1XVxW2+TG0ItQpx2/G3cXjgMuOALgO1Rc
-         auxKHXwS3ghK6vFFIfR8essc70JXfRi2oIpi3YT/VLqISCMTaVWCOI/Xf0rWfpfTmlnw
-         XgqCFC8jOuHD5AjsEtox3h0b9tzcHlVM0fA1RrJyDFubK9aS707t1BYf/K43qSc4slo4
-         wrQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=s3Cdswvtyrq8qHVwuRB9YRoTAIoD9G/2//h6WeFZHzo=;
-        b=CoVqvEE2THCI8Q7/pnPmw7w3LLu0EZKWD7xFhFiw6/j1a+dw6ZWt4DRxCfwX3gaYSs
-         kCju4ITc9ER8dZcOC5Xxr+EwZ0/ZfUBQfaFBy2NhFpbralvgHoUtb+AepCIH2+EP+X4g
-         MxbcHHKkprnbqWX+vrq2hW/5H13z0JWZgpcAk3yQNjAlQrbWdXiUDPnurAXNL/zxjcd2
-         lPmS/4uWIQFjaZV313CXek+dJvDRecEMDDskORV9Fq3jZc7/Ao53+bFp8nZdjGz/S7pH
-         7d+WW808r173YkYZ3B1Hjh3MnFez8bB/3uTuyMFRKhWFrnwApZK0IYTzU3l+/IAyqm6Q
-         BYrw==
-X-Gm-Message-State: AOAM5337CIHfuf707OXVXq9DrJf7+zX9zI7c9OMIsJ65G6pt11PZBYmw
-        qGr0hX/phTghY6zn8ixiApBH15jUqOJ+w+xcdsWB/uWdAEc0qw==
-X-Google-Smtp-Source: ABdhPJwbKHmbnZDflMHBZCcp2YbZAAZvFdPcM4owWeuPIkoxodmwIZJ+Xpgi08ylB1RFXLrw63SQRxJzumbwJKMTxhs=
-X-Received: by 2002:a17:90b:1007:b0:1dc:9862:68af with SMTP id
- gm7-20020a17090b100700b001dc986268afmr3261389pjb.205.1652243951499; Tue, 10
- May 2022 21:39:11 -0700 (PDT)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1652248309; x=1683784309;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=y7Ma3NU4R9DKob8KaqtrYsX/Lg7x0p6qjlq2IolMo3A=;
+  b=ybP8OunGnSp4Cg6yf4bFIX+cEWMCEBXkaTINbzLmQw8dp922yf+Pvt0s
+   6cP+R7cHE7BRGAJRIEMISBcU2NPJHlAq8fZEghVjNZCw8epRA8+P8YfFq
+   R1C9WYF/U+RoHAEIJHyTy2aqqJEXTUww8Tcf2z2IOfQIE9bEZK9sjVQ+D
+   w=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 10 May 2022 22:51:49 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2022 22:51:50 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 10 May 2022 22:51:50 -0700
+Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 10 May
+ 2022 22:51:46 -0700
+Subject: Re: [PATCH] remoteproc: qcom_q6v5_mss: map/unmap metadata region
+ before/after use
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     <bjorn.andersson@linaro.org>, <arnd@arndb.de>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <sboyd@kernel.org>, <agross@kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <mathieu.poirier@linaro.org>
+References: <1651845086-16535-1-git-send-email-quic_sibis@quicinc.com>
+ <YnVj7fxUbTqkJpdz@google.com>
+From:   Sibi Sankar <quic_sibis@quicinc.com>
+Message-ID: <d6dca8a1-0986-1d56-f0bd-131bda4b1381@quicinc.com>
+Date:   Wed, 11 May 2022 11:21:43 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:319:0:0:0:0 with HTTP; Tue, 10 May 2022 21:39:10
- -0700 (PDT)
-From:   Private Mail <privatemail1961@gmail.com>
-Date:   Tue, 10 May 2022 21:39:10 -0700
-Message-ID: <CANjAOAiiVcSrSv31FjThCVmeppS54UVvGVj3SRSvMfxOB+T8DA@mail.gmail.com>
-Subject: Have you had this? It is for your Benefit
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.3 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DEAR_BENEFICIARY,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-        DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLY,
-        LOTS_OF_MONEY,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+In-Reply-To: <YnVj7fxUbTqkJpdz@google.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Our Ref: BG/WA0151/2022
+Hey Matthias,
+Thanks for taking time to review the patch.
 
-Dear Beneficiary
+On 5/6/22 11:37 PM, Matthias Kaehlcke wrote:
+> On Fri, May 06, 2022 at 07:21:26PM +0530, Sibi Sankar wrote:
+>> The application processor accessing the dynamically assigned metadata
+>> region after assigning it to the remote Q6 would lead to an XPU violation.
+>> Fix this by un-mapping the metadata region post firmware header copy. The
+>> metadata region is freed only after the modem Q6 is done with fw header
+>> authentication.
+>>
+>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> 
+> Should this have a 'Fixes:' tag
+It ideally should have but similar to what we did for mba and mpss
+region map/unmap, it would be a ugly backport since it would point to
+the very first commit. We can agree to do a backport if it's ever
+reported upstream on any of the older SoCs.
 
-Subject: An Estate of US$15.8 Million
+-Sibi
 
-Blount and Griffin Genealogical Investigators specializes in probate
-research to locate missing heirs and beneficiaries to estates in the
-United Kingdom and Europe.
-
-We can also help you find wills, obtain copies of certificates, help
-you to administer an estate, as well as calculating how an estate,
-intestacy or trust should be distributed.
-
-You may be entitled to a large pay out for an inheritance in Europe
-worth US$15.8 million. We have discovered an estate belonging to the
-late Depositor has remained unclaimed since he died in 2011 and we
-have strong reasons to believe you are the closest living relative to
-the deceased we can find.
-
-You may unknowingly be the heir of this person who died without
-leaving a will (intestate). We will conduct a probate research to
-prove your entitlement, and can submit a claim on your behalf all at
-no risk to yourselves.
-
-Our service fee of 10% will be paid to us after you have received the estate.
-
-The estate transfer process should take just a matter of days as we
-have the mechanism and expertise to get this done very quickly. This
-message may come to you as a shock, however we hope to work with you
-to transfer the estate to you as quickly as possible.
-
-Feel free to email our senior case worker Mr. Malcolm Casey on email:
-malcolmcasey68@yahoo.com for further discussions.
-
-With warm regards,
-
-Mr. Blount W. Gort, CEO.
-Blount and Griffin Associates Inc
+> 
+>> ---
+>>   drivers/remoteproc/qcom_q6v5_mss.c | 43 +++++++++++++++++++++++++++++++-------
+>>   1 file changed, 35 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+>> index af217de75e4d..eb34a258b67b 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+>> @@ -10,6 +10,7 @@
+>>   #include <linux/clk.h>
+>>   #include <linux/delay.h>
+>>   #include <linux/devcoredump.h>
+>> +#include <linux/dma-map-ops.h>
+>>   #include <linux/dma-mapping.h>
+>>   #include <linux/interrupt.h>
+>>   #include <linux/kernel.h>
+>> @@ -932,27 +933,52 @@ static void q6v5proc_halt_axi_port(struct q6v5 *qproc,
+>>   static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>>   				const char *fw_name)
+>>   {
+>> -	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS;
+>> +	unsigned long dma_attrs = DMA_ATTR_FORCE_CONTIGUOUS | DMA_ATTR_NO_KERNEL_MAPPING;
+>> +	unsigned long flags = VM_DMA_COHERENT | VM_FLUSH_RESET_PERMS;
+>> +	struct page **pages;
+>> +	struct page *page;
+>>   	dma_addr_t phys;
+>>   	void *metadata;
+>>   	int mdata_perm;
+>>   	int xferop_ret;
+>>   	size_t size;
+>> -	void *ptr;
+>> +	void *vaddr;
+>> +	int count;
+>>   	int ret;
+>> +	int i;
+>>   
+>>   	metadata = qcom_mdt_read_metadata(fw, &size, fw_name, qproc->dev);
+>>   	if (IS_ERR(metadata))
+>>   		return PTR_ERR(metadata);
+>>   
+>> -	ptr = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+>> -	if (!ptr) {
+>> -		kfree(metadata);
+>> +	page = dma_alloc_attrs(qproc->dev, size, &phys, GFP_KERNEL, dma_attrs);
+>> +	if (!page) {
+>>   		dev_err(qproc->dev, "failed to allocate mdt buffer\n");
+>> -		return -ENOMEM;
+>> +		ret = -ENOMEM;
+>> +		goto free_metadata;
+>> +	}
+>> +
+>> +	count = PAGE_ALIGN(size) >> PAGE_SHIFT;
+>> +	pages = kmalloc_array(count, sizeof(struct page *), GFP_KERNEL);
+>> +	if (!pages) {
+>> +		ret = -ENOMEM;
+>> +		goto free_metadata;
+>>   	}
+>>   
+>> -	memcpy(ptr, metadata, size);
+>> +	for (i = 0; i < count; i++)
+>> +		pages[i] = nth_page(page, i);
+>> +
+>> +	vaddr = vmap(pages, count, flags, dma_pgprot(qproc->dev, PAGE_KERNEL, dma_attrs));
+>> +	kfree(pages);
+>> +	if (!vaddr) {
+>> +		dev_err(qproc->dev, "unable to map memory region: %pa+%zx\n", &phys, size);
+>> +		ret = -EBUSY;
+>> +		goto free_metadata;
+>> +	}
+>> +
+>> +	memcpy(vaddr, metadata, size);
+>> +
+>> +	vunmap(vaddr);
+>>   
+>>   	/* Hypervisor mapping to access metadata by modem */
+>>   	mdata_perm = BIT(QCOM_SCM_VMID_HLOS);
+>> @@ -982,7 +1008,8 @@ static int q6v5_mpss_init_image(struct q6v5 *qproc, const struct firmware *fw,
+>>   			 "mdt buffer not reclaimed system may become unstable\n");
+>>   
+>>   free_dma_attrs:
+>> -	dma_free_attrs(qproc->dev, size, ptr, phys, dma_attrs);
+>> +	dma_free_attrs(qproc->dev, size, page, phys, dma_attrs);
+>> +free_metadata:
+>>   	kfree(metadata);
+>>   
+>>   	return ret < 0 ? ret : 0;
+>> -- 
+>> 2.7.4
+>>
