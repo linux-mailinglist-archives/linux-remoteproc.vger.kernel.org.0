@@ -2,94 +2,101 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE357523C40
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 May 2022 20:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A14C6523E0F
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 May 2022 21:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346103AbiEKSLp (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 11 May 2022 14:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
+        id S1347303AbiEKTzC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 11 May 2022 15:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346100AbiEKSLp (ORCPT
+        with ESMTP id S1347327AbiEKTy7 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 11 May 2022 14:11:45 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61376606FD
-        for <linux-remoteproc@vger.kernel.org>; Wed, 11 May 2022 11:11:43 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id p4so3592175edx.0
-        for <linux-remoteproc@vger.kernel.org>; Wed, 11 May 2022 11:11:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=B1sIommB5oiopHgf7KLQUzUatFJzc302ngrnM99CnbU=;
-        b=Bncm1ERZjlJ+C2I71BhUNNvrXo+iHTAiA5u+snQ3KP3WhoLiPOVk3UUcEFxCrbc3YL
-         oJd9CfUY9MfEb9TRmtBQm+tSNWQCSIfpzzZC8ZFUpiBl2yhENsNmzUohewRc5OcOK1Q/
-         AzuSt2dN3/CNM3XGzcostHznROhsNuHr3LLYv6dZXVNwd5FKo+SJNAErujYdxIF3Ywhw
-         NryiSYLfP73Fz2gCjZBALqkKzoWvqb2heHCTgVqdcsz4jRNiq7A4y4ktvw2sLAhUWfIb
-         NBoEdKWCHn67IPzIw8jdGuVvT7TXUTpuUoUS9dwMAOfisyXp0SlMzKyMKgJkpKuV+d0R
-         nW/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=B1sIommB5oiopHgf7KLQUzUatFJzc302ngrnM99CnbU=;
-        b=h8vpq+UqQEtc5Wgt029SWgSwxeGUtU3txyAG3FpDwTqrVko+zksl0Urn7JeqIilxNc
-         NM6tqvJbGWzK5Dumjs4G+7UAXfbXmeJ2+c0neCKDi3BVldJDFWmZxrss+v87Ka+hJ5N6
-         qXsjGL/VPTAbz2D9Fgj6Z48GgPdEX14DjB8FDGM29GQDsje2XW8XMvByn2KfNieW0q4O
-         u/qadMhXhD0mRh6xkqCz3MZbiXuWrg4m8bSngqCWVtsnig4PfFSVKO708S7J1l6e6ZOm
-         8h6Id3xC8DbWvsBUGrAz2KuFKAjlTd3t3+nDC5UV3muXwWwJjj646r772Nrglu/xwfD2
-         Jgxg==
-X-Gm-Message-State: AOAM532ZqC9et1F4Cv/64TZ24pdi3od5vz+Jzc4EweuykT4oMTTxa7r/
-        E1IGVgmQhgeh3D6FTVbog4Z6fg==
-X-Google-Smtp-Source: ABdhPJyiDHzyY4rY+mnga9H3oSlY4ujZN6q06J9yJ2WZTAhsRJ/Dn4dfk2ee36mq5zINyyfgkHsSLw==
-X-Received: by 2002:aa7:c849:0:b0:427:d464:e66f with SMTP id g9-20020aa7c849000000b00427d464e66fmr30417861edt.411.1652292702040;
-        Wed, 11 May 2022 11:11:42 -0700 (PDT)
-Received: from [192.168.0.155] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id sb12-20020a1709076d8c00b006f3ef214e04sm1213887ejc.106.2022.05.11.11.11.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 May 2022 11:11:41 -0700 (PDT)
-Message-ID: <81365629-6cf0-f320-e684-4fb40b829399@linaro.org>
-Date:   Wed, 11 May 2022 20:11:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: msm8916: Fix typo in pronto
- remoteproc node
-Content-Language: en-US
-To:     Sireesh Kodali <sireeshkodali1@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Wed, 11 May 2022 15:54:59 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AFE9C2FC;
+        Wed, 11 May 2022 12:54:59 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id F06951F42CF0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1652298897;
+        bh=mb8FI9cn+BTWOJjO46oabe4cMLSOl4wn8hXjvFvCuoc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dpQiAjZI6Jhhxfs09HDMi10UTpbhdgj5qfUkzPgXjjmC7MFCoRAkXh2kPf8Zj/b6n
+         a31L8+kgqyxzLRD2bCYy1OcJv7Xh50hv++mdnTyw+xaxVCcjwvSq37pBLJhzNuJ7zp
+         k8XTHxEU/cPaEhoMXKQTkDl+FkDPjVMgyCBA5HJLq2VQr2UlfS/pmTkE6U1Q/t0XdC
+         rvdJV/8mEr7YgwsBJDPdQE+Lbaj+wFTdrOWFrfm7YiVivvmtDv/wgAnfiDQ7lg0pwF
+         thV44tjSbn8ZL6xGxPObQWwaig4gYkbUK5SwTP2Xs9pWcvs5UWS9lG4KSYBN2rLw73
+         9IwJ0Y27HprkA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220510042654.71152-1-sireeshkodali1@gmail.com>
- <20220510042654.71152-3-sireeshkodali1@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220510042654.71152-3-sireeshkodali1@gmail.com>
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@google.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: [PATCH v5 0/2] Mediatek SCP dt-binding tweaks
+Date:   Wed, 11 May 2022 15:54:50 -0400
+Message-Id: <20220511195452.871897-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 10/05/2022 06:26, Sireesh Kodali wrote:
-> The smem-state properties for the pronto node were incorrectly labelled,
-> reading `qcom,state*` rather than `qcom,smem-state*`. Fix that, allowing
-> the stop state to be used.
-> 
-> Fixes: 88106096cbf8 ("ARM: dts: msm8916: Add and enable wcnss node")
-> 
-> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
 
-No blank lines between tags, please.
+Two simple patches for the Mediatek SCP dt-binding. The first fixes the
+reg/reg-names property while the second adds a new optional
+memory-region property.
 
-Best regards,
-Krzysztof
+v4: https://lore.kernel.org/all/20220506213226.257859-1-nfraprado@collabora.com
+v3: https://lore.kernel.org/all/20220503211114.2656099-1-nfraprado@collabora.com
+v2: https://lore.kernel.org/all/20220502192420.2548512-1-nfraprado@collabora.com
+v1: https://lore.kernel.org/all/20220429211111.2214119-1-nfraprado@collabora.com
+
+Changes in v5:
+- Made l1tcm optional for mt8192/mt8195
+- Greatly simplified the constraints override in the if:then:
+
+Changes in v4:
+- Reworked presence of l1tcm reg to be if:then: based and present only
+  on mt8192/mt8195
+
+Changes in v3:
+- Made the cfg reg required again. After looking again into the mtk-scp
+  driver, only l1tcm is optional.
+
+Changes in v2:
+- Dropped type and description from memory-region since it's a
+  well-known property
+- Set memory-region maxItems to 1
+
+Nícolas F. R. A. Prado (2):
+  dt-bindings: remoteproc: mediatek: Make l1tcm reg exclusive to mt819x
+  dt-bindings: remoteproc: mediatek: Add optional memory-region to
+    mtk,scp
+
+ .../bindings/remoteproc/mtk,scp.yaml          | 47 +++++++++++++------
+ 1 file changed, 33 insertions(+), 14 deletions(-)
+
+-- 
+2.36.1
+
