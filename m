@@ -2,52 +2,52 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4325249C2
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 May 2022 12:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F2A5249C1
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 May 2022 12:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343585AbiELKAg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 12 May 2022 06:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57186 "EHLO
+        id S1352398AbiELKAb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 12 May 2022 06:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352411AbiELKA0 (ORCPT
+        with ESMTP id S1352390AbiELKA0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
         Thu, 12 May 2022 06:00:26 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1831222EA69
-        for <linux-remoteproc@vger.kernel.org>; Thu, 12 May 2022 03:00:25 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id p4so5673108edx.0
-        for <linux-remoteproc@vger.kernel.org>; Thu, 12 May 2022 03:00:24 -0700 (PDT)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BA022EA7A
+        for <linux-remoteproc@vger.kernel.org>; Thu, 12 May 2022 03:00:23 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id bv19so9140075ejb.6
+        for <linux-remoteproc@vger.kernel.org>; Thu, 12 May 2022 03:00:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=E5YORnDcbWOJgrpTz/qSCG6/YYMuC3Z8T9fT4bh9Wds=;
-        b=tag+9P2t6thmYxjj7J1BOojXQX1tCri+O11NqGILYUOWqcJ6jw3hpWb5QYILy+FXSY
-         nVdSdVSlhuTRTt/G0wrrozxzJJYIocRWYwpQ2yl3pMhtK5TED1puBrNRuH/6tI5yd093
-         znrmOPCCYUkJ5S+QP4BKUibf0nHpXYo6Abif6Qu8Ut+slVG7r1CIJBW6c1SIhWMX4CsA
-         WIk7F4HqLztUuuHN7zEk55VZZQXN49NeZUYwY83ti4PMfp55YgIOPxoFzEcRpJK5jUte
-         WWjvXkp1lmDFlmppaHxmRRnKPPRqeslms0nimycPHaZylLR2EkJaESCw8YHQUeCG5uI2
-         nmmw==
+        bh=tkpPDqrVq/H+y/puJS4Gb9kI2/A7Lq32jtq9rYl6yb0=;
+        b=IFOCvrs1XcRqoYH+gtMSaRO+jB86LwFrCJlZuTQw6K5wGLZgkWJzdyfIqnB4g/ICx7
+         awvQNRBRVjo2j3c+kx05jfv9MzsjtKKw2TkcoX4TGKnRp6zKSxn93IpM5+Lijs5lMLMk
+         qg4/5SozOIWU5fHhYTz/2pTWlzwDg8/9tZb7wMLguvv08VfJWzSS95AaW7/rJ71klVvm
+         GdJSbN3fl4+qdW9cyliiJBmZHlyEHCWyAtu8voMpalw3WXrn1M2kFZsKDSJ07VEFgsj4
+         n8A3KmJTAnLi3ZA59gbEjr2zj+Vc/Pf+0FRJwk8A5xNrssGWqDXS1KU9cmoWy2TBhGxG
+         fZ3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=E5YORnDcbWOJgrpTz/qSCG6/YYMuC3Z8T9fT4bh9Wds=;
-        b=tFE972909c2gUrp3Pm27YinlaEU5OHMA9GFrIywRzzwUwU+o4WohIU1YCzo3AF/G2C
-         OLR7Lxo+WwamGc++2vZHuAInQLjJYfEYbkvOvCtnX8weiqy+a8agAfrepmEP6CRxLuLU
-         sqfq3Uu+WK7QtJ1v93lBlljSPl6UwbdONjkuWX7yplCLWbMLrQXsrWPsS8nNP8KrGMb6
-         Xaxi+S0RHmsRHvPg0psZADk2/+dbKuRlY2ZHAnp9/uZ+WX9sAsNw4nUk78kY5kyz0epT
-         rOmVD2KmF7dCRWj7NhWJ6GJcttJQ6gAnhYWvxkOsiVu5mhu/D3MKve1GinFWfIIjvAvB
-         Lj3Q==
-X-Gm-Message-State: AOAM530KncXaLWXHstAVmQCJDsaDs4VDKE/twzi0ixjnSBetk00U+nne
-        Yg5H3vbpGynTYnwJvCiOgM+Fng==
-X-Google-Smtp-Source: ABdhPJwazH+uuaXS24OcpT4IwHOvZL8EGifCrtq+KeCqc3EgGbj2G01XYvk7XHbqVVh8hkxFIwYzaQ==
-X-Received: by 2002:aa7:c306:0:b0:428:414d:e216 with SMTP id l6-20020aa7c306000000b00428414de216mr33733082edq.394.1652349621242;
-        Thu, 12 May 2022 03:00:21 -0700 (PDT)
+        bh=tkpPDqrVq/H+y/puJS4Gb9kI2/A7Lq32jtq9rYl6yb0=;
+        b=g3tUv30EzptiQIhrxSrZzyQ3xyUGiPIP75+FqavlPMcMa/5EKQpqmj+qbLz7MGt21E
+         cTUbqaN5UFL61pdG25o7tBno2mlRr4AhIbd8wwamnZVELkm04H5F6wQvYkhxD+rQeoTt
+         j1uthL5m6ismlIdF96dfKhAIg9ZavAYzoHHojlpGDQFYN7pamhKMBN5keZH0m4P4ryEY
+         9jjVijnECcfcnuded1w5hVQ56y1QplkCX5EejLDTzjV3pnNNbp0E2bRaThR9X1ZFNheE
+         I/9vIXdj/l8WKsSwiLPSXQhGvXNDAgnYjfATNeObbKXmI4hSqtK32gCvjBCmus8pUklY
+         msrQ==
+X-Gm-Message-State: AOAM532jmvyCK/6FVOpk9+w4Tmqf4wLVjYOIcZut3vueJZxYs2MzR6mx
+        TCBI1w0BENeFpZHwXKiYtjvI+A==
+X-Google-Smtp-Source: ABdhPJyZ8rok39ODYQ+iX33CtABflvZmQXwLGT+B5UvhCCikKYy5X5z8qcmrUVr68U1RX4O9efLIag==
+X-Received: by 2002:a17:907:3e8f:b0:6f4:4f42:a75f with SMTP id hs15-20020a1709073e8f00b006f44f42a75fmr28608981ejc.695.1652349622410;
+        Thu, 12 May 2022 03:00:22 -0700 (PDT)
 Received: from localhost.localdomain (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id d17-20020a170906641100b006f3ef214da1sm1970287ejm.7.2022.05.12.03.00.20
+        by smtp.gmail.com with ESMTPSA id d17-20020a170906641100b006f3ef214da1sm1970287ejm.7.2022.05.12.03.00.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 May 2022 03:00:20 -0700 (PDT)
+        Thu, 12 May 2022 03:00:22 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -60,9 +60,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Sireesh Kodali <sireeshkodali1@gmail.com>,
         Sibi Sankar <quic_sibis@quicinc.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 04/12] dt-bindings: remoteproc: qcom,adsp: simplify interrupts
-Date:   Thu, 12 May 2022 11:59:58 +0200
-Message-Id: <20220512100006.99695-5-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 05/12] dt-bindings: remoteproc: qcom,adsp: simplify SM8150 power domains
+Date:   Thu, 12 May 2022 11:59:59 +0200
+Message-Id: <20220512100006.99695-6-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220512100006.99695-1-krzysztof.kozlowski@linaro.org>
 References: <20220512100006.99695-1-krzysztof.kozlowski@linaro.org>
@@ -70,7 +70,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,90 +78,46 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Interrupts between variants differ only with presence of last optional
-interrupt, so the constraints can be simplified.
+The SM8150 if cases for power domains can be merged with another entry.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../bindings/remoteproc/qcom,adsp.yaml        | 46 ++++++++-----------
- 1 file changed, 18 insertions(+), 28 deletions(-)
+ .../devicetree/bindings/remoteproc/qcom,adsp.yaml | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-index 6e1fdfe91043..0b2db36e5d14 100644
+index 0b2db36e5d14..e3a193299c4a 100644
 --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
 +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-@@ -72,11 +72,23 @@ properties:
- 
-   interrupts:
-     minItems: 5
--    maxItems: 6
-+    items:
-+      - description: Watchdog interrupt
-+      - description: Fatal interrupt
-+      - description: Ready interrupt
-+      - description: Handover interrupt
-+      - description: Stop acknowledge interrupt
-+      - description: Shutdown acknowledge interrupt
- 
-   interrupt-names:
-     minItems: 5
--    maxItems: 6
-+    items:
-+      - const: wdog
-+      - const: fatal
-+      - const: ready
-+      - const: handover
-+      - const: stop-ack
-+      - const: shutdown-ack
- 
-   resets:
-     minItems: 1
-@@ -317,19 +329,9 @@ allOf:
+@@ -371,6 +371,8 @@ allOf:
+               - qcom,msm8226-adsp-pil
+               - qcom,msm8996-adsp-pil
+               - qcom,msm8998-adsp-pas
++              - qcom,sm8150-adsp-pas
++              - qcom,sm8150-cdsp-pas
      then:
        properties:
-         interrupts:
--          items:
--            - description: Watchdog interrupt
--            - description: Fatal interrupt
--            - description: Ready interrupt
--            - description: Handover interrupt
--            - description: Stop acknowledge interrupt
-+          maxItems: 5
-         interrupt-names:
--          items:
--            - const: wdog
--            - const: fatal
--            - const: ready
--            - const: handover
--            - const: stop-ack
-+          maxItems: 5
+         power-domains:
+@@ -434,19 +436,6 @@ allOf:
+             - const: cx
+             - const: mx
  
+-  - if:
+-      properties:
+-        compatible:
+-          contains:
+-            enum:
+-              - qcom,sm8150-adsp-pas
+-              - qcom,sm8150-cdsp-pas
+-    then:
+-      properties:
+-        power-domains:
+-          items:
+-            - description: CX power domain
+-
    - if:
        properties:
-@@ -347,21 +349,9 @@ allOf:
-     then:
-       properties:
-         interrupts:
--          items:
--            - description: Watchdog interrupt
--            - description: Fatal interrupt
--            - description: Ready interrupt
--            - description: Handover interrupt
--            - description: Stop acknowledge interrupt
--            - description: Shutdown acknowledge interrupt
-+          minItems: 6
-         interrupt-names:
--          items:
--            - const: wdog
--            - const: fatal
--            - const: ready
--            - const: handover
--            - const: stop-ack
--            - const: shutdown-ack
-+          minItems: 6
- 
-   - if:
-       properties:
+         compatible:
 -- 
 2.32.0
 
