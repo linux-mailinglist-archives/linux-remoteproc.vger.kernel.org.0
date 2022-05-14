@@ -2,52 +2,52 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEA1526F08
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 May 2022 09:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7BCC526F1D
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 May 2022 09:15:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiENCrw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 13 May 2022 22:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
+        id S229476AbiENBDN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 13 May 2022 21:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiENCrv (ORCPT
+        with ESMTP id S229436AbiENBDL (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 13 May 2022 22:47:51 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730424F610E
-        for <linux-remoteproc@vger.kernel.org>; Fri, 13 May 2022 17:49:04 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id n10so19094739ejk.5
-        for <linux-remoteproc@vger.kernel.org>; Fri, 13 May 2022 17:49:04 -0700 (PDT)
+        Fri, 13 May 2022 21:03:11 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A7EEBAB3
+        for <linux-remoteproc@vger.kernel.org>; Fri, 13 May 2022 17:38:33 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id d6so11742213ede.8
+        for <linux-remoteproc@vger.kernel.org>; Fri, 13 May 2022 17:38:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=p1+Xm7EUInIY3jvthb6tC3vLUTde35YYnc+B4cs34zo=;
-        b=orPadqrPCDmcbZuPrF06wsMUbSjw0K+eL03xR0/hC+F5ybl24xD7r7i/VpUfJehJjk
-         X7fSZnDiXocFltfDjaIUXQ+2sZJSMEBKp7kxrsGGq4S5G/NJxkIfzIQXJ+A7TWZyrU33
-         iTKOFmYgHaZevZbhf3ot98zN7uXpkuR6sOTHnPqzxXlgjnHRtoY8RMP9ey+fYqZvlp79
-         4NMatCxHNITiRkmcwILZ7Rx80bpuJdAsaH5juR9kCTcF7CFb4Br5dhPPVbUjWQq3RXW9
-         2/yGlPOeaPIWEGbSJABM4Trh8lsVMpLOuCd45SlXaur4jayaeS8Qf9i0I+e7snI2bISe
-         Tstg==
+        bh=wBxMEIa7glrwrCrckfkFnYPIKZ191GVYDBXQw925KJM=;
+        b=JONcElkgDZphNsx81je19YoaYkIWiMXMmwWkXlRXBRAoc2mTGHmpUt3PVXhzlE7zOk
+         w1olp0FSMeHbZ2s2dF2YXwBndjBW4gZJCN3c/jAJu/pzOTbmIR0DCO1EDjSJFZOlAvzF
+         2rBrEVG+JhyXcRlhoCB9KoBC4NtQeSlqRz+QWoRUrUtE/YPl18UTVtkhfmH/Kim5Pt8r
+         D/mzYJ5oWj8NXSB5608/xtHNfZJxs/V+2BBAil73jGDzejFoko6GhJbBFAxFPE4o6VG8
+         jCXzbIDMth9WiTWAyLVoR2dQ6zs62At73Hkqc629pl/9N7Yqgqwr8Le/0XPh8tecPF5H
+         iaQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=p1+Xm7EUInIY3jvthb6tC3vLUTde35YYnc+B4cs34zo=;
-        b=PAbgeeLc+AgakvnszFKBxnxQtLGFwrUzQEfYmezFhW9w3gphnADbTiGksHAIn2N3QF
-         5n1a8vt385lVwo63Pukl6kY2CAUFyfBw7rKAnE0pvLYXCJLG1NHo5Q67XOWXPsgz2wJG
-         dZlEQ4HRMQNS3k4JHqoyQV/4/dzoBZ+el5Js/m8RGTwde+9SpTrAgDNNwlcDj5UJVLhQ
-         3bZrUxmW8X3pb3R5uD9tdrbBey/r3iYhlCRQua0fQBM4jrblRQ79g8n4EvbpZMs53MgF
-         vn8xeCVwZfgCPV7zLsW5w5itvUfLkKH6oU7Bfl5K8LCMGXpXfVGGbYZU+3LfhafUKTB0
-         uU0A==
-X-Gm-Message-State: AOAM530W5CJ4UhZM8WJf810APApgOhNHpNxLp9P5mPGVQmaIo1fIEKqg
-        QAQ5nUqMhhC4X0Yjrtc5NsPUtdoaFBksHA==
-X-Google-Smtp-Source: ABdhPJx0UmqhGj8S6MnXyxoYZW8I6PIYPveeEoxF6Y5cYXtbK5eThZLO5BKTg4wcW6L0KPMOIrlYQQ==
-X-Received: by 2002:a05:651c:10b:b0:24f:24a3:9dec with SMTP id a11-20020a05651c010b00b0024f24a39decmr4361223ljb.144.1652486470712;
-        Fri, 13 May 2022 17:01:10 -0700 (PDT)
+        bh=wBxMEIa7glrwrCrckfkFnYPIKZ191GVYDBXQw925KJM=;
+        b=cgNYvHzpzwgJyTCsMhucyyMpPi5LmQwYraYF0Jb+0tdNB/FoHuKWbUfSuPfoFHowwK
+         0xyZtHjmWSwztO0xD2z2OLL9w4hIxvzZLU4dxt9PJsKS8ecsKI93MteKQn3aZuaZOp3g
+         QCyrH/VNg007kQW+cpdWtrQ1m6qygP5xOwxr6fglxRyqKNuz0XrVHgNt3dO8ZleMCqXl
+         3aSNdKEj3T9JPlj1HzQw2Vob+wdAdB0XGYtPrn3rE5uoyBzqM5U6pfYobWOgX3toCieS
+         aQw8rx4uoearWBeQDarl2uOgfSgeFM6o3C38Vod/qZYrdNp6aUY3tRcg3WY7wI4voBpC
+         OAFQ==
+X-Gm-Message-State: AOAM531TzWii8ZtBJXvUpOo9ycBqBUsdq/DnSb2bxNIn7U/TDs7qk9n8
+        MwzhugClbyIOFXdyFxvOaM0R5BouIPQ3gQ==
+X-Google-Smtp-Source: ABdhPJwDY51jaWk5OxFlqX2bG7+SQ3FCT87DAJ8k854xm7TgH2QAb1WKHYeT0fxHN9Xtcqg+lLJ3Vg==
+X-Received: by 2002:a05:6512:1513:b0:448:39c0:def0 with SMTP id bq19-20020a056512151300b0044839c0def0mr4888476lfb.469.1652486471683;
+        Fri, 13 May 2022 17:01:11 -0700 (PDT)
 Received: from eriador.lan ([37.153.55.125])
         by smtp.gmail.com with ESMTPSA id z2-20020a2e9b82000000b0024f3d1daeaesm626221lji.54.2022.05.13.17.01.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 May 2022 17:01:10 -0700 (PDT)
+        Fri, 13 May 2022 17:01:11 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -57,9 +57,9 @@ To:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH 1/4] dt-bindings: remoteproc: qcom: Add SDM660 modem PAS compatible
-Date:   Sat, 14 May 2022 03:01:05 +0300
-Message-Id: <20220514000108.3070363-2-dmitry.baryshkov@linaro.org>
+Subject: [PATCH 2/4] dt-bindings: remoteproc: qcom: pas: Add SDM660 CDSP PAS compatible
+Date:   Sat, 14 May 2022 03:01:06 +0300
+Message-Id: <20220514000108.3070363-3-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220514000108.3070363-1-dmitry.baryshkov@linaro.org>
 References: <20220514000108.3070363-1-dmitry.baryshkov@linaro.org>
@@ -67,58 +67,63 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Describe required properties of the SDM660 MSS PIL device.
+The Qualcomm SDM660 has the usual audio, compute, sensor and modem
+remoteprocs. Add compatible string and conditions for the compute and
+modem PAS.  While we are at it, also add missing conditions for the
+audio PAS.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../devicetree/bindings/remoteproc/qcom,adsp.yaml          | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt b/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt
-index 8f1507052afd..5ecfaf2048ab 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,q6v5.txt
-@@ -16,6 +16,7 @@ on the Qualcomm Hexagon core.
- 		    "qcom,msm8998-mss-pil"
- 		    "qcom,sc7180-mss-pil"
- 		    "qcom,sc7280-mss-pil"
-+		    "qcom,sdm660-mss-pil"
- 		    "qcom,sdm845-mss-pil"
- 
- - reg:
-@@ -44,6 +45,7 @@ on the Qualcomm Hexagon core.
- 	qcom,qcs404-wcss-pil:
- 	qcom,msm8916-mss-pil:
- 	qcom,msm8974-mss-pil:
-+	qcom,sdm660-mss-pil:
- 		    must be "wdog", "fatal", "ready", "handover", "stop-ack"
- 	qcom,msm8996-mss-pil:
- 	qcom,msm8998-mss-pil:
-@@ -84,6 +86,7 @@ on the Qualcomm Hexagon core.
- 		    must be "iface", "bus", "mem", "xo", "gpll0_mss",
- 		    "snoc_axi", "mnoc_axi", "pnoc", "qdss"
- 	qcom,msm8998-mss-pil:
-+	qcom,sdm660-mss-pil:
- 		    must be "iface", "bus", "mem", "xo", "gpll0_mss",
- 		    "snoc_axi", "mnoc_axi", "qdss"
- 	qcom,sc7180-mss-pil:
-@@ -175,6 +178,7 @@ For the compatible string below the following supplies are required:
- 	qcom,msm8974-mss-pil:
- 	qcom,msm8996-mss-pil:
- 	qcom,msm8998-mss-pil:
-+	qcom,sdm660-mss-pil:
- 		    must be "cx", "mx"
- 	qcom,sc7180-mss-pil:
- 		    must be "cx", "mx", "mss"
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+index a4409c398193..682df80d3a96 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+@@ -30,6 +30,7 @@ properties:
+       - qcom,sc8180x-cdsp-pas
+       - qcom,sc8180x-mpss-pas
+       - qcom,sdm660-adsp-pas
++      - qcom,sdm660-cdsp-pas
+       - qcom,sdm845-adsp-pas
+       - qcom,sdm845-cdsp-pas
+       - qcom,sdx55-mpss-pas
+@@ -169,6 +170,8 @@ allOf:
+               - qcom,sc8180x-adsp-pas
+               - qcom,sc8180x-cdsp-pas
+               - qcom,sc8180x-mpss-pas
++              - qcom,sdm660-adsp-pas
++              - qcom,sdm660-cdsp-pas
+               - qcom,sdm845-adsp-pas
+               - qcom,sdm845-cdsp-pas
+               - qcom,sm6350-adsp-pas
+@@ -284,6 +287,8 @@ allOf:
+               - qcom,qcs404-wcss-pas
+               - qcom,sc8180x-adsp-pas
+               - qcom,sc8180x-cdsp-pas
++              - qcom,sdm660-adsp-pas
++              - qcom,sdm660-cdsp-pas
+               - qcom,sdm845-adsp-pas
+               - qcom,sdm845-cdsp-pas
+               - qcom,sm6350-adsp-pas
+@@ -366,6 +371,8 @@ allOf:
+             enum:
+               - qcom,msm8996-adsp-pil
+               - qcom,msm8998-adsp-pas
++              - qcom,sdm660-adsp-pas
++              - qcom,sdm660-cdsp-pas
+     then:
+       properties:
+         power-domains:
 -- 
 2.35.1
 
