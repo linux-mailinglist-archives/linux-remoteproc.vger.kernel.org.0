@@ -2,136 +2,210 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 837BF5288C4
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 May 2022 17:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C81B5289CF
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 May 2022 18:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240094AbiEPPZa (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 16 May 2022 11:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
+        id S245725AbiEPQJu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 16 May 2022 12:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245341AbiEPPZZ (ORCPT
+        with ESMTP id S234466AbiEPQJr (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 16 May 2022 11:25:25 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2103C705;
-        Mon, 16 May 2022 08:25:24 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id i25-20020a9d6259000000b00605df9afea7so10271810otk.1;
-        Mon, 16 May 2022 08:25:24 -0700 (PDT)
+        Mon, 16 May 2022 12:09:47 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A2E37BC4
+        for <linux-remoteproc@vger.kernel.org>; Mon, 16 May 2022 09:09:46 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-edf9ddb312so20721200fac.8
+        for <linux-remoteproc@vger.kernel.org>; Mon, 16 May 2022 09:09:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ScgtWm2uFkOxfulqs7520gHM/my4MYIe3yq/VcV3Ozw=;
+        b=Ui6BaQ6lQ9IwPfOUL4TJm7cJvfYf8UFV8wI0yIE/ecSwLqobvQf4rTIikXPC8Ksnp/
+         JRSTr3Fgwya3hm14X44WgUx1HJGuc9H1MoeHAN4VBzxuhJEnypxN8+xF6HAWoKiAVAs3
+         mxYrKvjtDKZ5Z0eJvjVSmqSHIwF8R/De7GbNU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OpVnMo42G5s86PrfDD1Zlh8XPSNlbAHUDJJNgTC/Y9E=;
-        b=Yx3qtJPGKgzOENUnk58tn+v08w+XIRZb6rS6ChkB4a6+KY2K10y6ozK4YkdW7S2KYQ
-         SXwt4ENGsQjUtgjJoFcGn/L7zNrnhbf9sp8SO62mmiohw/7GCN422+0LCNGcRvCz5rVV
-         LP5zQIs2VbwiHRgMxxouKKJ/jLGSSlk7MN+8lKaMqV2MfvBToyMTkAGichBA2uPpH2h7
-         2WrJQu/ODMEiyB69r0vnDOLmH4BHJFfUCpN+1AUHZWLTlj9sNrcrQOYNVzSJnRVwuPAt
-         4a6ObECvz+rQTyQYR3ZoRE3Lgbms5bLz/vgp11jiJbb6n62yhY9WMj4b4PkNDY4Vft3i
-         4Ytg==
-X-Gm-Message-State: AOAM533MP9cdyw4OzxZQDiHUpbvkLlI7S6HPI6G1MrEir5BGy9HPK8Cz
-        0aaZLfY8pf6NZyDwFVgl5w==
-X-Google-Smtp-Source: ABdhPJzQb6U+yxx1+Yyv+RdOBdfG4c9OWyZUaP/P8dWPXkSvXkWGRT72AonAuE9aQlT52lkdYFq4qg==
-X-Received: by 2002:a9d:24a8:0:b0:606:b2b8:cfb6 with SMTP id z37-20020a9d24a8000000b00606b2b8cfb6mr6157234ota.237.1652714723474;
-        Mon, 16 May 2022 08:25:23 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i20-20020a4a8d94000000b0035eb4e5a6c5sm4246865ook.27.2022.05.16.08.25.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 May 2022 08:25:22 -0700 (PDT)
-Received: (nullmailer pid 2675482 invoked by uid 1000);
-        Mon, 16 May 2022 15:25:21 -0000
-Date:   Mon, 16 May 2022 10:25:21 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Subject: Re: [PATCH 08/12] dt-bindings: remoteproc: qcom,smd-edge: define
- re-usable schema for smd-edge
-Message-ID: <20220516152521.GA2672819-robh@kernel.org>
-References: <20220512100006.99695-1-krzysztof.kozlowski@linaro.org>
- <20220512100006.99695-9-krzysztof.kozlowski@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ScgtWm2uFkOxfulqs7520gHM/my4MYIe3yq/VcV3Ozw=;
+        b=DVHXZ0pnIIC613vMBef8Rc2NOpsc+JYyPjy0jmP5Y6ZG2Pwygs9ry8FO+nnF2O+Bt/
+         PgfVQ/z249TjVtrhHlBbfxy1FN5C3ZW13cS86i2hrBuqJFCyra4sQvrHMSWbi0MQLMAK
+         mBsxK4u7Se4KN33Ow++2rTs7fuzwuw9o7KMcudopdk7G6iZzObw6FZmZIjerUPvKfQ+B
+         h/48cRDonEO8J/OR2xHuuYGvjpAZg9NzajASeiEXydtrtK+3Pjdzvi/QEEy02FrUXbhL
+         rAH+0Hasg5F7sF0zAS1cUNgex6hO9dqR6UxYwtgZU5+tDFcc6VM0RSEsLEEkvtf4Ahbx
+         RaNw==
+X-Gm-Message-State: AOAM530maljlL8ZNh27EkxBpAxy6KQ0GJrEBT8Ek1eqXDXHMOdMqvzyu
+        bp4iCjRMK/y6oQrVKK0+YdJQRv0McneF7cri
+X-Google-Smtp-Source: ABdhPJzM68lEuCGiSC7Zk4n9D8Yiz6xyXwTVuo8WLH0wLIZA11gIqmNFAi+wWQAHtgVEDSVzVp1jqA==
+X-Received: by 2002:a05:6870:7084:b0:ed:d709:34be with SMTP id v4-20020a056870708400b000edd70934bemr14857018oae.4.1652717384840;
+        Mon, 16 May 2022 09:09:44 -0700 (PDT)
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com. [209.85.160.43])
+        by smtp.gmail.com with ESMTPSA id q5-20020a4aa885000000b0035eb4e5a6b6sm4293915oom.12.2022.05.16.09.09.44
+        for <linux-remoteproc@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 May 2022 09:09:44 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-f16a3e0529so10399566fac.2
+        for <linux-remoteproc@vger.kernel.org>; Mon, 16 May 2022 09:09:44 -0700 (PDT)
+X-Received: by 2002:a05:6870:63a0:b0:f1:8bca:8459 with SMTP id
+ t32-20020a05687063a000b000f18bca8459mr4861359oap.174.1652716966894; Mon, 16
+ May 2022 09:02:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220512100006.99695-9-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220427224924.592546-1-gpiccoli@igalia.com> <20220427224924.592546-20-gpiccoli@igalia.com>
+ <YoJZVZl/MH0KiE/J@alley> <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+In-Reply-To: <ad082ce7-db50-13bb-3dbb-9b595dfa78be@igalia.com>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Mon, 16 May 2022 09:02:10 -0700
+X-Gmail-Original-Message-ID: <CAE=gft7ds+dHfEkRz8rnSH1EbTpGTpKbi5Wxj9DW0Jr5mX_j4w@mail.gmail.com>
+Message-ID: <CAE=gft7ds+dHfEkRz8rnSH1EbTpGTpKbi5Wxj9DW0Jr5mX_j4w@mail.gmail.com>
+Subject: Re: [PATCH 19/30] panic: Add the panic hypervisor notifier list
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Petr Mladek <pmladek@suse.com>, David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>,
+        Scott Branden <scott.branden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Sebastian Reichel <sre@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        kexec@lists.infradead.org, LKML <linux-kernel@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-alpha@vger.kernel.org,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-xtensa@linux-xtensa.org,
+        netdev@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+        rcu@vger.kernel.org, sparclinux@vger.kernel.org,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net, halves@canonical.com,
+        fabiomirmar@gmail.com, alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de,
+        Kees Cook <keescook@chromium.org>, luto@kernel.org,
+        mhiramat@kernel.org, mingo@redhat.com, paulmck@kernel.org,
+        peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Brian Norris <computersforpeace@gmail.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dexuan Cui <decui@microsoft.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Justin Chen <justinpopo6@gmail.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Paul Mackerras <paulus@samba.org>, Pavel Machek <pavel@ucw.cz>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        Wei Liu <wei.liu@kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        Stephen Boyd <swboyd@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu, May 12, 2022 at 12:00:02PM +0200, Krzysztof Kozlowski wrote:
-> 'smd-edge' property appears in multiple bindings, so split it into one
-> place which can be re-used.  This reduces code duplication and strict
-> schema matching for smd-edge nodes (instead of just "type:object").
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/remoteproc/qcom,adsp.yaml        |  2 +-
->  .../bindings/remoteproc/qcom,smd-edge.yaml    | 88 +++++++++++++++++++
->  .../bindings/soc/qcom/qcom,smd.yaml           | 53 +----------
->  3 files changed, 91 insertions(+), 52 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-> index 4dfbfece1ec7..3072af5f9d79 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-> @@ -148,7 +148,7 @@ properties:
->        three offsets within syscon for q6, modem and nc halt registers.
->  
->    smd-edge:
-> -    type: object
-> +    $ref: /schemas/remoteproc/qcom,smd-edge.yaml#
->      description:
->        Qualcomm Shared Memory subnode which represents communication edge,
->        channels and devices related to the ADSP.
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
-> new file mode 100644
-> index 000000000000..fde2c450e8b5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,smd-edge.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/qcom,smd-edge.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SMD Edge communication channel nodes
-> +
-> +maintainers:
-> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
-> +
-> +description:
-> +  Qualcomm SMD subnode represents a remote subsystem or a remote processor of
-> +  some sort - or in SMD language an "edge". The name of the edges are not
-> +  important.
-> +
-> +
-> +  See also Documentation/devicetree/bindings/soc/qcom/qcom,smd.yaml
-> +
-> +properties:
-> +  $nodename:
-> +    const: "smd-edge"
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  label:
-> +    $ref: /schemas/types.yaml#/definitions/string
+On Mon, May 16, 2022 at 8:07 AM Guilherme G. Piccoli
+<gpiccoli@igalia.com> wrote:
+>
+> Thanks for the review!
+>
+> I agree with the blinking stuff, I can rework and add all LED/blinking
+> stuff into the loop list, it does make sense. I'll comment a bit in the
+> others below...
+>
+> On 16/05/2022 11:01, Petr Mladek wrote:
+> > [...]
+> >> --- a/arch/mips/sgi-ip22/ip22-reset.c
+> >> +++ b/arch/mips/sgi-ip22/ip22-reset.c
+> >> @@ -195,7 +195,7 @@ static int __init reboot_setup(void)
+> >>      }
+> >>
+> >>      timer_setup(&blink_timer, blink_timeout, 0);
+> >> -    atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+> >> +    atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
+> >
+> > This notifier enables blinking. It is not much safe. It calls
+> > mod_timer() that takes a lock internally.
+> >
+> > This kind of functionality should go into the last list called
+> > before panic() enters the infinite loop. IMHO, all the blinking
+> > stuff should go there.
+> > [...]
+> >> --- a/arch/mips/sgi-ip32/ip32-reset.c
+> >> +++ b/arch/mips/sgi-ip32/ip32-reset.c
+> >> @@ -145,7 +144,7 @@ static __init int ip32_reboot_setup(void)
+> >>      pm_power_off = ip32_machine_halt;
+> >>
+> >>      timer_setup(&blink_timer, blink_timeout, 0);
+> >> -    atomic_notifier_chain_register(&panic_notifier_list, &panic_block);
+> >> +    atomic_notifier_chain_register(&panic_hypervisor_list, &panic_block);
+> >
+> > Same here. Should be done only before the "loop".
+> > [...]
+>
+> Ack.
+>
+>
+> >> --- a/drivers/firmware/google/gsmi.c
+> >> +++ b/drivers/firmware/google/gsmi.c
+> >> @@ -1034,7 +1034,7 @@ static __init int gsmi_init(void)
+> >>
+> >>      register_reboot_notifier(&gsmi_reboot_notifier);
+> >>      register_die_notifier(&gsmi_die_notifier);
+> >> -    atomic_notifier_chain_register(&panic_notifier_list,
+> >> +    atomic_notifier_chain_register(&panic_hypervisor_list,
+> >>                                     &gsmi_panic_notifier);
+> >
+> > I am not sure about this one. It looks like some logging or
+> > pre_reboot stuff.
+> >
+>
+> Disagree here. I'm looping Google maintainers, so they can comment.
+> (CCed Evan, David, Julius)
+>
+> This notifier is clearly a hypervisor notification mechanism. I've fixed
+> a locking stuff there (in previous patch), I feel it's low-risk but even
+> if it's mid-risk, the class of such callback remains a perfect fit with
+> the hypervisor list IMHO.
 
-Don't need a type here. Otherwise,
+This logs a panic to our "eventlog", a tiny logging area in SPI flash
+for critical and power-related events. In some cases this ends up
+being the only clue we get in a Chromebook feedback report that a
+panic occurred, so from my perspective moving it to the front of the
+line seems like a good idea.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+-Evan
