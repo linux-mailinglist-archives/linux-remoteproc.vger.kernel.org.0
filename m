@@ -2,52 +2,52 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8826529A0C
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 17 May 2022 09:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AA7529A11
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 17 May 2022 09:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240822AbiEQHBg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 17 May 2022 03:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
+        id S240180AbiEQHBi (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 17 May 2022 03:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240441AbiEQHBe (ORCPT
+        with ESMTP id S240808AbiEQHBe (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
         Tue, 17 May 2022 03:01:34 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30DA31343
-        for <linux-remoteproc@vger.kernel.org>; Tue, 17 May 2022 00:01:31 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id i19so32775456eja.11
-        for <linux-remoteproc@vger.kernel.org>; Tue, 17 May 2022 00:01:31 -0700 (PDT)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989383CFF4
+        for <linux-remoteproc@vger.kernel.org>; Tue, 17 May 2022 00:01:32 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id z2so32809039ejj.3
+        for <linux-remoteproc@vger.kernel.org>; Tue, 17 May 2022 00:01:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LazXu2ADGNpRx7NCnnIVEulufa0K62/IELeSMelv/jU=;
-        b=vB4FwIdysdASe6llMH+QnqOEj5eQjfjT0I7FtDmu6ZM0+3b2K1aOeZ9+v9ivZheD11
-         /S8aBSY7q3orvfrDksXccAgfRiWvneEXAeRi+pjfvXCAxF2/ZKvrxSOzMck38IlIkPAV
-         HKsOkX0u3oWfza3FZxh/3PHc3rjcY62MIHzeuUZQchvX14VKCQF5QyDyb1Qvt4qsZE/N
-         tDvL2vE9TQtoWL4nZzEHB+IgDI1KKQ0oeU20MSYNWCRnzPZGG9p6irlPGRBFSudLGLwm
-         OtTFBkAWlE4W5kltyabWCIGGmHoONatlPOLd7t5WnhYzQam3DhH7uMEhIRGzcxh8dt2D
-         rpDg==
+        bh=bc1mIt/3dkcIrUfw+Wx32EX6v+iTPPZGITrndOapvM4=;
+        b=Fjh6poNxasG94ErQpFcdlbjAl0+dlDmlCBoaT6HDLJGKC2Kw5OTZ92q8Dr7fo/kBF3
+         BLNhTmSo5/UVu2d9ilG70dsB8hTy4sLrmiex8pe6YJnw3utstVhoF1BcSiHY/9fMkZBL
+         xH4r97n04dXzIzRWhJvmJU+5eBiVSVbT6hT31XGH0IhBX+7iugUTRaSR1H4ewVuUO4nA
+         l9XGL7TQX4/ozmnfXw11EBk8btdV96qaweYJ5tsPVAMzCFpFjbBx6YvvpiGTbhOTrLgL
+         w5hKS9/BnpqQZc0GdsSBzhNdf3UODOS2hof9D/XKWnW0dLTLVx7fhOkn5thbJCdos7qx
+         V+WA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LazXu2ADGNpRx7NCnnIVEulufa0K62/IELeSMelv/jU=;
-        b=DPEXs2R1GDf/rm9RyCnSIsLRtwfACFw4KsmVnD35YbV4sqOcXvVRzZf0hacoGry8g9
-         v+t09vglwHKby20qf5UMsVjVww3gQqXoEYBzAcTdvXJnuwEFJ8kpT10nhUK4jy8CD6ZJ
-         sK+dDyONFFZuFagG3ekler7CeAQNeLlnbjSddLgCL9s+D0qlCP3yHl+ApUmZtLOG8zW/
-         mU3mGnzcAFvG8RYugMfoJ2hU3vMLPY0b7CMrUIg1BTNiPvbMrSR/JvRn1YiQ3Zf2LMnz
-         Cipmk34x2KqwKOnYrQkM5ZgIQ+s1gsuRDa+NOssfMQxVW+hcEQRi0xOARcbFcCYirtcF
-         oB8g==
-X-Gm-Message-State: AOAM533toO3r+c6/lJhWbWcozPLlzb8Z9+TysGZxVc5eov3olI+jCN0i
-        XMjC3p7s0/lf0skkKuT3Mik5nQ==
-X-Google-Smtp-Source: ABdhPJz3cvQL2isulpmYvKIWq0RrGfWma5QYQTNUNHch7EOBn7IIxI3HBT7zWKUVIDh83HdjyHj10g==
-X-Received: by 2002:a17:907:7b89:b0:6f4:9b92:c2ac with SMTP id ne9-20020a1709077b8900b006f49b92c2acmr17831258ejc.409.1652770890896;
-        Tue, 17 May 2022 00:01:30 -0700 (PDT)
+        bh=bc1mIt/3dkcIrUfw+Wx32EX6v+iTPPZGITrndOapvM4=;
+        b=e8ig5F7VYhI6f8euEZy7bImc+OLdhAwzUrm9CmnksLewQikRVmaQsSk0vNhxbqrtNj
+         u0m4ioi+EAR/TWRuVgMCfZdbFQOVy21xUWtcZ21kXSRinTp3ud5QYj9rIbC/xLSr11os
+         7wOFdYahDiM1jdo9yRjo5DanVCQTwYjVJ0eUEWqkmn0KFCKfS7nn6RQz9CwIr+fHtGnJ
+         +AtO3oRs94tE452FvIIfn6OKg2MLNV9YFd+2rM2f6VR5jncI1P0Lf5nk6QD4CA7OWduJ
+         OQotm3O+IlvcKw3FHhqjNaFWBLV2Y+3LACsXyhu8ex21w/xzyupzv6xKjArwzquGdC3q
+         DplQ==
+X-Gm-Message-State: AOAM533E4c486EhJWGqGDuh/u0JhlOLXcv+2YGko6GhyIfh/Ajy3SeD3
+        MdrB12EsXV7eXoFVHZjac8F46Q==
+X-Google-Smtp-Source: ABdhPJzkUfAuTvwacS7XtUrVOynLJXz12kNbe6zJA4OEiOtW6jW6Kj8UltSzl8K/mI/BNt0o0hkPBA==
+X-Received: by 2002:a17:907:94d2:b0:6f4:b5f9:6f3a with SMTP id dn18-20020a17090794d200b006f4b5f96f3amr18025368ejc.313.1652770891993;
+        Tue, 17 May 2022 00:01:31 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id b5-20020a056402138500b0042617ba637esm6487016edv.8.2022.05.17.00.01.29
+        by smtp.gmail.com with ESMTPSA id b5-20020a056402138500b0042617ba637esm6487016edv.8.2022.05.17.00.01.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 May 2022 00:01:30 -0700 (PDT)
+        Tue, 17 May 2022 00:01:31 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -58,9 +58,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 11/12] arm64: dts: qcom: sm8350: remove duplicated glink-edge interrupt
-Date:   Tue, 17 May 2022 09:01:12 +0200
-Message-Id: <20220517070113.18023-12-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 12/12] arm64: dts: qcom: sm8450: remove duplicated glink-edge interrupt
+Date:   Tue, 17 May 2022 09:01:13 +0200
+Message-Id: <20220517070113.18023-13-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220517070113.18023-1-krzysztof.kozlowski@linaro.org>
 References: <20220517070113.18023-1-krzysztof.kozlowski@linaro.org>
@@ -79,19 +79,19 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 Specifying interrupts and interrupts-extended is not correct.  Keep only
 the extended ones, routed towards IPCC mailbox to fix warnings like:
 
-  sm8350-sony-xperia-sagami-pdx214.dtb: glink-edge: More than one condition true in oneOf schema:
+  sm8450-qrd.dtb: glink-edge: More than one condition true in oneOf schema:
     {'$filename': 'Documentation/devicetree/bindings/remoteproc/qcom,glink-edge.yaml',
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 1 -
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 743cba9b683c..e8c341faa8df 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -1677,7 +1677,6 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 7d08fad76371..4e796f27d6fc 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -2282,7 +2282,6 @@ IPCC_MPROC_SIGNAL_GLINK_QMP
  							     IRQ_TYPE_EDGE_RISING>;
  				mboxes = <&ipcc IPCC_CLIENT_MPSS
  						IPCC_MPROC_SIGNAL_GLINK_QMP>;
