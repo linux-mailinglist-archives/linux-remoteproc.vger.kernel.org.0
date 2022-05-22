@@ -2,181 +2,98 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA19652FD93
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 21 May 2022 17:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903085304C5
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 22 May 2022 18:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232744AbiEUPNA (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 21 May 2022 11:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
+        id S1345823AbiEVQzy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 22 May 2022 12:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiEUPNA (ORCPT
+        with ESMTP id S235505AbiEVQzx (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 21 May 2022 11:13:00 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CD2554AB
-        for <linux-remoteproc@vger.kernel.org>; Sat, 21 May 2022 08:12:58 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id v8so16849236lfd.8
-        for <linux-remoteproc@vger.kernel.org>; Sat, 21 May 2022 08:12:58 -0700 (PDT)
+        Sun, 22 May 2022 12:55:53 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05D936324
+        for <linux-remoteproc@vger.kernel.org>; Sun, 22 May 2022 09:55:52 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-f1d5464c48so15700998fac.6
+        for <linux-remoteproc@vger.kernel.org>; Sun, 22 May 2022 09:55:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Jk8LaQh3YbYcgetXkqyBJpq8LYQteQJ9EbjKOpTl0XY=;
-        b=oGIquCyjTa0KYp6tHKz3oefhMdccABhkE4D7b90SYfLT5XULA4lw+u6xfvLSufi/dF
-         NCULivkTUv3fXSRlUYn4cEHbDx6WGdAq2W91sR+9n6AbecrbJiovgm6dYyxCx/AIwGsC
-         qGbMaTByAgUSifSq0sW583YfPXVDXTluKd0qnGrGlnwLyTi8UgVbwYOG3mM8LMsVRp8d
-         1dFJ422/GfrNVIR8IaqYhpESo6BheeQN9HsEBZzwJY+trSKTiIzdKD4NY2V/ejnoxUY9
-         ftWUjFrBdlCy1g7z0N59nJx34G61hPNcgIHw80QuFpAV14tURwW+UpsqzF3Yww2qwuhK
-         gjHw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=C+z24Pl7od6xO10XmMEfecsYemTIfW+XARlPRi62dVY=;
+        b=jKBn34OMqrb1ZV6Zy2nT260iMElYSgonAvEup+7zoFXvikbiXjhqSLQrhaqaAZ4GIM
+         TOolARk6zwzfQ7SVhgKfk/5hd8+Ssj5mNEWBtNU9Xk+Dl2dlS+29FzS6/c74j72vTzOw
+         n9qZwTSvLhAsA615ljwsu7Bz35KaTlJ+Hc87OPRTOHyww93NyIPOW50f5jW1FaRvsehG
+         L8JHjYbxdiQDqJFeCtW+gznQfFncScvwG/hPTKgVounDhbAUf8QoSINHWBfKF68S7NqV
+         D8Wfoy8rnK8MoUH/kXlRVbGdQZcL+NQeSQcCw1s8cHZAmg+zVyhHxhAdO808EQeUJj9m
+         BLdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Jk8LaQh3YbYcgetXkqyBJpq8LYQteQJ9EbjKOpTl0XY=;
-        b=mjLnKxfXc5iV97hvJr6kvN+j4htFdVn2s50WM6OpcV7kOhO37jILu7AWbSEyHRQ9EW
-         bsyKB/JKMTFc+YMRxWTElwaAwoaG8ZBbSpoJ6V6cMQ8QV3jAIBMaD6vw3EPKU2BdJzPm
-         88cvY5UGM0uHERQFIoqdOww9sm2lWMXR+w4dN0NTKyTi5SlPVW4+5CIzy3uMok4bPyk3
-         ZW/NJXuphgjqplcLAKidjG++PGuR6SQ0rwJr7B8F7L92f4he5I2Zv6Rq/VpcVZhiBuSc
-         qvszPMqDRHpArR9C24HnqKDpzX8XQZlyWVQtqBQ0Rukd7A+ZGKHaxbblajHCBv4U+qdc
-         DXBA==
-X-Gm-Message-State: AOAM532TGTDdwWXpGExaDAf7himeEs2HCugPJLK6aNEMJH72lQrQnivV
-        4tyEt7D+DEUxMf93ZFlN+Xk9XA==
-X-Google-Smtp-Source: ABdhPJzHBGbNgQUS6N5McRNLoRvhDms8eVo9NAyIsoae8EZeyxTurbcJ6pSNiu3YwGjGlMOUPBD83Q==
-X-Received: by 2002:ac2:484e:0:b0:477:b102:c8df with SMTP id 14-20020ac2484e000000b00477b102c8dfmr10795390lfy.415.1653145976844;
-        Sat, 21 May 2022 08:12:56 -0700 (PDT)
-Received: from [192.168.0.17] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05651c02cb00b00253e1fca85asm318558ljo.85.2022.05.21.08.12.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 May 2022 08:12:56 -0700 (PDT)
-Message-ID: <45fea4a1-387f-9684-a90b-58b695b54172@linaro.org>
-Date:   Sat, 21 May 2022 17:12:54 +0200
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=C+z24Pl7od6xO10XmMEfecsYemTIfW+XARlPRi62dVY=;
+        b=mGVcoDzF5gJazW2RGFwF2LBouZBVmWArVCnELSGA5i5+gqUwbNoVSufbo9OQPKMbV4
+         R5imaBwY6EMz3/1XubkTNIABwybZczUMwd64x2/yt+FkePl8RzZmayoA4QBbn/1lfesA
+         TaMDMmMb6zVrT3wE3L0YQKo8XHtFOXzZSwcZImTf5dnYK2HH8ur+RBEnytZFZ9K8UT4O
+         7v5CvUb9NGW38PPrtDiRhUjjsLCuY8q40nalP84G3JaxoGXrWdBlNEjY7XyZfPpMW0/L
+         gr2vOyXi/CZggs5za+EbRR429zj/5zuWrBngW0fz3dPmOkA9+KJnQKosuX/lTwVR8l45
+         3feQ==
+X-Gm-Message-State: AOAM533fo27R5xY6uHESumKFzE5upMYYLnysDWcqeg3IRzhvwEfHonjU
+        uAeqDnYwg2iWjb0rD81U5O1O1Y84gyILLaPi0hk=
+X-Google-Smtp-Source: ABdhPJwrtumWmBtnEP2BTElCVSwshfKKPxisuE3zWaDeWkzyWg7z4vxZAJ3WxY32QmWdt1jyFV7vUUxNNy9wijbGWYw=
+X-Received: by 2002:a05:6870:4596:b0:da:b3f:2b1d with SMTP id
+ y22-20020a056870459600b000da0b3f2b1dmr11180177oao.188.1653238551829; Sun, 22
+ May 2022 09:55:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH v5 1/6] dt-bindings: remoteproc: Add Xilinx RPU subsystem
- bindings
-Content-Language: en-US
-To:     Tanmay Shah <tanmay.shah@xilinx.com>, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        michal.simek@xilinx.com
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220518194426.3784095-1-tanmay.shah@xilinx.com>
- <20220518194426.3784095-2-tanmay.shah@xilinx.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220518194426.3784095-2-tanmay.shah@xilinx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:8794:b0:a3:1d9:70e9 with HTTP; Sun, 22 May 2022
+ 09:55:51 -0700 (PDT)
+Reply-To: paulmichael7707@gmail.com
+From:   paul michael <gabrielbenjamin22222@gmail.com>
+Date:   Sun, 22 May 2022 17:55:51 +0100
+Message-ID: <CADch5ANMT9=Qx8cLcnaxKjHGzSHi9KZgQrgfWDLz_kjt6mFfHA@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:2e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4490]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [paulmichael7707[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [gabrielbenjamin22222[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gabrielbenjamin22222[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 18/05/2022 21:44, Tanmay Shah wrote:
-> +description: |
-> +  The Xilinx platforms include a pair of Cortex-R5F processors (RPU) for
-> +  real-time processing based on the Cortex-R5F processor core from ARM.
-> +  The Cortex-R5F processor implements the Arm v7-R architecture and includes a
-> +  floating-point unit that implements the Arm VFPv3 instruction set.
-> +
-> +properties:
-> +  compatible:
-> +    const: xlnx,zynqmp-r5fss
-> +
-> +  xlnx,cluster-mode:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1, 2]
-> +    description: |
-> +      The RPU MPCore can operate in split mode(Dual-processor performance), Safety
-> +      lock-step mode(Both RPU cores execute the same code in lock-step,
-> +      clock-for-clock) or Single CPU mode (RPU core 0 can be held in reset while
-> +      core 1 runs normally). The processor does not support dynamic configuration.
-> +      Switching between modes is only permitted immediately after a processor reset.
-> +      If set to  1 then lockstep mode and if 0 then split mode.
-> +      If set to  2 then single CPU mode. When not defined, default will be lockstep mode.
-> +
-> +patternProperties:
-> +  "^r5f-[a-f0-9]+$":
-> +    type: object
-> +    description: |
-> +      The RPU is located in the Low Power Domain of the Processor Subsystem.
-> +      Each processor includes separate L1 instruction and data caches and
-> +      tightly coupled memories (TCM). System memory is cacheable, but the TCM
-> +      memory space is non-cacheable.
-> +
-> +      Each RPU contains one 64KB memory and two 32KB memories that
-> +      are accessed via the TCM A and B port interfaces, for a total of 128KB
-> +      per processor. In lock-step mode, the processor has access to 256KB of
-> +      TCM memory.
-> +
-> +    properties:
-> +      compatible:
-> +        const: xlnx,zynqmp-r5f
-> +
-> +      power-domains:
-> +        description: RPU core PM domain specifier
-> +        maxItems: 1
-> +
-> +      mboxes:
-> +        items:
-> +          - description: mailbox channel to send data to RPU
-> +          - description: mailbox channel to receive data from RPU
-> +        minItems: 1
-> +
-> +      mbox-names:
-> +        items:
-> +          - const: tx
-> +          - const: rx
-> +        minItems: 1
-> +
-> +      sram:
-> +        $ref: /schemas/types.yaml#/definitions/phandle-array
-> +        minItems: 1
-
-maxItems instead
-
-> +        description: |
-> +          phandles to one or more reserved on-chip SRAM regions. Other than TCM,
-> +          the RPU can execute instructions and access data from, the OCM memory,
-> +          the main DDR memory, and other system memories.
-> +
-> +          The regions should be defined as child nodes of the respective SRAM
-> +          node, and should be defined as per the generic bindings in,
-> +          Documentation/devicetree/bindings/sram/sram.yaml
-> +
-> +      memory-region:
-> +        description: |
-> +          List of phandles to the reserved memory regions associated with the
-> +          remoteproc device. This is variable and describes the memories shared with
-> +          the remote processor (e.g. remoteproc firmware and carveouts, rpmsg
-> +          vrings, ...). This reserved memory region will be allocated on DDR memory.
-> +        minItems: 1
-> +        items:
-> +          - description: region used for RPU firmware image section
-> +          - description: vdev buffer
-> +          - description: vring0
-> +          - description: vring1
-> +        additionalItems: true
-
-How did this one appear here? It does not look correct, so why do you
-need it?
-
-> +
-> +    required:
-> +      - compatible
-> +      - power-domains
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +\
-
-Best regards,
-Krzysztof
+Every time I retest your email, it tells me to check with my ISP or
+Log onto incoming mail server (POP3): Your e-mail server rejected .
+Kindly verify if your email is still valid for us to talk.
