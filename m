@@ -2,214 +2,69 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CF953263B
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 May 2022 11:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57FF953274D
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 May 2022 12:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235283AbiEXJTV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 24 May 2022 05:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48390 "EHLO
+        id S235816AbiEXKPT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 24 May 2022 06:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233643AbiEXJTU (ORCPT
+        with ESMTP id S235703AbiEXKPK (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 24 May 2022 05:19:20 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281875F278
-        for <linux-remoteproc@vger.kernel.org>; Tue, 24 May 2022 02:19:17 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 27so15209526ljw.0
-        for <linux-remoteproc@vger.kernel.org>; Tue, 24 May 2022 02:19:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=+Niw7yGnL20+GOOqZstdr0jY47BSBTsmVF0esVnrOoU=;
-        b=hBgqF51egRRRpK5ROssbMOsnBHZkpb14VjYKSk4amJX6s2phfdQzunu0CpQ9Dw0LnF
-         GspY4wM3l7i7okD+Yd6VJnU/sQhGM5DT0dmU7OlUATQLSuyOardrb8kQjQGd7iaGz+JQ
-         hg7LXVVzZ+ViDvGBCqcIS1o60FmiZMGtZr8CLk1CkqMvHBm2Csb4WVdJ/pDuasFIaFLn
-         CDrZPh3WmBQZf0j+5HGHT7MFzCSDtLJN/cD7KU/gBB1olBl3dbQuxG2OMTqUtHCMPYbN
-         4475rFIiv60wCs9+pve8mGr8PzgdKf/Xs/4fSrRveN58TDmisoqOcEpWf7rCKU3Zc3nK
-         sRpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+Niw7yGnL20+GOOqZstdr0jY47BSBTsmVF0esVnrOoU=;
-        b=s8QRkSMHUz4ItIyk1K4XDsjGi+QLArGHlYEsLZ5iB28kt59jozjLpFkaX3Gkc9WynH
-         QAUOTldkYJwo+EGQnYLwCjyPArNBDkhHy41azmcmb1V1xZeoCyoNi0P3B4F4vrawA+y0
-         TDd/A02jH9YLIdSWKBjhFUS2gXiNP1TpfxaM2YPbK4baP0+J7Og4kkzItDx4DkIs6q22
-         hpKy7Gp9dixAv4e1Y8g36ii5I4IQMnH0EkhKCnECHDfeCGzWJQ2F4TvFlc36jQi9NQb1
-         AkYHOZVlKBkAvdFOsTkbRbF3vmy5VGLnNp5IvFMlda+UmUwSNguJPkLzo2CN/0oDQdRn
-         8QWg==
-X-Gm-Message-State: AOAM533mYYuk24EZSWDYWaVSmjiKxc3j0VYBulxCPxcrM84+JbVDhNSy
-        uJRZqo/VriKXK4sRgfI1kj/zNg==
-X-Google-Smtp-Source: ABdhPJznpV2FUoCtb1XbNeFXg7bMAoJTuMYnDIlZJD+gLtUepUGBy4u89LrrCyXkaFuoNCi1VLc3Ng==
-X-Received: by 2002:a05:651c:a11:b0:253:f347:734a with SMTP id k17-20020a05651c0a1100b00253f347734amr2373641ljq.449.1653383955367;
-        Tue, 24 May 2022 02:19:15 -0700 (PDT)
-Received: from [172.20.68.48] ([91.221.145.6])
-        by smtp.gmail.com with ESMTPSA id b14-20020a2eb90e000000b00253bc0f63ffsm2323272ljb.13.2022.05.24.02.19.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 May 2022 02:19:14 -0700 (PDT)
-Message-ID: <1b117e49-28d0-da75-68ee-c2fcef9fc9a9@linaro.org>
-Date:   Tue, 24 May 2022 11:19:12 +0200
+        Tue, 24 May 2022 06:15:10 -0400
+X-Greylist: delayed 2172 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 24 May 2022 03:15:05 PDT
+Received: from box.indicandustries.com (hwsrv-970840.hostwindsdns.com [IPv6:2607:5501:3000:21a5::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57AF892D14
+        for <linux-remoteproc@vger.kernel.org>; Tue, 24 May 2022 03:15:05 -0700 (PDT)
+Received: from authenticated-user (box.indicandustries.com [104.168.149.109])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.indicandustries.com (Postfix) with ESMTPSA id F39031087ED
+        for <linux-remoteproc@vger.kernel.org>; Tue, 24 May 2022 03:25:30 -0600 (MDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=box.indicandustries.com; s=mail; t=1653384331;
+        bh=V6VCn7WEbqHjVVQ20/+SYu6rwS1WmTHcxX88g+j430s=;
+        h=Reply-To:From:To:Subject:Date:From;
+        b=UtKHMTi/PjOV38iWFr0yuL+rETEWiCp7nPphbXVKKexGEXlukra9vZppwSgSe4v64
+         WhPQpSOZErCSKhvJyjTi9Wx22fhFqox5PjewY84aBWXn8ZZ2d/CmI0kLD5S7IrubQt
+         rrbN/dGtbNCFc+PF7zKa1JB3sV9X+EGSkMfQVujwzIGgzN9O2o4puE5ouTESAHuwNh
+         sF1MgAypG+eyyRyH6U7VqZKVigezEUF7VIOwaqLWcAxWb9dHtOCpX8EQCDqbxd73tN
+         RM8f4lcYErxx9sQzHgdtqA6272PXDNrFpqDLZ069QwhqXgvl0suc2zNBRyLn5lH1uD
+         0H6qMflftUIPw==
+Reply-To: amjalia90@gmail.com
+From:   amjad.ali@box.indicandustries.com
+To:     linux-remoteproc@vger.kernel.org
+Subject: Hello Sir, I seek your urgent consideration.
+Date:   24 May 2022 11:25:30 +0200
+Message-ID: <20220524112530.C602DB78C523AA5D@box.indicandustries.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 1/6] dt-bindings: remoteproc: Add Xilinx RPU subsystem
- bindings
-Content-Language: en-US
-To:     Tanmay Shah <tanmay.shah@xilinx.com>, bjorn.andersson@linaro.org,
-        mathieu.poirier@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        michal.simek@xilinx.com
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220518194426.3784095-1-tanmay.shah@xilinx.com>
- <20220518194426.3784095-2-tanmay.shah@xilinx.com>
- <45fea4a1-387f-9684-a90b-58b695b54172@linaro.org>
- <c97d61b0-8a38-5054-d5f1-bc7c5e7bcf61@xilinx.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c97d61b0-8a38-5054-d5f1-bc7c5e7bcf61@xilinx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=3.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 23/05/2022 23:38, Tanmay Shah wrote:
-> Thanks for reviews Krzysztof. Please find my comments below.
-> 
-> On 5/21/22 8:12 AM, Krzysztof Kozlowski wrote:
->> On 18/05/2022 21:44, Tanmay Shah wrote:
->>> +description: |
->>> +  The Xilinx platforms include a pair of Cortex-R5F processors (RPU) for
->>> +  real-time processing based on the Cortex-R5F processor core from ARM.
->>> +  The Cortex-R5F processor implements the Arm v7-R architecture and includes a
->>> +  floating-point unit that implements the Arm VFPv3 instruction set.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: xlnx,zynqmp-r5fss
->>> +
->>> +  xlnx,cluster-mode:
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    enum: [0, 1, 2]
->>> +    description: |
->>> +      The RPU MPCore can operate in split mode(Dual-processor performance), Safety
->>> +      lock-step mode(Both RPU cores execute the same code in lock-step,
->>> +      clock-for-clock) or Single CPU mode (RPU core 0 can be held in reset while
->>> +      core 1 runs normally). The processor does not support dynamic configuration.
->>> +      Switching between modes is only permitted immediately after a processor reset.
->>> +      If set to  1 then lockstep mode and if 0 then split mode.
->>> +      If set to  2 then single CPU mode. When not defined, default will be lockstep mode.
->>> +
->>> +patternProperties:
->>> +  "^r5f-[a-f0-9]+$":
->>> +    type: object
->>> +    description: |
->>> +      The RPU is located in the Low Power Domain of the Processor Subsystem.
->>> +      Each processor includes separate L1 instruction and data caches and
->>> +      tightly coupled memories (TCM). System memory is cacheable, but the TCM
->>> +      memory space is non-cacheable.
->>> +
->>> +      Each RPU contains one 64KB memory and two 32KB memories that
->>> +      are accessed via the TCM A and B port interfaces, for a total of 128KB
->>> +      per processor. In lock-step mode, the processor has access to 256KB of
->>> +      TCM memory.
->>> +
->>> +    properties:
->>> +      compatible:
->>> +        const: xlnx,zynqmp-r5f
->>> +
->>> +      power-domains:
->>> +        description: RPU core PM domain specifier
->>> +        maxItems: 1
->>> +
->>> +      mboxes:
->>> +        items:
->>> +          - description: mailbox channel to send data to RPU
->>> +          - description: mailbox channel to receive data from RPU
->>> +        minItems: 1
->>> +
->>> +      mbox-names:
->>> +        items:
->>> +          - const: tx
->>> +          - const: rx
->>> +        minItems: 1
->>> +
->>> +      sram:
->>> +        $ref: /schemas/types.yaml#/definitions/phandle-array
->>> +        minItems: 1
->> maxItems instead
-> 
-> 
-> Here, I am not sure how many maxItems are really needed as TCM bindings 
-> are not
-> defined yet. For now, I will just keep maxItems as 8. i.e. 4 OCM banks 
-> and 4 TCM
-> banks. However, that can change once bindings are defined.
-> Is that fine?
+Hello,
 
-Yes, although shrinking might not be allowed once binding is being used.
+Greetings? I am Amjad. I work with a leading Bio Firm.  Due to=20
+the setbacks of the pandemic, my company has opened a bid in=20
+search of new suppliers for basic raw materials needed in=20
+production.
 
-> 
-> 
->>
->>> +        description: |
->>> +          phandles to one or more reserved on-chip SRAM regions. Other than TCM,
->>> +          the RPU can execute instructions and access data from, the OCM memory,
->>> +          the main DDR memory, and other system memories.
->>> +
->>> +          The regions should be defined as child nodes of the respective SRAM
->>> +          node, and should be defined as per the generic bindings in,
->>> +          Documentation/devicetree/bindings/sram/sram.yaml
->>> +
->>> +      memory-region:
->>> +        description: |
->>> +          List of phandles to the reserved memory regions associated with the
->>> +          remoteproc device. This is variable and describes the memories shared with
->>> +          the remote processor (e.g. remoteproc firmware and carveouts, rpmsg
->>> +          vrings, ...). This reserved memory region will be allocated on DDR memory.
->>> +        minItems: 1
->>> +        items:
->>> +          - description: region used for RPU firmware image section
->>> +          - description: vdev buffer
->>> +          - description: vring0
->>> +          - description: vring1
->>> +        additionalItems: true
->> How did this one appear here? It does not look correct, so why do you
->> need it?
-> 
-> 
-> Memory regions listed in items: field here are used for default current 
-> OpenAMP demos. However,
-> other demos can be developed by user that can use more number of memory 
-> regions.
-> As description says, memory-region can have variable number phandles 
-> based on
-> user requirement. So, by additionalItems I just want to notify that user can
-> define more number of regions. We can limit memory-regions with 
-> 'maxItems: 8'.
-> In that case, I will add 'maxItems:' field in next revision and even, 
-> that can change in future.
+I am seeking a representative=C2=A0as I am a staff, I can not be=20
+involved directly. It may not be your area of work but the=20
+profits are great and I will guide you through. I have already=20
+sourced a local supplier for this. I only need a reliable=20
+representative.
 
-That sounds fine.
+Please get back to me so I can explain this in full.
 
-> But, User should have flexibility to define more memory regions than 
-> what is in list
-> of 'items:' field. I think this is similar to what is defined in 
-> ti,k3-r5 bindings.
-> 
-> Please let me know your thoughts.
-
-I see. If schema accepts such combination (listing items + maxItems +
-additionalItems), then it's fine.
-
-> 
-
-Best regards,
-Krzysztof
+Amjad
