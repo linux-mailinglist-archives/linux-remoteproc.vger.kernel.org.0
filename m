@@ -2,135 +2,76 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A587B535A66
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 May 2022 09:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D1815362F7
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 May 2022 14:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232620AbiE0HaI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 May 2022 03:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
+        id S229747AbiE0Mqs convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 May 2022 08:46:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347099AbiE0HaG (ORCPT
+        with ESMTP id S235783AbiE0Mqq (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 27 May 2022 03:30:06 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71B2F68B6;
-        Fri, 27 May 2022 00:30:02 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4L8byf1kn7zjX8L;
-        Fri, 27 May 2022 15:28:58 +0800 (CST)
-Received: from dggpemm500018.china.huawei.com (7.185.36.111) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 15:30:00 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- dggpemm500018.china.huawei.com (7.185.36.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 27 May 2022 15:30:00 +0800
-From:   keliu <liuke94@huawei.com>
-To:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     keliu <liuke94@huawei.com>
-Subject: [PATCH] rpmsg: Directly use ida_alloc()/free()
-Date:   Fri, 27 May 2022 07:51:29 +0000
-Message-ID: <20220527075129.2475594-1-liuke94@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 27 May 2022 08:46:46 -0400
+X-Greylist: delayed 5803 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 27 May 2022 05:46:45 PDT
+Received: from mail.composit.net (mail.composit.net [195.49.185.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2BB75F63
+        for <linux-remoteproc@vger.kernel.org>; Fri, 27 May 2022 05:46:45 -0700 (PDT)
+Received: from mail.composit.net (localhost.localdomain [127.0.0.1])
+        by mail.composit.net (Proxmox) with ESMTP id 76E7838E9C7;
+        Fri, 27 May 2022 14:06:10 +0300 (MSK)
+Received: from mail.composit.net (mail.composit.local [192.168.101.14])
+        by mail.composit.net (Proxmox) with SMTP id 53AB2389288;
+        Fri, 27 May 2022 14:06:10 +0300 (MSK)
+Received: from [192.168.1.105] (Unknown [197.234.219.23])
+        by mail.composit.net with ESMTPSA
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256)
+        ; Fri, 27 May 2022 14:06:11 +0300
+Message-ID: <4929C7DD-C6E5-4594-BC00-F75B7BDA54A4@mail.composit.net>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500018.china.huawei.com (7.185.36.111)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Greetings From Ukraine.  
+To:     Recipients <heiss@dnet.it>
+From:   "Kostiantyn Chichkov" <heiss@dnet.it>
+Date:   Fri, 27 May 2022 12:05:53 +0100
+Reply-To: kostiantync@online.ee
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_SBL,RCVD_IN_SORBS_WEB,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
+        *      bl.spamcop.net
+        *      [Blocked - see <https://www.spamcop.net/bl.shtml?195.49.185.119>]
+        *  1.5 RCVD_IN_SORBS_WEB RBL: SORBS: sender is an abusable web server
+        *      [197.234.219.23 listed in dnsbl.sorbs.net]
+        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
+        *      [197.234.219.23 listed in zen.spamhaus.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
+        *      https://senderscore.org/blocklistlookup/
+        *      [195.49.185.119 listed in bl.score.senderscore.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 SPF_NONE SPF: sender does not publish an SPF Record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Use ida_alloc()/ida_free() instead of deprecated
-ida_simple_get()/ida_simple_remove() .
+Good Morning,
 
-Signed-off-by: keliu <liuke94@huawei.com>
----
- drivers/rpmsg/rpmsg_char.c | 10 +++++-----
- drivers/rpmsg/rpmsg_ctrl.c | 10 +++++-----
- 2 files changed, 10 insertions(+), 10 deletions(-)
+We are Kostiantyn Chychkov and Maryna Chudnovska from Ukraine, we need your service, we have gone through your profile and we will like to work with you on an important service that needs urgent attention due to the ongoing war in our country. Kindly acknowledge this inquiry as soon as possible for a detailed discussion about the service.
 
-diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index b6183d4f62a2..7daa21d92f20 100644
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -342,8 +342,8 @@ static void rpmsg_eptdev_release_device(struct device *dev)
- {
- 	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
- 
--	ida_simple_remove(&rpmsg_ept_ida, dev->id);
--	ida_simple_remove(&rpmsg_minor_ida, MINOR(eptdev->dev.devt));
-+	ida_free(&rpmsg_ept_ida, dev->id);
-+	ida_free(&rpmsg_minor_ida, MINOR(eptdev->dev.devt));
- 	kfree(eptdev);
- }
- 
-@@ -389,7 +389,7 @@ static int rpmsg_chrdev_eptdev_add(struct rpmsg_eptdev *eptdev, struct rpmsg_cha
- 		goto free_eptdev;
- 	dev->devt = MKDEV(MAJOR(rpmsg_major), ret);
- 
--	ret = ida_simple_get(&rpmsg_ept_ida, 0, 0, GFP_KERNEL);
-+	ret = ida_alloc(&rpmsg_ept_ida, GFP_KERNEL);
- 	if (ret < 0)
- 		goto free_minor_ida;
- 	dev->id = ret;
-@@ -405,9 +405,9 @@ static int rpmsg_chrdev_eptdev_add(struct rpmsg_eptdev *eptdev, struct rpmsg_cha
- 	return ret;
- 
- free_ept_ida:
--	ida_simple_remove(&rpmsg_ept_ida, dev->id);
-+	ida_free(&rpmsg_ept_ida, dev->id);
- free_minor_ida:
--	ida_simple_remove(&rpmsg_minor_ida, MINOR(dev->devt));
-+	ida_free(&rpmsg_minor_ida, MINOR(dev->devt));
- free_eptdev:
- 	put_device(dev);
- 	kfree(eptdev);
-diff --git a/drivers/rpmsg/rpmsg_ctrl.c b/drivers/rpmsg/rpmsg_ctrl.c
-index 107da70fdbaa..8418e2ea0716 100644
---- a/drivers/rpmsg/rpmsg_ctrl.c
-+++ b/drivers/rpmsg/rpmsg_ctrl.c
-@@ -130,8 +130,8 @@ static void rpmsg_ctrldev_release_device(struct device *dev)
- {
- 	struct rpmsg_ctrldev *ctrldev = dev_to_ctrldev(dev);
- 
--	ida_simple_remove(&rpmsg_ctrl_ida, dev->id);
--	ida_simple_remove(&rpmsg_minor_ida, MINOR(dev->devt));
-+	ida_free(&rpmsg_ctrl_ida, dev->id);
-+	ida_free(&rpmsg_minor_ida, MINOR(dev->devt));
- 	kfree(ctrldev);
- }
- 
-@@ -161,7 +161,7 @@ static int rpmsg_ctrldev_probe(struct rpmsg_device *rpdev)
- 		goto free_ctrldev;
- 	dev->devt = MKDEV(MAJOR(rpmsg_major), ret);
- 
--	ret = ida_simple_get(&rpmsg_ctrl_ida, 0, 0, GFP_KERNEL);
-+	ret = ida_alloc(&rpmsg_ctrl_ida, GFP_KERNEL);
- 	if (ret < 0)
- 		goto free_minor_ida;
- 	dev->id = ret;
-@@ -179,9 +179,9 @@ static int rpmsg_ctrldev_probe(struct rpmsg_device *rpdev)
- 	return ret;
- 
- free_ctrl_ida:
--	ida_simple_remove(&rpmsg_ctrl_ida, dev->id);
-+	ida_free(&rpmsg_ctrl_ida, dev->id);
- free_minor_ida:
--	ida_simple_remove(&rpmsg_minor_ida, MINOR(dev->devt));
-+	ida_free(&rpmsg_minor_ida, MINOR(dev->devt));
- free_ctrldev:
- 	put_device(dev);
- 	kfree(ctrldev);
--- 
-2.25.1
+Thank you.
+
+Yours expectantly,
+
+Kostiantyn Chichkov & Ms. Maryna Chudnovska,
+From Ukraine.
+
 
