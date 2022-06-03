@@ -2,144 +2,165 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB6453C9CB
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Jun 2022 14:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC3153CD44
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Jun 2022 18:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244236AbiFCMPu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 3 Jun 2022 08:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53576 "EHLO
+        id S1343969AbiFCQce (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 3 Jun 2022 12:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244189AbiFCMPt (ORCPT
+        with ESMTP id S243276AbiFCQcY (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 3 Jun 2022 08:15:49 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805FC39826;
-        Fri,  3 Jun 2022 05:15:48 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 253CFaNC078403;
-        Fri, 3 Jun 2022 07:15:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654258536;
-        bh=RUZPQ+k/CYQH8PVfKXR4X3F5fhUjffskd1cfh1MzVPE=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=mn81pSs2Fv/sYgGMQm3MtKYsg/rEcAMR2B/hEFHcBb5ft9AVcfsjSIWa+VBo2fk30
-         stOKiGzocXa9OTpB+tOZdiKt1K7GM4ZkL6c1MtuQCkbtiDxZsZl5eYER3rRkdZW1wx
-         YSJIV5sBmBjQdkxlwfqmmh2algmroMLRSrARlmmw=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 253CFall113689
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 3 Jun 2022 07:15:36 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 3
- Jun 2022 07:15:35 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 3 Jun 2022 07:15:36 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 253CFYvT129114;
-        Fri, 3 Jun 2022 07:15:35 -0500
-From:   Puranjay Mohan <p-mohan@ti.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
-        <p-mohan@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <rogerq@kernel.org>, <grygorii.strashko@ti.com>, <vigneshr@ti.com>,
-        <kishon@ti.com>, <robh@kernel.org>
-Subject: [PATCH v4 6/6] remoteproc: pru: add support for configuring GPMUX based on client setup
-Date:   Fri, 3 Jun 2022 17:45:20 +0530
-Message-ID: <20220603121520.13730-7-p-mohan@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220603121520.13730-1-p-mohan@ti.com>
-References: <20220603121520.13730-1-p-mohan@ti.com>
+        Fri, 3 Jun 2022 12:32:24 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8CA38DA1;
+        Fri,  3 Jun 2022 09:32:20 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 253GIYpt004994;
+        Fri, 3 Jun 2022 18:32:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=XYfsgN0Fz1IFWhCX2F/Bh12FPK+Ortq56BmKZ6Jz8Bs=;
+ b=7ch4VNH4Y7lUZrcXNyRXs+6zPKADMCtk3xau0A+z5WNye7tIlw6lgqCeHZtOnxClyhFZ
+ Sb7JFK74azX4V7ZrreI6AESR2cYhuNtV5ztIAyHl6C7TkbsyWtQtcHhk0FgCk9LzJt8G
+ klyD+f1jhDj1Z2fwwCO7zydHJZYlj0Dsvc+hanCH70l4jlRFXQDjeJefDpjqcVU5dgDB
+ McMqQAdDn/Aa0ArVPzTmPxNtVu9p3EiWL1OxxeqPQBMx//Zrk0U6Vi1o5z3+uk0sVoEm
+ 5zs/Jj6CFek/Rl/2l5qEPzXDfEQQWUJT/DGQSbdlUYs/QwLK4ZYbvRICWrI0bfZnJewv 0Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gbc5174sy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Jun 2022 18:32:03 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 6585E10002A;
+        Fri,  3 Jun 2022 18:32:01 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D57C0231533;
+        Fri,  3 Jun 2022 18:32:01 +0200 (CEST)
+Received: from localhost (10.75.127.48) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 3 Jun
+ 2022 18:32:01 +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>,
+        <arnaud.pouliquen@foss.st.com>
+Subject: [PATCH v6 0/4] remoteproc: restructure the remoteproc VirtIO device
+Date:   Fri, 3 Jun 2022 18:31:54 +0200
+Message-ID: <20220603163158.612513-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.24.3
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-03_05,2022-06-03_01,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Tero Kristo <t-kristo@ti.com>
+1) Update from V5 [1]:
 
-Client device node property ti,pruss-gp-mux-sel can now be used to
-configure the GPMUX config value for PRU.
+Updates based on Mathieu's comments.
+Updates are listed in the commit message of each patch.
 
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
-[s-anna@ti.com: simplify the pru id usage]
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
----
- drivers/remoteproc/pru_rproc.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+[1] https://lkml.org/lkml/2022/4/6/597
 
-diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-index 2977eb50631b..b532069fe259 100644
---- a/drivers/remoteproc/pru_rproc.c
-+++ b/drivers/remoteproc/pru_rproc.c
-@@ -123,6 +123,7 @@ struct pru_private_data {
-  * @dbg_single_step: debug state variable to set PRU into single step mode
-  * @dbg_continuous: debug state variable to restore PRU execution mode
-  * @evt_count: number of mapped events
-+ * @gpmux_save: saved value for gpmux config
-  */
- struct pru_rproc {
- 	int id;
-@@ -141,6 +142,7 @@ struct pru_rproc {
- 	u32 dbg_single_step;
- 	u32 dbg_continuous;
- 	u8 evt_count;
-+	u8 gpmux_save;
- };
- 
- static inline u32 pru_control_read_reg(struct pru_rproc *pru, unsigned int reg)
-@@ -250,6 +252,7 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	struct device *dev;
- 	const char *fw_name;
- 	int ret;
-+	u32 mux;
- 
- 	try_module_get(THIS_MODULE);
- 
-@@ -273,6 +276,22 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 
- 	mutex_unlock(&pru->lock);
- 
-+	ret = pruss_cfg_get_gpmux(pru->pruss, pru->id, &pru->gpmux_save);
-+        if (ret) {
-+                dev_err(dev, "failed to get cfg gpmux: %d\n", ret);
-+                goto err;
-+        }
-+
-+        ret = of_property_read_u32_index(np, "ti,pruss-gp-mux-sel", index,
-+                                         &mux);
-+        if (!ret) {
-+                ret = pruss_cfg_set_gpmux(pru->pruss, pru->id, mux);
-+                if (ret) {
-+                        dev_err(dev, "failed to set cfg gpmux: %d\n", ret);
-+                        goto err;
-+                }
-+        }
-+
- 	if (pru_id)
- 		*pru_id = pru->id;
- 
-@@ -310,6 +329,7 @@ void pru_rproc_put(struct rproc *rproc)
- 
- 	pru = rproc->priv;
- 
-+	pruss_cfg_set_gpmux(pru->pruss, pru->id, pru->gpmux_save);
- 	pru_rproc_set_firmware(rproc, NULL);
- 
- 	mutex_lock(&pru->lock);
+2) Patchset description:
+
+This series is a part of the work initiated a long time ago in 
+the series "remoteproc: Decorelate virtio from core"[2]
+
+Objective of the work:
+- Update the remoteproc VirtIO device creation (use platform device)
+- Allow to declare remoteproc VirtIO device in DT
+    - declare resources associated to a remote proc VirtIO
+    - declare a list of VirtIO supported by the platform.
+- Prepare the enhancement to more VirtIO devices (e.g I2C, audio, video, ...).
+  For instance be able to declare a I2C device in a virtio-i2C node.
+- Keep the legacy working!
+- Try to improve the picture about concerns reported by Christoph Hellwing [3][4]
+
+[2] https://lkml.org/lkml/2020/4/16/1817
+[3] https://lkml.org/lkml/2021/6/23/607
+[4] https://patchwork.kernel.org/project/linux-remoteproc/patch/AOKowLclCbOCKxyiJ71WeNyuAAj2q8EUtxrXbyky5E@cp7-web-042.plabs.ch/
+
+In term of device tree this would result in such hierarchy (stm32mp1 example with 2 virtio RPMSG):
+
+	m4_rproc: m4@10000000 {
+		compatible = "st,stm32mp1-m4";
+		reg = <0x10000000 0x40000>,
+		      <0x30000000 0x40000>,
+		      <0x38000000 0x10000>;
+        memory-region = <&retram>, <&mcuram>,<&mcuram2>;
+        mboxes = <&ipcc 2>, <&ipcc 3>;
+        mbox-names = "shutdown", "detach";
+        status = "okay";
+
+        #address-cells = <1>;
+        #size-cells = <0>;
+        
+        vdev@0 {
+		compatible = "rproc-virtio";
+		reg = <0>;
+		virtio,id = <7>;  /* RPMSG */
+		memory-region = <&vdev0vring0>, <&vdev0vring1>, <&vdev0buffer>;
+		mboxes = <&ipcc 0>, <&ipcc 1>;
+		mbox-names = "vq0", "vq1";
+		status = "okay";
+        };
+
+        vdev@1 {
+		compatible = "rproc-virtio";
+		reg = <1>;
+		virtio,id = <7>;  /*RPMSG */
+		memory-region = <&vdev1vring0>, <&vdev1vring1>, <&vdev1buffer>;
+		mboxes = <&ipcc 4>, <&ipcc 5>;
+		mbox-names = "vq0", "vq1";
+		status = "okay";
+        };
+};
+
+I have divided the work in 4 steps to simplify the review, This series implements only
+the step 1:
+step 1:  redefine the remoteproc VirtIO device as a platform device
+  - migrate rvdev management in remoteproc virtio.c,
+  - create a remotproc virtio config ( can be disabled for platform that not use VirtIO IPC.
+step 2: add possibility to declare and probe a VirtIO sub node
+  - VirtIO bindings declaration,
+  - multi DT VirtIO devices support,
+  - introduction of a remote proc virtio bind device mechanism ,
+=> https://github.com/arnopo/linux/commits/step2-virtio-in-DT
+step 3: Add memory declaration in VirtIO subnode
+=> https://github.com/arnopo/linux/commits/step3-virtio-memories
+step 4: Add mailbox declaration in VirtIO subnode
+=> https://github.com/arnopo/linux/commits/step4-virtio-mailboxes
+
+Arnaud Pouliquen (4):
+  remoteproc: core: Introduce rproc_rvdev_add_device function
+  remoteproc: core: Introduce rproc_add_rvdev function
+  remoteproc: Move rproc_vdev management to remoteproc_virtio.c
+  remoteproc: virtio: Create platform device for the remoteproc_virtio
+
+ drivers/remoteproc/remoteproc_core.c     | 153 +++---------------
+ drivers/remoteproc/remoteproc_internal.h |  23 ++-
+ drivers/remoteproc/remoteproc_virtio.c   | 188 ++++++++++++++++++++---
+ include/linux/remoteproc.h               |   6 +-
+ 4 files changed, 209 insertions(+), 161 deletions(-)
+
 -- 
-2.17.1
+2.24.3
 
