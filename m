@@ -2,114 +2,128 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853D053F34E
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Jun 2022 03:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CED653F554
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Jun 2022 06:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiFGBWq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 6 Jun 2022 21:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59150 "EHLO
+        id S236621AbiFGE5L (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 7 Jun 2022 00:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbiFGBWq (ORCPT
+        with ESMTP id S236664AbiFGE5H (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 6 Jun 2022 21:22:46 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8082D273;
-        Mon,  6 Jun 2022 18:22:42 -0700 (PDT)
+        Tue, 7 Jun 2022 00:57:07 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8077D4A17;
+        Mon,  6 Jun 2022 21:57:04 -0700 (PDT)
 Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2571McrH079758;
-        Mon, 6 Jun 2022 20:22:38 -0500
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2574urq5026447;
+        Mon, 6 Jun 2022 23:56:53 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1654564958;
-        bh=CgaOdxh/6hTCnwxfxKHlEtwk/bs3B/+0KLtEZteZTeg=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=WBskwVxgmQlIJmJBEj3/Pmv6FjtSLOqr/Nfj3hMdri6rjg92TgEh93deyVd7h/a2O
-         xMkmKCzES3ocVaAUuAoCvU73dc/7tz4TzMZA09NDg5DHnkPrv48+lx97Wwu02xKoVL
-         vh3YbbTamu0OL1FsP53KtHG59fl5MI5Dtt8KErtE=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2571Mcv9039513
+        s=ti-com-17Q1; t=1654577813;
+        bh=9vJgbNjL4gRLemPxOIvLcNcWlAjcet2En4x3IBbxTQg=;
+        h=From:To:CC:Subject:Date;
+        b=q5CE0eLfR8+1ZKWo9wHfnCbBvKMCPPT/nIocUcPxdi6s2cPR6EBH82NLV+aI0c9AG
+         kmRcG6D8PENJx6unsEJWAbIWelARm8r3OZOr5gwNcrVULhhxOM4gzjgFe8xFZ474Ub
+         UOVu3Jxyrx4zXVdffzDcENHxsKY7FWPDZbBFxicM=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2574urrV029089
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Jun 2022 20:22:38 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 6 Jun 2022 23:56:53 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 6
- Jun 2022 20:22:38 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2022 23:56:52 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 6 Jun 2022 20:22:38 -0500
-Received: from [10.249.32.125] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2571Mb7j069761;
-        Mon, 6 Jun 2022 20:22:38 -0500
-Message-ID: <eb7c2a20-3d9d-597c-c462-516bce30f82e@ti.com>
-Date:   Mon, 6 Jun 2022 20:22:37 -0500
+ Frontend Transport; Mon, 6 Jun 2022 23:56:52 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2574upsF111528;
+        Mon, 6 Jun 2022 23:56:52 -0500
+From:   Puranjay Mohan <p-mohan@ti.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
+        <p-mohan@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <rogerq@kernel.org>, <grygorii.strashko@ti.com>, <vigneshr@ti.com>,
+        <kishon@ti.com>, <robh@kernel.org>
+Subject: [PATCH v5 0/6] Introduce PRU remoteproc consumer API
+Date:   Tue, 7 Jun 2022 10:26:44 +0530
+Message-ID: <20220607045650.4999-1-p-mohan@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] remoteproc: k3-r5: Fix refcount leak in
- k3_r5_cluster_of_init
-Content-Language: en-US
-To:     Miaoqian Lin <linmq006@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220605083334.23942-1-linmq006@gmail.com>
-From:   Suman Anna <s-anna@ti.com>
-In-Reply-To: <20220605083334.23942-1-linmq006@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Miaoqian,
+This is the v5 of the patch series [1]. The 6th patch in the series was
+added in v4 and it had some checkpatch.pl errors which are removed here.
 
-On 6/5/22 03:33, Miaoqian Lin wrote:
-> Every iteration of for_each_available_child_of_node() decrements
-> the reference count of the previous node.
-> When breaking early from a for_each_available_child_of_node() loop,
-> we need to explicitly call of_node_put() on the child node.
-> Add missing of_node_put() to avoid refcount leak.
+I have posted two more patch series that depend on this series, one to
+the soc tree and another to the networking tree. I had sent all the 3
+series, including this one as RFC [2] to get comments and to explain the
+dependencies.
 
-Thanks for catching this.
+The Programmable Real-Time Unit and Industrial Communication Subsystem
+(PRU-ICSS or simply PRUSS) on various TI SoCs consists of dual 32-bit
+RISC cores (Programmable Real-Time Units, or PRUs) for program execution.
 
-> 
-> Fixes: 6dedbd1d5443 ("remoteproc: k3-r5: Add a remoteproc driver for R5F subsystem")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+There are 3 foundation components for PRUSS subsystem: the PRUSS platform
+driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All were
+already merged and can be found under:
+1) drivers/soc/ti/pruss.c
+   Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+2) drivers/irqchip/irq-pruss-intc.c
+   Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+3) drivers/remoteproc/pru_rproc.c
+   Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
 
-Acked-by: Suman Anna <s-anna@ti.com>
+The programmable nature of the PRUs provide flexibility to implement custom
+peripheral interfaces, fast real-time responses, or specialized data handling.
+Example of a PRU consumer drivers will be:
+  - Software UART over PRUSS
+  - PRU-ICSS Ethernet EMAC
 
-regards
-Suman
+In order to make usage of common PRU resources and allow the consumer drivers to
+configure the PRU hardware for specific usage the PRU API is introduced.
 
-> ---
->  drivers/remoteproc/ti_k3_r5_remoteproc.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> index 4840ad906018..0481926c6975 100644
-> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> @@ -1655,6 +1655,7 @@ static int k3_r5_cluster_of_init(struct platform_device *pdev)
->  		if (!cpdev) {
->  			ret = -ENODEV;
->  			dev_err(dev, "could not get R5 core platform device\n");
-> +			of_node_put(child);
->  			goto fail;
->  		}
->  
-> @@ -1663,6 +1664,7 @@ static int k3_r5_cluster_of_init(struct platform_device *pdev)
->  			dev_err(dev, "k3_r5_core_of_init failed, ret = %d\n",
->  				ret);
->  			put_device(&cpdev->dev);
-> +			of_node_put(child);
->  			goto fail;
->  		}
->  
+[1] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220603121520.13730-1-p-mohan@ti.com/
+[2] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220406094358.7895-1-p-mohan@ti.com/
+
+Thanks and Regards,
+Puranjay Mohan
+
+Roger Quadros (1):
+  remoteproc: pru: Add pru_rproc_set_ctable() function
+
+Suman Anna (2):
+  dt-bindings: remoteproc: Add PRU consumer bindings
+  remoteproc: pru: Make sysfs entries read-only for PRU client driven
+    boots
+
+Tero Kristo (3):
+  remoteproc: pru: Add APIs to get and put the PRU cores
+  remoteproc: pru: Configure firmware based on client setup
+  remoteproc: pru: add support for configuring GPMUX based on client
+    setup
+
+ .../bindings/remoteproc/ti,pru-consumer.yaml  |  69 +++++
+ drivers/remoteproc/pru_rproc.c                | 254 +++++++++++++++++-
+ include/linux/pruss.h                         |  78 ++++++
+ 3 files changed, 396 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+ create mode 100644 include/linux/pruss.h
+
+-- 
+2.17.1
 
