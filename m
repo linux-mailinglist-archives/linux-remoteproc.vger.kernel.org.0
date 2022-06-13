@@ -2,114 +2,62 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74911546D30
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 10 Jun 2022 21:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCA3547DE4
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Jun 2022 05:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349792AbiFJTXj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 10 Jun 2022 15:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
+        id S231246AbiFMDRB (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 12 Jun 2022 23:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348545AbiFJTXi (ORCPT
+        with ESMTP id S231218AbiFMDRA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 10 Jun 2022 15:23:38 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC7B19A711;
-        Fri, 10 Jun 2022 12:23:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1654889015; x=1686425015;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=S+DeJ3MsyXef9jo7MlX4F9bDqqCTfY+AdSWc6kyR9DU=;
-  b=ncy1UTC5atH6gW77/v/eQAPDyQK9dErNoTeO9y0XPdZGqiz1kTxCgaSU
-   KY6a2M2ydId3Ivbp/9YYMt7YTBTW/YbddmDi2XguXN5Y9UdaXJbRQfny1
-   6G2F3R5yPfFOXFCh7Xma4zUoLuoWLfhJcp9e64u0yRHhCMY/QXFL6yNYY
-   4=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 10 Jun 2022 12:23:35 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2022 12:23:34 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 10 Jun 2022 12:23:33 -0700
-Received: from hu-clew-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 10 Jun 2022 12:23:33 -0700
-From:   Chris Lew <quic_clew@quicinc.com>
-To:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_clew@quicinc.com>
-Subject: [PATCH 2/2] remoteproc: core: Introduce rproc_mem_entry_free
-Date:   Fri, 10 Jun 2022 12:23:05 -0700
-Message-ID: <1654888985-3846-3-git-send-email-quic_clew@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1654888985-3846-1-git-send-email-quic_clew@quicinc.com>
-References: <1654888985-3846-1-git-send-email-quic_clew@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Sun, 12 Jun 2022 23:17:00 -0400
+X-Greylist: delayed 45014 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Jun 2022 20:16:59 PDT
+Received: from yodobashi.com (unknown [117.50.183.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3D60E186CF
+        for <linux-remoteproc@vger.kernel.org>; Sun, 12 Jun 2022 20:16:58 -0700 (PDT)
+Sender: info@yodobashi.com
+Date:   Mon, 13 Jun 2022 11:16:54 +0800
+From:   "yodobashi" <admin@yodobashi.com>
+To:     <linux-remoteproc@vger.kernel.org>
+Subject: =?gb2312?B?peilyaXQpbelyaXDpcils6Xgo7qhuKSqv82YlMfpiPOhuaXRpbml7w==?=
+        =?gb2312?B?qWClyYnkuPykzt9CvWo=?=
+Message-ID: <20220613111659062722@yodobashi.com>
+X-mailer: Foxmail 6, 13, 102, 15 [cn]
+Mime-Version: 1.0
+Content-Type: text/plain;
+        charset="gb2312"
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_VALIDITY_RPBL,RCVD_IN_XBL,RDNS_NONE,
+        SPF_FAIL,SPF_HELO_FAIL,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Introduce a helper to free the rproc_mem_entry allocated by
-rproc_mem_entry_init(). This helper is to help manage rproc carveouts
-added to an rproc outside of remoteproc.
+ofah9qH2obikqr/NmJTH6Yjzobml0aW5pe+pYKXJieS4/KTO30K9aqH2ofah9g0Ko6iks6TOpeGp
+YKXrpM+hosXk0MWMn9PDpM6loqXJpeyluaTHxeTQxaS1pOykxqSkpN6kuaOpDQoNCqSqv82YlKTO
+pKq/zZiUx+mI84nkuPzK1r5BpK2k8qSqpLOkyqSkpN6kt6S/oaMNCsTayN2kzqS0tF/VSqTypKru
+iqSkpKSkv6S3pN6kuaGjDQqjqKXRpbml76lgpcmkz6Gise3KvqS3pMakqqTqpN6ku6Tzo6kNCg0K
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0NCqG+ieS4/Iydz/OkzrvhhlSl0aW5pe+pYKXJob8NCrvhhlRJRKGhOqGhbGludXgtcmVtb3Rl
+cHJvY0B2Z2VyLmtlcm5lbC5vcmcNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQoNCqHxieS4/KS1pOykv6Sqv82YlMfpiPMgDQotLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0K
+64rUkresusUNCsjV1tCkzqS030K9as/I64rUkresusUNCg0KpLS1x+Vox+mI86TPoaLPwtObobik
+qr/NmJSMn9PDpdqpYKW4obmkq6TppLS0X9VKpK+kwKS1pKShow0KDQqoi6Sqv82YlIyf08Ol2qlg
+pbgNCmh0dHBzOi8vd3d3LXlvZG9iYXNoLWNvbS5saW5nZXJzNS50ZWNoDQoNCi0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQqh+aSzpM6l
+4algpevE2sjdpMvQxKSipL+k6qTOpMqkpIj2us+kz6GipKrK1sr9pMekuaSsoaKl6KXJpdCltz+l
+yaXDpcg/pbOl4KSqhpakpLrPpO+ku7eZv9qk2NbBvLGktN9CvWqk8qSq7oqkpKSkpL+kt6TepLmh
+ow0KDQqks6TOpeGpYKXrpM+hosXk0MWMn9PDpM6loqXJpeyluaTHxeTQxaS1pOykxqSkpN6kuaGj
+DQqkqsrWyv2k8qSqkuyksaSkpL+kt6TepLmkrKGipLOkzqXhqWCl66TOxNrI3aTLpMSkpKTGpM6k
+qoaWpKS6z6TvpLukz8/C05ukzt9CvWrPyKTepMekqu6KpKSkpKS/pLek3qS5oaMNCg0KpeilyaXQ
+pbelyaXDpcils6XgIKSqhpakpLrPpO+ku7eZv9oNCkVtYWlsOiBpbmZvQHlvZG9iYXNoaS5jb20N
+Cg0KDQpDb3B5cmlnaHQyMDIyIFlvZG9iYXNoaSBDYW1lcmEgQ28uLEx0ZC4NCg==
 
-Signed-off-by: Chris Lew <quic_clew@quicinc.com>
----
- drivers/remoteproc/remoteproc_core.c | 13 +++++++++++++
- include/linux/remoteproc.h           |  1 +
- 2 files changed, 14 insertions(+)
-
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index ee71fccae970..161691fd2e96 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1069,6 +1069,19 @@ rproc_mem_entry_init(struct device *dev,
- EXPORT_SYMBOL(rproc_mem_entry_init);
- 
- /**
-+ * rproc_mem_entry_free() - free a rproc_mem_entry struct
-+ * @mem: rproc_mem_entry allocated by rproc_mem_entry_init()
-+ *
-+ * This function frees a rproc_mem_entry_struct that was allocated by
-+ * rproc_mem_entry_init().
-+ */
-+void rproc_mem_entry_free(struct rproc_mem_entry *mem)
-+{
-+	kfree(mem);
-+}
-+EXPORT_SYMBOL(rproc_mem_entry_free);
-+
-+/**
-  * rproc_of_resm_mem_entry_init() - allocate and initialize rproc_mem_entry struct
-  * from a reserved memory phandle
-  * @dev: pointer on device struct
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index 43112aa78ffe..9b039f37da12 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -666,6 +666,7 @@ rproc_mem_entry_init(struct device *dev,
- 		     int (*alloc)(struct rproc *, struct rproc_mem_entry *),
- 		     int (*release)(struct rproc *, struct rproc_mem_entry *),
- 		     const char *name, ...);
-+void rproc_mem_entry_free(struct rproc_mem_entry *mem);
- 
- struct rproc_mem_entry *
- rproc_of_resm_mem_entry_init(struct device *dev, u32 of_resm_idx, size_t len,
--- 
-2.7.4
 
