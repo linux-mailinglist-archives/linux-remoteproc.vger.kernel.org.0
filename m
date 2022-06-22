@@ -2,74 +2,89 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3BD554E71
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jun 2022 17:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE3B55514A
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 22 Jun 2022 18:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358884AbiFVPEO (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 22 Jun 2022 11:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
+        id S1358676AbiFVQZq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 22 Jun 2022 12:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358962AbiFVPEC (ORCPT
+        with ESMTP id S241588AbiFVQZp (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 22 Jun 2022 11:04:02 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A55A3EB8B
-        for <linux-remoteproc@vger.kernel.org>; Wed, 22 Jun 2022 08:03:54 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id g186so16353938pgc.1
-        for <linux-remoteproc@vger.kernel.org>; Wed, 22 Jun 2022 08:03:54 -0700 (PDT)
+        Wed, 22 Jun 2022 12:25:45 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C0031DF2
+        for <linux-remoteproc@vger.kernel.org>; Wed, 22 Jun 2022 09:25:44 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id y6so15843339plg.0
+        for <linux-remoteproc@vger.kernel.org>; Wed, 22 Jun 2022 09:25:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=Jt/qXO7TwQJF3EWuk5p4azKGOCxq/Rzk3KoLqC6Pwff+0tHhs8als9639cidnzFde4
-         ry7ero38QELHA22RBkZWtE0xNRPiiPEWIvKtPd0fZpNhUDrKHRyETW5WgRrbPPmi6/vT
-         vJpxoQNLrGfsMgIfV+PXszjD1nMaBRUe0Gxx0eYZw7YGtSc5pfRkGeshne5cjr5BaKxu
-         3INPcNuWqxw7/0puGY6UuhzUSAv6SoxD7Bz3CVHuDQWru55+lIHO02gOv78FJXnTYNjB
-         rbtWgbiyhkE21LXWR11Bk6fRJOPFFcU92J8XbdNavb7vvb9W0t8MjYRzeI2ufnWOCsiS
-         AGLA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nhVxaWNtri1CK0PHzSlalIxtbdAU1PUSddkvaK/+5e4=;
+        b=PUGiKBVAkeTgsz2FqLGI7rWQhLimJ38Xj+5Zg180pQyl0ruN+w1AjCcu6fqIZDYjAB
+         xG7oN1xzGX2iFM2bnPKINZLXHu/lSyd7wtYcs6OqMcEsqPQA2ynY1LEED97pYyPuEA5B
+         qtjsWDJ0vo7Vf+PB9f1yhRi+Rw4TyPhDuxJREQV6OxJ3nV4lruvuhc13IAbkfYRrajre
+         naFQHrt0Xgp0jY0cOGp6yjxaC3Dv9YICKdu9t5JldYvxQvfXK3p5P16zqjzR9I19PgF3
+         /sdblCFTDXUvSKaef4l5DisLWhm6bhKAkqGEKtWAtc5F2Tt7FQx53ATs58M4BElSCBe/
+         zQ1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=vhZEVnaGNBjosB86GDUW8b2wHjB/+QU31bPXl36TqFE=;
-        b=n40paWue/SBoOGK+U5zIpvonUNXF5tpTgILk0230cxG8vHS4da0VMPbnMK3ufmCspd
-         fI/t2YMQWNNeuLni9LNV77wuUxEafdCX/Eu2jbUI5hr1SzXwEURN2Ust7JnD8TJO366j
-         2P8R4osZ2VIBzNQXN+FVNX55we2MQVXB9sJpNsmVFO0VZe/xMfSzqWw+vfokNmjcfxgk
-         nMY+/HhRbtMiqYenIxB3qsW1cLv7HfJArVM4SskNVfQ8G7xR0RD8U3uuZHiVF3JXgouc
-         7y0HF04rpQs2pjsKz3kp8XTQBYq5cfvTbs2kFkjtFYIr+69fnotrm0yt2l8pb0wre/84
-         S/+Q==
-X-Gm-Message-State: AJIora+Ewa9bnVORsojSX7LHk/Zf7rTjLHP4UKKKAwpBSsyI7YgYFv4W
-        CuB+MQXoYeiEk4ReykzqiuCHqWLpvuIrVHzXA8s=
-X-Google-Smtp-Source: AGRyM1uVFGSnpr+dTCH2B3yi91+xpZWxlNuq532hGAWMLDkFZu1Qrq3wwA6KogrJ63y1ppaQwcWp21NviyeWeo5Xswg=
-X-Received: by 2002:a63:af1c:0:b0:40c:f9fb:deca with SMTP id
- w28-20020a63af1c000000b0040cf9fbdecamr3305128pge.479.1655910232628; Wed, 22
- Jun 2022 08:03:52 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nhVxaWNtri1CK0PHzSlalIxtbdAU1PUSddkvaK/+5e4=;
+        b=aLVmmtSzHVMp44ZZlk7TJ8CA6T1vM4Y/qE06sAcWsi/oQ2m9Wk7PEmWvEOiZynv2Cj
+         DAktM7JsJ89gwnr60rcnhqIvlYYbqenXl+Z0zFgsjmziLmgUzQvTjWEVEHTwaXvxveyf
+         nQaxfN9DTK5x9c6ueAbrwb8+fV99p1GzalUmRLvgRbMRpjjnQCqZfRpK5eLDjrWgVs/H
+         hymDqFjbshjU4XTnnW/VWdyDWQ+TkxVbRRy9ewt4IYk6ijkuVjeaXsHBaq8M0mLuKt1T
+         NFyJpmoaz0rCQZuqyKPlR5e8aOxSb5RKuKy0zIItzNiPwbHuiKBY1QbyNTgZ0jt5QbEr
+         Cwgw==
+X-Gm-Message-State: AJIora+NxCa+9iHMfVTv4DCv/u/DyQKVUtfifI+JDipPLdDx8Y41liLv
+        n0wAghIbkA1tgg5NmREmXnuLng==
+X-Google-Smtp-Source: AGRyM1ty3j96F9rBRPvE63v1BVhmw6iHaLjHVSskbjQhiqe7Ui9yA3Lv+QHsTJmdNJXt+uuOX/uoew==
+X-Received: by 2002:a17:90a:9408:b0:1ec:9453:2ebc with SMTP id r8-20020a17090a940800b001ec94532ebcmr4523830pjo.150.1655915144128;
+        Wed, 22 Jun 2022 09:25:44 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id 74-20020a62164d000000b005254535a2cfsm2035941pfw.136.2022.06.22.09.25.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jun 2022 09:25:43 -0700 (PDT)
+Date:   Wed, 22 Jun 2022 10:25:40 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
+        bjorn.andersson@linaro.org, robin.murphy@arm.com,
+        m.szyprowski@samsung.com, matthias.bgg@gmail.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, yj.chiang@mediatek.com
+Subject: Re: [PATCH 0/2] dma-mapping, remoteproc: Fix dma_mem leak after
+ rproc_shutdown
+Message-ID: <20220622162540.GA1606016@p14s>
+References: <20220422062436.14384-1-mark-pk.tsai@mediatek.com>
+ <20220423174650.GA29219@lst.de>
 MIME-Version: 1.0
-Received: by 2002:a17:903:2308:b0:16a:1b3f:f74b with HTTP; Wed, 22 Jun 2022
- 08:03:51 -0700 (PDT)
-Reply-To: sales0212@asonmedsystemsinc.com
-From:   Prasad Ronni <lerwickfinance7@gmail.com>
-Date:   Wed, 22 Jun 2022 16:03:51 +0100
-Message-ID: <CAFkto5szY9scoLwccBhUx92cgUVnT2cx2c=WmxiOTkm7N_y9gg@mail.gmail.com>
-Subject: Service Needed.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220423174650.GA29219@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
--- 
-Hi,
+On Sat, Apr 23, 2022 at 07:46:50PM +0200, Christoph Hellwig wrote:
+> Sigh.  In theory drivers should never declare coherent memory like
+> this, and there has been some work to fix remoteproc in that regard.
+> 
+> But I guess until that is merged we'll need somthing like this fix.
 
-Are you currently open to work as our executive company representative
-on contractual basis working remotely? If yes, we will be happy to
-share more details. Looking forward to your response.
+Should I take this in the remoteproc tree?  If so, can I get an RB?
 
-Regards,
+Thanks,
+Mathieu
+
