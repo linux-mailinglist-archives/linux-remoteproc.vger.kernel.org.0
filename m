@@ -2,154 +2,130 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F42655F7E3
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Jun 2022 09:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3BE55F9ED
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Jun 2022 10:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232975AbiF2HB4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 29 Jun 2022 03:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        id S231635AbiF2ICH (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 29 Jun 2022 04:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232869AbiF2G74 (ORCPT
+        with ESMTP id S232356AbiF2ICD (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 29 Jun 2022 02:59:56 -0400
-Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE2C37017;
-        Tue, 28 Jun 2022 23:58:29 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=37;SR=0;TI=SMTPD_---0VHml8K4_1656485902;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VHml8K4_1656485902)
-          by smtp.aliyun-inc.com;
-          Wed, 29 Jun 2022 14:58:23 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org,
-        kangjie.xu@linux.alibaba.com
-Subject: [PATCH v11 40/40] virtio_net: support set_ringparam
-Date:   Wed, 29 Jun 2022 14:56:56 +0800
-Message-Id: <20220629065656.54420-41-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220629065656.54420-1-xuanzhuo@linux.alibaba.com>
-References: <20220629065656.54420-1-xuanzhuo@linux.alibaba.com>
+        Wed, 29 Jun 2022 04:02:03 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233363B002
+        for <linux-remoteproc@vger.kernel.org>; Wed, 29 Jun 2022 01:02:02 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id mf9so31004150ejb.0
+        for <linux-remoteproc@vger.kernel.org>; Wed, 29 Jun 2022 01:02:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Viz1ZP9VtvajOYcBqzTA3hqYlKNwj1b1TN6tp7yivm4=;
+        b=iaWcatXWkv8khJ9y4MBhrfxkn3ToqWrxQyLJQkkWX/9f4c5UKIlkD0rd0v7r99gV1E
+         ujrr6uAV32ZkmS+wAw4LdQefshb1Ek/pV6a0nXHDTfk7oWI8BQRstoeDkXFuUHbRBaBj
+         BrbGYePz6ImBTByIHKT0Jl65XkjSsyTY1Gdmcvx2GdN3uBpQ2s9zzw8yKBqZT8LVMpGu
+         WVsBvKxQYvVxseQivZTuiWjlYnAxw757+Z7yZ5EQ5KqhhjW6AViH7uvXpT0nBN/swmIM
+         tNq8iIsjqY2mfqyA1LFR/X5Om92MlVvlWVLMUFOrSva9Afrqf0/0E+Prk4aQxwgqQ5pv
+         wqzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Viz1ZP9VtvajOYcBqzTA3hqYlKNwj1b1TN6tp7yivm4=;
+        b=ggZHS5MDRpJzlfQscH1rT1OOZAMo9SX0Kad5gMLTfk+EndWH90DB1F1yCAWkhXC0dl
+         T/EX7N3Wl6f0D66K3ykl92fU+gZAOdhWrCRk9fDg47WL6Rn45j53zXu4G1PzIR2MP6HR
+         jzvuESamOMoAUNUmnSYxHZTnlZDNEn2dB8HziI1bnM6BcPWNRy7rIoQmZVe/KljZ1CT5
+         CtwljI1u3C6Y5e9bhKUuZ80sbj90zUqktwVPo3bhm7cmk5qprqEe/+mU2YLcgNf6bKFu
+         p5detQZ/O524A5tIeOwIIo0kQ57mFrnAUwqpZrFuRbY/ZNYHb54sD6p0vx3TExTJ54ty
+         DlyQ==
+X-Gm-Message-State: AJIora+VBJPWTDM8OBfYM7otfCdfFqxFpV/SE3izkZ9M0/PEyECHxALB
+        UAzXTBYezRO3KCHS2hS2LlVeQw==
+X-Google-Smtp-Source: AGRyM1vO7SGdnsCGYLmlnxZnMJUpI/1lJrFBUrqZgXT8n+78HOyrtE1+gmTy3RSQtFx4xDctKuDt6A==
+X-Received: by 2002:a17:907:a0ca:b0:722:f8df:7d21 with SMTP id hw10-20020a170907a0ca00b00722f8df7d21mr1944691ejc.393.1656489720637;
+        Wed, 29 Jun 2022 01:02:00 -0700 (PDT)
+Received: from [192.168.0.183] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id d20-20020aa7ce14000000b00435d4179bbdsm11054730edv.4.2022.06.29.01.01.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jun 2022 01:01:59 -0700 (PDT)
+Message-ID: <9237dbad-12de-cd0f-82dd-40c08bf2a47b@linaro.org>
+Date:   Wed, 29 Jun 2022 10:01:58 +0200
 MIME-Version: 1.0
-X-Git-Hash: 3fdaf102dd89
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] rpmsg: fix possible refcount leak in
+ rpmsg_register_device_override()
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     Hangyu Hua <hbh25y@gmail.com>, bjorn.andersson@linaro.org,
+        gregkh@linuxfoundation.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220624024120.11576-1-hbh25y@gmail.com>
+ <20220624173621.GC1736477@p14s>
+ <47db0cd8-c940-6e74-f8dc-8e3931e13d80@linaro.org>
+ <CANLsYkzT5ZROReZNQ_eYL-r49ijaZYZ5TzdMpqy1RK0_hvW3_Q@mail.gmail.com>
+ <0bbee169-6fdc-b50e-87f7-1551dac821e2@linaro.org>
+ <20220628163107.GA1942439@p14s>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220628163107.GA1942439@p14s>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Support set_ringparam based on virtio queue reset.
+On 28/06/2022 18:31, Mathieu Poirier wrote:
+> On Sat, Jun 25, 2022 at 09:40:36PM +0200, Krzysztof Kozlowski wrote:
+>> On 24/06/2022 20:43, Mathieu Poirier wrote:
+>>> On Fri, 24 Jun 2022 at 11:45, Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> On 24/06/2022 19:36, Mathieu Poirier wrote:
+>>>>> On Fri, Jun 24, 2022 at 10:41:20AM +0800, Hangyu Hua wrote:
+>>>>>> rpmsg_register_device_override need to call put_device to free vch when
+>>>>>> driver_set_override fails.
+>>>>>>
+>>>>>> Fix this by adding a put_device() to the error path.
+>>>>>>
+>>>>>> Fixes: bb17d110cbf2 ("rpmsg: Fix calling device_lock() on non-initialized device")
+>>>>>
+>>>>> This is funny... Neither Bjorn nor I have reviewed this patch...
+>>>>
+>>>> It was a fix for commit in Greg's tree and Greg's pick it up after a
+>>>> week or something. I am not sure if that's actually funny that Greg has
+>>>> to pick it up without review :(
+>>>>
+>>>
+>>> The patch was sent out on April 19th and committed 3 days later on
+>>> April 22nd.  Is 3 days the new patch review time standard?
+>>
+>> Neither 19th, nor 22nd are correct. The patch which you set you never
+>> reviewed, so commit bb17d110cbf2 was sent on 29th of April:
+>> https://lore.kernel.org/all/20220429195946.1061725-1-krzysztof.kozlowski@linaro.org/
+>>
+> 
+> Twitchy fingers... Those dates are for commit 42cd402b8fd4, which is referenced
+> by bb17d110cbf2.
+> 
+> The end result is the same, that is patches related to the remoteproc/rpmsg
+> subsystems (or any subsystem) should not be committed before their maintainers
+> have the opportunity to review them.
 
-Users can use ethtool -G eth0 <ring_num> to modify the ring size of
-virtio-net.
+I think two months for your involvement was enough. During this two
+months there was a comment from Bjorn, applied and later quite plenty of
+time to revise/check/review.
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
----
- drivers/net/virtio_net.c | 48 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+I understand that we are all busy, pretty often working on upstream in
+spare time etc. So no one here complained that you did not review this
+patch within two months. But I don't understand what shall we do more if
+two months are not enough - wait four months? Six months?
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index fd358462f802..cc554cbac431 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2330,6 +2330,53 @@ static void virtnet_get_ringparam(struct net_device *dev,
- 	ring->tx_pending = virtqueue_get_vring_size(vi->sq[0].vq);
- }
- 
-+static int virtnet_set_ringparam(struct net_device *dev,
-+				 struct ethtool_ringparam *ring,
-+				 struct kernel_ethtool_ringparam *kernel_ring,
-+				 struct netlink_ext_ack *extack)
-+{
-+	struct virtnet_info *vi = netdev_priv(dev);
-+	u32 rx_pending, tx_pending;
-+	struct receive_queue *rq;
-+	struct send_queue *sq;
-+	int i, err;
-+
-+	if (ring->rx_mini_pending || ring->rx_jumbo_pending)
-+		return -EINVAL;
-+
-+	rx_pending = virtqueue_get_vring_size(vi->rq[0].vq);
-+	tx_pending = virtqueue_get_vring_size(vi->sq[0].vq);
-+
-+	if (ring->rx_pending == rx_pending &&
-+	    ring->tx_pending == tx_pending)
-+		return 0;
-+
-+	if (ring->rx_pending > virtqueue_get_vring_max_size(vi->rq[0].vq))
-+		return -EINVAL;
-+
-+	if (ring->tx_pending > virtqueue_get_vring_max_size(vi->sq[0].vq))
-+		return -EINVAL;
-+
-+	for (i = 0; i < vi->max_queue_pairs; i++) {
-+		rq = vi->rq + i;
-+		sq = vi->sq + i;
-+
-+		if (ring->tx_pending != tx_pending) {
-+			err = virtnet_tx_resize(vi, sq, ring->tx_pending);
-+			if (err)
-+				return err;
-+		}
-+
-+		if (ring->rx_pending != rx_pending) {
-+			err = virtnet_rx_resize(vi, rq, ring->rx_pending);
-+			if (err)
-+				return err;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static bool virtnet_commit_rss_command(struct virtnet_info *vi)
- {
- 	struct net_device *dev = vi->dev;
-@@ -2817,6 +2864,7 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
- 	.get_drvinfo = virtnet_get_drvinfo,
- 	.get_link = ethtool_op_get_link,
- 	.get_ringparam = virtnet_get_ringparam,
-+	.set_ringparam = virtnet_set_ringparam,
- 	.get_strings = virtnet_get_strings,
- 	.get_sset_count = virtnet_get_sset_count,
- 	.get_ethtool_stats = virtnet_get_ethtool_stats,
--- 
-2.31.0
-
+Best regards,
+Krzysztof
