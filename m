@@ -2,224 +2,223 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57940563044
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  1 Jul 2022 11:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB3956305D
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  1 Jul 2022 11:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235309AbiGAJf2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 1 Jul 2022 05:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
+        id S236346AbiGAJjL (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 1 Jul 2022 05:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234917AbiGAJf1 (ORCPT
+        with ESMTP id S236207AbiGAJjK (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 1 Jul 2022 05:35:27 -0400
-Received: from EUR03-AM5-obe.outbound.protection.outlook.com (mail-eopbgr30046.outbound.protection.outlook.com [40.107.3.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452FA747A9;
-        Fri,  1 Jul 2022 02:35:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RgPo0njhq/NQ2eqRefo7vawrwZu4Vv2qhdL5Yst39EUTeiZ+r9sNUMqcdRmAGW0dXuwYVMpH1oyngBWqZ6Ax4/lKKLmRz1s45/uLUB9PNzfSeJT5umPbkEAtl+95B9W/uiUfBMeAEWcnk859Nq8wBDWZ5G2ZMj6y678beU4FMoA2Jrtj2PIggFd1yl/j0fXbZvdXVtayHssVz8cqf8tBVFIHMfXv7XoYT0UooCOTb+1poXqGgw8KbsVSo00BSaaEf0vAYGhSwyAmUXnV3OaT1P4mkz5d0h/o1v+dL1AD+YnGq/8thjp49Bq1RJiZfUEIsCmM+ABF3SIQGGzTjCGkfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=otVKadlaaoou49b+fDAQ6ZmGz6y7tRTCzm2rje/Z1yI=;
- b=bP/nm+XOfzPIG1XOXgWRoyhrZf1vE8tteccTMvGmVLQFSD9V0iClGSxj4vnj+TZ3+CPvIBiI/UA9ObG2nO+vfIv+iunbkx1Bexo5iGUiF5x0ZZJUE9KVcByAbbtsQC1xeyeOTBPmde27/6LKW2JqThCHJMP5dhtz8doUrD1g+Kjuq1wZl5yunaRn+Ai7JZCgEKM60jePzx91DLh0ocOgxwjWkaoAVFv1+FU3eeuAcI0E/0R5lQMcS2RGBU0cU/pduMcgp1zb+SyroTqgUfxVxnAk7UCXuzwn4GcymbyhOS3fw7z0WPQEYH5ojcQGyatxUd7N8EKnSeaqGAMHZkygUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=otVKadlaaoou49b+fDAQ6ZmGz6y7tRTCzm2rje/Z1yI=;
- b=dGgDxx9HxH/BFUxp/cHaUgFc66SB19X4+nOZIJxFefDDm+dujQe7/Ng5QLxLyF15Mqv7n2s0z4tZSWsh2j/M1JZPQ1H5sEN5AcFO2BjWWEKSjvDUl8+nMbotksh32ql2dD7rHtPdNeYiTW3tHl246whGbMZw/z3krGOk9YGOgGY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by VI1PR04MB4655.eurprd04.prod.outlook.com (2603:10a6:803:72::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5395.14; Fri, 1 Jul
- 2022 09:35:24 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::fdd4:8557:334b:180d]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::fdd4:8557:334b:180d%6]) with mapi id 15.20.5395.015; Fri, 1 Jul 2022
- 09:35:24 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V6 2/2] remoteproc: support attach recovery after rproc crash
-Date:   Fri,  1 Jul 2022 17:37:02 +0800
-Message-Id: <20220701093702.265249-3-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220701093702.265249-1-peng.fan@oss.nxp.com>
-References: <20220701093702.265249-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0178.apcprd01.prod.exchangelabs.com
- (2603:1096:4:28::34) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        Fri, 1 Jul 2022 05:39:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6754C1E3DD
+        for <linux-remoteproc@vger.kernel.org>; Fri,  1 Jul 2022 02:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1656668348;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M6jjd4ijXuXIvJJrjir19vpImb6pnScxQWCTyU/0jws=;
+        b=LPAmb7aixWLlNHwghQIer3DV0GXscDLx+OW5I9ldUKTwjeBtv+6DYPt67SlgWb/O3bfRYX
+        3Y+8jJfBzN+7IcHSg4cVN4N7bWNaydxVkxXjkrmJ7lP7wwHPhZxj2GHL5SBpEmrfIAn+nA
+        2LyVimUfefE2qHr4YZtQHUdv6o9rhAg=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-6ZkHDghJPFiNz0FqY-hDxA-1; Fri, 01 Jul 2022 05:39:07 -0400
+X-MC-Unique: 6ZkHDghJPFiNz0FqY-hDxA-1
+Received: by mail-wm1-f72.google.com with SMTP id m20-20020a05600c4f5400b003a03aad6bdfso785838wmq.6
+        for <linux-remoteproc@vger.kernel.org>; Fri, 01 Jul 2022 02:39:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=M6jjd4ijXuXIvJJrjir19vpImb6pnScxQWCTyU/0jws=;
+        b=sHI5qeCviyJWLj/uq09SYUwF/Nvx+3+RyPPshK/6rmSJuHbk77ymuy68QOYbIXvTXd
+         mo5oWNpBcQ8x6Y9EUrP6dWw0zU9FlEfcdA/lgO9DWKdtWJ9jLnlWu8jegqHlDwQsM6gL
+         tq/2fq+UR16IBgNA+UK/6nImMhsH8pfwFukMle285MI8AFlDrD5HYAmjibMITHKX5BUT
+         2qXEJR7qhNGiD5YbGLJ6OPzAtamyhg5LDHQK7aSWekRdF/e+WKO/77AZHucrTUA8xWNt
+         QkffIi7rofWOosuiFRb+xEzkwmapW9U0bbwwbhWAwnASVb8y/qMqbbXShh1TIso1Z7g5
+         xT1w==
+X-Gm-Message-State: AJIora+NcjeMk1trDHve/tye00eoc3Ev2bqNICwolElHqMikUV64usZE
+        ciyTsNp9bof6RtEP9ZNGui3OBXJ5a5hljUgqqApVyXSP3WGF9SHd/goFPnyt6aa2pvRIWWfBgUW
+        FVmQWVhxLflTfrfEouzlGxzxdiiCiSA==
+X-Received: by 2002:a05:6000:a1e:b0:21b:8c8d:3cb5 with SMTP id co30-20020a0560000a1e00b0021b8c8d3cb5mr12801981wrb.372.1656668345694;
+        Fri, 01 Jul 2022 02:39:05 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tFcAXZoAaZyHfEts4V1bW0kmJ5lrttXMA/0eqVrtSgtW5wTjnCGywc6ih/h68PKIHmHWboSw==
+X-Received: by 2002:a05:6000:a1e:b0:21b:8c8d:3cb5 with SMTP id co30-20020a0560000a1e00b0021b8c8d3cb5mr12801952wrb.372.1656668345358;
+        Fri, 01 Jul 2022 02:39:05 -0700 (PDT)
+Received: from redhat.com ([2.55.3.188])
+        by smtp.gmail.com with ESMTPSA id bg28-20020a05600c3c9c00b003a175bc9c17sm6267998wmb.42.2022.07.01.02.39.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Jul 2022 02:39:04 -0700 (PDT)
+Date:   Fri, 1 Jul 2022 05:39:01 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-remoteproc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rpmsg: virtio: Fix broken rpmsg_probe()
+Message-ID: <20220701053813-mutt-send-email-mst@kernel.org>
+References: <20220608171334.730739-1-apatel@ventanamicro.com>
+ <20220629174318.GB2018382@p14s>
+ <20220630151716-mutt-send-email-mst@kernel.org>
+ <65d972ed-31b4-5636-86a3-dabd5f25a3be@foss.st.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c0c8e266-73b6-4154-7af7-08da5b450647
-X-MS-TrafficTypeDiagnostic: VI1PR04MB4655:EE_
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j91gj4Pfq+7kf1IL1BP/e6TaIv0qm5TU62uNDAqhOmob6GRBt9kCiE/XXFVMcFdsIQGnGPQhPArw/gNAS+tNyNHdqyu8sCLmjNeWe4KPwJQr5X187M0vVGhDWxzG01rboJIKnpy+WSBfl0wcqEhMOi4qEzr7Ox0VMNBZZwPoOJFwDHeGBHojBFs8BwUB01aD6CsYzKgOxbzeRn71v1so1qq+fwGyF2gqhNLWWU7viXzQ0RsttqVy3EoXiFsQ/HQWnAaviqVDwuBfuGhyudQKuQmievYCv6XjhBQ3aQVu9HeJfodtnJbt0LUACvEEBYm8D90CDZmf+YLxJcd7dmHEoQgTjgkDNuyk4jIQxcCly6l0noL9n5en83ZzliJIjdTEIiSF/spUDa3q+EAVYXv4cbQ2cdiBPZTMKnD8+xattkJHKtdAjtrIPvZSVhWWGeI/kggCDSSNyhT6oAOlZrxmWk3TTZTt0Xeq3UTCNGZzgaWW/syiMKZAukKfxnaob3MzC5pFw9hiCKvTE2T5z8hqhCeTm9mFx9nWMcJ1XXK5Ng8MIuOWd/kWXkMEMpFearF6o6ORW+Sk6KDtncecH9RhRxzOMNCYD422aVd6+MY9xj02Xtf6X4EfMUrMa8kQQZU0TFZdHFjL/+4xyKlC5xq6lyiJeqCZt1DZC4mt3a9MBuI3x6vlrBRGmu52o4f3k9GrxETtiB4hgK8HUhUDHL4rQhgb4Km56G/8aGLNwmKK/lrg43adbw56+SHAyU10hxX9Vh4JYOHC49yHdR8F929KkielRr3/pnmSopPPPkOHdJuXTzRmFot3zCTYkvVVQJwU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(366004)(39860400002)(346002)(396003)(1076003)(316002)(66556008)(66946007)(4326008)(66476007)(2616005)(86362001)(186003)(2906002)(8676002)(6512007)(8936002)(5660300002)(478600001)(26005)(6666004)(52116002)(6506007)(38350700002)(38100700002)(83380400001)(41300700001)(6486002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ac5jLxBN6Lx+Bh32IHu1sCNDOKhMzRzoXMykPQFSZe7tPLA16oVH/M1ddgy/?=
- =?us-ascii?Q?DdGMM+zy6/517cG5dKh8wrv/HddMfY3cu6gYXAnMZSMrfXhnLppLEKI9+VoU?=
- =?us-ascii?Q?o+N3Bq9nXvrckUCgLBz5SeybH4VjplTIcTsIn6jVxlSfbJALR88MBFpx+Cu+?=
- =?us-ascii?Q?lA2SZiTxaTdhPBu6DnqFr/p395N1tGS5SGvSqEgTYbSihrUFUWIJJqTGNg2t?=
- =?us-ascii?Q?78pHEVjmKP+ktl9L1wwjbO41R3CrHNuyqFYz2vUzJHQeNicKsGuIjqC22z00?=
- =?us-ascii?Q?J5Q5PlpsESh1p7KXQtz2aW+ACoxqKjb3CVeoMUFxCejBvtfr5is4S2kgQgMg?=
- =?us-ascii?Q?dKMvxJwHTw3qotk0kr9AtIZttMzgX4wPnhRurhnIxEj71JD7x7ZIpkwwDD2w?=
- =?us-ascii?Q?a/ItjDOssocEMwpBZutppopPr2pzMzUWglraEboNm8BNP9d9UiwPSDduE6zJ?=
- =?us-ascii?Q?XPX8euMnD5W3rR6dCCex6Ru0diR1ge3Augozlz22/MKkuRMrQPyooNjxajP5?=
- =?us-ascii?Q?AphcgVArfPZfyuL/RJhf6IPgJ+V/53kjmb1czSmK/igfk6Wcc2PRu7MAtiYP?=
- =?us-ascii?Q?yAHzyvlLblCqeaaN3YA1DUxiIe5o8XcT1L3r0Dx9QsZqOJWfgdf51o+NmCvT?=
- =?us-ascii?Q?v+VvDlPHlbQ/QSa6zLCxpBDU51anSqxDgyyO7ocHGE2LE0JO1xwWFOpG6q70?=
- =?us-ascii?Q?iBlTJoG9u1AULSkySH6z/jYw2xTLWrHefvVK23meSfXqlBZPSzp4HfmUEq7k?=
- =?us-ascii?Q?V8stOp3UVEH0YsFT7nNLuWsxMwtB+cpMmWPk2G6PpLANcfzbfUi9sUOXK3Kc?=
- =?us-ascii?Q?RAg5pSqj+eepXjzuHM3afi/EeNHTF78lf8wWJTF+vW+CKPeBMD9XLs0nfL7k?=
- =?us-ascii?Q?fHc6Og+l+EG1KfVbUY0jZXrRP1m+AnUq3JtbnE6jHOQD2KDSGFCzhAA8Ktv3?=
- =?us-ascii?Q?1d5lPdrouC8d6AHx241Y07P3JYqEWvsdPYhRLnPDTva/maOYwOvia1+TfeaX?=
- =?us-ascii?Q?1iQ/SxbZqSG1LE06/7ppgdiUvjF742Sq2kDRC7jDM4nHQlcPydQo2QFCj4k+?=
- =?us-ascii?Q?+6jD7M/WgEZRIw3bkqFil8wFmZwLD36Lnp9Gy+6RZc8/YEkXKTJDcO/CPys/?=
- =?us-ascii?Q?54uo/t5Pve6X2rQJZguqWP9lVkue6LYreIXsfRxTLViCpOEBd32Pk6b5CG1V?=
- =?us-ascii?Q?KlsEPo5oV+YfFtjgjIUW93lC3A+QIhLH8iTGGU8RYI7BtWkTieKXdw7icDdy?=
- =?us-ascii?Q?7ZrD7wi8Oz0AhMJh/81le0MJ8hucK5qkXsGAd5o2H8YdiedxvA5H4QpvRVAY?=
- =?us-ascii?Q?D9O0+F+cIrGGaWWl4yGwvpfYtNIwWaZppuBMrqzaHI415T9ueKHZDaWtkwIx?=
- =?us-ascii?Q?l5smm68x6sFmcl6XzxiLx3Jmvz5jLPHQSU6rKJRsBGIUH3qJN2pj5R+58/mx?=
- =?us-ascii?Q?IjKtrNoTkCMM4qYT7DdhT/fRLzmNQjFFPvtU9p/+N4q7YsZdsIIaQGkB9sFx?=
- =?us-ascii?Q?Baya4MEBW77UH4Jdt54rqNCwStHfDY9+ppuMzcI5HegbNaZ+PPQSDv5ryVw2?=
- =?us-ascii?Q?xN4+s5XwzXJOcgghzxV8K2IzCShI3gw0/0EcFwRc?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0c8e266-73b6-4154-7af7-08da5b450647
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2022 09:35:24.4143
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ivejuijwqkQEm2mpb6AzqjcPuY4LTe5o86nnLzlfxqCndcqYFC5pgl2oqKNown7MqLu39pf054p+gJVG1/VteQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4655
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <65d972ed-31b4-5636-86a3-dabd5f25a3be@foss.st.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On Fri, Jul 01, 2022 at 11:00:28AM +0200, Arnaud POULIQUEN wrote:
+> Hello,
+> 
+> On 6/30/22 21:19, Michael S. Tsirkin wrote:
+> > On Wed, Jun 29, 2022 at 11:43:18AM -0600, Mathieu Poirier wrote:
+> >> Hi Anup,
+> >>
+> >> On Wed, Jun 08, 2022 at 10:43:34PM +0530, Anup Patel wrote:
+> >>> The rpmsg_probe() is broken at the moment because virtqueue_add_inbuf()
+> >>> fails due to both virtqueues (Rx and Tx) marked as broken by the
+> >>> __vring_new_virtqueue() function. To solve this, virtio_device_ready()
+> >>> (which unbreaks queues) should be called before virtqueue_add_inbuf().
+> >>>
+> >>> Fixes: 8b4ec69d7e09 ("virtio: harden vring IRQ")
+> >>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> >>> ---
+> >>>  drivers/rpmsg/virtio_rpmsg_bus.c | 6 +++---
+> >>>  1 file changed, 3 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+> >>> index 905ac7910c98..71a64d2c7644 100644
+> >>> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> >>> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> >>> @@ -929,6 +929,9 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> >>>  	/* and half is dedicated for TX */
+> >>>  	vrp->sbufs = bufs_va + total_buf_space / 2;
+> >>>  
+> >>> +	/* From this point on, we can notify and get callbacks. */
+> >>> +	virtio_device_ready(vdev);
+> >>> +
+> >>
+> >> Calling virtio_device_ready() here means that virtqueue_get_buf_ctx_split() can
+> >> potentially be called (by way of rpmsg_recv_done()), which will race with
+> >> virtqueue_add_inbuf().  If buffers in the virtqueue aren't available then
+> >> rpmsg_recv_done() will fail, potentially breaking remote processors' state
+> >> machines that don't expect their initial name service to fail when the "device"
+> >> has been marked as ready.
+> > 
+> > When you say available I am guessing you really need used.
+> > 
+> > With a non broken device you won't get a callback
+> > until some buffers have been used.
+> > 
+> > Or, if no used buffers are present then you will get another
+> > callback down the road.
+> 
+> In current implementation the Linux rpmsg_virtio driver allocates the
+> virtio buffers for the coprocessor rpmsg virtio device transmission and
+> then updates the virtio device status in shared memory to inform the
+> coprocessor that it is ready for inter-processor communication.
+> 
+> So from coprocessor perspective, when the virtio device is ready
+> (set to VIRTIO_CONFIG_S_DRIVER_OK), it can
+> start to get available buffers and send virtio buffers to the Linux.
+> 
+> With the patch proposed, the virtio is set to VIRTIO_CONFIG_S_DRIVER_OK
+> while no buffer are available for the coprocessor transmission.
+> 
+> I'm agree that, if the Linux rpmsg_virtio driver has not allocated the
+> buffer, the coprocessor will fail to get available virtio buffer for
+> communication and so has "just" to wait that some buffers are available
+> in the virtqueue.
+> 
+> But this change the behavior and can lead to an unexpected error case
+> for some legacy coprocessor firmware...
+> Should we take the risk that this legacy is no longer compatible?
+> 
+> 
+> That said regarding the virtio spec 1.1 chapter 3.1.1 [1], I also wonder
+> if the introduction of the virqueue broken flag is compliant with the
+> spec? 
+> But i guess this is probably a matter of interpretation...
+> 
+> " 
+> The driver MUST follow this sequence to initialize a device:
+> [...]
+> 7. Perform device-specific setup, including discovery of virtqueues for
+> the device, optional per-bus setup, reading and possibly writing the
+> device’s virtio configuration space, and population of virtqueues.
+> 8. Set the DRIVER_OK status bit. At this point the device is “live”.
+> "
+> 
+> My question is what means in point 7. "and population of virtqueues"?
+> 
+> In my interpretation the call of "virtqueue_add_inbuf()" populates the
+> RX virtqueue.
+> That would mean that calling virtqueue_add_inbuf before calling 
+> virtio_device_ready() should be possible.
+> 
+> Thanks,
+> Arnaud 
+> 
+> [1]https://docs.oasis-open.org/virtio/virtio/v1.1/csprd01/virtio-v1.1-csprd01.html#x1-920001
 
-Current logic only support main processor to stop/start the remote
-processor after rproc crash. However to SoC, such as i.MX8QM/QXP, the
-remote processor could do attach recovery after crash and trigger watchdog
-reboot. It does not need main processor to load image, or stop/start M4
-core.
+I think I agree. For example, the networking device uses "population" in this
+sense:
 
-Introduce two functions: rproc_attach_recovery, rproc_firmware_recovery
-for the two cases. Firmware recovery is as before, let main processor to
-help recovery, while attach recovery is recover itself withou help.
-To attach recovery, we only do detach and attach.
+	It is generally a good idea to keep the receive virtqueue as
+	fully populated as possible: if it runs out, network performance
+	will suffer.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/remoteproc/remoteproc_core.c | 62 +++++++++++++++++++---------
- 1 file changed, 43 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index ed374c8bf14a..ef5b9310bc83 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1884,6 +1884,45 @@ static int __rproc_detach(struct rproc *rproc)
- 	return 0;
- }
- 
-+static int rproc_attach_recovery(struct rproc *rproc)
-+{
-+	int ret;
-+
-+	ret = __rproc_detach(rproc);
-+	if (ret)
-+		return ret;
-+
-+	return __rproc_attach(rproc);
-+}
-+
-+static int rproc_boot_recovery(struct rproc *rproc)
-+{
-+	const struct firmware *firmware_p;
-+	struct device *dev = &rproc->dev;
-+	int ret;
-+
-+	ret = rproc_stop(rproc, true);
-+	if (ret)
-+		return ret;
-+
-+	/* generate coredump */
-+	rproc->ops->coredump(rproc);
-+
-+	/* load firmware */
-+	ret = request_firmware(&firmware_p, rproc->firmware, dev);
-+	if (ret < 0) {
-+		dev_err(dev, "request_firmware failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/* boot the remote processor up again */
-+	ret = rproc_start(rproc, firmware_p);
-+
-+	release_firmware(firmware_p);
-+
-+	return ret;
-+}
-+
- /**
-  * rproc_trigger_recovery() - recover a remoteproc
-  * @rproc: the remote processor
-@@ -1898,7 +1937,6 @@ static int __rproc_detach(struct rproc *rproc)
-  */
- int rproc_trigger_recovery(struct rproc *rproc)
- {
--	const struct firmware *firmware_p;
- 	struct device *dev = &rproc->dev;
- 	int ret;
- 
-@@ -1912,24 +1950,10 @@ int rproc_trigger_recovery(struct rproc *rproc)
- 
- 	dev_err(dev, "recovering %s\n", rproc->name);
- 
--	ret = rproc_stop(rproc, true);
--	if (ret)
--		goto unlock_mutex;
--
--	/* generate coredump */
--	rproc->ops->coredump(rproc);
--
--	/* load firmware */
--	ret = request_firmware(&firmware_p, rproc->firmware, dev);
--	if (ret < 0) {
--		dev_err(dev, "request_firmware failed: %d\n", ret);
--		goto unlock_mutex;
--	}
--
--	/* boot the remote processor up again */
--	ret = rproc_start(rproc, firmware_p);
--
--	release_firmware(firmware_p);
-+	if (rproc_has_feature(rproc, RPROC_FEAT_ATTACH_ON_RECOVERY))
-+		ret = rproc_attach_recovery(rproc);
-+	else
-+		ret = rproc_boot_recovery(rproc);
- 
- unlock_mutex:
- 	mutex_unlock(&rproc->lock);
--- 
-2.25.1
+
+> 
+> > 
+> > 
+> >>
+> >> What does make me curious though is that nobody on the remoteproc mailing list
+> >> has complained about commit 8b4ec69d7e09 breaking their environment... By now,
+> >> i.e rc4, that should have happened.  Anyone from TI, ST and Xilinx care to test this on
+> >> their rig?
+> >>
+> >> Thanks,
+> >> Mathieu
+> >>
+> >>>  	/* set up the receive buffers */
+> >>>  	for (i = 0; i < vrp->num_bufs / 2; i++) {
+> >>>  		struct scatterlist sg;
+> >>> @@ -983,9 +986,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
+> >>>  	 */
+> >>>  	notify = virtqueue_kick_prepare(vrp->rvq);
+> >>>  
+> >>> -	/* From this point on, we can notify and get callbacks. */
+> >>> -	virtio_device_ready(vdev);
+> >>> -
+> >>>  	/* tell the remote processor it can start sending messages */
+> >>>  	/*
+> >>>  	 * this might be concurrent with callbacks, but we are only
+> >>> -- 
+> >>> 2.34.1
+> >>>
+> >>
+> > 
 
