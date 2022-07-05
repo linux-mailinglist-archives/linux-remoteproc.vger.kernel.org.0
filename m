@@ -2,205 +2,93 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85D3566A41
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  5 Jul 2022 13:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3DA7566BA5
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  5 Jul 2022 14:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiGELxv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 5 Jul 2022 07:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S234336AbiGEMJV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 5 Jul 2022 08:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiGELxb (ORCPT
+        with ESMTP id S235276AbiGEMIs (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 5 Jul 2022 07:53:31 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD08BF51;
-        Tue,  5 Jul 2022 04:53:30 -0700 (PDT)
+        Tue, 5 Jul 2022 08:08:48 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E14310;
+        Tue,  5 Jul 2022 05:08:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1657022010; x=1688558010;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=t0jdRRxvBRqLaphgAV4C75lY4+jAufKtnXYqkuwxxi8=;
-  b=fFLIzI2kIIoofweoDoz6up5pUKnLdfq0yvJPv+fIW0nOIHBRQQuegEC8
-   3BaKIGe+e9oJUNXjr6fxSIaILtNgsSPG7pNxrNq3dypCAteDcQHGoiYLE
-   lC120GxLobXP6ekMejWTJWJwygHewyXfruTG0zPpdIKyE95ZhLaIiViYm
-   I=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 05 Jul 2022 04:53:30 -0700
+  t=1657022919; x=1688558919;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=JX4CqpG131f0B16O13AOq1/dT80ue2EUWs1TLwPquUY=;
+  b=ZMPqufs8mnni+HSUvbhQ93KsIeFtwKgXdEqpmUE59hrLpQw3sMu41mrG
+   AXiJrWi+7GOVyjutg6ZxGco2VSBRUUGyN2RCORDJCvOsbXmi/psBqkDF9
+   YkERp/hqivfzG1Nd7J2KcPHvp5Rp5JE2Q1NsuJXtpIdSxsWcuQ9ZZ2N+T
+   A=;
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 05 Jul 2022 05:08:39 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 04:53:30 -0700
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2022 05:08:39 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 5 Jul 2022 04:53:29 -0700
-Received: from [10.79.43.230] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 5 Jul 2022
- 04:53:27 -0700
-Subject: Re: [PATCH] remoteproc: qcom: pas: Add decrypt shutdown support for
- modem
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <dmitry.baryshkov@linaro.org>, <agross@kernel.org>,
-        <mathieu.poirier@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1653031684-14771-1-git-send-email-quic_sibis@quicinc.com>
- <Yr35Q2G8NNvYaI8M@builder.lan>
+ 15.2.986.22; Tue, 5 Jul 2022 05:08:38 -0700
+Received: from blr-ubuntu-87.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 5 Jul 2022 05:08:35 -0700
 From:   Sibi Sankar <quic_sibis@quicinc.com>
-Message-ID: <a4373b5d-fd01-9692-2660-792b5b84d08c@quicinc.com>
-Date:   Tue, 5 Jul 2022 17:23:24 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+To:     <bjorn.andersson@linaro.org>
+CC:     <agross@kernel.org>, <mathieu.poirier@linaro.org>,
+        <dmitry.baryshkov@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <konrad.dybcio@somainline.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [V3 0/7] Miscellaneous PAS fixes
+Date:   Tue, 5 Jul 2022 17:38:13 +0530
+Message-ID: <1657022900-2049-1-git-send-email-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <Yr35Q2G8NNvYaI8M@builder.lan>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hey Bjorn,
-Thanks for taking time to review the series.
+A collection of misc. fixes for the remoteproc PAS and sysmon driver.
 
-On 7/1/22 12:58 AM, Bjorn Andersson wrote:
-> On Fri 20 May 02:28 CDT 2022, Sibi Sankar wrote:
-> 
->> The initial shutdown request to modem on SM8450 SoCs would start the
->> decryption process and will keep returning errors until the modem shutdown
->> is complete. Fix this by retrying shutdowns in fixed intervals.
->>
->> Err Logs on modem shutdown:
->> qcom_q6v5_pas 4080000.remoteproc: failed to shutdown: -22
->> remoteproc remoteproc3: can't stop rproc: -22
->>
->> Fixes: 5cef9b48458d ("remoteproc: qcom: pas: Add SM8450 remoteproc support")
->> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> 
-> Looks reasonable, just two inquiries below.
-> 
->> ---
->>   drivers/remoteproc/qcom_q6v5_pas.c | 67 +++++++++++++++++++++++++++++++++++++-
->>   1 file changed, 66 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
->> index 6ae39c5653b1..d04c4b877e12 100644
->> --- a/drivers/remoteproc/qcom_q6v5_pas.c
->> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
->> @@ -8,6 +8,7 @@
->>    */
->>   
->>   #include <linux/clk.h>
->> +#include <linux/delay.h>
->>   #include <linux/firmware.h>
->>   #include <linux/interrupt.h>
->>   #include <linux/kernel.h>
->> @@ -29,6 +30,8 @@
->>   #include "qcom_q6v5.h"
->>   #include "remoteproc_internal.h"
->>   
->> +#define ADSP_DECRYPT_SHUTDOWN_DELAY_MS	100
->> +
->>   struct adsp_data {
->>   	int crash_reason_smem;
->>   	const char *firmware_name;
->> @@ -36,6 +39,7 @@ struct adsp_data {
->>   	unsigned int minidump_id;
->>   	bool has_aggre2_clk;
->>   	bool auto_boot;
->> +	bool decrypt_shutdown;
->>   
->>   	char **proxy_pd_names;
->>   
->> @@ -65,6 +69,7 @@ struct qcom_adsp {
->>   	unsigned int minidump_id;
->>   	int crash_reason_smem;
->>   	bool has_aggre2_clk;
->> +	bool decrypt_shutdown;
->>   	const char *info_name;
->>   
->>   	struct completion start_done;
->> @@ -128,6 +133,20 @@ static void adsp_pds_disable(struct qcom_adsp *adsp, struct device **pds,
->>   	}
->>   }
->>   
->> +static int adsp_decrypt_shutdown(struct qcom_adsp *adsp)
->> +{
->> +	int retry_num = 50;
-> 
-> Seems unsigned to me.
+V3:
+ * Fixup misc. suggestions and rename to adsp_shutdown_poll_decrypt() [Bjorn]
+ * Pick up another lone sysmon fix from the list with R-b.
 
-ack
+V2:
+ * Add misc. sysmon fix.
+ * Dropping patch 1 and 6 from V1.
 
-> 
->> +	int ret = -EINVAL;
->> +
->> +	while (retry_num && ret) {
->> +		msleep(ADSP_DECRYPT_SHUTDOWN_DELAY_MS);
->> +		ret = qcom_scm_pas_shutdown(adsp->pas_id);
->> +		retry_num--;
->> +	}
-> 
-> Will qcom_scm_pas_shutdown() ever return any other errors than -EINVAL?
-> 
-> Would it make sense to make this:
-> 
-> 	do {
-> 		...;
-> 	} while (ret == -EINVAL && --retry_num);
-> 
+Sibi Sankar (2):
+  remoteproc: qcom: pas: Add decrypt shutdown support for modem
+  remoteproc: sysmon: Wait for SSCTL service to come up
 
-Just checking on ret would cover the -EINVAL case as well but like you
-said pas_shutdown() won't return any other error. So I'll just stick
-with your suggestion.
+Siddharth Gupta (5):
+  remoteproc: qcom: pas: Mark va as io memory
+  remoteproc: qcom: pas: Mark devices as wakeup capable
+  remoteproc: qcom: pas: Check if coredump is enabled
+  remoteproc: q6v5: Set q6 state to offline on receiving wdog irq
+  remoteproc: sysmon: Send sysmon state only for running rprocs
 
->> +
->> +	return ret;
->> +}
->> +
->>   static int adsp_unprepare(struct rproc *rproc)
->>   {
->>   	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
->> @@ -249,6 +268,9 @@ static int adsp_stop(struct rproc *rproc)
->>   		dev_err(adsp->dev, "timed out on wait\n");
->>   
->>   	ret = qcom_scm_pas_shutdown(adsp->pas_id);
->> +	if (ret && adsp->decrypt_shutdown)
->> +		ret = adsp_decrypt_shutdown(adsp);
->> +
->>   	if (ret)
->>   		dev_err(adsp->dev, "failed to shutdown: %d\n", ret);
->>   
->> @@ -459,6 +481,7 @@ static int adsp_probe(struct platform_device *pdev)
->>   	adsp->pas_id = desc->pas_id;
->>   	adsp->has_aggre2_clk = desc->has_aggre2_clk;
->>   	adsp->info_name = desc->sysmon_name;
->> +	adsp->decrypt_shutdown = desc->decrypt_shutdown;
->>   	platform_set_drvdata(pdev, adsp);
->>   
->>   	device_wakeup_enable(adsp->dev);
->> @@ -533,6 +556,7 @@ static const struct adsp_data adsp_resource_init = {
->>   		.pas_id = 1,
->>   		.has_aggre2_clk = false,
->>   		.auto_boot = true,
->> +		.decrypt_shutdown = false,
-> 
-> With all these booleans, I would prefer if we cleaned it up to not list
-> the disabled options. That would make it quicker to spot which features
-> are actually enabled for each remoteproc.
+ drivers/remoteproc/qcom_q6v5.c     |  4 +++
+ drivers/remoteproc/qcom_q6v5_pas.c | 53 ++++++++++++++++++++++++++++++++++++--
+ drivers/remoteproc/qcom_sysmon.c   | 16 ++++++++++--
+ 3 files changed, 69 insertions(+), 4 deletions(-)
 
-ack and ack to the adsp_shutdown_poll_decrypt() as well.
+-- 
+2.7.4
 
-> 
-> Regards,
-> Bjorn
-> 
