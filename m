@@ -2,98 +2,114 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32DA8574726
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 14 Jul 2022 10:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E907574964
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 14 Jul 2022 11:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbiGNIhn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 14 Jul 2022 04:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
+        id S238441AbiGNJpt (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 14 Jul 2022 05:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236173AbiGNIhG (ORCPT
+        with ESMTP id S237825AbiGNJpc (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 14 Jul 2022 04:37:06 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D6C3ED7B
-        for <linux-remoteproc@vger.kernel.org>; Thu, 14 Jul 2022 01:37:02 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id e28so1651139lfj.4
-        for <linux-remoteproc@vger.kernel.org>; Thu, 14 Jul 2022 01:37:02 -0700 (PDT)
+        Thu, 14 Jul 2022 05:45:32 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5111260F
+        for <linux-remoteproc@vger.kernel.org>; Thu, 14 Jul 2022 02:45:31 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id t1so1882879lft.8
+        for <linux-remoteproc@vger.kernel.org>; Thu, 14 Jul 2022 02:45:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=gaDZ6UkvWmoGLPkb5BiwWKXrxZqJRKNx4T2fn6EvGAM0nTMCvTzxyP4EuJ913j6Iv+
-         SvMX4/pvx4tmhR/0cDdL9pbkcCOAwg/dZQZJjKvYYHG5zoS6pTup2xrhZON7aPFodE61
-         jbdbe7f5x1iqsxnbqtRGk5VVyYe+GfguXyW53v/Jtk7m9BRLrugVau1mwPBhoM15I1rO
-         FgfB/JoMGOti2QefdfOSOcdpcygQeBiN0idXo3yCL6hW5Cz+uWpratECqWcSagxAB5xP
-         zT+sUZ3pJE3RjDVpLi/6z/hZ8yL43zLlaxwdm4ILJ3e9Bke6wVp5k2l7GAKtdogOGzmZ
-         5LQg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=U7bE4AFFaqlBpYGWGp2bDcGNToCNNNh+R2dU+aim+1I=;
+        b=aAacLcEaAKm5bx3USPkdVVrwv0zguEu8rs1lY5F6lNOeMAWK+8D/A9m4WBr/44c1XH
+         LjpTQrqg2GOuzh62iX8vVHYvrvM1BmWkK0TdoeVHMYGqu7iNBK9Pb2WlWt2yiiW55k7O
+         a1Uewv3Eh3QXfplrqJHwnIuip7m5R6MSqvAol32na8mvx6P5EFZjqtYZI27p/kvwznqU
+         hFCVjuNsjXUEC8J4Oz2Br3ZlaUgC47Cmx086b+Cinv7CqI2/LLhOBboXUA1tbSATjM0q
+         iRvtW5lwOF31ZgAmE0CDH0K6oNH0tLR1IJyD/s/wWqaUMm1KTImvgYg5uALvwAQ1+2Oz
+         3/dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
-        b=SaOB5D2EIRLS9l+CWgwe1A9holddf5TedDh53PcvJ2iZhxsRUqShDcYVs0IgOA4xcu
-         Y0gEbwDUeMtxM+ml6188sm9QAFOVXDZHDW+mfZB7QdmdZ4XBuMb6Uze650ZwjTUaFJmd
-         +ohE8qTIzxWDL55PUMveKzevzotR0xPxKK+9REdOc+SDaoGgLxZQsUMrabn5RGQPEWMV
-         LBGxLkM9CKp3zvgs2Z5gFLMI8kztteLEwD2zsP3LuC+vIUoYYbO4uEiePpvlZXMh4Lh7
-         LEWnuTwZwT9EB+qalgYF8f7KM3fb74/qFwtwiLubUJH/oQ8w2OmlqGBPKcYbvfYB+l/g
-         TZ8Q==
-X-Gm-Message-State: AJIora8DtoCB3nlOrxOZLRIexBTuTeyIFq8gDushgm8FsdckEyI7TOrN
-        q48TWV3+XC8vF8CEYa/1IekBwo/ky/jWFBgYogA=
-X-Google-Smtp-Source: AGRyM1vX4Zd9WIWDxqKGtP81mt11peMiDiT310/qUqT5enM4eeA2HoIqQaHp0s5sIeDBZVZu8TIFwya2pg7lDHDFDeo=
-X-Received: by 2002:a05:6512:4004:b0:48a:12dc:7f63 with SMTP id
- br4-20020a056512400400b0048a12dc7f63mr2033540lfb.131.1657787820892; Thu, 14
- Jul 2022 01:37:00 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=U7bE4AFFaqlBpYGWGp2bDcGNToCNNNh+R2dU+aim+1I=;
+        b=lQYoCPgtS1ByDoT4FlxbkiipxWGjgbqDrW+G8yZKptmhhsJvb+IaAv1wHbBQ/o30m5
+         tSCX222ehdnHBk3s/2xylfBHqH3q8EZe3yAv9zl0Joo/nBu6E4ukWROJWDumNOUEidmr
+         GhClbku0TF+FVqbmeJVN2STaGqkmWqoPiH+REs+VNo3+z7Rp1DoQXKJEk4wkm8VAr15X
+         gAUUqvQRbJ2XCFW3XjSNO+XYcEIvR7k+hyMJ3xfyff76TNQxNiIhcWeHInQxTIwXR7TE
+         2LreoZ7q3bk5jZyJ7s7F/gmyO+TwlytrML/t4kNvSunN+7Pj09kHe9tehOZ2hkQ1W3jp
+         Bv6w==
+X-Gm-Message-State: AJIora8hSlndIZHmZb1WDr33Q0PJ14zyDdv0GrQMTQhRPu6D/D14mrNo
+        0jFfTUW6YRzrLQvjyRPSz2PhGA==
+X-Google-Smtp-Source: AGRyM1vGpON0DG4ORvaWqjTmXe+q+KTMeS1n2R2I9F705IDWK+oapuyCfjSrtWQhaNSEqjPpmb36Ug==
+X-Received: by 2002:a05:6512:139a:b0:48a:1a73:8adc with SMTP id p26-20020a056512139a00b0048a1a738adcmr757796lfa.226.1657791929867;
+        Thu, 14 Jul 2022 02:45:29 -0700 (PDT)
+Received: from [10.0.0.8] (fwa5da9-171.bb.online.no. [88.93.169.171])
+        by smtp.gmail.com with ESMTPSA id 10-20020a05651c008a00b0025d2d495dc6sm185480ljq.66.2022.07.14.02.45.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Jul 2022 02:45:29 -0700 (PDT)
+Message-ID: <4936df27-e5b5-8ef5-5831-82fdf414ea90@linaro.org>
+Date:   Thu, 14 Jul 2022 11:45:27 +0200
 MIME-Version: 1.0
-Received: by 2002:a2e:9041:0:0:0:0:0 with HTTP; Thu, 14 Jul 2022 01:37:00
- -0700 (PDT)
-Reply-To: abdwabbomaddahm@gmail.com
-From:   Abdwabbo Maddah <abdwabbomaddah746@gmail.com>
-Date:   Thu, 14 Jul 2022 09:37:00 +0100
-Message-ID: <CAFC-3ieta-vbGq7=-xp9Wgp2Sr8SYhFWTPWR2J6JsyQ_pZJxLQ@mail.gmail.com>
-Subject: Get back to me... URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/6] arm64: dts: qcom: msm8916: Drop MSS fallback
+ compatible
+Content-Language: en-US
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sireesh Kodali <sireeshkodali1@gmail.com>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220712124421.3129206-1-stephan.gerhold@kernkonzept.com>
+ <20220712124421.3129206-2-stephan.gerhold@kernkonzept.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220712124421.3129206-2-stephan.gerhold@kernkonzept.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:12a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4960]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abdwabbomaddah746[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [abdwabbomaddah746[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
--- 
-Dear,
-I had sent you a mail but i don't think you received it that's why am
-writing you again.It is important you get back to me as soon as you
-can.
-Abd-Wabbo Maddah
+On 12/07/2022 14:44, Stephan Gerhold wrote:
+> MSM8916 was originally using the "qcom,q6v5-pil" compatible for the
+> MSS remoteproc. Later it was decided to use SoC-specific compatibles
+> instead, so "qcom,msm8916-mss-pil" is now the preferred compatible.
+> 
+> Commit 60a05ed059a0 ("arm64: dts: qcom: msm8916: Add MSM8916-specific
+> compatibles to SCM/MSS") updated the MSM8916 device tree to make use of
+> the new compatible but still kept the old "qcom,q6v5-pil" as fallback.
+> 
+> This is inconsistent with other SoCs and conflicts with the description
+> in the binding documentation (which says that only one compatible should
+> be present). Also, it has no functional advantage since older kernels
+> could not handle this DT anyway (e.g. "power-domains" in the MSS node is
+> only supported by kernels that also support "qcom,msm8916-mss-pil").
+> 
+> Make this consistent with other SoCs by using only the
+> "qcom,msm8916-mss-pil" compatible.
+> 
+> Fixes: 60a05ed059a0 ("arm64: dts: qcom: msm8916: Add MSM8916-specific compatibles to SCM/MSS")
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> ---
+
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof
