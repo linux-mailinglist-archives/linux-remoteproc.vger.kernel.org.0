@@ -2,64 +2,80 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03B95759A8
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 15 Jul 2022 04:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A67575AD7
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 15 Jul 2022 07:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbiGOCsJ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 14 Jul 2022 22:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
+        id S229603AbiGOFSn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 15 Jul 2022 01:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbiGOCsI (ORCPT
+        with ESMTP id S229579AbiGOFSm (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 14 Jul 2022 22:48:08 -0400
-X-Greylist: delayed 350 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Jul 2022 19:48:07 PDT
-Received: from mailgw22.onamae.ne.jp (mailgw22-242.onamae.ne.jp [118.27.95.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDFF65D5D
-        for <linux-remoteproc@vger.kernel.org>; Thu, 14 Jul 2022 19:48:07 -0700 (PDT)
-Received: from www100.onamae.ne.jp (unknown [172.16.42.212])
-        by mailgw22.onamae.ne.jp (Postfix) with ESMTP id C294018004A35E
-        for <linux-remoteproc@vger.kernel.org>; Fri, 15 Jul 2022 11:42:15 +0900 (JST)
-Received: by www100.onamae.ne.jp (Postfix, from userid 10413)
-        id C2076106329EC; Fri, 15 Jul 2022 11:42:15 +0900 (JST)
-To:     linux-remoteproc@vger.kernel.org
-Subject: =?UTF-8?B?44CQ5qCq5byP5Lya56S+44OR44K344OV44Kj44OD44Kv44OV44Kp44Os44K5?=  =?UTF-8?B?44OI44Oe44O844Kx44OG44Kj44Oz44Kw44CR44GK5ZWP44GE5ZCI44KP44Gb?=
-X-PHP-Script: www.pacific-fm.co.jp/index.php for 185.220.103.117
-X-PHP-Filename: /home/r0094398/public_html/pacific-fm.co.jp/index.php REMOTE_ADDR: 185.220.103.117
-Date:   Fri, 15 Jul 2022 02:42:15 +0000
-From:   =?UTF-8?B?5qCq5byP5Lya56S+44OR44K344OV44Kj44OD44Kv44OV44Kp44Os44K544OI?=
-         =?UTF-8?B?44Oe44O844Kx44OG44Kj44Oz44Kw?= 
-        <shunsuke.hori@pacific-fm.co.jp>
-Reply-To: shunsuke.hori@pacific-fm.co.jp
-Message-ID: <mnEwqrEKQlkxDOivfZ1zCBJwAJ8RVOU2WfJA4DFWA@www.pacific-fm.co.jp>
-X-Mailer: PHPMailer 6.6.0 (https://github.com/PHPMailer/PHPMailer)
+        Fri, 15 Jul 2022 01:18:42 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A04678DDF;
+        Thu, 14 Jul 2022 22:18:29 -0700 (PDT)
+X-UUID: 966e386179a44cd09227cb36ffe41646-20220715
+X-CID-UNFAMILIAR: 1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.8,REQID:3b012936-3323-4a76-a289-338e7d945338,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:100
+X-CID-INFO: VERSION:1.1.8,REQID:3b012936-3323-4a76-a289-338e7d945338,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:100
+X-CID-META: VersionHash:0f94e32,CLOUDID:be470d33-b9e4-42b8-b28a-6364427c76bb,C
+        OID:8d3c919cfca6,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 966e386179a44cd09227cb36ffe41646-20220715
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1561564; Fri, 15 Jul 2022 13:18:24 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 15 Jul 2022 13:18:23 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Jul 2022 13:18:22 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v1 0/2] Add support for MT8188 SCP
+Date:   Fri, 15 Jul 2022 13:18:19 +0800
+Message-ID: <20220715051821.30707-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_95,
-        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,SPF_HELO_NONE,SPF_NONE,
-        TVD_SPACE_RATIO_MINFP,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-【株式会社パシフィックフォレストマーケティング】のWebサイトより、
-下記の内容でお問い合わせを受け付けました。
 
-法人名(組織名) :💝 Catherine want to meet you! Click Here: https://letsg0dancing.page.link/go?fcx 💝
-氏名 :52rdz1
-ふりがな :9wnsz1
-TEL :793420935763
-メールアドレス :linux-remoteproc@vger.kernel.org
+Tinghan Shen (2):
+  dt-bindings: remoteproc: mediatek: Add binding for mt8188 scp
+  remoteproc: Support MT8188 SCP
 
-内容:
-ppwl5n
+ .../devicetree/bindings/remoteproc/mtk,scp.yaml     |  2 ++
+ drivers/remoteproc/mtk_scp.c                        | 13 +++++++++++++
+ 2 files changed, 15 insertions(+)
 
---
-株式会社パシフィックフォレストマーケティング
-〒7812110 高知県吾川郡いの町3175
-TEL : 123-456-7890
-FAX : 123-456-7890
+-- 
+2.18.0
+
