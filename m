@@ -2,96 +2,79 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B27FB578835
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 18 Jul 2022 19:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FD9578A21
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 18 Jul 2022 21:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234314AbiGRRTQ (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 18 Jul 2022 13:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S234287AbiGRTBj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 18 Jul 2022 15:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233910AbiGRRTP (ORCPT
+        with ESMTP id S234960AbiGRTBa (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 18 Jul 2022 13:19:15 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104F51FCF9
-        for <linux-remoteproc@vger.kernel.org>; Mon, 18 Jul 2022 10:19:15 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id a15so12436236pjs.0
-        for <linux-remoteproc@vger.kernel.org>; Mon, 18 Jul 2022 10:19:15 -0700 (PDT)
+        Mon, 18 Jul 2022 15:01:30 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0A02FFD1
+        for <linux-remoteproc@vger.kernel.org>; Mon, 18 Jul 2022 12:01:18 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id a14-20020a0568300b8e00b0061c4e3eb52aso9969088otv.3
+        for <linux-remoteproc@vger.kernel.org>; Mon, 18 Jul 2022 12:01:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6AlSG11Xz0KEmY1J4qxRxusy/iUb0jY7LfF1OTYlmoE=;
-        b=vEheWttEDztzn0wX59F2KAGkreCbHs3di+tKqkl4IAPJ8k+nkONjCaOPX0ur9T4LFn
-         HrVp5kPLFewdY8BqiqJF/XavfQqqwVJQWl6AOBEy+YbzNGvJwMKXg6qBhrucJC1j/d2f
-         /eixL9KXtAUfWaEZ6j5QcDUsb1pTei0QpfJACiz2a6oePiDheULjMRKUm+wzPiSz6E4w
-         0ZexggTDJG0McCTRtrAfYvWd0L88p05aYt0yWRNZGz/f1isLq+nSOc9bpNoaOfCzhY7g
-         YNbtNy9apzKYpB55t8+rdEKFWbEX3NqHfi3QUzYz5acc7L66jsN9JI8C3C/T5ZcpnnRY
-         PSMQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
+        b=IQXHlBQ3jHSYUTt89EYBBYMpS/rXYtHBaNUJ6e2ZzB07/ETpvOJM0/ZijryokIEfDh
+         oJG0jiachEiIldTcksV5XzU+dy3csOVeMrzVRYAIpdf4PUrGYfI/KNNvcLIWjvmc8oHa
+         yWKlPWKnOFkuEw2Mq2CzZYpqcRK9kJ+LygeUXE0izxh4s3I+nauj1w40rP+480vJCi+X
+         rAPSoEvo8wXV23cydMjOZnuzBivYToT/OwjRuq1iqX/8Isb8Rqougy46FnOdoQuh9Z/u
+         z7xKihQATs9EIIDqpmGAQl/2n//vpMk3ZDpLHQioaLk/1hVBrL4som/CgeyT77yPFwbn
+         VU6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6AlSG11Xz0KEmY1J4qxRxusy/iUb0jY7LfF1OTYlmoE=;
-        b=tsASfpqvn5K2qG4y/N+Wr3vmp1JusOhoLHDYfPggisBj2xGHrJxTXXeANWttHtyvU+
-         1uNZWySaC4YF19QM1wltFhNNe58+4y4iQCWHrbUBD9t17GiNbZurXrRCndQqH2S2Y1LI
-         bCrdbQJ/IExS9NZHoHz5kUyJDAhJs0837R7fQL4ntq+9Yv1hmnTTePZALAacdKe/Njyn
-         FZkdZ6t/R2OmFGFwNc5x+ne7G/nNlss3e+vwiN+QFYl2ms1Bs5Z46VV2EW7g3fpoRsPt
-         Ugaa8Yec9VM6f3uLWxyVAIZnr1QvWscSpgBLgoaa1UnnB0kUA8j6MZODtNwvB8UG71HL
-         FpPA==
-X-Gm-Message-State: AJIora/T3EL3nNQ+WYy2NdbrhVkb+o+U3FOs6Zo24UZbsXlqJ2VFVVsV
-        xO5DIs/RmohhuahnmA+FKTlrGA==
-X-Google-Smtp-Source: AGRyM1t9xo/AS/NKpz2t46SlZm8sa/vdqDfuyTscDK82ci703AzuOy6ziJl8eg57k0SFP6nQ2Qy72A==
-X-Received: by 2002:a17:90b:3d85:b0:1f0:7355:734 with SMTP id pq5-20020a17090b3d8500b001f073550734mr34853999pjb.24.1658164754519;
-        Mon, 18 Jul 2022 10:19:14 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id a20-20020aa794b4000000b0052abfc4b4a4sm9830384pfl.12.2022.07.18.10.19.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Jul 2022 10:19:13 -0700 (PDT)
-Date:   Mon, 18 Jul 2022 11:19:11 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v1 0/2] Add support for MT8188 SCP
-Message-ID: <20220718171911.GA3331732@p14s>
-References: <20220715051821.30707-1-tinghan.shen@mediatek.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
+        b=etbpstyDDWCZCs7VIArO47aBUnJwOR5SsCNrPZtF2Xny8cbGSdsVLdwiWTw3IIJtd2
+         9bDtGO8RxlV2j2s32dgNBdGCHTe5mI9DHqnmCdE5owjXidrERPbL38Xd8uoL8WVUhiLH
+         ow0cy3YxmA4YUdiTxFBEGy5X8NdWPyR8A83SwalROjlTfxtS4HS/HvxBcqo7OrYgZfdb
+         3sZ/zzGR3SF4JYGELMAZdyCmOR47nOk0D3d0nHcDaCo8G3yvRmrZ+bCgzSEbw13kjiyi
+         Pqd95qyiKAuH6mJ2TjdyqVrWoWvFO9xU3spbqMCDVGlZM13SxSJtFPlNCU0yDH0zJ1Z6
+         hw3Q==
+X-Gm-Message-State: AJIora9YnOtQc9u7EI3s3JV9DS0jWYL30OSb7belk9k57TWDzZriQ37F
+        I5Rs6JTea/YHY5l5VsYoJggj0EKneeouHST6FdFnKiut3NtJaQ==
+X-Google-Smtp-Source: AGRyM1sOF4caZ/Mzb7i1HwUB8dyXYAmjf9y+Pd1nVHRKiUHeMR6opOrMc10oZNu5DLkN2HS0cpkKNGEh0T+MU99Jmes=
+X-Received: by 2002:a81:5747:0:b0:31d:1bb8:65b7 with SMTP id
+ l68-20020a815747000000b0031d1bb865b7mr30830046ywb.168.1658170865217; Mon, 18
+ Jul 2022 12:01:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220715051821.30707-1-tinghan.shen@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6919:4004:b0:cc:50ff:b3d8 with HTTP; Mon, 18 Jul 2022
+ 12:01:04 -0700 (PDT)
+Reply-To: lilywilliam989@gmail.com
+From:   Lily William <sgtalberts@gmail.com>
+Date:   Mon, 18 Jul 2022 11:01:04 -0800
+Message-ID: <CALPTejMFgL0Bg7jCKa7j+5KxVv_jnSM4ZPq-QhHCiUpG_ZswsQ@mail.gmail.com>
+Subject: Hi Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, Jul 15, 2022 at 01:18:19PM +0800, Tinghan Shen wrote:
-> 
-> Tinghan Shen (2):
->   dt-bindings: remoteproc: mediatek: Add binding for mt8188 scp
->   remoteproc: Support MT8188 SCP
-> 
->  .../devicetree/bindings/remoteproc/mtk,scp.yaml     |  2 ++
->  drivers/remoteproc/mtk_scp.c                        | 13 +++++++++++++
->  2 files changed, 15 insertions(+)
+Hi Dear,
 
-I have applied this set.
+My name is Dr Lily William from the United States.I am a French and
+American nationality (dual) living in the U.S and sometimes in France
+for Work Purpose.
 
-Thanks,
-Mathieu
+I hope you consider my friend request. I will share some of my pics
+and more details about myself when I get your response.
 
-> 
-> -- 
-> 2.18.0
-> 
+Thanks
+
+With love
+Lily
