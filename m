@@ -2,154 +2,112 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAEF57AF5D
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Jul 2022 05:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9373257C03B
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 21 Jul 2022 00:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242125AbiGTDJg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 19 Jul 2022 23:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S229615AbiGTWqM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 20 Jul 2022 18:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241939AbiGTDI5 (ORCPT
+        with ESMTP id S229592AbiGTWqL (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 19 Jul 2022 23:08:57 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9331145;
-        Tue, 19 Jul 2022 20:06:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R221e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=37;SR=0;TI=SMTPD_---0VJux9Mt_1658286371;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VJux9Mt_1658286371)
-          by smtp.aliyun-inc.com;
-          Wed, 20 Jul 2022 11:06:13 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wed, 20 Jul 2022 18:46:11 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8761F13CF6;
+        Wed, 20 Jul 2022 15:46:10 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id 125so57124iou.6;
+        Wed, 20 Jul 2022 15:46:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7fJqAHYv/e5MRGfwQS2QwxmL0W6+8ciRB/YwHGWHQFk=;
+        b=VMM8r+XSwoUERuLHe3pAgYxHM7zsr851aE8TNrwfstEOMkDcXB9ARFBRSY1JCI1Q4J
+         q8VeNQ0z56Fe7RC2tWioMkwbPT7mu3+Apo1HlrS73ugfODnlvLR0SkTlp1YV3DbYT4xw
+         III54UGyPpR/fFcaW64A7IjXOBf8+l66fcsmffNG0tPROyZCSn44uYAPqHY97gsTdukL
+         RpzGs0RPPbUbaNM9jqSvoaKtlB+ZGAKyGrjwphJ/ypo019bR1lfX7EQ3v2FKjdRsyEyB
+         GPuM9+CQyxPTv2ExzJqk2lDMr/p1cbHZvpkB8TCIXXlKSiH2q4krF1DMAnyFPGjBtrOp
+         CZvQ==
+X-Gm-Message-State: AJIora+oS0gFGwuhXLLvKCj+WwLwo7IH+JuesNiqMICoPG8NgL/JwODl
+        lIO99LeP0D/FqmAJxeNybA==
+X-Google-Smtp-Source: AGRyM1sMJiRBS/KvsrXJPU6XhiUJ7qH5dRdaof9vxE2dzv6IVnCLk1o/OGzQuanFv/qLBna90S6X1g==
+X-Received: by 2002:a05:6602:2d4f:b0:67b:f7c9:a3e with SMTP id d15-20020a0566022d4f00b0067bf7c90a3emr9887172iow.77.1658357169768;
+        Wed, 20 Jul 2022 15:46:09 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id i20-20020a023b54000000b0033f4b1c2151sm53341jaf.154.2022.07.20.15.46.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jul 2022 15:46:09 -0700 (PDT)
+Received: (nullmailer pid 4120175 invoked by uid 1000);
+        Wed, 20 Jul 2022 22:46:08 -0000
+Date:   Wed, 20 Jul 2022 16:46:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        linux-um@lists.infradead.org, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, bpf@vger.kernel.org,
-        kangjie.xu@linux.alibaba.com
-Subject: [PATCH v12 40/40] virtio_net: support set_ringparam
-Date:   Wed, 20 Jul 2022 11:04:36 +0800
-Message-Id: <20220720030436.79520-41-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20220720030436.79520-1-xuanzhuo@linux.alibaba.com>
-References: <20220720030436.79520-1-xuanzhuo@linux.alibaba.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sireesh Kodali <sireeshkodali1@gmail.com>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] dt-bindings: remoteproc: qcom,q6v5: Move MSM8916
+ to schema
+Message-ID: <20220720224608.GA4107504-robh@kernel.org>
+References: <20220718140344.1831731-1-stephan.gerhold@kernkonzept.com>
+ <20220718140344.1831731-3-stephan.gerhold@kernkonzept.com>
 MIME-Version: 1.0
-X-Git-Hash: 366032b2ffac
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220718140344.1831731-3-stephan.gerhold@kernkonzept.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Support set_ringparam based on virtio queue reset.
+On Mon, Jul 18, 2022 at 04:03:41PM +0200, Stephan Gerhold wrote:
+> qcom,q6v5.txt covers multiple SoCs with quite different binding
+> requirements. Converting this into one DT schema would require
+> several if statements, making the DT schema overall harder to
+> read and understand.
+> 
+> To avoid this, follow the example of SC7180/SC7280 and split
+> "qcom,msm8916-mss-pil" (and the equivalent deprecated "qcom,q6v5-pil"
+> compatible) into a separate DT schema. The schema is somewhat based
+> on the one for SC7180/SC7280 but adjusted for the old platforms.
+> 
+> Compared to the old plain text bindings, add missing documentation for
+> the "bam-dmux" subnode and recommend one particular approach to specify
+> the MBA/MPSS "memory-region" (the other one is marked as deprecated).
+> 
+> Cc: Sireesh Kodali <sireeshkodali1@gmail.com>
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> ---
+> Changes in v2:
+>   - Add blank lines between top-level properties
+>   - Drop "deprecated" in "oneOf" list, it is not clear if this is valid
+>     and it should be redundant since the properties itself are already
+>     marked as "deprecated"
+> ---
+> Like Sibi's patch series for SC7180/SC7820 [1] this is somewhat related
+> to Sireesh's series that converts all of qcom,q6v5.txt [2] (with a lot
+> of if statements). However, this series focuses on MSM8916/MSM8974 (or
+> actually MSM8909) only.
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/1657020721-24939-1-git-send-email-quic_sibis@quicinc.com/
+> [2]: https://lore.kernel.org/linux-arm-msm/20220511161602.117772-7-sireeshkodali1@gmail.com/
 
-Users can use ethtool -G eth0 <ring_num> to modify the ring size of
-virtio-net.
+Is that one abandoned or do we just get to review both approaches 
+without coordination?
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
----
- drivers/net/virtio_net.c | 48 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+I think you need a common q6v5 schema here with all the common 
+properties. Having the same property name with the type defined multiple 
+times is not great. In fact, I'm working on a check for finding those.
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index d1e6940b46d8..59fc48c60403 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -2329,6 +2329,53 @@ static void virtnet_get_ringparam(struct net_device *dev,
- 	ring->tx_pending = virtqueue_get_vring_size(vi->sq[0].vq);
- }
- 
-+static int virtnet_set_ringparam(struct net_device *dev,
-+				 struct ethtool_ringparam *ring,
-+				 struct kernel_ethtool_ringparam *kernel_ring,
-+				 struct netlink_ext_ack *extack)
-+{
-+	struct virtnet_info *vi = netdev_priv(dev);
-+	u32 rx_pending, tx_pending;
-+	struct receive_queue *rq;
-+	struct send_queue *sq;
-+	int i, err;
-+
-+	if (ring->rx_mini_pending || ring->rx_jumbo_pending)
-+		return -EINVAL;
-+
-+	rx_pending = virtqueue_get_vring_size(vi->rq[0].vq);
-+	tx_pending = virtqueue_get_vring_size(vi->sq[0].vq);
-+
-+	if (ring->rx_pending == rx_pending &&
-+	    ring->tx_pending == tx_pending)
-+		return 0;
-+
-+	if (ring->rx_pending > vi->rq[0].vq->num_max)
-+		return -EINVAL;
-+
-+	if (ring->tx_pending > vi->sq[0].vq->num_max)
-+		return -EINVAL;
-+
-+	for (i = 0; i < vi->max_queue_pairs; i++) {
-+		rq = vi->rq + i;
-+		sq = vi->sq + i;
-+
-+		if (ring->tx_pending != tx_pending) {
-+			err = virtnet_tx_resize(vi, sq, ring->tx_pending);
-+			if (err)
-+				return err;
-+		}
-+
-+		if (ring->rx_pending != rx_pending) {
-+			err = virtnet_rx_resize(vi, rq, ring->rx_pending);
-+			if (err)
-+				return err;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static bool virtnet_commit_rss_command(struct virtnet_info *vi)
- {
- 	struct net_device *dev = vi->dev;
-@@ -2816,6 +2863,7 @@ static const struct ethtool_ops virtnet_ethtool_ops = {
- 	.get_drvinfo = virtnet_get_drvinfo,
- 	.get_link = ethtool_op_get_link,
- 	.get_ringparam = virtnet_get_ringparam,
-+	.set_ringparam = virtnet_set_ringparam,
- 	.get_strings = virtnet_get_strings,
- 	.get_sset_count = virtnet_get_sset_count,
- 	.get_ethtool_stats = virtnet_get_ethtool_stats,
--- 
-2.31.0
-
+Rob
