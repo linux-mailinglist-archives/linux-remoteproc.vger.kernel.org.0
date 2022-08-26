@@ -2,127 +2,169 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5AE25A222F
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 26 Aug 2022 09:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA605A2725
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 26 Aug 2022 13:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245538AbiHZHpl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 26 Aug 2022 03:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S1343673AbiHZLxg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 26 Aug 2022 07:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245506AbiHZHpb (ORCPT
+        with ESMTP id S232994AbiHZLxf (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 26 Aug 2022 03:45:31 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CA88E0D7;
-        Fri, 26 Aug 2022 00:45:30 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27Q7Wdra023548;
-        Fri, 26 Aug 2022 07:45:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ETkj+QXTCULceRPEha9GhQ71BYIoHHYCDlJY3zP5qIs=;
- b=MQAwx0HQ/6SekDZplIFA1FXuWJsCP14YleGxwuZRl50UADeby6bXZZw/8R2NdlQBCSLn
- eEvutKJ0esCirP+MViY7mj21QnjwBXosfc8ElX/qxg0cGWb4GzVyLgsqU5ktebXT+eSN
- SlT4LjdwABQva01jwzcSFaF+syRruwNFptr6BAoYlnj9deFan8UTRS48UhdSOnsEnCOt
- 5jgm1Z1YNT2oGQNu4RUSLNdrK9xQeHlPsjqpPx6siq2k97xzEdlDeOkdNiWKtoBOGjwj
- UqMQxPMMt8HOCOEzE/dW1KIApa06sz1F6hYaxh6j7rWy4tVillow6r7GHzBUUJlkU4b/ ww== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j6sv7829c-1
+        Fri, 26 Aug 2022 07:53:35 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A94D742A;
+        Fri, 26 Aug 2022 04:53:33 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27QA5Wv5031074;
+        Fri, 26 Aug 2022 13:53:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=iEo1T84Vz7FQCvQtWZ4+CglEzwVQiGhNUWl6R0IhKeg=;
+ b=MKi3grh6NUAmdOl1U/z9GlQWL9ABoYOKABPbV1sW32qLOMaqM+ljiHwjx4fIQd69dqqt
+ u8GYJryaxdZ/Vhzjg5xHkYAtNsKnolLld0+4thMZbogp1GSP5bAVEUF0IeNVojTqARQk
+ fxfzfMuvYUi2Z66MgaOEuEwGkagw1NBPz10Dv2/Znzph2WMiK9A79XjiXZ5w/IOGB+wY
+ vMkebrTMsLvMtzMcCzX5KcGVjI4fgl/qf+Z3hFnlMPdx8MDW66ZsGgV5J2UdsdhT37Bp
+ A6B0lb1F8poRpJIQQiy1nD+vd1kJmIqhp47W1ub/GEIMoVv1ATnKTAs6khZjzNsIgW8+ iQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3j4w3dm2yn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 07:45:28 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27Q7eRx8005942
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 26 Aug 2022 07:40:27 GMT
-Received: from [10.216.58.196] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Fri, 26 Aug
- 2022 00:40:23 -0700
-Message-ID: <089f50b7-a87e-8570-d85f-be7470153493@quicinc.com>
-Date:   Fri, 26 Aug 2022 13:10:18 +0530
+        Fri, 26 Aug 2022 13:53:24 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3074010002A;
+        Fri, 26 Aug 2022 13:53:22 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 9BE08222CA8;
+        Fri, 26 Aug 2022 13:53:22 +0200 (CEST)
+Received: from localhost (10.75.127.117) by SHFDAG1NODE2.st.com (10.75.129.70)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Fri, 26 Aug
+ 2022 13:53:21 +0200
+From:   Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Stefano Stabellini <stefanos@xilinx.com>,
+        Bruce Ashfield <bruce.ashfield@xilinx.com>,
+        <arnaud.pouliquen@foss.st.com>
+Subject: [PATCH v8 0/4] remoteproc: restructure the remoteproc VirtIO device
+Date:   Fri, 26 Aug 2022 13:52:28 +0200
+Message-ID: <20220826115232.2163130-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.24.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH linux-next] rpmsg: char: Remove the unneeded result
- variable
-Content-Language: en-US
-To:     <cgel.zte@gmail.com>, <bjorn.andersson@linaro.org>
-CC:     <mathieu.poirier@linaro.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-References: <20220826071954.252485-1-ye.xingchen@zte.com.cn>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20220826071954.252485-1-ye.xingchen@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: W3Ltf_LZM7JtQnhzXs2JeSd5AdWV_8z7
-X-Proofpoint-GUID: W3Ltf_LZM7JtQnhzXs2JeSd5AdWV_8z7
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.117]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-26_02,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 bulkscore=0 mlxlogscore=999
- impostorscore=0 suspectscore=0 phishscore=0 clxscore=1011
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208260028
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+ definitions=2022-08-26_05,2022-08-25_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+1) Update from V7 [1]:
+
+- rebase on rproc-next branch [2], commit 729c16326b7f ("remoteproc: imx_dsp_rproc: fix argument 2 of rproc_mem_entry_init")
+  The updates take into account the integration of the
+  commit 1404acbb7f68 ("remoteproc: Fix dma_mem leak after rproc_shutdown")
+- add Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org> according to reviews on V7
 
 
-On 8/26/2022 12:49 PM, cgel.zte@gmail.com wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Return the value rpmsg_chrdev_eptdev_add() directly instead of storing it
-> in another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->   drivers/rpmsg/rpmsg_char.c | 5 +----
->   1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> index 4f2189111494..0850ae34fb88 100644
-> --- a/drivers/rpmsg/rpmsg_char.c
-> +++ b/drivers/rpmsg/rpmsg_char.c
-> @@ -424,15 +424,12 @@ int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent
->   			       struct rpmsg_channel_info chinfo)
->   {
->   	struct rpmsg_eptdev *eptdev;
-> -	int ret;
->   
->   	eptdev = rpmsg_chrdev_eptdev_alloc(rpdev, parent);
->   	if (IS_ERR(eptdev))
->   		return PTR_ERR(eptdev);
->   
-> -	ret = rpmsg_chrdev_eptdev_add(eptdev, chinfo);
-> -
-> -	return ret;
-> +	return rpmsg_chrdev_eptdev_add(eptdev, chinfo);
->   }
+[1] https://lkml.org/lkml/2022/7/13/663
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git/log/?h=for-next
 
-LGTM.
+2) Patchset description:
 
-Reviewed-by:Mukesh Ojha <quic_mojha@quicinc.com>
+This series is a part of the work initiated a long time ago in 
+the series "remoteproc: Decorelate virtio from core"[3]
 
--Mukesh
+Objective of the work:
+- Update the remoteproc VirtIO device creation (use platform device)
+- Allow to declare remoteproc VirtIO device in DT
+    - declare resources associated to a remote proc VirtIO
+    - declare a list of VirtIO supported by the platform.
+- Prepare the enhancement to more VirtIO devices (e.g I2C, audio, video, ...).
+  For instance be able to declare a I2C device in a virtio-i2C node.
+- Keep the legacy working!
+- Try to improve the picture about concerns reported by Christoph Hellwing [4][5]
 
+[3] https://lkml.org/lkml/2020/4/16/1817
+[4] https://lkml.org/lkml/2021/6/23/607
+[5] https://patchwork.kernel.org/project/linux-remoteproc/patch/AOKowLclCbOCKxyiJ71WeNyuAAj2q8EUtxrXbyky5E@cp7-web-042.plabs.ch/
 
+In term of device tree this would result in such hierarchy (stm32mp1 example with 2 virtio RPMSG):
 
->   EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
->   
+	m4_rproc: m4@10000000 {
+		compatible = "st,stm32mp1-m4";
+		reg = <0x10000000 0x40000>,
+		      <0x30000000 0x40000>,
+		      <0x38000000 0x10000>;
+        memory-region = <&retram>, <&mcuram>,<&mcuram2>;
+        mboxes = <&ipcc 2>, <&ipcc 3>;
+        mbox-names = "shutdown", "detach";
+        status = "okay";
+
+        #address-cells = <1>;
+        #size-cells = <0>;
+        
+        vdev@0 {
+		compatible = "rproc-virtio";
+		reg = <0>;
+		virtio,id = <7>;  /* RPMSG */
+		memory-region = <&vdev0vring0>, <&vdev0vring1>, <&vdev0buffer>;
+		mboxes = <&ipcc 0>, <&ipcc 1>;
+		mbox-names = "vq0", "vq1";
+		status = "okay";
+        };
+
+        vdev@1 {
+		compatible = "rproc-virtio";
+		reg = <1>;
+		virtio,id = <7>;  /*RPMSG */
+		memory-region = <&vdev1vring0>, <&vdev1vring1>, <&vdev1buffer>;
+		mboxes = <&ipcc 4>, <&ipcc 5>;
+		mbox-names = "vq0", "vq1";
+		status = "okay";
+        };
+};
+
+I have divided the work in 4 steps to simplify the review, This series implements only
+the step 1:
+step 1: Redefine the remoteproc VirtIO device as a platform device
+  - migrate rvdev management in remoteproc virtio.c,
+  - create a remotproc virtio config ( can be disabled for platform that not use VirtIO IPC.
+step 2: Add possibility to declare and probe a VirtIO sub node
+  - VirtIO bindings declaration,
+  - multi DT VirtIO devices support,
+  - introduction of a remote proc virtio bind device mechanism ,
+=> https://github.com/arnopo/linux/commits/step2-virtio-in-DT
+step 3: Add memory declaration in VirtIO subnode
+=> https://github.com/arnopo/linux/commits/step3-virtio-memories
+step 4: Add mailbox declaration in VirtIO subnode
+=> https://github.com/arnopo/linux/commits/step4-virtio-mailboxes
+
+Arnaud Pouliquen (4):
+  remoteproc: core: Introduce rproc_rvdev_add_device function
+  remoteproc: core: Introduce rproc_add_rvdev function
+  remoteproc: Move rproc_vdev management to remoteproc_virtio.c
+  remoteproc: virtio: Create platform device for the remoteproc_virtio
+
+ drivers/remoteproc/remoteproc_core.c     | 154 +++---------------
+ drivers/remoteproc/remoteproc_internal.h |  23 ++-
+ drivers/remoteproc/remoteproc_virtio.c   | 189 ++++++++++++++++++++---
+ include/linux/remoteproc.h               |   6 +-
+ 4 files changed, 210 insertions(+), 162 deletions(-)
+
+-- 
+2.24.3
+
