@@ -2,189 +2,109 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4135A8059
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 31 Aug 2022 16:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D30E5A82E0
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 31 Aug 2022 18:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiHaOgv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 31 Aug 2022 10:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
+        id S232097AbiHaQRw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 31 Aug 2022 12:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbiHaOgu (ORCPT
+        with ESMTP id S231878AbiHaQRp (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:36:50 -0400
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDD651A18;
-        Wed, 31 Aug 2022 07:36:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Content-Transfer-Encoding:MIME-Version:References
-        :In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3RXUYIfGmiNssmAyA8sAS6ro4O/YXpdGE4Tgo9zFWeQ=; b=OoE81rc13VFdR5HYr3mG/Vqmtj
-        QKoxkLvUN4Msbivwq1UBDcO5XJtN4pRDtQU6NnIV+2KV1YB1uF041KJAGl+CaUPy1eWyZ+b7D9ktp
-        sRTf8Kzt8HiN+7YDIsvcCWqVF2+ZyQqU0jpo+NUAcF+JJsscEeOZoIkmZy50Lh82PvzX+BNi+qMdE
-        1feOgs/lQdg62YcLPFajeDdPC3xbNoY6kWuSXod26D3xnQmJ7W9oZ3XcojlevcnFaZqMjGBV9Ruuf
-        tOPfe7pWlGPT2/U2nOWJxgdh9PSlymXXb2qmo2+cJGZT6Smpar81+kJG1Wb12CUIQ6rZO1PYXZP8q
-        y9hhonJw==;
-Received: from [10.22.3.24] (helo=kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1oTO4B-003wS7-CQ; Wed, 31 Aug 2022 15:47:39 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Wed, 31 Aug 2022 12:17:45 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC207D2EB5
+        for <linux-remoteproc@vger.kernel.org>; Wed, 31 Aug 2022 09:17:42 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id z23so12297678ljk.1
+        for <linux-remoteproc@vger.kernel.org>; Wed, 31 Aug 2022 09:17:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=cKBGsEaj4oQkEiZ75eQ0nd+cq+8A2N09JqV8gHiJ4+Q=;
+        b=tMgFRqslaUaliYOxYH0dYUK2/uIP7BKLWbF+I6IKNsjCJinHeYlZHRVMu1TRfw18Wp
+         bUUkrsR36U9exIiOTQm6OmML0i/o8y2PcqqRp5BB8Nr2aaU0hNDmnhYE+52sHOujL6Vt
+         1edd5Gm891k0Nu5Fsw1IyJvFBxknVve9eMr9QIBaqtPqLZjmLfNcGdJqcnrwyXclrZrA
+         K9X6jK+IPOdS3ljtzFzBXEnpyCtnp6lopK0QmsQNQFcBrE2nqL3pllJCwOEwf0SimD2e
+         LzLBsew2A2CtBjjxVQ9pqWnVFcUCtYQn0uJKMIvISBauaVlJIsJxLbwth/pDtYdLqjiJ
+         h8ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=cKBGsEaj4oQkEiZ75eQ0nd+cq+8A2N09JqV8gHiJ4+Q=;
+        b=cE+gGBlp2ZHh4QM1vCtLOZLDo5iPKyosQL7f/NfOLpqqGrf0httSTUJLq5cJ9mMlyz
+         6PafY2Hu+UoTYrn5nKd/GaonMSnMWKnE2i8eJ+gd8ACFq6UjarIwjmvXGR4WSnrGDXD7
+         AUFQ56GT3+18Pwl4fiEqBEOGQTw+spzeNSBDXTSfayqYbMyc/1u0e92n0WsGEzG21Qi6
+         MJUFim7WRWL3RHcncVZu5/s0zHhawmpGRw/5CfEiEyxbjc6UNFDgvQOmQm07IG3H5LWQ
+         QVD6gq/quKIets4pUKKvZbVzrmSP/yaEOz1947J+t+tqUdhSytuWm/eKva2R2jQLvhtE
+         NCog==
+X-Gm-Message-State: ACgBeo3lamt2imdPUlByg0kiK8EeHrAO+eGh7Qj7Q8yby4yzO/sjq/nP
+        xHHBFa5bCYxQMXSdK40ZDWxGLg==
+X-Google-Smtp-Source: AA6agR4XliYALSJxmaQxjIWvOpSmc8kb/s83quW2sIBceAg8gUtAGNVFHuJ2Z38TzPn8KPwBT6uGuA==
+X-Received: by 2002:a05:651c:905:b0:261:d00c:e71 with SMTP id e5-20020a05651c090500b00261d00c0e71mr8699218ljq.407.1661962661016;
+        Wed, 31 Aug 2022 09:17:41 -0700 (PDT)
+Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id s2-20020a056512214200b004917a30c82bsm306338lfr.153.2022.08.31.09.17.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 09:17:40 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Subject: [PATCH v3 7/7] remoteproc: qcom: q6v5-mss: Add modem support on MSM8953
-Date:   Wed, 31 Aug 2022 15:46:26 +0200
-Message-Id: <20220831134626.2803117-8-stephan.gerhold@kernkonzept.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220831134626.2803117-1-stephan.gerhold@kernkonzept.com>
-References: <20220831134626.2803117-1-stephan.gerhold@kernkonzept.com>
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] remoteproc: report firmware name on load failures
+Date:   Wed, 31 Aug 2022 19:17:36 +0300
+Message-Id: <20220831161736.749932-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Sireesh Kodali <sireeshkodali1@gmail.com>
+remoteproc error messages like:
+  remoteproc remoteproc0: request_firmware failed: -2
+  remoteproc remoteproc1: request_firmware failed: -2
+are difficult to debug as one actually have no clue which device
+reported it and which firmware is missing.  Be verbose and print the
+name of the failed firmware.
 
-The modem on the MSM8953 platform is similar to the modem on the MSM8996
-platform in terms of set up. It differs primarily in that TZ needs to be
-informed of the modem start address and pas_id.
-
-Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-Changes in v3: Combine series with Sireesh's patches for MSM8953
----
- drivers/remoteproc/qcom_q6v5_mss.c | 55 ++++++++++++++++++++++++++++--
- 1 file changed, 53 insertions(+), 2 deletions(-)
+ drivers/remoteproc/remoteproc_core.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index 2555f06dfc74..2f4027664a0e 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -40,6 +40,8 @@
- 
- #define MBA_LOG_SIZE			SZ_4K
- 
-+#define MPSS_PAS_ID			5
-+
- /* RMB Status Register Values */
- #define RMB_PBL_SUCCESS			0x1
- 
-@@ -239,6 +241,7 @@ struct q6v5 {
- enum {
- 	MSS_MSM8909,
- 	MSS_MSM8916,
-+	MSS_MSM8953,
- 	MSS_MSM8974,
- 	MSS_MSM8996,
- 	MSS_MSM8998,
-@@ -692,10 +695,12 @@ static int q6v5proc_reset(struct q6v5 *qproc)
- 		}
- 		goto pbl_wait;
- 	} else if (qproc->version == MSS_MSM8909 ||
-+		   qproc->version == MSS_MSM8953 ||
- 		   qproc->version == MSS_MSM8996 ||
- 		   qproc->version == MSS_MSM8998) {
- 
--		if (qproc->version != MSS_MSM8909)
-+		if (qproc->version != MSS_MSM8909 &&
-+		    qproc->version != MSS_MSM8953)
- 			/* Override the ACC value if required */
- 			writel(QDSP6SS_ACC_OVERRIDE_VAL,
- 			       qproc->reg_base + QDSP6SS_STRAP_ACC);
-@@ -743,7 +748,8 @@ static int q6v5proc_reset(struct q6v5 *qproc)
- 			writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
- 
- 			/* Turn on L1, L2, ETB and JU memories 1 at a time */
--			if (qproc->version == MSS_MSM8996) {
-+			if (qproc->version == MSS_MSM8953 ||
-+			    qproc->version == MSS_MSM8996) {
- 				mem_pwr_ctl = QDSP6SS_MEM_PWR_CTL;
- 				i = 19;
- 			} else {
-@@ -1365,6 +1371,15 @@ static int q6v5_mpss_load(struct q6v5 *qproc)
- 			max_addr = ALIGN(phdr->p_paddr + phdr->p_memsz, SZ_4K);
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index e5279ed9a8d7..71cd7ed7a970 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -1923,7 +1923,8 @@ int rproc_trigger_recovery(struct rproc *rproc)
+ 	/* load firmware */
+ 	ret = request_firmware(&firmware_p, rproc->firmware, dev);
+ 	if (ret < 0) {
+-		dev_err(dev, "request_firmware failed: %d\n", ret);
++		dev_err(dev, "request_firmware %s failed: %d\n",
++			rproc->firmware, ret);
+ 		goto unlock_mutex;
  	}
  
-+	if (qproc->version == MSS_MSM8953) {
-+		ret = qcom_scm_pas_mem_setup(MPSS_PAS_ID, qproc->mpss_phys, qproc->mpss_size);
-+		if (ret) {
-+			dev_err(qproc->dev,
-+				"setting up mpss memory failed: %d\n", ret);
-+			goto release_firmware;
-+		}
-+	}
-+
- 	/*
- 	 * In case of a modem subsystem restart on secure devices, the modem
- 	 * memory can be reclaimed only after MBA is loaded.
-@@ -2341,6 +2356,41 @@ static const struct rproc_hexagon_res msm8916_mss = {
- 	.version = MSS_MSM8916,
- };
+@@ -2023,7 +2024,8 @@ int rproc_boot(struct rproc *rproc)
+ 		/* load firmware */
+ 		ret = request_firmware(&firmware_p, rproc->firmware, dev);
+ 		if (ret < 0) {
+-			dev_err(dev, "request_firmware failed: %d\n", ret);
++			dev_err(dev, "request_firmware %s failed: %d\n",
++				rproc->firmware, ret);
+ 			goto downref_rproc;
+ 		}
  
-+static const struct rproc_hexagon_res msm8953_mss = {
-+	.hexagon_mba_image = "mba.mbn",
-+	.proxy_supply = (struct qcom_mss_reg_res[]) {
-+		{
-+			.supply = "pll",
-+			.uA = 100000,
-+		},
-+		{}
-+	},
-+	.proxy_clk_names = (char*[]){
-+		"xo",
-+		NULL
-+	},
-+	.active_clk_names = (char*[]){
-+		"iface",
-+		"bus",
-+		"mem",
-+		NULL
-+	},
-+	.proxy_pd_names = (char*[]) {
-+		"cx",
-+		"mx",
-+		"mss",
-+		NULL
-+	},
-+	.need_mem_protection = false,
-+	.has_alt_reset = false,
-+	.has_mba_logs = false,
-+	.has_spare_reg = false,
-+	.has_qaccept_regs = false,
-+	.has_ext_cntl_regs = false,
-+	.has_vq6 = false,
-+	.version = MSS_MSM8953,
-+};
-+
- static const struct rproc_hexagon_res msm8974_mss = {
- 	.hexagon_mba_image = "mba.b00",
- 	.proxy_supply = (struct qcom_mss_reg_res[]) {
-@@ -2398,6 +2448,7 @@ static const struct of_device_id q6v5_of_match[] = {
- 	{ .compatible = "qcom,q6v5-pil", .data = &msm8916_mss},
- 	{ .compatible = "qcom,msm8909-mss-pil", .data = &msm8909_mss},
- 	{ .compatible = "qcom,msm8916-mss-pil", .data = &msm8916_mss},
-+	{ .compatible = "qcom,msm8953-mss-pil", .data = &msm8953_mss},
- 	{ .compatible = "qcom,msm8974-mss-pil", .data = &msm8974_mss},
- 	{ .compatible = "qcom,msm8996-mss-pil", .data = &msm8996_mss},
- 	{ .compatible = "qcom,msm8998-mss-pil", .data = &msm8998_mss},
 -- 
-2.30.2
+2.34.1
 
