@@ -2,114 +2,107 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDC75B06D2
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  7 Sep 2022 16:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B665B08D8
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  7 Sep 2022 17:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbiIGOc1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 7 Sep 2022 10:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
+        id S229947AbiIGPmg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 7 Sep 2022 11:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiIGOb6 (ORCPT
+        with ESMTP id S229563AbiIGPma (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 7 Sep 2022 10:31:58 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28FB5A3CC
-        for <linux-remoteproc@vger.kernel.org>; Wed,  7 Sep 2022 07:31:53 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id r18so3565911eja.11
-        for <linux-remoteproc@vger.kernel.org>; Wed, 07 Sep 2022 07:31:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=hlX5LG70Pfi5xUfXCm2C7WvkXcJVP5UakJZVNodPOy7vNkSXQuxkM6JMnL0NkwpmEx
-         GApIDchppryVktOBo5G41BqVss7NVeWmLRXcOx2bAZqQ+LAYFz8ePbLc684sFXT4Nmqj
-         OcoPmJYuvMlwncvSBL0BFnkvuWLyKibj/n8A5QS+qmy30Nhg7xyf0NkI/q67juR/h0tY
-         bD/nOML45bK21IZjrLP4cVfkyGYdsdvh6OJ7KPKPWGwDpi4WDdxiFiQ5bptV3cHn11YY
-         R2/ccByiK1oIAZVOw3mE9dymIO7CzllUwLBF2JbmBffIhO2NpTaaNqhGzBB+XMxejIE1
-         VDsQ==
+        Wed, 7 Sep 2022 11:42:30 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969F6B0B3A;
+        Wed,  7 Sep 2022 08:42:28 -0700 (PDT)
+Received: by mail-ot1-f54.google.com with SMTP id v2-20020a056830090200b006397457afecso10506495ott.13;
+        Wed, 07 Sep 2022 08:42:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=UTPjlhWN0j/3cl0uibj9IdU3K9tIHCNTd74bAPWV+BQ=;
-        b=OfTzPI7JcPzu35/g3fcF0YB6TfOLManSf9zLGThfipoTdtr8xOabLVU9b0pqMhH6sU
-         2GbFPZtwfGqoEOot/xlQpK3dLpyb0jBfoUmzECaSOGv49O1dOXc8MdZJIX2wEHsXbBpE
-         rDq4SpIvL+Oi/41Cmu6GSeOxZHGEbHUj5Zg1OW79NjhlJdFGrjeqpb1tednosNQlbDzo
-         klNkByf/qwtpWLbPZgV42zIotuHgyti20f+5P4n75rcsKh071YwbEnKGvNOsd6j6pziv
-         g+9kcueK3Txg5mSdvvdbI7OenHyllv1s7DqllvROfkqm98g/y+KSzTOcWcE7WTumWyhx
-         XHwg==
-X-Gm-Message-State: ACgBeo1Cq7eTqUeKtAQw+GPUJ6LQ7tUFUjwW2orp//IwlzoiJJ131JK/
-        XsycNLYCoSTa68YJBbnWdarsjmJgdiIBX590sZI=
-X-Google-Smtp-Source: AA6agR4pyZsB+xbbjgKGlrl2+RDjPAQ7wWCMdSGS3qWC1Sv629AIX++hkd3miN/bJlP1/yRRoX5bdHKo53e2l2Vr/Xc=
-X-Received: by 2002:a17:906:38f:b0:742:1f68:7058 with SMTP id
- b15-20020a170906038f00b007421f687058mr2510502eja.743.1662561112231; Wed, 07
- Sep 2022 07:31:52 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=O0C9t0VY3tvvvQVSv0/pXgbdUBlFzo5v3zMl5r02uQU=;
+        b=bgzhqVpt3OnLIuZ4VSICRTvj52t4nOdgrYHD1y7VDdcV9Tt9EEca40jpiknKjpPhF5
+         mvRy5nQyWg6m1MFd9mmH8eJxS2rPoLGk+uD5+fAWazGRZAO2+prTERsCg73RgKR7kU81
+         YXisgGzu7p/gpS/XmEyH7vr3d1tVDf3/fIsbFTeBJjq4gedUej1rDy30B48YXxSr1vDS
+         7lREDqwoci4m1nIAh5guBSPeCrOGrYFNrt2cvMVYfD/D3Nht/dxeWUz1J4mQP8wjgbQZ
+         LXhJSEZVNEag7VwNcd+BFGxm8AHcSELLMbKJLlxKhGMvn1DBsXnsWogNb4bx1rgn5H1Q
+         rvqQ==
+X-Gm-Message-State: ACgBeo0cR1G46Dqs2qBDJFLsID4oW0UqtoMJMRAP/IXjIZYC59vdypx0
+        n2UqR98QTu4Sa78g4sOoi+oTjWMsGQ==
+X-Google-Smtp-Source: AA6agR7LI/fVhUFeKz5sWm4Jx6IOy+RzpBAsW5Hc/i9i0RkMlpD3hfgjX5MK8MKQzdWCsaBTRik4MQ==
+X-Received: by 2002:a9d:67c1:0:b0:63b:2b5c:90bd with SMTP id c1-20020a9d67c1000000b0063b2b5c90bdmr1653134otn.237.1662565347815;
+        Wed, 07 Sep 2022 08:42:27 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a11-20020a4a988b000000b00435a8024bc1sm5159957ooj.4.2022.09.07.08.42.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Sep 2022 08:42:27 -0700 (PDT)
+Received: (nullmailer pid 3505199 invoked by uid 1000);
+        Wed, 07 Sep 2022 15:42:26 -0000
+Date:   Wed, 7 Sep 2022 10:42:26 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     linux-remoteproc@vger.kernel.org,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        David Heidelberg <david@ixit.cz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v12] dt-bindings: misc: fastrpc convert bindings to yaml
+Message-ID: <20220907154226.GA3505117-robh@kernel.org>
+References: <20220907074301.3996021-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a54:3fc4:0:0:0:0:0 with HTTP; Wed, 7 Sep 2022 07:31:51 -0700 (PDT)
-Reply-To: lumar.casey@outlook.com
-From:   LUMAR CASEY <miriankushrat@gmail.com>
-Date:   Wed, 7 Sep 2022 16:31:51 +0200
-Message-ID: <CAO4StN23CjT73+kAZo3jW6NA7B_rVMGFz9vZYzq4Gs86AZgN6A@mail.gmail.com>
-Subject: ATTENTION/PROPOSAL
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.8 required=5.0 tests=ADVANCE_FEE_4_NEW_MONEY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY,UPPERCASE_75_100 autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:642 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5014]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [miriankushrat[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 UPPERCASE_75_100 message body is 75-100% uppercase
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  0.2 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_4_NEW_MONEY Advance Fee fraud and lots of money
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220907074301.3996021-1-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-ATTENTION
+On Wed, 07 Sep 2022 10:43:01 +0300, Abel Vesa wrote:
+> Convert Qualcomm FastRPC bindings to yaml format, so that we could validate
+> dt-entries correctly and any future additions can go into yaml format.
+> 
+> Use compute-cb@ subnodes instead of just cb@. Add qcom,glink-channels and
+> qcom,smd-channels missing properties to make sure dtbs_check doesn't fail
+> right off the bat. Correct the name of the parent node in the example from
+> smd-edge to glink-edge.
+> 
+> Since now the qcom,fastrpc bindings document is yaml, update the
+> reference to it in qcom,glink-edge and also use $ref.
+> 
+> Also update the MAINTAINERS file to point to the yaml version.
+> 
+> Co-developed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> Co-developed-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> Changes since v11:
+>  * added 'additionalProperties: false' to the patternProperties,
+>    as suggested by Krzysztof
+> 
+>  .../devicetree/bindings/misc/qcom,fastrpc.txt |  88 -------------
+>  .../bindings/misc/qcom,fastrpc.yaml           | 124 ++++++++++++++++++
+>  .../bindings/remoteproc/qcom,glink-edge.yaml  |   4 +-
+>  MAINTAINERS                                   |   2 +-
+>  4 files changed, 127 insertions(+), 91 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.txt
+>  create mode 100644 Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+> 
 
-BUSINESS PARTNER,
-
-I AM LUMAR CASEY WORKING WITH AN INSURANCE FINANCIAL INSTITUTE, WITH
-MY POSITION AND PRIVILEGES I WAS ABLE TO SOURCE OUT AN OVER DUE
-PAYMENT OF 12.8 MILLION POUNDS THAT IS NOW SECURED WITH A SHIPPING
-DIPLOMATIC OUTLET.
-
-I AM SEEKING YOUR PARTNERSHIP TO RECEIVE THIS CONSIGNMENT AS AS MY
-PARTNER TO INVEST THIS FUND INTO A PROSPEROUS INVESTMENT VENTURE IN
-YOUR COUNTRY.
-
-I AWAIT YOUR REPLY TO ENABLE US PROCEED WITH THIS BUSINESS PARTNERSHIP TOGETHER.
-
-REGARDS,
-
-LUMAR CASEY
+Applied, thanks!
