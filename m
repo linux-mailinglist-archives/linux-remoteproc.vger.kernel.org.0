@@ -2,53 +2,53 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282CC5B3393
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  9 Sep 2022 11:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 158D55B3370
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  9 Sep 2022 11:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbiIIJUt (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 9 Sep 2022 05:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        id S230399AbiIIJUw (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 9 Sep 2022 05:20:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiIIJUr (ORCPT
+        with ESMTP id S231500AbiIIJUr (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
         Fri, 9 Sep 2022 05:20:47 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7FBB4EBB
-        for <linux-remoteproc@vger.kernel.org>; Fri,  9 Sep 2022 02:20:44 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id bn9so1091722ljb.6
-        for <linux-remoteproc@vger.kernel.org>; Fri, 09 Sep 2022 02:20:44 -0700 (PDT)
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EE0B1B83
+        for <linux-remoteproc@vger.kernel.org>; Fri,  9 Sep 2022 02:20:46 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id a8so1626761lff.13
+        for <linux-remoteproc@vger.kernel.org>; Fri, 09 Sep 2022 02:20:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=CEQ6kD7E3x3cGbQZ0xWqW+Ktcext0aENc2Q7rleIIpo=;
-        b=UQbRgGgAD9DMTUfnKoGoUryiinB3JrR/+fLyeAF6ApFQ/GGvwVhkMpUYAG3K61OL2Q
-         H/LYVddfrB9r4eGyEEYZiEfDoYfeHjbaLf9/7uoX8M5GhkDMlDyAfE6B0J3BkheHhSvT
-         DQ8XwEpJ7IkA7atE5AfljkcQLqox8ldzdAXMpBE2RGB8JsRw3l7+Qbpox5kQ8EstKtYq
-         8Q5ZFg5bIKxypbxCt9XQe0h8Vxr/MlQAT7MRPnXTFv9z+qvuJtL+vQ/7yW/u3EL+HrKA
-         pL6H9uF8i3ssZDH7hiOhuN7VdfAXbFVosgmiXELdIsbPPiZBRVPtCiejocKDT5WgTmWq
-         M/hw==
+        bh=p22VHkiyfyJQ/2cmDiOXf73kBtRCLk4DV4mGJPl32s0=;
+        b=T+/lWIY8v0qbAYeoyntJ0FQNj5wU33lo4K5Spce/QU9XjaHLtpN7Vk+iszIb7VtMdg
+         S31FyJhBd2gMoSsQy856YiJf0hmLG9rthIhEhIsy/XAgBr53ZAlOaxbAKJpeYLEvDM/p
+         DedQOV2vuejdGKV7xedWegc7UQFwOEtfOjJnvdqixcPUswSmHr4AIqQakzOAyF5dKzJx
+         23/9X0a89l6aAUBNHDiiQENwdc4f8OzD5CyLPTFFoPV9DCEmQxnCU47MoKqdAK7P4eZm
+         juHJBF+dLgTTpOBCPycex//xouuclW6585+dv79G9brhthWARf8RAferIXgfY+LEKFsG
+         nn3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=CEQ6kD7E3x3cGbQZ0xWqW+Ktcext0aENc2Q7rleIIpo=;
-        b=4Dr5LQ+YAsNObVuBO1WywNOVyNvJVFnuy/h7fpS6KRmxs5X25phdKsEjIactbQ/A3O
-         JDEkqhvX/+9Qk9Tdh5N2wNKZO9haRH7xppiotj1fxUZ0bNr2Y4VrbHmalcLFFG93FpAw
-         Bgz7ct6CdIrD2jkVhF/MIlVCaVwPI4ymBSDstU7cXs13QWzcGjuHY3m26tZCw5tD6yuq
-         7dhi2K00NKewo86zHAjnNb2fJFguG/rD4HRfDarNw8/hwnhxvMzoR4Vw8YMDa9CoU5/X
-         oED+QNs9Y+wVMg5NsBeGEhOEiX6/VSyAYXR3PXjAbUCSiXNmLjxCfV4dE5NKra6n/o99
-         wbhA==
-X-Gm-Message-State: ACgBeo2zyWazN50rSrEL2BEVWe1V42vZ8pGAspPzF42a5cqOIdY63C+G
-        b3CVx5XmLm5WD9XdofkW0A78vkmML3Iucg==
-X-Google-Smtp-Source: AA6agR4wosQnzzG9FY77Geu239a8YeXktmczFJO8DCKG+49rSSbuKPHSoXNQFdiVVS3he73xSaSrbA==
-X-Received: by 2002:a05:651c:1611:b0:261:e11c:c2ef with SMTP id f17-20020a05651c161100b00261e11cc2efmr3497449ljq.340.1662715243162;
-        Fri, 09 Sep 2022 02:20:43 -0700 (PDT)
+        bh=p22VHkiyfyJQ/2cmDiOXf73kBtRCLk4DV4mGJPl32s0=;
+        b=phY3kN2Cyv+vETYNFa62aTCJNz++zLEoZ3Ryco/ZztrspLYEGpG9pSn6Ra39ozA9O/
+         Jk+JIGOQ5h9+nl/8l1mC2QggYssJ6Xs9ZaoTU/iWCeVldeXp2hvsa47uh1OOCVhm8TeW
+         7NCU4+q5XNlxqnedA0KdHKDbgnQcV/QCfUGmYX7HHYVG8qF4KJrqZYVG66l9wVr0kiNj
+         FAlC5cmqeoXcKGCZiCB84U4o3t+ZEx314CejveDOc0hlsLA1ReB9qassrUQkd6ILnNck
+         hsxK9qHPCAeDg8RKAOXi8a7/BxSag92EXu43FV942bWXqljg+qf7LLhYNw3uxxdtS/VM
+         jgPg==
+X-Gm-Message-State: ACgBeo0HJ0vzHvTb1UM58tuMETTTRXKm3CM4xaheRgW/wz+c/RZeTx7u
+        N4tqwPgjgTDwKXeBxUnVBbo4Bw==
+X-Google-Smtp-Source: AA6agR76T7wG7Oj/rg4yBhTT1c6TwJjrayUmvtzsa/GBbqcMFntL6b1sri3PQCjNtkP/D0EkB4GCeg==
+X-Received: by 2002:ac2:5c52:0:b0:498:ec75:c73c with SMTP id s18-20020ac25c52000000b00498ec75c73cmr2367460lfp.164.1662715244381;
+        Fri, 09 Sep 2022 02:20:44 -0700 (PDT)
 Received: from krzk-bin.. (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id s6-20020a056512214600b00498fe38ea0fsm2170lfr.174.2022.09.09.02.20.42
+        by smtp.gmail.com with ESMTPSA id s6-20020a056512214600b00498fe38ea0fsm2170lfr.174.2022.09.09.02.20.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Sep 2022 02:20:42 -0700 (PDT)
+        Fri, 09 Sep 2022 02:20:43 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 02/15] dt-bindings: hwlock: qcom-hwspinlock: correct example indentation
-Date:   Fri,  9 Sep 2022 11:20:22 +0200
-Message-Id: <20220909092035.223915-3-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3 03/15] hwspinlock: qcom: correct MMIO max register for newer SoCs
+Date:   Fri,  9 Sep 2022 11:20:23 +0200
+Message-Id: <20220909092035.223915-4-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220909092035.223915-1-krzysztof.kozlowski@linaro.org>
 References: <20220909092035.223915-1-krzysztof.kozlowski@linaro.org>
@@ -79,32 +79,29 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Use some consistent indentation (4-space) for DTS example.
+Newer ARMv8 Qualcomm SoCs using 0x1000 register stride have maximum
+register 0x20000 (32 mutexes * 0x1000).
 
+Fixes: 7a1e6fb1c606 ("hwspinlock: qcom: Allow mmio usage in addition to syscon")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- .../devicetree/bindings/hwlock/qcom-hwspinlock.yaml    | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/hwspinlock/qcom_hwspinlock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
-index de98b961fb38..1a3adf75934b 100644
---- a/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
-+++ b/Documentation/devicetree/bindings/hwlock/qcom-hwspinlock.yaml
-@@ -43,9 +43,9 @@ additionalProperties: false
+diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
+index 80ea45b3a815..9734e149d981 100644
+--- a/drivers/hwspinlock/qcom_hwspinlock.c
++++ b/drivers/hwspinlock/qcom_hwspinlock.c
+@@ -121,7 +121,7 @@ static const struct regmap_config tcsr_mutex_config = {
+ 	.reg_bits		= 32,
+ 	.reg_stride		= 4,
+ 	.val_bits		= 32,
+-	.max_register		= 0x40000,
++	.max_register		= 0x20000,
+ 	.fast_io		= true,
+ };
  
- examples:
-   - |
--        tcsr_mutex: hwlock@1f40000 {
--                compatible = "qcom,tcsr-mutex";
--                reg = <0x01f40000 0x40000>;
--                #hwlock-cells = <1>;
--        };
-+    hwlock@1f40000 {
-+        compatible = "qcom,tcsr-mutex";
-+        reg = <0x01f40000 0x40000>;
-+        #hwlock-cells = <1>;
-+    };
- ...
 -- 
 2.34.1
 
