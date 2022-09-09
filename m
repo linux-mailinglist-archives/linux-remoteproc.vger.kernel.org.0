@@ -2,82 +2,69 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63FF5B3D01
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  9 Sep 2022 18:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10C05B3D78
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  9 Sep 2022 18:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbiIIQap (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 9 Sep 2022 12:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S231852AbiIIQwM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 9 Sep 2022 12:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbiIIQam (ORCPT
+        with ESMTP id S231890AbiIIQwI (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 9 Sep 2022 12:30:42 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7855AA0E
-        for <linux-remoteproc@vger.kernel.org>; Fri,  9 Sep 2022 09:30:40 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id x10so2488066ljq.4
-        for <linux-remoteproc@vger.kernel.org>; Fri, 09 Sep 2022 09:30:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=GhijzOpjBSZ7nCgUhoccck5ZIQUlIFoaWDsMZJ6nH7k=;
-        b=I4j7Pcd20LpWaZq4vo2jbbXxGnuCGPC0vRNNXv1pXnQQ36vo7i4bBmWp3N7c5Q0UaR
-         pJAQr2bZFOrGVsPkVjaaWMcaApx1uJ/8uNzOErXc0bZQ3H1MIoZR1MwQK+OLtAyomOXb
-         6+cFZbBG77MIxiPYQEVIWAuWmOJQJTG1dkg2nfnkkh8DranTyzJhy6ZryT9gbUyD2c+q
-         /U0VayMgCPIEwYHEYKVRVWJRHiYMQPa44xPTj8typjdYNZ09p0O6QikgvEGnxmcyEHT+
-         XYgzmsuF1duIulbUaWkT+IuAdxaRDgmm+c9f4pBglM3YqKnBu4NTORRCVrZvwmAVGdl+
-         rzEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=GhijzOpjBSZ7nCgUhoccck5ZIQUlIFoaWDsMZJ6nH7k=;
-        b=YK2BUUKM5nBayN0pnL5f0byqYUbVsLW2PMCxtxo7I0p+bSxiPhVksZ53jXrJ1Daatt
-         MVOXvqNBCAPsv79t+p+sSR7SutC2KegOtrHTV5xbnwgZZOmCbqtpXAU8z6Y3Oazqo1Ol
-         hWjKyC3HtwhVweFjjvN5WrbAT3qw/Xh6gYLN3rNzJa6h+9MlnM1qFaqlJXYDLC2MkVm1
-         yOgtqOKJv5/JTAtWBuGtBMpJjsXhrhXUcmI5uMMbIKU/nEdDjvUUjs0wF1RNshIvwAhN
-         R6zgvQGnJW3fkXUYw2u0MmARzc1SHIbxmm8OugJVURGA+YqVmud7X2CZUpGYwm260qeb
-         Rnkw==
-X-Gm-Message-State: ACgBeo1JracTPFzQ2ACieuo2NzyjyjnS8tHFdooyAAkFok4Cjp5/wPXy
-        CDrl5NNA80n796ePtDIVOezrIA==
-X-Google-Smtp-Source: AA6agR7w7saLxlIJEBvuYi+z1NoLl7P1vzJYXRWF1pav4TOZ4YU2x0cHschDHYJ9ylCz+VQq0/EW3w==
-X-Received: by 2002:a05:651c:4ca:b0:268:10c2:87bc with SMTP id e10-20020a05651c04ca00b0026810c287bcmr4529265lji.241.1662741038516;
-        Fri, 09 Sep 2022 09:30:38 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id h27-20020a2eb0fb000000b00261b9ccb18esm147240ljl.10.2022.09.09.09.30.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Sep 2022 09:30:37 -0700 (PDT)
-Message-ID: <9e5ec2a2-7b69-648d-4069-8d169abd7f4f@linaro.org>
-Date:   Fri, 9 Sep 2022 18:30:36 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 0/7] dt-bindings: remoteproc/misc/qcom: stricten SMD/GLINK
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Fri, 9 Sep 2022 12:52:08 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C34980B43
+        for <linux-remoteproc@vger.kernel.org>; Fri,  9 Sep 2022 09:51:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1662741959;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=afnKVBQX5rCWk4RFGC1jNM+Dz0i9Uxm87RuXQL6z6cY=;
+    b=VwiFQ6+6Vw271fTblK0u+Caoo15AdNQHrR0nQN16mpxWeNzf1Z03lMRjDOzgPPvICn
+    sI8p03+A4KdxxOmk4GlfovyeHTztd19pPaZDLw0WfdEIeRDrg/0CGzyk8/vdccXE4x7r
+    P75kyssZFOIN52qPgexMsi35Uocgb8A1zNhPsgyzFd/DapyjvfXTHZNvSDMN8cCSQer2
+    GdsSYAhvoksVIMG/O6I6ukt/u7rqxQvXt3mCRRs1Ct0fVzSId+zOLZydCeceSmaOpJqe
+    CadQh6e1dGY2kM0LRqmvVq+vVxKNLqIn3oJjkdjtayTVTHttXvj4irRyolsKIxNZfVMw
+    +YNw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKLUrK09lg=="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 48.0.2 AUTH)
+    with ESMTPSA id I8c97dy89GjwCzv
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 9 Sep 2022 18:45:58 +0200 (CEST)
+Date:   Fri, 9 Sep 2022 18:45:52 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        devicetree@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
-        David Heidelberg <david@ixit.cz>,
         Abel Vesa <abel.vesa@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-References: <20220909125403.803158-1-krzysztof.kozlowski@linaro.org>
- <20220909162351.GA1455181-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220909162351.GA1455181-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH] dt-bindings: remoteproc: qcom,smd-edge: Add APR/FastRPC
+Message-ID: <YxttwK1FMCMZ+CyS@gerhold.net>
+References: <20220908181432.458900-1-stephan.gerhold@kernkonzept.com>
+ <20220909161652.GA1448908-robh@kernel.org>
+ <CAL_JsqKVb54yckiky79mK5FdEf-Vf7SyVU01Jdpo9whOqq0spQ@mail.gmail.com>
+ <0b6f5b4b-247e-7573-04fd-05d037533aa3@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b6f5b4b-247e-7573-04fd-05d037533aa3@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,29 +72,43 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 09/09/2022 18:23, Rob Herring wrote:
-> On Fri, Sep 09, 2022 at 02:53:56PM +0200, Krzysztof Kozlowski wrote:
->> Hi,
->>
->> This depends on qcom,fastrpc.yaml conversion in Rob's tree, therefore
->> everything should go the same way, I think.
->>
->> Best regards,
->> Krzysztof
->>
->> Krzysztof Kozlowski (7):
->>   dt-bindings: misc: qcom,fastrpc: correct qcom,nsessions name
->>   dt-bindings: misc: qcom,fastrpc: add compute iommus
->>   dt-bindings: misc: qcom,fastrpc: restrict channel names
->>   dt-bindings: misc: qcom,fastrpc: correct example for GLINK edge
->>   dt-bindings: remoteproc: qcom,glink-edge: require channels in children
->>   dt-bindings: soc: qcom: smd: restrict child name to smd-edge
->>   dt-bindings: remoteproc: qcom,smd-edge: define children
+On Fri, Sep 09, 2022 at 06:30:11PM +0200, Krzysztof Kozlowski wrote:
+> On 09/09/2022 18:22, Rob Herring wrote:
+> > On Fri, Sep 9, 2022 at 11:16 AM Rob Herring <robh@kernel.org> wrote:
+> >>
+> >> On Thu, 08 Sep 2022 20:14:32 +0200, Stephan Gerhold wrote:
+> >>> Similar to qcom,glink-edge.yaml the smd-edge can also contain
+> >>> apr/fastrpc nodes for functionality exposed by the modem or audio DSP.
+> >>>
+> >>> These nodes are already used in existing device trees, adding them
+> >>> fixes the following dtbs_check warnings after converting
+> >>> qcom,msm8916-mss-pil to DT schema:
+> >>>
+> >>> arch/arm64/boot/dts/qcom/apq8016-sbc.dtb: remoteproc@4080000: smd-edge:
+> >>> Unevaluated properties are not allowed ('fastrpc' was unexpected)
+> >>>   From schema: remoteproc/qcom,msm8916-mss-pil.yaml
+> >>>
+> >>> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> >>> ---
+> >>> Since qcom,fastrpc.yaml only exists in Rob's tree right now and
+> >>> a similar change for qcom,glink-edge.yaml was applied there it is
+> >>> probably easiest if this patch goes through Rob's tree as well.
+> >>> ---
+> >>>  .../devicetree/bindings/remoteproc/qcom,smd-edge.yaml  | 10 ++++++++++
+> >>>  1 file changed, 10 insertions(+)
+> >>>
+> >>
+> >> Applied, thanks!
+> > 
+> > And dropped for Krzysztof's series instead.
 > 
-> Series applied.
+> Technically Stephan was first and his patch solves it in partial way,
+> yet still self-contained way. I am fine rebasing my patchset on top of it.
+> 
 
+Feel free to skip this patch if your series contains equivalent changes.
+I mainly submitted this to unblock my qcom,msm8916-mss-pil.yaml series
+so I'm fine as long as equivalent changes have been applied. :)
 
-OK, thanks!
-
-Best regards,
-Krzysztof
+Thanks,
+Stephan
