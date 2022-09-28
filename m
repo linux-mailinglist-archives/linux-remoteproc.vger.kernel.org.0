@@ -2,203 +2,152 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1FA5ED9FE
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 28 Sep 2022 12:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC165EDC8F
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 28 Sep 2022 14:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbiI1KWl (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 28 Sep 2022 06:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52748 "EHLO
+        id S233665AbiI1M2n (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 28 Sep 2022 08:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231703AbiI1KWk (ORCPT
+        with ESMTP id S233644AbiI1M2j (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 28 Sep 2022 06:22:40 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70082.outbound.protection.outlook.com [40.107.7.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DAE326DA;
-        Wed, 28 Sep 2022 03:22:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bpm6xA0/ClgcLme60RuTbngA61iTSiFeyWSmP5iDEYUQd0IhEsObI2opzGgIR/T4UZWahifeMsWRznNA6S59h8WNJhSUZX86E8Q8J58H6SzofLL9GXh+02ZizoAD1POj5jHT6pnQShsD9ee3w/Lhy4skDVa/67N0CNerWbERuWZxlVk6bb+AOl8z067YJpt+AUWFWmIP8TWgARU0WgDlL1LX38lmgPiqW1heSOxTADrLBIK6fABMohVNNsPDSOB5dOQLG/oGMPRuMQeJ53SxWpXIRLJQOwL/27250Xc23iK906n95MXPAsSEWd1U0qamcC2HdzrwSNBTfHWthgn4uA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IZzWxUimcJ70X/P5Iiukm9N43IhxFFwstTz88wE34/A=;
- b=MRaTF83ZguOoPXwiNfnvPDrSJ2wayRQMTGEDQmhL7PFoVFr4NxDPUAgtvNfo4mtzMIQjpq8+Gcr8ecsEmXN1WrSxSahezox/DLY48hHvuh7enR0DWKkdkftr7WWkIQbnbmBKQqZt2hHG0Zztn+5K6leuDnaGXcLAMMcSAYrT4i2yWerFDN+wFIudgs94a6RUstNGMWcvgWrI9WtJ6LVLyFTPXaUQeB0w/7d/mUFkvzYciHZjkSG9BFJuKzyaCE2oh49zFNWpgzW4HRMKx7kv+bnVzn+rToo91FnaMh3vJahAThidrv/98JQ/BHTI/X1FMuUEcBWBmmeXFDtxZLRi1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IZzWxUimcJ70X/P5Iiukm9N43IhxFFwstTz88wE34/A=;
- b=np/6cOvqmmTk18zYOlYa5LtqJDa+ZD9RvrEJsd1aOnJb7rDXdEswJ/t3n4X5sUs3MQAieb4nF21OL7EHzr1kBwSdAfDPpNf6bSFCEy7h3cUeCkU6SgETBX2q2XIfdree8um7FJTjDJCo19PwGPZ7+BVRQHiQvjGWAnd0Poj1yqA=
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM9PR04MB8177.eurprd04.prod.outlook.com (2603:10a6:20b:3b7::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.17; Wed, 28 Sep
- 2022 10:22:33 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::1eb:dcf:8fd7:867%5]) with mapi id 15.20.5654.025; Wed, 28 Sep 2022
- 10:22:33 +0000
-From:   Peng Fan <peng.fan@nxp.com>
-To:     "S.J. Wang" <shengjiu.wang@nxp.com>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "mathieu.poirier@linaro.org" <mathieu.poirier@linaro.org>,
-        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>
-CC:     "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "shengjiu.wang@gmail.com" <shengjiu.wang@gmail.com>
-Subject: RE: [PATCH] remoteproc: imx_dsp_rproc: Add mutex protection for
- workqueue
-Thread-Topic: [PATCH] remoteproc: imx_dsp_rproc: Add mutex protection for
- workqueue
-Thread-Index: AQHY0a9PUexT6xrsH0SQuEOAj4mH/K30o4tA
-Date:   Wed, 28 Sep 2022 10:22:32 +0000
-Message-ID: <DU0PR04MB9417A858260FFB3E0A00CC1788549@DU0PR04MB9417.eurprd04.prod.outlook.com>
-References: <1664192893-14487-1-git-send-email-shengjiu.wang@nxp.com>
-In-Reply-To: <1664192893-14487-1-git-send-email-shengjiu.wang@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AM9PR04MB8177:EE_
-x-ms-office365-filtering-correlation-id: 3a62ebc5-a0ed-4b68-ae17-08daa13b5b10
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: x0eHhmHx+zCsYFW6Xh5zxmhZCO6VxhFJFJ3exLi8d7PamWPcB5+GO5fvcdkJtBXcW/U/2MrYow/Mq3/YyNgxJiCUJO/1eo2/vKeQIeFDTJcZXCfw8QfhhTeBKhz8Ughfw5qGYEMQnX7sE+qlj3+9nnyqDBZvinqUV1ukb4ISg3WZF+U2v70jCgk2NEhjL7/Da6zB4y92eTCB0+NQt2cxieolZT/WuG39VW9/r+DIkTBr+aTNVWdcqsdN2LuzlIJb05LSSqp2JH3EOgJCc4rSlRYG/04OhR4MzoKSNfrEIpI8ux3fYpzQPRadPgYhYq2fq9XBmWd5x/kLyACx+g+dMLd8wCao+ZD+XdC2iA3ktilJIosABMTkgaD0BwlSVXRDS3MJOZ4V6e2KLojDovvS7gRHsqs2TJP1c2lIMYfHLwWvWZCwpIR7zGZ/y7kIi2qSK2Xsj31YIQjvugBVCvPcZjbf0WfGWf/qMzmCn49TWwb+IRfkWRBngEUMqSm10bbklvvcfZkS2aqHA3PrtHXUrg/fC46tGpjTYvufOddLpFqaUqJBtQf4ByhZ/3aqbTfzoZpLB92SKZQV8Y7l8JQVReNavpQD2stvoxc9ex4ei3aM+zm/BX+5AlXy+vksKyMwBN9Z8j+KVbt49EwUX/pgJhzYgzAZeUFFtSlBuAWZonDr45uVF4ap879ZcMgQF5GcudIzWHsiHf/hNw7SYzcxOktnpYhtCZiDHM7NCnL52WupiNxVGCX6gWUT4zAN+1NPCAPrUqGPVz0ZD8fbetkgqQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(376002)(346002)(396003)(39860400002)(451199015)(83380400001)(38100700002)(186003)(38070700005)(122000001)(44832011)(2906002)(8936002)(5660300002)(41300700001)(52536014)(55016003)(9686003)(478600001)(71200400001)(76116006)(26005)(7696005)(66556008)(4326008)(66446008)(66476007)(6506007)(8676002)(64756008)(66946007)(110136005)(54906003)(33656002)(316002)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ggN2iMtJ5Ll/8Vh6KMp2Aq3IeTNrA3c8vBQW5kiIQnYQkrABs6E1aeEVwYcG?=
- =?us-ascii?Q?ZKHlUe1O0h+92gFaVx5W02/8qrYo746FRIPUiuhjnpwnN2+kym8uHKy0AjXp?=
- =?us-ascii?Q?cc5HZ4UdG2JuWvE5Xt+HGBb5ygki9h3AybHrZc7qqQmsjqQnOuYCOMFDlx8j?=
- =?us-ascii?Q?E7Qv+P4lCgP88wsA+czAYKPdaGfXYdfnhKBqOEW5ZmC61uPUkRIMhhg6Sw10?=
- =?us-ascii?Q?JzUfpGaDSkxiPIwbJrEezgxeq7JhHqgCFPfTfmk+s17PPD2Npjn1aVWyDMlT?=
- =?us-ascii?Q?kaHI5tKR0CPabSq++wisl03S9ObccTRwBngfzmZ+14buNywJZy2jXjWRzISY?=
- =?us-ascii?Q?y25T09XJwaHUrkCNRf/6U5/AqCiMVkpmq3uKLqCGe9j2htgN6NNWni6xoRwM?=
- =?us-ascii?Q?kUKzrJGWRjnzNDr45e/gnYXffmBwcmDb7Lk4CqwE2RGJpQchLk1GTv1UOK8n?=
- =?us-ascii?Q?+Ex+z41mP/aR1VDT02/8YYW+hf+NCoThp9jP5PyXuxeQBoxOFykojiOzt0Ui?=
- =?us-ascii?Q?WQfH9NU/We2Nj72sXP6VpnNmT2KKYx0LQu53Sf0wSkHPmEKyHR/f+R9aIe1a?=
- =?us-ascii?Q?opTea+d+p1gGuEo6eBBBaQZaathpQtbBaDue9xSwv2PFziJ1w4UZSzsy6GLf?=
- =?us-ascii?Q?tWsjETIpc/qK7rixFbN/6I1i672c/hb0+2O9vpEwIwhZzJoCaNIvzwtwogVA?=
- =?us-ascii?Q?1FQf5fsKpja8lDcn9V+s3vEDmRf5+bscDt7gpNfSf8MSo7ywqht1K7qNzOHY?=
- =?us-ascii?Q?Nj9eOwrgnhUuCtO3rtW5k+wejNOPlXkYMveXvyaSFATWIHin7Lujmj91wnoU?=
- =?us-ascii?Q?kBXVd20etPGG1ERUAAGq7dgM1eIK+fNeEJr2722Fg13JSgo5Chzg2Opk8uLh?=
- =?us-ascii?Q?tpKdLyNPZd59R0pfxVmDjuIJTXfn0I81rwp5Ub7Sx4AS512QgbzB7B0ZP9Um?=
- =?us-ascii?Q?Rc2UUDjnJIL43R6JaCOSEcy9mbAfh9+O/jvucdD84tMk+XoRRRqPNbjLbqiQ?=
- =?us-ascii?Q?eQZbTlatsKUgCzlXaKwf1CYqVln/hVkrD7pq05l86hzZTWxsP8xpg1KHbTWq?=
- =?us-ascii?Q?4VisdJnJHmEJzP9vessJL4eEOYI0s4mHB/w3NCprfjq/aRAB8b7UODJojkFG?=
- =?us-ascii?Q?ttNL1+SkxKYBWQGI3Fg3+qtdrZxFHZMywVtiVkCzAD8B4kZ4OkvobF7FHMgC?=
- =?us-ascii?Q?5phGRI5MKmPUvDlH3xFWJfkhSJ8jquYKrCm2V0bYbUd/RosL3KbHyHMFw/5P?=
- =?us-ascii?Q?jWPy1kxex6WeIzIa8taEd2+6eV6cFhmlhKRkWTGTgUo7vkBUqnqC7MnwZK2/?=
- =?us-ascii?Q?teg8fFf8SydkmQMy1th3IZL+I629lTu0F1fkOa1fGP3EmFWvfHD5X67679pW?=
- =?us-ascii?Q?zxSpGmoSRxTizZ9lhH38bxRZyovQ0KmUfouhWbmiWmfZEfCzEmUxPjGXADTf?=
- =?us-ascii?Q?jtNP3vSqRGCwuCTkHMv41EOiwMq2JI7iHTe+L30NQbToYg3D83Wrhs4sPUbD?=
- =?us-ascii?Q?50SGuSuA8Q2aevtOWRada8x/UF6CqTQ35DWRSX/CJK2ML8zjJAco1wKuqrcd?=
- =?us-ascii?Q?h60L4S8SJiNmg4U4K/9cIS0alJaHI40hw0iJ7V0i?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 28 Sep 2022 08:28:39 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B0E91D3F;
+        Wed, 28 Sep 2022 05:28:37 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28SCRw7s015032;
+        Wed, 28 Sep 2022 12:28:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=LJiOaGL2VVuoViglQqnwwg6m1j1+ldTNGNUKoaPwF/A=;
+ b=OrhXGJuv4TQxrN7njd0cDelmAUgflzjYQB5bNrMe7b60KpAxHb6u8GgWLJibnk9jWgQt
+ 9a9++w5651q9pzXteD9mEBSToU7mHDDQIQmVOYQcSKX6TJ+fK8Qpw3O+aSTPjkdxQqdC
+ fcY0OW+GjsM5LOz5LfHnkiRjP0ip0jn3HGhqAWc4rKp6pRPgezRhyQRcjmwx1TkVTfXw
+ +Qb4z5ClIPNUtjYHxDL0KeN0tl72m2ifef/pzgEgFAU3hupWG72g+fN7Yqp4B90mtEeB
+ 7Sc+n4lurdR9YSYuWKwGdTSnwVK6sXXNmlRNYZ7q6LY1bIgIbX//BZdWuZtWZS/4wcqJ 2w== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jvm4vg7p2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 12:28:19 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 28SCSIrJ028982
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Sep 2022 12:28:18 GMT
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 28 Sep 2022 05:28:12 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
+        <krzysztof.kozlowski@linaro.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v10 0/7] Update ADSP pil loader for SC7280 platform
+Date:   Wed, 28 Sep 2022 17:57:46 +0530
+Message-ID: <1664368073-13659-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a62ebc5-a0ed-4b68-ae17-08daa13b5b10
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2022 10:22:32.8996
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +++RiLDaFccDTc2XRjJzHLwwm6o/K6Q7lf7Wu3ziKh/IDbC2RxO5z1IuNBIKqiOrYFEEiX2zDFRlW7i+nFBRDQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8177
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 5ltP-N2xlDEkrKbm4mGJo01E7aDAeZDv
+X-Proofpoint-GUID: 5ltP-N2xlDEkrKbm4mGJo01E7aDAeZDv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-09-28_05,2022-09-28_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ suspectscore=0 clxscore=1015 adultscore=0 mlxlogscore=999 spamscore=0
+ mlxscore=0 lowpriorityscore=0 priorityscore=1501 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2209280077
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-> Subject: [PATCH] remoteproc: imx_dsp_rproc: Add mutex protection for
-> workqueue
->=20
-> The workqueue may execute late even after remoteproc is stopped or
-> stopping, some resources (rpmsg device and endpoint) have been released
-> in rproc_stop_subdevices(), then rproc_vq_interrupt() access these
-> resources will cause kennel dump.
->=20
-> Call trace:
->  virtqueue_add_split+0x1ac/0x560
->  virtqueue_add_inbuf+0x4c/0x60
->  rpmsg_recv_done+0x15c/0x294
->  vring_interrupt+0x6c/0xa4
->  rproc_vq_interrupt+0x30/0x50
->  imx_dsp_rproc_vq_work+0x24/0x40 [imx_dsp_rproc]
->  process_one_work+0x1d0/0x354
->  worker_thread+0x13c/0x470
->  kthread+0x154/0x160
->  ret_from_fork+0x10/0x20
->=20
-> Add mutex protection in imx_dsp_rproc_vq_work(), if the state is not
-> running, then just skip calling rproc_vq_interrupt().
->=20
-> Also the flush workqueue operation can't be added in rproc stop for same
-> reason.
->=20
-> Fixes: ec0e5549f358 ("remoteproc: imx_dsp_rproc: Add remoteproc driver
-> for DSP on i.MX")
-> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Update ADSP pil loader driver for SC7280 platforms.
 
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
+Changes since V9:
+	-- Add missing unevaluatedProperties in dt-bindings glink-edge.
+Changes since V8:
+	-- Add glink-edge reference in dt-bindings.
+	-- Remove redundant glinke-edge properties in dt-bindings.
+	-- Make all reg propertioes as mandatory in dt-bindings.
+	-- Add iommus property in dt-bindings.
+Changes since V7:
+	-- Drop out of reset time out patch.
+	-- Remove redundant clocks in dt bindings.
+	-- Fix dt compilation error in dt bindings.
+Changes since V6:
+	-- Update dt-bindings with glink-edge
+	-- Add qcom,qmp property.
+	-- Update parse firmware callback.
+	-- Update commit message.
+	-- Update smmu map and unmap function names.
+	-- Revert adsp_ops const change.
+	-- Move iommu check to within smmu map/unmap functions.
+Changes since V5:
+	-- Remove adsp_rproc_unmap_smmu, adsp_of_unmap_smmu, adsp_of_map_smmu and 
+	   adsp_rproc_map_smmu functions.
+	-- Remove find_loaded_rsc_table call back initialization.
+	-- Rename adsp_sandbox_needed to has_iommu.
+	-- Update parse_fw callback in rproc ops.
+	-- Remove qcom,adsp-memory-regions property in dt-bindings.
+	-- Change adsp binary extension name.
+Changes since V4:
+	-- Update halt registers description in dt bindings.
+	-- Update Memory sandboxing with proper APIs for resource
+	   allocation and free.
+Changes since V3:
+	-- Rename is_adsp_sb_needed to adsp_sandbox_needed.
+	-- Update sc7280 compatible name entry in sorted order.
+	-- Add smmu unmapping in error case and in adsp stop.
+	-- Revert converting sdm845 dt bindings to generic and 
+	   create new dt bindings for sc7280.
+Changes since V2:
+	-- Generated patch with -M flag.
+	-- Add Clock property in dt bindings.
+	-- Add qcom,adsp-memory-regions property.
+	-- Add is_adsp_sb_needed flag instead of is_wpss.
+	-- Initialize is_adsp_sb_needed flag.
+	-- Remove empty proxy pds array.
+	-- Replace platform_bus_type with adsp->dev->bus.
+	-- Use API of_parse_phandle_with_args() instead of 
+	    of_parse_phandle_with_fixed_args().
+	-- Replace adsp->is_wpss with adsp->is_adsp.
+	-- Update error handling in adsp_start().
+Changes since V1:
+	-- Change reg property maxItems to minItems and update description.
+	-- Fix typo errors.
 
-I also give a look at other drivers, seems almost all drivers use rproc_vq_=
-interrupt
-has same issue, should use mutex to protect the mbox rx callback.
+Srinivasa Rao Mandadapu (7):
+  dt-bindings: remoteproc: qcom: Add SC7280 ADSP support
+  remoteproc: qcom: Add flag in adsp private data structure
+  remoteproc: qcom: Add compatible name for SC7280 ADSP
+  remoteproc: qcom: Update rproc parse firmware callback
+  remoteproc: qcom: Replace hard coded values with macros
+  remoteproc: qcom: Add efuse evb selection control
+  remoteproc: qcom: Add support for memory sandbox
 
-Regards,
-Peng.
+ .../bindings/remoteproc/qcom,sc7280-adsp-pil.yaml  | 195 +++++++++++++++++++++
+ drivers/remoteproc/qcom_q6v5_adsp.c                | 124 ++++++++++++-
+ 2 files changed, 315 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
 
-> ---
->  drivers/remoteproc/imx_dsp_rproc.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/remoteproc/imx_dsp_rproc.c
-> b/drivers/remoteproc/imx_dsp_rproc.c
-> index 899aa8dd12f0..95da1cbefacf 100644
-> --- a/drivers/remoteproc/imx_dsp_rproc.c
-> +++ b/drivers/remoteproc/imx_dsp_rproc.c
-> @@ -347,9 +347,6 @@ static int imx_dsp_rproc_stop(struct rproc *rproc)
->  	struct device *dev =3D rproc->dev.parent;
->  	int ret =3D 0;
->=20
-> -	/* Make sure work is finished */
-> -	flush_work(&priv->rproc_work);
-> -
->  	if (rproc->state =3D=3D RPROC_CRASHED) {
->  		priv->flags &=3D ~REMOTE_IS_READY;
->  		return 0;
-> @@ -432,9 +429,18 @@ static void imx_dsp_rproc_vq_work(struct
-> work_struct *work)  {
->  	struct imx_dsp_rproc *priv =3D container_of(work, struct
-> imx_dsp_rproc,
->  						  rproc_work);
-> +	struct rproc *rproc =3D priv->rproc;
-> +
-> +	mutex_lock(&rproc->lock);
-> +
-> +	if (rproc->state !=3D RPROC_RUNNING)
-> +		goto unlock_mutex;
->=20
->  	rproc_vq_interrupt(priv->rproc, 0);
->  	rproc_vq_interrupt(priv->rproc, 1);
-> +
-> +unlock_mutex:
-> +	mutex_unlock(&rproc->lock);
->  }
->=20
->  /**
-> --
-> 2.34.1
+-- 
+2.7.4
 
