@@ -2,76 +2,92 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16EF5F7DD6
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  7 Oct 2022 21:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04425F8645
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  8 Oct 2022 19:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiJGTUx (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 7 Oct 2022 15:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S230262AbiJHRrM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 8 Oct 2022 13:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiJGTUa (ORCPT
+        with ESMTP id S230309AbiJHRrL (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 7 Oct 2022 15:20:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE26857D6;
-        Fri,  7 Oct 2022 12:20:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61BD061DB4;
-        Fri,  7 Oct 2022 19:20:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C4B3AC433D7;
-        Fri,  7 Oct 2022 19:20:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665170411;
-        bh=G///58/K/T0MBCiEa4Qhh/H5vOZHaoIDhOzERsFXS7c=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=OmB1B9Lq6pVKtbJlTEGyfthm/6qqlxl5WsTjyPS2iZxaX4sps5dEyDU6WqbY4gY+d
-         ITmrH4T6Bt+NEiaqUpesRI4WwMxyK+nsX4V7jNK/onLwGLVfTs2caVnnjJ8RPJ5Tzm
-         JYiWyqqxVfQJA+FvEQkKuMusDlXYR5Q8EnqbbmmKRqypdael/ynOoyK0VEfz0e1SCC
-         PJoQGXVNEPxiWeCYnFKsVna6S/EArzXmwyMpEfhewsfmlFTkBeJGbUiB+tc31pyPQE
-         RCUNY0FDWqv25i/dGhPm2iUauQ0AT4wRhXZ3TUw/mkHHKEff9V4amJOUesQ1AIbffW
-         q8HMn37KbMuxg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A7952E21ED6;
-        Fri,  7 Oct 2022 19:20:11 +0000 (UTC)
-Subject: Re: [GIT PULL] rpmsg updates for v6.1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221007015707.2583858-1-andersson@kernel.org>
-References: <20221007015707.2583858-1-andersson@kernel.org>
-X-PR-Tracked-List-Id: <linux-remoteproc.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221007015707.2583858-1-andersson@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v6.1
-X-PR-Tracked-Commit-Id: 467233a4ac29b215d492843d067a9f091e6bf0c5
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e5df1d3ebed2568caf45564946b4a60aa75f0277
-Message-Id: <166517041165.8063.6113838581434299418.pr-tracker-bot@kernel.org>
-Date:   Fri, 07 Oct 2022 19:20:11 +0000
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 8 Oct 2022 13:47:11 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0643641A;
+        Sat,  8 Oct 2022 10:47:10 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d24so7135852pls.4;
+        Sat, 08 Oct 2022 10:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PjOpq6xMtwZ+a3cDZHo77w5YYPm/GULCq55aoUGSZUY=;
+        b=k2PdDqrMFH9TDVs4NNmkDNVW1tZ4DZI2Om3NlqRmVHq/ORP6Ek4CTPo2ChxBkffpqG
+         +exGCZ37mPRtxWvp6qBnqE51uk026LglhI9PMAO1O0WUkbcNgu4Y2BZXkX4t0sjQd2vv
+         6opOW+kcQSbdkSpElJuHFi30ya2mMiySGYPTaFGq0WxOmKGXV06z3yEjDfIXrmXuxfwG
+         LY02yLVqQiOuRSdG3YwNVAoAWHltYXP64dKm09HkasL6+NSyzt6Bu3TtVqj+KdzVFqrD
+         wkzEcXMbwaFHyPvrYgZndfNKbNlXQQI3cU0OG8RlRAKS1Hh8l7+Wf+c1raSlJVQu6xVB
+         w1dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PjOpq6xMtwZ+a3cDZHo77w5YYPm/GULCq55aoUGSZUY=;
+        b=Gz9JEEyc6WAgib6HJwb4+3Z6UQVpsqk18K4/sm5HjgTN7KrVBg5GJ6kGrgjNIVBoiR
+         NYhsCBKDEMfRE24zjdoXx8uDRX5PH+xAM6slwOlssfJPA81f92cd7Nx6TVZvkU6ze9sk
+         QlJaBrR3wyPPl9VFw32o1V/0UX+GSIipcQ+nxIezQ10yapN5GPKsbofO0IxYXuvDb1gt
+         +Kr30rSAd+JJ6Jwjq8qiY/zBzWxbxttKisgJZvKiv2wYUoGOvsBuHpldme91ZyS5fonb
+         prT/aoRetxUXxlE3JIlQcWGJ4gwthqpm0dzqpD/DbJ/znzvQBcsYKIhblFz5e7+Vd3PE
+         tq7g==
+X-Gm-Message-State: ACrzQf1mhYUfOxk6D3Cm5gLWH/Cr0mTO58oxcx3aWDW4QoQpKJ6n213l
+        oo4krmoopl+R1txDapLTokfvydvtyygNog==
+X-Google-Smtp-Source: AMsMyM5PNS0KaEXVCBl5n03E5vdpEpUJXbhW17H5h1iuFum/emGaclK/NUUxFJWQgBx3uTysCD1PQg==
+X-Received: by 2002:a17:90b:1d4c:b0:20a:8db1:da52 with SMTP id ok12-20020a17090b1d4c00b0020a8db1da52mr22216569pjb.98.1665251229287;
+        Sat, 08 Oct 2022 10:47:09 -0700 (PDT)
+Received: from skynet-linux.local ([2406:7400:61:5d7c:3fe4:8f6d:b1b6:f2bf])
+        by smtp.googlemail.com with ESMTPSA id o9-20020a170903210900b0017f7d7e95d3sm3583270ple.167.2022.10.08.10.47.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Oct 2022 10:47:08 -0700 (PDT)
+From:   Sireesh Kodali <sireeshkodali1@gmail.com>
+To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, linux-kernel@vger.kernel.org
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        dmitry.baryshkov@linaro.org,
+        Sireesh Kodali <sireeshkodali1@gmail.com>
+Subject: [PATCH v3 0/2] remoteproc: qcom: Add support for MSM8953 ADSP
+Date:   Sat,  8 Oct 2022 23:16:56 +0530
+Message-Id: <20221008174658.336470-1-sireeshkodali1@gmail.com>
+X-Mailer: git-send-email 2.37.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The pull request you sent on Thu,  6 Oct 2022 20:57:07 -0500:
+This patch series adds support for the ADSP PIL as found on the MSM8953
+platform. It is a subset of a previous patch series.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v6.1
+Changes since v2:
+ * Made ordering of compatible strings lexical in doc patch
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e5df1d3ebed2568caf45564946b4a60aa75f0277
+Link to v1: https://lkml.org/lkml/2022/10/6/18
 
-Thank you!
+Sireesh Kodali (2):
+  remoteproc: qcom: pas: Add MSM8953 ADSP PIL support
+  dt-bindings: remoteproc: qcom: adsp: Add ADSP on MSM8953
+
+ Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 5 +++++
+ drivers/remoteproc/qcom_q6v5_pas.c                          | 1 +
+ 2 files changed, 6 insertions(+)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.37.3
+
