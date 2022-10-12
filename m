@@ -2,167 +2,114 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943345FC477
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Oct 2022 13:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110CC5FC63C
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Oct 2022 15:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiJLLpm (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 12 Oct 2022 07:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47142 "EHLO
+        id S229660AbiJLNTt (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 12 Oct 2022 09:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229764AbiJLLp3 (ORCPT
+        with ESMTP id S229711AbiJLNTs (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 12 Oct 2022 07:45:29 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2579240A2;
-        Wed, 12 Oct 2022 04:45:10 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29CBivx7037778;
-        Wed, 12 Oct 2022 06:44:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1665575097;
-        bh=aBZmix5mN78scg9hnkAbo7v44ywBJRDrxSXesTutH9k=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=eJvr3WnNJ5zXpiLB0/oZbzrEgZOCPk0f5M7mjPgehpqHr12FYJuD6IvhilMpfPqKW
-         WJCXhwRK1MnkhQzLUFMhFRV+3SH4ajWu+M81cIJt6b+feSdOK9uxOFMa0Ua11EgpQU
-         1A1vjJOtZdaoXt357wQtC6uwPvBq/oVQ1eosQpio=
-Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29CBivFR115992
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 12 Oct 2022 06:44:57 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 12
- Oct 2022 06:44:56 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 12 Oct 2022 06:44:56 -0500
-Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29CBiuM7016488;
-        Wed, 12 Oct 2022 06:44:56 -0500
-Received: from localhost (a0501179-pc.dhcp.ti.com [10.24.69.114])
-        by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 29CBitJl003376;
-        Wed, 12 Oct 2022 06:44:56 -0500
-From:   MD Danish Anwar <danishanwar@ti.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Wed, 12 Oct 2022 09:19:48 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1F162C7;
+        Wed, 12 Oct 2022 06:19:40 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-134072c15c1so16181526fac.2;
+        Wed, 12 Oct 2022 06:19:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nHbkoBjQM3cnHgeuFNh4CLJQpR2gyMYlo/zWXCKAPu8=;
+        b=mA284yT9su6vAE0X7cBgYnjcC+QdjCy6005CZObAo/M7EI43IFlUbfwYZy4bd5I7Q4
+         uvadVUDsg00pPwVX4P4qvOaO5s3RWPy/RHATJRYlE1i0LkE6LVWbNF0TK8PgeDg5Dn21
+         6iS9+iRNzMcn4tXgSJ4Kl1iGvkeakRMoaXhi7pCU3HAl7/riMFISal4QAI7Xu8bSMstr
+         WM85JouC+rKXYIBsEyxO0tq+vVHBumiv27uS8C+yaAxIbgxnQQafIPFuuX9HLT/jGGA4
+         9Mfqcr09KbfIul6EgQUTEgYuhr0+TF/V6hqP2ucc/5OuzPHu9nVf90iXr65Qf56V0VZ6
+         PSFg==
+X-Gm-Message-State: ACrzQf10/mOFnsj3ZDwOp/uU5o956acNUH2wKP0qa6oNcWyPsbBPsPW3
+        CGe2igVWFd/YyT3GB7wY0w==
+X-Google-Smtp-Source: AMsMyM6pWmlDqANOqRxlJk0ps4RQ7CWJkauLGFTwb5K5BiMbI6+BceXPvi6XGB6cNc2hfI/VVxxo5Q==
+X-Received: by 2002:a05:6870:6586:b0:132:62a5:a663 with SMTP id fp6-20020a056870658600b0013262a5a663mr2247606oab.229.1665580779562;
+        Wed, 12 Oct 2022 06:19:39 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r16-20020a4a9650000000b00448a3ecdc9dsm972657ooi.22.2022.10.12.06.19.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 06:19:39 -0700 (PDT)
+Received: (nullmailer pid 1941574 invoked by uid 1000);
+        Wed, 12 Oct 2022 13:19:39 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, Puranjay Mohan <p-mohan@ti.com>,
+        srk@ti.com, Suman Anna <s-anna@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>, nm@ti.com,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
-        <nm@ti.com>, <vigneshr@ti.com>, <srk@ti.com>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "MD Danish Anwar" <danishanwar@ti.com>,
-        Tero Kristo <t-kristo@ti.com>,
-        "Grzegorz Jaszczyk" <grzegorz.jaszczyk@linaro.org>,
-        Puranjay Mohan <p-mohan@ti.com>
-Subject: [PATCH v6 5/5] remoteproc: pru: Configure firmware based on client setup
-Date:   Wed, 12 Oct 2022 17:14:29 +0530
-Message-ID: <20221012114429.2341215-6-danishanwar@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221012114429.2341215-1-danishanwar@ti.com>
-References: <20221012114429.2341215-1-danishanwar@ti.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Roger Quadros <rogerq@kernel.org>,
+        Tero Kristo <t-kristo@ti.com>, vigneshr@ti.com
+In-Reply-To: <20221012114429.2341215-2-danishanwar@ti.com>
+References: <20221012114429.2341215-1-danishanwar@ti.com> <20221012114429.2341215-2-danishanwar@ti.com>
+Message-Id: <166558063092.1936865.1773120279875751081.robh@kernel.org>
+Subject: Re: [PATCH v6 1/5] dt-bindings: remoteproc: Add PRU consumer bindings
+Date:   Wed, 12 Oct 2022 08:19:39 -0500
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Tero Kristo <t-kristo@ti.com>
+On Wed, 12 Oct 2022 17:14:25 +0530, MD Danish Anwar wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> Add a YAML binding document for PRU consumers. The binding includes
+> all the common properties that can be used by different PRU consumer
+> or application nodes and supported by the PRU remoteproc driver.
+> These are used to configure the PRU hardware for specific user
+> applications.
+> 
+> The application nodes themselves should define their own bindings.
+> 
+> Co-developed-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Tero Kristo <t-kristo@ti.com>
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+> ---
+>  .../bindings/remoteproc/ti,pru-consumer.yaml  | 132 ++++++++++++++++++
+>  1 file changed, 132 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> 
 
-Client device node property firmware-name is now used to configure
-firmware for the PRU instances. The default firmware is also
-restored once releasing the PRU resource.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Co-developed-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
-Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
----
- drivers/remoteproc/pru_rproc.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+yamllint warnings/errors:
 
-diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-index 3d1870e6b13b..15ffaeddd963 100644
---- a/drivers/remoteproc/pru_rproc.c
-+++ b/drivers/remoteproc/pru_rproc.c
-@@ -172,6 +172,23 @@ void pru_control_set_reg(struct pru_rproc *pru, unsigned int reg,
- 	spin_unlock_irqrestore(&pru->rmw_lock, flags);
- }
- 
-+/**
-+ * pru_rproc_set_firmware() - set firmware for a pru core
-+ * @rproc: the rproc instance of the PRU
-+ * @fw_name: the new firmware name, or NULL if default is desired
-+ *
-+ * Return: 0 on success, or errno in error case.
-+ */
-+static int pru_rproc_set_firmware(struct rproc *rproc, const char *fw_name)
-+{
-+	struct pru_rproc *pru = rproc->priv;
-+
-+	if (!fw_name)
-+		fw_name = pru->fw_name;
-+
-+	return rproc_set_firmware(rproc, fw_name);
-+}
-+
- static struct rproc *__pru_rproc_get(struct device_node *np, int index)
- {
- 	struct rproc *rproc;
-@@ -230,6 +247,7 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	struct rproc *rproc;
- 	struct pru_rproc *pru;
- 	struct device *dev;
-+	const char *fw_name;
- 	int ret;
- 
- 	rproc = __pru_rproc_get(np, index);
-@@ -256,11 +274,25 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	if (pru_id)
- 		*pru_id = pru->id;
- 
-+	ret = of_property_read_string_index(np, "firmware-name", index,
-+					    &fw_name);
-+	if (!ret) {
-+		ret = pru_rproc_set_firmware(rproc, fw_name);
-+		if (ret) {
-+			dev_err(dev, "failed to set firmware: %d\n", ret);
-+			goto err;
-+		}
-+	}
-+
- 	return rproc;
- 
- err_no_rproc_handle:
- 	rproc_put(rproc);
- 	return ERR_PTR(ret);
-+
-+err:
-+	pru_rproc_put(rproc);
-+	return ERR_PTR(ret);
- }
- EXPORT_SYMBOL_GPL(pru_rproc_get);
- 
-@@ -280,6 +312,8 @@ void pru_rproc_put(struct rproc *rproc)
- 
- 	pru = rproc->priv;
- 
-+	pru_rproc_set_firmware(rproc, NULL);
-+
- 	mutex_lock(&pru->lock);
- 
- 	if (!pru->client_np) {
--- 
-2.25.1
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.example.dtb:0:0: /example-0/icssg2-eth: failed to match any schema with compatible: ['ti,am654-icssg-prueth']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
