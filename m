@@ -2,203 +2,109 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B240F5FF31F
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 14 Oct 2022 19:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 848375FFC9D
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 16 Oct 2022 01:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiJNRtK (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 14 Oct 2022 13:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
+        id S229600AbiJOX06 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 15 Oct 2022 19:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiJNRtK (ORCPT
+        with ESMTP id S229547AbiJOX05 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 14 Oct 2022 13:49:10 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0321D443B
-        for <linux-remoteproc@vger.kernel.org>; Fri, 14 Oct 2022 10:49:08 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 128so4940784pga.1
-        for <linux-remoteproc@vger.kernel.org>; Fri, 14 Oct 2022 10:49:08 -0700 (PDT)
+        Sat, 15 Oct 2022 19:26:57 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FEB3EA6E
+        for <linux-remoteproc@vger.kernel.org>; Sat, 15 Oct 2022 16:26:55 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id l22so11386807edj.5
+        for <linux-remoteproc@vger.kernel.org>; Sat, 15 Oct 2022 16:26:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fgg+Z6tz1c5hzcpV+3M0EHGrTn1Q32r1s7UqtR7H4Z4=;
-        b=rKjysMoEJFnKsWxo+azU9/r8jB6dgiRWKOI8YL8DIkT2T9zE8kVZiWLxz5Pz/jSj8Y
-         VKJB7wkhAtpSK6/p6LY7kLTa7zc5bR07bnpTpS52iijrkxu18j5UCRlg8YAx8IgBFTsx
-         KfIX4cQLEqHu4H6hyyhWY2j15oROMF4D0KsMZMWyJ+lvMwasjrLjsYMQUpGrL30/rLes
-         bErMpL+IUW2vkIkFZUtVCPTvRZYvlGiZDhgwMmo6w+z4ZrOLnhhJ/L9VlqF0uQocZK+/
-         Q7UXhqPlI+zzPlLCf9GimHw6afKOLJksc9zC2GzC5Ywq0plkyA4Q25RzOCBn3UI241s3
-         JJxA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6aF9nFwwA4H8y+DQySeTN9I4LSFxeOQ6cH2LPftSBU4=;
+        b=PylwGucp8DT/F1QFDw2FtDbSSwSvUVHllt57G/O0Tk9zAnQtE1XBU941y9DY9sPzZL
+         IGmB/KsMRAMLUVoxgHWJwKrc4+USJ7vwNR+0E1Blo8f77Vkmp8mxGhWeyO2vJqgcxeir
+         VoPFdoUeKmE53h704uXLL5c0K75eVG5GvPGA6Yii60pZIPHGoYW6aGTvukFgKwcPZtsG
+         Gkj5U682jaml2bixgQCcnr+4rXxN7heF3Ayq89zMqXL/2m1pGnA1LOlC3NydNU7ICvM2
+         gKew6+l4NTv3c6EJ4VtjmblcrlmSkpvHikhhAd88xjpgypG+MmZ/RyG4plDft1YWJDq9
+         XqcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fgg+Z6tz1c5hzcpV+3M0EHGrTn1Q32r1s7UqtR7H4Z4=;
-        b=QCAvAxMGw9MVTAOnPwdS51vwL9qznU78JAbkFcRUidvN3jOwNtK3WZ88TJGDDetjYi
-         EuJ/JJn3mRJgYznm75IJBK6aOglQvLdcspeUED1Wadg9y1dZbrSQ805+Aa5SnSzLJ50l
-         s3q/EUWsFJbHltZfi1LaTaAEWoEcjrsTt3E21vcu92gAeRer8zsR7y6BVMLjxXbEc4OE
-         8mL6kST3XLKiRGbTAbMEkAn/rRE/NvV2TSVmYUwxkKoxagS1YGkZrhW24J9CJkSrSxRd
-         8L2GxvH9DbnMZ8nibm5LLUfBjLRsoj6op4wMPPZ5k0w4CIvh4ULBuzLdcE4NOfE+ySDD
-         Sv8w==
-X-Gm-Message-State: ACrzQf05Vmv3Xc/VkKratAbiD9ht7zRL4BRxz81sEJQOOUM1OcSF4HqW
-        78ETVHe+v5cdLGmwzKzowVoFJw==
-X-Google-Smtp-Source: AMsMyM5k06dMy4xiWzMMmiotkK9Vymdbnd2tx2iRdvjq+IUO+YtCCjKShj3wY2w9FnmFvqz1erWZ/w==
-X-Received: by 2002:a63:450c:0:b0:443:94a1:3703 with SMTP id s12-20020a63450c000000b0044394a13703mr5406312pga.565.1665769747842;
-        Fri, 14 Oct 2022 10:49:07 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b00180cf894b67sm2001776plh.130.2022.10.14.10.49.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 10:49:06 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 11:49:03 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH V7 6/7] remoteproc: imx_rproc: request mbox channel later
-Message-ID: <20221014174903.GA4125124@p14s>
-References: <20221014031037.1070424-1-peng.fan@oss.nxp.com>
- <20221014031037.1070424-7-peng.fan@oss.nxp.com>
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6aF9nFwwA4H8y+DQySeTN9I4LSFxeOQ6cH2LPftSBU4=;
+        b=K/07uScB6Bt3tPAg5l+UVIzmhVX2AZyQdYOEhb6eAY5udyby33NAyA+CN77//Bajn7
+         8Ce1GShfyS5ABonQcIse4g/cZlvN38H5bt7+UIUsfYK6T4sMGFGZUkfijDBd6LmnBKDm
+         J1KZNqH8TG4CgskHd0BqXg6dTo9vXjDp7lBv/hwE0SIszdvMsKXqULBTMhBRom0Whsvv
+         u7/BD6OJRyn2q+fihnHYgccQR+4v7aTwAQaHzNj9hFiuIsuBSAaYyoFaUuh5BCmokxHf
+         lW6/rOGc9ZaQG0oKff67UEm3kH5d3zFihzhizwmxUpn/YjM7GJmd1XNBBYwaK/g8qV9U
+         gQhg==
+X-Gm-Message-State: ACrzQf0iTdthfELXhvP8Th+C9m/KclBU3QiPW3RgU9loz5b+EsgPecjR
+        Mp1o+UowCuI5Dc7gs5xNmXPRbDATrk7Akv9XnsY=
+X-Google-Smtp-Source: AMsMyM7yVoSkrE4F3B0rWm2IIEKC4BFe3t2vzAqxjv7XXaXqik7GdvLrqF8ZfyK3Bu0xQiadrwoPzQB+cVJvecc9sIY=
+X-Received: by 2002:a05:6402:14c9:b0:459:1a5b:6c47 with SMTP id
+ f9-20020a05640214c900b004591a5b6c47mr4132818edx.426.1665876413682; Sat, 15
+ Oct 2022 16:26:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221014031037.1070424-7-peng.fan@oss.nxp.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab4:8b06:0:0:0:0:0 with HTTP; Sat, 15 Oct 2022 16:26:52
+ -0700 (PDT)
+Reply-To: richardwahl9035@gmail.com
+From:   Richard Wahl <awinokotieno@gmail.com>
+Date:   Sun, 16 Oct 2022 02:26:52 +0300
+Message-ID: <CAHRfjSBmgVQqxeOhEdxWFi09gju+fhytZJ=dVwkhUEAb37zsBQ@mail.gmail.com>
+Subject: Re,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,REPTO_419_FRAUD_GM_LOOSE,
+        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:532 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [richardwahl9035[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [awinokotieno[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  1.0 REPTO_419_FRAUD_GM_LOOSE Ends-in-digits Reply-To is similar to
+        *      known advance fee fraud collector mailbox
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 11:10:36AM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> It is possible that when remote processor crash, the communication
-> channel will be broken with garbage value in mailbox, such as
-> when Linux is issuing a message through mailbox, remote processor
-> crashes, we need free & rebuild the mailbox channels to make sure
-> no garbage value in mailbox channels.
-> 
-> So move the request/free to start/stop for managing remote procesosr in
-> Linux, move to attach/detach for remote processor is out of control of
-> Linux.
-> 
-> Previous, we just request mbox when attach for CM4 boot early before
-> Linux, but if mbox defer probe, remoteproc core will do resource cleanup
-> and corrupt resource table for later probe.
-> 
-> So move request mbox ealier and still keep mbox request when attach
-> for self recovery case, but keep a check when request/free mbox.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/remoteproc/imx_rproc.c | 39 ++++++++++++++++++++++++++++++++--
->  1 file changed, 37 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> index 917e6db39572..1183de84a4c0 100644
-> --- a/drivers/remoteproc/imx_rproc.c
-> +++ b/drivers/remoteproc/imx_rproc.c
-> @@ -84,6 +84,8 @@ struct imx_rproc_mem {
->  #define ATT_CORE_MASK   0xffff
->  #define ATT_CORE(I)     BIT((I))
->  
-> +static int imx_rproc_xtr_mbox_init(struct rproc *rproc);
-> +static void imx_rproc_free_mbox(struct rproc *rproc);
->  static int imx_rproc_detach_pd(struct rproc *rproc);
->  
->  struct imx_rproc {
-> @@ -357,6 +359,10 @@ static int imx_rproc_start(struct rproc *rproc)
->  	struct arm_smccc_res res;
->  	int ret;
->  
-> +	ret = imx_rproc_xtr_mbox_init(rproc);
-> +	if (ret)
-> +		return ret;
-> +
->  	switch (dcfg->method) {
->  	case IMX_RPROC_MMIO:
->  		ret = regmap_update_bits(priv->regmap, dcfg->src_reg, dcfg->src_mask,
-> @@ -407,6 +413,8 @@ static int imx_rproc_stop(struct rproc *rproc)
->  
->  	if (ret)
->  		dev_err(dev, "Failed to stop remote core\n");
-> +	else
-> +		imx_rproc_free_mbox(rproc);
->  
->  	return ret;
->  }
-> @@ -592,6 +600,22 @@ static void imx_rproc_kick(struct rproc *rproc, int vqid)
->  
->  static int imx_rproc_attach(struct rproc *rproc)
->  {
-> +	return imx_rproc_xtr_mbox_init(rproc);
-> +}
-> +
-> +static int imx_rproc_detach(struct rproc *rproc)
-> +{
-> +	struct imx_rproc *priv = rproc->priv;
-> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
-> +
-> +	if (dcfg->method != IMX_RPROC_SCU_API)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id))
-> +		return -EOPNOTSUPP;
-> +
-> +	imx_rproc_free_mbox(rproc);
-> +
->  	return 0;
->  }
->  
-> @@ -610,6 +634,7 @@ static struct resource_table *imx_rproc_get_loaded_rsc_table(struct rproc *rproc
->  static const struct rproc_ops imx_rproc_ops = {
->  	.prepare	= imx_rproc_prepare,
->  	.attach		= imx_rproc_attach,
-> +	.detach		= imx_rproc_detach,
->  	.start		= imx_rproc_start,
->  	.stop		= imx_rproc_stop,
->  	.kick		= imx_rproc_kick,
-> @@ -720,6 +745,9 @@ static int imx_rproc_xtr_mbox_init(struct rproc *rproc)
->  	struct device *dev = priv->dev;
->  	struct mbox_client *cl;
->  
-> +	if (priv->tx_ch && priv->rx_ch)
-> +		return 0;
-> +
+--=20
+Sch=C3=B6nen Tag,
 
-You did exactly the same things as in V6.  I asked you why this is needed and
-all you did is point me to the code in _probe(), which I can read on my own.
-
-Again - why is this needed when we know it will be done in start() and attach()?
-
-
->  	if (!of_get_property(dev->of_node, "mbox-names", NULL))
->  		return 0;
->  
-> @@ -749,8 +777,15 @@ static void imx_rproc_free_mbox(struct rproc *rproc)
->  {
->  	struct imx_rproc *priv = rproc->priv;
->  
-> -	mbox_free_channel(priv->tx_ch);
-> -	mbox_free_channel(priv->rx_ch);
-> +	if (priv->tx_ch) {
-> +		mbox_free_channel(priv->tx_ch);
-> +		priv->tx_ch = NULL;
-> +	}
-> +
-> +	if (priv->rx_ch) {
-> +		mbox_free_channel(priv->rx_ch);
-> +		priv->rx_ch = NULL;
-> +	}
->  }
->  
->  static void imx_rproc_put_scu(struct rproc *rproc)
-> -- 
-> 2.37.1
-> 
+Ich bin Herr Richard Wahl, Sie haben eine Spende von 700.000,00 =E2=82=AC. =
+Ich
+habe ein gewonnen
+Gl=C3=BCck in der Power-Ball-Lotterie und ich spende einen Teil davon an Te=
+n
+Lucky People und Ten Charity Organisation. Ihre E-Mail kam heraus
+siegreich, also antworte mir dringend f=C3=BCr weitere Informationen unter:
+richardwahl9035@gmail.com
+Aufrichtig,
+Herr Richard Wah7
