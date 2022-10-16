@@ -2,109 +2,110 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848375FFC9D
-	for <lists+linux-remoteproc@lfdr.de>; Sun, 16 Oct 2022 01:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89756000B7
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 16 Oct 2022 17:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiJOX06 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sat, 15 Oct 2022 19:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
+        id S229861AbiJPPeU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 16 Oct 2022 11:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiJOX05 (ORCPT
+        with ESMTP id S229711AbiJPPeS (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sat, 15 Oct 2022 19:26:57 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FEB3EA6E
-        for <linux-remoteproc@vger.kernel.org>; Sat, 15 Oct 2022 16:26:55 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id l22so11386807edj.5
-        for <linux-remoteproc@vger.kernel.org>; Sat, 15 Oct 2022 16:26:55 -0700 (PDT)
+        Sun, 16 Oct 2022 11:34:18 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79A4386A6
+        for <linux-remoteproc@vger.kernel.org>; Sun, 16 Oct 2022 08:34:17 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id f8so5375694qkg.3
+        for <linux-remoteproc@vger.kernel.org>; Sun, 16 Oct 2022 08:34:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6aF9nFwwA4H8y+DQySeTN9I4LSFxeOQ6cH2LPftSBU4=;
-        b=PylwGucp8DT/F1QFDw2FtDbSSwSvUVHllt57G/O0Tk9zAnQtE1XBU941y9DY9sPzZL
-         IGmB/KsMRAMLUVoxgHWJwKrc4+USJ7vwNR+0E1Blo8f77Vkmp8mxGhWeyO2vJqgcxeir
-         VoPFdoUeKmE53h704uXLL5c0K75eVG5GvPGA6Yii60pZIPHGoYW6aGTvukFgKwcPZtsG
-         Gkj5U682jaml2bixgQCcnr+4rXxN7heF3Ayq89zMqXL/2m1pGnA1LOlC3NydNU7ICvM2
-         gKew6+l4NTv3c6EJ4VtjmblcrlmSkpvHikhhAd88xjpgypG+MmZ/RyG4plDft1YWJDq9
-         XqcQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/HzaPuqNEIzv1PWmvD8WAnk/Y18nRQCpGE1l2eqH9ws=;
+        b=cgmcMRxhVutyoZcVTfiJ9EOzfMYm69fP9mG0tNU5Vj9SWYd6wQ/BrVP0hjEHPnYuy7
+         JybJDhxk9NjW4fA0UlweoG8ATmrTiTcZXuJYoLvZKLPpmwzYUyrWDX6VXc1/g1OvH6Hd
+         NJkVG4XSnY6xWOSUaIqXqJi3fzC5kC7M4AeUqixo4r/e+OKsjaSfvlOyDWnbkYWa1NhK
+         5Kf6ROPybvnEG1rAvVEXkace8tL+zgEphETag3XOiVpYTicT8HTpS4Fj9M0uKJ7yqex+
+         BqKX4owVWKL5PhvPd5FnqpkRDFq3oGSGSxKXWZxpEX1CblEQuDCWnCA/jG9jMQjsNmA4
+         LwEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6aF9nFwwA4H8y+DQySeTN9I4LSFxeOQ6cH2LPftSBU4=;
-        b=K/07uScB6Bt3tPAg5l+UVIzmhVX2AZyQdYOEhb6eAY5udyby33NAyA+CN77//Bajn7
-         8Ce1GShfyS5ABonQcIse4g/cZlvN38H5bt7+UIUsfYK6T4sMGFGZUkfijDBd6LmnBKDm
-         J1KZNqH8TG4CgskHd0BqXg6dTo9vXjDp7lBv/hwE0SIszdvMsKXqULBTMhBRom0Whsvv
-         u7/BD6OJRyn2q+fihnHYgccQR+4v7aTwAQaHzNj9hFiuIsuBSAaYyoFaUuh5BCmokxHf
-         lW6/rOGc9ZaQG0oKff67UEm3kH5d3zFihzhizwmxUpn/YjM7GJmd1XNBBYwaK/g8qV9U
-         gQhg==
-X-Gm-Message-State: ACrzQf0iTdthfELXhvP8Th+C9m/KclBU3QiPW3RgU9loz5b+EsgPecjR
-        Mp1o+UowCuI5Dc7gs5xNmXPRbDATrk7Akv9XnsY=
-X-Google-Smtp-Source: AMsMyM7yVoSkrE4F3B0rWm2IIEKC4BFe3t2vzAqxjv7XXaXqik7GdvLrqF8ZfyK3Bu0xQiadrwoPzQB+cVJvecc9sIY=
-X-Received: by 2002:a05:6402:14c9:b0:459:1a5b:6c47 with SMTP id
- f9-20020a05640214c900b004591a5b6c47mr4132818edx.426.1665876413682; Sat, 15
- Oct 2022 16:26:53 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/HzaPuqNEIzv1PWmvD8WAnk/Y18nRQCpGE1l2eqH9ws=;
+        b=ORCVpU2Hfjw+ABNpMl6VrhuouJORsmSVXvLixAN+JlX6zRZGssuz8Dou6Tys9Ark9l
+         jcM65c20KVKM67YRPHOHB/JovTmpAXlFr6fXLR3xgkNep5rO+UWtOGajaflKFx19Wqd+
+         CNt4ejgiIhTsv3KrHbvieVeZeMGedN2OUgVhEjlJ7miWFOnnEy7QQE8VRZp4t/9D1eEB
+         XBoBfNVDYXFJuNpUbw1VHpHuLu7d+pQ0CIw4gi77Yc86fa34/qUNf0eJLsKy3ZIXEi04
+         i+gNrbtsl5SOCGrMCd5VUJ4wS3Pqqa4QNgD5TKoz7TM1gwcGbj1QAbxjwgOVJbvojL8F
+         u82g==
+X-Gm-Message-State: ACrzQf2DuDj9L23RQZfCJTkl0iUNWQIN7g316/ieKIzG4eQcMLDKnnkK
+        IW/LrzMZlHjb/bAyS+W2gB1NNw==
+X-Google-Smtp-Source: AMsMyM4u3CYE3ChHbdxdMXGxFHg+maC17Gk9XqoktcgBmxSXQeYMvpMNCexAD8IGCLH39CBN2uVplg==
+X-Received: by 2002:a05:620a:40d5:b0:6ee:e3f8:20d2 with SMTP id g21-20020a05620a40d500b006eee3f820d2mr1077035qko.14.1665934457113;
+        Sun, 16 Oct 2022 08:34:17 -0700 (PDT)
+Received: from ?IPV6:2601:42:0:3450:9b13:d679:7b5b:6921? ([2601:42:0:3450:9b13:d679:7b5b:6921])
+        by smtp.gmail.com with ESMTPSA id y21-20020a05620a44d500b006b61b2cb1d2sm7465845qkp.46.2022.10.16.08.34.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Oct 2022 08:34:16 -0700 (PDT)
+Message-ID: <199bed73-676b-850f-fe1e-f144e1b2f314@linaro.org>
+Date:   Sun, 16 Oct 2022 11:34:14 -0400
 MIME-Version: 1.0
-Received: by 2002:ab4:8b06:0:0:0:0:0 with HTTP; Sat, 15 Oct 2022 16:26:52
- -0700 (PDT)
-Reply-To: richardwahl9035@gmail.com
-From:   Richard Wahl <awinokotieno@gmail.com>
-Date:   Sun, 16 Oct 2022 02:26:52 +0300
-Message-ID: <CAHRfjSBmgVQqxeOhEdxWFi09gju+fhytZJ=dVwkhUEAb37zsBQ@mail.gmail.com>
-Subject: Re,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,REPTO_419_FRAUD_GM_LOOSE,
-        SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:532 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [richardwahl9035[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [awinokotieno[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  1.0 REPTO_419_FRAUD_GM_LOOSE Ends-in-digits Reply-To is similar to
-        *      known advance fee fraud collector mailbox
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V7 2/7] dt-bindings: remoteproc: imx_rproc: support
+ i.MX8QM
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, andersson@kernel.org,
+        mathieu.poirier@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>, Rob Herring <robh@kernel.org>
+References: <20221014031037.1070424-1-peng.fan@oss.nxp.com>
+ <20221014031037.1070424-3-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221014031037.1070424-3-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
---=20
-Sch=C3=B6nen Tag,
+On 13/10/2022 23:10, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add i.MX8QM compatible
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> index 70322e57b6ff..64e783234e38 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> @@ -23,6 +23,7 @@ properties:
+>        - fsl,imx8mp-cm7
+>        - fsl,imx8mq-cm4
+>        - fsl,imx8qxp-cm4
+> +      - fsl,imx8qm-cm4
 
-Ich bin Herr Richard Wahl, Sie haben eine Spende von 700.000,00 =E2=82=AC. =
-Ich
-habe ein gewonnen
-Gl=C3=BCck in der Power-Ball-Lotterie und ich spende einen Teil davon an Te=
-n
-Lucky People und Ten Charity Organisation. Ihre E-Mail kam heraus
-siegreich, also antworte mir dringend f=C3=BCr weitere Informationen unter:
-richardwahl9035@gmail.com
-Aufrichtig,
-Herr Richard Wah7
+Keep alphabetical order.
+
+>  
+
+Best regards,
+Krzysztof
+
