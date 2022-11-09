@@ -2,98 +2,135 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1B5621678
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  8 Nov 2022 15:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2C6623110
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  9 Nov 2022 18:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbiKHO1a (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 8 Nov 2022 09:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58932 "EHLO
+        id S231482AbiKIRIe (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 9 Nov 2022 12:08:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234486AbiKHO0y (ORCPT
+        with ESMTP id S231396AbiKIRId (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 8 Nov 2022 09:26:54 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EC919C25
-        for <linux-remoteproc@vger.kernel.org>; Tue,  8 Nov 2022 06:25:45 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id h14so13940886pjv.4
-        for <linux-remoteproc@vger.kernel.org>; Tue, 08 Nov 2022 06:25:45 -0800 (PST)
+        Wed, 9 Nov 2022 12:08:33 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142E1D2CC
+        for <linux-remoteproc@vger.kernel.org>; Wed,  9 Nov 2022 09:08:28 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id t25so48481494ejb.8
+        for <linux-remoteproc@vger.kernel.org>; Wed, 09 Nov 2022 09:08:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=frTjEIHTlXO6v5jJNflbe46il1dUjxah1hmkPCKJYy1/f6aaVZ96YwVNT21c8Mx+VL
-         R0PVu5F+awlay7dv8uEqG3mfQMZaN+xEIbVs3zUJk90rHuBTfTbUKI9ehW1dX10rlbxd
-         mQXXSvWli42inJrLM2g6PhN5xYN7/tmPsk29sFPQYGlAj5/CDrj8p18q2KOhwzU0yn1Z
-         U66f4vHTq4ebadAs2QjhqyxxvIbo8plXAHwfVczpBCyZj8AfWtsEsZzbPdDqwFqP6y9l
-         dnCncy0D5q5jmwTVNrSaXkMoaoWTcIIADYOaYowOD+gdgXtrIbBhvp2gXI2k+n6CIgmW
-         oJxg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UGckoAKiL+PDGTYOUgV90XuQ0OsD8munY0lKgBlT8+s=;
+        b=NIOItJRTewEv5DYvzGdBGeSKT4mpKmy1pGwnHstesPtSCqn1tXV6A5AcJGX4WPtN13
+         YR5sM1Zo1yLI+FVdB+gbRVeHkS96fpcisi37Omz0g/e6V8SI9zO27z9Q1WMG8zvJajAc
+         1zmAbfyvQYU1nzXtbsQr0ABbAhJ/q3/iKYVZ4lIvcyQC7/5lwVHMen4OSLPhoAG01Bq8
+         89MrSUpJtPgSmsOhi8DUeTBVirY9VWZFleyPU9cYp2Ivll3eI+SMWS8an0kwCY6auMG8
+         C7stn7GLl2czqLWHeMbia7dGsJPSZVxGeZ3kt1mOKzJoDgK5AKt3S2wpPNBiaFT2Jh3Q
+         3S+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=WNJc/p3/EKOuQYgKrlwcObx0GTRdJOK31U+tX6d9F/wgLjIz7zM2zlYsuoDoBq8Ebs
-         xvUmP+sTXdTV3KaD980Ru1borXxliF3GSbyQQ0JxdtWLvYMewe8pIMXDwlSHsJ7i+9bE
-         eChenB8ZAGy5+q6WooZE5FDWK+sCyhH/26dimZag/VNMBisaOizCG7kuGE7vsg3xrBDb
-         7fYTk+mernE/E6UzuXUTe65I3l8imPbvFfIsR2gVkvjvxS8enLPRA4jOZJSSCZNlxPbi
-         WnKiVkbjc7Wa0s25Spz/BGpIJZWdflnmPBDC7k3Xl6y038V9eyqFsKPKN7tZHxr6Yko2
-         j36A==
-X-Gm-Message-State: ACrzQf3ereyEcS2If3atEz1c/q4Zw/DMH6teIIBDP34a1VQ+EiRVbuJz
-        SWl2o7de5vPvPgL/NgG9cZYz2HIeyvoDdLkO9EU=
-X-Google-Smtp-Source: AMsMyM7i+ouk6KB7gDQcijSLT+5BFPLxz5mMKwdHu69kXLREkeFp6kif+v8n3IHurpTlIb3CZV20pcw+4UqMuGNpObo=
-X-Received: by 2002:a17:902:b581:b0:186:fb90:1151 with SMTP id
- a1-20020a170902b58100b00186fb901151mr56255957pls.43.1667917544943; Tue, 08
- Nov 2022 06:25:44 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UGckoAKiL+PDGTYOUgV90XuQ0OsD8munY0lKgBlT8+s=;
+        b=iBENol/OCjgPlYpH4onjrkPUfdpVl9Z/OY6lAnua5sDFrJvjZ1zcWJPKvux0wy8wjP
+         msFrW38vXvX2sPVVytV5HfGf9ycU5D8kkTQkSsNZBTbgbpO0luvHDmrbcGW5iI3bENmI
+         UxYWnv/YrpxddVftXzCtXOvA+U3ddasAcWRQcoxHPo+cmpHByyQwmXzh1lssdaxdR5rj
+         UmkTVDH7N7cNRRHkyZA0kYH9zkGkJDFHuRrP3qP7QbJucWkRySSM57vrIyZKgXmyVWoI
+         9ZAfFuukTmnCHoLR83TU7QIBzCACXOcWcNRSFBdA08jHKgXRhxHEgrnqOKGk3QNf7vSX
+         whQQ==
+X-Gm-Message-State: ACrzQf2RmHoMc1Ih3afOO/mT/gPAv7QMlwP+Ari3lnxgfWCgNKP8Rbv9
+        WbuHXOAO+HsYYRiKEd75bmAjWw==
+X-Google-Smtp-Source: AMsMyM6Fmko3ZwqfkYv4RDk0uzq7sMO+AwhwNSzC3++RWkc09dWpeViELtKxZUiXmPtkvGuE1F9FvA==
+X-Received: by 2002:a17:907:217a:b0:7ae:415:3fb5 with SMTP id rl26-20020a170907217a00b007ae04153fb5mr1136935ejb.255.1668013707262;
+        Wed, 09 Nov 2022 09:08:27 -0800 (PST)
+Received: from localhost.localdomain ([194.29.137.22])
+        by smtp.gmail.com with ESMTPSA id w6-20020a056402070600b0046191f5e946sm7207012edx.21.2022.11.09.09.08.25
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 09 Nov 2022 09:08:26 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: remoteproc: qcom,adsp: Add SM6375 ADSP and CDSP
+Date:   Wed,  9 Nov 2022 18:08:21 +0100
+Message-Id: <20221109170822.58281-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Received: by 2002:a05:7300:5388:b0:85:81c6:896c with HTTP; Tue, 8 Nov 2022
- 06:25:44 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   "Mr.Abraham" <davidkekeli11@gmail.com>
-Date:   Tue, 8 Nov 2022 14:25:44 +0000
-Message-ID: <CAPBO+FLJ4NDKP9BsZOPRz6jaWhgZgOACSy5HwxhJ-yxSoaUS2A@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4984]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102c listed in]
-        [list.dnswl.org]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [davidkekeli11[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [davidkekeli11[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+Add entries for SM6375 ADSP and CDSP. They are effectively the same
+as SM6350 ADSP and SM8150 CDSP respectively.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ .../devicetree/bindings/remoteproc/qcom,adsp.yaml         | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+index db9e0f0c2bea..a9219c7c8349 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+@@ -40,6 +40,8 @@ properties:
+       - qcom,sm6350-adsp-pas
+       - qcom,sm6350-cdsp-pas
+       - qcom,sm6350-mpss-pas
++      - qcom,sm6375-adsp-pas
++      - qcom,sm6375-cdsp-pas
+       - qcom,sm8150-adsp-pas
+       - qcom,sm8150-cdsp-pas
+       - qcom,sm8150-mpss-pas
+@@ -197,6 +199,8 @@ allOf:
+               - qcom,sm6350-adsp-pas
+               - qcom,sm6350-cdsp-pas
+               - qcom,sm6350-mpss-pas
++              - qcom,sm6375-adsp-pas
++              - qcom,sm6375-cdsp-pas
+               - qcom,sm8150-adsp-pas
+               - qcom,sm8150-cdsp-pas
+               - qcom,sm8150-mpss-pas
+@@ -315,6 +319,8 @@ allOf:
+               - qcom,sdm845-cdsp-pas
+               - qcom,sm6350-adsp-pas
+               - qcom,sm6350-cdsp-pas
++              - qcom,sm6375-adsp-pas
++              - qcom,sm6375-cdsp-pas
+               - qcom,sm8150-adsp-pas
+               - qcom,sm8150-cdsp-pas
+               - qcom,sm8150-slpi-pas
+@@ -372,6 +378,7 @@ allOf:
+               - qcom,msm8226-adsp-pil
+               - qcom,msm8996-adsp-pil
+               - qcom,msm8998-adsp-pas
++              - qcom,sm6375-cdsp-pas
+               - qcom,sm8150-adsp-pas
+               - qcom,sm8150-cdsp-pas
+     then:
+@@ -468,6 +475,7 @@ allOf:
+               - qcom,sc8180x-cdsp-pas
+               - qcom,sc8280xp-adsp-pas
+               - qcom,sm6350-adsp-pas
++              - qcom,sm6375-adsp-pas
+               - qcom,sm8150-slpi-pas
+               - qcom,sm8250-adsp-pas
+               - qcom,sm8250-slpi-pas
+-- 
+2.38.1
+
