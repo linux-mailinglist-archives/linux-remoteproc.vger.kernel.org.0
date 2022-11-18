@@ -2,75 +2,82 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA5D62F4F6
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 18 Nov 2022 13:34:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB84F62F716
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 18 Nov 2022 15:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241879AbiKRMev (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 18 Nov 2022 07:34:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S242275AbiKROTb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 18 Nov 2022 09:19:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241876AbiKRMeb (ORCPT
+        with ESMTP id S242251AbiKROTa (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 18 Nov 2022 07:34:31 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CCE8C0AD
-        for <linux-remoteproc@vger.kernel.org>; Fri, 18 Nov 2022 04:34:24 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id t10so6669010ljj.0
-        for <linux-remoteproc@vger.kernel.org>; Fri, 18 Nov 2022 04:34:24 -0800 (PST)
+        Fri, 18 Nov 2022 09:19:30 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820EBCE0F
+        for <linux-remoteproc@vger.kernel.org>; Fri, 18 Nov 2022 06:19:28 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id n20so13537619ejh.0
+        for <linux-remoteproc@vger.kernel.org>; Fri, 18 Nov 2022 06:19:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KgzFpCzI8B2uXD6MokXq+lK9vzCjNqEEJmXSaPDrhbY=;
-        b=jBPMlBm3DNRITFRa2ci3giO9q+xRos8iH0QVb+s8XacjOXIEmPG3VurZt4BdkKuUBB
-         DTs+muxaynTU2wAZuK+8vNYBBljixPF6XSISk0PJLqHi5WPqOqfXaaAC6kqed+yHcPVi
-         Z/VG7o6EfV9aBT1zO3/9hYDIPGMqg5TWvDW4osi8nQ/wVyvgf+GWRbcBlz29HpaUgEbX
-         ZDcProPwoZrrjENIqnB8/Fhql6yg/L3TszRb7gurxGqKSCtevWq2HsvQmNlIXPu+hfOQ
-         hBgtlLJIfPnEXLw+HQrN5GE3udIK+SEguTF4RZxAV+NxQ5yA8x7lz0IfGxVOqMlNWwU7
-         qEmA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=huayGJZuEj82T3VVhDBfYhkqbqsIQAROvGUjJHMy0A4=;
+        b=BSd6d199NcnnzDGi4lrYRPT//cxZq4puzQawgEGxmol7u3hAoc1R4UMctzanxVT5ZI
+         9uM/GXS/0GijzL2xZSc+KKGGaUTXHnqyWyPrONkVi1jcBKpn51yK+sX7MgpWcc+gInLG
+         TgxDdjLCyRzL3juUiZQ+V0GBo1uvK/LuMaE3n677+33i6Evh9pA0K8SLvu7MrqRiv02Y
+         5pb1wabXt3b6VHtT5djc+i38irWqod0/WQtZGt67U/kiqblPZtyMaD2uoOr6tr+z+6rt
+         aed2mErkQy1gikw+kZFROJrFhAX6Eg+gfhGeskWFkOinrGtrSfvvlDDr5LuSpGVP91A6
+         Igmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KgzFpCzI8B2uXD6MokXq+lK9vzCjNqEEJmXSaPDrhbY=;
-        b=pgoKqGBIsXRKM/4+ef6glZ5TBlfrIVB0nC4yqyMvrGWRzra+t/qeBzdOOGh4/+HdGe
-         qw/6dMpi5ePlYcQpfdStW4ok/rH3tR64BGVgWF61AuyG9OQr0nIZ+7LE0G5iZ5TZmzOB
-         HlxVBJyDr0E3VrpAEgP1BBFF4jFKC2DBYP8FcUDNhgH/1F0BtLKIbinKNQItlNI67cKX
-         3TBlBxrxE41NcOozutLvHTekLJNxpt4eUJyqVkHQO/r27ffmOBzla9WCBmQypP7i3YZ/
-         kiZoi2QdD8Jg6zZ6VW+TPGguSImoCw4p6/GO87jcIVFAecRrL/5aoE2AQyBu+SGJZX3q
-         VtrA==
-X-Gm-Message-State: ANoB5pkfzmx8ZdtJmyft8Z5zgYDPiw3NlGColaUHmZhllPzAgBkhmAXS
-        yXXwrl+5T4x4+FZFUf0BO+B2Tw==
-X-Google-Smtp-Source: AA0mqf6KxcK5wCNohwnNhQpc+G4qT5ssBFPbM5UwddedcYyJujnxufqKb9YY8FvOx8uoo1RTyYcG2Q==
-X-Received: by 2002:a05:651c:1993:b0:26c:4fb:b084 with SMTP id bx19-20020a05651c199300b0026c04fbb084mr2310631ljb.383.1668774863204;
-        Fri, 18 Nov 2022 04:34:23 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m10-20020a19434a000000b004ac088fdfd2sm645833lfj.85.2022.11.18.04.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 04:34:22 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 7/7] dt-bindings: remoteproc: qcom,sdx55-pas: split into separate file
-Date:   Fri, 18 Nov 2022 13:34:02 +0100
-Message-Id: <20221118123402.95784-8-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221118123402.95784-1-krzysztof.kozlowski@linaro.org>
-References: <20221118123402.95784-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=huayGJZuEj82T3VVhDBfYhkqbqsIQAROvGUjJHMy0A4=;
+        b=tAjKsdGBvZm5xSL4XKNKhPJOPy7NYSp+sggiPVpD7f8B9zC4sf4cdoNaMW4e6eBDcT
+         dvA0/5yU4LeVrlJy+/G3JygAz0t6lbczjcjzyxh9h6aWFQQYy0hivwdWEKuVfqxnpGQ0
+         Ri/QHQM5H89goitNfZrmx6YfwA29145MQgWuKrHvoPQzXo0E2zPIYGu2c2L/1eSLX2FK
+         /QnjikMX/N8GnK/Jo2FdhcTVg0luFpCJclplxjGF9X52E4sCWFutchNFxdMWfatB34Tv
+         is3QfM9XEpNP8CgbEz0pjehXMxWLEd9/aFBa3m/aBKUBnuAUk0gasGtsJZ9Pcsk0vBc2
+         QzYA==
+X-Gm-Message-State: ANoB5plYON1vTQ0i3ydjWb+S3vDIeCv/emZDKA2idGK84lxg3wuwoMQa
+        Wbna+oAdw6xzeaMd5rbZtSBFZkzNgTluTA==
+X-Google-Smtp-Source: AA0mqf6uK3wLOR2f3cv8+L5adpdIIy9QHfdrqKmoyY5V4tC4oEGoKDk8aU1bKav2RGmAnpcMQdBaUQ==
+X-Received: by 2002:a17:906:c24e:b0:778:d81d:b1f0 with SMTP id bl14-20020a170906c24e00b00778d81db1f0mr6113608ejb.731.1668781167068;
+        Fri, 18 Nov 2022 06:19:27 -0800 (PST)
+Received: from [192.168.156.208] (92.40.169.209.threembb.co.uk. [92.40.169.209])
+        by smtp.gmail.com with ESMTPSA id ky13-20020a170907778d00b0077a1dd3e7b7sm1717981ejc.102.2022.11.18.06.19.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Nov 2022 06:19:26 -0800 (PST)
+Message-ID: <4e8c2d46-ef74-42ad-e70f-dfc9a796f13a@linaro.org>
+Date:   Fri, 18 Nov 2022 14:19:23 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2 1/2] remoteproc: qcom_q6v5_pas: disable wakeup on probe
+ fail or remove
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Mukesh Ojha <quic_mojha@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        Siddharth Gupta <sidgup@codeaurora.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <s3FHojr9Uw7APAwEfc-TCdbc4o_X6o3a0BQxTBjrfM2kWX7tqxnECIE9VtPZmGaEl7Rxl5Qltzu76_QYm_jHqg==@protonmail.internalid>
+ <20221118090816.100012-1-luca.weiss@fairphone.com>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20221118090816.100012-1-luca.weiss@fairphone.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,164 +86,60 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Split SDX55 remote processor Peripheral Authentication Service bindings
-into their own file to reduce complexity and make maintenance easier.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
----
+On 18/11/2022 09:08, Luca Weiss wrote:
+> Leaving wakeup enabled during probe fail (-EPROBE_DEFER) or remove makes
+> the subsequent probe fail.
+> 
+> [    3.749454] remoteproc remoteproc0: releasing 3000000.remoteproc
+> [    3.752949] qcom_q6v5_pas: probe of 3000000.remoteproc failed with error -17
+> [    3.878935] remoteproc remoteproc0: releasing 4080000.remoteproc
+> [    3.887602] qcom_q6v5_pas: probe of 4080000.remoteproc failed with error -17
+> [    4.319552] remoteproc remoteproc0: releasing 8300000.remoteproc
+> [    4.332716] qcom_q6v5_pas: probe of 8300000.remoteproc failed with error -17
+> 
+> Fix this by disabling wakeup in both cases so the driver can properly
+> probe on the next try.
+> 
+> Fixes: a781e5aa5911 ("remoteproc: core: Prevent system suspend during remoteproc recovery")
+> Fixes: dc86c129b4fb ("remoteproc: qcom: pas: Mark devices as wakeup capable")
+> Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 
-Changes since v1:
-1. New patch.
----
- .../bindings/remoteproc/qcom,adsp.yaml        |   4 -
- .../bindings/remoteproc/qcom,sdx55-pas.yaml   | 101 ++++++++++++++++++
- 2 files changed, 101 insertions(+), 4 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml
+Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
+> ---
+> Changes in v2:
+> * move new line before rproc_free which frees 'adsp' as well
+> * pick up tags
+> 
+>   drivers/remoteproc/qcom_q6v5_pas.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+> index 6afd0941e552..67f5152e2398 100644
+> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> @@ -556,6 +556,7 @@ static int adsp_probe(struct platform_device *pdev)
+>   detach_proxy_pds:
+>   	adsp_pds_detach(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+>   free_rproc:
+> +	device_init_wakeup(adsp->dev, false);
+>   	rproc_free(rproc);
+> 
+>   	return ret;
+> @@ -572,6 +573,7 @@ static int adsp_remove(struct platform_device *pdev)
+>   	qcom_remove_sysmon_subdev(adsp->sysmon);
+>   	qcom_remove_smd_subdev(adsp->rproc, &adsp->smd_subdev);
+>   	qcom_remove_ssr_subdev(adsp->rproc, &adsp->ssr_subdev);
+> +	device_init_wakeup(adsp->dev, false);
+>   	rproc_free(adsp->rproc);
+> 
+>   	return 0;
+> --
+> 2.38.1
+> 
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-index bb7646446881..28e37d47d57b 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
-@@ -30,7 +30,6 @@ properties:
-       - qcom,sdm660-adsp-pas
-       - qcom,sdm845-adsp-pas
-       - qcom,sdm845-cdsp-pas
--      - qcom,sdx55-mpss-pas
- 
-   reg:
-     maxItems: 1
-@@ -197,7 +196,6 @@ allOf:
-             enum:
-               - qcom,sc7180-mpss-pas
-               - qcom,sc7280-mpss-pas
--              - qcom,sdx55-mpss-pas
-     then:
-       properties:
-         interrupts:
-@@ -275,7 +273,6 @@ allOf:
-           contains:
-             enum:
-               - qcom,sc7280-mpss-pas
--              - qcom,sdx55-mpss-pas
-     then:
-       properties:
-         power-domains:
-@@ -335,7 +332,6 @@ allOf:
-               - qcom,qcs404-cdsp-pas
-               - qcom,qcs404-wcss-pas
-               - qcom,sdm660-adsp-pas
--              - qcom,sdx55-mpss-pas
-     then:
-       properties:
-         qcom,qmp: false
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml
-new file mode 100644
-index 000000000000..cbeaa00ca4d4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml
-@@ -0,0 +1,101 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/remoteproc/qcom,sdx55-pas.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm SDX55 Peripheral Authentication Service
-+
-+maintainers:
-+  - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-+
-+description:
-+  Qualcomm SDX55 SoC Peripheral Authentication Service loads and boots firmware
-+  on the Qualcomm DSP Hexagon cores.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,sdx55-mpss-pas
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: XO clock
-+
-+  clock-names:
-+    items:
-+      - const: xo
-+
-+  interrupts:
-+    minItems: 6
-+
-+  interrupt-names:
-+    minItems: 6
-+
-+  power-domains:
-+    items:
-+      - description: CX power domain
-+      - description: MSS power domain
-+
-+  power-domain-names:
-+    items:
-+      - const: cx
-+      - const: mss
-+
-+  qcom,qmp:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: Reference to the AOSS side-channel message RAM.
-+
-+  smd-edge: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,rpmh.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/qcom-rpmpd.h>
-+
-+    remoteproc@4080000 {
-+        compatible = "qcom,sdx55-mpss-pas";
-+        reg = <0x04080000 0x4040>;
-+
-+        clocks = <&rpmhcc RPMH_CXO_CLK>;
-+        clock-names = "xo";
-+
-+        interrupts-extended = <&intc GIC_SPI 250 IRQ_TYPE_EDGE_RISING>,
-+                              <&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-+                              <&modem_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-+                              <&modem_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-+                              <&modem_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
-+                              <&modem_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
-+        interrupt-names = "wdog", "fatal", "ready", "handover",
-+                          "stop-ack", "shutdown-ack";
-+
-+        memory-region = <&mpss_adsp_mem>;
-+
-+        power-domains = <&rpmhpd SDX55_CX>, <&rpmhpd SDX55_MSS>;
-+        power-domain-names = "cx", "mss";
-+
-+        qcom,smem-states = <&modem_smp2p_out 0>;
-+        qcom,smem-state-names = "stop";
-+
-+        glink-edge {
-+            interrupts = <GIC_SPI 114 IRQ_TYPE_EDGE_RISING>;
-+            label = "mpss";
-+            mboxes = <&apcs 15>;
-+            qcom,remote-pid = <1>;
-+
-+            /* ... */
-+        };
-+    };
 -- 
-2.34.1
-
+Kind Regards,
+Caleb (they/them)
