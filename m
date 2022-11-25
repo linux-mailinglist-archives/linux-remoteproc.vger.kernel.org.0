@@ -2,79 +2,73 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50AD63849E
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 25 Nov 2022 08:44:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F1D638517
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 25 Nov 2022 09:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbiKYHou (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 25 Nov 2022 02:44:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
+        id S229632AbiKYIS4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 25 Nov 2022 03:18:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKYHot (ORCPT
+        with ESMTP id S229874AbiKYISy (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 25 Nov 2022 02:44:49 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09772C128;
-        Thu, 24 Nov 2022 23:44:48 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NJRhv2y4jz4xVnK;
-        Fri, 25 Nov 2022 15:44:47 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2AP7iZ1o090552;
-        Fri, 25 Nov 2022 15:44:35 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp02[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Fri, 25 Nov 2022 15:44:36 +0800 (CST)
-Date:   Fri, 25 Nov 2022 15:44:36 +0800 (CST)
-X-Zmail-TransId: 2afa638072642d79166f
-X-Mailer: Zmail v1.0
-Message-ID: <202211251544369078587@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <andersson@kernel.org>
-Cc:     <ohad@wizery.com>, <baolin.wang@linux.alibaba.com>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBod3NwaW5sb2NrOiBVc2UgZGV2aWNlX21hdGNoX29mX25vZGUoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2AP7iZ1o090552
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6380726F.001 by FangMail milter!
-X-FangMail-Envelope: 1669362287/4NJRhv2y4jz4xVnK/6380726F.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6380726F.001/4NJRhv2y4jz4xVnK
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 25 Nov 2022 03:18:54 -0500
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBAD303E5;
+        Fri, 25 Nov 2022 00:18:52 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VVeXNnB_1669364328;
+Received: from 30.97.48.45(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VVeXNnB_1669364328)
+          by smtp.aliyun-inc.com;
+          Fri, 25 Nov 2022 16:18:49 +0800
+Message-ID: <e22e325e-bf49-c1de-4356-962ece1287fe@linux.alibaba.com>
+Date:   Fri, 25 Nov 2022 16:18:51 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] hwspinlock: Use device_match_of_node()
+To:     ye.xingchen@zte.com.cn, andersson@kernel.org
+Cc:     ohad@wizery.com, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <202211251544369078587@zte.com.cn>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <202211251544369078587@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Replace the open-code with device_match_of_node().
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/hwspinlock/hwspinlock_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 11/25/2022 3:44 PM, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Replace the open-code with device_match_of_node().
+> 
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index fd5f5c5a5244..22b8f2a70b3b 100644
---- a/drivers/hwspinlock/hwspinlock_core.c
-+++ b/drivers/hwspinlock/hwspinlock_core.c
-@@ -367,7 +367,7 @@ int of_hwspin_lock_get_id(struct device_node *np, int index)
- 			continue;
- 		}
+LGTM.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
--		if (hwlock->bank->dev->of_node == args.np) {
-+		if (device_match_of_node(hwlock->bank->dev, args.np)) {
- 			ret = 0;
- 			break;
- 		}
--- 
-2.25.1
+> ---
+>   drivers/hwspinlock/hwspinlock_core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
+> index fd5f5c5a5244..22b8f2a70b3b 100644
+> --- a/drivers/hwspinlock/hwspinlock_core.c
+> +++ b/drivers/hwspinlock/hwspinlock_core.c
+> @@ -367,7 +367,7 @@ int of_hwspin_lock_get_id(struct device_node *np, int index)
+>   			continue;
+>   		}
+> 
+> -		if (hwlock->bank->dev->of_node == args.np) {
+> +		if (device_match_of_node(hwlock->bank->dev, args.np)) {
+>   			ret = 0;
+>   			break;
+>   		}
