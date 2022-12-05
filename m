@@ -2,78 +2,103 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F7B642DBD
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  5 Dec 2022 17:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E7664348E
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  5 Dec 2022 20:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbiLEQuu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 5 Dec 2022 11:50:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S235095AbiLETr5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 5 Dec 2022 14:47:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231887AbiLEQuO (ORCPT
+        with ESMTP id S235084AbiLETrh (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:50:14 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424E89FFA
-        for <linux-remoteproc@vger.kernel.org>; Mon,  5 Dec 2022 08:49:15 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id v7so9231376wmn.0
-        for <linux-remoteproc@vger.kernel.org>; Mon, 05 Dec 2022 08:49:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
-        b=Z2wBWagY9UnEZ+M5YPDdGkg6nVUsQfYS1BhjpcwGEao2GhG01+Mm/qvV+1fKOq1lbu
-         EFS78qR+UGfEwXQVt6IRXk6jTGT8mo+KAwwjj0fZxBmjE1jztugOoJP4/rka0x6XFhxu
-         W6iUCvsIDO6eHcdCHFvdIDlIVpJCsES5SD3xSnapoHClZmLcHlXbjXoeix+TX99ab7ry
-         BqOOHDFzUlmJeyU3OvUitATOsPkFA0DOczbi/Afsjm9NHI/YtApk72ny0qjFhFTXO+XP
-         yKXAtBeMHMlIwSKvmuRpEfOfWiK9b959mo8P7Fx64Ot+uHxQXUUrd10S+RG2s/yWLOX2
-         BSUg==
+        Mon, 5 Dec 2022 14:47:37 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129052A42E;
+        Mon,  5 Dec 2022 11:44:04 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id q83so765889oif.7;
+        Mon, 05 Dec 2022 11:44:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
-        b=j8PLVqAe0Wu9I8cKUmSwl6qQpjPUVGnV2Ybf71z0eXmYc2SSmOlTwpUUf8lRaI6KGN
-         bGUmFlx+Z57f2QijjAtcbx7LFHlbEdZELCOUomZ7DU5eU9b5wxq3Q1VuXdlTLqqFeZau
-         UGxqoX7EsroB6vaVp+Ub3MvGO1DFOo3LbLMYGuBcSevC37rhtNBiRzRn6p94rudC6n+I
-         p/d4fhxYbkb+TIT1qb4BGTBdoz5A4lJAYfBb38zgB9RpgHj4Dr5I0SfFkNx5gNHgXkME
-         KrwLFLL/XraiN4pJWPSj2yoR4bJftufpVbYT9GoPA0NiK1kiYAWJAFeXswrE/HKuiCf+
-         Pa7g==
-X-Gm-Message-State: ANoB5pkmdPmRrJ2mO1xWZrrFqX3HuF9IBFP3meUZMdQXkCNqsfGz2LGo
-        SoDLY5kaOkYoYcxaLrBIBnaafGbqa04Vo4NYrlRRtmpR0Hg=
-X-Google-Smtp-Source: AA0mqf6LlThRqxALxahU+d5CDCL5XgA0Iri4oQFEx6hETTBFBZxUw9iI5CXyM5b3WvWotoaM22oBvK+CwFtVO/zgxX4=
-X-Received: by 2002:a7b:c8d0:0:b0:3cf:ca91:7094 with SMTP id
- f16-20020a7bc8d0000000b003cfca917094mr60628535wml.24.1670258943314; Mon, 05
- Dec 2022 08:49:03 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HQzVdvVBCf/eUGpwToE6Ntfsj3J9nsllj1YkGsPYjqQ=;
+        b=yRHf+xpvpZF+dT0FNc4F6+7Zr8xF+F990ptgf/qU9gKZMTjAbBbetSU2b0VOinNvMB
+         bJHxxHPLPhUHRscTDANb5dROIhcqmtKvXykmPl0cQ84iXMcWCozset/JHGdokfhbEmvn
+         u+cPF2v6LiUjknAf99/yXitd6XY37OCXdeF2eZ2pvR5+f2KSEy+1+xgLpx/KxdGiyU6r
+         XEdiZMv0Wmkxqj229ip+Qne4OBZ6inC1lIIpKTFrSwYzhN+Ly7Prkj/U4TAaMy32zhhq
+         uCm+NcF8jUA9pKw2o2Xm5inmL83kZ9Bfo4iuqH5ivwG+DImH9FKQ6IDEcQUzoSwke7A1
+         MIqg==
+X-Gm-Message-State: ANoB5pmcgORy4FOMimY+Hat9551nlpW+ZAX8OVl5LALtUYDOE/xqzcV9
+        7irkqU45UFQY5FNyZbMvn8Likxmlhw==
+X-Google-Smtp-Source: AA0mqf7b+4zUTozm5hbhuaD7wbOoaVSrzhgGn8fvTMrKL4MCB2VXcVReLBK54tTCECqtI7gKpxjEBw==
+X-Received: by 2002:aca:a908:0:b0:35c:23ed:253a with SMTP id s8-20020acaa908000000b0035c23ed253amr4257656oie.91.1670269443185;
+        Mon, 05 Dec 2022 11:44:03 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id cv31-20020a056870c69f00b00143cfb377b4sm9657112oab.6.2022.12.05.11.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 11:44:02 -0800 (PST)
+Received: (nullmailer pid 2473716 invoked by uid 1000);
+        Mon, 05 Dec 2022 19:44:02 -0000
+Date:   Mon, 5 Dec 2022 13:44:02 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        devicetree@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH v3 05/15] dt-bindings: remoteproc: qcom,adsp: drop resets
+ and qcom,halt-regs
+Message-ID: <167026944152.2473650.845853977501597417.robh@kernel.org>
+References: <20221124184333.133911-1-krzysztof.kozlowski@linaro.org>
+ <20221124184333.133911-6-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6000:5c1:0:0:0:0 with HTTP; Mon, 5 Dec 2022 08:49:02
- -0800 (PST)
-Reply-To: phmanu14@hotmail.com
-From:   Philip Manul <zagbamdjala@gmail.com>
-Date:   Mon, 5 Dec 2022 08:49:02 -0800
-Message-ID: <CAPCnorG0wZz4L65xmUUzHEvxvuhrsq0nQnSPJqno3Ah89AhSwA@mail.gmail.com>
-Subject: REP:
-To:     in <in@proposal.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221124184333.133911-6-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
---=20
-Guten tag,
-Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
-einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
-teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
-mein verstorbener Kunde, hat hier in meinem Land einen nicht
-beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
-Verfahren.
-Philip Manul.
+
+On Thu, 24 Nov 2022 19:43:23 +0100, Krzysztof Kozlowski wrote:
+> Some remote processors (e.g. QCS404 CDSP, SC7180 MPSS/MSS) can be brought
+> to life using two different bindings:
+> 1. PIL (Peripheral Image Loader)
+> 2. PAS (Peripheral Authentication Service)
+> 
+> They still describe the same hardware - firmware load for remote
+> processor - but use different methods to communicate with that
+> processor.
+> 
+> For these SoCs, the qcom,adsp.yaml bindings were describing the PAS
+> method, however for easier customization of board DTS, the bindings
+> combined additional properties from PIL: reset lines, qcom,halt-regs and
+> additional clocks.  The devices and Linux kernel drivers, when
+> instantiated as PAS, do not use these properties, so drop them from the
+> bindings.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v2:
+> 1. New patch
+> ---
+>  .../bindings/remoteproc/qcom,adsp.yaml        | 113 +-----------------
+>  1 file changed, 4 insertions(+), 109 deletions(-)
+> 
+
+Acked-by: Rob Herring <robh@kernel.org>
