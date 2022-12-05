@@ -2,107 +2,78 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C50D642468
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  5 Dec 2022 09:21:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F7B642DBD
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  5 Dec 2022 17:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbiLEIVj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 5 Dec 2022 03:21:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
+        id S231774AbiLEQuu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 5 Dec 2022 11:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232021AbiLEIVd (ORCPT
+        with ESMTP id S231887AbiLEQuO (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:21:33 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCFA165A4
-        for <linux-remoteproc@vger.kernel.org>; Mon,  5 Dec 2022 00:21:30 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so9336376wmi.3
-        for <linux-remoteproc@vger.kernel.org>; Mon, 05 Dec 2022 00:21:30 -0800 (PST)
+        Mon, 5 Dec 2022 11:50:14 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424E89FFA
+        for <linux-remoteproc@vger.kernel.org>; Mon,  5 Dec 2022 08:49:15 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id v7so9231376wmn.0
+        for <linux-remoteproc@vger.kernel.org>; Mon, 05 Dec 2022 08:49:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=K2llCY+S9xP0hToJ39zAtXBAJ+E1kB9/4btQ1z2p/Q4=;
-        b=aFLyenYtj1VL6wuR/g2gdAe1q5V5TQwJVLAkd1ZKz+sdOfTRzZmUOv5vustsRMOeTs
-         4btJibz1hP4yDfNk5Yuk205BwWxNjRKt3v6uYSSzBnz6ysOvxJX3C9w2080TR6f61lQz
-         E+7ipKTT3wGEPyO+NwcubahKwKjRLhTFufrXcn0pS7mpeSb4iyY6doeI4QSskynkry/j
-         ZWGdctaUwNlJZav+kxHDU6z2rC8kMqOF+MvQLNWNXvQTK9VTuealurfLDruwGQWxeaIR
-         pUcSSSf5ml6N2TeO98U6nSgxk3kpkAC38P5w2mdV3LwGJpktpuvCTCQThXTWwrazsdjy
-         HYug==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=Z2wBWagY9UnEZ+M5YPDdGkg6nVUsQfYS1BhjpcwGEao2GhG01+Mm/qvV+1fKOq1lbu
+         EFS78qR+UGfEwXQVt6IRXk6jTGT8mo+KAwwjj0fZxBmjE1jztugOoJP4/rka0x6XFhxu
+         W6iUCvsIDO6eHcdCHFvdIDlIVpJCsES5SD3xSnapoHClZmLcHlXbjXoeix+TX99ab7ry
+         BqOOHDFzUlmJeyU3OvUitATOsPkFA0DOczbi/Afsjm9NHI/YtApk72ny0qjFhFTXO+XP
+         yKXAtBeMHMlIwSKvmuRpEfOfWiK9b959mo8P7Fx64Ot+uHxQXUUrd10S+RG2s/yWLOX2
+         BSUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K2llCY+S9xP0hToJ39zAtXBAJ+E1kB9/4btQ1z2p/Q4=;
-        b=t8Ofx1KlZicanq6sbRW8yA/tFYFagMECLz3v0UtLeqCpbMxUd6cJITllQwdoGQQDu6
-         27UptjIxDFVL4EpJtQyXiIyqXHFPmWoW2e/wOhA4rrnrbaOYYeKfNsz2QqX4dg3vi2Y2
-         tojIRsexM/VYY2S8itdroOTfwuZU5oUaJGwjT3rxQoiDgt0HrdMvlUP7/lR7X4yjVivZ
-         Cw408CaY2C3PX4XXKQoeQ2houA+I2y4sP5YT0e46txRHAeqF21DCdOQikU+AOh+LlVHy
-         aQZvQQAjMBkmgadjizyNXncco0f7XmJT2uoUuDMDmhSzthOCrBVwrP1XTVa97M01tLad
-         fEhA==
-X-Gm-Message-State: ANoB5pkP/3z8CSEcPEABoYTJDz3UOE2tnnChTCpM57urIp9wOB6AaPDe
-        PefLjz31L/oPDPsEMpP3cuEsXw==
-X-Google-Smtp-Source: AA0mqf5WiuFbN9XlmBzCmsv4CfQxfb0C1sECJ1I5kEKyWuh6lTY6TqTzlCPoveUNn59ONI7Ib2WCKQ==
-X-Received: by 2002:a05:600c:4f55:b0:3cf:729b:d4b4 with SMTP id m21-20020a05600c4f5500b003cf729bd4b4mr53799723wmq.48.1670228489132;
-        Mon, 05 Dec 2022 00:21:29 -0800 (PST)
-Received: from [192.168.7.93] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id k26-20020a05600c1c9a00b003b47b80cec3sm22816447wms.42.2022.12.05.00.21.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 00:21:28 -0800 (PST)
-Message-ID: <71a1619d-717d-b251-a03b-083d26c35375@linaro.org>
-Date:   Mon, 5 Dec 2022 09:21:27 +0100
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O4WPtqOs6pYDke8VCfpzwsIX+8zN33o8tLS2XMy/lFU=;
+        b=j8PLVqAe0Wu9I8cKUmSwl6qQpjPUVGnV2Ybf71z0eXmYc2SSmOlTwpUUf8lRaI6KGN
+         bGUmFlx+Z57f2QijjAtcbx7LFHlbEdZELCOUomZ7DU5eU9b5wxq3Q1VuXdlTLqqFeZau
+         UGxqoX7EsroB6vaVp+Ub3MvGO1DFOo3LbLMYGuBcSevC37rhtNBiRzRn6p94rudC6n+I
+         p/d4fhxYbkb+TIT1qb4BGTBdoz5A4lJAYfBb38zgB9RpgHj4Dr5I0SfFkNx5gNHgXkME
+         KrwLFLL/XraiN4pJWPSj2yoR4bJftufpVbYT9GoPA0NiK1kiYAWJAFeXswrE/HKuiCf+
+         Pa7g==
+X-Gm-Message-State: ANoB5pkmdPmRrJ2mO1xWZrrFqX3HuF9IBFP3meUZMdQXkCNqsfGz2LGo
+        SoDLY5kaOkYoYcxaLrBIBnaafGbqa04Vo4NYrlRRtmpR0Hg=
+X-Google-Smtp-Source: AA0mqf6LlThRqxALxahU+d5CDCL5XgA0Iri4oQFEx6hETTBFBZxUw9iI5CXyM5b3WvWotoaM22oBvK+CwFtVO/zgxX4=
+X-Received: by 2002:a7b:c8d0:0:b0:3cf:ca91:7094 with SMTP id
+ f16-20020a7bc8d0000000b003cfca917094mr60628535wml.24.1670258943314; Mon, 05
+ Dec 2022 08:49:03 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] remoteproc: qcom_q6v5_pas: fix refcount leak in
- adsp_alloc_memory_region()
-Content-Language: en-US
-To:     Wang Yufen <wangyufen@huawei.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        mathieu.poirier@linaro.org, lgirdwood@gmail.com, broonie@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org
-References: <1670203687-42016-1-git-send-email-wangyufen@huawei.com>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <1670203687-42016-1-git-send-email-wangyufen@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:6000:5c1:0:0:0:0 with HTTP; Mon, 5 Dec 2022 08:49:02
+ -0800 (PST)
+Reply-To: phmanu14@hotmail.com
+From:   Philip Manul <zagbamdjala@gmail.com>
+Date:   Mon, 5 Dec 2022 08:49:02 -0800
+Message-ID: <CAPCnorG0wZz4L65xmUUzHEvxvuhrsq0nQnSPJqno3Ah89AhSwA@mail.gmail.com>
+Subject: REP:
+To:     in <in@proposal.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 05/12/2022 02:28, Wang Yufen wrote:
-> The node returned by of_parse_phandle() with refcount incremented,
-> of_node_put() needs be called when finish using it. So add it in the
-> end of of_address_to_resource().
-> 
-> Fixes: 9e004f97161d ("remoteproc: qcom: Rename Hexagon v5 PAS driver")
-> Signed-off-by: Wang Yufen <wangyufen@huawei.com>
-> ---
->   drivers/remoteproc/qcom_q6v5_pas.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-> index 6afd094..24439a6 100644
-> --- a/drivers/remoteproc/qcom_q6v5_pas.c
-> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-> @@ -449,6 +449,7 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
->   	}
->   
->   	ret = of_address_to_resource(node, 0, &r);
-> +	of_node_put(node);
->   	if (ret)
->   		return ret;
->   
-
-
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+--=20
+Guten tag,
+Mein Name ist Philip Manul. Ich bin von Beruf Rechtsanwalt. Ich habe
+einen verstorbenen Kunden, der zuf=C3=A4llig denselben Namen mit Ihnen
+teilt. Ich habe alle Papierdokumente in meinem Besitz. Ihr Verwandter,
+mein verstorbener Kunde, hat hier in meinem Land einen nicht
+beanspruchten Fonds zur=C3=BCckgelassen. Ich warte auf Ihre Antwort zum
+Verfahren.
+Philip Manul.
