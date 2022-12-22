@@ -2,85 +2,73 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C2165357C
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 21 Dec 2022 18:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6965E653BDE
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 22 Dec 2022 06:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234811AbiLURos (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 21 Dec 2022 12:44:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S229817AbiLVFvE (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 22 Dec 2022 00:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234927AbiLURop (ORCPT
+        with ESMTP id S229531AbiLVFvA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 21 Dec 2022 12:44:45 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FDF233AD;
-        Wed, 21 Dec 2022 09:44:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 25129CE1818;
-        Wed, 21 Dec 2022 17:44:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 63232C433F1;
-        Wed, 21 Dec 2022 17:44:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671644681;
-        bh=DpQ4h0EGGCGKxyzcgAhk0mF2+ad8ywsb56AGt7rrpAU=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Ll73BtDm4TiRLysBOSflJlEIKVUgcNdEM0feDQsH3xEO6E3NBxXrjYF9z/EInekuU
-         IPbARLpgh2+MHUP6qOiZeGPAUB4dzArU7TOiy9o8Bom97KPu9gvJ8xVO/xI+/ipanc
-         UZjFlB1JfM83uBJThMrFDcXiA2G6XHZ55+8FN6RrrdmUoL5WQJTxS1JZFuDQdM2SAX
-         pOOOQztslaj61Mdt6pt3hG5bou/HJWbcfZniycSSyV0kdhp4EWno7Ugh7t0vyTF+6Q
-         5taJhVWr8Pe8moq3LYlJQSVOK8zh5w/Z1DIWgu77MT580L9pbx732/e1u6sOYQmndr
-         mgC8UmUTvpFTQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E4D6C43141;
-        Wed, 21 Dec 2022 17:44:41 +0000 (UTC)
-Subject: Re: [GIT PULL] remoteproc updates for v6.2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221220180832.93801-1-andersson@kernel.org>
-References: <20221220180832.93801-1-andersson@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221220180832.93801-1-andersson@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rproc-v6.2
-X-PR-Tracked-Commit-Id: 11c7f9e3131ad14b27a957496088fa488b153a48
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9cf5b508bd260d5693d337bcf1f9b82b961b6137
-Message-Id: <167164468130.23021.6887596002060025560.pr-tracker-bot@kernel.org>
-Date:   Wed, 21 Dec 2022 17:44:41 +0000
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>,
-        Ben Levinsky <ben.levinsky@amd.com>,
-        Tanmay Shah <tanmay.shah@amd.com>,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Maria Yu <quic_aiquny@quicinc.com>,
-        Yuan Can <yuancan@huawei.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 22 Dec 2022 00:51:00 -0500
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FBE24A
+        for <linux-remoteproc@vger.kernel.org>; Wed, 21 Dec 2022 21:50:59 -0800 (PST)
+Received: by mail-lf1-x143.google.com with SMTP id 1so1204751lfz.4
+        for <linux-remoteproc@vger.kernel.org>; Wed, 21 Dec 2022 21:50:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eZx+l47CzuZ3xlEKU80E40CSh3ZgdwDHh7dVN/b5kRo=;
+        b=MTbMkDCK0Mmi2hIFlgHoLrDkruKvtjfostC91CKcGaUc8EbPJwzsIQIb5wW9DU7A54
+         pWKBjJstaimH6/HI7ewr93Fkcsw2ZOfhvFIhtwS8X1j5wmgNZfQe87XXBvFqifB6btFJ
+         5lQ/JBeOXtj1pAdmM0ePuB9lzbdKuffHdPx7TPAwpoC8r+9dgkweXfztBZOu5rP6Meg7
+         GuhUoOshLrPi4yJGMsjFamCI7+K6Q0Yu46MBagw00rV2eJeS0B+vArlSTyPaiNkk30ll
+         18plwfk3jtxYSuIbdZrz1GEf2OeEWC9H5g0AZwxlAx+GZ/ORz1CY3TY32mx8SrEkJ9y3
+         LccA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eZx+l47CzuZ3xlEKU80E40CSh3ZgdwDHh7dVN/b5kRo=;
+        b=Z40iEk6L5jUtBKvK6Q/dkY0L+p+vCXy1yHK0njDhWst/niIFS3pVeVvXfCQgexsGFV
+         RWkyODGP1piOGgeUXIGPlrnPiL20g31P1K1DQSaVVq8gy8Q3lb1s6waXOi2697czqksJ
+         nCjMVZtJ97iuxBZXuuHGG2IuQaBQ5Tk0vEuhAIMrKS8BhCKgz40PXzEfxj3Qf3jeS4rI
+         9v+DaCp98BbT4aeBlGmkmLfAjhv/VBlDjrwfD2kK4D7A3no/G7YquJx+rXs37il1enAZ
+         doxdGV8DZPdiTcYK7Lqzp9WJ1Z1EJ79/Tn7yvltT9kYteBYs1nDvoyyTXcq4tx7ViL3J
+         Nz8Q==
+X-Gm-Message-State: AFqh2kp/eH60lHCT7JWeYChNZ961bo9hfcsYpFFpE9r8BurG7es6VYi3
+        Z1I/GQxWOucgnzr/fclvFRbU71oG0aprzKklQVg=
+X-Google-Smtp-Source: AMrXdXt1PvdXWo2PV4CvyDrECbjcqy1Houems4sj4Rrb4yJcbsZfGAbCvH/TRdKKGA/2b4G5D8oMmO1nslyIQb62r84=
+X-Received: by 2002:a05:6512:1582:b0:4b5:b111:babd with SMTP id
+ bp2-20020a056512158200b004b5b111babdmr487888lfb.516.1671688257858; Wed, 21
+ Dec 2022 21:50:57 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:a05:6504:1594:b0:201:4770:d326 with HTTP; Wed, 21 Dec 2022
+ 21:50:57 -0800 (PST)
+Reply-To: seyba_daniel@yahoo.com
+From:   Seyba Daniel <yameogojacqueline70@gmail.com>
+Date:   Thu, 22 Dec 2022 06:50:57 +0100
+Message-ID: <CANwBPNG1qQBkDPcc-PWbisx+u15jDUyj+t=WE6joy8X56iSeyQ@mail.gmail.com>
+Subject: Seyba Daniel
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The pull request you sent on Tue, 20 Dec 2022 12:08:32 -0600:
+I urgently seek your service to represent me in investing in
+your region / country and you will be rewarded for your service without
+affecting your present job with very little time invested in it
+My dearest regards
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rproc-v6.2
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9cf5b508bd260d5693d337bcf1f9b82b961b6137
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Seyba Daniel
