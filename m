@@ -2,47 +2,49 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11B26585AA
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 28 Dec 2022 19:18:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C4B6585B0
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 28 Dec 2022 19:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbiL1SSy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 28 Dec 2022 13:18:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55264 "EHLO
+        id S233844AbiL1SS5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 28 Dec 2022 13:18:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233445AbiL1SSl (ORCPT
+        with ESMTP id S233470AbiL1SSm (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 28 Dec 2022 13:18:41 -0500
+        Wed, 28 Dec 2022 13:18:42 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9582C13D12
-        for <linux-remoteproc@vger.kernel.org>; Wed, 28 Dec 2022 10:18:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAA4175B4;
+        Wed, 28 Dec 2022 10:18:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4626BB818BB
-        for <linux-remoteproc@vger.kernel.org>; Wed, 28 Dec 2022 18:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CAB1C433F1;
-        Wed, 28 Dec 2022 18:18:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3CB70B818BC;
+        Wed, 28 Dec 2022 18:18:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1A6C43392;
+        Wed, 28 Dec 2022 18:18:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672251518;
-        bh=o8+mPQjNYaGdZ9v/dWvFWoFoJ4Nbi0pZN96QcnkpXAo=;
+        s=k20201202; t=1672251519;
+        bh=lrZY2fsTFYfQj4eVl3mncxZwaKUp972COk8fahv6UvM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jJ6mP0bd2fEOh/kzBIrdUv6YLoaGUddJ/T7MRp8aAhJKBB0IkCwXStE/ZzlD2MR4/
-         Wmq+faHyqkXy3uhfIflQi2BjGC9jysoVLVwqheC/8tT3jHDvvTGtScE/83gASEpLWq
-         XbW3mu9pvVlsXRQYzc6tRFYDJS0FHciJNd++A0MS7WuczIZ/lL2U/furoQYvXftGam
-         IekZL30DMaePLUwN5No6NNFFr6lP21zoai8zz1hpQpkdC3wsHhnlxYvPd04U7dJtF+
-         VjnNcny8msfpFOoE2W0fg4Rmv0o1lDnqipEzTS8yHLchrrsh9tLn1UmEar7r8m60J0
-         nXdSC+JXGUzHA==
+        b=pHDraBv1GIIuM9H6jtWMKo3NO/fuwbqZ1VXb4oMj18v2h1d481zgdmbLAc1k2plI/
+         vBXuTnD+hxnn/MOkN+TBZO9mMT7dOdZYzqAHgjKOT+41t+AiTYbIZjuYwax/+nZM/k
+         7IGWh3ThC8GGAwWm45vgqnRQRU/aPwqr2NClUcZUswLluIz8X5kPOBDHV2PwJNLwBd
+         D5TIveEjdZACuZD4o/rcVCglplMmxwNVMlRqVAOfF2R+urCcedLj5jAFLXG47dOOOP
+         hQOaCphqIamwEzcaQWLIDH7o5LF4XUh61TCGWzexhEzmtQ4iaA1JkPqm34Var9oq1d
+         wFy+aMTMgXkAg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     cuigaosheng1@huawei.com, mathieu.poirier@linaro.org,
+To:     mathieu.poirier@linaro.org, swboyd@chromium.org,
+        quic_deesin@quicinc.com, quic_clew@quicinc.com,
         Bjorn Andersson <andersson@kernel.org>,
-        konrad.dybcio@somainline.org, agross@kernel.org
-Cc:     linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH] remoteproc: qcom: wcnss: remove unused qcom_iris_driver declaration
-Date:   Wed, 28 Dec 2022 12:18:27 -0600
-Message-Id: <167225151224.950465.1541214434488486569.b4-ty@kernel.org>
+        arnaud.pouliquen@foss.st.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: (subset) [PATCH V4 0/2] rpmsg_char/ctrl driver fixes
+Date:   Wed, 28 Dec 2022 12:18:28 -0600
+Message-Id: <167225151225.950465.10463243136528744031.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220911090637.3208939-1-cuigaosheng1@huawei.com>
-References: <20220911090637.3208939-1-cuigaosheng1@huawei.com>
+In-Reply-To: <1663584840-15762-1-git-send-email-quic_deesin@quicinc.com>
+References: <1663584840-15762-1-git-send-email-quic_deesin@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,17 +57,22 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Sun, 11 Sep 2022 17:06:37 +0800, Gaosheng Cui wrote:
-> qcom_iris_driver has been removed since
-> commit 1fcef985c8bd ("remoteproc: qcom: wcnss: Fix race
-> with iris probe"), so remove it.
+On Mon, 19 Sep 2022 16:23:58 +0530, Deepak Kumar Singh wrote:
+> Change from v4:
+> Corrcted mistaked in commit message for patch2.
 > 
+> Deepak Kumar Singh (2):
+>   rpmsg: glink: Add lock to avoid race when rpmsg device is released
+>   rpmsg: glink: Add lock to rpmsg_ctrldev_remove
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] remoteproc: qcom: wcnss: remove unused qcom_iris_driver declaration
-      commit: b27aa4d87809b3d7ac5b792dd059108283044e3b
+[1/2] rpmsg: char: Add lock to avoid race when rpmsg device is released
+      commit: 17b88a2050e9d1f89a53562f2adb709a8959e763
+[2/2] rpmsg: ctrl: Add lock to rpmsg_ctrldev_remove
+      commit: c23965b7f7d99bbb2604f1f02aa26fb6d1d5864d
 
 Best regards,
 -- 
