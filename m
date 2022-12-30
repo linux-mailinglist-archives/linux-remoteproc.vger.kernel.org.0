@@ -2,70 +2,92 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283836585BC
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 28 Dec 2022 19:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1F26598A1
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 30 Dec 2022 14:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234195AbiL1STC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 28 Dec 2022 13:19:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
+        id S231439AbiL3NVe (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 30 Dec 2022 08:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233814AbiL1SSr (ORCPT
+        with ESMTP id S229505AbiL3NVe (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 28 Dec 2022 13:18:47 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBFE17423;
-        Wed, 28 Dec 2022 10:18:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BABD615A1;
-        Wed, 28 Dec 2022 18:18:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E197C433D2;
-        Wed, 28 Dec 2022 18:18:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672251525;
-        bh=aNKyAgWgpmtQpKcS0+jnYT2a9bIILcxM4UnC04+pZXI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UibUX7cDn32xH8apwdc6g8NESXE9kE4Pwzj3ZoXV5NV2LnveTOoLYH3yz8QYSkQFn
-         pZ6QDfXGgIMpn4BWFBQghnUhImBZp/fhVYbWARRBEFVSKbh8wjh7erKx4VIvbZzid5
-         9qk9lXB1i1Vs5przlx0hC1qnO2sxDUEQsSCXI58WkhaSlcMFkKdhJvFz3ufFstvb1W
-         2g9lTDw+OnGRYacy5AhYxj+lfEZED23860mJ9rrC+kUfUlGwRt6ma8Z/rVJD4sP0bd
-         804SLWGKzNukcMtukcozpQZZmEr9B91Bx3rwP3U6aIemMU//lGX62CW4YPqciJcc8F
-         3bvO6T+annYnQ==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     linux-kernel@vger.kernel.org, ohad@wizery.com,
-        baolin.wang@linux.alibaba.com, linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH] hwspinlock: Use device_match_of_node()
-Date:   Wed, 28 Dec 2022 12:18:35 -0600
-Message-Id: <167225151235.950465.4943773240400997708.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <202211251544369078587@zte.com.cn>
-References: <202211251544369078587@zte.com.cn>
+        Fri, 30 Dec 2022 08:21:34 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA641A05B;
+        Fri, 30 Dec 2022 05:21:32 -0800 (PST)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2BUDLIq2048320;
+        Fri, 30 Dec 2022 07:21:18 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1672406478;
+        bh=dgtWKiypkfZyZIMMgNnZ1rCIMvsBKWgzAMtTZGyqJDk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=HvaHtmfz5BgNpQkmjKlxkohl6ShTXsWaahJ7uP+LOgwdiiTPIqDEa7xdM8DR6UqNO
+         lDiOoyBrki4D54sCEZTFgUX6QVKJH8yLEi1XdYNM/V0bWjkUlh6UaOn1+UuS9mc199
+         2GODsgjbazU/O4BYeyZcEAEOBupPUly9Yoncb8JM=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2BUDLIxO011205
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 30 Dec 2022 07:21:18 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 30
+ Dec 2022 07:21:18 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 30 Dec 2022 07:21:17 -0600
+Received: from [10.249.48.175] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2BUDLHft130087;
+        Fri, 30 Dec 2022 07:21:17 -0600
+Message-ID: <b746fd70-95eb-307e-0f95-28d009d95f85@ti.com>
+Date:   Fri, 30 Dec 2022 07:21:17 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: k3-dsp: update bindings for
+ AM62A SoCs
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <andersson@kernel.org>, <devicetree@vger.kernel.org>,
+        <mathieu.poirier@linaro.org>, <p.zabel@pengutronix.de>,
+        <linux-remoteproc@vger.kernel.org>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <s-anna@ti.com>
+CC:     <praneeth@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
+        <a-bhatia1@ti.com>, <j-luthra@ti.com>, <devarsht@ti.com>
+References: <20221228123655.15384-1-hnagalla@ti.com>
+ <20221228123655.15384-2-hnagalla@ti.com>
+ <18a2fd76-c708-0c14-2d5c-b771ab8baee5@linaro.org>
+Content-Language: en-US
+From:   Hari Nagalla <hnagalla@ti.com>
+In-Reply-To: <18a2fd76-c708-0c14-2d5c-b771ab8baee5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, 25 Nov 2022 15:44:36 +0800 (CST), ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+On 12/28/22 06:38, Krzysztof Kozlowski wrote:
+>>   
+>>     resets:
+>>       description: |
+>> @@ -111,6 +113,7 @@ else:
+>>           enum:
+>>             - ti,j721e-c71-dsp
+>>             - ti,j721s2-c71-dsp
+>> +	  - ti,am62a-c7xv-dsp
+> Does not look like you tested the bindings. Please run `make
+> dt_binding_check` (see
+> Documentation/devicetree/bindings/writing-schema.rst for instructions).
 > 
-> Replace the open-code with device_match_of_node().
-> 
-> 
+> Wrong indentation.
+Seems, i used a wrong option in our patch verify script. Used the 
+correct options and fixed it. sending v2 with review comment updates. Thanks
 
-Applied, thanks!
-
-[1/1] hwspinlock: Use device_match_of_node()
-      commit: ec5c05e5ac8bcb4a6bcd92970e15494a85400d34
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
