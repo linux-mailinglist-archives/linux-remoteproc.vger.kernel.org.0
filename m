@@ -2,113 +2,140 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81AEF65CD37
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Jan 2023 07:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A56265CE57
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Jan 2023 09:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbjADGkg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 4 Jan 2023 01:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52990 "EHLO
+        id S229658AbjADIbn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 4 Jan 2023 03:31:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjADGkK (ORCPT
+        with ESMTP id S234029AbjADIb2 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 4 Jan 2023 01:40:10 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918E8183A5
-        for <linux-remoteproc@vger.kernel.org>; Tue,  3 Jan 2023 22:40:09 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id s67so12298677pgs.3
-        for <linux-remoteproc@vger.kernel.org>; Tue, 03 Jan 2023 22:40:09 -0800 (PST)
+        Wed, 4 Jan 2023 03:31:28 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60E6F1869B
+        for <linux-remoteproc@vger.kernel.org>; Wed,  4 Jan 2023 00:31:26 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id n4so35228989plp.1
+        for <linux-remoteproc@vger.kernel.org>; Wed, 04 Jan 2023 00:31:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Sm2IrX2as+k9LNhXBii+2EPLTtwp8Q7bZRIteVKR48Y=;
-        b=lxucC7WdJqs/f6vnO0xyjDIiYvkO1zIUbY5dvzc1gS3dAy3OfQQYNJY3qgkIp4IvGC
-         Oi3Qiq2J4RL2YPCvlge/HIY6+nyJiUXFhgSIFyzAmwWVXagd97/PUtXlb5jfygBt6BRf
-         fwWN260uJVbK/yc9R8WuWezkJeUQdhpjES8XGIHyH3AdF/AFkNlz+YfQuZN2gO1EmOPc
-         8KKIj6/qhE8i3Fe0WWEG9u5kvwBFlkiVo2YRHtZuVzM09AJ0QQD44w0muYyCcKVpzTF1
-         KpA5Z3tjS1NOBVAYcaIMzzN2x6CIMAwuhChhhugpiMtk+ck5Mr24ICxbQ/8nSTPVum7J
-         QJOA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4+dLuHlcC9jnNQMQw94DnzReVIGUmjOcxr5KvYMev8U=;
+        b=Y6p8ZQAFtVMjaWUXOOmJW3dVg7sTCZDpqgmsww1yv78ELTsTvUOzzh1vI4HKCoA/I/
+         YDKeO3dbrEB3Uxq4ikf+PWOZI49nPxuRhtLY//2wK2Jj4JLmZE8cxt4ADlPRaqFJRfJd
+         LTxf/SNUMnvBAqj9hsojG7XuTAN2ANr3weauE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sm2IrX2as+k9LNhXBii+2EPLTtwp8Q7bZRIteVKR48Y=;
-        b=s1aJ90IXDTVsiQbYc3X2SY0JSZLJ1WF1hRvkWhd1SxV6r2xtk3tnjLX0BT6EF6r/d9
-         NNTLKS/fN62oUKDUyOjlNkXJXB6MiHB2tVRhMseYRB7sqgHmK6vazs2LT48E14MJ5OBh
-         6qPVYD26qDhn+6U6egjr2v8FwFgiLR+JumeRogBrrNnO36VluyaxmkUmShBMnIXmV1Hl
-         wu1T/+rGzz36dbB+gdxhsw5AUE4VHiTbB9WaYICfu3DBUXAez5hWsF6eNe799+23104G
-         2ZnyK2A+fBkNMqKLaWfApmFSd9rxAuw3z/H+PDNQHMQLtvBlho6pia+eV6chEozqbj+0
-         EoTg==
-X-Gm-Message-State: AFqh2kpNvjl/UZG03Gcd3sHbEJIg+o/6hqn/jceopI9us6GPRLEJqs/8
-        cJVryj35xnN9kTQslUI+Ca7H3Ik7TWsAOkJ1FJA=
-X-Google-Smtp-Source: AMrXdXtzEgdGNYXviASYnSqNJC0ZiQxlpsBhKtwlV/fC9EHlEQAD4b0ufCVYBzwI8FMubEJLf3ti+D5YEYUYV8QjtJ4=
-X-Received: by 2002:a62:1d07:0:b0:582:e7c:f6f3 with SMTP id
- d7-20020a621d07000000b005820e7cf6f3mr1157112pfd.8.1672814408803; Tue, 03 Jan
- 2023 22:40:08 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4+dLuHlcC9jnNQMQw94DnzReVIGUmjOcxr5KvYMev8U=;
+        b=KdOuxtpp3fDRXsyHXWjKUeTZYzqJN+vafbUP7nNDvVk0k2Rtjjp/wbgkOz07cjT7vs
+         HOlRYz+4+2ZOUdTnYhNODlLxjqJ3VuuMe7Heelk3cjumdbCSnQcL0ClyZNP1k1o1ES8M
+         O8VRgNH8D05v0SfltQ+Rex7E/R9LTHU1J/YEeF4neLzlKxvrr5vP0UFii09SjXh9MafD
+         DgDbcUbcThKtF8IFNVxBT8pbXEvcVdE/v7K0s0Yir9iH0JnOwMrPeAYnrkopwTLk6183
+         AoWXYyCC9Ym0rhQ9/5evGSLX1B6IAuzZt8PYl7ClJqxME+xa4I88bRp8qOQKhCx05h/6
+         INhg==
+X-Gm-Message-State: AFqh2krhwE1hAkATPzm3sik/UIL/dbXiqtqL5kek4gKv4P7Dt0KYVECW
+        mQhk3Yz2ITVb5k11hMeA2YEIGzjn3iIahUht
+X-Google-Smtp-Source: AMrXdXujFnG7dDV9MJtsjkA59x1G95RzXq9CimM7pdZKe0Di/GVPavoCYPnyhRWzT/EOvKLsFiYF/g==
+X-Received: by 2002:a05:6a20:1e55:b0:a2:a636:70c2 with SMTP id cy21-20020a056a201e5500b000a2a63670c2mr66048817pzb.24.1672821085870;
+        Wed, 04 Jan 2023 00:31:25 -0800 (PST)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:9ef5:c3c1:77a5:2cd])
+        by smtp.gmail.com with ESMTPSA id g16-20020a63fa50000000b0046b1dabf9a8sm19781604pgk.70.2023.01.04.00.31.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 00:31:25 -0800 (PST)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH] remoteproc/mtk_scp: Move clk ops outside send_lock
+Date:   Wed,  4 Jan 2023 16:31:10 +0800
+Message-Id: <20230104083110.736377-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
 MIME-Version: 1.0
-Reply-To: mrs.maryander1947@gmail.com
-Sender: mrs.janeval197@gmail.com
-Received: by 2002:a05:7300:7652:b0:94:fcda:856a with HTTP; Tue, 3 Jan 2023
- 22:40:08 -0800 (PST)
-From:   "Mrs. Mary Anderson" <amrsmary16@gmail.com>
-Date:   Wed, 4 Jan 2023 06:40:08 +0000
-X-Google-Sender-Auth: jTqv_0vHyo2y0EStaK-jLA4ClSk
-Message-ID: <CAL+V8fx8n5YVCBnyPw3TzcFWBtXqZO5w+9A_JwP7BB54jJSoEA@mail.gmail.com>
-Subject: Dear Beloved,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5899]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrs.janeval197[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mrs.maryander1947[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrs.janeval197[at]gmail.com]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:52d listed in]
-        [list.dnswl.org]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hello,
+Clocks are properly reference counted and do not need to be inside the
+lock range.
 
-Dear Beloved,
+Right now this triggers a false-positive lockdep warning on MT8192 based
+Chromebooks, through a combination of mtk-scp that has a cros-ec-rpmsg
+sub-device, the (actual) cros-ec I2C adapter registration, I2C client
+(not on cros-ec) probe doing i2c transfers and enabling clocks.
 
-I am Mrs. Mary Anderson, It is understandable that you may be a bit
-apprehensive because you do not know me, I found your email address
-from a Human resources database and decided to contact you. I would
-love to employ you into my charity work, I am ready to donate some
-money to you to carry on the Charity work in your country. Please
-reply so that i will give you further details and tell you about
-myself.
+This is a false positive because the cros-ec-rpmsg under mtk-scp does
+not have an I2C adapter, and also each I2C adapter and cros-ec instance
+have their own mutex.
 
-Yours Sincerely
-Mrs. Mary Anderson
+Move the clk operations outside of the send_lock range.
+
+Fixes: ("63c13d61eafe remoteproc/mediatek: add SCP support for mt8183")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+ drivers/remoteproc/mtk_scp_ipi.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
+index 00f041ebcde6..4c0d121c2f54 100644
+--- a/drivers/remoteproc/mtk_scp_ipi.c
++++ b/drivers/remoteproc/mtk_scp_ipi.c
+@@ -164,21 +164,21 @@ int scp_ipi_send(struct mtk_scp *scp, u32 id, void *buf, unsigned int len,
+ 	    WARN_ON(len > sizeof(send_obj->share_buf)) || WARN_ON(!buf))
+ 		return -EINVAL;
+ 
+-	mutex_lock(&scp->send_lock);
+-
+ 	ret = clk_prepare_enable(scp->clk);
+ 	if (ret) {
+ 		dev_err(scp->dev, "failed to enable clock\n");
+-		goto unlock_mutex;
++		return ret;
+ 	}
+ 
++	mutex_lock(&scp->send_lock);
++
+ 	 /* Wait until SCP receives the last command */
+ 	timeout = jiffies + msecs_to_jiffies(2000);
+ 	do {
+ 		if (time_after(jiffies, timeout)) {
+ 			dev_err(scp->dev, "%s: IPI timeout!\n", __func__);
+ 			ret = -ETIMEDOUT;
+-			goto clock_disable;
++			goto unlock_mutex;
+ 		}
+ 	} while (readl(scp->reg_base + scp->data->host_to_scp_reg));
+ 
+@@ -205,10 +205,9 @@ int scp_ipi_send(struct mtk_scp *scp, u32 id, void *buf, unsigned int len,
+ 			ret = 0;
+ 	}
+ 
+-clock_disable:
+-	clk_disable_unprepare(scp->clk);
+ unlock_mutex:
+ 	mutex_unlock(&scp->send_lock);
++	clk_disable_unprepare(scp->clk);
+ 
+ 	return ret;
+ }
+-- 
+2.39.0.314.g84b9a713c41-goog
+
