@@ -2,117 +2,99 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E894662CD3
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  9 Jan 2023 18:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC8E662DB9
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  9 Jan 2023 18:55:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbjAIRdC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 9 Jan 2023 12:33:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
+        id S231811AbjAIRzL (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 9 Jan 2023 12:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234370AbjAIRc7 (ORCPT
+        with ESMTP id S237379AbjAIRyd (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 9 Jan 2023 12:32:59 -0500
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5554A47E;
-        Mon,  9 Jan 2023 09:32:57 -0800 (PST)
-Received: by mail-ot1-f52.google.com with SMTP id p17-20020a9d6951000000b00678306ceb94so5559832oto.5;
-        Mon, 09 Jan 2023 09:32:57 -0800 (PST)
+        Mon, 9 Jan 2023 12:54:33 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C91F58D0F
+        for <linux-remoteproc@vger.kernel.org>; Mon,  9 Jan 2023 09:50:27 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id bu8so14189102lfb.4
+        for <linux-remoteproc@vger.kernel.org>; Mon, 09 Jan 2023 09:50:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mV5PeBWjbAt+jdxJk/6pzFPhbIuu2htqwYYpEc7BluY=;
+        b=O21Y088DfhgYx7nmpVRhnfzYm7dzDKNfNAHKdO0vGsP4P89iaMsx9Fi6HKweeK0fWy
+         29n2abD9OxSZCVI1gOjdVSRdaVWbo9/hSsGjJFmF/2KdLv+aEraR69ulaBxUrpcIAZSq
+         h2h5ufuHmtEzlGVrZKHBUOvcJS1f3FuaSCMt4Ki2Lk1Ki+oGg/Aq+X1uHwIfwPJYkQWP
+         WHdMbN7eNfxEuUfXbRCyiYpQ0MAh3F4paFzKVGnnCSpbz6GVLYZgZbuEY+Ft5E9M1yd+
+         SBg8A7SO6SEd7RSmTOXzjk3SNYyRlUwS6zsg3u6nN6B2DBJZzHuDwAmouAEnEDbJC70X
+         NJKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Vt7DGUy1KFLtewCdpYO+kWiUzbW5gAuQvl+L5yBlJLE=;
-        b=zRW6h1FrGcT/RtZxhetriTbBWWfyM1qn+8fc3e/53flwkssqgXZrhemknrrdBuClj7
-         xJjFliZ6/68TYRQd0jdN2VeIlWKzHxb8/+9DP+LjhQH3sQn44a+XKfaLkJtAw2/gZqTO
-         rzfZXsKUrG5FHbSsv9E5IM5nDAXw78jZlHJ2YNHoRtvst5gxZIh2ph5AJq3INxYK0I7a
-         jmxBa1hDfBe8/EE/Pu0mK+mvuoKfNgnQHNCw3u1Quq9EdFTRZ7aW71HrmTzQWTGOeYxF
-         a7/IgOEQGWkHO7MBG3toDsqETPmvFUifJk0pUfDI/XVdpP0TJ+OEujFEo3DkmOFet5b8
-         Scag==
-X-Gm-Message-State: AFqh2kpc66u6C6lUbQczoG7UcvwIHl9MhY+/6ZlmzObcSasuOx4d/KLz
-        l2wTeJh3hVevJ7YbgBl+sA==
-X-Google-Smtp-Source: AMrXdXsB5bdrYW28/WMqpdBRZNzuh/dd8EtxEGTo5RAGR3aEt6h3yJn+AQWoPreURt1SOKrddRdd/A==
-X-Received: by 2002:a05:6830:612:b0:670:97e8:bb88 with SMTP id w18-20020a056830061200b0067097e8bb88mr39230591oti.28.1673285577072;
-        Mon, 09 Jan 2023 09:32:57 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id k8-20020a9d7608000000b006708a6274afsm4847417otl.25.2023.01.09.09.32.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 09:32:56 -0800 (PST)
-Received: (nullmailer pid 1013201 invoked by uid 1000);
-        Mon, 09 Jan 2023 17:32:55 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mV5PeBWjbAt+jdxJk/6pzFPhbIuu2htqwYYpEc7BluY=;
+        b=qsFIG06SD3eI5Bh47VlUeSSvuujAT26F97/maR8ifwfGg5XmE3zdT4Z4xQ8m0GpbxF
+         3udgsIBgvuvuTgiUZQqm/G0mRK+HyobR5veMz0FvusJbhhNxLOrXs6YdBqtBkMmIrT8o
+         1wdPbCmc+KafX1X2xyBGwHQbAZpsmcZgWVgXoyalwQefJpmovJV171G20YHer+b+xFgR
+         fe/vfrcS2E9c61pA4O24hM60yNGjObkjP8eOJP0A6WUKuiZglQIKlOfQIl1eA1CjXYNY
+         fUWm1odvHjJ/TQdGRm2y8R3M/satVe083MALXyKeoOql/m6ZISXRfOLPvc9lboupfeep
+         hYwg==
+X-Gm-Message-State: AFqh2koOQt3QizWSG8c9t+fjlnWkloSetcu/PRGo81ZcigVnbMaUb1vl
+        zO7fjPjiA94OmGcoRQW8A/IxWUIi0Osdtgvbh/I=
+X-Google-Smtp-Source: AMrXdXtAHEYwtfuj1zAjaVtdC/P6Kr5BfniRZMBdg5ZsiY7IysVG2N1512oDJ0ES3gSKYUS5uTLBw39frTHKJzcWVPI=
+X-Received: by 2002:a19:4f13:0:b0:4cb:20b3:e7f4 with SMTP id
+ d19-20020a194f13000000b004cb20b3e7f4mr3867379lfb.194.1673286606783; Mon, 09
+ Jan 2023 09:50:06 -0800 (PST)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-remoteproc@vger.kernel.org, andersson@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        marijn.suijten@somainline.org, linux-arm-msm@vger.kernel.org,
-        agross@kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski@linaro.org,
-        Manivannan Sadhasivam <mani@kernel.org>
-In-Reply-To: <20230109135647.339224-2-konrad.dybcio@linaro.org>
-References: <20230109135647.339224-1-konrad.dybcio@linaro.org>
- <20230109135647.339224-2-konrad.dybcio@linaro.org>
-Message-Id: <167328555792.1012753.8015526796598804432.robh@kernel.org>
-Subject: Re: [PATCH v3 1/4] dt-bindings: remoteproc: qcom,sm6375-pas: Document
- remoteprocs
-Date:   Mon, 09 Jan 2023 11:32:55 -0600
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Received: by 2002:a05:6022:3122:b0:35:2af5:3578 with HTTP; Mon, 9 Jan 2023
+ 09:50:04 -0800 (PST)
+Reply-To: jb7148425@gmail.com
+From:   James b <b248074@gmail.com>
+Date:   Mon, 9 Jan 2023 17:50:04 +0000
+Message-ID: <CAENsMjM4uf0UsWga21f7mT=p8AUQJVL1mkT9FUD4GaefYpp5Pg@mail.gmail.com>
+Subject: Good day,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8366]
+        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:12c listed in]
+        [list.dnswl.org]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [jb7148425[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [b248074[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [b248074[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-
-On Mon, 09 Jan 2023 14:56:44 +0100, Konrad Dybcio wrote:
-> SM6375 hosts an ADSP, CDSP and modem as remote processors. Create
-> related bindings.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> v2 -> v3:
-> - Separate out 6375 bindings
-> 
->  .../bindings/remoteproc/qcom,sm6375-pas.yaml  | 137 ++++++++++++++++++
->  1 file changed, 137 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.yaml
-> 
-
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/remoteproc/qcom,pas-common.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.example.dtb: remoteproc@a400000: False schema does not allow {'compatible': ['qcom,sm6375-adsp-pas'], 'reg': [[171966464, 256]], 'interrupts-extended': [[4294967295, 0, 282, 4], [4294967295, 0, 1], [4294967295, 1, 1], [4294967295, 2, 1], [4294967295, 3, 1]], 'interrupt-names': ['wdog', 'fatal', 'ready', 'handover', 'stop-ack'], 'clocks': [[4294967295, 0]], 'clock-names': ['xo'], 'power-domains': [[4294967295, 8], [4294967295, 9]], 'power-domain-names': ['lcx', 'lmx'], 'memory-region': [[4294967295]], 'qcom,smem-states': [[4294967295, 0]], 'qcom,smem-state-names': ['stop'], 'glink-edge': {'interrupts-extended': [[4294967295, 3, 0, 1]], 'mboxes': [[4294967295, 3, 0]], 'label': ['lpass'], 'qcom,remote-pid': [[2]]}, '$nodename': ['remoteproc@a400000']}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.example.dtb: remoteproc@a400000: Unevaluated properties are not allowed ('glink-edge', 'memory-region', 'qcom,smem-state-names', 'qcom,smem-states' were unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230109135647.339224-2-konrad.dybcio@linaro.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Greetings and the peace of the Lord be with you. I send this message
+with a painful and broken heart. please get back to me as soon as
+possible. I have a there is a confidential matter to be discussed with
+you.  Regards
