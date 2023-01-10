@@ -2,75 +2,85 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7BFB663420
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  9 Jan 2023 23:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F14EE663956
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Jan 2023 07:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237911AbjAIWkc (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 9 Jan 2023 17:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
+        id S234887AbjAJG2M (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 10 Jan 2023 01:28:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237922AbjAIWkO (ORCPT
+        with ESMTP id S234576AbjAJG2G (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 9 Jan 2023 17:40:14 -0500
+        Tue, 10 Jan 2023 01:28:06 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F5F13FA6;
-        Mon,  9 Jan 2023 14:40:14 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 309Maet2015718;
-        Mon, 9 Jan 2023 22:40:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=BY0U/IfBBmjexzqkP5sEll4FvdKK3LgbuOw30SuZ9hE=;
- b=NZ9Qk5arFonnNXYATWjh6w5EirdQuiGHRPsCDeALkQiG2iOZ8i6s7QvlBtiphZbGbgOQ
- 9Aex3DpPfXHArYf7ZyV8wdFfCz/2prOi/CzcOHG3sW9uMxdEXmlZoDuQ6WnbFbMCKdeo
- 8MN8TWJQzFwpW81HrlSJDHVpxYjlI7aKpSCuq2MLlBW9gHP/BxCNEbWiainB6n8J0n/I
- 3diP69QomN7KxkUFHscheswdTx9eDLotIdL3F/nw/tWAvSSE+ammzDAqmJ7zZ74rMxKS
- mzmmNX2YZMSKdiEO0QKlFors35GURIEBEH2vxMtyVDT21TGZJt4a+yVRLJuNJn72qseO nQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3my1wu452d-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7CC395D1;
+        Mon,  9 Jan 2023 22:28:04 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30A44UGd023823;
+        Tue, 10 Jan 2023 06:27:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=p7LDM4ETC4g9nquHCDAtm666lp1vxWqVcTJq9/Y0Jgc=;
+ b=RjN3bopGd2Hjh8O9TruUew0mpVSIhRQCPHxtjyy6eInPvz2LIrjAHO7wjzPHccTNqYfY
+ 4GJJQoL463uTjFxR3GS+2H0/d0j4rdnlypyU9I8gQ/pO+DkKammQqvBGZBQhWlM618Jq
+ uocNgSIXZ7wEgQ1g/W2EZFPLxSHfy4N2oZPP/WJIgvp+WHIs8JCQ8woUZvqn4F+hB9Ey
+ TnhV/dV+LcBeXehXNgL4ICO8ExCv1kMiZ4M5HHibgn6gjmHuA77zx5x8EGSEVvvva4fR
+ 7Axb6q9h80pRbRZuGCq+ptud5anKNRKAt0wYQlIhM5zIQLG6KF0GuxvwCuU1yw4A7IvV Hw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n0x0jgh3u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 09 Jan 2023 22:40:11 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 309MeBbH003685
+        Tue, 10 Jan 2023 06:27:20 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30A6RKfT017257
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 9 Jan 2023 22:40:11 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 9 Jan 2023 14:40:08 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Chris Lew <quic_clew@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 6/6] rpmsg: glink: Cancel pending intent requests at removal
-Date:   Mon, 9 Jan 2023 14:40:01 -0800
-Message-ID: <20230109224001.1706516-7-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230109224001.1706516-1-quic_bjorande@quicinc.com>
-References: <20230109224001.1706516-1-quic_bjorande@quicinc.com>
+        Tue, 10 Jan 2023 06:27:20 GMT
+Received: from [10.216.32.170] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 9 Jan 2023
+ 22:27:13 -0800
+Message-ID: <1c6ce9e4-b9a4-9252-566a-f48c8e675d6b@quicinc.com>
+Date:   Tue, 10 Jan 2023 11:57:10 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] dt-bindings: remoteproc: qcom: sc7280-adsp-pil: Add
+ reg-names and power-domain-names
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>,
+        <mathieu.poirier@linaro.org>, <corbet@lwn.net>
+References: <1672991425-898-1-git-send-email-quic_srivasam@quicinc.com>
+ <c6ea3f37-fe5a-9a61-3a02-99bc036fd23e@linaro.org>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <c6ea3f37-fe5a-9a61-3a02-99bc036fd23e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: OMw4aFvjcilatTXB6ds_brK0IJd9sMuF
-X-Proofpoint-GUID: OMw4aFvjcilatTXB6ds_brK0IJd9sMuF
+X-Proofpoint-GUID: -LDfi5XHiq2SAKxP_9qL3TafB4WSO33R
+X-Proofpoint-ORIG-GUID: -LDfi5XHiq2SAKxP_9qL3TafB4WSO33R
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2023-01-09_14,2023-01-09_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=749
- malwarescore=0 clxscore=1015 mlxscore=0 priorityscore=1501 impostorscore=0
- spamscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2301090157
+ definitions=2023-01-10_01,2023-01-09_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 clxscore=1015 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 phishscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
+ spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301100041
 X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,54 +89,66 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-During removal of the glink edge interrupts are disabled and no more
-incoming messages are being serviced. In addition to the remote endpoint
-being defunct that means that any outstanding requests for intents will
-not be serviced, and qcom_glink_request_intent() will blindly wait for
-up to 10 seconds.
 
-Mark the intent request as not granted and complete the intent request
-completion to fail the waiting client immediately.
+On 1/8/2023 9:06 PM, Krzysztof Kozlowski wrote:
+Thanks for Your Time Krzyszto!!!
+> On 06/01/2023 08:50, Srinivasa Rao Mandadapu wrote:
+>> Add reg-names and power-domain-names for remoteproc ADSP pheripheral
+>> loader. This is to make compatible with remoteproc ADSP PIL driver.
+> I don't understand the reasoning. Before binding was "incompatible"?
 
-Once the current intent request is failed, any potential clients waiting
-for the intent request mutex will not enter the same wait, as the
-qcom_glink_tx() call will fail fast.
+Yes. Previous bindings needs fixes. Will add fixes tag for the same. So 
+far corresponding device tree not
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- drivers/rpmsg/qcom_glink_native.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+mainlined and no user till now, hence these missing errors not found.
 
-diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-index d81d0729493e..bb14e7edeadc 100644
---- a/drivers/rpmsg/qcom_glink_native.c
-+++ b/drivers/rpmsg/qcom_glink_native.c
-@@ -423,6 +423,12 @@ static void qcom_glink_handle_intent_req_ack(struct qcom_glink *glink,
- 	complete(&channel->intent_req_comp);
- }
- 
-+static void qcom_glink_intent_req_abort(struct glink_channel *channel)
-+{
-+	channel->intent_req_result = 0;
-+	complete(&channel->intent_req_comp);
-+}
-+
- /**
-  * qcom_glink_send_open_req() - send a RPM_CMD_OPEN request to the remote
-  * @glink: Ptr to the glink edge
-@@ -1788,6 +1794,12 @@ void qcom_glink_native_remove(struct qcom_glink *glink)
- 	wake_up_all(&glink->tx_avail_notify);
- 	spin_unlock_irqrestore(&glink->tx_lock, flags);
- 
-+	/* Abort any senders waiting for intent requests */
-+	spin_lock_irqsave(&glink->idr_lock, flags);
-+	idr_for_each_entry(&glink->lcids, channel, cid)
-+		qcom_glink_intent_req_abort(channel);
-+	spin_unlock_irqrestore(&glink->idr_lock, flags);
-+
- 	ret = device_for_each_child(glink->dev, NULL, qcom_glink_remove_device);
- 	if (ret)
- 		dev_warn(glink->dev, "Can't remove GLINK devices: %d\n", ret);
--- 
-2.37.3
+>
+>> Also change power domain from LCX to CX.
+> Why? Hardware changed?
 
+No, basically it's a fix. The power domain name wrongly mentioned in 
+previous bindings.
+
+The fixes tag mentioned above will be applicable here also.
+
+>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> ---
+>> Changes Since v1:
+>>      -- Modify subject line to SoC specific.
+>>
+>>   .../devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml  | 11 ++++++++++-
+>>   1 file changed, 10 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+>> index 94ca7a0..b5bee2c 100644
+>> --- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7280-adsp-pil.yaml
+>> @@ -23,6 +23,11 @@ properties:
+>>         - description: qdsp6ss register
+>>         - description: efuse q6ss register
+>>   
+>> +  reg-names:
+>> +    items:
+>> +      - const: qdsp6ss_base
+>> +      - const: lpass_efuse
+>> +
+>>     iommus:
+>>       items:
+>>         - description: Phandle to apps_smmu node with sid mask
+>> @@ -57,7 +62,11 @@ properties:
+>>   
+>>     power-domains:
+>>       items:
+>> -      - description: LCX power domain
+>> +      - description: CX power domain
+>> +
+>> +  power-domain-names:
+>> +    items:
+>> +      - const: cx
+>>   
+>>     resets:
+>>       items:
+> Best regards,
+> Krzysztof
+>
