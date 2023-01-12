@@ -2,277 +2,103 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999E9664B4D
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Jan 2023 19:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6720E668470
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Jan 2023 21:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239339AbjAJSlu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 10 Jan 2023 13:41:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S240650AbjALUxo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 12 Jan 2023 15:53:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239679AbjAJSlZ (ORCPT
+        with ESMTP id S232842AbjALUwz (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 10 Jan 2023 13:41:25 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1357D5EC15
-        for <linux-remoteproc@vger.kernel.org>; Tue, 10 Jan 2023 10:35:09 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id v3so8850928pgh.4
-        for <linux-remoteproc@vger.kernel.org>; Tue, 10 Jan 2023 10:35:09 -0800 (PST)
+        Thu, 12 Jan 2023 15:52:55 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3102FACF;
+        Thu, 12 Jan 2023 12:26:31 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id y18so17022596ljk.11;
+        Thu, 12 Jan 2023 12:26:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g52wDQR8/IIDDs4StQuzSV2ua8NLfetdd275k+8B5dM=;
-        b=cD32zmqroBWxd8Rr7zVcOTbU+5VannjE8t2cnjJxlHRjAkkf4+KjVLscm2qGdFUbo2
-         K9cwjru/GH6tPTm7JzrVYYwCNztERSce3Nyy+VcE8F0eQTObMgwX7Kd0sJiaGvCw/saY
-         7vjG3QHmYGE986WlemST8r7i1jYut8m9qkNjplF3alpv02ATj4E1fX5wQV/Qie7gcuXT
-         RIFoQWdZ+/wf6YzPpeP1bqZ4HmImEEP6UzW6mU8u8I32sAFbejOO97L2JswA5alKbrG4
-         CDa6fqvioSEsQ35+yaIbzrAyb1SzcI895q5yRVBroJmuBCEhqMfPZv0xnQ/tRHf1bjJ6
-         jM8Q==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ToTfVSINCq1vTbWWorTxY4lvCe0zPhUxxrJQUXc5LXA=;
+        b=acPEpDRXzH90lhTZpws66xzyETCAdqnXYU4zKZ/GBkFvtb0p8VVCVBTFIERI+zOanq
+         8bZGhNjoBcN/tehvpEGcHTJWqwyi9t/oo50SfJ5K01FeVBYD8tVPPOy8zovBQkXGNNZZ
+         WmrPHKoDkez4++vTlmxQ8jpsQTJ0uJpmQGkj9/t8KKRj/q17Bx9BtOqFXvyJjZZps5Fs
+         JPS/7YKKfEKmlC4c3lp37CcrD3VK7RSyy3GbM/sNzzMnU8tir2Ded9q+tTQa+9nYEObs
+         c/xjbHIL+FU+dQc89FC6JQSxbOUs4Bb5d05bv3yPEMRnuc0QCQEFVJ31LOjQ7Vfb2i1L
+         dr7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g52wDQR8/IIDDs4StQuzSV2ua8NLfetdd275k+8B5dM=;
-        b=bJMG2mJoXS9ygF/ik2Ftt5nRzhHjv14q15PbaZMSStPQQvxAq6LPO1X/Dg7K3F2NYg
-         RBBO6H8NI4e70BDQsACRM8VD5eWxjohlx8t1JidBjOfTmuF6ED6hzbUp8zaXyllVGZLg
-         mIoWoVcgPgx9e9A+snKmygePIhlv0dacwksPviRsmk2FcHUGp2EH7Ozs1KuIU+n//VGw
-         EXhGwkKpoief3Uy4YDM+eKb5KfQ88gkyG5H1FDSiy3XiLdJ5RObSeTt7JVQBJL3FtAQi
-         6i/drzL8fsiJjU2T3yM2EkI9eudMD3IhXe+ACLRP9K5IOuaEw/rcWomRogPcpPtRl1oe
-         QZvA==
-X-Gm-Message-State: AFqh2koMWhxUfb/1WN+jEtu6rNKHDK4N3eP3SHBIUxaPqbN4J4W4BRN2
-        +JGCmm0lV5RGgbbVkg1oZFH8DQ==
-X-Google-Smtp-Source: AMrXdXtKOknjNWVmAs9h7nmS8UbdLQIT0fCBX7CP9/j+Zq27bBae9rPRYTblI9ZsBzlG3n/d3KSewQ==
-X-Received: by 2002:a05:6a00:450a:b0:56e:664f:a5f5 with SMTP id cw10-20020a056a00450a00b0056e664fa5f5mr83432498pfb.8.1673375708461;
-        Tue, 10 Jan 2023 10:35:08 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:339:119d:e561:2d7d])
-        by smtp.gmail.com with ESMTPSA id 3-20020a621503000000b00581c741f95csm6634963pfv.46.2023.01.10.10.35.06
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ToTfVSINCq1vTbWWorTxY4lvCe0zPhUxxrJQUXc5LXA=;
+        b=5RQ7b7PSqSYGAXAEfmlGF0X/ByoVlNAkIIaLr1hSJORV/4rIiv4OXuilYSpckGRuwF
+         jTYoG6QOqK4Qrmm+JAZFVNyCGlnfb9cPNYaitqLzS8REJoioHIfmEzmaYAzChOsZwTjf
+         RskczWaj4uJBy/e9urQlq0D3SzZJx0U5ICKvbwDSZh8j5gom5jG3NyGuxXr8gJgIUKLV
+         5QdDO2Q15Ukt6t/mKBSBSmQtnwJay0EQjYKHjbfzu6QusPjnXSMB9lZkWf5qLcOlxyYE
+         ckOUFfut/sQ83l+x/At0HGTureOlwDVUuvjETznS6AzwPMtEJskjPqLNNU5qnjvICjVr
+         2KFA==
+X-Gm-Message-State: AFqh2kpQjf/qeLuDk8xnRx3MXGF/JOmAs2LKBYjAJvrBaZuj5cu4LbDe
+        6cCwKaFe18xMOmbwOeP3+Ka6texX/OqBLA==
+X-Google-Smtp-Source: AMrXdXut4N+CpUE1lMni2KHSS6cVLYele0wJZLAJwuq4e6x9vskSIev04DYrFG1JwlB57moeHEEQdw==
+X-Received: by 2002:a2e:bf1e:0:b0:27b:65e3:3e93 with SMTP id c30-20020a2ebf1e000000b0027b65e33e93mr25222636ljr.45.1673555190105;
+        Thu, 12 Jan 2023 12:26:30 -0800 (PST)
+Received: from i-vetokaappi.home.lan (dsl-hkibng42-56733b-36.dhcp.inet.fi. [86.115.59.36])
+        by smtp.gmail.com with ESMTPSA id k6-20020a2eb746000000b00281350bb5fbsm2346731ljo.2.2023.01.12.12.26.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 10:35:08 -0800 (PST)
-Date:   Tue, 10 Jan 2023 11:35:05 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Devarsh Thakkar <devarsht@ti.com>
-Cc:     andersson@kernel.org, devicetree@vger.kernel.org,
-        p.zabel@pengutronix.de, linux-remoteproc@vger.kernel.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, s-anna@ti.com, hnagalla@ti.com,
-        praneeth@ti.com, nm@ti.com, vigneshr@ti.com, a-bhatia1@ti.com,
-        j-luthra@ti.com
-Subject: Re: [PATCH v5 2/2] remoteproc: k3-r5: Use separate compatible string
- for TI AM62 SoC family
-Message-ID: <20230110183505.GA2741090@p14s>
-References: <20221227145216.1524-1-devarsht@ti.com>
- <20221227145216.1524-3-devarsht@ti.com>
+        Thu, 12 Jan 2023 12:26:29 -0800 (PST)
+From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH 0/8] Modem support for MSM8226
+Date:   Thu, 12 Jan 2023 22:26:03 +0200
+Message-Id: <20230112202612.791455-1-matti.lehtimaki@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221227145216.1524-3-devarsht@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Dec 27, 2022 at 08:22:16PM +0530, Devarsh Thakkar wrote:
-> AM62 and AM62A SoCs use single core R5F which is a new scenario
-> different than the one being used with CLUSTER_MODE_SINGLECPU
-> which is for utilizing a single core from a set of cores available
-> in R5F cluster present in the SoC.
-> 
-> To support this single core scenario map it with
-> newly defined CLUSTER_MODE_NONE and use it when
-> compatible is set to ti,am62-r5fss.
-> 
-> Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
-> ---
-> V2: Fix indentation and ordering issues as per review comments
-> V3: Change CLUSTER_MODE_NONE value to -1
-> V4: No change
-> V5: No change (fixing typo in email address)
-> ---
->  drivers/remoteproc/ti_k3_r5_remoteproc.c | 57 ++++++++++++++++++------
->  1 file changed, 44 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> index 0481926c6975..127f1f68e592 100644
-> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> @@ -74,9 +74,11 @@ struct k3_r5_mem {
->   *   Split mode      : AM65x, J721E, J7200 and AM64x SoCs
->   *   LockStep mode   : AM65x, J721E and J7200 SoCs
->   *   Single-CPU mode : AM64x SoCs only
-> + *   None            : AM62x, AM62A SoCs
->   */
->  enum cluster_mode {
-> -	CLUSTER_MODE_SPLIT = 0,
-> +	CLUSTER_MODE_NONE = -1,
+This series adds support for modem remoteproc found on MSM8226.
+It also adds needed device tree nodes and enables modem used for
+location service on matisse-wifi.
 
-s/CLUSTER_MODE_NONE/CLUSTER_MODE_ONECORE
+Luca Weiss (3):
+  remoteproc: qcom_q6v5_mss: Handle platforms with only single power
+    domain
+  remoteproc: qcom_q6v5_mss: Add modem support on MSM8226
+  ARM: dts: qcom: msm8226: Add modem remoteproc node
 
-And add it after CLUSTER_MODE_SINGLECPU
+Matti Lehtimäki (5):
+  dt-bindings: remoteproc: qcom,msm8916-mss-pil: Add MSM8226
+  dt-bindings: mfd: qcom,tcsr: Add compatible for MSM8226
+  ARM: dts: qcom: msm8226: Add node for TCSR halt regs
+  ARM: dts: qcom: msm8226: Add smsm node
+  ARM: dts: qcom: apq8026-samsung-matisse-wifi: Enable modem
 
-> +	CLUSTER_MODE_SPLIT,
->  	CLUSTER_MODE_LOCKSTEP,
->  	CLUSTER_MODE_SINGLECPU,
->  };
-> @@ -86,11 +88,13 @@ enum cluster_mode {
->   * @tcm_is_double: flag to denote the larger unified TCMs in certain modes
->   * @tcm_ecc_autoinit: flag to denote the auto-initialization of TCMs for ECC
->   * @single_cpu_mode: flag to denote if SoC/IP supports Single-CPU mode
-> + * @is_single_core: flag to denote if SoC/IP has only single core R5
->   */
->  struct k3_r5_soc_data {
->  	bool tcm_is_double;
->  	bool tcm_ecc_autoinit;
->  	bool single_cpu_mode;
-> +	bool is_single_core;
->  };
->  
->  /**
-> @@ -838,7 +842,8 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
->  
->  	core0 = list_first_entry(&cluster->cores, struct k3_r5_core, elem);
->  	if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
-> -	    cluster->mode == CLUSTER_MODE_SINGLECPU) {
-> +	    cluster->mode == CLUSTER_MODE_SINGLECPU ||
-> +	    cluster->mode == CLUSTER_MODE_NONE) {
->  		core = core0;
->  	} else {
->  		core = kproc->core;
-> @@ -853,7 +858,7 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
->  		boot_vec, cfg, ctrl, stat);
->  
->  	/* check if only Single-CPU mode is supported on applicable SoCs */
-> -	if (cluster->soc_data->single_cpu_mode) {
-> +	if (cluster->soc_data->single_cpu_mode || cluster->soc_data->is_single_core) {
+ .../devicetree/bindings/mfd/qcom,tcsr.yaml    |   1 +
+ .../remoteproc/qcom,msm8916-mss-pil.yaml      |  41 +++++-
+ .../dts/qcom-apq8026-samsung-matisse-wifi.dts |  13 +-
+ arch/arm/boot/dts/qcom-msm8226.dtsi           | 127 ++++++++++++++++
+ drivers/remoteproc/qcom_q6v5_mss.c            | 137 ++++++++++++++++++
+ 5 files changed, 313 insertions(+), 6 deletions(-)
 
-Everywhere other than k3_r5_probe(), cluster->mode should be used.  Otherwise it
-is wildly confusing and error prone.  Please resend this set with an extra
-preamble patch that fixes this.
+-- 
+2.34.1
 
->  		single_cpu =
->  			!!(stat & PROC_BOOT_STATUS_FLAG_R5_SINGLECORE_ONLY);
->  		if (single_cpu && cluster->mode == CLUSTER_MODE_SPLIT) {
-> @@ -1074,6 +1079,7 @@ static void k3_r5_adjust_tcm_sizes(struct k3_r5_rproc *kproc)
->  
->  	if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
->  	    cluster->mode == CLUSTER_MODE_SINGLECPU ||
-> +	    cluster->mode == CLUSTER_MODE_NONE ||
->  	    !cluster->soc_data->tcm_is_double)
->  		return;
->  
-> @@ -1147,7 +1153,9 @@ static int k3_r5_rproc_configure_mode(struct k3_r5_rproc *kproc)
->  	atcm_enable = cfg & PROC_BOOT_CFG_FLAG_R5_ATCM_EN ?  1 : 0;
->  	btcm_enable = cfg & PROC_BOOT_CFG_FLAG_R5_BTCM_EN ?  1 : 0;
->  	loczrama = cfg & PROC_BOOT_CFG_FLAG_R5_TCM_RSTBASE ?  1 : 0;
-> -	if (cluster->soc_data->single_cpu_mode) {
-> +	if (cluster->soc_data->is_single_core) {
-> +		mode = CLUSTER_MODE_NONE;
-> +	} else if (cluster->soc_data->single_cpu_mode) {
->  		mode = cfg & PROC_BOOT_CFG_FLAG_R5_SINGLE_CORE ?
->  				CLUSTER_MODE_SINGLECPU : CLUSTER_MODE_SPLIT;
-
-Same comment as above.
-
->  	} else {
-> @@ -1271,7 +1279,8 @@ static int k3_r5_cluster_rproc_init(struct platform_device *pdev)
->  
->  		/* create only one rproc in lockstep mode or single-cpu mode */
->  		if (cluster->mode == CLUSTER_MODE_LOCKSTEP ||
-> -		    cluster->mode == CLUSTER_MODE_SINGLECPU)
-> +		    cluster->mode == CLUSTER_MODE_SINGLECPU ||
-> +		    cluster->mode == CLUSTER_MODE_NONE)
->  			break;
->  	}
->  
-> @@ -1704,21 +1713,32 @@ static int k3_r5_probe(struct platform_device *pdev)
->  	 * default to most common efuse configurations - Split-mode on AM64x
->  	 * and LockStep-mode on all others
->  	 */
-
-The above comment needs to be adjusted.
-
-Thanks,
-Mathieu
-
-> -	cluster->mode = data->single_cpu_mode ?
-> +	if (!data->is_single_core)
-> +		cluster->mode = data->single_cpu_mode ?
->  				CLUSTER_MODE_SPLIT : CLUSTER_MODE_LOCKSTEP;
-> +	else
-> +		cluster->mode = CLUSTER_MODE_NONE;
-> +
->  	cluster->soc_data = data;
->  	INIT_LIST_HEAD(&cluster->cores);
->  
-> -	ret = of_property_read_u32(np, "ti,cluster-mode", &cluster->mode);
-> -	if (ret < 0 && ret != -EINVAL) {
-> -		dev_err(dev, "invalid format for ti,cluster-mode, ret = %d\n",
-> -			ret);
-> -		return ret;
-> +	if (!data->is_single_core) {
-> +		ret = of_property_read_s32(np, "ti,cluster-mode", &cluster->mode);
-> +		if (ret < 0 && ret != -EINVAL) {
-> +			dev_err(dev, "invalid format for ti,cluster-mode, ret = %d\n", ret);
-> +			return ret;
-> +		}
->  	}
->  
->  	num_cores = of_get_available_child_count(np);
-> -	if (num_cores != 2) {
-> -		dev_err(dev, "MCU cluster requires both R5F cores to be enabled, num_cores = %d\n",
-> +	if (num_cores != 2 && !data->is_single_core) {
-> +		dev_err(dev, "MCU cluster requires both R5F cores to be enabled but num_cores is set to = %d\n",
-> +			num_cores);
-> +		return -ENODEV;
-> +	}
-> +
-> +	if (num_cores != 1 && data->is_single_core) {
-> +		dev_err(dev, "SoC supports only single core R5 but num_cores is set to %d\n",
->  			num_cores);
->  		return -ENODEV;
->  	}
-> @@ -1760,18 +1780,28 @@ static const struct k3_r5_soc_data am65_j721e_soc_data = {
->  	.tcm_is_double = false,
->  	.tcm_ecc_autoinit = false,
->  	.single_cpu_mode = false,
-> +	.is_single_core = false,
->  };
->  
->  static const struct k3_r5_soc_data j7200_j721s2_soc_data = {
->  	.tcm_is_double = true,
->  	.tcm_ecc_autoinit = true,
->  	.single_cpu_mode = false,
-> +	.is_single_core = false,
->  };
->  
->  static const struct k3_r5_soc_data am64_soc_data = {
->  	.tcm_is_double = true,
->  	.tcm_ecc_autoinit = true,
->  	.single_cpu_mode = true,
-> +	.is_single_core = false,
-> +};
-> +
-> +static const struct k3_r5_soc_data am62_soc_data = {
-> +	.tcm_is_double = false,
-> +	.tcm_ecc_autoinit = true,
-> +	.single_cpu_mode = false,
-> +	.is_single_core = true,
->  };
->  
->  static const struct of_device_id k3_r5_of_match[] = {
-> @@ -1779,6 +1809,7 @@ static const struct of_device_id k3_r5_of_match[] = {
->  	{ .compatible = "ti,j721e-r5fss", .data = &am65_j721e_soc_data, },
->  	{ .compatible = "ti,j7200-r5fss", .data = &j7200_j721s2_soc_data, },
->  	{ .compatible = "ti,am64-r5fss",  .data = &am64_soc_data, },
-> +	{ .compatible = "ti,am62-r5fss",  .data = &am62_soc_data, },
->  	{ .compatible = "ti,j721s2-r5fss",  .data = &j7200_j721s2_soc_data, },
->  	{ /* sentinel */ },
->  };
-> -- 
-> 2.17.1
-> 
