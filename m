@@ -2,92 +2,99 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747B666A429
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Jan 2023 21:36:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7626566A546
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Jan 2023 22:45:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbjAMUgV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 13 Jan 2023 15:36:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
+        id S229996AbjAMVpu (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 13 Jan 2023 16:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjAMUgS (ORCPT
+        with ESMTP id S229707AbjAMVpt (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 13 Jan 2023 15:36:18 -0500
-X-Greylist: delayed 4177 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 13 Jan 2023 12:35:59 PST
-Received: from mail.dmbarone.com (mail.dmbarone.com [5.181.144.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3061B1D7;
-        Fri, 13 Jan 2023 12:35:57 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.dmbarone.com (Postfix) with ESMTP id A6A2A2A56DC;
-        Fri, 13 Jan 2023 15:25:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
-        t=1673623549; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
-        h=Subject:To:From:Date:Reply-To:From;
-        b=aZlCZBThkmHI4RIfhijFhrDQnHCy/Xl7TNfW0/j1wX1qfdzwVqggHO2ETrOVEE9ox
-         5L9Zof05uKP8fn6Oz6SAqdZjOLEzkW1bNmIudiM3C/JGSJCfDMVpscJUw2BQ8k1IWV
-         kGfvZ5LRxhdcH3yPO1sXVrBpL67PNHP6E0ARFzgY=
-X-Virus-Scanned: Debian amavisd-new at ispdmbarone.kubeitalia.it
-Received: from mail.dmbarone.com ([127.0.0.1])
-        by localhost (ispdmbarone.kubeitalia.it [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id 77yDe_Wyf_gF; Fri, 13 Jan 2023 15:25:49 +0000 (UTC)
-Received: from [172.20.10.6] (unknown [129.205.124.225])
-        (Authenticated sender: admin@dmbarone.com)
-        by mail.dmbarone.com (Postfix) with ESMTPSA id B337E2A544D;
-        Fri, 13 Jan 2023 15:25:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dmbarone.com; s=mail;
-        t=1673623549; bh=QIjTgWBPcZMVeqZovj8WAOWgI9bu1lFe9hdim3iQkyQ=;
-        h=Subject:To:From:Date:Reply-To:From;
-        b=aZlCZBThkmHI4RIfhijFhrDQnHCy/Xl7TNfW0/j1wX1qfdzwVqggHO2ETrOVEE9ox
-         5L9Zof05uKP8fn6Oz6SAqdZjOLEzkW1bNmIudiM3C/JGSJCfDMVpscJUw2BQ8k1IWV
-         kGfvZ5LRxhdcH3yPO1sXVrBpL67PNHP6E0ARFzgY=
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 13 Jan 2023 16:45:49 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA557CDF3
+        for <linux-remoteproc@vger.kernel.org>; Fri, 13 Jan 2023 13:45:48 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id b12so15860019pgj.6
+        for <linux-remoteproc@vger.kernel.org>; Fri, 13 Jan 2023 13:45:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fLpE4svXD3XQQRSXVJzXdGhWxSRO6yXuEUgvAKhMVl4=;
+        b=seXJpHkX75LLjeAQGGDYlo3npZTN5KBqgznJsS+O6gpK2NmQ8Yi8U38tzdE+sC0EtR
+         5QNoTpmSeSffYXeoVSQnn2DDfEUU15bx7u8Rc9mQ7+nG4BrIVuqxpf1JQJStGuZpibXL
+         us0R/zMDHhkDokII30bM1n/PGIAWgWXSABq5bm53ejqYhpqMuyX2VG9tuy7tkBOcBPXr
+         IG/Grxqr1iz8WOBM4TaI5wMisBoRkN7/HNxFv0u7XrxoEJZ8VtsAoxndPL1Ch+k+o3w2
+         q2AwPfjhCwZUciSBXNwm+cYaZBpI27vZHdYtB1+MOOaRomdw7nEBN/HbhoNBnskedaKr
+         hCSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fLpE4svXD3XQQRSXVJzXdGhWxSRO6yXuEUgvAKhMVl4=;
+        b=pt3W+oKVW5x15/KBjhdUTs0svykgWJn9HM+hJdqVoGkrTg/qmKa2zcaAnxKztd5ItK
+         SosYj7QwvFQzRpYqwaThUEYvD/X50vaQu/siKhIzxnKoawrB/5ovyhEOpzJOfr9evbDP
+         bxDrTR8uKOrS+vvQo/fFII8kzdHIQr+TzrwcdPlGz7YzPY3HL3NTsDNlhH3gcsr/8cM5
+         GDL01Nza47H1Nt2acDDn1TKEcvfSnTHkzGUpbki+219c8Do8BiW/j/pApom3zUU01AOl
+         DZYqMK3e6uCwEDQjdWsnG10U/u1RofXEoaR4PXQpEy52iW+uoTrUauLgzIvEQUuJ/+JG
+         0BPA==
+X-Gm-Message-State: AFqh2koZhye2mE1T16atmhF1XzRnrWh7dYSSOBVMupB5DngsByOZ2d8K
+        /83K+/E/fCuHbfRKrHdzBkcYRw==
+X-Google-Smtp-Source: AMrXdXsrIOvOzBb3717HQB1WC3lU2RR/DE+Mjyapbas+eMRFoGzQr3ZhpTdppsDT513yxfgfdqZIMg==
+X-Received: by 2002:a62:6001:0:b0:582:33b4:4c57 with SMTP id u1-20020a626001000000b0058233b44c57mr11213692pfb.33.1673646347798;
+        Fri, 13 Jan 2023 13:45:47 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:d88b:1f:16ba:1ee7])
+        by smtp.gmail.com with ESMTPSA id e8-20020aa79808000000b005897f5436c0sm9309127pfl.118.2023.01.13.13.45.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 13:45:47 -0800 (PST)
+Date:   Fri, 13 Jan 2023 14:45:44 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Hari Nagalla <hnagalla@ti.com>
+Cc:     andersson@kernel.org, devicetree@vger.kernel.org,
+        p.zabel@pengutronix.de, linux-remoteproc@vger.kernel.org,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, s-anna@ti.com, praneeth@ti.com,
+        nm@ti.com, vigneshr@ti.com, a-bhatia1@ti.com, j-luthra@ti.com,
+        devarsht@ti.com
+Subject: Re: [PATCH v2 0/2] Add C7xv DSP for AM62A
+Message-ID: <20230113214544.GA2956142@p14s>
+References: <20221230132453.32022-1-hnagalla@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?q?Wohlt=C3=A4tigkeit!!?=
-To:     Recipients <admi@dmbarone.com>
-From:   <admi@dmbarone.com>
-Date:   Fri, 13 Jan 2023 16:25:49 +0100
-Reply-To: theresasteven225@gmail.com
-X-Antivirus: Avast (VPS 230113-2, 1/13/2023), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20230113152549.A6A2A2A56DC@mail.dmbarone.com>
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_SBL,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.9291]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [129.205.124.225 listed in zen.spamhaus.org]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [5.181.144.66 listed in bl.score.senderscore.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [theresasteven225[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221230132453.32022-1-hnagalla@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Eine Spende wurde an Sie get=E4tigt, antworten Sie f=FCr weitere Einzelheit=
-en.
+On Fri, Dec 30, 2022 at 07:24:51AM -0600, Hari Nagalla wrote:
+> AM62A SoC family has a C7xv DSP subsystem with Analytics engine. This
+> susbystem is intended for deep learning purposes. C7xv is similar to C71
+> DSPs on K3 J7 SoCs with additional harware accelerators and IP updates
+> for deep learining.
+> 
+> Hari Nagalla (1):
+>   dt-bindings: remoteproc: k3-dsp: update bindings for AM62A SoCs
+> 
+> Jai Luthra (1):
+>   remoteproc: k3-c7x: Add support for C7xv DSP on AM62A SoC
+> 
+>  .../bindings/remoteproc/ti,k3-dsp-rproc.yaml         |  3 +++
+>  drivers/remoteproc/ti_k3_dsp_remoteproc.c            | 12 ++++++++++++
+>  2 files changed, 15 insertions(+)
+>
 
-Gr=FC=DFe
-Theresia Steven
+Applied - thanks
+Mathieu
 
--- 
-This email has been checked for viruses by Avast antivirus software.
-www.avast.com
+> -- 
+> 2.17.1
+> 
