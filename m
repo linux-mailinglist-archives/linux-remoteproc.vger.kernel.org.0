@@ -2,65 +2,64 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2287D6722FB
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Jan 2023 17:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83240672301
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 18 Jan 2023 17:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjARQYg (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 18 Jan 2023 11:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S230480AbjARQYk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 18 Jan 2023 11:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjARQYU (ORCPT
+        with ESMTP id S229851AbjARQYV (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 18 Jan 2023 11:24:20 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3736589A0
-        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Jan 2023 08:22:43 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so1807926wmb.0
-        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Jan 2023 08:22:43 -0800 (PST)
+        Wed, 18 Jan 2023 11:24:21 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38B3589BA
+        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Jan 2023 08:22:44 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so1807958wmb.0
+        for <linux-remoteproc@vger.kernel.org>; Wed, 18 Jan 2023 08:22:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=P4dmctLxdZK3eYAfEKwcOzQh3Gp/4sD4d2HzV/1+Nrw=;
-        b=WiY1AS2zer5ahoODjQ8Y3ht6v/Axjn4JLz4yzpsMT+3EKV5+jOsvRZTMHYjiOE/J3S
-         DomR/QyEhbR2YXoaItwgpG5J+eTeLO0KZp+BSavxggl16iRIzyuSbMrDqerj+8GkA5W7
-         0ngjVMlvaQKh+2xyfZRqnnmydAf4E8wX7Zq8ljk8jPaxu7JhsVBYc5bU7OeXbp0+3uNJ
-         uoK9HdMdph+Uc95W3Oz6sfbKUeoeM0IBaCQcAsYSuKfJXrHATpPfOB5r+LXxszRrK4xA
-         etYI59rM0OJk5K96CtBuTRX/+uPR36t2WP7mTvceKh9wm2AdVYrxF2vi0pL0aZeZjCXv
-         VCRg==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OhbZjX/koZrX9iSh81WiUJwKhhql/MHhaB/Kr/N+S/w=;
+        b=yr/9wmZiTzFYxxilRSLGpxIbrlCS5ZK5VyA5sRbddu88WfeakbJ267et7UfBOZhkzL
+         C8PxREakRwiCY6uHFhdvZGYBckjHMeOpl0CGuJNamF9PdqUuaGtfD1hvcfBrXHpAWPxV
+         Ghjuz9jwroP90wZodO67XTyqIBdEQfbismAZmoB9AiaF3MxmB3jyuwpMgNG8GuzbIq7y
+         kiRN6B0ihQ5eMRnpv8sXsUH+2d31laYsXjzTyJf4GagN78tcei6oScCImsP+caau9QTx
+         8enV/4WUdaHkNOgXPglo2lh75rfgkH1nGRCo4In8aRyt6xGBAHnRAX0pLzWMT8aO2bDY
+         4a0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P4dmctLxdZK3eYAfEKwcOzQh3Gp/4sD4d2HzV/1+Nrw=;
-        b=eNz5AkATaSfqm/fHPgQphE1w4QbAbZWef0wXx6zp4io/S53NAVC3yZq33NowOAQDPq
-         e4auW4x27AsgSTk+bWBrAZDKCNJuAHNY48tdk7S0DpVcneC4eiGQfRgoKAo8O0WpHtZa
-         G7ZRj4KB0TJ0+Vgk7Dx9bgU10B9U0LuGu/0stATxB/dY+LEdnDtPOQGmw3gv6xuEL4D3
-         kLtuDLeyoGHDiG73JS4o6r4D/o04jC9g2Fl7hZWJvxIK6/84CtkgApcoOSm/pNpyDYbn
-         4jSo5erIruV6N8WG/bPs81upzDFMUyF3tfGDp3Of0A8FT7QsPL+XzSQRVyhMgkHyCtVL
-         3Nqw==
-X-Gm-Message-State: AFqh2kpCYBo4PDD2usqkiV/r+/qlQsN/sQ2MRdIGamx+9G6xwpzmFdWD
-        pvrv2TGJRg+KBFC0xGUKVl4LEA==
-X-Google-Smtp-Source: AMrXdXuSfKEoI9Que22uwdl2DSJT2jjnF4v05Fdzz7/9dp0O0uRIcdpKjO6cvsuzGzA9eJ1QCp8LFg==
-X-Received: by 2002:a05:600c:1e21:b0:3d0:7fee:8a70 with SMTP id ay33-20020a05600c1e2100b003d07fee8a70mr7622507wmb.19.1674058962368;
-        Wed, 18 Jan 2023 08:22:42 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OhbZjX/koZrX9iSh81WiUJwKhhql/MHhaB/Kr/N+S/w=;
+        b=E9RZivQOxYcrBnkzH7ZbaOLS5xr65nZUadJB6furs0nuEGGcB3aBPjz59jPnVTII1u
+         +/EKLQ76p930YaoMdK5pWBZbt7fXMRy9HTqdIgjukzsvUW28dQUZnph13/qNGMgCY3f0
+         x6DL9zUpSvi3IFPXic92fl0oI5LvWTNFwRvsgZbWph4MpKT4SomSvGDiTH3w2DvYyG70
+         yVa2p28akxLqBc4Skihy+PKSJxGpD4CFkTOASDihXxf5OxzcInmmsjA1ca2WYoUV8z68
+         ehP7Di8URihjtck1vdFCNhLNrGllLlxBovvTkhWls2PrhTv2sc6v9Ov/oaE68ksBKZw2
+         VS6A==
+X-Gm-Message-State: AFqh2kpECQe6rrQW5Lcvy0vuxoKZ7jrH4c98AHafWAK+qbXcvN1YmL8Y
+        Vp18qZFcwkmAlX0zlSUbR6vQ3Q==
+X-Google-Smtp-Source: AMrXdXvMYEjz/xdcBYIRDbh2a4jrJIHNl505YxCHZvp+zi/0bFGENp2nhe7nwKmk7s5aaE3zgSXVuw==
+X-Received: by 2002:a05:600c:4910:b0:3d3:4406:8a3a with SMTP id f16-20020a05600c491000b003d344068a3amr7562958wmp.30.1674058963373;
+        Wed, 18 Jan 2023 08:22:43 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id l23-20020a05600c1d1700b003db0dbbea53sm2744393wms.30.2023.01.18.08.22.41
+        by smtp.gmail.com with ESMTPSA id l23-20020a05600c1d1700b003db0dbbea53sm2744393wms.30.2023.01.18.08.22.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 08:22:41 -0800 (PST)
+        Wed, 18 Jan 2023 08:22:42 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Subject: [PATCH v4 0/5] remoteproc: qcom_q6v5_pas: add support for SM8550
- adsp, cdsp & mpss
 Date:   Wed, 18 Jan 2023 17:22:39 +0100
-Message-Id: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-0-54154c08c0b7@linaro.org>
+Subject: [PATCH v4 1/5] dt-bindings: remoteproc: qcom: adsp: move
+ memory-region and firmware-name out of pas-common
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAM8cyGMC/53NQWrDMBAF0KsErTtFM5ITt6veI2QhybItsKUwc
- gzB+O6ZZFe6albDH/jvb6pGTrGq78OmOK6pppIl2I+DCqPLQ4TUSVakiRDRQnY814VLHqDObdNo
- uF0lRzcDx7ks8colQKttb3rvjfW9Esu7GsGzy2EULd+mSZ5jqkvh+2t7RTnn/86sCBpQ22Bs8MZ
- /4c+UpFk+Cw/qIhMrvcXSkyUfiKhp7Mn+Yc1brBH2SHgkh11/wvYXu+/7AwWo346OAQAA
+Message-Id: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-1-54154c08c0b7@linaro.org>
+References: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-0-54154c08c0b7@linaro.org>
+In-Reply-To: <20221114-narmstrong-sm8550-upstream-remoteproc-v4-0-54154c08c0b7@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
@@ -86,88 +85,226 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-This patchsets adds support for the aDSP, cDSP and MPSS found in the
-SM8550 SoC.
+Move memory-region and firmware-name definitions out of qcom,pas-common.yaml
+since they will be redefined differently for SM8550 PAS bindings documentation.
 
-The aDSP, cDSP and MPSS boot process on SM8550 now requires a secondary
-"Devicetree" firmware to be passed along the main Firmware, and the cDSP
-a new power domain named "NSP".
-
-In order to satisfy the load & authentication order required by the SM8550
-SoC, the following is implemented:
-- "Devicetree" firmware request & load in dedicated memory
-- Q6V5 prepare
-- Power Domain & Clocks enable
-- "Devicetree" firmware authentication
-- Main firmware load in dedicated memory
-- Main firmware authentication
-- Q6V5 startup
-- "Devicetree" firmware metadata release
-- Main metadata release
-
-When booting older platforms, the "Devicetree" steps would be
-bypassed and the load & authentication order would still be valid.
-
-To: Andy Gross <agross@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
-To: Konrad Dybcio <konrad.dybcio@somainline.org>
-To: Mathieu Poirier <mathieu.poirier@linaro.org>
-To: Rob Herring <robh+dt@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-To: Manivannan Sadhasivam <mani@kernel.org>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To: Amol Maheshwari <amahesh@qti.qualcomm.com>
-Cc: Alex Elder <elder@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-remoteproc@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Abel Vesa <abel.vesa@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-
 ---
-Changes in v4:
-- Rebased onto git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git for-next
-- Added reviewed-by on bindings patches
-- Remove dependency in cover letter since merged
-- Link to v3: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-remoteproc-v3-0-62162a1df718@linaro.org
+ Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml       | 4 ++++
+ Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml | 8 --------
+ Documentation/devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml | 8 ++++++++
+ Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml | 8 ++++++++
+ .../devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml          | 8 ++++++++
+ .../devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml         | 8 ++++++++
+ Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml  | 8 ++++++++
+ Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml | 8 ++++++++
+ Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml | 8 ++++++++
+ Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml | 8 ++++++++
+ 10 files changed, 68 insertions(+), 8 deletions(-)
 
-Changes in v3:
-- fix mpss matching in bindings, tested against DT
-- Link to v2: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-remoteproc-v2-0-12bc22255474@linaro.org
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+index d3bfc0f472a9..643ee787a81f 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml
+@@ -40,6 +40,10 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description: Reference to the AOSS side-channel message RAM.
+ 
++  memory-region:
++    maxItems: 1
++    description: Reference to the reserved-memory for the Hexagon core
++
+ required:
+   - compatible
+ 
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
+index 1d5e01c8d8bc..171ef85de193 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
+@@ -52,14 +52,6 @@ properties:
+     minItems: 1
+     maxItems: 3
+ 
+-  firmware-name:
+-    $ref: /schemas/types.yaml#/definitions/string
+-    description: Firmware name for the Hexagon core
+-
+-  memory-region:
+-    maxItems: 1
+-    description: Reference to the reserved-memory for the Hexagon core
+-
+   qcom,smem-states:
+     $ref: /schemas/types.yaml#/definitions/phandle-array
+     description: States used by the AP to signal the Hexagon core
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml
+index 007349ef51ed..5efa0e5c0439 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml
+@@ -41,6 +41,14 @@ properties:
+   power-domain-names: false
+   smd-edge: false
+ 
++  memory-region:
++    minItems: 1
++    description: Reference to the reserved-memory for the Hexagon core
++
++  firmware-name:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: Firmware name for the Hexagon core
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml
+index 6fd768609a66..5cefd2c58593 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml
+@@ -50,12 +50,20 @@ properties:
+       - const: mx
+       - const: mss
+ 
++  memory-region:
++    minItems: 1
++    description: Reference to the reserved-memory for the Hexagon core
++
+   qcom,qmp:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description: Reference to the AOSS side-channel message RAM.
+ 
+   smd-edge: false
+ 
++  firmware-name:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: Firmware name for the Hexagon core
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml
+index 3026cfde5582..c1f8dd8d0e4c 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml
+@@ -37,6 +37,14 @@ properties:
+ 
+   smd-edge: false
+ 
++  memory-region:
++    minItems: 1
++    description: Reference to the reserved-memory for the Hexagon core
++
++  firmware-name:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: Firmware name for the Hexagon core
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml
+index c08274aaa6f8..f6fbc531dc28 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml
+@@ -37,6 +37,14 @@ properties:
+ 
+   smd-edge: false
+ 
++  memory-region:
++    minItems: 1
++    description: Reference to the reserved-memory for the Hexagon core
++
++  firmware-name:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: Firmware name for the Hexagon core
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml
+index cbeaa00ca4d4..c66e298462c7 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml
+@@ -45,12 +45,20 @@ properties:
+       - const: cx
+       - const: mss
+ 
++  memory-region:
++    minItems: 1
++    description: Reference to the reserved-memory for the Hexagon core
++
+   qcom,qmp:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description: Reference to the AOSS side-channel message RAM.
+ 
+   smd-edge: false
+ 
++  firmware-name:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: Firmware name for the Hexagon core
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml
+index 911529400142..fee02fa800b5 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml
+@@ -35,8 +35,16 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description: Reference to the AOSS side-channel message RAM.
+ 
++  memory-region:
++    minItems: 1
++    description: Reference to the reserved-memory for the Hexagon core
++
+   smd-edge: false
+ 
++  firmware-name:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: Firmware name for the Hexagon core
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml
+index b934252cf02b..2c085ac2c3fb 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml
+@@ -39,8 +39,16 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description: Reference to the AOSS side-channel message RAM.
+ 
++  memory-region:
++    minItems: 1
++    description: Reference to the reserved-memory for the Hexagon core
++
+   smd-edge: false
+ 
++  firmware-name:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: Firmware name for the Hexagon core
++
+ required:
+   - compatible
+   - reg
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml
+index 853f97d6879f..af24f9a3cdf1 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml
+@@ -42,6 +42,14 @@ properties:
+ 
+   smd-edge: false
+ 
++  memory-region:
++    minItems: 1
++    description: Reference to the reserved-memory for the Hexagon core
++
++  firmware-name:
++    $ref: /schemas/types.yaml#/definitions/string
++    description: Firmware name for the Hexagon core
++
+ required:
+   - compatible
+   - reg
 
-Changes in v2:
-- Moved the SM8550 pas bindings on top of "split and reorganize PAS/PIL" v3 patchset 
-- Incorporated DSM memory support into pas bindings & driver
-- Moved second DTB firmware into second entry of firmware-name
-- Dropped applied "qcom,fastrpc: increase allowed iommus entries" patch
-- Link to v1: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-remoteproc-v1-0-104c34cb3b91@linaro.org
-
----
-Neil Armstrong (5):
-      dt-bindings: remoteproc: qcom: adsp: move memory-region and firmware-name out of pas-common
-      dt-bindings: remoteproc: qcom: adsp: document sm8550 adsp, cdsp & mpss compatible
-      remoteproc: qcom_q6v5_pas: add support for dtb co-firmware loading
-      remoteproc: qcom_q6v5_pas: add support for assigning memory to firmware
-      remoteproc: qcom_q6v5_pas: add sm8550 adsp, cdsp & mpss compatible & data
-
- .../devicetree/bindings/remoteproc/qcom,adsp.yaml  |   4 +
- .../bindings/remoteproc/qcom,pas-common.yaml       |   8 -
- .../bindings/remoteproc/qcom,qcs404-pas.yaml       |   8 +
- .../bindings/remoteproc/qcom,sc7180-pas.yaml       |   8 +
- .../bindings/remoteproc/qcom,sc8180x-pas.yaml      |   8 +
- .../bindings/remoteproc/qcom,sc8280xp-pas.yaml     |   8 +
- .../bindings/remoteproc/qcom,sdx55-pas.yaml        |   8 +
- .../bindings/remoteproc/qcom,sm6350-pas.yaml       |   8 +
- .../bindings/remoteproc/qcom,sm8150-pas.yaml       |   8 +
- .../bindings/remoteproc/qcom,sm8350-pas.yaml       |   8 +
- .../bindings/remoteproc/qcom,sm8550-pas.yaml       | 178 ++++++++++++++
- drivers/remoteproc/qcom_q6v5_pas.c                 | 268 ++++++++++++++++++++-
- 12 files changed, 501 insertions(+), 21 deletions(-)
----
-base-commit: f9721c6a43b63f6428e71b23a435f7f4f4e17af2
-change-id: 20221114-narmstrong-sm8550-upstream-remoteproc-804f3fbb34bf
-
-Best regards,
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+2.34.1
