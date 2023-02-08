@@ -2,53 +2,54 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C2068EC91
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  8 Feb 2023 11:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 124B268EC81
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  8 Feb 2023 11:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjBHKP4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 8 Feb 2023 05:15:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
+        id S229679AbjBHKP6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 8 Feb 2023 05:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjBHKPx (ORCPT
+        with ESMTP id S230184AbjBHKPz (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 8 Feb 2023 05:15:53 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463443CE3B
-        for <linux-remoteproc@vger.kernel.org>; Wed,  8 Feb 2023 02:15:51 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id l37-20020a05600c1d2500b003dfe46a9801so1083425wms.0
-        for <linux-remoteproc@vger.kernel.org>; Wed, 08 Feb 2023 02:15:51 -0800 (PST)
+        Wed, 8 Feb 2023 05:15:55 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588F042DFA
+        for <linux-remoteproc@vger.kernel.org>; Wed,  8 Feb 2023 02:15:53 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id f47-20020a05600c492f00b003dc584a7b7eso1043835wmp.3
+        for <linux-remoteproc@vger.kernel.org>; Wed, 08 Feb 2023 02:15:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eU6t5S19qfP9S/338lMbvl6syTeQ25IZRs/UFhzDsMA=;
-        b=xAgJOQTtwNrVJrNTfT5OsEjumUulgPcqd+hkTlkBCkq9Q+8fyumZqYT004/fo9KeZh
-         4eES/ylqvkP/Qmcw06wqlaSFqo1tUgkzzuLQYBPy2zokiaeNOfH3p9ecuGTWTfpLUQtd
-         imQJCyYsIi1gQCM+J7YBsfjFFZpMPPlvIMCaKL+p3SKujBtA0TW6b4qR9awJM97r6vcB
-         BFE8gtZz9Dripy1Y0sNQvMrC+v+j5f0KmnBbibWGDUV0YBtfpm+LvEtpk8XlaAZvmqe2
-         QDTdxqjvhDWl0wH1djTencI1QckLv7cmcUVLDl8VTk8hdO1QabwL2IefQ77N1sRL8SjI
-         l5Dw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eVEuYxssYzS6K5JrTOLvMTdbukj74pIFYD+z30S9/84=;
+        b=VS3V3vJEHQN/F+Pe5DaKbbio/v4b9V6vMRPxKMe9+yY+91mSKgemsjWdrDcu1JeGXJ
+         cdJIWD2jJi+V4ZySzq1GdZ6g1HP4LYQrGAIAmQB85vYbUIltjKEwAcUuUlDulhhBgsGN
+         9BSY0D4iWk9cd8SKjX3wMPBht2t6Mqe9mt9lT2iU1O3Por7ralBb0vCg4kEsX23rOfoS
+         cQ6wE6PC34jg/YUoxoDOnlaT+37DKKHzjdCmfrSvO0tIPSs4s0KPx1ynJGU/N7y2PZKQ
+         ydEalrfM3VBUK/JwOmihWwkNOC1khv80gD3gmeh4LoVytIVIHbL0HYUTn/jpsQgEvRRV
+         XR5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eU6t5S19qfP9S/338lMbvl6syTeQ25IZRs/UFhzDsMA=;
-        b=KBcW3MXVupjEsp9bn60Lw4CbopEtm074tRfVYn06Mlrt/iu4v3SUTuW/n4aDkJY1f7
-         xKYhB30pWstLxZvjkgiYppkIb/HvH5fXVFTuYyNYlQXtdaoYJgHqadTz9hiIaqnE2WWy
-         UV8PK2yG9TByhIS9y+RnuKLthi7+ZopRc9mkSC0/pl/BbaEdps1xHoiTzlk2mRUs0RSP
-         ubqg5hAigtIN4kl/zXISK2oHR5YwxAYszuGIeT4Z7iblSl9s/qAfc+TamqbRsZEpIRbr
-         6WVcRWhCbl8dr672Ydd11mipLltZZCz0Q0hqc/f9MPrhl5YwUScrDlXAkvDeDYXJeYxJ
-         3ILg==
-X-Gm-Message-State: AO0yUKXBvmlewoJQpJr91nlJmmbzbSnP+Nc4q16T4UdMuKhvFP+vEr2U
-        7XwvdgcGO7g245NH2YLhEkYP5w==
-X-Google-Smtp-Source: AK7set+3SMFP2OpvNgvLeXy7mER86UTqQJAVe/mbVxWgJzDl3CcIVKEZEMzUr63nz3N38oChbUWJ2w==
-X-Received: by 2002:a05:600c:230f:b0:3da:f665:5b66 with SMTP id 15-20020a05600c230f00b003daf6655b66mr8239345wmo.6.1675851349867;
-        Wed, 08 Feb 2023 02:15:49 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eVEuYxssYzS6K5JrTOLvMTdbukj74pIFYD+z30S9/84=;
+        b=Nq5ZljaJWfGhGBzdbzaDi4pgTLL31od8cYEzALWacEMv7j7hymC6ofVkQT0MeBemSC
+         8Qxv0ohTIhQbw5u8VaHtHt3LhshA+kdCbZeqWlU2u/bcHBTg8NVhLdAI7s+TKRKl2Hsq
+         KxHrQczizO7lhGyXA0KURPYti7O88q0FDmlGgJQecOZeC7caclObIY4nEcrgYJ3xZPLl
+         iYbRFHcazioo/D0AZQrVmnxsjapCXA1H45vstzVom85a1gx5Dv3BpabPUqJ3VYzwoWgm
+         eZt2eNC61g9cyDi0YYtEGLe/q9+Mfor4nEh54oc1A8qKy+fFJXFYY1tRqD0sENjokg/M
+         IuZg==
+X-Gm-Message-State: AO0yUKVy15celw3vFzNZ2bhdZbEjXBAWyjUwykRvpd26YMSMxDudCzgN
+        1BNUkOQH6tFZOBElH+sW9DBtpQ==
+X-Google-Smtp-Source: AK7set8QWSrB1VoOwQDhU4/XDsvh97uKEmQ5ftpRs9Z0p1SnhshHE2kaliOz0S8RQAp+4Zy2+7nrUw==
+X-Received: by 2002:a05:600c:13d4:b0:3df:e1e9:200e with SMTP id e20-20020a05600c13d400b003dfe1e9200emr6033073wmg.39.1675851351905;
+        Wed, 08 Feb 2023 02:15:51 -0800 (PST)
 Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003dc4ecfc4d7sm1496328wmq.29.2023.02.08.02.15.47
+        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003dc4ecfc4d7sm1496328wmq.29.2023.02.08.02.15.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Feb 2023 02:15:49 -0800 (PST)
+        Wed, 08 Feb 2023 02:15:51 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -64,10 +65,12 @@ To:     Andy Gross <agross@kernel.org>,
         linux-remoteproc@vger.kernel.org, alsa-devel@alsa-project.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v2 1/7] arm64: dts: qcom: ipq6018: align RPM G-Link node with bindings
-Date:   Wed,  8 Feb 2023 11:15:39 +0100
-Message-Id: <20230208101545.45711-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 2/7] arm64: dts: qcom: qcs404: align RPM G-Link node with bindings
+Date:   Wed,  8 Feb 2023 11:15:40 +0100
+Message-Id: <20230208101545.45711-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230208101545.45711-1-krzysztof.kozlowski@linaro.org>
+References: <20230208101545.45711-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,20 +94,20 @@ Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Changes since v1:
 1. Add Rb tag.
 ---
- arch/arm64/boot/dts/qcom/ipq6018.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/qcs404.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq6018.dtsi b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-index d32c9b2515ee..bbd94025ff5d 100644
---- a/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq6018.dtsi
-@@ -176,7 +176,7 @@ rpm-glink {
+diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+index 9c9890cf1b10..bc2ed73afb74 100644
+--- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
++++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
+@@ -223,7 +223,7 @@ rpm-glink {
  		qcom,rpm-msg-ram = <&rpm_msg_ram>;
  		mboxes = <&apcs_glb 0>;
  
 -		rpm_requests: glink-channel {
 +		rpm_requests: rpm-requests {
- 			compatible = "qcom,rpm-ipq6018";
+ 			compatible = "qcom,rpm-qcs404";
  			qcom,glink-channels = "rpm_requests";
  
 -- 
