@@ -2,135 +2,195 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437BD694BB2
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Feb 2023 16:52:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C79694E66
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Feb 2023 18:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjBMPwa (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 Feb 2023 10:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
+        id S230339AbjBMRu0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 13 Feb 2023 12:50:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjBMPw1 (ORCPT
+        with ESMTP id S230250AbjBMRuR (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 Feb 2023 10:52:27 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21691A665;
-        Mon, 13 Feb 2023 07:52:26 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 31DERs62001670;
-        Mon, 13 Feb 2023 15:52:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=np/Fh/isAkZqVk4IGvOaJu01AVx1Edn4bZ3eEoznThM=;
- b=CILJ3Plmnsa89OEgsZQZFaeSmgyAexUlueFuRDTvgXyznbSHgkZRa/Kt3C5qpMwJd2/4
- 5nSanxtYk7Xkn1/HuQWvaUaExoB3nC55huTSfg/xpR655fJtnfulo40VVYrd9BKLkGBS
- B9vY6QXGRkq7h8+lIHhTU5fDIlsTwpsUacoqxQF06uZhMSUSKZSypu6i0kLzOGSS3KBY
- zdqYTZaoUD5PWvy1hI4hggpB8lSu5RKPr9U1anYCm6j5U3LIdOc4BKVDD1ItEM3GRg2S
- Z84sZrby2kpwkExbdiUoLG9oNMqQtcs6gEtFb+Dz5bagu2vcvzN8MZWFaOYKUhs6VbhE Ig== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3np0qpvgs4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 15:52:23 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 31DFqM5V021292
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Feb 2023 15:52:22 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Mon, 13 Feb 2023 07:52:22 -0800
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Chris Lew <quic_clew@quicinc.com>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 6/6] rpmsg: glink: Cancel pending intent requests at removal
-Date:   Mon, 13 Feb 2023 07:52:15 -0800
-Message-ID: <20230213155215.1237059-7-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230213155215.1237059-1-quic_bjorande@quicinc.com>
-References: <20230213155215.1237059-1-quic_bjorande@quicinc.com>
+        Mon, 13 Feb 2023 12:50:17 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E6C1F934
+        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Feb 2023 09:50:09 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id nh19-20020a17090b365300b00233ceae8407so5428099pjb.3
+        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Feb 2023 09:50:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M8NVw51hJujJ9w6ww4tXYpEn/8Vq7ox+Z1FASgY/bLU=;
+        b=Bd5fqu4Y/EyTummo2fVWma8W7zSH94KPXwjC+My/qv4w4lRqc2bTM0aeCnwo6RxXqx
+         Qr+kuCxm+ap5+tWeT8OpIKQQTipytFb7/VmEUWg7rfnNZKpqDqQEHV5nGn8XO1FGTIk+
+         Nv4k3G3cJKiR3Q7ObE4YCnakTxt7A81IvBvGWk1/KSvFfHtxEp6CPMyvhBkOKyOuYFvK
+         lTno7aCndNECZC+kSDNG8MR1VstW/BurZNGlpBM46+040Vmc0bbLtTufBBF0wZGWZc+x
+         zD2cd1bgxeINi8EXEJNHjiAb5HnZPX/jb5phCXk8ACCb2hEiYZweiC4Kbi2OEhcQmVTc
+         i1ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M8NVw51hJujJ9w6ww4tXYpEn/8Vq7ox+Z1FASgY/bLU=;
+        b=lhu5iuXICe9B75ecsrsYHhRvNbftsNSGJsaeK5XFqkAuuGv0vcEpVT4xLJtLqxUB0l
+         aCTQko4Yof6eB6ppXyE71W8xK7XwZ/9ulQAZ8P8DoH1mZYjFYkoGEu7eqZjn+SFIO+/r
+         xgV+niokNL6c7SlwxpMaj51x4sXzOZg37TDsPrOfS3z1SG79BQl9kILc0V2bPqanlCaO
+         23ezgpgCSD3B1mzo3eNaI78JSjvLh7Ecl4avsZLg/a5jlvarpLTJ+B/zEyk1+koOLHzP
+         /7EuR0MxQEXnDB1dei1bOO/kWh7vurbI7M/mxFJBTz3h668ZhYRdtvpS5Ffdxg+LTgol
+         logA==
+X-Gm-Message-State: AO0yUKUeIK9l/wvVQxvzKM5xEZ+MyJw+GOxxR7hhLK27UDEVBste2uTI
+        xa1/3CdEXr1zLCCPyS8UqbA5xgfmP3/FFAyH
+X-Google-Smtp-Source: AK7set9lsbgjl5TgXfCPbU1vvfIDzkRjBJr9zNN0yZX/rOiaR87z3+Pi1tvaUwDAPm+VBgOq2lq3rA==
+X-Received: by 2002:a17:90b:4a0b:b0:233:9fff:888e with SMTP id kk11-20020a17090b4a0b00b002339fff888emr13858074pjb.39.1676310609341;
+        Mon, 13 Feb 2023 09:50:09 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:8b5:7925:cf2a:8bac])
+        by smtp.gmail.com with ESMTPSA id i61-20020a17090a3dc300b00231224439c1sm4290656pjc.27.2023.02.13.09.50.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Feb 2023 09:50:08 -0800 (PST)
+Date:   Mon, 13 Feb 2023 10:50:06 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Iuliana Prodan <iuliana.prodan@nxp.com>
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in DDR
+Message-ID: <20230213175006.GA310433@p14s>
+References: <20230209063816.2782206-1-peng.fan@oss.nxp.com>
+ <2c4997fa-973c-dee4-9b26-6b38a1ca4540@nxp.com>
+ <DU0PR04MB9417A9B81B86FAC0A477063D88DC9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <73d34c86-7c31-6530-0915-aa470af5d9ca@nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8-3SoyprBJlUMxkUWbNgAHOG3qokxnBO
-X-Proofpoint-ORIG-GUID: 8-3SoyprBJlUMxkUWbNgAHOG3qokxnBO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.170.22
- definitions=2023-02-13_10,2023-02-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
- malwarescore=0 phishscore=0 adultscore=0 suspectscore=0 spamscore=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 mlxlogscore=848
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2302130143
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <73d34c86-7c31-6530-0915-aa470af5d9ca@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-During removal of the glink edge interrupts are disabled and no more
-incoming messages are being serviced. In addition to the remote endpoint
-being defunct that means that any outstanding requests for intents will
-not be serviced, and qcom_glink_request_intent() will blindly wait for
-up to 10 seconds.
+On Mon, Feb 13, 2023 at 12:15:59PM +0200, Iuliana Prodan wrote:
+> On 2/12/2023 9:43 AM, Peng Fan wrote:
+> > Hi Iuliana,
+> > 
+> > > Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in
+> > > DDR
+> > > 
+> > > 
+> > > On 2/9/2023 8:38 AM, Peng Fan (OSS) wrote:
+> > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > 
+> > > > V3:
+> > > > 
+> > > >    Daniel, Iuliana
+> > > > 
+> > > >      Please help review this patchset per Mathieu's comments.
+> > > > 
+> > > >    Thanks,
+> > > >    Peng.
+> > > > 
+> > > >    Move patch 3 in v2 to 1st patch in v3 and add Fixes tag Per Daniel
+> > > >    IMX_RPROC_ANY in patch 3 Per Mathieu
+> > > >    Update comment and commit log in patch 5, 6.
+> > > > 
+> > > >    NXP SDK provides ".interrupts" section, but I am not sure how others
+> > > >    build the firmware. So I still keep patch 6 as v2, return bootaddr
+> > > >    if there is no ".interrupts" section.
+> > > > 
+> > > > V2:
+> > > >    patch 4 is introduced for sparse check warning fix
+> > > > 
+> > > > This pachset is to support i.MX8M and i.MX93 Cortex-M core firmware
+> > > > could be in DDR, not just the default TCM.
+> > > > 
+> > > > i.MX8M needs stack/pc value be stored in TCML entry address[0,4], the
+> > > > initial value could be got from firmware first section ".interrupts".
+> > > > i.MX93 is a bit different, it just needs the address of .interrupts
+> > > > section. NXP SDK always has .interrupts section.
+> > > > 
+> > > > So first we need find the .interrupts section from firmware, so patch
+> > > > 1 is to reuse the code of find_table to introduce a new API
+> > > > rproc_elf_find_shdr to find shdr, the it could reused by i.MX driver.
+> > > > 
+> > > > Patch 2 is introduce devtype for i.MX8M/93
+> > > > 
+> > > > Although patch 3 is correct the mapping, but this area was never used
+> > > > by NXP SW team, we directly use the DDR region, not the alias region.
+> > > > Since this patchset is first to support firmware in DDR, mark this
+> > > > patch as a fix does not make much sense.
+> > > > 
+> > > > patch 4 and 5 is support i.MX8M/93 firmware in DDR with parsing
+> > > > .interrupts section. Detailed information in each patch commit message.
+> > > > 
+> > > > Patches were tested on i.MX8MQ-EVK i.MX8MP-EVK i.MX93-11x11-EVK
+> > > If one can build their firmware as they want, then the .interrupt section can
+> > > also be called differently.
+> > > I don't think is a good idea to base all your implementation on this
+> > > assumption.
+> > > 
+> > > It's clear there's a limitation when linking firmware in DDR, so this should be
+> > > well documented so one can compile their firmware and put the needed
+> > > section (interrupt as we call it in NXP SDK) always in TCML - independently
+> > > where the other section go.
+> > Ok, so .interrupt section should be a must in elf file if I understand correctly.
+> > 
+> > I could add a check in V4 that if .interrupt section is not there, driver will report
+> > failure.
+> > 
+> > How do you think?
+> 
+> Peng, I stand by my opinion that the limitation of linking firmware in DDR
+> should be documented in an Application Note, or maybe there are other
+> documents where how to use imx_rproc is explained.
+> 
+> The implementation based on the .interrupt section is not robust.
+> Maybe a user linked his firmware correctly in TCML, but the section is not
+> called .interrupt so the firmware loading will work.
+> 
+> So, instead of using the section name, you should use the address.
 
-Mark the intent request as not granted and complete the intent request
-completion to fail the waiting client immediately.
+Can you be more specific on the above?
 
-Once the current intent request is failed, any potential clients waiting
-for the intent request mutex will not enter the same wait, as the
-qcom_glink_tx() call will fail fast.
+> 
+> First, check whether there is a section linked to TCML.
+> If there is none, check for section name - as you did.
+> If there is no section called .interrupt, give an error message.
 
-Reviewed-by: Chris Lew <quic_clew@quicinc.com>
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
+We have two ways of booting, one that puts the firmware image in the TCML and
+another in RAM.  Based on the processor type, the first 8 bytes of the TCML need
+to include the address for the stack and PC value.
 
-Changes since v1:
-- None
+I think the first thing to do is have two different firmware images, one for
+i.MX8M and another one for i.MX93.  That should greatly simplify things.
 
- drivers/rpmsg/qcom_glink_native.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Second, there should always be a segment that adds the right information to the
+TMCL.  That segment doesn't need a name, it simply have to be part of the
+segments that are copied to memory (any kind of memory) so that function
+rproc_elf_load_segments() can do its job. 
 
-diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
-index 946128c343f3..324c75d59a6f 100644
---- a/drivers/rpmsg/qcom_glink_native.c
-+++ b/drivers/rpmsg/qcom_glink_native.c
-@@ -423,6 +423,12 @@ static void qcom_glink_handle_intent_req_ack(struct qcom_glink *glink,
- 	complete(&channel->intent_req_comp);
- }
- 
-+static void qcom_glink_intent_req_abort(struct glink_channel *channel)
-+{
-+	channel->intent_req_result = 0;
-+	complete(&channel->intent_req_comp);
-+}
-+
- /**
-  * qcom_glink_send_open_req() - send a RPM_CMD_OPEN request to the remote
-  * @glink: Ptr to the glink edge
-@@ -1788,6 +1794,12 @@ void qcom_glink_native_remove(struct qcom_glink *glink)
- 	wake_up_all(&glink->tx_avail_notify);
- 	spin_unlock_irqrestore(&glink->tx_lock, flags);
- 
-+	/* Abort any senders waiting for intent requests */
-+	spin_lock_irqsave(&glink->idr_lock, flags);
-+	idr_for_each_entry(&glink->lcids, channel, cid)
-+		qcom_glink_intent_req_abort(channel);
-+	spin_unlock_irqrestore(&glink->idr_lock, flags);
-+
- 	ret = device_for_each_child(glink->dev, NULL, qcom_glink_remove_device);
- 	if (ret)
- 		dev_warn(glink->dev, "Can't remove GLINK devices: %d\n", ret);
--- 
-2.25.1
+That pushes the complexity to the tool that generates the firmware image,
+exactly where it should be.
 
+This is how I think we should solve this problem based on the very limited
+information provided with this patchset.  Please let me know if I missed
+something and we'll go from there.    
+
+> 
+> For all the above options please add comments in code, explaining each step.
+> 
