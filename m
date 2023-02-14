@@ -2,26 +2,26 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97263695541
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 Feb 2023 01:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 347B069554E
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 Feb 2023 01:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjBNAOO (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 Feb 2023 19:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S229629AbjBNAUR (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 13 Feb 2023 19:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjBNAOM (ORCPT
+        with ESMTP id S229521AbjBNAUQ (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 Feb 2023 19:14:12 -0500
+        Mon, 13 Feb 2023 19:20:16 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8468018B29;
-        Mon, 13 Feb 2023 16:14:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15EF41968E;
+        Mon, 13 Feb 2023 16:20:15 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 82E431042;
-        Mon, 13 Feb 2023 16:14:52 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6F6081AED;
+        Mon, 13 Feb 2023 16:20:57 -0800 (PST)
 Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B88B63F663;
-        Mon, 13 Feb 2023 16:14:06 -0800 (PST)
-Date:   Tue, 14 Feb 2023 00:12:00 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D849C3F663;
+        Mon, 13 Feb 2023 16:20:12 -0800 (PST)
+Date:   Tue, 14 Feb 2023 00:18:05 +0000
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Bastian Germann <bage@debian.org>
 Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
@@ -35,11 +35,10 @@ Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH 3/3] arm64: dts: allwinner: a64: Add hwspinlock node
-Message-ID: <20230214001200.54504034@slackpad.lan>
-In-Reply-To: <20230213231931.6546-4-bage@debian.org>
+Subject: Re: [PATCH 0/3] Enable hwlock on Allwinner A64
+Message-ID: <20230214001805.6ead683d@slackpad.lan>
+In-Reply-To: <20230213231931.6546-1-bage@debian.org>
 References: <20230213231931.6546-1-bage@debian.org>
-        <20230213231931.6546-4-bage@debian.org>
 Organization: Arm Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
@@ -53,51 +52,36 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, 14 Feb 2023 00:19:30 +0100
+On Tue, 14 Feb 2023 00:19:27 +0100
 Bastian Germann <bage@debian.org> wrote:
 
-Hi,
+Hi Bastian,
 
-> Add the hwspinlock to A64 which is already implemented for A31.
+> The allwinner,sun6i-a31-hwspinlock compatible driver can be used with
+> the Allwinner A64 chip. Add the wiring required to enable it.
 > 
-> Signed-off-by: Bastian Germann <bage@debian.org>
-> ---
->  arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> The device tree schema needs some work to verify everything that is
+> needed by the sun6i hwlock driver.
 > 
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-> index 77b5349f6087..d4be8be0f2f3 100644
-> --- a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-> @@ -851,6 +851,16 @@ wdt0: watchdog@1c20ca0 {
->  			clocks = <&osc24M>;
->  		};
->  
-> +		hwspinlock: hwlock@1c18000 {
-> +			compatible = "allwinner,sun6i-a31-hwspinlock";
+> The hwlock device was verified to be available with this series applied
+> on a Pinebook.
 
-I wonder if we should add a more specific compatible string here
-(sun50i-a64-hwspinlock), with the existing one as a fallback.
-
-Checked the address and the clock/reset against the manual.
-
-I am not entirely sure if it's the best practice to unconditionally
-enable those devices, but since it needs explicit consumers to be used,
-it's probably fine.
+The changes look fine, but are there any actual users of this device?
+The missing binding bits you fixed demonstrate that a driver/binding
+without actual users can create problems.
+So are there Linux/Crust patches out there that use this device?
 
 Cheers,
 Andre
 
-
-> +			reg = <0x01c18000 0x1000>;
-> +			clocks = <&ccu CLK_BUS_SPINLOCK>;
-> +			clock-names = "ahb";
-> +			resets = <&ccu RST_BUS_SPINLOCK>;
-> +			reset-names = "ahb";
-> +			#hwlock-cells = <1>;
-> +		};
-> +
->  		spdif: spdif@1c21000 {
->  			#sound-dai-cells = <0>;
->  			compatible = "allwinner,sun50i-a64-spdif",
+> 
+> Bastian Germann (3):
+>   dt-bindings: hwlock: sun6i: Add missing #hwlock-cells
+>   dt-bindings: hwlock: sun6i: Add missing names
+>   arm64: dts: allwinner: a64: Add hwspinlock node
+> 
+>  .../hwlock/allwinner,sun6i-a31-hwspinlock.yaml     | 14 ++++++++++++++
+>  arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi      | 10 ++++++++++
+>  2 files changed, 24 insertions(+)
+> 
 
