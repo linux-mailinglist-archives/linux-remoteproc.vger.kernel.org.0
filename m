@@ -2,53 +2,51 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5DB6969CD
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 Feb 2023 17:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5059696A35
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 Feb 2023 17:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjBNQhn (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 14 Feb 2023 11:37:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
+        id S230171AbjBNQsT (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 14 Feb 2023 11:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbjBNQhm (ORCPT
+        with ESMTP id S229765AbjBNQsS (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 14 Feb 2023 11:37:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEF84215;
-        Tue, 14 Feb 2023 08:37:41 -0800 (PST)
+        Tue, 14 Feb 2023 11:48:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CE53AAE;
+        Tue, 14 Feb 2023 08:48:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 800B06179F;
-        Tue, 14 Feb 2023 16:37:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35D41C433EF;
-        Tue, 14 Feb 2023 16:37:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B03DB81BF9;
+        Tue, 14 Feb 2023 16:48:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F89C433EF;
+        Tue, 14 Feb 2023 16:48:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1676392660;
-        bh=zA3qxRQiZVHeCuSPcpD8NkDwG9B4B15GfeTYUiCpIik=;
+        s=k20201202; t=1676393292;
+        bh=pIGfIUyELnj1r2C49mieQLwNusabnsLyOs47P3KXPeY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mkeGiHLhcgLfZ6ClM6LEdZL0M78Ovh27GTlfAZVvbKzjSKBQlM7qUCdE5f8vDfadl
-         AfBb5P7YJLot41yNGNdJJWEK+XeY1dAo1/yotiSkCthXjZnibVccmzVvIywoY9fn0b
-         wQdIdwctsmBx67We9tw5gePhjicXBkElD7d5btyufMOICE3OMLUd9S2jw18Kd5qnYD
-         YcA7f9MvnLNC7xLDmKjFn3h7/KagavHny5xbaaKiv12RNIfDB2rGyATnPYwiKzEeIs
-         aO5llr+fic9wh2aFwQ1n2pHkTnVlnz9iFvX1mlYoUB0UXOApbQOkBX6r7Vnm3ynz4g
-         Zg0bcxP6YaRew==
-Date:   Tue, 14 Feb 2023 08:39:44 -0800
+        b=hsLd7sab/dP2RG1Pz26VDBcWibqcVpaT1tF6jRx0V50LaGHdqEm2Np7ZsPkd88UUW
+         iqyCGDk908fqDScRlH9julU5+ZOWipd1CfWqStaGT+kDdkOD9vPhNoLBXdbl5QsyjD
+         YabVD8VkJhZf36QMa9xlBLk8OP/yHzpvU5cLtNBhlLOjvhlO/tchaLLblYafV+cGyf
+         u7xbGv44ZIPh5pwZR2WfAOXE8kkJ0kfOYn082Ca94D0s+TkUfUTkIUpWRL5Kn0T7s+
+         mWn6h+x0N5GPBDzWnAMEG8K/4TpLTheWNezIFCn2YNEcC6dUXTnuwT15AlrIThrv3Q
+         f2l1m7dd2HTug==
+Date:   Tue, 14 Feb 2023 08:50:16 -0800
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     dmitry.baryshkov@linaro.org, agross@kernel.org,
-        mathieu.poirier@linaro.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] remoteproc: qcom: replace kstrdup with kstrndup
-Message-ID: <20230214163944.y5tkgdfmsycmpg7p@ripper>
-References: <1675180866-16695-1-git-send-email-quic_mojha@quicinc.com>
- <1676383691-29738-1-git-send-email-quic_mojha@quicinc.com>
+To:     Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
+Cc:     mathieu.poirier@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2] remoteproc: sysfs/debugfs: fix race while updating
+ recovery flag
+Message-ID: <20230214165016.fteeddbwjjyiwxwb@ripper>
+References: <20230201054609.14575-1-quic_satyap@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1676383691-29738-1-git-send-email-quic_mojha@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230201054609.14575-1-quic_satyap@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,39 +54,72 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 07:38:11PM +0530, Mukesh Ojha wrote:
-> Since, there is no guarantee that region.name will be 0-terminated
-> from the firmware side, replace kstrdup with kstrndup.
+On Tue, Jan 31, 2023 at 09:46:08PM -0800, Satya Durga Srinivasu Prabhala wrote:
+> When multiple clients try to update the recovery flag, it is
+> possible that, race condition would lead to undesired results
+> as updates to recovery flag isn't protected by any mechanism
+> today. To avoid such issues, take remoteproc mutex lock before
+> updating recovery flag and release the lock once done.
 > 
-> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-Please don't send additional patches in-reply-to another patch, it makes
-it impossible to use b4 to pick up the first patch.
+The only query of recovery_disabled that I can see is in
+rproc_crash_handler_work(), outside of any lock. So I'm not able to see
+the issue you're referring to.
 
-And please don't send two patches which clearly will conflict with
-each other. Now I had to manually apply the first patch...
+Can you please help me understand better?
 
-Regards,
+Thanks,
 Bjorn
 
+> Signed-off-by: Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>
 > ---
->  drivers/remoteproc/qcom_common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v1 -> v2:
+> - addressed comments from Mukesh Ojha
+>   1. take & release lock only while updating recovery flag
+>   2. update debugfs
 > 
-> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
-> index 020349f..7810f91 100644
-> --- a/drivers/remoteproc/qcom_common.c
-> +++ b/drivers/remoteproc/qcom_common.c
-> @@ -124,7 +124,7 @@ static int qcom_add_minidump_segments(struct rproc *rproc, struct minidump_subsy
->  	for (i = 0; i < seg_cnt; i++) {
->  		memcpy_fromio(&region, ptr + i, sizeof(region));
->  		if (region.valid == MD_REGION_VALID) {
-> -			name = kstrdup(region.name, GFP_KERNEL);
-> +			name = kstrndup(region.name, MAX_REGION_NAME_LENGTH - 1, GFP_KERNEL);
->  			if (!name) {
->  				iounmap(ptr);
->  				return -ENOMEM;
+>  drivers/remoteproc/remoteproc_debugfs.c | 4 ++++
+>  drivers/remoteproc/remoteproc_sysfs.c   | 4 ++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_debugfs.c b/drivers/remoteproc/remoteproc_debugfs.c
+> index b86c1d09c70c..2c44d375024e 100644
+> --- a/drivers/remoteproc/remoteproc_debugfs.c
+> +++ b/drivers/remoteproc/remoteproc_debugfs.c
+> @@ -226,10 +226,14 @@ rproc_recovery_write(struct file *filp, const char __user *user_buf,
+>  
+>  	if (!strncmp(buf, "enabled", count)) {
+>  		/* change the flag and begin the recovery process if needed */
+> +		mutex_lock(&rproc->lock);
+>  		rproc->recovery_disabled = false;
+> +		mutex_unlock(&rproc->lock);
+>  		rproc_trigger_recovery(rproc);
+>  	} else if (!strncmp(buf, "disabled", count)) {
+> +		mutex_lock(&rproc->lock);
+>  		rproc->recovery_disabled = true;
+> +		mutex_unlock(&rproc->lock);
+>  	} else if (!strncmp(buf, "recover", count)) {
+>  		/* begin the recovery process without changing the flag */
+>  		rproc_trigger_recovery(rproc);
+> diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
+> index 8c7ea8922638..628e0de9a132 100644
+> --- a/drivers/remoteproc/remoteproc_sysfs.c
+> +++ b/drivers/remoteproc/remoteproc_sysfs.c
+> @@ -50,10 +50,14 @@ static ssize_t recovery_store(struct device *dev,
+>  
+>  	if (sysfs_streq(buf, "enabled")) {
+>  		/* change the flag and begin the recovery process if needed */
+> +		mutex_lock(&rproc->lock);
+>  		rproc->recovery_disabled = false;
+> +		mutex_unlock(&rproc->lock);
+>  		rproc_trigger_recovery(rproc);
+>  	} else if (sysfs_streq(buf, "disabled")) {
+> +		mutex_lock(&rproc->lock);
+>  		rproc->recovery_disabled = true;
+> +		mutex_unlock(&rproc->lock);
+>  	} else if (sysfs_streq(buf, "recover")) {
+>  		/* begin the recovery process without changing the flag */
+>  		rproc_trigger_recovery(rproc);
 > -- 
-> 2.7.4
+> 2.38.1
 > 
