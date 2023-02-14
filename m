@@ -2,26 +2,26 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C8769553E
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 Feb 2023 01:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C21C695544
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 14 Feb 2023 01:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjBNAOI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 Feb 2023 19:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
+        id S230175AbjBNAOU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 13 Feb 2023 19:14:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjBNAOH (ORCPT
+        with ESMTP id S229941AbjBNAOR (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 Feb 2023 19:14:07 -0500
+        Mon, 13 Feb 2023 19:14:17 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B8407B77C;
-        Mon, 13 Feb 2023 16:14:05 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48E10193F8;
+        Mon, 13 Feb 2023 16:14:15 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 362EB4B3;
-        Mon, 13 Feb 2023 16:14:47 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 423DE1A9A;
+        Mon, 13 Feb 2023 16:14:57 -0800 (PST)
 Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6CFEA3F663;
-        Mon, 13 Feb 2023 16:14:01 -0800 (PST)
-Date:   Tue, 14 Feb 2023 00:04:17 +0000
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 83DA23F663;
+        Mon, 13 Feb 2023 16:14:11 -0800 (PST)
+Date:   Tue, 14 Feb 2023 00:07:36 +0000
 From:   Andre Przywara <andre.przywara@arm.com>
 To:     Bastian Germann <bage@debian.org>
 Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
@@ -35,12 +35,11 @@ Cc:     Wilken Gottwalt <wilken.gottwalt@posteo.net>,
         linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: hwlock: sun6i: Add missing
- #hwlock-cells
-Message-ID: <20230214000417.6f466073@slackpad.lan>
-In-Reply-To: <20230213231931.6546-2-bage@debian.org>
+Subject: Re: [PATCH 2/3] dt-bindings: hwlock: sun6i: Add missing names
+Message-ID: <20230214000736.3697f8c6@slackpad.lan>
+In-Reply-To: <20230213231931.6546-3-bage@debian.org>
 References: <20230213231931.6546-1-bage@debian.org>
-        <20230213231931.6546-2-bage@debian.org>
+        <20230213231931.6546-3-bage@debian.org>
 Organization: Arm Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 MIME-Version: 1.0
@@ -54,12 +53,16 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, 14 Feb 2023 00:19:28 +0100
+On Tue, 14 Feb 2023 00:19:29 +0100
 Bastian Germann <bage@debian.org> wrote:
 
-> The allwinner,sun6i-a31-hwspinlock.yaml binding needs #hwlock-cells
-> which is required by the hwlock type.
-> 
+> The allwinner,sun6i-a31-hwspinlock.yaml binding needs clock-names
+> and reset-names set to "ahb" as required by the driver.
+
+That should read "Linux driver", and is technically not a good
+rationale to change a DT binding, but I guess the Linux kernel is the
+only user so far, so the change should be fine:
+
 > Fixes: f9e784dcb63f ("dt-bindings: hwlock: add sun6i_hwspinlock")
 > Signed-off-by: Bastian Germann <bage@debian.org>
 
@@ -69,27 +72,39 @@ Cheers,
 Andre
 
 > ---
->  .../bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml       | 4 ++++
->  1 file changed, 4 insertions(+)
+>  .../hwlock/allwinner,sun6i-a31-hwspinlock.yaml         | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
 > diff --git a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
-> index 10e5a53e447b..01b1bbb3061f 100644
+> index 01b1bbb3061f..1f11d9580646 100644
 > --- a/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
 > +++ b/Documentation/devicetree/bindings/hwlock/allwinner,sun6i-a31-hwspinlock.yaml
-> @@ -26,11 +26,15 @@ properties:
+> @@ -23,9 +23,17 @@ properties:
+>    clocks:
+>      maxItems: 1
+>  
+> +  clock-names:
+> +    items:
+> +      - const: ahb
+> +
 >    resets:
 >      maxItems: 1
 >  
-> +  '#hwlock-cells':
-> +    const: 1
+> +  reset-names:
+> +    items:
+> +      - const: ahb
 > +
->  required:
+>    '#hwlock-cells':
+>      const: 1
+>  
+> @@ -33,7 +41,9 @@ required:
 >    - compatible
 >    - reg
 >    - clocks
+> +  - clock-names
 >    - resets
-> +  - "#hwlock-cells"
+> +  - reset-names
+>    - "#hwlock-cells"
 >  
 >  additionalProperties: false
->  
 
