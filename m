@@ -2,149 +2,92 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1AE69856D
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 15 Feb 2023 21:20:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 864536985A8
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 15 Feb 2023 21:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjBOUUe (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 15 Feb 2023 15:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42584 "EHLO
+        id S229810AbjBOUhi (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 15 Feb 2023 15:37:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjBOUUd (ORCPT
+        with ESMTP id S229782AbjBOUhg (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 15 Feb 2023 15:20:33 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9942BEF5
-        for <linux-remoteproc@vger.kernel.org>; Wed, 15 Feb 2023 12:20:31 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id f23-20020a05600c491700b003dff4480a17so2925175wmp.1
-        for <linux-remoteproc@vger.kernel.org>; Wed, 15 Feb 2023 12:20:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kNzCuF6BCyXsL2yh1ARNBckVMji8pzlET6deYgUkxoE=;
-        b=XSFpJ/VevZDFan5kWJUyXz9WwmiflZO3DOFhA4+AF8vqE6RUr6/iCVk8JQzqwhaEeZ
-         t6gERriMHefRcBZ3gW87YjfyQDjXuAwfEcdWu/6LmiwCRELo5LT0bglwGFgMLRWv9UVr
-         2oA3KjvI0qlohDfKpzUWIV1YceyqPCAj4WkCuRFYmeFC8EAQ3yjVAFK79iGopxCSqX98
-         XEPh5IUPqDXeJKqb+R5CHwg8CGotNyxYgFiEQPLyXLvAh+ldKo4oWWNwhfn2+EBnO6G9
-         iZP2ObgDXL31cnnyrgPsnHPqLoq5xN62QODC8H7oVyv4Q/Tf/t330v9HlX8jiFgI5UGs
-         wVPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kNzCuF6BCyXsL2yh1ARNBckVMji8pzlET6deYgUkxoE=;
-        b=DMyU1b6n8yJQ0G11JfU0uxoigjzmrUaaUIR01L6JJTnZMIwCaSkClI2hnlrQljD5QL
-         BtxBsDkQQoR4NRvLpyLLL1uNVEzQFe8ov6Iq5e+amTdJ8u6yW2sYo4XVxZaEkfkm5QZl
-         dLScW2MnDQAVm/tqLAl1MYqho+4mzAFZbM76ElbrawrTwn1J6D9DJPuku+TVKoaA6uam
-         Rp0JP+Pc1u0BQOthpXduhHZ1v+fqMXtd2NAMCHhruxY/4WNBMgc8QfIqgOs70LEQF9jz
-         Gg9yUMUMFw4av6xXsRPYPoENQzlhHmDppir2z2JqSrYWhUf6V5hnE62y6I+QWxMRhdne
-         cOTA==
-X-Gm-Message-State: AO0yUKWOu/EWlGAXzdBtpYX5j/22bqzPBgxERY1dd8427mnGa90w6SSH
-        5aDQi5B25asA+Rp02iyiqXVsUg==
-X-Google-Smtp-Source: AK7set9HivnC5lM/33lGnpMP4+zfEdLK/YWpE4+Ki+SgmylRZwxipc7gomV24OC7lBQFZ7fBot4O1Q==
-X-Received: by 2002:a05:600c:130f:b0:3dc:198c:dde with SMTP id j15-20020a05600c130f00b003dc198c0ddemr2710643wmf.41.1676492429680;
-        Wed, 15 Feb 2023 12:20:29 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id k21-20020a05600c1c9500b003dc492e4430sm3163621wms.28.2023.02.15.12.20.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Feb 2023 12:20:29 -0800 (PST)
-Message-ID: <865420b3-6afe-7f91-7a89-f9fbf831c2ab@linaro.org>
-Date:   Wed, 15 Feb 2023 21:20:27 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5/9] dt-bindings: remoteproc: mpss: Document
- QDU1000/QRU1000 mpss devices
-Content-Language: en-US
-To:     Melody Olvera <quic_molvera@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
+        Wed, 15 Feb 2023 15:37:36 -0500
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F493B3C4;
+        Wed, 15 Feb 2023 12:37:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
+        :Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=e/h7Jd3Bftz4I/V3GwkrnB37sFuV2tm61VzgB83k3L4=; b=OffNwXDw2cmv09Gyr4ScW2cmR8
+        ddg010JHL6upKIJS4YL0BLf8upSmjs0nkBYuycSPCIadhCthTA2OEyUAD7WrEWSrOTD/jBIFtip0O
+        y9mYrS1MDbym6lMeKM7aN9N3OkLrRe838X02Oh7HRxUXTSoev4o2Ex0dL4NV9i2V4gk6ROQ88Yr4L
+        L6CecifHmbvpBDCN0DDtSaAx3mxcJt15rWoEokXcRu1WwJ70FULOBRfb8qvGyTJ9glwwfOrNbayEK
+        8893zclLjf36lU5GfinPl02IIz6VkH4byI7ZmYMdMhokXq2snKBBiBR41fIrI4NAomTbv1EwVaReW
+        HijuX0KA==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <bage@debian.org>)
+        id 1pSOWi-002j5f-B0; Wed, 15 Feb 2023 20:37:16 +0000
+From:   Bastian Germann <bage@debian.org>
+To:     Wilken Gottwalt <wilken.gottwalt@posteo.net>
+Cc:     Bastian Germann <bage@debian.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
         Bjorn Andersson <andersson@kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
-References: <20230213185218.166520-1-quic_molvera@quicinc.com>
- <20230213185218.166520-6-quic_molvera@quicinc.com>
- <aba45ae9-8558-50c1-e5ad-dd910dacdbb3@linaro.org>
- <0cb9dcb8-130e-7ad2-1f58-3d2f1bb48a49@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0cb9dcb8-130e-7ad2-1f58-3d2f1bb48a49@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        devicetree@vger.kernel.org
+Subject: [PATCH v2 0/5] Enable hwlock on Allwinner A64
+Date:   Wed, 15 Feb 2023 21:37:05 +0100
+Message-Id: <20230215203711.6293-1-bage@debian.org>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Debian-User: bage
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 14/02/2023 22:23, Melody Olvera wrote:
-> 
-> 
-> On 2/14/2023 12:28 AM, Krzysztof Kozlowski wrote:
->> On 13/02/2023 19:52, Melody Olvera wrote:
->>> This documents the compatible for the component used to boot the
->>> MPSS on the QDU1000 and QRU1000 SoCs.
->>>
->>> The QDU1000 and QRU1000 mpss boot process now requires the specification
->>> of an RMB register space to complete the handshake needed to start or
->>> attach the mpss.
->>>
->>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->>> ---
->>>  .../bindings/remoteproc/qcom,qdu1000-pas.yaml | 127 ++++++++++++++++++
->>>  1 file changed, 127 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,qdu1000-pas.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,qdu1000-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,qdu1000-pas.yaml
->>> new file mode 100644
->>> index 000000000000..eb6ade984778
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,qdu1000-pas.yaml
->>> @@ -0,0 +1,127 @@
->>> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/remoteproc/qcom,qdu1000-pas.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: Qualcomm QDU1000 Peripheral Authentication Service
->>> +
->>> +maintainers:
->>> +  - Melody Olvera <quic_molvera@quicinc.com>
->>> +
->>> +description:
->>> +  Qualcomm QDU1000 SoC Peripheral Authentication Service loads and boots firmware
->>> +  on the Qualcomm DSP Hexagon cores.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - qcom,qdu1000-mpss-pas
->> What about other remote processors? The subject prefix suggests it is
->> only for mpss, but filename is different.
-> 
-> Yeah so QDU1000 and QRU1000 only have mpss; there are no other remote processors.
-> However, it uses the same PAS driver as the other remote processors on other SoCs.
-> I can rename to Modem Peripheral Authentication Service.
+The allwinner,sun6i-a31-hwspinlock compatible driver can be used with
+the Allwinner A64 chip. Add the wiring required to enable it.
 
-Yes, please rename the title. Also please rename the file (and $id) to
-be based on compatible:
-qcom,qdu1000-mpss-pas.yaml
+The device tree binding needs some work to verify everything that is
+needed by the sun6i hwlock driver.
 
+The hwlock device was verified to be available with this series applied
+on a Pinebook.
 
+1/5 was already applied in linux-next.
 
-Best regards,
-Krzysztof
+Changelog:
+v2:
+   Fix the dt-binding example for the added properties.
+   Add a compatible string for a64.
+   Wording 3/5: driver -> Linux driver.
+
+Bastian Germann (5):
+  dt-bindings: hwlock: sun6i: Add missing #hwlock-cells
+  dt-bindings: hwlock: sun6i: Add #hwlock-cells to example
+  dt-bindings: hwlock: sun6i: Add missing names
+  dt-bindings: hwlock: sun6i: Add a64 compatible string
+  arm64: dts: allwinner: a64: Add hwspinlock node
+
+ .../allwinner,sun6i-a31-hwspinlock.yaml       | 21 ++++++++++++++++++-
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 11 ++++++++++
+ 2 files changed, 31 insertions(+), 1 deletion(-)
+
+-- 
+2.39.1
 
