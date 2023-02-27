@@ -2,76 +2,102 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5376A3401
-	for <lists+linux-remoteproc@lfdr.de>; Sun, 26 Feb 2023 21:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F8D6A35F7
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 27 Feb 2023 01:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjBZUkR (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sun, 26 Feb 2023 15:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43638 "EHLO
+        id S229689AbjB0Al0 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 26 Feb 2023 19:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjBZUkP (ORCPT
+        with ESMTP id S229556AbjB0Al0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sun, 26 Feb 2023 15:40:15 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DEB8691;
-        Sun, 26 Feb 2023 12:40:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C6662CE0F09;
-        Sun, 26 Feb 2023 20:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5ED98C433A8;
-        Sun, 26 Feb 2023 20:40:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677444013;
-        bh=MCeywGqJV7rj79oAKjlVvpdf14RoFC61p57a1nj7YGo=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=JogyUwGtQ5UnWJcI9p/Oo2HBO30L9aedPMUhD2s+j69LJAUP+zFqBo1AuobKLW48O
-         5+23q2PYGdtOrtePrv333R9NwNDVZDJpd3+BmVnMatW6ty6ofNFB5m81z+OgKHsxpf
-         Od5UF7wGzdaQo3Ya2Ja4B808Fi6pdsW2lNHi7sBi62yzXuFDOtXTKeCxw+xtc8j7t6
-         CiRTxVE8ieHWAQU7itn/p6VyKuVxTB8GMYsDvqakbir+LGDPTBW2Qnr4WM/F0joRVu
-         uAAbiJl5H5rrEDWFdcZxOJzyhpMCTlpmDaYM1UXYd8IDPTd5QY2EsbGmhCuBrJXbpY
-         ipgiI/kkuVQ+g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4A70CE4D010;
-        Sun, 26 Feb 2023 20:40:13 +0000 (UTC)
-Subject: Re: [GIT PULL] hwspinlock changes for v6.3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230226171452.298931-1-andersson@kernel.org>
-References: <20230226171452.298931-1-andersson@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230226171452.298931-1-andersson@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/hwlock-v6.3
-X-PR-Tracked-Commit-Id: 95e158ec843666d76c09900507db08b76d77ce3e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9b0b0dd857652bf77d5350c6aec6cae767c48824
-Message-Id: <167744401330.16333.4941422089815556610.pr-tracker-bot@kernel.org>
-Date:   Sun, 26 Feb 2023 20:40:13 +0000
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bastian Germann <bage@debian.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 26 Feb 2023 19:41:26 -0500
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC74D14993;
+        Sun, 26 Feb 2023 16:41:23 -0800 (PST)
+Received: by mail-pg1-x535.google.com with SMTP id q189so2584254pga.9;
+        Sun, 26 Feb 2023 16:41:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VbCPVQtiESRrldU5N97vl2jVTNR3CI+lTkLJPv/JlxY=;
+        b=FIhL7WvMTJJI0MvKC8BuE83lhEBcgqpFgltetQFkUhlFharmOUhsjX1gsyTSdrgqvf
+         gnb4RP6bIYIRXKe0E+ZVZ5IOVqkA2LE1FSRRm02NN3rVGpgjjKnLEjjOTUIEwBoy5JF8
+         +67Nap3EZcr6sqPx4V5JPbV2LjFrwBbOXG0vCbKIzStdQT5uh8ZWYzlrtW3rB15B5r9G
+         ytNrKbDYwLHLv8GcKsdfIaha3HJlcQ6m4BL/ndv5tFi1+u3YNOc/+163gnbgr0LjpFJy
+         KdecQpTvJ6H2r0ZlDGfibheaxRX2wRtYdiEH9FT8nOjqez4P8d0QJHCEaOQgb81s6BaK
+         jw/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VbCPVQtiESRrldU5N97vl2jVTNR3CI+lTkLJPv/JlxY=;
+        b=5avMCkBVG7tqCnbpZItUQC6IZhsEOK2HxIFEfsTiRanOPJNRgt8FNuGZMzoc2LA6do
+         JiF9tOWyQwF3ULQb/5bgvYsfcOG9F8qSjeb28YXi/gf42V6gQPzDzH2baqzUqQLkKxAs
+         NysH6NGmjvqvbyP9XQtOms4i3rpEVJ41Iizy2k5GahqwWEHpV92F4lCDoC3N0xYifXKq
+         iTVYuLpk3udNWI9g7qhack7zYpEDQ5VElAm4cMFee5lBIrv7DKMuxaUcm2IC6GVO21N8
+         +QBSxKAbvCHuAXToEfXSN/BhafWQhDUOV7QatudI746IsGOeSfkrErcmA0Ci/iMq3pBF
+         GHgQ==
+X-Gm-Message-State: AO0yUKW3u/+DISvzE1RDqZdiL5ymQkS+h5Hl7NmT33DCJDzPYK/on29Q
+        lgFkRy6jWgVpTjp/1bOMLoI=
+X-Google-Smtp-Source: AK7set/9dfT1kX/+D9/ExaK6VxhqfV4WwZG/fOXQiLyvCUAHB5NX4ks34kXfo7q0J0zbGORvDjXr5g==
+X-Received: by 2002:a62:1dd0:0:b0:5e0:316a:39ce with SMTP id d199-20020a621dd0000000b005e0316a39cemr9681985pfd.27.1677458483279;
+        Sun, 26 Feb 2023 16:41:23 -0800 (PST)
+Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
+        by smtp.gmail.com with ESMTPSA id l12-20020a62be0c000000b005da23d8cbffsm2951023pff.158.2023.02.26.16.41.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Feb 2023 16:41:22 -0800 (PST)
+From:   Kang Chen <void0red@gmail.com>
+To:     lkp@intel.com
+Cc:     agross@kernel.org, andersson@kernel.org,
+        baolin.wang@linux.alibaba.com, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, ohad@wizery.com, void0red@gmail.com
+Subject: [PATCH v2] hwspinlock: add a check of devm_regmap_field_alloc in qcom_hwspinlock_probe
+Date:   Mon, 27 Feb 2023 08:41:16 +0800
+Message-Id: <20230227004116.1273988-1-void0red@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <202302270034.DqtDwv49-lkp@intel.com>
+References: <202302270034.DqtDwv49-lkp@intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The pull request you sent on Sun, 26 Feb 2023 09:14:52 -0800:
+devm_regmap_field_alloc may fails, priv field might be error pointer and
+cause illegal address access later.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/hwlock-v6.3
+Signed-off-by: Kang Chen <void0red@gmail.com>
+---
+v2 -> v1: add missing parenthesis and switch to use PTR_ERR
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9b0b0dd857652bf77d5350c6aec6cae767c48824
+ drivers/hwspinlock/qcom_hwspinlock.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thank you!
-
+diff --git a/drivers/hwspinlock/qcom_hwspinlock.c b/drivers/hwspinlock/qcom_hwspinlock.c
+index 9cf186362..dee7bb5ea 100644
+--- a/drivers/hwspinlock/qcom_hwspinlock.c
++++ b/drivers/hwspinlock/qcom_hwspinlock.c
+@@ -197,6 +197,8 @@ static int qcom_hwspinlock_probe(struct platform_device *pdev)
+ 
+ 		bank->lock[i].priv = devm_regmap_field_alloc(&pdev->dev,
+ 							     regmap, field);
++		if (IS_ERR(bank->lock[i].priv))
++			return PTR_ERR(bank->lock[i].priv);
+ 	}
+ 
+ 	return devm_hwspin_lock_register(&pdev->dev, bank, &qcom_hwspinlock_ops,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.34.1
+
