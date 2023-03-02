@@ -2,133 +2,96 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB176A8172
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  2 Mar 2023 12:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A996A879D
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  2 Mar 2023 18:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjCBLpF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 2 Mar 2023 06:45:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
+        id S229660AbjCBRPF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 2 Mar 2023 12:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbjCBLpB (ORCPT
+        with ESMTP id S229476AbjCBRPE (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 2 Mar 2023 06:45:01 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9694428215;
-        Thu,  2 Mar 2023 03:44:49 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id f13so66425750edz.6;
-        Thu, 02 Mar 2023 03:44:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MgcX8EGXFFs2CYAQ3n8aThDVhsTDFrs3NdW4ctHY4fI=;
-        b=k5pBQ8EP3iwiWTbhaShkulqMWgkrbM2hVwe1H6anDQtIVT6cg0EQaXQyxYcvHO9Lpi
-         td2XNaPoaZBCfQrclY379j2IphVl46ic5NXrqpoVLQlMVLoBAyutC5jqpEcR8L2+aDM9
-         fwm1bAUEWKvnQUgeHPmfuwm7IkNmrY9jt/EKHffZ29R7xjJCBzd2cOlzQl2jMz44JVPZ
-         pspHtzNLAUwYSuji4TBsG3HzN+hlKQGnlkwzziFBfgN3ZauZ1MTXEw6EBcygPS+f0O/U
-         wecSYNdT/fIb3J/AsWkOfOxGTghg1EfoPbYhmOAGR9xRw1+UKgtzuxJH+nZiXzRTVxIa
-         0luw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MgcX8EGXFFs2CYAQ3n8aThDVhsTDFrs3NdW4ctHY4fI=;
-        b=lYLjN7NTmAoBLpRPeGUBumMWi7oIfzvkPNsP22OMtqHqkP9MGBHUYKchFf5JhA/uCq
-         D2Pr41JQZZyEfZBmFKhqqVu8yEv6WfNpiwrfKIIEc60niWcs0AWNiWPu4TnHM7RwsKmO
-         sSwuzyj+T/WlbZs9agHFld9FbW5qd/DNFnTx2q8UXUyli0QRZY7U03K1vSI7C+hzsNbX
-         NUGMR6q2MUzSUXtl7cd841Ssdr1AsfZPImQupxGKlvJY8419RCFNdjbQaN56wPqttiYF
-         NOmSkqiBQGOaZUfwiuZq8Pl6lVzZo2TQuWazEJLYWa4ehUDj+ADFyv5gA2wtwTreFrLv
-         EcLg==
-X-Gm-Message-State: AO0yUKUmOitCfpy086XgIzh42ED8vRIryNxHsUN/FI8ZBrS54Etq/tb1
-        ReYpKojmnm7Z2nL47SXamsPiL8hGe03G0M/yZQk=
-X-Google-Smtp-Source: AK7set83guEjYuAZsftANPxCyT0o9Uw2I2z385IEElmR7QPacUY5T7mQ+QffNB0XvapGrhRYeX067o0bpbr2iVuW848=
-X-Received: by 2002:a50:d0d1:0:b0:4bf:8bc6:7584 with SMTP id
- g17-20020a50d0d1000000b004bf8bc67584mr1621828edf.2.1677757487983; Thu, 02 Mar
- 2023 03:44:47 -0800 (PST)
+        Thu, 2 Mar 2023 12:15:04 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E882B1ACD7;
+        Thu,  2 Mar 2023 09:15:01 -0800 (PST)
+Received: from pan.home (unknown [IPv6:2a00:23c6:c311:3401:45a5:b946:dcd1:2820])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: martyn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F3816602F05;
+        Thu,  2 Mar 2023 17:15:00 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677777300;
+        bh=MKf13LLrF97Xk6jvSCKLeu38G4LeLT4CpYwHqJ0gXCo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YJoW6/ka66QlJHMHOuVwNMdmHdV0K5WZ1PIh68Thkmwp4lJjFLGZxoTOMkVAN5HUO
+         FHQT4sGRnUSCAageWClckm9JJTGyfyF6rnX+/8FvgzguFwZcfunZY320ze+9/7tZcC
+         hT+svAdfTb7puZBUD45MtQ5nk5DLb8teexvJlCvRjDMfe/MhAHJ4JbOXuVYJxowXbw
+         Z7Ix386zEhS++gH/5hDNkd6+YtMQuaWVshG39LdkCcbkhVQ6Hnn+Muc2Jo2OrGAxDD
+         hvXD1WRfmpr3L8SUAqmHsPrfGvyXbMSLQHQzpl1N7nwdeyghG9QexS7Vi6cyOryXav
+         9jzK0Dkl+hJag==
+From:   Martyn Welch <martyn.welch@collabora.com>
+To:     andersson@kernel.org, mathieu.poirier@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        hnagalla@ti.com, p.zabel@pengutronix.de
+Cc:     kernel@collabora.com, Martyn Welch <martyn.welch@collabora.com>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] TI K3 M4F support on AM64x and AM62x SoCs
+Date:   Thu,  2 Mar 2023 17:14:47 +0000
+Message-Id: <20230302171450.1598576-1-martyn.welch@collabora.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230221170356.27923-1-iuliana.prodan@oss.nxp.com>
- <20230301184916.GA1326133@p14s> <20230301185606.GB1326133@p14s>
-In-Reply-To: <20230301185606.GB1326133@p14s>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Thu, 2 Mar 2023 13:44:35 +0200
-Message-ID: <CAEnQRZAN4YRZ3VQYXuEU57WdQs4tJQtXZKpWzSM-hS1c-_20vg@mail.gmail.com>
-Subject: Re: [PATCH v5] remoteproc: imx_dsp_rproc: add custom memory copy
- implementation for i.MX DSP Cores
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     "Iuliana Prodan (OSS)" <iuliana.prodan@oss.nxp.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "S.J. Wang" <shengjiu.wang@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Iuliana Prodan <iuliana.prodan@nxp.com>,
-        linux-imx <linux-imx@nxp.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 9:11=E2=80=AFPM Mathieu Poirier
-<mathieu.poirier@linaro.org> wrote:
->
-> On Wed, Mar 01, 2023 at 11:49:16AM -0700, Mathieu Poirier wrote:
-> > Hi Iuliana,
-> >
-> > On Tue, Feb 21, 2023 at 07:03:56PM +0200, Iuliana Prodan (OSS) wrote:
-> > > From: Iuliana Prodan <iuliana.prodan@nxp.com>
-> > >
-> > > The IRAM is part of the HiFi DSP.
-> > > According to hardware specification only 32-bits write are allowed
-> > > otherwise we get a Kernel panic.
-> > >
-> > > Therefore add a custom memory copy and memset functions to deal with
-> > > the above restriction.
-> > >
-> > > Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
-> > > ---
-> > > Changes since v4
-> > > - use GENMASK;
-> > > - s/ioread32/readl;
-> > > - s/iowrite32/writel;
-> > > - use for loop with writel instead of __iowrite32_copy;
-> > > - update multi-line comment format.
-> > >
-> >
-> > This looks good now.  I will queue this on March 13th when 6.3-rc2 is o=
-ut.
-> >
->
-> And out of curiosity, are the remote processors handled by imx_rproc.c al=
-so have
-> the same 32-bit write constraints?  If so, it would be nice to have a pat=
-ch that
-> fixes that as well.  In such a case, imx_dsp_rproc_memcpy() and
-> imx_dsp_rproc_memset() should be renamed to something more generic and re=
--used
-> in imx_rproc.c.
+The following series introduces K3 M4F remoteproc driver support for
+AM64x and AM62x SoC families. These SoCs have a ARM Cortex M4F core in
+the MCU voltage domain. For safety oriented applications, this core is
+operated independently with out any IPC to other cores on the SoC.
+However, for non safety applications, some customers use it as a remote
+processor and so linux remote proc support is extended to the M4F core.
 
-Paging Peng Fan.
+See AM64x Technical Reference Manual (SPRUIM2C – SEPTEMBER 2021) for
+further details: https://www.ti.com/lit/pdf/SPRUIM2
 
-imx_rproc handles M4/M7 cores.
-imx_dsp_rproc handles HIFI4 DSP cores.
+This series was originally submitted by Hari in Jan 2022. Review
+comments were made, however I've been unable to find any further
+submissions. I have tried to contact the author and have received no
+reply. As we are interested in using this functionality, we have decided
+to pick this up and see if we can get it merged.
 
-From what I experienced 32 bit read/writes are only mandatory for
-certain memory areas
-that fall inside the HIFI4 address spaces but this doesn't happen for
-M4/M7 memory maps.
 
-thanks,
-Daniel.
+Hari Nagalla (1):
+  dt-bindings: remoteproc: k3-m4f: Add bindings for K3 AM64x SoCs
+
+Martyn Welch (2):
+  remoteproc: k4: Split out functions common with M4 driver
+  remoteproc: k4-m4: Add a remoteproc driver for M4F subsystem
+
+ .../bindings/remoteproc/ti,k3-m4f-rproc.yaml  | 158 ++++++
+ drivers/remoteproc/Kconfig                    |  13 +
+ drivers/remoteproc/Makefile                   |   3 +-
+ drivers/remoteproc/ti_k3_common.c             | 375 +++++++++++++
+ drivers/remoteproc/ti_k3_common.h             | 107 ++++
+ drivers/remoteproc/ti_k3_dsp_remoteproc.c     | 462 +---------------
+ drivers/remoteproc/ti_k3_m4_remoteproc.c      | 491 ++++++++++++++++++
+ 7 files changed, 1174 insertions(+), 435 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml
+ create mode 100644 drivers/remoteproc/ti_k3_common.c
+ create mode 100644 drivers/remoteproc/ti_k3_common.h
+ create mode 100644 drivers/remoteproc/ti_k3_m4_remoteproc.c
+
+-- 
+2.39.1
+
