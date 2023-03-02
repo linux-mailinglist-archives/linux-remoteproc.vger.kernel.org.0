@@ -2,111 +2,444 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A5E6A8B67
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  2 Mar 2023 23:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB0B6A8CB6
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Mar 2023 00:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjCBWCM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 2 Mar 2023 17:02:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44760 "EHLO
+        id S229572AbjCBXK6 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 2 Mar 2023 18:10:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjCBWB5 (ORCPT
+        with ESMTP id S229453AbjCBXK5 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 2 Mar 2023 17:01:57 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292835F6C9
-        for <linux-remoteproc@vger.kernel.org>; Thu,  2 Mar 2023 14:01:31 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id q16so543530wrw.2
-        for <linux-remoteproc@vger.kernel.org>; Thu, 02 Mar 2023 14:01:31 -0800 (PST)
+        Thu, 2 Mar 2023 18:10:57 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E569143937
+        for <linux-remoteproc@vger.kernel.org>; Thu,  2 Mar 2023 15:10:55 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id v11so890308plz.8
+        for <linux-remoteproc@vger.kernel.org>; Thu, 02 Mar 2023 15:10:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677794489;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=eoLlFIKo+0HC5z28LpcjtRJj56OW9StYTeb8Ufax9js=;
-        b=YpQcR7Fk9iV2T9fMbhThZBBI3/6zaasRJaHdsjGW9xKGPo4O7Ce+woLxIidUTkLdVW
-         YnlO0mK+ywg8Z/jbg7gaL8bVeFN3Z6RmaW9l4An+tbGZeCmkgbaS6mevIiDp9uGG6icN
-         3blWigkKz42aFytge/FoW+om2fZGXhxo7KRLSA6wUp4mg/Yl7VcToGqD5LhnIYqxD6bg
-         XqQL8r+ee3LjdXEWrulYuu5wyUNZMQiKgCKfWkSjVxEshFQVDceePd5egARutR758B1d
-         +xUUkUp16H4qrgvOk64HJpu+bNBpSgRm11PFhEOkXNTItmLGdZkKC01ySrfirtaa1PnS
-         Sw5Q==
+        d=linaro.org; s=google; t=1677798655;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OIO2BplgSwwa0QOcYMeKpXSJwqPWn5n80nZsHGXphts=;
+        b=Lw3YqjsYYJitC8CakKNkK6I0EP2iwVyueP1TmPD/lQddkt+CdDHiPWuG5OLqrD8ksD
+         5wljNh72JxBf0j7TplGBHE/oKOGPIDqf0721jppBg2zrh4mUx+x9p3NClJK/sUCxeMrB
+         upXlZZI+Pgms4X6b7vWRf4xxU04cGaJL4KKCS9Em2Kd47VKxG60Z7sTcwNd2DNfn35Zi
+         gqtBKoChCmJsFIv3g33zoYvCfX2fra9AGyCWe6RTkdL0LGnqCG33JBp82dE+3XTJ44Ga
+         qhH6R7TcENLhQKvgQgvtqoJdUJuy1HAdcWQoHcVgv5iq45wt1AbT1PSVS15lYC/jxqMg
+         5UXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677794489;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eoLlFIKo+0HC5z28LpcjtRJj56OW9StYTeb8Ufax9js=;
-        b=QK2icYon2eHQPTptc0m6WXXbu9uYswHrBiZiJ1kilTRc3pN5p77o5aDxJ6Ij8d32vg
-         torTCJn5/0vY746n/e8f6x3D3jNyXHln0Q8rDvskd99VgAzFOctRU8i6vWtLbw2pRN2Q
-         v/PbQbo6W+erYwvG/wc4zxxgmjd1vKpUDG9p0nJX/9Bbs0SLATeH4kqYHxJu4GXMlC/E
-         pRRPNADsqH75oyStzGgp1kjNeXAT38pXt2gaZ5Nx/rKXTCdrPpai/W/mputwTqo7N4pm
-         GW+dQgxu5j6cgv0TckcBlbMIZLGAdEgJWzLO1QWedQH9P7s0d+MnUYOejw0IgHh2l7fd
-         16Cw==
-X-Gm-Message-State: AO0yUKXrDAjMVRkg+NgvJ3Yi7STQ99ILZ5JuH+fKlo1t5z14J+Hmi5LK
-        FbX4Ya8n2ryC1l59t3CwDcZ7qmYVND35DRajS+DfaQ==
-X-Google-Smtp-Source: AK7set8p2o8BjVZaPWOCquuwzj0H6Ba4FS/Y1kR8lKWg5AU835kdnwYfmn8lUlm0xHF4LlpzwHVVxhlKuA+A81J4M70=
-X-Received: by 2002:adf:f7cb:0:b0:2c7:a39:78ae with SMTP id
- a11-20020adff7cb000000b002c70a3978aemr1975071wrq.13.1677794489531; Thu, 02
- Mar 2023 14:01:29 -0800 (PST)
-MIME-Version: 1.0
-References: <20230228130215.289081-1-nick.alcock@oracle.com> <20230228130215.289081-9-nick.alcock@oracle.com>
-In-Reply-To: <20230228130215.289081-9-nick.alcock@oracle.com>
+        d=1e100.net; s=20210112; t=1677798655;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OIO2BplgSwwa0QOcYMeKpXSJwqPWn5n80nZsHGXphts=;
+        b=IVjFrhsnhDqKjFixcGR5Ys94+TwjjEgqXLPQi9p2TE5AC3xqRsMCRn+pDUkhY9uW6F
+         NVo5KEFjC+kW3QXXtVp/FuSmbas4AJW+22OyeY1x89kbv/6BvwFcCdqMf2ZLhVsaiM3X
+         JskzYSALvDiJc29JMEHqG7JdTo/qKJK+JWCIaNhO9qnmLiQ3EDKtH3lJPka+PjyxgTGN
+         ij///eDm0p0zUKCSB52Ct4r4kIrEpsYb9uub+I7BNVgQvSBBjx/QngFlnmWdEpeiLnr7
+         3Zdft5UL7iesqXxhQmfL3UN8uA0x4QO/faa1rUcVlwubkLYw9iVn8nNPz6bnfDEkz9gM
+         Iwyw==
+X-Gm-Message-State: AO0yUKVIPeDQpwJT9fVdErNCu2nSLkjCi5nPLqwOFqKb025jwuS87gci
+        FH5h1ysOuBH48+5VZ8WYtaOwnw==
+X-Google-Smtp-Source: AK7set92aAdc8gDXzG3FhKxkbzKff45zlSDK8gamnihQt9rDyE388+SEKrk4q+82nDhK6jWKUMopcw==
+X-Received: by 2002:a17:902:ce8a:b0:19a:df76:ddd2 with SMTP id f10-20020a170902ce8a00b0019adf76ddd2mr13468886plg.36.1677798655322;
+        Thu, 02 Mar 2023 15:10:55 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:f233:886c:8482:e0ce])
+        by smtp.gmail.com with ESMTPSA id ky6-20020a170902f98600b0019cbec6c17bsm186675plb.190.2023.03.02.15.10.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Mar 2023 15:10:54 -0800 (PST)
+Date:   Thu, 2 Mar 2023 16:10:52 -0700
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Thu, 2 Mar 2023 15:01:18 -0700
-Message-ID: <CANLsYkxBR3Gi42Tsv-=QQ70BtvJCRcVPz6gn=9Q-zXzkt6Vz+A@mail.gmail.com>
-Subject: Re: [PATCH 08/20] remoteproc: remove MODULE_LICENSE in non-modules
-To:     Nick Alcock <nick.alcock@oracle.com>
-Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Bjorn Andersson <andersson@kernel.org>,
+To:     Tanmay Shah <tanmay.shah@amd.com>
+Cc:     michal.simek@amd.com, andersson@kernel.org,
+        jaswinder.singh@linaro.org, ben.levinsky@amd.com,
+        shubhrajyoti.datta@amd.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
         linux-remoteproc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v4 5/5] remoteproc: xilinx: add mailbox channels for rpmsg
+Message-ID: <20230302231052.GB1401708@p14s>
+References: <20230228210216.447373-1-tanmay.shah@amd.com>
+ <20230228210216.447373-6-tanmay.shah@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228210216.447373-6-tanmay.shah@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, 28 Feb 2023 at 06:03, Nick Alcock <nick.alcock@oracle.com> wrote:
->
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
->
-> So remove it in the files in this commit, none of which can be built as
-> modules.
->
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: linux-remoteproc@vger.kernel.org
+Hi,
+
+On Tue, Feb 28, 2023 at 01:02:16PM -0800, Tanmay Shah wrote:
+> This patch makes each r5 core mailbox client and uses
+> tx and rx channels to send and receive data to/from
+> remote processor respectively. This is needed for rpmsg
+> communication to remote processor.
+> 
+> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
 > ---
->  drivers/remoteproc/remoteproc_core.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index 1cd4815a6dd19..de1ace44cb57b 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -2765,5 +2765,4 @@ static void __exit remoteproc_exit(void)
+> 
+> Changes in v4:
+>   - move zynqmp_r5_setup_mbox from zynqmp_r5_add_rproc_core to
+>     zynqmp_r5_cluster_init
+> 
+> Changes in v3:
+>   - fix multi-line comment format
+>   - do not mixup mailbox information with memory-regions
+>   - fix redundant dev_warn for split mode
+>   - setting up mailboxes should return an error code
+>   - redesign driver to move mailbox setup during driver probe
+>   - add .kick function only if mailbox setup is success
+> 
+> v2: https://lore.kernel.org/all/20230126213154.1707300-1-tanmay.shah@amd.com/
+> 
+>  drivers/remoteproc/xlnx_r5_remoteproc.c | 227 +++++++++++++++++++++++-
+>  1 file changed, 225 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
+> index 5dd007622603..78c1638ccef0 100644
+> --- a/drivers/remoteproc/xlnx_r5_remoteproc.c
+> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
+> @@ -8,16 +8,23 @@
+>  #include <linux/dma-mapping.h>
+>  #include <linux/firmware/xlnx-zynqmp.h>
+>  #include <linux/kernel.h>
+> +#include <linux/mailbox_client.h>
+> +#include <linux/mailbox/zynqmp-ipi-message.h>
+>  #include <linux/module.h>
+>  #include <linux/of_address.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/remoteproc.h>
+> -#include <linux/slab.h>
+>  
+>  #include "remoteproc_internal.h"
+>  
+> +/* IPI buffer MAX length */
+> +#define IPI_BUF_LEN_MAX	32U
+> +
+> +/* RX mailbox client buffer max length */
+> +#define MBOX_CLIENT_BUF_MAX	(IPI_BUF_LEN_MAX + \
+> +				 sizeof(struct zynqmp_ipi_message))
+>  /*
+>   * settings for RPU cluster mode which
+>   * reflects possible values of xlnx,cluster-mode dt-property
+> @@ -43,6 +50,27 @@ struct mem_bank_data {
+>  	char *bank_name;
+>  };
+>  
+> +/**
+> + * struct mbox_info
+> + *
+> + * @rx_mc_buf: to copy data from mailbox rx channel
+> + * @tx_mc_buf: to copy data to mailbox tx channel
+> + * @r5_core: this mailbox's corresponding r5_core pointer
+> + * @mbox_work: schedule work after receiving data from mailbox
+> + * @mbox_cl: mailbox client
+> + * @tx_chan: mailbox tx channel
+> + * @rx_chan: mailbox rx channel
+> + */
+> +struct mbox_info {
+> +	unsigned char rx_mc_buf[MBOX_CLIENT_BUF_MAX];
+> +	unsigned char tx_mc_buf[MBOX_CLIENT_BUF_MAX];
+> +	struct zynqmp_r5_core *r5_core;
+> +	struct work_struct mbox_work;
+> +	struct mbox_client mbox_cl;
+> +	struct mbox_chan *tx_chan;
+> +	struct mbox_chan *rx_chan;
+> +};
+> +
+>  /*
+>   * Hardcoded TCM bank values. This will be removed once TCM bindings are
+>   * accepted for system-dt specifications and upstreamed in linux kernel
+> @@ -63,6 +91,7 @@ static const struct mem_bank_data zynqmp_tcm_banks[] = {
+>   * @tcm_banks: array of each TCM bank data
+>   * @rproc: rproc handle
+>   * @pm_domain_id: RPU CPU power domain id
+> + * @ipi: pointer to mailbox information
+>   */
+>  struct zynqmp_r5_core {
+>  	struct device *dev;
+> @@ -71,6 +100,7 @@ struct zynqmp_r5_core {
+>  	struct mem_bank_data **tcm_banks;
+>  	struct rproc *rproc;
+>  	u32 pm_domain_id;
+> +	struct mbox_info *ipi;
+>  };
+>  
+>  /**
+> @@ -88,6 +118,178 @@ struct zynqmp_r5_cluster {
+>  	struct zynqmp_r5_core **r5_cores;
+>  };
+>  
+> +/**
+> + * event_notified_idr_cb() - callback for vq_interrupt per notifyid
+> + * @id: rproc->notify id
+> + * @ptr: pointer to idr private data
+> + * @data: data passed to idr_for_each callback
+> + *
+> + * Pass notification to remoteproc virtio
+> + *
+> + * Return: 0. having return is to satisfy the idr_for_each() function
+> + *          pointer input argument requirement.
+> + **/
+> +static int event_notified_idr_cb(int id, void *ptr, void *data)
+> +{
+> +	struct rproc *rproc = data;
+> +
+> +	if (rproc_vq_interrupt(rproc, id) == IRQ_NONE)
+> +		dev_dbg(&rproc->dev, "data not found for vqid=%d\n", id);
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * handle_event_notified() - remoteproc notification work function
+> + * @work: pointer to the work structure
+> + *
+> + * It checks each registered remoteproc notify IDs.
+> + */
+> +static void handle_event_notified(struct work_struct *work)
+> +{
+> +	struct mbox_info *ipi;
+> +	struct rproc *rproc;
+> +
+> +	ipi = container_of(work, struct mbox_info, mbox_work);
+> +	rproc = ipi->r5_core->rproc;
+> +
+> +	/*
+> +	 * We only use IPI for interrupt. The RPU firmware side may or may
+> +	 * not write the notifyid when it trigger IPI.
+> +	 * And thus, we scan through all the registered notifyids and
+> +	 * find which one is valid to get the message.
+> +	 * Even if message from firmware is NULL, we attempt to get vqid
+> +	 */
+> +	idr_for_each(&rproc->notifyids, event_notified_idr_cb, rproc);
+> +}
+> +
+> +/**
+> + * zynqmp_r5_mb_rx_cb() - receive channel mailbox callback
+> + * @cl: mailbox client
+> + * @msg: message pointer
+> + *
+> + * Receive data from ipi buffer, ack interrupt and then
+> + * it will schedule the R5 notification work.
+> + */
+> +static void zynqmp_r5_mb_rx_cb(struct mbox_client *cl, void *msg)
+> +{
+> +	struct zynqmp_ipi_message *ipi_msg, *buf_msg;
+> +	struct mbox_info *ipi;
+> +	size_t len;
+> +
+> +	ipi = container_of(cl, struct mbox_info, mbox_cl);
+> +
+> +	/* copy data from ipi buffer to r5_core */
+> +	ipi_msg = (struct zynqmp_ipi_message *)msg;
+> +	buf_msg = (struct zynqmp_ipi_message *)ipi->rx_mc_buf;
+> +	len = ipi_msg->len;
+> +	if (len > IPI_BUF_LEN_MAX) {
+> +		dev_warn(cl->dev, "msg size exceeded than %d\n",
+> +			 IPI_BUF_LEN_MAX);
+> +		len = IPI_BUF_LEN_MAX;
+> +	}
+> +	buf_msg->len = len;
+> +	memcpy(buf_msg->data, ipi_msg->data, len);
+> +
+> +	/* received and processed interrupt ack */
+> +	if (mbox_send_message(ipi->rx_chan, NULL) < 0)
+> +		dev_err(cl->dev, "ack failed to mbox rx_chan\n");
+> +
+> +	schedule_work(&ipi->mbox_work);
+> +}
+> +
+> +/**
+> + * zynqmp_r5_setup_mbox() - Setup mailboxes related properties
+> + *			    this is used for each individual R5 core
+> + *
+> + * @cdev: child node device
+> + *
+> + * Function to setup mailboxes related properties
+> + * return : NULL if failed else pointer to mbox_info
+> + */
+> +static struct mbox_info *zynqmp_r5_setup_mbox(struct device *cdev)
+> +{
+> +	struct mbox_client *mbox_cl;
+> +	struct mbox_info *ipi;
+> +
+> +	ipi = kzalloc(sizeof(*ipi), GFP_KERNEL);
+> +	if (!ipi)
+> +		return NULL;
+> +
+> +	mbox_cl = &ipi->mbox_cl;
+> +	mbox_cl->rx_callback = zynqmp_r5_mb_rx_cb;
+> +	mbox_cl->tx_block = false;
+> +	mbox_cl->knows_txdone = false;
+> +	mbox_cl->tx_done = NULL;
+> +	mbox_cl->dev = cdev;
+> +
+> +	/* Request TX and RX channels */
+> +	ipi->tx_chan = mbox_request_channel_byname(mbox_cl, "tx");
+> +	if (IS_ERR(ipi->tx_chan)) {
+> +		ipi->tx_chan = NULL;
+> +		kfree(ipi);
+> +		dev_warn(cdev, "mbox tx channel request failed\n");
+> +		return NULL;
+> +	}
+> +
+> +	ipi->rx_chan = mbox_request_channel_byname(mbox_cl, "rx");
+> +	if (IS_ERR(ipi->rx_chan)) {
+> +		mbox_free_channel(ipi->tx_chan);
+> +		ipi->rx_chan = NULL;
+> +		ipi->tx_chan = NULL;
+> +		kfree(ipi);
+> +		dev_warn(cdev, "mbox rx channel request failed\n");
+> +		return NULL;
+> +	}
+> +
+> +	INIT_WORK(&ipi->mbox_work, handle_event_notified);
+> +
+> +	return ipi;
+> +}
+> +
+> +static void zynqmp_r5_free_mbox(struct mbox_info *ipi)
+> +{
+> +	if (!ipi)
+> +		return;
+> +
+> +	if (ipi->tx_chan) {
+> +		mbox_free_channel(ipi->tx_chan);
+> +		ipi->tx_chan = NULL;
+> +	}
+> +
+> +	if (ipi->rx_chan) {
+> +		mbox_free_channel(ipi->rx_chan);
+> +		ipi->rx_chan = NULL;
+> +	}
+> +
+> +	kfree(ipi);
+> +}
+> +
+> +/*
+> + * zynqmp_r5_core_kick() - kick a firmware if mbox is provided
+> + * @rproc: r5 core's corresponding rproc structure
+> + * @vqid: virtqueue ID
+> + */
+> +static void zynqmp_r5_rproc_kick(struct rproc *rproc, int vqid)
+> +{
+> +	struct zynqmp_r5_core *r5_core = rproc->priv;
+> +	struct device *dev = r5_core->dev;
+> +	struct zynqmp_ipi_message *mb_msg;
+> +	struct mbox_info *ipi;
+> +	int ret;
+> +
+> +	ipi = r5_core->ipi;
+> +	if (!ipi)
+> +		return;
+> +
+> +	mb_msg = (struct zynqmp_ipi_message *)ipi->tx_mc_buf;
+> +	memcpy(mb_msg->data, &vqid, sizeof(vqid));
+> +	mb_msg->len = sizeof(vqid);
+> +	ret = mbox_send_message(ipi->tx_chan, mb_msg);
+> +	if (ret < 0)
+> +		dev_warn(dev, "failed to send message\n");
+> +}
+> +
+>  /*
+>   * zynqmp_r5_set_mode()
+>   *
+> @@ -614,7 +816,7 @@ static int zynqmp_r5_rproc_unprepare(struct rproc *rproc)
+>  	return 0;
 >  }
->  module_exit(remoteproc_exit);
->
-> -MODULE_LICENSE("GPL v2");
+>  
+> -static const struct rproc_ops zynqmp_r5_rproc_ops = {
+> +static struct rproc_ops zynqmp_r5_rproc_ops = {
+>  	.prepare	= zynqmp_r5_rproc_prepare,
+>  	.unprepare	= zynqmp_r5_rproc_unprepare,
+>  	.start		= zynqmp_r5_rproc_start,
+> @@ -673,6 +875,7 @@ static struct zynqmp_r5_core *zynqmp_r5_add_rproc_core(struct device *cdev)
+>  	}
+>  
+>  	r5_core->rproc = r5_rproc;
+> +
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Spurious change.
 
->  MODULE_DESCRIPTION("Generic Remote Processor Framework");
-> --
-> 2.39.1.268.g9de2f9a303
->
+>  	return r5_core;
+>  
+>  free_rproc:
+> @@ -799,6 +1002,7 @@ static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
+>  	struct device_node *child;
+>  	enum rpu_tcm_comb tcm_mode;
+>  	int core_count, ret, i;
+> +	struct mbox_info *ipi;
+>  
+>  	ret = of_property_read_u32(dev_node, "xlnx,cluster-mode", &cluster_mode);
+>  
+> @@ -869,6 +1073,18 @@ static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
+>  
+>  		child_devs[i] = &child_pdev->dev;
+>  
+> +		/*
+> +		 * If mailbox nodes are disabled using "status" property then
+> +		 * setting up mailbox channels will be failed. In that case we
+> +		 * don't really need kick() operation. Include .kick() only if
+> +		 * mbox channels are acquired successfully.
+> +		 */
+> +		ipi = zynqmp_r5_setup_mbox(&child_pdev->dev);
+> +		if (ipi)
+> +			zynqmp_r5_rproc_ops.kick = zynqmp_r5_rproc_kick;
+> +		else
+> +			zynqmp_r5_rproc_ops.kick = NULL;
+> +
+
+Based on the way this patchset has turned out, I don't think it is required to
+do this anymore.  After all, .kick() won't be called if the mailboxes aren't
+initialized.
+
+Please move the call to zynqmp_r5_setup_mbox() just below in the next hunk.
+
+Thanks,
+Mathieu
+
+>  		/* create and add remoteproc instance of type struct rproc */
+>  		r5_cores[i] = zynqmp_r5_add_rproc_core(&child_pdev->dev);
+>  		if (IS_ERR(r5_cores[i])) {
+> @@ -878,6 +1094,11 @@ static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
+>  			goto release_r5_cores;
+>  		}
+>  
+> +		if (ipi) {
+> +			r5_cores[i]->ipi = ipi;
+> +			ipi->r5_core = r5_cores[i];
+> +		}
+> +
+>  		/*
+>  		 * If two child nodes are available in dts in lockstep mode,
+>  		 * then ignore second child node.
+> @@ -915,6 +1136,7 @@ static int zynqmp_r5_cluster_init(struct zynqmp_r5_cluster *cluster)
+>  	while (i >= 0) {
+>  		put_device(child_devs[i]);
+>  		if (r5_cores[i]) {
+> +			zynqmp_r5_free_mbox(r5_cores[i]->ipi);
+>  			of_reserved_mem_device_release(r5_cores[i]->dev);
+>  			rproc_del(r5_cores[i]->rproc);
+>  			rproc_free(r5_cores[i]->rproc);
+> @@ -939,6 +1161,7 @@ static void zynqmp_r5_cluster_exit(void *data)
+>  
+>  	for (i = 0; i < cluster->core_count; i++) {
+>  		r5_core = cluster->r5_cores[i];
+> +		zynqmp_r5_free_mbox(r5_core->ipi);
+>  		of_reserved_mem_device_release(r5_core->dev);
+>  		put_device(r5_core->dev);
+>  		rproc_del(r5_core->rproc);
+> -- 
+> 2.25.1
+> 
