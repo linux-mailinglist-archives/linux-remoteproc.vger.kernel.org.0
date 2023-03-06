@@ -2,153 +2,127 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F1D6ACCE4
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  6 Mar 2023 19:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091356AD294
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Mar 2023 00:12:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjCFSo2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 6 Mar 2023 13:44:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S230183AbjCFXMb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 6 Mar 2023 18:12:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjCFSo2 (ORCPT
+        with ESMTP id S230119AbjCFXM2 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:44:28 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA5D664E1
-        for <linux-remoteproc@vger.kernel.org>; Mon,  6 Mar 2023 10:44:02 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id y2so10742618pjg.3
-        for <linux-remoteproc@vger.kernel.org>; Mon, 06 Mar 2023 10:44:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678128241;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=365J6Piko6rztWGOR0yLK2bsAIKP4u5eMy2EMrLl6w0=;
-        b=tf2EZgbURrgBp9bwac8RT/sGU9/M1fIIhoYFbwBGIZCucpJpms9fV5d0sSKqeeBUTR
-         yvA3MbEO79BepXdOrT/5ZFy3mPpPCNjVGV4uIH7nphVdHFPwt7RJ+BtNrWr1SbPTiRpM
-         uY2u7IBYkTptpeqmiQatMMbTrSpZ3gugd7v/rhz/5vrB8Nst1NbnfjBC9Q4Gk6XnjT5j
-         wAekaMDoTtBVA8LkcCN8xJGcnrSON8plNIUjxVJjwKiM95yYIJ1s0VgQup0G5OntHy1T
-         EwlhGVYvgyeuk6OyxFPggK+oOIQ7fOyepEXF1cf1PFMIoRfOhFzWJbzP6+HosX0UcLYw
-         QN8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678128241;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=365J6Piko6rztWGOR0yLK2bsAIKP4u5eMy2EMrLl6w0=;
-        b=B7n0TT3OhbUIzZv4tOIHor13eX7+4AfU/RiuPPV5JSt9GK8arySGPLjysFNGntMXlO
-         jEL7JiVb4GkHmC4z64Z0vfMwZ/dcLv8/yWvDoXiKdp2WzFH8N86fEOU8gEYeH2JTFyIX
-         eM4YhijBhCKZ+yYtwJkXKUa5rnvPJcTmmpatPiXcDu29ALmApTE7Uvpgl+pJbjELvGEx
-         C4a3TDu+HninCRgiCJCLXUbkjWO6jJMo6blr0DGO4Rf/5CJpdsFEJv1fD014mduEytqO
-         r1XLbX95fTQ1lT/Nmc3uRuuGnkOGPmSyiMwVNMdCKBA5+jCRIZb+kwZWpHknmzuKzuPq
-         FTiA==
-X-Gm-Message-State: AO0yUKXU8D7O+pw6ap/zNxnugaQQnCCH/Jo8dZ8R1zMyWAI/B9OeOt6e
-        fFtsrYK4JTj1Oa5/WCrarg9taw==
-X-Google-Smtp-Source: AK7set+/MEIeQEy/F6GN5ZSD5HtwdnA/tFtpDPXbVIG5nrXJuyJNtIIVYf4bU3UboWwix9n+UDkZEw==
-X-Received: by 2002:a17:903:246:b0:19c:fd73:5586 with SMTP id j6-20020a170903024600b0019cfd735586mr14251090plh.38.1678128241615;
-        Mon, 06 Mar 2023 10:44:01 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:e8cc:984:8f0a:efd3])
-        by smtp.gmail.com with ESMTPSA id x6-20020a170902ec8600b0019c91d3bdb4sm7010259plg.304.2023.03.06.10.44.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 10:44:01 -0800 (PST)
-Date:   Mon, 6 Mar 2023 11:43:58 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     MD Danish Anwar <danishanwar@ti.com>
-Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <t-kristo@ti.com>,
+        Mon, 6 Mar 2023 18:12:28 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADAC6BDE0;
+        Mon,  6 Mar 2023 15:12:26 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326LmJb8018208;
+        Mon, 6 Mar 2023 23:12:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=F473ci7Bo9qB5pVyAJ4eTEqIhxsHYS7Vw2tYQOIjHLA=;
+ b=LcKeXx+jSdT8KsI9JVNn9l4AfhtVNM6d8mTpYeMzpzzpgfVKwHFe1JVJi7+3tiqqgyYg
+ HwkTQcjNM0N1Zy4ElThqKgqsMiK6/0d6iQ8Z2ZdUA6jEL6GdvylwafaThnK2/NlDpY2G
+ bkOzNWkKlzacMOkooDIxZ7Ne/XCpjfou7Bdds7t4UpgZ9oRNZrhdo9wW2xUOX5E0vB1G
+ /gt3XmUBaHDCBBQyKXmvfAM2u/jT7UA7/Ok+XxjdTRWPwOVmwhFElw0bNR27YE0JHIp5
+ 61BjlsBFKO7KpwmWUErWBXjqrFM8SoyuMTt8A0Fwpkfl19J6FWC3zx5k7EnILQqpsrqw KQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p417jx9am-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 23:12:22 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 326NCLm2019288
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 6 Mar 2023 23:12:21 GMT
+Received: from hu-molvera-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Mon, 6 Mar 2023 15:12:20 -0800
+From:   Melody Olvera <quic_molvera@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v3 0/6] Introduce PRU platform consumer API
-Message-ID: <20230306184358.GA1633717@p14s>
-References: <20230306110934.2736465-1-danishanwar@ti.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+Subject: [PATCH v2 0/7] remoteproc: qcom_q6v5_pas: Add support for QDU1000/QRU1000 mpss
+Date:   Mon, 6 Mar 2023 15:11:55 -0800
+Message-ID: <20230306231202.12223-1-quic_molvera@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306110934.2736465-1-danishanwar@ti.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: WqfaSoCLqnldOhFeyd1xKQypaZl8WU2e
+X-Proofpoint-ORIG-GUID: WqfaSoCLqnldOhFeyd1xKQypaZl8WU2e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_14,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ clxscore=1015 adultscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ mlxlogscore=886 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303060202
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 04:39:28PM +0530, MD Danish Anwar wrote:
-> Hi All,
-> The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS
-> or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
-> (Programmable Real-Time Units, or PRUs) for program execution.
-> 
-> There are 3 foundation components for TI PRUSS subsystem: the PRUSS platform
-> driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All of them have
-> already been merged and can be found under:
-> 1) drivers/soc/ti/pruss.c
->    Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
-> 2) drivers/irqchip/irq-pruss-intc.c
->    Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
-> 3) drivers/remoteproc/pru_rproc.c
->    Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> 
-> The programmable nature of the PRUs provide flexibility to implement custom
-> peripheral interfaces, fast real-time responses, or specialized data handling.
-> Example of a PRU consumer drivers will be: 
->   - Software UART over PRUSS
->   - PRU-ICSS Ethernet EMAC
-> 
-> In order to make usage of common PRU resources and allow the consumer drivers to
-> configure the PRU hardware for specific usage the PRU API is introduced.
-> 
-> This is the v3 of the old patch series[1]. This doesn't have any functional 
-> changes, the old series has been rebased on linux-next (tag: next-20230306).
-> 
-> This series depends on another series which is already merged in the remoteproc
-> tree[2] and is part of v6.3-rc1. This series and the remoteproc series form the
-> PRUSS consumer API which can be used by consumer drivers to utilize the PRUs.
-> 
-> One example of the consumer driver is the PRU-ICSSG ethernet driver [3],which 
-> depends on this series and the remoteproc series[2].
-> 
-> [1] https://lore.kernel.org/all/20220418123004.9332-1-p-mohan@ti.com/
-> [2] https://lore.kernel.org/all/20230106121046.886863-1-danishanwar@ti.com/#t
-> [3] https://lore.kernel.org/all/20230210114957.2667963-1-danishanwar@ti.com/
-> 
-> Thanks and Regards,
-> Md Danish Anwar
-> 
-> Andrew F. Davis (1):
->   soc: ti: pruss: Add pruss_{request,release}_mem_region() API
-> 
-> Suman Anna (3):
->   soc: ti: pruss: Add pruss_cfg_read()/update() API
->   soc: ti: pruss: Add helper functions to set GPI mode, MII_RT_event and
->     XFR
->   soc: ti: pruss: Add helper function to enable OCP master ports
-> 
-> Tero Kristo (2):
->   soc: ti: pruss: Add pruss_get()/put() API
->   soc: ti: pruss: Add helper functions to get/set PRUSS_CFG_GPMUX
-> 
->  drivers/soc/ti/pruss.c           | 257 ++++++++++++++++++++++++++++++-
->  include/linux/pruss_driver.h     |  72 ++++++---
->  include/linux/remoteproc/pruss.h | 221 ++++++++++++++++++++++++++
->  3 files changed, 526 insertions(+), 24 deletions(-)
+This patchset adds support for the mpss found in the QDU1000 and QRU1000
+SoCs. 
 
-The last revision of this set was sent out on April 18th 2022... It is always
-very difficult to follow-up with a patchset when it has been this long.
-Moreover, you added a SoB to patch 1 and 2 but none of the other ones.
+The mpss boot process now supports late attach for an already running
+mpss. For this, it uses an RMB register space to perform a handshake
+with the mpss for the late attach process. This is implemented in the
+patches below. The patches also address issues with split binary
+detection to support loading of split binaries more robustly.
 
-Roger had comments on the previous set - I will look at this revision when he
-has provided his RB for this entire set.
+Changes from v1:
+* Dropped changes to aoss-qmp
+* Renamed mpss pas bindings
+* Updated commit msg on mdt loader to be more descriptive
+* Fixed syntax errors in bindings
+* Updated firmware name in bindings
 
-Thanks,
-Mathieu
+Gokul Krishna Krishnakumar (1):
+  soc: qcom: mdt_loader: Enhance split binary detection
 
-> 
-> -- 
-> 2.25.1
-> 
+Melody Olvera (6):
+  dt-bindings: firmware: qcom,scm: Update QDU1000/QRU1000 compatible
+  dt-bindings: soc: qcom: aoss: Document QDU1000/QRU1000 compatible
+  dt-bindings: remoteproc: mpss: Document QDU1000/QRU1000 mpss devices
+  remoteproc: qcom: q6v5: Add support for q6 rmb registers
+  remoteproc: qcom_q6v5_pas: Add support to attach a DSP
+  remoteproc: qcom_q6v5_pas: Add QDU1000/QRU1000 mpss compatible & data
+
+ .../bindings/firmware/qcom,scm.yaml           |   1 +
+ .../remoteproc/qcom,qdu1000-mpss-pas.yaml     | 130 ++++++++++++++++++
+ .../bindings/soc/qcom/qcom,aoss-qmp.yaml      |   1 +
+ drivers/remoteproc/qcom_q6v5.c                |   9 ++
+ drivers/remoteproc/qcom_q6v5.h                |   8 ++
+ drivers/remoteproc/qcom_q6v5_pas.c            | 125 ++++++++++++++++-
+ drivers/soc/qcom/mdt_loader.c                 |  64 +++++----
+ 7 files changed, 308 insertions(+), 30 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,qdu1000-mpss-pas.yaml
+
+
+base-commit: dc837c1a5137a8cf2e9432c1891392b6a66f4d8d
+-- 
+2.25.1
+
