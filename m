@@ -2,38 +2,41 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B8C6AD8D7
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Mar 2023 09:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D816ADAC9
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  7 Mar 2023 10:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCGILx (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 7 Mar 2023 03:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S229815AbjCGJqq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 7 Mar 2023 04:46:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjCGILw (ORCPT
+        with ESMTP id S229718AbjCGJqn (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:11:52 -0500
+        Tue, 7 Mar 2023 04:46:43 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6C410415;
-        Tue,  7 Mar 2023 00:11:27 -0800 (PST)
-X-UUID: a4aa750cbcbf11eda06fc9ecc4dadd91-20230307
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B54F52CC49;
+        Tue,  7 Mar 2023 01:46:37 -0800 (PST)
+X-UUID: f05e89ccbccc11eda06fc9ecc4dadd91-20230307
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
         h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=vgduVIOHUsmEHqgZONx8uKnlTWsJSWncFzmVVWh4R04=;
         b=WUgWrsYU4kZG7RMZ9IJwuS8qCq51Fpw4yExmwCzaAnoUHzD0KU2FqxETlzf0TBmvSUW/wSI5c9cVoEp0g93LkPH4LNng1BTx99zrer6JxzubRDP117+hayR+CPl08P0H0Ui5B1huk9T+uAbsU+vH7srDenmQ9LFBZ6hf0dCZx38=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:fa58624e-9b59-4247-b325-5e108002f59e,IP:0,U
+X-CID-O-INFO: VERSION:1.1.20,REQID:d154f112-a30c-4c57-ba38-c231e0560a27,IP:0,U
         RL:0,TC:0,Content:-25,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
         ION:release,TS:-55
-X-CID-META: VersionHash:25b5999,CLOUDID:5afd9327-564d-42d9-9875-7c868ee415ec,B
+X-CID-META: VersionHash:25b5999,CLOUDID:7c749727-564d-42d9-9875-7c868ee415ec,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
         L:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
 X-CID-BVR: 0
-X-UUID: a4aa750cbcbf11eda06fc9ecc4dadd91-20230307
+X-UUID: f05e89ccbccc11eda06fc9ecc4dadd91-20230307
 Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <haozhe.chang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1325799970; Tue, 07 Mar 2023 16:11:20 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+        with ESMTP id 271420556; Tue, 07 Mar 2023 17:46:31 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with ShadowRedundancy id
+ 15.2.1118.7; Tue, 7 Mar 2023 09:46:03 +0000
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.1118.25; Tue, 7 Mar 2023 16:11:19 +0800
 Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
@@ -79,7 +82,7 @@ Content-Type: text/plain
 X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
