@@ -2,60 +2,78 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CF46BC492
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Mar 2023 04:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7127C6BC808
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 Mar 2023 09:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjCPDTH (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 15 Mar 2023 23:19:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
+        id S229875AbjCPIBC (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 16 Mar 2023 04:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230025AbjCPDS1 (ORCPT
+        with ESMTP id S229546AbjCPIBB (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:18:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919C7A4B2A;
-        Wed, 15 Mar 2023 20:18:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FBFF61E4A;
-        Thu, 16 Mar 2023 03:18:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A3AEC433B3;
-        Thu, 16 Mar 2023 03:18:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678936685;
-        bh=koTj7fPng3rbr7CisUXzllSEFJ/TrcwUQQysfl0mu38=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S4ccpVCR3eoLlE3o2xW+WFxzT1EF8oTfDjyupkVHE4h9BQDsD5lHiUEmNrPoY8k27
-         H3dFKPShMuDImRVFu/yVdkwzNGHkCIny8TKv4YaITfI90u5xbNsjpGy71rB8y4rzbC
-         FYJvWnuPyCFdFpU0KHQqWeYmlIiEIaPfKIN2a05w6KndiF+RyNdU/4Av5vIWEaj4uf
-         Gsb2RHoCfhu0EIWRh6mAJ6dSqgDnkjjwOMd5WfJBKVl/Cex+x6D6jrOeS2zfqTtmVH
-         WLqmMbtipipeL+9JtZFLYQQNjb0yRNnGwCgDyT8tR/6lt2/Mb21ge0b8efmIDt1iop
-         GDmO3KjKHlwWQ==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Jassi Brar <jassisinghbrar@gmail.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Thu, 16 Mar 2023 04:01:01 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55012D6A
+        for <linux-remoteproc@vger.kernel.org>; Thu, 16 Mar 2023 01:00:58 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id x3so4040313edb.10
+        for <linux-remoteproc@vger.kernel.org>; Thu, 16 Mar 2023 01:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678953657;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5DSdjDU0w5FQnEaCXOhop9s0Twb0u6rluswiSnrTsDE=;
+        b=j+P13YR0eUjpy79tY7AywvIQ9PlyVKEU1GaEf/tSNfcXlIEM7FV9zUVXy6j2pKXPYM
+         Kut6xeuKYtDZaPV4kGjFtF4D7JSF7B1B7gC5wDMO7QJh0hlqxq3BbmKL/Zqle7GYmqQI
+         Rpkl26zeayrfJLOU9/oTdPpArj4gP0ZdJfIkjQrvgWiyWuVfDErO85CFI9p4+InQHRn0
+         E7qexJPA1tPJu8wouLaqykbQe5i5ydFGjwMsMOMcElkhOsxvEvKSt9pgcC+Mx0486HCp
+         UN8d7bMya8WAlZvdQycZUuWmZfyBdyZmMmwa9FtOnliLRCyNce9bXtO36uG4DRh+3/9x
+         Inug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678953657;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5DSdjDU0w5FQnEaCXOhop9s0Twb0u6rluswiSnrTsDE=;
+        b=yva61iBdS25zA+MgbKuK0Ny/JEEb+z8tNvoYd2bS8BDzlg84feB8/xgQommvZTmUFC
+         lG0C4tG5cv8eK4NyytYN3oUmvOJMzc0E1MSXkAz2WKEwNpXe/XHpMvIg9EeiCbpB1lVW
+         MypnNf4jh1axfi1B/0i6RbB+IYiPIASJn+ZGNOv0AewpeUBbs8tiusCsBSAKlD0Jmxow
+         czWnAWE1HD3crSSIYe+wLjp0FbuVfYk/9uwWJY5uPnI+dK+9aEaBmTQBj9uJHmnrRWMg
+         hS7+rrGmshTrdVfrEUAtXkOT8jw9kywaX0Sh0GXYjXs2B7vAVEzlF1RewTiks6an0xIC
+         Ba/Q==
+X-Gm-Message-State: AO0yUKUSTHMXG0Ad1qdh0mjOA7dJRPAh43gSiGT9+BZ/lnC0Ex85DFE+
+        n8iJHBMKZDFFkN+SyD4hGN9UPw==
+X-Google-Smtp-Source: AK7set/iWxJbPG/O+5nY7JnlCh+pWaxI5PWWttcrRji7J2jZ3aDvxnXWCfa6qUW0dG/SzIXNfytG5g==
+X-Received: by 2002:a17:906:4715:b0:8b1:812f:2578 with SMTP id y21-20020a170906471500b008b1812f2578mr8955146ejq.45.1678953657355;
+        Thu, 16 Mar 2023 01:00:57 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id d14-20020a170906370e00b008d53ea69227sm3494678ejc.224.2023.03.16.01.00.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 01:00:57 -0700 (PDT)
+Message-ID: <bd3d21bf-24bc-a074-957f-a223105d34a9@linaro.org>
+Date:   Thu, 16 Mar 2023 09:00:55 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] dt-bindings: remoteproc: qcom: sm6115-pas: Add QCM2290
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Robert Marko <robimarko@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: (subset) [PATCH v2 0/7] remoteproc: qcom_q6v5_pas: Add support for QDU1000/QRU1000 mpss
-Date:   Wed, 15 Mar 2023 20:21:04 -0700
-Message-Id: <167893686410.303819.12606519784601951345.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230306231202.12223-1-quic_molvera@quicinc.com>
-References: <20230306231202.12223-1-quic_molvera@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230315183231.3562580-1-konrad.dybcio@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230315183231.3562580-1-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,25 +81,19 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Mon, 6 Mar 2023 15:11:55 -0800, Melody Olvera wrote:
-> This patchset adds support for the mpss found in the QDU1000 and QRU1000
-> SoCs.
+On 15/03/2023 19:32, Konrad Dybcio wrote:
+> QCM2290 is more or less a fork of the same design that SM6115 is based
+> on. As a result, the ADSP and modem found on it are identical.
 > 
-> The mpss boot process now supports late attach for an already running
-> mpss. For this, it uses an RMB register space to perform a handshake
-> with the mpss for the late attach process. This is implemented in the
-> patches below. The patches also address issues with split binary
-> detection to support loading of split binaries more robustly.
+> Add compatibles for the QCM2290 with SM6115 fallbacks so as not to
+> require any driver changes. Change the allOf:if:properties clauses
+> to look for the presence of SM6115 compatibles and not an exact match.
 > 
-> [...]
+> Note that QCM2290 lacks a CDSP.
+> 
 
-Applied, thanks!
-
-[1/7] dt-bindings: firmware: qcom,scm: Update QDU1000/QRU1000 compatible
-      commit: bbf97c274da60fcfbb8ebde70a1c3abc6102c709
-[2/7] dt-bindings: soc: qcom: aoss: Document QDU1000/QRU1000 compatible
-      commit: 9559342891be54d9ffd13061022d9e5d24b2577a
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Krzysztof
+
