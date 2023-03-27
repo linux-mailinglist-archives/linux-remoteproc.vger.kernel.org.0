@@ -2,109 +2,93 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5656CAEB5
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 27 Mar 2023 21:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C34AE6CB018
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 27 Mar 2023 22:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjC0TfH (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 27 Mar 2023 15:35:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
+        id S229897AbjC0UpH (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 27 Mar 2023 16:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjC0TfG (ORCPT
+        with ESMTP id S229664AbjC0UpG (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 27 Mar 2023 15:35:06 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E941736
-        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Mar 2023 12:35:04 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id eg48so40580086edb.13
-        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Mar 2023 12:35:04 -0700 (PDT)
+        Mon, 27 Mar 2023 16:45:06 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C852107
+        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Mar 2023 13:45:04 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id l27so10106852wrb.2
+        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Mar 2023 13:45:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679945702;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=rAw6XJ1fgnGt+Qt//vZMySIcxRN5BjqGMW61n6KkE4o=;
-        b=m2iy7Xy3jVqU+tO5YusakE9NsiZbvYHloJaBcOiNnBH+beCr9j4+unXFsPJQxioy1z
-         P+SuBwYoqt8xh01YtYGPKkzDHLvFA6wrKzhoYVrDN/yLeMcLtj4jIL4tPMiUUEFOueq4
-         jnp3i+sT0eaCdQ2Nqxlaa1PvTpSzQ7bqYz7O+1c466AcV/FcXjjyfrABoFZVlgPKV8iO
-         ho1eAbB17x457eRLCUpZXiRyDTQrjdv6DRyHUoa0N3+A1oXzCcyzHst95+5QBubs8EJC
-         7QBVMV/O4agQEk5S7jtVF3ApTN1WdBNwyrpPY1xRtnXALpWhffCoeFzKS7mmGuXLomAR
-         NF7w==
+        d=linaro.org; s=google; t=1679949902;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XXpwyfObowKcpaJA0Vcps/lEQSlDqJgPBHnabdYA9dE=;
+        b=ZV+Wq94n+gfnQf6VM4SaSun9dqYcgE0HYiK03w4VOPgn45s6y8PCnTAzaezE08LQop
+         wu3RA5wgkjnWCH5WQKnS/LQmMePGl+bJETF7tea9KQFRLWN6WaRfz+7aqqBrxLDWwOok
+         i5wuxTVw9oCQqBSsTIybgZ6DkQqh7XZldehNDNlKshJ7cS1Ig5JvY+cPTefpbYYdF/R7
+         lFx1oS//KMVzWyCF5qHsMuUpi8g2s6wMH+4l++U3ihsqgG0N0xQubM+rN3otL5UV6Wtm
+         gctvqR22bF63D8FATQ+ImgagVcaOMebuKDTZ5Afdb5BGjp6VK38u+ykpnCgQKzbYD8iC
+         4yzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679945702;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rAw6XJ1fgnGt+Qt//vZMySIcxRN5BjqGMW61n6KkE4o=;
-        b=6/WdVc+U0NQPQx7BKmInDexlzmxIKrKIhTkYYTwy8cYvdrrkJKkd8z8XflIGpnja+Z
-         KOgXhwfUd7ZwSmt0jv2kzKgZs6h8O54hGv0Ff7Je9vt39wCzTyFyfDR88iSjJ8MZZlvW
-         +VDno6tvO+R3IyRjtq4WhyEL649VyOB9mDWuhvaROGgfPz+Ui7ooenWGfu9nWWJjEYTF
-         WjY6dMyz4J05Chzpk8YnXBDERNT1LSP7DYh9a7ucslb6Ed7IOL4W/ewwsfRAp/ig6znI
-         U2+l9Us8situTqG6Q5zEDtldB9WBL/SXtonXkaDHd4HNPfaZWOOg8UHE9coDNhGw4rq/
-         pzUQ==
-X-Gm-Message-State: AAQBX9crIq58rBovi35ViPFxYalq506WOYsSwP3hK9eNRWPCPTWDX4sZ
-        Y6uk/G5TEubcl/VSliuEbGXbU2hYWJ43UpHAYoc=
-X-Google-Smtp-Source: AKy350b8JLnbeiyREbGKeLCXB834bizQhV90xQMHiSbKigkIqhHjlh2gk5O5nu1jkcnImy+sBG3EcK3fDzg6FtY3at0=
-X-Received: by 2002:a17:907:2152:b0:888:b471:8e18 with SMTP id
- rk18-20020a170907215200b00888b4718e18mr5845444ejb.8.1679945702374; Mon, 27
- Mar 2023 12:35:02 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679949902;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XXpwyfObowKcpaJA0Vcps/lEQSlDqJgPBHnabdYA9dE=;
+        b=26yhpZJOWT+8AIgbnK2hYVCL1aFNGDChpj9VubR9RufzhSJT9JCaSjMVBxqePJb8X5
+         qFH97Ke8cHG5wxT+1FUNZ9Tqv3CawqOMmiLGjWLIjfCp/F3f7rYBJYDu3Rj+ZsqTBkxI
+         06JcixV7Ej44cmCwBnyXVHaCAT9UgQyQH9is0enCJRcaVVfnCl+S3F3lfeWs4nT5+NTW
+         RUIDgosbF6JwBMTaKvkjYkngHTu4kFElcVpg4ppI0MF7+osj3j1hUzJSDHjOaxN6ds9U
+         3E4kKth5SQWw7uStKNIXaKdR9PZWYJCCVmYvtWtvKUlOPzk/wXO5gl56CXu9A+pFSDxS
+         gihw==
+X-Gm-Message-State: AAQBX9fX8ctq6BwT8B2CkB/7YYliUZr8yPNawUkSc6ggVgjdjPnX/Q4L
+        VykP0Cj/0BZpIYtpPHLZfP/fEaAXgQ20Ynl1da+ouw==
+X-Google-Smtp-Source: AKy350ZMyhBvj4PkrBDJXNkoE3OUydv5XuVNMSuO6RHmSUFmrOJ+S3NmUZ+XT4/2pJxtdIxe8n41OnsHneQDVphkmpE=
+X-Received: by 2002:a05:6000:1819:b0:2d0:58f9:a69 with SMTP id
+ m25-20020a056000181900b002d058f90a69mr2198643wrh.4.1679949902560; Mon, 27 Mar
+ 2023 13:45:02 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7208:5583:b0:65:ee66:643d with HTTP; Mon, 27 Mar 2023
- 12:35:01 -0700 (PDT)
-From:   Daniel Ndoye <fcr423384@gmail.com>
-Date:   Mon, 27 Mar 2023 19:35:01 +0000
-Message-ID: <CAJYHccwVB5c9CUSQhDwRMKnZdE87QzXD9j1EF5ntzSh4gezRYg@mail.gmail.com>
-Subject: We shall stand in understanding
-To:     undisclosed-recipients:;
+References: <20230313202655.1719587-1-bhupesh.sharma@linaro.org> <3cf8f543-d439-5d9e-5b07-08bb8991e774@linaro.org>
+In-Reply-To: <3cf8f543-d439-5d9e-5b07-08bb8991e774@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Tue, 28 Mar 2023 02:14:51 +0530
+Message-ID: <CAH=2Ntz3zJjFVLtCeuEkyGWjCdN=6=hNvZtYO0ScinOm9GzhEg@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: remoteproc: qcom: Fix sm6115 pas documentation
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        mani@kernel.org, mathieu.poirier@linaro.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=ADVANCE_FEE_2_NEW_FORM,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
-        FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:541 listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [fcr423384[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [fcr423384[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  1.0 ADVANCE_FEE_2_NEW_FORM Advance Fee fraud and a form
-X-Spam-Level: *****
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-We shall stand in understanding.
+On Tue, 14 Mar 2023 at 14:07, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 13/03/2023 21:26, Bhupesh Sharma wrote:
+> > Fix the sm6115 pas yaml documentation to note that 'memory-region'
+> > is a required property.
+> >
+> > While at it also mark that memory-region property supports
+> > only one item.
+> >
+> > Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Would you be interested in handling a good deal worth more than
-Millions of dollars.
-   Please Permit to tell you this this transaction is 100% risk free
-as I legitimately I am a banker and during our periodic audits last we
-discovered dormant accounts with holding balances.
-  I hoping you will cooperate with me as a partner in a project of
-transferring an abandoned fund.
-Am confident that it will be of great benefit to both of us. How we'll
-realize this fund. Please contact me via below with your details.
+Thanks Krzysztof for the review,
 
-Full Name and Address
-Occupation
-Country of Origin
-Cellphone Number
+And a gentle ping to maintainers for merging this change.
 
-Regards.
-Daniel Ndoye
+Thanks,
+Bhupesh
