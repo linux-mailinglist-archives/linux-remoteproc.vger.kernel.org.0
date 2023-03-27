@@ -2,194 +2,109 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C856CAD2A
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 27 Mar 2023 20:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5656CAEB5
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 27 Mar 2023 21:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232508AbjC0SiM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 27 Mar 2023 14:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S229601AbjC0TfH (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 27 Mar 2023 15:35:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbjC0SiG (ORCPT
+        with ESMTP id S229950AbjC0TfG (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 27 Mar 2023 14:38:06 -0400
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E13C4233
-        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Mar 2023 11:38:02 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4PlhQD1WVrz9sc1;
-        Mon, 27 Mar 2023 20:37:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
-        s=MBO0001; t=1679942276;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OpnY5Bll0e5uxT0SinClsl4A2EVcTJcY0t1lar/iMyU=;
-        b=vXkPWp3D4jR8eSe2YoJquvRM/caraZwDhConHqvV7+z26+YIet9wjbUdnXJ80c+BNtpB8x
-        QJSB3rWesiXNc/Qs9LKYO4gad8Te6cikFJLH/922jYZKNdsig0gfwkyU7s6ZcqnBEKAHMn
-        udquq0Y4XY6dMhM2EJ/wEcuMxj19hTkEwAZenJMv6yPDC6I2blpnRVcx1v8HHNQfe26GL0
-        pdl4wE+77YJPMsTrkXDKCJqT+n5vaYLQzzXpOAXP6eR+0oLmvPfIyyZFUEHfPWUXBTd/gC
-        QKfhygZ21oEgpz0eTYZyjHS4pItKvGk/o1sl5ED3Q9wXocJe15GVb8oS0FYGfg==
-From:   Dylan Van Assche <me@dylanvanassche.be>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dylan Van Assche <me@dylanvanassche.be>
-Subject: [PATCH v2 3/3] remoteproc: qcom: pas: refactor SLPI remoteproc init
-Date:   Mon, 27 Mar 2023 20:37:36 +0200
-Message-Id: <20230327183736.496170-4-me@dylanvanassche.be>
-In-Reply-To: <20230327183736.496170-1-me@dylanvanassche.be>
-References: <20230327183736.496170-1-me@dylanvanassche.be>
+        Mon, 27 Mar 2023 15:35:06 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E941736
+        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Mar 2023 12:35:04 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id eg48so40580086edb.13
+        for <linux-remoteproc@vger.kernel.org>; Mon, 27 Mar 2023 12:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679945702;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rAw6XJ1fgnGt+Qt//vZMySIcxRN5BjqGMW61n6KkE4o=;
+        b=m2iy7Xy3jVqU+tO5YusakE9NsiZbvYHloJaBcOiNnBH+beCr9j4+unXFsPJQxioy1z
+         P+SuBwYoqt8xh01YtYGPKkzDHLvFA6wrKzhoYVrDN/yLeMcLtj4jIL4tPMiUUEFOueq4
+         jnp3i+sT0eaCdQ2Nqxlaa1PvTpSzQ7bqYz7O+1c466AcV/FcXjjyfrABoFZVlgPKV8iO
+         ho1eAbB17x457eRLCUpZXiRyDTQrjdv6DRyHUoa0N3+A1oXzCcyzHst95+5QBubs8EJC
+         7QBVMV/O4agQEk5S7jtVF3ApTN1WdBNwyrpPY1xRtnXALpWhffCoeFzKS7mmGuXLomAR
+         NF7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679945702;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rAw6XJ1fgnGt+Qt//vZMySIcxRN5BjqGMW61n6KkE4o=;
+        b=6/WdVc+U0NQPQx7BKmInDexlzmxIKrKIhTkYYTwy8cYvdrrkJKkd8z8XflIGpnja+Z
+         KOgXhwfUd7ZwSmt0jv2kzKgZs6h8O54hGv0Ff7Je9vt39wCzTyFyfDR88iSjJ8MZZlvW
+         +VDno6tvO+R3IyRjtq4WhyEL649VyOB9mDWuhvaROGgfPz+Ui7ooenWGfu9nWWJjEYTF
+         WjY6dMyz4J05Chzpk8YnXBDERNT1LSP7DYh9a7ucslb6Ed7IOL4W/ewwsfRAp/ig6znI
+         U2+l9Us8situTqG6Q5zEDtldB9WBL/SXtonXkaDHd4HNPfaZWOOg8UHE9coDNhGw4rq/
+         pzUQ==
+X-Gm-Message-State: AAQBX9crIq58rBovi35ViPFxYalq506WOYsSwP3hK9eNRWPCPTWDX4sZ
+        Y6uk/G5TEubcl/VSliuEbGXbU2hYWJ43UpHAYoc=
+X-Google-Smtp-Source: AKy350b8JLnbeiyREbGKeLCXB834bizQhV90xQMHiSbKigkIqhHjlh2gk5O5nu1jkcnImy+sBG3EcK3fDzg6FtY3at0=
+X-Received: by 2002:a17:907:2152:b0:888:b471:8e18 with SMTP id
+ rk18-20020a170907215200b00888b4718e18mr5845444ejb.8.1679945702374; Mon, 27
+ Mar 2023 12:35:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4PlhQD1WVrz9sc1
-X-Spam-Status: No, score=-0.9 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
-        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:7208:5583:b0:65:ee66:643d with HTTP; Mon, 27 Mar 2023
+ 12:35:01 -0700 (PDT)
+From:   Daniel Ndoye <fcr423384@gmail.com>
+Date:   Mon, 27 Mar 2023 19:35:01 +0000
+Message-ID: <CAJYHccwVB5c9CUSQhDwRMKnZdE87QzXD9j1EF5ntzSh4gezRYg@mail.gmail.com>
+Subject: We shall stand in understanding
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=ADVANCE_FEE_2_NEW_FORM,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
+        FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:541 listed in]
+        [list.dnswl.org]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [fcr423384[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [fcr423384[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  1.0 ADVANCE_FEE_2_NEW_FORM Advance Fee fraud and a form
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-SLPI remoteproc initialization is the same for SDM845, SM8150, SM8250,
-SM8350 but is duplicated for each compatible. Refactor initialization
-structs for these 4 compatibles as a single struct.
+We shall stand in understanding.
 
-Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
----
- drivers/remoteproc/qcom_q6v5_pas.c | 66 ++++--------------------------
- 1 file changed, 9 insertions(+), 57 deletions(-)
+Would you be interested in handling a good deal worth more than
+Millions of dollars.
+   Please Permit to tell you this this transaction is 100% risk free
+as I legitimately I am a banker and during our periodic audits last we
+discovered dormant accounts with holding balances.
+  I hoping you will cooperate with me as a partner in a project of
+transferring an abandoned fund.
+Am confident that it will be of great benefit to both of us. How we'll
+realize this fund. Please contact me via below with your details.
 
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index d82b6f4bced4..d1c7baec4aca 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -1014,7 +1014,7 @@ static const struct adsp_data sc8180x_mpss_resource = {
- 	.ssctl_id = 0x12,
- };
- 
--static const struct adsp_data slpi_resource_init = {
-+static const struct adsp_data msm_slpi_resource_init = {
- 		.crash_reason_smem = 424,
- 		.firmware_name = "slpi.mdt",
- 		.pas_id = 12,
-@@ -1028,7 +1028,7 @@ static const struct adsp_data slpi_resource_init = {
- 		.ssctl_id = 0x16,
- };
- 
--static const struct adsp_data sdm845_slpi_resource = {
-+static const struct adsp_data sm_slpi_resource_init = {
- 		.crash_reason_smem = 424,
- 		.firmware_name = "slpi.mdt",
- 		.pas_id = 12,
-@@ -1044,54 +1044,6 @@ static const struct adsp_data sdm845_slpi_resource = {
- 		.ssctl_id = 0x16,
- };
- 
--static const struct adsp_data sm8150_slpi_resource = {
--		.crash_reason_smem = 424,
--		.firmware_name = "slpi.mdt",
--		.pas_id = 12,
--		.auto_boot = true,
--		.proxy_pd_names = (char*[]){
--			"lcx",
--			"lmx",
--			NULL
--		},
--		.load_state = "slpi",
--		.ssr_name = "dsps",
--		.sysmon_name = "slpi",
--		.ssctl_id = 0x16,
--};
--
--static const struct adsp_data sm8250_slpi_resource = {
--	.crash_reason_smem = 424,
--	.firmware_name = "slpi.mdt",
--	.pas_id = 12,
--	.auto_boot = true,
--	.proxy_pd_names = (char*[]){
--		"lcx",
--		"lmx",
--		NULL
--	},
--	.load_state = "slpi",
--	.ssr_name = "dsps",
--	.sysmon_name = "slpi",
--	.ssctl_id = 0x16,
--};
--
--static const struct adsp_data sm8350_slpi_resource = {
--	.crash_reason_smem = 424,
--	.firmware_name = "slpi.mdt",
--	.pas_id = 12,
--	.auto_boot = true,
--	.proxy_pd_names = (char*[]){
--		"lcx",
--		"lmx",
--		NULL
--	},
--	.load_state = "slpi",
--	.ssr_name = "dsps",
--	.sysmon_name = "slpi",
--	.ssctl_id = 0x16,
--};
--
- static const struct adsp_data wcss_resource_init = {
- 	.crash_reason_smem = 421,
- 	.firmware_name = "wcnss.mdt",
-@@ -1200,9 +1152,9 @@ static const struct of_device_id adsp_of_match[] = {
- 	{ .compatible = "qcom,msm8953-adsp-pil", .data = &msm8996_adsp_resource},
- 	{ .compatible = "qcom,msm8974-adsp-pil", .data = &adsp_resource_init},
- 	{ .compatible = "qcom,msm8996-adsp-pil", .data = &msm8996_adsp_resource},
--	{ .compatible = "qcom,msm8996-slpi-pil", .data = &slpi_resource_init},
-+	{ .compatible = "qcom,msm8996-slpi-pil", .data = &msm_slpi_resource_init},
- 	{ .compatible = "qcom,msm8998-adsp-pas", .data = &msm8996_adsp_resource},
--	{ .compatible = "qcom,msm8998-slpi-pas", .data = &slpi_resource_init},
-+	{ .compatible = "qcom,msm8998-slpi-pas", .data = &msm_slpi_resource_init},
- 	{ .compatible = "qcom,qcs404-adsp-pas", .data = &adsp_resource_init },
- 	{ .compatible = "qcom,qcs404-cdsp-pas", .data = &cdsp_resource_init },
- 	{ .compatible = "qcom,qcs404-wcss-pas", .data = &wcss_resource_init },
-@@ -1217,7 +1169,7 @@ static const struct of_device_id adsp_of_match[] = {
- 	{ .compatible = "qcom,sdm660-adsp-pas", .data = &adsp_resource_init},
- 	{ .compatible = "qcom,sdm845-adsp-pas", .data = &sdm845_adsp_resource_init},
- 	{ .compatible = "qcom,sdm845-cdsp-pas", .data = &sdm845_cdsp_resource_init},
--	{ .compatible = "qcom,sdm845-slpi-pas", .data = &sdm845_slpi_resource},
-+	{ .compatible = "qcom,sdm845-slpi-pas", .data = &sm_slpi_resource_init},
- 	{ .compatible = "qcom,sdx55-mpss-pas", .data = &sdx55_mpss_resource},
- 	{ .compatible = "qcom,sm6115-adsp-pas", .data = &adsp_resource_init},
- 	{ .compatible = "qcom,sm6115-cdsp-pas", .data = &cdsp_resource_init},
-@@ -1228,17 +1180,17 @@ static const struct of_device_id adsp_of_match[] = {
- 	{ .compatible = "qcom,sm8150-adsp-pas", .data = &sm8150_adsp_resource},
- 	{ .compatible = "qcom,sm8150-cdsp-pas", .data = &sm8150_cdsp_resource},
- 	{ .compatible = "qcom,sm8150-mpss-pas", .data = &mpss_resource_init},
--	{ .compatible = "qcom,sm8150-slpi-pas", .data = &sm8150_slpi_resource},
-+	{ .compatible = "qcom,sm8150-slpi-pas", .data = &sm_slpi_resource_init},
- 	{ .compatible = "qcom,sm8250-adsp-pas", .data = &sm8250_adsp_resource},
- 	{ .compatible = "qcom,sm8250-cdsp-pas", .data = &sm8250_cdsp_resource},
--	{ .compatible = "qcom,sm8250-slpi-pas", .data = &sm8250_slpi_resource},
-+	{ .compatible = "qcom,sm8250-slpi-pas", .data = &sm_slpi_resource_init},
- 	{ .compatible = "qcom,sm8350-adsp-pas", .data = &sm8350_adsp_resource},
- 	{ .compatible = "qcom,sm8350-cdsp-pas", .data = &sm8350_cdsp_resource},
--	{ .compatible = "qcom,sm8350-slpi-pas", .data = &sm8350_slpi_resource},
-+	{ .compatible = "qcom,sm8350-slpi-pas", .data = &sm_slpi_resource_init},
- 	{ .compatible = "qcom,sm8350-mpss-pas", .data = &mpss_resource_init},
- 	{ .compatible = "qcom,sm8450-adsp-pas", .data = &sm8350_adsp_resource},
- 	{ .compatible = "qcom,sm8450-cdsp-pas", .data = &sm8350_cdsp_resource},
--	{ .compatible = "qcom,sm8450-slpi-pas", .data = &sm8350_slpi_resource},
-+	{ .compatible = "qcom,sm8450-slpi-pas", .data = &sm_slpi_resource_init},
- 	{ .compatible = "qcom,sm8450-mpss-pas", .data = &sm8450_mpss_resource},
- 	{ .compatible = "qcom,sm8550-adsp-pas", .data = &sm8550_adsp_resource},
- 	{ .compatible = "qcom,sm8550-cdsp-pas", .data = &sm8550_cdsp_resource},
--- 
-2.39.2
+Full Name and Address
+Occupation
+Country of Origin
+Cellphone Number
 
+Regards.
+Daniel Ndoye
