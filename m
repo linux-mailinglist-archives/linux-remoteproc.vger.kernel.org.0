@@ -2,311 +2,208 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DC56DF021
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Apr 2023 11:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF15B6DF1F3
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Apr 2023 12:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjDLJT1 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 12 Apr 2023 05:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
+        id S230373AbjDLKag (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 12 Apr 2023 06:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjDLJT0 (ORCPT
+        with ESMTP id S229784AbjDLKa3 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 12 Apr 2023 05:19:26 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADEF10F1;
-        Wed, 12 Apr 2023 02:19:24 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33C9JDY8052195;
-        Wed, 12 Apr 2023 04:19:13 -0500
+        Wed, 12 Apr 2023 06:30:29 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118776E80;
+        Wed, 12 Apr 2023 03:30:25 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 33CAUFws046650;
+        Wed, 12 Apr 2023 05:30:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1681291153;
-        bh=B5KBTLGR0HvDGhIJ+R+6qhJ89Y456NUm7iSUklZXQuk=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=YpC9wIbkV7gX3RMOG42yHGsFpwJhmXkJJjxsCANj47qJUtThmAUsGyzLxSoUkHGiO
-         rZ4/4LI71W5Onqg0fGkmgtWuDvdH0yHRtTPLvxPxKmbx6oCC59erAwGZaC0ZZyG/94
-         CN/NVxGsvmhbics+3GeAhlBD8NIuMOan1tvXxo0s=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33C9JDht048563
+        s=ti-com-17Q1; t=1681295415;
+        bh=0FzCz5eeJRH2yU9foXR8AIy2YrmkIhw88/pWp8ZrEDI=;
+        h=From:To:CC:Subject:Date;
+        b=nFRjoRiXkWRL1ujv2zYSW6eCJCNFujrW/ipxJw2otZ5dd+XXKjgOBx0ahesbK9+qb
+         LiCCWuAMOFrSIPkslnF5/T4nSkTHc7jm6M3lyKvc4bGFqfaJXg9REC0ojcmssPabYE
+         Ut9tze+oLxuSr0dwgqiotOhbgJhxXKMgdwTo4T9w=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 33CAUF5Q008413
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 12 Apr 2023 04:19:13 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 12
- Apr 2023 04:19:13 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
+        Wed, 12 Apr 2023 05:30:15 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE113.ent.ti.com
  (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 12
+ Apr 2023 05:30:14 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 12 Apr 2023 04:19:13 -0500
-Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33C9J8u0015809;
-        Wed, 12 Apr 2023 04:19:08 -0500
-Message-ID: <bfe1681c-9515-5c3c-6f9a-276e60d3db52@ti.com>
-Date:   Wed, 12 Apr 2023 14:49:07 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [EXTERNAL] Re: [PATCH v7 4/4] soc: ti: pruss: Add helper
- functions to set GPI mode, MII_RT_event and XFR
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        MD Danish Anwar <danishanwar@ti.com>
-CC:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+ Frontend Transport; Wed, 12 Apr 2023 05:30:15 -0500
+Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 33CAUEgs089881;
+        Wed, 12 Apr 2023 05:30:14 -0500
+Received: from localhost (uda0501179.dhcp.ti.com [10.24.69.114])
+        by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 33CAUDJv028919;
+        Wed, 12 Apr 2023 05:30:14 -0500
+From:   MD Danish Anwar <danishanwar@ti.com>
+To:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
         Roger Quadros <rogerq@kernel.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Tero Kristo <kristo@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>, <linux-remoteproc@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
         <srk@ti.com>, <devicetree@vger.kernel.org>,
         <netdev@vger.kernel.org>
-References: <20230404115336.599430-1-danishanwar@ti.com>
- <20230404115336.599430-5-danishanwar@ti.com> <20230411175707.GE38361@p14s>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <20230411175707.GE38361@p14s>
+Subject: [PATCH v8 0/4] Introduce PRU platform consumer API
+Date:   Wed, 12 Apr 2023 16:00:08 +0530
+Message-ID: <20230412103012.1754161-1-danishanwar@ti.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 11/04/23 23:27, Mathieu Poirier wrote:
-> On Tue, Apr 04, 2023 at 05:23:36PM +0530, MD Danish Anwar wrote:
->> From: Suman Anna <s-anna@ti.com>
->>
->> The PRUSS CFG module is represented as a syscon node and is currently
->> managed by the PRUSS platform driver. Add easy accessor functions to set
->> GPI mode, MII_RT event enable/disable and XFR (XIN XOUT) enable/disable
->> to enable the PRUSS Ethernet usecase. These functions reuse the generic
->> pruss_cfg_update() API function.
->>
->> Signed-off-by: Suman Anna <s-anna@ti.com>
->> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->> Reviewed-by: Roger Quadros <rogerq@kernel.org>
->> Reviewed-by: Tony Lindgren <tony@atomide.com>
->> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->> ---
->>  drivers/remoteproc/pru_rproc.c   | 15 -------
->>  drivers/soc/ti/pruss.c           | 74 ++++++++++++++++++++++++++++++++
->>  include/linux/remoteproc/pruss.h | 51 ++++++++++++++++++++++
->>  3 files changed, 125 insertions(+), 15 deletions(-)
->>
->> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
->> index 4ddd5854d56e..a88861737dec 100644
->> --- a/drivers/remoteproc/pru_rproc.c
->> +++ b/drivers/remoteproc/pru_rproc.c
->> @@ -81,21 +81,6 @@ enum pru_iomem {
->>  	PRU_IOMEM_MAX,
->>  };
->>  
->> -/**
->> - * enum pru_type - PRU core type identifier
->> - *
->> - * @PRU_TYPE_PRU: Programmable Real-time Unit
->> - * @PRU_TYPE_RTU: Auxiliary Programmable Real-Time Unit
->> - * @PRU_TYPE_TX_PRU: Transmit Programmable Real-Time Unit
->> - * @PRU_TYPE_MAX: just keep this one at the end
->> - */
->> -enum pru_type {
->> -	PRU_TYPE_PRU = 0,
->> -	PRU_TYPE_RTU,
->> -	PRU_TYPE_TX_PRU,
->> -	PRU_TYPE_MAX,
->> -};
->> -
->>  /**
->>   * struct pru_private_data - device data for a PRU core
->>   * @type: type of the PRU core (PRU, RTU, Tx_PRU)
->> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
->> index 0e37fe142615..64a1880ba4ee 100644
->> --- a/drivers/soc/ti/pruss.c
->> +++ b/drivers/soc/ti/pruss.c
->> @@ -213,6 +213,80 @@ int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux)
->>  }
->>  EXPORT_SYMBOL_GPL(pruss_cfg_set_gpmux);
->>  
->> +/**
->> + * pruss_cfg_gpimode() - set the GPI mode of the PRU
->> + * @pruss: the pruss instance handle
->> + * @pru_id: id of the PRU core within the PRUSS
->> + * @mode: GPI mode to set
->> + *
->> + * Sets the GPI mode for a given PRU by programming the
->> + * corresponding PRUSS_CFG_GPCFGx register
->> + *
->> + * Return: 0 on success, or an error code otherwise
->> + */
->> +int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
->> +		      enum pruss_gpi_mode mode)
->> +{
->> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
->> +		return -EINVAL;
->> +
->> +	if (mode < 0 || mode > PRUSS_GPI_MODE_MAX)
->> +		return -EINVAL;
->> +
->> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
->> +				PRUSS_GPCFG_PRU_GPI_MODE_MASK,
->> +				mode << PRUSS_GPCFG_PRU_GPI_MODE_SHIFT);
->> +}
->> +EXPORT_SYMBOL_GPL(pruss_cfg_gpimode);
->> +
->> +/**
->> + * pruss_cfg_miirt_enable() - Enable/disable MII RT Events
->> + * @pruss: the pruss instance
->> + * @enable: enable/disable
->> + *
->> + * Enable/disable the MII RT Events for the PRUSS.
->> + *
->> + * Return: 0 on success, or an error code otherwise
->> + */
->> +int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
->> +{
->> +	u32 set = enable ? PRUSS_MII_RT_EVENT_EN : 0;
->> +
->> +	return pruss_cfg_update(pruss, PRUSS_CFG_MII_RT,
->> +				PRUSS_MII_RT_EVENT_EN, set);
->> +}
->> +EXPORT_SYMBOL_GPL(pruss_cfg_miirt_enable);
->> +
->> +/**
->> + * pruss_cfg_xfr_enable() - Enable/disable XIN XOUT shift functionality
->> + * @pruss: the pruss instance
->> + * @pru_type: PRU core type identifier
->> + * @enable: enable/disable
->> + *
->> + * Return: 0 on success, or an error code otherwise
->> + */
->> +int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
->> +			 bool enable)
->> +{
->> +	u32 mask, set;
->> +
->> +	switch (pru_type) {
->> +	case PRU_TYPE_PRU:
->> +		mask = PRUSS_SPP_XFER_SHIFT_EN;
->> +		break;
->> +	case PRU_TYPE_RTU:
->> +		mask = PRUSS_SPP_RTU_XFR_SHIFT_EN;
->> +		break;
->> +	default:
->> +		return -EINVAL;
->> +	}
->> +
->> +	set = enable ? mask : 0;
->> +
->> +	return pruss_cfg_update(pruss, PRUSS_CFG_SPP, mask, set);
->> +}
->> +EXPORT_SYMBOL_GPL(pruss_cfg_xfr_enable);
->> +
->>  static void pruss_of_free_clk_provider(void *data)
->>  {
->>  	struct device_node *clk_mux_np = data;
->> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
->> index 5641153459a7..b68ab8735247 100644
->> --- a/include/linux/remoteproc/pruss.h
->> +++ b/include/linux/remoteproc/pruss.h
->> @@ -34,6 +34,33 @@ enum pruss_gp_mux_sel {
->>  	PRUSS_GP_MUX_SEL_MAX,
->>  };
->>  
->> +/*
->> + * enum pruss_gpi_mode - PRUSS GPI configuration modes, used
->> + *			 to program the PRUSS_GPCFG0/1 registers
->> + */
->> +enum pruss_gpi_mode {
->> +	PRUSS_GPI_MODE_DIRECT = 0,
->> +	PRUSS_GPI_MODE_PARALLEL,
->> +	PRUSS_GPI_MODE_28BIT_SHIFT,
->> +	PRUSS_GPI_MODE_MII,
->> +	PRUSS_GPI_MODE_MAX,
->> +};
->> +
->> +/**
->> + * enum pru_type - PRU core type identifier
->> + *
->> + * @PRU_TYPE_PRU: Programmable Real-time Unit
->> + * @PRU_TYPE_RTU: Auxiliary Programmable Real-Time Unit
->> + * @PRU_TYPE_TX_PRU: Transmit Programmable Real-Time Unit
->> + * @PRU_TYPE_MAX: just keep this one at the end
->> + */
->> +enum pru_type {
->> +	PRU_TYPE_PRU = 0,
->> +	PRU_TYPE_RTU,
->> +	PRU_TYPE_TX_PRU,
->> +	PRU_TYPE_MAX,
->> +};
->> +
-> 
-> These go in pruss_driver.h
-> 
->>  /**
->>   * enum pruss_pru_id - PRU core identifiers
->>   * @PRUSS_PRU0: PRU Core 0.
->> @@ -98,6 +125,11 @@ int pruss_release_mem_region(struct pruss *pruss,
->>  			     struct pruss_mem_region *region);
->>  int pruss_cfg_get_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 *mux);
->>  int pruss_cfg_set_gpmux(struct pruss *pruss, enum pruss_pru_id pru_id, u8 mux);
->> +int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
->> +		      enum pruss_gpi_mode mode);
->> +int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable);
->> +int pruss_cfg_xfr_enable(struct pruss *pruss, enum pru_type pru_type,
->> +			 bool enable);
->>  
->>  #else
->>  
->> @@ -133,6 +165,25 @@ static inline int pruss_cfg_set_gpmux(struct pruss *pruss,
->>  	return ERR_PTR(-EOPNOTSUPP);
->>  }
->>  
->> +static inline int pruss_cfg_gpimode(struct pruss *pruss,
->> +				    enum pruss_pru_id pru_id,
->> +				    enum pruss_gpi_mode mode)
->> +{
->> +	return ERR_PTR(-EOPNOTSUPP);
->> +}
->> +
->> +static inline int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
->> +{
->> +	return ERR_PTR(-EOPNOTSUPP);
->> +}
->> +
->> +static inline int pruss_cfg_xfr_enable(struct pruss *pruss,
->> +				       enum pru_type pru_type,
->> +				       bool enable);
->> +{
->> +	return ERR_PTR(-EOPNOTSUPP);
->> +}
->> +
-> 
-> So do these.
-> 
-> Thanks,
-> Mathieu
-> 
+Hi All,
+The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS
+or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
+(Programmable Real-Time Units, or PRUs) for program execution.
 
-Sure, Mathieu. I'll move all these definitions and enums to
-linux/pruss_driver.h from linux/remoteproc/pruss.h accordingly and send next
-revision.
+There are 3 foundation components for TI PRUSS subsystem: the PRUSS platform
+driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All of them have
+already been merged and can be found under:
+1) drivers/soc/ti/pruss.c
+   Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+2) drivers/irqchip/irq-pruss-intc.c
+   Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+3) drivers/remoteproc/pru_rproc.c
+   Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
 
->>  #endif /* CONFIG_TI_PRUSS */
->>  
->>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
->> -- 
->> 2.25.1
->>
+The programmable nature of the PRUs provide flexibility to implement custom
+peripheral interfaces, fast real-time responses, or specialized data handling.
+Example of a PRU consumer drivers will be: 
+  - Software UART over PRUSS
+  - PRU-ICSS Ethernet EMAC
+
+In order to make usage of common PRU resources and allow the consumer drivers 
+to configure the PRU hardware for specific usage the PRU API is introduced.
+
+This is the v8 of the old patch series [10].
+
+Changes from v7 [10] to v8:
+*) Addressed Mathieu's comments and moved pruss related API definitions to
+linux/pruss_driver.h
+*) Moved enum pruss_mem, pruss_gp_mux_sel, pruss_gpi_mode, pru_type and struct
+pruss_mem_region from remoteproc/pruss.h to linux/pruss_driver.h as asked by
+Mathieu.
+
+Changes from v6 [9] to v7:
+*) Addressed Simon's comment on patch 3 of this series and dropped unnecassary
+macros from the patch.
+
+Changes from v5 [1] to v6:
+*) Added Reviewed by tags of Roger and Tony to the patches.
+*) Added Acked by tag of Mathieu to patch 2 of this series.
+*) Added NULL check for @mux in pruss_cfg_get_gpmux() API.
+*) Added comment to the pruss_get() function documentation mentioning it is
+expected the caller will have done a pru_rproc_get() on @rproc.
+*) Fixed compilation warning "warning: ‘pruss_cfg_update’ defined but not used"
+in patch 3 by squashing patch 3 [7] and patch 5 [8] of previous revision
+together. Squashed patch 5 instead of patch 4 with patch 3 because patch 5 uses
+both read() and update() APIs where as patch 4 only uses update() API.
+Previously pruss_cfg_read()/update() APIs were intoroduced in patch 3
+and used in patch 4 and 5. Now these APIs are introduced as well as used in 
+patch 3.
+
+Changes from v4 [2] to v5:
+*) Addressed Roger's comment to change function argument in API 
+pruss_cfg_xfr_enable(). Instead of asking user to calcualte mask, now user
+will just provide the pru_type and mask will be calcualted inside the API.
+*) Moved enum pru_type from pru_rproc.c to include/linux/remoteproc/pruss.h
+in patch 4 / 5.
+*) Moved enum pruss_gpi_mode from patch 3/5 to patch 4/5 to introduce this
+enum in same patch as the API using it.
+*) Moved enum pruss_gp_mux_sel from patch 3/5 to patch 5/5 to introduce this
+enum in same patch as the API using it.
+*) Created new headefile drivers/soc/ti/pruss.h, private to PRUSS as asked by
+Roger. Moved all private definitions and pruss_cfg_read () / update ()
+APIs to this newly added headerfile.
+*) Renamed include/linux/pruss_driver.h to include/linux/pruss_internal.h as
+suggested by Andrew and Roger.
+
+Changes from v3 [3] to v4:
+*) Added my SoB tags in all patches as earlier SoB tags were missing in few
+patches.
+*) Added Roger's RB tags in 3 patches.
+*) Addressed Roger's comment in patch 4/5 of this series. Added check for 
+   invalid GPI mode in pruss_cfg_gpimode() API.
+*) Removed patch [4] from this series as that patch is no longer required.
+*) Made pruss_cfg_read() and pruss_cfg_update() APIs internal to pruss.c by
+   removing EXPORT_SYMBOL_GPL and making them static. Now these APIs are 
+   internal to pruss.c and PRUSS CFG space is not exposed.
+*) Moved APIs pruss_cfg_gpimode(), pruss_cfg_miirt_enable(), 
+   pruss_cfg_xfr_enable(), pruss_cfg_get_gpmux(), pruss_cfg_set_gpmux() to
+   pruss.c file as they are using APIs pruss_cfg_read / update. 
+   Defined these APIs in pruss.h file as other drivers use these APIs to 
+   perform respective operations.
+
+Changes from v2 to v3:
+*) No functional changes, the old series has been rebased on linux-next (tag:
+next-20230306).
+
+This series depends on another series which is already merged in the remoteproc
+tree [5] and is part of v6.3-rc1. This series and the remoteproc series form 
+the PRUSS consumer API which can be used by consumer drivers to utilize the 
+PRUs.
+
+One example of the consumer driver is the PRU-ICSSG ethernet driver [6],which 
+depends on this series and the remoteproc series [5].
+
+[1] https://lore.kernel.org/all/20230323062451.2925996-1-danishanwar@ti.com/
+[2] https://lore.kernel.org/all/20230313111127.1229187-1-danishanwar@ti.com/
+[3] https://lore.kernel.org/all/20230306110934.2736465-1-danishanwar@ti.com/
+[4] https://lore.kernel.org/all/20230306110934.2736465-6-danishanwar@ti.com/
+[5] https://lore.kernel.org/all/20230106121046.886863-1-danishanwar@ti.com/#t
+[6] https://lore.kernel.org/all/20230210114957.2667963-1-danishanwar@ti.com/
+[7] https://lore.kernel.org/all/20230323062451.2925996-4-danishanwar@ti.com/
+[8] https://lore.kernel.org/all/20230323062451.2925996-6-danishanwar@ti.com/
+[9] https://lore.kernel.org/all/20230331112941.823410-1-danishanwar@ti.com/
+[10] https://lore.kernel.org/all/20230404115336.599430-1-danishanwar@ti.com/
+
+Thanks and Regards,
+Md Danish Anwar
+
+Andrew F. Davis (1):
+  soc: ti: pruss: Add pruss_{request,release}_mem_region() API
+
+Suman Anna (2):
+  soc: ti: pruss: Add pruss_cfg_read()/update(),
+    pruss_cfg_get_gpmux()/set_gpmux() APIs
+  soc: ti: pruss: Add helper functions to set GPI mode, MII_RT_event and
+    XFR
+
+Tero Kristo (1):
+  soc: ti: pruss: Add pruss_get()/put() API
+
+ drivers/remoteproc/pru_rproc.c |  15 --
+ drivers/soc/ti/pruss.c         | 258 +++++++++++++++++++++++++++++++++
+ drivers/soc/ti/pruss.h         |  88 +++++++++++
+ include/linux/pruss_driver.h   | 123 ++++++++++++++++
+ 4 files changed, 469 insertions(+), 15 deletions(-)
+ create mode 100644 drivers/soc/ti/pruss.h
 
 -- 
-Thanks and Regards,
-Danish.
+2.34.1
+
