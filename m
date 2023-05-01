@@ -2,36 +2,36 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313DA6F2D68
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  1 May 2023 05:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60966F2DB3
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  1 May 2023 05:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232917AbjEADMS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Sun, 30 Apr 2023 23:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36976 "EHLO
+        id S232987AbjEADQq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 30 Apr 2023 23:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233051AbjEADKQ (ORCPT
+        with ESMTP id S233034AbjEADNy (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Sun, 30 Apr 2023 23:10:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57B24222;
-        Sun, 30 Apr 2023 20:04:18 -0700 (PDT)
+        Sun, 30 Apr 2023 23:13:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEA846A8;
+        Sun, 30 Apr 2023 20:05:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF8A8617AC;
-        Mon,  1 May 2023 03:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D73C4339C;
-        Mon,  1 May 2023 03:03:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CE6261779;
+        Mon,  1 May 2023 03:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32BBC433A0;
+        Mon,  1 May 2023 03:05:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1682910220;
-        bh=lW38JLU3QFhVbWOQXPhF88T4VJz8JtutIhc3gKjsfPk=;
+        s=k20201202; t=1682910303;
+        bh=L4+K2FOZGL2vNUkKFgGDiM/jDho4psOTn0+IDn0nViY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fv8dm2/IVlNYGt9uaVg23cJLdl5T8Hp+qG25j6sdp1F9eOVm3AjjssBv0lLYDo+lh
-         5nf/L4hgC57PGyNBFrqwviwp3SoL/g2m4hBq0jtJHCmQYSSo+lXsvQuws9eH4uIC/O
-         G4X81G+zJq3Z7VHrFiGuNanKOqCroIEXVTq0xi4dAxV1EURae24qYnQzo2sI5ex2v8
-         GknA13JumHt294/pROxh6Vuw32RXuKCSG1TBU4AlhEicsFsSBXpPP1H1i1lbqJKgWh
-         4K7OGJBUDJr/Sod77u2YoWECUlLGQ2qiSurN75rhEnp063E0B/CQdSfcIS7SANTTpK
-         DHRinWlA/eZSw==
+        b=VH0OAMiImEEO4Nl4JzPP2Xc8F0iEZp2fRTAcQ+Yyw8AF1ZCr67ViAgPWnfABgc9T2
+         9LS8HVrh047P9E2z58U2/l+DDAKcHC8sRXdXCWAus5jxWrdoh0/v9/O0eV3MvYhqNy
+         TyiJNXB3IlgcH1ENSiVzhugMBvA4t8nAKt6BMnW/ePGDI5chfAtD4I/2C5oJw9rXlp
+         nB8wZhIaGYXNa50MNuTibRBH+OxaDYRS1w4dIcJWX2QwA7mCFmiYUQIHp2L8h1uo5x
+         heXMaEyo/HB++Y1teNOorOwT0nimeqq3t16kkjuqG1CCkJ+UBEZBEvY8b2OlNsSs6F
+         dztt0QwAuGBBQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
@@ -41,18 +41,18 @@ Cc:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
         linux-remoteproc@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 20/33] remoteproc: stm32_rproc: Add mutex protection for workqueue
-Date:   Sun, 30 Apr 2023 23:02:14 -0400
-Message-Id: <20230501030227.3254266-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 10/17] remoteproc: stm32_rproc: Add mutex protection for workqueue
+Date:   Sun, 30 Apr 2023 23:04:27 -0400
+Message-Id: <20230501030435.3254695-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230501030227.3254266-1-sashal@kernel.org>
-References: <20230501030227.3254266-1-sashal@kernel.org>
+In-Reply-To: <20230501030435.3254695-1-sashal@kernel.org>
+References: <20230501030435.3254695-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,7 +91,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 8 insertions(+)
 
 diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 7d782ed9e5896..f618405cf4200 100644
+index b643efcf995a1..bc91d99db60f2 100644
 --- a/drivers/remoteproc/stm32_rproc.c
 +++ b/drivers/remoteproc/stm32_rproc.c
 @@ -287,8 +287,16 @@ static void stm32_rproc_mb_vq_work(struct work_struct *work)
