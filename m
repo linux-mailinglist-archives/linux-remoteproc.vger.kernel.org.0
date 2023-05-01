@@ -2,158 +2,287 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8956EF0C1
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 26 Apr 2023 11:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F616F2C24
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  1 May 2023 04:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239843AbjDZJMx (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 26 Apr 2023 05:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34704 "EHLO
+        id S232176AbjEAC5s (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sun, 30 Apr 2023 22:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240166AbjDZJMl (ORCPT
+        with ESMTP id S232156AbjEAC5o (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 26 Apr 2023 05:12:41 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C9430EF;
-        Wed, 26 Apr 2023 02:12:37 -0700 (PDT)
-X-UUID: 76be70c4e41211eda9a90f0bb45854f4-20230426
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=zITZHaBffEXHgQvakViptRVDM6YtdJ7FNpbDESp+DO4=;
-        b=OSRCxZeEb3Tx3vUNA0cWLhQLEy3ypOwhPh5g4TFZYXrW0qVOFzcCd3ZoiIwTgNKP+LsaYydPR0ts0LHmyVyqxdgCqvUuoRWIXcpD4qEktvk9dupiVyfguf2sxzUEjp7BeVhm1JxnJvdlTI/eT1u4k0mSTqN0WJw1jwEb3qrT8fE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:bd5ecef9-b050-4e38-b6c2-20379eef23c9,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:120426c,CLOUDID:a8bd34ec-db6f-41fe-8b83-13fe7ed1ef52,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 76be70c4e41211eda9a90f0bb45854f4-20230426
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 575319499; Wed, 26 Apr 2023 17:12:27 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 26 Apr 2023 17:12:25 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Wed, 26 Apr 2023 17:12:25 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
+        Sun, 30 Apr 2023 22:57:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B531730;
+        Sun, 30 Apr 2023 19:57:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F48A615CC;
+        Mon,  1 May 2023 02:57:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F039C433D2;
+        Mon,  1 May 2023 02:57:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1682909834;
+        bh=dR9PklygolTqH8imwIcPA8LbTdW6fOKb0nJV97565/o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=f6Iixv7wOr5SYGeyP7Fs8WwyuKegvs40PuSYwJm/0W8UiOHNDIo/UfTr58Ng75Kly
+         5KG3VaK55XwY3veCdMKtz1gLOq6TRii6IuNQWCpTRLykurlJo3ToeGn6TGwCbGocvi
+         bIKl6frNmwcxzc/nNKr6pI4334ZpIapsjNNuH0UdE1K1/tl1nc4Dp0rwLaDeHnLkcJ
+         ZqUIhPRimR/gKmZgzRJEoC/q+LErlIKG+IzgcASarkDS2j9p0Hrf71fNJU8A0jSVR2
+         RV9VQVvWTyG7yt5JNYnkDZ+XfBQRMivbAG0O5lAzFDHLp8AYYmgKoIRE2+vBV5Q2E4
+         jwtt2AcQmLUuw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Iuliana Prodan <iuliana.prodan@nxp.com>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v10 11/11] arm64: dts: mediatek: mt8195: Add SCP 2nd core
-Date:   Wed, 26 Apr 2023 17:12:11 +0800
-Message-ID: <20230426091211.21557-12-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230426091211.21557-1-tinghan.shen@mediatek.com>
-References: <20230426091211.21557-1-tinghan.shen@mediatek.com>
+        Sasha Levin <sashal@kernel.org>, andersson@kernel.org,
+        shawnguo@kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.3 09/44] remoteproc: imx_dsp_rproc: Add custom memory copy implementation for i.MX DSP Cores
+Date:   Sun, 30 Apr 2023 22:55:57 -0400
+Message-Id: <20230501025632.3253067-9-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230501025632.3253067-1-sashal@kernel.org>
+References: <20230501025632.3253067-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Rewrite the MT8195 SCP device node as a cluster and
-add the SCP 2nd core in it.
+From: Iuliana Prodan <iuliana.prodan@nxp.com>
 
-Since the SCP device node is changed to multi-core structure,
-enable SCP cluster to enable probing SCP core 0.
+[ Upstream commit 408ec1ff0caa340c57eecf4cbd14ef0132036a50 ]
 
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+The IRAM is part of the HiFi DSP.
+According to hardware specification only 32-bits write are allowed
+otherwise we get a Kernel panic.
+
+Therefore add a custom memory copy and memset functions to deal with
+the above restriction.
+
+Signed-off-by: Iuliana Prodan <iuliana.prodan@nxp.com>
+Link: https://lore.kernel.org/r/20230221170356.27923-1-iuliana.prodan@oss.nxp.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../boot/dts/mediatek/mt8195-cherry.dtsi      |  6 +++-
- arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 32 ++++++++++++++-----
- 2 files changed, 29 insertions(+), 9 deletions(-)
+ drivers/remoteproc/imx_dsp_rproc.c | 187 ++++++++++++++++++++++++++++-
+ 1 file changed, 186 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 8ac80a136c37..8addb94a24a1 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -962,7 +962,11 @@
- 	interrupts-extended = <&pio 222 IRQ_TYPE_LEVEL_HIGH>;
- };
+diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+index 95da1cbefacf0..6255864442a2b 100644
+--- a/drivers/remoteproc/imx_dsp_rproc.c
++++ b/drivers/remoteproc/imx_dsp_rproc.c
+@@ -715,6 +715,191 @@ static void imx_dsp_rproc_kick(struct rproc *rproc, int vqid)
+ 		dev_err(dev, "%s: failed (%d, err:%d)\n", __func__, vqid, err);
+ }
  
--&scp {
-+&scp_cluster {
-+	status = "okay";
-+};
++/*
++ * Custom memory copy implementation for i.MX DSP Cores
++ *
++ * The IRAM is part of the HiFi DSP.
++ * According to hw specs only 32-bits writes are allowed.
++ */
++static int imx_dsp_rproc_memcpy(void *dest, const void *src, size_t size)
++{
++	const u8 *src_byte = src;
++	const u32 *source = src;
++	u32 affected_mask;
++	u32 *dst = dest;
++	int i, q, r;
++	u32 tmp;
 +
-+&scp_c0 {
- 	status = "okay";
- 
- 	firmware-name = "mediatek/mt8195/scp.img";
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index a44aae4ab953..10947b4b4707 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -916,14 +916,30 @@
- 			clocks = <&infracfg_ao CLK_INFRA_AO_GCE2>;
- 		};
- 
--		scp: scp@10500000 {
--			compatible = "mediatek,mt8195-scp";
--			reg = <0 0x10500000 0 0x100000>,
--			      <0 0x10720000 0 0xe0000>,
--			      <0 0x10700000 0 0x8000>;
--			reg-names = "sram", "cfg", "l1tcm";
--			interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-+		scp_cluster: scp@10500000 {
-+			compatible = "mediatek,mt8195-scp-dual";
-+			reg = <0 0x10720000 0 0xe0000>, <0 0x10700000 0 0x8000>;
-+			reg-names = "cfg", "l1tcm";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x10500000 0x100000>;
- 			status = "disabled";
++	/* destination must be 32bit aligned */
++	if (!IS_ALIGNED((uintptr_t)dest, 4))
++		return -EINVAL;
 +
-+			scp_c0: scp@0 {
-+				compatible = "mediatek,scp-core";
-+				reg = <0x0 0xa0000>;
-+				reg-names = "sram";
-+				interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-+				status = "disabled";
-+			};
++	q = size / 4;
++	r = size % 4;
 +
-+			scp_c1: scp@a0000 {
-+				compatible = "mediatek,scp-core";
-+				reg = <0xa0000 0x20000>;
-+				reg-names = "sram";
-+				interrupts = <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH 0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		scp_adsp: clock-controller@10720000 {
-@@ -2464,7 +2480,7 @@
- 				 <&iommu_vdo M4U_PORT_L19_VENC_REF_LUMA>,
- 				 <&iommu_vdo M4U_PORT_L19_VENC_REF_CHROMA>;
- 			interrupts = <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH 0>;
--			mediatek,scp = <&scp>;
-+			mediatek,scp = <&scp_c0>;
- 			clocks = <&vencsys CLK_VENC_VENC>;
- 			clock-names = "venc_sel";
- 			assigned-clocks = <&topckgen CLK_TOP_VENC>;
++	/* copy data in units of 32 bits at a time */
++	for (i = 0; i < q; i++)
++		writel(source[i], &dst[i]);
++
++	if (r) {
++		affected_mask = GENMASK(8 * r, 0);
++
++		/*
++		 * first read the 32bit data of dest, then change affected
++		 * bytes, and write back to dest.
++		 * For unaffected bytes, it should not be changed
++		 */
++		tmp = readl(dest + q * 4);
++		tmp &= ~affected_mask;
++
++		/* avoid reading after end of source */
++		for (i = 0; i < r; i++)
++			tmp |= (src_byte[q * 4 + i] << (8 * i));
++
++		writel(tmp, dest + q * 4);
++	}
++
++	return 0;
++}
++
++/*
++ * Custom memset implementation for i.MX DSP Cores
++ *
++ * The IRAM is part of the HiFi DSP.
++ * According to hw specs only 32-bits writes are allowed.
++ */
++static int imx_dsp_rproc_memset(void *addr, u8 value, size_t size)
++{
++	u32 tmp_val = value;
++	u32 *tmp_dst = addr;
++	u32 affected_mask;
++	int q, r;
++	u32 tmp;
++
++	/* destination must be 32bit aligned */
++	if (!IS_ALIGNED((uintptr_t)addr, 4))
++		return -EINVAL;
++
++	tmp_val |= tmp_val << 8;
++	tmp_val |= tmp_val << 16;
++
++	q = size / 4;
++	r = size % 4;
++
++	while (q--)
++		writel(tmp_val, tmp_dst++);
++
++	if (r) {
++		affected_mask = GENMASK(8 * r, 0);
++
++		/*
++		 * first read the 32bit data of addr, then change affected
++		 * bytes, and write back to addr.
++		 * For unaffected bytes, it should not be changed
++		 */
++		tmp = readl(tmp_dst);
++		tmp &= ~affected_mask;
++
++		tmp |= (tmp_val & affected_mask);
++		writel(tmp, tmp_dst);
++	}
++
++	return 0;
++}
++
++/*
++ * imx_dsp_rproc_elf_load_segments() - load firmware segments to memory
++ * @rproc: remote processor which will be booted using these fw segments
++ * @fw: the ELF firmware image
++ *
++ * This function loads the firmware segments to memory, where the remote
++ * processor expects them.
++ *
++ * Return: 0 on success and an appropriate error code otherwise
++ */
++static int imx_dsp_rproc_elf_load_segments(struct rproc *rproc, const struct firmware *fw)
++{
++	struct device *dev = &rproc->dev;
++	const void *ehdr, *phdr;
++	int i, ret = 0;
++	u16 phnum;
++	const u8 *elf_data = fw->data;
++	u8 class = fw_elf_get_class(fw);
++	u32 elf_phdr_get_size = elf_size_of_phdr(class);
++
++	ehdr = elf_data;
++	phnum = elf_hdr_get_e_phnum(class, ehdr);
++	phdr = elf_data + elf_hdr_get_e_phoff(class, ehdr);
++
++	/* go through the available ELF segments */
++	for (i = 0; i < phnum; i++, phdr += elf_phdr_get_size) {
++		u64 da = elf_phdr_get_p_paddr(class, phdr);
++		u64 memsz = elf_phdr_get_p_memsz(class, phdr);
++		u64 filesz = elf_phdr_get_p_filesz(class, phdr);
++		u64 offset = elf_phdr_get_p_offset(class, phdr);
++		u32 type = elf_phdr_get_p_type(class, phdr);
++		void *ptr;
++
++		if (type != PT_LOAD || !memsz)
++			continue;
++
++		dev_dbg(dev, "phdr: type %d da 0x%llx memsz 0x%llx filesz 0x%llx\n",
++			type, da, memsz, filesz);
++
++		if (filesz > memsz) {
++			dev_err(dev, "bad phdr filesz 0x%llx memsz 0x%llx\n",
++				filesz, memsz);
++			ret = -EINVAL;
++			break;
++		}
++
++		if (offset + filesz > fw->size) {
++			dev_err(dev, "truncated fw: need 0x%llx avail 0x%zx\n",
++				offset + filesz, fw->size);
++			ret = -EINVAL;
++			break;
++		}
++
++		if (!rproc_u64_fit_in_size_t(memsz)) {
++			dev_err(dev, "size (%llx) does not fit in size_t type\n",
++				memsz);
++			ret = -EOVERFLOW;
++			break;
++		}
++
++		/* grab the kernel address for this device address */
++		ptr = rproc_da_to_va(rproc, da, memsz, NULL);
++		if (!ptr) {
++			dev_err(dev, "bad phdr da 0x%llx mem 0x%llx\n", da,
++				memsz);
++			ret = -EINVAL;
++			break;
++		}
++
++		/* put the segment where the remote processor expects it */
++		if (filesz) {
++			ret = imx_dsp_rproc_memcpy(ptr, elf_data + offset, filesz);
++			if (ret) {
++				dev_err(dev, "memory copy failed for da 0x%llx memsz 0x%llx\n",
++					da, memsz);
++				break;
++			}
++		}
++
++		/* zero out remaining memory for this segment */
++		if (memsz > filesz) {
++			ret = imx_dsp_rproc_memset(ptr + filesz, 0, memsz - filesz);
++			if (ret) {
++				dev_err(dev, "memset failed for da 0x%llx memsz 0x%llx\n",
++					da, memsz);
++				break;
++			}
++		}
++	}
++
++	return ret;
++}
++
+ static int imx_dsp_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
+ {
+ 	if (rproc_elf_load_rsc_table(rproc, fw))
+@@ -729,7 +914,7 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
+ 	.start		= imx_dsp_rproc_start,
+ 	.stop		= imx_dsp_rproc_stop,
+ 	.kick		= imx_dsp_rproc_kick,
+-	.load		= rproc_elf_load_segments,
++	.load		= imx_dsp_rproc_elf_load_segments,
+ 	.parse_fw	= imx_dsp_rproc_parse_fw,
+ 	.sanity_check	= rproc_elf_sanity_check,
+ 	.get_boot_addr	= rproc_elf_get_boot_addr,
 -- 
-2.18.0
+2.39.2
 
