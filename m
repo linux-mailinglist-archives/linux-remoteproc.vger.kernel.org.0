@@ -2,152 +2,324 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB656F5BF1
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  3 May 2023 18:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251616F5C65
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  3 May 2023 19:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjECQ1l (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 3 May 2023 12:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
+        id S229617AbjECRDs (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 3 May 2023 13:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjECQ1k (ORCPT
+        with ESMTP id S229565AbjECRDm (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 3 May 2023 12:27:40 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912B855AF
-        for <linux-remoteproc@vger.kernel.org>; Wed,  3 May 2023 09:27:37 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-957dbae98b4so830210066b.1
-        for <linux-remoteproc@vger.kernel.org>; Wed, 03 May 2023 09:27:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683131256; x=1685723256;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oofjhUkDBoyhSvfn9xrML4y1PXC5qidRBwwApXpHT6w=;
-        b=Bl4pOO1vK6PiYX4R0E5x+2r6wpefXs0TO2KYo0suP/IyYAE/jQZnl1B5t0Tj4qVi1l
-         xEKoNmVlUWxmCmnOQBTHZLS/3EF+lFZ3L7fGbfCwK3vjLscktYuQfUqLk2oBr3d9MEgW
-         WwjBrMZqWRJbtjgZvJcnJw09Cpuo1oTc3yqXZMdyvZjgY8k8IkivZs3NPjEt85kpmsWQ
-         DILKEsm1DwEmd32GhmNrmUlZQhgHTSZXlp6hM+mm2ToeslG01YtJ+CwDfNesTVlzUXDJ
-         Bu8a80YnvjDN1pzCDQLMjm0wg16nEodegUiN1zh2gIUWLCrVWboV1luik4BJhhhJJMjA
-         V2Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683131256; x=1685723256;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oofjhUkDBoyhSvfn9xrML4y1PXC5qidRBwwApXpHT6w=;
-        b=V1j0gko4B8RBI2spsruTlodp8VL6lVQwIdeD9szIJmqHERpNQyB/OazX0guNGM7TfG
-         EnfOdcHfkTSjKeWXGRZwBBXErkgwWt6Q1+jTaBPTEfvoAkvVPO58BBsAkG0Drvke3uuw
-         8DZ0+YZogXll/Sycc5qrBAkZ1oGV+Z8i1EbVchjpz0qq/QpDsiPrkQAPLLBsukUKNknB
-         45JLukH+M/knS4u8+7Xtw9Ak18QGSihz4H7d6FB1jRWtMFxLJBEfFzK6XwlABkV/asL5
-         DKcPRS1DkNuxu/ObjW1DJ6jRVT0c5+fmuLnkA0LcDhJEidg2DST+HnRWxuPS2w8Ds1GO
-         fHqQ==
-X-Gm-Message-State: AC+VfDweS0NLMOeVvMAXo+ObwVrmcOE3o+NLilrot6+tguCVs2lwMFUZ
-        Pg4dhdFPort9YV/v4wJU1GpI6Q==
-X-Google-Smtp-Source: ACHHUZ4Heu2hUEMlfp5wVbyQPUTiI0ylQQqFhGqns/GKAE1nOsQMqxyigR11MSo5s4yCryK+QQV6Ew==
-X-Received: by 2002:a17:907:1c21:b0:94b:cd7c:59f4 with SMTP id nc33-20020a1709071c2100b0094bcd7c59f4mr3980503ejc.16.1683131255932;
-        Wed, 03 May 2023 09:27:35 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:db42:e3d0:c55a:8cf1? ([2a02:810d:15c0:828:db42:e3d0:c55a:8cf1])
-        by smtp.gmail.com with ESMTPSA id ia1-20020a170907a06100b009614fea69e8sm5438304ejc.74.2023.05.03.09.27.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 May 2023 09:27:34 -0700 (PDT)
-Message-ID: <fdb8e5a9-d8a0-1881-894f-1202ceefcc21@linaro.org>
-Date:   Wed, 3 May 2023 18:27:33 +0200
+        Wed, 3 May 2023 13:03:42 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B3E10F1;
+        Wed,  3 May 2023 10:03:39 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 343GLZTU031407;
+        Wed, 3 May 2023 17:02:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=y8nhUca5/jXytqEZLC1ft88NVgxYtp+AuBfD2huFXQk=;
+ b=bPfvs9dcOWuNEGQ9v2MQ0bjkHTyuFxjuWzq2YTJKRi7PFEVXU0vtfOhjZax859d9v/Ym
+ /Cjqw1BcRIT9pE2Ehb+8IF5nysy0Irl5frAp/DakI1Pq3Pkjd4Gto8XDio1XFlzZc7gY
+ cWxlnsRrWMJoJt4WMLQarTvEwceLjnyaLRdoki+Rsqk1xLEMNZPDovlyCguIVxbGU87N
+ 4DQW1v2v08U3sUZGhqUZcSZQV6SRul8usyvFXtU2jkSMjH6duL/J52UAE85QSntiuMLx
+ KE7PcCCj+U5bAUfHUNVgHUzvtD+PjK+49E02XBqhvYAw5hg6NQd5M1yStwUgbkXhevTw JQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qb4e9b5wc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 May 2023 17:02:50 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 343H2nG7000325
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 3 May 2023 17:02:49 GMT
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 3 May 2023 10:02:43 -0700
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, "Mukesh Ojha" <quic_mojha@quicinc.com>
+Subject: [PATCH v3 00/18] Add basic Minidump kernel driver support
+Date:   Wed, 3 May 2023 22:32:14 +0530
+Message-ID: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 01/11] dt-bindings: remoteproc: qcom: Add support for
- multipd model
-Content-Language: en-US
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     quic_sjaganat@quicinc.com, quic_gurus@quicinc.com,
-        quic_gokulsri@quicinc.com, linux-arm-msm@vger.kernel.org,
-        andersson@kernel.org, jassisinghbrar@gmail.com,
-        konrad.dybcio@linaro.org, quic_eberman@quicinc.com,
-        quic_poovendh@quicinc.com, robimarko@gmail.com,
-        mturquette@baylibre.com, mathieu.poirier@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, quic_arajkuma@quicinc.com,
-        sboyd@kernel.org, robh+dt@kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, loic.poulain@linaro.org,
-        quic_anusha@quicinc.com, linux-kernel@vger.kernel.org,
-        quic_srichara@quicinc.com, quic_kathirav@quicinc.com,
-        agross@kernel.org, linux-remoteproc@vger.kernel.org
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
- <167819522915.3831.12765243745569076133.robh@kernel.org>
- <9de5629f-0a69-7b5b-c312-ab6fe19d60f8@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9de5629f-0a69-7b5b-c312-ab6fe19d60f8@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SvRd_yi7ZP4GM4OvtMKgPEiZy-L_VoeU
+X-Proofpoint-ORIG-GUID: SvRd_yi7ZP4GM4OvtMKgPEiZy-L_VoeU
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-03_12,2023-05-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1011 malwarescore=0 suspectscore=0 spamscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 mlxscore=0 phishscore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303200000 definitions=main-2305030145
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 03/05/2023 12:59, Manikanta Mylavarapu wrote:
-> 
-> 
-> On 3/7/2023 6:53 PM, Rob Herring wrote:
->>
->> On Tue, 07 Mar 2023 10:11:27 +0530, Manikanta Mylavarapu wrote:
->>> Add new binding document for multipd model remoteproc.
->>> IPQ5018, IPQ9574 follows multipd model.
->>>
->>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
->>> ---
->>>   .../bindings/remoteproc/qcom,multipd-pil.yaml | 282 ++++++++++++++++++
->>>   1 file changed, 282 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
->>>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> yamllint warnings/errors:
->>
->> dtschema/dtc warnings/errors:
->> Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.example.dts:22:18: fatal error: dt-bindings/clock/qcom,gcc-ipq5018.h: No such file or directory
->>     22 |         #include <dt-bindings/clock/qcom,gcc-ipq5018.h>
->>        |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> compilation terminated.
->> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.example.dtb] Error 1
->> make[1]: *** Waiting for unfinished jobs....
->> make: *** [Makefile:1512: dt_binding_check] Error 2
->>
->> doc reference errors (make refcheckdocs):
->>
->> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com
->>
->> The base for the series is generally the latest rc1. A different dependency
->> should be noted in *this* patch.
->>
->> If you already ran 'make dt_binding_check' and didn't see the above
->> error(s), then make sure 'yamllint' is installed and dt-schema is up to
->> date:
->>
->> pip3 install dtschema --upgrade
->>
->> Please check and re-submit after running the above command yourself. Note
->> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
->> your schema. However, it must be unset to test all examples with your schema.
->>
-> 
-> I mentioned dependency link 
-> (https://lore.kernel.org/linux-arm-msm/20220621161126.15883-1-quic_srichara@quicinc.com/) 
-> in cover page patch because it's required for entire series. I will add 
-> dependency link's and raise new patchset.
+Minidump is a best effort mechanism to collect useful and predefined data
+for first level of debugging on end user devices running on Qualcomm SoCs.
+It is built on the premise that System on Chip (SoC) or subsystem part of
+SoC crashes, due to a range of hardware and software bugs. Hence, the
+ability to collect accurate data is only a best-effort. The data collected
+could be invalid or corrupted, data collection itself could fail, and so on.
 
-Is the dependency merged for v6.4-rc1? Looks not, so this means the
-patch cannot be merged for next three months.
+Qualcomm devices in engineering mode provides a mechanism for generating
+full system ramdumps for post mortem debugging. But in some cases it's
+however not feasible to capture the entire content of RAM. The minidump
+mechanism provides the means for selecting which snippets should be
+included in the ramdump.
 
-Why do you need any dependency here in this binding?
+The core of minidump feature is part of Qualcomm's boot firmware code.
+It initializes shared memory (SMEM), which is a part of DDR and
+allocates a small section of SMEM to minidump table i.e also called
+global table of content (G-ToC). Each subsystem (APSS, ADSP, ...) has
+their own table of segments to be included in the minidump and all get
+their reference from G-ToC. Each segment/region has some details like
+name, physical address and it's size etc. and it could be anywhere
+scattered in the DDR.
 
-Best regards,
-Krzysztof
+Existing upstream Qualcomm remoteproc driver[1] already supports minidump
+feature for remoteproc instances like ADSP, MODEM, ... where predefined
+selective segments of subsystem region can be dumped as part of
+coredump collection which generates smaller size artifacts compared to
+complete coredump of subsystem on crash.
+
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/remoteproc/qcom_common.c#n142
+
+In addition to managing and querying the APSS minidump description,
+the Linux driver maintains a ELF header in a segment. This segment
+gets updated with section/program header whenever a new entry gets
+registered.
+
+Patch 1/18 is very trivial change.
+Patch 2/18 moves the minidump specific data structure and macro to
+ qcom_minidump.h so that (4/18) qcom minidump driver can use.
+Patch 3/18 documents qualcomm minidump guide for users.
+Patch 4/18 implements qualcomm minidump kernel driver and exports
+ symbol which other minidump kernel client can use.
+Patch 5/18 add pending region support for the clients who came for
+registration before minidump.
+Patch 6/18 add update region support for registered clients.
+Patch 7/18 enables the qualcomm minidump driver.
+Patch 8/18 Use the exported symbol from minidump driver in qcom_common
+ for querying minidump descriptor for a subsystem.
+Patch 9-13 add qcom dynamic ramoops region support via a driver which
+ adds ramoops platform device and also register existing pstore
+ frontend regions.
+Patch 14-18 are not new and has already been through 6 versions and
+reason of adding here is for minidump testing purpose and it will be rebased
+automatically along with new version of minidump series.
+
+Testing of the patches has been done on sm8450 target after enabling config like
+CONFIG_PSTORE_RAM and CONFIG_PSTORE_CONSOLE and once the device boots up.
+Try crashing it via devmem2 0xf11c000(this is known to create xpu violation and
+and put the device in download mode) on command prompt.
+
+I have added download patch here numbered from 14/18 to 18/18
+Earlier download mode setting patches were sent separately
+https://lore.kernel.org/lkml/1680076012-10785-1-git-send-email-quic_mojha@quicinc.com/
+
+Default storage type is set to via USB, so minidump would be downloaded with the
+help of x86_64 machine (running PCAT tool) attached to Qualcomm device which has
+backed minidump boot firmware support (more can be found patch 3/18)
+
+Below patch [1] is to warm reset Qualcomm device which has upstream qcom
+watchdog driver support.
+
+After applying all patches, we can boot the device and can execute
+following command.
+
+echo mini > /sys/module/qcom_scm/parameters/download_mode
+echo c > /proc/sysrq-trigger
+
+This will make the device go to download mode and collect the minidump on to the
+attached x86 machine running the Qualcomm PCAT tool(This comes as part Qualcomm
+package manager kit).
+After that we will see a bunch of predefined registered region as binary blobs files
+starts with md_* downloaded on the x86 machine on given location in PCAT tool from
+the target device.
+
+A sample client example to dump a linux region has been given in patch 3/18 and as
+well as can be seen in patch 12/18.
+
+[1]
+--------------------------->8-------------------------------------
+
+commit f1124ccebd47550b4c9627aa162d9cdceba2b76f
+Author: Mukesh Ojha <quic_mojha@quicinc.com>
+Date:   Thu Mar 16 14:08:35 2023 +0530
+
+    do not merge: watchdog bite on panic
+
+    Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+
+diff --git a/drivers/watchdog/qcom-wdt.c b/drivers/watchdog/qcom-wdt.c
+index 0d2209c..767e84a 100644
+--- a/drivers/watchdog/qcom-wdt.c
++++ b/drivers/watchdog/qcom-wdt.c
+@@ -12,6 +12,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/watchdog.h>
+ #include <linux/of_device.h>
++#include <linux/panic.h>
+
+ enum wdt_reg {
+        WDT_RST,
+@@ -114,12 +115,28 @@ static int qcom_wdt_set_pretimeout(struct watchdog_device *wdd,
+        return qcom_wdt_start(wdd);
+ }
+
++static void qcom_wdt_bite_on_panic(struct qcom_wdt *wdt)
++{
++       writel(0, wdt_addr(wdt, WDT_EN));
++       writel(1, wdt_addr(wdt, WDT_BITE_TIME));
++       writel(1, wdt_addr(wdt, WDT_RST));
++       writel(QCOM_WDT_ENABLE, wdt_addr(wdt, WDT_EN));
++
++       wmb();
++
++       while(1)
++               udelay(1);
++}
++
+ static int qcom_wdt_restart(struct watchdog_device *wdd, unsigned long action,
+                            void *data)
+ {
+        struct qcom_wdt *wdt = to_qcom_wdt(wdd);
+        u32 timeout;
+
++       if (in_panic)
++               qcom_wdt_bite_on_panic(wdt);
++
+        /*
+         * Trigger watchdog bite:
+         *    Setup BITE_TIME to be 128ms, and enable WDT.
+diff --git a/include/linux/panic.h b/include/linux/panic.h
+index 979b776..f913629 100644
+--- a/include/linux/panic.h
++++ b/include/linux/panic.h
+@@ -22,6 +22,7 @@ extern int panic_on_oops;
+ extern int panic_on_unrecovered_nmi;
+ extern int panic_on_io_nmi;
+ extern int panic_on_warn;
++extern bool in_panic;
+
+ extern unsigned long panic_on_taint;
+ extern bool panic_on_taint_nousertaint;
+diff --git a/kernel/panic.c b/kernel/panic.c
+index 487f5b0..714f7f4 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -65,6 +65,8 @@ static unsigned int warn_limit __read_mostly;
+
+ int panic_timeout = CONFIG_PANIC_TIMEOUT;
+ EXPORT_SYMBOL_GPL(panic_timeout);
++bool in_panic = false;
++EXPORT_SYMBOL_GPL(in_panic);
+
+ #define PANIC_PRINT_TASK_INFO          0x00000001
+ #define PANIC_PRINT_MEM_INFO           0x00000002
+@@ -261,6 +263,7 @@ void panic(const char *fmt, ...)
+        int old_cpu, this_cpu;
+        bool _crash_kexec_post_notifiers = crash_kexec_post_notifiers;
+
++       in_panic = true;
+        if (panic_on_warn) {
+                /*
+                 * This thread may hit another WARN() in the panic path.
+--------------------------------------------------------------------------
+
+Changes in v3:
+ - Addressed most of the comments by Srini on v2 and refactored the minidump driver.
+    - Added platform device support
+    - Unregister region support.
+ - Added update region for clients.
+ - Added pending region support.
+ - Modified the documentation guide accordingly.
+ - Added qcom_pstore_ramdump client driver which happen to add ramoops platform
+   device and also registers ramoops region with minidump.
+ - Added download mode patch series with this minidump series. 
+    https://lore.kernel.org/lkml/1680076012-10785-1-git-send-email-quic_mojha@quicinc.com/
+
+Changes in v2: https://lore.kernel.org/lkml/1679491817-2498-1-git-send-email-quic_mojha@quicinc.com/
+ - Addressed review comment made by [quic_tsoni/bmasney] to add documentation.
+ - Addressed comments made by [srinivas.kandagatla]
+ - Dropped pstore 6/6 from the last series, till i get conclusion to get pstore
+   region in minidump.
+ - Fixed issue reported by kernel test robot.
+
+Changes in v1: https://lore.kernel.org/lkml/1676978713-7394-1-git-send-email-quic_mojha@quicinc.com/
+
+
+Mukesh Ojha (18):
+  remoteproc: qcom: Expand MD_* as MINIDUMP_*
+  remoteproc: qcom: Move minidump specific data to qcom_minidump.h
+  docs: qcom: Add qualcomm minidump guide
+  soc: qcom: Add Qualcomm minidump kernel driver
+  soc: qcom: minidump: Add pending region registration support
+  soc: qcom: minidump: Add update region support
+  arm64: defconfig: Enable Qualcomm minidump driver
+  remoterproc: qcom: refactor to leverage exported minidump symbol
+  soc: qcom: Add qcom's pstore minidump driver support
+  dt-bindings: reserved-memory: Add qcom,ramoops-minidump binding
+  arm64: dts: qcom: sm8450: Add Qualcomm ramoops minidump node
+  soc: qcom: Register pstore frontend region with minidump
+  arm64: defconfig: Enable Qualcomm pstore minidump client driver
+  firmware: qcom_scm: provide a read-modify-write function
+  pinctrl: qcom: Use qcom_scm_io_update_field()
+  firmware: scm: Modify only the download bits in TCSR register
+  firmware: qcom_scm: Refactor code to support multiple download mode
+  firmware: qcom_scm: Add multiple download mode support
+
+ Documentation/admin-guide/qcom_minidump.rst        | 246 +++++++
+ .../reserved-memory/qcom,ramoops-minidump.yaml     |  69 ++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi               |  11 +
+ arch/arm64/configs/defconfig                       |   2 +
+ drivers/firmware/Kconfig                           |  11 -
+ drivers/firmware/qcom_scm.c                        |  88 ++-
+ drivers/pinctrl/qcom/pinctrl-msm.c                 |  11 +-
+ drivers/remoteproc/qcom_common.c                   |  75 +--
+ drivers/soc/qcom/Kconfig                           |  25 +
+ drivers/soc/qcom/Makefile                          |   2 +
+ drivers/soc/qcom/qcom_minidump.c                   | 724 +++++++++++++++++++++
+ drivers/soc/qcom/qcom_pstore_minidump.c            | 194 ++++++
+ drivers/soc/qcom/smem.c                            |   8 +
+ include/linux/firmware/qcom/qcom_scm.h             |   2 +
+ include/soc/qcom/qcom_minidump.h                   | 130 ++++
+ 15 files changed, 1503 insertions(+), 95 deletions(-)
+ create mode 100644 Documentation/admin-guide/qcom_minidump.rst
+ create mode 100644 Documentation/devicetree/bindings/reserved-memory/qcom,ramoops-minidump.yaml
+ create mode 100644 drivers/soc/qcom/qcom_minidump.c
+ create mode 100644 drivers/soc/qcom/qcom_pstore_minidump.c
+ create mode 100644 include/soc/qcom/qcom_minidump.h
+
+-- 
+2.7.4
 
