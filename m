@@ -2,45 +2,51 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405FD6F744B
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  4 May 2023 21:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC356F77C1
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  4 May 2023 23:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjEDTua (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 4 May 2023 15:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59948 "EHLO
+        id S229823AbjEDVEb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 4 May 2023 17:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbjEDTtm (ORCPT
+        with ESMTP id S230505AbjEDVEV (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 4 May 2023 15:49:42 -0400
+        Thu, 4 May 2023 17:04:21 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F9F15ECA
-        for <linux-remoteproc@vger.kernel.org>; Thu,  4 May 2023 12:46:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528A312EAD
+        for <linux-remoteproc@vger.kernel.org>; Thu,  4 May 2023 14:04:07 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1puet2-0007eH-I3; Thu, 04 May 2023 21:45:08 +0200
+        id 1puet2-0007eJ-I3; Thu, 04 May 2023 21:45:08 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1puet1-0018F8-BR; Thu, 04 May 2023 21:45:07 +0200
+        id 1puet1-0018FC-KX; Thu, 04 May 2023 21:45:07 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1puet0-001JhG-Ll; Thu, 04 May 2023 21:45:06 +0200
+        id 1puet1-001JhJ-1d; Thu, 04 May 2023 21:45:07 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     linux-remoteproc@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 01/18] remoteproc: da8xx: Convert to platform remove callback returning void
-Date:   Thu,  4 May 2023 21:44:36 +0200
-Message-Id: <20230504194453.1150368-2-u.kleine-koenig@pengutronix.de>
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 02/18] remoteproc: imx_dsp: Convert to platform remove callback returning void
+Date:   Thu,  4 May 2023 21:44:37 +0200
+Message-Id: <20230504194453.1150368-3-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194453.1150368-1-u.kleine-koenig@pengutronix.de>
 References: <20230504194453.1150368-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1904; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=vhPoBFtnA6xBzYnsFk7zcxZRcSq7PoGat4KtE90/LC4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkVAm9KYCUm/SDO0J0LqcdNz+S7LoHcTn/2z29G WRCW8cQPdWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFQJvQAKCRCPgPtYfRL+ ThpuB/9+KPBHYsGjQFSQ2eAc1tRL0EACEth6qKk5QWHirP5/WqoCSkRYpcXcdUMsCr95+Zcf1G1 WOSKAMSPlaeuM8IESqhPWXomIAGlyrMhKMvvZui6NLVz1e4ATgT27nvwWS+Qtp1raiDhPu77eCq q9nHBk9Gs/YoXSYz1PylQHEWNmjyX5U5Xu9SV35RDwFUVdQbHDTpn4UCoWK2H6V2yRYHzStHYHO 0XaSHvNCR5lLNg9WlYgo2MQJPare7js/IsJSNR3CgWLh0epnelMQyT6TeDFLA2Wp6GcldJcv0Jx iWFJxFldr9BeSJbrt8AP7ytWzh/Q2jDwXdjm1W+ecnId/z2X
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1842; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=zwM/QZMJlZeCndTvEfUyRK5/BLxxW15WO9j7aKBmhB8=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkVAm+Qq3eYUTNVFZfRTn2nJ9GGX1xBddXW4rQK 7Rh8V9gU6+JATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFQJvgAKCRCPgPtYfRL+ TlquB/45xYl5XCKrj4hfMbGGQywNrukbYNAIFugHfEkq4fg2NR+wlSk4CtSt3Yi4JXuI7THDzRD z8lCtlXg4JaazUCam9yjBRHjZSBGdBpYCghKmhIiOiGJbVviyFcjTiW2uhuBGcmFs6J+6bQgGZu qvs9wsVthzYTUxIl6MI3dmbe45IIOASZY5n3N3gMqfu8xY6weCj0+kCfdz6M7YweNWKfo8keNTI RNzqKHrZyRhaHAwTJmujQJtuZBJca6Rj5333hxe3Zmfx6cF64Mx8hUaMY/Ra7QhXGw5/VvFDaAI bEft5LmzSulA4KwSENw4IpPsIO7VQL2Dg4cKwbZ/qyFe7+1c
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -69,40 +75,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/remoteproc/da8xx_remoteproc.c | 6 ++----
+ drivers/remoteproc/imx_dsp_rproc.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/remoteproc/da8xx_remoteproc.c b/drivers/remoteproc/da8xx_remoteproc.c
-index 768217f0f5cd..9041a0e07fb2 100644
---- a/drivers/remoteproc/da8xx_remoteproc.c
-+++ b/drivers/remoteproc/da8xx_remoteproc.c
-@@ -357,7 +357,7 @@ static int da8xx_rproc_probe(struct platform_device *pdev)
+diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+index cab06dbf37fb..bda7f2a910e0 100644
+--- a/drivers/remoteproc/imx_dsp_rproc.c
++++ b/drivers/remoteproc/imx_dsp_rproc.c
+@@ -1161,7 +1161,7 @@ static int imx_dsp_rproc_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int da8xx_rproc_remove(struct platform_device *pdev)
-+static void da8xx_rproc_remove(struct platform_device *pdev)
+-static int imx_dsp_rproc_remove(struct platform_device *pdev)
++static void imx_dsp_rproc_remove(struct platform_device *pdev)
  {
  	struct rproc *rproc = platform_get_drvdata(pdev);
- 	struct da8xx_rproc *drproc = rproc->priv;
-@@ -374,8 +374,6 @@ static int da8xx_rproc_remove(struct platform_device *pdev)
+ 	struct imx_dsp_rproc *priv = rproc->priv;
+@@ -1170,8 +1170,6 @@ static int imx_dsp_rproc_remove(struct platform_device *pdev)
+ 	rproc_del(rproc);
+ 	imx_dsp_detach_pm_domains(priv);
  	rproc_free(rproc);
- 	if (dev->of_node)
- 		of_reserved_mem_device_release(dev);
 -
 -	return 0;
  }
  
- static const struct of_device_id davinci_rproc_of_match[] __maybe_unused = {
-@@ -386,7 +384,7 @@ MODULE_DEVICE_TABLE(of, davinci_rproc_of_match);
+ /* pm runtime functions */
+@@ -1328,7 +1326,7 @@ MODULE_DEVICE_TABLE(of, imx_dsp_rproc_of_match);
  
- static struct platform_driver da8xx_rproc_driver = {
- 	.probe = da8xx_rproc_probe,
--	.remove = da8xx_rproc_remove,
-+	.remove_new = da8xx_rproc_remove,
+ static struct platform_driver imx_dsp_rproc_driver = {
+ 	.probe = imx_dsp_rproc_probe,
+-	.remove = imx_dsp_rproc_remove,
++	.remove_new = imx_dsp_rproc_remove,
  	.driver = {
- 		.name = "davinci-rproc",
- 		.of_match_table = of_match_ptr(davinci_rproc_of_match),
+ 		.name = "imx-dsp-rproc",
+ 		.of_match_table = imx_dsp_rproc_of_match,
 -- 
 2.39.2
 
