@@ -2,47 +2,49 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A62D6F77C5
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  4 May 2023 23:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD03D6F779F
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  4 May 2023 23:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjEDVFU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 4 May 2023 17:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
+        id S230351AbjEDVAb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 4 May 2023 17:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjEDVE4 (ORCPT
+        with ESMTP id S229981AbjEDVA0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 4 May 2023 17:04:56 -0400
+        Thu, 4 May 2023 17:00:26 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A6E14E76
-        for <linux-remoteproc@vger.kernel.org>; Thu,  4 May 2023 14:04:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD9B1328F
+        for <linux-remoteproc@vger.kernel.org>; Thu,  4 May 2023 14:00:06 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1puet7-0007r8-5L; Thu, 04 May 2023 21:45:13 +0200
+        id 1puet7-0007rT-Tw; Thu, 04 May 2023 21:45:13 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1puet6-0018GN-G8; Thu, 04 May 2023 21:45:12 +0200
+        id 1puet7-0018GT-2O; Thu, 04 May 2023 21:45:13 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1puet5-001JiC-Pc; Thu, 04 May 2023 21:45:11 +0200
+        id 1puet6-001JiH-2c; Thu, 04 May 2023 21:45:12 +0200
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Patrice Chotard <patrice.chotard@foss.st.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 16/18] remoteproc: st: Convert to platform remove callback returning void
-Date:   Thu,  4 May 2023 21:44:51 +0200
-Message-Id: <20230504194453.1150368-17-u.kleine-koenig@pengutronix.de>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, kernel@pengutronix.de
+Subject: [PATCH 17/18] remoteproc: stm32: Convert to platform remove callback returning void
+Date:   Thu,  4 May 2023 21:44:52 +0200
+Message-Id: <20230504194453.1150368-18-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230504194453.1150368-1-u.kleine-koenig@pengutronix.de>
 References: <20230504194453.1150368-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1683; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=9Hpc+1nEHcry74XcdQCz/ksi4LbJ7ai5C+zSEEKp4lk=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkVAnPj1ADWabic6+xCCxZOpEF0L+YTwAzs8WDz nHxlp6S+UCJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFQJzwAKCRCPgPtYfRL+ TlRoB/9zMKuw0qMffVkRack/9/Fg3t0DCVrKCyeQtlonarTOq8LhK71cPi9DDXwFWs+LtXbq4FW b/QkTsenI98/dYdGY+Kr8YTWTlUSc9CaXMB0X7NtLrUeyqgbGyBkWOr+wLK86G2GKcmTk9KGdiz scNU0aBcRIhVtszl6Wlq3CUtCCn1IUtdMkDmLR9LbZoXdAWNYnaFQhTk6ooYIywn6S1doESi1cH s9MfY8QagJVAZwaAmTWyDVOmvFO0B8UJFiq/oBLDaSqQZtuBRiqBKCJoELstljxY96PGFI5MX2p OIDgZep/ws2HG8sVhat/bbYYtCv/k9CXetB6l36m6Pt47JnA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1811; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=9tubpyai1MB/op1/Q29LPA4MvfejBQFUuyYAIHIRXME=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkVAnQwcEJ78+sYNtDLU5hJpc67PNpuv+IhuLlV EoKBa1W/yOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFQJ0AAKCRCPgPtYfRL+ TgLgB/98quk2KPNuo4vHNRohCZNRm15MpGX2eYc3IoP1bAOIp2xRVYzPsddMlqIEDbkNeaTCLty QEsEq4eWXV8q+ZYHavex1LoRpaCvx2Dror1cBFosEn68jlj8ck4hAeM5SAxU0aqZQTSd/poPC69 zsUpiVKq1ju5pce/4kRn+sEnYObTt+sQbe5TnK0faLvdh9k+1y+4CGvX4viLNA0g3ncJGR6pA34 z8QCh1RT81CXdhgcDjL19C1SVhGbnXoDPRl2Ph/RHfpmICFdOhddC/TaOyGvIfCsjFYWvs8HAGP mmyspGtp6BhXV4DPlguXhu0ZAs/fpvnM21L4YBxXfwMixdyE
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -71,37 +73,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/remoteproc/st_remoteproc.c | 6 ++----
+ drivers/remoteproc/stm32_rproc.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_remoteproc.c
-index 3f1b8963639f..e3ce01d98b4c 100644
---- a/drivers/remoteproc/st_remoteproc.c
-+++ b/drivers/remoteproc/st_remoteproc.c
-@@ -448,7 +448,7 @@ static int st_rproc_probe(struct platform_device *pdev)
+diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
+index 8746cbb1f168..19716ec82aae 100644
+--- a/drivers/remoteproc/stm32_rproc.c
++++ b/drivers/remoteproc/stm32_rproc.c
+@@ -867,7 +867,7 @@ static int stm32_rproc_probe(struct platform_device *pdev)
  	return ret;
  }
  
--static int st_rproc_remove(struct platform_device *pdev)
-+static void st_rproc_remove(struct platform_device *pdev)
+-static int stm32_rproc_remove(struct platform_device *pdev)
++static void stm32_rproc_remove(struct platform_device *pdev)
  {
  	struct rproc *rproc = platform_get_drvdata(pdev);
- 	struct st_rproc *ddata = rproc->priv;
-@@ -462,13 +462,11 @@ static int st_rproc_remove(struct platform_device *pdev)
- 		mbox_free_channel(ddata->mbox_chan[i]);
- 
+ 	struct stm32_rproc *ddata = rproc->priv;
+@@ -885,8 +885,6 @@ static int stm32_rproc_remove(struct platform_device *pdev)
+ 		device_init_wakeup(dev, false);
+ 	}
  	rproc_free(rproc);
 -
 -	return 0;
  }
  
- static struct platform_driver st_rproc_driver = {
- 	.probe = st_rproc_probe,
--	.remove = st_rproc_remove,
-+	.remove_new = st_rproc_remove,
+ static int __maybe_unused stm32_rproc_suspend(struct device *dev)
+@@ -916,7 +914,7 @@ static SIMPLE_DEV_PM_OPS(stm32_rproc_pm_ops,
+ 
+ static struct platform_driver stm32_rproc_driver = {
+ 	.probe = stm32_rproc_probe,
+-	.remove = stm32_rproc_remove,
++	.remove_new = stm32_rproc_remove,
  	.driver = {
- 		.name = "st-rproc",
- 		.of_match_table = of_match_ptr(st_rproc_match),
+ 		.name = "stm32-rproc",
+ 		.pm = &stm32_rproc_pm_ops,
 -- 
 2.39.2
 
