@@ -2,116 +2,154 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EF4B6F6FF4
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  4 May 2023 18:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61C16F7456
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  4 May 2023 21:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjEDQev (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 4 May 2023 12:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
+        id S231354AbjEDTud (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 4 May 2023 15:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjEDQeq (ORCPT
+        with ESMTP id S231482AbjEDTuE (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 4 May 2023 12:34:46 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0527F3C2B
-        for <linux-remoteproc@vger.kernel.org>; Thu,  4 May 2023 09:34:37 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-94f3cd32799so141530366b.0
-        for <linux-remoteproc@vger.kernel.org>; Thu, 04 May 2023 09:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683218075; x=1685810075;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nszTvAg6fphYuzaPSYnd3w5WMHZrZJJaEUI5zTnvsx4=;
-        b=dhxD37R48wLSmMqoo+yOvb619nXn47MDnAlUoME6jFo/UJ4C+dA44spBJdEsQXo/BB
-         ZJATJlWpYr1F5QCJ6s4RbliW9MHK/oFSkY0nYFR4f0yiNMmYfywayOEQedzYAybRAfgf
-         l926ylMz4mrzTXBojvCkJGyiiK4Nt/Z5vnxxDPKwxpzhN8BnWyhI/3Z3fqL0sARvjGL3
-         nEqAjz6mwz7o5kO33wL8e4wrte01H86lLz7FmFbBcYDnJfOE+HEmf+MVoK+XrfQByDpC
-         YLwdqYNtyB4F+0X8T4psmNmW2EkRXtWJoHu47vmhJk6a1mzVnGPmJcViYA00Qi45MKpn
-         NCJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683218075; x=1685810075;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nszTvAg6fphYuzaPSYnd3w5WMHZrZJJaEUI5zTnvsx4=;
-        b=Bw6L/HYmiGkJb/SuPyuYVdVvI+K9BF9ZU44iID1aw+nqHYFqAEIftQrIDmW4LjzaVD
-         WPyFGVXex6XDgwTf5TyUTARVkt3fJ6IkID5QRscNikk3mFJzZ5UQ9UNgfJ192ZdGlOkF
-         s6IOdLhrSeT3zGDNItk6qo1Xv6ugW89x+x+8ytfTDCVig+G04k/WengYObxEfmP23BCK
-         ncPuHOsz2xfUJuEL7owYeFFh2OK/ALlMIBCxMlbtwGT+xC7UmJWNY/+7hXSwQ6CgMTiq
-         TSSsgctzCUK1bkobu1lqQe5TmWB3APHEULc4SZbwq84UTzztBsMdnj5G86GJ0WUXQ/v/
-         Upsg==
-X-Gm-Message-State: AC+VfDyhfrwEr7w2lSVUAe6ux8aH/RbDnNRuhOm+K+M3AvHzj3zuUrt0
-        uWbRyS9VZOKlGGrnQcoBCi27SQccAfWYBjFotiQ=
-X-Google-Smtp-Source: ACHHUZ7UTw09BUZkzS6zw6s3B83bTJ2iIzEWu8O3/gcd5QbYIqL3Pcttt0DLEfeqNgf6m6beVNV0ow==
-X-Received: by 2002:a17:907:a412:b0:961:be96:b0e0 with SMTP id sg18-20020a170907a41200b00961be96b0e0mr6847612ejc.73.1683218075231;
-        Thu, 04 May 2023 09:34:35 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:bdb9:99c4:33a5:6114? ([2a02:810d:15c0:828:bdb9:99c4:33a5:6114])
-        by smtp.gmail.com with ESMTPSA id n20-20020a1709065db400b00965b439027csm802967ejv.195.2023.05.04.09.34.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 May 2023 09:34:34 -0700 (PDT)
-Message-ID: <500e5abc-fb71-8468-a6b0-3ced2676b57c@linaro.org>
-Date:   Thu, 4 May 2023 18:34:32 +0200
+        Thu, 4 May 2023 15:50:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7578A1492F
+        for <linux-remoteproc@vger.kernel.org>; Thu,  4 May 2023 12:46:23 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1puet3-0007eG-9l; Thu, 04 May 2023 21:45:09 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1puet1-0018F4-3j; Thu, 04 May 2023 21:45:07 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1puet0-001JhD-03; Thu, 04 May 2023 21:45:06 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-remoteproc@vger.kernel.org, kernel@pengutronix.de,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: [PATCH 00/18] remoteproc: Convert to platform remove callback returning void
+Date:   Thu,  4 May 2023 21:44:35 +0200
+Message-Id: <20230504194453.1150368-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 04/18] soc: qcom: Add Qualcomm minidump kernel driver
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, corbet@lwn.net,
-        keescook@chromium.org, tony.luck@intel.com, gpiccoli@igalia.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        srinivas.kandagatla@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org
-References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
- <1683133352-10046-5-git-send-email-quic_mojha@quicinc.com>
- <c6f730b6-f702-91d4-4abd-71546e02f869@linaro.org>
- <23b493f4-1a01-8d03-fc12-d588b2c6fd74@quicinc.com>
- <575a422d-6224-06b7-628c-8487b47882e9@linaro.org>
-In-Reply-To: <575a422d-6224-06b7-628c-8487b47882e9@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3577; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=1MtyBZrEfa4B8pF3gNxwA18Zw/gtonyelyJbi+5OOFE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkVAm8mOKc9b0/danYJCdc61k/Zj773LlxBpbUo 6ju5XkgRdqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFQJvAAKCRCPgPtYfRL+ TiAxCAC1E8bg6I203hTsrJ3wz7jlhRBG+fWX/irJYFYhOed/WIzieyXyY+YZZGF/caBCQuNl/H2 EULhxcNYvCWrNjmBRI2piNO1ZuXOFto63zWyAhJTPQS/uggSvQbcfHNyOiYTw+E1WbsQfb/7M/0 EOM9LXiivD71kmmMXWccckezN3teMuquCvd1trbFddSRdCChxk18k0WQHX+OZeFnQkvAvVLiXSi XfaTFa/jEyblKAeusAq7t4qaGgHsVYZ5AwobaS9C6vwD4koSOeOH0MKmDL+JgToipyEaSNtlaAo VlUdExOqycUZ2WBDSRZ6kr8sK7G70uAtTEfaN/SN2UzfTwnZ
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-remoteproc@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 04/05/2023 17:21, Krzysztof Kozlowski wrote:
->>>
->>>> +	ret = qcom_minidump_init_apss_subsystem(md);
->>>> +	if (ret) {
->>>> +		dev_err(&pdev->dev, "apss minidump initialization failed: %d\n", ret);
->>>> +		goto unlock;
->>>> +	}
->>>> +
->>>> +	__md = md;
->>>
->>> No. This is a platform device, so it can have multiple instances.
->>
->> It can have only one instance that is created from SMEM driver probe.
-> 
-> Anyone can instantiate more of them.... how did you solve it?
+Hello,
 
-To clarify - sprinkling more of singletons makes everything tightly
-coupled, difficult to debug and non-portable. You cannot have two
-instances, you have to control concurrent initialization by yourself in
-each of such singletons.
+this patch series adapts most platform drivers below drivers/remoteproc
+to use the .remove_new() callback. Compared to the traditional .remove()
+callback .remove_new() returns no value. This is a good thing because
+the driver core doesn't (and cannot) cope for errors during remove. The
+only effect of a non-zero return value in .remove() is that the driver
+core emits a warning. The device is removed anyhow and an early return
+from .remove() usually yields a resource leak. One driver suffering from
+this problem (s3c2410) is fixed by the first patch.
 
-I understand sometimes they are unavoidable, for example when this does
-not map to hardware property. However here you have the parent - smem -
-which can return you valid instance. Thus you avoid entire problem of
-file-scope variables.
+By changing the remove callback to return void driver authors cannot
+reasonably (but wrongly) assume any more that there happens some kind of
+cleanup later.
 
-Best regards,
-Krzysztof
+There is one driver (i.e. ti_k3_dsp_remoteproc.c) that might return an
+error code in .remove(). I didn't look in detail into this driver, but
+if that error happens, we have exactly the bad situation described
+above. (Note that kproc->mem and the register mapping goes away.)
+
+Best regards
+Uwe
+
+Uwe Kleine-König (18):
+  remoteproc: da8xx: Convert to platform remove callback returning void
+  remoteproc: imx_dsp: Convert to platform remove callback returning
+    void
+  remoteproc: imx: Convert to platform remove callback returning void
+  remoteproc: keystone: Convert to platform remove callback returning
+    void
+  remoteproc: meson_mx_ao_arc: Convert to platform remove callback
+    returning void
+  remoteproc: mtk_scp: Convert to platform remove callback returning
+    void
+  remoteproc: omap: Convert to platform remove callback returning void
+  remoteproc: pru: Convert to platform remove callback returning void
+  remoteproc: qcom_q6v5_adsp: Convert to platform remove callback
+    returning void
+  remoteproc: qcom_q6v5_mss: Convert to platform remove callback
+    returning void
+  remoteproc: qcom_q6v5_pas: Convert to platform remove callback
+    returning void
+  remoteproc: qcom_q6v5_wcss: Convert to platform remove callback
+    returning void
+  remoteproc: qcom_wcnss: Convert to platform remove callback returning
+    void
+  remoteproc: rcar: Convert to platform remove callback returning void
+  remoteproc: virtio: Convert to platform remove callback returning void
+  remoteproc: st: Convert to platform remove callback returning void
+  remoteproc: stm32: Convert to platform remove callback returning void
+  remoteproc: wkup_m3: Convert to platform remove callback returning
+    void
+
+ drivers/remoteproc/da8xx_remoteproc.c    | 6 ++----
+ drivers/remoteproc/imx_dsp_rproc.c       | 6 ++----
+ drivers/remoteproc/imx_rproc.c           | 6 ++----
+ drivers/remoteproc/keystone_remoteproc.c | 6 ++----
+ drivers/remoteproc/meson_mx_ao_arc.c     | 6 ++----
+ drivers/remoteproc/mtk_scp.c             | 6 ++----
+ drivers/remoteproc/omap_remoteproc.c     | 6 ++----
+ drivers/remoteproc/pru_rproc.c           | 6 ++----
+ drivers/remoteproc/qcom_q6v5_adsp.c      | 6 ++----
+ drivers/remoteproc/qcom_q6v5_mss.c       | 6 ++----
+ drivers/remoteproc/qcom_q6v5_pas.c       | 6 ++----
+ drivers/remoteproc/qcom_q6v5_wcss.c      | 6 ++----
+ drivers/remoteproc/qcom_wcnss.c          | 6 ++----
+ drivers/remoteproc/rcar_rproc.c          | 6 ++----
+ drivers/remoteproc/remoteproc_virtio.c   | 6 ++----
+ drivers/remoteproc/st_remoteproc.c       | 6 ++----
+ drivers/remoteproc/stm32_rproc.c         | 6 ++----
+ drivers/remoteproc/wkup_m3_rproc.c       | 6 ++----
+ 18 files changed, 36 insertions(+), 72 deletions(-)
+
+
+base-commit: 1a5304fecee523060f26e2778d9d8e33c0562df3
+-- 
+2.39.2
 
