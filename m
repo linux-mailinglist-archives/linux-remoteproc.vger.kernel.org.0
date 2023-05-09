@@ -2,68 +2,60 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2616FCC70
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  9 May 2023 19:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B63D26FCD35
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  9 May 2023 20:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjEIRM2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 9 May 2023 13:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
+        id S229704AbjEISFy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 9 May 2023 14:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235248AbjEIRMM (ORCPT
+        with ESMTP id S234795AbjEISFw (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 9 May 2023 13:12:12 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3603930D5
-        for <linux-remoteproc@vger.kernel.org>; Tue,  9 May 2023 10:11:42 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349CIsXA020568;
-        Tue, 9 May 2023 19:11:20 +0200
+        Tue, 9 May 2023 14:05:52 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5071E49F8
+        for <linux-remoteproc@vger.kernel.org>; Tue,  9 May 2023 11:05:44 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 349GtqNJ019223;
+        Tue, 9 May 2023 19:08:31 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
+ mime-version : subject : to : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=selector1;
- bh=mn5jOxLh1H2LGQF8BkirJjrvG/rHRFFa5N/haTu7SCk=;
- b=w1GEJOugTU6MG/OSxcxzMhyVxUpsKNitOvKtS0QqiQsycyC9Ssr3FD1HyAidp6nGnBjN
- wVLKmYLS7oTOYIbXqsMwwAfeT/OK2hOdQ4BWSG/cWxaaMQFi1RKT3fMY/DljnhqgZsDW
- UowzfJ7pVeTbHDwgnwOdplKXWHIV+fKqg4+xvlmzf7+cRFE6XI3F6Zs7tunHrtbLGhRq
- JGSntJi2FDLMhoTwFdo0kq5Q2lJkUQzIci70Qw8a87XjMrWjSqJiYrO8eZEBZtiIcK5d
- gSB0QkWgHLUtk4NoWnnOfnUsvLAr8EntsH/VNB68fkSZFw23FU3RFVScOGiUJxU/FT7d 2Q== 
+ bh=2FIYxZ7KjQ1GWn+MIOnGaA6m9oVE7UHzsGo2/bEkyZs=;
+ b=k9j0JpX8ziwIoUwM1UfEEsGLKZd3VC/lDGy00giQwk+bprwJJQYT1sXM1Uo/AlO+vc1N
+ 4/8PJAWjPerHL3k+rXqElYePgyDyzCaJf9XLoOp6feZXfvZYjJMxqcOC0akc4HapdaMo
+ Ak7Ycohy8+7e3Jv+rFkHbLnQVhmJH/X2ycF+uutLYvFD7C6gY0N74gw2H2BCY2CRNdQE
+ HY8eMlnCP3uw4RqK9gcT2jPyrRCUHHvtrurBJ2f+xjiEisWcKt8i4toBRLHEVf5dRVIk
+ wkC7j9O+4tCG4t498ZNIC+0xbZeGcst8/mG62AeBA1JGQOFhjG6OuX1JP6RK80X2e5Uk RQ== 
 Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qf79heekw-1
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qf790phcn-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 May 2023 19:11:20 +0200
+        Tue, 09 May 2023 19:08:31 +0200
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0CA4010002A;
-        Tue,  9 May 2023 19:11:19 +0200 (CEST)
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3DBA110002A;
+        Tue,  9 May 2023 19:08:30 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 04BC7231506;
-        Tue,  9 May 2023 19:11:19 +0200 (CEST)
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 29C102309FE;
+        Tue,  9 May 2023 19:08:30 +0200 (CEST)
 Received: from [10.252.28.195] (10.252.28.195) by SHFDAG1NODE2.st.com
  (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 9 May
- 2023 19:11:17 +0200
-Message-ID: <e14f7bc4-6705-6be6-3393-69ea962ab6ac@foss.st.com>
-Date:   Tue, 9 May 2023 19:11:16 +0200
+ 2023 19:08:27 +0200
+Message-ID: <86dc39b0-61bf-5e83-e65d-1283fdf382b4@foss.st.com>
+Date:   Tue, 9 May 2023 19:08:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 17/18] remoteproc: stm32: Convert to platform remove
- callback returning void
+Subject: Re: remoteproc over PCIe
 Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <kernel@pengutronix.de>
-References: <20230504194453.1150368-1-u.kleine-koenig@pengutronix.de>
- <20230504194453.1150368-18-u.kleine-koenig@pengutronix.de>
+To:     Simon Maurer <mail@maurer.systems>,
+        <linux-remoteproc@vger.kernel.org>, Christoph Hellwig <hch@lst.de>
+References: <72ff39f1-b966-a089-0f3c-9216d8a38e77@maurer.systems>
 From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
 Organization: STMicroelectronics
-In-Reply-To: <20230504194453.1150368-18-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <72ff39f1-b966-a089-0f3c-9216d8a38e77@maurer.systems>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.252.28.195]
 X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE2.st.com
  (10.75.129.70)
@@ -80,59 +72,71 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Uwe,
+Hi Simon,
 
-On 5/4/23 21:44, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
-> 
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
+On 5/9/23 15:42, Simon Maurer wrote:
+> Hi,
+> I've got a "Zynq PCIe FMC Carrier Evaluation Board" with a x86 host. The Zynq
+> 7000 is an FPGA with 2x Cortex-A9, on which ZephyrOS with the OpenAMP framework
+> is running. The VirtIO ring and the buffer for the RPMSGs are located in the
+> nocache memory section of the ZephyrOS. The card DDR-RAM and the CPU control
+> registers are mapped into PCIe BARs. On the FPGA the "AXI Memory Mapped To PCI
+> Express" IP core is used, so the kernel has mmio access to the card DDR-RAM.
+> Besides the kernel module, I had to do a few modifications elsewhere in the
+> kernel. In remoteproc_virtio.c I implemented the get_shm_region function for the
+> rproc_virtio_config_ops. This gives access to the rpmsg buffer, that is already
+> mapped. 
 
-Reviewed-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
++ christopher Hellwig.
 
-Thanks,
+Nice proposal!
+
+I've also had the same approach in mind for a while, to remove the use of
+dma_declare_coherent_memory in remoteproc_virtio[1][2].
+But I haven't found the time to implement it yet.
+
+[1] https://lkml.org/lkml/2021/6/23/607
+[2]
+https://patchwork.kernel.org/project/linux-remoteproc/patch/AOKowLclCbOCKxyiJ71WeNyuAAj2q8EUtxrXbyky5E@cp7-web-042.plabs.ch/
+
+It would be nice to ensure same approach for the different virtio
+backend (remoteproc_virtio, virtio_mmio, ...) to be able to reuse the virtio
+drivers on top of.
+
+The virtio_mmio seems the reference...
+
+> In virtio_rpmsg_bus.c this function is used instead of allocating a new
+> region.
+
+The DT seems to me a valid place to define memory regions associated.
+It can be one for vrings and buffers, or one unique pool.
+One reason is that the main processor can have to specify the memory mapping
+and to specify associated access right.
+
+> This is just a proof of concept, but it seems to be working, ttyRPMSG is
+> created and I can send and receive messages.
+
+Great!
+
+> But what would be the clean way to do this? I'm thinking about implementing
+> dma_map_ops for the vdev, but maybe there is a better solution?
+
+Good question...I don't have the answer.
+I have implemented something different but not fully satisfied. For instance how
+to manage the remoteproc address (DA) and CPU address(PA) conversion for vring
+descriptor?
+
+You can have a look to the work I started, described in the cover letter[3]] with
+links to my github for the code source.
+I have only up-streamed the step 1 yet.
+We have some discussions in the OpenAMP project to reuse the virtio MMIO. So I
+put on hold waiting more clues.
+
+[3]https://www.spinics.net/lists/linux-remoteproc/msg13680.html
+
+Regards,
 Arnaud
 
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
->  drivers/remoteproc/stm32_rproc.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-> index 8746cbb1f168..19716ec82aae 100644
-> --- a/drivers/remoteproc/stm32_rproc.c
-> +++ b/drivers/remoteproc/stm32_rproc.c
-> @@ -867,7 +867,7 @@ static int stm32_rproc_probe(struct platform_device *pdev)
->  	return ret;
->  }
->  
-> -static int stm32_rproc_remove(struct platform_device *pdev)
-> +static void stm32_rproc_remove(struct platform_device *pdev)
->  {
->  	struct rproc *rproc = platform_get_drvdata(pdev);
->  	struct stm32_rproc *ddata = rproc->priv;
-> @@ -885,8 +885,6 @@ static int stm32_rproc_remove(struct platform_device *pdev)
->  		device_init_wakeup(dev, false);
->  	}
->  	rproc_free(rproc);
-> -
-> -	return 0;
->  }
->  
->  static int __maybe_unused stm32_rproc_suspend(struct device *dev)
-> @@ -916,7 +914,7 @@ static SIMPLE_DEV_PM_OPS(stm32_rproc_pm_ops,
->  
->  static struct platform_driver stm32_rproc_driver = {
->  	.probe = stm32_rproc_probe,
-> -	.remove = stm32_rproc_remove,
-> +	.remove_new = stm32_rproc_remove,
->  	.driver = {
->  		.name = "stm32-rproc",
->  		.pm = &stm32_rproc_pm_ops,
+> Best regards,
+> Simon
