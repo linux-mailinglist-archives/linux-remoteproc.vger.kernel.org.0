@@ -2,163 +2,137 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA836FD740
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 10 May 2023 08:38:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9496FDE3A
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 10 May 2023 15:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjEJGiV (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 10 May 2023 02:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
+        id S236415AbjEJNGa (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 10 May 2023 09:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236038AbjEJGiN (ORCPT
+        with ESMTP id S236355AbjEJNG2 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 10 May 2023 02:38:13 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA95C468B;
-        Tue,  9 May 2023 23:38:08 -0700 (PDT)
-X-UUID: 34fca714eefd11edb20a276fd37b9834-20230510
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=zITZHaBffEXHgQvakViptRVDM6YtdJ7FNpbDESp+DO4=;
-        b=RMy+qCiWsl3rXwmUylt4gMfvkzBz+VaXyQNYgXWSPBOmr6CzS7QTZRJhru9PiyhcgRMq7veYubKgzxuCAaiFeW+6wjuiS0eXkC1x87iea97rpT7ps4P3sGqPbRkQkvYdDJRyZlUTMmdkGh8FL5wgnBydRigCQsxWgcMLjhbSV7c=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.24,REQID:55a57a01-568d-49c8-88df-18e1f754f9eb,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.24,REQID:55a57a01-568d-49c8-88df-18e1f754f9eb,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:178d4d4,CLOUDID:41d0556b-2f20-4998-991c-3b78627e4938,B
-        ulkID:2305101438029ZZL3W1M,BulkQuantity:0,Recheck:0,SF:17|19|48|38|29|28,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 34fca714eefd11edb20a276fd37b9834-20230510
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <tinghan.shen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 487062167; Wed, 10 May 2023 14:38:00 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.194) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 10 May 2023 14:37:58 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 10 May 2023 14:37:58 +0800
-From:   Tinghan Shen <tinghan.shen@mediatek.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>
-CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v11 11/11] arm64: dts: mediatek: mt8195: Add SCP 2nd core
-Date:   Wed, 10 May 2023 14:37:49 +0800
-Message-ID: <20230510063749.5127-12-tinghan.shen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230510063749.5127-1-tinghan.shen@mediatek.com>
-References: <20230510063749.5127-1-tinghan.shen@mediatek.com>
+        Wed, 10 May 2023 09:06:28 -0400
+X-Greylist: delayed 84237 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 May 2023 06:06:27 PDT
+Received: from mail.maurer.systems (mail.maurer.systems [91.250.87.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C696E4C
+        for <linux-remoteproc@vger.kernel.org>; Wed, 10 May 2023 06:06:27 -0700 (PDT)
+Received: from [192.168.253.174] (mob-194-230-158-211.cgn.sunrise.net [194.230.158.211])
+        by mail.maurer.systems (Postfix) with ESMTPSA id B32222399DCE
+        for <linux-remoteproc@vger.kernel.org>; Wed, 10 May 2023 15:06:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=maurer.systems;
+        s=mail; t=1683723983;
+        bh=ijj0MWZLzsHdXxXUrUasOSVU2jtOIEfKY/31VarqLo4=;
+        h=Date:Subject:References:To:From:In-Reply-To:From;
+        b=XB1jlPOT4bTNmlIyEkyJ9d1iA2SWYSi6ATYDqYVEIUOsdOjd31X825Y8J2YyxN2Ft
+         +1XQA8LqN4dMT/fjl28NBtyxPSZCM89LiBc+PQ1qsNGKTry7qXY0RxZdYdHK94+J1+
+         UaONTRWXcSjjnUGnSmwy4atUyBJNc5d3Ckr8Oqug=
+Message-ID: <8a49666b-4509-1210-f8d5-fffd0a4cf855@maurer.systems>
+Date:   Wed, 10 May 2023 15:06:23 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: remoteproc over PCIe
+Content-Language: en-US
+References: <72ff39f1-b966-a089-0f3c-9216d8a38e77@maurer.systems>
+ <86dc39b0-61bf-5e83-e65d-1283fdf382b4@foss.st.com>
+To:     linux-remoteproc@vger.kernel.org
+From:   Simon Maurer <mail@maurer.systems>
+In-Reply-To: <86dc39b0-61bf-5e83-e65d-1283fdf382b4@foss.st.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Rewrite the MT8195 SCP device node as a cluster and
-add the SCP 2nd core in it.
+Hi Arnaud,
 
-Since the SCP device node is changed to multi-core structure,
-enable SCP cluster to enable probing SCP core 0.
+Thank you for your response.
 
-Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../boot/dts/mediatek/mt8195-cherry.dtsi      |  6 +++-
- arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 32 ++++++++++++++-----
- 2 files changed, 29 insertions(+), 9 deletions(-)
+On 5/9/23 19:08, Arnaud POULIQUEN wrote:
+> Hi Simon,
+> 
+> On 5/9/23 15:42, Simon Maurer wrote:
+>> Hi,
+>> I've got a "Zynq PCIe FMC Carrier Evaluation Board" with a x86 host. The Zynq
+>> 7000 is an FPGA with 2x Cortex-A9, on which ZephyrOS with the OpenAMP framework
+>> is running. The VirtIO ring and the buffer for the RPMSGs are located in the
+>> nocache memory section of the ZephyrOS. The card DDR-RAM and the CPU control
+>> registers are mapped into PCIe BARs. On the FPGA the "AXI Memory Mapped To PCI
+>> Express" IP core is used, so the kernel has mmio access to the card DDR-RAM.
+>> Besides the kernel module, I had to do a few modifications elsewhere in the
+>> kernel. In remoteproc_virtio.c I implemented the get_shm_region function for the
+>> rproc_virtio_config_ops. This gives access to the rpmsg buffer, that is already
+>> mapped.
+> 
+> + christopher Hellwig.
+> 
+> Nice proposal!
+> 
+> I've also had the same approach in mind for a while, to remove the use of
+> dma_declare_coherent_memory in remoteproc_virtio[1][2].
+> But I haven't found the time to implement it yet.
+> 
+> [1] https://lkml.org/lkml/2021/6/23/607
+> [2]
+> https://patchwork.kernel.org/project/linux-remoteproc/patch/AOKowLclCbOCKxyiJ71WeNyuAAj2q8EUtxrXbyky5E@cp7-web-042.plabs.ch/
+> 
+> It would be nice to ensure same approach for the different virtio
+> backend (remoteproc_virtio, virtio_mmio, ...) to be able to reuse the virtio
+> drivers on top of.
+> 
+> The virtio_mmio seems the reference...
+> 
+>> In virtio_rpmsg_bus.c this function is used instead of allocating a new
+>> region.
+> 
+> The DT seems to me a valid place to define memory regions associated.
+> It can be one for vrings and buffers, or one unique pool.
+> One reason is that the main processor can have to specify the memory mapping
+> and to specify associated access right.
+> 
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-index 8ac80a136c37..8addb94a24a1 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195-cherry.dtsi
-@@ -962,7 +962,11 @@
- 	interrupts-extended = <&pio 222 IRQ_TYPE_LEVEL_HIGH>;
- };
- 
--&scp {
-+&scp_cluster {
-+	status = "okay";
-+};
-+
-+&scp_c0 {
- 	status = "okay";
- 
- 	firmware-name = "mediatek/mt8195/scp.img";
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index a44aae4ab953..10947b4b4707 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -916,14 +916,30 @@
- 			clocks = <&infracfg_ao CLK_INFRA_AO_GCE2>;
- 		};
- 
--		scp: scp@10500000 {
--			compatible = "mediatek,mt8195-scp";
--			reg = <0 0x10500000 0 0x100000>,
--			      <0 0x10720000 0 0xe0000>,
--			      <0 0x10700000 0 0x8000>;
--			reg-names = "sram", "cfg", "l1tcm";
--			interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-+		scp_cluster: scp@10500000 {
-+			compatible = "mediatek,mt8195-scp-dual";
-+			reg = <0 0x10720000 0 0xe0000>, <0 0x10700000 0 0x8000>;
-+			reg-names = "cfg", "l1tcm";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0 0 0x10500000 0x100000>;
- 			status = "disabled";
-+
-+			scp_c0: scp@0 {
-+				compatible = "mediatek,scp-core";
-+				reg = <0x0 0xa0000>;
-+				reg-names = "sram";
-+				interrupts = <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH 0>;
-+				status = "disabled";
-+			};
-+
-+			scp_c1: scp@a0000 {
-+				compatible = "mediatek,scp-core";
-+				reg = <0xa0000 0x20000>;
-+				reg-names = "sram";
-+				interrupts = <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH 0>;
-+				status = "disabled";
-+			};
- 		};
- 
- 		scp_adsp: clock-controller@10720000 {
-@@ -2464,7 +2480,7 @@
- 				 <&iommu_vdo M4U_PORT_L19_VENC_REF_LUMA>,
- 				 <&iommu_vdo M4U_PORT_L19_VENC_REF_CHROMA>;
- 			interrupts = <GIC_SPI 341 IRQ_TYPE_LEVEL_HIGH 0>;
--			mediatek,scp = <&scp>;
-+			mediatek,scp = <&scp_c0>;
- 			clocks = <&vencsys CLK_VENC_VENC>;
- 			clock-names = "venc_sel";
- 			assigned-clocks = <&topckgen CLK_TOP_VENC>;
--- 
-2.18.0
+I created a section in the linker script for ZephyrOS that is reserved 
+for the host. The kernel module parses the ELF file and creates the 
+vrings and the buffers in it. There is no device tree on my x86 host, 
+there is just BIOS and ACPI magic.
 
+>> This is just a proof of concept, but it seems to be working, ttyRPMSG is
+>> created and I can send and receive messages.
+> 
+> Great!
+> 
+>> But what would be the clean way to do this? I'm thinking about implementing
+>> dma_map_ops for the vdev, but maybe there is a better solution?
+> 
+> Good question...I don't have the answer.
+> I have implemented something different but not fully satisfied. For instance how
+> to manage the remoteproc address (DA) and CPU address(PA) conversion for vring
+> descriptor?
+> 
+I forgot to mention this, the PA address (host) of the shared memory is 
+written to a variable in the shared memory, so ZephyrOS/OpenAMP can 
+translate back the buffer addresses to DA. But this is a hack I would 
+really like to get rid of. This would be the reason for the dma_map_ops 
+implementation, so the driver on the host has full control what 
+addresses the vring writes into the descriptors.
+
+> You can have a look to the work I started, described in the cover letter[3]] with
+> links to my github for the code source.
+> I have only up-streamed the step 1 yet.
+> We have some discussions in the OpenAMP project to reuse the virtio MMIO. So I
+> put on hold waiting more clues.
+> 
+> [3]https://www.spinics.net/lists/linux-remoteproc/msg13680.html
+> 
+>
+
+Thanks, I will take a look at it.
+
+Best Regards
+Simon
