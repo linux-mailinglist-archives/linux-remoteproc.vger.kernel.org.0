@@ -2,182 +2,157 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1893C6FCF19
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  9 May 2023 22:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD4D6FD72A
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 10 May 2023 08:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjEIUJX (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 9 May 2023 16:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S236026AbjEJGiM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 10 May 2023 02:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjEIUJW (ORCPT
+        with ESMTP id S229661AbjEJGiK (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 9 May 2023 16:09:22 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61A351B9
-        for <linux-remoteproc@vger.kernel.org>; Tue,  9 May 2023 13:09:21 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-643aad3bc41so5237722b3a.0
-        for <linux-remoteproc@vger.kernel.org>; Tue, 09 May 2023 13:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683662961; x=1686254961;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=k+FKrsLIVkKYcsIeLT6acEHQnxxZ6Q1AY/ul3RhcaDc=;
-        b=t7HcuJJ8yNGZSd5jU/xlsEmIR0LbZB3y+UKrWSXF1bjCnP1H/mulK2qxWbB9om6c5e
-         EPoNhS+2F2SY6TDpNh93OfYIaBuWtDyA0WUhhijzdrOdZ209vJFBMBDEstCsarasou+9
-         +aaguV9fWmvqneuHb9CoJTE/qx66MsyzXT+Vxlf3Z99RhkANcfNe43TH2ZxXjLdx2+BS
-         HuT1Mt+LUKLIi9eC3VKE3enmhVi2+4/fEeTRQlISUfpnrQX7AiRV2EtLIcQYI0O8DYbA
-         SgRhafl44CnHhh1/jjt5W5eRfmOo6Y3wvHoZfrVQ9hLa4M2QjasbOPOES3SF4ouZL3OB
-         lEsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683662961; x=1686254961;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k+FKrsLIVkKYcsIeLT6acEHQnxxZ6Q1AY/ul3RhcaDc=;
-        b=ktA6lhGGqPrTK4mGTvbNfYyheZLScbGqubPRVPkhvUFx64R5ZC5D7LfjwDwv8cqI5O
-         2+KqF1kKT0IGp2rXtGNis3hgbUXJz7ReXq/vRhwYvTUew4HwJU/dyy7RDE/yaWwEyfwp
-         tIp24CmOpsfkTwsKMTYjEvGHqzgzbzi4D5wUlE1bpt3sfYHfT6IVNkXEU+gWi+NS5H/P
-         5ukJJRdQAM4QQuhRP26Rh34FBcpU7W+RjWdVlnECM5gSyzWviMHk53jEYS9miTIlxRKb
-         fvoVSc0p0ojr77ShMn9HKFNi9wA0whYS0HD8Jwj8Q7Dfyfl6+w/uI5THTppZTMNl+8zk
-         bP/Q==
-X-Gm-Message-State: AC+VfDzALCQeIGaNbPG+G/6yH8su8VF+RVnPUzhRSx27RcktqrPzvUl7
-        i4Y/N4LmZGkER9t2Q39ArBbWKQ==
-X-Google-Smtp-Source: ACHHUZ7DY1IJhZ58XkyYQJW/n6N11Hq8FL8JnuzhTJRQRu0mHe/ZFZZkYof5BJbwpbwYX39JmI5wDQ==
-X-Received: by 2002:a05:6a21:6317:b0:f3:3810:8a89 with SMTP id wu23-20020a056a21631700b000f338108a89mr16127445pzb.51.1683662960788;
-        Tue, 09 May 2023 13:09:20 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:5e48:ff40:3eaf:3f9e])
-        by smtp.gmail.com with ESMTPSA id a9-20020a63e409000000b0050376cedb3asm1756976pgi.24.2023.05.09.13.09.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 13:09:20 -0700 (PDT)
-Date:   Tue, 9 May 2023 14:09:17 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
+        Wed, 10 May 2023 02:38:10 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C643A93;
+        Tue,  9 May 2023 23:38:03 -0700 (PDT)
+X-UUID: 33f534e4eefd11ed9cb5633481061a41-20230510
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=TtDmYan93l7lTSLnfIrWMEofnCJ1AFEHHfuJq1PcxZQ=;
+        b=puILrc4Tfo02YNYm7AqHMrI41ocX/wR54Kbj5En8gx999hbhnONbx/Hvh3BluWBJNEeQqd7LP+SbVIaHQfub38jdFQoNM5BoyHbQYh4fEcDpDI1A2Eg7PsQGGezx7wHqgbQLS26thfYgPCaSJkE0t2vhD5Jvq/nz9reKO3U85qI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.24,REQID:98141f3e-8e76-4524-b0d4-2f15c17de935,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:100
+X-CID-INFO: VERSION:1.1.24,REQID:98141f3e-8e76-4524-b0d4-2f15c17de935,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:100
+X-CID-META: VersionHash:178d4d4,CLOUDID:4ad9b03a-de1e-4348-bc35-c96f92f1dcbb,B
+        ulkID:2305101437597MA4QOLZ,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
+        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 33f534e4eefd11ed9cb5633481061a41-20230510
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1624071030; Wed, 10 May 2023 14:37:58 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.194) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 10 May 2023 14:37:57 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 10 May 2023 14:37:57 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-remoteproc@vger.kernel.org, kernel@pengutronix.de,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH 00/18] remoteproc: Convert to platform remove callback
- returning void
-Message-ID: <ZFqobZAfdlu+Rdtt@p14s>
-References: <20230504194453.1150368-1-u.kleine-koenig@pengutronix.de>
+        Tinghan Shen <tinghan.shen@mediatek.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v11 00/11] Add support for MT8195 SCP 2nd core
+Date:   Wed, 10 May 2023 14:37:38 +0800
+Message-ID: <20230510063749.5127-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230504194453.1150368-1-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu, May 04, 2023 at 09:44:35PM +0200, Uwe Kleine-König wrote:
-> Hello,
-> 
-> this patch series adapts most platform drivers below drivers/remoteproc
-> to use the .remove_new() callback. Compared to the traditional .remove()
-> callback .remove_new() returns no value. This is a good thing because
-> the driver core doesn't (and cannot) cope for errors during remove. The
-> only effect of a non-zero return value in .remove() is that the driver
-> core emits a warning. The device is removed anyhow and an early return
-> from .remove() usually yields a resource leak. One driver suffering from
-> this problem (s3c2410) is fixed by the first patch.
-> 
-> By changing the remove callback to return void driver authors cannot
-> reasonably (but wrongly) assume any more that there happens some kind of
-> cleanup later.
-> 
-> There is one driver (i.e. ti_k3_dsp_remoteproc.c) that might return an
-> error code in .remove(). I didn't look in detail into this driver, but
-> if that error happens, we have exactly the bad situation described
-> above. (Note that kproc->mem and the register mapping goes away.)
-> 
-> Best regards
-> Uwe
-> 
-> Uwe Kleine-König (18):
->   remoteproc: da8xx: Convert to platform remove callback returning void
->   remoteproc: imx_dsp: Convert to platform remove callback returning
->     void
->   remoteproc: imx: Convert to platform remove callback returning void
->   remoteproc: keystone: Convert to platform remove callback returning
->     void
->   remoteproc: meson_mx_ao_arc: Convert to platform remove callback
->     returning void
->   remoteproc: mtk_scp: Convert to platform remove callback returning
->     void
->   remoteproc: omap: Convert to platform remove callback returning void
->   remoteproc: pru: Convert to platform remove callback returning void
->   remoteproc: qcom_q6v5_adsp: Convert to platform remove callback
->     returning void
->   remoteproc: qcom_q6v5_mss: Convert to platform remove callback
->     returning void
->   remoteproc: qcom_q6v5_pas: Convert to platform remove callback
->     returning void
->   remoteproc: qcom_q6v5_wcss: Convert to platform remove callback
->     returning void
->   remoteproc: qcom_wcnss: Convert to platform remove callback returning
->     void
->   remoteproc: rcar: Convert to platform remove callback returning void
->   remoteproc: virtio: Convert to platform remove callback returning void
->   remoteproc: st: Convert to platform remove callback returning void
->   remoteproc: stm32: Convert to platform remove callback returning void
->   remoteproc: wkup_m3: Convert to platform remove callback returning
->     void
-> 
->  drivers/remoteproc/da8xx_remoteproc.c    | 6 ++----
->  drivers/remoteproc/imx_dsp_rproc.c       | 6 ++----
->  drivers/remoteproc/imx_rproc.c           | 6 ++----
->  drivers/remoteproc/keystone_remoteproc.c | 6 ++----
->  drivers/remoteproc/meson_mx_ao_arc.c     | 6 ++----
->  drivers/remoteproc/mtk_scp.c             | 6 ++----
->  drivers/remoteproc/omap_remoteproc.c     | 6 ++----
->  drivers/remoteproc/pru_rproc.c           | 6 ++----
->  drivers/remoteproc/qcom_q6v5_adsp.c      | 6 ++----
->  drivers/remoteproc/qcom_q6v5_mss.c       | 6 ++----
->  drivers/remoteproc/qcom_q6v5_pas.c       | 6 ++----
->  drivers/remoteproc/qcom_q6v5_wcss.c      | 6 ++----
->  drivers/remoteproc/qcom_wcnss.c          | 6 ++----
->  drivers/remoteproc/rcar_rproc.c          | 6 ++----
->  drivers/remoteproc/remoteproc_virtio.c   | 6 ++----
->  drivers/remoteproc/st_remoteproc.c       | 6 ++----
->  drivers/remoteproc/stm32_rproc.c         | 6 ++----
->  drivers/remoteproc/wkup_m3_rproc.c       | 6 ++----
->  18 files changed, 36 insertions(+), 72 deletions(-)
->
+The mediatek remoteproc driver currently only allows bringing up a 
+single core SCP, e.g. MT8183. It also only bringing up the 1st 
+core in SoCs with a dual-core SCP, e.g. MT8195. This series support 
+to bring-up the 2nd core of the dual-core SCP.
 
-I have applied this set.
+v10 -> v11:
+1. rewrite patchset 5 to probe single-core SCP with the cluster list
+2. Also in patchset 5, move the pointer of mtk_scp object from the
+   platform data property to the driver data property 
+3. move the appearance of mtk_scp cluster property to patcheset 7
 
-Thanks,
-Mathieu
+v9 -> v10:
+1. move the global mtk_scp list into the platform device driver data structure
+2. remove an unnecessary if() condition
 
-> 
-> base-commit: 1a5304fecee523060f26e2778d9d8e33c0562df3
-> -- 
-> 2.39.2
-> 
+v8 -> v9:
+1. initialize l1tcm_size/l1tcm_phys at patchset 05/11 
+2. rewrite patchset 06/11 to unify the flow and remove hacks
+
+v7 -> v8:
+1. update the node name of mt8192 asurada SCP rpmsg subnode
+2. squash register definitions into driver patches
+3. initialize local variables on the declaration at patch v8 06/11 
+
+v6 -> v7:
+1. merge the mtk_scp_cluster struct into the mtk_scp structure
+   at the "Probe multi-core SCP" patch
+
+v5 -> v6:
+1. move the mtk_scp_of_regs structure from mtk_common.h to mtk_scp.c
+2. rename the SCP core 0 label from 'scp' to 'scp_c0'
+
+v4 -> v5:
+1. move resource release actions to the platform driver remove operation 
+2. fix dual-core watchdog handling
+
+v3 -> v4:
+1. change the representation of dual-core SCP in dts file and update SCP yaml
+2. rewrite SCP driver to reflect the change of dts node
+3. drop 'remove redundant call of rproc_boot for SCP' in v3 for further investigation
+
+v2 -> v3:
+1. change the representation of dual-core SCP in dts file and update SCP yaml
+2. rewrite SCP driver to reflect the change of dts node
+3. add SCP core 1 node to mt8195.dtsi
+4. remove redundant call of rproc_boot for SCP
+5. refine IPI error message
+
+v1 -> v2:
+1. update dt-binding property description
+2. remove kconfig for scp dual driver
+3. merge mtk_scp_dual.c and mtk_scp_subdev.c to mtk_scp.c
+
+
+Tinghan Shen (11):
+  dt-bindings: remoteproc: mediatek: Improve the rpmsg subnode
+    definition
+  arm64: dts: mediatek: Update the node name of SCP rpmsg subnode
+  dt-bindings: remoteproc: mediatek: Support MT8195 dual-core SCP
+  remoteproc: mediatek: Add MT8195 SCP core 1 operations
+  remoteproc: mediatek: Introduce cluster on single-core SCP
+  remoteproc: mediatek: Probe multi-core SCP
+  remoteproc: mediatek: Control SCP core 1 by rproc subdevice
+  remoteproc: mediatek: Setup MT8195 SCP core 1 SRAM offset
+  remoteproc: mediatek: Handle MT8195 SCP core 1 watchdog timeout
+  remoteproc: mediatek: Refine ipi handler error message
+  arm64: dts: mediatek: mt8195: Add SCP 2nd core
+
+ .../bindings/remoteproc/mtk,scp.yaml          | 176 +++++++-
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   2 +-
+ .../boot/dts/mediatek/mt8192-asurada.dtsi     |   2 +-
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      |   6 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  32 +-
+ drivers/remoteproc/mtk_common.h               |  32 ++
+ drivers/remoteproc/mtk_scp.c                  | 420 ++++++++++++++++--
+ 7 files changed, 595 insertions(+), 75 deletions(-)
+
+-- 
+2.18.0
+
