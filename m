@@ -2,174 +2,172 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0198727247
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  8 Jun 2023 00:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B42B6727840
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  8 Jun 2023 09:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233227AbjFGWze (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Wed, 7 Jun 2023 18:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S235304AbjFHHLS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 8 Jun 2023 03:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjFGWzZ (ORCPT
+        with ESMTP id S233900AbjFHHLR (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Wed, 7 Jun 2023 18:55:25 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E79268E
-        for <linux-remoteproc@vger.kernel.org>; Wed,  7 Jun 2023 15:55:13 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-977c88c9021so498266b.3
-        for <linux-remoteproc@vger.kernel.org>; Wed, 07 Jun 2023 15:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686178513; x=1688770513;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=h4j71OFNDV5FfvldtjCh/L+Qg71oYHcBnHuDB5srtk996zsBHlbD8SaqVv65TPPNSR
-         D55ZWk68qXdEmt+kIdXRugiaujZb/weZnFCTHcuZcbiNqcbtWT0X7OlskYnP/y/1JDzr
-         WbOZ68AcZfM/aHW4up57fkOGafclaBar/hLOCFBtTjAlCxKYQtVTvq0W4SECGmO4CUql
-         dig397pPxdZX0OTvC2J8JrOzuSqogeJM29duG5G1BgaFsW6donzZWRU1Jz4x6qDKSWR9
-         w6/41Hy1gwVz7zf6M5uQKiqeQS7jHj9sppdk3jRa//N+UQ6Qg+lxAaHE7mp4Zy+a5Adc
-         Kv2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686178513; x=1688770513;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lwmqmz3SLTAm/5XHn54kA2Qkz1KiGdBlOiEDAaxIk1A=;
-        b=eXzNeRegtB6tUvYQ/vNbaSFtip9Qq6COqdBZnSGuX14QFV2RP/t/fQoi0hDAtlppfJ
-         tr8ehTz5PF468m3BY5vXCIq4m01bg4cu3mWU+K26FrfkBoCU3KCE8vSnteaduvx8lDkH
-         SDVSt/+bHj/SY4wXtaTwEWMn8yjXOeWDUtyo5q7m4BSAnvUePjgvFRUIIekrBCeIK6an
-         bzmhsDcesYI1+4BWc/mcy7UW1D3NFApdz4yeVEatFhyhKPUMp4LDsh9nyPa8ThRcQxpY
-         iID5GdHkfJKKiAhXljG4d8vndcOp8dbOrgg06UNitn+Kom6GSW3+UbVWpxsEf5CFDqRl
-         iVaA==
-X-Gm-Message-State: AC+VfDxOGyTwrDFUkmvKJDyvNHcZ7NCoPqEWGPgZeAlDx95YAW69xBXc
-        haBlPJMLhhP3GAb8Mb1aQNOYRM7+O6j1cpm3JHKnKK/nzIoJyQ==
-X-Google-Smtp-Source: ACHHUZ5q9v5E8VuN7LGrTh1boUYVANIIUnJnBwlK4YNL8XVT+z7GalrAexguq0b795Op+2qoCUEoHnMN8sFXq0M0ebg=
-X-Received: by 2002:a17:907:8a15:b0:96f:d154:54f7 with SMTP id
- sc21-20020a1709078a1500b0096fd15454f7mr7113590ejc.42.1686178492570; Wed, 07
- Jun 2023 15:54:52 -0700 (PDT)
+        Thu, 8 Jun 2023 03:11:17 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31E41FDA;
+        Thu,  8 Jun 2023 00:11:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686208271; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=EyXGzWk5qOg4GSCIAy3lW2UQjI1xBH2mtBGSiS4lAzSs70HXRrgkzrOFuoIki3D83d
+    YDiuh0FKR2xi8o6wGSFKiRGJUOsnDAuPapmnB/Vc2hqOTMOo0cyUEMJceQZYS5vNaghk
+    h9Gh6MDkEH6vOJLlMlrriJbRcrNR1yI1OjVOhq2TsfCrsZOAuNFydsJcxqgAQozLdmuY
+    AYtlaCGXeAnpYg9qxYTJqIRb/7vb7olEiEgaONeXhfCxvDujh4eRqsTQa1WpPODoZukP
+    XtpK2YNe8ClKjoqXEDUnU89pdqDfQc9HcRAGezrOnrE2eEX7kHVK8H2CVRPJrA/4pWpm
+    oFuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686208271;
+    s=strato-dkim-0002; d=strato.com;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=e94V8Kezz3qtY3xLT9x24/ZhCtGOkVTLukjovOp8Io0=;
+    b=ODlssyIGnyL66sBAo+w/jXpRmaHUtTrPofEfinPuvGX8T2jlAhXOiRG89gAv59D9At
+    F6RWqNNNdkld7jIJIVgXqhKeBGN4+7KljMcU/aVv41l8+Wv7QFBFeYv4he4hDSjZpRO5
+    tr9unK0eIzISlHaCyTrw6nnTefDb9hHoc4iLNeuwo6UcqABkEmASMmKJglb54keWytmJ
+    +m4tH/WervtCk55XT2PlZCFILogmY/mjM345Vgsos+TVZ1hWQgM1gyCwEkPG7BODlvk2
+    rxlV5LJjDRZ5QY7a3hGiHXIoui/wL/1mW4Awee69vKK+ndVod4ft+xuo3DGKtlfvSTef
+    QtKg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686208271;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=e94V8Kezz3qtY3xLT9x24/ZhCtGOkVTLukjovOp8Io0=;
+    b=o9PYSaDyoBym2xOkZGzTgE5tTfSTI0LWSonNqs8FenqHEjukJPato+qEE/D8FHdcOQ
+    vtGPl2R1kMob6gwsEI9evgnCCJjsTOFUkzYgSg/M8bEeWsFl9CGgroi/qxPJHPiz1Pwx
+    PcnZrBMU17zwL/fe/k8ZksCH9bU5QA/U8xFoNDEIOit6i31Joz2lLqgDJ6LtP4mBLnwp
+    tMfL50LCDcPFWiMl+Dny0nDFLmN+bHQpnqc0XhnejVPwXUqUyqNDuQc3OjWMMUdRFx11
+    f+h1CZ8wzF+DjC2gmIqXFpX03wttEOcMWlarP0LXdqdePxDwuxZIVOqS69in/tYEuaHd
+    UjRw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686208271;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=e94V8Kezz3qtY3xLT9x24/ZhCtGOkVTLukjovOp8Io0=;
+    b=h3+wXnICtH32yfWZObSS2Lj1ds/ix142rEBxSZwxwrVU0kTqtoPhzVeX+AUJBiT/DH
+    qLCL9glieObTZivubxDA==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4ly9TY="
+Received: from [192.168.244.3]
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z587BBKHt
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 8 Jun 2023 09:11:11 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
+Subject: [PATCH v2 00/12] Add dedicated device tree node for RPM
+ processor/subsystem
+Date:   Thu, 08 Jun 2023 09:10:20 +0200
+Message-Id: <20230531-rpm-rproc-v2-0-56a4a00c8260@gerhold.net>
 MIME-Version: 1.0
-Received: by 2002:a54:2409:0:b0:217:72a9:f646 with HTTP; Wed, 7 Jun 2023
- 15:54:52 -0700 (PDT)
-Reply-To: unitednationcompensationcoordinatortreasury@hotmail.com
-From:   "UNITED NATION DEPUTY SECRETARY-GENERAL (U.N)" 
-        <successikolo@gmail.com>
-Date:   Wed, 7 Jun 2023 15:54:52 -0700
-Message-ID: <CADFNGJ8vkgORi1jPvvhP+FQnPCNqs4cr588+_a-ywDXpqf+qKA@mail.gmail.com>
-Subject: CONTACT DHL OFFICE IMMEDIATELY FOR YOUR ATM MASTER CARD 1.5 MILLION,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.6 required=5.0 tests=ADVANCE_FEE_3_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FORM_FRAUD_5,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        LOTS_OF_MONEY,MONEY_FORM,MONEY_FRAUD_5,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_LOAN,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM,UNDISC_MONEY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:633 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [successikolo[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
-        *  0.0 MONEY_FORM Lots of money if you fill out a form
-        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 ADVANCE_FEE_3_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  0.2 MONEY_FRAUD_5 Lots of money and many fraud phrases
-        *  0.0 FORM_FRAUD_5 Fill a form and many fraud phrases
-X-Spam-Level: ******
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANx+gWQC/22NTQ6CMBCFr0JmbU1LAdGV9zAsSjvQJtiSKRIN4
+ e6OrF28xffyfjbISAEz3IoNCNeQQ4oM5akA600cUQTHDKUstay1EjQ/WZSsuNStbqpWX61zwPn
+ eZBQ9mWg9N+JrmticCYfwPg4eHbMPeUn0Of5W9XP/Ta9KSIHS6L5xqAZV3UcknyZ3jrhAt+/7F
+ ylWJ+q5AAAA
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-UNITED NATION DEPUTY SECRETARY-GENERAL.
+The Resource Power Manager (RPM) currently does not have a dedicated 
+device tree node that represents the remoteproc/subsystem. The 
+functionality exposed through the SMD/GLINK channels is described in 
+top-level nodes of the device tree. This makes it hard to group other 
+functionality provided by the RPM together in the device tree. This 
+series adds a single top-level remoteproc-rpm/rpm-proc device tree node 
+that groups all RPM functionality together.
 
-This is to official inform you that we have been having meetings for
-the past three (3) weeks which ended two days ago with MR. JIM YONG
-KIM the world bank president and other seven continent presidents on
-the congress we treated on solution to scam victim problems.
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+---
+Changes in v2:
+- Pick up review/test tags from Konrad and Krzysztof
+- Rename "remoteproc-rpm" -> "remoteproc" everywhere (Krzysztof/Konrad)
+- "dt-bindings: remoteproc: Add Qualcomm RPM processor/subsystem"
+  - Squash with other dt-bindings changes to have atomic refactoring (Krzysztof)
+  - Add diagrams from discussion as clarification
+- "soc: qcom: smem: Add qcom_smem_is_available()"
+  - Add return documentation in qcom_smem_is_available() (Konrad)
+- "soc: qcom: Add RPM processor/subsystem driver"
+  - Add missing of_node_put(), fix children (Konrad)
+  - Add depends on RPMSG_QCOM_SMD || RPMSG_QCOM_SMD=n to fix build 
+    error in weird kernel configurations (kernel test robot)
+- Link to v1: https://lore.kernel.org/r/20230531-rpm-rproc-v1-0-e0a3b6de1f14@gerhold.net
 
- Note: we have decided to contact you following the reports we
-received from anti-fraud international monitoring group your
-name/email has been submitted to us therefore the united nations have
-agreed to compensate you with the sum of (USD$ 1.5 Million) this
-compensation is also including international business that failed you
-in the past due to government problems etc.
+---
+Stephan Gerhold (12):
+      dt-bindings soc: qcom: smd-rpm: Fix sort order
+      dt-bindings: soc: qcom: smd-rpm: Add MSM8909 to qcom,smd-channels
+      dt-bindings: soc: qcom: smd-rpm: Add some more compatibles
+      soc: qcom: smd-rpm: Match rpmsg channel instead of compatible
+      dt-bindings: remoteproc: Add Qualcomm RPM processor/subsystem
+      soc: qcom: smem: Add qcom_smem_is_available()
+      rpmsg: qcom_smd: Use qcom_smem_is_available()
+      soc: qcom: Add RPM processor/subsystem driver
+      arm64: dts: qcom: Add rpm-proc node for SMD platforms
+      arm64: dts: qcom: Add rpm-proc node for GLINK gplatforms
+      ARM: dts: qcom: Add rpm-proc node for SMD platforms
+      ARM: dts: qcom: apq8064: Drop redundant /smd node
 
- We have arranged your payment through our ATM Master Card and
-deposited it in DHL Office to deliver it to you which is the latest
-instruction from the World Bank president MR. JIM YONG KIM, For your
-information=E2=80=99s, the delivery charges already paid by U.N treasury, t=
-he
-only money you will send to DHL office south Korea is
-($500). for security keeping fee, U.N coordinator already paid for
-others charges fees for delivery except the security keeping fee, the
-director of DHL refused to collect the security keeping fee from U.N
-coordinator, the Director of DHL office said that they don=E2=80=99t know
-exactly time you will contact them to reconfirm your details to avoid
-counting demur-rage that is why they refused collecting the ($500) .
-for security keeping fee.
+ .../bindings/remoteproc/qcom,rpm-proc.yaml         | 171 +++++++++++++++++++++
+ .../devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml |  23 ++-
+ .../devicetree/bindings/soc/qcom/qcom,smd.yaml     |   7 +
+ arch/arm/boot/dts/qcom-apq8064.dtsi                |  40 -----
+ arch/arm/boot/dts/qcom-apq8084.dtsi                |   6 +-
+ arch/arm/boot/dts/qcom-msm8226.dtsi                |  38 ++---
+ arch/arm/boot/dts/qcom-msm8974.dtsi                |  44 +++---
+ arch/arm64/boot/dts/qcom/ipq6018.dtsi              |  48 +++---
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              |  28 ++--
+ arch/arm64/boot/dts/qcom/msm8916.dtsi              |   6 +-
+ arch/arm64/boot/dts/qcom/msm8939.dtsi              | 112 +++++++-------
+ arch/arm64/boot/dts/qcom/msm8953.dtsi              | 136 ++++++++--------
+ arch/arm64/boot/dts/qcom/msm8976.dtsi              | 152 +++++++++---------
+ arch/arm64/boot/dts/qcom/msm8994.dtsi              |  99 ++++++------
+ arch/arm64/boot/dts/qcom/msm8996.dtsi              | 113 +++++++-------
+ arch/arm64/boot/dts/qcom/msm8998.dtsi              |  98 ++++++------
+ arch/arm64/boot/dts/qcom/qcm2290.dtsi              | 126 +++++++--------
+ arch/arm64/boot/dts/qcom/qcs404.dtsi               | 152 +++++++++---------
+ arch/arm64/boot/dts/qcom/sdm630.dtsi               | 132 ++++++++--------
+ arch/arm64/boot/dts/qcom/sm6115.dtsi               | 128 +++++++--------
+ arch/arm64/boot/dts/qcom/sm6125.dtsi               | 140 +++++++++--------
+ arch/arm64/boot/dts/qcom/sm6375.dtsi               | 126 +++++++--------
+ drivers/rpmsg/qcom_smd.c                           |  10 +-
+ drivers/soc/qcom/Kconfig                           |   1 +
+ drivers/soc/qcom/Makefile                          |   2 +-
+ drivers/soc/qcom/rpm-proc.c                        |  77 ++++++++++
+ drivers/soc/qcom/smd-rpm.c                         |  35 ++---
+ drivers/soc/qcom/smem.c                            |  11 ++
+ include/linux/soc/qcom/smem.h                      |   1 +
+ 29 files changed, 1161 insertions(+), 901 deletions(-)
+---
+base-commit: 8d5a57ea6a0b1722725170e32e511701ca7c454c
+change-id: 20230531-rpm-rproc-758364839cdd
 
- Therefore be advice to contact DHL Office agent south Korea. Rev:John
-Lee Tae-seok
-who is in position to deliver your ATM
-Master Card to your location address, contact DHL Office immediately
-with the bellow email & phone number as listed below.
+Best regards,
+-- 
+Stephan Gerhold <stephan@gerhold.net>
 
- Contact name: John Lee Tae-seok
-
- Email:( dhlgeneralheadquartersrepublic@gmail.com )
-
- Do not hesitate to Contact Rev: John Lee Tae-seok, as soon as you
-
- read this message. Email:( dhlgeneralheadquartersrepublic@gmail.com )
-
- Make sure you reconfirmed DHL Office your details ASAP as stated
-below to avoid wrong delivery.
-
- Your full name..........
-
- Home address:.........
-
- Your country...........
-
- Your city..............
-
- Telephone......
-
- Occupation:.......
-
- Age:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
-
- Let us know as soon as possible you receive your ATM MasterCard
-for proper verification.
-
- Regards,
-
- Mrs Vivian kakadu.
-
- DEPUTY SECRETARY-GENERAL (U.N)
