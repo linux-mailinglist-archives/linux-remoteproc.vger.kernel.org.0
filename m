@@ -2,77 +2,198 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF069746672
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Jul 2023 02:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C622746942
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Jul 2023 07:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbjGDAQv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 3 Jul 2023 20:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
+        id S230294AbjGDF5b (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 4 Jul 2023 01:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjGDAQu (ORCPT
+        with ESMTP id S229938AbjGDF53 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 3 Jul 2023 20:16:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810B6DC;
-        Mon,  3 Jul 2023 17:16:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 14B9D610A3;
-        Tue,  4 Jul 2023 00:16:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D8E7C433CA;
-        Tue,  4 Jul 2023 00:16:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688429808;
-        bh=ZiPRo7k/JjvcIbPU5V4ARaJ/ydfOBzfAhJawl7IM+8A=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=luZiGy3DkciCXNlM4vhdUPLSIvGAp2A1tmH6jMM6IxVG2MhjzM3jDhMYToASTasfg
-         1A4Ga9NX8OPnCJNMPYOBb7ix583CnED1akOS9rHPz98/sBerkPAUenfg3sxcILS7Yu
-         zgv2Q0yyNlZtjvGDQmH5OzJuW8vlhrcJ6j1WE7EWYBnt+mPQ4CP448aI6Mn1sI4vze
-         RcpdzEhvZkKN3sXK95Mi9vSx6s+IGX7lstAq39tn1g9MWkgua2YJ23IFCTnKjz0XT3
-         AXUYi8pe4D1c8FyUC+n9cEQqNvrzr37eSnfElAE2FA4SJPPmzJmCHtmlVuSSARXQ8P
-         PL0acE1UasTjg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 62960C04E32;
-        Tue,  4 Jul 2023 00:16:48 +0000 (UTC)
-Subject: Re: [GIT PULL] hwspinlock updates for v6.5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230703200854.3081448-1-andersson@kernel.org>
-References: <20230703200854.3081448-1-andersson@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230703200854.3081448-1-andersson@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/hwlock-v6.5
-X-PR-Tracked-Commit-Id: 1b39e7607144337d752f36c2068ed79447462f99
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6afb24a0fe7294f004ee6c43b10251ff86218d56
-Message-Id: <168842980839.28751.13892359473368551278.pr-tracker-bot@kernel.org>
-Date:   Tue, 04 Jul 2023 00:16:48 +0000
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 4 Jul 2023 01:57:29 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978CFE52
+        for <linux-remoteproc@vger.kernel.org>; Mon,  3 Jul 2023 22:57:26 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51d946d2634so6146878a12.3
+        for <linux-remoteproc@vger.kernel.org>; Mon, 03 Jul 2023 22:57:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688450245; x=1691042245;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ArafajhkK4cFBXCxi4x8GmLW6nX9wjFH15qR/2p7CyM=;
+        b=NtZsucGnDSuql+9fvbmGD0BxyvMogak6Y5smEqXX8YVtwaMtHZZ1C/TGlyDDoMak1a
+         haGaMkG1VU2aV8G9ouvmhF2bUT4R7l4z7IpK6rWEsQOIASdpe/ETlyxhdNMHA1K0IAXI
+         nuqu7D3vk1N5XXGoxqp97McDiFeIx/d2WDA8EXrw/d4mjEHvqQ9Xm/NQoidg4jGB/4tn
+         LQyQINMHJ0B6gUmy6EKdTmk9v8aoK/SbhVsxA7v90azH6n7VT5YSeuUuoLCFlvH9R0G4
+         ovqIMFrBmkbIyBLF5UOq/9OGMltcQdmd2K73ozPB/ooxRpFAkVe78oy5UYKqy/j5tswu
+         V7wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688450245; x=1691042245;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ArafajhkK4cFBXCxi4x8GmLW6nX9wjFH15qR/2p7CyM=;
+        b=EDhsXIur2huvKzANCUE/Sn6tu3jUL88vkjM+0b982mdcDTTI91TOeYaUfQJu0n6xs8
+         HsH+1a1lUAhTLn6Rh1ojAa4drgAYW/M0DeHQ8PVMRpfjfZJP7suRueuUtbUzJZWrYOp2
+         KTsTwNtN+MYhufCwAdjI0hlDkC1PVqOsl+0HF83zYSFrxQqqa5gK9qUhDsGjsTaYh+dI
+         yfr9f7EBYw3FYtsGIrgyC23WZ3vMzuumbY9pWGJ7cqOxfPPntcRc8jZYY/5ByFs8JBS0
+         OTw3S9wEMCw57TYUd/hZJR0DW5A33D5Xce56QIrgwUGk2BmbkiyCKMQE4+aNZDK1Hv3J
+         7ZwQ==
+X-Gm-Message-State: ABy/qLYDOi+WIeU+P8wqliMzPFvNgSGsYcePGU6icozc7YpJ8E5wwK4u
+        Q7UVA8CHUAv4hhgwGIbywxQVpA==
+X-Google-Smtp-Source: APBJJlGLdz4OnkPHg9QESQPK4xkTqc+rD1zI9xMSBTVlJ3pUKrE8wYmXdm39x7xyr77A57uxd3eyPg==
+X-Received: by 2002:a05:6402:5149:b0:51d:9bf3:40c5 with SMTP id n9-20020a056402514900b0051d9bf340c5mr8832051edd.20.1688450245125;
+        Mon, 03 Jul 2023 22:57:25 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id i21-20020a05640200d500b0051bfc7763c2sm11462697edu.25.2023.07.03.22.57.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 22:57:24 -0700 (PDT)
+Message-ID: <f0609361-6fb6-a446-4e23-646201943923@linaro.org>
+Date:   Tue, 4 Jul 2023 07:57:21 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 08/21] dt-bindings: reserved-memory: Add qcom,ramoops
+ binding
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, corbet@lwn.net,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        conor+dt@kernel.org, keescook@chromium.org, tony.luck@intel.com,
+        gpiccoli@igalia.com, mathieu.poirier@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, linus.walleij@linaro.org,
+        andy.shevchenko@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+References: <1687955688-20809-1-git-send-email-quic_mojha@quicinc.com>
+ <1687955688-20809-9-git-send-email-quic_mojha@quicinc.com>
+ <CAL_JsqJ_TTnGjjB2d8_FKHpWBRG5GHLoWnabCKjsdeZ4QFdNEg@mail.gmail.com>
+ <cacbbb02-732e-076e-50bf-292d20a4d722@quicinc.com>
+ <58a26b9e-a48d-d567-c310-193a2c52521e@linaro.org>
+ <5447f9f8-55b4-8bed-66a6-1c9d62b02c79@quicinc.com>
+ <CAGE=qrq0CuO4J-6yC=YZ4xjL67o9QTqpei0ovX-X_8MLVeEH6g@mail.gmail.com>
+ <ba04bb7b-6599-6f41-09a8-834ee280830d@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ba04bb7b-6599-6f41-09a8-834ee280830d@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The pull request you sent on Mon,  3 Jul 2023 13:08:53 -0700:
+On 03/07/2023 17:55, Mukesh Ojha wrote:
+> 
+> 
+> On 7/3/2023 12:50 PM, Krzysztof Kozlowski wrote:
+>> On Mon, 3 Jul 2023 at 08:22, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+>>> On 7/2/2023 1:42 PM, Krzysztof Kozlowski wrote:
+>>>>>> The big difference is if firmware is not deciding where this log
+>>>>>> lives, then it doesn't need to be in DT. How does anything except the
+>>>>>> kernel that allocates the log find the logs?
+>>>>>
+>>>>> Yes, you are correct, firmware is not deciding where the logs lives
+>>>>> instead here, Kernel has reserved the region where the ramoops region
+>>>>> lives and later with the minidump registration where, physical
+>>>>> address/size/virtual address(for parsing) are passed and that is how
+>>>>> firmware is able to know and dump those region before triggering system
+>>>>> reset.
+>>>>
+>>>> Your explanation does not justify storing all this in DT. Kernel can
+>>>> allocate any memory it wishes, store there logs and pass the address to
+>>>> the firmware. That's it, no need for DT.
+>>>
+>>> If you go through the driver, you will know that what it does, is
+>>
+>> We talk about bindings and I should not be forced to look at the
+>> driver to be able to understand them. Bindings should stand on their
+>> own.
+> 
+> Why can't ramoops binding have one more feature where it can add a flag 
+> *dynamic* to indicate the regions are dynamic and it is for platforms
+> where there is another entity 'minidump' who is interested in these
+> regions.
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/hwlock-v6.5
+Because we do not define dynamic stuff in Devicetree. Dynamic means
+defined by SW or runtime configurable. It is against the entire idea of
+Devicetree which is for non-discoverable hardware.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6afb24a0fe7294f004ee6c43b10251ff86218d56
+> 
+>>
+>>> just create platform device for actual ramoops driver to probe and to
+>>
+>> Not really justification for Devicetree anyway. Whatever your driver
+>> is doing, is driver's business, not bindings.
+>>
+>>> provide this it needs exact set of parameters of input what original
+>>> ramoops DT provides, we need to keep it in DT as maintaining this in
+>>> driver will not scale well with different size/parameter size
+>>> requirement for different targets.
+>>
+>> Really? Why? I don't see a problem in scaling. At all.
+> 
+> I had attempted it here,
+> 
+> https://lore.kernel.org/lkml/1683133352-10046-10-git-send-email-quic_mojha@quicinc.com/
+> 
+> but got comments related to hard coding and some in favor of having
+> the same set of properties what ramoops has/provides
+> 
+> https://lore.kernel.org/lkml/e25723bf-be85-b458-a84c-1a45392683bb@gmail.com/
+> 
+> https://lore.kernel.org/lkml/202305161347.80204C1A0E@keescook/
 
-Thank you!
+Then you were tricked. I don't get why someone else suggests that
+non-hardware property should be part of Devicetree, but anyway it's the
+call of Devicetree binding maintainers, not someone else. DT is not
+dumping ground for all the system configuration variables.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+>>
+>>>
+>>>>
+>>>>>
+>>>>> A part of this registration code you can find in 11/21
+>>>>>
+>>>>>> I'm pretty sure I already said all this before.
+>>>>>
+>>>>> Yes, you said this before but that's the reason i came up with vendor
+>>>>> ramoops instead of changing traditional ramoops binding.
+>>>>
+>>>> That's unexpected conclusion. Adding more bindings is not the answer to
+>>>> comment that it should not be in the DTS in the first place.
+>>>
+>>> Please suggest, what is the other way being above text as requirement..
+>>
+>> I do not see any requirement for us there. Forcing me to figure out
+>> how to add non-hardware property to DT is not the way to convince
+>> reviewers. But if you insist - we have ABI for this, called sysfs. If
+>> it is debugging feature, then debugfs.
+> 
+> ramoops already support module params and a way to pass these parameters
+> from bootargs but it also need to know the hard-codes addresses, so, 
+> doing something in sysfs will be again duplication with ramoops driver..
+
+Why do you need hard-coded addresses?
+
+> 
+> If this can be accommodated under ramoops, this will be very small 
+> change, like this
+> 
+> https://lore.kernel.org/lkml/20230622005213.458236-1-isaacmanjarres@google.com/
+
+That's also funny patch - missing bindings updated, missing CC DT
+maintainers.
+
+Best regards,
+Krzysztof
+
