@@ -2,55 +2,54 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCB874BA01
-	for <lists+linux-remoteproc@lfdr.de>; Sat,  8 Jul 2023 01:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD2A74BA08
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  8 Jul 2023 01:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjGGXZR (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 7 Jul 2023 19:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
+        id S229755AbjGGX0l (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 7 Jul 2023 19:26:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjGGXZR (ORCPT
+        with ESMTP id S229675AbjGGX0l (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 7 Jul 2023 19:25:17 -0400
+        Fri, 7 Jul 2023 19:26:41 -0400
 Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B8E2106;
-        Fri,  7 Jul 2023 16:25:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A432127;
+        Fri,  7 Jul 2023 16:26:39 -0700 (PDT)
 Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 1AA5386307;
-        Sat,  8 Jul 2023 01:25:02 +0200 (CEST)
+        by phobos.denx.de (Postfix) with ESMTPSA id 19CC285F50;
+        Sat,  8 Jul 2023 01:26:38 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1688772303;
-        bh=KyuDqypJqy4PITTMyrCUAaIaAbCclPHKKt5tlXM8dzM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZyOcr2ZQEpDJvhWYgjCibSlekvgvTXPxBEvwzug9IgHGBvur6mZ5uROch1sqHkNF7
-         XAg6+fgWlXroJA6KkM4k6gojGuUY5Dtq/JNoy+lEhbDg8+/5kb9K8GzCTc+VutW6Yd
-         fxIg7q4Dow6GXHzuy+atNsl4FhvU9IqgyK7Tsag7wLpxYvUXuORZ7ma+daVaXwWo7n
-         wdRci9doseKkic39f1lT6n0Yy0cWxdFwKrMVs5REXqyk0LrO3oAAX6Zcf5+q0kdkaX
-         2lZjSdX82ocFp1UE3DB9kOvdT14iE3IJhC2djpmXP5YhLJJ0s3Ld0wec1qyHhlRrZx
-         jaTSofE1V1r1w==
+        s=phobos-20191101; t=1688772398;
+        bh=njmuRh0WR2KTTOX3tz8FV2jEOUSOxOGj/xiEt/oNLIA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CzTJEP5K57oX0RDsM9CBjCLelIDxr6vRQpoX27i5oypAjz81kC5miI9L4svJ4as74
+         32B42q3yqL866KWLYPc5J4T7bDT/4Xffd7jshNn9Mi36Gg4+LZjc9uF4qhSgo9qSP+
+         ZEc5eSQIwZd0gyBAlQLgRa+5Tv2/8LIuNX2+nh4qWxYYnrRSgwLwZxEvVByVkZXZuR
+         JpFEvC3/g/m7W/wTIx2TTdt8bfPLWqmDRsImYkT7VY68j3zPaSY86ajoH5yUfkSSUJ
+         U1OsYfIliGOcKt5W4WD3zh2CiDu1tDcXxIKgKm64gF4Lh3pV/mxadNYoMDFjIZpXFn
+         wdjMrmXywW/TA==
 From:   Marek Vasut <marex@denx.de>
 To:     linux-remoteproc@vger.kernel.org
-Cc:     Peng Fan <peng.fan@nxp.com>, Jacky Bai <ping.bai@nxp.com>,
-        Ye Li <ye.li@nxp.com>, Bjorn Andersson <andersson@kernel.org>,
+Cc:     Marek Vasut <marex@denx.de>,
+        Bjorn Andersson <andersson@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/2] remoteproc: imx_rproc: add start up delay
-Date:   Sat,  8 Jul 2023 01:24:44 +0200
-Message-Id: <20230707232444.374431-2-marex@denx.de>
+Subject: [PATCH 1/2] dt-bindings: remoteproc: imx_rproc: Support i.MX8MN/P MMIO
+Date:   Sat,  8 Jul 2023 01:26:25 +0200
+Message-Id: <20230707232626.374475-1-marex@denx.de>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230707232444.374431-1-marex@denx.de>
-References: <20230707232444.374431-1-marex@denx.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
@@ -65,25 +64,16 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+The MX8M CM7 boot via SMC call is problematic, since not all versions
+of ATF support this interface. Document MMIO support used to boot the
+CM7 on MX8MN/MP instead and discern MMIO interface using DT compatible
+string. Document GPR register syscon phandle which is required by the
+MMIO interface too.
 
-There is case that after remoteproc start remote processor[M4], the M4
-runs slow and before M4 finish its own rpmsg framework initialization,
-linux sends out vring kick message, then M4 firmware drops the kick
-message. Some NXP released Cortex-M[x] images has such limitation that
-it requires linux sends out vring kick message after M4 firmware finish
-its rpmsg framework initialization.
-
-Reviewed-by: Jacky Bai <ping.bai@nxp.com>
-Reviewed-by: Ye Li <ye.li@nxp.com>
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Marek Vasut <marex@denx.de>
 ---
-Note: picked from NXP downstream LF-6630-2 remoteproc: imx_rproc: add start up delay
-https://github.com/nxp-imx/linux-imx.git 0b1b91c95b291a3b60d6224b13f6a95a75896abf
----
-Note: Literally all of the NXP BSP 2.13.0 firmware builds fail to boot
-      without this being set to something like 50..500 ms , so this is
-      rather useful to have.
+Note that the MMIO being discerned using compatible string is similar
+approach to "st,stm32mp1-rcc" vs "st,stm32mp1-rcc-secure".
 ---
 Cc: Bjorn Andersson <andersson@kernel.org>
 Cc: Conor Dooley <conor+dt@kernel.org>
@@ -100,50 +90,55 @@ Cc: devicetree@vger.kernel.org
 Cc: linux-arm-kernel@lists.infradead.org
 Cc: linux-remoteproc@vger.kernel.org
 ---
- drivers/remoteproc/imx_rproc.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../bindings/remoteproc/fsl,imx-rproc.yaml    | 20 +++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-index f9874fc5a80ff..d0eb96d6a4fe1 100644
---- a/drivers/remoteproc/imx_rproc.c
-+++ b/drivers/remoteproc/imx_rproc.c
-@@ -6,6 +6,7 @@
- #include <dt-bindings/firmware/imx/rsrc.h>
- #include <linux/arm-smccc.h>
- #include <linux/clk.h>
-+#include <linux/delay.h>
- #include <linux/err.h>
- #include <linux/firmware/imx/sci.h>
- #include <linux/interrupt.h>
-@@ -110,6 +111,7 @@ struct imx_rproc {
- 	u32				core_index;
- 	struct device                   **pd_dev;
- 	struct device_link              **pd_dev_link;
-+	u32				startup_delay;
- };
+diff --git a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+index c940199ce89df..78bb976f738ee 100644
+--- a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+@@ -20,7 +20,9 @@ properties:
+       - fsl,imx7ulp-cm4
+       - fsl,imx8mm-cm4
+       - fsl,imx8mn-cm7
++      - fsl,imx8mn-cm7-mmio
+       - fsl,imx8mp-cm7
++      - fsl,imx8mp-cm7-mmio
+       - fsl,imx8mq-cm4
+       - fsl,imx8qm-cm4
+       - fsl,imx8qxp-cm4
+@@ -30,6 +32,11 @@ properties:
+   clocks:
+     maxItems: 1
  
- static const struct imx_rproc_att imx_rproc_att_imx93[] = {
-@@ -382,6 +384,9 @@ static int imx_rproc_start(struct rproc *rproc)
- 	if (ret)
- 		dev_err(dev, "Failed to enable remote core!\n");
- 
-+	if (priv->startup_delay)
-+		msleep(priv->startup_delay);
++  gpr:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to IOMUXC GPR block which provide access to CM7 CPUWAIT bit.
 +
- 	return ret;
- }
+   syscon:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+@@ -84,6 +91,19 @@ properties:
+ required:
+   - compatible
  
-@@ -1090,6 +1095,10 @@ static int imx_rproc_probe(struct platform_device *pdev)
- 	if (rproc->state != RPROC_DETACHED)
- 		rproc->auto_boot = of_property_read_bool(np, "fsl,auto-boot");
- 
-+	ret = of_property_read_u32(dev->of_node, "fsl,startup-delay-ms", &priv->startup_delay);
-+	if (ret)
-+		priv->startup_delay = 0;
++allOf:
++  - if:
++      properties:
++        compatible:
++          not:
++            contains:
++              enum:
++                - fsl,imx8mn-cm7-mmio
++                - fsl,imx8mp-cm7-mmio
++    then:
++      properties:
++        gpr: false
 +
- 	ret = rproc_add(rproc);
- 	if (ret) {
- 		dev_err(dev, "rproc_add failed\n");
+ additionalProperties: false
+ 
+ examples:
 -- 
 2.40.1
 
