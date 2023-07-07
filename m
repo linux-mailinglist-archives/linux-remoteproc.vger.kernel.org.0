@@ -2,228 +2,177 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDE474A60F
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  6 Jul 2023 23:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0A274AA6E
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  7 Jul 2023 07:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232077AbjGFVnL (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 6 Jul 2023 17:43:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S232501AbjGGF0b (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 7 Jul 2023 01:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjGFVnK (ORCPT
+        with ESMTP id S232464AbjGGF03 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 6 Jul 2023 17:43:10 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6901FF7;
-        Thu,  6 Jul 2023 14:42:57 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 366LXVql009263;
-        Thu, 6 Jul 2023 21:42:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=NG6ZBkBrzZbuDvIirQPnHenO/FvyuxYx3kz6+WGyraM=;
- b=P25HytVPTYT5X+IP/dNk7Q4YmFZ1waAtR9rQGMzr8Pcjn7eIkqBkkIxD7yYl8mhhSBHH
- CCRlYeIv+VYFUgTn9rhfs5AnXzrImruT5pcz3y1hzGspgPQsyCqt7kn5Gp/wHThyMWG/
- kd5eF5Xw4p4C3dqgrePgLWSXGb+5Y5gDH5mU0QThi7kvZK2sopbWlZk0qJyxcIKQDGTZ
- +TRXzzGCzZyGuLK6VqtYqbYcft/KyfwHy4dfi4ZVjxSydIenOGdjcG7XDlfb8nND8C/U
- eX9A0n0G0Vm/fV3qNM6l5r0PynCwyk+Xvq49pfzRDCOJcPUYSO8dr8OP4bgv55AtzYlh rw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rntctsg19-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 06 Jul 2023 21:42:40 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 366LgdTk017762
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 6 Jul 2023 21:42:39 GMT
-Received: from sarannya-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+        Fri, 7 Jul 2023 01:26:29 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F171FC6;
+        Thu,  6 Jul 2023 22:26:23 -0700 (PDT)
+X-UUID: cb4b1e1a1c8611eeb20a276fd37b9834-20230707
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=S908HPXLMOOveANHXI/Onpb6be3Nr0vIEIrUdob0Jo4=;
+        b=EkBwjGdv7QP5yEN9KhrszWDY/lcAQHkgeah7oELkXCtEhIGR6dkf+m0v8+cPSWtLUnaLRaESIioq7vDi/E1mS1+zMzEwlOVtaItKgBgmSoD1AuWl7YIKJ5Z4+fK0Y/uX+oxMJnk/DSKc0oD8y8fb75uzscIyZ7HcKhBTn/3xqv4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.27,REQID:e98e22f9-61ba-4f7c-a356-d16869f52e9f,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:01c9525,CLOUDID:727ef60d-c22b-45ab-8a43-3004e9216b56,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: cb4b1e1a1c8611eeb20a276fd37b9834-20230707
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 103852036; Fri, 07 Jul 2023 13:26:15 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 6 Jul 2023 14:42:35 -0700
-From:   Sarannya S <quic_sarannya@quicinc.com>
-To:     <quic_bjorande@quicinc.com>, <arnaud.pouliquen@foss.st.com>,
-        <swboyd@chromium.org>, <quic_clew@quicinc.com>,
-        <mathieu.poirier@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>,
-        Sarannya S <quic_sarannya@quicinc.com>,
-        "Bjorn Andersson" <andersson@kernel.org>
-Subject: [PATCH V9 3/3] rpmsg: char: Add RPMSG GET/SET FLOWCONTROL IOCTL support
-Date:   Fri, 7 Jul 2023 03:11:38 +0530
-Message-ID: <1688679698-31274-4-git-send-email-quic_sarannya@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1688679698-31274-1-git-send-email-quic_sarannya@quicinc.com>
-References: <1688679698-31274-1-git-send-email-quic_sarannya@quicinc.com>
+ 15.2.1118.26; Fri, 7 Jul 2023 13:26:14 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 7 Jul 2023 13:26:14 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v14 00/12] Add support for MT8195 SCP 2nd core
+Date:   Fri, 7 Jul 2023 13:26:00 +0800
+Message-ID: <20230707052612.27521-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: wiiuVh4uZ9stepSFfBkhMnvzAa6xnqgk
-X-Proofpoint-ORIG-GUID: wiiuVh4uZ9stepSFfBkhMnvzAa6xnqgk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-06_15,2023-07-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 spamscore=0 phishscore=0
- malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307060189
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-From: Chris Lew <quic_clew@quicinc.com>
+The mediatek remoteproc driver currently only allows bringing up a 
+single core SCP, e.g. MT8183. It also only bringing up the 1st 
+core in SoCs with a dual-core SCP, e.g. MT8195. This series support 
+to bring-up the 2nd core of the dual-core SCP.
 
-Add RPMSG_GET_OUTGOING_FLOWCONTROL and RPMSG_SET_INCOMING_FLOWCONTROL
-IOCTL support for rpmsg char device nodes to get/set the low level
-transport signals.
+v13 -> v14:
+1. add review tag to patchset 1,6
+2. exchange the order of sram power on and reset assert in
+mt8195_scp_c1_before_load at patchset 2
+3. Use ERR_CAST in patchset 5
+4. Re-write patchset 7 to remove dependency between core 0 and core 1 
+5. Add patch set 10 to report watchdot timeout to all cores
 
-Signed-off-by: Chris Lew <quic_clew@quicinc.com>
-Signed-off-by: Deepak Kumar Singh <quic_deesin@quicinc.com>
-Signed-off-by: Sarannya S <quic_sarannya@quicinc.com>
----
- drivers/rpmsg/rpmsg_char.c | 54 ++++++++++++++++++++++++++++++++++++++++------
- include/uapi/linux/rpmsg.h | 10 +++++++++
- 2 files changed, 58 insertions(+), 6 deletions(-)
+v12 -> v13:
+1. replace subdevice with new mediatek scp operations in patchset 7 
+2. add review tag to patchset 3
+3. modify mediatek,scp phandle name of video-codec@18000000 at patchset 11
 
-diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index a271fce..09833ad 100644
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -52,6 +52,8 @@ static DEFINE_IDA(rpmsg_minor_ida);
-  * @readq:	wait object for incoming queue
-  * @default_ept: set to channel default endpoint if the default endpoint should be re-used
-  *              on device open to prevent endpoint address update.
-+ * remote_flow_restricted: to indicate if the remote has requested for flow to be limited
-+ * remote_flow_updated: to indicate if the flow control has been requested
-  */
- struct rpmsg_eptdev {
- 	struct device dev;
-@@ -68,6 +70,8 @@ struct rpmsg_eptdev {
- 	struct sk_buff_head queue;
- 	wait_queue_head_t readq;
- 
-+	bool remote_flow_restricted;
-+	bool remote_flow_updated;
- };
- 
- int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
-@@ -116,6 +120,18 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
- 	return 0;
- }
- 
-+static int rpmsg_ept_flow_cb(struct rpmsg_device *rpdev, void *priv, bool enable)
-+{
-+	struct rpmsg_eptdev *eptdev = priv;
-+
-+	eptdev->remote_flow_restricted = enable;
-+	eptdev->remote_flow_updated = true;
-+
-+	wake_up_interruptible(&eptdev->readq);
-+
-+	return 0;
-+}
-+
- static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
- {
- 	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
-@@ -152,6 +168,7 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
- 		return -EINVAL;
- 	}
- 
-+	ept->flow_cb = rpmsg_ept_flow_cb;
- 	eptdev->ept = ept;
- 	filp->private_data = eptdev;
- 	mutex_unlock(&eptdev->ept_lock);
-@@ -172,6 +189,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
- 		eptdev->ept = NULL;
- 	}
- 	mutex_unlock(&eptdev->ept_lock);
-+	eptdev->remote_flow_updated = false;
- 
- 	/* Discard all SKBs */
- 	skb_queue_purge(&eptdev->queue);
-@@ -285,6 +303,9 @@ static __poll_t rpmsg_eptdev_poll(struct file *filp, poll_table *wait)
- 	if (!skb_queue_empty(&eptdev->queue))
- 		mask |= EPOLLIN | EPOLLRDNORM;
- 
-+	if (eptdev->remote_flow_updated)
-+		mask |= EPOLLPRI;
-+
- 	mutex_lock(&eptdev->ept_lock);
- 	mask |= rpmsg_poll(eptdev->ept, filp, wait);
- 	mutex_unlock(&eptdev->ept_lock);
-@@ -297,14 +318,35 @@ static long rpmsg_eptdev_ioctl(struct file *fp, unsigned int cmd,
- {
- 	struct rpmsg_eptdev *eptdev = fp->private_data;
- 
--	if (cmd != RPMSG_DESTROY_EPT_IOCTL)
--		return -EINVAL;
-+	bool set;
-+	int ret;
- 
--	/* Don't allow to destroy a default endpoint. */
--	if (eptdev->default_ept)
--		return -EINVAL;
-+	switch (cmd) {
-+	case RPMSG_GET_OUTGOING_FLOWCONTROL:
-+		eptdev->remote_flow_updated = false;
-+		ret = put_user(eptdev->remote_flow_restricted, (int __user *)arg);
-+		break;
-+	case RPMSG_SET_INCOMING_FLOWCONTROL:
-+		if (arg > 1) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+		set = !!arg;
-+		ret = rpmsg_set_flow_control(eptdev->ept, set, eptdev->chinfo.dst);
-+		break;
-+	case RPMSG_DESTROY_EPT_IOCTL:
-+		/* Don't allow to destroy a default endpoint. */
-+		if (eptdev->default_ept) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+		ret = rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
- 
--	return rpmsg_chrdev_eptdev_destroy(&eptdev->dev, NULL);
-+	return ret;
- }
- 
- static const struct file_operations rpmsg_eptdev_fops = {
-diff --git a/include/uapi/linux/rpmsg.h b/include/uapi/linux/rpmsg.h
-index 1637e68..f0c8da2 100644
---- a/include/uapi/linux/rpmsg.h
-+++ b/include/uapi/linux/rpmsg.h
-@@ -43,4 +43,14 @@ struct rpmsg_endpoint_info {
-  */
- #define RPMSG_RELEASE_DEV_IOCTL	_IOW(0xb5, 0x4, struct rpmsg_endpoint_info)
- 
-+/**
-+ * Get the flow control state of the remote rpmsg char device.
-+ */
-+#define RPMSG_GET_OUTGOING_FLOWCONTROL _IOR(0xb5, 0x5, int)
-+
-+/**
-+ * Set the flow control state of the local rpmsg char device.
-+ */
-+#define RPMSG_SET_INCOMING_FLOWCONTROL _IOR(0xb5, 0x6, int)
-+
- #endif
+v11 -> v12:
+1. add scp_add_single/multi_core() to patchset 6
+2. remove unused comment in patchset 6
+3. rename list name from mtk_scp_cluster to mtk_scp_list
+4. rewrite the multi-core probe flow 
+5. disable rproc->autoboot and boot rproc by request_firmware_nowait at patchset 7 
+6. remove patchset 7 review tag  
+
+v10 -> v11:
+1. rewrite patchset 5 to probe single-core SCP with the cluster list
+2. Also in patchset 5, move the pointer of mtk_scp object from the
+   platform data property to the driver data property 
+3. move the appearance of mtk_scp cluster property to patcheset 7
+
+v9 -> v10:
+1. move the global mtk_scp list into the platform device driver data structure
+2. remove an unnecessary if() condition
+
+v8 -> v9:
+1. initialize l1tcm_size/l1tcm_phys at patchset 05/11 
+2. rewrite patchset 06/11 to unify the flow and remove hacks
+
+v7 -> v8:
+1. update the node name of mt8192 asurada SCP rpmsg subnode
+2. squash register definitions into driver patches
+3. initialize local variables on the declaration at patch v8 06/11 
+
+v6 -> v7:
+1. merge the mtk_scp_cluster struct into the mtk_scp structure
+   at the "Probe multi-core SCP" patch
+
+v5 -> v6:
+1. move the mtk_scp_of_regs structure from mtk_common.h to mtk_scp.c
+2. rename the SCP core 0 label from 'scp' to 'scp_c0'
+
+v4 -> v5:
+1. move resource release actions to the platform driver remove operation 
+2. fix dual-core watchdog handling
+
+v3 -> v4:
+1. change the representation of dual-core SCP in dts file and update SCP yaml
+2. rewrite SCP driver to reflect the change of dts node
+3. drop 'remove redundant call of rproc_boot for SCP' in v3 for further investigation
+
+v2 -> v3:
+1. change the representation of dual-core SCP in dts file and update SCP yaml
+2. rewrite SCP driver to reflect the change of dts node
+3. add SCP core 1 node to mt8195.dtsi
+4. remove redundant call of rproc_boot for SCP
+5. refine IPI error message
+
+v1 -> v2:
+1. update dt-binding property description
+2. remove kconfig for scp dual driver
+3. merge mtk_scp_dual.c and mtk_scp_subdev.c to mtk_scp.c
+
+
+Tinghan Shen (12):
+  dt-bindings: remoteproc: mediatek: Improve the rpmsg subnode
+    definition
+  arm64: dts: mediatek: Update the node name of SCP rpmsg subnode
+  dt-bindings: remoteproc: mediatek: Support MT8195 dual-core SCP
+  remoteproc: mediatek: Add MT8195 SCP core 1 operations
+  remoteproc: mediatek: Introduce cluster on single-core SCP
+  remoteproc: mediatek: Probe multi-core SCP
+  remoteproc: mediatek: Remove dependency of MT8195 SCP L2TCM power
+    control on dual-core SCP
+  remoteproc: mediatek: Setup MT8195 SCP core 1 SRAM offset
+  remoteproc: mediatek: Handle MT8195 SCP core 1 watchdog timeout
+  remoteproc: mediatek: Report watchdog crash to all cores
+  remoteproc: mediatek: Refine ipi handler error message
+  arm64: dts: mediatek: mt8195: Add SCP 2nd core
+
+ .../bindings/remoteproc/mtk,scp.yaml          | 176 ++++++-
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   2 +-
+ .../boot/dts/mediatek/mt8192-asurada.dtsi     |   2 +-
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      |   6 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  34 +-
+ drivers/remoteproc/mtk_common.h               |  24 +
+ drivers/remoteproc/mtk_scp.c                  | 458 +++++++++++++++---
+ 7 files changed, 610 insertions(+), 92 deletions(-)
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.18.0
 
