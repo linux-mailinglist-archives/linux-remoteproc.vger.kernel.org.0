@@ -2,77 +2,82 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F277274EDBE
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 11 Jul 2023 14:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F21274EEFE
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 11 Jul 2023 14:34:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbjGKMLN (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 11 Jul 2023 08:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
+        id S231210AbjGKMeO (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 11 Jul 2023 08:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjGKMLL (ORCPT
+        with ESMTP id S231819AbjGKMeL (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 11 Jul 2023 08:11:11 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B6510C0
-        for <linux-remoteproc@vger.kernel.org>; Tue, 11 Jul 2023 05:11:03 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3159d75606dso1923909f8f.1
-        for <linux-remoteproc@vger.kernel.org>; Tue, 11 Jul 2023 05:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689077462; x=1691669462;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aNBxTgVnJ8Dr2x17xMcs2WWzX7OlQI5PaEygLf/8jHQ=;
-        b=CphdP3GnwEqZ5uS7/ISnyFpMuZAbwlhJY8n7vFWhBzhDI3lwOsLA7vleGh2jwD+a2T
-         Eed+cb4e0ezP82Usz2z15XaCZXAMuSkVxnEVrNj6hhmNY0XNgGHWtdV+Xl5TCBUCq7mt
-         7c/nniN1rHrPzH+i44pZRvbR504xq2HTuPETTAFWfxPWQkQtYzrCeaHeoXcsxkVScDuE
-         C1PnsS5Nrkd1KJHFUFOkFbnCVK/kHacCiW3C2xQLs/IChwBOHefT6CqAdD7+eA9tCP1C
-         AqiMqMEtYlzoPtOefLqd06F1MaPY64cFD013Cqx4h0g/fWaJqcDe3nM5OBNfhqLNYwDt
-         RELQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689077462; x=1691669462;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aNBxTgVnJ8Dr2x17xMcs2WWzX7OlQI5PaEygLf/8jHQ=;
-        b=MzIHZ7eFajpeo0F8ARG6T0J1TbcRYNEDndcmuM6bkEvyDdX08+uCce0rl9/rC+cNYK
-         qJ507gwqUr2kpxg1J+9aP8/2uJXGnhNqvyGX18mXAOo5wEaw8wJZFLDXS9r9IT55KkQx
-         vl2Rwvou8K5CSrbSqzxELciABgCTCzG+hHiB/jK7ZSFjKI3jEYQm8mu+wiMKYYF6mIs+
-         vDEIT3YMuYF9l/HqysN57nHwd5NkIpWqZ0UqlPd35rOcqy9TfssnaRihn+T77qy/z6Ck
-         jfVpsN+sqtfRRN4wGWW2ap0gGEfo0B6idEkpi9GKF8jhkd9mJ+eDHgUSnT2F17mhWYVw
-         BauQ==
-X-Gm-Message-State: ABy/qLZAG4aIZVZNh0Oh4xhf48slsq6c4nM4p5gdupFoUYPuJe+fAMm9
-        GC8F5OLeBHgd+fReho5+0ItBTSCEl9Hybhd4F7o=
-X-Google-Smtp-Source: APBJJlHfEYu/APKtZSXN8LAB/F/9n1Tv09E1GKFAx6mKx+60OmRokA5q23AGE+Nr5jEmAgd0rxIIEg==
-X-Received: by 2002:a5d:5603:0:b0:314:37e7:efb4 with SMTP id l3-20020a5d5603000000b0031437e7efb4mr11909981wrv.11.1689077462078;
-        Tue, 11 Jul 2023 05:11:02 -0700 (PDT)
-Received: from [192.168.1.82] (host-92-17-99-126.as13285.net. [92.17.99.126])
-        by smtp.gmail.com with ESMTPSA id t14-20020adfe44e000000b00314374145e0sm2091419wrm.67.2023.07.11.05.11.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 05:11:01 -0700 (PDT)
-Message-ID: <d9ecfde3-a1ec-8a83-c778-2349f51df31d@linaro.org>
-Date:   Tue, 11 Jul 2023 13:11:00 +0100
+        Tue, 11 Jul 2023 08:34:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4654B170E;
+        Tue, 11 Jul 2023 05:33:41 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36BAXh14011465;
+        Tue, 11 Jul 2023 12:21:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ZRBfs040BRdum9oeYUADEjrb3k2RsXmk2ekeVRNex5U=;
+ b=fmaaLA/Y15vS3FmafkMEDMr2lhs30LxK7WthotSIKLC6hCE+X7HmgkvVGHkJ1FZVBMo8
+ foIIuW1q3NeQJDP16Cos3yLjIqo0Xdo0qtrtcqBtJKb/HYgRHDZEJLcUDo3nDdVt3Asx
+ KGvfgdXB+wRcyxtrVMSwVnOjX8jZYXnV354lI/keWUtOGDJb80Midobi8xV5uzXzXfp7
+ QdyOHlel6+xfntYhj/dkjv9ZGwItxlXduHJ8o24Ro3ojj1svweHD/7bPGOvteau3f/14
+ +XhTygvoojZAWx9fyN9BMEJY3NUI8qr/Wr1IDTpoBPfz7E6+9sVNpU/+/GMHUYZJZfHp 9g== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs4qp09pe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 12:21:15 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36BCLDmM012255
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 12:21:13 GMT
+Received: from [10.201.206.238] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 05:20:39 -0700
+Message-ID: <91faf4d4-ff42-24cb-126c-cdb046d34c1e@quicinc.com>
+Date:   Tue, 11 Jul 2023 17:50:36 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3] remoteproc: qcom: Use of_reserved_mem_lookup()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 1/2] rpmsg: glink: change rx work queue type
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <mathieu.poirier@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_varada@quicinc.com>
+References: <20230607121731.26958-1-quic_mmanikan@quicinc.com>
+ <20230607121731.26958-2-quic_mmanikan@quicinc.com>
 Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230710-rproc-of-rmem-v3-1-eea7f0a33590@gerhold.net>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <20230710-rproc-of-rmem-v3-1-eea7f0a33590@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20230607121731.26958-2-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: p1D8xkLtOkWWWmbhArSdaeiOmhH7dT6S
+X-Proofpoint-GUID: p1D8xkLtOkWWWmbhArSdaeiOmhH7dT6S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_06,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ phishscore=0 impostorscore=0 spamscore=0 malwarescore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307110111
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,355 +86,75 @@ X-Mailing-List: linux-remoteproc@vger.kernel.org
 
 
 
-On 10/07/2023 21:34, Stephan Gerhold wrote:
-> Reserved memory can be either looked up using the generic function
-> of_address_to_resource() or using the special of_reserved_mem_lookup().
-> The latter has the advantage that it ensures that the referenced memory
-> region was really reserved and is not e.g. status = "disabled".
+On 6/7/2023 5:47 PM, Manikanta Mylavarapu wrote:
+> In case of heavy cpu load, rx worker thread
+> not able to get cpu slot because it's bound
+> to kernel global work queue.
 > 
-> of_reserved_mem also supports allocating reserved memory dynamically at
-> boot time. This works only when using of_reserved_mem_lookup() since
-> there won't be a fixed address in the device tree.
+> Glink client drivers will return timeout
+> error if they didn't receive response
+> within stipulated duration. Changing rx
+> work queue type to UNBOUND workqueue
+> ensures rx worker thread will be executed
+> as early as possible.
 > 
-> Switch the code to use of_reserved_mem_lookup(), similar to
-> qcom_q6v5_wcss.c which is using it already. There is no functional
-> difference for static reserved memory allocations.
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+> ---
+>   drivers/rpmsg/qcom_glink_native.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> While at it this also adds two missing of_node_put() calls in
-> qcom_q6v5_pas.c.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+> index 1beb40a1d3df..6f9a439e5046 100644
+> --- a/drivers/rpmsg/qcom_glink_native.c
+> +++ b/drivers/rpmsg/qcom_glink_native.c
+> @@ -81,6 +81,7 @@ struct glink_core_rx_intent {
+>    * @rx_pipe:	pipe object for receive FIFO
+>    * @tx_pipe:	pipe object for transmit FIFO
+>    * @rx_work:	worker for handling received control messages
+> + * @rx_wq:	work queue of rx_work
+>    * @rx_lock:	protects the @rx_queue
+>    * @rx_queue:	queue of received control messages to be processed in @rx_work
+>    * @tx_lock:	synchronizes operations on the tx fifo
+> @@ -100,6 +101,7 @@ struct qcom_glink {
+>   	struct qcom_glink_pipe *tx_pipe;
+>   
+>   	struct work_struct rx_work;
+> +	struct workqueue_struct *rx_wq;
+>   	spinlock_t rx_lock;
+>   	struct list_head rx_queue;
+>   
+> @@ -822,7 +824,7 @@ static int qcom_glink_rx_defer(struct qcom_glink *glink, size_t extra)
+>   	list_add_tail(&dcmd->node, &glink->rx_queue);
+>   	spin_unlock(&glink->rx_lock);
+>   
+> -	schedule_work(&glink->rx_work);
+> +	queue_work(glink->rx_wq, &glink->rx_work);
+>   	qcom_glink_rx_advance(glink, sizeof(dcmd->msg) + extra);
+>   
+>   	return 0;
+> @@ -1665,6 +1667,8 @@ static void qcom_glink_cancel_rx_work(struct qcom_glink *glink)
+>   	/* cancel any pending deferred rx_work */
+>   	cancel_work_sync(&glink->rx_work);
+>   
+> +	destroy_workqueue(glink->rx_wq);
+> +
+>   	list_for_each_entry_safe(dcmd, tmp, &glink->rx_queue, node)
+>   		kfree(dcmd);
+>   }
+> @@ -1750,6 +1754,10 @@ struct qcom_glink *qcom_glink_native_probe(struct device *dev,
+>   	INIT_WORK(&glink->rx_work, qcom_glink_work);
+>   	init_waitqueue_head(&glink->tx_avail_notify);
+>   
+> +	glink->rx_wq = alloc_workqueue("glink_rx_wq", WQ_UNBOUND, 1);
+> +	if (!glink->rx_wq)
+> +		return ERR_PTR(-ENOMEM);
+> +
+>   	spin_lock_init(&glink->idr_lock);
+>   	idr_init(&glink->lcids);
+>   	idr_init(&glink->rcids);
 
-Tested-by: Caleb Connolly <caleb.connolly@linaro.org> # SDM845
-Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
-> ---
-> Changes in v3:
-> - Revert additional rmem->size checks: None of the existing users of
->   of_reserved_mem_lookup() have it so it sounds better to handle this 
->   internally in of_reserved_mem. I'll work on a separate patch series
->   to improve this independently of this one. (Caleb)
-> - Link to v2: https://lore.kernel.org/r/20230529-rproc-of-rmem-v2-0-95e39b959585@gerhold.net
-> 
-> Changes in v2:
-> - Add missing check for rmem (Bjorn)
-> - Add checks for rmem->size to ensure dynamic reserved memory was 
->   really allocated
-> - Link to v1: https://lore.kernel.org/r/20230529-rproc-of-rmem-v1-1-5b1e38880aba@gerhold.net
-> ---
-> See e.g. [1] for an example of dynamically allocated reserved memory.
-> (This patch does *not* depend on [1] and is useful without as well...)
-> 
-> NOTE: Changes in qcom_q6v5_adsp.c and qcom_q6v5_pas.c are untested,
-> I only checked qcom_q6v5_mss.c and qcom_wcnss.c on MSM8916/DB410c.
-> The code changes are pretty similar for all of those though.
-> 
-> [1]: https://lore.kernel.org/linux-arm-msm/20230510-dt-resv-bottom-up-v1-5-3bf68873dbed@gerhold.net/
-> ---
->  drivers/remoteproc/qcom_q6v5_adsp.c | 24 ++++++++---------
->  drivers/remoteproc/qcom_q6v5_mss.c  | 33 ++++++++++++++----------
->  drivers/remoteproc/qcom_q6v5_pas.c  | 51 ++++++++++++++++++++-----------------
->  drivers/remoteproc/qcom_wcnss.c     | 24 ++++++++---------
->  4 files changed, 69 insertions(+), 63 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-> index 6777a3bd6226..d3caaa551916 100644
-> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
-> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-> @@ -14,8 +14,8 @@
->  #include <linux/kernel.h>
->  #include <linux/mfd/syscon.h>
->  #include <linux/module.h>
-> -#include <linux/of_address.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_reserved_mem.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
->  #include <linux/pm_runtime.h>
-> @@ -637,28 +637,26 @@ static int adsp_init_mmio(struct qcom_adsp *adsp,
->  
->  static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
->  {
-> +	struct reserved_mem *rmem = NULL;
->  	struct device_node *node;
-> -	struct resource r;
-> -	int ret;
->  
->  	node = of_parse_phandle(adsp->dev->of_node, "memory-region", 0);
-> -	if (!node) {
-> -		dev_err(adsp->dev, "no memory-region specified\n");
-> +	if (node)
-> +		rmem = of_reserved_mem_lookup(node);
-> +	of_node_put(node);
-> +
-> +	if (!rmem) {
-> +		dev_err(adsp->dev, "unable to resolve memory-region\n");
->  		return -EINVAL;
->  	}
->  
-> -	ret = of_address_to_resource(node, 0, &r);
-> -	of_node_put(node);
-> -	if (ret)
-> -		return ret;
-> -
-> -	adsp->mem_phys = adsp->mem_reloc = r.start;
-> -	adsp->mem_size = resource_size(&r);
-> +	adsp->mem_phys = adsp->mem_reloc = rmem->base;
-> +	adsp->mem_size = rmem->size;
->  	adsp->mem_region = devm_ioremap_wc(adsp->dev,
->  				adsp->mem_phys, adsp->mem_size);
->  	if (!adsp->mem_region) {
->  		dev_err(adsp->dev, "unable to map memory region: %pa+%zx\n",
-> -			&r.start, adsp->mem_size);
-> +			&rmem->base, adsp->mem_size);
->  		return -EBUSY;
->  	}
->  
-> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-> index 70bffc9f33f6..69b90dc32d8a 100644
-> --- a/drivers/remoteproc/qcom_q6v5_mss.c
-> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
-> @@ -15,7 +15,6 @@
->  #include <linux/kernel.h>
->  #include <linux/mfd/syscon.h>
->  #include <linux/module.h>
-> -#include <linux/of_address.h>
->  #include <linux/of_device.h>
->  #include <linux/of_reserved_mem.h>
->  #include <linux/platform_device.h>
-> @@ -1875,8 +1874,6 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
->  	struct device_node *child;
->  	struct reserved_mem *rmem;
->  	struct device_node *node;
-> -	struct resource r;
-> -	int ret;
->  
->  	/*
->  	 * In the absence of mba/mpss sub-child, extract the mba and mpss
-> @@ -1891,15 +1888,20 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
->  		of_node_put(child);
->  	}
->  
-> -	ret = of_address_to_resource(node, 0, &r);
-> +	if (!node) {
-> +		dev_err(qproc->dev, "no mba memory-region specified\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	rmem = of_reserved_mem_lookup(node);
->  	of_node_put(node);
-> -	if (ret) {
-> +	if (!rmem) {
->  		dev_err(qproc->dev, "unable to resolve mba region\n");
-> -		return ret;
-> +		return -EINVAL;
->  	}
->  
-> -	qproc->mba_phys = r.start;
-> -	qproc->mba_size = resource_size(&r);
-> +	qproc->mba_phys = rmem->base;
-> +	qproc->mba_size = rmem->size;
->  
->  	if (!child) {
->  		node = of_parse_phandle(qproc->dev->of_node,
-> @@ -1910,15 +1912,20 @@ static int q6v5_alloc_memory_region(struct q6v5 *qproc)
->  		of_node_put(child);
->  	}
->  
-> -	ret = of_address_to_resource(node, 0, &r);
-> +	if (!node) {
-> +		dev_err(qproc->dev, "no mpss memory-region specified\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	rmem = of_reserved_mem_lookup(node);
->  	of_node_put(node);
-> -	if (ret) {
-> +	if (!rmem) {
->  		dev_err(qproc->dev, "unable to resolve mpss region\n");
-> -		return ret;
-> +		return -EINVAL;
->  	}
->  
-> -	qproc->mpss_phys = qproc->mpss_reloc = r.start;
-> -	qproc->mpss_size = resource_size(&r);
-> +	qproc->mpss_phys = qproc->mpss_reloc = rmem->base;
-> +	qproc->mpss_size = rmem->size;
->  
->  	if (!child) {
->  		node = of_parse_phandle(qproc->dev->of_node, "memory-region", 2);
-> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-> index 3153d82037e7..58f8b81f6d52 100644
-> --- a/drivers/remoteproc/qcom_q6v5_pas.c
-> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-> @@ -13,8 +13,8 @@
->  #include <linux/interrupt.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> -#include <linux/of_address.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_reserved_mem.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
->  #include <linux/pm_runtime.h>
-> @@ -533,9 +533,8 @@ static void adsp_pds_detach(struct qcom_adsp *adsp, struct device **pds,
->  
->  static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
->  {
-> +	struct reserved_mem *rmem;
->  	struct device_node *node;
-> -	struct resource r;
-> -	int ret;
->  
->  	node = of_parse_phandle(adsp->dev->of_node, "memory-region", 0);
->  	if (!node) {
-> @@ -543,17 +542,19 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
->  		return -EINVAL;
->  	}
->  
-> -	ret = of_address_to_resource(node, 0, &r);
-> +	rmem = of_reserved_mem_lookup(node);
->  	of_node_put(node);
-> -	if (ret)
-> -		return ret;
-> +	if (!rmem) {
-> +		dev_err(adsp->dev, "unable to resolve memory-region\n");
-> +		return -EINVAL;
-> +	}
->  
-> -	adsp->mem_phys = adsp->mem_reloc = r.start;
-> -	adsp->mem_size = resource_size(&r);
-> +	adsp->mem_phys = adsp->mem_reloc = rmem->base;
-> +	adsp->mem_size = rmem->size;
->  	adsp->mem_region = devm_ioremap_wc(adsp->dev, adsp->mem_phys, adsp->mem_size);
->  	if (!adsp->mem_region) {
->  		dev_err(adsp->dev, "unable to map memory region: %pa+%zx\n",
-> -			&r.start, adsp->mem_size);
-> +			&rmem->base, adsp->mem_size);
->  		return -EBUSY;
->  	}
->  
-> @@ -566,16 +567,19 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
->  		return -EINVAL;
->  	}
->  
-> -	ret = of_address_to_resource(node, 0, &r);
-> -	if (ret)
-> -		return ret;
-> +	rmem = of_reserved_mem_lookup(node);
-> +	of_node_put(node);
-> +	if (!rmem) {
-> +		dev_err(adsp->dev, "unable to resolve dtb memory-region\n");
-> +		return -EINVAL;
-> +	}
->  
-> -	adsp->dtb_mem_phys = adsp->dtb_mem_reloc = r.start;
-> -	adsp->dtb_mem_size = resource_size(&r);
-> +	adsp->dtb_mem_phys = adsp->dtb_mem_reloc = rmem->base;
-> +	adsp->dtb_mem_size = rmem->size;
->  	adsp->dtb_mem_region = devm_ioremap_wc(adsp->dev, adsp->dtb_mem_phys, adsp->dtb_mem_size);
->  	if (!adsp->dtb_mem_region) {
->  		dev_err(adsp->dev, "unable to map dtb memory region: %pa+%zx\n",
-> -			&r.start, adsp->dtb_mem_size);
-> +			&rmem->base, adsp->dtb_mem_size);
->  		return -EBUSY;
->  	}
->  
-> @@ -584,29 +588,28 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
->  
->  static int adsp_assign_memory_region(struct qcom_adsp *adsp)
->  {
-> +	struct reserved_mem *rmem = NULL;
->  	struct qcom_scm_vmperm perm;
->  	struct device_node *node;
-> -	struct resource r;
->  	int ret;
->  
->  	if (!adsp->region_assign_idx)
->  		return 0;
->  
->  	node = of_parse_phandle(adsp->dev->of_node, "memory-region", adsp->region_assign_idx);
-> -	if (!node) {
-> -		dev_err(adsp->dev, "missing shareable memory-region\n");
-> +	if (node)
-> +		rmem = of_reserved_mem_lookup(node);
-> +	of_node_put(node);
-> +	if (!rmem) {
-> +		dev_err(adsp->dev, "unable to resolve shareable memory-region\n");
->  		return -EINVAL;
->  	}
->  
-> -	ret = of_address_to_resource(node, 0, &r);
-> -	if (ret)
-> -		return ret;
-> -
->  	perm.vmid = QCOM_SCM_VMID_MSS_MSA;
->  	perm.perm = QCOM_SCM_PERM_RW;
->  
-> -	adsp->region_assign_phys = r.start;
-> -	adsp->region_assign_size = resource_size(&r);
-> +	adsp->region_assign_phys = rmem->base;
-> +	adsp->region_assign_size = rmem->size;
->  	adsp->region_assign_perms = BIT(QCOM_SCM_VMID_HLOS);
->  
->  	ret = qcom_scm_assign_mem(adsp->region_assign_phys,
-> diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
-> index 1ed0647bc962..334a9c75dad6 100644
-> --- a/drivers/remoteproc/qcom_wcnss.c
-> +++ b/drivers/remoteproc/qcom_wcnss.c
-> @@ -14,8 +14,8 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/io.h>
-> -#include <linux/of_address.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_reserved_mem.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
->  #include <linux/pm_runtime.h>
-> @@ -506,27 +506,25 @@ static int wcnss_request_irq(struct qcom_wcnss *wcnss,
->  
->  static int wcnss_alloc_memory_region(struct qcom_wcnss *wcnss)
->  {
-> +	struct reserved_mem *rmem = NULL;
->  	struct device_node *node;
-> -	struct resource r;
-> -	int ret;
->  
->  	node = of_parse_phandle(wcnss->dev->of_node, "memory-region", 0);
-> -	if (!node) {
-> -		dev_err(wcnss->dev, "no memory-region specified\n");
-> +	if (node)
-> +		rmem = of_reserved_mem_lookup(node);
-> +	of_node_put(node);
-> +
-> +	if (!rmem) {
-> +		dev_err(wcnss->dev, "unable to resolve memory-region\n");
->  		return -EINVAL;
->  	}
->  
-> -	ret = of_address_to_resource(node, 0, &r);
-> -	of_node_put(node);
-> -	if (ret)
-> -		return ret;
-> -
-> -	wcnss->mem_phys = wcnss->mem_reloc = r.start;
-> -	wcnss->mem_size = resource_size(&r);
-> +	wcnss->mem_phys = wcnss->mem_reloc = rmem->base;
-> +	wcnss->mem_size = rmem->size;
->  	wcnss->mem_region = devm_ioremap_wc(wcnss->dev, wcnss->mem_phys, wcnss->mem_size);
->  	if (!wcnss->mem_region) {
->  		dev_err(wcnss->dev, "unable to map memory region: %pa+%zx\n",
-> -			&r.start, wcnss->mem_size);
-> +			&rmem->base, wcnss->mem_size);
->  		return -EBUSY;
->  	}
->  
-> 
-> ---
-> base-commit: 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5
-> change-id: 20230529-rproc-of-rmem-7d931f61f64e
-> 
-> Best regards,
 
--- 
-// Caleb (they/them)
+Gentle reminder for review!
+
+Thanks,
+Manikanta.
