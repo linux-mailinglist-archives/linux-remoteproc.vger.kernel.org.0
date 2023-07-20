@@ -2,229 +2,147 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E2575AEDE
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 20 Jul 2023 14:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4A775AF67
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 20 Jul 2023 15:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjGTM4f (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 20 Jul 2023 08:56:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55478 "EHLO
+        id S231764AbjGTNNv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 20 Jul 2023 09:13:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjGTM4c (ORCPT
+        with ESMTP id S231776AbjGTNNp (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 20 Jul 2023 08:56:32 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8C12719;
-        Thu, 20 Jul 2023 05:56:06 -0700 (PDT)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 14BB3847C0;
-        Thu, 20 Jul 2023 14:56:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1689857764;
-        bh=Dy3nxWdNI1j9nIqovfHwlzO+6mWNzr6qPT7Pvev89Bo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tIDj6kA3prN1jZqK4mxOsin0Vy1+eAHdYAqTWW7hpEr5LGg4vvZ58jcSuK8fM7Pp8
-         rlDEIi79EP5NgATP77cV1lcB0CJhz0jitRH7c0GEf2tSTBqv3qqusOCHnvWHnmxd1l
-         dTCRN/Sn8w5E0QIw7i7pPH/THR7vb3xVbgwCN28GFT0YKgz2YH6cWFNOpBkGT8yUa+
-         fugQIQ7r9FQsgJJBO7nz+Rwty4HkEXx4fw8N86VQ31xoRfJiZcwcrrFr4RlVWMjBiz
-         r6pFxtR5kHh53m3Qs9mlmWBebrH/hMcJCBv3NF/jGydzXVUW8hO2qvgmLqeEVL6/Mh
-         wBf0UXoAk/Zbw==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-remoteproc@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 2/2] remoteproc: imx_rproc: Switch iMX8MN/MP from SMCCC to MMIO
-Date:   Thu, 20 Jul 2023 14:55:49 +0200
-Message-Id: <20230720125549.72929-2-marex@denx.de>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230720125549.72929-1-marex@denx.de>
-References: <20230720125549.72929-1-marex@denx.de>
+        Thu, 20 Jul 2023 09:13:45 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C7D26AC
+        for <linux-remoteproc@vger.kernel.org>; Thu, 20 Jul 2023 06:13:43 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fbc244d307so6682605e9.1
+        for <linux-remoteproc@vger.kernel.org>; Thu, 20 Jul 2023 06:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689858821; x=1690463621;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=33+dIrV1g2li6K17tpdCbWThgnqyYELTLl4Ef0pYaFI=;
+        b=ELEG4L2qZEKgbn/CUk4mr8V+GTaYcHKX+bqevSarlForkDjOhtzRVycgEg/LiXcDPj
+         Kr96cq6sU0moXgJhufwG3kNiPbr+aZMgHMAUZw5xm16kFBHnpyyA9Fir6ZIyCfvED+44
+         KvYbUXc/L9+teUmBwhpVYHBECYBVkf7Sye90VtT3bBzajxZculITif8pd4SYa6+VwudZ
+         eEulGPDpT1jisJIjf31XmTcgugkQT91GY98ReaiMpFkXEKC3xBDMGuDyooYyPK4P5MoR
+         TY6BJQnJh0s9yYwdiOp+/vPJ2kSTQGbUAw9yEkj4Uu2YZWGvpe6UYrLulUny8imF1NYX
+         ZZxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689858821; x=1690463621;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=33+dIrV1g2li6K17tpdCbWThgnqyYELTLl4Ef0pYaFI=;
+        b=W/g0I1tFgphwQb+Zr2ShX2jcExaV+4BFOt3AblDdUorS9zBs7S+sNjnwdTo6dxr3as
+         SFv94udJGi5PPSRoyBNW4O2ZXBQszqI08pxFGOj69L/8/UP3XzS0o3YGv8DWKwf0H8qo
+         TpkIVI83QUi8PDywOez6rkoCurMUvA7j/7r3fzpVHIlwMVk49shdFHJjQBafqtZgydgM
+         eqYo+svQNHb68VvqRrunYCoQj271bPg+ZSxMzOfguTUQt6KnBvgs+jAIVSTX5sHyFcrg
+         Y0jcR3Jwl9ctt6YD+Y++Q4zlKEeDMOmwCawCX3blZEqd5rf6ypxkzyQEEqV07bbVHDmM
+         JlYA==
+X-Gm-Message-State: ABy/qLZCze7eWEPKTKb6fjVLzveFs3kl1ZjTBl3mYwzE9mChVKD2/pIC
+        TcukN5JFbbUNwcX5akbmu8BLPU+RrCfHDp0D7Ik=
+X-Google-Smtp-Source: APBJJlGLbk/dGMS2u15ZxfXPZhUejqXraQAMnSt+pNwzRVCfjD/Iv62GXpdZvhsPa6mpU9rV1bHw0w==
+X-Received: by 2002:a7b:c8cd:0:b0:3f9:b748:ff3f with SMTP id f13-20020a7bc8cd000000b003f9b748ff3fmr6553704wml.1.1689858821422;
+        Thu, 20 Jul 2023 06:13:41 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id y15-20020a7bcd8f000000b003fbdd5d0758sm1166775wmj.22.2023.07.20.06.13.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jul 2023 06:13:40 -0700 (PDT)
+Message-ID: <c53c8fc5-a898-df1d-4626-696ffd990796@linaro.org>
+Date:   Thu, 20 Jul 2023 15:13:38 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [V3,09/11] remoteproc: qcom: Add Hexagon based multipd rproc
+ driver
+Content-Language: en-US
+To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mathieu.poirier@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        quic_eberman@quicinc.com, kvalo@kernel.org,
+        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_anusha@quicinc.com
+References: <20230718120501.3205661-1-quic_mmanikan@quicinc.com>
+ <20230718120501.3205661-10-quic_mmanikan@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230718120501.3205661-10-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The MX8M CM7 boot via SMC call is problematic, since not all versions
-of ATF support this interface. Extend the MMIO support so it can boot
-the CM7 on MX8MN/MP instead and discern the two alternatives using DT
-compatible strings.
+On 18/07/2023 14:04, Manikanta Mylavarapu wrote:
+> It adds support to bring up remoteproc's on multipd model.
+> Pd means protection domain. It's similar to process in Linux.
+> Here QDSP6 processor runs each wifi radio functionality on a
+> separate process. One process can't access other process
+> resources, so this is termed as PD i.e protection domain.
 
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Conor Dooley <conor+dt@kernel.org>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Peng Fan <peng.fan@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: devicetree@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-remoteproc@vger.kernel.org
----
-V2: Rename 'gpr' to 'fsl,iomuxc-gpr'
----
- drivers/remoteproc/imx_rproc.c | 58 ++++++++++++++++++++++++++++++++--
- drivers/remoteproc/imx_rproc.h |  2 ++
- 2 files changed, 58 insertions(+), 2 deletions(-)
+...
 
-diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-index 4ee2646ce62ad..8bb293b9f327c 100644
---- a/drivers/remoteproc/imx_rproc.c
-+++ b/drivers/remoteproc/imx_rproc.c
-@@ -40,6 +40,12 @@
- #define IMX7D_M4_STOP			(IMX7D_ENABLE_M4 | IMX7D_SW_M4C_RST | \
- 					 IMX7D_SW_M4C_NON_SCLR_RST)
- 
-+#define IMX8M_M7_STOP			(IMX7D_ENABLE_M4 | IMX7D_SW_M4C_RST)
-+#define IMX8M_M7_POLL			IMX7D_ENABLE_M4
-+
-+#define IMX8M_GPR22			0x58
-+#define IMX8M_GPR22_CM7_CPUWAIT		BIT(0)
-+
- /* Address: 0x020D8000 */
- #define IMX6SX_SRC_SCR			0x00
- #define IMX6SX_ENABLE_M4		BIT(22)
-@@ -91,6 +97,7 @@ static int imx_rproc_detach_pd(struct rproc *rproc);
- struct imx_rproc {
- 	struct device			*dev;
- 	struct regmap			*regmap;
-+	struct regmap			*gpr;
- 	struct rproc			*rproc;
- 	const struct imx_rproc_dcfg	*dcfg;
- 	struct imx_rproc_mem		mem[IMX_RPROC_MEM_MAX];
-@@ -285,6 +292,18 @@ static const struct imx_rproc_att imx_rproc_att_imx6sx[] = {
- 	{ 0x80000000, 0x80000000, 0x60000000, 0 },
- };
- 
-+static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mn_mmio = {
-+	.src_reg	= IMX7D_SRC_SCR,
-+	.src_mask	= IMX7D_M4_RST_MASK,
-+	.src_start	= IMX7D_M4_START,
-+	.src_stop	= IMX8M_M7_STOP,
-+	.gpr_reg	= IMX8M_GPR22,
-+	.gpr_wait	= IMX8M_GPR22_CM7_CPUWAIT,
-+	.att		= imx_rproc_att_imx8mn,
-+	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8mn),
-+	.method		= IMX_RPROC_MMIO,
-+};
-+
- static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mn = {
- 	.att		= imx_rproc_att_imx8mn,
- 	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8mn),
-@@ -365,8 +384,14 @@ static int imx_rproc_start(struct rproc *rproc)
- 
- 	switch (dcfg->method) {
- 	case IMX_RPROC_MMIO:
--		ret = regmap_update_bits(priv->regmap, dcfg->src_reg, dcfg->src_mask,
--					 dcfg->src_start);
-+		if (priv->gpr) {
-+			ret = regmap_clear_bits(priv->gpr, dcfg->gpr_reg,
-+						dcfg->gpr_wait);
-+		} else {
-+			ret = regmap_update_bits(priv->regmap, dcfg->src_reg,
-+						 dcfg->src_mask,
-+						 dcfg->src_start);
-+		}
- 		break;
- 	case IMX_RPROC_SMC:
- 		arm_smccc_smc(IMX_SIP_RPROC, IMX_SIP_RPROC_START, 0, 0, 0, 0, 0, 0, &res);
-@@ -395,6 +420,16 @@ static int imx_rproc_stop(struct rproc *rproc)
- 
- 	switch (dcfg->method) {
- 	case IMX_RPROC_MMIO:
-+		if (priv->gpr) {
-+			ret = regmap_set_bits(priv->gpr, dcfg->gpr_reg,
-+					      dcfg->gpr_wait);
-+			if (ret) {
-+				dev_err(priv->dev,
-+					"Failed to quiescence M4 platform!\n");
-+				return ret;
-+			}
-+		}
-+
- 		ret = regmap_update_bits(priv->regmap, dcfg->src_reg, dcfg->src_mask,
- 					 dcfg->src_stop);
- 		break;
-@@ -992,6 +1027,10 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
- 		break;
- 	}
- 
-+	priv->gpr = syscon_regmap_lookup_by_phandle(dev->of_node, "fsl,iomuxc-gpr");
-+	if (IS_ERR(priv->gpr))
-+		priv->gpr = NULL;
-+
- 	regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
- 	if (IS_ERR(regmap)) {
- 		dev_err(dev, "failed to find syscon\n");
-@@ -1001,6 +1040,19 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
- 	priv->regmap = regmap;
- 	regmap_attach_dev(dev, regmap, &config);
- 
-+	if (priv->gpr) {
-+		ret = regmap_read(priv->gpr, dcfg->gpr_reg, &val);
-+		if (val & dcfg->gpr_wait) {
-+			/*
-+			 * After cold boot, the CM indicates its in wait
-+			 * state, but not fully powered off. Power it off
-+			 * fully so firmware can be loaded into it.
-+			 */
-+			imx_rproc_stop(priv->rproc);
-+			return 0;
-+		}
-+	}
-+
- 	ret = regmap_read(regmap, dcfg->src_reg, &val);
- 	if (ret) {
- 		dev_err(dev, "Failed to read src\n");
-@@ -1142,6 +1194,8 @@ static const struct of_device_id imx_rproc_of_match[] = {
- 	{ .compatible = "fsl,imx8mm-cm4", .data = &imx_rproc_cfg_imx8mq },
- 	{ .compatible = "fsl,imx8mn-cm7", .data = &imx_rproc_cfg_imx8mn },
- 	{ .compatible = "fsl,imx8mp-cm7", .data = &imx_rproc_cfg_imx8mn },
-+	{ .compatible = "fsl,imx8mn-cm7-mmio", .data = &imx_rproc_cfg_imx8mn_mmio },
-+	{ .compatible = "fsl,imx8mp-cm7-mmio", .data = &imx_rproc_cfg_imx8mn_mmio },
- 	{ .compatible = "fsl,imx8qxp-cm4", .data = &imx_rproc_cfg_imx8qxp },
- 	{ .compatible = "fsl,imx8qm-cm4", .data = &imx_rproc_cfg_imx8qm },
- 	{ .compatible = "fsl,imx8ulp-cm33", .data = &imx_rproc_cfg_imx8ulp },
-diff --git a/drivers/remoteproc/imx_rproc.h b/drivers/remoteproc/imx_rproc.h
-index 1c7e2127c7584..79a1b8956d142 100644
---- a/drivers/remoteproc/imx_rproc.h
-+++ b/drivers/remoteproc/imx_rproc.h
-@@ -31,6 +31,8 @@ struct imx_rproc_dcfg {
- 	u32				src_mask;
- 	u32				src_start;
- 	u32				src_stop;
-+	u32				gpr_reg;
-+	u32				gpr_wait;
- 	const struct imx_rproc_att	*att;
- 	size_t				att_size;
- 	enum imx_rproc_method		method;
--- 
-2.40.1
+> + * User pd boot-info format mentioned below
+> + * <Version> <No of elements passing over smem> <Header type> <Header Length>
+> + * <Process Id> <Load address> <firmware mem Size>
+> + *
+> + * Returns 0 on success else negative value on failure.
+> + */
+> +static int share_upd_bootinfo_to_q6(struct rproc *rproc)
+> +{
+> +	int ret;
+> +	size_t size;
+> +	u16 cnt = 0, version;
+> +	void *ptr;
+> +	struct q6_wcss *wcss = rproc->priv, *upd_wcss;
+> +	struct device_node *upd_np;
+> +	struct platform_device *upd_pdev;
+> +	struct rproc *upd_rproc;
+> +	struct userpd_boot_info upd_bootinfo = {0};
+> +	const struct firmware *fw;
+> +
+> +	ret = qcom_smem_alloc(REMOTE_PID, UPD_BOOT_INFO_SMEM_ID,
+> +			      UPD_BOOT_INFO_SMEM_SIZE);
+> +	if (ret && ret != -EEXIST) {
+> +		dev_err(wcss->dev,
+> +			"failed to allocate q6 bootinfo smem segment\n");
+> +		return ret;
+> +	}
+> +
+> +	ptr = qcom_smem_get(REMOTE_PID, UPD_BOOT_INFO_SMEM_ID, &size);
+> +	if (IS_ERR(ptr) || size != UPD_BOOT_INFO_SMEM_SIZE) {
+> +		dev_err(wcss->dev,
+> +			"Unable to acquire smp2p item(%d) ret:%ld\n",
+> +			UPD_BOOT_INFO_SMEM_ID, PTR_ERR(ptr));
+> +		return PTR_ERR(ptr);
+> +	}
+> +
+> +	/* print physical address */
+> +	dev_info(wcss->dev,
+> +		 "smem phyiscal address:0x%lX\n",
+> +		 (uintptr_t)qcom_smem_virt_to_phys(ptr));
+
+One more thought. Why do you need it? Even if this is not a kernel or
+user-space address, why would like to disclose the memory layout? I
+think this is contradictory to the kptr_restrict concept.
+
+> +
+> +	/*Version*/
+
+
+
+Best regards,
+Krzysztof
 
