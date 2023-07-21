@@ -2,256 +2,188 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9033F75B534
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 20 Jul 2023 19:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C06775BC68
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 21 Jul 2023 04:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjGTRHq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 20 Jul 2023 13:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
+        id S229713AbjGUCmI (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 20 Jul 2023 22:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjGTRHp (ORCPT
+        with ESMTP id S229642AbjGUCmF (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 20 Jul 2023 13:07:45 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0EF1A8
-        for <linux-remoteproc@vger.kernel.org>; Thu, 20 Jul 2023 10:07:44 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-262e89a3ee2so537851a91.1
-        for <linux-remoteproc@vger.kernel.org>; Thu, 20 Jul 2023 10:07:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689872864; x=1690477664;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3gQbgDrG+e3Hu7SQ1w0l1g3BL557ddifDpg7rbmsdAg=;
-        b=TpyW1pxzIvR3hrNLjOVY1YSuvyeRVOo1esnAq5v6N/2AnFzEHVw76iyvzS76/bSdf4
-         N9ho6WaoM9qGp07f1trYjuxtLNR+dot/6Jw2EDFUnINE50QLfYl4qIcgr3zI6yRj1zId
-         z/Ox1Kk66EtV7NQqd57FhZM9GTfChTBgbPW3M4emuL+P1Tcl/fbwpzp8kp1z412J/veA
-         iaePlXfuow+onqc1CPIHDvGfIA+0bBM1hGMQmjt08TPNjcYkXA8NI3sSmM20IMBz77HW
-         AWgy1G4cJ3BIRjZjnDV4DoU/tZQ0lMekwT9vZGuLZYzRKgfmzvnxJ07ENyjIJUKPuSSB
-         qLQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689872864; x=1690477664;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3gQbgDrG+e3Hu7SQ1w0l1g3BL557ddifDpg7rbmsdAg=;
-        b=lpqTcgdpOz0szO9z1aMUkrMbfvm86Q8aEpcArOPM5/+vpX4wpRkj2cVf5PhADe3N6V
-         f6KtxEmWe2r7wdWHY0xbfSlraq1cIxzUqlfTBp4lDo9zM43mwQ9YY2w8FcM51sNImX19
-         UJ/wdiOnzD1WhynzjwDdS71mHhYx9xFkun6/eyVfDWZtL/pLUEr1oLpOFi2oELvdqSVp
-         tQ14Xh5kq8VgQ/0JTCB21XQYFrWJjjbhT8hg/z8CdmvmxkZJVhGKX04y7SkCLuyqLmeL
-         6nxNqfze+Uh6ZwszVIN7m/6wvTNcIa+fgC60R12zbSBP0G/fvyJ5frjwKqEMBjqD7LeE
-         iN4g==
-X-Gm-Message-State: ABy/qLYElVUfnifNT2E1E9LkAzUTbl6G7sk/bpR9WaGHRRoewU4LekMt
-        4I46Z/3TCGDleuvjft3iOuAHFn5ZYXULxfZlVqE=
-X-Google-Smtp-Source: APBJJlEiQVV2IHjouWpGwbgKwsjYtrLIL3UxRwgSfH/BCd16vzBsGvF7fK39e7fnzw5MzrRDk3YPww==
-X-Received: by 2002:a17:90a:d598:b0:264:97a:2ba6 with SMTP id v24-20020a17090ad59800b00264097a2ba6mr121329pju.7.1689872863688;
-        Thu, 20 Jul 2023 10:07:43 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:ef2d:6ce9:20ef:3d8b])
-        by smtp.gmail.com with ESMTPSA id t10-20020a17090a448a00b00263f8915aa3sm2852204pjg.31.2023.07.20.10.07.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 10:07:43 -0700 (PDT)
-Date:   Thu, 20 Jul 2023 11:07:40 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Marek Vasut <marex@denx.de>
-Cc:     linux-remoteproc@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Thu, 20 Jul 2023 22:42:05 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803ED2690;
+        Thu, 20 Jul 2023 19:41:58 -0700 (PDT)
+X-UUID: 254ff3a6277011ee9cb5633481061a41-20230721
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=cuQcAFun+BnSgG5anPpJsFlDoWtYI8mwMJXr/j2QCQw=;
+        b=NEujqncd9Pppb0EJkjNSlljhfszfc7bjDD2nR3jK9awxKb5iaystOEoZd+idoVr8Cow331CoN2CHc4Mn7xKupCX2zvemCJJC6GxKzufqmuAKeaiUy98PSGL2M6pZ5WYdHlz0l1oFEnTXsOIIdyEpA/dy4g/nZ3PrM6/vy+3Aco4=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.28,REQID:0dad7ffc-5d50-4929-9843-8a1276bcfedc,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:176cd25,CLOUDID:6914d8dc-dc79-4898-9235-1134b97257a8,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+        DKR:0,DKP:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 254ff3a6277011ee9cb5633481061a41-20230721
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1309599569; Fri, 21 Jul 2023 10:41:51 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 21 Jul 2023 10:41:49 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 21 Jul 2023 10:41:49 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] remoteproc: imx_rproc: Switch iMX8MN/MP from
- SMCCC to MMIO
-Message-ID: <ZLlp3Iy0xRP/UL29@p14s>
-References: <20230720125549.72929-1-marex@denx.de>
- <20230720125549.72929-2-marex@denx.de>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+CC:     <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v15 00/13] Add support for MT8195 SCP 2nd core
+Date:   Fri, 21 Jul 2023 10:41:19 +0800
+Message-ID: <20230721024132.6548-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230720125549.72929-2-marex@denx.de>
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Hi Marek,
+The mediatek remoteproc driver currently only allows bringing up a 
+single core SCP, e.g. MT8183. It also only bringing up the 1st 
+core in SoCs with a dual-core SCP, e.g. MT8195. This series support 
+to bring-up the 2nd core of the dual-core SCP.
 
-On Thu, Jul 20, 2023 at 02:55:49PM +0200, Marek Vasut wrote:
-> The MX8M CM7 boot via SMC call is problematic, since not all versions
-> of ATF support this interface. Extend the MMIO support so it can boot
-> the CM7 on MX8MN/MP instead and discern the two alternatives using DT
-> compatible strings.
-> 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Conor Dooley <conor+dt@kernel.org>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Peng Fan <peng.fan@nxp.com>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-remoteproc@vger.kernel.org
-> ---
-> V2: Rename 'gpr' to 'fsl,iomuxc-gpr'
-> ---
->  drivers/remoteproc/imx_rproc.c | 58 ++++++++++++++++++++++++++++++++--
->  drivers/remoteproc/imx_rproc.h |  2 ++
->  2 files changed, 58 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> index 4ee2646ce62ad..8bb293b9f327c 100644
-> --- a/drivers/remoteproc/imx_rproc.c
-> +++ b/drivers/remoteproc/imx_rproc.c
-> @@ -40,6 +40,12 @@
->  #define IMX7D_M4_STOP			(IMX7D_ENABLE_M4 | IMX7D_SW_M4C_RST | \
->  					 IMX7D_SW_M4C_NON_SCLR_RST)
->  
-> +#define IMX8M_M7_STOP			(IMX7D_ENABLE_M4 | IMX7D_SW_M4C_RST)
-> +#define IMX8M_M7_POLL			IMX7D_ENABLE_M4
-> +
-> +#define IMX8M_GPR22			0x58
-> +#define IMX8M_GPR22_CM7_CPUWAIT		BIT(0)
-> +
->  /* Address: 0x020D8000 */
->  #define IMX6SX_SRC_SCR			0x00
->  #define IMX6SX_ENABLE_M4		BIT(22)
-> @@ -91,6 +97,7 @@ static int imx_rproc_detach_pd(struct rproc *rproc);
->  struct imx_rproc {
->  	struct device			*dev;
->  	struct regmap			*regmap;
-> +	struct regmap			*gpr;
->  	struct rproc			*rproc;
->  	const struct imx_rproc_dcfg	*dcfg;
->  	struct imx_rproc_mem		mem[IMX_RPROC_MEM_MAX];
-> @@ -285,6 +292,18 @@ static const struct imx_rproc_att imx_rproc_att_imx6sx[] = {
->  	{ 0x80000000, 0x80000000, 0x60000000, 0 },
->  };
->  
-> +static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mn_mmio = {
-> +	.src_reg	= IMX7D_SRC_SCR,
-> +	.src_mask	= IMX7D_M4_RST_MASK,
-> +	.src_start	= IMX7D_M4_START,
-> +	.src_stop	= IMX8M_M7_STOP,
-> +	.gpr_reg	= IMX8M_GPR22,
-> +	.gpr_wait	= IMX8M_GPR22_CM7_CPUWAIT,
-> +	.att		= imx_rproc_att_imx8mn,
-> +	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8mn),
-> +	.method		= IMX_RPROC_MMIO,
-> +};
-> +
->  static const struct imx_rproc_dcfg imx_rproc_cfg_imx8mn = {
->  	.att		= imx_rproc_att_imx8mn,
->  	.att_size	= ARRAY_SIZE(imx_rproc_att_imx8mn),
-> @@ -365,8 +384,14 @@ static int imx_rproc_start(struct rproc *rproc)
->  
->  	switch (dcfg->method) {
->  	case IMX_RPROC_MMIO:
-> -		ret = regmap_update_bits(priv->regmap, dcfg->src_reg, dcfg->src_mask,
-> -					 dcfg->src_start);
-> +		if (priv->gpr) {
-> +			ret = regmap_clear_bits(priv->gpr, dcfg->gpr_reg,
-> +						dcfg->gpr_wait);
-> +		} else {
-> +			ret = regmap_update_bits(priv->regmap, dcfg->src_reg,
-> +						 dcfg->src_mask,
-> +						 dcfg->src_start);
-> +		}
->  		break;
->  	case IMX_RPROC_SMC:
->  		arm_smccc_smc(IMX_SIP_RPROC, IMX_SIP_RPROC_START, 0, 0, 0, 0, 0, 0, &res);
-> @@ -395,6 +420,16 @@ static int imx_rproc_stop(struct rproc *rproc)
->  
->  	switch (dcfg->method) {
->  	case IMX_RPROC_MMIO:
-> +		if (priv->gpr) {
-> +			ret = regmap_set_bits(priv->gpr, dcfg->gpr_reg,
-> +					      dcfg->gpr_wait);
-> +			if (ret) {
-> +				dev_err(priv->dev,
-> +					"Failed to quiescence M4 platform!\n");
-> +				return ret;
-> +			}
-> +		}
-> +
->  		ret = regmap_update_bits(priv->regmap, dcfg->src_reg, dcfg->src_mask,
->  					 dcfg->src_stop);
->  		break;
-> @@ -992,6 +1027,10 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
->  		break;
->  	}
->  
-> +	priv->gpr = syscon_regmap_lookup_by_phandle(dev->of_node, "fsl,iomuxc-gpr");
-> +	if (IS_ERR(priv->gpr))
-> +		priv->gpr = NULL;
-> +
->  	regmap = syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
->  	if (IS_ERR(regmap)) {
->  		dev_err(dev, "failed to find syscon\n");
-> @@ -1001,6 +1040,19 @@ static int imx_rproc_detect_mode(struct imx_rproc *priv)
->  	priv->regmap = regmap;
->  	regmap_attach_dev(dev, regmap, &config);
->  
-> +	if (priv->gpr) {
-> +		ret = regmap_read(priv->gpr, dcfg->gpr_reg, &val);
-> +		if (val & dcfg->gpr_wait) {
-> +			/*
-> +			 * After cold boot, the CM indicates its in wait
-> +			 * state, but not fully powered off. Power it off
-> +			 * fully so firmware can be loaded into it.
-> +			 */
-> +			imx_rproc_stop(priv->rproc);
-> +			return 0;
-> +		}
-> +	}
+v15 -> v14:
+1. Use the common SCP registers in struct mtk_scp_of_cluster instead of
+   copy it to struct mtk_scp at patchset 5 
+2. Use platform_set_drvdata instead of platform_device_add_data at patchset 5 
+3. Rename l2tcm_lock to cluster_lock at patchset 8
+4. Check l2tcm_refcnt value before decreasing at patchset 8
+5. Revise the commit message at patchset 11
 
-Thanks for the clarification.  I will apply this patch when the DT people have
-had the time to review the first patch of this series.
+v13 -> v14:
+1. add review tag to patchset 1,6
+2. exchange the order of sram power on and reset assert in
+mt8195_scp_c1_before_load at patchset 2
+3. Use ERR_CAST in patchset 5
+4. Re-write patchset 7 to remove dependency between core 0 and core 1 
+5. Add patch set 10 to report watchdot timeout to all cores
 
-Thanks,
-Mathieu
+v12 -> v13:
+1. replace subdevice with new mediatek scp operations in patchset 7 
+2. add review tag to patchset 3
+3. modify mediatek,scp phandle name of video-codec@18000000 at patchset 11
+
+v11 -> v12:
+1. add scp_add_single/multi_core() to patchset 6
+2. remove unused comment in patchset 6
+3. rename list name from mtk_scp_cluster to mtk_scp_list
+4. rewrite the multi-core probe flow 
+5. disable rproc->autoboot and boot rproc by request_firmware_nowait at patchset 7 
+6. remove patchset 7 review tag  
+
+v10 -> v11:
+1. rewrite patchset 5 to probe single-core SCP with the cluster list
+2. Also in patchset 5, move the pointer of mtk_scp object from the
+   platform data property to the driver data property 
+3. move the appearance of mtk_scp cluster property to patcheset 7
+
+v9 -> v10:
+1. move the global mtk_scp list into the platform device driver data structure
+2. remove an unnecessary if() condition
+
+v8 -> v9:
+1. initialize l1tcm_size/l1tcm_phys at patchset 05/11 
+2. rewrite patchset 06/11 to unify the flow and remove hacks
+
+v7 -> v8:
+1. update the node name of mt8192 asurada SCP rpmsg subnode
+2. squash register definitions into driver patches
+3. initialize local variables on the declaration at patch v8 06/11 
+
+v6 -> v7:
+1. merge the mtk_scp_cluster struct into the mtk_scp structure
+   at the "Probe multi-core SCP" patch
+
+v5 -> v6:
+1. move the mtk_scp_of_regs structure from mtk_common.h to mtk_scp.c
+2. rename the SCP core 0 label from 'scp' to 'scp_c0'
+
+v4 -> v5:
+1. move resource release actions to the platform driver remove operation 
+2. fix dual-core watchdog handling
+
+v3 -> v4:
+1. change the representation of dual-core SCP in dts file and update SCP yaml
+2. rewrite SCP driver to reflect the change of dts node
+3. drop 'remove redundant call of rproc_boot for SCP' in v3 for further investigation
+
+v2 -> v3:
+1. change the representation of dual-core SCP in dts file and update SCP yaml
+2. rewrite SCP driver to reflect the change of dts node
+3. add SCP core 1 node to mt8195.dtsi
+4. remove redundant call of rproc_boot for SCP
+5. refine IPI error message
+
+v1 -> v2:
+1. update dt-binding property description
+2. remove kconfig for scp dual driver
+3. merge mtk_scp_dual.c and mtk_scp_subdev.c to mtk_scp.c
 
 
-> +
->  	ret = regmap_read(regmap, dcfg->src_reg, &val);
->  	if (ret) {
->  		dev_err(dev, "Failed to read src\n");
-> @@ -1142,6 +1194,8 @@ static const struct of_device_id imx_rproc_of_match[] = {
->  	{ .compatible = "fsl,imx8mm-cm4", .data = &imx_rproc_cfg_imx8mq },
->  	{ .compatible = "fsl,imx8mn-cm7", .data = &imx_rproc_cfg_imx8mn },
->  	{ .compatible = "fsl,imx8mp-cm7", .data = &imx_rproc_cfg_imx8mn },
-> +	{ .compatible = "fsl,imx8mn-cm7-mmio", .data = &imx_rproc_cfg_imx8mn_mmio },
-> +	{ .compatible = "fsl,imx8mp-cm7-mmio", .data = &imx_rproc_cfg_imx8mn_mmio },
->  	{ .compatible = "fsl,imx8qxp-cm4", .data = &imx_rproc_cfg_imx8qxp },
->  	{ .compatible = "fsl,imx8qm-cm4", .data = &imx_rproc_cfg_imx8qm },
->  	{ .compatible = "fsl,imx8ulp-cm33", .data = &imx_rproc_cfg_imx8ulp },
-> diff --git a/drivers/remoteproc/imx_rproc.h b/drivers/remoteproc/imx_rproc.h
-> index 1c7e2127c7584..79a1b8956d142 100644
-> --- a/drivers/remoteproc/imx_rproc.h
-> +++ b/drivers/remoteproc/imx_rproc.h
-> @@ -31,6 +31,8 @@ struct imx_rproc_dcfg {
->  	u32				src_mask;
->  	u32				src_start;
->  	u32				src_stop;
-> +	u32				gpr_reg;
-> +	u32				gpr_wait;
->  	const struct imx_rproc_att	*att;
->  	size_t				att_size;
->  	enum imx_rproc_method		method;
-> -- 
-> 2.40.1
-> 
+Tinghan Shen (13):
+  dt-bindings: remoteproc: mediatek: Improve the rpmsg subnode
+    definition
+  arm64: dts: mediatek: Update the node name of SCP rpmsg subnode
+  dt-bindings: remoteproc: mediatek: Support MT8195 dual-core SCP
+  remoteproc: mediatek: Add MT8195 SCP core 1 operations
+  remoteproc: mediatek: Extract SCP common registers
+  remoteproc: mediatek: Probe SCP cluster on single-core SCP
+  remoteproc: mediatek: Probe SCP cluster on multi-core SCP
+  remoteproc: mediatek: Remove dependency of MT8195 SCP L2TCM power
+    control on dual-core SCP
+  remoteproc: mediatek: Setup MT8195 SCP core 1 SRAM offset
+  remoteproc: mediatek: Handle MT8195 SCP core 1 watchdog timeout
+  remoteproc: mediatek: Report watchdog crash to all cores
+  remoteproc: mediatek: Refine ipi handler error message
+  arm64: dts: mediatek: mt8195: Add SCP 2nd core
+
+ .../bindings/remoteproc/mtk,scp.yaml          | 176 +++++-
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   2 +-
+ .../boot/dts/mediatek/mt8192-asurada.dtsi     |   2 +-
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      |   6 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  34 +-
+ drivers/remoteproc/mtk_common.h               |  39 +-
+ drivers/remoteproc/mtk_scp.c                  | 534 ++++++++++++++----
+ drivers/remoteproc/mtk_scp_ipi.c              |   4 +-
+ 8 files changed, 651 insertions(+), 146 deletions(-)
+
+-- 
+2.18.0
+
