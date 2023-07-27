@@ -2,76 +2,83 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC78765959
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 27 Jul 2023 18:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E5C765A60
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 27 Jul 2023 19:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbjG0Q7J (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 27 Jul 2023 12:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
+        id S231667AbjG0Rde (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 27 Jul 2023 13:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232605AbjG0Q7H (ORCPT
+        with ESMTP id S231621AbjG0Rdb (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 27 Jul 2023 12:59:07 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B150273C
-        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Jul 2023 09:59:06 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-2680eee423aso705147a91.2
-        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Jul 2023 09:59:06 -0700 (PDT)
+        Thu, 27 Jul 2023 13:33:31 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34F230E3
+        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Jul 2023 10:33:29 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4fe07f0636bso2173279e87.1
+        for <linux-remoteproc@vger.kernel.org>; Thu, 27 Jul 2023 10:33:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690477145; x=1691081945;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+h5b9iSf68eT3e10rX6ZgnouDl7RDMsV+Kj+5zmd2qQ=;
-        b=g2jGtsst0SlvCOD9xfUpQfNh+0s42T45Fnxqcaze8ENV3PSes8kD0NCLLFG4IytI39
-         9d6vwjR7pmB5+qCCfj4hXSvE8qrjrpbnsEgOUZSdCpKnVoXF0Ts3v9R+YAdJ6PrbW5AO
-         1SwYE1wozO8PNN9rmGxsmQrDQHl9QQkembBp6WyJcsOkQRMQ4j4A9CuRc2vvrWRsnvjk
-         M/8Gjx3wO13A46gf+QvbMt/UzZ0mo2UEQrv2p+JrcK1qImSVKhOZBxMrWEQi2iEJH+vM
-         80fADN92F7sGIaG4XLwErVf/rc1d5PGgvzi1xdch9YJvwFtxM1mWwIpsuWUjCJcWUdiJ
-         ksLw==
+        d=linaro.org; s=google; t=1690479208; x=1691084008;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y4JznAwqUwxEns3QHdYNhwDRE+I8wR/yzqEuWAMFbic=;
+        b=PcWPtR9b1nCRdEFGVqDS0YR2Jo3PkQoX8nI9M1AfkF0XYnOGJ9iwy5lSWs4KI/aIJp
+         jTqWREY0L8q2BRi5UNx3okPiXmoBCuGgz5ww5wlyY2FS7gvdkCGw9ll1VFyFWC9L+rNB
+         RhccdqMW7iOj6rQNwb1KsL8/RomjhvKnWETd5t6X0u7/ntUCnAPplW2lST2TUk9bIpon
+         s/hvV4NoBjk+W9Qtmca0BIUnIxezshpQM4u4Xl0FhhdOsD2uTgB9OoU/P4RkQm5EJI+L
+         gSBq1F7EHJy89T0WBL9sx7jAo99uCRPm/u9fiY7SEWQ1+9O35/tj78scvFc5xCVF6JDL
+         iRrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690477145; x=1691081945;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+h5b9iSf68eT3e10rX6ZgnouDl7RDMsV+Kj+5zmd2qQ=;
-        b=FDaixMmufHmJ8R0gRLJawE/ti4YnIKSKBs1PFCgX7XABTQXZUvGb4/ydC/ghmK8B2m
-         ejz6x2DUkc2K/baPOT19hmnSpc0AI9S5RHJBG8wevYR8X1suI7I6dywsK2o2azn/CmFg
-         t4QAS+mIlxudJepdeSDNajURMp7LxX6rSjg6Zp+3LVPuvq/r2p3dRHkJC7p4/yoomj8s
-         4VNgpIDRqrwLMtuMJPxSasqV7wAeZkjOEx9xuJLre34u5uc7A/orvQudFsK4oQQtF035
-         3tblFrGRbAZBpspBRaUgNa9Nqak6uiZr+SYGs1m9YiecK2NXP3c4JhZOCNl4C0/e1ZDG
-         st8Q==
-X-Gm-Message-State: ABy/qLYuoafdupgDU1Ku1lqTSLxDmdyNa+is6Pxrkezh/EdDIfGjfsq+
-        dKDoAh3nHRcbXpSebvJlZmY4tg==
-X-Google-Smtp-Source: APBJJlENijKfsxSssGg95/tJuzhiRfsI+T8WQ3e9RaVBEdUkdytKbkBXKnoBHRSOD8cBfUR1PwZptA==
-X-Received: by 2002:a17:90b:4f8b:b0:268:1355:b03e with SMTP id qe11-20020a17090b4f8b00b002681355b03emr4502908pjb.38.1690477145456;
-        Thu, 27 Jul 2023 09:59:05 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:b3f9:2cf3:dfbd:a9b6])
-        by smtp.gmail.com with ESMTPSA id t12-20020a17090b018c00b002639c4f81cesm3043086pjs.3.2023.07.27.09.59.04
+        d=1e100.net; s=20221208; t=1690479208; x=1691084008;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y4JznAwqUwxEns3QHdYNhwDRE+I8wR/yzqEuWAMFbic=;
+        b=L/iArn7PTdNlbKzztVLdCnq5BE41MGUvzIccjcBSE1+VF5No2LF0jNWt9MgutUgv3W
+         9qlSwDf7Y7FjVWAaQC+XZfmd+ZQdabp3E/1/hL2FAs/ycYNefdqrljNdJ9JTH3lkr3vr
+         osIX20UZASr665IxZMIeuvfI7HbCoYytMXl/b9HmjKRH7iBYSmgsaYVSD2VvaAUhGblM
+         21ve+JNvDwc7ATr++yIR7x+qR0wQubVCfgJ43iV2BmhY5/It2qDxiOo7ZF+lqWWbamf5
+         wBb2AmWw+jFEyfBN/+0YBKjTCKrhuQb3biiHIFmXKl8W6QJqNPPjGCt043vKKmHDmGQw
+         T1nw==
+X-Gm-Message-State: ABy/qLaeGITtHawBdF7XK5lasRH3XWZMLQl/PoF6+pfiGMQkTJiaj1CE
+        j60HwvZZpWKgi0LurhYNOO4y6w==
+X-Google-Smtp-Source: APBJJlHwcmw/KyFLe5ksFAFNL/2577EugKUqrVekH06+MUX621YSkGula6cTwfUp9vkFCLLrB/ayGw==
+X-Received: by 2002:a05:6512:1152:b0:4fb:cabd:2a66 with SMTP id m18-20020a056512115200b004fbcabd2a66mr2329775lfg.21.1690479204174;
+        Thu, 27 Jul 2023 10:33:24 -0700 (PDT)
+Received: from [192.168.1.101] (abxi99.neoplus.adsl.tpnet.pl. [83.9.2.99])
+        by smtp.gmail.com with ESMTPSA id g4-20020a19ac04000000b004fe07f06337sm412089lfc.53.2023.07.27.10.33.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Jul 2023 09:59:05 -0700 (PDT)
-Date:   Thu, 27 Jul 2023 10:59:02 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Marek Vasut <marex@denx.de>
-Cc:     linux-remoteproc@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: remoteproc: imx_rproc: Support
- i.MX8MN/P MMIO
-Message-ID: <ZMKiViF+RHhxQNa5@p14s>
-References: <20230724222418.163220-1-marex@denx.de>
+        Thu, 27 Jul 2023 10:33:23 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v5 0/3] SM6375 remoteprocs
+Date:   Thu, 27 Jul 2023 19:33:20 +0200
+Message-Id: <20230725-topic-6375_rproc-v5-0-a8e9cde56a20@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230724222418.163220-1-marex@denx.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGCqwmQC/32OO27DMBBEr2Kw9goUP1LkKvcIjIDix1pY5gpLR
+ Yhh6O6h3SRVyjfAvJmHKJExFnE6PATHDQtSrmCPB+Enly8RMFQWSiote2VhpQU9dLq3n7wweTB
+ J9sYNKjmbRK2NrkQY2WU/1WL+mucaLhwTfr92Ps6VE9MN1omj+7W3cmi17UzfaD0oZaCFK2V2o
+ Qn30SO9z5gdU0N8ee5MWFbi++v5Zp7if05uBiQEa+Ob64JMNv2Vnfd9/wFUYHvxCQEAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1690479202; l=1994;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=61U37Uw72v05UEzFluxQektiVeexmyoM4WiivXI068k=;
+ b=pAnAQak2rce0Y4N+KN1l4zAW9NFfM1BgAT6ebdaiESIvsmaVZ8eoT3T4AIt0zFU7+X9jTwtly
+ YLn2VPCD6aKCrY7/gR4y9JdM6muNRMuOuZ1GiMYOCd7oIpJN2MlQD0O
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -82,91 +89,54 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 12:24:17AM +0200, Marek Vasut wrote:
-> The MX8M CM7 boot via SMC call is problematic, since not all versions
-> of ATF support this interface. Document MMIO support used to boot the
-> CM7 on MX8MN/MP instead and discern MMIO interface using DT compatible
-> string. Document GPR register syscon phandle which is required by the
-> MMIO interface too.
-> 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Conor Dooley <conor+dt@kernel.org>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Peng Fan <peng.fan@nxp.com>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: devicetree@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-remoteproc@vger.kernel.org
-> ---
-> V2: Rename 'gpr' to 'fsl,iomuxc-gpr'
-> V3: Rename 'gpr' to 'fsl,iomuxc-gpr' everywhere
-> ---
-> Note that the MMIO being discerned using compatible string is similar
-> approach to "st,stm32mp1-rcc" vs "st,stm32mp1-rcc-secure".
-> ---
->  .../bindings/remoteproc/fsl,imx-rproc.yaml    | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> index 0c3910f152d1d..30632efdad8bb 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> @@ -20,7 +20,9 @@ properties:
->        - fsl,imx7ulp-cm4
->        - fsl,imx8mm-cm4
->        - fsl,imx8mn-cm7
-> +      - fsl,imx8mn-cm7-mmio
->        - fsl,imx8mp-cm7
-> +      - fsl,imx8mp-cm7-mmio
->        - fsl,imx8mq-cm4
->        - fsl,imx8qm-cm4
->        - fsl,imx8qxp-cm4
-> @@ -70,6 +72,11 @@ properties:
->      description:
->        Specify CPU entry address for SCU enabled processor.
->  
-> +  fsl,iomuxc-gpr:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      Phandle to IOMUXC GPR block which provide access to CM7 CPUWAIT bit.
-> +
->    fsl,resource-id:
->      $ref: /schemas/types.yaml#/definitions/uint32
->      description:
-> @@ -79,6 +86,19 @@ properties:
->  required:
->    - compatible
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          not:
-> +            contains:
-> +              enum:
-> +                - fsl,imx8mn-cm7-mmio
-> +                - fsl,imx8mp-cm7-mmio
-> +    then:
-> +      properties:
-> +        fsl,iomuxc-gpr: false
-> +
->  additionalProperties: false
->  
->  examples:
+Resending as the previous revision was mostly ignored on the rproc side.
 
-I have applied this set.  Next time please add a cover letter.
+Changes since v3:
+- Pick up krzk's rb on bindings
+- Drop patch 4 (applied)
+Link to v3: https://lore.kernel.org/linux-arm-msm/20230109135647.339224-1-konrad.dybcio@linaro.org/
 
-Thanks,
-Mathieu
+This revision merges two [1] [2] previously separate series,
+adding SM6375's ADSP, CDSP, MPSS and related bindings.
 
-> -- 
-> 2.40.1
-> 
+[1] https://lore.kernel.org/linux-arm-msm/20230107120623.1903056-1-konrad.dybcio@linaro.org/T/#m89d629bd788593dfd27e4dbf0cf0bf94ffd0a7ce
+[2] https://lore.kernel.org/linux-arm-msm/622afd8b-a469-4c95-d2b8-030e47b0cac2@linaro.org/T/#m17aee8f3a51cfbd3f92fe2b4dd48b3722a6a0a7e
+
+Konrad Dybcio (4):
+  dt-bindings: remoteproc: qcom,sm6375-pas: Document remoteprocs
+  remoteproc: qcom: pas: Add SM6375 ADSP & CDSP
+  remoteproc: qcom: pas: Add SM6375 MPSS
+  arm64: dts: qcom: sm6375: Add missing power-domain-named to CDSP
+
+ .../bindings/remoteproc/qcom,sm6375-pas.yaml  | 137 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm6375.dtsi          |   1 +
+ drivers/remoteproc/qcom_q6v5_pas.c            |  18 +++
+ 3 files changed, 156 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sm6375-pas.yaml
+
+--
+2.39.0
+
+---
+Changes in v5:
+- Fix up bindings atop cee616c6884616aea3be72a9debafd0614332682
+- Drop krzk's rb from patch 1
+- Link to v4: https://lore.kernel.org/r/20230725-topic-6375_rproc-v4-0-d55e8a6d0f5f@linaro.org
+
+---
+Konrad Dybcio (3):
+      dt-bindings: remoteproc: qcom,sm6375-pas: Document remoteprocs
+      remoteproc: qcom: pas: Add SM6375 ADSP & CDSP
+      remoteproc: qcom: pas: Add SM6375 MPSS
+
+ .../bindings/remoteproc/qcom,sm6375-pas.yaml       | 145 +++++++++++++++++++++
+ drivers/remoteproc/qcom_q6v5_pas.c                 |  18 +++
+ 2 files changed, 163 insertions(+)
+---
+base-commit: 451cc82bd11eb6a374f4dbcfc1cf007eafea91ab
+change-id: 20230725-topic-6375_rproc-4f074a92fa5f
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
