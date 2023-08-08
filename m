@@ -2,64 +2,42 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFF2774492
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  8 Aug 2023 20:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3047747F3
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  8 Aug 2023 21:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235669AbjHHSXb (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 8 Aug 2023 14:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
+        id S235937AbjHHTWf (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 8 Aug 2023 15:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235675AbjHHSXF (ORCPT
+        with ESMTP id S236184AbjHHTWA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 8 Aug 2023 14:23:05 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE64E2270B
-        for <linux-remoteproc@vger.kernel.org>; Tue,  8 Aug 2023 10:34:44 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fe4f5290daso9237295e87.1
-        for <linux-remoteproc@vger.kernel.org>; Tue, 08 Aug 2023 10:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691516083; x=1692120883;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UUWWJpKA/6zwXJWGtCMuvBG3TRDaWAJxATaidUtAgac=;
-        b=fs1tXew4tQYoXEecvNHb4SKP8wmTaUc5W/FJDfY/IWC8AXboz+R8CZJalO1VTR0zAZ
-         t3XI+20BLuYut8ZKin7WoJQmCuQYUeiOY/Y0usXdORyXsGTDetkTN6YTWtShTeHV1LPA
-         pTH7LkANrZwqGzELS7sL1fOUchv4cw2j+p7fhwHHjXc1foK3XljrjE0A0//N8DZOCihL
-         2cek4apXMNvEsPHq4LMyK8CzdUyMgqAHQIf31+KZbaYTirOcaf/y2K4My/2vtawZmiiD
-         icE6KscN31Hw6iLRCgW4gLjwlQVmUAzOD7I73Ok1j8DrdhL+QU0K2GzYz6X/oe825uBh
-         Wf8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691516083; x=1692120883;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UUWWJpKA/6zwXJWGtCMuvBG3TRDaWAJxATaidUtAgac=;
-        b=dG/hbK5XtqbtvsvTjCy6+eA62grJjDJ4VJtT7inZMsThv4svzC40fmSTWsIQWnwu+w
-         YTDgdy6GOV0f7bDAiKGjgRiY7K9h+kG3NXbSahjK4ilBbMCT9uLFVSavNoRzRCtPZd4f
-         a64CkW/bFSmP+TtAFOYnZ2kahdwWrpFIfZ9R0jKKwcVWx2n+UGOnvW0I7VqrEv9h9KQG
-         XQ2gp718YSl9pWgk3bN5cca8nJ7mVBFpSAkIq+Ljr37tnp+WIz+rxnx0K6jGZk1emcQZ
-         G0DrnY59MuMMO1kMXPLaizaz9PhF0v/1ER7Cm9z7HbbaQEk8zuTZJ2I7ndBEUeHMX6l8
-         L3CQ==
-X-Gm-Message-State: AOJu0YwrjJJWJ9QGphvPc6ooO6CKVU7nQaNr22MAvU8UlZ9A3+iZYrI2
-        cLCeFYpE3DzyYl4qjfI4ERe7MHIJKf8IIeliegM=
-X-Google-Smtp-Source: AGHT+IESMg7JzrGFpGM30sigc77/m28bfDkUOPdPqGf70edI8KNzvVpGtPkhRGubKlKkdCSwOam6hg==
-X-Received: by 2002:adf:ef42:0:b0:314:54f0:df35 with SMTP id c2-20020adfef42000000b0031454f0df35mr8529088wrp.16.1691489895173;
-        Tue, 08 Aug 2023 03:18:15 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id k18-20020a5d5192000000b003143b7449ffsm13177574wrv.25.2023.08.08.03.18.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Aug 2023 03:18:14 -0700 (PDT)
-Message-ID: <1ade44f5-b3d1-dcde-6819-9e944f3b115d@linaro.org>
-Date:   Tue, 8 Aug 2023 12:18:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH] dt-bindings: remoteproc: pru: Add Interrupt property
-Content-Language: en-US
-To:     Md Danish Anwar <a0501179@ti.com>, Conor Dooley <conor@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>
-Cc:     Suman Anna <s-anna@ti.com>, Conor Dooley <conor+dt@kernel.org>,
+        Tue, 8 Aug 2023 15:22:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA1310E9C8;
+        Tue,  8 Aug 2023 09:45:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E096624A6;
+        Tue,  8 Aug 2023 10:48:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3F57C433C8;
+        Tue,  8 Aug 2023 10:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691491687;
+        bh=g4Al6u/oxW9sOdVO40WZiYWYztfE/tWlGU1STUdbHRs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rsIaGXcA79+KRvi55vDwZcaycKr5Mc/tVkLjU9fnNOY0UZLyw4vPkks1ugyvNMdZv
+         srirx/T+v64qvDgrub2wSDxGiS/PYNi3uuTSQoz89p7MJQy3+2poNJRzUWKNVWRLpg
+         wQP0U7Mdof49bv8EQ0mxaWPbO00xd64PzEDXDyLSCKUw1N6Kwpdr+2B21tHFn1aTwp
+         E2oma7Au+eu76VP9dHf8q2a11dhwdmCzggYmbElo7c2WGOjSEHsYn3sM6kZdXQeANH
+         EvYNDPEwf6tVZEpntFzO6jB/RyIpiIdleHwr0hQTx3SD77GNmeoiHOgVaKiRK8405H
+         RaOFRZFBn8QcQ==
+Date:   Tue, 8 Aug 2023 11:48:02 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Md Danish Anwar <a0501179@ti.com>
+Cc:     MD Danish Anwar <danishanwar@ti.com>, Suman Anna <s-anna@ti.com>,
+        Conor Dooley <conor+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
@@ -68,47 +46,99 @@ Cc:     Suman Anna <s-anna@ti.com>, Conor Dooley <conor+dt@kernel.org>,
         linux-remoteproc@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com,
         nm@ti.com
+Subject: Re: [PATCH] dt-bindings: remoteproc: pru: Add Interrupt property
+Message-ID: <20230808-unwomanly-generic-67d20f0e51cd@spud>
 References: <20230807110836.2612730-1-danishanwar@ti.com>
  <20230807-euphemism-trailing-ef4130dc7437@spud>
  <910a4a98-712a-5517-5a5b-ffb962f83463@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="RzfM45YTf9+4RvqO"
+Content-Disposition: inline
 In-Reply-To: <910a4a98-712a-5517-5a5b-ffb962f83463@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 08/08/2023 11:44, Md Danish Anwar wrote:
->>>    properties:
->>>      compatible:
->>> @@ -171,6 +181,9 @@ examples:
->>>                <0x22400 0x100>;
->>>          reg-names = "iram", "control", "debug";
->>>          firmware-name = "am65x-pru0_0-fw";
->>> +        interrupt-parent = <&icssg0_intc>;
->>> +        interrupts = <16 2 2>;
->>> +        interrupt-names = "vring";
->>>        };
->>
->> These examples would probably be more helpful if they used the
->> appropriate defines, no?
->>
-> 
-> PRUSS Interrupt controller doesn't have any appropriate defines. This doesn't
-> use GIC so defines from arm-gic.h can not be used here. These are specific to
+
+--RzfM45YTf9+4RvqO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Aug 08, 2023 at 03:14:31PM +0530, Md Danish Anwar wrote:
+> Hi Conor,
+>=20
+> On 07/08/23 8:09 pm, Conor Dooley wrote:
+> > On Mon, Aug 07, 2023 at 04:38:36PM +0530, MD Danish Anwar wrote:
+> >> Add interrupts and interrupt-names protperties for PRU and RTU cores.
+> >>
+> >> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+> >> ---
+> >>  .../bindings/remoteproc/ti,pru-rproc.yaml     | 22 +++++++++++++++++++
+> >>  1 file changed, 22 insertions(+)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-rproc=
+=2Eyaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
+> >> index cd55d80137f7..6970316943bb 100644
+> >> --- a/Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
+> >> +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-rproc.yaml
+> >> @@ -66,6 +66,16 @@ properties:
+> >>        Should contain the name of the default firmware image
+> >>        file located on the firmware search path.
+> >> =20
+> >> +  interrupts:
+> >> +    maxItems: 1
+> >> +    description:
+> >> +      Interrupt specifiers enable the virtio/rpmsg communication betw=
+een MPU
+> >> +      and the PRU/RTU cores.
+> >> +
+> >> +  interrupt-names:
+> >> +    items:
+> >> +      - const: vring
+> >> +
+> >>  if:
+> >>    properties:
+> >>      compatible:
+> >> @@ -171,6 +181,9 @@ examples:
+> >>                <0x22400 0x100>;
+> >>          reg-names =3D "iram", "control", "debug";
+> >>          firmware-name =3D "am65x-pru0_0-fw";
+> >> +        interrupt-parent =3D <&icssg0_intc>;
+> >> +        interrupts =3D <16 2 2>;
+> >> +        interrupt-names =3D "vring";
+> >>        };
+> >=20
+> > These examples would probably be more helpful if they used the
+> > appropriate defines, no?
+> >=20
+>=20
+> PRUSS Interrupt controller doesn't have any appropriate defines. This doe=
+sn't
+> use GIC so defines from arm-gic.h can not be used here. These are specifi=
+c to
 > PRUSS INTC.
-> 
+
+I was deliberately vague in case the gic stuff applied too, but my main
+question was about the standard defines used for interrupt types.
+
 > I think these example are OK. Please let me know if this is OK to you.
 
-But isn't "2" type of the interrupt?
+--RzfM45YTf9+4RvqO
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZNIdYgAKCRB4tDGHoIJi
+0sfFAQDUGTaUH2VxL1ST+sf18hKE5yCqpFEUkOJu+bgGPLkmuQD/XAUCs4HrdF2v
+1lu3PdJ0QSaQoDb36Qrpa6k3hHGvUQg=
+=l++a
+-----END PGP SIGNATURE-----
+
+--RzfM45YTf9+4RvqO--
