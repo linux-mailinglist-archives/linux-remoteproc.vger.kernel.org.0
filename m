@@ -2,152 +2,112 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ACAC792593
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  5 Sep 2023 18:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DB77925B9
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  5 Sep 2023 18:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232712AbjIEQGj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 5 Sep 2023 12:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
+        id S238688AbjIEQGq (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 5 Sep 2023 12:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245012AbjIEBn0 (ORCPT
+        with ESMTP id S1352431AbjIEFsT (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 4 Sep 2023 21:43:26 -0400
-X-Greylist: delayed 573 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Sep 2023 18:43:21 PDT
-Received: from klingt.org (mail.klingt.org [86.59.21.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8943CC5
-        for <linux-remoteproc@vger.kernel.org>; Mon,  4 Sep 2023 18:43:21 -0700 (PDT)
-Received: from [192.168.0.107] ([202.184.201.145])
-        (authenticated bits=0)
-        by klingt.org (8.17.2/8.17.2/Debian-1) with ESMTPSA id 3851Xc4n485665
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Tue, 5 Sep 2023 03:33:40 +0200
-Message-ID: <00d5edfd-808f-51ac-0233-ce8489c6722c@klingt.org>
-Date:   Tue, 5 Sep 2023 09:33:37 +0800
+        Tue, 5 Sep 2023 01:48:19 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA2712E;
+        Mon,  4 Sep 2023 22:48:12 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id DFB88408E8;
+        Tue,  5 Sep 2023 10:48:03 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1693892884; bh=6NzDrYOGUI/eztRBxodJ7A7nQVvfQ/vxNF6cyl99jnI=;
+        h=From:Subject:Date:To:Cc:From;
+        b=qrj6JUL8oHQl+rsibyMi6LJ/sbBKgakLOZYIzUbMXlKUUWLRfBAuWQqCQi8ZDQ0+v
+         UogFkyuBRhNfGRyxykgw3HIeiZoX7AZwHZPVWja19hqwnhyNl6iXOE9tElvypk8Dcp
+         vH94w3fYxI60cjhF0KXcoSPlJE3qMgrUkC5byKpQEE9GBgKbhHbTzz0tqZzEDHn2Fx
+         pO7vDJo64+PRs0P7yzQgjGfzkO2h7yji/qWzWM/PvX4QF1DEWGuSPqanYmbnSplqHS
+         1K11XEdLzdLgaOw9tOatqHXlxPBZyuj8YjJfkhypXH7GIgeWyiWSGP4ANEwEEcmNuj
+         z2fuRDXJTRx/w==
+From:   Nikita Travkin <nikita@trvn.ru>
+Subject: [PATCH 0/4] sc7180: Add ADSP
+Date:   Tue, 05 Sep 2023 10:47:19 +0500
+Message-Id: <20230905-sc7180-adsp-rproc-v1-0-dfea7699da7b@trvn.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.15.0
-Content-Language: en-US
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Cc:     Tim Blechmann <tim.blechmann@gmail.com>,
-        linux-remoteproc@vger.kernel.org
-References: <20230904083602.106703-1-tim@klingt.org>
- <64ecb19a-b3d1-0fa1-b015-b34607aee460@foss.st.com> <ZPZBVS3R/oZuUmk5@p14s>
-From:   Tim Blechmann <tim@klingt.org>
-Subject: Re: [PATCH 1/1] rpmsg: virtio_rpmsg_bus - prevent possible race
- condition
-In-Reply-To: <ZPZBVS3R/oZuUmk5@p14s>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Greylist: inspected by milter-greylist-4.6.4 (klingt.org [86.59.21.178]); Tue, 05 Sep 2023 03:33:41 +0200 (CEST) for IP:'202.184.201.145' DOMAIN:'[202.184.201.145]' HELO:'[192.168.0.107]' FROM:'tim@klingt.org' RCPT:''
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (klingt.org [86.59.21.178]); Tue, 05 Sep 2023 03:33:41 +0200 (CEST)
-X-Virus-Scanned: clamav-milter 1.0.2 at es.klingt.org
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAOfA9mQC/x3MMQqAMAxA0atIZgO1Kq1eRRxqTTWLlgREEO9uc
+ XzD/w8oCZPCWD0gdLHyeRQ0dQVxD8dGyGsxWGNbM5geNbrGGwyrZpQsZ8Tgun7xPiQ7eChdFkp
+ 8/89pft8PnwYx9mMAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org
+Cc:     David Wronek <davidwronek@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Nikita Travkin <nikita@trvn.ru>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1256; i=nikita@trvn.ru;
+ h=from:subject:message-id; bh=6NzDrYOGUI/eztRBxodJ7A7nQVvfQ/vxNF6cyl99jnI=;
+ b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBk9sES+wqZKbIUGbtvj7cTi3dr7MkmPaV9w4glL
+ OacWiZsZ8SJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZPbBEgAKCRBDHOzuKBm/
+ dVjQD/9DU0y3Sfg7b4TRIuj5naCvCyNpYfcItUCL7fspA12rURwFVxe0+1V19czWuV/wdf8IKdK
+ NXcQB6fmO9U4A8CS/MSj7Y2dnQbabIGHpORZP/MlTIZBy/FdpJgvARTDTZVadxMGj06MTbkNcBU
+ Cm2HPPDAN68cyUPJYdv9KYCmyO/jz+zjTNJu8XcaWsvBrxS/4Yb/OgXZDLBND6bYh9LuPHOKJtS
+ ckCUk4wfJbR1dh/9AK/k1YHnKwORHwhF+sFwM41p0tZJmGOIe+q9nqaJguyr8MoPmxl9BmWmYQH
+ Ki/I8YVmFP1mWvQvnnP8y0ACZT4udu6+/ZRHTwAIw7yBzIbC5HwLJaEMk+UCqxIEPOXJLghV/6S
+ ogUB8pJ7bBWykzAiLWO+nf/z938tpbwtzSmTGB/6jrGGOE9T7nHho7k+tFt9qYBX+1PDU4nnjpJ
+ U7eRufLYDSl7qLG/biZRwxM8d/ObEbtl1EHa7IfRQqvQF0/emqzCZ9wxo0JqQC1xwYkcjXyNUB+
+ sYtXyf7owIyPPjK4ivdRP4lABJRMrlv0WFIDqQeMjQhl6GoRRbXSHjTsqSmtGdLmTkSD+X0p3ba
+ du4sGCQFhsZHQCpc4iPkk3n23ZfGUsZ8Qcvfy0jGh/ldZkVxbBUE85pQps0KIqjqd/NzU+WKeLG
+ wLoY8r7LahQoaRA==
+X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
+ fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
->>> when we cannot get a tx buffer (`get_a_tx_buf`) `rpmsg_upref_sleepers`
->>> enables tx-complete interrupt.
->>> however if the interrupt is executed after `get_a_tx_buf` and before
->>> `rpmsg_upref_sleepers` we may mis the tx-complete interrupt and sleep
->>> for the full 15 seconds.
->>
->>
->> Is there any reason why your co-processor is unable to release the TX RPMSG
->> buffers for 15 seconds? If not, you should first determine the reason why it is
->> stalled.
-> 
-> Arnaud's concern is valid.  If the remote processor can't consume a buffer
-> within 15 seconds, something is probably wrong.
-> 
-> That said, I believe your assesment of the situation is correct.  *If* the TX
-> callback is disabled and there is no buffer available, there is a window of
-> opportunity between calls to get_a_tx_buf() and rpmsg_upref_sleepers() for an
-> interrupt to arrive in function rpmsg_send_offchannel_raw().
+sc7180 has an ADSP remoteproc that can be used to control the sound
+hardware. This remoteproc has to be used on those devices that use
+Qualcomm firmware and thus are locked out of driving the lpass directly.
 
-the remote processor certainly releases the tx buffer and according to 
-my tracing the `vring_interrupt` fires immediately before `rpmsg_send` 
-enters the `rpmsg_upref_sleepers`.
+Introducing the ADSP would allow multiple WoA laptops such as Aspire 1
+to provide sound. It's also useful for the sm7125 devices that are to be
+included to the kernel [1]
 
-after applying this patch we haven't been able to reproduce the 15s 
-timeout anymore, whereas before we could easily reproduce it with 
-certain workloads.
+This series adds the ADSP and the sound services needed to make use of
+it later.
 
-> 3) This patch gets applied when rc1 comes out so that it has 6 or 7 weeks to
-> soak.  No error are locks are reported due to this patch during that time.
+[1] https://lore.kernel.org/all/20230824091737.75813-1-davidwronek@gmail.com/
 
-mentioning locks: i was a bit uncertain about a good way to implement 
-the retry, since both `rpmsg_upref_sleepers` and `get_a_tx_buf` both 
-acquire the same mutex. i briefly considered to add `get_a_tx_buf` into 
-`rpmsg_upref_sleepers` to avoid locking the same mutex multiple times, 
-though it adds a bit of complexity to the implementation and harms 
-readability a bit.
-are there any recommendations on this topic or are (likely 
-non-contended) locks not expensive enough to justify the added complexity?
+Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+---
+Nikita Travkin (4):
+      dt-bindings: remoteproc: qcom: sc7180-pas: Add ADSP compatible
+      remoteproc: qcom: pas: Add sc7180 adsp
+      arm64: dts: qcom: sc7180: Add tertiary mi2s pinctrl
+      arm64: dts: qcom: sc7180: Add ADSP
 
-thanks,
-tim
+ .../bindings/remoteproc/qcom,sc7180-pas.yaml       |  12 ++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               | 127 +++++++++++++++++++++
+ drivers/remoteproc/qcom_q6v5_pas.c                 |   1 +
+ 3 files changed, 140 insertions(+)
+---
+base-commit: c50216cfa084d5eb67dc10e646a3283da1595bb6
+change-id: 20230905-sc7180-adsp-rproc-a745b88af298
 
-
-> 
->>
->> Regards,
->> Arnaud
->>
->>>
->>> in this case, so we re-try once before we really start to sleep
->>>
->>> Signed-off-by: Tim Blechmann <tim@klingt.org>
->>> ---
->>>   drivers/rpmsg/virtio_rpmsg_bus.c | 24 +++++++++++++++---------
->>>   1 file changed, 15 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
->>> index 905ac7910c98..2a9d42225e60 100644
->>> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
->>> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
->>> @@ -587,21 +587,27 @@ static int rpmsg_send_offchannel_raw(struct rpmsg_device *rpdev,
->>>   
->>>   	/* no free buffer ? wait for one (but bail after 15 seconds) */
->>>   	while (!msg) {
->>>   		/* enable "tx-complete" interrupts, if not already enabled */
->>>   		rpmsg_upref_sleepers(vrp);
->>>   
->>> -		/*
->>> -		 * sleep until a free buffer is available or 15 secs elapse.
->>> -		 * the timeout period is not configurable because there's
->>> -		 * little point in asking drivers to specify that.
->>> -		 * if later this happens to be required, it'd be easy to add.
->>> -		 */
->>> -		err = wait_event_interruptible_timeout(vrp->sendq,
->>> -					(msg = get_a_tx_buf(vrp)),
->>> -					msecs_to_jiffies(15000));
->>> +		/* make sure to retry to grab tx buffer before we start waiting */
->>> +		msg = get_a_tx_buf(vrp);
->>> +		if (msg) {
->>> +			err = 0;
->>> +		} else {
->>> +			/*
->>> +			 * sleep until a free buffer is available or 15 secs elapse.
->>> +			 * the timeout period is not configurable because there's
->>> +			 * little point in asking drivers to specify that.
->>> +			 * if later this happens to be required, it'd be easy to add.
->>> +			 */
->>> +			err = wait_event_interruptible_timeout(vrp->sendq,
->>> +						(msg = get_a_tx_buf(vrp)),
->>> +						msecs_to_jiffies(15000));
->>> +		}
->>>   
->>>   		/* disable "tx-complete" interrupts if we're the last sleeper */
->>>   		rpmsg_downref_sleepers(vrp);
->>>   
->>>   		/* timeout ? */
->>>   		if (!err) {
-> 
+Best regards,
+-- 
+Nikita Travkin <nikita@trvn.ru>
 
