@@ -2,80 +2,152 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A879791F9B
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  5 Sep 2023 00:50:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ACAC792593
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  5 Sep 2023 18:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240903AbjIDWur (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 4 Sep 2023 18:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S232712AbjIEQGj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Tue, 5 Sep 2023 12:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237755AbjIDWur (ORCPT
+        with ESMTP id S245012AbjIEBn0 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 4 Sep 2023 18:50:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25250E4D;
-        Mon,  4 Sep 2023 15:50:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D0C08B80F3B;
-        Mon,  4 Sep 2023 22:50:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7D439C433CA;
-        Mon,  4 Sep 2023 22:50:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693867826;
-        bh=qTmeeCDlPqDAYNvsvXWhRX/Ol3iE62sOPvlYBv2vRoI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=HFuYsy+2Npyy3oFf3jH8u105M0vudxMorYkBfsH73TNpIFNA25lVms+cfJoUZxuGe
-         v7qXnWbbKJK6lr2/bMixyW3cpSy8r+2xT21MIssgvC0Nh5NutZ7ayZDgP5ddlfdzuK
-         YpmvBVfvJdkyHkrUyRPhbeYpOe5RtWJQGCrc2yAJvIME+jOQzxsQYv0UiUbBg2hGXS
-         Dn9YCDgVae5FhnzQlQqk4OFZTihqRf81wl1niMjJPzWnIWEqYQ+m1Lq2F9lwx4M5v0
-         7JUeJzBLjpV2d6uz7J3WBNCGUB4WgEivSalQJDQpMGIF14By7Wl+WQZLJoPpo8Kstb
-         T4s6Gp90GJJdQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6867AC04DD9;
-        Mon,  4 Sep 2023 22:50:26 +0000 (UTC)
-Subject: Re: [GIT PULL] rpmsg updates for v6.6
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230904160107.2954624-1-andersson@kernel.org>
-References: <20230904160107.2954624-1-andersson@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230904160107.2954624-1-andersson@kernel.org>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v6.6
-X-PR-Tracked-Commit-Id: d629e5bcdfd9ba1c9da6da9144cc7ba43f04a6dc
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3d904704c8a23cda6423f82aadea1336df31b864
-Message-Id: <169386782642.10061.2824902130362233803.pr-tracker-bot@kernel.org>
-Date:   Mon, 04 Sep 2023 22:50:26 +0000
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Lew <quic_clew@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Deepak Kumar Singh <quic_deesin@quicinc.com>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 4 Sep 2023 21:43:26 -0400
+X-Greylist: delayed 573 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Sep 2023 18:43:21 PDT
+Received: from klingt.org (mail.klingt.org [86.59.21.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8943CC5
+        for <linux-remoteproc@vger.kernel.org>; Mon,  4 Sep 2023 18:43:21 -0700 (PDT)
+Received: from [192.168.0.107] ([202.184.201.145])
+        (authenticated bits=0)
+        by klingt.org (8.17.2/8.17.2/Debian-1) with ESMTPSA id 3851Xc4n485665
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 5 Sep 2023 03:33:40 +0200
+Message-ID: <00d5edfd-808f-51ac-0233-ce8489c6722c@klingt.org>
+Date:   Tue, 5 Sep 2023 09:33:37 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.15.0
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     Tim Blechmann <tim.blechmann@gmail.com>,
+        linux-remoteproc@vger.kernel.org
+References: <20230904083602.106703-1-tim@klingt.org>
+ <64ecb19a-b3d1-0fa1-b015-b34607aee460@foss.st.com> <ZPZBVS3R/oZuUmk5@p14s>
+From:   Tim Blechmann <tim@klingt.org>
+Subject: Re: [PATCH 1/1] rpmsg: virtio_rpmsg_bus - prevent possible race
+ condition
+In-Reply-To: <ZPZBVS3R/oZuUmk5@p14s>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Greylist: inspected by milter-greylist-4.6.4 (klingt.org [86.59.21.178]); Tue, 05 Sep 2023 03:33:41 +0200 (CEST) for IP:'202.184.201.145' DOMAIN:'[202.184.201.145]' HELO:'[192.168.0.107]' FROM:'tim@klingt.org' RCPT:''
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.4 (klingt.org [86.59.21.178]); Tue, 05 Sep 2023 03:33:41 +0200 (CEST)
+X-Virus-Scanned: clamav-milter 1.0.2 at es.klingt.org
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The pull request you sent on Mon,  4 Sep 2023 09:01:06 -0700:
+>>> when we cannot get a tx buffer (`get_a_tx_buf`) `rpmsg_upref_sleepers`
+>>> enables tx-complete interrupt.
+>>> however if the interrupt is executed after `get_a_tx_buf` and before
+>>> `rpmsg_upref_sleepers` we may mis the tx-complete interrupt and sleep
+>>> for the full 15 seconds.
+>>
+>>
+>> Is there any reason why your co-processor is unable to release the TX RPMSG
+>> buffers for 15 seconds? If not, you should first determine the reason why it is
+>> stalled.
+> 
+> Arnaud's concern is valid.  If the remote processor can't consume a buffer
+> within 15 seconds, something is probably wrong.
+> 
+> That said, I believe your assesment of the situation is correct.  *If* the TX
+> callback is disabled and there is no buffer available, there is a window of
+> opportunity between calls to get_a_tx_buf() and rpmsg_upref_sleepers() for an
+> interrupt to arrive in function rpmsg_send_offchannel_raw().
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rpmsg-v6.6
+the remote processor certainly releases the tx buffer and according to 
+my tracing the `vring_interrupt` fires immediately before `rpmsg_send` 
+enters the `rpmsg_upref_sleepers`.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3d904704c8a23cda6423f82aadea1336df31b864
+after applying this patch we haven't been able to reproduce the 15s 
+timeout anymore, whereas before we could easily reproduce it with 
+certain workloads.
 
-Thank you!
+> 3) This patch gets applied when rc1 comes out so that it has 6 or 7 weeks to
+> soak.  No error are locks are reported due to this patch during that time.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+mentioning locks: i was a bit uncertain about a good way to implement 
+the retry, since both `rpmsg_upref_sleepers` and `get_a_tx_buf` both 
+acquire the same mutex. i briefly considered to add `get_a_tx_buf` into 
+`rpmsg_upref_sleepers` to avoid locking the same mutex multiple times, 
+though it adds a bit of complexity to the implementation and harms 
+readability a bit.
+are there any recommendations on this topic or are (likely 
+non-contended) locks not expensive enough to justify the added complexity?
+
+thanks,
+tim
+
+
+> 
+>>
+>> Regards,
+>> Arnaud
+>>
+>>>
+>>> in this case, so we re-try once before we really start to sleep
+>>>
+>>> Signed-off-by: Tim Blechmann <tim@klingt.org>
+>>> ---
+>>>   drivers/rpmsg/virtio_rpmsg_bus.c | 24 +++++++++++++++---------
+>>>   1 file changed, 15 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+>>> index 905ac7910c98..2a9d42225e60 100644
+>>> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+>>> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+>>> @@ -587,21 +587,27 @@ static int rpmsg_send_offchannel_raw(struct rpmsg_device *rpdev,
+>>>   
+>>>   	/* no free buffer ? wait for one (but bail after 15 seconds) */
+>>>   	while (!msg) {
+>>>   		/* enable "tx-complete" interrupts, if not already enabled */
+>>>   		rpmsg_upref_sleepers(vrp);
+>>>   
+>>> -		/*
+>>> -		 * sleep until a free buffer is available or 15 secs elapse.
+>>> -		 * the timeout period is not configurable because there's
+>>> -		 * little point in asking drivers to specify that.
+>>> -		 * if later this happens to be required, it'd be easy to add.
+>>> -		 */
+>>> -		err = wait_event_interruptible_timeout(vrp->sendq,
+>>> -					(msg = get_a_tx_buf(vrp)),
+>>> -					msecs_to_jiffies(15000));
+>>> +		/* make sure to retry to grab tx buffer before we start waiting */
+>>> +		msg = get_a_tx_buf(vrp);
+>>> +		if (msg) {
+>>> +			err = 0;
+>>> +		} else {
+>>> +			/*
+>>> +			 * sleep until a free buffer is available or 15 secs elapse.
+>>> +			 * the timeout period is not configurable because there's
+>>> +			 * little point in asking drivers to specify that.
+>>> +			 * if later this happens to be required, it'd be easy to add.
+>>> +			 */
+>>> +			err = wait_event_interruptible_timeout(vrp->sendq,
+>>> +						(msg = get_a_tx_buf(vrp)),
+>>> +						msecs_to_jiffies(15000));
+>>> +		}
+>>>   
+>>>   		/* disable "tx-complete" interrupts if we're the last sleeper */
+>>>   		rpmsg_downref_sleepers(vrp);
+>>>   
+>>>   		/* timeout ? */
+>>>   		if (!err) {
+> 
+
