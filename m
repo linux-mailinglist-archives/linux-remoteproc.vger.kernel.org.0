@@ -2,127 +2,125 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C151796FB7
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  7 Sep 2023 06:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3EF797ABD
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  7 Sep 2023 19:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232412AbjIGEwe (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 7 Sep 2023 00:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48216 "EHLO
+        id S245570AbjIGRsM (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 7 Sep 2023 13:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjIGEwd (ORCPT
+        with ESMTP id S245661AbjIGRsA (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 7 Sep 2023 00:52:33 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735AF19B5
-        for <linux-remoteproc@vger.kernel.org>; Wed,  6 Sep 2023 21:52:30 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1bc8a2f71eeso4774555ad.0
-        for <linux-remoteproc@vger.kernel.org>; Wed, 06 Sep 2023 21:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694062349; x=1694667149; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:reply-to:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1EYEWcjaY4nx2xSlU4W17DpuXjxYNQYHKMQBHrUQ9oc=;
-        b=Dyehd4LFv2EbRu+h41fdXaSgSQddWTH4fhNow69KjM5umE8gkN+C4dQ4teeedhl1YJ
-         J0yoO9t0CDkceyMXB3Ko+fWcrjYo1xhPPXg82AkL7SkGVMV2pWUGSDKVxjRUwxs0krlu
-         pVfJg4L1Tv+GIpvZfUH8RMEDBzQftmSTVKan+M4MwQuMqSDxh372jpwi68mxISeJfZYU
-         /dJ3uYAC+0XSYYlChcbyDsgnHlPu7GkP7uYg6z0fsRNqj5gPDSEn3yllKz1m/uJZI/Hw
-         ZKVBTsVbEp0Lm8wi0Nmswb8IhCw/3DDpMw/ySeFHYJXMlHSBbwF+GdR8c/gBJIHaVaiG
-         VR2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694062349; x=1694667149;
-        h=content-transfer-encoding:mime-version:reply-to:message-id:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1EYEWcjaY4nx2xSlU4W17DpuXjxYNQYHKMQBHrUQ9oc=;
-        b=GvUisIZTHY2/ReeaGbRrjHfKIKVRQFss1EVLNaH6qcG23cmu6QS12pF5W0y6ByUEKd
-         0e0MD+D4DrMFw7OCLfJNqfKDsjwI0iUdUonoL7I2e/3G7yL1HgRFg7TgSYeMTo4bghyp
-         oZCNOIyMm465x34jLU4OnCrkIzzt63EpG0oP3Fn2VNHHvvXnu/BSZIieCrdETkWEeQ2v
-         zaHGm4sznWoltk5CPqKcxPmaebbHgzlJj2CmBYlu2Isltt3BfiUXTAc9fbFDpoluKXXt
-         ZQuxpp4SDDk+eRk9qqFGlEek32HjKwvK3WRpJCCnA/71HrYr6htPP5MU8lidNuqaZian
-         ZtnQ==
-X-Gm-Message-State: AOJu0YwJxnvkhEpWuqxVpadoOR15nQEzwrj1609wyc56oc5YVYBABRWd
-        Ft2Et0z1s9iPIRoqXcFYfZv7w0vV7RA=
-X-Google-Smtp-Source: AGHT+IFP84KAdNLQvHdRhpfQkPdv8/ywN6SrGW4I57n5RGemCsLwsl+qKDDMLJV3UmqEThB4nkBKwg==
-X-Received: by 2002:a17:903:32cf:b0:1bc:3944:9391 with SMTP id i15-20020a17090332cf00b001bc39449391mr17566941plr.25.1694062349334;
-        Wed, 06 Sep 2023 21:52:29 -0700 (PDT)
-Received: from P330.. ([2001:f40:904:5cee:ad2b:9ccb:5263:6a01])
-        by smtp.googlemail.com with ESMTPSA id x18-20020a17090300d200b001b2069072ccsm11933704plc.18.2023.09.06.21.52.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 21:52:28 -0700 (PDT)
-From:   Tim Blechmann <tim.blechmann@gmail.com>
-X-Google-Original-From: Tim Blechmann <tim@klingt.org>
-To:     linux-remoteproc@vger.kernel.org
-Cc:     Tim Blechmann <tim@klingt.org>
-Subject: [PATCH 1/1] rpmsg: virtio_rpmsg_bus - prevent possible race condition
-Date:   Thu,  7 Sep 2023 12:51:52 +0800
-Message-Id: <20230907045152.22935-1-tim@klingt.org>
-X-Mailer: git-send-email 2.34.1
-Reply-To: <ZPZBVS3R/oZuUmk5@p14s>
+        Thu, 7 Sep 2023 13:48:00 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D581FCF;
+        Thu,  7 Sep 2023 10:47:40 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id 14E03408FB;
+        Thu,  7 Sep 2023 15:03:04 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1694080985; bh=UydgDVQiSUviGozQ38IeSZQCohfutWy5gMlbsDElVGI=;
+        h=From:Subject:Date:To:Cc:From;
+        b=TTl3YhZOTLW5oLj4fT9j2yYvOMgL4+xe6tXIO7+dbx+g6JvuoRRlUdXor2El+nDu5
+         5L7BHZC3I2wtfzoQXqK8ww5vj8zG3EZjb23vztrU8lLbYIx+OPRI/a2aRhtDEvkdpr
+         qfzSTbKfrHu7Lo/VL+SY0U5Z1Jel/LziUbouBuVvzN9Dbpp98M1N7yoPFExYjsADXr
+         ohXECoi8FryPEkkzmiZTwx2JYXZq8WP6UywPng0lQMUK7gtDPuIqN9Z0M8kLyXX9os
+         mKcH6A0rl9b4bQHTiGL0vElfaknXlYpzTprkYPfN53x+sEGZ9uuZF8Kwd4f1fkF87U
+         CND7wMVUnfmpA==
+From:   Nikita Travkin <nikita@trvn.ru>
+Subject: [PATCH v3 0/4] sc7180: Add ADSP
+Date:   Thu, 07 Sep 2023 15:02:33 +0500
+Message-Id: <20230907-sc7180-adsp-rproc-v3-0-6515c3fbe0a3@trvn.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_REPLYTO,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALqf+WQC/4WOQQ6CMBBFr2Jm7ZihCG1deQ/jYqBFugEyxUZDu
+ LuFjTtdvkne+7NA9BJ8hMthAfEpxDAOGcrjAdqeh4fH4DKDIlWSpQpjqwtDyC5OKJOMLbI+V40
+ x3ClrIHuT+C689ubtnrkPcR7lvU+kYrv+qqUCCV3nWdfWOtbNdZY0nOQJWyupv77KvuFG53dsT
+ cRff13XD2Hu+q/wAAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org
+Cc:     David Wronek <davidwronek@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Nikita Travkin <nikita@trvn.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1675; i=nikita@trvn.ru;
+ h=from:subject:message-id; bh=UydgDVQiSUviGozQ38IeSZQCohfutWy5gMlbsDElVGI=;
+ b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBk+Z/WMvI8KZwdvygbbGoASchk5qt3AjBHgUYYU
+ st7UotEVBSJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZPmf1gAKCRBDHOzuKBm/
+ daa4D/47b2bcaSAm0q55I/o1527ZcR87PYQWgs8tk7O3H8biqTfugg9KwBhvwUqXALIJgFYFay+
+ ofNXd91lPtTdv2Y4B7MoBysTcK4IFHGH7qnnin3Tn0lcBljHBBXdzqvDI+YRBsI1YGN226MtAxz
+ y+2bynO9JfD1kZOJ6jKCGvJOQXHowqUWWDwtDQKO0slv/X8Fj2tsI9cRp6cVTml4ssTdk2iOLMk
+ l82WUXl2VyAiaB9jK2HcxBwaTiM4YhqXe4yges78zLJCMLsheU/GKDvKKcSySBxDDSsMOcGk5Zg
+ J5xBrCnnth2QPR8sgMD8er3KeHzNomSFuuL6M4fDxV//6SeESsPBl4B7ZrSE5Na2xIQrAZsaMX7
+ HbDAWAcI8A71aoRJL6mCCGGWAATBAojnkV74tT5e+P3/duVyzREE6XGbqulCYc5rExJK8ams8w8
+ W1GbhYakeBBGAUybQs5HhJIjvM3XHadJk9lpKGh1xa4FYR3yxZ/C8qkanA3swZ8+tADFrKnKRdx
+ dFhQIihNUUE9T9Q+QsGlB5RyhWkpg2x+tsVezyUaSJQ/LP5W1E6aQaHDV6y2lX0uBM+PK0yp8O0
+ ZOl4FpQ2tRCxeVuAPXdw1/aWoGp2MeHwoG3D9ajGbMQEBXlE0wsmdCIfDE73KVVE62Rp77kpMjb
+ a4AHxeY8n++etFQ==
+X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
+ fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-When we cannot get a tx buffer (`get_a_tx_buf`) `rpmsg_upref_sleepers`
-enables tx-complete interrupt.
-However if the interrupt is executed after `get_a_tx_buf` and before
-`rpmsg_upref_sleepers` we may miss the tx-complete interrupt and sleep
-for the full 15 seconds. To avoid this race condition, we re-try once
-before we really start to sleep.
+sc7180 has an ADSP remoteproc that can be used to control the sound
+hardware. This remoteproc has to be used on those devices that use
+Qualcomm firmware and thus are locked out of driving the lpass directly.
 
-Signed-off-by: Tim Blechmann <tim@klingt.org>
+Introducing the ADSP would allow multiple WoA laptops such as Aspire 1
+to provide sound. It's also useful for the sm7125 devices that are to be
+included to the kernel [1]
+
+This series adds the ADSP and the sound services needed to make use of
+it later.
+
+[1] https://lore.kernel.org/all/20230824091737.75813-1-davidwronek@gmail.com/
+
+Signed-off-by: Nikita Travkin <nikita@trvn.ru>
 ---
- drivers/rpmsg/virtio_rpmsg_bus.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+Changes in v3:
+- Reorder the pinctrl
+- Fixup remoteproc submode per schema
+- Link to v2: https://lore.kernel.org/r/20230905-sc7180-adsp-rproc-v2-0-8ab7f299600a@trvn.ru
 
-diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 905ac7910c98..2a9d42225e60 100644
---- a/drivers/rpmsg/virtio_rpmsg_bus.c
-+++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-@@ -587,21 +587,27 @@ static int rpmsg_send_offchannel_raw(struct rpmsg_device *rpdev,
- 
- 	/* no free buffer ? wait for one (but bail after 15 seconds) */
- 	while (!msg) {
- 		/* enable "tx-complete" interrupts, if not already enabled */
- 		rpmsg_upref_sleepers(vrp);
- 
--		/*
--		 * sleep until a free buffer is available or 15 secs elapse.
--		 * the timeout period is not configurable because there's
--		 * little point in asking drivers to specify that.
--		 * if later this happens to be required, it'd be easy to add.
--		 */
--		err = wait_event_interruptible_timeout(vrp->sendq,
--					(msg = get_a_tx_buf(vrp)),
--					msecs_to_jiffies(15000));
-+		/* make sure to retry to grab tx buffer before we start waiting */
-+		msg = get_a_tx_buf(vrp);
-+		if (msg) {
-+			err = 0;
-+		} else {
-+			/*
-+			 * sleep until a free buffer is available or 15 secs elapse.
-+			 * the timeout period is not configurable because there's
-+			 * little point in asking drivers to specify that.
-+			 * if later this happens to be required, it'd be easy to add.
-+			 */
-+			err = wait_event_interruptible_timeout(vrp->sendq,
-+						(msg = get_a_tx_buf(vrp)),
-+						msecs_to_jiffies(15000));
-+		}
- 
- 		/* disable "tx-complete" interrupts if we're the last sleeper */
- 		rpmsg_downref_sleepers(vrp);
- 
- 		/* timeout ? */
- 		if (!err) {
+Changes in v2:
+- Refactor the pas binding to fit adsp better
+- Fixup remoteproc subnode names and property order
+- Link to v1: https://lore.kernel.org/r/20230905-sc7180-adsp-rproc-v1-0-dfea7699da7b@trvn.ru
+
+---
+Nikita Travkin (4):
+      dt-bindings: remoteproc: qcom: sc7180-pas: Add ADSP compatible
+      remoteproc: qcom: pas: Add sc7180 adsp
+      arm64: dts: qcom: sc7180: Add tertiary mi2s pinctrl
+      arm64: dts: qcom: sc7180: Add ADSP
+
+ .../bindings/remoteproc/qcom,sc7180-pas.yaml       |  81 +++++++++----
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               | 127 +++++++++++++++++++++
+ drivers/remoteproc/qcom_q6v5_pas.c                 |   1 +
+ 3 files changed, 184 insertions(+), 25 deletions(-)
+---
+base-commit: cd04b2fab5ee58862674e9bab3cbc8e9a8576845
+change-id: 20230905-sc7180-adsp-rproc-a745b88af298
+
+Best regards,
 -- 
-2.34.1
+Nikita Travkin <nikita@trvn.ru>
 
