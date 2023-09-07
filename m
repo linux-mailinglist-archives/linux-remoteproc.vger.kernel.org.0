@@ -2,146 +2,96 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F497979DF
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  7 Sep 2023 19:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08178797B37
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  7 Sep 2023 20:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240884AbjIGRY4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 7 Sep 2023 13:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
+        id S245212AbjIGSJY (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 7 Sep 2023 14:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234942AbjIGRYz (ORCPT
+        with ESMTP id S1343616AbjIGSJU (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 7 Sep 2023 13:24:55 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2072.outbound.protection.outlook.com [40.107.237.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654031FEE;
-        Thu,  7 Sep 2023 10:24:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cn1lX2aBSkZpPduk3aTFZzQ2Q/yRLSPvHhcqOi3X3ajAhQGqwnBrS9fkmJAEo3EdzdrqI2ut0d0NgYHNr6Nnn9GcrPB78oGOiUuqFXsP9ywcIkHh9/obAX1fbRnKPJK2IQwsBA5HGDk2H+DD0fFUTk86m15jNVy3pIgH6CALYNj98a2AJbLDU7jr2KpXJGELe6KURrLkAI7zKEzQCCmygL9ychOFye/Bq441UhWy32zud0cNqCYdirzSniH+B9QlAfgFnK2yxoWiUbystIYsYyKx8Uog75VP1+ah32sQItTWAuShtSJOIHsZD4SRWoO8pdp1XuIjfqaIaF+dY8kWEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=L7fM/z4RMsK8eb1gWkmOiNHv0dr7V+SbpHXE4IDRn08=;
- b=Ar24JwucnzMpJxx24vG0f8DbIgxKBx9GVGHFED55apA7tHr4VHooaAzfkeicgQKkcTmkzy9T1d51RE9D0rjq6zaRYYqSbLHZ5lF5oDSwL/UZYxDbJPWjZiHkj/tULBdKqq6NGh2iT+tTL7eJzVNQDFMQQAlDpfRf9K7XAYvViBdf2kesfhMDjC77+Xcc4FpJAHKTsGQfP6t7mJLXI5/9YPWdlWtFSwTuGcaiN1aiUrIOQFk/rftSbu+wBEqvOZgdqkmBEeLaExXNhW/W3kGzmpgDbBmBuZ+avkBi7pPL+WFnfvyfiOpdPACHyMAr+AxoeZ7E6cmYysjKKLn6xjpb9A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=L7fM/z4RMsK8eb1gWkmOiNHv0dr7V+SbpHXE4IDRn08=;
- b=S3eSvrGjw6dTB624igUe6j/Fw4AghbTBoYQdthpX6KCcadp7Ey7J3FbTy4Z8wTqYtJ8LTcUX6CkvXHxdVIZY7jtQsaLbvHB5s0hrSZ8Th8Zl+F/TxC5HqfK19HpHy/ipSronDdRwfH6qZHV7SVChGRq7nHPRt53jMWMxDrRqTmk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3683.namprd12.prod.outlook.com (2603:10b6:a03:1a5::16)
- by PH7PR12MB8794.namprd12.prod.outlook.com (2603:10b6:510:27d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.34; Thu, 7 Sep
- 2023 17:23:26 +0000
-Received: from BY5PR12MB3683.namprd12.prod.outlook.com
- ([fe80::8304:46bd:5017:3dcb]) by BY5PR12MB3683.namprd12.prod.outlook.com
- ([fe80::8304:46bd:5017:3dcb%6]) with mapi id 15.20.6745.034; Thu, 7 Sep 2023
- 17:23:26 +0000
-Message-ID: <ad75ec32-cd49-4a64-ae72-e52a6a34dc30@amd.com>
-Date:   Thu, 7 Sep 2023 12:23:23 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] remoteproc: zynqmp: get TCM from device-tree
-Content-Language: en-US
-From:   Tanmay Shah <tanmay.shah@amd.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Thu, 7 Sep 2023 14:09:20 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B42CE7
+        for <linux-remoteproc@vger.kernel.org>; Thu,  7 Sep 2023 11:08:51 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1c1f8aaab9aso10771005ad.1
+        for <linux-remoteproc@vger.kernel.org>; Thu, 07 Sep 2023 11:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694110129; x=1694714929; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1WA7nSSX03R+7PZDRdySk15Ri5tD4cJkX4Tu5hOXZTU=;
+        b=MPAhnH0WQg01oSsEvDD1aqj2YsdOadfGZ6HCh9Z8XYpGMyrNSMG5JuxxcdFVAveqmj
+         cbBR2HvWyZ2e0Lr90NTqRTxy5S2/8Pgm36B1u0KH0TUGBGjXqAireRwFWVZUe4I2OOtn
+         nBfQdy+dBzYj9YqMUhdaD2os+vF+N4LIdlZdX78fls1MXhgDA/+LCaCrIhf8FJmBp3aO
+         VdWwtBVF90JXL3xtJ1n4fXAIl+TH9aYG5Uyq0293Ctqr7Uv5rmMfc41wqTZdfa604N1N
+         RzMV9yjLXYfkUG6RIypbSacety+VvobTGRyaeCwAM/oY7v/75vrmvCn6lk6oNGwX2UuQ
+         vGYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694110129; x=1694714929;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1WA7nSSX03R+7PZDRdySk15Ri5tD4cJkX4Tu5hOXZTU=;
+        b=OkxHq34hWYYvOgosAoMj5rNY3rj/ogszbNW1WzH0un8ATiovnzj5tEDpC+hSlltWAO
+         hYPrJ5z4OJvSJD2/7Dc+d1Ax12zI5OrJcoalRNZVKTkWSKagxVS+k8NQSNFjyrnddmBa
+         tBEviGgtpdkEoA6kig3nwG0NP8vGomwAXoNfd0nxbSPj9EsAbLUclZGjyS6Gcll9QRbr
+         1wXVmPdjgpX3WAjd2ZYiOC6U6r1SEcDcACmqsIl1fCjNj+B71gzxdXcvZCjWrNE/F4hx
+         RJoEUiF7vF9sYytpI4G2Mi/b4FlfZqyBUyxSthzP1C42H002hhGRmXWJXN+o1YRbohAU
+         NgOA==
+X-Gm-Message-State: AOJu0YzUDAvFXk5tT9u9X1eRtFiogJyztzyHhaZAN5Z2kq7ng+hpN+Gi
+        SxLP5d9fuFZ+WJHRMvN0sfR8hg==
+X-Google-Smtp-Source: AGHT+IGpxyyboM/L/zgGhHQFaXQnsWarAVOvpbAUvZlAdvzzajFVDv/KMuQZTDNBj8y83kls2kWv8g==
+X-Received: by 2002:a17:903:124f:b0:1bf:73ec:b977 with SMTP id u15-20020a170903124f00b001bf73ecb977mr422072plh.46.1694110129153;
+        Thu, 07 Sep 2023 11:08:49 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:e988:55e1:682d:801f])
+        by smtp.gmail.com with ESMTPSA id g2-20020a1709026b4200b001b8a00d4f7asm66327plt.9.2023.09.07.11.08.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Sep 2023 11:08:48 -0700 (PDT)
+Date:   Thu, 7 Sep 2023 12:08:44 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tanmay Shah <tanmay.shah@amd.com>
+Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Simek, Michal" <michal.simek@amd.com>,
+        Michal Simek <michal.simek@amd.com>,
         Conor Dooley <conor+dt@kernel.org>,
-        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
-        "Levinsky, Ben" <ben.levinsky@amd.com>
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+        Ben Levinsky <ben.levinsky@amd.com>
+Subject: Re: [PATCH v4 3/3] remoteproc: zynqmp: get TCM from device-tree
+Message-ID: <ZPoRrLJEKwSGv+jR@p14s>
 References: <20230829181900.2561194-1-tanmay.shah@amd.com>
- <20230829181900.2561194-4-tanmay.shah@amd.com> <ZPjXTTGHb4ZG0GqN@p14s>
+ <20230829181900.2561194-4-tanmay.shah@amd.com>
+ <ZPjXTTGHb4ZG0GqN@p14s>
  <ff56ae0f-48b5-492b-bbb3-713d457e8514@amd.com>
-In-Reply-To: <ff56ae0f-48b5-492b-bbb3-713d457e8514@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0365.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::10) To BY5PR12MB3683.namprd12.prod.outlook.com
- (2603:10b6:a03:1a5::16)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3683:EE_|PH7PR12MB8794:EE_
-X-MS-Office365-Filtering-Correlation-Id: b2c17d3b-dacf-483a-2be7-08dbafc72574
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uaa3R67NVfKiLlRqlME3s2vzIjrGY6WLvj8wwfsB4IBtAr7wo1SXk285BkMc4ppTbJcFcx8Fo+JJLHerb60Ev6Cw0KRovrVWUfU94+ve4B0z7hBJ3YV0tc95O2EWiSjA9B7EPPnUP98u1mT5T+ZH+CquQ0SHPNG2l2xgqUep76A0VkGvR/3KtdtVNQhPE18yLt4vZXbbXveknK8mMhbnzPUjmjBTDI6MbNz4v5fShIAjeHtyLKLLXUWWX2zjfxdLI+xXXA2dwBetGwSNL9hog4fdZwj2OzsizKfGp8A/4rTcy346ysel76bfeC9X53alXwWdZ7toWnM3SISYBJirXMIvhflfuBTnTomkntT4I07PQ77gg0nMYotHfcifNrV6n8qAFZkVu3CCSkL8GpVREOjVS3jiGL9Ogn66ePhldwjSN1pAqmXFXICcgp+TVjQfzE9UGiXHtJ0rDHTiupcRYy5/4odtRs8vtOAst87en45jBarD3vXOd3bJ5vRWoY+pfmbD/TJhj8P2rsLLstjGbHg0v/GbRmJWNURA3i1XM1tVGDfHjF2qEIXt0q/Dh6ooosgcrE10PVOPWyQvM0xzMgshrLNgbGpZLGGlqXQEoROE8EPVSUtNe6aXarE3Fulw5nG61MBajfoal1LQr1orOg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3683.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(376002)(39860400002)(136003)(346002)(451199024)(1800799009)(186009)(6506007)(478600001)(6486002)(86362001)(53546011)(26005)(31696002)(5660300002)(6512007)(83380400001)(31686004)(6666004)(2906002)(38100700002)(30864003)(66556008)(36756003)(66899024)(2616005)(6916009)(316002)(54906003)(66476007)(44832011)(66946007)(8676002)(4326008)(8936002)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SkhGdDdKWE9ZQTA4NExCUmlYTHJMOEtMUmZpRWZOWTBkdW9CMlZhS2FFSDVs?=
- =?utf-8?B?K01VeU80UWhEYmxpVmwrWXJyYnRMVnQ2S0NoNWQ3RkFaQmNkQWdwTkhQKzRh?=
- =?utf-8?B?YTJiVElNNHF1VGZld0tneGNNK1cyTTVpbURVUU5RdEJ4c1doOHlPVHN6T1hI?=
- =?utf-8?B?VS9PMFFOVy9CTm5lc0hlT3RoL25keHZBalJieGRLZFlYN3lFYTFTaEJERnhm?=
- =?utf-8?B?UHBCRFc0dzVVOEhqdENqRXJxZzkwSVRYVmd4RlpDTXNPa2tiZ3FBaVdPYTZ1?=
- =?utf-8?B?NG1vVFVkdWJiMDhyYnBKbXozOURIZjU1UnFZSVB3ZUkzakJDZVJoREp3dUor?=
- =?utf-8?B?a3NVOE9mc3Q2SmM0MWRLL0FMQWdyU3JKamJJS05Idjg0LzUyWktjVzBYNkRB?=
- =?utf-8?B?RXcvVVlXNFFvMDdCTDduanZQRHBvR0VOL2NITTlGRGkvWEdELzJ6ZVh2cXRr?=
- =?utf-8?B?cWMzT002U0hXMDJJMXB5aGxDaDJWN1NFditib1d4NXFSUmpKSzhHTXRTZndk?=
- =?utf-8?B?VjNMTzBEU1IvUlNXZjBjS2lqZTdzWVFQRFAxZjdKSTQzNzlBaVVWVTkyZURz?=
- =?utf-8?B?QzVLQk13SE5RbWhGTHFWNWVHR2ptQ09BYk9JYkgwTEpvcGpleWQxcG54ZDRz?=
- =?utf-8?B?am5ma0RBN0pIQTh2K3M4RmtqM3J6WGNBTGE1U3FMZ0daN2xpMkk2aHpwVTVE?=
- =?utf-8?B?ejY2dlh4Ni8rNkNvMGdLaFFjZ3BoUGpLdXozTFhCZVZYSmRLb3VHV1dkNnRj?=
- =?utf-8?B?d0ZTSGFya2JhOFp2WmxNOEVhNFRkN0NzYmpPM1ZnMVd0NWI2eFNkN0dieWVp?=
- =?utf-8?B?cExPK3dydkhuRnVSS2NUNlhHMTR3L1BXclI5MTRJYmdNcTFkSk9UQ3FENUhZ?=
- =?utf-8?B?R2pkd0FqWUNIa1R6NzNXWWl2K3BFRFJHTHRZa3Q4Q2JsaTJ2NE9NQm9JaHAz?=
- =?utf-8?B?eE8xOUk0MVd5QytOS2I5SXlMNjZWUDRXNTdZQmwra1V2cjgyZ1V1QmtCQlZF?=
- =?utf-8?B?cVRkNTJGN3J6VUNDM0JhVEdnbnAxQlJIcEpaWUFlMU5BeUU3NDJOS0pJQ0tM?=
- =?utf-8?B?K283UjVPbHVqZWo3ZWJHajBBY1RyYWRPWmk0ZTVUM0YxSEROLzBaOFo2c1pI?=
- =?utf-8?B?dmVEOENjcnpCVi9QTko3cXQyWmorTDVkMmFBOHRPNUxZbXV3RGR6am9UblJp?=
- =?utf-8?B?bTlFd2NvM0hoa29ZVmwvU2NQN1JQVEE2YkNOVEpacGtsV0ZmQTU4TW1VZ1VZ?=
- =?utf-8?B?dXdDb29qOFJDNm4xaWxUN0NndGNqUDNUYjhmNzk2Qy9sNUFjckF0L081bnlS?=
- =?utf-8?B?QktuNlFJSFFiR3V6NzU2OW4vVDdqTDd5eCthdUZHYms5ZzdLMEZZSWxjL0RC?=
- =?utf-8?B?WHZXZjBWTXlubjNZR2lzaFpDNTkrdFZtSGRKeXFuK0dDQ05YNkFsVE93dTEx?=
- =?utf-8?B?YjZvRmh4bVVBV2IyZVFuUitVR3lsWlI4NXc1dGVrRmdtSTMwUXlsb2JVVDRs?=
- =?utf-8?B?N0pPUnkxc29DMVl4eVIyRXdLQmhoNGU1WEc2OXZ3QjVwUmJFQzdmclZ0ZWF3?=
- =?utf-8?B?VFh4eVkxbDFGQTFkY3hQeGZWS3N4SC80NG1nd0RRdy9Odmo4VnNBL2tHWmlx?=
- =?utf-8?B?NzlwdHRXdnVWeTI3VTIzclNjUnViRUg4WWdyN29SbDlmT0Ywam9CQ2ZQMHdo?=
- =?utf-8?B?R3NkZnlnNm1qenNEUkdSUXA0NTR2VFkvZkFnSXU0Vm9zczFYaStlTXFQYWJY?=
- =?utf-8?B?MXpObkZuM3NRUTR5R203V2ZXS2NGTmZ2aEhGUEJzLzFLeElMVFVSc0xVbE1j?=
- =?utf-8?B?aVdYb1hQb25hQmx3U1d1QmtWS1BoQndMdFZxK3F6d25ReUdpK3F4azI2bzRa?=
- =?utf-8?B?MzNObituZEl2OGNBNnpCbFpudkMzK1lsTE10TUIreC9xQThBMmwvUVZocko2?=
- =?utf-8?B?NmpkTkZRKzFQU2V5Y2JFbTNnNXlKNENXemcrMTQvODFUczh6V256bXJPZGJt?=
- =?utf-8?B?bUlSQ0tVRUp0MG5KRWJWeUtKUlVWNU5OTmdhRmxPUlJVd2tXWngzZ2I4T2tO?=
- =?utf-8?B?OHZzSVN1aVNBcW16cjNRLzNLVzVVYlpSc1FTeUZsa1A0N0dlRzcxd01qT0lu?=
- =?utf-8?Q?TdRC44Qh+k02snDY0+42FEjOU?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2c17d3b-dacf-483a-2be7-08dbafc72574
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3683.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Sep 2023 17:23:26.7060
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /6hMTtv2SSEC3DHIy0ivGF6RyPHoRSey9Nd0+fcnuCWd51FYONKRllN6ZmBpyWsZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8794
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ff56ae0f-48b5-492b-bbb3-713d457e8514@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-
-On 9/6/23 5:02 PM, Tanmay Shah wrote:
+On Wed, Sep 06, 2023 at 05:02:40PM -0500, Tanmay Shah wrote:
 > HI Mathieu,
->
+> 
 > Thanks for reviews. Please find my comments below.
 >
->
+
+I took another look after reading your comment and found more problems...
+
+> 
 > On 9/6/23 2:47 PM, Mathieu Poirier wrote:
 > > Hi Tanmay,
 > >
@@ -184,16 +134,32 @@ On 9/6/23 5:02 PM, Tanmay Shah wrote:
 > > > +	u32 size;
 > >
 > > Why are the types of @addr and @size changed?
->
+> 
 > So, R5 can access 32-bit address range only. Before I had missed this.
->
+> 
 > In Devce-tree bindings I am keeping address-cells and size-cells as 2.
->
+> 
 > So, out of 64-bits only 32-bits will be used to get address of TCM. Same for size.
->
+> 
 > This motivated me to change the type of @addr and @size fields. It doesn't have any side effects.
->
->
+
+It doesn't have an effect but it also doesn't need to be in this patch,
+especially since it is not documented. 
+
+
+This patch needs to be broken in 3 parts:
+
+1) One patch that deals with the addition of the static mem_bank_data for
+lockstep mode.
+
+2) One patch that deals with the addition of ->pm_domain_id2 and the potential
+bug I may have highlighted below.
+
+3) One patch that deals with extracting the TCM information from the DT.
+Everything else needs to be in another patch.
+
+> 
+> 
 > >
 > > >  	u32 pm_domain_id;
 > > > -	char *bank_name;
@@ -201,14 +167,17 @@ On 9/6/23 5:02 PM, Tanmay Shah wrote:
 > > > +	char bank_name[32];
 > >
 > > Same
->
+> 
 > Now we have "reg-names" property in dts so, when that is available, I try to use it.
->
+> 
 > So, instead of keeping simple pointer, I copy name from "struct resources". So, I changed bank_name
->
+> 
 > from pointer to array.
 >
->
+
+I'll look at that part again when the rest of may comments are addressed.
+
+> 
 > >
 > > >  };
 > > >  
@@ -228,17 +197,17 @@ On 9/6/23 5:02 PM, Tanmay Shah wrote:
 > >
 > > Here the device address for btcm0 is 0x20000 while in the cover letter it is
 > > 0x2000.
->
+> 
 > Thanks for catching this. This is actually typo in cover-letter. It should be 0x20000 in cover-letter.
->
+> 
 > >
 > > > +	{0xffe90000, 0x0, 0x10000, PD_R5_1_ATCM, 0, "atcm1"},
 > > > +	{0xffeb0000, 0x20000, 0x10000, PD_R5_1_BTCM, 0, "btcm1"},
 > >
 > > Same
->
+> 
 > Same here: It should be 0x20000 in cover-letter.
->
+> 
 > >
 > > > +};
 > > > +
@@ -256,7 +225,7 @@ On 9/6/23 5:02 PM, Tanmay Shah wrote:
 > > > +
 > >
 > > Spurious change
-> Sure,Â  I will remove it.
+> Sure,  I will remove it.
 > >
 > > >  	return 0;
 > > >  }
@@ -328,6 +297,11 @@ On 9/6/23 5:02 PM, Tanmay Shah wrote:
 > > > -	phys_addr_t bank_addr;
 > > > -	size_t bank_size = 0;
 > > > +	u32 bank_size = 0;
+
+Why is this changed to a u32 when rproc_mem_entry_init() takes a size_t for
+@len?  This is especially concerning since add_tcm_carveout_split_mode() still
+uses a size_t.
+
 > > >  	struct device *dev;
 > > > -	u32 pm_domain_id;
 > > >  	char *bank_name;
@@ -390,6 +364,10 @@ On 9/6/23 5:02 PM, Tanmay Shah wrote:
 > > > +						 bank_size, da,
 > > > +						 tcm_mem_map, tcm_mem_unmap,
 > > > +						 bank_name);
+
+The original code adds a single carveout while this code is adding one for each
+memory bank?  Is this done on purpose or is it a bug?  No comment is provided.
+
 > > > +		if (!rproc_mem) {
 > > > +			ret = -ENOMEM;
 > > > +			goto release_tcm_lockstep;
@@ -453,6 +431,10 @@ On 9/6/23 5:02 PM, Tanmay Shah wrote:
 > > > +	struct mem_bank_data *tcm;
 > > > +	struct device_node *np, *np1 = NULL;
 > > > +	struct device *dev;
+
+As far as I can tell @ret, @res and @np1 don't need initilisation.  It may also
+be the case for @abs_addr and @size.  
+
 > > > +
 > > > +	for (i = 0; i < cluster->core_count; i++) {
 > > > +		r5_core = cluster->r5_cores[i];
@@ -597,19 +579,19 @@ On 9/6/23 5:02 PM, Tanmay Shah wrote:
 > >
 > > Why are the changes to get TCM bank information from the DT and enhancement to
 > > support lockstep mode in the same patch?
->
+> 
 > Actually TCM in lockstep mode was supported before as well. It's just I was using same table in lockstep mode before.
->
+> 
 > However, now I am having two tables for split mode and lockstep mode.
->
-> I had to do this as I have introduced "da" field in "struct mem_bank_data" object.Â  This makes it easy to process
->
+> 
+> I had to do this as I have introduced "da" field in "struct mem_bank_data" object.  This makes it easy to process
+> 
 > "device address" derived from device-tree.
->
+> 
 > And as I have introduced "u32 da", I had to modify table as well and remove hardcoding of "da" calculation in "tcm_mem_map" function.
->
+> 
 > As all of this is connected, I have them in same patch. No new functionality is added, but just code refactoring.
->
+> 
 > > > +
 > > >  
 > > >  	/* count per core tcm banks */
@@ -633,33 +615,30 @@ On 9/6/23 5:02 PM, Tanmay Shah wrote:
 > > > +		if (np) {
 > >
 > > Why was this check added?
->
+> 
 > We want to maintain backward compatibility with previous bindings only for zynqmp platform.
->
+> 
+
+That check has nothing to do with backward compatibility.
+
 > So, hardcode table is used only for "zynqmp" platform if getting "reg" information from device-tree fails.
->
+> 
 > If node is not compatible with "xlnx,zynqmp-r5f" then it is new platform and we must not use hardcode
->
+> 
 > table instead we should fail.
->
->
+> 
+
+So this is the real reason for the check, but zynqmp-r5f is still the only
+platform supported by this driver.  Please remove and re-introduce if/when a new
+platform is added.
+
+> 
 > > So far there are too many unanswered questions with this patchset and as such I
 > > will stop here.
->
+> 
 > No problem. Please let me know if you have any further questions.
-
-Hi Mathieu,
-
-Did you want me to document all the comments I mentioned in driver and send new patchset or can we continue reviews ?
-
-I am fine either way. Let me know.
-
-Thanks,
-
-Tanmay
-
->
->
+> 
+> 
 > > Mathieu
 > >
 > > > +			ret = zynqmp_r5_get_tcm_node(cluster);
