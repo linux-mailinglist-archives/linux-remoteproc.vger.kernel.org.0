@@ -2,123 +2,201 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3227F798980
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Sep 2023 17:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E15798983
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Sep 2023 17:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238409AbjIHPDy (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 8 Sep 2023 11:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
+        id S237799AbjIHPEU (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 8 Sep 2023 11:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243458AbjIHPDy (ORCPT
+        with ESMTP id S233245AbjIHPEU (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 8 Sep 2023 11:03:54 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363431FC4
-        for <linux-remoteproc@vger.kernel.org>; Fri,  8 Sep 2023 08:03:49 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so6995778a12.1
-        for <linux-remoteproc@vger.kernel.org>; Fri, 08 Sep 2023 08:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694185427; x=1694790227; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GgbRCToEb5NmEGS74P9h1ZwNZOKwIjjVNc1A6TPphJs=;
-        b=oAZ8MtO/TglrT1MY1/eewD/01E9hjVMJb0n4JXttqacYCylmvNjdEw+x4SxF9wY0Fy
-         HUOx6st7bk4/5oki9bedcF2bOVkv9Qo3oK2/iG4rayY2RR/CUaTRrM5iwVmE/ZmOogdi
-         IDTBppG4Gu1TTh4MBVvyReA3UawjVe/j4fTxZHyvod94FC93I2DaBPPXbdP1M1cEdLb1
-         8GlNhfi2h4f85Q6T4zQla5UXPzNqyKpv8h3NAgLx50e3xOu6GJcuy0HfHsmlu2d30PWl
-         ABl7vi0GSgegBr+d8QdjMS1nBCX1sNrebfsSVX/FIMpm/uD8uErogLA8D62yUZKJqQlV
-         yw1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694185427; x=1694790227;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GgbRCToEb5NmEGS74P9h1ZwNZOKwIjjVNc1A6TPphJs=;
-        b=bBYXiiHmSKXJClfggHgIbKA3OQMMSj8OMDEJR/919RbQmdOp3KK1YRMn9SvV68CxnG
-         a7c4GNshNC5LSEq0azkmDSwFwftu7ureU02IFwT8rduGRh81jbsdOUFjNyicTmfltIPH
-         mwvbth2391FebA6RoyrzhJAcTflXwRWYoQ3Go8rd/l+gA2kkyKKydxYEGPuhZoGjAFnk
-         XPmZMnMsUp7h9//soDcJCwj8oBGTxIzxQURhim5S4IAvYH4Xqhnd2SW298xHC8Ah4dje
-         zNyp9Yxe5aPSDuel354GW8id33XA3Cv6XSisVP9SLoL/RxXfaOyXGuq4Q1HClLEewMIX
-         Egsg==
-X-Gm-Message-State: AOJu0YypNDcf4I842d6rE7X2Z6llXErZ0JQZ3l/8P5b9u+NNcSIERQpY
-        2HOv+ZaM6XTudzWCyIiCTc26w55Wu6M9UnSKpGw=
-X-Google-Smtp-Source: AGHT+IEEPvFKP5sUKl+TfFd5GNBGbrKhtGba+BcCS4qkr1b8bKTyv15XMXkviGb38ahMzZ8eWnhbXhblw9jddy1/ZQw=
-X-Received: by 2002:a17:907:2c62:b0:9a1:eb4f:56f with SMTP id
- ib2-20020a1709072c6200b009a1eb4f056fmr3345882ejc.13.1694185425763; Fri, 08
- Sep 2023 08:03:45 -0700 (PDT)
+        Fri, 8 Sep 2023 11:04:20 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6A31FC6
+        for <linux-remoteproc@vger.kernel.org>; Fri,  8 Sep 2023 08:04:10 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38898jaw016971;
+        Fri, 8 Sep 2023 17:04:06 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=
+        selector1; bh=W/vtyMI92lJrEsUOX31XkdxVO8ScNcRaRGbWV0gnCSc=; b=ce
+        UF+Q8F/9cm3kK34tbBffVdSULZi6QqTM9rcfZit+yh4IZs24zi106yHIPBjDNMYp
+        33Cc33YTcR3QnQaUhk5nrxwG93DFiLTceT62sO4cZGOn09KJ0LGzoWgi6PRNln3a
+        Zpx7z0y00s8OGHE+MoL0mtMWv/EZLbdl1Ciad7O7keM3LSWaQf/pd6gJ+qLwBL3A
+        i94D4c2vkOCRlHeQHZ/kzvyY5aRcJvpViPsGq2fmagkqQ8pKTxQhn0TuBxC1HYvT
+        xaKosL2vtsHl0YqgNEWpFB9kqa+u6JJW6BfERZKmYRq2H4qlJHGB37uG8bF+XSA7
+        YSoFj/3B9Lssx0PVUE3g==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3sutffutwe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 08 Sep 2023 17:04:06 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 8E74D100052;
+        Fri,  8 Sep 2023 17:04:04 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 864122823E6;
+        Fri,  8 Sep 2023 17:04:04 +0200 (CEST)
+Received: from [10.252.26.200] (10.252.26.200) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 8 Sep
+ 2023 17:04:03 +0200
+Message-ID: <a47f8cea-5dc4-cdb2-9c2d-daf84c6853e3@foss.st.com>
+Date:   Fri, 8 Sep 2023 17:04:03 +0200
 MIME-Version: 1.0
-Received: by 2002:a17:907:a41:b0:9a5:a231:1330 with HTTP; Fri, 8 Sep 2023
- 08:03:45 -0700 (PDT)
-Reply-To: PopovAleksander@proton.me
-From:   Popov Aleksander <offficeo01@gmail.com>
-Date:   Fri, 8 Sep 2023 08:03:45 -0700
-Message-ID: <CAKrNddYK4FjcKf7d8SU2j4-D=9vcownBt7QSHH0b5hA8o-aFcQ@mail.gmail.com>
-Subject: URGENT RESPONSE!!!
-To:     undisclosed-recipients:;
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/1] rpmsg: virtio_rpmsg_bus - prevent possible race
+ condition
+Content-Language: en-US
+To:     Tim Blechmann <tim@klingt.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     Tim Blechmann <tim.blechmann@gmail.com>,
+        <linux-remoteproc@vger.kernel.org>
+References: <20230904083602.106703-1-tim@klingt.org>
+ <64ecb19a-b3d1-0fa1-b015-b34607aee460@foss.st.com> <ZPZBVS3R/oZuUmk5@p14s>
+ <00d5edfd-808f-51ac-0233-ce8489c6722c@klingt.org>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <00d5edfd-808f-51ac-0233-ce8489c6722c@klingt.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.0 required=5.0 tests=ADVANCE_FEE_4_NEW,BAYES_50,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,TVD_PH_SUBJ_META1,UNDISC_MONEY,
-        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [2a00:1450:4864:20:0:0:0:535 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [offficeo01[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [offficeo01[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.6 URG_BIZ Contains urgent matter
-        *  1.2 TVD_PH_SUBJ_META1 Email has a Phishy looking subject line
-        *  0.0 ADVANCE_FEE_4_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  2.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.252.26.200]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-08_12,2023-09-05_01,2023-05-22_02
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Greetings,
 
-Trust you are doing well, I got your email contact from Google
-business listing in your country and with your interesting profile, I
-decided to contact you.
 
-My name is Popov Aleksander from Ukraine, I'm a businessman reaching
-from Kyiv where I am currently stuck due to the restriction of some
-age bracket which is not allowed to leave the country as part of
-government's martial law by virtue of the ongoing war here in Ukraine.
+On 9/5/23 03:33, Tim Blechmann wrote:
+>>>> when we cannot get a tx buffer (`get_a_tx_buf`) `rpmsg_upref_sleepers`
+>>>> enables tx-complete interrupt.
+>>>> however if the interrupt is executed after `get_a_tx_buf` and before
+>>>> `rpmsg_upref_sleepers` we may mis the tx-complete interrupt and sleep
+>>>> for the full 15 seconds.
+>>>
+>>>
+>>> Is there any reason why your co-processor is unable to release the TX RPMSG
+>>> buffers for 15 seconds? If not, you should first determine the reason why it is
+>>> stalled.
+>>
+>> Arnaud's concern is valid.  If the remote processor can't consume a buffer
+>> within 15 seconds, something is probably wrong.
+>>
+>> That said, I believe your assesment of the situation is correct.  *If* the TX
+>> callback is disabled and there is no buffer available, there is a window of
+>> opportunity between calls to get_a_tx_buf() and rpmsg_upref_sleepers() for an
+>> interrupt to arrive in function rpmsg_send_offchannel_raw().
+> 
+> the remote processor certainly releases the tx buffer and according to my
+> tracing the `vring_interrupt` fires immediately before `rpmsg_send` enters the
+> `rpmsg_upref_sleepers`.
 
-It has been over 18 months into the war. Many businesses have
-collapsed, especially in my region the Mariupol City of Donetsk Oblast
-where the Russian Army has invaded and occupied.
 
-Considering the situation in my country, I have decided to make an
-investment outside Ukraine so I'm searching for a capable partner who
-can manage my resources judiciously, I can fund a multi-million
-investment as partnership or loan as long as my fund will be in safe
-hands. If you are interested, contact  PopovAleksander@proton.me  for
-more discussion.
+If I well understood your point, the issue occur in following race condition
 
+- all the Tx buffers are used
+- in rpmsg_send_offchannel_raw() function, we try to get a buffer using
+get_a_tx_buf(vrp) that returns NULL
+- rpmsg_xmit_done is called as a Tx buffer is released by the remote processor
+  and now free
+- in rpmsg_send_offchannel_raw() rpmsg_upref_sleepers is called
+
+At this point you are nothing happen until 15 second because rpmsg_xmit_done is
+never called  again that would wake up the waitqueue to call get_a_tx_buf()
+
+I'm right?
+
+If yes what is not clear to me is that wait_event_interruptible_timeout() seems
+to test the condition (so call get_a_tx_buf()) before entering in sleep[1]. A
+free TX buffer should be found at this step.
+
+[1]https://elixir.bootlin.com/linux/latest/source/include/linux/wait.h#L534
 
 Regards,
-Popov Aleksander
-Kyiv, Ukraine.
+Arnaud
+
+> 
+> after applying this patch we haven't been able to reproduce the 15s timeout
+> anymore, whereas before we could easily reproduce it with certain workloads.
+> 
+>> 3) This patch gets applied when rc1 comes out so that it has 6 or 7 weeks to
+>> soak.  No error are locks are reported due to this patch during that time.
+> 
+> mentioning locks: i was a bit uncertain about a good way to implement the retry,
+> since both `rpmsg_upref_sleepers` and `get_a_tx_buf` both acquire the same
+> mutex. i briefly considered to add `get_a_tx_buf` into `rpmsg_upref_sleepers` to
+> avoid locking the same mutex multiple times, though it adds a bit of complexity
+> to the implementation and harms readability a bit.
+> are there any recommendations on this topic or are (likely non-contended) locks
+> not expensive enough to justify the added complexity?
+> 
+> thanks,
+> tim
+> 
+> 
+>>
+>>>
+>>> Regards,
+>>> Arnaud
+>>>
+>>>>
+>>>> in this case, so we re-try once before we really start to sleep
+>>>>
+>>>> Signed-off-by: Tim Blechmann <tim@klingt.org>
+>>>> ---
+>>>>   drivers/rpmsg/virtio_rpmsg_bus.c | 24 +++++++++++++++---------
+>>>>   1 file changed, 15 insertions(+), 9 deletions(-)
+>>>>
+>>>> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c
+>>>> b/drivers/rpmsg/virtio_rpmsg_bus.c
+>>>> index 905ac7910c98..2a9d42225e60 100644
+>>>> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+>>>> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+>>>> @@ -587,21 +587,27 @@ static int rpmsg_send_offchannel_raw(struct
+>>>> rpmsg_device *rpdev,
+>>>>         /* no free buffer ? wait for one (but bail after 15 seconds) */
+>>>>       while (!msg) {
+>>>>           /* enable "tx-complete" interrupts, if not already enabled */
+>>>>           rpmsg_upref_sleepers(vrp);
+>>>>   -        /*
+>>>> -         * sleep until a free buffer is available or 15 secs elapse.
+>>>> -         * the timeout period is not configurable because there's
+>>>> -         * little point in asking drivers to specify that.
+>>>> -         * if later this happens to be required, it'd be easy to add.
+>>>> -         */
+>>>> -        err = wait_event_interruptible_timeout(vrp->sendq,
+>>>> -                    (msg = get_a_tx_buf(vrp)),
+>>>> -                    msecs_to_jiffies(15000));
+>>>> +        /* make sure to retry to grab tx buffer before we start waiting */
+>>>> +        msg = get_a_tx_buf(vrp);
+>>>> +        if (msg) {
+>>>> +            err = 0;
+>>>> +        } else {
+>>>> +            /*
+>>>> +             * sleep until a free buffer is available or 15 secs elapse.
+>>>> +             * the timeout period is not configurable because there's
+>>>> +             * little point in asking drivers to specify that.
+>>>> +             * if later this happens to be required, it'd be easy to add.
+>>>> +             */
+>>>> +            err = wait_event_interruptible_timeout(vrp->sendq,
+>>>> +                        (msg = get_a_tx_buf(vrp)),
+>>>> +                        msecs_to_jiffies(15000));
+>>>> +        }
+>>>>             /* disable "tx-complete" interrupts if we're the last sleeper */
+>>>>           rpmsg_downref_sleepers(vrp);
+>>>>             /* timeout ? */
+>>>>           if (!err) {
+>>
+> 
