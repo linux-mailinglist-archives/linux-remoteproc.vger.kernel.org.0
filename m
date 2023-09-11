@@ -2,85 +2,70 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A621979B2A9
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Sep 2023 01:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F53479B0DD
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Sep 2023 01:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjIKV3Z (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 11 Sep 2023 17:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
+        id S238427AbjIKV2p (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 11 Sep 2023 17:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236655AbjIKLJ4 (ORCPT
+        with ESMTP id S243046AbjIKQpl (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 11 Sep 2023 07:09:56 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F71CDC
-        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Sep 2023 04:09:51 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2bbbda48904so71517911fa.2
-        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Sep 2023 04:09:51 -0700 (PDT)
+        Mon, 11 Sep 2023 12:45:41 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D09E4
+        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Sep 2023 09:45:36 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-68fbd31d9deso1076583b3a.3
+        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Sep 2023 09:45:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694430590; x=1695035390; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ItV/PafZYbRtZG+3EH6sRu97i9Pet4QO+NBJ8/y2iuI=;
-        b=tg4h2AL9gT7/qUV0jFTrvkPJl9a/skFZyfbwb9lpcls46kdOpKy/0zULUF05nAJKrw
-         ITd7nMPZiaS5PsZzg1uTs9LpnOIGc5IQoXbM6B0QK8XpMLmTWz7Uvoa0s4ZTgz5Jq9t4
-         v0U5o8trLtrjzW4IH2vQo4mpKEbOiin4b62jWutcLNlCqZmZsOvN5+FxgDlk21bHCJDq
-         AGy8mFU5AJj5nVJ+LxeMb8183iNYaxF1hzP/jM4wDcZfI50R1cg8CQ5wa0RSetIfcJDN
-         Epx6SgrPMDqtOePCk98hrz6ZZ1pRWPxrXpWGXqxYXtz71fRYbYppSVB44eXGFYlNXoj4
-         UTNw==
+        d=linaro.org; s=google; t=1694450736; x=1695055536; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oqKvGMHqYqut6M1/awSuIk3zziLg+uksxVFlWIgcNLk=;
+        b=K2VUXHeUUB9BDeeaYt/OuNxcDryMWfV8FITVMjuFlE6uYdZ3YN2tTECNeG3Lk1ugS0
+         xZlL4SEl+V6fmgGKiQVygFSyhB1yk0ZA9jUSdaTT3a8yNxfqA6QM5Ogg1NCtovKTd0Z+
+         4gXDWKXABP66OZPHIyRNXq7JAoZoTSZJbT/i74P4IgrQ9VYtf0tGweHCM8vQf92T+gGQ
+         24PJbiDtpXmOb5KwrS/si5ZcU8KkwCrrjzn1e+H+zeYncqT6iZs5YaLqJPLaiFevTmvz
+         zDTxzpe7/Ynv7abJOsVBYahnLMuM9O3gerv5NrqHFmT7vwZmoI92e0gjXzlJVr/EicZy
+         7a/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694430590; x=1695035390;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ItV/PafZYbRtZG+3EH6sRu97i9Pet4QO+NBJ8/y2iuI=;
-        b=Di9qpk3GTagdLdvHuH5MUOUCmAhGkr8yUrA/9kAZebwz+rbwsfcMi8t2zjbA/pXU75
-         Hvdis/nLR338VHZwB3nHFf573ejmSdXDduT50RnRTvfs3MI6Rvef0W2iXvbDIpfsmNgp
-         iGedwqtyrDvtloEYLA36LYZDGi0bzwNxIsPXDpKivw69W5BhTmKDmCIib8MRPzeKTQGm
-         m46rw4k/xVxLKC7MJLsbsRq+nJR6bwH4MeLFzgUd/EK6wa/8Qb7A7ozemAvpxRx0I9Nx
-         aeNzFFcVKsxvPYaI2krTjKiEdcyVd9HL7ZS3VJO8HAagCzCfAmlVaPJ4JqSh/jHStMue
-         4PIg==
-X-Gm-Message-State: AOJu0YwmenQLHOkk91DcXkhBKszQ9RtVdhw9/3foGhq3CBFf82bejE0C
-        jVI+NMQzzgmJ85ALsog+o9IvQQ==
-X-Google-Smtp-Source: AGHT+IEA9FyfM8rXa+3k+u+doQWaGigDrU1zuRRVi1v3E2XELPt5LPr2HsZJRl0XxMdT23XFarwUrQ==
-X-Received: by 2002:a2e:8543:0:b0:2bd:180d:67b7 with SMTP id u3-20020a2e8543000000b002bd180d67b7mr6601812ljj.40.1694430589764;
-        Mon, 11 Sep 2023 04:09:49 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id lw7-20020a170906bcc700b009a168ab6ee2sm5129780ejb.164.2023.09.11.04.09.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 04:09:48 -0700 (PDT)
-Message-ID: <0041a391-12ba-2e1b-0954-fbc0e00be631@linaro.org>
-Date:   Mon, 11 Sep 2023 13:09:46 +0200
+        d=1e100.net; s=20230601; t=1694450736; x=1695055536;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oqKvGMHqYqut6M1/awSuIk3zziLg+uksxVFlWIgcNLk=;
+        b=CIAhvOwGpR4BKSph6u1kuXBoaXwGi3MLhSt3lW7FLjSbMOGxKZ0vbO1KVaM78KovJN
+         5QFRlgRJ528sBH2QGaYIHex5cH9YEYjo14OyzjfDQPvS1iGbJm0MadREEW+0XMj2h5uy
+         9tADS1H7BhgdFwt5FAXlWIf95Y1VIRhZwLNyHgOMkUIqIqXK8wrw94Fekoixio0lp4lr
+         0apwvLsD3y+ffsK42QO681E1szjg7ZlBozz4yBJoFOwJ2RAYzImbJ4L7gaC2tVm/VGXy
+         WUalJ3YK+MO7bIRiv/awQAE4BFJKXIWcuryRncXhpRjxgYKK9yIsmZ+BLe6jO86D81Yh
+         G0PQ==
+X-Gm-Message-State: AOJu0YyyhgzI29rqCeW+E8EbpB4ha+V1vN0SlDSVnfM8J8zrfLvLjp+H
+        N+V2TnaUmjuZFhNX5R2pN34mSQ==
+X-Google-Smtp-Source: AGHT+IGVKv99gjdhTfQwWUcVSjYyCdzVgcuDt5u9yDRwFVKUSkhQxBLAXf3VgNUeXzKBENN2j5I6SA==
+X-Received: by 2002:a05:6a20:3d93:b0:152:6b63:f1e7 with SMTP id s19-20020a056a203d9300b001526b63f1e7mr10224833pzi.1.1694450736278;
+        Mon, 11 Sep 2023 09:45:36 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:cb1c:f39e:e329:2c3d])
+        by smtp.gmail.com with ESMTPSA id t4-20020a62ea04000000b0068bc44dc40dsm5794566pfh.34.2023.09.11.09.45.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Sep 2023 09:45:35 -0700 (PDT)
+Date:   Mon, 11 Sep 2023 10:45:33 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Apurva Nandan <a-nandan@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>, Bjorn Andersson <andersson@kernel.org>,
+        Suman Anna <s-anna@ti.com>, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>,
+        Hari Nagalla <hnagalla@ti.com>, Udit Kumar <u-kumar1@ti.com>
+Subject: Re: [PATCH] remoteproc: k3-r5: Wait for core0 power-up before
+ powering up core1
+Message-ID: <ZP9ELdOQ9WMj2Rxd@p14s>
+References: <20230906124756.3480579-1-a-nandan@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v5 11/17] qcom_minidump: Register ramoops region with
- minidump
-Content-Language: en-US
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, corbet@lwn.net,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, keescook@chromium.org, tony.luck@intel.com,
-        gpiccoli@igalia.com, mathieu.poirier@linaro.org,
-        catalin.marinas@arm.com, will@kernel.org, linus.walleij@linaro.org,
-        andy.shevchenko@gmail.com, vigneshr@ti.com, nm@ti.com,
-        matthias.bgg@gmail.com, kgene@kernel.org, alim.akhtar@samsung.com,
-        bmasney@redhat.com, quic_tsoni@quicinc.com
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, kernel@quicinc.com
-References: <1694290578-17733-1-git-send-email-quic_mojha@quicinc.com>
- <1694290578-17733-12-git-send-email-quic_mojha@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1694290578-17733-12-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230906124756.3480579-1-a-nandan@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,51 +73,126 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 09/09/2023 22:16, Mukesh Ojha wrote:
-> Register all the pstore frontend with minidump, so that they can
-> be dumped as default Linux minidump region to be collected on
-> SoC where minidump is enabled.
+Hi Apurva,
+
+On Wed, Sep 06, 2023 at 06:17:56PM +0530, Apurva Nandan wrote:
+> PSC controller has a limitation that it can only power-up the second core
+> when the first core is in ON state. Power-state for core0 should be equal
+> to or higher than core1, else the kernel is seen hanging during rproc
+> loading.
 > 
-
-...
-
+> Make the powering up of cores sequential, by waiting for the current core
+> to power-up before proceeding to the next core, with a timeout of 2sec.
+> Add a wait queue event in k3_r5_cluster_rproc_init call, that will wait
+> for the current core to be released from reset before proceeding with the
+> next core.
+> 
+> Fixes: 6dedbd1d5443 ("remoteproc: k3-r5: Add a remoteproc driver for R5F subsystem")
+> 
+> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> ---
+> 
+>  kpv report: https://gist.githubusercontent.com/apurvanandan1997/feb3b304121c265b7827be43752b7ae8/raw
+> 
+>  drivers/remoteproc/ti_k3_r5_remoteproc.c | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+> index ad3415a3851b..ba5e503f7c9c 100644
+> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
+> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+> @@ -103,12 +103,14 @@ struct k3_r5_soc_data {
+>   * @dev: cached device pointer
+>   * @mode: Mode to configure the Cluster - Split or LockStep
+>   * @cores: list of R5 cores within the cluster
+> + * @core_transition: wait queue to sync core state changes
+>   * @soc_data: SoC-specific feature data for a R5FSS
+>   */
+>  struct k3_r5_cluster {
+>  	struct device *dev;
+>  	enum cluster_mode mode;
+>  	struct list_head cores;
+> +	wait_queue_head_t core_transition;
+>  	const struct k3_r5_soc_data *soc_data;
+>  };
+>  
+> @@ -128,6 +130,7 @@ struct k3_r5_cluster {
+>   * @atcm_enable: flag to control ATCM enablement
+>   * @btcm_enable: flag to control BTCM enablement
+>   * @loczrama: flag to dictate which TCM is at device address 0x0
+> + * @released_from_reset: flag to signal when core is out of reset
+>   */
+>  struct k3_r5_core {
+>  	struct list_head elem;
+> @@ -144,6 +147,7 @@ struct k3_r5_core {
+>  	u32 atcm_enable;
+>  	u32 btcm_enable;
+>  	u32 loczrama;
+> +	bool released_from_reset;
+>  };
+>  
+>  /**
+> @@ -460,6 +464,8 @@ static int k3_r5_rproc_prepare(struct rproc *rproc)
+>  			ret);
+>  		return ret;
+>  	}
+> +	core->released_from_reset = true;
+> +	wake_up_interruptible(&cluster->core_transition);
+>  
+>  	/*
+>  	 * Newer IP revisions like on J7200 SoCs support h/w auto-initialization
+> @@ -1140,6 +1146,7 @@ static int k3_r5_rproc_configure_mode(struct k3_r5_rproc *kproc)
+>  		return ret;
+>  	}
+>  
+> +	core->released_from_reset = c_state;
+>  	ret = ti_sci_proc_get_status(core->tsp, &boot_vec, &cfg, &ctrl,
+>  				     &stat);
+>  	if (ret < 0) {
+> @@ -1280,6 +1287,21 @@ static int k3_r5_cluster_rproc_init(struct platform_device *pdev)
+>  		    cluster->mode == CLUSTER_MODE_SINGLECPU ||
+>  		    cluster->mode == CLUSTER_MODE_SINGLECORE)
+>  			break;
 > +
-> +	record.type = type;
-> +	record.id = 0;
-> +	max_dump_cnt = 0;
-> +	name = pstore_type_to_name(record.type);
-> +	do {
-> +		ret = pstore_region_defined(&record, &virt, &phys, &size, &max_dump_cnt);
-> +		if (ret < 0)
-> +			break;
-> +
-> +		mdr_list = devm_kzalloc(dev, sizeof(struct md_region_list), GFP_KERNEL);
+> +		/* R5 cores require to be powered on sequentially, core0
+> +		 * should be in higher power state than core1 in a cluster
+> +		 * So, wait for current core to power up before proceeding
+> +		 * to next core and put timeout of 2sec for each core.
+> +		 */
 
-sizeof(*)
+Wrong multi-line comment format.
 
-Please fix it everywhere in your code.
-
-> +		if (!mdr_list)
-> +			return -ENOMEM;
-> +
-> +		md_region = &mdr_list->md_region;
-> +		scnprintf(md_region->name, sizeof(md_region->name) - 1, "K%s%llu", name, record.id);
-> +		md_region->virt_addr = virt;
-> +		md_region->phys_addr = phys;
-> +		md_region->size = size;
-> +		ret = qcom_minidump_region_register(md_region);
-> +		if (ret) {
-> +			pr_err("failed to register minidump region\n");
-> +			break;
+> +		ret = wait_event_interruptible_timeout(cluster->core_transition,
+> +						       core->released_from_reset,
+> +						       msecs_to_jiffies(2000));
+> +		if (ret <= 0) {
+> +			dev_err(dev,
+> +				"Timed out waiting for %s core to power up!\n",
+> +				rproc->name);
+> +			return ret;
 > +		}
-> +
-> +		list_add(&mdr_list->list, &ramoops_region_list);
-> +	} while (record.id < max_dump_cnt && ++record.id);
-> +
-> +	return ret;
-> +}
 
+From my perspective, this is needed because rproc_auto_boot_callback() for core1
+can be called before core0 due to thread execution order.  Am I correct?  
 
-Best regards,
-Krzysztof
+If so please add this explanation to the comment you have above.  Also, let's
+say a user decides to switch both cores off after reboot.  At that time, what
+prevents a user from switching on core1 before core0 via sysfs?
 
+Thanks,
+Mathieu
+
+>  	}
+>  
+>  	return 0;
+> @@ -1709,6 +1731,7 @@ static int k3_r5_probe(struct platform_device *pdev)
+>  	cluster->dev = dev;
+>  	cluster->soc_data = data;
+>  	INIT_LIST_HEAD(&cluster->cores);
+> +	init_waitqueue_head(&cluster->core_transition);
+>  
+>  	ret = of_property_read_u32(np, "ti,cluster-mode", &cluster->mode);
+>  	if (ret < 0 && ret != -EINVAL) {
+> -- 
+> 2.34.1
+> 
