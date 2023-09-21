@@ -2,101 +2,93 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF7C7A9BF4
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 21 Sep 2023 21:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450507A9F63
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 21 Sep 2023 22:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjIUTFS (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Thu, 21 Sep 2023 15:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
+        id S231547AbjIUUVk (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Thu, 21 Sep 2023 16:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbjIUTE6 (ORCPT
+        with ESMTP id S229804AbjIUUVS (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Thu, 21 Sep 2023 15:04:58 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDC6E08D
-        for <linux-remoteproc@vger.kernel.org>; Thu, 21 Sep 2023 10:50:00 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-404fbfac998so14508165e9.3
-        for <linux-remoteproc@vger.kernel.org>; Thu, 21 Sep 2023 10:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1695318599; x=1695923399; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2aBYYxm4V3k4FyEjLrLJ9/n/H90Md6QsttKISLF22a4=;
-        b=TvitetX1+8y+R6XxPTdBEUGoj6BIf2gpF/Bwke9VYSb4YLtSo4/+W/q7rK3pJkFMpN
-         8qWwqFN5XtYbX0hbFcxX/OM0jfJSztr8H7ytGnte4LWbDKWmaggv4Fn5Tiz2RGyU2x+c
-         Azgs60OMdNVftFZi+gx+blMLkNVDuE/j0frR4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695318599; x=1695923399;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2aBYYxm4V3k4FyEjLrLJ9/n/H90Md6QsttKISLF22a4=;
-        b=uYXBDZJpf7F0preTJ7csjGge0P2tqhDGMbjEMTSbTQCD+0zQVs2epWBOPgTR8YsoG1
-         9Ygb5MwBGpWNBvEXI8WiW+YG/TfoUovh9yIk0Zlpr0YfO8LBMCb8SdZEhtuMgnzfxAif
-         TTSjyYqzsgcKrTlAqWycXb2n2fFYvUjPS6014VGR78bqXIadVSUzQHN+p/gmjcRtePt+
-         przZg0+ljGn9+cXIGmYfcW2lpYKY8VTqY1OkZLknCbZ1nLrOV86l+xm+RYnDO9sqH9oo
-         1+0IfA00mWBcdVJQAAetcbiw2WXZ1GCAxTcKRLtsbGMaA5ahXID6rMOSIxnNGM4oacn3
-         9xvQ==
-X-Gm-Message-State: AOJu0Yxj/qJZ5+ZL5YBhWSOAXzoGj1n9bwEnb5gqj0f2VIo56WK2GIsk
-        sI/ueJceuw3dgs0pTWpkORUR3d4ag9eF8HxEtlje6VaS6dQ9C464msE=
-X-Google-Smtp-Source: AGHT+IGdIV8J7fxjUNbRUv5HJhGzBY+D1JG/lYO+jffLDerOCNDgsVdIhjbf+HuUVjEXXFJfi0crYYSdZkt0BFEhkOg=
-X-Received: by 2002:a19:e051:0:b0:4ff:8863:be01 with SMTP id
- g17-20020a19e051000000b004ff8863be01mr3396045lfj.8.1695269389034; Wed, 20 Sep
- 2023 21:09:49 -0700 (PDT)
+        Thu, 21 Sep 2023 16:21:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33DD902E;
+        Thu, 21 Sep 2023 10:23:14 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 67FCB6607285;
+        Thu, 21 Sep 2023 08:18:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695280681;
+        bh=u+SDF/PNL5Ju2+whiov9Et6DghwzY6lUPs+GJOtpLPk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RL8DToJNQahbJaZooqiEqG8PJe63aN8SdCp6AfAplEVykYDHO7c3GVAVMpGB74dO1
+         a5ljz6v7vbGTqnOhJTDOy+iZi8ldmc5h69baoWulk54LbBJ2OtyWvia73/YgSrfm0K
+         UXtHYcmXE3SqUiD4Ba/G7UShpSWFNS7VPSOAlEs30TiabER69pZBp//qX6uDlfMUZz
+         QHc73AxBFMZrr+ZKUj0fc5FgjLSR/mCImmoC+umJnrzk5NBKZGapn8MryzY8H0Llpz
+         t2MFNh8zL5BcMRX26UpBymze5ym+bTB2AeWN2l7BbGDmJSM0hcJ6lx2S0wrEHr181F
+         pDDJWBQ8q0ugA==
+Message-ID: <c9780f70-62b5-e151-0ac6-11d97a694439@collabora.com>
+Date:   Thu, 21 Sep 2023 09:17:57 +0200
 MIME-Version: 1.0
-References: <20230919092336.51007-1-angelogioacchino.delregno@collabora.com> <20230920150332.318851-1-laura.nao@collabora.com>
-In-Reply-To: <20230920150332.318851-1-laura.nao@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 21 Sep 2023 12:09:37 +0800
-Message-ID: <CAGXv+5Hr1woRL5z6b4k6e+FQKaVyoUmP4vAt=RrEgjEwq8bUhw@mail.gmail.com>
-Subject: Re: [PATCH] remoteproc: mediatek: Refactor single core check and fix retrocompatibility
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH] remoteproc: mediatek: Refactor single core check and fix
+ retrocompatibility
 To:     Laura Nao <laura.nao@collabora.com>
-Cc:     angelogioacchino.delregno@collabora.com, andersson@kernel.org,
-        kernel@collabora.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+Cc:     andersson@kernel.org, kernel@collabora.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
         linux-remoteproc@vger.kernel.org, mathieu.poirier@linaro.org,
-        matthias.bgg@gmail.com, tinghan.shen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        matthias.bgg@gmail.com, tinghan.shen@mediatek.com,
+        wenst@chromium.org
+References: <20230919092336.51007-1-angelogioacchino.delregno@collabora.com>
+ <20230920150332.318851-1-laura.nao@collabora.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230920150332.318851-1-laura.nao@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 11:03=E2=80=AFPM Laura Nao <laura.nao@collabora.com=
-> wrote:
->
+Il 20/09/23 17:03, Laura Nao ha scritto:
 > On 9/19/23 11:23, AngeloGioacchino Del Regno wrote:
-> > In older devicetrees we had the ChromeOS EC in a node called "cros-ec"
-> > instead of the newer "cros-ec-rpmsg", but this driver is now checking
-> > only for the latter, breaking compatibility with those.
-> >
-> > Besides, we can check if the SCP is single or dual core by simply
-> > walking through the children of the main SCP node and checking if
-> > if there's more than one "mediatek,scp-core" compatible node.
-> >
-> > Fixes: 1fdbf0cdde98 ("remoteproc: mediatek: Probe SCP cluster on multi-=
-core SCP")
-> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@co=
-llabora.com>
-> > ---
-> >   drivers/remoteproc/mtk_scp.c | 18 +++++++-----------
-> >   1 file changed, 7 insertions(+), 11 deletions(-)
-> >
->
-> Tested on asurada (spherion) and jacuzzi (juniper). The issue was detecte=
-d by KernelCI, so:
->
+>> In older devicetrees we had the ChromeOS EC in a node called "cros-ec"
+>> instead of the newer "cros-ec-rpmsg", but this driver is now checking
+>> only for the latter, breaking compatibility with those.
+>>
+>> Besides, we can check if the SCP is single or dual core by simply
+>> walking through the children of the main SCP node and checking if
+>> if there's more than one "mediatek,scp-core" compatible node.
+>>
+>> Fixes: 1fdbf0cdde98 ("remoteproc: mediatek: Probe SCP cluster on multi-core SCP")
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> ---
+>>    drivers/remoteproc/mtk_scp.c | 18 +++++++-----------
+>>    1 file changed, 7 insertions(+), 11 deletions(-)
+>>
+> 
+> Tested on asurada (spherion) and jacuzzi (juniper). The issue was detected by KernelCI, so:
+> 
 > Reported-by: "kernelci.org bot" <bot@kernelci.org>
 > Tested-by: Laura Nao <laura.nao@collabora.com>
+> 
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+Thanks for pointing out the correct Reported-by tag! :-)
 
-on Hayato (MT8192) and Juniper (MT8183).
+Cheers,
+Angelo
+
