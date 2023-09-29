@@ -2,67 +2,64 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783047B37A8
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 29 Sep 2023 18:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C157B37EC
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 29 Sep 2023 18:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233485AbjI2QQ4 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 29 Sep 2023 12:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        id S233147AbjI2Q25 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 29 Sep 2023 12:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233607AbjI2QQ4 (ORCPT
+        with ESMTP id S233446AbjI2Q24 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 29 Sep 2023 12:16:56 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8D11B7
-        for <linux-remoteproc@vger.kernel.org>; Fri, 29 Sep 2023 09:16:53 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-32157c8e4c7so14131821f8f.1
-        for <linux-remoteproc@vger.kernel.org>; Fri, 29 Sep 2023 09:16:53 -0700 (PDT)
+        Fri, 29 Sep 2023 12:28:56 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C211B5
+        for <linux-remoteproc@vger.kernel.org>; Fri, 29 Sep 2023 09:28:53 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-523100882f2so17925001a12.2
+        for <linux-remoteproc@vger.kernel.org>; Fri, 29 Sep 2023 09:28:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696004211; x=1696609011; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MikOgdHnw9Cj1F3F15+YBxnX7Q0cPaNa5HmAcMHbwVs=;
-        b=Up6A5L6slPRGd0ev40c2i0B4MtiiT2z2ZzBA5H7gxs141wmsXDs3ev2NNjHO6kfxgB
-         1slgibq/awH6SzdmUjG8yQnZJ1YM1yrQVWMtY0UeI+YwJbk1NcrcPOMVCfGpCx/MhQYX
-         oDpxTbtKGSOq/xujlqAwcxFgC/YRwuqUV+SCr+TbWBvWvAmEbKS1TqyKTfV55srfzXxk
-         znD7pReiYo7x7afeC+RbZ8k1nn34+oQN7Rh7SimBkbXfB2zH/JwA8UY6EBxxOAvjjeTj
-         L4RN653xogllCaioSYfuVxSPIONxNwoQMoJIvDMKTyzDqhItXUqlA+3dpk23fBRN/sIB
-         PTnA==
+        d=linaro.org; s=google; t=1696004932; x=1696609732; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X8mQZtTVeZ33y1fcK4D+RrR6+JupRwQI35yzIof0Q8A=;
+        b=yoo8Sswt1id8qNkT6u4hAjpNQVuUQZXh4WhGsrlZNUdsiVIiHoJ2IAbSUvPrfaqUA+
+         bIlPNzupammYeZwe/P/nJKCYK/5T9Vs8Vw55BgbIjNBEqjIDvC9hghgTFwUYLqrn6+wc
+         9uOxHSepwxFwyDExvUrxRLciDcvMTxiBu+/mH1yd9FZs+qFtvh5C/eESv6I1pSa6i5T9
+         QL9YL8g0bwDOi+QOWSaT5z0WGHK2cTmR/6A87cUQO3bZI0ifhGhtlBaWTYyvz3RZWBEM
+         wqXl0W26kkHvEvgBIKbCmMnLSjBseo4hHFqWGu3g0kHWqzJHte+tmyM9Jio6hsyaakoB
+         9kGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696004211; x=1696609011;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MikOgdHnw9Cj1F3F15+YBxnX7Q0cPaNa5HmAcMHbwVs=;
-        b=t/7LFP9+eAnYYea/NIR1tWADxHPN0xnJo3LJTsEJuRR53G6o2AB3sY2wfgCjdogv3B
-         N0G7kz3vJcdFU7RRbKOQ9bJFAYCSyz3ZfXJYpz2OxNsKrlCHuJZ8uMUfeg7aQcLrP1uO
-         sqBGm1OUBNAShhTe/VdCnGXFOopx10b6Fm1v2QcRTBT2DjuXuxM1tbWJjfMN5v/11ZSZ
-         LeKYNCH1b5eFYhkPLwZQ8JeqgGiZ0Vk1JIGLhOBceh8joIki1Zv3kRk2lNDnIF2UJSbH
-         Es5kklUsUbOomNvZdUc1//pTwuexgYw1vnl6+STPVk08NY2hWywpsMdLTqmfiVJb6vfp
-         Cb3g==
-X-Gm-Message-State: AOJu0Yw+x09Oce2ll9dTUXRf4Ux5RjNQxagQRjLdrycXBuR+cBUodXL2
-        C8aY2SCTgKlD0JAhsrTyan7iww==
-X-Google-Smtp-Source: AGHT+IGh9+hHCV8PgonNR9t6AFEVc/cDbuI0Aqd6VW8dFYYBRvr/czuKcfiIKkHf283fsaQY+Cme5Q==
-X-Received: by 2002:adf:f5c3:0:b0:314:350a:6912 with SMTP id k3-20020adff5c3000000b00314350a6912mr4034356wrp.36.1696004211549;
-        Fri, 29 Sep 2023 09:16:51 -0700 (PDT)
-Received: from lion.localdomain (host-2-99-112-229.as13285.net. [2.99.112.229])
-        by smtp.gmail.com with ESMTPSA id x15-20020adfcc0f000000b0032330e43590sm10226848wrh.22.2023.09.29.09.16.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Sep 2023 09:16:51 -0700 (PDT)
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-Date:   Fri, 29 Sep 2023 17:16:20 +0100
-Subject: [PATCH 4/4] MAINTAINERS: Add entry for Qualcomm Cooling Driver
+        d=1e100.net; s=20230601; t=1696004932; x=1696609732;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X8mQZtTVeZ33y1fcK4D+RrR6+JupRwQI35yzIof0Q8A=;
+        b=OKTSCxgkk5yt2viuvRQzkxs9Ndw+AsyROIj2wew4Oed1Sf85L2fpH3mGvMpRyzV2+w
+         7tL9R+4ETSmHwMD7Nu+foWfgNj97/j1KDdCBH5tsmlAvlQ+CXeBUIDiaBk5LDdg5IxI4
+         2GJOOlK2cMwPFOhken485N3hWyK2Hapc8lKC5M1kNmnIAOS7Dk6YWJ4E5xlKDtPvpD25
+         yW1myA+dVYsJJEdiJaO2rdTWkLdrsUrJmrnk4GrujmQIqY3Q+sGKAiKdYRn8ZB8KCyqO
+         I3WgXufOOV/vesgpg1VbLSMu+1iunK/5l8Axat76cj/LYH8A4rSXzeESGvgELMl+7Llb
+         HndA==
+X-Gm-Message-State: AOJu0YyJHD3O7dTsa/VGs4wrOnWPzz3NVBMj5CeOgiGeVmeOUD2R/zpq
+        effHyLOjtrV10P9u+tebC+s9Vg==
+X-Google-Smtp-Source: AGHT+IGzYhpFXCR0EPzBGhIzwNmt9lRnwwgeUPiOpbQaT6s0SYUQITM2AREylz2cWxOB58g0zLCQMg==
+X-Received: by 2002:a17:906:319a:b0:9a9:f17e:412f with SMTP id 26-20020a170906319a00b009a9f17e412fmr4717755ejy.50.1696004931898;
+        Fri, 29 Sep 2023 09:28:51 -0700 (PDT)
+Received: from [192.168.0.219] (178235177217.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.217])
+        by smtp.gmail.com with ESMTPSA id hs35-20020a1709073ea300b009b28ad521f4sm7253315ejc.4.2023.09.29.09.28.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Sep 2023 09:28:51 -0700 (PDT)
+Message-ID: <30aa40c9-b63a-093c-954d-86e4bb232431@linaro.org>
+Date:   Fri, 29 Sep 2023 18:28:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230905-caleb-qmi_cooling-v1-4-5aa39d4164a7@linaro.org>
-References: <20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org>
-In-Reply-To: <20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 3/4] thermal: qcom: add qmi-cooling driver
+To:     Caleb Connolly <caleb.connolly@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bhupesh Sharma <bhupesh.linux@gmail.com>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -75,56 +72,201 @@ To:     Andy Gross <agross@kernel.org>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Thara Gopinath <thara.gopinath@gmail.com>
 Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Caleb Connolly <caleb.connolly@linaro.org>
-X-Mailer: b4 0.13-dev-46309
-X-Developer-Signature: v=1; a=openpgp-sha256; l=874;
- i=caleb.connolly@linaro.org; h=from:subject:message-id;
- bh=lGmSgXW2XFQ/63QULMjMdPqhafuryymoFyIIA0vaTv4=;
- b=owGbwMvMwCFYaeA6f6eBkTjjabUkhlSxH3k3+Bf291/I99V6oPb+kdyaZ+r2Kh0Zr0ryDjwKT
- X47/eahjlIWBkEOBlkxRRbxE8ssm9ZettfYvuACzBxWJpAhDFycAjCR6aIMf0WmOf4TP2lWzrrO
- Z86kBbf+Pnwx+brP5aM537axFL9jkGRm+B+dkP7m9KzXj94U3tmz1+oo1631m720+J2ksk6djA+
- b4HAfAA==
-X-Developer-Key: i=caleb.connolly@linaro.org; a=openpgp;
- fpr=83B24DA7FE145076BC38BB250CD904EB673A7C47
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org>
+ <20230905-caleb-qmi_cooling-v1-3-5aa39d4164a7@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230905-caleb-qmi_cooling-v1-3-5aa39d4164a7@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Add myself as the maintainer for the Qualcomm Cooling
-driver.
 
-Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 01dde0acebd3..d92cfa1dd57f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17800,6 +17800,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/mtd/qcom,nandc.yaml
- F:	drivers/mtd/nand/raw/qcom_nandc.c
- 
-+QUALCOMM QMI (THERMAL MITIGATION DEVICE) COOLING DRIVER
-+M:	Caleb Connolly <caleb.connolly@linaro.org>
-+L:	linux-pm@vger.kernel.org
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
-+F:	drivers/thermal/qcom/qmi-cooling.*
-+
- QUALCOMM QSEECOM DRIVER
- M:	Maximilian Luz <luzmaximilian@gmail.com>
- L:	linux-arm-msm@vger.kernel.org
+On 9/29/23 18:16, Caleb Connolly wrote:
+> The Thermal Mitigation Device (TMD) service exposes various platform
+> specific thermal mitigations available on remote subsystems (ie the
+> modem, adsp, cdsp, and sdsp). The service is exposed via the QMI messaging
+> interface, usually over the QRTR transport.
+> 
+> These controls affect things like the power limits of the modem power
+> amplifier and cpu core, skin temperature mitigations, as well as rail
+> voltage restrictions under cold conditions.
+> 
+> Each remote subsystem has its own TMD instance, where each child node
+> represents a single thermal control.
+> 
+> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> ---
+[...]
 
--- 
-2.42.0
+> +/* Notify the remote subsystem of the requested cooling state */
+> +static int qmi_tmd_send_state_request(struct qmi_tmd *tmd)
+> +{
+> +	struct tmd_set_mitigation_level_resp_msg_v01 tmd_resp;
+> +	struct tmd_set_mitigation_level_req_msg_v01 req;
+> +	struct qmi_tmd_client *client;
+> +	struct qmi_txn txn;
+> +	int ret = 0;
+> +
+> +	client = tmd->client;
+You can assign it at declaration time
+> +
+> +	if (!client->connection_active)
+> +		return 0;
+Is that an expected scenario?
 
+> +
+> +	memset(&req, 0, sizeof(req));
+> +	memset(&tmd_resp, 0, sizeof(tmd_resp));
+Since you're declaring them above, you can do = { 0 }; instead, which
+will be faster
+
+> +
+> +	strscpy(req.mitigation_dev_id.mitigation_dev_id, tmd->qmi_name,
+> +		QMI_TMD_MITIGATION_DEV_ID_LENGTH_MAX_V01 + 1);
+> +	req.mitigation_level = tmd->cur_state;
+> +
+> +	mutex_lock(&client->mutex);
+Look into fancy scoped mutexes https://lwn.net/Articles/934679/
+
+[...]
+
+> +static int qmi_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
+> +{
+> +	struct qmi_tmd *tmd = cdev->devdata;
+> +
+> +	if (!tmd)
+> +		return -EINVAL;
+> +
+> +	if (state > tmd->max_state)
+> +		return -EINVAL;Would it be useful if this threw an error in dmesg?
+
+
+> + * When the QMI service starts up on a remote subsystem this function will fetch
+> + * the list of TMDs on the subsystem, match it to the TMDs specified in devicetree
+> + * and call qmi_tmd_init_control() for each
+> + */
+> +static void qmi_tmd_svc_arrive(struct work_struct *work)
+> +{
+> +	struct qmi_tmd_client *client =
+> +		container_of(work, struct qmi_tmd_client, svc_arrive_work);
+> +
+> +	struct tmd_get_mitigation_device_list_req_msg_v01 req;
+> +	struct tmd_get_mitigation_device_list_resp_msg_v01 *resp;
+> +	int ret = 0, i;
+> +	struct qmi_txn txn;
+> +
+> +	memset(&req, 0, sizeof(req));
+= { 0 }
+
+[...]
+
+> +
+> +	pr_info("QMI TMD service reset %s\n", client->name);
+Is it useful to the user? pr_debug?
+
+> +
+> +	list_for_each_entry(tmd, &client->cdev_list, node) {
+> +		qmi_tmd_send_state_request(tmd);
+> +	}
+> +}
+> +
+> +static void thermal_qmi_del_server(struct qmi_handle *qmi, struct qmi_service *service)
+> +{
+> +	struct qmi_tmd_client *client = container_of(qmi, struct qmi_tmd_client, handle);
+> +
+> +	pr_info("QMI TMD service stop %s\n", client->name);
+Ditto
+
+> +
+> +	client->connection_active = false;
+> +}
+> +
+> +static int thermal_qmi_new_server(struct qmi_handle *qmi, struct qmi_service *service)
+> +{
+> +	struct qmi_tmd_client *client = container_of(qmi, struct qmi_tmd_client, handle);
+> +	struct sockaddr_qrtr sq = { AF_QIPCRTR, service->node, service->port };
+> +
+> +	pr_info("QMI TMD service start %s\n", client->name);
+Ditto
+
+> +		tmd->type = devm_kasprintf(client->dev, GFP_KERNEL, "%s:%s",
+> +						client->name, subnode->name);
+> +		if (!tmd->type)
+> +			return dev_err_probe(dev, -ENOMEM, "Cooling device name\n");
+Cooling device name-what? :D
+
+> +
+> +		if (of_property_read_string(subnode, "label", &name)) {
+> +			return dev_err_probe(client->dev, -EINVAL,
+> +					     "Fail to parse dev name for %s\n",
+Failed
+
+[...]
+
+> +static int qmi_tmd_client_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev;
+> +	struct qmi_tmd_client *client;
+> +	const struct qmi_instance_id *match;
+> +	int ret;
+> +
+> +	dev = &pdev->dev;
+Initialize at declaration
+
+> +
+> +	client = devm_kzalloc(dev, sizeof(*client), GFP_KERNEL);
+> +	if (!client)
+> +		return -ENOMEM;
+> +
+> +	client->dev = dev;
+> +
+> +	match = of_device_get_match_data(dev);
+> +	if (!match)
+> +		return dev_err_probe(dev, -EINVAL, "No match data\n");
+> +
+> +	client->id = match->id;
+> +	client->name = match->name;
+> +
+> +	mutex_init(&client->mutex);
+> +	INIT_LIST_HEAD(&client->cdev_list);
+> +	INIT_WORK(&client->svc_arrive_work, qmi_tmd_svc_arrive);
+> +
+> +	ret = qmi_tmd_alloc_cdevs(client);
+> +	if (ret)
+> +		return ret;
+> +
+> +	platform_set_drvdata(pdev, client);
+> +
+> +	ret = qmi_handle_init(&client->handle,
+> +			      TMD_GET_MITIGATION_DEVICE_LIST_RESP_MSG_V01_MAX_MSG_LEN,
+> +			      &thermal_qmi_event_ops, NULL);
+> +	if (ret < 0)
+> +		return dev_err_probe(client->dev, ret, "QMI handle init failed for client %#x\n",
+> +			      client->id);
+> +
+> +	ret = qmi_add_lookup(&client->handle, TMD_SERVICE_ID_V01, TMD_SERVICE_VERS_V01,
+> +			     client->id);
+> +	if (ret < 0) {
+> +		qmi_handle_release(&client->handle);
+> +		return dev_err_probe(client->dev, ret, "QMI register failed for client 0x%x\n",
+> +			      client->id);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int qmi_tmd_client_remove(struct platform_device *pdev)
+void + .remove_new
+
+Konrad
