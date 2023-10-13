@@ -2,148 +2,109 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 154757C8E62
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Oct 2023 22:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B9D7C8EC8
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Oct 2023 23:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbjJMUhP (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 13 Oct 2023 16:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        id S232197AbjJMVMF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 13 Oct 2023 17:12:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjJMUhP (ORCPT
+        with ESMTP id S232127AbjJMVME (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 13 Oct 2023 16:37:15 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC7183
-        for <linux-remoteproc@vger.kernel.org>; Fri, 13 Oct 2023 13:37:13 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-32d569e73acso2279206f8f.1
-        for <linux-remoteproc@vger.kernel.org>; Fri, 13 Oct 2023 13:37:13 -0700 (PDT)
+        Fri, 13 Oct 2023 17:12:04 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3D8C2
+        for <linux-remoteproc@vger.kernel.org>; Fri, 13 Oct 2023 14:12:03 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9be3b66f254so48414466b.3
+        for <linux-remoteproc@vger.kernel.org>; Fri, 13 Oct 2023 14:12:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697229431; x=1697834231; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eGqNMQJoTKDExVF5LTm0ABt03qpcjjaRQIb4oBXXpL8=;
-        b=HwHiVS18UclmDwQ/0Pmhoqo3RlKq/DNKjDmzkq/WDb01LMW9sCPduIiQqNwgABUAyw
-         ev7pGWFCJ6FxICDKZBiG9gioai80lRyATWbZdCtbAsZDpSdOFLxdRYqKBcIT254UPDRI
-         zlR2fLV+ziSLkL2kWJK4WnhAafO6HsbUc2o6Qp6MMV4LLRVmDNv7VJ8JG4RoncRPq9X+
-         Y7Z2XJdX+ured4BfzT7jVdd06fpbvrqETPyK8QFr1jKeqN5nSTTIZ2aY7S7p/KwGDcZa
-         E9ZIjvu65CVwHebuHFfJydo+tuOcI152wXUca8L+ICMYKc85VexBSskcZ4qPx34pxd5E
-         R/cA==
+        d=chromium.org; s=google; t=1697231522; x=1697836322; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UHVs5ZMbCMnK4OZxIw3w4X3jAnHxQSIJjis2sL1D3HI=;
+        b=dO1GIqemepXjKGmg3lbpqPOar2nZH1kZ3q1HZ8PumN652eubsrxfpovlesXbIiWea0
+         TzSK2tE9GRnVgJeuN20VbS+sZHfKhw3w+DFLwOQnJunWnKtmFzcEQYy4h7I6unhWhjTC
+         DXnucm7AwN6816jyQ1rZ9l7EM9k0vKpfyUaio=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697229431; x=1697834231;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eGqNMQJoTKDExVF5LTm0ABt03qpcjjaRQIb4oBXXpL8=;
-        b=Zueik8S+8MDVZpIJCpC0Bq1ASv1PMd+q+ztoXHgepXK2xSMsaL1MASDbrGX7jAsugM
-         9q4N+bEh1kycEoUwLhsZBbSaXHvNhpW5aLaG4ZS0wGRR0hfO9T9gVgdHmcPsDiObutwl
-         R0XmJetBpT6wDlEtnprrR5borFi40uCiUPx8U2jwLqCr+/wDwIx5fSANzhdTOy6oxb8g
-         yGde+3UBMakHjuspSqmGnplfqearb2/FczVuBWVCBksfZETr2V8ZKhTAbc8teC/tDOCa
-         aZuGTWLn14ion11M0yEMZv+tyyiOSoluX9idvcf996dMLlPREoACq5wG4CRGa8gfrt0r
-         rPhw==
-X-Gm-Message-State: AOJu0YwZWhabqcRCl2wgr/Y2CBdaP5ZkUrnqUy2qOpRIc3W10d4YR2An
-        2pXA8FvujcQS2lTajsnpdshJ2oSbGUv9V937ZTSCjA==
-X-Google-Smtp-Source: AGHT+IF+7IiJEEKizdMeYQJowMnFRLsMOiRhCWVvtDSSbLN5+4n2cIdYTg5MU1RI1Xr336Wc5nGpjJB2bTesb2OZQ6w=
-X-Received: by 2002:a05:6000:1e11:b0:32d:8357:42dd with SMTP id
- bj17-20020a0560001e1100b0032d835742ddmr10781479wrb.68.1697229431471; Fri, 13
- Oct 2023 13:37:11 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697231522; x=1697836322;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UHVs5ZMbCMnK4OZxIw3w4X3jAnHxQSIJjis2sL1D3HI=;
+        b=B/6od5+tyxXHQH80qvfUaDzukToxa0fyeh+T/7VAq1P25OygCjVZ/TVhcFTPN4RjmJ
+         Fwf3UlpTgjmDT+43Fz/Xyw98fCOJu35iM04gusLlkC73LqQuyKJK0Cn43ohZ8KoRtSX8
+         w1aMFTGFURgKU13IKZ8RMQLzSGC0VPUHyi104qQD/1vrk2Ou51KzCiNKGNwDWPj59d6c
+         Hvq8W50YjRimrIpmChiROTo8ME4/kLS1qtKBRfzfwrdro6klWMWKWeKe41oSo2KTbjYw
+         cMn14gf3L3Zv35d6n/VhUYgtsuDPhjW+gTCFNkl40Ayf3lYljPxzff/x8tfRZN9w7aRT
+         34Gw==
+X-Gm-Message-State: AOJu0YwkHuMnY5puKjZ1s+ARcVg+BCQCWwL2HCTWAsMENiyvSzcz3c1J
+        4stP+kgJ+HGO8h42yfngQCshjrCar5U4F4HvKYPlsA==
+X-Google-Smtp-Source: AGHT+IEuNA+Q2Yxxws7amOJuXWe3ey6jbnUkGbWIJda+AVzB6s8jOrXT89FhBxT8kIo26PoR154bP2xzv0Ano/B3pdA=
+X-Received: by 2002:a17:907:60cb:b0:9be:7b67:1673 with SMTP id
+ hv11-20020a17090760cb00b009be7b671673mr337821ejc.1.1697231521525; Fri, 13 Oct
+ 2023 14:12:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231012-st_remoteproc-fix-sometimes-uninit-v1-1-f64d0f2d5b37@kernel.org>
-In-Reply-To: <20231012-st_remoteproc-fix-sometimes-uninit-v1-1-f64d0f2d5b37@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 13 Oct 2023 13:36:59 -0700
-Message-ID: <CAKwvOdnGDXvbCgPFq+DZxaMo-ptdq7omXJyLVgwgFeKh5RwdTg@mail.gmail.com>
-Subject: Re: [PATCH] remoteproc: st: Fix sometimes uninitialized ret in st_rproc_probe()
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     patrice.chotard@foss.st.com, andersson@kernel.org,
-        mathieu.poirier@linaro.org, robh@kernel.org, trix@redhat.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, llvm@lists.linux.dev,
-        patches@lists.linux.dev
+References: <20231013200851.347042-1-robh@kernel.org>
+In-Reply-To: <20231013200851.347042-1-robh@kernel.org>
+From:   Simon Glass <sjg@chromium.org>
+Date:   Fri, 13 Oct 2023 14:11:50 -0700
+Message-ID: <CAPnjgZ0Uh7RTvYfLjEL7g1NjC1pO8-xJuj9RBSVVnwviAwzF0Q@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Drop kernel copy of common reserved-memory bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Julien Massot <julien.massot@iot.bzh>,
+        Trevor Wu <trevor.wu@mediatek.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Thu, Oct 12, 2023 at 10:04=E2=80=AFAM Nathan Chancellor <nathan@kernel.o=
-rg> wrote:
+On Fri, 13 Oct 2023 at 13:45, Rob Herring <robh@kernel.org> wrote:
 >
-> Clang warns (or errors with CONFIG_WERROR=3Dy):
+> The common reserved-memory bindings have recently been copied from the
+> kernel tree into dtschema. The preference is to host common, stable
+> bindings in dtschema. As reserved-memory is documented in the DT Spec,
+> it meets the criteria.
 >
->   drivers/remoteproc/st_remoteproc.c:357:6: error: variable 'ret' is used=
- uninitialized whenever 'if' condition is true [-Werror,-Wsometimes-uniniti=
-alized]
->     357 |         if (!ddata->config)
->         |             ^~~~~~~~~~~~~~
->   drivers/remoteproc/st_remoteproc.c:442:9: note: uninitialized use occur=
-s here
->     442 |         return ret;
->         |                ^~~
->   drivers/remoteproc/st_remoteproc.c:357:2: note: remove the 'if' if its =
-condition is always false
->     357 |         if (!ddata->config)
->         |         ^~~~~~~~~~~~~~~~~~~
->     358 |                 goto free_rproc;
->         |                 ~~~~~~~~~~~~~~~
->   drivers/remoteproc/st_remoteproc.c:348:9: note: initialize the variable=
- 'ret' to silence this warning
->     348 |         int ret, i;
->         |                ^
->         |                 =3D 0
->   1 error generated.
+> The v2023.09 version of dtschema is what contains the reserved-memory
+> schemas we depend on, so bump the minimum version to that. Otherwise,
+> references to these schemas will generate errors.
 >
-> Set ret to -ENODEV, which seems to be a standard return code when
-> device_get_match_data() returns NULL.
->
-> Closes: https://github.com/ClangBuiltLinux/linux/issues/1944
-> Fixes: 5c77ebcd05ac ("remoteproc: st: Use device_get_match_data()")
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/remoteproc/st_remoteproc.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/remoteproc/st_remoteproc.c b/drivers/remoteproc/st_r=
-emoteproc.c
-> index b0638f984842..cb163766c56d 100644
-> --- a/drivers/remoteproc/st_remoteproc.c
-> +++ b/drivers/remoteproc/st_remoteproc.c
-> @@ -354,8 +354,10 @@ static int st_rproc_probe(struct platform_device *pd=
-ev)
->         rproc->has_iommu =3D false;
->         ddata =3D rproc->priv;
->         ddata->config =3D (struct st_rproc_config *)device_get_match_data=
-(dev);
-> -       if (!ddata->config)
-> +       if (!ddata->config) {
-> +               ret =3D -ENODEV;
->                 goto free_rproc;
-> +       }
->
->         platform_set_drvdata(pdev, rproc);
->
->
-> ---
-> base-commit: 5c77ebcd05acf3789949c8a387df72381d949ca2
-> change-id: 20231012-st_remoteproc-fix-sometimes-uninit-7aff1bdb7349
->
-> Best regards,
-> --
-> Nathan Chancellor <nathan@kernel.org>
+>  Documentation/devicetree/bindings/Makefile    |   2 +-
+>  .../remoteproc/renesas,rcar-rproc.yaml        |   2 +-
+>  .../bindings/reserved-memory/framebuffer.yaml |  52 -----
+>  .../reserved-memory/memory-region.yaml        |  40 ----
+>  .../reserved-memory/reserved-memory.txt       |   2 +-
+>  .../reserved-memory/reserved-memory.yaml      | 181 ------------------
+>  .../reserved-memory/shared-dma-pool.yaml      |  97 ----------
+>  .../bindings/sound/mediatek,mt8188-afe.yaml   |   2 +-
+>  8 files changed, 4 insertions(+), 374 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/memory-region.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/shared-dma-pool.yaml
 >
 
-
---=20
-Thanks,
-~Nick Desaulniers
+Reviewed-by: Simon Glass <sjg@chromium.org>
