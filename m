@@ -2,76 +2,94 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B9D7C8EC8
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 13 Oct 2023 23:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4044E7C9737
+	for <lists+linux-remoteproc@lfdr.de>; Sun, 15 Oct 2023 01:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbjJMVMF (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 13 Oct 2023 17:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
+        id S230217AbjJNXQB (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Sat, 14 Oct 2023 19:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbjJMVME (ORCPT
+        with ESMTP id S229872AbjJNXP7 (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 13 Oct 2023 17:12:04 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D3D8C2
-        for <linux-remoteproc@vger.kernel.org>; Fri, 13 Oct 2023 14:12:03 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9be3b66f254so48414466b.3
-        for <linux-remoteproc@vger.kernel.org>; Fri, 13 Oct 2023 14:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697231522; x=1697836322; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UHVs5ZMbCMnK4OZxIw3w4X3jAnHxQSIJjis2sL1D3HI=;
-        b=dO1GIqemepXjKGmg3lbpqPOar2nZH1kZ3q1HZ8PumN652eubsrxfpovlesXbIiWea0
-         TzSK2tE9GRnVgJeuN20VbS+sZHfKhw3w+DFLwOQnJunWnKtmFzcEQYy4h7I6unhWhjTC
-         DXnucm7AwN6816jyQ1rZ9l7EM9k0vKpfyUaio=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697231522; x=1697836322;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UHVs5ZMbCMnK4OZxIw3w4X3jAnHxQSIJjis2sL1D3HI=;
-        b=B/6od5+tyxXHQH80qvfUaDzukToxa0fyeh+T/7VAq1P25OygCjVZ/TVhcFTPN4RjmJ
-         Fwf3UlpTgjmDT+43Fz/Xyw98fCOJu35iM04gusLlkC73LqQuyKJK0Cn43ohZ8KoRtSX8
-         w1aMFTGFURgKU13IKZ8RMQLzSGC0VPUHyi104qQD/1vrk2Ou51KzCiNKGNwDWPj59d6c
-         Hvq8W50YjRimrIpmChiROTo8ME4/kLS1qtKBRfzfwrdro6klWMWKWeKe41oSo2KTbjYw
-         cMn14gf3L3Zv35d6n/VhUYgtsuDPhjW+gTCFNkl40Ayf3lYljPxzff/x8tfRZN9w7aRT
-         34Gw==
-X-Gm-Message-State: AOJu0YwkHuMnY5puKjZ1s+ARcVg+BCQCWwL2HCTWAsMENiyvSzcz3c1J
-        4stP+kgJ+HGO8h42yfngQCshjrCar5U4F4HvKYPlsA==
-X-Google-Smtp-Source: AGHT+IEuNA+Q2Yxxws7amOJuXWe3ey6jbnUkGbWIJda+AVzB6s8jOrXT89FhBxT8kIo26PoR154bP2xzv0Ano/B3pdA=
-X-Received: by 2002:a17:907:60cb:b0:9be:7b67:1673 with SMTP id
- hv11-20020a17090760cb00b009be7b671673mr337821ejc.1.1697231521525; Fri, 13 Oct
- 2023 14:12:01 -0700 (PDT)
+        Sat, 14 Oct 2023 19:15:59 -0400
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2080.outbound.protection.outlook.com [40.107.212.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E7ADC;
+        Sat, 14 Oct 2023 16:15:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kIHnUbYMjufmr/GjGFgs7CEliyji+u+IqtORT4A2zuL0SzARXxLfitOcXixdLpWHJDxCxtLvP0DWHOgIvihYqmnBlYQU3ZeLLFszA0P0p1GnxXmG40jSXgPT/Bv+bxgCGCEkRwJhZhWJMbWm5RugzfmdYY9gD2iCsgJ/Mw+9/Ihh33TUptwUfzJqYZ/cBlwKxybx4o57M76jMR3IrJMm5ge2+oWlS/hdidinTtHgpEXRq9vwABxzm5mmJRZtLxk82mMqdfq7cCxybIOuz0u9HCJfyou+xh7nPpApXRBIQWJqbhhaHSTMSoePwSqIMiV6lzSw1b9kTbhgh06DQ42Z7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rpsNQc9oclzCEfPjRsXgGNZNh0auLcZ5wh7TxsYLIVo=;
+ b=c5dZoLLK3BUfTOzsNPEJpU432+KNdi+IQCEjycWzK/ipzhrzrMMLqCFrqTuuFPBz5GLtXSXZgxIJDG90fl60NdLMdB1ver2dbRsdwDJbGcwZv2vSQMc0m8U36eZaeSKHyMGS6E9HQ3NqHHKT1sMNPRMO9vvJ1XePVRXEymv+naAh3feXmMOJEHWhJL9BSs/phtKRe4k5S7w6zXueVBJQKwcwiikNlbtTboLivbYFy0zAz1lVm1fpvJpW1wdLo4IjEUnpeHjzPCfHZQDGjh2vnr1DG532JH11pU7Y/wYUjSxWwg2+1Cv5wTh8wVd+MNWlb1tFAZeA5e2g1PjTcUurMQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rpsNQc9oclzCEfPjRsXgGNZNh0auLcZ5wh7TxsYLIVo=;
+ b=GcwLzIqa2BOV49FD/Z7cnLX8Wc9hIUn5W5bRs9CMjj3PV0GOozvOrUYyH/aJjZGaAxzzr+pCav0Jm+VZCpcXfzqwXnG1T2HmWtumlVHYFlz2DEgcpA6bYk+X5+Qpp3JfKpCx1JeGhtF+JrN2dPIO0uB9ynSrhq5i8N+l6Ev3f1A=
+Received: from SA1P222CA0007.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:22c::22)
+ by PH7PR12MB6490.namprd12.prod.outlook.com (2603:10b6:510:1f5::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.34; Sat, 14 Oct
+ 2023 23:15:52 +0000
+Received: from SA2PEPF00001507.namprd04.prod.outlook.com
+ (2603:10b6:806:22c:cafe::b4) by SA1P222CA0007.outlook.office365.com
+ (2603:10b6:806:22c::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.30 via Frontend
+ Transport; Sat, 14 Oct 2023 23:15:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ SA2PEPF00001507.mail.protection.outlook.com (10.167.242.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6838.22 via Frontend Transport; Sat, 14 Oct 2023 23:15:51 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Sat, 14 Oct
+ 2023 18:15:51 -0500
+Received: from xsjtanmays50.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
+ Transport; Sat, 14 Oct 2023 18:15:50 -0500
+From:   Tanmay Shah <tanmay.shah@amd.com>
+To:     <andersson@kernel.org>, <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Tanmay Shah" <tanmay.shah@amd.com>
+Subject: [RESEND PATCH v3 0/2] remoteproc: get rproc devices for clusters
+Date:   Sat, 14 Oct 2023 16:15:46 -0700
+Message-ID: <20231014231548.637303-1-tanmay.shah@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20231013200851.347042-1-robh@kernel.org>
-In-Reply-To: <20231013200851.347042-1-robh@kernel.org>
-From:   Simon Glass <sjg@chromium.org>
-Date:   Fri, 13 Oct 2023 14:11:50 -0700
-Message-ID: <CAPnjgZ0Uh7RTvYfLjEL7g1NjC1pO8-xJuj9RBSVVnwviAwzF0Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop kernel copy of common reserved-memory bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Julien Massot <julien.massot@iot.bzh>,
-        Trevor Wu <trevor.wu@mediatek.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00001507:EE_|PH7PR12MB6490:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9c6eb843-fb5b-4dbd-f9bd-08dbcd0b823e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gbeCyi5ycusMmClGS9d4dRD3z3yGu426WT+hUvIchNVDZUh5RrouaOA0ID/UMxmuyYIvCD3ba3qxMSed9n/rkuycpG8cAPnAnn3zktiJyTjRMnaxFpi782YPJi1KY86kvEO4WeU5ezF1+zYL6CK2psefFWiF89FtkqvhPPxY550Z1z4WVRTxiDGf+nC4z9UkxXOdS6QU0niHPSCsEQYw+od0mz54IDSYJs8eWbfK3TEmzobCyPvYx0f63XCn52gsNWIqbuKYFOg5xv5QD211zRJelupYemUajD/vSC6GqeJo4jmcwlDxErTreaxOGOrP0/WzoCf64iSg2ksttNKnWJJq+eP92YkKDS1aqP4IwdfT0jJgJ1JJFdznWFOEzyScSEdJ+ZkEn40pRKlIBrwWnvpwD/HiBIB7yB1evGBNeb+a/4wBVETZICcacms9+mCBkUWUNcGygRUaQs0MVezWAFEhFs/tJgzjOGi7b2AIThuAaXAA4bhCnkWnZqT4I0lBC9kzI/+d5fPpKvSYAUN5ZB3m0QWTtOBfT/IIBYXOR9DCwwJdYP0M8Hu/HvoOOzTRm6JQfiIAPIp1XScXxbfHrMOVC+WYhJ6yAtbmL564WOuTEbout/GP+ZvWULNWxpRHctu9OBI23qGJ8vbKw5esBz1Dty1s7d4STCw7Em01Exl+Utx/L5kGnEgHUZ27VEON1l/HTrP1KV9Feq/FwrbquhuqbBLEwm2lYK58z/Rik/6mnPV0DukC+A7aMByXWWgenBMaRI6HtfEg68jqscK5Sw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(39860400002)(396003)(376002)(346002)(230922051799003)(186009)(1800799009)(82310400011)(64100799003)(451199024)(46966006)(36840700001)(40470700004)(40460700003)(110136005)(70586007)(316002)(70206006)(54906003)(26005)(1076003)(426003)(336012)(83380400001)(36756003)(2616005)(40480700001)(356005)(82740400003)(81166007)(86362001)(36860700001)(47076005)(966005)(478600001)(6666004)(41300700001)(5660300002)(44832011)(2906002)(4744005)(8676002)(4326008)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2023 23:15:51.5931
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c6eb843-fb5b-4dbd-f9bd-08dbcd0b823e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF00001507.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6490
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,32 +97,30 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On Fri, 13 Oct 2023 at 13:45, Rob Herring <robh@kernel.org> wrote:
->
-> The common reserved-memory bindings have recently been copied from the
-> kernel tree into dtschema. The preference is to host common, stable
-> bindings in dtschema. As reserved-memory is documented in the DT Spec,
-> it meets the criteria.
->
-> The v2023.09 version of dtschema is what contains the reserved-memory
-> schemas we depend on, so bump the minimum version to that. Otherwise,
-> references to these schemas will generate errors.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/Makefile    |   2 +-
->  .../remoteproc/renesas,rcar-rproc.yaml        |   2 +-
->  .../bindings/reserved-memory/framebuffer.yaml |  52 -----
->  .../reserved-memory/memory-region.yaml        |  40 ----
->  .../reserved-memory/reserved-memory.txt       |   2 +-
->  .../reserved-memory/reserved-memory.yaml      | 181 ------------------
->  .../reserved-memory/shared-dma-pool.yaml      |  97 ----------
->  .../bindings/sound/mediatek,mt8188-afe.yaml   |   2 +-
->  8 files changed, 4 insertions(+), 374 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml
->  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/memory-region.yaml
->  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
->  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/shared-dma-pool.yaml
->
+This series extends original patch and makes rproc_put() work
+for clusters along with rprog_get_by_phandle().
 
-Reviewed-by: Simon Glass <sjg@chromium.org>
+Changes in v3:
+  - remove module_put call that was introduced in the patch by mistake
+  - remove redundant check in rproc_put
+  - Add inline comments in rproc_put that explains functionality
+
+Changes in v2:
+  - Introduce patch to fix rproc_put as per modified rproc_get_by_phandle
+
+v1 is here: https://lore.kernel.org/all/20221214221643.1286585-1-mathieu.poirier@linaro.org/
+
+Mathieu Poirier (1):
+  remoteproc: Make rproc_get_by_phandle() work for clusters
+
+Tanmay Shah (1):
+  remoteproc: enhance rproc_put() for clusters
+
+ drivers/remoteproc/remoteproc_core.c | 45 ++++++++++++++++++++++++++--
+ 1 file changed, 43 insertions(+), 2 deletions(-)
+
+
+base-commit: a7d272979d3a89b117ca2c547dc8a465c4f28635
+-- 
+2.25.1
+
