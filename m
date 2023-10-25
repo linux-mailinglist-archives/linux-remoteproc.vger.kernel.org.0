@@ -2,111 +2,139 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253307D58E6
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Oct 2023 18:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2F77D63B1
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Oct 2023 09:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234887AbjJXQl5 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Tue, 24 Oct 2023 12:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
+        id S232665AbjJYHo2 (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Wed, 25 Oct 2023 03:44:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232602AbjJXQl4 (ORCPT
+        with ESMTP id S233538AbjJYHnx (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Tue, 24 Oct 2023 12:41:56 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B81AC;
-        Tue, 24 Oct 2023 09:41:54 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-57d086365f7so2783873eaf.0;
-        Tue, 24 Oct 2023 09:41:54 -0700 (PDT)
+        Wed, 25 Oct 2023 03:43:53 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3173C1E
+        for <linux-remoteproc@vger.kernel.org>; Wed, 25 Oct 2023 00:35:49 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31fa15f4cc6so3729175f8f.2
+        for <linux-remoteproc@vger.kernel.org>; Wed, 25 Oct 2023 00:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698219347; x=1698824147; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LuZMkbxv4lOoR8L5PlaX616AqvMbmm0wHfhqvqys2P8=;
+        b=d3q+ytglzxkl3BT4ew+V5ltbnyUfV/ulSXO8J8F42egYDwalMCMhpQydGHdvVCdPRg
+         R0NMtyW2r7C/0q0GzPUk52Xr1m3MhuAQQS0ZEDb0dbJ7KX8TfjgLlo7HH0w5T2Dg6Up0
+         s4x0xxICGePW4pwg+OvqG7Yom3oRf628W9BEvImaAb7GqIsAF8EQHYEHRSPqhCQqzb3I
+         6X29UYWyHPU3510hvDLmbE7nkABCtMj8wUP4cyp+495vrBw8rRC+bJgHfN8K95KsdWcK
+         tDcnKKRLK78BRkAgkFwfkYiIShGb+VGIvC/1UFkdOfOtnbqseQLyOssYhUuu5G6E4YpX
+         t3rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698165713; x=1698770513;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m4xcdNfgUB8A/3KrK/pkTkDn6tlFzVt2oKgvssbhENc=;
-        b=eY5E0So5vkWcHYAS246RbwYeqNQ0S5OMia4ymLq4Hk+jtlS9ddnwYomBAgC4Kdm7pH
-         8Mq04KogbYJvbZn3U+UXaAohRqAio/CdlhQ4u7TGFdlnuiqg+4Q5jpA3TA96lTDBTBeq
-         rJ9Fm4Sp/34ILfLLVTWRF3Qx/3E9kqxBAiMkUZj6LILwb7ZUBCOUqC7WfXLYi27e5HMt
-         RtYr60PX17IRVljEEf0q6iTpHxsi6X4+ptvur/PzeGumQrW63SdZw4Pr1aP9R4xsNef/
-         us4R2BIbsrU4XjrQV0d4V580WTzf0n3bRbfaHxfJ3dSUnIeQs4LUsV8W20X3IcQhLecB
-         PeyQ==
-X-Gm-Message-State: AOJu0Yzd7LmOLpBx+wbbkWF2qgPt70h++OGhk1NuERUMsUk6/Dd2F91b
-        Y52fNjt6RNRUIp4tLHem+w==
-X-Google-Smtp-Source: AGHT+IHYKyO3ogdUGL4R4E9sBhKDQ/3y/62tY8hPLoGpOKOm3RsZpCwkW+zvRJrXop02dDrQyVwNzw==
-X-Received: by 2002:a4a:a581:0:b0:57b:469d:8af6 with SMTP id d1-20020a4aa581000000b0057b469d8af6mr13049788oom.4.1698165713249;
-        Tue, 24 Oct 2023 09:41:53 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z10-20020a4ad1aa000000b00581daa5c5fdsm1993792oor.29.2023.10.24.09.41.51
+        d=1e100.net; s=20230601; t=1698219347; x=1698824147;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LuZMkbxv4lOoR8L5PlaX616AqvMbmm0wHfhqvqys2P8=;
+        b=uNKI3Kds9lnUdyHtYQqXtmuAqVDzx43He8rI/fUHXvXEWsno0z1I3FUP3c6Ozk0gkm
+         UONEw1d0kiE4/yHlIDpuz6FW6Hre1nCV/lqpYdSkqoAD+rRS7DjjTSwwx1MIn0udN7Ey
+         y1NP/f21xB9w9KMuzn0wdm05A8cykvKIwO9z1bhSOtBF1UWqQBF6X9WSvVy7bvGWeAWP
+         BG2/2RMT60fSoZmrEJ2PvQwomPYNX322MjZgTFX0DiZwlRBkCTIedF5AgoKu++hTu2yH
+         oY0+axj2pnXx3himNBfY/ZjtsuSans+XACBG7oyKyBnmOJowFX+SIWXDH+rmWykcie0A
+         94iA==
+X-Gm-Message-State: AOJu0Ywts9kaUZSbvx7jCismDNryx6VMZLIBY4Xfu7Y+SAuiYjXlOvPk
+        L+nnvfM0HnCuP0LwFSR/Fc2How==
+X-Google-Smtp-Source: AGHT+IE/jBJ78iYrm60h7+ZediUSZppT/KAya0yPIC8L6ZyljEwy3u1G6Ruj/TRjmlLHPjvUruAeCg==
+X-Received: by 2002:a5d:4043:0:b0:314:1313:c3d6 with SMTP id w3-20020a5d4043000000b003141313c3d6mr8273034wrp.33.1698219347171;
+        Wed, 25 Oct 2023 00:35:47 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id d14-20020adffd8e000000b0031984b370f2sm11416346wrr.47.2023.10.25.00.35.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 09:41:52 -0700 (PDT)
-Received: (nullmailer pid 4065610 invoked by uid 1000);
-        Tue, 24 Oct 2023 16:41:51 -0000
-Date:   Tue, 24 Oct 2023 11:41:51 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Brown <broonie@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Simon Glass <sjg@chromium.org>,
-        linux-mediatek@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        alsa-devel@alsa-project.org, Julien Massot <julien.massot@iot.bzh>,
-        Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH] dt-bindings: Drop kernel copy of common reserved-memory
- bindings
-Message-ID: <169816568976.4065099.2725442642169549559.robh@kernel.org>
-References: <20231013200851.347042-1-robh@kernel.org>
+        Wed, 25 Oct 2023 00:35:46 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH 0/3] remoteproc: qcom: Introduce DSP support for SM8650
+Date:   Wed, 25 Oct 2023 09:35:43 +0200
+Message-Id: <20231025-topic-sm8650-upstream-remoteproc-v1-0-a8d20e4ce18c@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231013200851.347042-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE/FOGUC/x3NQQrCMBBG4auUWTuQtDgWryIuYvyrs0gTJlGE0
+ rs3uPw2721UYYpK12Ejw1er5rXDnwaK77C+wPrsptGNk3deuOWikWua5ez4U2ozhMSGlBuK5cg
+ iYb4AD1kA6pliWPT3X9zu+34AdvU/MnIAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1692;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=YgeLp8OwDHnCQkyYhlcUdjOeopES1tNQUXbEyCTj8Oc=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBlOMVQ1OwV/MZ2jOQdUnfkOghpJyNe/BxAhxiT+PQm
+ kAXjk2KJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZTjFUAAKCRB33NvayMhJ0RDOD/
+ 9DOhccEOhJq2/GIEU3oWWYhH7xSI8VBsGHFfRXy6dS2+m6z/0GfvDcDES6KFVZIublrVIshgLHvLYo
+ SmIjrxawVa/mccex+OzEXp8SuBPFaSmrtGlp6vJgOiQkFCd3pyhL5hk0HJeqisVImKPBn6vAkg5e9w
+ 6dwvGlrOl+tVyiAjO/etMJftpEL41DYaHaPG1KMLF3ocSrMaLni6m2AmzEcogj+Ual2BXVWraZkd5i
+ 0r8VWLul4v8MRlJwwq9kOwwghD35nzvhzVvntT9PaN7TpcN9mDZeC1mZDa5vxOye86z56vQ0Ccw9/w
+ +Iu1reIXq5Te/t5uequFUHaWq1GCr94/tEVm9vIK6LMMUTmkNv+bFWKNTst5Is1D/k4oumKInN4ozh
+ PwmRZ7ROh+bNRp1IIEMj9fNC/dRiR9be61XsezBv/8Hlb67OZhJBh4QqVtGG9hOw/jVxsp21UW2irL
+ opHCsfp1RmdK7MLtXWOC9p2EEwcwY45RgJJ48V1lvt9WjBBwk47nyFd6xsZtDFZiJ6Cc+J6Y7sYZaQ
+ ZQLpYVtnzHhhDRkuDgmiW493qN0Cq0Fx2AOL43YKRzoVUo77dqo1HKOBYG5pAjA7XB9a36vRwhOWpQ
+ 70drGS4IcmIOLb7kxVwVqNZA7ba0YBO4UEMMZFX5lnVPOzSOBzMsAtDRIUDg==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
+Add the bindings and driver changes for DSP support on the
+SM8650 platform in order to enable the aDSP, cDSP and MPSS
+subsystems to boot.
 
-On Fri, 13 Oct 2023 15:08:49 -0500, Rob Herring wrote:
-> The common reserved-memory bindings have recently been copied from the
-> kernel tree into dtschema. The preference is to host common, stable
-> bindings in dtschema. As reserved-memory is documented in the DT Spec,
-> it meets the criteria.
-> 
-> The v2023.09 version of dtschema is what contains the reserved-memory
-> schemas we depend on, so bump the minimum version to that. Otherwise,
-> references to these schemas will generate errors.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/Makefile    |   2 +-
->  .../remoteproc/renesas,rcar-rproc.yaml        |   2 +-
->  .../bindings/reserved-memory/framebuffer.yaml |  52 -----
->  .../reserved-memory/memory-region.yaml        |  40 ----
->  .../reserved-memory/reserved-memory.txt       |   2 +-
->  .../reserved-memory/reserved-memory.yaml      | 181 ------------------
->  .../reserved-memory/shared-dma-pool.yaml      |  97 ----------
->  .../bindings/sound/mediatek,mt8188-afe.yaml   |   2 +-
->  8 files changed, 4 insertions(+), 374 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml
->  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/memory-region.yaml
->  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml
->  delete mode 100644 Documentation/devicetree/bindings/reserved-memory/shared-dma-pool.yaml
-> 
+Compared to SM8550, where SM8650 uses the same dual firmware files,
+(dtb file and main firmware) the memory zones requirement has changed:
+- cDSP: now requires 2 memory zones to be configured as shared
+  between the cDSP and the HLOS subsystem
+- MPSS: In addition to the memory zone required for the SM8550
+  MPSS, another one is required to be configured for MPSS
+  usage only.
 
-Applied, thanks!
+In order to handle this and avoid code duplication, the region_assign_*
+code patch has been made more generic and is able handle multiple
+DSP-only memory zones (for MPSS) or DSP-HLOS shared memory zones (cDSP)
+in the same region_assign functions.
+
+Dependencies: None
+
+For convenience, a regularly refreshed linux-next based git tree containing
+all the SM8650 related work is available at:
+https://git.codelinaro.org/neil.armstrong/linux/-/tree/topic/sm85650/upstream/integ
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (3):
+      dt-bindings: remoteproc: qcom,sm8550-pas: document the SM8650 PAS
+      remoteproc: qcom: pas: make region assign more generic
+      remoteproc: qcom: pas: Add SM8650 remoteproc support
+
+ .../bindings/remoteproc/qcom,sm8550-pas.yaml       |  41 +++++-
+ drivers/remoteproc/qcom_q6v5_pas.c                 | 152 ++++++++++++++++-----
+ 2 files changed, 156 insertions(+), 37 deletions(-)
+---
+base-commit: fe1998aa935b44ef873193c0772c43bce74f17dc
+change-id: 20231016-topic-sm8650-upstream-remoteproc-66a87eeb6fee
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
