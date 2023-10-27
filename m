@@ -2,224 +2,139 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CEC7D8FF6
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Oct 2023 09:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8162F7D9B0B
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Oct 2023 16:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345443AbjJ0Hga (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 Oct 2023 03:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
+        id S1346078AbjJ0OUj (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 Oct 2023 10:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345453AbjJ0Hg2 (ORCPT
+        with ESMTP id S1346023AbjJ0OUi (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Fri, 27 Oct 2023 03:36:28 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB621AC
-        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Oct 2023 00:36:25 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-507973f3b65so2708017e87.3
-        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Oct 2023 00:36:25 -0700 (PDT)
+        Fri, 27 Oct 2023 10:20:38 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C301DFA
+        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Oct 2023 07:20:31 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9b95622c620so347453366b.0
+        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Oct 2023 07:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698392184; x=1698996984; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FKgxwW12cXvJbbJyaE54dQi3HeFLiwxHnNrbqUscsyw=;
-        b=goG8P1A6H2ypq5vqm5Ei3c75UdWfo8F0g8RvmWTSZGrH6HBIRNrfuI3rFfWO5v5sMM
-         bCyDiMj/jqdjy+9qXyac0N+XfIUrTkWC5CegtooR5gieOyOfbZnW1AjdhTYoh/bJajEs
-         x8Xwep1tGwF3ZKqF0wz7M1UYZmaOtIsjBcdr/ZRRIbnr0YBQTf7oh/k5Z4RpDQg4Mn8Y
-         F0YeiDJnOAhyleXN9FkUNuKcMt5agCPRRifig2QyapJtCRZT+BlayGLAKwawPBdH1LBT
-         jOBM4FOvj03DcnTjO8LYr9CgLcES13SSSSs8gFqdpjYekIBVO+r+OJeQhw8rr3T7heXE
-         mxjg==
+        d=fairphone.com; s=fair; t=1698416430; x=1699021230; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0/j0TiNzPUhDHoMqO5+ZQ6Ubp+GWwLgzxQZaKqp7fdY=;
+        b=cqkVYRwB/Gy4YBzI/DvRTzW/lADWc7ljNMXAxq6eukVHNWV4G81RvzjBc+3LsujeMV
+         Iw6ioToqIXaNhqHwxK1FGIupDlI62EAmyH0EKDZ4Irq8y0Ky25hsKPaV8rCGezBjrNoL
+         qLV+GeIto8Tz71NvV/A1ueN0oRSiyo5yVCSBP4MQ/xHnf0N2F3onCBqFePcWPBAOcSQM
+         majP/l9ppJwlB47i8zMQC1m930eN7wBW1FLb7BpiauJcBfASaqgxPEYTBB5FqLsCWThI
+         pYXPy093Vj59nnEW72ZVCb3AwmqnmgCqwmGiW699B/8ivXjPIc9XXMZyYlaJbCFlJaB5
+         S8Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698392184; x=1698996984;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FKgxwW12cXvJbbJyaE54dQi3HeFLiwxHnNrbqUscsyw=;
-        b=ERGRDpfHxpoAjfSXVh+OxOqfvE2YTy7iTcpI8serkfHk8jVih3pPGV9kE8kpvW3mHI
-         LUfaD0LtS9gADFikEw5X/maeEA3stVpfskoCDK4cUES8njXc6R1Zfs+n+FO1E9eY2wlt
-         gsHIc42Cz5FAeqxVpbmahAw11Z/kbgMnoOvbYPatFfRhoAupRoHcIBqEUy3AuHUDBG7d
-         gImfAiSTPcBcUliKTHDX+FFscJf/TfuRDHtH5Gcc5L5AMHqTpSFR78mPaMBTIu0F04cY
-         QLFHYmgeNmdUxsaTvfvG0dWkc2CWcPaQI4bXBx0L05trVF4ChE6+VKV8VWuB3IyaN9DA
-         3fEg==
-X-Gm-Message-State: AOJu0Yw5QD4CG1/2rtPFzcthX4WHVpvGn4WPRXc4/IM+03S//Kfelxs5
-        nx6slIWCY+9OABWb1YXuuZmnrg==
-X-Google-Smtp-Source: AGHT+IFqagUd0m8zM5GEs/QvCP49dXETv0iPLFRVr7vsc8eyNYMZsLQ/8t/1txgYTkEGuOrjv46TKA==
-X-Received: by 2002:a05:6512:3b89:b0:503:36cb:5438 with SMTP id g9-20020a0565123b8900b0050336cb5438mr1484365lfv.21.1698392183994;
-        Fri, 27 Oct 2023 00:36:23 -0700 (PDT)
-Received: from [192.168.0.22] ([78.10.206.168])
-        by smtp.gmail.com with ESMTPSA id a14-20020a194f4e000000b00505a20d070asm170385lfk.78.2023.10.27.00.36.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Oct 2023 00:36:23 -0700 (PDT)
-Message-ID: <a1895327-b520-4f3a-a427-0947ac46495c@linaro.org>
-Date:   Fri, 27 Oct 2023 09:36:22 +0200
+        d=1e100.net; s=20230601; t=1698416430; x=1699021230;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0/j0TiNzPUhDHoMqO5+ZQ6Ubp+GWwLgzxQZaKqp7fdY=;
+        b=uJE+8BrnDMP3ynErJtyMRktBCqL9xhYNYsnpHHZI1N/7US9tcoBPPqB4IGcFKiJTvn
+         4GfX3CC+5QFhq8FS6WwOw5tEH9DoDsD6xOPgrGteW+e4VgAq3JWaNPwrpE+8ig8AeO+9
+         ykxlkudlHaHN+LSWef6gpDkWth0ddXOev5z8LFMTQsS7JPiF/5iHkafdvjeZCSJ7+p5r
+         xXCYqVJ+Nmh7pFm7CQiij2tsRasji94MhpWTchYaP0f/IcRFCuxfIivtdgWGiMHBu2vh
+         Lb/dk3KeZMqmWaM+s3lhrJFc88qu94idLrfpWEFK6S0l+6Tgp7OzvxpopFLwcgcWJ+WW
+         dPrQ==
+X-Gm-Message-State: AOJu0Yy1T/Jw2kG9mQhTAB4qJ4YA94QP8cNlvnSt7rZ+EKON5dI6ux0v
+        1V8+qVcgy5REQoo0KbjtJeCVcQ==
+X-Google-Smtp-Source: AGHT+IEHU68OfuGWAvG3zTnVTKwBQCICdozH6KFZV9fK/3NTvhj+P36e1Upf25B4a1jWyFcm/BO63A==
+X-Received: by 2002:a17:907:5cb:b0:9b2:7367:a6a4 with SMTP id wg11-20020a17090705cb00b009b27367a6a4mr2620117ejb.31.1698416430256;
+        Fri, 27 Oct 2023 07:20:30 -0700 (PDT)
+Received: from otso.luca.vpn.lucaweiss.eu (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id z23-20020a170906075700b0099cc36c4681sm1254076ejb.157.2023.10.27.07.20.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Oct 2023 07:20:29 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH 0/9] Remoteprocs (ADSP, CDSP, WPSS) for SC7280
+Date:   Fri, 27 Oct 2023 16:20:22 +0200
+Message-Id: <20231027-sc7280-remoteprocs-v1-0-05ce95d9315a@fairphone.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: remoteproc: qcom,sm8550-pas: document
- the SM8650 PAS
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACbHO2UC/x3MQQqEMAxA0atI1lNIo2DxKjKLIUbNQivJIIL07
+ haXb/H/DS6m4jA0N5ic6pr3ivhpgNffvkjQqRoIqY1IfXDuKWEw2fJfDsvsAbtEmJijxBZqeJj
+ Mer3T8VvKA2dC/J9kAAAA
+To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231025-topic-sm8650-upstream-remoteproc-v1-0-a8d20e4ce18c@linaro.org>
- <20231025-topic-sm8650-upstream-remoteproc-v1-1-a8d20e4ce18c@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231025-topic-sm8650-upstream-remoteproc-v1-1-a8d20e4ce18c@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Manivannan Sadhasivam <mani@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        =?utf-8?q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>
+X-Mailer: b4 0.12.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-On 25/10/2023 09:35, Neil Armstrong wrote:
-> Document the DSP Peripheral Authentication Service on the SM8650 Platform.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/remoteproc/qcom,sm8550-pas.yaml       | 41 +++++++++++++++++++++-
->  1 file changed, 40 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml
-> index 58120829fb06..316371c8ee6e 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml
-> @@ -19,6 +19,9 @@ properties:
->        - qcom,sm8550-adsp-pas
->        - qcom,sm8550-cdsp-pas
->        - qcom,sm8550-mpss-pas
-> +      - qcom,sm8650-adsp-pas
-> +      - qcom,sm8650-cdsp-pas
-> +      - qcom,sm8650-mpss-pas
->  
->    reg:
->      maxItems: 1
-> @@ -49,6 +52,7 @@ properties:
->        - description: Memory region for main Firmware authentication
->        - description: Memory region for Devicetree Firmware authentication
->        - description: DSM Memory region
-> +      - description: DSM Memory region 2
->  
->  required:
->    - compatible
-> @@ -63,6 +67,7 @@ allOf:
->            enum:
->              - qcom,sm8550-adsp-pas
->              - qcom,sm8550-cdsp-pas
-> +            - qcom,sm8650-adsp-pas
->      then:
->        properties:
->          interrupts:
-> @@ -71,7 +76,25 @@ allOf:
->            maxItems: 5
->          memory-region:
->            maxItems: 2
-> -    else:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,sm8650-cdsp-pas
-> +    then:
-> +      properties:
-> +        interrupts:
-> +          minItems: 5
+This series adds support for the ADSP, CDSP and WPSS remoteprocs found
+on SC7280. And finally enable them and WiFi on the QCM6490-based
+Fairphone 5 smartphone.
 
-maxItems
+The first two patches are fixes for the MPSS to fix some dt validation
+issues. They're included in this series to avoid conflicts with the
+later patches and keep it simpler.
 
+Please note, that the ChromeOS-based devices using SC7280 need different
+driver and dts support, similar to how there's already
+qcom,sc7280-mpss-pas for "standard" firmware and there's
+qcom,sc7280-mss-pil for ChromeOS firmware.
 
-> +        interrupt-names:
-> +          minItems: 5
+I'm aware of the series also adding SC7280 ADSP support with the last
+revision sent in June this year.
 
-maxItems
+https://lore.kernel.org/linux-arm-msm/20230616103534.4031331-1-quic_mohs@quicinc.com/
 
-> +        memory-region:
-> +          minItems: 3
+However there's some differences since that series added the "pil"
+variant for ChromeOS, not "pas" for standard firmware. Also it seems on
+ChromeOS devices gpr+q6apm+q6prm is used. On my device it appears to be
+instead apr+q6afe+q6asm+q6adm but I don't add either in this series to
+keep it a bit simpler, and I couldn't test much of that yet.
 
-maxItems: 3
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Luca Weiss (9):
+      dt-bindings: remoteproc: qcom: sc7180-pas: Fix SC7280 MPSS PD-names
+      arm64: dts: qcom: sc7280: Remove unused second MPSS reg
+      dt-bindings: remoteproc: qcom: sc7180-pas: Add SC7280 compatibles
+      remoteproc: qcom_q6v5_pas: Add SC7280 ADSP, CDSP & WPSS
+      arm64: dts: qcom: sc7280: Use WPSS PAS instead of PIL
+      arm64: dts: qcom: sc7280: Add ADSP node
+      arm64: dts: qcom: sc7280: Add CDSP node
+      arm64: dts: qcom: qcm6490-fairphone-fp5: Enable various remoteprocs
+      arm64: dts: qcom: qcm6490-fairphone-fp5: Enable WiFi
 
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,sm8550-mpss-pas
-> +    then:
->        properties:
->          interrupts:
->            minItems: 6
-> @@ -79,12 +102,26 @@ allOf:
->            minItems: 6
->          memory-region:
->            minItems: 3
-
-You need to add here maxItems.
-
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - qcom,sm8650-mpss-pas
-> +    then:
-
-I am not sure if keeping it in the same binding as sm8550 avoids that
-much duplication.
+ .../bindings/remoteproc/qcom,sc7180-pas.yaml       |  21 ++
+ arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts |  24 +++
+ arch/arm64/boot/dts/qcom/sc7280-chrome-common.dtsi |  24 ++-
+ .../boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi    |   2 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 225 +++++++++++++++++++--
+ drivers/remoteproc/qcom_q6v5_pas.c                 |  19 ++
+ 6 files changed, 300 insertions(+), 15 deletions(-)
+---
+base-commit: 6a0dad42244c987e3c12bfae728199e360acf079
+change-id: 20231027-sc7280-remoteprocs-048208cc1e13
 
 Best regards,
-Krzysztof
+-- 
+Luca Weiss <luca.weiss@fairphone.com>
 
