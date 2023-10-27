@@ -2,62 +2,62 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2EE7D9B14
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Oct 2023 16:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED727D9B1F
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Oct 2023 16:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346152AbjJ0OUo (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Fri, 27 Oct 2023 10:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S1346147AbjJ0OUv (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Fri, 27 Oct 2023 10:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346128AbjJ0OUm (ORCPT
+        with ESMTP id S1346130AbjJ0OUm (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
         Fri, 27 Oct 2023 10:20:42 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DFF1B4
-        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Oct 2023 07:20:33 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9bdf5829000so346926366b.0
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3A71B9
+        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Oct 2023 07:20:34 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9d10972e63eso18950166b.2
         for <linux-remoteproc@vger.kernel.org>; Fri, 27 Oct 2023 07:20:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=fairphone.com; s=fair; t=1698416432; x=1699021232; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pY5w7Bh5EYkfQAkYpZoq0bZLBNjbmv28cc4lnv8Ll9I=;
-        b=aHnZV7dV5+yi+0oU2d6hlrnfy1rMELaNvyKZPuEQlJwz/vZHHMFXNaAqsY00RvFtMF
-         7Q+sF5Ma+tzzS+mOdaZu3RcTsa0VoR0q1uyAfQSczDE+Y4FvmhPQXsT6I4X0fEdVXF7C
-         VTxMjvdw/CWRGNBdednjTv2DcwrBsH6pQFSeWykMuz4mWGt+tfu1rTt3/ziTJpwWV3M0
-         uh/eKse9RnzjrF4+qq+ihe7TZwuPiIIEYOQeibbJI88gm9HK8WqBl/ykHd8/FJlfPSv8
-         DetYLASWaQ7BIcPS6My9/vEupK+CpUrQVNcQHZfOuXtqwVbBcxkIDmA+USSU1dm3Zsrs
-         ZiyQ==
+        bh=qiaNVgFsOF5Zw3tvRPpyTyeGAWwoR4UCi6KiKDhkf8E=;
+        b=IDtCdoeTYD6+4cFN4ixcQhuklQU+d2epuKjqoTra/zJ/DQ7PjtGvqQrbEYx+7AHTCM
+         zgM+TUH1bgnoqBoD2RI01YaGFyIF7XMsi6oYqHb62MVVwjcsUw3z9t3LJ0b/9qAZjKUl
+         6rdAKnJ9rabhwP398raQiNC4OhkQAqwGSRO+nOPEiHpQkuE9G4B181tkSMLs17deCUXH
+         iOEsDQeIIKpbWqUzhOrdsoTQD7tD9YHInlWkkYB08X4gwGihxgzhshqhSmrHVlAJhY5Z
+         lZ2wDA3ZBhCECSKhTeSF/44F/RdVe+v4RC5AeEHui/+l7oS6BrNBuSQ24+CAWzRRm3eT
+         Z/lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1698416432; x=1699021232;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pY5w7Bh5EYkfQAkYpZoq0bZLBNjbmv28cc4lnv8Ll9I=;
-        b=PsD7gsuiKulvHCa9x7ttSBJRNO8ELT5FvfbuvIuxF+B4lzP3yX+YWrWFIF16wVPRaB
-         1oJ/kYv0Ie49jCS8CisPUYi29iNGMi7rK3FFnHgLd9sx9kllkvZQP/nWqQXcIlIUZW6Y
-         5nfgjFrCqXQJ09KbQLSmPKQg6Ba5Ms4Bb3EeIXIEiCVxlXr1CHuFkxjqGckrRWzIsy0A
-         4INK6aCYEUmlMKUvS/NSZ0KkB/g42oQQ0KsD+ToNPvDFS37nv3vWdzqkrYrnzrf+rOaM
-         yWlOf2I8uB8yK3gtm8Toz4QfPJ7/KO1YBC9L0AJQAJ4RjFtI1PoiR7UwYd3JClsGbDc0
-         GVpA==
-X-Gm-Message-State: AOJu0YyGcsz8Xi/zYNh1O6PyukljZpNg7dSiiXpPSsBHANFaUXR/T7J3
-        abaYiQjPpt79ysyDjb7SfhP81w==
-X-Google-Smtp-Source: AGHT+IGW4u2KfBM90vMKxhLrcqy8HbkaqtvIK0ZxxsXDMDiAWz6lFDgrjRgnZjEl4dWhiMUeVF29PA==
-X-Received: by 2002:a17:907:940b:b0:9a1:f81f:d0d5 with SMTP id dk11-20020a170907940b00b009a1f81fd0d5mr1934297ejc.54.1698416431800;
-        Fri, 27 Oct 2023 07:20:31 -0700 (PDT)
+        bh=qiaNVgFsOF5Zw3tvRPpyTyeGAWwoR4UCi6KiKDhkf8E=;
+        b=reyJHQDsvjuU5ojssM0+AFlZlG2VeoHSyyLm8iGK648Sy9RvaevPE7P1WOhGbUKCQB
+         YmZMz4wj2yL16liX/ijSW+qS7U+LiOWaNdTUMNqvE4KtGvWvD3T0s7lCUIIDmWr7Xj9+
+         Ayz6Zl9+P/oFA81OQzYEimdbDlFLHMEstU/26MyZd4fRjkkBI0FxtM/ml438V6p3wrts
+         5BTQ7gjZ3j3rJ92/TpW49W0pqtzO/m2dBBcgPw24b0s03f3kyBk8r5ESyPyEE6VJyolk
+         fh3YHXkpLGgclhYa2i28x5v+Wzfnx4SnKo4dOTTtxxuIl8tM82j3iFUvxvpym0BMAs9a
+         5YDw==
+X-Gm-Message-State: AOJu0YzdMZVaZ/Jxxgw5shh0Xlhf7OJTgOcH9EisAt1s05lmRyfYBZmP
+        fZJqnfbccXzCt0cDA2jbKvsfjw==
+X-Google-Smtp-Source: AGHT+IGDNnVpbkH0lLAk1NXDlXJGluBIjs/kgI9CNupXE5bgr2Nn0Mbfufl8wyky5i5tSdTjfENjiA==
+X-Received: by 2002:a17:907:7285:b0:9b2:be5e:7545 with SMTP id dt5-20020a170907728500b009b2be5e7545mr2343795ejc.36.1698416432487;
+        Fri, 27 Oct 2023 07:20:32 -0700 (PDT)
 Received: from otso.luca.vpn.lucaweiss.eu (144-178-202-138.static.ef-service.nl. [144.178.202.138])
         by smtp.gmail.com with ESMTPSA id z23-20020a170906075700b0099cc36c4681sm1254076ejb.157.2023.10.27.07.20.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Oct 2023 07:20:31 -0700 (PDT)
+        Fri, 27 Oct 2023 07:20:32 -0700 (PDT)
 From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Fri, 27 Oct 2023 16:20:24 +0200
-Subject: [PATCH 2/9] arm64: dts: qcom: sc7280: Remove unused second MPSS
- reg
+Date:   Fri, 27 Oct 2023 16:20:25 +0200
+Subject: [PATCH 3/9] dt-bindings: remoteproc: qcom: sc7180-pas: Add SC7280
+ compatibles
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231027-sc7280-remoteprocs-v1-2-05ce95d9315a@fairphone.com>
+Message-Id: <20231027-sc7280-remoteprocs-v1-3-05ce95d9315a@fairphone.com>
 References: <20231027-sc7280-remoteprocs-v1-0-05ce95d9315a@fairphone.com>
 In-Reply-To: <20231027-sc7280-remoteprocs-v1-0-05ce95d9315a@fairphone.com>
 To:     Andy Gross <agross@kernel.org>,
@@ -87,46 +87,61 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-The bindings for sc7280-mpss-pas neither expects a second reg nor a
-reg-names property, which is only required by the sc7280-mss-pil
-bindings.
-
-Move it to sc7280-herobrine-lte-sku.dtsi, the only place where that
-other compatible is used.
+Add the compatibles and constraints for the ADSP, CDSP and WPSS found on
+the SC7280 SoC.
 
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi | 2 ++
- arch/arm64/boot/dts/qcom/sc7280.dtsi                   | 3 +--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ .../bindings/remoteproc/qcom,sc7180-pas.yaml        | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-index 95505549adcc..203274c10532 100644
---- a/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
-@@ -33,6 +33,8 @@ &ipa {
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml
+index 6f0bd6fa5d26..c054b84fdcd5 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml
+@@ -18,7 +18,10 @@ properties:
+     enum:
+       - qcom,sc7180-adsp-pas
+       - qcom,sc7180-mpss-pas
++      - qcom,sc7280-adsp-pas
++      - qcom,sc7280-cdsp-pas
+       - qcom,sc7280-mpss-pas
++      - qcom,sc7280-wpss-pas
  
- &remoteproc_mpss {
- 	compatible = "qcom,sc7280-mss-pil";
-+	reg = <0 0x04080000 0 0x10000>, <0 0x04180000 0 0x48>;
-+	reg-names = "qdsp6", "rmb";
+   reg:
+     maxItems: 1
+@@ -75,6 +78,7 @@ allOf:
+         compatible:
+           enum:
+             - qcom,sc7180-adsp-pas
++            - qcom,sc7280-adsp-pas
+     then:
+       properties:
+         power-domains:
+@@ -120,6 +124,23 @@ allOf:
+             - const: cx
+             - const: mss
  
- 	clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
- 		 <&gcc GCC_MSS_OFFLINE_AXI_CLK>,
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index 5db468d1a06e..0d9cc44066ce 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2848,8 +2848,7 @@ adreno_smmu: iommu@3da0000 {
++  - if:
++      properties:
++        compatible:
++          enum:
++            - qcom,sc7280-cdsp-pas
++            - qcom,sc7280-wpss-pas
++    then:
++      properties:
++        power-domains:
++          items:
++            - description: CX power domain
++            - description: MX power domain
++        power-domain-names:
++          items:
++            - const: cx
++            - const: mx
++
+ unevaluatedProperties: false
  
- 		remoteproc_mpss: remoteproc@4080000 {
- 			compatible = "qcom,sc7280-mpss-pas";
--			reg = <0 0x04080000 0 0x10000>, <0 0x04180000 0 0x48>;
--			reg-names = "qdsp6", "rmb";
-+			reg = <0 0x04080000 0 0x10000>;
- 
- 			interrupts-extended = <&intc GIC_SPI 264 IRQ_TYPE_LEVEL_HIGH>,
- 					      <&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+ examples:
 
 -- 
 2.42.0
