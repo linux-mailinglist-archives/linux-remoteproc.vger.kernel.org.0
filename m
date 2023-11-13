@@ -2,62 +2,62 @@ Return-Path: <linux-remoteproc-owner@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C77C7E985D
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Nov 2023 09:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C1F7E9865
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 Nov 2023 09:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbjKMI4u (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
-        Mon, 13 Nov 2023 03:56:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S233410AbjKMI5D (ORCPT <rfc822;lists+linux-remoteproc@lfdr.de>);
+        Mon, 13 Nov 2023 03:57:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233343AbjKMI4p (ORCPT
+        with ESMTP id S233353AbjKMI4q (ORCPT
         <rfc822;linux-remoteproc@vger.kernel.org>);
-        Mon, 13 Nov 2023 03:56:45 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39A71705
-        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Nov 2023 00:56:33 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5441305cbd1so6393679a12.2
-        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Nov 2023 00:56:33 -0800 (PST)
+        Mon, 13 Nov 2023 03:56:46 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395F3171C
+        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Nov 2023 00:56:35 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-54366784377so6447866a12.3
+        for <linux-remoteproc@vger.kernel.org>; Mon, 13 Nov 2023 00:56:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1699865792; x=1700470592; darn=vger.kernel.org;
+        d=fairphone.com; s=fair; t=1699865793; x=1700470593; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CynjfYwQt6yEjM2yMQy6bc2CWbjcfVhAVfgPHtrn8R0=;
-        b=Ku1rR5ZhiViLtyprrjrTUYU/pwAIWbiBblbUoveMhq0Gav3fTkKl40O+0oo/8bL0jc
-         hxTI9TzpJR7T8iq8UsTLKOzYdL5SfuKmdEZEzbLN6x12RRg3hUnVuizptErlSJUnE0Ec
-         eXLTX+bBN0VO2pYUlv1+PPb0EyvJITBtq/rRfZSZZxtLkQjPDHdMHhoWnw3ff9Ggkf4X
-         dEeyMTVuSb4JqzCriVzWxYBDxn1iXtMhfFsZskRfel4dGpoqO/HrlgYfzCa8wwVGlZCw
-         aJLx+mesUN9M1/NmAQ7bdJTntxpI5jqQIBrn03aGD+5zQGUXhbdEyhFM2hRMUiMg625X
-         o99w==
+        bh=IHFRmzvU5T3tlzyLJ6u+L9D1svx2JsEEqR5zHg9JW1s=;
+        b=qUwO+ta1ElsepjclimtwfnWbQX16Z+Q7FjTwuVNuPDBAhAk1VhXGKqUVy/HgJgBtYw
+         90VbKbOA2H3fPTMWutCMGwEoooBYSkz618InRSpGLoRDc7emjltlnMlCzsr8rjIeF5Z0
+         PcRCY2m3ssO5/tEbAwHIGQLHobetEqPS110Odj5c1lNdwnoml8bhoBt8O4Lyxc+tCh8K
+         7O4FFfts/Nix3cmEhIm0j+lyWu0xkaIwcuJO3kz4Ikadozxi/xePv/MmCh9hmzRlEV3E
+         IPnjiJoz51Kqfx+w6UWHUjne2xCzEzixfvJnRDDpte9qQEoqn72LtSMA+RYR7EYWKtrl
+         tFpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699865792; x=1700470592;
+        d=1e100.net; s=20230601; t=1699865793; x=1700470593;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CynjfYwQt6yEjM2yMQy6bc2CWbjcfVhAVfgPHtrn8R0=;
-        b=ZPfWWZKNQuMMSV4sGwwuxoZQI0i5xFZHEKzJWCKVTGZaHujFRTOrlBgcrfHU50yL/Q
-         mp5q99z1msoRBtxQ0cyZY1H2+QadJpecPfzl4IbxLoivFWWz51HYWIU60MqCKfhd2QTe
-         qJG+PB8Qdm3GcLj6QazoilocbyHPB93S4v1zbngf5V1Oq0FXyfUeVGzEZOwHDqWTmitz
-         hfPpODQH8Beaztx4r8iXqsdZRsq/4ri25oRRnMZYpRsJ+TKspAvWwsKiH7GcfTjRCdYl
-         eGcbCqsrFA+kGZuBqbZyGiyBuhuISVa7aLcuDcKQcbOvOmVlyGyL350QK31ewkHGFUdp
-         XVbg==
-X-Gm-Message-State: AOJu0Yxbny/TKFXnWtW7HSR0hu0HNOho6lBiqgsUu6Qpu/JVXsZYQsF9
-        uP+NqPm9L/DzAWJtiVd4sigBdA==
-X-Google-Smtp-Source: AGHT+IE+1B70iakds+oKGTWbH2CVf5IC+VLEh7U7CdAMgRj38n4ZGWVR76woo6mU73f3DDL36Oe23w==
-X-Received: by 2002:a17:907:76d0:b0:9ae:7502:7d30 with SMTP id kf16-20020a17090776d000b009ae75027d30mr3389089ejc.57.1699865792415;
-        Mon, 13 Nov 2023 00:56:32 -0800 (PST)
+        bh=IHFRmzvU5T3tlzyLJ6u+L9D1svx2JsEEqR5zHg9JW1s=;
+        b=m+WAS7jlUpv2QHDj7H6eqT94sfHhs+JFEpM9WMiAHNn401BKhqpkk3MTciWaXaqdx4
+         Alx4SjAa9Q/2d4ZY/GwkR06gyVqdt+kCgS/yjiKEsrnMfk0YYv+pp9b91tYnBVdnhrM+
+         ctF/LzFwCeHaMeQOuexbIYMHHxc50KieJxN7+O8dmFkxPRPS28wiziZ1iAS0sAsKeqPE
+         zoHyC9PX9B4mT6Kql5uqXVVL20Wg2EmUCU6Qne3RMDFV9cV8L15Q4UDfkFsEQF0V2Fya
+         FoafmvcJmL31QjsTsoQ2nqiOC/AONZezmr0AXqK9EkTqk+cUCN+9JnJMC8k1vG4Uo0eb
+         2vjQ==
+X-Gm-Message-State: AOJu0YzITAFX6VW3MtfgXxzi8Uy5j+N5HcKawp1erGDhojAJfe7l2jMO
+        Nbz7fdzVZB9XYAAq3Mse9o57cw==
+X-Google-Smtp-Source: AGHT+IHa8Pb31leGcq/BfLuDTezKdtxG/yoxKfwEJl9LGFiOL4LSbWDBIt1ehToQWQGdY76XglA3OA==
+X-Received: by 2002:a17:906:7fd7:b0:9de:b20c:be5e with SMTP id r23-20020a1709067fd700b009deb20cbe5emr4170846ejs.53.1699865793553;
+        Mon, 13 Nov 2023 00:56:33 -0800 (PST)
 Received: from otso.luca.vpn.lucaweiss.eu (k10064.upc-k.chello.nl. [62.108.10.64])
-        by smtp.gmail.com with ESMTPSA id kk22-20020a170907767600b009c758b6cdefsm3673538ejc.128.2023.11.13.00.56.31
+        by smtp.gmail.com with ESMTPSA id kk22-20020a170907767600b009c758b6cdefsm3673538ejc.128.2023.11.13.00.56.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 13 Nov 2023 00:56:32 -0800 (PST)
 From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Mon, 13 Nov 2023 09:56:21 +0100
-Subject: [PATCH v2 10/11] arm64: dts: qcom: qcm6490-fairphone-fp5: Enable
- various remoteprocs
+Date:   Mon, 13 Nov 2023 09:56:22 +0100
+Subject: [PATCH v2 11/11] arm64: dts: qcom: qcm6490-fairphone-fp5: Enable
+ WiFi
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231113-sc7280-remoteprocs-v2-10-e5c5fd5268a7@fairphone.com>
+Message-Id: <20231113-sc7280-remoteprocs-v2-11-e5c5fd5268a7@fairphone.com>
 References: <20231113-sc7280-remoteprocs-v2-0-e5c5fd5268a7@fairphone.com>
 In-Reply-To: <20231113-sc7280-remoteprocs-v2-0-e5c5fd5268a7@fairphone.com>
 To:     Andy Gross <agross@kernel.org>,
@@ -87,44 +87,30 @@ Precedence: bulk
 List-ID: <linux-remoteproc.vger.kernel.org>
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 
-Enable the ADSP, CDSP, MPSS and WPSS that are found on the SoC.
+Now that the WPSS remoteproc is enabled, enable wifi so we can use it.
 
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Depends on (just to resolve merge conflicts, could also rebase without
+that):
+https://lore.kernel.org/linux-arm-msm/20231002-sc7280-venus-pas-v2-3-bd2408891317@fairphone.com/
+---
+ arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts b/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
-index 77ba05b77d68..307062c1a0cb 100644
+index 307062c1a0cb..c0287d8f4ed6 100644
 --- a/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
 +++ b/arch/arm64/boot/dts/qcom/qcm6490-fairphone-fp5.dts
-@@ -470,6 +470,26 @@ &qupv3_id_1 {
+@@ -693,3 +693,8 @@ &venus {
+ 	firmware-name = "qcom/qcm6490/fairphone5/venus.mbn";
  	status = "okay";
  };
- 
-+&remoteproc_adsp {
-+	firmware-name = "qcom/qcm6490/fairphone5/adsp.mbn";
++
++&wifi {
++	qcom,ath11k-calibration-variant = "Fairphone_5";
 +	status = "okay";
 +};
-+
-+&remoteproc_cdsp {
-+	firmware-name = "qcom/qcm6490/fairphone5/cdsp.mbn";
-+	status = "okay";
-+};
-+
-+&remoteproc_mpss {
-+	firmware-name = "qcom/qcm6490/fairphone5/modem.mbn";
-+	status = "okay";
-+};
-+
-+&remoteproc_wpss {
-+	firmware-name = "qcom/qcm6490/fairphone5/wpss.mbn";
-+	status = "okay";
-+};
-+
- &sdc2_clk {
- 	drive-strength = <16>;
- 	bias-disable;
 
 -- 
 2.42.1
