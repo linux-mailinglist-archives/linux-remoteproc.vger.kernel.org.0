@@ -1,349 +1,187 @@
-Return-Path: <linux-remoteproc+bounces-219-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-223-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0328082DA9B
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 15 Jan 2024 14:54:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80F7882DEE9
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 15 Jan 2024 19:14:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BA681F21053
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 15 Jan 2024 13:54:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FEEE283028
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 15 Jan 2024 18:14:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7084B1756F;
-	Mon, 15 Jan 2024 13:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18B8F182B6;
+	Mon, 15 Jan 2024 18:14:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Zm8yQleP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z3xN0lJg"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7150B17547;
-	Mon, 15 Jan 2024 13:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40FDrut4016506;
-	Mon, 15 Jan 2024 14:54:01 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	selector1; bh=0PSMMS3Epy211SgFxqxEWr8MrpTb+Oy9K28Jyjmop1g=; b=Zm
-	8yQleP7o/+NMgtYtF8h0wc3z3PADD3L/6SIkmS+ZXYkG4Z5wpn1zeLC5V+cnEOWx
-	SM1/bwm2G8yUjdmsJyR7K4BTd+QulWGo75umuaZK1fL3YI8d8HI57CdvtzXCGyfp
-	jwpjYQEWiO7N19a5sR0H/IahKXlxLm+8WX0OWW+TiD6UbJSHiU3q+zhl+YBA/p6S
-	0hOQpKi1RqmGUtQZ3n06fU58jf6qyAnusODhg8RVBxGqc7IZb3UQAJ3TUPIrnAEv
-	e8iUoBwsQNF/8weETHp2YGoJ8vIf3UrEMjwh15ua/0fgQ+OKrtiAQQclVUERBG9y
-	YpB4LlSimmTOId5CaLyg==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3vm6bnx8mn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Jan 2024 14:54:01 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id BC455100058;
-	Mon, 15 Jan 2024 14:54:00 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B136828EF7F;
-	Mon, 15 Jan 2024 14:54:00 +0100 (CET)
-Received: from localhost (10.201.20.75) by SHFDAG1NODE2.st.com (10.75.129.70)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 15 Jan
- 2024 14:53:59 +0100
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Rob
- Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <op-tee@lists.trustedfirmware.org>, <devicetree@vger.kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH 4/4] remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
-Date: Mon, 15 Jan 2024 14:52:49 +0100
-Message-ID: <20240115135249.296822-5-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240115135249.296822-1-arnaud.pouliquen@foss.st.com>
-References: <20240115135249.296822-1-arnaud.pouliquen@foss.st.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F7818048
+	for <linux-remoteproc@vger.kernel.org>; Mon, 15 Jan 2024 18:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6db786df38dso1170905b3a.0
+        for <linux-remoteproc@vger.kernel.org>; Mon, 15 Jan 2024 10:14:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705342463; x=1705947263; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YBn2qZQx8P3zg2r39V5+2Dh28lfRonfO6AcXOPJi0eo=;
+        b=Z3xN0lJgoMpkO7ZmWQWssNERIlWY/LH1cbKdVjbqumPdwcFgGfR6CrSozF90Ub0YrZ
+         noGdHjoPd4sUouvD9veEsjJWKeXlLJWIdTP2R8DuZWWGDKHBnTOP/67SmPCZN4xeSa+E
+         h1gQTnzJh6o6XrHW493lsywTl3FHNd+youIwd5px/QZMH0o4ohGtD2YBUvG7wzcflSFM
+         9jzvGcnmpL8eplLFjgTsP8VlIGhycspNS/vH+F1RUi4MuE6/MDJqlyjbjHiZJ+DCQ9jr
+         JdDQb81joMFiIdqhNpzAETy1lTwCamZd/G1sX8eiWLm6GpYaP40gZOGOZnH7HSRl1M8W
+         CyHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705342463; x=1705947263;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YBn2qZQx8P3zg2r39V5+2Dh28lfRonfO6AcXOPJi0eo=;
+        b=YbVi+xxFwiK4Se1TTB4Ur7PLOSGzPYWI0YGFz4f4uMUDvGfzlmnQzUUOH0rMNqi5+f
+         2un23Ah4AW3nJtr3Uwj47nOt1jczZAr0vNkUEbXLGbRk/LzKMK7O3ivhAN8/NGLKytp5
+         mL29Sn+NA9nJHboFc0iimH62BsdwVuvEyMgYCxjRM2Aq4+QJM2LN5Frpa4cwyb9EiUFz
+         R84OlBFg9v602NBYz8Er9XnUlkVvnpTbK1YuyAVgJxoZJXD0GCvc+Frsu3gsh8g8/p+V
+         LInNS91Rx6fsQjuQCArQS3DUIVy5EAwBclJ3YqrN6kc5lqdKfSHIIDwW5N7GXtbSkCJy
+         8IrQ==
+X-Gm-Message-State: AOJu0Yz6Ba7SeHfLzzEnAUr8wwnd8fPjigwZ4NWlDDIjbUm9PJIMv1sA
+	+o6u5K54a4/ZFRkB1wNZciRiv33kzR4fgw==
+X-Google-Smtp-Source: AGHT+IE+Bl8C8gShAKZw9kvDRcOSbLDBFpmGYYhTQ367w8nhdPd/vWjoDLLYXnHf7zdXAZEBXtu+7w==
+X-Received: by 2002:a05:6a20:9c89:b0:19b:2303:88a4 with SMTP id mj9-20020a056a209c8900b0019b230388a4mr731854pzb.105.1705342463524;
+        Mon, 15 Jan 2024 10:14:23 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800::5ced])
+        by smtp.gmail.com with ESMTPSA id lc18-20020a056a004f5200b006d9cf4b56edsm8116673pfb.175.2024.01.15.10.14.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jan 2024 10:14:23 -0800 (PST)
+Date: Mon, 15 Jan 2024 11:14:20 -0700
+From: Mathieu Poirier <mathieu.poirier@linaro.org>
+To: Tanmay Shah <tanmay.shah@amd.com>
+Cc: andersson@kernel.org, linux-remoteproc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Ben Levinsky <ben.levinsky@xilinx.com>
+Subject: Re: [PATCH v4 1/2] remoteproc: Make rproc_get_by_phandle() work for
+ clusters
+Message-ID: <ZaV1/GEiV2VS6c2p@p14s>
+References: <20240103221124.3063683-1-tanmay.shah@amd.com>
+ <20240103221124.3063683-2-tanmay.shah@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-05_08,2024-01-05_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240103221124.3063683-2-tanmay.shah@amd.com>
 
-The new TEE remoteproc device is used to manage remote firmware in a
-secure, trusted context. The 'st,stm32mp1-m4-tee' compatibility is
-introduced to delegate the loading of the firmware to the trusted
-execution context. In such cases, the firmware should be signed and
-adhere to the image format defined by the TEE.
+Hi Tanmay,
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
- drivers/remoteproc/Kconfig       |   3 +-
- drivers/remoteproc/stm32_rproc.c | 149 +++++++++++++++++++++++++++++--
- 2 files changed, 146 insertions(+), 6 deletions(-)
+Thanks for the refactoring, this is in line with what Bjorn and I have talked
+about at Plumbers.  Please see my comments below.
 
-diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-index 85299606806c..e5bb675b5fc5 100644
---- a/drivers/remoteproc/Kconfig
-+++ b/drivers/remoteproc/Kconfig
-@@ -316,6 +316,7 @@ config STM32_RPROC
- 	depends on ARCH_STM32 || COMPILE_TEST
- 	depends on REMOTEPROC
- 	select MAILBOX
-+	select TEE_REMOTEPROC
- 	help
- 	  Say y here to support STM32 MCU processors via the
- 	  remote processor framework.
-@@ -367,7 +368,7 @@ config XLNX_R5_REMOTEPROC
- 
- 
- config TEE_REMOTEPROC
--	tristate "trusted firmware support by a TEE application"
-+	tristate "trusted firmware support by a trusted application"
- 	depends on OPTEE
- 	help
- 	  Support for trusted remote processors firmware. The firmware
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index fcc0001e2657..16dcf36ceeb6 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -20,6 +20,7 @@
- #include <linux/remoteproc.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
-+#include <linux/tee_remoteproc.h>
- #include <linux/workqueue.h>
- 
- #include "remoteproc_internal.h"
-@@ -49,6 +50,9 @@
- #define M4_STATE_STANDBY	4
- #define M4_STATE_CRASH		5
- 
-+/* Remote processor unique identifier aligned with the Trusted Execution Environment definitions */
-+#define STM32_MP1_M4_PROC_ID    0
-+
- struct stm32_syscon {
- 	struct regmap *map;
- 	u32 reg;
-@@ -90,6 +94,8 @@ struct stm32_rproc {
- 	struct stm32_mbox mb[MBOX_NB_MBX];
- 	struct workqueue_struct *workqueue;
- 	bool hold_boot_smc;
-+	bool fw_loaded;
-+	struct tee_rproc *trproc;
- 	void __iomem *rsc_va;
- };
- 
-@@ -257,6 +263,91 @@ static int stm32_rproc_release(struct rproc *rproc)
- 	return err;
- }
- 
-+static int stm32_rproc_tee_elf_sanity_check(struct rproc *rproc,
-+					    const struct firmware *fw)
-+{
-+	struct stm32_rproc *ddata = rproc->priv;
-+	unsigned int ret = 0;
-+
-+	if (rproc->state == RPROC_DETACHED)
-+		return 0;
-+
-+	ret = tee_rproc_load_fw(ddata->trproc, fw);
-+	if (!ret)
-+		ddata->fw_loaded = true;
-+
-+	return ret;
-+}
-+
-+static int stm32_rproc_tee_elf_load(struct rproc *rproc,
-+				    const struct firmware *fw)
-+{
-+	struct stm32_rproc *ddata = rproc->priv;
-+	unsigned int ret;
-+
-+	/*
-+	 * This function can be called by remote proc for recovery
-+	 * without the sanity check. In this case we need to load the firmware
-+	 * else nothing done here as the firmware has been preloaded for the
-+	 * sanity check to be able to parse it for the resource table.
-+	 */
-+	if (ddata->fw_loaded)
-+		return 0;
-+
-+	ret = tee_rproc_load_fw(ddata->trproc, fw);
-+	if (ret)
-+		return ret;
-+	ddata->fw_loaded = true;
-+
-+	/* Update the resource table parameters. */
-+	if (rproc_tee_get_rsc_table(ddata->trproc)) {
-+		/* No resource table: reset the related fields. */
-+		rproc->cached_table = NULL;
-+		rproc->table_ptr = NULL;
-+		rproc->table_sz = 0;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct resource_table *
-+stm32_rproc_tee_elf_find_loaded_rsc_table(struct rproc *rproc,
-+					  const struct firmware *fw)
-+{
-+	struct stm32_rproc *ddata = rproc->priv;
-+
-+	return tee_rproc_get_loaded_rsc_table(ddata->trproc);
-+}
-+
-+static int stm32_rproc_tee_start(struct rproc *rproc)
-+{
-+	struct stm32_rproc *ddata = rproc->priv;
-+
-+	return tee_rproc_start(ddata->trproc);
-+}
-+
-+static int stm32_rproc_tee_attach(struct rproc *rproc)
-+{
-+	/* Nothing to do, remote proc already started by the secured context. */
-+	return 0;
-+}
-+
-+static int stm32_rproc_tee_stop(struct rproc *rproc)
-+{
-+	struct stm32_rproc *ddata = rproc->priv;
-+	int err;
-+
-+	stm32_rproc_request_shutdown(rproc);
-+
-+	err = tee_rproc_stop(ddata->trproc);
-+	if (err)
-+		return err;
-+
-+	ddata->fw_loaded = false;
-+
-+	return stm32_rproc_release(rproc);
-+}
-+
- static int stm32_rproc_prepare(struct rproc *rproc)
- {
- 	struct device *dev = rproc->dev.parent;
-@@ -319,7 +410,14 @@ static int stm32_rproc_prepare(struct rproc *rproc)
- 
- static int stm32_rproc_parse_fw(struct rproc *rproc, const struct firmware *fw)
- {
--	if (rproc_elf_load_rsc_table(rproc, fw))
-+	struct stm32_rproc *ddata = rproc->priv;
-+	int ret;
-+
-+	if (ddata->trproc)
-+		ret = rproc_tee_get_rsc_table(ddata->trproc);
-+	else
-+		ret = rproc_elf_load_rsc_table(rproc, fw);
-+	if (ret)
- 		dev_warn(&rproc->dev, "no resource table found for this firmware\n");
- 
- 	return 0;
-@@ -693,8 +791,22 @@ static const struct rproc_ops st_rproc_ops = {
- 	.get_boot_addr	= rproc_elf_get_boot_addr,
- };
- 
-+static const struct rproc_ops st_rproc_tee_ops = {
-+	.prepare	= stm32_rproc_prepare,
-+	.start		= stm32_rproc_tee_start,
-+	.stop		= stm32_rproc_tee_stop,
-+	.attach		= stm32_rproc_tee_attach,
-+	.kick		= stm32_rproc_kick,
-+	.parse_fw	= stm32_rproc_parse_fw,
-+	.find_loaded_rsc_table = stm32_rproc_tee_elf_find_loaded_rsc_table,
-+	.get_loaded_rsc_table = stm32_rproc_get_loaded_rsc_table,
-+	.sanity_check	= stm32_rproc_tee_elf_sanity_check,
-+	.load		= stm32_rproc_tee_elf_load,
-+};
-+
- static const struct of_device_id stm32_rproc_match[] = {
--	{ .compatible = "st,stm32mp1-m4" },
-+	{.compatible = "st,stm32mp1-m4",},
-+	{.compatible = "st,stm32mp1-m4-tee",},
- 	{},
- };
- MODULE_DEVICE_TABLE(of, stm32_rproc_match);
-@@ -853,6 +965,7 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct stm32_rproc *ddata;
- 	struct device_node *np = dev->of_node;
-+	struct tee_rproc *trproc;
- 	struct rproc *rproc;
- 	unsigned int state;
- 	int ret;
-@@ -861,11 +974,31 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	rproc = rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
--	if (!rproc)
--		return -ENOMEM;
-+	if (of_device_is_compatible(np, "st,stm32mp1-m4-tee")) {
-+		trproc = tee_rproc_register(dev, STM32_MP1_M4_PROC_ID);
-+		if (IS_ERR(trproc)) {
-+			dev_err_probe(dev, PTR_ERR(trproc),
-+				      "signed firmware not supported by TEE\n");
-+			return PTR_ERR(trproc);
-+		}
-+		/*
-+		 * Delegate the firmware management to the secure context.
-+		 * The firmware loaded has to be signed.
-+		 */
-+		dev_info(dev, "Support of signed firmware only\n");
-+	}
-+	rproc = rproc_alloc(dev, np->name,
-+			    trproc ? &st_rproc_tee_ops : &st_rproc_ops,
-+			    NULL, sizeof(*ddata));
-+	if (!rproc) {
-+		ret = -ENOMEM;
-+		goto free_tee;
-+	}
- 
- 	ddata = rproc->priv;
-+	ddata->trproc = trproc;
-+	if (trproc)
-+		trproc->rproc = rproc;
- 
- 	rproc_coredump_set_elf_info(rproc, ELFCLASS32, EM_NONE);
- 
-@@ -916,6 +1049,10 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 		device_init_wakeup(dev, false);
- 	}
- 	rproc_free(rproc);
-+free_tee:
-+	if (trproc)
-+		tee_rproc_unregister(trproc);
-+
- 	return ret;
- }
- 
-@@ -937,6 +1074,8 @@ static void stm32_rproc_remove(struct platform_device *pdev)
- 		device_init_wakeup(dev, false);
- 	}
- 	rproc_free(rproc);
-+	if (ddata->trproc)
-+		tee_rproc_unregister(ddata->trproc);
- }
- 
- static int stm32_rproc_suspend(struct device *dev)
--- 
-2.25.1
+On Wed, Jan 03, 2024 at 02:11:24PM -0800, Tanmay Shah wrote:
+> From: Mathieu Poirier <mathieu.poirier@linaro.org>
+> 
+> Multi-cluster remoteproc designs typically have the following DT
+> declaration:
+> 
+> 	remoteproc_cluster {
+> 		compatible = "soc,remoteproc-cluster";
+> 
+>                 core0: core0 {
+> 			compatible = "soc,remoteproc-core"
+>                         memory-region;
+>                         sram;
+>                 };
+> 
+>                 core1: core1 {
+> 			compatible = "soc,remoteproc-core"
+>                         memory-region;
+>                         sram;
+>                 }
+>         };
+> 
+> A driver exists for the cluster rather than the individual cores
+> themselves so that operation mode and HW specific configurations
+> applicable to the cluster can be made.
+> 
+> Because the driver exists at the cluster level and not the individual
+> core level, function rproc_get_by_phandle() fails to return the
+> remoteproc associated with the phandled it is called for.
+> 
+> This patch enhances rproc_get_by_phandle() by looking for the cluster's
+> driver when the driver for the immediate remoteproc's parent is not
+> found.
+> 
+> Reported-by: Ben Levinsky <ben.levinsky@xilinx.com>
+> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
+Humm... You wrote the code in this patch so you also deserve some credit.  If I
+end up applying this set I will add myself as a co-developer, i.e
+Co-developed-by:, and add your SoB.  If you end up re-spinning this set then
+simply do so for the next revision.
+
+As far as I am concerned this patchset is ready.  I will wait to see if other
+people would like to see something adjusted.
+
+Mathieu
+
+> ---
+>  drivers/remoteproc/remoteproc_core.c | 23 ++++++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 695cce218e8c..0b3b34085e2f 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -33,6 +33,7 @@
+>  #include <linux/idr.h>
+>  #include <linux/elf.h>
+>  #include <linux/crc32.h>
+> +#include <linux/of_platform.h>
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/virtio_ids.h>
+>  #include <linux/virtio_ring.h>
+> @@ -2112,6 +2113,7 @@ EXPORT_SYMBOL(rproc_detach);
+>  struct rproc *rproc_get_by_phandle(phandle phandle)
+>  {
+>  	struct rproc *rproc = NULL, *r;
+> +	struct device_driver *driver;
+>  	struct device_node *np;
+>  
+>  	np = of_find_node_by_phandle(phandle);
+> @@ -2122,7 +2124,26 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
+>  	list_for_each_entry_rcu(r, &rproc_list, node) {
+>  		if (r->dev.parent && device_match_of_node(r->dev.parent, np)) {
+>  			/* prevent underlying implementation from being removed */
+> -			if (!try_module_get(r->dev.parent->driver->owner)) {
+> +
+> +			/*
+> +			 * If the remoteproc's parent has a driver, the
+> +			 * remoteproc is not part of a cluster and we can use
+> +			 * that driver.
+> +			 */
+> +			driver = r->dev.parent->driver;
+> +
+> +			/*
+> +			 * If the remoteproc's parent does not have a driver,
+> +			 * look for the driver associated with the cluster.
+> +			 */
+> +			if (!driver) {
+> +				if (r->dev.parent->parent)
+> +					driver = r->dev.parent->parent->driver;
+> +				if (!driver)
+> +					break;
+> +			}
+> +
+> +			if (!try_module_get(driver->owner)) {
+>  				dev_err(&r->dev, "can't get owner\n");
+>  				break;
+>  			}
+> -- 
+> 2.25.1
+> 
 
