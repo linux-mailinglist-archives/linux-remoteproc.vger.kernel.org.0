@@ -1,99 +1,85 @@
-Return-Path: <linux-remoteproc+bounces-355-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-357-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7570842522
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Jan 2024 13:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF34784285E
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Jan 2024 16:49:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 625A41F27FB4
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Jan 2024 12:41:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EDE51F272CF
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Jan 2024 15:49:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D286DD0F;
-	Tue, 30 Jan 2024 12:40:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 665E87F7F8;
+	Tue, 30 Jan 2024 15:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tA7EWbFU"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="C0qDyFNe"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B10D6A348
-	for <linux-remoteproc@vger.kernel.org>; Tue, 30 Jan 2024 12:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706618407; cv=none; b=YrA6Dza2IFWdwv4Rejg8o2f20+ZF13v163rWrMJksgIIdCQ98T0RecHJLDE4RIPVlOHXjbVjMJK07yYfXxTC+BnROiAbaV5K9lGd/mH7kdwoqiKwEfst1BA585Y7Cy3eNtTZFWde8KZqKR5C4A7xhGqpaTrlkG/nFO3UT9ILPxk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706618407; c=relaxed/simple;
-	bh=amT5XvS5cIMcEYdHzb5WGCBIhqN0P7Hqeenb8AqG0zw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HN6etn+Nrga0+MzsGee93ktlZwP6nXfznyr3GrRb1qLbOVSzesbuc4tvB8XLkdI57WfY/vhN93ciaiAaxMK1l0ufbuA3NfIXcbzEQTUu4Lyf+BEMRFKxc+9lYGYxW2vWPG1paQtXRIn9nRR7/dilo6uUtV3yinTv6jFqtf+q2zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tA7EWbFU; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-51028acdcf0so4799917e87.0
-        for <linux-remoteproc@vger.kernel.org>; Tue, 30 Jan 2024 04:40:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706618403; x=1707223203; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OaTT8dB3EwkGsk/s/Xq1pLso3HjDpVKzVVMDBdDT7Fc=;
-        b=tA7EWbFUqqE2O+mCBjAt22hVvtgmbiaa6WKhNVtv3j7Zz34O6sl/TGu+Lvh0NK0FV9
-         YnmnVqinVSKwkH3A6XRmCpUytXb/3xeZarLVpPXe3BzWV5UoUUFb87iSXWitQoPx9QUz
-         /1DWXCbEJd3DGhrOCsJpViJYEiRyG7R0RN82Q6B/t3FvveSdvALtxTZ+In05Qthc11pr
-         2W6nAqxgpFCC6tWNi9PE+ktm8UXgfNNS0YfSA+AKV6Jj+7hTmY9fi//ZkDchX0nc8KDi
-         ZByKWMYTE7Avk4WC6vHAVOvC6hRxFxCLKY8wUKmqi3kn4/TCa17A/+Jte7Wfel7zONmf
-         3Pcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706618403; x=1707223203;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OaTT8dB3EwkGsk/s/Xq1pLso3HjDpVKzVVMDBdDT7Fc=;
-        b=lFV2Ndm4/bCvVy9nBnwzUehKDo+Ql+jMgVl8LBAinMj6+bbopXpc4AHwqrUAoBMrzp
-         oTCQa5jCS9jTc2PbEFPFUME8u92F7g0hN5NSszwii7QlzYKCi9L7JdW8N5kSlaT1gn/K
-         4l8/sIcUFS6l+RoZeZ9S2Pu7n3GOKICNnm2I3uMqH5XSFNGwFNfK16C9aFe6ZdRBvNre
-         m1tif8xyf9xMqhphaoBHtVgaSt1a10dgFuDtKL3PJIQVjxPC3ypvykS5cBtLWWUmk9G8
-         glPAHREvRYWdzZLdjtyfaP+2S5BQTZ8TaXg45rImOJ+fitAelf1VUmo157UsdrN40eSs
-         IidQ==
-X-Gm-Message-State: AOJu0YyUKlZKh94h9shlsygZIx5q4qjT7HVjthn0lzkN0MtZG0GN9/oB
-	RGnOlLKNooFVZkdAa+kWFrGA8V0zGGQJOTM0uxcXiP0CWu50V/0t04ohbaC9gIM=
-X-Google-Smtp-Source: AGHT+IFnPKvzbNCMhe6s/L8G6kZw6DMvBRjhbburl1wgaBRZACQ7tPo5D9p5JxU9BQNYUd52+R0E9A==
-X-Received: by 2002:a05:6512:3046:b0:510:28a9:9b2a with SMTP id b6-20020a056512304600b0051028a99b2amr6215200lfb.66.1706618403620;
-        Tue, 30 Jan 2024 04:40:03 -0800 (PST)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id p10-20020a19f00a000000b005111b28f7c2sm200661lfc.36.2024.01.30.04.40.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 04:40:03 -0800 (PST)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	linux-pm@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Kevin Hilman <khilman@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Nikunj Kela <nkela@quicinc.com>,
-	Prasad Sodagudi <psodagud@quicinc.com>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Ben Horgan <Ben.Horgan@arm.com>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Subject: [PATCH v3 5/5] media: venus: Convert to dev_pm_domain_attach|detach_list() for vcodec
-Date: Tue, 30 Jan 2024 13:39:51 +0100
-Message-Id: <20240130123951.236243-6-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240130123951.236243-1-ulf.hansson@linaro.org>
-References: <20240130123951.236243-1-ulf.hansson@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5694D86AE8;
+	Tue, 30 Jan 2024 15:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706629768; cv=fail; b=sx1nhLTGht5WfAWbiDuVD6JMG5d25rH2jDqZK8/R3MTMF0AJ75r3itfcBQGV8yeNCO+fZU5wZocnKzIsIvC/OwS9XTAOmJkUOO5OkBVXZ00crz/tiMBDXTMEuLccgspsAFn8nlOwDFkwTqWyuCG1xWCkHNky+VKkSonyvsh4/DQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706629768; c=relaxed/simple;
+	bh=2/L3CMIpD2Q6WTee3CeIHz3X6PEST7CYI3j9OqQiozU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=k7Z9CAbERyFYB9i6CopTZqjWN1ujgBewmcmVKIuDyb9FgvBoZavzGyihdWXoIbRuv6kCoXdZLnPgMmcU4P1WrshNBhX8ATbJHGLwliprye6AYKe5jzvIX7VxmE6xJDIe0DyL4nYoLB1tFMXoNGV1W87BHvJuDZ1i0nY81kzkx2A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=C0qDyFNe; arc=fail smtp.client-ip=40.107.236.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oc/gzXyAc/D2cJ0LnZVt1Xfy+kLKIfcimLSZ8+NU6VNV8fCsd7IMG+Npi6BAHkbh86HvaDSHzY2JqfcSuvb8b9bcO/dWiBGXEouEHQ9K5OnuFK6lTI3qJj3HqFSMWWuHJQ0QrkLuUHPiSGlIw06xxyi/E8Tg6UwiUEawscERKSOGE9FttJsTaDtZrorSy6nQzo033PpPA5Szu4tkampkKkp83Umi/lXCfNCksAyYIUrK326DfWS5LecsyP0K/RteoEAAvnoDVIFLN25EySIaw5qfeS0us4JaXABvAXBj30JorVBFGH/hbJm99b2XYCAmZUw7puPYFTmkpQuAJJQEtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5BsRx+5Ng7RgJdjezWuHPR+PBFBF/orE+c2CGbsv9hA=;
+ b=Y0+TvSpAH3aZwZVk5xwCRsrrqvaWNIc1avbQeZJ1B8t/zBQcTvLtjaLYY06mUn0UjbFMz5XLTXWbfArYHz6JIUzbEOf5OT7lCzZJZuRoEW2DTlK0pEXqhAK22NdhCrEc2qpg2dnSDmXUGszWUyF681HgqAi+1Tmeh0QkZl4ZzEh8hMXhQAE/mNjJd1+qwgFngdCmBczmYOQtdvpvVTF3JiHgYx4mSkv6lAt/WQ8azcV1buWj6xRFxTByLbldQ4XpRzI+RrAVazhaexNyvC/onpbGuhwf9nFzMqyu5Jrv7+uiccox3+oiiYH0zi1eTn1VmJYncy5c7hj/md67W7Q63g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5BsRx+5Ng7RgJdjezWuHPR+PBFBF/orE+c2CGbsv9hA=;
+ b=C0qDyFNe8TPABDNcq32empr29Y3EmGlWIqwtAFIHRI6FkA3G+fiC6F7TS29rLSE2Nq1YdUtaVHoN+VoN+Ezyj/afHJI3EF5jd08A3Sqb/t55rAPiI79NXQbj3bRpfl6dZd3U5/W4/lqCswsq8oTkJz+b14pw/by9EpQk2YZ0WSU=
+Received: from BN8PR07CA0002.namprd07.prod.outlook.com (2603:10b6:408:ac::15)
+ by DM8PR12MB5397.namprd12.prod.outlook.com (2603:10b6:8:38::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7249.22; Tue, 30 Jan 2024 15:49:23 +0000
+Received: from BN3PEPF0000B069.namprd21.prod.outlook.com
+ (2603:10b6:408:ac:cafe::e4) by BN8PR07CA0002.outlook.office365.com
+ (2603:10b6:408:ac::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.22 via Frontend
+ Transport; Tue, 30 Jan 2024 15:49:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN3PEPF0000B069.mail.protection.outlook.com (10.167.243.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7270.0 via Frontend Transport; Tue, 30 Jan 2024 15:49:23 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Tue, 30 Jan
+ 2024 09:49:23 -0600
+Received: from xsjtanmays50.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.34 via Frontend
+ Transport; Tue, 30 Jan 2024 09:49:22 -0600
+From: Tanmay Shah <tanmay.shah@amd.com>
+To: <andersson@kernel.org>, <mathieu.poirier@linaro.org>
+CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Ben
+ Levinsky" <ben.levinsky@xilinx.com>, Tarak Reddy <tarak.reddy@amd.com>,
+	"Tanmay Shah" <tanmay.shah@amd.com>
+Subject: [PATCH v5] remoteproc: Make rproc_get_by_phandle() work for clusters
+Date: Tue, 30 Jan 2024 07:48:49 -0800
+Message-ID: <20240130154849.1018666-1-tanmay.shah@amd.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -101,242 +87,137 @@ List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B069:EE_|DM8PR12MB5397:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7c4eadac-ab17-4353-4501-08dc21ab07fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	z7P33WArlmURc0lD5x0jq+BPbMEwBKBPb+gmDaUKestaQ1R4CgS+IuDdJDFfpW1kudHER+K8KlGQG6u3rfi+5fNh8IZmfU9JrN1Japws2yCVLyXKfYODwt4Oe78JNHQ3vFlL8CN+rCK8VFSrhjDcRqRB6+gqzOWZDBqxotVaoNKhwZgSDRsNCwaK3o2b1XmHBjrXjlo+uRIzwxnueam6/4wWhlq+KQXH5dwYQpCeIeZF5GIpq7v93oMq7Vq2XCnf5xrf3zLTT2eaFZYSfT0ahfUli/q9D8BCvUuKfJdL3bcPrANOdRuoVEJ2z0QCptqoGCPTnK88yQTNs1R5yZzHs2W4eFq6O7UgaF0hIK7rqOSEcECdRGSPqy1AXuVLoUEo5jxaHDH9YjR4XEi3zAYrfE/+i/pL3zgQzxm0x2DzMwtsOrKE1oaaAEylJGvwuQxglvyjDumsqdxZPDKr/rC+eV/CgfCklLGOoL2b15pw9Lg4HDBSKd2yYy+ghlUodn5G3f4vJYBgFQGwa57CTLsPcyxzgl0yOzuqVO0ylXZ7k3uLHiJ6IxPn/cUlDuqiadESBb3rQBvaCkBqQ5uS9Br1EzQIHMNfw10yFCDrA78uZ0/gyzxbS0qgj9Qmzd5vuzF9lOtfdFEKVbRtk1zF3icpVxmKsBNDW+xyp0QUj/OhM+zkgu+uXfwo3UPaUDdgYkdtasuHN2B+sKQhJ75AZiztigimTfUESqzQHyzhnyF34RZ5VO3OpNS2pDa2F8VmBZMQ0sMvs/Je9zPXnc9JXe6e7g==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(346002)(396003)(39860400002)(376002)(230922051799003)(1800799012)(186009)(82310400011)(451199024)(64100799003)(46966006)(40470700004)(36840700001)(426003)(336012)(2616005)(1076003)(41300700001)(40460700003)(40480700001)(36756003)(47076005)(36860700001)(110136005)(26005)(6666004)(478600001)(83380400001)(81166007)(82740400003)(356005)(54906003)(86362001)(2906002)(5660300002)(4326008)(70206006)(316002)(44832011)(70586007)(8676002)(8936002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2024 15:49:23.6396
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c4eadac-ab17-4353-4501-08dc21ab07fc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN3PEPF0000B069.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5397
 
-Let's avoid some of the boilerplate code to manage the vcodec PM domains,
-by converting into using dev_pm_domain_attach|detach_list().
+From: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
-Cc: Vikash Garodia <quic_vgarodia@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: <linux-media@vger.kernel.org>
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Multi-cluster remoteproc designs typically have the following DT
+declaration:
+
+        remoteproc-cluster {
+                compatible = "soc,remoteproc-cluster";
+
+                core0: core0 {
+                        compatible = "soc,remoteproc-core"
+                        memory-region;
+                        sram;
+                };
+
+                core1: core1 {
+                        compatible = "soc,remoteproc-core"
+                        memory-region;
+                        sram;
+                }
+        };
+
+A driver exists for the cluster rather than the individual cores
+themselves so that operation mode and HW specific configurations
+applicable to the cluster can be made.
+
+Because the driver exists at the cluster level and not the individual
+core level, function rproc_get_by_phandle() fails to return the
+remoteproc associated with the phandled it is called for.
+
+This patch enhances rproc_get_by_phandle() by looking for the cluster's
+driver when the driver for the immediate remoteproc's parent is not
+found.
+
+Reported-by: Ben Levinsky <ben.levinsky@xilinx.com>
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Co-developed-by: Tarak Reddy <tarak.reddy@amd.com>
+Signed-off-by: Tarak Reddy <tarak.reddy@amd.com>
+Co-developed-by: Tanmay Shah <tanmay.shah@amd.com>
+Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
 ---
+ drivers/remoteproc/remoteproc_core.c | 29 ++++++++++++++++++++++++++--
+ 1 file changed, 27 insertions(+), 2 deletions(-)
 
-Changes in v3:
-	- None.
-
-Changes in v2:
-	- Added reviewed-by and tested-by tags.
-
----
- drivers/media/platform/qcom/venus/core.c      | 12 +++--
- drivers/media/platform/qcom/venus/core.h      |  7 ++-
- .../media/platform/qcom/venus/pm_helpers.c    | 48 +++++++------------
- 3 files changed, 26 insertions(+), 41 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index a712dd4f02a5..ce206b709754 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -16,6 +16,7 @@
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <media/videobuf2-v4l2.h>
- #include <media/v4l2-mem2mem.h>
-@@ -114,7 +115,8 @@ static void venus_sys_error_handler(struct work_struct *work)
- 	pm_runtime_put_sync(core->dev);
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 695cce218e8c..f276956f2c5c 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -33,6 +33,7 @@
+ #include <linux/idr.h>
+ #include <linux/elf.h>
+ #include <linux/crc32.h>
++#include <linux/of_platform.h>
+ #include <linux/of_reserved_mem.h>
+ #include <linux/virtio_ids.h>
+ #include <linux/virtio_ring.h>
+@@ -2112,6 +2113,7 @@ EXPORT_SYMBOL(rproc_detach);
+ struct rproc *rproc_get_by_phandle(phandle phandle)
+ {
+ 	struct rproc *rproc = NULL, *r;
++	struct device_driver *driver;
+ 	struct device_node *np;
  
- 	for (i = 0; i < max_attempts; i++) {
--		if (!core->pmdomains[0] || !pm_runtime_active(core->pmdomains[0]))
-+		if (!core->pmdomains ||
-+		    !pm_runtime_active(core->pmdomains->pd_devs[0]))
- 			break;
- 		usleep_range(1000, 1500);
- 	}
-@@ -705,7 +707,7 @@ static const struct venus_resources sdm845_res_v2 = {
- 	.vcodec0_clks = { "vcodec0_core", "vcodec0_bus" },
- 	.vcodec1_clks = { "vcodec1_core", "vcodec1_bus" },
- 	.vcodec_clks_num = 2,
--	.vcodec_pmdomains = { "venus", "vcodec0", "vcodec1" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0", "vcodec1" },
- 	.vcodec_pmdomains_num = 3,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 2,
-@@ -754,7 +756,7 @@ static const struct venus_resources sc7180_res = {
- 	.clks_num = 3,
- 	.vcodec0_clks = { "vcodec0_core", "vcodec0_bus" },
- 	.vcodec_clks_num = 2,
--	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 1,
-@@ -811,7 +813,7 @@ static const struct venus_resources sm8250_res = {
- 	.resets_num = 2,
- 	.vcodec0_clks = { "vcodec0_core" },
- 	.vcodec_clks_num = 1,
--	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "mx", NULL },
- 	.vcodec_num = 1,
-@@ -870,7 +872,7 @@ static const struct venus_resources sc7280_res = {
- 	.clks_num = 3,
- 	.vcodec0_clks = {"vcodec_core", "vcodec_bus"},
- 	.vcodec_clks_num = 2,
--	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 1,
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 4a633261ece4..7ef341bf21cc 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -25,7 +25,6 @@
- 
- #define VIDC_CLKS_NUM_MAX		4
- #define VIDC_VCODEC_CLKS_NUM_MAX	2
--#define VIDC_PMDOMAINS_NUM_MAX		3
- #define VIDC_RESETS_NUM_MAX		2
- 
- extern int venus_fw_debug;
-@@ -72,7 +71,7 @@ struct venus_resources {
- 	const char * const vcodec0_clks[VIDC_VCODEC_CLKS_NUM_MAX];
- 	const char * const vcodec1_clks[VIDC_VCODEC_CLKS_NUM_MAX];
- 	unsigned int vcodec_clks_num;
--	const char * const vcodec_pmdomains[VIDC_PMDOMAINS_NUM_MAX];
-+	const char **vcodec_pmdomains;
- 	unsigned int vcodec_pmdomains_num;
- 	const char **opp_pmdomain;
- 	unsigned int vcodec_num;
-@@ -134,7 +133,7 @@ struct venus_format {
-  * @video_path: an interconnect handle to video to/from memory path
-  * @cpucfg_path: an interconnect handle to cpu configuration path
-  * @has_opp_table: does OPP table exist
-- * @pmdomains:	an array of pmdomains struct device pointers
-+ * @pmdomains:	a pointer to a list of pmdomains
-  * @opp_dl_venus: an device-link for device OPP
-  * @opp_pmdomain: an OPP power-domain
-  * @resets: an array of reset signals
-@@ -187,7 +186,7 @@ struct venus_core {
- 	struct icc_path *video_path;
- 	struct icc_path *cpucfg_path;
- 	bool has_opp_table;
--	struct device *pmdomains[VIDC_PMDOMAINS_NUM_MAX];
-+	struct dev_pm_domain_list *pmdomains;
- 	struct device_link *opp_dl_venus;
- 	struct device *opp_pmdomain;
- 	struct reset_control *resets[VIDC_RESETS_NUM_MAX];
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index a1b127caa90a..502822059498 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -455,7 +455,7 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret)
- 			return ret;
- 
--		ret = pm_runtime_put_sync(core->pmdomains[1]);
-+		ret = pm_runtime_put_sync(core->pmdomains->pd_devs[1]);
- 		if (ret < 0)
- 			return ret;
- 	}
-@@ -471,7 +471,7 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret)
- 			return ret;
- 
--		ret = pm_runtime_put_sync(core->pmdomains[2]);
-+		ret = pm_runtime_put_sync(core->pmdomains->pd_devs[2]);
- 		if (ret < 0)
- 			return ret;
- 	}
-@@ -484,7 +484,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 	int ret;
- 
- 	if (coreid_mask & VIDC_CORE_ID_1) {
--		ret = pm_runtime_get_sync(core->pmdomains[1]);
-+		ret = pm_runtime_get_sync(core->pmdomains->pd_devs[1]);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -502,7 +502,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 	}
- 
- 	if (coreid_mask & VIDC_CORE_ID_2) {
--		ret = pm_runtime_get_sync(core->pmdomains[2]);
-+		ret = pm_runtime_get_sync(core->pmdomains->pd_devs[2]);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -860,19 +860,18 @@ static int vcodec_domains_get(struct venus_core *core)
- 	struct device **opp_virt_dev;
- 	struct device *dev = core->dev;
- 	const struct venus_resources *res = core->res;
--	struct device *pd;
--	unsigned int i;
-+	struct dev_pm_domain_attach_data vcodec_data = {
-+		.pd_names = res->vcodec_pmdomains,
-+		.num_pd_names = res->vcodec_pmdomains_num,
-+		.pd_flags = PD_FLAG_NO_DEV_LINK,
-+	};
- 
- 	if (!res->vcodec_pmdomains_num)
- 		goto skip_pmdomains;
- 
--	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
--		pd = dev_pm_domain_attach_by_name(dev,
--						  res->vcodec_pmdomains[i]);
--		if (IS_ERR_OR_NULL(pd))
--			return pd ? PTR_ERR(pd) : -ENODATA;
--		core->pmdomains[i] = pd;
--	}
-+	ret = dev_pm_domain_attach_list(dev, &vcodec_data, &core->pmdomains);
-+	if (ret < 0)
-+		return ret;
- 
- skip_pmdomains:
- 	if (!core->res->opp_pmdomain)
-@@ -896,30 +895,14 @@ static int vcodec_domains_get(struct venus_core *core)
- 	return 0;
- 
- opp_attach_err:
--	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
--		if (IS_ERR_OR_NULL(core->pmdomains[i]))
--			continue;
--		dev_pm_domain_detach(core->pmdomains[i], true);
--	}
--
-+	dev_pm_domain_detach_list(core->pmdomains);
- 	return ret;
+ 	np = of_find_node_by_phandle(phandle);
+@@ -2122,7 +2124,26 @@ struct rproc *rproc_get_by_phandle(phandle phandle)
+ 	list_for_each_entry_rcu(r, &rproc_list, node) {
+ 		if (r->dev.parent && device_match_of_node(r->dev.parent, np)) {
+ 			/* prevent underlying implementation from being removed */
+-			if (!try_module_get(r->dev.parent->driver->owner)) {
++
++			/*
++			 * If the remoteproc's parent has a driver, the
++			 * remoteproc is not part of a cluster and we can use
++			 * that driver.
++			 */
++			driver = r->dev.parent->driver;
++
++			/*
++			 * If the remoteproc's parent does not have a driver,
++			 * look for the driver associated with the cluster.
++			 */
++			if (!driver) {
++				if (r->dev.parent->parent)
++					driver = r->dev.parent->parent->driver;
++				if (!driver)
++					break;
++			}
++
++			if (!try_module_get(driver->owner)) {
+ 				dev_err(&r->dev, "can't get owner\n");
+ 				break;
+ 			}
+@@ -2533,7 +2554,11 @@ EXPORT_SYMBOL(rproc_free);
+  */
+ void rproc_put(struct rproc *rproc)
+ {
+-	module_put(rproc->dev.parent->driver->owner);
++	if (rproc->dev.parent->driver)
++		module_put(rproc->dev.parent->driver->owner);
++	else
++		module_put(rproc->dev.parent->parent->driver->owner);
++
+ 	put_device(&rproc->dev);
  }
- 
- static void vcodec_domains_put(struct venus_core *core)
- {
--	const struct venus_resources *res = core->res;
--	unsigned int i;
-+	dev_pm_domain_detach_list(core->pmdomains);
- 
--	if (!res->vcodec_pmdomains_num)
--		goto skip_pmdomains;
--
--	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
--		if (IS_ERR_OR_NULL(core->pmdomains[i]))
--			continue;
--		dev_pm_domain_detach(core->pmdomains[i], true);
--	}
--
--skip_pmdomains:
- 	if (!core->has_opp_table)
- 		return;
- 
-@@ -1035,7 +1018,8 @@ static void core_put_v4(struct venus_core *core)
- static int core_power_v4(struct venus_core *core, int on)
- {
- 	struct device *dev = core->dev;
--	struct device *pmctrl = core->pmdomains[0];
-+	struct device *pmctrl = core->pmdomains ?
-+			core->pmdomains->pd_devs[0] : NULL;
- 	int ret = 0;
- 
- 	if (on == POWER_ON) {
+ EXPORT_SYMBOL(rproc_put);
+
+base-commit: 99f59b148871dadb9104366e3d25b120a97f897b
 -- 
-2.34.1
+2.25.1
 
 
