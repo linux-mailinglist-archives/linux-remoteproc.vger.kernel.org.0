@@ -1,290 +1,184 @@
-Return-Path: <linux-remoteproc+bounces-368-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-371-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7E5C843AED
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 31 Jan 2024 10:20:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4147843B26
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 31 Jan 2024 10:30:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C78BFB29D69
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 31 Jan 2024 09:16:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F7281F2C669
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 31 Jan 2024 09:30:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 002B37993A;
-	Wed, 31 Jan 2024 09:13:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B60269963;
+	Wed, 31 Jan 2024 09:30:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EyY4sPHw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TTsz9d5D"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5376E69D19
-	for <linux-remoteproc@vger.kernel.org>; Wed, 31 Jan 2024 09:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438D669956
+	for <linux-remoteproc@vger.kernel.org>; Wed, 31 Jan 2024 09:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706692390; cv=none; b=Qzjiuh4csLeb5rxiY/WyqguZH+4Hb9rHh4gCZ9PGcoYTLmerfa9tWo+wcIWXZHS1+3B2jA8NPfduZ16BmjUG8r0BlXx2YQzr2WrA8fIz+SMcXHM6uV+A4Ot52vle5qYafZDYUI9fyuy05NRQoyFEtcOobv54qUjj+nioMa/fa00=
+	t=1706693431; cv=none; b=VSPasM6Ytmp5hfY2TI5RW9meZSUKals8hNUuStJFN1XuCNo+wZR5Ux3/1FAmkF/5AUcAWqcOQ+uLCwfVBjkEa4UxJaZcROf1A24asxABtUIyCruEvtSVDFizdq2TV+G/stgErUtJtHvT71kY65koLSYvNyQaDI//iMC2fat/PjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706692390; c=relaxed/simple;
-	bh=kgV9w/3r2N+l2XD1xKQ4N3OKQGrm1FtckgzvTrOPwHY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bol98tJIUCQXitUL5Bow5w0CpW61TPlZ7kIe/oBIjix2EIk1Xd8ifC+g+eJT1Nff/6+xhzlb4+xIl6DtfNf7tt+QbC7obg6Cp/XxWdM2LqDXdt3MN4fTaI1V9frfPwn7MytkDoDWVO15rJnGqal0lo2edZ+bESpKQyZJQhUemLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EyY4sPHw; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706692388;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=60OE93oZxMpAy5PTfrRWb+NgmfRgxzqKxIV3hKWBwnk=;
-	b=EyY4sPHwwwjfdZAhqkccdaKTnHYjCP8wnUPJQtLia/5qcHRciZCBifprTgA10XerC7J+ts
-	B0GEAXwHpAAlLU38izQx5vW003vzR7FwaAFRjv1O48yHhhFayJf4z53ImVvPp8MX2QIcfx
-	GR5zD7arPADipFDZDhClsQRgc+jvdzc=
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
- [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-253-lxns5pSBNomBuFvJlkn3sQ-1; Wed, 31 Jan 2024 04:13:05 -0500
-X-MC-Unique: lxns5pSBNomBuFvJlkn3sQ-1
-Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-7d2dfe84153so3292319241.3
-        for <linux-remoteproc@vger.kernel.org>; Wed, 31 Jan 2024 01:13:05 -0800 (PST)
+	s=arc-20240116; t=1706693431; c=relaxed/simple;
+	bh=bmWztwT189Wa+/DkcC1wRGU1L587x8rOhwGOBzjiDSE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r359CbPSeHzqzpfhm5T34ueu0ZuxtmM7GidHLeVbW6b3Zvpi71EETovfE+MlT/gjPuDHyKyjTAHOBOYX+bEI0ELKzNNfCReWVqPY8mwPSHVSOR1em0N7xFOghIe8lu8VLmo755DcMveGUZjtYkHDNynwzMZ4hgPYIslgYpD+kgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TTsz9d5D; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a26f73732c5so614279266b.3
+        for <linux-remoteproc@vger.kernel.org>; Wed, 31 Jan 2024 01:30:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706693427; x=1707298227; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ICDsKAS7ESjBHyOA4kXHBONHifKEPJQGSK8cycVBuy8=;
+        b=TTsz9d5DhZ2WCWzadUMzylvH+Q7QTGkE/do5OxhTMqvvKsWljwmkxM4AqW2uXoRgVu
+         QSW5t6G7w6zgV/ypOHecuiJEUgxV0NY9rLlWpBMjLS9vYeKZMwEKJSX9GM+xqaZ+oL40
+         FaL956sMXRQSMw4ToJlm0CwVWXBqJkqFa4mXGSygBcjeWrtSKZ+N05mfi96Q6gQSETKW
+         yHQPV24eGQ0MzjL4xOLf4cpczMUNevBx/frDbWzi3ocoiABKRSBivQ19t1CoCHSjolBh
+         yNKsTtSdp2RR3tTDW4mRZHOO/sssomtJvl4FVSg49KlCmfsmP+kAQdhrk1OBLLIi3x35
+         zXxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706692385; x=1707297185;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=60OE93oZxMpAy5PTfrRWb+NgmfRgxzqKxIV3hKWBwnk=;
-        b=nCRiDrhNhzdpqQa1z7urouN/VTBFhS+ymRNTfMfQNjX7jLONQmiLpVKKkWgLAtw2Xn
-         X0skFCRRD5o/Jv9hMtkg8yx+uL9Az6QTUQCKd3AkLfFgqAz+3r1nr5HISwpBeGbkUabT
-         Wq795ElVQECG601287vvAiBD0n+ErMapSVXrDJJ6QHCf4b7USqdun/RyKE0OrXUKtrcY
-         voBq5vqeY/YsLkj3B3jxp3iIM/C+93UwyAgc3T/2I+RLrp0iAHHcLldrrkfZ6ROCn9yf
-         y3RYDoVR4JldXEtJDk/obTMJFrTambptRfCk/XQWXQuG9WBh3HgbHzWcShs3VkXe61Zr
-         06qg==
-X-Gm-Message-State: AOJu0YwMR+7gFfPDnUw5UxZSNGKq8SUGkWA9wQl2l1opOOWalahhhFpI
-	LAJxIScNUL4iccI5l8aeZTuWV8JPcRl0miL0mJnvqlVXut45bbcjjfthTg0Li2Sfj4dTQqch8Jn
-	KDPHVQRmWIgQTbHVIczOrT2RgUbrFMEOB4Rt1DiAIGjMF1+jJqTyZ1E+o9ujNXcNbLpafELAiAP
-	Xmmm5XfxRNnCY0kpu7ofe5inH8ArF5nqX1I8bfiRdFlg==
-X-Received: by 2002:a05:6102:3a72:b0:46b:3515:e946 with SMTP id bf18-20020a0561023a7200b0046b3515e946mr689879vsb.26.1706692384883;
-        Wed, 31 Jan 2024 01:13:04 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEgfhT0+kNvJvRq3b0MROwRjSrfE5RBznl53uEMT/GjL79yJlQ2dVHq4B1TZ1jfZQ3KLNrl4yziYblN9FfKH0U=
-X-Received: by 2002:a05:6102:3a72:b0:46b:3515:e946 with SMTP id
- bf18-20020a0561023a7200b0046b3515e946mr689871vsb.26.1706692384618; Wed, 31
- Jan 2024 01:13:04 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706693427; x=1707298227;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ICDsKAS7ESjBHyOA4kXHBONHifKEPJQGSK8cycVBuy8=;
+        b=bqWpjbZdqeifc5bv2n7BK22XhhJP6Xl1U8TNoMsGh8pQN+24IsfAqHgr+V1vf1Hvyb
+         0hxUYPLjmtP2zRH/Lg5JVvRQi0Zvjef6lgTZYu/J7HPk4fuVSA3v165zAE1OQx8ZGSsW
+         W/iR5ugD4abzUZY7U3HzOQImu6KFRGSdZfNK/Wjyt4p7cJFKGlpZM6lvuRr5NUKyHPBx
+         XxpsC/klk6HvsEn9U9/8AsZA1HXE+Va3PXPp/Dk06pTuUPRxtJgwIN0MRaAqasXi4lCH
+         CT3VdfY5dpeESb71K21COj9+Kdl7OPHShlDrVTdKUjrJ9N5cWCSdw4IRCutDFC5+gZih
+         x8Bg==
+X-Gm-Message-State: AOJu0YwTcfjqhZOIU1A9P+vb7xyg2qqgTHsp/N7bnZj1xAH8uAyZ0VBs
+	8vhzDcntSreOgsHQU1p6XOZrEV/8jO69Lof8bTefSksoaEYhsZozzgstaVqRbso=
+X-Google-Smtp-Source: AGHT+IGrVcvMI9FoMp3oRRPiCyaZkNJi+u88q8/q2mfDVcBMnWJf/RHpPtrRjkpcY5Fwi1LSRj5hsw==
+X-Received: by 2002:a17:906:e2cd:b0:a36:47fa:4b8c with SMTP id gr13-20020a170906e2cd00b00a3647fa4b8cmr772150ejb.9.1706693427367;
+        Wed, 31 Jan 2024 01:30:27 -0800 (PST)
+Received: from linaro.org ([79.115.23.25])
+        by smtp.gmail.com with ESMTPSA id hd11-20020a170907968b00b00a31906f280asm5985711ejc.193.2024.01.31.01.30.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jan 2024 01:30:26 -0800 (PST)
+Date: Wed, 31 Jan 2024 11:30:25 +0200
+From: Abel Vesa <abel.vesa@linaro.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Sibi Sankar <quic_sibis@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Sibi Sankar <quic_sibis@quicinc.com>
+Subject: Re: [PATCH 3/3] remoteproc: qcom_q6v5_pas: Unload lite firmware on
+ ADSP
+Message-ID: <ZboTMVx7SN1BBoaz@linaro.org>
+References: <20240129-x1e80100-remoteproc-v1-0-15d21ef58a4b@linaro.org>
+ <20240129-x1e80100-remoteproc-v1-3-15d21ef58a4b@linaro.org>
+ <CAA8EJporoBQQtrRWL5SS4qwpmu0rF6UMpaZXQ5t-qdvoW53XOA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130114224.86536-1-xuanzhuo@linux.alibaba.com> <20240130114224.86536-18-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <20240130114224.86536-18-xuanzhuo@linux.alibaba.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Wed, 31 Jan 2024 17:12:47 +0800
-Message-ID: <CACGkMEv2cyuesaTx899hwZt7uDdqwmAwXJ8fZDv00W9FbVbTpw@mail.gmail.com>
-Subject: Re: [PATCH vhost 17/17] virtio_net: sq support premapped mode
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: virtualization@lists.linux.dev, Richard Weinberger <richard@nod.at>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Hans de Goede <hdegoede@redhat.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Vadim Pasternak <vadimp@nvidia.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Cornelia Huck <cohuck@redhat.com>, 
-	Halil Pasic <pasic@linux.ibm.com>, Eric Farman <farman@linux.ibm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Benjamin Berg <benjamin.berg@intel.com>, 
-	Yang Li <yang.lee@linux.alibaba.com>, linux-um@lists.infradead.org, 
-	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-	linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org, 
-	kvm@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJporoBQQtrRWL5SS4qwpmu0rF6UMpaZXQ5t-qdvoW53XOA@mail.gmail.com>
 
-On Tue, Jan 30, 2024 at 7:43=E2=80=AFPM Xuan Zhuo <xuanzhuo@linux.alibaba.c=
-om> wrote:
->
-> If the xsk is enabling, the xsk tx will share the send queue.
-> But the xsk requires that the send queue use the premapped mode.
-> So the send queue must support premapped mode.
->
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> ---
->  drivers/net/virtio_net.c | 167 ++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 163 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 226ab830870e..cf0c67380b07 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -46,6 +46,7 @@ module_param(napi_tx, bool, 0644);
->  #define VIRTIO_XDP_REDIR       BIT(1)
->
->  #define VIRTIO_XDP_FLAG        BIT(0)
-> +#define VIRTIO_DMA_FLAG        BIT(1)
->
->  /* RX packet size EWMA. The average packet size is used to determine the=
- packet
->   * buffer size when refilling RX rings. As the entire RX ring may be ref=
-illed
-> @@ -140,6 +141,21 @@ struct virtnet_rq_dma {
->         u16 need_sync;
->  };
->
-> +struct virtnet_sq_dma {
-> +       union {
-> +               struct virtnet_sq_dma *next;
-> +               void *data;
-> +       };
-> +       dma_addr_t addr;
-> +       u32 len;
-> +       bool is_tail;
-> +};
-> +
-> +struct virtnet_sq_dma_head {
-> +       struct virtnet_sq_dma *free;
-> +       struct virtnet_sq_dma *head;
+On 24-01-29 17:17:28, Dmitry Baryshkov wrote:
+> On Mon, 29 Jan 2024 at 15:35, Abel Vesa <abel.vesa@linaro.org> wrote:
+> >
+> > From: Sibi Sankar <quic_sibis@quicinc.com>
+> >
+> > The UEFI loads a lite variant of the ADSP firmware to support charging
+> > use cases. The kernel needs to unload and reload it with the firmware
+> > that has full feature support for audio. This patch arbitarily shutsdown
+> > the lite firmware before loading the full firmware.
+> >
+> > Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> >  drivers/remoteproc/qcom_q6v5_pas.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+> > index 083d71f80e5c..4f6940368eb4 100644
+> > --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> > +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> > @@ -39,6 +39,7 @@ struct adsp_data {
+> >         const char *dtb_firmware_name;
+> >         int pas_id;
+> >         int dtb_pas_id;
+> > +       int lite_pas_id;
+> >         unsigned int minidump_id;
+> >         bool auto_boot;
+> >         bool decrypt_shutdown;
+> > @@ -72,6 +73,7 @@ struct qcom_adsp {
+> >         const char *dtb_firmware_name;
+> >         int pas_id;
+> >         int dtb_pas_id;
+> > +       int lite_pas_id;
+> >         unsigned int minidump_id;
+> >         int crash_reason_smem;
+> >         bool decrypt_shutdown;
+> > @@ -210,6 +212,10 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+> >         /* Store firmware handle to be used in adsp_start() */
+> >         adsp->firmware = fw;
+> >
+> > +       /* WIP: Shutdown the ADSP if it's running a lite version of the firmware*/
+> 
+> Why is it still marked as WIP?
 
-Any reason the head must be a pointer instead of a simple index?
+AFAIU, there was more to be done here w.r.t. preloaded lite version
+firmware.
 
-> +};
-> +
->  /* Internal representation of a send virtqueue */
->  struct send_queue {
->         /* Virtqueue associated with this send _queue */
-> @@ -159,6 +175,8 @@ struct send_queue {
->
->         /* Record whether sq is in reset state. */
->         bool reset;
-> +
-> +       struct virtnet_sq_dma_head dmainfo;
->  };
->
->  /* Internal representation of a receive virtqueue */
-> @@ -348,6 +366,131 @@ static struct xdp_frame *ptr_to_xdp(void *ptr)
->         return (struct xdp_frame *)((unsigned long)ptr & ~VIRTIO_XDP_FLAG=
-);
->  }
->
-> +static inline void *virtnet_sq_unmap(struct send_queue *sq, void *data)
-> +{
-> +       struct virtnet_sq_dma *head, *tail;
-> +
-> +       if (!((unsigned long)data & VIRTIO_DMA_FLAG))
-> +               return data;
-> +
-> +       head =3D (void *)((unsigned long)data & ~VIRTIO_DMA_FLAG);
-> +
-> +       tail =3D head;
-> +
-> +       while (true) {
-> +               virtqueue_dma_unmap_page_attrs(sq->vq, tail->addr, tail->=
-len,
-> +                                              DMA_TO_DEVICE, 0);
-> +
-> +               if (tail->is_tail)
-> +                       break;
-> +
-> +               tail =3D tail->next;
-> +       }
-> +
-> +       data =3D tail->data;
-> +       tail->is_tail =3D false;
-> +
-> +       tail->next =3D sq->dmainfo.free;
-> +       sq->dmainfo.free =3D head;
-> +
-> +       return data;
-> +}
-> +
-> +static void *virtnet_sq_dma_splice(struct send_queue *sq,
-> +                                  struct virtnet_sq_dma *head,
-> +                                  struct virtnet_sq_dma *tail,
-> +                                  void *data)
-> +{
-> +       sq->dmainfo.free =3D tail->next;
-> +
-> +       tail->is_tail =3D true;
-> +       tail->data =3D data;
-> +
-> +       head =3D (void *)((unsigned long)head | VIRTIO_DMA_FLAG);
-> +
-> +       return head;
-> +}
-> +
-> +static struct virtnet_sq_dma *virtnet_sq_map_sg(struct send_queue *sq, i=
-nt nents, void *data)
-> +{
-> +       struct virtnet_sq_dma *head, *tail, *p;
-> +       struct scatterlist *sg;
-> +       dma_addr_t addr;
-> +       int i;
-> +
-> +       head =3D sq->dmainfo.free;
-> +       p =3D head;
-> +
-> +       tail =3D NULL;
-> +
-> +       for_each_sg(sq->sg, sg, nents, i) {
-> +               addr =3D virtqueue_dma_map_page_attrs(sq->vq, sg_page(sg)=
-,
-> +                                                   sg->offset, sg->lengt=
-h,
-> +                                                   DMA_TO_DEVICE, 0);
-> +               if (virtqueue_dma_mapping_error(sq->vq, addr))
-> +                       goto err;
-> +
-> +               sg->dma_address =3D addr;
-> +
-> +               tail =3D p;
-> +               tail->addr =3D sg->dma_address;
-> +               tail->len =3D sg->length;
-> +
-> +               p =3D p->next;
-> +       }
-> +
-> +       return virtnet_sq_dma_splice(sq, head, tail, data);
-> +
-> +err:
-> +       if (tail)
-> +               virtnet_sq_unmap(sq, virtnet_sq_dma_splice(sq, head, tail=
-, data));
-> +
-> +       return NULL;
-> +}
-> +
-> +static int virtnet_add_outbuf(struct send_queue *sq, u32 num, void *data=
-)
-> +{
-> +       int ret;
-> +
-> +       if (sq->vq->premapped) {
-> +               data =3D virtnet_sq_map_sg(sq, num, data);
-> +               if (!data)
-> +                       return -ENOMEM;
-> +       }
-> +
-> +       ret =3D virtqueue_add_outbuf(sq->vq, sq->sg, num, data, GFP_ATOMI=
-C);
-> +       if (ret && sq->vq->premapped)
-> +               virtnet_sq_unmap(sq, data);
-> +
-> +       return ret;
-> +}
-> +
-> +static int virtnet_sq_init_dma_mate(struct send_queue *sq)
-> +{
-> +       struct virtnet_sq_dma *d;
-> +       int size, i;
-> +
-> +       size =3D virtqueue_get_vring_size(sq->vq);
-> +
-> +       size +=3D MAX_SKB_FRAGS + 2;
+Later, was agreed that that is not case.
 
-Is this enough for the case where an indirect descriptor is used?
+So maybe I just need to drop the comment.
 
-Thanks
+Sibi, can you confirm?
 
+> 
+> > +       if (adsp->lite_pas_id)
+> > +               ret = qcom_scm_pas_shutdown(adsp->lite_pas_id);
+> > +
+> >         if (adsp->dtb_pas_id) {
+> >                 ret = request_firmware(&adsp->dtb_firmware, adsp->dtb_firmware_name, adsp->dev);
+> >                 if (ret) {
+> > @@ -693,6 +699,7 @@ static int adsp_probe(struct platform_device *pdev)
+> >         adsp->rproc = rproc;
+> >         adsp->minidump_id = desc->minidump_id;
+> >         adsp->pas_id = desc->pas_id;
+> > +       adsp->lite_pas_id = desc->lite_pas_id;
+> >         adsp->info_name = desc->sysmon_name;
+> >         adsp->decrypt_shutdown = desc->decrypt_shutdown;
+> >         adsp->region_assign_idx = desc->region_assign_idx;
+> > @@ -990,6 +997,7 @@ static const struct adsp_data x1e80100_adsp_resource = {
+> >         .dtb_firmware_name = "adsp_dtb.mdt",
+> >         .pas_id = 1,
+> >         .dtb_pas_id = 0x24,
+> > +       .lite_pas_id = 0x1f,
+> >         .minidump_id = 5,
+> >         .auto_boot = true,
+> >         .proxy_pd_names = (char*[]){
+> >
+> > --
+> > 2.34.1
+> >
+> >
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry
 
