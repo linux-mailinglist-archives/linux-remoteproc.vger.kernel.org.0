@@ -1,147 +1,171 @@
-Return-Path: <linux-remoteproc+bounces-427-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-407-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C16AF846CEF
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Feb 2024 10:49:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCDF1846C55
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Feb 2024 10:40:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D51D0B3015C
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Feb 2024 09:46:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E02951C29F39
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Feb 2024 09:40:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE057A70F;
-	Fri,  2 Feb 2024 09:44:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E7AC77F3C;
+	Fri,  2 Feb 2024 09:39:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="GDzwbbpY"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="YcGIdsch"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B067182C5
-	for <linux-remoteproc@vger.kernel.org>; Fri,  2 Feb 2024 09:43:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CB777F24;
+	Fri,  2 Feb 2024 09:39:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706867041; cv=none; b=Vf6l956x/xdbSUArpiRoIr8YySx4tgIBQj7i9b7OOa+K6XnGO2J73sHJHjRZpXMs73tJETR1vnb8EbpYzH9ntnnsviFL/uWJAiPnJisF2pS7G5g6gHbKYDD5U4BcEgmCblVJMGq+MwqyMrhbYJHdU3AccLja0qUGDz8XwauLjuo=
+	t=1706866798; cv=none; b=NOUWNXvS0/kXm5f4fmwhPxwgpPJj1Cg4yuqCiXjZqhLtkGh+LmcB3LveLMhliNojOMhikOpyvsGJBpbVCrbgQkHzqDEhZSYCbfB4HC5WUQLSqOOMlmEkWAwo36n0sDFGvQOmgvXg9jHsDjr+ioycO3FN/XN+RcveDXYoC2Kes3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706867041; c=relaxed/simple;
-	bh=0gSponWPD5pRMgPNjQiZK7Ym17xVjhx81lCmCyLMrhs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=auKJ1g8BHNH2dSas+ivyfWxDPBIe7VkSKCgKOGyIv1ga/OcYEuJm7efLXVCxjUxqu4y3GcAgksAwn7CP8UESmszYgop2pY325BHRRtMgszBGQNJXnttrc/to4JeLTgRvCs/FB9EvRVZI/IAyCnYGqajzdjKluUzA6zy9/ha6IwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=GDzwbbpY; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4128jYtg029462;
-	Fri, 2 Feb 2024 10:14:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	selector1; bh=beRBQd08SkWcu2yrQWWKIySWaH5YZPesRpx3lxFNk0g=; b=GD
-	zwbbpYg1lYJuqHZXm1+TV2WchPCFP/0NuyUhZx7ltSJqDakBk8sVsBweFCC8y0P0
-	UAN/xKa3vTJYxKwJcQ9HGLB3+X4AzesI4CLkq0eUS46CFrsAKtOvDIOmAnT5cdKR
-	HZiiV31rloyeBCCTEOkAPuJYKiIXtPW06QplPhJ6nIUnIRHXyXwIY2mVElrCamio
-	P84FA8qxpqcTdt5qq7Y496zRA2xxFk0CMo1rBrdF4NsHP2Xrfg/GlNxZtm7n0ExQ
-	AZhh3I/aDSaKWSohoVCATOo+a/SOZKllVMCrP6mQH4NRt+E3UIQynMImsOO/zWQ2
-	kBgxGkNziNZIkTp5kMXA==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3w0puj1jag-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 Feb 2024 10:14:10 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F097D100050;
-	Fri,  2 Feb 2024 10:14:09 +0100 (CET)
-Received: from Webmail-eu.st.com (eqndag1node6.st.com [10.75.129.135])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C7E6222FA5A;
-	Fri,  2 Feb 2024 10:14:09 +0100 (CET)
-Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE6.st.com
- (10.75.129.135) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 2 Feb
- 2024 10:14:09 +0100
-Received: from [10.252.18.177] (10.252.18.177) by SAFDAG1NODE1.st.com
- (10.75.90.17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 2 Feb
- 2024 10:14:09 +0100
-Message-ID: <cc9926d2-4341-47b3-8b00-a33fbf653744@foss.st.com>
-Date: Fri, 2 Feb 2024 10:14:08 +0100
+	s=arc-20240116; t=1706866798; c=relaxed/simple;
+	bh=oNm9Qw7hwiq6aJIott3Cohv2DrbIJbpdeI2rTKx8nhQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SN3vBdrdXTWCJVOxDrSX/9ZgWcfST9x5Pa94d886CpImLs40pMMUhhXkeAHpAKJe/7cpcQuWqSTzdPAg8NOvW4A2JK+kucMVtB6EzCQig6QbnGKhl+9qABo2/mCNEjDspbDMXYentMfpppjLhnl2BlcAEek9pPbUFTxEazymvCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=YcGIdsch; arc=none smtp.client-ip=115.124.30.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1706866794; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=peR8A4izAqgzsimxR/4ieXlIWtvCe7qrSUa+LFRRffU=;
+	b=YcGIdschgRCM3PRajhnA5CwMhce1rXTi44w+vkk4EqXYOKrWCXadPvkHhlRgnGIDFSPqjIxRkrktIkmvdKUu2uvkVLmUKl2hqrn+PZ+aSamm8MyDg2ucJDn914ppPcHLw4qH5734cP8jIcqvY5lhb598FE10vTtcc2K4M9hvUhQ=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=36;SR=0;TI=SMTPD_---0W.wc6kr_1706866791;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W.wc6kr_1706866791)
+          by smtp.aliyun-inc.com;
+          Fri, 02 Feb 2024 17:39:52 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: virtualization@lists.linux.dev
+Cc: Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Vadim Pasternak <vadimp@nvidia.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Halil Pasic <pasic@linux.ibm.com>,
+	Eric Farman <farman@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Benjamin Berg <benjamin.berg@intel.com>,
+	linux-um@lists.infradead.org,
+	netdev@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	kvm@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH vhost v1 00/19] virtio: drivers maintain dma info for premapped vq
+Date: Fri,  2 Feb 2024 17:39:32 +0800
+Message-Id: <20240202093951.120283-1-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC] Passing device-tree to remoteproc?
-Content-Language: en-US
-To: Yann Sionneau <ysionneau@kalrayinc.com>,
-        <linux-remoteproc@vger.kernel.org>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        Julian Vetter <jvetter@kalrayinc.com>,
-        "Jonathan Borne" <jborne@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Damien Hedde <dhedde@kalrayinc.com>,
-        Titouan Huard <thuard@kalrayinc.com>
-References: <9c32f94e-869a-16d3-6bba-064082518ce4@kalrayinc.com>
- <f67cd822-4e29-71f2-7c42-e11dbaa6cd8c@kalrayinc.com>
-From: Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Organization: STMicroelectronics
-In-Reply-To: <f67cd822-4e29-71f2-7c42-e11dbaa6cd8c@kalrayinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SAFDAG1NODE1.st.com
- (10.75.90.17)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-02_03,2024-01-31_01,2023-05-22_02
+X-Git-Hash: 4c7bacd05cb8
+Content-Transfer-Encoding: 8bit
 
-Hello Yann,
+As discussed:
+http://lore.kernel.org/all/CACGkMEvq0No8QGC46U4mGsMtuD44fD_cfLcPaVmJ3rHYqRZxYg@mail.gmail.com
 
-On 1/30/24 11:20, Yann Sionneau wrote:
-> Hello,
-> 
-> On 1/23/24 14:32, Yann Sionneau wrote:
->> Hello,
->>
->> How interesting to upstream Linux would it be to have a way for Linux kernel
->> or user space to pass a device tree blob to remote processor when starting a
->> remote proc FW?
->>
->> For instance we could imagine something like this:
->>
->> 1/ user space does echo -n firmware.elf >
->> /sys/class/remoteproc/remoteprocXXX/firmware
->>
->> 2/ user space does echo -n my_dt.dtb > /sys/class/remoteproc/remoteprocXXX/dtb
->>
->> 3/ user space does echo start > /sys/class/remoteproc/remoteprocXXX/state
-> 
-> Any opinion on this proposal?
+If the virtio is premapped mode, the driver should manage the dma info by self.
+So the virtio core should not store the dma info.
+So we can release the memory used to store the dma info.
 
+But if the desc_extra has not dma info, we face a new question,
+it is hard to get the dma info of the desc with indirect flag.
+For split mode, that is easy from desc, but for the packed mode,
+it is hard to get the dma info from the desc. And for hardening
+the dma unmap is saft, we should store the dma info of indirect
+descs.
 
-Interesting use case. There is no concrete need in ST, but it raises the
-question of providing extra data with the firmware to the remote processor.
+So I introduce the "structure the indirect desc table" to
+allocate space to store dma info with the desc table.
 
-In a first approach, my personal feeling is that the ELF and the DTB are
-interdependent.
-So having a mechanism to ensure coherency between both could be important.
+On the other side, we mix the descs with indirect flag
+with other descs together to share the unmap api. That
+is complex. I found if we we distinguish the descs with
+VRING_DESC_F_INDIRECT before unmap, thing will be clearer.
 
-Then it could be interesting to address the need in a more generic way
-to be able to transfer extra data, for instance an audio tuning for a DSP.
-Adding a specific sysfs for each specific need could not be a good idea in long
-term.
+Because of the dma array is allocated in the find_vqs(),
+so I introduce a new parameter to find_vqs().
 
-Have you looked into some other approaches such as adding the DTB as a specific
-section of your ELF file,or adding the support of a new format that packages
-everything together (for instance FIP)?
+Please review.
 
-Regards,
-Arnaud
+Thanks
 
-> 
-> Thanks!
-> 
-> Regards,
-> 
+v1:
+    1. rename transport_vq_config to vq_transport_config
+    2. virtio-net set dma meta number to (ring-size + 1)(MAX_SKB_FRGAS +2)
+    3. introduce virtqueue_dma_map_sg_attrs
+    4. separate vring_create_virtqueue to an independent commit
+
+Xuan Zhuo (19):
+  virtio_ring: introduce vring_need_unmap_buffer
+  virtio_ring: packed: remove double check of the unmap ops
+  virtio_ring: packed: structure the indirect desc table
+  virtio_ring: split: remove double check of the unmap ops
+  virtio_ring: split: structure the indirect desc table
+  virtio_ring: no store dma info when unmap is not needed
+  virtio: find_vqs: pass struct instead of multi parameters
+  virtio: vring_create_virtqueue: pass struct instead of multi
+    parameters
+  virtio: vring_new_virtqueue(): pass struct instead of multi parameters
+  virtio_ring: reuse the parameter struct of find_vqs()
+  virtio: find_vqs: add new parameter premapped
+  virtio_ring: export premapped to driver by struct virtqueue
+  virtio_net: set premapped mode by find_vqs()
+  virtio_ring: remove api of setting vq premapped
+  virtio_ring: introduce dma map api for page
+  virtio_ring: introduce virtqueue_dma_map_sg_attrs
+  virtio_net: unify the code for recycling the xmit ptr
+  virtio_net: rename free_old_xmit_skbs to free_old_xmit
+  virtio_net: sq support premapped mode
+
+ arch/um/drivers/virtio_uml.c             |  31 +-
+ drivers/net/virtio_net.c                 | 291 +++++++---
+ drivers/platform/mellanox/mlxbf-tmfifo.c |  24 +-
+ drivers/remoteproc/remoteproc_virtio.c   |  31 +-
+ drivers/s390/virtio/virtio_ccw.c         |  33 +-
+ drivers/virtio/virtio_mmio.c             |  30 +-
+ drivers/virtio/virtio_pci_common.c       |  59 +-
+ drivers/virtio/virtio_pci_common.h       |   9 +-
+ drivers/virtio/virtio_pci_legacy.c       |  16 +-
+ drivers/virtio/virtio_pci_modern.c       |  24 +-
+ drivers/virtio/virtio_ring.c             | 698 ++++++++++++-----------
+ drivers/virtio/virtio_vdpa.c             |  45 +-
+ include/linux/virtio.h                   |  13 +-
+ include/linux/virtio_config.h            |  48 +-
+ include/linux/virtio_ring.h              |  82 +--
+ tools/virtio/virtio_test.c               |   4 +-
+ tools/virtio/vringh_test.c               |  28 +-
+ 17 files changed, 848 insertions(+), 618 deletions(-)
+
+--
+2.32.0.3.g01195cf9f
+
 
