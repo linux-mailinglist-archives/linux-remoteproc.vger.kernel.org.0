@@ -1,261 +1,147 @@
-Return-Path: <linux-remoteproc+bounces-406-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-427-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B564484664F
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Feb 2024 04:06:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C16AF846CEF
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Feb 2024 10:49:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DAEB28C51D
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Feb 2024 03:06:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D51D0B3015C
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Feb 2024 09:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A40F6C131;
-	Fri,  2 Feb 2024 03:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE057A70F;
+	Fri,  2 Feb 2024 09:44:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WKpRfWkg"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="GDzwbbpY"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D009AF4EF
-	for <linux-remoteproc@vger.kernel.org>; Fri,  2 Feb 2024 03:06:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B067182C5
+	for <linux-remoteproc@vger.kernel.org>; Fri,  2 Feb 2024 09:43:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706843198; cv=none; b=TNSo/wDjEFFG4tvLYCKvJUnAupRzQr+SDpHXGvtGU6khHy3qXwNzvJqzhsu6H/WrigVgFxdHcMtkxpPvPiqTBQCWL6CjoEhJ5I/pjOB6geyyXhH9uNV/baLSHEQDwjQM81KhLwStJdZvkN27wG9l83PcAKAwPEAVSPmBfqIR+9c=
+	t=1706867041; cv=none; b=Vf6l956x/xdbSUArpiRoIr8YySx4tgIBQj7i9b7OOa+K6XnGO2J73sHJHjRZpXMs73tJETR1vnb8EbpYzH9ntnnsviFL/uWJAiPnJisF2pS7G5g6gHbKYDD5U4BcEgmCblVJMGq+MwqyMrhbYJHdU3AccLja0qUGDz8XwauLjuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706843198; c=relaxed/simple;
-	bh=QYZqJFdgYNLavms/nUo1ysLWMYWkecHneGmYCeW0PAI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CEd7K3tXx2idCuqRBiqr+mcRMn35nhhdGRn2t8MIiFqjysU0PSOZDK6beTc5lli6l4xHmOsjEWyWaT1jYNYa/ASrS6U6eAvkqF0CJOLip6CagPiIXsF+088dxloShZh+kJ2/Q/jTYflSpn8+Jf2i+FW5vBd7xqjocHlGlLblrng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WKpRfWkg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706843195;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=p5MXqqYcm0nwNL3MENOJLZhnS+rtBOxM/i4dVzBZQWc=;
-	b=WKpRfWkgaes3heAfZjfNQ+gVxfvS9KOX2Sw9rPGXu8vbsDiuhxFmJWDiac3upMXf4OksBd
-	X0CJlqmfJTl/rSf4wlX8/I6ADNi0KLllnPqayNZnUQaxI3HIVg4SWNVNyjy8lIJ6VT14+K
-	6Ggw0KILmugkMaOgS3FkluoWjZr6ot4=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-681-DRE1CKo9PrmM5RZD5soj-g-1; Thu, 01 Feb 2024 22:06:34 -0500
-X-MC-Unique: DRE1CKo9PrmM5RZD5soj-g-1
-Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-598cba51c4eso1468061eaf.0
-        for <linux-remoteproc@vger.kernel.org>; Thu, 01 Feb 2024 19:06:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706843193; x=1707447993;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p5MXqqYcm0nwNL3MENOJLZhnS+rtBOxM/i4dVzBZQWc=;
-        b=gzuU2zPh7K5IBAvrvDVP/8MSoo4O0EYrZ8xoggb7XV4PyM1O2J7UbX//4pCeR6/Mnt
-         98LkVJ7ZuBYI5aZ/B3M4jlcUxXRT8XZxFneTxvh39/N4HcOv35Tt7kG9OINH0FDmE4bu
-         lCfoB0ni6IcxhgKdZOp96mq5p2k28gZalxzIciSxK/VSQdQomARrOK2tGtOfETyYbWh3
-         KUakrjMjGvaa7MHLeu+1nEdfD1m6kVgwcXBWv88Bw6Ld440xIscUSDHs7PMY3jjLIjbB
-         qXaFVSh06vgzz3/CJGj3DCr+EpMNLlEry4z4Xf3vOpHNrA4W9Tq4W9cVZn5fpEr6WBBj
-         t1tw==
-X-Gm-Message-State: AOJu0YxVTHM1uQyphp8JSLAjico9BJd2LZYuDbm+woGLg6FxHEiaRY+o
-	a72Oj/BB7E3/zX+I1SGxRq0rf0tgtEvL70pahr/AV/WarACkIENnzcRCL0nUK7JqjlbOAhCK/ls
-	PhxX6mAlLE7EjHuLsTwmSGaW+tEtpfu6YgLnfHGt8eozx5kMxxlj8IUFmd7cV/g8BrVWy2yzf7v
-	QlUw7D+9IosholjAjRfMnghQX5eI3wfCqjazguaptjAw==
-X-Received: by 2002:a05:6358:7e8b:b0:178:cb3e:b74c with SMTP id o11-20020a0563587e8b00b00178cb3eb74cmr721189rwn.28.1706843193275;
-        Thu, 01 Feb 2024 19:06:33 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGnnf0uYApnwJ8ot71PqIV/dtLwp0t3UGDcHzLTReGmnUTng7hr5CvYF6Rt6fg0aixEyvGJkwHqZoRSyzJB6TI=
-X-Received: by 2002:a05:6358:7e8b:b0:178:cb3e:b74c with SMTP id
- o11-20020a0563587e8b00b00178cb3eb74cmr721167rwn.28.1706843192958; Thu, 01 Feb
- 2024 19:06:32 -0800 (PST)
+	s=arc-20240116; t=1706867041; c=relaxed/simple;
+	bh=0gSponWPD5pRMgPNjQiZK7Ym17xVjhx81lCmCyLMrhs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=auKJ1g8BHNH2dSas+ivyfWxDPBIe7VkSKCgKOGyIv1ga/OcYEuJm7efLXVCxjUxqu4y3GcAgksAwn7CP8UESmszYgop2pY325BHRRtMgszBGQNJXnttrc/to4JeLTgRvCs/FB9EvRVZI/IAyCnYGqajzdjKluUzA6zy9/ha6IwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=GDzwbbpY; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4128jYtg029462;
+	Fri, 2 Feb 2024 10:14:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	selector1; bh=beRBQd08SkWcu2yrQWWKIySWaH5YZPesRpx3lxFNk0g=; b=GD
+	zwbbpYg1lYJuqHZXm1+TV2WchPCFP/0NuyUhZx7ltSJqDakBk8sVsBweFCC8y0P0
+	UAN/xKa3vTJYxKwJcQ9HGLB3+X4AzesI4CLkq0eUS46CFrsAKtOvDIOmAnT5cdKR
+	HZiiV31rloyeBCCTEOkAPuJYKiIXtPW06QplPhJ6nIUnIRHXyXwIY2mVElrCamio
+	P84FA8qxpqcTdt5qq7Y496zRA2xxFk0CMo1rBrdF4NsHP2Xrfg/GlNxZtm7n0ExQ
+	AZhh3I/aDSaKWSohoVCATOo+a/SOZKllVMCrP6mQH4NRt+E3UIQynMImsOO/zWQ2
+	kBgxGkNziNZIkTp5kMXA==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3w0puj1jag-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Feb 2024 10:14:10 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id F097D100050;
+	Fri,  2 Feb 2024 10:14:09 +0100 (CET)
+Received: from Webmail-eu.st.com (eqndag1node6.st.com [10.75.129.135])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C7E6222FA5A;
+	Fri,  2 Feb 2024 10:14:09 +0100 (CET)
+Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE6.st.com
+ (10.75.129.135) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 2 Feb
+ 2024 10:14:09 +0100
+Received: from [10.252.18.177] (10.252.18.177) by SAFDAG1NODE1.st.com
+ (10.75.90.17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 2 Feb
+ 2024 10:14:09 +0100
+Message-ID: <cc9926d2-4341-47b3-8b00-a33fbf653744@foss.st.com>
+Date: Fri, 2 Feb 2024 10:14:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130114224.86536-1-xuanzhuo@linux.alibaba.com>
- <20240130114224.86536-18-xuanzhuo@linux.alibaba.com> <CACGkMEv2cyuesaTx899hwZt7uDdqwmAwXJ8fZDv00W9FbVbTpw@mail.gmail.com>
- <1706757660.3554723-2-xuanzhuo@linux.alibaba.com> <CACGkMEtwWAijrLOrdgJ9ZPx5VjSfJtwVm1k1U8fsg9+tvgRHxg@mail.gmail.com>
- <1706766995.312187-2-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <1706766995.312187-2-xuanzhuo@linux.alibaba.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Fri, 2 Feb 2024 11:06:21 +0800
-Message-ID: <CACGkMEt-sveBvAGTVsqpFSAoDpdUk66oT8wtPASu7dhAb12oJw@mail.gmail.com>
-Subject: Re: [PATCH vhost 17/17] virtio_net: sq support premapped mode
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: virtualization@lists.linux.dev, Richard Weinberger <richard@nod.at>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Hans de Goede <hdegoede@redhat.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Vadim Pasternak <vadimp@nvidia.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Cornelia Huck <cohuck@redhat.com>, 
-	Halil Pasic <pasic@linux.ibm.com>, Eric Farman <farman@linux.ibm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Benjamin Berg <benjamin.berg@intel.com>, 
-	Yang Li <yang.lee@linux.alibaba.com>, linux-um@lists.infradead.org, 
-	netdev@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
-	linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org, 
-	kvm@vger.kernel.org, bpf@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] Passing device-tree to remoteproc?
+Content-Language: en-US
+To: Yann Sionneau <ysionneau@kalrayinc.com>,
+        <linux-remoteproc@vger.kernel.org>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier
+	<mathieu.poirier@linaro.org>,
+        Julian Vetter <jvetter@kalrayinc.com>,
+        "Jonathan Borne" <jborne@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Damien Hedde <dhedde@kalrayinc.com>,
+        Titouan Huard <thuard@kalrayinc.com>
+References: <9c32f94e-869a-16d3-6bba-064082518ce4@kalrayinc.com>
+ <f67cd822-4e29-71f2-7c42-e11dbaa6cd8c@kalrayinc.com>
+From: Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <f67cd822-4e29-71f2-7c42-e11dbaa6cd8c@kalrayinc.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SAFDAG1NODE1.st.com
+ (10.75.90.17)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-02_03,2024-01-31_01,2023-05-22_02
 
-On Thu, Feb 1, 2024 at 2:01=E2=80=AFPM Xuan Zhuo <xuanzhuo@linux.alibaba.co=
-m> wrote:
->
-> On Thu, 1 Feb 2024 13:36:46 +0800, Jason Wang <jasowang@redhat.com> wrote=
-:
-> > On Thu, Feb 1, 2024 at 11:28=E2=80=AFAM Xuan Zhuo <xuanzhuo@linux.aliba=
-ba.com> wrote:
-> > >
-> > > On Wed, 31 Jan 2024 17:12:47 +0800, Jason Wang <jasowang@redhat.com> =
-wrote:
-> > > > On Tue, Jan 30, 2024 at 7:43=E2=80=AFPM Xuan Zhuo <xuanzhuo@linux.a=
-libaba.com> wrote:
-> > > > >
-> > > > > If the xsk is enabling, the xsk tx will share the send queue.
-> > > > > But the xsk requires that the send queue use the premapped mode.
-> > > > > So the send queue must support premapped mode.
-> > > > >
-> > > > > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > > > > ---
-> > > > >  drivers/net/virtio_net.c | 167 +++++++++++++++++++++++++++++++++=
-+++++-
-> > > > >  1 file changed, 163 insertions(+), 4 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > > > > index 226ab830870e..cf0c67380b07 100644
-> > > > > --- a/drivers/net/virtio_net.c
-> > > > > +++ b/drivers/net/virtio_net.c
-> > > > > @@ -46,6 +46,7 @@ module_param(napi_tx, bool, 0644);
-> > > > >  #define VIRTIO_XDP_REDIR       BIT(1)
-> > > > >
-> > > > >  #define VIRTIO_XDP_FLAG        BIT(0)
-> > > > > +#define VIRTIO_DMA_FLAG        BIT(1)
-> > > > >
-> > > > >  /* RX packet size EWMA. The average packet size is used to deter=
-mine the packet
-> > > > >   * buffer size when refilling RX rings. As the entire RX ring ma=
-y be refilled
-> > > > > @@ -140,6 +141,21 @@ struct virtnet_rq_dma {
-> > > > >         u16 need_sync;
-> > > > >  };
-> > > > >
-> > > > > +struct virtnet_sq_dma {
-> > > > > +       union {
-> > > > > +               struct virtnet_sq_dma *next;
-> > > > > +               void *data;
-> > > > > +       };
-> > > > > +       dma_addr_t addr;
-> > > > > +       u32 len;
-> > > > > +       bool is_tail;
-> > > > > +};
-> > > > > +
-> > > > > +struct virtnet_sq_dma_head {
-> > > > > +       struct virtnet_sq_dma *free;
-> > > > > +       struct virtnet_sq_dma *head;
-> > > >
-> > > > Any reason the head must be a pointer instead of a simple index?
-> > >
-> > >
-> > > The head is used for kfree.
-> > > Maybe I need to rename it.
-> > >
-> > > About the index(next) of the virtnet_sq_dma.
-> > > If we use the index, the struct will be:
-> > >
-> > > struct virtnet_sq_dma {
-> > >        dma_addr_t addr;
-> > >        u32 len;
-> > >
-> > >        u32 next;
-> > >        void *data
-> > > };
-> > >
-> > > The size of virtnet_sq_dma is same.
-> >
-> > Ok.
-> >
-> > >
-> > >
-> > > >
-> > > > > +};
-> > > > > +
-> > > > >  /* Internal representation of a send virtqueue */
-> > > > >  struct send_queue {
-> > > > >         /* Virtqueue associated with this send _queue */
-> > > > > @@ -159,6 +175,8 @@ struct send_queue {
-> > > > >
-> > > > >         /* Record whether sq is in reset state. */
-> > > > >         bool reset;
-> > > > > +
-> > > > > +       struct virtnet_sq_dma_head dmainfo;
-> > > > >  };
-> > > > >
-> > >
-> > > ....
-> > >
-> > > > > +
-> > > > > +static int virtnet_sq_init_dma_mate(struct send_queue *sq)
-> > > > > +{
-> > > > > +       struct virtnet_sq_dma *d;
-> > > > > +       int size, i;
-> > > > > +
-> > > > > +       size =3D virtqueue_get_vring_size(sq->vq);
-> > > > > +
-> > > > > +       size +=3D MAX_SKB_FRAGS + 2;
-> > > >
-> > > > Is this enough for the case where an indirect descriptor is used?
-> > >
-> > >
-> > > This is for the case, when the ring is full, the xmit_skb is called.
-> > >
-> > > I will add comment.
-> >
-> > Just to make sure we are at the same page.
-> >
-> > I meant, we could have more pending #sg than allocated here.
-> >
-> > For example, we can have up to (vring_size - 2 - MAX_SKB_FRAGS) *
-> > MAX_SKB_FRAGS number of pending sgs?
-> >
->
-> Oh, my was wrong.
->
-> But the max value a
-> But shouldn't the maximum value be vring_size * (2 + MAX_SKB_FRAGS)?
+Hello Yann,
 
-This seems to be safer, yes.
+On 1/30/24 11:20, Yann Sionneau wrote:
+> Hello,
+> 
+> On 1/23/24 14:32, Yann Sionneau wrote:
+>> Hello,
+>>
+>> How interesting to upstream Linux would it be to have a way for Linux kernel
+>> or user space to pass a device tree blob to remote processor when starting a
+>> remote proc FW?
+>>
+>> For instance we could imagine something like this:
+>>
+>> 1/ user space does echo -n firmware.elf >
+>> /sys/class/remoteproc/remoteprocXXX/firmware
+>>
+>> 2/ user space does echo -n my_dt.dtb > /sys/class/remoteproc/remoteprocXXX/dtb
+>>
+>> 3/ user space does echo start > /sys/class/remoteproc/remoteprocXXX/state
+> 
+> Any opinion on this proposal?
 
->
-> And for the reason above, we should allocate (vring_size + 1) * (2 + MAX_=
-SKB_FRAGS);
 
-Then we need to benchmark to see if it has an impact on the performance.
+Interesting use case. There is no concrete need in ST, but it raises the
+question of providing extra data with the firmware to the remote processor.
 
-Thanks
+In a first approach, my personal feeling is that the ELF and the DTB are
+interdependent.
+So having a mechanism to ensure coherency between both could be important.
 
->
-> Thanks.
->
->
-> > Thanks
-> >
-> > >
-> > > Thanks.
-> > >
-> > >
-> > > >
-> > > > Thanks
-> > > >
-> > >
-> >
->
+Then it could be interesting to address the need in a more generic way
+to be able to transfer extra data, for instance an audio tuning for a DSP.
+Adding a specific sysfs for each specific need could not be a good idea in long
+term.
 
+Have you looked into some other approaches such as adding the DTB as a specific
+section of your ELF file,or adding the support of a new format that packages
+everything together (for instance FIP)?
+
+Regards,
+Arnaud
+
+> 
+> Thanks!
+> 
+> Regards,
+> 
 
