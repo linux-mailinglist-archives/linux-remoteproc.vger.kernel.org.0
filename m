@@ -1,125 +1,70 @@
-Return-Path: <linux-remoteproc+bounces-449-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-456-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A8AE84A244
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  5 Feb 2024 19:29:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A91E84A35B
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  5 Feb 2024 20:16:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DAAB1B21B2D
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  5 Feb 2024 18:29:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB3172836C9
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  5 Feb 2024 19:16:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFF6E487B4;
-	Mon,  5 Feb 2024 18:28:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6962562807;
+	Mon,  5 Feb 2024 19:03:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="H5yulMLP"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DMZfyMXu"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13682482FE;
-	Mon,  5 Feb 2024 18:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9886167B;
+	Mon,  5 Feb 2024 19:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707157681; cv=none; b=CMLTFqTpSA7uAXFeFOFogZMcpwe3AZeGFO3/a0K5VWaCNe8ALaJc6ioNbSPOA3EQwN4OgT/KCWolIOZ17lwP++Dln14pH/WppEuxJUWKLiOCMn2q9C76SBnGr2OGADIi4qis2pw2AsKX+EfC/YRj0m1gYHj1v9A7Wiw4bRC+Vys=
+	t=1707159794; cv=none; b=IadGitD4HbOClMDodSLQXNwB4iJK2SZHruPhz7ieJjZjsuC9uncZQb9DC01deoULP4HaClDXltplI6qwIYEL3jSmuB21oli8awhzDKn52Ib96iWOY1fRvCaTaLg2MCRUq/rR8RaeABKAmVz3Im5Pmzh9rKpJDnIloO50av4Qsoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707157681; c=relaxed/simple;
-	bh=UTKjnl02zRrNFWyX0e1HTEuHJnpztcqmM5wI4qOg/PM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tFUndIcuFAkuNbQfnGbY5McoCbRvhUwLc8PYcsX1xsQUQHNaDzmKOQ5shWsE1P3befB3qGpiwNd/+pf+B4FS6Fmx7lJmMyW8s2epKxmWJ9SiEICOWz/wPcHmdivyTZU7IaruQIRRJ6/s48xajmEiX0LBbfn9aLB7Gl2QjCyadVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=H5yulMLP; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 415IRukq120265;
-	Mon, 5 Feb 2024 12:27:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1707157676;
-	bh=cCOdsqhr20y5QKXtiSnCUsddUxH/Yci+gnu7HPlrDyE=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=H5yulMLPBSMo1WqQqmzdeIODB5B+tM/DEG72QsvlnQ+3FHxzoHYJKwp3pNlHNljjt
-	 Hqu+0vCM+6BicpapV4dsQYmr+5Sd3/cRR98hdiMWfo6aD9ydfNHx+e1C4wImrWKPVb
-	 sh1nsOdLszLKhwFsN6aorpx9ERxOTxrEhCTYM0jQ=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 415IRu8B123163
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 5 Feb 2024 12:27:56 -0600
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 5
- Feb 2024 12:27:56 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 5 Feb 2024 12:27:56 -0600
-Received: from lelvsmtp6.itg.ti.com ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 415IRsX9058567;
-	Mon, 5 Feb 2024 12:27:55 -0600
-From: Andrew Davis <afd@ti.com>
-To: Jai Luthra <j-luthra@ti.com>, Hari Nagalla <hnagalla@ti.com>,
-        Bjorn
- Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>
-CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew
- Davis <afd@ti.com>
-Subject: [PATCH v2 5/5] remoteproc: k3-dsp: Use devm_rproc_add() helper
-Date: Mon, 5 Feb 2024 12:27:53 -0600
-Message-ID: <20240205182753.36978-6-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240205182753.36978-1-afd@ti.com>
-References: <20240205182753.36978-1-afd@ti.com>
+	s=arc-20240116; t=1707159794; c=relaxed/simple;
+	bh=NPy4Qjb0aNJaUt1anX4DLKcJO8MAHo9hxB1lf/SnJVo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uAEBQHvekHpSDMj/3zI+K7BWt+3xABMxwhHgbC/1bfQ18kjd4cmh9RYxITY55FzD/UZgKy3cWS56/cUv+OsD4pPWeC9NtVMf9S3JGeaz6hGQxbXuW11KmEPhJ0k3n1sFgaCdCmcaLM7pDPu8o8Hk2Cb/qL7gWvwbnAc3XLso/mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DMZfyMXu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E86C433F1;
+	Mon,  5 Feb 2024 19:03:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1707159794;
+	bh=NPy4Qjb0aNJaUt1anX4DLKcJO8MAHo9hxB1lf/SnJVo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DMZfyMXuOa1kADPO04CIOl72zvN91fiwL8OGas0toSLB8qyIY3k3y4h5UTytjwCg1
+	 s/YGMU+bzPwYyYMzB6XM7m8YSxupQZSalnsnPnKN99Mk99pJLtyOw2hLX/CgzQ6GUV
+	 Dtjg8jYqZb3gOPnGKeOUWfEGD16/hxvU7Fu+MgXA=
+Date: Mon, 5 Feb 2024 04:47:01 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Ricardo B. Marliere" <ricardo@marliere.net>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rpmsg: core: make rpmsg_bus const
+Message-ID: <2024020555-disrupt-remark-5e34@gregkh>
+References: <20240204-bus_cleanup-rpmsg-v1-1-1703508c23b7@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240204-bus_cleanup-rpmsg-v1-1-1703508c23b7@marliere.net>
 
-Use device lifecycle managed devm_rproc_add() helper function. This helps
-prevent mistakes like deleting out of order in cleanup functions and
-forgetting to delete on all error paths.
+On Sun, Feb 04, 2024 at 05:32:05PM -0300, Ricardo B. Marliere wrote:
+> Now that the driver core can properly handle constant struct bus_type,
+> move the rpmsg_bus variable to be a constant structure as well,
+> placing it into read-only memory which can not be modified at runtime.
+> 
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/remoteproc/ti_k3_dsp_remoteproc.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/remoteproc/ti_k3_dsp_remoteproc.c b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-index f799f74734b4a..3555b535b1683 100644
---- a/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-@@ -768,7 +768,7 @@ static int k3_dsp_rproc_probe(struct platform_device *pdev)
- 		}
- 	}
- 
--	ret = rproc_add(rproc);
-+	ret = devm_rproc_add(dev, rproc);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "failed to add register device with remoteproc core\n");
- 
-@@ -786,14 +786,9 @@ static void k3_dsp_rproc_remove(struct platform_device *pdev)
- 
- 	if (rproc->state == RPROC_ATTACHED) {
- 		ret = rproc_detach(rproc);
--		if (ret) {
--			/* Note this error path leaks resources */
-+		if (ret)
- 			dev_err(dev, "failed to detach proc (%pe)\n", ERR_PTR(ret));
--			return;
--		}
- 	}
--
--	rproc_del(kproc->rproc);
- }
- 
- static const struct k3_dsp_mem_data c66_mems[] = {
--- 
-2.39.2
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
