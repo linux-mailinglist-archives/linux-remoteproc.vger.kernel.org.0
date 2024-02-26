@@ -1,47 +1,47 @@
-Return-Path: <linux-remoteproc+bounces-567-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-568-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC8DE866F8D
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 26 Feb 2024 10:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EF208672F1
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 26 Feb 2024 12:23:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A26CF28858C
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 26 Feb 2024 09:59:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1572C285956
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 26 Feb 2024 11:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B1057876;
-	Mon, 26 Feb 2024 09:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 601641CFB6;
+	Mon, 26 Feb 2024 11:23:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="C1J5Z6CN"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="tEu3pCul"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D101BC30;
-	Mon, 26 Feb 2024 09:30:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218A71DA20;
+	Mon, 26 Feb 2024 11:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708939844; cv=none; b=is3j56z1D3XOQD0Xpa3Ch1nEV1R52jrTZf17fdtMgjDonic/rHEk2hhZ6F9LyEmu14a/6F4ecH4M0gA+XkvK8U76LVCMkSq44QzdCVbB0c6MwV7giyvfNP0k6VGfRgyhpmtKFzL8Gt/mAFGK86nQU+00gDx2AlOSfWfArIsX10I=
+	t=1708946606; cv=none; b=MInOu+FPcI2aJGOsLjm1BL4NH7EtQSAFnSnWlwdFAMn36pXgmVmNIeHg8Yz+nxLFSlNEdOQVORwtYC3F1+tgS9Lv6HNHb34tS/K7AIzsjf1GhTkQSFI3VO+Afz3S83sqLis/L8n7IeKPDWSPMzxqvRIaZ9nhfpGqhLglMWha5ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708939844; c=relaxed/simple;
-	bh=OiE2GjI9ymIQ6HLdX0je5+ntcMKubBu34WK+jFxRGvU=;
-	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=WL5CLe9h+w4LhS3v5NehrlR9UkysMqf+ruhzNAzCQDDpthZMfeqHYobAIbhsWj7JGlwxL3ctr01Vg0Xm8/knAip1Rej7e9wkx5ohhlsdz4xvjP+2vzJNuGt3WnO9zEVid0LJWatAUamio3NdCB/vrkf6AEqjVlkQ8pzkVo5/E4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=C1J5Z6CN; arc=none smtp.client-ip=115.124.30.119
+	s=arc-20240116; t=1708946606; c=relaxed/simple;
+	bh=VbHMUnRINqd49h2Fy+oMVyxg3A+Pf6nKzEoB6ETOEy8=;
+	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=ttAS/TBty864P4ARG8Gn7HN6FnVTqdJyNzxiTQeZziA0Q+TQBP922y2EAVj+p71RPhFPG5//fTETqMS10MRIFAnHl+KOmfdXhRg4chZAKl5tFhJO6jEhaPuz1UzgnC4UnJk5yHn91ryTFH00OdySw03xXvyRjDBYAj9c3ugNIx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=tEu3pCul; arc=none smtp.client-ip=115.124.30.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1708939838; h=Message-ID:Subject:Date:From:To;
-	bh=xEH79XloeCWwYFRjbQWwvM/K3wpplCxfHiQw2CFFMEw=;
-	b=C1J5Z6CNpobwtdL/mJzebFYe3fObzQTeUIaFu0CGMFGZ6mgwmvPl4yF3KnR/Lhb9xxW0MnCnRWjr7lz9Evhy/4DMrnrLSLfP/IEaEOq6B7mN6OWERG7wLEXcnEoQghke/PGQFN++w1tB0SL3KSYlYcom7mWfwkJp/yozhbaKl7A=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0W1FmByV_1708939835;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W1FmByV_1708939835)
+	t=1708946600; h=Message-ID:Subject:Date:From:To;
+	bh=zVt/9g3Z86Qm2TQExnCYlvSUSDo5URogUSA9lArrC1g=;
+	b=tEu3pCulDLpq/TjbpIbUqx1OJZEnAOZ9RlBqI7bepshqI17a9mLC9HpqRhFHsqy+UvrEgsIbnLEJ8jlsGAAsdDK3wWXvGWzOskVE54h+2Am+wl9bsHR5ncRNtkQeHZRDC/Xu5WmbkQJhK0cpOiH2XImvJG6Srm1hZ4Kefvit1xY=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=35;SR=0;TI=SMTPD_---0W1H3Wyg_1708946597;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W1H3Wyg_1708946597)
           by smtp.aliyun-inc.com;
-          Mon, 26 Feb 2024 17:30:36 +0800
-Message-ID: <1708939451.7601678-3-xuanzhuo@linux.alibaba.com>
+          Mon, 26 Feb 2024 19:23:18 +0800
+Message-ID: <1708946440.799724-1-xuanzhuo@linux.alibaba.com>
 Subject: Re: [PATCH vhost v2 19/19] virtio_net: sq support premapped mode
-Date: Mon, 26 Feb 2024 17:24:11 +0800
+Date: Mon, 26 Feb 2024 19:20:40 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: "Michael S. Tsirkin" <mst@redhat.com>
 Cc: virtualization@lists.linux.dev,
@@ -76,7 +76,7 @@ Cc: virtualization@lists.linux.dev,
  linux-remoteproc@vger.kernel.org,
  linux-s390@vger.kernel.org,
  kvm@vger.kernel.org,
- bpf@vger.kernel.org
+ bpf@vger.kernel.org, "Christoph Hellwig" <hch@lst.de>
 References: <20240223082726.52915-1-xuanzhuo@linux.alibaba.com>
  <20240223082726.52915-20-xuanzhuo@linux.alibaba.com>
  <20240225032330-mutt-send-email-mst@kernel.org>
@@ -248,38 +248,22 @@ On Sun, 25 Feb 2024 03:38:48 -0500, "Michael S. Tsirkin" <mst@redhat.com> wrote:
 > A while ago I proposed:
 > - extend DMA APIs so one can query whether unmap is a nop
 
+I think such code is ok:
 
-We may have trouble for this.
-
-dma_addr_t dma_map_page_attrs(struct device *dev, struct page *page,
-		size_t offset, size_t size, enum dma_data_direction dir,
-		unsigned long attrs)
+bool dma_is_direct(struct device *dev)
 {
-	const struct dma_map_ops *ops = get_dma_ops(dev);
-	dma_addr_t addr;
+	if (!dma_map_direct(dev, ops))
+		return false;
 
-	BUG_ON(!valid_dma_direction(dir));
+	if (is_swiotlb_force_bounce(dev))
+		return false;
 
-	if (WARN_ON_ONCE(!dev->dma_mask))
-		return DMA_MAPPING_ERROR;
-
-	if (dma_map_direct(dev, ops) ||
-	    arch_dma_map_page_direct(dev, page_to_phys(page) + offset + size))
-		addr = dma_direct_map_page(dev, page, offset, size, dir, attrs);
-	else
-		addr = ops->map_page(dev, page, offset, size, dir, attrs);
-	kmsan_handle_dma(page, offset, size, dir);
-	debug_dma_map_page(dev, page, offset, size, dir, addr, attrs);
-
-	return addr;
+	return true;
 }
 
-arch_dma_map_page_direct will check the dma address.
-So we can not judge by the API in advance.
+@Christoph Hellwig
 
 Thanks.
-
-
 
 
 >   and whether sync is a nop
