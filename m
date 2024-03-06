@@ -1,156 +1,113 @@
-Return-Path: <linux-remoteproc+bounces-685-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-688-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC98A8727D0
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  5 Mar 2024 20:41:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DDCF872ED4
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  6 Mar 2024 07:24:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0A7A1C2784D
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  5 Mar 2024 19:41:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8D8A1F24EDA
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  6 Mar 2024 06:24:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C24D12AAEB;
-	Tue,  5 Mar 2024 19:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E10A1C6B8;
+	Wed,  6 Mar 2024 06:24:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="Q7/JDQz0"
+	dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b="tBR/XbId"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from quicklyemailsend77.com (quicklyemailsend77.com [57.128.172.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB67B86AC3;
-	Tue,  5 Mar 2024 19:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC881C2A6
+	for <linux-remoteproc@vger.kernel.org>; Wed,  6 Mar 2024 06:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.128.172.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709667631; cv=none; b=AKxEarD3G1FRXU1Px9rBdSGNZ9HCqJ1IwsvdN8PYcCuFswIirqg1C7UxeQYOGefEaz5c+HquHAV7NzGrR+0X0PRJ/QaIuuLWUPENwT0y5OhgPEaiMU/pTf0JmHLhaqzQOFI1oKneJhbNsYytHI6IsPShzaRxQYc0Viai6HDEx2g=
+	t=1709706245; cv=none; b=W6ocKIitSblX5fuc7qHLiuWLwzJKCp8PS4gRc8w21D1+T9619zEpLNGb3qesHuMure7h/IXl4UX5IodSHag4c2masNGJTu/BXg0fuWgyfrOVt9njq63i12FePSqTI2M3ddw6gIyTJoz9pTZMbmzqRSypG6oqfpqJXm6D5ZmNYD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709667631; c=relaxed/simple;
-	bh=aYEnoEaK8lvdazf1apUl70SZAkWUVo6cPnMSWocdxf0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=C7uykNqpxahpboKfGmy+tcg+BYcHHKWWlYDIXj7TOrBOwqdeaP3NmDqqV6k61FUPKVHL5GX3iS7YxuhSVXoJ04+uhVX1Sju0qn1m7h3364CDadz+4IyHdM4D/QUBLk+OFNBfWEQnkOB3BsMDGdQifPo90DUeMvIotwEz6wr7b0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=Q7/JDQz0; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-6e57a3bf411so3654246b3a.0;
-        Tue, 05 Mar 2024 11:40:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709667629; x=1710272429;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZbOk/Gqyi9LltFIdUYglAWdVxEfqass0k2Pwo4RSlsc=;
-        b=t/hMEoDKfhkXEBnAf3TKOwwwbFG7lV31pdbS+DFdQLr5LW8kGqsbbDVUPIH0gJUyex
-         ggWaCNFjJdepg4RElwOhbvXY20EMGMcpTLHw6NuLsS/iA2RUYVDYJn4L6dQMDbH5lQhQ
-         MBu4rgXH5+g9/VWxAobN67CzxeA3RC/yTyFQkRGHTfLFNx/2t12A9htD7FbnsgH5NCaZ
-         HyIx4lCRMR7HMrl092f2+yx1p18Y27TrZSL/k1nmiDvGFMr+Y9N+hLhrX2vgpLTH4nye
-         PrbQsISs71Y4Eq3kjPiNhqidkDbESxOq0CSfBCpqsx991w53ULimb6AetK7YSxLfvMXt
-         N9dw==
-X-Forwarded-Encrypted: i=1; AJvYcCX+Qa3yZcigJ2IgIis9ARWgf6XYKVCVC7bRWliiVb0w99rjrrKXkhrQ2dsQol6Jfvqo6n4eAlRn+2nROI/+2+u3cnUxN4sQLw+TqajO
-X-Gm-Message-State: AOJu0YxNG3CLJX4+jgbmb51qXjidJ/eDhjSckGI7jTD3042rnkloUvci
-	jh8ZYcSggN81an0cVzUrGiA0E99NePLWyLuHNk2i84rFYRFKSVXOscrrs0txdV0rzA==
-X-Google-Smtp-Source: AGHT+IFQzC+hq4orwy5u/GXVGLqkKMY2sD4mqYBvpHgvZcdwlXBZEAcW/vIDS9kDeyt28vHpaG9h0A==
-X-Received: by 2002:a05:6a00:896:b0:6e6:4946:985f with SMTP id q22-20020a056a00089600b006e64946985fmr474334pfj.11.1709667628961;
-        Tue, 05 Mar 2024 11:40:28 -0800 (PST)
-Received: from mail.marliere.net ([24.199.118.162])
-        by smtp.gmail.com with ESMTPSA id q23-20020aa79837000000b006e5e93e7854sm6012875pfl.151.2024.03.05.11.40.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Mar 2024 11:40:28 -0800 (PST)
-From: "Ricardo B. Marliere" <ricardo@marliere.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=2024; t=1709667627;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ZbOk/Gqyi9LltFIdUYglAWdVxEfqass0k2Pwo4RSlsc=;
-	b=Q7/JDQz0+772PuNm4IuQFgQq5HWmlpCGPK9jCCmEnGy+qZ7vHcRZp7vqEei/b9blQuADE9
-	nY7L/v0vlHZkxCT0Le9+pBUFye2yfZRrx0OLzz7UNkMmI3X5nBC1bl8orn0/fEqeIPlFU4
-	UvLS0mFfWP/A0wlNTU5abQHLxOI6EsAjYKe8oUI9GmqYQqqoEkde+O+RR9MemAMXOHFsOW
-	rphaMwfDQlApO/961cvnYIpS8u/eBBCy9QMqbvZebMySTs6U54/Le/rYO/DWLdwFB3NfnQ
-	xENSF0dtJQ0cpygKUsLrIdFS+Lah9dg+12btp2r3IAQHcnXk7MkCK3ZngZ6tkw==
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
-Date: Tue, 05 Mar 2024 16:40:23 -0300
-Subject: [PATCH] remoteproc: make rproc_class constant
+	s=arc-20240116; t=1709706245; c=relaxed/simple;
+	bh=UkCnC3hxyWUR811IY5T5PlAQFaHotSY7xhHSl4hh88I=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KuzsgjHJaLybOUZ8f6p5pAGI9fchQVYFlE3Js+FVm9JKZ/xTg00xAr2k5c+L/d4Pcy/89HUOgXXJ/cADyfjo/eZCAOA7TOFMGANraQ/ezJcNmfcB5KWTu81FwRseM0HJWN6XVxJstrzy7sfmXObicwAOzoUBU7vHr7RbeDyXY9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com; spf=pass smtp.mailfrom=quicklyemailsend77.com; dkim=pass (2048-bit key) header.d=quicklyemailsend77.com header.i=@quicklyemailsend77.com header.b=tBR/XbId; arc=none smtp.client-ip=57.128.172.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicklyemailsend77.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicklyemailsend77.com
+Received: from quicklyemailsend77.com (unknown [185.255.114.95])
+	by quicklyemailsend77.com (Postfix) with ESMTPA id F1DBD3977A7
+	for <linux-remoteproc@vger.kernel.org>; Wed,  6 Mar 2024 03:51:46 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 quicklyemailsend77.com F1DBD3977A7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=quicklyemailsend77.com; s=default; t=1709697108;
+	bh=eefLZdwY5mr6nwq86b3d+rtsxGUHJntuGmXl+R35AcQ=;
+	h=Reply-To:From:To:Subject:Date:From;
+	b=tBR/XbIddDEgSe9VtEBSVNJAoSkK+SUIcUFIU5sEQbX4kAXGBFfUuoQXOkS/hmnJG
+	 0JmctVr2d3CvaCGzS175U21dM30vlyWkW1Yn8Wfp9aLlfpp+6Zlb0CBayTu79sT0mY
+	 ksonBBJeO1sE7OFKNvwRVNRigtWrxp/5//I2RuWmuEEY0VzxX03Y6eWRTk+EB2YpRI
+	 4ZB/bsY4FLpHj0LJB0bLz8Mh3qRQULsGR3VSh83pJtCWupOllk9G1IQimsSGbsDj7p
+	 lr/fUGGvqal8kkWWjHVxJ7w38nFk51cmjCzdciNXU99K3U4c+AjiHyrC1eDrqkmlF8
+	 05pz8/NCeO69Q==
+Reply-To: joakimlarson@skendiaelevator.com
+From: info@quicklyemailsend77.com
+To: linux-remoteproc@vger.kernel.org
+Subject: =?UTF-8?B?7YyQ66ekIOusuOydmCAyMDI0?=
+Date: 05 Mar 2024 19:51:46 -0800
+Message-ID: <20240305195146.3611BE70D2701AD6@quicklyemailsend77.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240305-class_cleanup-remoteproc2-v1-1-1b139e9828c9@marliere.net>
-X-B4-Tracking: v=1; b=H4sIACZ152UC/x3MQQqDMBBA0avIrA0ko13Eq0iRECftgE3CTFsE8
- e4Gl2/x/wFKwqQwdQcI/Vm55AbXdxDfIb/I8NoMaHG0g32YuAXVJW4U8q8aoU/5UpUS0SSHDv0
- wJu8ttL4KJd7v9/w8zwveuXDAawAAAA==
-To: Bjorn Andersson <andersson@kernel.org>, 
- Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Ricardo B. Marliere" <ricardo@marliere.net>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1785; i=ricardo@marliere.net;
- h=from:subject:message-id; bh=aYEnoEaK8lvdazf1apUl70SZAkWUVo6cPnMSWocdxf0=;
- b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl53UoF5WUvPGlq4VL+7i6YHDw3CvmBCkzhUVPg
- vKBiqxKdSKJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZed1KAAKCRDJC4p8Y4ZY
- pipSEACwnMbkOr2h9S8BDhLWgU2C57CHwLERMTpqJlUFRTUjanlY57NEbpYFjSuJ4BUr0p0B4B1
- fpne2elnneCrI0fJ+A8qU05viHGeSBDdkyVXykbDKZboyP5w/GvsYe7jpEWGYPFar9WqfmW+ch7
- dQO0UnSSEmdVub8ZlmJ4Lo/UmF2R5qPJSrgfJ/TTcXo7oFRf03ZbMwaoryZEoTE3kxbRcnhOR/7
- kouVynUlCLalM4cLVqOvF5KDbCgy2rai9vOWFjaUCz8/Sj/L9pnobiBcNRdfGFwPijWXkC9Bngl
- IEOON0cxGxP1PgKGbed3CGh0RXrNhHl44u0aureCUsajpejt2JDq1MRl8bfGA0nT9PmIe4Wm8tt
- IPjHklHiYcoZxMM9KlyWvZxJwRN4+/4iwCNlD5nHBLRPuYcP5ea9FR/cjcYMUS4kPf8wFu+0r9C
- 8J781ru5vxPHSdsanUFDi1tnkNV/kmyWa+ggjwywWai1aUqFLozhlaUMOaBwD1/k5M16NvXmFgz
- q0DNfFq7a9O8/kCqR6lwhAJLl9+lfyt4+XkfapaJCiQcQqVMwVCbjGYviqm0OfchvrsOvqnc0M4
- VMP3UhQg4ViCRVbXtPmCqGns4oW4ih2rtAA9urjcjXw8RD1tUEWDm6gG4n6ELVXWWoMc/vJkoHm
- Azd+bXJkljFPV2g==
-X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
- fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Since commit 43a7206b0963 ("driver core: class: make class_register() take
-a const *"), the driver core allows for struct class to be in read-only
-memory, so move the rproc_class structure to be declared at build time
-placing it into read-only memory, instead of having to be dynamically
-allocated at boot time.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
----
- drivers/remoteproc/remoteproc_internal.h | 2 +-
- drivers/remoteproc/remoteproc_sysfs.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+=EC=95=88=EB=85=95=ED=95=98=EC=84=B8=EC=9A=94
+=20
+=EC=8A=A4=EC=9B=A8=EB=8D=B4 =EC=8A=A4=EC=B9=B8=EB=94=94=EC=95=84 =EC=97=98=
+=EB=A0=88=EB=B0=94=ED=86=A0(Skandia Elevato)=EC=97=90=EC=84=9C =EC=98=A8 =
+=EC=9A=94=EC=95=84=ED=82=B4 =EB=9D=BC=EB=A5=B4=EC=86=90(JOAKIM LARSSON) .
+=20
+=EC=9A=B0=EB=A6=AC=EB=8A=94 =EA=B8=B4=EA=B8=89=ED=95=98=EA=B2=8C =EA=B7=80=
+=ED=95=98=EC=9D=98 =EC=A0=9C=ED=92=88=EC=9D=84 =ED=95=84=EC=9A=94=EB=A1=9C =
+=ED=95=98=EB=A9=B0 =EA=B0=80=EB=8A=A5=ED=95=9C =ED=95=9C =EB=B9=A8=EB=A6=AC=
+ =EC=8B=9C=ED=97=98 =EC=A3=BC=EB=AC=B8=EC=9D=84 =ED=95=98=EA=B3=A0 =EC=8B=
+=B6=EC=8A=B5=EB=8B=88=EB=8B=A4. 
+=20
+=EC=98=A8=EB=9D=BC=EC=9D=B8=EC=9C=BC=EB=A1=9C =EC=A0=9C=ED=92=88=EC=97=90 =
+=EB=8C=80=ED=95=9C =EC=A0=95=EB=B3=B4=EB=A5=BC =EC=88=98=EC=A7=91=ED=95=98=
+=EA=B3=A0 =EC=9E=88=EC=8A=B5=EB=8B=88=EB=8B=A4. 
+=20
+=EA=B7=B8=EB=A6=AC=EA=B3=A0 =EB=82=B4 =EB=AA=A8=EC=9E=84=EC=97=90=EC=84=9C =
+=EB=82=98=EB=8A=94 =EC=9A=B0=EB=A6=AC=EA=B0=80 =EB=8B=B9=EC=8B=A0=EC=9D=98 =
+=EC=A0=9C=ED=92=88=EC=9D=84 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EA=B2=83=EC=9D=B4=
+=EB=9D=BC=EA=B3=A0 =EC=83=9D=EA=B0=81=ED=95=A9=EB=8B=88=EB=8B=A4.
+=20
+1. =EC=B5=9C=EC=8B=A0 Catalouge=EB=A5=BC =EB=B3=B4=EB=82=BC =EC=88=98 =EC=
+=9E=88=EC=8A=B5=EB=8B=88=EA=B9=8C?
+=20
+2. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=A0 =EC=88=98 =EC=9E=
+=88=EB=8A=94 =EC=B5=9C=EC=86=8C=ED=95=9C=EC=9D=80 =EB=AC=B4=EC=97=87=EC=9D=
+=B4=EA=B3=A0 =EB=98=90=ED=95=9C =EA=B8=B0=EA=B0=84=EC=9D=84 =EB=B3=B4=EB=82=
+=B4=EC=8B=AD=EC=8B=9C=EC=98=A4=20
+=EB=B0=8F =EC=A1=B0=EA=B1=B4.
+3. =EC=9A=B0=EB=A6=AC=EA=B0=80 =EC=A3=BC=EB=AC=B8=ED=95=98=EB=8A=94 =EA=B2=
+=BD=EC=9A=B0 =EC=A7=80=EB=B6=88=EC=9D=84 =EC=96=B4=EB=96=BB=EA=B2=8C =ED=95=
+=B4=EA=B2=B0=ED=95=98=EA=B8=B0=EB=A5=BC =EC=9B=90=ED=95=98=EC=8B=AD=EB=8B=
+=88=EA=B9=8C?
+=20
+=EA=B7=80=ED=95=98=EC=9D=98 =ED=9A=8C=EC=8B=A0 =EB=8C=80=EA=B8=B0 =EC=A4=91=
 
-diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-index f62a82d71dfa..0cd09e67ac14 100644
---- a/drivers/remoteproc/remoteproc_internal.h
-+++ b/drivers/remoteproc/remoteproc_internal.h
-@@ -72,7 +72,7 @@ void rproc_init_debugfs(void);
- void rproc_exit_debugfs(void);
- 
- /* from remoteproc_sysfs.c */
--extern struct class rproc_class;
-+extern const struct class rproc_class;
- int rproc_init_sysfs(void);
- void rproc_exit_sysfs(void);
- 
-diff --git a/drivers/remoteproc/remoteproc_sysfs.c b/drivers/remoteproc/remoteproc_sysfs.c
-index 8c7ea8922638..138e752c5e4e 100644
---- a/drivers/remoteproc/remoteproc_sysfs.c
-+++ b/drivers/remoteproc/remoteproc_sysfs.c
-@@ -254,7 +254,7 @@ static const struct attribute_group *rproc_devgroups[] = {
- 	NULL
- };
- 
--struct class rproc_class = {
-+const struct class rproc_class = {
- 	.name		= "remoteproc",
- 	.dev_groups	= rproc_devgroups,
- };
 
----
-base-commit: 8b46dc5cfa5ffea279aed0fc05dc4b1c39a51517
-change-id: 20240305-class_cleanup-remoteproc2-f1212934f990
+Mr Joakim larssonv(=EB=B6=80=EC=82=AC=EC=9E=A5/=EC=98=81=EC=97=85 =EA=B4=80=
+=EB=A6=AC=EC=9E=90)
 
-Best regards,
--- 
-Ricardo B. Marliere <ricardo@marliere.net>
+=EB=B0=A9=EB=AC=B8=EC=9E=90 =EC=A3=BC=EC=86=8C: Kedumsv=C3=A4gen 14, SE-534=
+ 94 Vara, Sweden
+
+=EB=B0=B0=EC=86=A1 =EC=A3=BC=EC=86=8C: Industriv=C3=A4gen, SE-534 94 Vara, =
+Sweden
+
+joakimlarson@skendiaelevator.com
+https://skandiaelevator.com
 
 
