@@ -1,55 +1,55 @@
-Return-Path: <linux-remoteproc+bounces-701-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-702-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BF1787644F
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Mar 2024 13:29:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63B468765B4
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Mar 2024 14:55:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CF531C204E8
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Mar 2024 12:29:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A46E4B2466E
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  8 Mar 2024 13:55:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7833E57322;
-	Fri,  8 Mar 2024 12:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D11253BBE6;
+	Fri,  8 Mar 2024 13:55:08 +0000 (UTC)
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49E656456;
-	Fri,  8 Mar 2024 12:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3713D1C693;
+	Fri,  8 Mar 2024 13:55:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709900949; cv=none; b=Ab0m2mOPit7Lhmzs1O+8R5UaW9W2gqqAEf7tySQm+v/p0RqR92OyXfHL5XBpVrbivfUuTN+z469lDhZD4HtVOP6Qe+kCM3BK2Uj2EOkXZkIW09JpiA5PIDULPWzX8lwT1bsR9z4VD2hbwP9knc0ffpj6kPhQCd1gljIz1PBVuuY=
+	t=1709906108; cv=none; b=V1hur+mCO3oCQW/i6kf2ZxapviKcoAzKD3hUSNBVOOAUZkZLaReSCv1Qe+9OYwirxWpAlmz49mAbezO2MAd+Kf+uwIRKDV4VUObV/AgvvTjQ8CzvsRFKnD3J8Zp3ItiG000UEgLZV8e/ipW+ibeJyZ3NO/naSpmkDvj4aTcsi5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709900949; c=relaxed/simple;
-	bh=J1WQUOExGT2BUFKbzdvuQXj04tR/Nr0MoFLS79WMU+M=;
+	s=arc-20240116; t=1709906108; c=relaxed/simple;
+	bh=gpe31UXeX7bcdJyL7trsKR/X8oxuIkkTElqB+1EPXoc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ugFfHJA72BDA8B94uM48OvsXPVOIf1L0JLzjtze3tJ2QHR7SfP5s+CgG17GdbXSe/LUeOmpCgPN57HabGlVUsFhcVbnmrv1YMsWEMhnYYNfSCptxcuKzXSBAZnKMwpfWqhkMmHgXnKpnx1y9mc56FiqpigbhFR56WwM1iybkkSc=
+	 Content-Type:Content-Disposition:In-Reply-To; b=C4cYJRXZedOzBJz02ORgixXvi8Fd+wNdoBBMw9QEoiMrYK41DPysfhk0ImQHHvFZIuOZP39EuVYhsJ9e2xW2uoVNf0EAJROkhK38QPW5TqRsg7VoA4eTLkxyuAJvdryZl1il6eDzozCck6ZZk4qIibNswha0bS04gWxKwcHgG2k=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 002B0C15;
-	Fri,  8 Mar 2024 04:29:43 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0520F3F73F;
-	Fri,  8 Mar 2024 04:29:03 -0800 (PST)
-Date: Fri, 8 Mar 2024 12:29:01 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: abdellatif.elkhlifi@arm.com, Bjorn Andersson <andersson@kernel.org>,
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22596C15;
+	Fri,  8 Mar 2024 05:55:43 -0800 (PST)
+Received: from e130802.arm.com (unknown [10.57.14.181])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 34A953F762;
+	Fri,  8 Mar 2024 05:55:03 -0800 (PST)
+Date: Fri, 8 Mar 2024 13:54:59 +0000
+From: Abdellatif El Khlifi <abdellatif.elkhlifi@arm.com>
+To: Sudeep Holla <sudeep.holla@arm.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
 	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
 	Rob Herring <robh+dt@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>,
 	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>, Drew.Reed@arm.com,
 	Adam.Johnston@arm.com, linux-arm-kernel@lists.infradead.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-remoteproc@vger.kernel.org
 Subject: Re: [PATCH 3/3] dt-bindings: remoteproc: Add Arm remoteproc
-Message-ID: <ZesEjbl4IITA4Yie@bogus>
+Message-ID: <20240308135459.GA193849@e130802.arm.com>
 References: <20240301164227.339208-4-abdellatif.elkhlifi@arm.com>
  <9fcebf32-a3da-49ab-b3d9-9450fb7e1985@linaro.org>
+ <ZesEjbl4IITA4Yie@bogus>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -58,46 +58,35 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9fcebf32-a3da-49ab-b3d9-9450fb7e1985@linaro.org>
+In-Reply-To: <ZesEjbl4IITA4Yie@bogus>
 
-On Fri, Mar 01, 2024 at 08:30:43PM +0100, Krzysztof Kozlowski wrote:
-> On 01/03/2024 17:42, abdellatif.elkhlifi@arm.com wrote:
-> > From: Abdellatif El Khlifi <abdellatif.elkhlifi@arm.com>
-> > 
-> > introduce the bindings for Arm remoteproc support.
-> > 
-> > Signed-off-by: Abdellatif El Khlifi <abdellatif.elkhlifi@arm.com>
-> > ---
-> >  .../bindings/remoteproc/arm,rproc.yaml        | 69 +++++++++++++++++++
-> >  MAINTAINERS                                   |  1 +
-> 
-> Fix order of patches - bindings are always before the user (see
-> submitting bindings doc).
-> 
-> >  2 files changed, 70 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/remoteproc/arm,rproc.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/remoteproc/arm,rproc.yaml b/Documentation/devicetree/bindings/remoteproc/arm,rproc.yaml
-> > new file mode 100644
-> > index 000000000000..322197158059
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/remoteproc/arm,rproc.yaml
-> > @@ -0,0 +1,69 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/remoteproc/arm,rproc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Arm Remoteproc Devices
-> 
-> That's quite generic... does it applied to all ARM designs?
-> 
+Hi Krzysztof, Sudeep,
 
-Nope, it is platform specific. It can't just generically be referred as
-Arm Remoteproc for sure.
+> > > diff --git a/Documentation/devicetree/bindings/remoteproc/arm,rproc.yaml b/Documentation/devicetree/bindings/remoteproc/arm,rproc.yaml
+> > > new file mode 100644
+> > > index 000000000000..322197158059
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/remoteproc/arm,rproc.yaml
+> > > @@ -0,0 +1,69 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/remoteproc/arm,rproc.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Arm Remoteproc Devices
+> > 
+> > That's quite generic... does it applied to all ARM designs?
+> > 
+> 
+> Nope, it is platform specific. It can't just generically be referred as
+> Arm Remoteproc for sure.
 
--- 
-Regards,
-Sudeep
+Thank you guys.
+
+The file names and the documentation will reflect that it's
+an Arm Corstone SoC. Work in progress.
+
+Cheers,
+Abdellatif
 
