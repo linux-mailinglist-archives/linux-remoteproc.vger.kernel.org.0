@@ -1,141 +1,136 @@
-Return-Path: <linux-remoteproc+bounces-741-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-745-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A996878C1A
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Mar 2024 02:03:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AE191878CD4
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Mar 2024 03:10:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEE8E2831A2
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Mar 2024 01:03:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 652D8282610
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 12 Mar 2024 02:10:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 918B65CB5;
-	Tue, 12 Mar 2024 01:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF96D8F40;
+	Tue, 12 Mar 2024 02:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c2W6YfP2"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="B+cUXyME"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BC153A1
-	for <linux-remoteproc@vger.kernel.org>; Tue, 12 Mar 2024 01:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3414D6FB9;
+	Tue, 12 Mar 2024 02:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710205411; cv=none; b=YJK2a/mokmNHHXzjwvvQAovR3eBtfDizPdSwX8v0tMVxtdbv0dYAIxvK8zde9nn71ICiDsQI+EdURQcd9HJplv3fMKBxZy+XIx7AMd+Mcy+QkitBavi1BALkncQaH79ietP3Aqpv9iG8pue/gpyFMruwkm3VvY7IHBwdxPB8CUs=
+	t=1710209425; cv=none; b=qCvFsIFkZsrBXy8WcoVAEqcA4DoQqMN0LFuju9K1FuY6y4ofTxP9PSWLItNLl7AQb8sbde+x+px8BmWVPIA8q74cCDuW+JSbXmhFYX0ucJty3nc5lrGQBoVCW2nMiXVyasw9oIQaFFhK3FMPzsxZEXh6DpBVpIwaV6bkNbSSiok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710205411; c=relaxed/simple;
-	bh=mllAJVdUnscH65M6A/IFWXfzMztwOkscsI91LkruZpk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B4xUkrbm7a3NwY0Y7NOERPBkS1UxUUJdKZ4eb8ina75m2mDr72cUr2mwoVHD1xzlMGp4zJKJo/5kGLcuvN0Hl9c9O6AMSxDb+OiIBsyLGbxJ6ynbn9++ZBz7DT4szG7kK1NiSmO/ZDKzZ5BtiP9EYJLuH1awdzhVyWW3tSKe80s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c2W6YfP2; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-dc6d9a8815fso4905661276.3
-        for <linux-remoteproc@vger.kernel.org>; Mon, 11 Mar 2024 18:03:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1710205407; x=1710810207; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ws7LKeep8xs071G+zIEyu5NMNq4g7+CkOu+MrT6LYWg=;
-        b=c2W6YfP26OTHUrF8R42hXL9bKkkeXj2BlY94TM4k7z3orfBIqcwV4+7wT5LH+zs0hE
-         USFtmTAk0DzOKDaF1BycrkfHCrtFnJw3MNQFBKm3MIySfbOr6eHaAtF5gyeR2z7u0gO9
-         bDYpsC2n8m3XESYOtZPzGekmbzOXpLL19prw771XoIeT7fWgmj84xmo2bPgntcI/6rLZ
-         8Nwh3oO+cP+rwLdcfQJycOZO4GqrORnrkpBLrLon4OxvCKYMQL1Lb77NixC4NJQRTUz2
-         akQOppuQNIBUIqYSnp4r6OHxwoS8DEHurbrS52m3D50IOMDExF3+8FXKDIVl1Z0t+wz7
-         vpZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1710205407; x=1710810207;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ws7LKeep8xs071G+zIEyu5NMNq4g7+CkOu+MrT6LYWg=;
-        b=NPJmzftNmXyjSDD3kWVFnQmStcvlX1igsPidQ0uqPUs7kcoplDZXacCskPazzw4rQv
-         hSJS2whzwB4QS47WfeKZtkHpFvP6NUnOP7ajY3lyaP3hUOyvV79JTfByNXvUZyOG5MPY
-         tTPcD59Ph3s+hdMXnKBlp53clzNLEDBWRIU2yvjJOsQRnY23E8Ye0eWywUSSkAZcOuMn
-         SbmR0l3ZPMI8klu9VJyVz2F+6gWwW3cuFfSa4eWe1zaChtoPnryq4enKRD2mgHHqRh6Q
-         ZeXTWpwc5wJs3hGsABL7HgkUDdMRIPslk4uBdT6bFYyw1C6Qvj0+a8sRNEAneHqOGoRh
-         S/RA==
-X-Forwarded-Encrypted: i=1; AJvYcCWUkp+/Yz7bfaasbT5FO1eY58cwUL2soVlcV+Cgr0DK4QO8EIYBGK9HyIRXSKmXk34PseBXbjkiXEOsYZcBfku+3QEg6yprUDtfw+Jrl4mV5w==
-X-Gm-Message-State: AOJu0YwCz+hvCpEt49jausBO+uekDA9mcAgfbzLgbfOtrfp0cdSAJ8UV
-	DLkDe9te3l5m44L+0RMfiav8sPvx5o4TX91A+PugU1p1wSgVeG862fxlJn1ZxwsdXcqXgSCA5I0
-	yP69QOrduKPKqzU+EzOcnoQKkqelRNuuBiThKcQ==
-X-Google-Smtp-Source: AGHT+IGnbKO6H0C20S0kebFSx0qWkvqE68K5N495YSoxog7GKNvUgRkw3+0e9zY2XmsTV7V2X6VEfkR4TsptJ1mwCpc=
-X-Received: by 2002:a25:ad10:0:b0:dcc:9e88:b15 with SMTP id
- y16-20020a25ad10000000b00dcc9e880b15mr346522ybi.41.1710205407500; Mon, 11 Mar
- 2024 18:03:27 -0700 (PDT)
+	s=arc-20240116; t=1710209425; c=relaxed/simple;
+	bh=7sM4it/sLlFJgMn6vXgBs9cjjyYlwmbxnWNAQnNS6to=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fO0kdCoPewrWmzeNFmjpxdcZpDe91Qu39BiEaxHtyzC8VjFH5B8riONx12fNlddUy7j87WSQuu9R/pM2e07VjbK9IxCnkELU1E4LgmM3wemUtLYBdUdZ7PMCuemL5gepuT+skz9Pxdd5Pl3onC8G6qGAdPkg5mO0BcSelLtQmrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=B+cUXyME; arc=none smtp.client-ip=115.124.30.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1710209415; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=93N4BPytBZxlC/Q2oeD9Rd8EctJjuaPCcnJKvMa7iTk=;
+	b=B+cUXyMEIbHlJuKhgv5FhbA9dv85kXWxnl4dNBmU08iaAii7xROrlkXHDgOgQnrfNLcBnSrpVLiqyHpalg4TqqnyMWz4v0RtIbR/kUWBxe9LDbpnbQ45YcTc3ix73C+vE1AMXTDh/ti8LU5why8oTHSj05ztjm44TpCACESVphY=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R811e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=25;SR=0;TI=SMTPD_---0W2JwVQv_1710209413;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W2JwVQv_1710209413)
+          by smtp.aliyun-inc.com;
+          Tue, 12 Mar 2024 10:10:14 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: virtualization@lists.linux.dev
+Cc: Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Vadim Pasternak <vadimp@nvidia.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Halil Pasic <pasic@linux.ibm.com>,
+	Eric Farman <farman@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	linux-um@lists.infradead.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	kvm@vger.kernel.org
+Subject: [PATCH vhost v3 0/4] refactor the params of find_vqs()
+Date: Tue, 12 Mar 2024 10:10:09 +0800
+Message-Id: <20240312021013.88656-1-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240311-qcom-pd-mapper-v4-0-24679cca5c24@linaro.org>
- <20240311-qcom-pd-mapper-v4-2-24679cca5c24@linaro.org> <05b640a9-c5e4-4140-95dd-9b35269d85cd@linaro.org>
-In-Reply-To: <05b640a9-c5e4-4140-95dd-9b35269d85cd@linaro.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 12 Mar 2024 03:03:17 +0200
-Message-ID: <CAA8EJprNMGRXXY_sehehfSyZrHc3NN=C5fG6o5wYDpDzr4KQ=g@mail.gmail.com>
-Subject: Re: [PATCH v4 2/7] soc: qcom: qmi: add a way to remove running service
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
-	linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
-	Johan Hovold <johan+linaro@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Git-Hash: 8d1a4cfe2924
+Content-Transfer-Encoding: 8bit
 
-On Tue, 12 Mar 2024 at 02:53, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 3/11/24 16:34, Dmitry Baryshkov wrote:
-> > Add qmi_del_server(), a pair to qmi_add_server(), a way to remove
-> > running server from the QMI socket. This is e.g. necessary for
-> > pd-mapper, which needs to readd a server each time the DSP is started or
-> > stopped.
-> >
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >   drivers/soc/qcom/qmi_interface.c | 67 ++++++++++++++++++++++++++++++++++++++++
-> >   include/linux/soc/qcom/qmi.h     |  2 ++
-> >   2 files changed, 69 insertions(+)
-> >
-> > diff --git a/drivers/soc/qcom/qmi_interface.c b/drivers/soc/qcom/qmi_interface.c
-> > index bb98b06e87f8..18ff2015c682 100644
-> > --- a/drivers/soc/qcom/qmi_interface.c
-> > +++ b/drivers/soc/qcom/qmi_interface.c
-> > @@ -289,6 +289,73 @@ int qmi_add_server(struct qmi_handle *qmi, unsigned int service,
-> >   }
-> >   EXPORT_SYMBOL_GPL(qmi_add_server);
-> >
-> > +static void qmi_send_del_server(struct qmi_handle *qmi, struct qmi_service *svc)
-> > +{
-> > +     struct qrtr_ctrl_pkt pkt;
-> > +     struct sockaddr_qrtr sq;
-> > +     struct msghdr msg = { };
-> > +     struct kvec iv = { &pkt, sizeof(pkt) };
-> > +     int ret;
-> > +
-> > +     memset(&pkt, 0, sizeof(pkt));
->
-> 0-init instead?
->
-> > +     pkt.cmd = cpu_to_le32(QRTR_TYPE_DEL_SERVER);
-> > +     pkt.server.service = cpu_to_le32(svc->service);
-> > +     pkt.server.instance = cpu_to_le32(svc->version | svc->instance << 8);
-> > +     pkt.server.node = cpu_to_le32(qmi->sq.sq_node);
-> > +     pkt.server.port = cpu_to_le32(qmi->sq.sq_port);
->
-> Or perhaps C99-init?
+This pathset is splited from the
 
-This follows 1:1 qcom_send_add_server(). I don't think we should use
-new style just for this function.
+     http://lore.kernel.org/all/20240229072044.77388-1-xuanzhuo@linux.alibaba.com
 
->
-> Konrad
+That may needs some cycles to discuss. But that notifies too many people.
+
+But just the four commits need to notify so many people.
+And four commits are independent. So I split that patch set,
+let us review these first.
+
+The patch set try to  refactor the params of find_vqs().
+Then we can just change the structure, when introducing new
+features.
+
+Thanks.
+
+v3:
+  1. fix the bug: "assignment of read-only location '*cfg.names'"
+
+v2:
+  1. add kerneldoc for "struct vq_transport_config" @ilpo.jarvinen
+
+v1:
+  1. fix some comments from ilpo.jarvinen@linux.intel.com
 
 
 
--- 
-With best wishes
-Dmitry
+Xuan Zhuo (4):
+  virtio: find_vqs: pass struct instead of multi parameters
+  virtio: vring_create_virtqueue: pass struct instead of multi
+    parameters
+  virtio: vring_new_virtqueue(): pass struct instead of multi parameters
+  virtio_ring: simplify the parameters of the funcs related to
+    vring_create/new_virtqueue()
+
+ arch/um/drivers/virtio_uml.c             |  31 ++--
+ drivers/platform/mellanox/mlxbf-tmfifo.c |  24 ++--
+ drivers/remoteproc/remoteproc_virtio.c   |  31 ++--
+ drivers/s390/virtio/virtio_ccw.c         |  33 ++---
+ drivers/virtio/virtio_mmio.c             |  30 ++--
+ drivers/virtio/virtio_pci_common.c       |  60 ++++----
+ drivers/virtio/virtio_pci_common.h       |   9 +-
+ drivers/virtio/virtio_pci_legacy.c       |  16 ++-
+ drivers/virtio/virtio_pci_modern.c       |  38 +++--
+ drivers/virtio/virtio_ring.c             | 173 ++++++++---------------
+ drivers/virtio/virtio_vdpa.c             |  45 +++---
+ include/linux/virtio_config.h            |  85 ++++++++---
+ include/linux/virtio_ring.h              |  93 +++++++-----
+ tools/virtio/virtio_test.c               |   4 +-
+ tools/virtio/vringh_test.c               |  28 ++--
+ 15 files changed, 363 insertions(+), 337 deletions(-)
+
+--
+2.32.0.3.g01195cf9f
+
 
