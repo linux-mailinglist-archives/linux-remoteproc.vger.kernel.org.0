@@ -1,131 +1,79 @@
-Return-Path: <linux-remoteproc+bounces-837-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-839-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D03CF885B9D
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 21 Mar 2024 16:27:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DD24886028
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 21 Mar 2024 18:57:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E9AF1F22041
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 21 Mar 2024 15:27:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD5F1282238
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 21 Mar 2024 17:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 084BE8613F;
-	Thu, 21 Mar 2024 15:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58F4913340E;
+	Thu, 21 Mar 2024 17:57:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="akYgZSmU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k70eqOPX"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6CA85943
-	for <linux-remoteproc@vger.kernel.org>; Thu, 21 Mar 2024 15:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E4F133408;
+	Thu, 21 Mar 2024 17:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711034831; cv=none; b=n8cUJxCSmkDZ6qOeK5nyLJqmQXaHBjM/ZPQy2jQnSdU5wCDGLACjj1s9ZyfG2Bp4U83yu6gsTKnQFBaTUuMEY4otZ+BXSJ54t0uqnxna0TOGx1XDRncEh5JRQJnCSvcy8kz2hOeV5oM98h7pjxKsysQmol2n4e4TKzXE1Bd3Dxk=
+	t=1711043859; cv=none; b=XCJUTlVC4V0DrLCWIv3fAaC+ROVr4IaqvcdC8330/G00cCRtbpc4GYnmWUd0hYSWE/Zx8i2h9NXUmtHRNaEV9tiVEjH60jMUtJ5VUCJy7Z6IdDyVgud54Xq/OO35Zz+1E0SE3adxZeHpygHWaI8bXoy5H8I+wmrTeG1iQ5V+8Yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711034831; c=relaxed/simple;
-	bh=n8T4C2A5gem4U8d3WvHIEu6sVO6mAM1shyUf70RSvro=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E97SJXORqWx8KlIUtSyhkRR+2AZacK37JWi3lXXcxc+wRGQ6OITPb+LeANcI7BRSA6dL0CbrQ0cuOSM0hirqB2TKhRgtIUAF+g5DGetH4eEnpX32C/s899vgrzC20gN7/GwyQhjM+/Ke0FLNNCRSk99Lv+S6YpN+f+PJ4ab337g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=akYgZSmU; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1dddbeac9f9so7113145ad.3
-        for <linux-remoteproc@vger.kernel.org>; Thu, 21 Mar 2024 08:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1711034830; x=1711639630; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+xaUG2ldhaQRaRHuk6t4MDB7vN1BXN+/W59BKlbNm/o=;
-        b=akYgZSmUvzmL0HUiIiKO5kfSN46jX00L0Y3uBZH4B4+SYPTo87xY1MvAVQJC+O9WR5
-         YMf8HGmcTQtv4aStnJhY2ORf23v8nM/VS76KRFAz36ZlrNFXniU9nMNtY4akh1+koJ1s
-         Ugp5eKwcXkGIPczST0x2d5RMQvJGnU91zeMXpR8e4HTDBTsIbU1wgBM4TSIop5L71giu
-         dOgy9zwn86x+b9/BQSZtU/rSU/JCYi2S8BBmzrZ7PuJml76H19q2oS0qbvbr74TFbrpy
-         b8P05IW8i+v71seOqlfa3xSonXNtPa3AW88VXTihXpm1stxiVqVTNkW20B0PpK1OG3/5
-         Ok1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1711034830; x=1711639630;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+xaUG2ldhaQRaRHuk6t4MDB7vN1BXN+/W59BKlbNm/o=;
-        b=M348b0wx7gAnV2QVRy/Rf+685veAAuIRF+pqms2gJpGzcf4kMdCQ0jpIk5ht4a//+K
-         GiqSc67wTT4JB5xBc3W9EafXF1Dyhy4vnV9RX0T8dAKRPdnT/1YRKLYTL9UM3lEbozpq
-         mdjHtll9xpm817amXfHqqhFXXKZikqXk01iCIVpacma1H8W4e+1xgLHCX2y+OQOPRyxs
-         k5b+kJg7crTQeLelkKiqM0aElfCaBaBnhdOp3+aPkWVF9YiOyOg4fs6yehND7zVFXZQw
-         2jLMOnrSQNU/JNlEPxJhuCDIE0X40JqLx9WTztakeTTGZH9nWXVDf1q1kgWidjyV0ZgT
-         F/Nw==
-X-Forwarded-Encrypted: i=1; AJvYcCWPqxTXh0R6AhiR2x1F/zvmdVUuipdJk9fRTsqQliSOYHKujuMEFWJhrphn8OZlctKv2r5VbBJzA85Hqqo30snOClzQ/rq+Hb5bOt/OcqiCUA==
-X-Gm-Message-State: AOJu0YyuFb0QGRhYn0iV42GvANhZ8A++4yCe85f/mJ4DaegvuixvJnzB
-	IKxEICxOyNi0acpvhgKkmt5WnlPbmeIcbNYWl7yvwoPJXuICAA9Cdc45AFlzek4=
-X-Google-Smtp-Source: AGHT+IFZusUIQQGZ01wR/lIafQ3ProKPMjN3Xn3Bpv3FxV8YHFTb1NMxzLzr2zATgiRssYtdZLM9qA==
-X-Received: by 2002:a17:903:22d0:b0:1e0:1e87:c9d8 with SMTP id y16-20020a17090322d000b001e01e87c9d8mr13021667plg.7.1711034829723;
-        Thu, 21 Mar 2024 08:27:09 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:d9a2:e52:d93:c759])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b001dee3fe3c1asm15077983plb.258.2024.03.21.08.27.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Mar 2024 08:27:09 -0700 (PDT)
-Date: Thu, 21 Mar 2024 09:27:04 -0600
-From: Mathieu Poirier <mathieu.poirier@linaro.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: andersson@kernel.org, matthias.bgg@gmail.com, tzungbi@kernel.org,
-	tinghan.shen@mediatek.com, linux-remoteproc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, wenst@chromium.org,
-	kernel@collabora.com
-Subject: Re: [PATCH 2/2] remoteproc: mediatek: Don't parse extraneous
- subnodes for multi-core
-Message-ID: <ZfxRyMyUqyqtXy8n@p14s>
-References: <20240321084614.45253-1-angelogioacchino.delregno@collabora.com>
- <20240321084614.45253-3-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1711043859; c=relaxed/simple;
+	bh=VSlbdcA1cpZjWKahCfYaYXGeEUF2FdtzF6Z7mb9PwJI=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=qKMyOOQurjM8e8e/D7fgzkm8f9obUW0fRyN3uqJGd3XfxdAZnB4eV7ojmqPRtNpF8z8M5jjqV7LKHQul7+cUzj/QeklmAIWPk0Puq2Uy5QWHr9DZEqH2BtzWmuzpfdOacPNq/OJje9ES9p0EAfRf8GavWcS/qDl6T7kARL5NFIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k70eqOPX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A84CBC433F1;
+	Thu, 21 Mar 2024 17:57:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1711043858;
+	bh=VSlbdcA1cpZjWKahCfYaYXGeEUF2FdtzF6Z7mb9PwJI=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=k70eqOPXO0yLFjO86aWLI/E/cv6ghBkJeQimX2htSAFVmuXGx6lJl7/NpRHqVhoKy
+	 T3KCIIxYGC0ukSuhrJyjnPqjoNzpnBZmY42QvKSkYcP2Ez0a8H/eo3loUcaJDHW0TC
+	 nvDAdg0dIHeGESreCwIjcJ6tR7U/P7jriVyjICoFcSdm3ZsscE16iOpCQwGznH24F3
+	 Cfrjl0LjNerg6mG18Ig3HTaVN9dkr9pNLi0R2vx64q8ACWi2UzFJe4dt4238tjIH3b
+	 Pg/qU5A+KyT8n8iZfgkfZncfSpY7nOr/z6Api9Ibdpys2qgVw1AxRmYY/StnEoXC2s
+	 8q38YFrkBBIbQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9E084D95060;
+	Thu, 21 Mar 2024 17:57:38 +0000 (UTC)
+Subject: Re: [GIT PULL] remoteproc updates for v6.9
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20240321125518.1675903-1-andersson@kernel.org>
+References: <20240321125518.1675903-1-andersson@kernel.org>
+X-PR-Tracked-List-Id: <linux-remoteproc.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20240321125518.1675903-1-andersson@kernel.org>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rproc-v6.9
+X-PR-Tracked-Commit-Id: 62210f7509e13a2caa7b080722a45229b8f17a0a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 0e875ee5e897db13104faab93bb1ab2b95da9ab9
+Message-Id: <171104385863.25447.2950152220216254695.pr-tracker-bot@kernel.org>
+Date: Thu, 21 Mar 2024 17:57:38 +0000
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org, Andrew Davis <afd@ti.com>, Neil Armstrong <neil.armstrong@linaro.org>, Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Sibi Sankar <quic_sibis@quicinc.com>, Abel Vesa <abel.vesa@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Joakim Zhang <joakim.zhang@cixtech.com>, Mathieu Poirier <mathieu.poirier@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240321084614.45253-3-angelogioacchino.delregno@collabora.com>
 
-On Thu, Mar 21, 2024 at 09:46:14AM +0100, AngeloGioacchino Del Regno wrote:
-> When probing multi-core SCP, this driver is parsing all sub-nodes of
-> the scp-cluster node, but one of those could be not an actual SCP core
-> and that would make the entire SCP cluster to fail probing for no good
-> reason.
-> 
-> To fix that, in scp_add_multi_core() treat a subnode as a SCP Core by
-> parsing only available subnodes having compatible "mediatek,scp-core".
-> 
-> Fixes: 1fdbf0cdde98 ("remoteproc: mediatek: Probe SCP cluster on multi-core SCP")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/remoteproc/mtk_scp.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-> index 67518291a8ad..fbe1c232dae7 100644
-> --- a/drivers/remoteproc/mtk_scp.c
-> +++ b/drivers/remoteproc/mtk_scp.c
-> @@ -1096,6 +1096,9 @@ static int scp_add_multi_core(struct platform_device *pdev,
->  	cluster_of_data = (const struct mtk_scp_of_data **)of_device_get_match_data(dev);
->  
->  	for_each_available_child_of_node(np, child) {
-> +		if (!of_device_is_compatible(child, "mediatek,scp-core"))
-> +			continue;
-> +
+The pull request you sent on Thu, 21 Mar 2024 05:55:13 -0700:
 
-Interesting - what else gets stashed under the remote processor node?  I don't
-see anything specified in the bindings.
+> https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git tags/rproc-v6.9
 
-Thanks,
-Mathieu
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/0e875ee5e897db13104faab93bb1ab2b95da9ab9
 
->  		if (!cluster_of_data[core_id]) {
->  			ret = -EINVAL;
->  			dev_err(dev, "Not support core %d\n", core_id);
-> -- 
-> 2.44.0
-> 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
