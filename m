@@ -1,354 +1,160 @@
-Return-Path: <linux-remoteproc+bounces-1083-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1085-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B9EF8A06D7
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 11 Apr 2024 05:38:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F3558A0808
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 11 Apr 2024 08:07:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1382D1F22A69
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 11 Apr 2024 03:38:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6213A1C231D9
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 11 Apr 2024 06:07:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5C9413BAEC;
-	Thu, 11 Apr 2024 03:38:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59A213CA8E;
+	Thu, 11 Apr 2024 06:07:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="QKBn912v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uIV1iJgY"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E56360B9D;
-	Thu, 11 Apr 2024 03:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B995313CA88;
+	Thu, 11 Apr 2024 06:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712806682; cv=none; b=Sh17xbLoNy/a7cbOtSl+qEUUk7rqiGIM8jFskCGoNPkv0yV4kSZRco9h9O0FgRbw+F+Q2XYw6kk3UIE02SuZSTLmp3IKfVR7lnF84wTxn/g4YU89hbVdgD4jWmVWCeiz/tTwe3yd+2XNp3LTm1yD4IM1svqHEo3rP3RU8Wpnmvo=
+	t=1712815628; cv=none; b=D7c4yoQxALe/Pxhw9okeAGxqUzxmRG7+XMqfVjIourRxNbY39a7snVbeEDnL1ZiMvqPa6gZk63Hbu6g/in0ugebr/ZGyYfe1YCOyf3P1rUF8jcRMJo00mLEHTpPTCv24LunW5VPeywmxmJd//5j8yZwsOLZYGssdqKEzINeANsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712806682; c=relaxed/simple;
-	bh=W30wZEwAdnb897V8ut868bNRKVxFQqSs7Dr1Kc84Fd8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jDhbzg6e54bdxtszam9v6tUnk66yyIT/TqUAGsbAQK+5dgLlreAcJtgE014cqtl4zUa2eLAH5VLd8mGrP7v/V9YAneDEbLJGeDoRvnjvgs2ZJhLzKMeZaoBFSchKZwKVGQSbHikcj0WeEmTZjm3+e8cOz6AAEvaZDG8wNyU/4Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=QKBn912v; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: e21ba588f7b411ee935d6952f98a51a9-20240411
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=UvMG50Z3NH/sSS5y+Dr9wRb2N8963RLCoZFyqfPOd9k=;
-	b=QKBn912vvyp1NWRim6rtNs9/aDQCIjrqkkwu2O/9qyRatyTLWEfxtPILqNCSBLKEW0zHW1rg2xgE2BlAKIC/PFw2Dxd16IgyKHXTTwSTg//E8djnOovhEJAEVFrRXcTKxd09KDYWpMGeWQsG4o/SLrFkTB2AStgPVookk3BYUAs=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.37,REQID:83e27213-294c-4307-bc53-da12d537252d,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:-25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:-30
-X-CID-META: VersionHash:6f543d0,CLOUDID:54760a86-8d4f-477b-89d2-1e3bdbef96d1,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:1,IP:nil,UR
-	L:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
-	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: e21ba588f7b411ee935d6952f98a51a9-20240411
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-	(envelope-from <olivia.wen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 932935860; Thu, 11 Apr 2024 11:37:55 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 10 Apr 2024 20:37:54 -0700
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 11 Apr 2024 11:37:54 +0800
-From: olivia.wen <olivia.wen@mediatek.com>
-To: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier
-	<mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>
-CC: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Tinghan
- Shen <tinghan.shen@mediatek.com>, <linux-remoteproc@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<jason-ch.chen@mediatek.com>, <yaya.chang@mediatek.com>,
-	<teddy.chen@mediatek.com>, <olivia.wen@mediatek.com>
-Subject: [PATCH 2/2] remoteproc: mediatek: Support MT8188 SCP core 1
-Date: Thu, 11 Apr 2024 11:37:50 +0800
-Message-ID: <20240411033750.6476-3-olivia.wen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20240411033750.6476-1-olivia.wen@mediatek.com>
-References: <20240411033750.6476-1-olivia.wen@mediatek.com>
+	s=arc-20240116; t=1712815628; c=relaxed/simple;
+	bh=moQ7vBvBvMlEyceyYgedBVvbftU2N42FEzYpfITRaTM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qzOWkZ4m/dzxlPkjZgZfzG8fjpS/tp3w0ZpjMUl6pDpZwon4fz1e3TNtCm3RFcQaEGGUF3gqzDZrn6TZOavc/WTJ3dH2IX4NQ5uYongo/SIQu3H+2QbYOyBw0SwVM0bcaljbeQWrVU8UL0ZDFUqCxDmbtZt5gXQKfnIQUna4V40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uIV1iJgY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 409F3C433C7;
+	Thu, 11 Apr 2024 06:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712815628;
+	bh=moQ7vBvBvMlEyceyYgedBVvbftU2N42FEzYpfITRaTM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=uIV1iJgYc7RGw1GTjL3n6XDtSSm6WASongTB6x3M328vjRZRsddzjzTIxsP2MsMNP
+	 Ow8XRWGTXgaPBpNI+RaamkeaH8Q+tGHaspnsraXVBb6jOtS4QFzQBIo6MApGETDdxY
+	 PNJRu7ErXXxQXSSMsvLpuj3uAaNja+qR8uFLTCZUjJR5QFDw6rI1VZn+I5h35Urre0
+	 M1AIanhIoQk6oKuzwfPvfMe0088qs2SHTo+6ghrUK1MIHrX6690zn2HQgesQ6CMyrl
+	 gd8g2lhcHEZGocXBf3Um3xQ8yW4QvPv/StaLas0a1hryRpvGSutqu9ACgvS/UxYpR3
+	 eIB32VqnaEIMg==
+Message-ID: <7598d482-456b-458e-a0b6-b5767f9c4863@kernel.org>
+Date: Thu, 11 Apr 2024 08:06:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: mediatek: Support MT8188
+ dual-core SCP
+To: "olivia.wen" <olivia.wen@mediatek.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Tinghan Shen <tinghan.shen@mediatek.com>, linux-remoteproc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ Project_Global_Chrome_Upstream_Group@mediatek.com,
+ jason-ch.chen@mediatek.com, yaya.chang@mediatek.com, teddy.chen@mediatek.com
+References: <20240411033750.6476-1-olivia.wen@mediatek.com>
+ <20240411033750.6476-2-olivia.wen@mediatek.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20240411033750.6476-2-olivia.wen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-To Support MT8188 SCP core 1 for ISP driver.
-The SCP on different chips will require different code sizes
- and IPI buffer sizes based on varying requirements.
+On 11/04/2024 05:37, olivia.wen wrote:
+> Under different applications, the MT8188 SCP can be used as single-core
+> or dual-core.
+> 
+> Signed-off-by: olivia.wen <olivia.wen@mediatek.com>
 
-Signed-off-by: olivia.wen <olivia.wen@mediatek.com>
----
- drivers/remoteproc/mtk_common.h    |  5 +--
- drivers/remoteproc/mtk_scp.c       | 62 +++++++++++++++++++++++++++++++-------
- drivers/remoteproc/mtk_scp_ipi.c   |  9 ++++--
- include/linux/remoteproc/mtk_scp.h |  1 +
- 4 files changed, 62 insertions(+), 15 deletions(-)
+Are you sure you use full name, not email login as name?
 
-diff --git a/drivers/remoteproc/mtk_common.h b/drivers/remoteproc/mtk_common.h
-index 6d7736a..8f37f65 100644
---- a/drivers/remoteproc/mtk_common.h
-+++ b/drivers/remoteproc/mtk_common.h
-@@ -78,7 +78,6 @@
- #define MT8195_L2TCM_OFFSET			0x850d0
- 
- #define SCP_FW_VER_LEN			32
--#define SCP_SHARE_BUFFER_SIZE		288
- 
- struct scp_run {
- 	u32 signaled;
-@@ -110,6 +109,8 @@ struct mtk_scp_of_data {
- 	u32 host_to_scp_int_bit;
- 
- 	size_t ipi_buf_offset;
-+	u32 ipi_buffer_size;
-+	u32 max_code_size;
- };
- 
- struct mtk_scp_of_cluster {
-@@ -162,7 +163,7 @@ struct mtk_scp {
- struct mtk_share_obj {
- 	u32 id;
- 	u32 len;
--	u8 share_buf[SCP_SHARE_BUFFER_SIZE];
-+	u8 *share_buf;
- };
- 
- void scp_memcpy_aligned(void __iomem *dst, const void *src, unsigned int len);
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index 6751829..270718d 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -20,7 +20,6 @@
- #include "mtk_common.h"
- #include "remoteproc_internal.h"
- 
--#define MAX_CODE_SIZE 0x500000
- #define SECTION_NAME_IPI_BUFFER ".ipi_buffer"
- 
- /**
-@@ -94,14 +93,14 @@ static void scp_ipi_handler(struct mtk_scp *scp)
- {
- 	struct mtk_share_obj __iomem *rcv_obj = scp->recv_buf;
- 	struct scp_ipi_desc *ipi_desc = scp->ipi_desc;
--	u8 tmp_data[SCP_SHARE_BUFFER_SIZE];
-+	u8 *tmp_data;
- 	scp_ipi_handler_t handler;
- 	u32 id = readl(&rcv_obj->id);
- 	u32 len = readl(&rcv_obj->len);
- 
--	if (len > SCP_SHARE_BUFFER_SIZE) {
-+	if (len > scp->data->ipi_buffer_size) {
- 		dev_err(scp->dev, "ipi message too long (len %d, max %d)", len,
--			SCP_SHARE_BUFFER_SIZE);
-+			scp->data->ipi_buffer_size);
- 		return;
- 	}
- 	if (id >= SCP_IPI_MAX) {
-@@ -109,6 +108,10 @@ static void scp_ipi_handler(struct mtk_scp *scp)
- 		return;
- 	}
- 
-+	tmp_data = kzalloc(len, GFP_KERNEL);
-+	if (!tmp_data)
-+		return;
-+
- 	scp_ipi_lock(scp, id);
- 	handler = ipi_desc[id].handler;
- 	if (!handler) {
-@@ -123,6 +126,7 @@ static void scp_ipi_handler(struct mtk_scp *scp)
- 
- 	scp->ipi_id_ack[id] = true;
- 	wake_up(&scp->ack_wq);
-+	kfree(tmp_data);
- }
- 
- static int scp_elf_read_ipi_buf_addr(struct mtk_scp *scp,
-@@ -133,6 +137,7 @@ static int scp_ipi_init(struct mtk_scp *scp, const struct firmware *fw)
- {
- 	int ret;
- 	size_t buf_sz, offset;
-+	size_t share_buf_offset;
- 
- 	/* read the ipi buf addr from FW itself first */
- 	ret = scp_elf_read_ipi_buf_addr(scp, fw, &offset);
-@@ -154,10 +159,12 @@ static int scp_ipi_init(struct mtk_scp *scp, const struct firmware *fw)
- 
- 	scp->recv_buf = (struct mtk_share_obj __iomem *)
- 			(scp->sram_base + offset);
-+	share_buf_offset = sizeof(scp->recv_buf->id)
-+		+ sizeof(scp->recv_buf->len) + scp->data->ipi_buffer_size;
- 	scp->send_buf = (struct mtk_share_obj __iomem *)
--			(scp->sram_base + offset + sizeof(*scp->recv_buf));
--	memset_io(scp->recv_buf, 0, sizeof(*scp->recv_buf));
--	memset_io(scp->send_buf, 0, sizeof(*scp->send_buf));
-+			(scp->sram_base + offset + share_buf_offset);
-+	memset_io(scp->recv_buf, 0, share_buf_offset);
-+	memset_io(scp->send_buf, 0, share_buf_offset);
- 
- 	return 0;
- }
-@@ -891,7 +898,7 @@ static int scp_map_memory_region(struct mtk_scp *scp)
- 	}
- 
- 	/* Reserved SCP code size */
--	scp->dram_size = MAX_CODE_SIZE;
-+	scp->dram_size = scp->data->max_code_size;
- 	scp->cpu_addr = dma_alloc_coherent(scp->dev, scp->dram_size,
- 					   &scp->dma_addr, GFP_KERNEL);
- 	if (!scp->cpu_addr)
-@@ -1247,6 +1254,8 @@ static const struct mtk_scp_of_data mt8183_of_data = {
- 	.host_to_scp_reg = MT8183_HOST_TO_SCP,
- 	.host_to_scp_int_bit = MT8183_HOST_IPC_INT_BIT,
- 	.ipi_buf_offset = 0x7bdb0,
-+	.max_code_size = 0x500000,
-+	.ipi_buffer_size = 288,
- };
- 
- static const struct mtk_scp_of_data mt8186_of_data = {
-@@ -1260,18 +1269,22 @@ static const struct mtk_scp_of_data mt8186_of_data = {
- 	.host_to_scp_reg = MT8183_HOST_TO_SCP,
- 	.host_to_scp_int_bit = MT8183_HOST_IPC_INT_BIT,
- 	.ipi_buf_offset = 0x3bdb0,
-+	.max_code_size = 0x500000,
-+	.ipi_buffer_size = 288,
- };
- 
- static const struct mtk_scp_of_data mt8188_of_data = {
- 	.scp_clk_get = mt8195_scp_clk_get,
--	.scp_before_load = mt8192_scp_before_load,
--	.scp_irq_handler = mt8192_scp_irq_handler,
-+	.scp_before_load = mt8195_scp_before_load,
-+	.scp_irq_handler = mt8195_scp_irq_handler,
- 	.scp_reset_assert = mt8192_scp_reset_assert,
- 	.scp_reset_deassert = mt8192_scp_reset_deassert,
--	.scp_stop = mt8192_scp_stop,
-+	.scp_stop = mt8195_scp_stop,
- 	.scp_da_to_va = mt8192_scp_da_to_va,
- 	.host_to_scp_reg = MT8192_GIPC_IN_SET,
- 	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
-+	.max_code_size = 0x500000,
-+	.ipi_buffer_size = 600,
- };
- 
- static const struct mtk_scp_of_data mt8192_of_data = {
-@@ -1284,6 +1297,8 @@ static const struct mtk_scp_of_data mt8192_of_data = {
- 	.scp_da_to_va = mt8192_scp_da_to_va,
- 	.host_to_scp_reg = MT8192_GIPC_IN_SET,
- 	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
-+	.max_code_size = 0x500000,
-+	.ipi_buffer_size = 288,
- };
- 
- static const struct mtk_scp_of_data mt8195_of_data = {
-@@ -1296,6 +1311,8 @@ static const struct mtk_scp_of_data mt8195_of_data = {
- 	.scp_da_to_va = mt8192_scp_da_to_va,
- 	.host_to_scp_reg = MT8192_GIPC_IN_SET,
- 	.host_to_scp_int_bit = MT8192_HOST_IPC_INT_BIT,
-+	.max_code_size = 0x500000,
-+	.ipi_buffer_size = 288,
- };
- 
- static const struct mtk_scp_of_data mt8195_of_data_c1 = {
-@@ -1308,6 +1325,22 @@ static const struct mtk_scp_of_data mt8195_of_data_c1 = {
- 	.scp_da_to_va = mt8192_scp_da_to_va,
- 	.host_to_scp_reg = MT8192_GIPC_IN_SET,
- 	.host_to_scp_int_bit = MT8195_CORE1_HOST_IPC_INT_BIT,
-+	.max_code_size = 0x500000,
-+	.ipi_buffer_size = 288,
-+};
-+
-+static const struct mtk_scp_of_data mt8188_of_data_c1 = {
-+	.scp_clk_get = mt8195_scp_clk_get,
-+	.scp_before_load = mt8195_scp_c1_before_load,
-+	.scp_irq_handler = mt8195_scp_c1_irq_handler,
-+	.scp_reset_assert = mt8195_scp_c1_reset_assert,
-+	.scp_reset_deassert = mt8195_scp_c1_reset_deassert,
-+	.scp_stop = mt8195_scp_c1_stop,
-+	.scp_da_to_va = mt8192_scp_da_to_va,
-+	.host_to_scp_reg = MT8192_GIPC_IN_SET,
-+	.host_to_scp_int_bit = MT8195_CORE1_HOST_IPC_INT_BIT,
-+	.max_code_size = 0xA00000,
-+	.ipi_buffer_size = 600,
- };
- 
- static const struct mtk_scp_of_data *mt8195_of_data_cores[] = {
-@@ -1316,6 +1349,12 @@ static const struct mtk_scp_of_data *mt8195_of_data_cores[] = {
- 	NULL
- };
- 
-+static const struct mtk_scp_of_data *mt8188_of_data_cores[] = {
-+	&mt8188_of_data,
-+	&mt8188_of_data_c1,
-+	NULL
-+};
-+
- static const struct of_device_id mtk_scp_of_match[] = {
- 	{ .compatible = "mediatek,mt8183-scp", .data = &mt8183_of_data },
- 	{ .compatible = "mediatek,mt8186-scp", .data = &mt8186_of_data },
-@@ -1323,6 +1362,7 @@ static const struct of_device_id mtk_scp_of_match[] = {
- 	{ .compatible = "mediatek,mt8192-scp", .data = &mt8192_of_data },
- 	{ .compatible = "mediatek,mt8195-scp", .data = &mt8195_of_data },
- 	{ .compatible = "mediatek,mt8195-scp-dual", .data = &mt8195_of_data_cores },
-+	{ .compatible = "mediatek,mt8188-scp-dual", .data = &mt8188_of_data_cores },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, mtk_scp_of_match);
-diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
-index cd0b601..4ef5491 100644
---- a/drivers/remoteproc/mtk_scp_ipi.c
-+++ b/drivers/remoteproc/mtk_scp_ipi.c
-@@ -162,10 +162,12 @@ int scp_ipi_send(struct mtk_scp *scp, u32 id, void *buf, unsigned int len,
- 	struct mtk_share_obj __iomem *send_obj = scp->send_buf;
- 	u32 val;
- 	int ret;
-+	size_t share_buf_offset;
-+	void __iomem *share_buf_io_address;
- 
- 	if (WARN_ON(id <= SCP_IPI_INIT) || WARN_ON(id >= SCP_IPI_MAX) ||
- 	    WARN_ON(id == SCP_IPI_NS_SERVICE) ||
--	    WARN_ON(len > sizeof(send_obj->share_buf)) || WARN_ON(!buf))
-+	    WARN_ON(len > scp->data->ipi_buffer_size) || WARN_ON(!buf))
- 		return -EINVAL;
- 
- 	ret = clk_prepare_enable(scp->clk);
-@@ -184,7 +186,10 @@ int scp_ipi_send(struct mtk_scp *scp, u32 id, void *buf, unsigned int len,
- 		goto unlock_mutex;
- 	}
- 
--	scp_memcpy_aligned(send_obj->share_buf, buf, len);
-+	share_buf_offset = offsetof(struct mtk_share_obj, share_buf);
-+	share_buf_io_address = (void __iomem *)((uintptr_t)scp->send_buf + share_buf_offset);
-+
-+	scp_memcpy_aligned(share_buf_io_address, buf, len);
- 
- 	writel(len, &send_obj->len);
- 	writel(id, &send_obj->id);
-diff --git a/include/linux/remoteproc/mtk_scp.h b/include/linux/remoteproc/mtk_scp.h
-index 7c2b7cc9..344ff41 100644
---- a/include/linux/remoteproc/mtk_scp.h
-+++ b/include/linux/remoteproc/mtk_scp.h
-@@ -43,6 +43,7 @@ enum scp_ipi_id {
- 	SCP_IPI_CROS_HOST_CMD,
- 	SCP_IPI_VDEC_LAT,
- 	SCP_IPI_VDEC_CORE,
-+	SCP_IPI_IMGSYS_CMD,
- 	SCP_IPI_NS_SERVICE = 0xFF,
- 	SCP_IPI_MAX = 0x100,
- };
--- 
-2.6.4
+> ---
+>  Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+> index 507f98f..7e7b567 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
+> @@ -22,7 +22,7 @@ properties:
+>        - mediatek,mt8192-scp
+>        - mediatek,mt8195-scp
+>        - mediatek,mt8195-scp-dual
+> -
+> +      - mediatek,mt8188-scp-dual
+
+Missing blank line, misordered.
+
+
+>    reg:
+>      description:
+>        Should contain the address ranges for memory regions SRAM, CFG, and,
+> @@ -195,6 +195,7 @@ allOf:
+>          compatible:
+>            enum:
+>              - mediatek,mt8195-scp-dual
+> +            - mediatek,mt8188-scp-dual
+
+Again, keep the order.
+
+
+
+Best regards,
+Krzysztof
 
 
