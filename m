@@ -1,380 +1,117 @@
-Return-Path: <linux-remoteproc+bounces-1078-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1084-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DD4F8A05F0
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 11 Apr 2024 04:36:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FADA8A06DA
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 11 Apr 2024 05:38:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB072B2440F
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 11 Apr 2024 02:36:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5EC41F243E6
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 11 Apr 2024 03:38:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B91A513B59B;
-	Thu, 11 Apr 2024 02:35:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE9C13BC2E;
+	Thu, 11 Apr 2024 03:38:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="KKV4gHNw"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="JLshGaH2"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76CC13AD23;
-	Thu, 11 Apr 2024 02:35:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B824B13BAEF;
+	Thu, 11 Apr 2024 03:38:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712802941; cv=none; b=frwt3JnWeHx4wwPJ0qwNJtEuiUP6k2yVqeY0lEExfKuZd8PXtRjilRoZnxJgrACIzqgby7DVggtEYhzerwyRWV4emGikBwUoMj2zEybV6Ljt0ZViBfyWgqpZDa11+1L3mDB0z4YAXPf1Ka7w7Cywo+jR7bhcXov75P77wd37aVU=
+	t=1712806684; cv=none; b=uXBokcu+uFI4OiBs3IhnvRSJzGh6OtzecyiLBtrNIEYet18NQILgW2JKLSY+rj5ABXof9Vjg3w5KyEqGnydZ1ZWpLbBZaQdkx6K+ZproFKiWLQxYlhmvN1yeqG9yXtorSheo7eJ+q90cf7dSb0nWmG2/rWEXpOMgMGoSiI6BUGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712802941; c=relaxed/simple;
-	bh=SfXfzBX5m7OyuijJ/TvDkBhY3+VuhHYyh0GDJpcwuZI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RNLPsn64eioqQSGx9qRhhC04PTJbK8atyD++6/Z1ogTs5DLg/NStfR4m/xK7BH8znkHbeqrZgov92Da97Aq4XZ/7T85BR0jPPTFOlXmDJrvmQeBbKckHke9FU8TTTpxBpfSdPf0lo3uBANsyIiaa6DVqBJCtqzhqR7Ywo6yLVXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=KKV4gHNw; arc=none smtp.client-ip=115.124.30.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1712802937; h=From:To:Subject:Date:Message-Id:MIME-Version:Content-Type;
-	bh=I053vaJtgEERLOYMIzGt1ZlnZX72e17msqyJhPtc3g8=;
-	b=KKV4gHNwcFji45VZ19e6jfciahhJnG7a0Pdn9tjaBOTMi5wtx/iyYkkpfGZ8qYdh0r3TDNrddxaUVg/+JHxCQ7V8mowQcolEIXcx0dS5YpuaVsZ3jDjKdzfIG5RTE3g7SGfuqRqV2xOMNTyaGbAMMY5Hy9s/MMhTPOpxhLlWBX0=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=26;SR=0;TI=SMTPD_---0W4JW4Ji_1712802935;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W4JW4Ji_1712802935)
-          by smtp.aliyun-inc.com;
-          Thu, 11 Apr 2024 10:35:35 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: virtualization@lists.linux.dev
-Cc: Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Vadim Pasternak <vadimp@nvidia.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Halil Pasic <pasic@linux.ibm.com>,
-	Eric Farman <farman@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	David Hildenbrand <david@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	linux-um@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	kvm@vger.kernel.org
-Subject: [PATCH vhost v8 6/6] virtio_ring: simplify the parameters of the funcs related to vring_create/new_virtqueue()
-Date: Thu, 11 Apr 2024 10:35:28 +0800
-Message-Id: <20240411023528.10914-7-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20240411023528.10914-1-xuanzhuo@linux.alibaba.com>
-References: <20240411023528.10914-1-xuanzhuo@linux.alibaba.com>
+	s=arc-20240116; t=1712806684; c=relaxed/simple;
+	bh=pz1rT3cpx3P5SfxVYkWgMRQ4d7jTO20Tqk5wJuH1FFw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XpojevLIUe/1L995JGqzSCTOwSnmtMapju546GwVhSPN4484rbzvJbzFQylSlsxhtHfkTTy6sJC5jFfviwxmSz4mIyUMqqEw/0JRs6Uf7Dtr+G3WdDFeESJTSV8yzktdqFl+7eZOMdMtY0OCv8DRnfQ5sU79pKQ7djuayp5+/Ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=JLshGaH2; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: e312976cf7b411ee935d6952f98a51a9-20240411
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=CEUv8/vX9Yj8LYxJzEvWBhJg+Z+9IJKRp+0lTzE59Rs=;
+	b=JLshGaH2HuWZgCz+wT3BghPpjZJfR427NB06oU8Zc1GVhjMt0M9imHxbSYoep4+dmyByONjMi2UPqeLtW5KsAPphzkuZTd1nedNH/CMOo3hUlxQSxxiG55OeDl2pS+jkoPLMDSzCmP1YJJkgnMVeF9/sVhfNIPJle1r9EkeLU5Q=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.37,REQID:e1e37312-d11d-4036-9477-7dbbf9cb2a93,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:6f543d0,CLOUDID:ceaec6fa-ed05-4274-9204-014369d201e8,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
+	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: e312976cf7b411ee935d6952f98a51a9-20240411
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+	(envelope-from <olivia.wen@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 770570878; Thu, 11 Apr 2024 11:37:57 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 11 Apr 2024 11:37:53 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 11 Apr 2024 11:37:53 +0800
+From: olivia.wen <olivia.wen@mediatek.com>
+To: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier
+	<mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>
+CC: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	"Tinghan Shen" <tinghan.shen@mediatek.com>,
+	<linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<jason-ch.chen@mediatek.com>, <yaya.chang@mediatek.com>,
+	<teddy.chen@mediatek.com>, <olivia.wen@mediatek.com>
+Subject: [PATCH 0/2] Support MT8188 SCP core 1
+Date: Thu, 11 Apr 2024 11:37:48 +0800
+Message-ID: <20240411033750.6476-1-olivia.wen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Git-Hash: d277a0b9519b
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--1.728900-8.000000
+X-TMASE-MatchedRID: 5QkmdD6LvPKtGUuyWCB/KosKNaNh88CQTJDl9FKHbrlGL0g1nVmkYV2k
+	xKIqW9ov4vM1YF6AJbZhyT3WNjppUtAtbEEX0MxBxEHRux+uk8jfhP1xgyx3DNbluTaZDCfQexs
+	PsLsZUCpUMEaxhqvmXiMu2Y9Ez16wi+7vFLFx0XSzJ7sL1nbh6SwXJUWXOqeHm110BD6OWbQ2zu
+	p2rewEAI6H7DI0GsVcMmI24qiENwrMpIbcl3IoA+q1XYAYw09qIdY9jOi4lTI=
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--1.728900-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP:
+	744BD5FC53961DB76626F4B855044EB74205B7C16E9164E059E8D277DFA8359C2000:8
+X-MTK: N
 
-As the refactor of find_vqs()/vring_new_virtqueue()/vring_create_virtqueue
-the struct cfg/tp_cfg are passed to vring.
+Add below patches to support MT8188 SCP core 1
+[PATCH 1/2] dt-bindings: remoteproc: mediatek: 
+               Support MT8188 dual-core SCP
+[PATCH 2/2] remoteproc: mediatek: Support MT8188 SCP core 1
 
-This patch refactors the vring by these structures. This can simplify
-the code.
+olivia.wen (2):
+  dt-bindings: remoteproc: mediatek: Support MT8188 dual-core SCP
+  remoteproc: mediatek: Support MT8188 SCP core 1
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
----
- drivers/virtio/virtio_ring.c | 157 +++++++++++------------------------
- 1 file changed, 50 insertions(+), 107 deletions(-)
+ .../devicetree/bindings/remoteproc/mtk,scp.yaml    |  3 +-
+ drivers/remoteproc/mtk_common.h                    |  5 +-
+ drivers/remoteproc/mtk_scp.c                       | 62 ++++++++++++++++++----
+ drivers/remoteproc/mtk_scp_ipi.c                   |  9 +++-
+ include/linux/remoteproc/mtk_scp.h                 |  1 +
+ 5 files changed, 64 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 20e5e4779f36..70de1a9a81a3 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -223,15 +223,11 @@ struct vring_virtqueue {
- #endif
- };
- 
--static struct virtqueue *__vring_new_virtqueue(unsigned int index,
-+static struct virtqueue *__vring_new_virtqueue(struct virtio_device *vdev,
-+					       unsigned int index,
- 					       struct vring_virtqueue_split *vring_split,
--					       struct virtio_device *vdev,
--					       bool weak_barriers,
--					       bool context,
--					       bool (*notify)(struct virtqueue *),
--					       void (*callback)(struct virtqueue *),
--					       const char *name,
--					       struct device *dma_dev);
-+					       struct vq_transport_config *tp_cfg,
-+					       struct virtio_vq_config *cfg);
- static struct vring_desc_extra *vring_alloc_desc_extra(unsigned int num);
- static void vring_free(struct virtqueue *_vq);
- 
-@@ -240,6 +236,8 @@ static void vring_free(struct virtqueue *_vq);
-  */
- 
- #define to_vvq(_vq) container_of_const(_vq, struct vring_virtqueue, vq)
-+#define cfg_vq_val(cfg, vq, key) (cfg->key[vq->vq.index])
-+#define cfg_vq_get(cfg, vq, key) (cfg->key ? cfg_vq_val(cfg, vq, key) : false)
- 
- static bool virtqueue_use_indirect(const struct vring_virtqueue *vq,
- 				   unsigned int total_sg)
-@@ -1138,32 +1136,28 @@ static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
- 	return 0;
- }
- 
--static struct virtqueue *vring_create_virtqueue_split(
--	unsigned int index,
--	unsigned int num,
--	unsigned int vring_align,
--	struct virtio_device *vdev,
--	bool weak_barriers,
--	bool may_reduce_num,
--	bool context,
--	bool (*notify)(struct virtqueue *),
--	void (*callback)(struct virtqueue *),
--	const char *name,
--	struct device *dma_dev)
-+static struct virtqueue *vring_create_virtqueue_split(struct virtio_device *vdev,
-+						      unsigned int index,
-+						      struct vq_transport_config *tp_cfg,
-+						      struct virtio_vq_config *cfg)
- {
- 	struct vring_virtqueue_split vring_split = {};
- 	struct virtqueue *vq;
- 	int err;
- 
--	err = vring_alloc_queue_split(&vring_split, vdev, num, vring_align,
--				      may_reduce_num, dma_dev);
-+	tp_cfg->dma_dev = tp_cfg->dma_dev ? : vdev->dev.parent;
-+
-+	err = vring_alloc_queue_split(&vring_split, vdev,
-+				      tp_cfg->num,
-+				      tp_cfg->vring_align,
-+				      tp_cfg->may_reduce_num,
-+				      tp_cfg->dma_dev);
- 	if (err)
- 		return NULL;
- 
--	vq = __vring_new_virtqueue(index, &vring_split, vdev, weak_barriers,
--				   context, notify, callback, name, dma_dev);
-+	vq = __vring_new_virtqueue(vdev, index, &vring_split, tp_cfg, cfg);
- 	if (!vq) {
--		vring_free_split(&vring_split, vdev, dma_dev);
-+		vring_free_split(&vring_split, vdev, tp_cfg->dma_dev);
- 		return NULL;
- 	}
- 
-@@ -2050,38 +2044,33 @@ static void virtqueue_reinit_packed(struct vring_virtqueue *vq)
- 	virtqueue_vring_init_packed(&vq->packed, !!vq->vq.callback);
- }
- 
--static struct virtqueue *vring_create_virtqueue_packed(
--	unsigned int index,
--	unsigned int num,
--	unsigned int vring_align,
--	struct virtio_device *vdev,
--	bool weak_barriers,
--	bool may_reduce_num,
--	bool context,
--	bool (*notify)(struct virtqueue *),
--	void (*callback)(struct virtqueue *),
--	const char *name,
--	struct device *dma_dev)
-+static struct virtqueue *vring_create_virtqueue_packed(struct virtio_device *vdev,
-+						       unsigned int index,
-+						       struct vq_transport_config *tp_cfg,
-+						       struct virtio_vq_config *cfg)
- {
- 	struct vring_virtqueue_packed vring_packed = {};
- 	struct vring_virtqueue *vq;
-+	struct device *dma_dev;
- 	int err;
- 
--	if (vring_alloc_queue_packed(&vring_packed, vdev, num, dma_dev))
-+	dma_dev = tp_cfg->dma_dev ? : vdev->dev.parent;
-+
-+	if (vring_alloc_queue_packed(&vring_packed, vdev, tp_cfg->num, dma_dev))
- 		goto err_ring;
- 
- 	vq = kmalloc(sizeof(*vq), GFP_KERNEL);
- 	if (!vq)
- 		goto err_vq;
- 
--	vq->vq.callback = callback;
-+	vq->vq.callback = cfg_vq_val(cfg, vq, callbacks);
- 	vq->vq.vdev = vdev;
--	vq->vq.name = name;
-+	vq->vq.name = cfg_vq_val(cfg, vq, names);
- 	vq->vq.index = index;
- 	vq->vq.reset = false;
- 	vq->we_own_ring = true;
--	vq->notify = notify;
--	vq->weak_barriers = weak_barriers;
-+	vq->notify = tp_cfg->notify;
-+	vq->weak_barriers = tp_cfg->weak_barriers;
- #ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
- 	vq->broken = true;
- #else
-@@ -2094,7 +2083,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
- 	vq->do_unmap = vq->use_dma_api;
- 
- 	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
--		!context;
-+		!cfg_vq_get(cfg, vq, ctx);
- 	vq->event = virtio_has_feature(vdev, VIRTIO_RING_F_EVENT_IDX);
- 
- 	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
-@@ -2104,9 +2093,9 @@ static struct virtqueue *vring_create_virtqueue_packed(
- 	if (err)
- 		goto err_state_extra;
- 
--	virtqueue_vring_init_packed(&vring_packed, !!callback);
-+	virtqueue_vring_init_packed(&vring_packed, !!cfg_vq_val(cfg, vq, callbacks));
- 
--	virtqueue_init(vq, num);
-+	virtqueue_init(vq, tp_cfg->num);
- 	virtqueue_vring_attach_packed(vq, &vring_packed);
- 
- 	spin_lock(&vdev->vqs_list_lock);
-@@ -2599,15 +2588,11 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
- EXPORT_SYMBOL_GPL(vring_interrupt);
- 
- /* Only available for split ring */
--static struct virtqueue *__vring_new_virtqueue(unsigned int index,
-+static struct virtqueue *__vring_new_virtqueue(struct virtio_device *vdev,
-+					       unsigned int index,
- 					       struct vring_virtqueue_split *vring_split,
--					       struct virtio_device *vdev,
--					       bool weak_barriers,
--					       bool context,
--					       bool (*notify)(struct virtqueue *),
--					       void (*callback)(struct virtqueue *),
--					       const char *name,
--					       struct device *dma_dev)
-+					       struct vq_transport_config *tp_cfg,
-+					       struct virtio_vq_config *cfg)
- {
- 	struct vring_virtqueue *vq;
- 	int err;
-@@ -2620,26 +2605,26 @@ static struct virtqueue *__vring_new_virtqueue(unsigned int index,
- 		return NULL;
- 
- 	vq->packed_ring = false;
--	vq->vq.callback = callback;
-+	vq->vq.callback = cfg_vq_val(cfg, vq, callbacks);
- 	vq->vq.vdev = vdev;
--	vq->vq.name = name;
-+	vq->vq.name = cfg_vq_val(cfg, vq, names);
- 	vq->vq.index = index;
- 	vq->vq.reset = false;
- 	vq->we_own_ring = false;
--	vq->notify = notify;
--	vq->weak_barriers = weak_barriers;
-+	vq->notify = tp_cfg->notify;
-+	vq->weak_barriers = tp_cfg->weak_barriers;
- #ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
- 	vq->broken = true;
- #else
- 	vq->broken = false;
- #endif
--	vq->dma_dev = dma_dev;
-+	vq->dma_dev = tp_cfg->dma_dev;
- 	vq->use_dma_api = vring_use_dma_api(vdev);
- 	vq->premapped = false;
- 	vq->do_unmap = vq->use_dma_api;
- 
- 	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
--		!context;
-+		!cfg_vq_get(cfg, vq, ctx);
- 	vq->event = virtio_has_feature(vdev, VIRTIO_RING_F_EVENT_IDX);
- 
- 	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
-@@ -2667,36 +2652,10 @@ struct virtqueue *vring_create_virtqueue(struct virtio_device *vdev,
- 					 struct vq_transport_config *tp_cfg,
- 					 struct virtio_vq_config *cfg)
- {
--	struct device *dma_dev;
--	unsigned int num;
--	unsigned int vring_align;
--	bool weak_barriers;
--	bool may_reduce_num;
--	bool context;
--	bool (*notify)(struct virtqueue *_);
--	void (*callback)(struct virtqueue *_);
--	const char *name;
--
--	dma_dev = tp_cfg->dma_dev ? : vdev->dev.parent;
--
--	num            = tp_cfg->num;
--	vring_align    = tp_cfg->vring_align;
--	weak_barriers  = tp_cfg->weak_barriers;
--	may_reduce_num = tp_cfg->may_reduce_num;
--	notify         = tp_cfg->notify;
--
--	name     = cfg->names[index];
--	callback = cfg->callbacks[index];
--	context  = cfg->ctx ? cfg->ctx[index] : false;
--
- 	if (virtio_has_feature(vdev, VIRTIO_F_RING_PACKED))
--		return vring_create_virtqueue_packed(index, num, vring_align,
--				vdev, weak_barriers, may_reduce_num,
--				context, notify, callback, name, dma_dev);
-+		return vring_create_virtqueue_packed(vdev, index, tp_cfg, cfg);
- 
--	return vring_create_virtqueue_split(index, num, vring_align,
--			vdev, weak_barriers, may_reduce_num,
--			context, notify, callback, name, dma_dev);
-+	return vring_create_virtqueue_split(vdev, index, tp_cfg, cfg);
- }
- EXPORT_SYMBOL_GPL(vring_create_virtqueue);
- 
-@@ -2842,30 +2801,14 @@ struct virtqueue *vring_new_virtqueue(struct virtio_device *vdev,
- 				      struct virtio_vq_config *cfg)
- {
- 	struct vring_virtqueue_split vring_split = {};
--	unsigned int num;
--	unsigned int vring_align;
--	bool weak_barriers;
--	bool context;
--	bool (*notify)(struct virtqueue *_);
--	void (*callback)(struct virtqueue *_);
--	const char *name;
--
--	num            = tp_cfg->num;
--	vring_align    = tp_cfg->vring_align;
--	weak_barriers  = tp_cfg->weak_barriers;
--	notify         = tp_cfg->notify;
--
--	name     = cfg->names[index];
--	callback = cfg->callbacks[index];
--	context  = cfg->ctx ? cfg->ctx[index] : false;
- 
- 	if (virtio_has_feature(vdev, VIRTIO_F_RING_PACKED))
- 		return NULL;
- 
--	vring_init(&vring_split.vring, num, pages, vring_align);
--	return __vring_new_virtqueue(index, &vring_split, vdev, weak_barriers,
--				     context, notify, callback, name,
--				     vdev->dev.parent);
-+	tp_cfg->dma_dev = vdev->dev.parent;
-+
-+	vring_init(&vring_split.vring, tp_cfg->num, pages, tp_cfg->vring_align);
-+	return __vring_new_virtqueue(vdev, index, &vring_split, tp_cfg, cfg);
- }
- EXPORT_SYMBOL_GPL(vring_new_virtqueue);
- 
 -- 
-2.32.0.3.g01195cf9f
+2.6.4
 
 
