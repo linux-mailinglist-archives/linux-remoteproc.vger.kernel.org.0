@@ -1,382 +1,211 @@
-Return-Path: <linux-remoteproc+bounces-1167-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1170-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF2DC8B05C8
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 11:16:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C17D8B05F9
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 11:28:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CA3A1F2675C
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 09:16:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 761071F2284B
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 09:28:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF15159218;
-	Wed, 24 Apr 2024 09:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9E66158D9D;
+	Wed, 24 Apr 2024 09:28:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="J7OYHsjf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="E+iB7vqB"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B84A1591F3;
-	Wed, 24 Apr 2024 09:15:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5594157A47
+	for <linux-remoteproc@vger.kernel.org>; Wed, 24 Apr 2024 09:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713950150; cv=none; b=huluRpdWskM59meelifZs+7L9ZIM66t7HTquuJFE8C8JU4i2K0wxO4p9g5Bi1EbMe7DYy/rbhRP2HW8NfQuCz5VKlhgxVjg65WB5Y8fd5Y8qPfQJNr61trhhwheRl90nADyzNesxOvL6Um6fyttvdOnni9CrBA+wEnxvX2YGUvk=
+	t=1713950882; cv=none; b=Ath+CI5gGzzlttgOdW9IztN2BHu7v1k5q5dCTd/ayfJ8O2uSvogoZCK5ywyy9ncODBMXKrq3o5S6REgwFCP/GcuTaNmrILab23jRuvvQyqmd76BgpS5f+VnuMzGyyzqMTezzoM3mh+M1m9yY1UecA6roBgrZMEgMYwv6j8rBJFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713950150; c=relaxed/simple;
-	bh=WqijgsgknTD42pX0AJPxhmATHAHRAgWH+Y70fUcWT0k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XXT2LOZcgttssB+bP1DbEsu2AYAWsJxuBRT2SZZZzjv556/RnL6PqX54gNqFDYaOEDkHVT20JNyGpeREfN1vihSFssLQ+bfxUyfx6Mfi7JjkzOBP7yZi2pJjNhm28mSVa9zuhMMnR5NOYLqjd/L6osn57mmPxUsF0zE3ZkbfVGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=J7OYHsjf; arc=none smtp.client-ip=115.124.30.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1713950146; h=From:To:Subject:Date:Message-Id:MIME-Version:Content-Type;
-	bh=BF+R39vEMjfNT7kwwXK+6kuPa16lTOGlEmdbi4NXV28=;
-	b=J7OYHsjf1Ziff1CvUrQRAkB22fGKrIxVCTB76nCL7YEercC/cAIPDdmbKG6prZJCQDqf44BTkg5QKQd45PNRSlEJiLjdieXOYLzOssVf/TSNYsMUn1WicQdxHU2XMkwtG5eQJQjm15+t1yJqp8WOAHcVbXtmzZPIWWR778TbBGc=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067110;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=26;SR=0;TI=SMTPD_---0W5BsEqC_1713950143;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W5BsEqC_1713950143)
-          by smtp.aliyun-inc.com;
-          Wed, 24 Apr 2024 17:15:44 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: virtualization@lists.linux.dev
-Cc: Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Vadim Pasternak <vadimp@nvidia.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Halil Pasic <pasic@linux.ibm.com>,
-	Eric Farman <farman@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	David Hildenbrand <david@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	linux-um@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	kvm@vger.kernel.org
-Subject: [PATCH vhost v9 6/6] virtio_ring: simplify the parameters of the funcs related to vring_create/new_virtqueue()
-Date: Wed, 24 Apr 2024 17:15:33 +0800
-Message-Id: <20240424091533.86949-7-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20240424091533.86949-1-xuanzhuo@linux.alibaba.com>
-References: <20240424091533.86949-1-xuanzhuo@linux.alibaba.com>
+	s=arc-20240116; t=1713950882; c=relaxed/simple;
+	bh=mLwS05dNwcW/ElrmPpDn8CNcIuAd5i6BGGcFDqJ+fnM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VqEdgVZLBvT1IlkjISIaWfzj3ZjkRLglQK4AB4sMxW9d+4oyYPjJ5DD+ZdfmvLYbdOYoT2OsR3LyL5U5TS3Er3u7vrhbS7RFkPr5BTCdFt6QCBOINWR+0810aMaws+BFYpEkqjHMaARALyctw8i3R73fMHj7YRvG0oozq7TqSio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=E+iB7vqB; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2dcbcfe11f8so52805721fa.2
+        for <linux-remoteproc@vger.kernel.org>; Wed, 24 Apr 2024 02:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713950879; x=1714555679; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ip0VHmZdh+xcFW/ASY2jXq9x8Dcr/PFVJGAwmDLam5Y=;
+        b=E+iB7vqB2o6tqAOLR4toujgMsNH9OPOBmREXDBQFRE6Ib/q+GJj521fGL49G30WuB8
+         FCCxEXUcprP5z/fxQsiAW9/v6unmO22dhqxAeJ7mkSyZsz/iwytMFV0EcFF7GVSxKUle
+         7hCyPwNt/3I9wV3CfUD1H1DSoPck07kKHQxOkiTFbBNvx7V0TS5RjEJlvoetAfQbI+SC
+         E3Lj9EJ6ew1ePfKoKgYJsI3jvugHfohiLxPMlIW8hnsgjO4yPm8YzZZrgHE1XjxeoKK9
+         LgGYlhdyEixcTXkalUwX/jY8Se72tLurIBSVdODQZ/Nr/hqcF23lXytD4eNTgXIhYhvA
+         3uuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713950879; x=1714555679;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ip0VHmZdh+xcFW/ASY2jXq9x8Dcr/PFVJGAwmDLam5Y=;
+        b=lLmgI2H3bvzsBi42MZ1htNLCoy92fOHiQGUREhDaoCso7E69xrwrPmVowGVKHeMlJ8
+         os8LlUtHfWS3yXeiOe4O1uOARvXONKmX1ZEXGPirmEtntnqgpEqFpXGRDRFUl62c79bl
+         YZo6zmCxD3FdRC044xoJ7DTyipLc/kMmQ4hlG5LNJC0/arCiYeOZPMrbc0N7BbtIN//u
+         MVthp7yApMttuQIj3g1YSbLyj1WnCrQd2IXrDvraXTA6kuF4cZJqkadEcpcMUi9Rf8e1
+         xiiW5uXIh9V3omhyIW7Q7k+IWrdVN/2SNwLdXv0KHe27g8gJsZhnYM7nUKMvcoe1EMD6
+         Z7hQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV0jtEBCifz18xM2WhBHDM1mOoN7bjRuysiXL0G4RGsGO1MdesnpcOBBkx6Qlkxr4/yptO5jJhGD4LFtexG/LUkJetZZLuQCwRuru/62ZYrgQ==
+X-Gm-Message-State: AOJu0YxHTjjLeb5+aTYFZk7IhwCgUTkbfN/rdEi5ZSCGLve/kQsUoKfY
+	4eZnkWnAlJe5DnUheV7mkwRiGKNKEF8VJKve3v1SJjLflG8icAtjMT6kyDRYIhw=
+X-Google-Smtp-Source: AGHT+IEzWyNmfcL0ESrs6hcUXc/a2rBo+HjGU7WuwduiB4fypJi3l19ZEzscf4gH2/z5Zjte1DqgAg==
+X-Received: by 2002:a2e:7c05:0:b0:2da:9f24:44a8 with SMTP id x5-20020a2e7c05000000b002da9f2444a8mr1108908ljc.11.1713950879041;
+        Wed, 24 Apr 2024 02:27:59 -0700 (PDT)
+Received: from umbar.lan ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id u2-20020a2e8442000000b002d8744903ebsm1916849ljh.68.2024.04.24.02.27.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Apr 2024 02:27:58 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH v7 0/6] soc: qcom: add in-kernel pd-mapper implementation
+Date: Wed, 24 Apr 2024 12:27:56 +0300
+Message-Id: <20240424-qcom-pd-mapper-v7-0-05f7fc646e0f@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Git-Hash: bdb00f35db89
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJzQKGYC/3XOwWrEIBQF0F8ZXNegz6fGrvofpQtHzUTaxNSE0
+ DDk32sGSlOkywvv3HfvZA45hpk8X+4khzXOMY0l6KcLcb0db4FGXzIBBsgE4/TTpYFOng52mkK
+ mgYNXAB6tZ6SgKYcufj0KX99K7nI5X/oc7E+N4ACKMYGoG8EQhZKUUz/EJW/N1eZt7t/T+vIRR
+ 5tTk/LtqO3jvKS8PWaucJT/u2gFyqj0HCxruTeen6uOSas4e6y8KF61su0st467tvJ48rz+j8U
+ DKm2cs9IBVl7+euSm8rL4IORVdS3qYEzl1ckDVF4V3xllpPaMA9N//L7v38GhWr/0AQAA
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Sibi Sankar <quic_sibis@quicinc.com>, 
+ Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-remoteproc@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>, 
+ Xilin Wu <wuxilin123@gmail.com>, 
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4410;
+ i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
+ bh=mLwS05dNwcW/ElrmPpDn8CNcIuAd5i6BGGcFDqJ+fnM=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBmKNCd4zI4LD5jNj6H7BH7tL3H4kKac/FOaJvUa
+ Z7C1UxjUSuJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZijQnQAKCRCLPIo+Aiko
+ 1VPoB/96xkqauFGwjlOqxMwLHWwObbGIWDA3irTxtrvrug0yU/G4+jCQJixlvQ6qP24N1aWb9m9
+ u40zS7PJ1gD9yu6zw0P2NhV4NA5pr41JNEUf8TYh1heceaZRtEeWhGg7dL7uZDYVVeD9Thuq7gW
+ rEsmsCk3aSPaWQCWa3RayP4oXeZgtokQeQOIBOHcZoBRY3Q8zHBChXfFeZ6nefC1qdKPI2pd8UO
+ /OF0urm/z6YWoLHNtuiYSUNVAYcoaDexjY8kZy3jajKYQ7a2L2Ea28Yzoo9yKMglivwbAVKvaMm
+ 7RlXXE65D4FkNnuPvrSHELE/bFfH1BGRS4k4eBMerP09xUv8
+X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
-As the refactor of find_vqs()/vring_new_virtqueue()/vring_create_virtqueue
-the struct cfg/tp_cfg are passed to vring.
+Protection domain mapper is a QMI service providing mapping between
+'protection domains' and services supported / allowed in these domains.
+For example such mapping is required for loading of the WiFi firmware or
+for properly starting up the UCSI / altmode / battery manager support.
 
-This patch refactors the vring by these structures. This can simplify
-the code.
+The existing userspace implementation has several issue. It doesn't play
+well with CONFIG_EXTRA_FIRMWARE, it doesn't reread the JSON files if the
+firmware location is changed (or if the firmware was not available at
+the time pd-mapper was started but the corresponding directory is
+mounted later), etc.
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
+However this configuration is largely static and common between
+different platforms. Provide in-kernel service implementing static
+per-platform data.
+
+Unlike previous revisions of the patchset, this iteration uses static
+configuration per platform, rather than building it dynamically from the
+list of DSPs being started.
+
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Sibi Sankar <quic_sibis@quicinc.com>
+To: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-remoteproc@vger.kernel.org
+Cc: Johan Hovold <johan+linaro@kernel.org>
+Cc: Xilin Wu <wuxilin123@gmail.com>
+Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+--
+
+Changes in v7:
+- Fixed modular build (Steev)
+- Link to v6: https://lore.kernel.org/r/20240422-qcom-pd-mapper-v6-0-f96957d01207@linaro.org
+
+Changes in v6:
+- Reworked mutex to fix lockdep issue on deregistration
+- Fixed dependencies between PD-mapper and remoteproc to fix modular
+  builds (Krzysztof)
+- Added EXPORT_SYMBOL_GPL to fix modular builds (Krzysztof)
+- Fixed kerneldocs (Krzysztof)
+- Removed extra pr_debug messages (Krzysztof)
+- Fixed wcss build (Krzysztof)
+- Added platforms which do not require protection domain mapping to
+  silence the notice on those platforms
+- Link to v5: https://lore.kernel.org/r/20240419-qcom-pd-mapper-v5-0-e35b6f847e99@linaro.org
+
+Changes in v5:
+- pdr: drop lock in pdr_register_listener, list_lock is already held (Chris Lew)
+- pd_mapper: reworked to provide static configuration per platform
+  (Bjorn)
+- Link to v4: https://lore.kernel.org/r/20240311-qcom-pd-mapper-v4-0-24679cca5c24@linaro.org
+
+Changes in v4:
+- Fixed missing chunk, reenabled kfree in qmi_del_server (Konrad)
+- Added configuration for sm6350 (Thanks to Luca)
+- Removed RFC tag (Konrad)
+- Link to v3: https://lore.kernel.org/r/20240304-qcom-pd-mapper-v3-0-6858fa1ac1c8@linaro.org
+
+Changes in RFC v3:
+- Send start / stop notifications when PD-mapper domain list is changed
+- Reworked the way PD-mapper treats protection domains, register all of
+  them in a single batch
+- Added SC7180 domains configuration based on TCL Book 14 GO
+- Link to v2: https://lore.kernel.org/r/20240301-qcom-pd-mapper-v2-0-5d12a081d9d1@linaro.org
+
+Changes in RFC v2:
+- Swapped num_domains / domains (Konrad)
+- Fixed an issue with battery not working on sc8280xp
+- Added missing configuration for QCS404
+
 ---
- drivers/virtio/virtio_ring.c | 161 +++++++++++------------------------
- 1 file changed, 52 insertions(+), 109 deletions(-)
+Dmitry Baryshkov (6):
+      soc: qcom: pdr: protect locator_addr with the main mutex
+      soc: qcom: pdr: fix parsing of domains lists
+      soc: qcom: pdr: extract PDR message marshalling data
+      soc: qcom: qmi: add a way to remove running service
+      soc: qcom: add pd-mapper implementation
+      remoteproc: qcom: enable in-kernel PD mapper
 
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 3a5e56cca13a..766db96406f0 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -223,15 +223,11 @@ struct vring_virtqueue {
- #endif
- };
- 
--static struct virtqueue *__vring_new_virtqueue(unsigned int index,
-+static struct virtqueue *__vring_new_virtqueue(struct virtio_device *vdev,
-+					       unsigned int index,
- 					       struct vring_virtqueue_split *vring_split,
--					       struct virtio_device *vdev,
--					       bool weak_barriers,
--					       bool context,
--					       bool (*notify)(struct virtqueue *),
--					       void (*callback)(struct virtqueue *),
--					       const char *name,
--					       struct device *dma_dev);
-+					       struct vq_transport_config *tp_cfg,
-+					       struct virtio_vq_config *cfg);
- static struct vring_desc_extra *vring_alloc_desc_extra(unsigned int num);
- static void vring_free(struct virtqueue *_vq);
- 
-@@ -240,6 +236,8 @@ static void vring_free(struct virtqueue *_vq);
-  */
- 
- #define to_vvq(_vq) container_of_const(_vq, struct vring_virtqueue, vq)
-+#define cfg_vq_val(cfg, vq, key) (cfg->key[vq->vq.index])
-+#define cfg_vq_get(cfg, vq, key) (cfg->key ? cfg_vq_val(cfg, vq, key) : false)
- 
- static bool virtqueue_use_indirect(const struct vring_virtqueue *vq,
- 				   unsigned int total_sg)
-@@ -1138,32 +1136,28 @@ static int vring_alloc_queue_split(struct vring_virtqueue_split *vring_split,
- 	return 0;
- }
- 
--static struct virtqueue *vring_create_virtqueue_split(
--	unsigned int index,
--	unsigned int num,
--	unsigned int vring_align,
--	struct virtio_device *vdev,
--	bool weak_barriers,
--	bool may_reduce_num,
--	bool context,
--	bool (*notify)(struct virtqueue *),
--	void (*callback)(struct virtqueue *),
--	const char *name,
--	struct device *dma_dev)
-+static struct virtqueue *vring_create_virtqueue_split(struct virtio_device *vdev,
-+						      unsigned int index,
-+						      struct vq_transport_config *tp_cfg,
-+						      struct virtio_vq_config *cfg)
- {
- 	struct vring_virtqueue_split vring_split = {};
- 	struct virtqueue *vq;
- 	int err;
- 
--	err = vring_alloc_queue_split(&vring_split, vdev, num, vring_align,
--				      may_reduce_num, dma_dev);
-+	tp_cfg->dma_dev = tp_cfg->dma_dev ? : vdev->dev.parent;
-+
-+	err = vring_alloc_queue_split(&vring_split, vdev,
-+				      tp_cfg->num,
-+				      tp_cfg->vring_align,
-+				      tp_cfg->may_reduce_num,
-+				      tp_cfg->dma_dev);
- 	if (err)
- 		return NULL;
- 
--	vq = __vring_new_virtqueue(index, &vring_split, vdev, weak_barriers,
--				   context, notify, callback, name, dma_dev);
-+	vq = __vring_new_virtqueue(vdev, index, &vring_split, tp_cfg, cfg);
- 	if (!vq) {
--		vring_free_split(&vring_split, vdev, dma_dev);
-+		vring_free_split(&vring_split, vdev, tp_cfg->dma_dev);
- 		return NULL;
- 	}
- 
-@@ -2050,38 +2044,33 @@ static void virtqueue_reinit_packed(struct vring_virtqueue *vq)
- 	virtqueue_vring_init_packed(&vq->packed, !!vq->vq.callback);
- }
- 
--static struct virtqueue *vring_create_virtqueue_packed(
--	unsigned int index,
--	unsigned int num,
--	unsigned int vring_align,
--	struct virtio_device *vdev,
--	bool weak_barriers,
--	bool may_reduce_num,
--	bool context,
--	bool (*notify)(struct virtqueue *),
--	void (*callback)(struct virtqueue *),
--	const char *name,
--	struct device *dma_dev)
-+static struct virtqueue *vring_create_virtqueue_packed(struct virtio_device *vdev,
-+						       unsigned int index,
-+						       struct vq_transport_config *tp_cfg,
-+						       struct virtio_vq_config *cfg)
- {
- 	struct vring_virtqueue_packed vring_packed = {};
- 	struct vring_virtqueue *vq;
-+	struct device *dma_dev;
- 	int err;
- 
--	if (vring_alloc_queue_packed(&vring_packed, vdev, num, dma_dev))
-+	dma_dev = tp_cfg->dma_dev ? : vdev->dev.parent;
-+
-+	if (vring_alloc_queue_packed(&vring_packed, vdev, tp_cfg->num, dma_dev))
- 		goto err_ring;
- 
- 	vq = kmalloc(sizeof(*vq), GFP_KERNEL);
- 	if (!vq)
- 		goto err_vq;
- 
--	vq->vq.callback = callback;
--	vq->vq.vdev = vdev;
--	vq->vq.name = name;
- 	vq->vq.index = index;
-+	vq->vq.callback = cfg_vq_val(cfg, vq, callbacks);
-+	vq->vq.vdev = vdev;
-+	vq->vq.name = cfg_vq_val(cfg, vq, names);
- 	vq->vq.reset = false;
- 	vq->we_own_ring = true;
--	vq->notify = notify;
--	vq->weak_barriers = weak_barriers;
-+	vq->notify = tp_cfg->notify;
-+	vq->weak_barriers = tp_cfg->weak_barriers;
- #ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
- 	vq->broken = true;
- #else
-@@ -2094,7 +2083,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
- 	vq->do_unmap = vq->use_dma_api;
- 
- 	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
--		!context;
-+		!cfg_vq_get(cfg, vq, ctx);
- 	vq->event = virtio_has_feature(vdev, VIRTIO_RING_F_EVENT_IDX);
- 
- 	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
-@@ -2104,9 +2093,9 @@ static struct virtqueue *vring_create_virtqueue_packed(
- 	if (err)
- 		goto err_state_extra;
- 
--	virtqueue_vring_init_packed(&vring_packed, !!callback);
-+	virtqueue_vring_init_packed(&vring_packed, !!cfg_vq_val(cfg, vq, callbacks));
- 
--	virtqueue_init(vq, num);
-+	virtqueue_init(vq, tp_cfg->num);
- 	virtqueue_vring_attach_packed(vq, &vring_packed);
- 
- 	spin_lock(&vdev->vqs_list_lock);
-@@ -2599,15 +2588,11 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
- EXPORT_SYMBOL_GPL(vring_interrupt);
- 
- /* Only available for split ring */
--static struct virtqueue *__vring_new_virtqueue(unsigned int index,
-+static struct virtqueue *__vring_new_virtqueue(struct virtio_device *vdev,
-+					       unsigned int index,
- 					       struct vring_virtqueue_split *vring_split,
--					       struct virtio_device *vdev,
--					       bool weak_barriers,
--					       bool context,
--					       bool (*notify)(struct virtqueue *),
--					       void (*callback)(struct virtqueue *),
--					       const char *name,
--					       struct device *dma_dev)
-+					       struct vq_transport_config *tp_cfg,
-+					       struct virtio_vq_config *cfg)
- {
- 	struct vring_virtqueue *vq;
- 	int err;
-@@ -2620,26 +2605,26 @@ static struct virtqueue *__vring_new_virtqueue(unsigned int index,
- 		return NULL;
- 
- 	vq->packed_ring = false;
--	vq->vq.callback = callback;
--	vq->vq.vdev = vdev;
--	vq->vq.name = name;
- 	vq->vq.index = index;
-+	vq->vq.callback = cfg_vq_val(cfg, vq, callbacks);
-+	vq->vq.vdev = vdev;
-+	vq->vq.name = cfg_vq_val(cfg, vq, names);
- 	vq->vq.reset = false;
- 	vq->we_own_ring = false;
--	vq->notify = notify;
--	vq->weak_barriers = weak_barriers;
-+	vq->notify = tp_cfg->notify;
-+	vq->weak_barriers = tp_cfg->weak_barriers;
- #ifdef CONFIG_VIRTIO_HARDEN_NOTIFICATION
- 	vq->broken = true;
- #else
- 	vq->broken = false;
- #endif
--	vq->dma_dev = dma_dev;
-+	vq->dma_dev = tp_cfg->dma_dev;
- 	vq->use_dma_api = vring_use_dma_api(vdev);
- 	vq->premapped = false;
- 	vq->do_unmap = vq->use_dma_api;
- 
- 	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
--		!context;
-+		!cfg_vq_get(cfg, vq, ctx);
- 	vq->event = virtio_has_feature(vdev, VIRTIO_RING_F_EVENT_IDX);
- 
- 	if (virtio_has_feature(vdev, VIRTIO_F_ORDER_PLATFORM))
-@@ -2667,36 +2652,10 @@ struct virtqueue *vring_create_virtqueue(struct virtio_device *vdev,
- 					 struct vq_transport_config *tp_cfg,
- 					 struct virtio_vq_config *cfg)
- {
--	struct device *dma_dev;
--	unsigned int num;
--	unsigned int vring_align;
--	bool weak_barriers;
--	bool may_reduce_num;
--	bool context;
--	bool (*notify)(struct virtqueue *_);
--	void (*callback)(struct virtqueue *_);
--	const char *name;
--
--	dma_dev = tp_cfg->dma_dev ? : vdev->dev.parent;
--
--	num            = tp_cfg->num;
--	vring_align    = tp_cfg->vring_align;
--	weak_barriers  = tp_cfg->weak_barriers;
--	may_reduce_num = tp_cfg->may_reduce_num;
--	notify         = tp_cfg->notify;
--
--	name     = cfg->names[index];
--	callback = cfg->callbacks[index];
--	context  = cfg->ctx ? cfg->ctx[index] : false;
--
- 	if (virtio_has_feature(vdev, VIRTIO_F_RING_PACKED))
--		return vring_create_virtqueue_packed(index, num, vring_align,
--				vdev, weak_barriers, may_reduce_num,
--				context, notify, callback, name, dma_dev);
-+		return vring_create_virtqueue_packed(vdev, index, tp_cfg, cfg);
- 
--	return vring_create_virtqueue_split(index, num, vring_align,
--			vdev, weak_barriers, may_reduce_num,
--			context, notify, callback, name, dma_dev);
-+	return vring_create_virtqueue_split(vdev, index, tp_cfg, cfg);
- }
- EXPORT_SYMBOL_GPL(vring_create_virtqueue);
- 
-@@ -2837,30 +2796,14 @@ struct virtqueue *vring_new_virtqueue(struct virtio_device *vdev,
- 				      struct virtio_vq_config *cfg)
- {
- 	struct vring_virtqueue_split vring_split = {};
--	unsigned int num;
--	unsigned int vring_align;
--	bool weak_barriers;
--	bool context;
--	bool (*notify)(struct virtqueue *_);
--	void (*callback)(struct virtqueue *_);
--	const char *name;
--
--	num            = tp_cfg->num;
--	vring_align    = tp_cfg->vring_align;
--	weak_barriers  = tp_cfg->weak_barriers;
--	notify         = tp_cfg->notify;
--
--	name     = cfg->names[index];
--	callback = cfg->callbacks[index];
--	context  = cfg->ctx ? cfg->ctx[index] : false;
- 
- 	if (virtio_has_feature(vdev, VIRTIO_F_RING_PACKED))
- 		return NULL;
- 
--	vring_init(&vring_split.vring, num, pages, vring_align);
--	return __vring_new_virtqueue(index, &vring_split, vdev, weak_barriers,
--				     context, notify, callback, name,
--				     vdev->dev.parent);
-+	tp_cfg->dma_dev = vdev->dev.parent;
-+
-+	vring_init(&vring_split.vring, tp_cfg->num, pages, tp_cfg->vring_align);
-+	return __vring_new_virtqueue(vdev, index, &vring_split, tp_cfg, cfg);
- }
- EXPORT_SYMBOL_GPL(vring_new_virtqueue);
- 
+ drivers/remoteproc/Kconfig          |   4 +
+ drivers/remoteproc/qcom_q6v5_adsp.c |  11 +-
+ drivers/remoteproc/qcom_q6v5_mss.c  |  10 +-
+ drivers/remoteproc/qcom_q6v5_pas.c  |  12 +-
+ drivers/remoteproc/qcom_q6v5_wcss.c |  12 +-
+ drivers/soc/qcom/Kconfig            |  14 +
+ drivers/soc/qcom/Makefile           |   2 +
+ drivers/soc/qcom/pdr_interface.c    |   6 +-
+ drivers/soc/qcom/pdr_internal.h     | 318 ++---------------
+ drivers/soc/qcom/qcom_pd_mapper.c   | 656 ++++++++++++++++++++++++++++++++++++
+ drivers/soc/qcom/qcom_pdr_msg.c     | 353 +++++++++++++++++++
+ drivers/soc/qcom/qmi_interface.c    |  67 ++++
+ include/linux/soc/qcom/pd_mapper.h  |  28 ++
+ include/linux/soc/qcom/qmi.h        |   2 +
+ 14 files changed, 1193 insertions(+), 302 deletions(-)
+---
+base-commit: a59668a9397e7245b26e9be85d23f242ff757ae8
+change-id: 20240301-qcom-pd-mapper-e12d622d4ad0
+
+Best regards,
 -- 
-2.32.0.3.g01195cf9f
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 
