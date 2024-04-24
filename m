@@ -1,147 +1,134 @@
-Return-Path: <linux-remoteproc+bounces-1198-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1201-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EC7E8B1063
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 18:58:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D63728B1335
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 21:06:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5471EB29690
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 16:55:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63C6B1F25993
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 19:06:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C925013DBB2;
-	Wed, 24 Apr 2024 16:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5300C2263A;
+	Wed, 24 Apr 2024 19:06:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="mMZVtqoB"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="zF0wSj5k"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57DAA16C450;
-	Wed, 24 Apr 2024 16:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42AE1DDF4;
+	Wed, 24 Apr 2024 19:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713977739; cv=none; b=TlT/f3bI+RLgST/CBW25SUnWzZAO+5n2zhV4yVbe+urcZiJpsOx1VFxzVYUAURg+EKRdCuPjqtogAnajt6yjSlceQbDHXpZW3KaCmsGzQFkgbwB7fGDc9E9TMiHKzm68J0LgowBqB6cMVKYkN1pahUZhEfgB07xsEgz+3oL/3Qg=
+	t=1713985599; cv=none; b=YftVP/lRm1HrPoYvv1rmroDOl1dAHeKGFvVUr3lMIG9XLc0DO6NhmDtf0O/dKsFaetJct1mHLcfOcQ2ECsVpgwK3p1WwTZjfWorkOhYB++XWzdjtwsX0Dmpyk89BlpVw2pcOjoJb8O67kjUjzplYewYAgN+ldM4DQQtde7aMP5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713977739; c=relaxed/simple;
-	bh=ismdr1NH89EyqlRlfJMRiCPmKdo+TMgxDhu4SNwwFKM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=izHC4Cq7Tka0vxVSy0aVB3jM3+lVC5+/wDPw+O36JRzScB45yX3SPI3PhPtp32RVYTHJF05IMnu6UI6xJBdFTu0V6CLjEOUW8KSoI/xU9sn1ZqlrtZlc9cPPnVyY+76WmKYt8CqM7bpPCpmXAM7J8zkyscR7SEe8W+OlpjZisuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=mMZVtqoB; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43OGrFNG018626;
-	Wed, 24 Apr 2024 16:55:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=S3QwG/gp7sGhYK+iMw8kH
-	vsDhub3gIJuqyRymC6Hyns=; b=mMZVtqoBq1oaB0lOfFqvvBc0fcWm9kvADGZWT
-	tGp19sacBYS0+2Vwq40/MdKK/pWfK93DUxOcEksATBJ/oEoJEDFk9e32d/ysQNMD
-	3eDHG51iVFZH7/ULg2RDWglFU5xGToV7rvN9WSn+4bnvYSvSbwpq6bpwrphe1ebE
-	kXaZMdIwL0/OZXI1fAu+7AukFa+xHvqwvQkSOd89W1pz3Dyi2ahDnKK4QB9d9qSm
-	QecIkmOYNyxx1AWcf7xm/jsoy8lTW+hjiNCUd722QKX2ak55hUdQFvGg1xbN6vMz
-	bjXq0VXGyW5zeH8iM6IG0aIdd6nKhhwDx4/F/7IF4lzyN/VGg==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xpv9g9hqs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Apr 2024 16:55:32 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43OGtVgX031427
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Apr 2024 16:55:31 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 24 Apr 2024 09:55:31 -0700
-Date: Wed, 24 Apr 2024 09:55:30 -0700
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Luca Weiss <luca@z3ntu.xyz>
-CC: <~postmarketos/upstreaming@lists.sr.ht>, <phone-devel@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+	s=arc-20240116; t=1713985599; c=relaxed/simple;
+	bh=WYoh90sRIRI9un9UAfYGHEtVzQuEF9n+z1X1OknWuN4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IX3i1e5Xzs8gkmJohRtvKyk3QupUR9QiVKU8b2reacBWA2/7uo/5CDn04S0U+CThY5Uvl1KWI+Dok5A3ovBUkjhJCKXJrGl5omynbomCenCMKojtBvhp6w4yOdrD/AgZK8gY86sa1JHRuy8FfhGsC7nf8LkX7fo0AGY0eKwfSaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=zF0wSj5k; arc=none smtp.client-ip=198.47.23.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 43OJ6DGk004439;
+	Wed, 24 Apr 2024 14:06:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1713985573;
+	bh=x032eyrn6hQaOAO3LEFL1lvrOVjn5YoaEkDcNs3WXGA=;
+	h=From:To:CC:Subject:Date;
+	b=zF0wSj5k2gqtemLwsYM2rMIDDm3JyZ3SPrvzrvFui9v3xLy83ZrdRgaZoX1SM8qPk
+	 RKVpfFPStKxdB57ULywBkGhv3If8dEJqV0R6BBWnI6Xz98VIMFPo6O9ISGIZlrtrSW
+	 LhOM8qB2L2X7/bm+1fCSHVL32ntlGlvL5A9VmG1s=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 43OJ6Dsr017950
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Wed, 24 Apr 2024 14:06:13 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 24
+ Apr 2024 14:06:13 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 24 Apr 2024 14:06:13 -0500
+Received: from ula0226330.dhcp.ti.com (ula0226330.dhcp.ti.com [10.219.51.241])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 43OJ6DqN067070;
+	Wed, 24 Apr 2024 14:06:13 -0500
+From: Andrew Davis <afd@ti.com>
+To: Bjorn Andersson <andersson@kernel.org>,
         Mathieu Poirier
 	<mathieu.poirier@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob
- Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor
- Dooley <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 0/7] Use mboxes instead of syscon for APCS (arm32 & arm64)
-Message-ID: <Zik5gmTixGpk13qj@hu-bjorande-lv.qualcomm.com>
-References: <20240424-apcs-mboxes-v1-0-6556c47cb501@z3ntu.xyz>
+        Rob Herring <robh@kernel.org>,
+        Krzysztof
+ Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Nishanth
+ Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo
+	<kristo@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Hari Nagalla
+	<hnagalla@ti.com>
+CC: <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>
+Subject: [PATCH v8 0/4] TI K3 M4F support on AM62 SoCs
+Date: Wed, 24 Apr 2024 14:06:08 -0500
+Message-ID: <20240424190612.17349-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240424-apcs-mboxes-v1-0-6556c47cb501@z3ntu.xyz>
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: hQv8mAhEPOsbXGPMhm9SQ19NB9rfqNBn
-X-Proofpoint-GUID: hQv8mAhEPOsbXGPMhm9SQ19NB9rfqNBn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-04-24_14,2024-04-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- suspectscore=0 clxscore=1015 mlxlogscore=922 malwarescore=0 adultscore=0
- mlxscore=0 phishscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2404010003
- definitions=main-2404240072
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Wed, Apr 24, 2024 at 06:23:53PM +0200, Luca Weiss wrote:
-> The first patch is for removing a bogus error warning I've noticed while
-> developing this on msm8226 - there the patches are also coming later for
-> this SoC since apcs is getting hooked up to cpufreq there also.
-> 
-> Apart from usages from the qcom,smsm driver (patches coming!) all other
-> usages of the apcs mailbox now go via the mailbox driver - where one is
-> used, so some arm32 boards will continue using "qcom,ipc*" properties in
-> the short or long term.
-> 
+Hello all,
 
-Very nice, thank you for cleaning this up.
+This is the continuation of the M4F RProc support series from here[0].
+I'm helping out with the upstream task for Hari and so this version(v8)
+is a little different than the previous(v7) postings[0]. Most notable
+change I've introduced being the patches factoring out common support
+from the current K3 R5 and DSP drivers have been dropped. I'd like
+to do that re-factor *after* getting this driver in shape, that way
+we have 3 similar drivers to factor out from vs trying to make those
+changes in parallel with the series adding M4 support.
 
-Regards,
-Bjorn
+Anyway, details on our M4F subsystem can be found the
+the AM62 TRM in the section on the same:
 
-> Only compile-tested apart from msm8953 (tested on sdm632-fairphone-fp3)
-> and msm8974 (tested on msm8974pro-fairphone-fp2), but I don't expect any
-> complications with this.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-> Luca Weiss (7):
->       rpmsg: qcom_smd: Don't print error during probe deferral
->       ARM: dts: qcom: msm8974: Use mboxes properties for APCS
->       arm64: dts: qcom: msm8916: Use mboxes properties for APCS
->       arm64: dts: qcom: msm8939: Use mboxes properties for APCS
->       arm64: dts: qcom: msm8953: Use mboxes properties for APCS
->       arm64: dts: qcom: msm8976: Use mboxes properties for APCS
->       arm64: dts: qcom: msm8994: Use mboxes properties for APCS
-> 
->  arch/arm/boot/dts/qcom/qcom-msm8974.dtsi | 14 +++++++-------
->  arch/arm64/boot/dts/qcom/msm8916.dtsi    | 10 +++++-----
->  arch/arm64/boot/dts/qcom/msm8939.dtsi    |  4 ++--
->  arch/arm64/boot/dts/qcom/msm8953.dtsi    | 10 +++++-----
->  arch/arm64/boot/dts/qcom/msm8976.dtsi    |  8 ++++----
->  arch/arm64/boot/dts/qcom/msm8994.dtsi    |  6 +++---
->  drivers/rpmsg/qcom_smd.c                 |  3 ++-
->  7 files changed, 28 insertions(+), 27 deletions(-)
-> ---
-> base-commit: 43173e6dbaa227f3107310d4df4a3bacd5e0df33
-> change-id: 20240423-apcs-mboxes-12ee6c01a5b3
-> 
-> Best regards,
-> -- 
-> Luca Weiss <luca@z3ntu.xyz>
-> 
+AM62x Technical Reference Manual (SPRUIV7A – MAY 2022)
+https://www.ti.com/lit/pdf/SPRUIV7A
+
+Thanks,
+Andrew
+
+[0] https://lore.kernel.org/linux-arm-kernel/20240202175538.1705-5-hnagalla@ti.com/T/
+
+Hari Nagalla (3):
+  dt-bindings: remoteproc: k3-m4f: Add K3 AM64x SoCs
+  arm64: defconfig: Enable TI K3 M4 remoteproc driver
+  arm64: dts: ti: k3-am62: Add M4F remoteproc node
+
+Martyn Welch (1):
+  remoteproc: k3-m4: Add a remoteproc driver for M4F subsystem
+
+ .../bindings/remoteproc/ti,k3-m4f-rproc.yaml  | 126 +++
+ arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi       |  12 +
+ .../arm64/boot/dts/ti/k3-am62x-sk-common.dtsi |  18 +
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/remoteproc/Kconfig                    |  13 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/ti_k3_m4_remoteproc.c      | 785 ++++++++++++++++++
+ 7 files changed, 956 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml
+ create mode 100644 drivers/remoteproc/ti_k3_m4_remoteproc.c
+
+-- 
+2.39.2
+
 
