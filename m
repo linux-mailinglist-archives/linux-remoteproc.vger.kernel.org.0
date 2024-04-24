@@ -1,173 +1,107 @@
-Return-Path: <linux-remoteproc+bounces-1202-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1204-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 800F78B1337
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 21:07:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB0FA8B144A
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 22:14:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2237E1F25286
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 19:07:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82EE8282A03
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 24 Apr 2024 20:14:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 746C92374C;
-	Wed, 24 Apr 2024 19:06:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 262C0144309;
+	Wed, 24 Apr 2024 20:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="xVHvpTX/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R9kDUEVk"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9A91EB36;
-	Wed, 24 Apr 2024 19:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D251442E8
+	for <linux-remoteproc@vger.kernel.org>; Wed, 24 Apr 2024 20:13:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713985599; cv=none; b=YUZtucQobOoe+KLFBav58BZ3Te7khR63VFGbPoMz92QnZJ0SPzyOggsCYxavN8rFjFPMPdum6Kpfvp0Ej6bFxgLZiTxJDpFUiGq0IEJVq9JRY8niUAPdjKIaYFr2afBVHOpW6bymEbivfIi3j8ymXyBCjwYHOn3uQbZNLErtRss=
+	t=1713989638; cv=none; b=KJljAY6LPLGDGQXp0a1QbJLtP4vzTcik2tszgz964ntgmcEscpEyu198XGivdoinJclOpNaXUxdK7G90v+W8CwsbUEfFTupgEG9fEzfh0q/Xo6XlG5EKNqugrNN1e7TcfO34eU9GhxPJV5+X+XxxKv1HbIX67tvPH6XWD+30onk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713985599; c=relaxed/simple;
-	bh=lXgdA1VYXOVAo664jkOGVLzSIAQ7tosy7CcWVdpPwAk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OWoG72DCufl8Vy8ILuNmaN9F6euU+QGbcV3YTTJPXRyUrp19IyRsN5/0543rpoMm/64nsqRDlX1EPymjpWhMW3nmNhMaPa+9nBikwNrzqiv4LONlSJd0HRCu7Q+2jISo/xevoP/HRD5qFOV8FXHebhmUSLmzGdF15FhKPx+gt2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=xVHvpTX/; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 43OJ6FBk022632;
-	Wed, 24 Apr 2024 14:06:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1713985575;
-	bh=WpM9LZ1mafWCjjoPr9/TU74EPFXo8BshGHxAWjtGkx0=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=xVHvpTX/UdbE0culkKSjpf6GfCTzexC0OPzt9OvRo4ZHKud8mwBilDP6CVZC4gDQq
-	 nXynYIjEhl/eeqsqwRnpiVhZavJwe9pDJ87ocHfzPvS/tG5V9b7hethF4av11Z87DI
-	 /tJd5q47+dsehnC0EbIAR2tISmKPRksNOt04Bj7k=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 43OJ6FWV106515
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 24 Apr 2024 14:06:15 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 24
- Apr 2024 14:06:14 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 24 Apr 2024 14:06:14 -0500
-Received: from ula0226330.dhcp.ti.com (ula0226330.dhcp.ti.com [10.219.51.241])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 43OJ6DqR067070;
-	Wed, 24 Apr 2024 14:06:14 -0500
-From: Andrew Davis <afd@ti.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Nishanth
- Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo
-	<kristo@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hari Nagalla
-	<hnagalla@ti.com>
-CC: <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>
-Subject: [PATCH v8 4/4] arm64: dts: ti: k3-am62: Add M4F remoteproc node
-Date: Wed, 24 Apr 2024 14:06:12 -0500
-Message-ID: <20240424190612.17349-5-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240424190612.17349-1-afd@ti.com>
-References: <20240424190612.17349-1-afd@ti.com>
+	s=arc-20240116; t=1713989638; c=relaxed/simple;
+	bh=5juKDdGEYxNl2ENPjsF/4a/Y2iZb9ON1oaGj0sw8O/8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P3pswsSeeoPKUavZwpYU5LL98hntEK1gsnzEVfghgfF9U5pAMbqAxl2Hm0gXsDVb8PPLA5txSzF0NbNAX+MPEZkwGG8c24F5bVwl0Ls9IrV4PnMh8lVKrBsjaMyRv7khxzbNzxjJMnSZAnrUrv26et8OhqwnuQGuwB+3ZYXRZkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=R9kDUEVk; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-51bafbe7509so270623e87.1
+        for <linux-remoteproc@vger.kernel.org>; Wed, 24 Apr 2024 13:13:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1713989634; x=1714594434; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rcWOpWv1JwDPxWKBqvGmsKPJY5XCaFq86YjpwkCYxAM=;
+        b=R9kDUEVkJAXt7js53ztZzpdcSlPkXE7YXL7Ntwgu5dQ7kWUe/PmwOycvS4nHUvtlNU
+         bppMnyuHiqDb/52FLuyhLB/GGLj+gTN//NsOeV24A6gya465W+4YxtgNBx6XfpSUdtKZ
+         YiL3HWyJPAxU741fhDqcnLW6+hDPttfbsMrSu0EtvepSG0YggJHR9IwDa84XPW26ZiZu
+         siOq1ufnReWDB1FJKPuiAoWsUqgWf2vt4j6Jx0DsC28e5ol7ANRJ82sc3mGYB5qdpt/w
+         il4sy1jJiogV0c9y0mRcitZHoCNaOy4U9G+GUzdNhGbpKVS7GyOeSSz7MG7CWcwZhpKp
+         IErg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713989634; x=1714594434;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rcWOpWv1JwDPxWKBqvGmsKPJY5XCaFq86YjpwkCYxAM=;
+        b=ukEdcPn7UyTPdOBOiU+TP0vX1pjMNCTAHPo/C+VlqyzyN0hb9HYxbEc10pKH7qPgDn
+         sEJPQp0vdoMBOIqaKS5La+fnKgIIl4abqnvs0/4mXj1QnD4/iY5VlthdSH5o7gHQ+Koj
+         1cvW5SN0i2u6stKz+G0Px/GuMZqv5wZTVzb15ZOXDkAx3Pu7+lFyk5zgQCAHx65utCG3
+         9Dm/BMFM/cuNuk2OGdzuklKuVSS7kqcTR36DUayHud40yfstuHa2zqiCc01UEq32lpEb
+         MGW6JFtlAndvtpwKo++TeL9CzJHQLCpxti1CLee2cX22FuczadE5173n1aaT50gmtXdH
+         dmaw==
+X-Forwarded-Encrypted: i=1; AJvYcCWcA6vR6W4FBqw9jpNDrCAwIcdsoyt743P7+GdTsGmW3XDLzqd16uf8yBNGGLBeI3R3TuUDPq+FAbN+PMNB7Ne+/Sq1S0CX4fAl6tatBfGxwg==
+X-Gm-Message-State: AOJu0Yw/8br6yiewIQyA9v4FGZtLnuHUrU7HtBHOZUyovw1vxSjbNJG2
+	c4bSfw6zdW3oxQb9mXGwCJ/Vpw6E+Q3jsn6Hy+TJlI1uVFi2dpDhnLmUY/5TmXY=
+X-Google-Smtp-Source: AGHT+IHbBMck575yTo+0QV891RtpsbHelGrtzt6MSOzg4v88bBDA7+36rpuohXNTJekQxEkxDwi1ZQ==
+X-Received: by 2002:a19:e057:0:b0:518:c69b:3a04 with SMTP id g23-20020a19e057000000b00518c69b3a04mr3170938lfj.0.1713989634521;
+        Wed, 24 Apr 2024 13:13:54 -0700 (PDT)
+Received: from [172.30.204.223] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05651220cf00b0051b88cfa076sm762823lfr.237.2024.04.24.13.13.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Apr 2024 13:13:54 -0700 (PDT)
+Message-ID: <71346ffc-c07f-43cc-9d0a-40c7f6406a95@linaro.org>
+Date: Wed, 24 Apr 2024 22:13:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/7] ARM: dts: qcom: msm8974: Use mboxes properties for
+ APCS
+To: Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+ phone-devel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20240424-apcs-mboxes-v1-0-6556c47cb501@z3ntu.xyz>
+ <20240424-apcs-mboxes-v1-2-6556c47cb501@z3ntu.xyz>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20240424-apcs-mboxes-v1-2-6556c47cb501@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Hari Nagalla <hnagalla@ti.com>
 
-The AM62x SoCs of the TI K3 family have a Cortex M4F core in the MCU
-domain. This core can be used by non safety applications as a remote
-processor. When used as a remote processor with virtio/rpmessage IPC,
-two carveout reserved memory nodes are needed. The first region is used
-as a DMA pool for the rproc device, and the second region will furnish
-the static carveout regions for the firmware memory.
 
-The current carveout addresses and sizes are defined statically for
-each rproc device. The M4F processor do not have an MMU, and as such
-require the exact memory used by the firmware to be set-aside.
+On 4/24/24 18:23, Luca Weiss wrote:
+> Instead of passing the syscon to the various nodes, use the mbox
+> interface using the mboxes property.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
 
-Signed-off-by: Hari Nagalla <hnagalla@ti.com>
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi        | 12 ++++++++++++
- arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi | 18 ++++++++++++++++++
- 2 files changed, 30 insertions(+)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-index e66d486ef1f21..0c6ee801f35fc 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-@@ -173,4 +173,16 @@ mcu_mcan1: can@4e18000 {
- 		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
- 		status = "disabled";
- 	};
-+
-+	mcu_m4fss: m4fss@5000000 {
-+		compatible = "ti,am64-m4fss";
-+		reg = <0x00 0x5000000 0x00 0x30000>,
-+		<0x00 0x5040000 0x00 0x10000>;
-+		reg-names = "iram", "dram";
-+		ti,sci = <&dmsc>;
-+		ti,sci-dev-id = <9>;
-+		ti,sci-proc-ids = <0x18 0xff>;
-+		resets = <&k3_reset 9 1>;
-+		firmware-name = "am62-mcu-m4f0_0-fw";
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi b/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
-index 3c45782ab2b78..bda9fb2e33eec 100644
---- a/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
-@@ -48,6 +48,18 @@ ramoops@9ca00000 {
- 			pmsg-size = <0x8000>;
- 		};
- 
-+		mcu_m4fss_dma_memory_region: m4f-dma-memory@9cb00000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0x00 0x9cb00000 0x00 0x100000>;
-+			no-map;
-+		};
-+
-+		mcu_m4fss_memory_region: m4f-memory@9cc00000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0x00 0x9cc00000 0x00 0xe00000>;
-+			no-map;
-+		};
-+
- 		secure_tfa_ddr: tfa@9e780000 {
- 			reg = <0x00 0x9e780000 0x00 0x80000>;
- 			alignment = <0x1000>;
-@@ -457,6 +469,12 @@ mbox_m4_0: mbox-m4-0 {
- 	};
- };
- 
-+&mcu_m4fss {
-+	mboxes = <&mailbox0_cluster0>, <&mbox_m4_0>;
-+	memory-region = <&mcu_m4fss_dma_memory_region>,
-+			<&mcu_m4fss_memory_region>;
-+};
-+
- &usbss0 {
- 	bootph-all;
- 	status = "okay";
--- 
-2.39.2
-
+Konrad
 
