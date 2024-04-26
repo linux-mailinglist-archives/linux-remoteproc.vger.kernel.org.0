@@ -1,119 +1,185 @@
-Return-Path: <linux-remoteproc+bounces-1228-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1232-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE3A28B4005
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 26 Apr 2024 21:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 23CC98B42BD
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 27 Apr 2024 01:25:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED46BB24246
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 26 Apr 2024 19:18:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60B6AB212C6
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 26 Apr 2024 23:25:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508CC1D54A;
-	Fri, 26 Apr 2024 19:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A9E3BBCB;
+	Fri, 26 Apr 2024 23:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="u7guXwcG"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Frlo/t2R"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55AA208D6;
-	Fri, 26 Apr 2024 19:18:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D3FF3A8E4;
+	Fri, 26 Apr 2024 23:25:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714159120; cv=none; b=HoGgpzF+drTpAsDZ5Zwj2vx40cbQgVJyP2U6UvspG/VvEW+Gh9VjEsxVNYytzgPsXW1Zby0SkCBc7/rv80hE8fVDvUy6WilXfFre2A3nNSeZf5cXAkM2tqpnPEAlq/uCRlObA87cjHc2yZYrp9VQeyxPNmXZH6oOE588RYFeVTo=
+	t=1714173939; cv=none; b=YSBWoNsxikzGq2ZY5EJrLVarLU0DGP8GcsSb7SPfhDLFPhz53eZPnyCR2R/i7BN6bv54doCLNf6bU3uPocKN3K8/MTTEr8LKLfUOApZpFi6TfM6YXYE7YT0L08LfcKiSYzyEpqbVJIP7X6J0xYQsvIWVwV9ZvMWafGMwvGHKpXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714159120; c=relaxed/simple;
-	bh=LjOOh654N028PKm9hKjjINIwDhnYd4OGHM8FU+b5J68=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z3C5JdsdJNZ0yn8O6lDR9bOCymFztCYsREKBXIFxJX73OMUDgQFPottHr/rJgT64OrsOrW90TM4Qv2jGkILVJl1xHzSB+3QbhozzB6MfGaPdUDaqSsL5As6vZJgJymOvF86rLHpjoWZlRvecEiaGxhcbeFxi9H1WoBqG/EMOpmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=u7guXwcG; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 43QJICTW099384;
-	Fri, 26 Apr 2024 14:18:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1714159092;
-	bh=EeEnTqm3oLoWS+b5dZcuC693obg0Ef8ytBl/uzoDfOk=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=u7guXwcGuzEUdmIcJoD4OGP2xPPre4gy/A53rrjjC1D21VJC4b/HaVTkXACnY0i91
-	 4Zgy1B9IsUDt1c9+FCg+BnOz9hPYi1V/VKk8huCjmArWis6AmsiZrAxpvgVlLa4OR5
-	 vI4JVqkPP4ipji1TivS6kq4dTgPHf6g7APbEaET8=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 43QJICLE040924
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 26 Apr 2024 14:18:12 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 26
- Apr 2024 14:18:12 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 26 Apr 2024 14:18:12 -0500
-Received: from ula0226330.dhcp.ti.com (ula0226330.dhcp.ti.com [128.247.81.8])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 43QJIB7O028593;
-	Fri, 26 Apr 2024 14:18:12 -0500
-From: Andrew Davis <afd@ti.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Nishanth
- Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo
-	<kristo@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hari Nagalla
-	<hnagalla@ti.com>
-CC: <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>
-Subject: [PATCH v9 5/5] arm64: defconfig: Enable TI K3 M4 remoteproc driver
-Date: Fri, 26 Apr 2024 14:18:11 -0500
-Message-ID: <20240426191811.32414-6-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240426191811.32414-1-afd@ti.com>
-References: <20240426191811.32414-1-afd@ti.com>
+	s=arc-20240116; t=1714173939; c=relaxed/simple;
+	bh=Oo3OtoMFZgV8oyBBeZdB6VsYE2VPjoVz9FYqPtF9BJ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=gvoR41PXNmd6YrLu3+82eKtJvmh9bg6jvWLIOHFnDL6cZhsDQnrE575gtZ+v4TIjjVFy0nUVBT2abrDanKoKwVw8SSUdJcCUbfisIQsNrjZYxPw50kvWUa/WZbG+ACFfWdOrWPks13HRfFjlWkwTmCLhilZDCFz89GZCA+LC3bA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Frlo/t2R; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 43QNMkCt023899;
+	Fri, 26 Apr 2024 23:25:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=XDkUIigcVGqC8gCqZT1/+lGYK1cHWMUguzns/fZY7WU=; b=Fr
+	lo/t2RcNY7/5flTCMi4u2SOlyAMPDSEwsc5QfQXcCIxS/7krFsc6Lq4Iflf9zr6i
+	/KB3S0Ff0e+eKDWwkJ3GaAQEnsFsUlWS3fJuhYBdxQ5ZMhmGEbrhnAje3z17BHkv
+	qBOH1+Ck/IOC1lcMHAd88IE1G24mdO1gTQWp6WD5RuszIw59q6QKhT72fye/w9z+
+	08iaTt495KwEfjPo90H2rQ6h0d7Cl4su0QtW7I/ipP4Ecssd6fOEgJA6tShzDrYO
+	/9RW9FZAy2q0Z4GInnmmSXRjyM2X1DQTcAw/796v579I1WnO7oJyWHBrCULi8pzh
+	+He/KOi+cVVQkF3JXBOw==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xranmhfnq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Apr 2024 23:25:32 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43QNPV1I031896
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 26 Apr 2024 23:25:31 GMT
+Received: from [10.110.11.138] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 26 Apr
+ 2024 16:25:30 -0700
+Message-ID: <6b6298c4-485d-ebe5-fa8d-9edc461467a0@quicinc.com>
+Date: Fri, 26 Apr 2024 16:25:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v7 5/6] soc: qcom: add pd-mapper implementation
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sibi Sankar
+	<quic_sibis@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Xilin Wu <wuxilin123@gmail.com>,
+        Bryan O'Donoghue
+	<bryan.odonoghue@linaro.org>
+References: <20240424-qcom-pd-mapper-v7-0-05f7fc646e0f@linaro.org>
+ <20240424-qcom-pd-mapper-v7-5-05f7fc646e0f@linaro.org>
+Content-Language: en-US
+From: Chris Lew <quic_clew@quicinc.com>
+In-Reply-To: <20240424-qcom-pd-mapper-v7-5-05f7fc646e0f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xiSbrLKX4H3KLGrkCGae4cBJFRNzDXEx
+X-Proofpoint-ORIG-GUID: xiSbrLKX4H3KLGrkCGae4cBJFRNzDXEx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-04-26_20,2024-04-26_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 phishscore=0 clxscore=1015
+ malwarescore=0 adultscore=0 impostorscore=0 spamscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2404010003 definitions=main-2404260166
 
-From: Hari Nagalla <hnagalla@ti.com>
 
-Some K3 platform devices (AM64x, AM62x) have a Cortex M4 core. Build
-the M4 remote proc driver as a module for these platforms.
 
-Signed-off-by: Hari Nagalla <hnagalla@ti.com>
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On 4/24/2024 2:28 AM, Dmitry Baryshkov wrote:
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 2c30d617e1802..04e8e2ca4aa10 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1352,6 +1352,7 @@ CONFIG_QCOM_Q6V5_PAS=m
- CONFIG_QCOM_SYSMON=m
- CONFIG_QCOM_WCNSS_PIL=m
- CONFIG_TI_K3_DSP_REMOTEPROC=m
-+CONFIG_TI_K3_M4_REMOTEPROC=m
- CONFIG_TI_K3_R5_REMOTEPROC=m
- CONFIG_RPMSG_CHAR=m
- CONFIG_RPMSG_CTRL=m
--- 
-2.39.2
+> +static int qcom_pdm_start(void)
+> +{
+> +	const struct of_device_id *match;
+> +	const struct qcom_pdm_domain_data * const *domains;
+> +	struct device_node *root;
+> +	int ret, i;
+> +
+> +	root = of_find_node_by_path("/");
+> +	if (!root)
+> +		return -ENODEV;
+> +
+> +	match = of_match_node(qcom_pdm_domains, root);
+> +	of_node_put(root);
+> +	if (!match) {
+> +		pr_notice("PDM: no support for the platform, userspace daemon might be required.\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	domains = match->data;
+> +	if (!domains) {
+> +		pr_debug("PDM: no domains\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	mutex_lock(&qcom_pdm_mutex);
+> +	for (i = 0; domains[i]; i++) {
+> +		ret = qcom_pdm_add_domain(domains[i]);
+> +		if (ret)
+> +			goto free_domains;
+> +	}
+> +
+> +	ret = qmi_handle_init(&qcom_pdm_handle, 1024,
+> +			      NULL, qcom_pdm_msg_handlers);
 
+1024 here seems arbitrary, I think most other usage of qmi_handle_init 
+has a macro defined for the max message length of the qmi service.
+
+> +	if (ret)
+> +		goto free_domains;
+> +
+> +	ret = qmi_add_server(&qcom_pdm_handle, SERVREG_LOCATOR_SERVICE,
+> +			     SERVREG_QMI_VERSION, SERVREG_QMI_INSTANCE);
+> +	if (ret) {
+> +		pr_err("PDM: error adding server %d\n", ret);
+> +		goto release_handle;
+> +	}
+> +	mutex_unlock(&qcom_pdm_mutex);
+> +
+> +	return 0;
+> +
+> +release_handle:
+> +	qmi_handle_release(&qcom_pdm_handle);
+> +
+> +free_domains:
+> +	qcom_pdm_free_domains();
+> +	mutex_unlock(&qcom_pdm_mutex);
+> +
+> +	return ret;
+> +}
+> +
+> +static void qcom_pdm_stop(void)
+> +{
+> +	qmi_del_server(&qcom_pdm_handle, SERVREG_LOCATOR_SERVICE,
+> +		       SERVREG_QMI_VERSION, SERVREG_QMI_INSTANCE);
+> +
+> +	qmi_handle_release(&qcom_pdm_handle);
+> +
+
+I don't think doing an explicit qmi_del_server() is necessary. As part 
+of the qmi_handle_release(), the qrtr socket will be closed and the qrtr 
+ns will broadcast a DEL_SERVER and DEL_CLIENT notification as part of 
+the cleanup.
+
+> +	qcom_pdm_free_domains();
+> +}
+> +
 
