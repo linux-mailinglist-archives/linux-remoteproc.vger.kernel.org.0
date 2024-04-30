@@ -1,111 +1,219 @@
-Return-Path: <linux-remoteproc+bounces-1240-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1244-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFC578B6744
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Apr 2024 03:16:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69B0B8B69B7
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Apr 2024 07:09:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 10E30B2222D
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Apr 2024 01:16:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D50451F22B22
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 30 Apr 2024 05:09:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A91205E35;
-	Tue, 30 Apr 2024 01:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B0514AB7;
+	Tue, 30 Apr 2024 05:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Jx0ZHp4T"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="pV0+jd+d"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6018F1870;
-	Tue, 30 Apr 2024 01:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 967C91863B;
+	Tue, 30 Apr 2024 05:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714439759; cv=none; b=Ypt2sgpwZHTLFHuW/UxR667KybDRs7Zfjvdqc75Qc64tQdFfzI/wyqlAJygI1LugKCqAD5YZwTYfqwUnAWh/jMjKU8wVsepvsCABtlCe56Y3v+ZZdStxE7GLsHVF9KsfE3fjVjbwUVWS72mPi//elFvO9Nam8j/soxKVdEiRXoM=
+	t=1714453751; cv=none; b=WA0UzfCPlxH9421/g4z0Wau594mLyKo6UJ51mZ8CsmGhB+15AJqmeA2UDZiaOq4R1ZKckutlyHMG2QtvYfXPpIVLNgvyBsRNCVteHUytSThtxV3e9zcdM6jUQjNkWGKPz/8KQJI23MhhHaGf7eeFf11jnGJxqX1N5JpHxQw5a2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714439759; c=relaxed/simple;
-	bh=PXmCsMOPnCdopdBpQldAEM295KDNUdX3XLiFeNeMqAA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OFnjIKq762NpOAadlDB/kOjwHpjpmAUJgNQfDnLDI2YGiDwoEYon8d56+K/ZKTz6lm81cIrSba9W3yO9MDG9D73RhUWYMeC545/hodVeU1ac1bugwX0hqrRFKMNdsBSdpAMio/fdgJMKX9OpGAaLR45FDiBj3EMC/0xP/cZtZJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Jx0ZHp4T; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 2f4f03fc068f11ef8065b7b53f7091ad-20240430
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=xNMGsxn0OLBsFm3paxlvV9TGcZk1pwxKTvl76HU1AYY=;
-	b=Jx0ZHp4TAuOrXCkovZ5QWp5/GEWAkKnR8Dq7vNv6Yjk1+4jb++vIgyOW32YbRiGTQ3DnmBFSec80tl2goa2jjZLVLlT0v51w4NIbvdTSEOCjQmqddGSGVLY05aQQvAjFjHuoPHOQjy6j7b179m1Y+/O2wTjm9toonFvdr/El7f0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:bfe900be-31a5-4240-b550-dbd0289a8125,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:82c5f88,CLOUDID:4c004383-4f93-4875-95e7-8c66ea833d57,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,
-	SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 2f4f03fc068f11ef8065b7b53f7091ad-20240430
-Received: from mtkmbs14n1.mediatek.inc [(172.21.101.75)] by mailgw02.mediatek.com
-	(envelope-from <olivia.wen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1945480039; Tue, 30 Apr 2024 09:15:51 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 30 Apr 2024 09:15:50 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 30 Apr 2024 09:15:50 +0800
-From: Olivia Wen <olivia.wen@mediatek.com>
-To: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier
-	<mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>
-CC: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Tinghan
- Shen <tinghan.shen@mediatek.com>, <linux-remoteproc@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<jason-ch.chen@mediatek.com>, <yaya.chang@mediatek.com>,
-	<teddy.chen@mediatek.com>, <olivia.wen@mediatek.com>
-Subject: [PATCH v4 4/4] remoteproc: mediatek: Add IMGSYS IPI command
-Date: Tue, 30 Apr 2024 09:15:34 +0800
-Message-ID: <20240430011534.9587-5-olivia.wen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20240430011534.9587-1-olivia.wen@mediatek.com>
-References: <20240430011534.9587-1-olivia.wen@mediatek.com>
+	s=arc-20240116; t=1714453751; c=relaxed/simple;
+	bh=rajPX0iLeGJ7tihYHYpJ3BqiDgnmd6Uozx+b2NmThOU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=NPMvMpFzF5njwjngsFPCAI4kHtkM/dKlAePZc2JtHjBCbkV0Xap40fAGApHjUuNh1l4g6U3xTn2rvB75bQGRl8zyo1Lm4K2PhEPNzLklEnQBIV9q3VkZQQQcGX+EiMqm7PiNFeOwouU2hyMpR6d+WaXAO59EfOIwtEftVHMLV1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=pV0+jd+d; arc=none smtp.client-ip=198.47.19.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 43U5956b045715;
+	Tue, 30 Apr 2024 00:09:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1714453745;
+	bh=UYVNtjeJt9uaMDsZWyZRF6NmvnAypTge/4ixYT3NUtI=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=pV0+jd+do5GrqBwUwPDZdTomBTiMRSxIRhma0xU2MsQwJ2mGcXl5GgBO+g1EfN14Z
+	 ImN6euM3KcikLYs7QUVWG2z9cCAmpI44l+3QIh5QJcEgitJ+5Od3q7SA7hfOg2P5pr
+	 ZY59BM7FQx1Q9IlOqEoymkmveiOU8mxy2EID5LCI=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 43U595AX001890
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 30 Apr 2024 00:09:05 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 30
+ Apr 2024 00:09:04 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 30 Apr 2024 00:09:04 -0500
+Received: from [10.24.69.66] (uda0510294.dhcp.ti.com [10.24.69.66])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 43U591f7010411;
+	Tue, 30 Apr 2024 00:09:02 -0500
+Message-ID: <03662f93-e770-4f9e-b7ec-21ad4992e951@ti.com>
+Date: Tue, 30 Apr 2024 10:39:00 +0530
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+User-Agent: Mozilla Thunderbird
+Subject: Re: [EXTERNAL] Re: [PATCH v2 1/2] remoteproc: k3-r5: Wait for core0
+ power-up before powering up core1
+To: Mathieu Poirier <mathieu.poirier@linaro.org>
+CC: <andersson@kernel.org>, <s-anna@ti.com>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <u-kumar1@ti.com>, <nm@ti.com>, <devarsht@ti.com>, <hnagalla@ti.com>
+References: <20240424130504.494916-1-b-padhi@ti.com>
+ <20240424130504.494916-2-b-padhi@ti.com> <Zivf4Bhi8zqEQh7p@p14s>
+Content-Language: en-US
+From: Beleswar Prasad Padhi <b-padhi@ti.com>
+In-Reply-To: <Zivf4Bhi8zqEQh7p@p14s>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Add an IPI command definition for communication with IMGSYS through
-SCP mailbox.
+Hello,
 
-Signed-off-by: Olivia Wen <olivia.wen@mediatek.com>
----
- include/linux/remoteproc/mtk_scp.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/include/linux/remoteproc/mtk_scp.h b/include/linux/remoteproc/mtk_scp.h
-index 7c2b7cc9..344ff41 100644
---- a/include/linux/remoteproc/mtk_scp.h
-+++ b/include/linux/remoteproc/mtk_scp.h
-@@ -43,6 +43,7 @@ enum scp_ipi_id {
- 	SCP_IPI_CROS_HOST_CMD,
- 	SCP_IPI_VDEC_LAT,
- 	SCP_IPI_VDEC_CORE,
-+	SCP_IPI_IMGSYS_CMD,
- 	SCP_IPI_NS_SERVICE = 0xFF,
- 	SCP_IPI_MAX = 0x100,
- };
--- 
-2.6.4
-
+On 26/04/24 22:39, Mathieu Poirier wrote:
+> Good day, On Wed, Apr 24, 2024 at 06: 35: 03PM +0530, Beleswar Padhi wrote: >
+> From: Apurva Nandan <a-nandan@ ti. com> > > PSC controller has a limitation that
+> it can only power-up the second core > when the first core is in ON
+> ZjQcmQRYFpfptBannerStart
+> This message was sent from outside of Texas Instruments.
+> Do not click links or open attachments unless you recognize the source of this
+> email and know the content is safe. If you wish to report this message to IT
+> Security, please forward the message as an attachment to phishing@list.ti.com
+> ZjQcmQRYFpfptBannerEnd
+>
+> Good day,
+>
+> On Wed, Apr 24, 2024 at 06:35:03PM +0530, Beleswar Padhi wrote:
+> > From: Apurva Nandan <a-nandan@ti.com>
+> > 
+> > PSC controller has a limitation that it can only power-up the second core
+> > when the first core is in ON state. Power-state for core0 should be equal
+> > to or higher than core1, else the kernel is seen hanging during rproc
+> > loading.
+> > 
+> > Make the powering up of cores sequential, by waiting for the current core
+> > to power-up before proceeding to the next core, with a timeout of 2sec.
+> > Add a wait queue event in k3_r5_cluster_rproc_init call, that will wait
+> > for the current core to be released from reset before proceeding with the
+> > next core.
+> > 
+> > Fixes: 6dedbd1d5443 ("remoteproc: k3-r5: Add a remoteproc driver for R5F subsystem")
+> > 
+> > Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+>
+> You need to add your own SoB as well.
+>
+> > ---
+> >  drivers/remoteproc/ti_k3_r5_remoteproc.c | 28 ++++++++++++++++++++++++
+> >  1 file changed, 28 insertions(+)
+> > 
+> > diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+> > index ad3415a3851b..5a9bd5d4a2ea 100644
+> > --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
+> > +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+> > @@ -103,12 +103,14 @@ struct k3_r5_soc_data {
+> >   * @dev: cached device pointer
+> >   * @mode: Mode to configure the Cluster - Split or LockStep
+> >   * @cores: list of R5 cores within the cluster
+> > + * @core_transition: wait queue to sync core state changes
+> >   * @soc_data: SoC-specific feature data for a R5FSS
+> >   */
+> >  struct k3_r5_cluster {
+> >  	struct device *dev;
+> >  	enum cluster_mode mode;
+> >  	struct list_head cores;
+> > +	wait_queue_head_t core_transition;
+> >  	const struct k3_r5_soc_data *soc_data;
+> >  };
+> >  
+> > @@ -128,6 +130,7 @@ struct k3_r5_cluster {
+> >   * @atcm_enable: flag to control ATCM enablement
+> >   * @btcm_enable: flag to control BTCM enablement
+> >   * @loczrama: flag to dictate which TCM is at device address 0x0
+> > + * @released_from_reset: flag to signal when core is out of reset
+> >   */
+> >  struct k3_r5_core {
+> >  	struct list_head elem;
+> > @@ -144,6 +147,7 @@ struct k3_r5_core {
+> >  	u32 atcm_enable;
+> >  	u32 btcm_enable;
+> >  	u32 loczrama;
+> > +	bool released_from_reset;
+> >  };
+> >  
+> >  /**
+> > @@ -460,6 +464,8 @@ static int k3_r5_rproc_prepare(struct rproc *rproc)
+> >  			ret);
+> >  		return ret;
+> >  	}
+> > +	core->released_from_reset = true;
+> > +	wake_up_interruptible(&cluster->core_transition);
+> >  
+> >  	/*
+> >  	 * Newer IP revisions like on J7200 SoCs support h/w auto-initialization
+> > @@ -1140,6 +1146,7 @@ static int k3_r5_rproc_configure_mode(struct k3_r5_rproc *kproc)
+> >  		return ret;
+> >  	}
+> >  
+> > +	core->released_from_reset = c_state;
+>
+> I understand why this is needed but it line could be very cryptic for people
+> trying to understand this driver.  Please add a comment to describe what is
+> happening here.
+Thanks for the review. I will send v3 addressing these comments shortly!
+>
+> >  	ret = ti_sci_proc_get_status(core->tsp, &boot_vec, &cfg, &ctrl,
+> >  				     &stat);
+> >  	if (ret < 0) {
+> > @@ -1280,6 +1287,26 @@ static int k3_r5_cluster_rproc_init(struct platform_device *pdev)
+> >  		    cluster->mode == CLUSTER_MODE_SINGLECPU ||
+> >  		    cluster->mode == CLUSTER_MODE_SINGLECORE)
+> >  			break;
+> > +
+> > +		/*
+> > +		 * R5 cores require to be powered on sequentially, core0
+> > +		 * should be in higher power state than core1 in a cluster
+> > +		 * So, wait for current core to power up before proceeding
+> > +		 * to next core and put timeout of 2sec for each core.
+> > +		 *
+> > +		 * This waiting mechanism is necessary because
+> > +		 * rproc_auto_boot_callback() for core1 can be called before
+> > +		 * core0 due to thread execution order.
+> > +		 */
+> > +		ret = wait_event_interruptible_timeout(cluster->core_transition,
+> > +						       core->released_from_reset,
+> > +						       msecs_to_jiffies(2000));
+> > +		if (ret <= 0) {
+> > +			dev_err(dev,
+> > +				"Timed out waiting for %s core to power up!\n",
+> > +				rproc->name);
+> > +			return ret;
+> > +		}
+> >  	}
+> >  
+> >  	return 0;
+> > @@ -1709,6 +1736,7 @@ static int k3_r5_probe(struct platform_device *pdev)
+> >  	cluster->dev = dev;
+> >  	cluster->soc_data = data;
+> >  	INIT_LIST_HEAD(&cluster->cores);
+> > +	init_waitqueue_head(&cluster->core_transition);
+> >  
+> >  	ret = of_property_read_u32(np, "ti,cluster-mode", &cluster->mode);
+> >  	if (ret < 0 && ret != -EINVAL) {
+> > -- 
+> > 2.34.1
+> > 
+>
 
