@@ -1,63 +1,63 @@
-Return-Path: <linux-remoteproc+bounces-1281-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1282-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE0DB8C1255
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 May 2024 17:55:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05C7D8C12BB
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 May 2024 18:28:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE1C91F22047
-	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 May 2024 15:55:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 42325B22214
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  9 May 2024 16:28:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E4A16F8E9;
-	Thu,  9 May 2024 15:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53FA617088F;
+	Thu,  9 May 2024 16:27:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="N6mdPVtQ"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="L0/Wtr7I"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D877B16F8FB;
-	Thu,  9 May 2024 15:55:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5825170852;
+	Thu,  9 May 2024 16:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715270138; cv=none; b=poUTewqrQb3E2OeqPMTFUqz0wLJoQlUFBbwCo3SNvYd/HjrmUUsEM0LQaZB2Md8zC+d2qEgplG9KfRRUrAjEury13NUevhpKJb0a6mb82/n7tPyJBnwThBNhuGz1XdwIjPxUeR+A7UANHB9/lBqd3v173fjcGZThvg8jAz50ZmI=
+	t=1715272056; cv=none; b=Gbqz+otjlJ7OYXKW0W6NODJFI/tRqfsKVHZXJhFikDYUcdnhuGXZDz3H58GL70ThPq3sIh5bIivgK6X2taor9peznNq+2kSh7zsicnbThnFHCsB4unTHpHEKVwUY5th+gfzbvy6nKwlKaeM6hyR/uCUzZ5bq7MGWKVUL7aS0E9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715270138; c=relaxed/simple;
-	bh=nxDRRmBSDWra8EpQJnSkeUeUaZpFDcMtLNkADd8gB1Q=;
+	s=arc-20240116; t=1715272056; c=relaxed/simple;
+	bh=QcOdQsUWXso2c+tuMklAz9vJz9aa9KyI7XZSgC0TWMA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=PKhU926jxRZlOga6A05veBc7SDmQHFRyKzp/mawKDhpm/3gimMfqusqTaFmsIrYBYZFQIWpzlNKOavjD452HKawFu0xZOATDIIxOUeWQVOEdSQWo2wxUt+2F10o0t1YqotoMCiWfaIeYN5VBg+UxdzsoVYhH9zwptcaymjv2xfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=N6mdPVtQ; arc=none smtp.client-ip=198.47.23.248
+	 In-Reply-To:Content-Type; b=WrgxXC6XJ5hwzUXU07nT7VMDdB6YbvflYuS+mVcOEHqpfR7ovpB/UTSlBZnin5uPiVec2stZGQXFmyv96lVh2Nl5w5oZG242ZKUvOuAIU5b6TgODem4uIj2bfVzn4JgFRt/DlwNZbRkY/6naACO6Tn7aoIS1/MLk+P25KBrW5nU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=L0/Wtr7I; arc=none smtp.client-ip=198.47.23.249
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 449FsqDf024749;
-	Thu, 9 May 2024 10:54:52 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 449GR5l7055198;
+	Thu, 9 May 2024 11:27:05 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1715270092;
-	bh=IeHWj0xwnGSyaCEdcCOlX75kibWY1YUCCHDM6GK2DnU=;
+	s=ti-com-17Q1; t=1715272025;
+	bh=cZrFZFEjpvuii6ANlj+/np38/Xg4yNl9fIo8ySC9hno=;
 	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=N6mdPVtQ3ogw3Y6thiGiwsWWNdGQRIW8psXQzuK0DZuYaS5pdTgyiXb8jhNDn95r4
-	 0tcCaO6Dl7xQM9tvoEhGurNCs2Wn5Q/uNb2hbGyFSjvkh1WNVdcERES5B/6IinmK9u
-	 5K5COQWS5KsRY/mfqSsjX2cCedDBkAVOcmSU+tMg=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 449FsqRX010035
+	b=L0/Wtr7IgcJOVZw9P9UQwKhf4kKo7csoPPZMZJTInl6ITA8m1Q6NqCjf9sbjpY/JR
+	 gMvPIua2ZIztVOFJHlbF9B75ybWFm1SFQnjC4IlqaLyzO8K5BNWzD+DlK0ubdOpLlM
+	 OmMsyYKay16U2WgnsgjM8GfkhF5uAql2v3m9QNCI=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 449GR5SP052241
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 9 May 2024 10:54:52 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+	Thu, 9 May 2024 11:27:05 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 9
- May 2024 10:54:51 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ May 2024 11:27:05 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 9 May 2024 10:54:51 -0500
+ Frontend Transport; Thu, 9 May 2024 11:27:05 -0500
 Received: from [10.249.42.149] ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 449FspeJ105836;
-	Thu, 9 May 2024 10:54:51 -0500
-Message-ID: <e8315809-090a-4282-9306-24d878a108af@ti.com>
-Date: Thu, 9 May 2024 10:54:51 -0500
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 449GR4dQ038468;
+	Thu, 9 May 2024 11:27:04 -0500
+Message-ID: <9a6bc04a-2493-4330-9c50-9714b05c2653@ti.com>
+Date: Thu, 9 May 2024 11:27:04 -0500
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -80,26 +80,20 @@ CC: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
 References: <20240426191811.32414-1-afd@ti.com>
- <20240426191811.32414-3-afd@ti.com> <ZjlBrf2mxENSZb8E@p14s>
- <b66e8bbe-8228-401a-9bb8-848b2d132ca0@ti.com>
- <CANLsYkzZg+BCsn59aX5Uz7LtzYYbcmep3j64JFGN4A+eo1yxoA@mail.gmail.com>
+ <20240426191811.32414-3-afd@ti.com> <ZjqQ3e1Qd4NBiFsi@p14s>
+ <f56afda7-1a99-431b-b212-113e314d164b@ti.com>
+ <CANLsYkyAeO64BqHDdHWpO1AcaghmmMur3CpJ-q+AvZXwvXmbwA@mail.gmail.com>
 Content-Language: en-US
 From: Andrew Davis <afd@ti.com>
-In-Reply-To: <CANLsYkzZg+BCsn59aX5Uz7LtzYYbcmep3j64JFGN4A+eo1yxoA@mail.gmail.com>
+In-Reply-To: <CANLsYkyAeO64BqHDdHWpO1AcaghmmMur3CpJ-q+AvZXwvXmbwA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 5/9/24 10:22 AM, Mathieu Poirier wrote:
-> On Wed, 8 May 2024 at 09:36, Andrew Davis <afd@ti.com> wrote:
+On 5/9/24 10:32 AM, Mathieu Poirier wrote:
+> On Wed, 8 May 2024 at 10:54, Andrew Davis <afd@ti.com> wrote:
 >>
->> On 5/6/24 3:46 PM, Mathieu Poirier wrote:
->>> Good day,
->>>
->>> I have started reviewing this patchset.  Comments will be scattered over
->>> multiple days and as such, I will explicitly inform you when  am done with the
->>> review.
->>>
+>> On 5/7/24 3:36 PM, Mathieu Poirier wrote:
 >>> On Fri, Apr 26, 2024 at 02:18:08PM -0500, Andrew Davis wrote:
 >>>> From: Martyn Welch <martyn.welch@collabora.com>
 >>>>
@@ -326,6 +320,26 @@ On 5/9/24 10:22 AM, Mathieu Poirier wrote:
 >>>> +
 >>>> +    /* send the index of the triggered virtqueue in the mailbox payload */
 >>>> +    ret = mbox_send_message(kproc->mbox, (void *)(uintptr_t)msg);
+>>>
+>>> I remember discussing this but can't recall the outcome.  Still, I don't see
+>>> why (uintptr_t) is needed here.
+>>>
+>>
+>> Was discussed here: https://lkml.org/lkml/2024/3/28/974
+>>
+>> Re-quoting my response from last time:
+>>
+>>> Doing that in one step (u32 -> void*) causes a warning when void* is 64bit
+>>> (cast from int to pointer of different size).
+>>
+> 
+> I remember now - please add a comment that supports using the syntax.
+> That way we avoid receiving patches and once again having to review
+> this.
+> 
+
+Sure, will add a comment.
+
 >>>> +    if (ret < 0)
 >>>> +            dev_err(dev, "failed to send mailbox message, status = %d\n",
 >>>> +                    ret);
@@ -379,6 +393,15 @@ On 5/9/24 10:22 AM, Mathieu Poirier wrote:
 >>>> +            dev_err(dev, "local-reset deassert failed, ret = %d\n", ret);
 >>>> +            if (kproc->ti_sci->ops.dev_ops.put_device(kproc->ti_sci,
 >>>> +                                                      kproc->ti_sci_id))
+>>>
+>>> This is done unconditionally, even when dev_ops.get_device() above hasn't been
+>>> called.
+>>>
+>>
+>> Will rework to fix that, seems this is also a problem for ti_k3_dsp_remoteproc.c
+>> from which this function was based. Will fix that too when we factor out these
+>> common functions.
+>>
 >>>> +                    dev_warn(dev, "module-reset assert back failed\n");
 >>>> +    }
 >>>> +
@@ -603,6 +626,19 @@ On 5/9/24 10:22 AM, Mathieu Poirier wrote:
 >>>> +
 >>>> +            dev_dbg(dev, "memory %8s: bus addr %pa size 0x%zx va %pK da 0x%x\n",
 >>>> +                    data->mems[i].name, &kproc->mem[i].bus_addr,
+>>>
+>>> I'm pretty sure you are intrested in kproc->mem[i].bus_addr rather than
+>>> &kproc->mem[i].bus_addr.
+>>>
+>>
+>> I think this is correct as it is, the %pa format takes a "reference" to what
+>> we are interested in, so we need to pass the address of the address :)
+>>
+> 
+> You are correct.
+> 
+>> https://www.kernel.org/doc/Documentation/printk-formats.txt
+>>
 >>>> +                    kproc->mem[i].size, kproc->mem[i].cpu_addr,
 >>>> +                    kproc->mem[i].dev_addr);
 >>>> +    }
@@ -632,6 +668,14 @@ On 5/9/24 10:22 AM, Mathieu Poirier wrote:
 >>>> +    if (num_rmems < 0) {
 >>>> +            dev_err(dev, "device does not reserved memory regions (%pe)\n",
 >>>> +                    ERR_PTR(num_rmems));
+>>>
+>>> Why use %pe and ERR_PTR() when function of_property_count_elems_of_size()
+>>> returns a simple error code?
+>>>
+>>
+>> Done to match the same in ti_k3_dsp_remoteproc.c but I see no good reason
+>> for it, will fix.
+>>
 >>>> +            return -EINVAL;
 >>>> +    }
 >>>> +    if (num_rmems < 2) {
@@ -645,6 +689,9 @@ On 5/9/24 10:22 AM, Mathieu Poirier wrote:
 >>>> +    if (ret) {
 >>>> +            dev_err(dev, "device cannot initialize DMA pool (%pe)\n",
 >>>> +                    ERR_PTR(ret));
+>>>
+>>> Same
+>>>
 >>>> +            return ret;
 >>>> +    }
 >>>> +    ret = devm_add_action_or_reset(dev, k3_m4_rproc_dev_mem_release, dev);
@@ -863,28 +910,6 @@ On 5/9/24 10:22 AM, Mathieu Poirier wrote:
 >>>> +    kproc->reset = devm_reset_control_get_exclusive(dev, NULL);
 >>>> +    if (IS_ERR(kproc->reset))
 >>>> +            return dev_err_probe(dev, PTR_ERR(kproc->reset), "failed to get reset\n");
->>>
->>> What happens when devm_reset_control_get_exclusive() returns NULL?
->>>
->>
->> Only the _optional_ version of this fuction can return NULL, this fuction
->> will always return an error if the reset cannot be taken.
->>
-> 
-> What does optional mean?  Regardless, it's only a matter of time
-> before some automated tool starts complaining.
-> 
-
-The "optional" versions of these reset_get functions (like reset_control_get_optional)
-will return NULL if the reset cannot be found. All the other reset_control_*() functions
-are built to take NULL as an argument without issue. That way if `kproc->reset`
-was set to NULL there is no failure (other than the reset wouldn't work, but as said,
-since this is not the optional version of this function, not finding the reset
-would return an error, never NULL).
-
-And, as NULL is a valid value for kproc->reset to have, no automated tool should ever
-complain (and if it did, the tool would need fixed as NULL is valid here).
-
 >>>> +
 >>>> +    kproc->tsp = k3_m4_rproc_of_get_tsp(dev, kproc->ti_sci);
 >>>> +    if (IS_ERR(kproc->tsp))
@@ -924,16 +949,6 @@ complain (and if it did, the tool would need fixed as NULL is valid here).
 >>>> +            rproc->ops->attach = k3_m4_rproc_attach;
 >>>> +            rproc->ops->detach = k3_m4_rproc_detach;
 >>>> +            rproc->ops->get_loaded_rsc_table = k3_m4_get_loaded_rsc_table;
->>>
->>> Why are the last 3 assignment needed when they are already set in the
->>> declaration of k3_m4_rproc_ops?
->>>
->>
->> Good point, seems none of these overrides should be needed, start()/stop()
->> are not called for ATTCHED/DETACHED cores anyway, opposite is true for attach()/detach().
->>
->> I'll drop these overrides.
->>
 >>>> +    } else {
 >>>> +            dev_info(dev, "configured M4 for remoteproc mode\n");
 >>>> +            /*
@@ -964,27 +979,28 @@ complain (and if it did, the tool would need fixed as NULL is valid here).
 >>>> +    { .name = "iram", .dev_addr = 0x0 },
 >>>> +    { .name = "dram", .dev_addr = 0x30000 },
 >>>> +};
->>>
->>> Is this hardcoded in the hardware and never expected to change?  If not please
->>> add to the DT bindings.
->>>
->>
->> This is a hardware hardcoded address and will be the same for this class
->> of K3 M4 cores.
->>
->> Thanks,
->> Andrew
->>
->>> More comments later or tomorrow.
->>>
->>> Thanks,
->>> Mathieu
->>>
 >>>> +
 >>>> +static const struct k3_m4_rproc_dev_data am64_m4_data = {
 >>>> +    .mems = am64_m4_mems,
 >>>> +    .num_mems = ARRAY_SIZE(am64_m4_mems),
 >>>> +    .uses_lreset = true,
+>>>
+>>> If this is the case, why carrying k3_m4_rproc_dev_data::uses_lreset and all the
+>>> code around it?
+>>>
+>>
+>> It was to keep most of these functions consistent with k3-r5 and k3-dsp drivers
+>> which do optionally have this local reset. For now I'll just remove it from
+>> here.
+>>
+>> Thanks,
+>> Andrew
+>>
+>>> I am done reviewing this set.
+>>>
+>>> Regards,
+>>> Mathieu
+>>>
 >>>> +};
 >>>> +
 >>>> +static const struct of_device_id k3_m4_of_match[] = {
