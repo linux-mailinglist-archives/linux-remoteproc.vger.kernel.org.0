@@ -1,216 +1,179 @@
-Return-Path: <linux-remoteproc+bounces-1294-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1298-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7673A8C3A6F
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 May 2024 05:23:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE6718C7EAC
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 17 May 2024 01:00:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A27B2811A2
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 13 May 2024 03:23:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E28B1F21F99
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 16 May 2024 23:00:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBA43145B1E;
-	Mon, 13 May 2024 03:23:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCFB7364AB;
+	Thu, 16 May 2024 22:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kali.org header.i=@kali.org header.b="P7IiSgus"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nJ7FDvr9"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AEFD145B16
-	for <linux-remoteproc@vger.kernel.org>; Mon, 13 May 2024 03:23:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB6C273FC;
+	Thu, 16 May 2024 22:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715570623; cv=none; b=fbu2d9Rqt4G1I5x6cv3fJ4QxIkxZwpXbQ2kKzjsUfYTnoaKb9TCrCtv060xxapNhTLNVtFyvB1pN1qnxfwnLH5JmyDFflpCSzzQz3QI8JQOmhFvHs39ZapK8wqwpNfkBI/uAsXXyUmTdbfP6Mms8JmJ2SMECEI7Z08DOioiHR/E=
+	t=1715900386; cv=none; b=dGGNU7HaJgIDgC3x2Md3rhFX070tZnOFeANWvT/ZhCTCrU2+neTSrQsHalWlZsL6WKnYWEoRp9VUAGcvEh+wzyWQXLPolLrRf7t+K2QIG2VgwTq+LLIRg2W7PYKB8e8zyKZoE/YRxSPLqGLhgy1isZAwS2zrWtBBSv8THKzzb0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715570623; c=relaxed/simple;
-	bh=XoegDtlcSO/zIWKuRP063e2zFQ+RAdHrnLhPXIuNUEc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AeuArVLRZ0hle7sm0F6ZE/4IHjr7f4WWUxdcXmMC5Qf5hlGP6mvFp68cdQbjrhNIrpRdsFwj/nSaCS8R35JUraSBF0Zw6bYkQCZDr+SvvpyARMxU3TGbvWHMWhLDdInb0d9NVbwF+ma3hxo2HFd5+axzhPaLIafarBrYotb3vB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kali.org; spf=pass smtp.mailfrom=kali.org; dkim=pass (2048-bit key) header.d=kali.org header.i=@kali.org header.b=P7IiSgus; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kali.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kali.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-51f72a29f13so4855207e87.3
-        for <linux-remoteproc@vger.kernel.org>; Sun, 12 May 2024 20:23:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google; t=1715570620; x=1716175420; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e3m7C5s1EzbrOCKMut3xyPmXWEUzIM5EzWY1SS9dSVQ=;
-        b=P7IiSgusaN8tA/JtV2ZeR7LTt62mSdbHpi7C14dNPD54cI5D1X5HFaYTot85dhoctB
-         /nKJPziKXkJlsDqDp5N8S8c1PVYypEb9IhzhV88+CLOKmP+92UAzTi/hf4jL3H5Ix7fu
-         7o2cMlD29pERtxRN9L3HPvLSW4D1GBjwWd8PQ3ZaSOrSwUg9mhlNg+dzB/omgv/UmFTw
-         ZcqTsGvCgfx958jHOEWSbBKur7/jWW++jNe3umLoC4rjLAH5yqLesr4Q7kVkcxQ7804a
-         uJmmesqZSsH3GMJ3NnEi+8aTBFpvcTD7578zbhsZTYPqDunFezuCME1zzvZKATDgEreJ
-         vj2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715570620; x=1716175420;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e3m7C5s1EzbrOCKMut3xyPmXWEUzIM5EzWY1SS9dSVQ=;
-        b=IQS/MTGW3OiCUl6tNYNGnUJlBqu9nxGXXA/chCNdW6TVC6x1oS4HnEx2eBdz1NW2op
-         UlPU2ECna5irR6a2MULIBj0Gc4C99vabGofiAlYercqheZTxF3uIoiTqjL3Xp9xaKg0a
-         s+ukfgxEkJc6jhtzKt1u0n4ejwx2uN+jg4zqgYapH6Oymj2qju1hv2UjZYf6xpK6rXLo
-         z7LFZ4pbH8HfR7WMcNUUgqbQm5IyQY4inNafuKI0b7tlDLR8fhPm2ob95J+ivJJnkYTw
-         iByeHSMLlRSpP+gGDFKiGw2YDuyVAagyJdy+dqUGFduxZedNz//CLSpSjktfUdzXzKR8
-         p3Yg==
-X-Forwarded-Encrypted: i=1; AJvYcCXYhRjW+436GbwZedyc32gCk5yHSE/XeehwDyVZk7EYbKhduLZSwPUU6iN5nVGvAgtz6HvrixxBf2DXClET6nZ9ycAAjUyUNsAG0JVr9OzC4g==
-X-Gm-Message-State: AOJu0YynOVMZzdEh1egjS9+y4RjHa4Y0ZytfotZoKscxm84ZkTqPUK0h
-	1d9/CwOjG8C4v9yI2tIpepG3RsEa3/UjxyoNTNVI6BubHYkyen2KcP4XjB+sJyCjR/OcLt556wU
-	y2nh2wZoICUNonYL7clHyfHHcMBmbiTMt/ndN0w==
-X-Google-Smtp-Source: AGHT+IHy34Cl4xZziZ107yfN01l4O0AakzJJxSzjElicrXFSsUZTQI+ymQEJT0TItQo7MqTqkqjIYns4wqu3zrFqwIE=
-X-Received: by 2002:a19:6410:0:b0:51a:d5d3:ee52 with SMTP id
- 2adb3069b0e04-5221006e6f8mr5380369e87.17.1715570619914; Sun, 12 May 2024
- 20:23:39 -0700 (PDT)
+	s=arc-20240116; t=1715900386; c=relaxed/simple;
+	bh=69uarWmzmHKnkRD1y5e85vm0oq19eeBBvnrV6aoQPlk=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=rjvr4zm6FOgFK8EY7VAV+UTXOU5Ksc+ANqa5aGGFY5ljZYfUZS8JbunSEofHhzYG59a45dQC2mzrV5p1mARPN1hV3cXUWnReZks+UEVWBi1mgDJRsONT1LAKZB7LrmNNHIAk4rG/MRyVxPJx0kiJyu+sYKw2w2JyPfAgcSggQpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nJ7FDvr9; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44GKMUBH017256;
+	Thu, 16 May 2024 22:59:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:subject:date:message-id:mime-version:content-type
+	:content-transfer-encoding:to:cc; s=qcppdkim1; bh=tFGkOgQk1CQWak
+	kHmlHYIl48bNGXvL5BaBkAJN/8WTo=; b=nJ7FDvr9FKYYcrxKYO2Y2HMMg+FY1q
+	6ebpjMozEpFZhAAdxp6UW7JGZ82MEDWl/i4331jYz6OjIE3qnyXZM4ab6mauZMyi
+	VwW7f+i9x4F6hA1r6IKe+hDNulWCtoc/X2qS2hQkpBNVzZNPWSNyFmlM+7cAubwX
+	rni4bmtaUdI01YGWpGghyhqGvUQpiD9GP9PVzuP7b1sJsSfmI9gTTTHeQcwALVM3
+	ANHKDsx7dKASr9BmByB2Th3Ll/8XbbU1hd6NNRYjJGuK2+u6AL7wON3+a1VzBtke
+	IdxTyJNHlb6mUI/poI0UlNIeewAshNxGvqRgL5pb0srHiDDKk2DrmFDw==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3y3j28shxy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 May 2024 22:59:09 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 44GMx6Jx012432
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 May 2024 22:59:06 GMT
+Received: from hu-clew-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Thu, 16 May 2024 15:59:04 -0700
+From: Chris Lew <quic_clew@quicinc.com>
+Subject: [PATCH 0/7] Add support for hwspinlock bust
+Date: Thu, 16 May 2024 15:58:18 -0700
+Message-ID: <20240516-hwspinlock-bust-v1-0-47a90a859238@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240512-qcom-pd-mapper-v8-0-5ecbb276fcc0@linaro.org>
-In-Reply-To: <20240512-qcom-pd-mapper-v8-0-5ecbb276fcc0@linaro.org>
-From: Steev Klimaszewski <steev@kali.org>
-Date: Sun, 12 May 2024 22:23:28 -0500
-Message-ID: <CAKXuJqjLFL4iYFf_FxTpKUpHPL2-G095Pyp0Qn0ofBCKwFqRRA@mail.gmail.com>
-Subject: Re: [PATCH v8 0/5] soc: qcom: add in-kernel pd-mapper implementation
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Sibi Sankar <quic_sibis@quicinc.com>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-remoteproc@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>, 
-	Xilin Wu <wuxilin123@gmail.com>, "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, 
-	Alexey Minnekhanov <alexeymin@postmarketos.org>, Neil Armstrong <neil.armstrong@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIqPRmYC/2WNQQ6CMBBFr0Jmbc20lgCuuIdhUYYqE7XFFlBDu
+ LuVuHP5XvLfXyDawDbCMVsg2Jkje5dA7jKg3riLFdwlBoVKY46V6J9xYHfzdBXtFEfR6aowBZI
+ 0BwNpNQR75tdWPDWJe46jD+/tYFZf+2tJ/GvNSqDIW1OSLlGWXVU/JiZ2tCd/h2Zd1w9WPf8us
+ AAAAA==
+To: Bjorn Andersson <andersson@kernel.org>,
+        Baolin Wang
+	<baolin.wang@linux.alibaba.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Ingo
+ Molnar" <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long
+	<longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+        Jonathan Corbet
+	<corbet@lwn.net>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Manivannan Sadhasivam
+	<manivannan.sadhasivam@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, Chris Lew <quic_clew@quicinc.com>,
+        "Richard
+ Maina" <quic_rmaina@quicinc.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1715900345; l=2621;
+ i=quic_clew@quicinc.com; s=20240508; h=from:subject:message-id;
+ bh=69uarWmzmHKnkRD1y5e85vm0oq19eeBBvnrV6aoQPlk=;
+ b=1uxRXGnN0jTn6ygeG+GtBtrs/pyZD4LD89c7a4az2b2w+xOzJniXhYV/mGAPSJypgpjobItiA
+ yV5hiHcaqUKDB4AaUm/KMvaor/Uz6QFFM7Tyzf7xLX5QkjvFN68hQIU
+X-Developer-Key: i=quic_clew@quicinc.com; a=ed25519;
+ pk=lEYKFaL1H5dMC33BEeOULLcHAwjKyHkTLdLZQRDTKV4=
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: BoIJKhdQkUTDNXlkXcvRToDio0vuAlaw
+X-Proofpoint-GUID: BoIJKhdQkUTDNXlkXcvRToDio0vuAlaw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-16_07,2024-05-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ impostorscore=0 malwarescore=0 phishscore=0 bulkscore=0 suspectscore=0
+ mlxscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=912
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2405010000 definitions=main-2405160168
 
-On Sat, May 11, 2024 at 4:56=E2=80=AFPM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> Protection domain mapper is a QMI service providing mapping between
-> 'protection domains' and services supported / allowed in these domains.
-> For example such mapping is required for loading of the WiFi firmware or
-> for properly starting up the UCSI / altmode / battery manager support.
->
-> The existing userspace implementation has several issue. It doesn't play
-> well with CONFIG_EXTRA_FIRMWARE, it doesn't reread the JSON files if the
-> firmware location is changed (or if the firmware was not available at
-> the time pd-mapper was started but the corresponding directory is
-> mounted later), etc.
->
-> However this configuration is largely static and common between
-> different platforms. Provide in-kernel service implementing static
-> per-platform data.
->
-> To: Bjorn Andersson <andersson@kernel.org>
-> To: Konrad Dybcio <konrad.dybcio@linaro.org>
-> To: Sibi Sankar <quic_sibis@quicinc.com>
-> To: Mathieu Poirier <mathieu.poirier@linaro.org>
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: Johan Hovold <johan+linaro@kernel.org>
-> Cc: Xilin Wu <wuxilin123@gmail.com>
-> Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-> Cc: Steev Klimaszewski <steev@kali.org>
-> Cc: Alexey Minnekhanov <alexeymin@postmarketos.org>
->
-> --
->
-> Changes in v8:
-> - Reworked pd-mapper to register as an rproc_subdev / auxdev
-> - Dropped Tested-by from Steev and Alexey from the last patch since the
->   implementation was changed significantly.
-> - Add sensors, cdsp and mpss_root domains to 660 config (Alexey
->   Minnekhanov)
-> - Added platform entry for sm4250 (used for qrb4210 / RB2)
-> - Added locking to the pdr_get_domain_list() (Chris Lew)
-> - Remove the call to qmi_del_server() and corresponding API (Chris Lew)
-> - In qmi_handle_init() changed 1024 to a defined constant (Chris Lew)
-> - Link to v7: https://lore.kernel.org/r/20240424-qcom-pd-mapper-v7-0-05f7=
-fc646e0f@linaro.org
->
-> Changes in v7:
-> - Fixed modular build (Steev)
-> - Link to v6: https://lore.kernel.org/r/20240422-qcom-pd-mapper-v6-0-f969=
-57d01207@linaro.org
->
-> Changes in v6:
-> - Reworked mutex to fix lockdep issue on deregistration
-> - Fixed dependencies between PD-mapper and remoteproc to fix modular
->   builds (Krzysztof)
-> - Added EXPORT_SYMBOL_GPL to fix modular builds (Krzysztof)
-> - Fixed kerneldocs (Krzysztof)
-> - Removed extra pr_debug messages (Krzysztof)
-> - Fixed wcss build (Krzysztof)
-> - Added platforms which do not require protection domain mapping to
->   silence the notice on those platforms
-> - Link to v5: https://lore.kernel.org/r/20240419-qcom-pd-mapper-v5-0-e35b=
-6f847e99@linaro.org
->
-> Changes in v5:
-> - pdr: drop lock in pdr_register_listener, list_lock is already held (Chr=
-is Lew)
-> - pd_mapper: reworked to provide static configuration per platform
->   (Bjorn)
-> - Link to v4: https://lore.kernel.org/r/20240311-qcom-pd-mapper-v4-0-2467=
-9cca5c24@linaro.org
->
-> Changes in v4:
-> - Fixed missing chunk, reenabled kfree in qmi_del_server (Konrad)
-> - Added configuration for sm6350 (Thanks to Luca)
-> - Removed RFC tag (Konrad)
-> - Link to v3: https://lore.kernel.org/r/20240304-qcom-pd-mapper-v3-0-6858=
-fa1ac1c8@linaro.org
->
-> Changes in RFC v3:
-> - Send start / stop notifications when PD-mapper domain list is changed
-> - Reworked the way PD-mapper treats protection domains, register all of
->   them in a single batch
-> - Added SC7180 domains configuration based on TCL Book 14 GO
-> - Link to v2: https://lore.kernel.org/r/20240301-qcom-pd-mapper-v2-0-5d12=
-a081d9d1@linaro.org
->
-> Changes in RFC v2:
-> - Swapped num_domains / domains (Konrad)
-> - Fixed an issue with battery not working on sc8280xp
-> - Added missing configuration for QCS404
->
-> ---
-> Dmitry Baryshkov (5):
->       soc: qcom: pdr: protect locator_addr with the main mutex
->       soc: qcom: pdr: fix parsing of domains lists
->       soc: qcom: pdr: extract PDR message marshalling data
->       soc: qcom: add pd-mapper implementation
->       remoteproc: qcom: enable in-kernel PD mapper
->
->  drivers/remoteproc/qcom_common.c    |  87 +++++
->  drivers/remoteproc/qcom_common.h    |  10 +
->  drivers/remoteproc/qcom_q6v5_adsp.c |   3 +
->  drivers/remoteproc/qcom_q6v5_mss.c  |   3 +
->  drivers/remoteproc/qcom_q6v5_pas.c  |   3 +
->  drivers/remoteproc/qcom_q6v5_wcss.c |   3 +
->  drivers/soc/qcom/Kconfig            |  15 +
->  drivers/soc/qcom/Makefile           |   2 +
->  drivers/soc/qcom/pdr_interface.c    |  17 +-
->  drivers/soc/qcom/pdr_internal.h     | 318 ++---------------
->  drivers/soc/qcom/qcom_pd_mapper.c   | 676 ++++++++++++++++++++++++++++++=
-++++++
->  drivers/soc/qcom/qcom_pdr_msg.c     | 353 +++++++++++++++++++
->  12 files changed, 1190 insertions(+), 300 deletions(-)
-> ---
-> base-commit: e5119bbdaca76cd3c15c3c975d51d840bbfb2488
-> change-id: 20240301-qcom-pd-mapper-e12d622d4ad0
->
-> Best regards,
-> --
-> Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->
+hwspinlocks can be acquired by many devices on the SoC. If any of these
+devices go into a bad state before the device releases the hwspinlock,
+then that hwspinlock may end up in an unusable state.
 
-I've tested this over the weekend on my Thinkpad X13s with a number of
-reboots and seems to do the correct thing in v8 as well.
-Tested-by: Steev Klimaszewski <steev@kali.org>
+In the case of smem, each remoteproc takes a hwspinlock before trying to
+allocate an smem item. If the remoteproc were to suddenly crash without
+releasing this, it would be impossible for other remoteprocs to allocate
+any smem items.
+
+We propose a new api to bust a hwspinlock. This functionality is meant
+for drivers that manage the lifecycle of a device. The driver can use
+the bust api if it detects the device has gone into an error state, thus
+allowing other entities in the system to use the hwspinlock.
+
+The bust API implies multiple devices in linux can get a reference to a
+hwspinlock. We add the ability for multiple devices to get a reference
+to a hwspinlock via hwspin_lock_request_specific().
+hwspin_lock_request() will continue to provide the next unused lock.
+
+For the smem example, the hwspinlock will now be referenced by remoteproc
+and the smem driver.
+
+These patches were tested on an sm8650 mtp using engineering cdsp
+firmware that triggers a watchdog with the smem hwspinlock acquired.
+
+Checked for error in dt-bindings with below.
+ - make DT_CHECKER_FLAGS=-m DT_SCHEMA_FILES=remoteproc/qcom,pas-common.yaml dt_binding_check
+ - make qcom/sm8650-mtp.dtb CHECK_DTBS=1
+
+Signed-off-by: Chris Lew <quic_clew@quicinc.com>
+---
+Chris Lew (2):
+      dt-bindings: remoteproc: qcom,pas: Add hwlocks
+      arm64: dts: qcom: sm8650: Add hwlock to remoteproc
+
+Richard Maina (5):
+      hwspinlock: Introduce refcount
+      hwspinlock: Enable hwspinlock sharing
+      hwspinlock: Introduce hwspin_lock_bust()
+      hwspinlock: qcom: implement bust operation
+      remoteproc: qcom_q6v5_pas: Add hwspinlock bust on stop
+
+ .../bindings/remoteproc/qcom,pas-common.yaml       |  3 ++
+ Documentation/locking/hwspinlock.rst               | 19 ++++++--
+ arch/arm64/boot/dts/qcom/sm8650.dtsi               |  3 ++
+ drivers/hwspinlock/hwspinlock_core.c               | 52 ++++++++++++++++------
+ drivers/hwspinlock/hwspinlock_internal.h           |  5 +++
+ drivers/hwspinlock/qcom_hwspinlock.c               | 25 +++++++++++
+ drivers/remoteproc/qcom_q6v5_pas.c                 | 28 ++++++++++++
+ include/linux/hwspinlock.h                         |  6 +++
+ 8 files changed, 123 insertions(+), 18 deletions(-)
+---
+base-commit: e7b4ef8fffaca247809337bb78daceb406659f2d
+change-id: 20240509-hwspinlock-bust-d497a70c1a3a
+
+Best regards,
+-- 
+Chris Lew <quic_clew@quicinc.com>
+
 
