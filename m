@@ -1,144 +1,190 @@
-Return-Path: <linux-remoteproc+bounces-1351-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1354-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE3588CAE0B
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 21 May 2024 14:18:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D7B28CAE3C
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 21 May 2024 14:29:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64A46281A3F
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 21 May 2024 12:17:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 184931F239FA
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 21 May 2024 12:29:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEC3D6CDD8;
-	Tue, 21 May 2024 12:17:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35FC5770E4;
+	Tue, 21 May 2024 12:29:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="NWsKLMmV"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="wxGpb03d"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9113B757F7;
-	Tue, 21 May 2024 12:17:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA6875817;
+	Tue, 21 May 2024 12:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716293876; cv=none; b=oduoCR+WQXoTkYzbYV5C2y8QLO5yzHxNwqRpcLQDGGDVdvX6HQ4JuLnpUoXULUmq+9cilEnNoNx/NQnHShKSGg3JM+ueYY2ki11HP1ETC+Nb9p5RNKcZll9Tl35dAKWtVLfIFEi2pHRWdGEhyoc4dsPpCQvZ+csSlrI13J+ADfo=
+	t=1716294544; cv=none; b=ZJReBQjNP27PGkrBSYCa4eBa8Xtd0GFUqytyTMh+xVTHqscDhzRWI/7VazEdS7rILV3oZm/TBOaKQ6Iasyd8Ni+4EsXCW2HuNiOcmU0s7PesaOEVOuj2kjE8jWFVEcglreErGOiUlnmdH6omurB70cioGuXp3ahX94nw+HQ+vXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716293876; c=relaxed/simple;
-	bh=nNkhGw3YG1Wk2LjkcE5/lhfywpxP0++zWLyUl2c3+Ow=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=RIwKATNj0GaJI+pJH7umJeq4m3fUpo8ToiUWtXIYNRK56o6WSuS/MfhviOqiEtGwTd5OLXPnj04dNcCcKcLzHPlOVzF5gzeaYtSJ622Y0Qx738iuntRni36y7LsmfyCila8LEvwbA2pZCIhjE2oddgsT6o77GyOhysruxVco6vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=NWsKLMmV; arc=none smtp.client-ip=185.132.182.106
+	s=arc-20240116; t=1716294544; c=relaxed/simple;
+	bh=w5ZVhkNqsWSHnsReZdJv8Md0glaGrOXZLkGJT0DkAn4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mjyzZ1v3Cy/sya297h1tAsBwzjTTn14QH/Jr+hx0PMpMz0gT0mRkAr5d7K56n1zUbiUj3a/ssKdlIS0ga3m/bbd1ST8ELQzDZc1IuafRYLu0b/XhFzp8UhqLFGE9o4Iv+VoV2PwFqy77yFCrHtdc98vItZPS96luWiZYW3+4qrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=wxGpb03d; arc=none smtp.client-ip=91.207.212.93
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44LBRr0a019207;
-	Tue, 21 May 2024 14:17:30 +0200
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 44LBS5OH003116;
+	Tue, 21 May 2024 14:28:38 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	selector1; bh=NB18YDuzAPhccihOvrNVEn535LLvcSqVIm6q6GCowLk=; b=NW
-	sKLMmVnuP5no2/j0pXbYlId8pyR1WjzvXloM+f+9wc/2IXqZ01GrlUFcy4x8Dr8X
-	5mya/Z5J3547aeYnsSdQLyiIvWwiI3KD/gqvyqryUt1/Ip7/hSLJ6d/kZSGBCTjN
-	ebH2L2X8tIbDk4v9RZpMkPWNpyfigSzu5UVgG+6gLNO7wuWK3EgMbsOGL5LFcbGy
-	fa4BMItreNQq0G+KBfj381mzXyqU+OkdRAUIZ9NTpaqfpdToqjEEww33P2DQ1/Jn
-	o1v3YyV7fSKm6+vVtOeMlg9MBhk40o3Xih2T0qAbxls5c2bTaF79X/CLVT0Q6RZm
-	JIlMJm/Pc9wdARZT/ZWA==
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=selector1; bh=r1c6L8J
+	oj9/3Y2Gzu38mfrsCUic2tjpvOTpujp6f5UU=; b=wxGpb03dXAJrqEuwwv/rI4F
+	xfiqpM6MQ2AEavq+IrBVkEB2YaGzJrS8DhJ0sUUvMMRXANv9mk9G88PwLh34/G41
+	oVRb54gx1YrvhrgLGtZk8CrZrT30H+F3H5vjAkQCARbOcK32IV3pANrcpQ0A6pbb
+	museSCqP2pmXU/vbrXKGSfD5i23xTZ7DhC3M3q7Uq791Cv2akJ1N7eJRTLdJbHGQ
+	G5wVVLlJv2/cro3DruEsNwcioLezIO5QcQLMBPYgffelnxMkVysf6K4xxba5Bjfp
+	LTUtTbWEtzbIAIgd4Ut/p4geKaNj/sUafvxxO81G3vPiPvhhJAnn8hKekCvM6kA=
+	=
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3y75w0a23s-1
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3y6n6hkqv8-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 21 May 2024 14:17:30 +0200 (MEST)
+	Tue, 21 May 2024 14:28:38 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B22CF4002D;
-	Tue, 21 May 2024 14:17:22 +0200 (CEST)
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 2326940044;
+	Tue, 21 May 2024 14:28:34 +0200 (CEST)
 Received: from Webmail-eu.st.com (eqndag1node6.st.com [10.75.129.135])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0B82B2194DB;
-	Tue, 21 May 2024 14:16:58 +0200 (CEST)
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E3A372171C2;
+	Tue, 21 May 2024 14:27:45 +0200 (CEST)
 Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE6.st.com
  (10.75.129.135) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 21 May
- 2024 14:16:57 +0200
-Received: from [10.48.86.121] (10.48.86.121) by SAFDAG1NODE1.st.com
- (10.75.90.17) with Microsoft SMTP Server (version=TLS1_2,
+ 2024 14:27:45 +0200
+Received: from localhost (10.48.86.121) by SAFDAG1NODE1.st.com (10.75.90.17)
+ with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 21 May
- 2024 14:16:57 +0200
-Message-ID: <498403f4-98ff-40ec-adfc-c0ffba6450aa@foss.st.com>
-Date: Tue, 21 May 2024 14:16:56 +0200
+ 2024 14:27:45 +0200
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier
+	<mathieu.poirier@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <op-tee@lists.trustedfirmware.org>, <devicetree@vger.kernel.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Subject: [RESEND PATCH v5 0/7] Introduction of a remoteproc tee to load signed firmware
+Date: Tue, 21 May 2024 14:24:51 +0200
+Message-ID: <20240521122458.3517054-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/7] dt-bindings: remoteproc: Add compatibility for TEE
- support
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-References: <20240521081001.2989417-1-arnaud.pouliquen@foss.st.com>
- <20240521081001.2989417-3-arnaud.pouliquen@foss.st.com>
- <dfb3c96e-0684-4e61-b1c9-5a83f61e0418@kernel.org>
-Content-Language: en-US
-From: Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Organization: STMicroelectronics
-In-Reply-To: <dfb3c96e-0684-4e61-b1c9-5a83f61e0418@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SAFDAG1NODE1.st.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SAFCAS1NODE2.st.com (10.75.90.13) To SAFDAG1NODE1.st.com
  (10.75.90.17)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
  definitions=2024-05-21_08,2024-05-21_01,2024-05-17_01
 
+Main updates from the previous version [1]:
+------------------------------------------
 
-On 5/21/24 11:24, Krzysztof Kozlowski wrote:
-> On 21/05/2024 10:09, Arnaud Pouliquen wrote:
->> The "st,stm32mp1-m4-tee" compatible is utilized in a system configuration
->> where the Cortex-M4 firmware is loaded by the Trusted execution Environment
->> (TEE).
->> For instance, this compatible is used in both the Linux and OP-TEE
->> device-tree:
->> - In OP-TEE, a node is defined in the device tree with the
->>   st,stm32mp1-m4-tee to support signed remoteproc firmware.
->>   Based on DT properties, OP-TEE authenticates, loads, starts, and stops
->>   the firmware.
->> - On Linux, when the compatibility is set, the Cortex-M resets should not
->>   be declared in the device tree.
->>
-> 
-> Not tested.
-> 
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC. It might happen, that command when run on an older
-> kernel, gives you outdated entries. Therefore please be sure you base
-> your patches on recent Linux kernel.
-> 
-> Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-> people, so fix your workflow. Tools might also fail if you work on some
-> ancient tree (don't, instead use mainline), work on fork of kernel
-> (don't, instead use mainline) or you ignore some maintainers (really
-> don't). Just use b4 and everything should be fine, although remember
-> about `b4 prep --auto-to-cc` if you added new patches to the patchset.
-> 
-> You missed at least devicetree list (maybe more), so this won't be
-> tested by automated tooling. Performing review on untested code might be
-> a waste of time, thus I will skip this patch entirely till you follow
-> the process allowing the patch to be tested.
-> 
-> Please kindly resend and include all necessary To/Cc entries.
+1) use proc->table_ptr as unique reference to point to the resource table
+ --> update remoteproc_core.c to implement management of the resource table
+     base on rproc->rproc->tee_interface new field:
+     - on start get the resource table address from TEE remoteproc instead
+       of finding it in firmware (ops choice to confirm)
+     - on stop unmap the resource table before updating the
+       proc->table_ptr pointer.
 
-I apologize for this oversight; I will resend the pull request and adding
-the missing CC and To.
+2) retrieve the TEE rproc Identifier from the device tree instead of
+   hardcoding it
+ -->  Add a new "st,proc-id" property in device tree.
 
-Thanks!
-Arnaud
+More details on updates are listed in commits messages
 
-> 
-> Best regards,
-> Krzysztof
-> 
+[1] https://lore.kernel.org/linux-arm-kernel/20240115135249.296822-1-arnaud.pouliquen@foss.st.com/T/#m9ebb2e8f6d5e90f055827e4f227ce0877bc6d761
+
+base-commit: c8d8f841e95bcc07ac8c5621fc171a24f1fd5cdb
+
+Description of the feature:
+--------------------------
+This series proposes the implementation of a remoteproc tee driver to
+communicate with a TEE trusted application responsible for authenticating
+and loading the remoteproc firmware image in an Arm secure context.
+
+1) Principle:
+
+The remoteproc tee driver provides services to communicate with the OP-TEE
+trusted application running on the Trusted Execution Context (TEE).
+The trusted application in TEE manages the remote processor lifecycle:
+
+- authenticating and loading firmware images,
+- isolating and securing the remote processor memories,
+- supporting multi-firmware (e.g., TF-M + Zephyr on a Cortex-M33),
+- managing the start and stop of the firmware by the TEE.
+
+2) Format of the signed image:
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/src/remoteproc_core.c#L18-L57
+
+3) OP-TEE trusted application API:
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/include/ta_remoteproc.h
+
+4) OP-TEE signature script
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/scripts/sign_rproc_fw.py
+
+Example of usage:
+sign_rproc_fw.py --in <fw1.elf> --in <fw2.elf> --out <signed_fw.sign> --key ${OP-TEE_PATH}/keys/default.pem
+
+
+5) Impact on User space Application
+
+No sysfs impact.the user only needs to provide the signed firmware image
+instead of the ELF image.
+
+
+For more information about the implementation, a presentation is available here
+(note that the format of the signed image has evolved between the presentation
+and the integration in OP-TEE).
+
+https://resources.linaro.org/en/resource/6c5bGvZwUAjX56fvxthxds
+
+Arnaud Pouliquen (7):
+  remoteproc: Add TEE support
+  dt-bindings: remoteproc: Add compatibility for TEE support
+  dt-bindings: remoteproc: Add processor identifier property
+  remoteproc: core introduce rproc_set_rsc_table_on_start function
+  remoteproc: core: support of the tee interface
+  remoteproc: stm32: Create sub-functions to request shutdown and
+    release
+  remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
+
+ .../bindings/remoteproc/st,stm32-rproc.yaml   |  58 ++-
+ drivers/remoteproc/Kconfig                    |  10 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/remoteproc_core.c          | 135 +++---
+ drivers/remoteproc/stm32_rproc.c              | 149 ++++--
+ drivers/remoteproc/tee_remoteproc.c           | 429 ++++++++++++++++++
+ include/linux/remoteproc.h                    |   4 +
+ include/linux/tee_remoteproc.h                |  99 ++++
+ 8 files changed, 784 insertions(+), 101 deletions(-)
+ create mode 100644 drivers/remoteproc/tee_remoteproc.c
+ create mode 100644 include/linux/tee_remoteproc.h
+
+-- 
+2.25.1
+
 
