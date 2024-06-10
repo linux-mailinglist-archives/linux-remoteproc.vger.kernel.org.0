@@ -1,60 +1,60 @@
-Return-Path: <linux-remoteproc+bounces-1548-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1553-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6482C90283E
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Jun 2024 20:06:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7AF890284E
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Jun 2024 20:07:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B80E1C21EB1
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Jun 2024 18:06:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73A2428225C
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Jun 2024 18:07:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC00E14BF87;
-	Mon, 10 Jun 2024 18:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F60014F9D9;
+	Mon, 10 Jun 2024 18:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="SSfNPLY9"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="rLhIN45e"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C4412F5B6;
-	Mon, 10 Jun 2024 18:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF5314B96C;
+	Mon, 10 Jun 2024 18:06:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718042792; cv=none; b=AchoulY61nNql4/m7h3H+VZ54/dm9jd7ziSKh4/2ofCUw9t51YmZUTKIDq6eirP+wJtzC+Ut+It/KG/EJD+lF2udZAXbnlI2o/wvIIQKRO+KPGs6aJewFLXvq6ro3Vnts6CLiqCBU0t/nlWkUWE0FQlkV2fqBc3xETTr4bdDJNI=
+	t=1718042794; cv=none; b=kiD5e8WHk8Omjf4Gcvu4ENnLfTlDQITEdTXFklFvUGDnXUDWwOzSw8NgGC6P5YLT0m7WXix7VUEVJl0q22p89ZQCVsv4MID1Lx/Jv7EupSlHwapwOCKSqs3zfqHTqEAxyRBjti1lEOhAN9JkNC+syQwY2pHbclk+/Apb+++hLiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718042792; c=relaxed/simple;
-	bh=205vA25fJGdQp7gx2fSzwIASczYJ2XhK1BNSi8Cu6a0=;
+	s=arc-20240116; t=1718042794; c=relaxed/simple;
+	bh=j+wJNqq6LN1l9QOUCTlh+E//BNnt6ndNLoX5XFvnuHQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Vsu5uUovr0KgwontyybOAg6EVZ+bXYQNLHCQv8mBh3gBWA4XvWoAA3xZkFOMCdEuDdcgBUr8RfsZF3QealMDG0eTIzH8IcIpkdaP/qKsXlKRra73LCit9BWT1aQR0RHgSEOsgerdzoBuZe77rm3KppyvZVaafXrZUPbVm9Lt0iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=SSfNPLY9; arc=none smtp.client-ip=198.47.23.248
+	 MIME-Version:Content-Type; b=Sq6sc0etQq6n3x34wNUqd5lyEcoMLN+UOqRwBCOipYCzy0o+tXIVlSIT8h1yhKx08Z0HEMgTeLSf836u++7zzTpOfKAgfinGriSM3YcrAGaAJicNXJiyrDz2VZxBjokP/Cue+gO3MBi+WHHQZCrDJE2RDJfLe9+Glkbrp7tdIOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=rLhIN45e; arc=none smtp.client-ip=198.47.19.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45AI6JXA024752;
-	Mon, 10 Jun 2024 13:06:19 -0500
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45AI6KfQ063716;
+	Mon, 10 Jun 2024 13:06:20 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1718042779;
-	bh=c++NXaRcOYOcHcUH4HHfdQIPtUkQdhjeGSyzyykhV4s=;
+	s=ti-com-17Q1; t=1718042780;
+	bh=QbLyDp54gEuMeUkswIcMc++rcLqlSvQ+Z1iN7qMEziM=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=SSfNPLY9q1gSm/ldaF7CB+TV4+DEWbbhFkqBDx/atLbMcc9JLg/CVXiKpnMdvDrcA
-	 y3tzCtcZ7ShWbBdCaC6PCcNaL/1TZM4Dopmu5a8nOKrWKSyj/ce0ytABqtMcyWnQRp
-	 HhCrzhXbE33QI6Vfj4l+d0zIKCgQzu22Ir0kWitc=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45AI6JFp022917
+	b=rLhIN45ekWGvsWwAZ1UBkHHv5s81UCeDbZ4qycHQaWNMBPt+Dx3qwJq83n96VlwZ8
+	 zjHnsYGo5CHWL4h6ot1CVlIzo+wEQUiOCMn6dbItIB7aR24S3JAWuK87vgZe8NsqPn
+	 AnL0wXLs/pgSOBgmdz4uM6CrQXIthIfnlA9MaQts=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45AI6KjD022920
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 10 Jun 2024 13:06:19 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+	Mon, 10 Jun 2024 13:06:20 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 10
- Jun 2024 13:06:19 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ Jun 2024 13:06:20 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 10 Jun 2024 13:06:19 -0500
+ Frontend Transport; Mon, 10 Jun 2024 13:06:20 -0500
 Received: from lelvsmtp5.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45AI6Gtk056905;
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45AI6Gtl056905;
 	Mon, 10 Jun 2024 13:06:19 -0500
 From: Andrew Davis <afd@ti.com>
 To: Bjorn Andersson <andersson@kernel.org>,
@@ -74,9 +74,9 @@ To: Bjorn Andersson <andersson@kernel.org>,
 CC: <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
         Andrew Davis <afd@ti.com>
-Subject: [PATCH v10 5/8] arm64: dts: ti: k3-am64: Add M4F remoteproc node
-Date: Mon, 10 Jun 2024 13:06:12 -0500
-Message-ID: <20240610180615.313622-6-afd@ti.com>
+Subject: [PATCH v10 6/8] arm64: dts: ti: k3-am642-sk: Add M4F remoteproc node
+Date: Mon, 10 Jun 2024 13:06:13 -0500
+Message-ID: <20240610180615.313622-7-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240610180615.313622-1-afd@ti.com>
 References: <20240610180615.313622-1-afd@ti.com>
@@ -95,39 +95,57 @@ From: Hari Nagalla <hnagalla@ti.com>
 The AM64x SoCs of the TI K3 family have a Cortex M4F core in the MCU
 domain. This core can be used by non safety applications as a remote
 processor. When used as a remote processor with virtio/rpmessage IPC,
-two carveout reserved memory nodes are needed.
+two carveout reserved memory nodes are needed. The first region is used
+as a DMA pool for the rproc device, and the second region will furnish
+the static carveout regions for the firmware memory.
 
-Disable by default as this node is not complete until mailbox data
-is provided in the board level DT.
+The current carveout addresses and sizes are defined statically for
+each rproc device. The M4F processor does not have an MMU, and as such
+requires the exact memory used by the firmware to be set-aside.
 
 Signed-off-by: Hari Nagalla <hnagalla@ti.com>
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
-index ec17285869da6..b98e8ad453289 100644
---- a/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi
-@@ -160,4 +160,17 @@ mcu_esm: esm@4100000 {
- 		reg = <0x00 0x4100000 0x00 0x1000>;
- 		ti,esm-pins = <0>, <1>;
- 	};
+diff --git a/arch/arm64/boot/dts/ti/k3-am642-sk.dts b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+index 5b028b3a3192f..727d467ed2c1d 100644
+--- a/arch/arm64/boot/dts/ti/k3-am642-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+@@ -99,6 +99,18 @@ main_r5fss1_core1_memory_region: r5f-memory@a3100000 {
+ 			no-map;
+ 		};
+ 
++		mcu_m4fss_dma_memory_region: m4f-dma-memory@a4000000 {
++			compatible = "shared-dma-pool";
++			reg = <0x00 0xa4000000 0x00 0x100000>;
++			no-map;
++		};
 +
-+	mcu_m4fss: m4fss@5000000 {
-+		compatible = "ti,am64-m4fss";
-+		reg = <0x00 0x5000000 0x00 0x30000>,
-+		      <0x00 0x5040000 0x00 0x10000>;
-+		reg-names = "iram", "dram";
-+		resets = <&k3_reset 9 1>;
-+		firmware-name = "am64-mcu-m4f0_0-fw";
-+		ti,sci = <&dmsc>;
-+		ti,sci-dev-id = <9>;
-+		ti,sci-proc-ids = <0x18 0xff>;
-+		status = "disabled";
-+	};
++		mcu_m4fss_memory_region: m4f-memory@a4100000 {
++			compatible = "shared-dma-pool";
++			reg = <0x00 0xa4100000 0x00 0xf00000>;
++			no-map;
++		};
++
+ 		rtos_ipc_memory_region: ipc-memories@a5000000 {
+ 			reg = <0x00 0xa5000000 0x00 0x00800000>;
+ 			alignment = <0x1000>;
+@@ -666,6 +678,13 @@ &main_r5fss1_core1 {
+ 			<&main_r5fss1_core1_memory_region>;
  };
+ 
++&mcu_m4fss {
++	mboxes = <&mailbox0_cluster6 &mbox_m4_0>;
++	memory-region = <&mcu_m4fss_dma_memory_region>,
++			<&mcu_m4fss_memory_region>;
++	status = "okay";
++};
++
+ &ecap0 {
+ 	status = "okay";
+ 	/* PWM is available on Pin 1 of header J3 */
 -- 
 2.39.2
 
