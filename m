@@ -1,116 +1,151 @@
-Return-Path: <linux-remoteproc+bounces-1545-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1549-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05EE49027DC
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Jun 2024 19:37:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7239E902842
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Jun 2024 20:06:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD0951F22E19
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Jun 2024 17:37:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E7212822A3
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Jun 2024 18:06:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C35FB14EC6B;
-	Mon, 10 Jun 2024 17:36:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E982B14D2A3;
+	Mon, 10 Jun 2024 18:06:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="McdIVopN"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="vA76jLLq"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D16414D6FF;
-	Mon, 10 Jun 2024 17:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F421420DD;
+	Mon, 10 Jun 2024 18:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718041000; cv=none; b=Uae6FUHeRTsoraA9uZN0PgAipnSTR99B6Juw6CbNi7ZphG8GfZKQC6SZmVfr/h087QrJdTYwuB8XK4b6qjdwKOFblPY+2cyoDXnsuMnM8s+B2jPbaPtBDfEgIApXK0PMArLmTfJhAVljKZzp07bFRESx+3Ea7TyiNfgjxqOgf6s=
+	t=1718042792; cv=none; b=Be5uU/baFMdkjA74sm505rvr47ZneXCMKoVMzL9dET7EGrP1+SiESjP+3CXeFr8Wy+yI1aJkF9yysMhcpcfNPfJWJ8RGmqyhsrna603jgugIRUWvyHf/IXxp3UsYsMOh1wIfaoeOUHRCpWjNPMFioSxJdyQnwwrVxgHPjctiNy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718041000; c=relaxed/simple;
-	bh=5peT9yE4nDGFeJtvaJ7NLGE1KQp2YckJYIwOYXJbbGA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lP9zAeeV7jiRw00+qLVrlo+KI/TsqyNjMxFLOvLWGrpGzKo5l5pd2jDdM35l7GJ3UwbEBEg4MXfbaZiKzJZI/u44J0qfgdRp4iDoPAqgzcPbql5QVkuMAmhtEVkysPugZHx2QZ9tq1gDSD6EYXHtAQqdixbe2K35BcI99fwuG4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=McdIVopN; arc=none smtp.client-ip=83.149.199.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
-Received: from fedor-21d0 (unknown [5.228.116.47])
-	by mail.ispras.ru (Postfix) with ESMTPSA id DF359407853A;
-	Mon, 10 Jun 2024 17:36:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru DF359407853A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-	s=default; t=1718040987;
-	bh=3mx7J795/y8Yz1JHM3D8D7/9NeMSSgSBgbIlVoPD2Nw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=McdIVopNHE9BRDrwTqPcWXIO+30y9qCb6noHwAH4dDKfyUbq9GDBLoR6aKWr8io2I
-	 BT2j8PVErELdSAd8Q0EivkajK22MF3Znv3dvy255z1Ge/lhT4EBPLvC3z3qzikrNI4
-	 pGMDUX6mSsXL8Nfjm3WqLyyI5oB0K/q8lOoZvA8c=
-Date: Mon, 10 Jun 2024 20:36:19 +0300
-From: Fedor Pchelkin <pchelkin@ispras.ru>
-To: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Aleksandr Mishin <amishin@t-argos.ru>, imx@lists.linux.dev, 
-	lvc-project@linuxtesting.org, Shawn Guo <shawnguo@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Oleksij Rempel <o.rempel@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	linux-arm-kernel@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [lvc-project] [PATCH] remoteproc: imx_rproc: Adjust phandle
- parsing issue while remapping optional addresses in imx_rproc_addr_init()
-Message-ID: <20240610-4fb504648421659114538a50-pchelkin@ispras.ru>
-References: <20240606075204.12354-1-amishin@t-argos.ru>
- <ZmcuFRfjKRQG9OXI@p14s>
+	s=arc-20240116; t=1718042792; c=relaxed/simple;
+	bh=SGlTXlbAHbufnPd6Eo1oHjPC/WB5/kPMxMReDNymQY8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SOLfcB7Ab4VXWokScUAhgNrzJNsKllzfJiRS2g3P3t5nGmfNy6yJEDYmiyZRMHJeQC7kczG6ZD1Q2gwZWKPYctTtkWwiN0K+UWIzTh/qG9wvee38oQRVZ4joE+xa3xjzzaTwoukKpCvoVPfT7rXW7Jc6leZvqiIDqceAa0KOHYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=vA76jLLq; arc=none smtp.client-ip=198.47.19.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45AI6HdW057292;
+	Mon, 10 Jun 2024 13:06:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1718042777;
+	bh=h5VEq1G9dRBm6MKM7VYTq1WEKIHpwg4F8MH0iitI/x0=;
+	h=From:To:CC:Subject:Date;
+	b=vA76jLLqRjRRQ+XjFIFTkUne3Ll1Orh2yVNdhBXfBnjcFkRA3LHd6rpPdMfLbyhsx
+	 qkUp3oStrWXExp8HXxsk7XS+Z5WjwCAUrh7TmWXjye9MbppGXq0pgVS5rQl2JNEZyj
+	 Ns6WSvDZPRROSMmWrniouy1bWI7cGr9n4B7/4Adc=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45AI6H96011773
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 10 Jun 2024 13:06:17 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 10
+ Jun 2024 13:06:16 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 10 Jun 2024 13:06:16 -0500
+Received: from lelvsmtp5.itg.ti.com ([10.249.42.149])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45AI6Gtf056905;
+	Mon, 10 Jun 2024 13:06:16 -0500
+From: Andrew Davis <afd@ti.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier
+	<mathieu.poirier@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof
+ Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Nishanth
+ Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo
+	<kristo@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Hari Nagalla
+	<hnagalla@ti.com>
+CC: <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Davis <afd@ti.com>
+Subject: [PATCH v10 0/8] TI K3 M4F support on AM62 and AM64 SoCs
+Date: Mon, 10 Jun 2024 13:06:07 -0500
+Message-ID: <20240610180615.313622-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZmcuFRfjKRQG9OXI@p14s>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Mon, 10. Jun 10:47, Mathieu Poirier wrote:
-> On Thu, Jun 06, 2024 at 10:52:04AM +0300, Aleksandr Mishin wrote:
-> > In imx_rproc_addr_init() "nph = of_count_phandle_with_args()" just counts
-> > number of phandles. But phandles may be empty. So of_parse_phandle() in
-> > the parsing loop (0 < a < nph) may return NULL which is later dereferenced.
-> > Adjust this issue by adding NULL-return check.
-> > 
-> > Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> > 
-> > Fixes: a0ff4aa6f010 ("remoteproc: imx_rproc: add a NXP/Freescale imx_rproc driver")
-> > Signed-off-by: Aleksandr Mishin <amishin@t-argos.ru>
-> > ---
-> >  drivers/remoteproc/imx_rproc.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> > index 5a3fb902acc9..39eacd90af14 100644
-> > --- a/drivers/remoteproc/imx_rproc.c
-> > +++ b/drivers/remoteproc/imx_rproc.c
-> > @@ -726,6 +726,8 @@ static int imx_rproc_addr_init(struct imx_rproc *priv,
-> >  		struct resource res;
-> >  
-> >  		node = of_parse_phandle(np, "memory-region", a);
-> > +		if (!node)
-> 
-> You're missing an "of_node_put()" before continuing.
-> 
+Hello all,
 
-The node is NULL in this case so of_node_put() is not needed..?
+This is the continuation of the M4F RProc support series from here[0].
+I'm helping out with the upstream task for Hari and so versions (v8+)
+is a little different than the previous(v7-) postings[0]. Most notable
+change I've introduced being the patches factoring out common support
+from the current K3 R5 and DSP drivers have been dropped. I'd like
+to do that re-factor *after* getting this driver in shape, that way
+we have 3 similar drivers to factor out from vs trying to make those
+changes in parallel with the series adding M4 support.
 
-Btw, there is a "rsc-table" node->name check in the the end of the loop
-body. It was added recently with commit 5e4c1243071d ("remoteproc:
-imx_rproc: support remote cores booted before Linux Kernel"). Seems to me
-it forgot that of_node_put() is called way before that.
+Anyway, details on our M4F subsystem can be found the
+the AM62 TRM in the section on the same:
 
-Also commit 61afafe8b938 ("remoteproc: imx_rproc: Fix refcount leak in
-imx_rproc_addr_init") was dealing with the last of_node_put() call here
-but it's still not in the right place I'd say.
+AM62x Technical Reference Manual (SPRUIV7A – MAY 2022)
+https://www.ti.com/lit/pdf/SPRUIV7A
 
-> > +			continue;
-> >  		/* Not map vdevbuffer, vdevring region */
-> >  		if (!strncmp(node->name, "vdev", strlen("vdev"))) {
-> >  			of_node_put(node);
-> > -- 
-> > 2.30.2
-> > 
-> > 
+Thanks,
+Andrew
+
+[0] https://lore.kernel.org/linux-arm-kernel/20240202175538.1705-5-hnagalla@ti.com/T/
+
+Changes for v10:
+ - Rebased on v6.10-rc3
+ - Added AM64 M4 support in DT
+ - Addressed comments by Mathieu from v9
+
+Changes for v9:
+ - Fixed reserved-memory.yaml text in [1/5]
+ - Split dts patch into one for SoC and one for board enable
+ - Corrected DT property order and formatting [4/5][5/5]
+
+Hari Nagalla (7):
+  dt-bindings: remoteproc: k3-m4f: Add K3 AM64x SoCs
+  arm64: dts: ti: k3-am62: Add M4F remoteproc node
+  arm64: dts: ti: k3-am625-sk: Add M4F remoteproc node
+  arm64: dts: ti: k3-am64: Add M4F remoteproc node
+  arm64: dts: ti: k3-am642-sk: Add M4F remoteproc node
+  arm64: dts: ti: k3-am642-evm: Add M4F remoteproc node
+  arm64: defconfig: Enable TI K3 M4 remoteproc driver
+
+Martyn Welch (1):
+  remoteproc: k3-m4: Add a remoteproc driver for M4F subsystem
+
+ .../bindings/remoteproc/ti,k3-m4f-rproc.yaml  | 125 +++
+ arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi       |  13 +
+ .../arm64/boot/dts/ti/k3-am62x-sk-common.dtsi |  19 +
+ arch/arm64/boot/dts/ti/k3-am64-mcu.dtsi       |  13 +
+ arch/arm64/boot/dts/ti/k3-am642-evm.dts       |  19 +
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts        |  19 +
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/remoteproc/Kconfig                    |  13 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/ti_k3_m4_remoteproc.c      | 760 ++++++++++++++++++
+ 10 files changed, 983 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/remoteproc/ti,k3-m4f-rproc.yaml
+ create mode 100644 drivers/remoteproc/ti_k3_m4_remoteproc.c
+
+-- 
+2.39.2
+
 
