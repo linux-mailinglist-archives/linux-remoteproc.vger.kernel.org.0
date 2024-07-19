@@ -1,281 +1,113 @@
-Return-Path: <linux-remoteproc+bounces-1840-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1842-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5E28937527
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 19 Jul 2024 10:40:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8C1193755D
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 19 Jul 2024 10:52:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AB29281B54
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 19 Jul 2024 08:40:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 070551C211FD
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 19 Jul 2024 08:52:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8110681749;
-	Fri, 19 Jul 2024 08:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE06578C76;
+	Fri, 19 Jul 2024 08:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="RRWd57XG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BOTI06hX"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11011057.outbound.protection.outlook.com [52.101.65.57])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C298002A;
-	Fri, 19 Jul 2024 08:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.57
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721378416; cv=fail; b=CWuiQE1wGmZX2HDvbxjzLoQLqDNTzEz3qrwOeVVVu8dDV7ToxLgm34z0oEvlqAQYuhATfSnJzJvUmB8DIYzqq+YiM1VIAZw/Oi4hKwAqj+HiowsjwFxa7sr4/A5o6BXnRe+FSb/msYMB2wWAwvz49+bcdQ6I+vKlIGYCgdypEiA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721378416; c=relaxed/simple;
-	bh=rlUw6E9WN9JlbR6sIv2jpD4O1qh5dSmpbHeKOPorMg4=;
-	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=bGzWZc1LHSgdDVhVHi/mMoroFrqmawHnB2B0xTfMDIJ2iSsagoOXDUb3qSNPa19AsaAaIMQEvZJUCdbN0TjIv+4RxM4Ip5OgIFZ0LNJblcQnq0ahJ6L/QJddFF3jAi6agqrCA6ob9/O4kGKEakQ576xVQTI0mMAQ9rmM9aanGxs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (1024-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=RRWd57XG; arc=fail smtp.client-ip=52.101.65.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fuB6ii/wRT5hjyvV1PrHdMrX8qUrrQB5G31uzqawLlEfc6a+5HAoS1FVFVMAQ/jIhTttA9ZWWmk23FYzhdRqLCrBjKYnHUZRZlaok4Qj5D5aPHHQ0lS+oSbQmo1XybPrztgRYbEgSx+u9kpJ/ocu512Y9H8c+91tWQoaIMUrcaACanf0siRPD7rJYTWb0DZJsKM48qmhc0UOcIHin4zc4Pif1lBIQNfbjcK2+PrTWVHdqoKbJnHNp2t8UR1iXFrkYI1abHNvkEDEFIL1wVedu19ITkN0t68MkvZuh14h91nDntG8FS7JyeLEkNawuar4iFt7H+cw/68umW0GLQuZKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XNSxgizy+rrvrZ17tCcZ6RNMk2PwDZ358yswXzx4I5s=;
- b=Wg4EFsoy0NXOvepJtRo+zcSfzSeM9CrZ8i+UEr6zPVqEdL/7AU5ekwmPhyIc1PsbyPtdq0kifWqJQi33hRVEn9BogIBO/IzP3yer/11M8VnizkKUW84DODCvVqtyMUnwXVnjFktyl8cHaVn+hFgykwv6cJ3E/21diLeK3ZTT11rCAEoyNm9ZxZgooLcwXfODDInf3T/fnLkEl98Z0aYeYwlZr+Wh2XRKSu/LfKZCkE7B3q7yTvSccBQrcVWruYZbRb7CTh2acyBCpRmbc3uLjI2A+adfJu7d5ulwV+0avrXHKQ4Drd8nKAvxHeb+mp6Q/i2HQVvKb1G1zKihZP6seQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XNSxgizy+rrvrZ17tCcZ6RNMk2PwDZ358yswXzx4I5s=;
- b=RRWd57XGcaI1NkCkXTjRyTKGxfnw5kMK7FHQZO8x/o2AbMXfDsVLiNhDyUF0SwwLeRppD3/qqzIi74kSgsJAZytMNDz8Bd5SpRDeE0ka3XrIHJJmhu2fBpbuEJW3ni6daKz6LAx9NoVeWaDPUQiM+uc9514pjVAlg4Xne4tOL7c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by DB8PR04MB6812.eurprd04.prod.outlook.com (2603:10a6:10:f8::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.18; Fri, 19 Jul
- 2024 08:40:11 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.7762.020; Fri, 19 Jul 2024
- 08:40:11 +0000
-From: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Date: Fri, 19 Jul 2024 16:49:04 +0800
-Subject: [PATCH v2 2/2] remoteproc: imx_rproc: handle system off for
- i.MX7ULP
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240719-imx_rproc-v2-2-cd8549aa3f1f@nxp.com>
-References: <20240719-imx_rproc-v2-0-cd8549aa3f1f@nxp.com>
-In-Reply-To: <20240719-imx_rproc-v2-0-cd8549aa3f1f@nxp.com>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Mathieu Poirier <mathieu.poirier@linaro.org>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Daniel Baluta <daniel.baluta@nxp.com>, 
- Iuliana Prodan <iuliana.prodan@nxp.com>, Marek Vasut <marex@denx.de>
-Cc: linux-remoteproc@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- Peng Fan <peng.fan@nxp.com>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1721378951; l=2895;
- i=peng.fan@nxp.com; s=20230812; h=from:subject:message-id;
- bh=9u+mOLa/UKnpD74PoVrTGFSC490GJBGP44V6TiFNVYA=;
- b=XhxP2n+9b5iHTZSeqM2AsJF3TXHNyn5hV0SXTABeJWtoTt3L2zA2e1oSOT98AEeRblWGi1ItN
- Xi/qe1DBDnLCTdNHe6R4uhrY7dT2UC3WAFA/fH74+5GyvCC8DPXmyEy
-X-Developer-Key: i=peng.fan@nxp.com; a=ed25519;
- pk=I4sJg7atIT1g63H7bb5lDRGR2gJW14RKDD0wFL8TT1g=
-X-ClientProxiedBy: SG2PR03CA0129.apcprd03.prod.outlook.com
- (2603:1096:4:91::33) To PAXPR04MB8459.eurprd04.prod.outlook.com
- (2603:10a6:102:1da::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B5380026;
+	Fri, 19 Jul 2024 08:52:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1721379125; cv=none; b=id9XGo6ZxQF/5+I1z8MPvAEoCE7dL+fm///rKeir7cpGoX7FoPWr4PDQ5Q9NDFQD7zMXd6+nDppgqq4WXnDoPAW7ao0OtioufbsRDq3rJzAjS5NhH7vox6O1H5gJBuPC93w4MB5g6quSRkJ4JTKGGUTvRZNV0J/I0FcqROjwa2o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1721379125; c=relaxed/simple;
+	bh=r8oFgF9hsmNmGc0Nc9AK6CXg8ie6rgCUDmSyIstaJLA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KR+F+q7aydMcB5R5epoDqeskbLSYunG2sxtwHJEMa/vwagPDnACCpgrHc2G3ED8feqlbORUYIz3kvmyya7CLEdAazjMiv1Qxw9z3WdYrnZ++bGaaESCqkYrfIgxgjYW/3qBng9GBWn8YzrX6PRNpoxr3pz/ziH59dE8El0cSY40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BOTI06hX; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4266eda81c5so11388005e9.0;
+        Fri, 19 Jul 2024 01:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1721379121; x=1721983921; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r8oFgF9hsmNmGc0Nc9AK6CXg8ie6rgCUDmSyIstaJLA=;
+        b=BOTI06hXktK1P3/+hIDVk5O6W7s2kxCaAcstIxDfPGHTDYU4efF0zUg0Npf3UVNTIB
+         1tCQRrm2ZMDy0Yin+zq+uOm18LdvMTbwj1TEO8CsfBUEUqnK7mLkhdRvUSzhAMGGNdcb
+         MRzflp7pSkY30TcYtohB+XR8ONHPZCLRUvoUnA8EhNyGlHPjmXYUtjx2cpXyExbBXnNl
+         y77WrFO/dqb0RNzjMxVgwvDVKgfeKe+QYknUB/X6aKl4OYx5Xn+vwSSt0loZR+ilv9FF
+         zmfSAG5UKAK0/jSikQJefrizb9SbMhbLplobd9IGmu90Enz+LSoJJnufAfCbjdjmyQQT
+         2tgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721379121; x=1721983921;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r8oFgF9hsmNmGc0Nc9AK6CXg8ie6rgCUDmSyIstaJLA=;
+        b=jYKBySHZWQq2nwTcjrC8dGEQyv7QvfxgULrnweEh6d6Ic39AslCUB7UWQZ92nM92ER
+         JiIcgVAisLO6o7tPWt/GgszeHdzopH0HPUahOeOclxWFTDTKP3xEUaNHiTXYFybfeARo
+         afPknQQjyQgA1NtKVgiBbiUDpG7V+/MbrUUWO3oyIxJ7mPYvW2V/MSNn8Zcr5tpoAbu1
+         bwxCkODN8KnHO26o+4eLGuyyUPzATF5zFIN2KQDMW8OqmCl81tZBpmkMT+nk68Shedlf
+         Rn0XBnk4nKG5J9JwiSGmAVPZFHi6a9BF9lZq8f0sscNmcr1UglpjgRvqmjvljHB7LTV3
+         r8XQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV953OrHLH72Q6AGCcX9UWSpf1y+fBfxlysukaz3eshrkjx5I30aYxtV4aAfqn8jcBRAk3GEbrxy7ri1oLvQ1JUqEvrT06YA7f/v4NvXpCmV4UCVRbJGwmbKRkNG1pcLZKZB/ChhrDHVI72Ki0d4Q==
+X-Gm-Message-State: AOJu0YzPONBk5meYMrvewQJcSqWvD8yIN+BkOsVlUsfpChQDXFuqpsmJ
+	cDtGjGZ3AcLAZXQL2NQttZDmjHtLFUaY+jG/hJHGl3BcCXQ6/qP0icqZdKppZTZ3iRlU/o2br1V
+	oQlDoWZfz0841RVErRXiBE0nUuwg=
+X-Google-Smtp-Source: AGHT+IEv3qCK6lAidNklfBcgIVXCYYSmSxxXgW/Dm21GqZIiZZ5HailN4WXo1vsVLga8IxfI0D2fv7nNamOEy/sdeQs=
+X-Received: by 2002:a05:6000:2c8:b0:367:9c46:198 with SMTP id
+ ffacd0b85a97d-368315f1ef5mr6492142f8f.1.1721379120874; Fri, 19 Jul 2024
+ 01:52:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|DB8PR04MB6812:EE_
-X-MS-Office365-Filtering-Correlation-Id: de398837-d19f-4d89-b55f-08dca7ce6701
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|52116014|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?SmxxckJ0R1FRdTRtRjIrR3FKSXpHaUJkN3R5R0RPWkxleUdRNkllVkZXODlh?=
- =?utf-8?B?Yk8vcjNjc1JJWlBEMW42bWZFYzZBazBxZU1jbGIzMm9lUEc3dnpzTEFtTC85?=
- =?utf-8?B?MTR4Wmc0dldHY1FsNHllY0VPblMyR1hCVzNNOU54SGFMcXFYSFlCQmI5ZnZV?=
- =?utf-8?B?T1dJeENwOGdpd1VOeE5qVU9JUVdndmJLdmcyVXJBbldQSWExbzBUejFXTWZS?=
- =?utf-8?B?NDdrWEZqZHlkZ3krd2F4dEpYWHArMzc0d1gwSjI4R1FlM2VVRUdTQjBpOEZT?=
- =?utf-8?B?d0pMZ2JXT1FKN3FJMzRuUFViVSttMnJKYWFGYVkrNm5wb1IreFB6aW4xVk1m?=
- =?utf-8?B?OVpzdS9WcDBUcU1aNTB0U2tHQUxCQkE0TWpBTTc1RVNtdnJSYWEyY2JCZEh4?=
- =?utf-8?B?ZjVneW55VkhqL1hRMTM4SGpvSDNOREMzQTMzbkhGVjJodDNwNmY2NlVOcmhI?=
- =?utf-8?B?QnZqQmpGL2R5cHJCZUgxbC80MUZSMmtWV25PR2htYjdiNkdqVHJZOUlCUFo1?=
- =?utf-8?B?aTQ1QVF3VGl1anVXODNWTlJIK05ZdVVCY3lOcEhGWXIwWjlZWTQvYzlvMTR5?=
- =?utf-8?B?RCtDdElaZkVlZkRCM0tUbWtCMlk0SW9xVm5wait2aHF1eTdxcVUySG9UWTF2?=
- =?utf-8?B?SGFzUlF6Yi9yZi9YNlB4UDYwYTA3ajFKMHlyR0R0ZUhMdi9pNG1LMFFWaExQ?=
- =?utf-8?B?RVJYSUhBc0JtS1pmcUk4b3BtRU1sdUdNVlgzc25OMEF4ZFBIcEM5K2pqSkps?=
- =?utf-8?B?WGZJRklNRTZLd0FCbGhjYjBhWWVXYk5tUWtDZE03Z29aK3NuWDk3RDh4S2pJ?=
- =?utf-8?B?eEVVTU1odldXRCtjRzhWMlZpekRwU3FVZGVESzk0YWVUMEllOVJ6R1ZWTFRE?=
- =?utf-8?B?R3ZKbnRSbVg3elIwZUxkUmNrTXNZaXB6WFRDdTlwdzRPM0pNc0tqSU8vYktt?=
- =?utf-8?B?UGEyUzJndUpOcjNKMHB4M0w1Q1ZZZkVvSHFlVGtyZUhiODk1TFp3OGlQTGhD?=
- =?utf-8?B?WnRHeTFpVFB4Wk1TOE42VGtiRGtwWStldlNYWHl0eVhmcDZCb0R5WkFzWktj?=
- =?utf-8?B?amRBWGVOVFR5eEcrMFhoeXorQWQ1Wnh2cUU5Mjd4SmcyNG5wLzk5QnN0blZT?=
- =?utf-8?B?dzk2Zkh1eldJUWkrTFJmVzFGTDA2WTRlZWZ5Q1VSaHZ0Ykc4MjB6ZjlERDVp?=
- =?utf-8?B?Q0d4YkU2aHhpekFaSGFWZkZkYmRaazNCQ1RXNVNPbXEreG1tUVV1UkY0Smxl?=
- =?utf-8?B?alZTL3NmVFhiazRuRUdDeWxiYTRYQzhYOU1NemI0ZzNMMUptR3hnZjU1NHlz?=
- =?utf-8?B?SGNkd1lEeVBheEJrVlZZc2ZQMkQyd2ltbk4rZGR5emVoRllXY0lLdjErcWJK?=
- =?utf-8?B?bkhHc0Y3cU9sVmV1b1dJeEV0dFp1TXlPVFdqRWk2cXcrcTlZQmhkcGovL2xE?=
- =?utf-8?B?MnovaW5yeHVucmsra21aWnNoUEVmdXBhNjhLcTNnTElGZHRGQjlWaGFRMHUw?=
- =?utf-8?B?dGR1V3ZHRmxiY09ISTlIdC9lK0c2ZjFWeDdtSUU4cmltUnpXZFhZaXJ3Yk1D?=
- =?utf-8?B?dXBWTm9QM09zTnU4YlE1THFjM1VHOHhtOXFncFRsRi9VbDZlS0s2QnhlL3FE?=
- =?utf-8?B?bkd5R1ZXY3JJZTROQU9BQzBtaFF6bjBHRkN5eUF0SXNIalpiVkFERTJid1l1?=
- =?utf-8?B?MGovQmFsaHkyekJaUmZPeDRCL3FrZFF3NGQ1NFRTTW9qRlcybHhJRDlIUSsz?=
- =?utf-8?B?YStWZzk0MVJwVkVLRGZnc1dyWXdqd2FFbDNhQkd0S3BIaDRpemcxWEtTSUpT?=
- =?utf-8?B?ejhBb3ltT0dZOXYydHFnVVV1QlBUVXNzOEZsV3hHVkJ4Um9wS1BDYWhMR3Fs?=
- =?utf-8?B?QmJiN3lQVVhGWWlpV3VhY3Zoa2tTZjhKMUxwSEpMeFhjaVE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(52116014)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SHBlS0FTRVJxQld6VENraGxPcHdTL2FXN29PTmxEZnhNZlRXTTlBMnNIbnhp?=
- =?utf-8?B?dk1mWkp4TkY1MWVTb1BoVWdzOXI4cytSTkNOQzkyYTlzbm8xeXFTQXFNM24r?=
- =?utf-8?B?SVo0Z21mTkh6Y3ZBcWE3SFluV1FLK0tkcGk0TWl5MTJmSjBiUE8yUUpDaERP?=
- =?utf-8?B?Q2xINWN4eEhIWVdEak9tenJQVEg4U0tXMmZjSjZhUXZOOE1WMVltT0M4Zlly?=
- =?utf-8?B?Ynpzb0R1Wjk2WFRLQnlJa3VrNmVjdEtKNko5ekxwWm9qWWRFUzRORVEraFBE?=
- =?utf-8?B?bmpYY3lZbVI2RXZPMFNzYTQ5aGhyK3NKaTg4Y1loa2RmcG5GUHdHelhwU3lB?=
- =?utf-8?B?NzJIaEJhdU5vNUE5M1lxYzlob0swaDBBalhFSStYdlcyRmVLYnhvaXJRdGdT?=
- =?utf-8?B?a29OTHJESXJsb0lGenc5OEhDY1hSZ0JxLy94bGlTOHFGNEZHVU5QRlNQMW5S?=
- =?utf-8?B?V2hBK01TK1Z6NDJCMFhkUFJ0RmdpZG01Rk1EbHU2MnpEWHloUDZDYVRFRWFF?=
- =?utf-8?B?QVlMTGlYejFzUkxEUitDcmF1RDFDR2VibUdHREwrcmFPdlJJaC96blljTWJY?=
- =?utf-8?B?YTliQUsvSDIzd1ZPQzdrUmdtNzZMNWRmdE9ESWN3WDMxWXQ2a3NFVDZOS3F0?=
- =?utf-8?B?dDhqMEt6SmF1TmxxWmtsR3NTNEJ5UjRseUVxWGcyYTBndlJueTV4Vy9JNUsr?=
- =?utf-8?B?SlJOSjlEM2xPWHhZY1RHbitFRFFscmtxaitUUDkxUGtLRTBYOEVpTVU3TE5K?=
- =?utf-8?B?Z1d6dVZReWV5Wll6T3FxWkljTjBUdmNzaHEweW1DNHgxT0NIdk9PTmZJaWpt?=
- =?utf-8?B?czNOZVVJbFZkeWJqWEdzMkMzT2ZxejVnWnRuOTFmUjE0RnM3ZkgxUlY0UXFR?=
- =?utf-8?B?aHdvdW5iVXpxaXhuUHZsaVdUb05aVnB2UmpLVnovNTBPYUsvbjA5RzhsU2NV?=
- =?utf-8?B?NU9JL3ZpVUZWUkxiRFdxSHMyVXFZMy9NOG8vd0VaWngxcjVvSGxFQkU4eDZ1?=
- =?utf-8?B?ckY1N2VycFRSV3o2Y2lqVzY2UU52Vkl0MWc2TmhhN2s5VjVOMEFxczZVWGZU?=
- =?utf-8?B?OEk1VUh5SkMxOU1TQjNzVWptd3VQdW5wWE5oNW9URVNSTXBJNVhFMEJZbytx?=
- =?utf-8?B?b2FSU2JVZk5USDgwM3RLblFiODNCWHN6MW5MTEZmU3NSVHIrcEV5b3hTWnYz?=
- =?utf-8?B?dzhQZnNSdHo3TFFENXF6S3hQbkZwMzZTVDBFTVFVMnJ1V3dYdyt6Z0xQZFVr?=
- =?utf-8?B?bm1mRTdrKzFyelFHejZyUWxUNzZrbUhjaWVvRDhkaUZEejkxRWhjTEl0ZnJw?=
- =?utf-8?B?MmZyV0R0UkZjdGlUaXczVlkyKy9pcGFJY29hVkRLMHcwTUNPWnZpMFdjNllJ?=
- =?utf-8?B?dkR3WXVJUGgwQ3FIall4c1lxVnNXYXNrOStnWklWMVVwYmlQRFlWbGNwVitn?=
- =?utf-8?B?aXNrN3hHWi9WeDdjajh2ZjExczRPVzdISmQ4SEJ6RGpQUVFYT3pxMkQydFFP?=
- =?utf-8?B?T2YyWXF4cC9HY0dqc2YvZmc5bXppWUZUSFZFNWZNa0NhQTdSUjJKUTJFcG0v?=
- =?utf-8?B?U01IZGM1SGNrS1FNNU9XRFB2azYzN0l3M0s2alpPMHR0ekYxYXkzRWV1UmN5?=
- =?utf-8?B?Z1FwN3B4RWdKUHVWTXBpTXJFWWVKTXVtRDZGNjIyTVAxNmtjSUhpMktQT3Nk?=
- =?utf-8?B?QTYzdjNKbjJFUlRDMzljU1ZjS1BlbFNIMmphM0VDVU1Vb2Q1c1ZpbHJZRE5n?=
- =?utf-8?B?S0ozUVlySUk4a1NRM3dxNG5uMVRJWUxEWDIwWVFqN1NabitBSFVmMnNsZmg3?=
- =?utf-8?B?Um44Vi83S1g2OGtoQ1c2NUVrZXg2dHpFSlFIYTNHczlNZjRSdUdyR3UzdGNo?=
- =?utf-8?B?K04xZnFmMmhCNXpLeXVZKzUxTzQ2OFlLUGZtQy9ocXhOZU1jRm1EcGxBQmNy?=
- =?utf-8?B?NStCd3poNE5EQm51VWZZS3IrQkJoamExZVMvNnpVTkNqSy9XbHlTM051d3Zo?=
- =?utf-8?B?YXkzbUV3SlduMU4rOW54VXRPYUtTSW43NzlvT1BuNlcvUFlHd2tsWisxWEVl?=
- =?utf-8?B?WFNyUytPVWxRL2ltN1VpS25TYm9nZjBvenhTOTFiZnQ4aXhVaVI3VjZRb0V0?=
- =?utf-8?Q?FzZzUTPCuOeiqvPY/08km6oLW?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de398837-d19f-4d89-b55f-08dca7ce6701
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2024 08:40:11.3926
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0p2FcKPldASIKuu9L6Z3AzTCIxkaN5LIbNUCuQrd656Bnrnc3E/sJivVbXXdTdx9h3AjuFvV1mzsPyDOo1+QJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6812
+References: <20240719-imx_rproc-v2-0-10d0268c7eb1@nxp.com>
+In-Reply-To: <20240719-imx_rproc-v2-0-10d0268c7eb1@nxp.com>
+From: Daniel Baluta <daniel.baluta@gmail.com>
+Date: Fri, 19 Jul 2024 11:52:44 +0300
+Message-ID: <CAEnQRZAh1P0i+Uj1+vrvZM4vVuxuYR9tN9FMm+khSSvwyz7hhA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] remoteproc: imx_rproc: various patches for misc
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Daniel Baluta <daniel.baluta@nxp.com>, Iuliana Prodan <iuliana.prodan@nxp.com>, 
+	Marek Vasut <marex@denx.de>, linux-remoteproc@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Peng Fan <peng.fan@nxp.com>, Terry Lv <terry.lv@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Peng Fan <peng.fan@nxp.com>
+On Fri, Jul 19, 2024 at 11:27=E2=80=AFAM Peng Fan (OSS) <peng.fan@oss.nxp.c=
+om> wrote:
+>
+> This patchset is to upstream a few patches that in NXP downstream for
+> quite sometime. For patches directly cherry-picked from NXP downstream,
+> I keep the R-b tags.
+>
+> Patch 1 is a minor fix to DDR alias.
+> Patch 2 was sent out before,
+> https://patchwork.kernel.org/project/linux-remoteproc/patch/2022011103333=
+3.403448-1-peng.fan@oss.nxp.com/#25144792
+> this is just a resend
+> Patch 3 is to avoid mu interrupt trigger earlier.
+> Patch 4 is merge small area to support elf that has large section
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-The i.MX7ULP Cortex-A7 is under control of Cortex-M4. The i.MX7ULP Linux
-poweroff and restart rely on rpmsg driver to send a message to Cortex-M4
-firmware. Then Cortex-A7 could poweroff or restart by Cortex-M4 to
-configure the i.MX7ULP power controller properly.
+Neat and clean.
 
-However the reboot and restart kernel common code use atomic notifier,
-so with blocking tx mailbox will trigger kernel dump, because of
-blocking mailbox will use wait_for_completion_timeout. In such case,
-linux no need to wait for completion.
+Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
 
-Current patch is to use non-blocking tx mailbox channel when system
-is going to poweroff or restart.
-
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/remoteproc/imx_rproc.c | 36 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
-
-diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-index 01cf1dfb2e87..e1abf110abc9 100644
---- a/drivers/remoteproc/imx_rproc.c
-+++ b/drivers/remoteproc/imx_rproc.c
-@@ -18,6 +18,7 @@
- #include <linux/of_reserved_mem.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
-+#include <linux/reboot.h>
- #include <linux/regmap.h>
- #include <linux/remoteproc.h>
- #include <linux/workqueue.h>
-@@ -114,6 +115,7 @@ struct imx_rproc {
- 	u32				entry;		/* cpu start address */
- 	u32				core_index;
- 	struct dev_pm_domain_list	*pd_list;
-+	struct sys_off_data		data;
- };
- 
- static const struct imx_rproc_att imx_rproc_att_imx93[] = {
-@@ -1050,6 +1052,22 @@ static int imx_rproc_clk_enable(struct imx_rproc *priv)
- 	return 0;
- }
- 
-+static int imx_rproc_sys_off_handler(struct sys_off_data *data)
-+{
-+	struct rproc *rproc = data->cb_data;
-+	int ret;
-+
-+	imx_rproc_free_mbox(rproc);
-+
-+	ret = imx_rproc_xtr_mbox_init(rproc, false);
-+	if (ret) {
-+		dev_err(&rproc->dev, "Failed to request non-blocking mbox\n");
-+		return NOTIFY_BAD;
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
- static int imx_rproc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -1104,6 +1122,24 @@ static int imx_rproc_probe(struct platform_device *pdev)
- 	if (rproc->state != RPROC_DETACHED)
- 		rproc->auto_boot = of_property_read_bool(np, "fsl,auto-boot");
- 
-+	if (of_device_is_compatible(dev->of_node, "fsl,imx7ulp-cm4")) {
-+		ret = devm_register_sys_off_handler(dev, SYS_OFF_MODE_POWER_OFF_PREPARE,
-+						    SYS_OFF_PRIO_DEFAULT,
-+						    imx_rproc_sys_off_handler, rproc);
-+		if (ret) {
-+			dev_err(dev, "register power off handler failure\n");
-+			goto err_put_clk;
-+		}
-+
-+		ret = devm_register_sys_off_handler(dev, SYS_OFF_MODE_RESTART_PREPARE,
-+						    SYS_OFF_PRIO_DEFAULT,
-+						    imx_rproc_sys_off_handler, rproc);
-+		if (ret) {
-+			dev_err(dev, "register restart handler failure\n");
-+			goto err_put_clk;
-+		}
-+	}
-+
- 	ret = rproc_add(rproc);
- 	if (ret) {
- 		dev_err(dev, "rproc_add failed\n");
-
--- 
-2.37.1
-
+Thanks Peng!
 
