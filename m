@@ -1,85 +1,70 @@
-Return-Path: <linux-remoteproc+bounces-1905-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1908-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ADB7946054
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Aug 2024 17:22:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4F7794630F
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Aug 2024 20:25:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C7AB1C22D96
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Aug 2024 15:22:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 47A87B22179
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Aug 2024 18:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F37DB166F11;
-	Fri,  2 Aug 2024 15:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 308F41A83CD;
+	Fri,  2 Aug 2024 18:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="prZsjnTm"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Nw1VcDDK"
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C90415C133;
-	Fri,  2 Aug 2024 15:21:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12E71A83B9;
+	Fri,  2 Aug 2024 18:23:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722612091; cv=none; b=uXBK+GHC0Mfz07Ht26vqQ7jDfJZQrvfdbYTNudN7q8qSD2IzoeLm5Tw2EujYQpNEILNbQek0FqqsnpDB8psbC1XobpIU+qPIhmybAYug5FAtCgGn90iXoYBuDYUqe3lr+xdgnS5IlI9HdoUh+opUh65xSyhKMTCrY0N7k+mR2Dw=
+	t=1722622997; cv=none; b=SGKog8dPE3Vzumue29IGE4bvPH8UDJGt10X1tig2d/pt58UYHrrwt9Y2eo56k17+Mou/tawFIFBMpAZOKfOjjbWn/Yfvggj7WLKRKLY7t1FF1+hAsCDC8e5U0ZDWFoGJQ/pZHV7MAJ6OlnTKj4WRxt05TpHU8y+hbm17AH/kCTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722612091; c=relaxed/simple;
-	bh=2nZAOMcSJCaT69/GDR9w5DOfEgqbDDTv9vQRykhcQCY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lkKNf3NcYhF3kuvV4T9Y4olJnuN+z1Kb4Uu1Qvhb0hVobOV+a7PLfYC7Rq2y+JDQzRpmGUXW5xgNt9PMSKjZVPkDiuGOK9l47mo7SPb1vyyOElZFG4J0KadLtsDNOHlS34sFfkr2xuuLQtdwqWVqt/eCLwZRCTVdZ+dGBUcb2Ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=prZsjnTm; arc=none smtp.client-ip=198.47.19.141
+	s=arc-20240116; t=1722622997; c=relaxed/simple;
+	bh=M+ulUkV1YTG068x/Qdy7o5UyxYtRh+kStIOmvFqJrHI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JX5sEWuay+E63lSSj438WC6eHYqFDTc0cJGwwSV84ZHfOoqwsbxvP+6dYMmdPnvtFiLU/2grDiiVxHJi1K2PDaUY+Ld7LaRqjbgGmK2zKexZ1Z0FYrXfNytm5uslhk7QqKHcSDzN4H4XWPwr+PzCvJ9mmRjo2fWq9blXQrzi64Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Nw1VcDDK; arc=none smtp.client-ip=198.47.19.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 472FLGum022622;
-	Fri, 2 Aug 2024 10:21:16 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 472IN1xH069877;
+	Fri, 2 Aug 2024 13:23:01 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1722612076;
-	bh=rSINEMLQKp5dKg3nb0GwpjmEE7NlJqoQKsuh82SeeuU=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=prZsjnTmgpcFPohegaaWAUHjb936qZhNblDTsOZ0iVtxfVHV2yDlZFyyrsXHSwPAd
-	 r4YuFjHijL9RmTCIpYHudCV/WEfmCqlApVfHaJvdb9Z5aIEaBBb+GTQGw+0wDloSot
-	 JKH34E9GbZoebJo00ycbu3vzguzk1DuCNFOCYlFU=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 472FLGmu108218
+	s=ti-com-17Q1; t=1722622981;
+	bh=QM5oBnyYC3TLRvQQiX0szRRaPNGIEa5CsBev4nNhHDs=;
+	h=From:To:CC:Subject:Date;
+	b=Nw1VcDDK2TsE97UWRYIkAZESGrQ/1PZy+RYVY1uciNeCwRfDqtB9H2KK/4VBOhO5R
+	 FbCAp3QZIuSRtOvh6HLpaqhjn0IVTY1zlfhddCbTV7JISq8+IcTNRgmrcm7WaLODO/
+	 lYOHh2lhohrFQVgmz09tdBLTzggEE5gR8/OG6y8E=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 472IN1kI044102
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 2 Aug 2024 10:21:16 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+	Fri, 2 Aug 2024 13:23:01 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 2
- Aug 2024 10:21:16 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2024 13:23:01 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 2 Aug 2024 10:21:16 -0500
-Received: from fllvsmtp8.itg.ti.com ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 472FLAex007504;
-	Fri, 2 Aug 2024 10:21:15 -0500
+ Frontend Transport; Fri, 2 Aug 2024 13:23:01 -0500
+Received: from lelvsmtp5.itg.ti.com ([10.249.42.149])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 472IN0BQ039524;
+	Fri, 2 Aug 2024 13:23:01 -0500
 From: Andrew Davis <afd@ti.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof
- Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Nishanth
- Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo
-	<kristo@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hari Nagalla
-	<hnagalla@ti.com>
-CC: <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>
-Subject: [PATCH v11 9/9] arm64: defconfig: Enable TI K3 M4 remoteproc driver
-Date: Fri, 2 Aug 2024 10:21:09 -0500
-Message-ID: <20240802152109.137243-10-afd@ti.com>
+To: Hari Nagalla <hnagalla@ti.com>, Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew
+ Davis <afd@ti.com>
+Subject: [PATCH 1/7] remoteproc: keystone: Use devm_kasprintf() to build name string
+Date: Fri, 2 Aug 2024 13:22:54 -0500
+Message-ID: <20240802182300.244055-1-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240802152109.137243-1-afd@ti.com>
-References: <20240802152109.137243-1-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -90,29 +75,40 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-From: Hari Nagalla <hnagalla@ti.com>
+This is simpler and removes the need to assume the id length to be 1
+digit, which then removes a W=1 compile warning about the same.
 
-Some K3 platform devices (AM64x, AM62x) have a Cortex M4 core. Build
-the M4 remote proc driver as a module for these platforms.
-
-Signed-off-by: Hari Nagalla <hnagalla@ti.com>
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/remoteproc/keystone_remoteproc.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7d32fca649965..33b0487b0d607 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1383,6 +1383,7 @@ CONFIG_QCOM_Q6V5_PAS=m
- CONFIG_QCOM_SYSMON=m
- CONFIG_QCOM_WCNSS_PIL=m
- CONFIG_TI_K3_DSP_REMOTEPROC=m
-+CONFIG_TI_K3_M4_REMOTEPROC=m
- CONFIG_TI_K3_R5_REMOTEPROC=m
- CONFIG_RPMSG_CHAR=m
- CONFIG_RPMSG_CTRL=m
+diff --git a/drivers/remoteproc/keystone_remoteproc.c b/drivers/remoteproc/keystone_remoteproc.c
+index 7e57b90bcaf85..81b179e269a1e 100644
+--- a/drivers/remoteproc/keystone_remoteproc.c
++++ b/drivers/remoteproc/keystone_remoteproc.c
+@@ -366,8 +366,6 @@ static int keystone_rproc_probe(struct platform_device *pdev)
+ 	struct rproc *rproc;
+ 	int dsp_id;
+ 	char *fw_name = NULL;
+-	char *template = "keystone-dsp%d-fw";
+-	int name_len = 0;
+ 	int ret = 0;
+ 
+ 	if (!np) {
+@@ -382,11 +380,9 @@ static int keystone_rproc_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* construct a custom default fw name - subject to change in future */
+-	name_len = strlen(template); /* assuming a single digit alias */
+-	fw_name = devm_kzalloc(dev, name_len, GFP_KERNEL);
++	fw_name = devm_kasprintf(dev, GFP_KERNEL, "keystone-dsp%d-fw", dsp_id);
+ 	if (!fw_name)
+ 		return -ENOMEM;
+-	snprintf(fw_name, name_len, template, dsp_id);
+ 
+ 	rproc = rproc_alloc(dev, dev_name(dev), &keystone_rproc_ops, fw_name,
+ 			    sizeof(*ksproc));
 -- 
 2.39.2
 
