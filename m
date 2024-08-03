@@ -1,73 +1,54 @@
-Return-Path: <linux-remoteproc+bounces-1909-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-1914-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7AA0946311
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Aug 2024 20:25:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52B83946804
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  3 Aug 2024 08:15:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73C822836AC
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  2 Aug 2024 18:25:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84EF51C20D89
+	for <lists+linux-remoteproc@lfdr.de>; Sat,  3 Aug 2024 06:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F7A91C2319;
-	Fri,  2 Aug 2024 18:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="xrqqjxoQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 731BD42A85;
+	Sat,  3 Aug 2024 06:14:55 +0000 (UTC)
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1297165F0A;
-	Fri,  2 Aug 2024 18:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27B513D8B6
+	for <linux-remoteproc@vger.kernel.org>; Sat,  3 Aug 2024 06:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722622998; cv=none; b=liMr1sTKJwWxMV4XiIqSPufaHzQxuwxqvjiBlZFeNrWR2EtGPLJLO+uhmJ2zcM/SWlPpUsp1of+q0iOmlWbp+l4rekeo72I9ehH3YfPxlQpwWpW3dMC4jYVpHuJWXS3mqRC0G3jTdvh4kr/z+6ECKjMnUcgIVY2Xn2G4erb10f4=
+	t=1722665695; cv=none; b=bfAtn1lz3vynMzMVrMrsXT5OKXReh6JUXbqO8JFWdbUyuUAx9gDu1FUxcfJOnlaiys0WrlRjwvsv1d8bBiGO9r9h0KpLdf7Ue/vqaGQEjk5kraAKwNWi1+K8HSn/kr0mIxz/sE8ovna6yantJLfnW1vwwuE/1ey3GjR6xpfYN1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722622998; c=relaxed/simple;
-	bh=BZQIjqi3RVmv20lIjZed/236F9Ix29Tk7k2nJ/s+hmo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KZUnOKMxLleURSjWf9i8CXILv58kqxOij4ab/RuWCrfBJ2I8SeGaXTp5CNLaIUgzY45snJJShgu8uPSH0ng3/b59wo2WKd9thaZQVMxfeiLtBvokuvh02Ck2Hgk/cwcH/mDkLsXV1/CWsukUAWfgLItPzGnJiam0SP3alq2Gcmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=xrqqjxoQ; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 472IN7Ol069897;
-	Fri, 2 Aug 2024 13:23:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1722622987;
-	bh=0mbRMD8jBzGMNnJ6EKpzKJECBjbh92PM3dytT8hEJS8=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=xrqqjxoQVGk1fzjVHOqf/R0YppZJmEh6FkyfRYaooZnie+PQOWOjpg649DizSvP17
-	 5oUP5DDFdlAIOnFj1dTzTuVdzbOfW1Cy0VdxuB8Xc4diXne++XhM/kk+aIqGX6Sb/G
-	 L74RmoDzwgH4uL8dncOVJKl6MllfV5zPUMDxbHSI=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 472IN7fr071391
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 2 Aug 2024 13:23:07 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 2
- Aug 2024 13:23:03 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 2 Aug 2024 13:23:03 -0500
-Received: from lelvsmtp5.itg.ti.com ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 472IN0BW039524;
-	Fri, 2 Aug 2024 13:23:02 -0500
-From: Andrew Davis <afd@ti.com>
-To: Hari Nagalla <hnagalla@ti.com>, Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew
- Davis <afd@ti.com>
-Subject: [PATCH 7/7] remoteproc: keystone: Use devm_rproc_add() helper
-Date: Fri, 2 Aug 2024 13:23:00 -0500
-Message-ID: <20240802182300.244055-7-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240802182300.244055-1-afd@ti.com>
-References: <20240802182300.244055-1-afd@ti.com>
+	s=arc-20240116; t=1722665695; c=relaxed/simple;
+	bh=eW+DUt+e9wF9uB0sTe3VDHN6cI3P0dPyibjjUWpL4l0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=n0EmoYKXlu8GEQInWmM7jEtdziT3PHpuitGAxMP+CB7c3DAv8YQlZ+U7WDjqRkwHERbTYObynQyGcS9BLnx+uLxohT8DO/5KZZhFCqtM3isOZXpVDnW87odaNg+1oYH4Ek1apa38HKVJLUPMwpoupqPKp6xBOgq9c962Ry1nUjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4WbXTx3mkxzxWBj;
+	Sat,  3 Aug 2024 14:14:29 +0800 (CST)
+Received: from kwepemd200011.china.huawei.com (unknown [7.221.188.251])
+	by mail.maildlp.com (Postfix) with ESMTPS id C9ABD18007C;
+	Sat,  3 Aug 2024 14:14:44 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemd200011.china.huawei.com (7.221.188.251) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Sat, 3 Aug 2024 14:14:44 +0800
+From: Gaosheng Cui <cuigaosheng1@huawei.com>
+To: <andersson@kernel.org>, <baolin.wang@linux.alibaba.com>,
+	<mcoquelin.stm32@gmail.com>, <alexandre.torgue@foss.st.com>,
+	<cuigaosheng1@huawei.com>
+CC: <linux-remoteproc@vger.kernel.org>,
+	<linux-stm32@st-md-mailman.stormreply.com>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH -next] hwspinlock: stm32: Add missing clk_disable_unprepare in stm32_hwspinlock_probe
+Date: Sat, 3 Aug 2024 14:14:43 +0800
+Message-ID: <20240803061443.287117-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -76,54 +57,42 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemd200011.china.huawei.com (7.221.188.251)
 
-Use the device lifecycle managed add function. This helps prevent mistakes
-like deleting out of order in cleanup functions and forgetting to delete
-on error paths.
+Add the missing clk_disable_unprepare() before return in
+stm32_hwspinlock_probe().
 
-Signed-off-by: Andrew Davis <afd@ti.com>
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 ---
- drivers/remoteproc/keystone_remoteproc.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ drivers/hwspinlock/stm32_hwspinlock.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/remoteproc/keystone_remoteproc.c b/drivers/remoteproc/keystone_remoteproc.c
-index da5d5969829fb..27ebe6661b0b7 100644
---- a/drivers/remoteproc/keystone_remoteproc.c
-+++ b/drivers/remoteproc/keystone_remoteproc.c
-@@ -463,22 +463,13 @@ static int keystone_rproc_probe(struct platform_device *pdev)
- 		keystone_rproc_dsp_reset(ksproc);
+diff --git a/drivers/hwspinlock/stm32_hwspinlock.c b/drivers/hwspinlock/stm32_hwspinlock.c
+index bb5c7e5f7a80..a4e3b9a9e29d 100644
+--- a/drivers/hwspinlock/stm32_hwspinlock.c
++++ b/drivers/hwspinlock/stm32_hwspinlock.c
+@@ -103,6 +103,7 @@ static int stm32_hwspinlock_probe(struct platform_device *pdev)
+ 	ret = devm_add_action_or_reset(dev, stm32_hwspinlock_disable_clk, pdev);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register action\n");
++		clk_disable_unprepare(hw->clk);
+ 		return ret;
  	}
  
--	ret = rproc_add(rproc);
-+	ret = devm_rproc_add(dev, rproc);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "failed to register device with remoteproc core\n");
+@@ -112,8 +113,10 @@ static int stm32_hwspinlock_probe(struct platform_device *pdev)
+ 	ret = devm_hwspin_lock_register(dev, &hw->bank, &stm32_hwspinlock_ops,
+ 					0, STM32_MUTEX_NUM_LOCKS);
  
--	platform_set_drvdata(pdev, ksproc);
--
- 	return 0;
+-	if (ret)
++	if (ret) {
+ 		dev_err(dev, "Failed to register hwspinlock\n");
++		clk_disable_unprepare(hw->clk);
++	}
+ 
+ 	return ret;
  }
- 
--static void keystone_rproc_remove(struct platform_device *pdev)
--{
--	struct keystone_rproc *ksproc = platform_get_drvdata(pdev);
--
--	rproc_del(ksproc->rproc);
--}
--
- static const struct of_device_id keystone_rproc_of_match[] = {
- 	{ .compatible = "ti,k2hk-dsp", },
- 	{ .compatible = "ti,k2l-dsp", },
-@@ -490,7 +481,6 @@ MODULE_DEVICE_TABLE(of, keystone_rproc_of_match);
- 
- static struct platform_driver keystone_rproc_driver = {
- 	.probe	= keystone_rproc_probe,
--	.remove_new = keystone_rproc_remove,
- 	.driver	= {
- 		.name = "keystone-rproc",
- 		.of_match_table = keystone_rproc_of_match,
 -- 
-2.39.2
+2.25.1
 
 
