@@ -1,87 +1,89 @@
-Return-Path: <linux-remoteproc+bounces-2089-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2093-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4930C965D86
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 30 Aug 2024 11:54:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA717966825
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 30 Aug 2024 19:38:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFA6E1F25B71
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 30 Aug 2024 09:54:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3C7EB280AE
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 30 Aug 2024 17:38:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AED4E17BB3D;
-	Fri, 30 Aug 2024 09:53:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA621BB68D;
+	Fri, 30 Aug 2024 17:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="wDSd6tn/"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ppTFfRVR"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2066.outbound.protection.outlook.com [40.107.244.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCCEC17C22E;
-	Fri, 30 Aug 2024 09:53:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725011609; cv=none; b=f+1Ybh/HPhoWyHmP2NWwriFLPC2y/zd2lSSnkbJbE4tqIWEEP/E6qf9g5065Q2Ur5zVyKzlSkReuGCbisNvrQrynd1W42MCsIjbDNHTA7QxW9c0Z7WQ2uEISkxXv4ELyR6zBlqqQBFCAj9kuJdjthZgj6gKzT1OvMyfVpspBk54=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725011609; c=relaxed/simple;
-	bh=3ofik/Dx7u2jq1dmNGJ9s3j9GmEi8eVdKnNoNZruoMI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fHMOrD/u+nzmLsnMWs7QuIkCOfldenWxLTBjJ/l2vsklJl+GdgpdKCv3vBl9rIRiG7aBEJ851snyJol5fe6mjFV87iESCwDf+csyKlt6dIxKSJpFxgUN8GR237yeYAJYTQwiy5Cp+7V9Ta/1nI5Oa2sLopDmcKrqmLO9Qr8umsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=wDSd6tn/; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47U7RFuv001710;
-	Fri, 30 Aug 2024 11:53:14 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	n1klpJyPZeBUDJnbCIwtPUP2m2MGVEou3m5PsEyRuSE=; b=wDSd6tn/RLMw7L77
-	WBCp569PnSRg026v16tPVDpRf6F416elRI1vuZf1asjw5VBja2+aNiNrY0U0Ow7a
-	xL+A6J+armE1J9jFFujgrBodKxWW7kUMMIdRvlZNfhxBWjaoGBE5k/y6RRXFZiiQ
-	FGvtKzcxjjqy4v2B94bQc2dDsVJ+cmvB7yNJqKamy9WhVsvq0Dbwjvg6P3MalXmL
-	lK8LMyn+DmaZbRMgIDjIel4rpHed5cn2ueqITFsbEtFJwAULitswLj81dQTKRVG9
-	GAobBcHa3hP2D5Ui2vFNMqu3bRzl1mRWrVGiya7cDSlxqQpkN5B1cwsL4hNu1Qev
-	WvP+9g==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 41b14uja1v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 30 Aug 2024 11:53:14 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 5DEE240044;
-	Fri, 30 Aug 2024 11:53:10 +0200 (CEST)
-Received: from Webmail-eu.st.com (eqndag1node6.st.com [10.75.129.135])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B06A3257A80;
-	Fri, 30 Aug 2024 11:52:20 +0200 (CEST)
-Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE6.st.com
- (10.75.129.135) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Fri, 30 Aug
- 2024 11:52:20 +0200
-Received: from localhost (10.48.86.121) by SAFDAG1NODE1.st.com (10.75.90.17)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Fri, 30 Aug
- 2024 11:52:20 +0200
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <op-tee@lists.trustedfirmware.org>, <devicetree@vger.kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH v9 7/7] remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
-Date: Fri, 30 Aug 2024 11:51:47 +0200
-Message-ID: <20240830095147.3538047-8-arnaud.pouliquen@foss.st.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675E11B4C2D;
+	Fri, 30 Aug 2024 17:38:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725039525; cv=fail; b=PovDTkI0lMLA9i4DRDCskpis3IvwXxaZd8OFvcZ0PBmcHKVRmc6ibAhMzLN5qgNrorErn5ZkiriKM/OM1YNu5f0uTVNPJS+96GDb2hKwubgmg7J7JOtPR2fwHQHfzvPKe9/Ls34R/YzFkUZokrhg8WvH6qxjs5pq9xz52OqOeFU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725039525; c=relaxed/simple;
+	bh=Fjxms/JqjF5rxKqGh/GGZZLFq+W51MdU4g5uo64tJJ8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RyyV2nqoIBRvMkcFSdr9mSuJUCJ9aVxOPeXGyfbcOumiPpxZYPRR0AXRUah0+EDj3CrMZHdyy8semeC+vEd9Re88wbF6wLQsniCLDcJxSYKCNMsERDFgyqK6nn3Vc3XOa/Sg61O4zwzgb6mrtb8P51uxRnT6R1qDIijdzV9H99c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ppTFfRVR; arc=fail smtp.client-ip=40.107.244.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yxHeNfoo6aiEjSPgm3WMYaWEuzFS/QQHNT9dkOYQgeb19VQlXa2WlTmLu8utan4KihZVLpkuZfJcWvTziX5wfg4gOwpeKAQiIw4e4KbIDeIuVZ6/9Y1FmSNPKV5qZjLUTAhkTWsh4nkWAgPKG3q0UR94YKpqH02pd0Pr9oQoISYHYWcbTFH1yQGxXHlDpH/A7rAX+oCKjJ6LyUfXIhmTMVcyAOvNeL+UN/rXUKkYxI3nvM17VfuFynBchQUihFTEn/5N4LZ593AA3AY4OgyRL3SEmUXpwERrFXbGgd79DrOVsci89GNcgXADTKw3lIGBVVS6+gkFZEWLEYOY2AK+MA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/DFTA+BhjL20KP3HMRuCTDLqJvUb2S9vW9KeUR4VZ6A=;
+ b=DJuQDZlKdwtEEWQO3uQGHbdz6N99S/RQA5mELLJHpCF1JXvkzz4ErCj77qp4wZ9CyohhoIx4l/B6UTQz9bneTfWGYpNJFKgAOWJNsR1NWea/hNXfaaEfBcLCTQrmo6AKXpP1naZ3opJAVCOaDMnFMch0QLICsWw3bkTVc0Tu5dkzfv4Y6znbnfnCzbqV35O4Zc8vIfewqxjWKXILz2/PB4YSlWJFirT2UXVHnO2tnze/Kb9s2EK6d7j1jVGxgLBRGSwf+eyPYiwDOpGseW5zJ4Lrsv3AjoP1CbfIHZekdvEh5BeH+sawQYgAK4YJ6KSk14MJ9J5xmsVI6O8QPmI3Cw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/DFTA+BhjL20KP3HMRuCTDLqJvUb2S9vW9KeUR4VZ6A=;
+ b=ppTFfRVRB2UrjvhJB/I5RK54JQLW3gmdvTiR8GCo8XIblyKRO23aVBf48lojJXe0ub9tQQW2F9VSwsWNRiuAKFz9C9HXhASgKYCFHC1hvdcJY18sg9EbEt+jj5At30U7rtIlZfYojZII+kugmRKDp6RgajEdH7yxTq6MdQ/hl5o=
+Received: from CH5PR04CA0010.namprd04.prod.outlook.com (2603:10b6:610:1f4::18)
+ by DS0PR12MB6488.namprd12.prod.outlook.com (2603:10b6:8:c3::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.20; Fri, 30 Aug
+ 2024 17:38:38 +0000
+Received: from CH2PEPF000000A0.namprd02.prod.outlook.com
+ (2603:10b6:610:1f4:cafe::fb) by CH5PR04CA0010.outlook.office365.com
+ (2603:10b6:610:1f4::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.20 via Frontend
+ Transport; Fri, 30 Aug 2024 17:38:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CH2PEPF000000A0.mail.protection.outlook.com (10.167.244.26) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7918.13 via Frontend Transport; Fri, 30 Aug 2024 17:38:37 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 30 Aug
+ 2024 12:38:36 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 30 Aug
+ 2024 12:38:36 -0500
+Received: from xsjtanmays50.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Fri, 30 Aug 2024 12:38:35 -0500
+From: Tanmay Shah <tanmay.shah@amd.com>
+To: <andersson@kernel.org>, <mathieu.poirier@linaro.org>
+CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Tanmay
+ Shah <tanmay.shah@amd.com>
+Subject: [PATCH v5] remoteproc: xlnx: add sram support
+Date: Fri, 30 Aug 2024 10:37:36 -0700
+Message-ID: <20240830173735.279432-1-tanmay.shah@amd.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240830095147.3538047-1-arnaud.pouliquen@foss.st.com>
-References: <20240830095147.3538047-1-arnaud.pouliquen@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -90,142 +92,276 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SAFCAS1NODE2.st.com (10.75.90.13) To SAFDAG1NODE1.st.com
- (10.75.90.17)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-30_04,2024-08-30_01,2024-05-17_01
+Received-SPF: None (SATLEXMB05.amd.com: tanmay.shah@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF000000A0:EE_|DS0PR12MB6488:EE_
+X-MS-Office365-Filtering-Correlation-Id: efec7b8a-b6c6-4bf0-4243-08dcc91a9492
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?u9XefQV9QY99hYBBGjgzqun1+0Yzopl/2W2ttRN/HOfnphbIc5W621K9ocvs?=
+ =?us-ascii?Q?H8tAEHVxXpkSTbbKcDF/4zWhdu6L74MGiri787H5utDJpvXWxJ5JfOAtQUWe?=
+ =?us-ascii?Q?PDHAijqAs8wYEFKKYBSkW79OQWaWLfRL+itGFJR7tNNVUj/rrFGrzmKzelrk?=
+ =?us-ascii?Q?U2SISuJHe3hkd3VBnZqtSv+NHjj+/qIJGms3DuTTJqUO1mWfmItHSbvFI5xF?=
+ =?us-ascii?Q?ScVLwTfFGWW5JnLGvBNrZLGChL5i5tv6rqXPuRAIeQyo3vdvQXf87bhzU5sO?=
+ =?us-ascii?Q?KMWe5vfLZyuKCcA+lr7shasY7dARpcXuqt8UDv3rISs78HRH6NbvXsX4GK9y?=
+ =?us-ascii?Q?n3Cx9qAto0OCjMGcI1x8gf5sr0EvivyiVKshPOJitaibgalveY4r7Y6p+b2v?=
+ =?us-ascii?Q?a2Zoy+NassiQPpNzKiQwK99yChPu11E6HNgkezhldOmTSL6oEi+0DTs/WQx+?=
+ =?us-ascii?Q?AKOrzC0KP1kGse+bngyaPzXCvY7EUupb70bkvPJV3+wzlby5s0Na9k4kKp9i?=
+ =?us-ascii?Q?Wgws9OkmWPIJ9mdWFh4abdnh3Fbkw8lnpdv7Je4DPqnSdJ8NOrJbRgFyVJhS?=
+ =?us-ascii?Q?O1ZgqzpLYChN+YnRxZ8pE21GsdKvQsqoddLQJ4BYKsbDYMbIf7nVqtETvLEW?=
+ =?us-ascii?Q?McrTZTnzrH1LnTlLg8N2nnkFR83DBZyBOUU6t6zMbF+PIZ4/sui31DnYtRA4?=
+ =?us-ascii?Q?b6Seg1DY74XJ+dQjNVRS7q9Mif5VNVj1rz8CRNB6q1PgH0vR7CeICE75PRlo?=
+ =?us-ascii?Q?U9xK3hgzoEe3rafvA9xv8EjhIggppiJau4eC8AalOiHaM3P9uBFZqumIgDQH?=
+ =?us-ascii?Q?5p6pFCqVr5ne2/Q7IashNmrrGS1RqfUC4ZLxAnll6L2arV98Z8bC23K5GR1n?=
+ =?us-ascii?Q?FRN4xAyh1jd0I+CNGHDfWd4g0VoUUSg5VhekXVLljlGZnTvgekSrMhMIB96k?=
+ =?us-ascii?Q?K3zWE+xteof4TdVEewvpd/utqnEOj+qfSs8g8zssl2rE7jDjWXPT7iCgvC7W?=
+ =?us-ascii?Q?c2Jw+d3GCiOI+gaDzTCpzNsK4GxIzeerPUci3XoKT3V5YvxJp19SlHA149Qb?=
+ =?us-ascii?Q?RIuNLP5oxCGR7DGPHmhxX3ttPlZno4cbEQ8zZ12pAVCANsaoG/iGnnVkZRjK?=
+ =?us-ascii?Q?DrWP20zq47gDBeV0aYQxgmF0xyQ7MZ1NMzxKPjFPZnahef3hZR407OwYM5N1?=
+ =?us-ascii?Q?GftXLfhO7XVjCjh/hO0J898WiMwe4PnVhmEeSt//EhDjsOUDUtSR/xE13WTj?=
+ =?us-ascii?Q?Qt0nJBQ/gtVXdl6m+6qY+5/8Evx0FiW2FG7rITyUV1w8j11uUXWP48uYN7P1?=
+ =?us-ascii?Q?zawkLmIIyv8IK9DhTQrLzzpDT2b6eMLOr/TyJbAFM7VlkjRDAVsn6qNVN/pU?=
+ =?us-ascii?Q?v7TLorjnfMrj6MzeCS6OLtHB6gpNYYK66e/Tkfn6Kswj1w1ll1PzJRlM7D6d?=
+ =?us-ascii?Q?PbZT/ArKk5ZqKwi+NlwaInzzPypgyGUG?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2024 17:38:37.5432
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: efec7b8a-b6c6-4bf0-4243-08dcc91a9492
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF000000A0.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6488
 
-The new TEE remoteproc driver is used to manage remote firmware in a
-secure, trusted context. The 'st,stm32mp1-m4-tee' compatibility is
-introduced to delegate the loading of the firmware to the trusted
-execution context. In such cases, the firmware should be signed and
-adhere to the image format defined by the TEE.
+AMD-Xilinx zynqmp platform contains on-chip sram memory (OCM).
+R5 cores can access OCM and access is faster than DDR memory but slower
+than TCM memories available. Sram region can have optional multiple
+power-domains. Platform management firmware is responsible
+to operate these power-domains.
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
 ---
- drivers/remoteproc/stm32_rproc.c | 63 ++++++++++++++++++++++++++++++--
- 1 file changed, 60 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 79c638936163..400a7a93b1c9 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -18,6 +18,7 @@
- #include <linux/pm_wakeirq.h>
- #include <linux/regmap.h>
- #include <linux/remoteproc.h>
-+#include <linux/remoteproc_tee.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/workqueue.h>
-@@ -257,6 +258,19 @@ static int stm32_rproc_release(struct rproc *rproc)
+Changes in v5:
+  - remoteproc: xlnx: remove genpool use for OCM sram
+
+Changes in v4:
+  - Free previously allocalted genpool if adding carveouts fail for any
+    sram.
+  - add comment about sram size used in creating carveouts.
+
+Changes in v3:
+  - make @sram an array rather than an array of pointers
+  - fix of_node_put usage to maintain proper refcount of node
+  - s/proprty/property
+  - Use gen pool framework for mapping sram address space.
+
+Changes in v2:
+  - Expand commit message with power-domains related information.
+
+
+ drivers/remoteproc/xlnx_r5_remoteproc.c | 135 ++++++++++++++++++++++++
+ 1 file changed, 135 insertions(+)
+
+diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
+index 2cea97c746fd..af4e0e53dc9d 100644
+--- a/drivers/remoteproc/xlnx_r5_remoteproc.c
++++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
+@@ -56,6 +56,17 @@ struct mem_bank_data {
+ 	char *bank_name;
+ };
+ 
++/**
++ * struct zynqmp_sram_bank - sram bank description
++ *
++ * @sram_res: sram address region information
++ * @da: device address of sram
++ */
++struct zynqmp_sram_bank {
++	struct resource sram_res;
++	u32 da;
++};
++
+ /**
+  * struct mbox_info
+  *
+@@ -120,6 +131,8 @@ static const struct mem_bank_data zynqmp_tcm_banks_lockstep[] = {
+  * struct zynqmp_r5_core
+  *
+  * @rsc_tbl_va: resource table virtual address
++ * @sram: Array of sram memories assigned to this core
++ * @num_sram: number of sram for this core
+  * @dev: device of RPU instance
+  * @np: device node of RPU instance
+  * @tcm_bank_count: number TCM banks accessible to this RPU
+@@ -131,6 +144,8 @@ static const struct mem_bank_data zynqmp_tcm_banks_lockstep[] = {
+  */
+ struct zynqmp_r5_core {
+ 	void __iomem *rsc_tbl_va;
++	struct zynqmp_sram_bank *sram;
++	int num_sram;
+ 	struct device *dev;
+ 	struct device_node *np;
+ 	int tcm_bank_count;
+@@ -494,6 +509,45 @@ static int add_mem_regions_carveout(struct rproc *rproc)
  	return 0;
  }
  
-+static int stm32_rproc_tee_stop(struct rproc *rproc)
++static int add_sram_carveouts(struct rproc *rproc)
 +{
-+	int err;
++	struct zynqmp_r5_core *r5_core = rproc->priv;
++	struct rproc_mem_entry *rproc_mem;
++	struct zynqmp_sram_bank *sram;
++	dma_addr_t dma_addr;
++	size_t len;
++	int da, i;
 +
-+	stm32_rproc_request_shutdown(rproc);
++	for (i = 0; i < r5_core->num_sram; i++) {
++		sram = &r5_core->sram[i];
 +
-+	err = tee_rproc_stop(rproc);
-+	if (err)
-+		return err;
++		dma_addr = (dma_addr_t)sram->sram_res.start;
 +
-+	return stm32_rproc_release(rproc);
++		len = resource_size(&sram->sram_res);
++		da = sram->da;
++
++		rproc_mem = rproc_mem_entry_init(&rproc->dev, NULL,
++						 (dma_addr_t)dma_addr,
++						 len, da,
++						 zynqmp_r5_mem_region_map,
++						 zynqmp_r5_mem_region_unmap,
++						 sram->sram_res.name);
++		if (!rproc_mem) {
++			dev_err(&rproc->dev, "failed to add sram %s da=0x%x, size=0x%lx",
++				sram->sram_res.name, da, len);
++			return -ENOMEM;
++		}
++
++		rproc_add_carveout(rproc, rproc_mem);
++		rproc_coredump_add_segment(rproc, da, len);
++
++		dev_dbg(&rproc->dev, "sram carveout %s addr=%llx, da=0x%x, size=0x%lx",
++			sram->sram_res.name, dma_addr, da, len);
++	}
++
++	return 0;
 +}
 +
- static int stm32_rproc_prepare(struct rproc *rproc)
- {
- 	struct device *dev = rproc->dev.parent;
-@@ -693,8 +707,20 @@ static const struct rproc_ops st_rproc_ops = {
- 	.get_boot_addr	= rproc_elf_get_boot_addr,
- };
- 
-+static const struct rproc_ops st_rproc_tee_ops = {
-+	.prepare	= stm32_rproc_prepare,
-+	.start		= tee_rproc_start,
-+	.stop		= stm32_rproc_tee_stop,
-+	.kick		= stm32_rproc_kick,
-+	.load		= tee_rproc_load_fw,
-+	.parse_fw	= tee_rproc_parse_fw,
-+	.find_loaded_rsc_table = tee_rproc_find_loaded_rsc_table,
-+
-+};
-+
- static const struct of_device_id stm32_rproc_match[] = {
- 	{ .compatible = "st,stm32mp1-m4" },
-+	{ .compatible = "st,stm32mp1-m4-tee" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, stm32_rproc_match);
-@@ -853,17 +879,42 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct stm32_rproc *ddata;
- 	struct device_node *np = dev->of_node;
-+	struct tee_rproc *trproc = NULL;
- 	struct rproc *rproc;
- 	unsigned int state;
-+	u32 proc_id;
- 	int ret;
- 
- 	ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
- 	if (ret)
+ /*
+  * tcm_mem_unmap()
+  * @rproc: single R5 core's corresponding rproc instance
+@@ -669,6 +723,12 @@ static int zynqmp_r5_rproc_prepare(struct rproc *rproc)
  		return ret;
+ 	}
  
--	rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
--	if (!rproc)
--		return -ENOMEM;
-+	if (of_device_is_compatible(np, "st,stm32mp1-m4-tee")) {
-+		/*
-+		 * Delegate the firmware management to the secure context.
-+		 * The firmware loaded has to be signed.
-+		 */
-+		ret = of_property_read_u32(np, "st,proc-id", &proc_id);
-+		if (ret) {
-+			dev_err(dev, "failed to read st,rproc-id property\n");
-+			return ret;
-+		}
-+
-+		rproc = devm_rproc_alloc(dev, np->name, &st_rproc_tee_ops, NULL, sizeof(*ddata));
-+		if (!rproc)
-+			return -ENOMEM;
-+
-+		trproc = tee_rproc_register(dev, rproc, proc_id);
-+		if (IS_ERR(trproc)) {
-+			dev_err_probe(dev, PTR_ERR(trproc),
-+				      "signed firmware not supported by TEE\n");
-+			return PTR_ERR(trproc);
-+		}
-+	} else {
-+		rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
-+		if (!rproc)
-+			return -ENOMEM;
++	ret = add_sram_carveouts(rproc);
++	if (ret) {
++		dev_err(&rproc->dev, "failed to get sram carveout %d\n", ret);
++		return ret;
 +	}
- 
- 	ddata = rproc->priv;
- 
-@@ -915,6 +966,9 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 		dev_pm_clear_wake_irq(dev);
- 		device_init_wakeup(dev, false);
- 	}
-+	if (trproc)
-+		tee_rproc_unregister(trproc);
 +
- 	return ret;
+ 	return 0;
  }
  
-@@ -935,6 +989,9 @@ static void stm32_rproc_remove(struct platform_device *pdev)
- 		dev_pm_clear_wake_irq(dev);
- 		device_init_wakeup(dev, false);
- 	}
-+	if (rproc->tee_interface)
-+		tee_rproc_unregister(rproc->tee_interface);
-+
+@@ -881,6 +941,77 @@ static struct zynqmp_r5_core *zynqmp_r5_add_rproc_core(struct device *cdev)
+ 	return ERR_PTR(ret);
  }
  
- static int stm32_rproc_suspend(struct device *dev)
++static int zynqmp_r5_get_sram_banks(struct zynqmp_r5_core *r5_core)
++{
++	struct device_node *np = r5_core->np;
++	struct device *dev = r5_core->dev;
++	struct zynqmp_sram_bank *sram;
++	struct device_node *sram_np;
++	int num_sram, i, ret;
++	u64 abs_addr, size;
++
++	/* "sram" is optional property. Do not fail, if unavailable. */
++	if (!of_property_present(r5_core->np, "sram"))
++		return 0;
++
++	num_sram = of_property_count_elems_of_size(np, "sram", sizeof(phandle));
++	if (num_sram <= 0) {
++		dev_err(dev, "Invalid sram property, ret = %d\n",
++			num_sram);
++		return -EINVAL;
++	}
++
++	sram = devm_kcalloc(dev, num_sram,
++			    sizeof(struct zynqmp_sram_bank), GFP_KERNEL);
++	if (!sram)
++		return -ENOMEM;
++
++	for (i = 0; i < num_sram; i++) {
++		sram_np = of_parse_phandle(np, "sram", i);
++		if (!sram_np) {
++			dev_err(dev, "failed to get sram %d phandle\n", i);
++			return -EINVAL;
++		}
++
++		if (!of_device_is_available(sram_np)) {
++			dev_err(dev, "sram device not available\n");
++			ret = -EINVAL;
++			goto fail_sram_get;
++		}
++
++		ret = of_address_to_resource(sram_np, 0, &sram[i].sram_res);
++		if (ret) {
++			dev_err(dev, "addr to res failed\n");
++			goto fail_sram_get;
++		}
++
++		/* Get SRAM device address */
++		ret = of_property_read_reg(sram_np, i, &abs_addr, &size);
++		if (ret) {
++			dev_err(dev, "failed to get reg property\n");
++			goto fail_sram_get;
++		}
++
++		sram[i].da = (u32)abs_addr;
++
++		of_node_put(sram_np);
++
++		dev_dbg(dev, "sram %d: name=%s, addr=0x%llx, da=0x%x, size=0x%llx\n",
++			i, sram[i].sram_res.name, sram[i].sram_res.start,
++			sram[i].da, resource_size(&sram[i].sram_res));
++	}
++
++	r5_core->sram = sram;
++	r5_core->num_sram = num_sram;
++
++	return 0;
++
++fail_sram_get:
++	of_node_put(sram_np);
++
++	return ret;
++}
++
+ static int zynqmp_r5_get_tcm_node_from_dt(struct zynqmp_r5_cluster *cluster)
+ {
+ 	int i, j, tcm_bank_count, ret, tcm_pd_idx, pd_count;
+@@ -1095,6 +1226,10 @@ static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
+ 				return ret;
+ 			}
+ 		}
++
++		ret = zynqmp_r5_get_sram_banks(r5_core);
++		if (ret)
++			return ret;
+ 	}
+ 
+ 	return 0;
+
+base-commit: 057e5c17e29fe67fae4c2786d558c31fd3b106ba
 -- 
 2.25.1
 
