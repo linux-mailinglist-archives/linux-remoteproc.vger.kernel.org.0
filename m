@@ -1,155 +1,218 @@
-Return-Path: <linux-remoteproc+bounces-2130-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2132-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90A6F96BA72
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Sep 2024 13:26:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3CA896BEB6
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Sep 2024 15:38:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 223431F23FC7
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Sep 2024 11:26:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FECC1F25559
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  4 Sep 2024 13:38:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9011D0174;
-	Wed,  4 Sep 2024 11:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A118D1DC19E;
+	Wed,  4 Sep 2024 13:36:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="RUQZoTLu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Of09j7Bu"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8D821D0167;
-	Wed,  4 Sep 2024 11:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A9D1DC18F;
+	Wed,  4 Sep 2024 13:36:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725448838; cv=none; b=eBkSI5mg1DfR1P+OaMoViGNi+pDHGmlQxplcIDzcxEOcMEn0JXf2xa/inXoD1Yl07vD1zMAxruB8jrCiM9x/EJXB9ds0Y+ZAOr731cmibHlzmA+6mn+AbQQ4+EsVT05YjBTe+qz5kECl3tNpt6t0twO1lX9HacxHWQbVH93CA5o=
+	t=1725457009; cv=none; b=Ec5ZDd7ti8vJN94mGmkXpYALnGWRGk6bmo2H/dVG5PdMvppgK9XCfwOcjEx5H4JU5FIjXVz0tAv/UuutaKv7mN0N3wbIyF1EEwOmkN9/FlBBXWGbrDVphAKrLrNkDGYa6k2ewd1vBAZc6t9PbB2ijBmP0w1IY1roAgrWUIVBF54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725448838; c=relaxed/simple;
-	bh=/p67161pq4mFVbBAVqpn+WmmAOac3AJuuOBsiT98BCM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=U/mg7uAnAq07LWxu3J0vOKttOZxBYi0mMrF1S2TMVSBBqajO+BxbtGAIEIF805NEhRzP65wsniKdmC4RQXgid1yO8ugTEEDzvDmjid+wEg/kOYFBnAzpT49Zc5m+BOSMP8J96PMgt/1qHo98n5RL52ITTk9tLhPLLlo/ujlBLzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=RUQZoTLu; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 484BKIsb002952;
-	Wed, 4 Sep 2024 06:20:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1725448818;
-	bh=2JE8yXmqVX5IfjYueX0kdENmSWkRL9BydcoG+TvETAQ=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=RUQZoTLu8dUpEGshxZDCyjESQyGqE+tLIArQSwQ5H/I5KMYfg7w3l4w7AhFhkqFWV
-	 zm93GYs5NXdlDagjilxaniEzz9VJf8sa6mAx8FKf/m8sIUcaCOICEBMozOWIxrKM4b
-	 KgLjLP8S1/IqtfhtP2ZdCL7L3EwmgMbbtldUlFvc=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 484BKICn052628;
-	Wed, 4 Sep 2024 06:20:18 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 4
- Sep 2024 06:20:18 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 4 Sep 2024 06:20:18 -0500
-Received: from [10.250.149.209] ([10.250.149.209])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 484BKFLo106649;
-	Wed, 4 Sep 2024 06:20:15 -0500
-Message-ID: <40ad98dd-6a1d-4619-9732-459ca837468e@ti.com>
-Date: Wed, 4 Sep 2024 16:50:14 +0530
+	s=arc-20240116; t=1725457009; c=relaxed/simple;
+	bh=qWY32TQVxIiG/7F7JcJ2JBNdihZus2JMmzuFFBXoAw8=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=Q+CnMXO2VeWWxwZxDADuTJ1+jO+ewC+o04j/9xkLXpN0gFzct3/BWEbzJSTPALToSGByfHXMtboAJm8nJM68KI6DJsM9bHNqZ2ecJsnkWx2SLeWmZkCSgSIE/PPkoziip6c7Gceir2qiPxDnY4jqfyTkx4VLsuetcu+VV0fDtsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Of09j7Bu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B510CC4CECC;
+	Wed,  4 Sep 2024 13:36:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725457009;
+	bh=qWY32TQVxIiG/7F7JcJ2JBNdihZus2JMmzuFFBXoAw8=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=Of09j7BuUK/iZCc5Z6JVx/0geBcWgWdJG67JTXEoneZVqv1rdanX4h73G7aKpgK+s
+	 hD3JEuO1EEHmeCIi293LsmozCAvh6CqWjLjGb4mT5mjZqES2YNBb3IcLCPxwbhq4H9
+	 ZZlljf7w7/j5c32YHnmbd+MI24QJHgmzEJwoA2gRYxBcrU2+Obu6TcnFrlTsrvsyMp
+	 J0JuUk363D9BYB9AUuq896Y0DcZaOM09RRE5RpJhaQg/g76hJIQB1+LwVzeA5nEkjv
+	 m2mYOdANauOKn78/QjnaVZN8Ti/7bc9vRxNaDR0yOJ/47+WNxrtFSfHRcPG6EABZRr
+	 Ag+Z3bw7Lj99Q==
+Date: Wed, 04 Sep 2024 08:36:47 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] remoteproc: k3-r5: Delay notification of wakeup event
-To: Mathieu Poirier <mathieu.poirier@linaro.org>
-CC: <andersson@kernel.org>, <afd@ti.com>, <hnagalla@ti.com>, <u-kumar1@ti.com>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20240820105004.2788327-1-b-padhi@ti.com>
- <522affaa-47ad-4834-be3c-acdd04902821@ti.com>
- <CANLsYkzfpO4dcF=xkfZRo8ekCOzyNwvjHkwu8t5T58B2hV8-AQ@mail.gmail.com>
-Content-Language: en-US
-From: Beleswar Prasad Padhi <b-padhi@ti.com>
-In-Reply-To: <CANLsYkzfpO4dcF=xkfZRo8ekCOzyNwvjHkwu8t5T58B2hV8-AQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Jingyi Wang <quic_jingyw@quicinc.com>
+Cc: Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Mathieu Poirier <mathieu.poirier@linaro.org>, Vinod Koul <vkoul@kernel.org>, 
+ Zhenhua Huang <quic_zhenhuah@quicinc.com>, Andy Gross <agross@kernel.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, Robin Murphy <robin.murphy@arm.com>, 
+ Avri Altman <avri.altman@wdc.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, linux-arm-msm@vger.kernel.org, 
+ Kyle Deng <quic_chunkaid@quicinc.com>, linux-kernel@vger.kernel.org, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Tingguo Cheng <quic_tingguoc@quicinc.com>, linux-scsi@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Das Srinagesh <quic_gurus@quicinc.com>, iommu@lists.linux.dev, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+ Will Deacon <will@kernel.org>, Joerg Roedel <joro@8bytes.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Robert Marko <robimarko@gmail.com>, 
+ linux-arm-kernel@lists.infradead.org, Jassi Brar <jassisinghbrar@gmail.com>, 
+ Bjorn Andersson <andersson@kernel.org>, linux-remoteproc@vger.kernel.org, 
+ Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+ Lee Jones <lee@kernel.org>, Xin Liu <quic_liuxin@quicinc.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org, 
+ Shazad Hussain <quic_shazhuss@quicinc.com>, linux-phy@lists.infradead.org, 
+ Alim Akhtar <alim.akhtar@samsung.com>, Bart Van Assche <bvanassche@acm.org>, 
+ devicetree@vger.kernel.org
+In-Reply-To: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
+References: <20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com>
+Message-Id: <172545686260.2410635.12324465724634886770.robh@kernel.org>
+Subject: Re: [PATCH 00/19] Add initial support for QCS8300
 
 
-On 03-09-2024 20:02, Mathieu Poirier wrote:
-> On Tue, 3 Sept 2024 at 04:15, Beleswar Prasad Padhi <b-padhi@ti.com> wrote:
->> Hi Mathieu,
->>
->> On 20-08-2024 16:20, Beleswar Padhi wrote:
->>> From: Udit Kumar <u-kumar1@ti.com>
->>>
->>> Few times, core1 was scheduled to boot first before core0, which leads
->>> to error:
->>>
->>> 'k3_r5_rproc_start: can not start core 1 before core 0'.
->>>
->>> This was happening due to some scheduling between prepare and start
->>> callback. The probe function waits for event, which is getting
->>> triggered by prepare callback. To avoid above condition move event
->>> trigger to start instead of prepare callback.
->>>
->>> Fixes: 61f6f68447ab ("remoteproc: k3-r5: Wait for core0 power-up before powering up core1")
->>
->> Please put this patch on hold. I have some additional changelog that
->> should go in v3.
->>
-> I applied this patch a couple of weeks ago - are those changes to the
-> code?  If so please send another patch on top of rproc-next.
+On Wed, 04 Sep 2024 16:33:41 +0800, Jingyi Wang wrote:
+> Add initial support for QCS8300 SoC and QCS8300 RIDE board.
+> 
+> This revision brings support for:
+> - CPUs with cpu idle
+> - interrupt-controller with PDC wakeup support
+> - gcc
+> - TLMM
+> - interconnect
+> - qup with uart
+> - smmu
+> - pmic
+> - ufs
+> - ipcc
+> - sram
+> - remoteprocs including ADSP,CDSP and GPDSP
+> 
+> Signed-off-by: Jingyi Wang <quic_jingyw@quicinc.com>
+> ---
+> patch series organized as:
+> - 1-2: remoteproc binding and driver
+> - 3-5: ufs binding and driver
+> - 6-7: rpmhpd binding and driver
+> - 8-15: bindings for other components found on the SoC
+> - 16-19: changes to support the device tree
+> 
+> dependencies:
+> tlmm: https://lore.kernel.org/linux-arm-msm/20240819064933.1778204-1-quic_jingyw@quicinc.com/
+> gcc: https://lore.kernel.org/all/20240820-qcs8300-gcc-v1-0-d81720517a82@quicinc.com/
+> interconnect: https://lore.kernel.org/linux-arm-msm/20240827151622.305-1-quic_rlaggysh@quicinc.com/
+> 
+> dtb check got following err:
+> /local/mnt/workspace/jingyi/aim500/linux/arch/arm64/boot/dts/qcom/qcs8300-ride.dtb: interconnect@1680000: Unevaluated properties are not allowed ('reg' was unexpected)
+> which is cause by "reg" compatible missing in dt binding, will be fixed in interconnect patch series.
+> 
+> ---
+> Jingyi Wang (11):
+>       dt-bindings: remoteproc: qcom,sa8775p-pas: Document QCS8300 remoteproc
+>       remoteproc: qcom: pas: Add QCS8300 remoteproc support
+>       dt-bindings: qcom,pdc: document QCS8300 Power Domain Controller
+>       dt-bindings: soc: qcom: add qcom,qcs8300-imem compatible
+>       dt-bindings: mailbox: qcom-ipcc: Document QCS8300 IPCC
+>       dt-bindings: mfd: qcom,tcsr: Add compatible for QCS8300
+>       dt-bindings: nvmem: qfprom: Add compatible for QCS8300
+>       dt-bindings: arm: qcom: document QCS8275/QCS8300 SoC and reference board
+>       arm64: defconfig: enable clock controller, interconnect and pinctrl for QCS8300
+>       arm64: dts: qcom: add initial support for QCS8300 DTSI
+>       arm64: dts: qcom: add base QCS8300 RIDE dts
+> 
+> Kyle Deng (1):
+>       dt-bindings: soc: qcom,aoss-qmp: Document the QCS8300 AOSS channel
+> 
+> Shazad Hussain (1):
+>       dt-bindings: power: rpmpd: Add QCS8300 power domains
+> 
+> Tingguo Cheng (1):
+>       pmdomain: qcom: rpmhpd: Add QCS8300 power domains
+> 
+> Xin Liu (3):
+>       dt-bindings: phy: Add QMP UFS PHY comptible for QCS8300
+>       dt-bindings: ufs: qcom: Document the QCS8300 UFS Controller
+>       phy: qcom-qmp-ufs: Add support for QCS8300
+> 
+> Zhenhua Huang (2):
+>       dt-bindings: arm-smmu: Add compatible for QCS8300 SoC
+>       dt-bindings: firmware: qcom,scm: document SCM on QCS8300 SoCs
+> 
+>  Documentation/devicetree/bindings/arm/qcom.yaml    |    8 +
+>  .../devicetree/bindings/firmware/qcom,scm.yaml     |    1 +
+>  .../bindings/interrupt-controller/qcom,pdc.yaml    |    1 +
+>  .../devicetree/bindings/iommu/arm,smmu.yaml        |    2 +
+>  .../devicetree/bindings/mailbox/qcom-ipcc.yaml     |    1 +
+>  .../devicetree/bindings/mfd/qcom,tcsr.yaml         |    1 +
+>  .../devicetree/bindings/nvmem/qcom,qfprom.yaml     |    1 +
+>  .../bindings/phy/qcom,sc8280xp-qmp-ufs-phy.yaml    |    2 +
+>  .../devicetree/bindings/power/qcom,rpmpd.yaml      |    1 +
+>  .../bindings/remoteproc/qcom,sa8775p-pas.yaml      |    6 +
+>  .../bindings/soc/qcom/qcom,aoss-qmp.yaml           |    1 +
+>  .../devicetree/bindings/sram/qcom,imem.yaml        |    1 +
+>  .../devicetree/bindings/ufs/qcom,ufs.yaml          |    2 +
+>  arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+>  arch/arm64/boot/dts/qcom/qcs8300-ride.dts          |  246 ++++
+>  arch/arm64/boot/dts/qcom/qcs8300.dtsi              | 1282 ++++++++++++++++++++
+>  arch/arm64/configs/defconfig                       |    3 +
+>  drivers/phy/qualcomm/phy-qcom-qmp-ufs.c            |    3 +
+>  drivers/pmdomain/qcom/rpmhpd.c                     |   24 +
+>  drivers/remoteproc/qcom_q6v5_pas.c                 |    3 +
+>  include/dt-bindings/power/qcom-rpmpd.h             |   19 +
+>  21 files changed, 1609 insertions(+)
+> ---
+> base-commit: eb8c5ca373cbb018a84eb4db25c863302c9b6314
+> change-id: 20240829-qcs8300_initial_dtsi-1a386eb317d3
+> 
+> Best regards,
+> --
+> Jingyi Wang <quic_jingyw@quicinc.com>
+> 
+> 
+> 
 
 
-Understood. Those are code changes, I will post another patch series for 
-the same.
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Thanks,
-Beleswar
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
->
->> Thanks,
->> Beleswar
->>
->>> Signed-off-by: Udit Kumar <u-kumar1@ti.com>
->>> [ Applied wakeup event trigger only for Split-Mode booted rprocs ]
->>> Signed-off-by: Beleswar Padhi <b-padhi@ti.com>
->>> ---
->>> v2: Changelog:
->>> * Mathieu
->>> 1) Rebased changes on top of -next-20240820 tag.
->>>
->>> Link to v1:
->>> https://lore.kernel.org/all/20240809060132.308642-1-b-padhi@ti.com/
->>>
->>>    drivers/remoteproc/ti_k3_r5_remoteproc.c | 5 +++--
->>>    1 file changed, 3 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
->>> index 8a63a9360c0f..e61e53381abc 100644
->>> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
->>> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
->>> @@ -469,8 +469,6 @@ static int k3_r5_rproc_prepare(struct rproc *rproc)
->>>                        ret);
->>>                return ret;
->>>        }
->>> -     core->released_from_reset = true;
->>> -     wake_up_interruptible(&cluster->core_transition);
->>>
->>>        /*
->>>         * Newer IP revisions like on J7200 SoCs support h/w auto-initialization
->>> @@ -587,6 +585,9 @@ static int k3_r5_rproc_start(struct rproc *rproc)
->>>                ret = k3_r5_core_run(core);
->>>                if (ret)
->>>                        return ret;
->>> +
->>> +             core->released_from_reset = true;
->>> +             wake_up_interruptible(&cluster->core_transition);
->>>        }
->>>
->>>        return 0;
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y qcom/qcs8300-ride.dtb' for 20240904-qcs8300_initial_dtsi-v1-0-d0ea9afdc007@quicinc.com:
+
+In file included from arch/arm64/boot/dts/qcom/qcs8300-ride.dts:11:
+arch/arm64/boot/dts/qcom/qcs8300.dtsi:6:10: fatal error: dt-bindings/clock/qcom,qcs8300-gcc.h: No such file or directory
+    6 | #include <dt-bindings/clock/qcom,qcs8300-gcc.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [scripts/Makefile.lib:434: arch/arm64/boot/dts/qcom/qcs8300-ride.dtb] Error 1
+make[2]: *** [scripts/Makefile.build:490: arch/arm64/boot/dts/qcom] Error 2
+make[2]: Target 'arch/arm64/boot/dts/qcom/qcs8300-ride.dtb' not remade because of errors.
+make[1]: *** [/home/rob/proj/linux-dt-testing/Makefile:1390: qcom/qcs8300-ride.dtb] Error 2
+make: *** [Makefile:224: __sub-make] Error 2
+make: Target 'qcom/qcs8300-ride.dtb' not remade because of errors.
+
+
+
+
+
 
