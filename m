@@ -1,238 +1,185 @@
-Return-Path: <linux-remoteproc+bounces-2368-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2372-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4EB89961C6
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  9 Oct 2024 10:04:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAC129965C8
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  9 Oct 2024 11:46:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2ED49B25EFF
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  9 Oct 2024 08:04:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8AE81C20F4A
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  9 Oct 2024 09:46:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACEC4188727;
-	Wed,  9 Oct 2024 08:03:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="8Q8KUHUl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F8818A92C;
+	Wed,  9 Oct 2024 09:46:50 +0000 (UTC)
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5DF13A409;
-	Wed,  9 Oct 2024 08:03:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C95228EF;
+	Wed,  9 Oct 2024 09:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728461037; cv=none; b=U7nB8rQrOQf9Fvh4BV6KTw1gJiDY3N1Rl1bmY6ky5T0rzRd80KyZpBsteZETX3lm7wyDKpC00QHxFCUPPrIlB++nmUVfUiL4l1KEWNFFKsxfmcp4M4T3DxGNhr2NZ2pweo6nSN4bxp/dDoKohkovN9GV/MZZfIu/Lmq9gQ5ZANY=
+	t=1728467210; cv=none; b=U0XvfHdyQnQmYJ6dxiSjydViq3zkd9jWvUgBXd+3wU3Jz+5q5rY/xLjkYLamFbp5JwQTQNJLmn9ZJt6IaU0y13tLJqJvYmQxKzdmkolljnz/RwGiAcS30R+D2nbmjR4BP+MjLv4Q2nOQ/T8Jx8axlBufLdZ/AKgMKZf19cYoYR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728461037; c=relaxed/simple;
-	bh=bpX8qYPDprF9e+Llv/N145kaRuCgJC13QjsF838VF9k=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=G0IYR3EFe8cjT3j9BSyn0ceWzKl05r4T33Jz/UUqQA2U7xc2Egp6rkJvBGExMVQ8b55eInbKHQln/cI7/f9c00KDi9WzJbxtA/tl6OKXib3/V64sYNgd5LmLxuw00Aw7xmHIRc+A5+mk5MIpcXE1h6G4rj+4+/zZyvZgftt4rwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=8Q8KUHUl; arc=none smtp.client-ip=91.207.212.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4994xqbO000861;
-	Wed, 9 Oct 2024 10:03:34 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	s5V/ak9e2KNTK7sdLe5mgpLa1O/y/iC6ULhTeZtaqyY=; b=8Q8KUHUlIkpzWcOv
-	f30Ex74iLH9ainEadk3WSZ8i6rV1oencIr2HNuQ5n1tQv//ZF7dvD4h0B4KCIojt
-	Q+oLh5pih2n/GZXyN5h2ZZspAATBrgQdMOyPXEdP+uSFCR9uwMzlaQ5EGROPxGFw
-	xX95W08UmnmVUBJoWk+cwnZx/HU29nwe8X4dxb91BoP3q9/+x2DQrehoMUn5Z5xP
-	dXdzEEi8BsEupvbaieJc99+6mciDjQ+wksodHU78V9rlEQil25zP7JiTHv2N+9ln
-	s7VlbVVT4oBRSWGIPtL4MQO8BURyCEbcxiPJZSPlZelb4cYyQdmHvtwBci1oSBOB
-	UVVj+Q==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 423gdmq9hn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 09 Oct 2024 10:03:33 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id ECA6540055;
-	Wed,  9 Oct 2024 10:02:19 +0200 (CEST)
-Received: from Webmail-eu.st.com (eqndag1node4.st.com [10.75.129.133])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3B06821A91B;
-	Wed,  9 Oct 2024 10:01:29 +0200 (CEST)
-Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE4.st.com
- (10.75.129.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Wed, 9 Oct
- 2024 10:01:29 +0200
-Received: from localhost (10.48.86.121) by SAFDAG1NODE1.st.com (10.75.90.17)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Wed, 9 Oct
- 2024 10:01:28 +0200
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC: <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <op-tee@lists.trustedfirmware.org>, <devicetree@vger.kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH v11 7/7] remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
-Date: Wed, 9 Oct 2024 10:01:08 +0200
-Message-ID: <20241009080108.4170320-8-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241009080108.4170320-1-arnaud.pouliquen@foss.st.com>
-References: <20241009080108.4170320-1-arnaud.pouliquen@foss.st.com>
+	s=arc-20240116; t=1728467210; c=relaxed/simple;
+	bh=+/1qdEErw7r4OmVk0Wcg57j8okPyhJ1yRcVclaa3YsM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TUWfR2mkayc/1+ZMj67W2/A6po1zkRu+IzqlV+7zbkLg7evVnxsKLiO10HYfOLPSNU+gQ8HpzfESz/N5S/uKxBld9yXwWsJo44SXK2RTkuRTgDLeSj8eCsGCwDGc7o3sMoNVWXnTON5EtuvNLcxbr21xWVBuAMGFO8x18bdR+3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2FF0FEC;
+	Wed,  9 Oct 2024 02:47:16 -0700 (PDT)
+Received: from e130802.arm.com (unknown [10.1.25.50])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 05F4C3F64C;
+	Wed,  9 Oct 2024 02:46:43 -0700 (PDT)
+Date: Wed, 9 Oct 2024 10:46:35 +0100
+From: Abdellatif El Khlifi <abdellatif.elkhlifi@arm.com>
+To: mathieu.poirier@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+	robh@kernel.org, robin.murphy@arm.com
+Cc: Adam.Johnston@arm.com, Hugues.KambaMpiana@arm.com, Drew.Reed@arm.com,
+	andersson@kernel.org, conor+dt@kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	liviu.dudau@arm.com, lpieralisi@kernel.org, sudeep.holla@arm.com
+Subject: Re: [PATCH v2 1/5] dt-bindings: remoteproc: sse710: Add the External
+ Systems remote processors
+Message-ID: <20241009094635.GA14639@e130802.arm.com>
+References: <CANLsYkwOrtXxObL5MKf30OrUYB_uT=DnGEXUtfjH503r_LyMQA@mail.gmail.com>
+ <20240822170951.339492-1-abdellatif.elkhlifi@arm.com>
+ <20240822170951.339492-2-abdellatif.elkhlifi@arm.com>
+ <ce534365-0110-4aba-b8b5-0a46c5ea81d0@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SAFCAS1NODE1.st.com (10.75.90.11) To SAFDAG1NODE1.st.com
- (10.75.90.17)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ce534365-0110-4aba-b8b5-0a46c5ea81d0@arm.com>
 
-The new TEE remoteproc driver is used to manage remote firmware in a
-secure, trusted context. The 'st,stm32mp1-m4-tee' compatibility is
-introduced to delegate the loading of the firmware to the trusted
-execution context. In such cases, the firmware should be signed and
-adhere to the image format defined by the TEE.
+Hello folks,
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
-updates vs v9 revision:
-- rename tee_interface to tee_rproc_itf
-- in stm32_rproc_probe(), test and use rproc->tee_rproc_itf instead of
-  trproc in the tee_rproc_unregister() call
-- initialize release_fw ops
----
- drivers/remoteproc/stm32_rproc.c | 63 ++++++++++++++++++++++++++++++--
- 1 file changed, 60 insertions(+), 3 deletions(-)
+> On 22/08/2024 6:09 pm, Abdellatif El Khlifi wrote:
+> > Add devicetree binding schema for the External Systems remote processors
+> > 
+> > The External Systems remote processors are provided on the Corstone-1000
+> > IoT Reference Design Platform via the SSE-710 subsystem.
+> > 
+> > For more details about the External Systems, please see Corstone SSE-710
+> > subsystem features [1].
+> > 
+> > [1]: https://developer.arm.com/documentation/102360/0000/Overview-of-Corstone-1000/Corstone-SSE-710-subsystem-features
+> > 
+> > Signed-off-by: Abdellatif El Khlifi <abdellatif.elkhlifi@arm.com>
+> > ---
+> >   .../remoteproc/arm,sse710-extsys.yaml         | 90 +++++++++++++++++++
+> >   1 file changed, 90 insertions(+)
+> >   create mode 100644 Documentation/devicetree/bindings/remoteproc/arm,sse710-extsys.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/remoteproc/arm,sse710-extsys.yaml b/Documentation/devicetree/bindings/remoteproc/arm,sse710-extsys.yaml
+> > new file mode 100644
+> > index 000000000000..827ba8d962f1
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/remoteproc/arm,sse710-extsys.yaml
+> > @@ -0,0 +1,90 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/remoteproc/arm,sse710-extsys.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: SSE-710 External System Remote Processor
+> 
+> Thing is, this is not describing SSE-710. As far as I can work out, it is
+> describing the firmware and hardware that a particular example
+> implementation of the Corstone-1000 kit has chosen to put in the "external
+> system" hole in the SSE-710 within that kit.
+> 
+> If I license SSE-710 alone or even the Corstone-1000 kit, I can put whatever
+> I want in *my* implementation of those subsystems, so there clearly cannot
+> possibly be a common binding for that.
+> 
+> For instance what if I decide to combine a Cortex-M core plus a radio and
+> some other glue as my external subsystem? Do we have dozens of remoteproc
+> bindings and drivers for weird fixed-function remoteprocs whose
+> "firmware-name" implies a Bluetooth protocol stack? No, we treat them as
+> Bluetooth controller devices. Look at
+> devicetree/bindings/sound/fsl,rpmsg.yaml - it's even unashamedly an rpmsg
+> client, but it's still not abusing the remoteproc subsystem because its
+> function to the host OS is as an audio controller, not an arbitrarily
+> configurable processor.
+> 
+> As I said before, all SSE-710 actually implements is a reset mechanism, so
+> it only seems logical to model it as a reset controller, e.g. something
+> like:
+> 
+> 	hbsys: syscon@xyz {
+> 		compatible = "arm,sse710-host-base-sysctrl", "syscon";
+> 		reg = <xyz>;
+> 		#reset-cells = <1>;
+> 	};
+> 
+> 	something {
+> 		...
+> 		resets = <&hbsys 0>;
+> 	};
+> 
+> 	something-else {
+> 		...
+> 		resets = <&hbsys 1>;
+> 	};
+> 
+> 
+> Then if there is actually any meaningful functionality in the default
+> extsys0 firmware preloaded on the FPGA setup then define a binding for
+> "arm,corstone1000-an550-extsys0" to describe whatever that actually does. If
+> a user chooses to create and load their own different firmware, they're
+> going to need their own binding and driver for whatever *that* firmware
+> does.
+> 
+> FWIW, driver-wise the mapping to the reset API seems straightforward -
+> .assert hits RST_REQ, .deassert clears CPUWAIT (.status is possibly a
+> combination of CPUWAIT and RST_ACK?)
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 288bd70c7861..cb7093de41df 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -18,6 +18,7 @@
- #include <linux/pm_wakeirq.h>
- #include <linux/regmap.h>
- #include <linux/remoteproc.h>
-+#include <linux/remoteproc_tee.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/workqueue.h>
-@@ -255,6 +256,19 @@ static int stm32_rproc_release(struct rproc *rproc)
- 	return 0;
- }
- 
-+static int stm32_rproc_tee_stop(struct rproc *rproc)
-+{
-+	int err;
-+
-+	stm32_rproc_request_shutdown(rproc);
-+
-+	err = tee_rproc_stop(rproc);
-+	if (err)
-+		return err;
-+
-+	return stm32_rproc_release(rproc);
-+}
-+
- static int stm32_rproc_prepare(struct rproc *rproc)
- {
- 	struct device *dev = rproc->dev.parent;
-@@ -691,8 +705,20 @@ static const struct rproc_ops st_rproc_ops = {
- 	.get_boot_addr	= rproc_elf_get_boot_addr,
- };
- 
-+static const struct rproc_ops st_rproc_tee_ops = {
-+	.prepare	= stm32_rproc_prepare,
-+	.start		= tee_rproc_start,
-+	.stop		= stm32_rproc_tee_stop,
-+	.kick		= stm32_rproc_kick,
-+	.load		= tee_rproc_load_fw,
-+	.parse_fw	= tee_rproc_parse_fw,
-+	.find_loaded_rsc_table = tee_rproc_find_loaded_rsc_table,
-+	.release_fw	= tee_rproc_release_fw,
-+};
-+
- static const struct of_device_id stm32_rproc_match[] = {
- 	{ .compatible = "st,stm32mp1-m4" },
-+	{ .compatible = "st,stm32mp1-m4-tee" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, stm32_rproc_match);
-@@ -851,17 +877,42 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct stm32_rproc *ddata;
- 	struct device_node *np = dev->of_node;
-+	struct tee_rproc *trproc = NULL;
- 	struct rproc *rproc;
- 	unsigned int state;
-+	u32 proc_id;
- 	int ret;
- 
- 	ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
- 	if (ret)
- 		return ret;
- 
--	rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
--	if (!rproc)
--		return -ENOMEM;
-+	if (of_device_is_compatible(np, "st,stm32mp1-m4-tee")) {
-+		/*
-+		 * Delegate the firmware management to the secure context.
-+		 * The firmware loaded has to be signed.
-+		 */
-+		ret = of_property_read_u32(np, "st,proc-id", &proc_id);
-+		if (ret) {
-+			dev_err(dev, "failed to read st,rproc-id property\n");
-+			return ret;
-+		}
-+
-+		rproc = devm_rproc_alloc(dev, np->name, &st_rproc_tee_ops, NULL, sizeof(*ddata));
-+		if (!rproc)
-+			return -ENOMEM;
-+
-+		trproc = tee_rproc_register(dev, rproc, proc_id);
-+		if (IS_ERR(trproc)) {
-+			dev_err_probe(dev, PTR_ERR(trproc),
-+				      "signed firmware not supported by TEE\n");
-+			return PTR_ERR(trproc);
-+		}
-+	} else {
-+		rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
-+		if (!rproc)
-+			return -ENOMEM;
-+	}
- 
- 	ddata = rproc->priv;
- 
-@@ -913,6 +964,9 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 		dev_pm_clear_wake_irq(dev);
- 		device_init_wakeup(dev, false);
- 	}
-+	if (rproc->tee_rproc_itf)
-+		tee_rproc_unregister(rproc->tee_rproc_itf);
-+
- 	return ret;
- }
- 
-@@ -933,6 +987,9 @@ static void stm32_rproc_remove(struct platform_device *pdev)
- 		dev_pm_clear_wake_irq(dev);
- 		device_init_wakeup(dev, false);
- 	}
-+	if (rproc->tee_rproc_itf)
-+		tee_rproc_unregister(rproc->tee_rproc_itf);
-+
- }
- 
- static int stm32_rproc_suspend(struct device *dev)
--- 
-2.25.1
+We are happy to follow what Robin recommended.
 
+This can be summarized in two parts:
+
+Part 1: Writing an SSE-710 reset controller driver
+
+    An SSE-710 reset controller driver that switches on/off the external system.
+    The driver will be helpful for products using SSE-710. So whoever licenses
+    Corstone-1000 or SSE-710 will find the reset controller driver helpful.
+    They can use it with their implementation of the external system.
+
+    Note: It's likely that the external systems the end user will be using in
+    their products will be different from the Corstone-1000 external system
+    given as an example. Differences in the memory configuration, subsystem
+    involved, boot roms configurations, ...
+    These differences mean that the end user will need to write their own driver
+    which might or might not be a remoteproc driver (e.g: Bluetooth, audio, ...).
+
+Part 2: Corstone-1000 remoteproc driver
+
+    Corstone-1000 HW is being upgraded to support memory sharing between the
+    Cortex-A35 (Linux) and the external system (Cortex-M3).
+
+    Once the HW is ready, we can write a Corstone-1000 remoteproc driver able
+    to reload the external system firmware and doing communication with the MHUs.
+    This remoteproc driver can use the reset subsystem APIs to call the SSE-710
+    reset controller driver to switch on/off the external system (already
+    developed in part 1).
+
+Impact on the current patchset:
+
+- The current remoteproc patchset will be paused until the HW is upgraded.
+- In CY25Q1, I'll send to the mailing list the SSE-710 reset controller bindings
+  and a driver under the Reset Controller subsystem.
+
+Thank you for your support and expertise.
+
+Cheers,
+Abdellatif
 
