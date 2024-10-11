@@ -1,75 +1,74 @@
-Return-Path: <linux-remoteproc+bounces-2403-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2405-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E48E99A490
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Oct 2024 15:11:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0026C99A497
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Oct 2024 15:11:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE3841F2402B
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Oct 2024 13:11:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7AB62854D7
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 11 Oct 2024 13:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D00B721B458;
-	Fri, 11 Oct 2024 13:09:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA91421BAFA;
+	Fri, 11 Oct 2024 13:09:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nuzoGB4a"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z5ZMV0EB"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055DB21B43A
-	for <linux-remoteproc@vger.kernel.org>; Fri, 11 Oct 2024 13:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B8121B45B
+	for <linux-remoteproc@vger.kernel.org>; Fri, 11 Oct 2024 13:09:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728652187; cv=none; b=bl9HBB9vMo0agZxkVt5qnLkJDgXSR2ImXalcId5x5drwiY9TKeBb5uMnGOniy36C0DBZ97TvPhhA9AayVRI8EqG+eyNI+zEWEwk9nqEpSMAwMK1JjsKgwU93dvVliczldE1tRokKtqZTABebkWFkA9S8QQbF5uHeaKItnKngIoc=
+	t=1728652189; cv=none; b=tmEpD4nMUuzWyetCtLVTLZhUH+XGV4aRD/cdBZPSWacHtpxJ2H7uvSK3yzcCgmK+iD5fzRAD1U7FSItaTRGTa745a+GM2hcmThgkVwcO3S0C7VKmESe6z7abCfEH+20GhjmjDqZBVm5yGZ0Wvo46kNxEaNWuYXLfAQReF0irUEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728652187; c=relaxed/simple;
-	bh=aMcNBPeURPXIhNuMngoM0gRIWvppAMi+Wbo99mTH2bs=;
+	s=arc-20240116; t=1728652189; c=relaxed/simple;
+	bh=aiK48nBymVvo/dH/OUWaei0T3BtvhFeLUjzn+aJU3M8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WORjBiiSQfouCkIDP1Ui3pIf1Y6WvMcUeL+Y76dwnkCl9sxTOQC5yGl6SZ6JuEszv02zwEyxv4e5TVafhUTplrTD9TPg60WWH3viVfGSlUM/yGnPXFWnAL33g5DPlILSZ1ckYMqrNLlup8RQM5W3cLX+z1ivDtHNn4xG6mv44jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nuzoGB4a; arc=none smtp.client-ip=209.85.221.46
+	 In-Reply-To:To:Cc; b=u4ERecqIdcuijyjRf86LjLZTe9WPyaZlizJmnhr0/EjGwe9Ed8erd6wEBrMZEJ5aP4LdGU0Lx7D4TRu1ou1HgKpzjBW+OtcvZ1wY8qI4QNT1KJQyCEQKTYsEFxvPlqHkgUOdq6d2chavQczrY9mEZvgN5pP9M1G8EN0OhFL2up4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z5ZMV0EB; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-37d58a51fa5so47869f8f.1
-        for <linux-remoteproc@vger.kernel.org>; Fri, 11 Oct 2024 06:09:45 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4312484334eso65055e9.0
+        for <linux-remoteproc@vger.kernel.org>; Fri, 11 Oct 2024 06:09:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728652184; x=1729256984; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1728652186; x=1729256986; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lrM6MfbqjGQogO7kaKSf9Rc0irvOSmDPvQniDSWlBW0=;
-        b=nuzoGB4aDsFqvvkfC/zwdBaDexhLuS1lHH4fgZqkBoo/MiOde5GgQuQWNdQLAm9g+v
-         Vc31Zg2hsoH3tyhEVa7ByEvlYvGfuob3Y2S4g06gux9q/RUU6NcCfSvMJEq519AB6s7C
-         Ow59Q6yzFne4spI4P/11WE80Ewj9l9xVAn02GoC9byZg7KVIbfpur07c7udyDGYYHLo4
-         bkOWWtMyGhlAvhmGzRXZ2qY0OwXiPiMvYgHPLrLragCkN+X81F1nZ1jvbKlRAiTBpUho
-         8xmeU3/m1jzYl32B0oYhxmO1ncAazpZ0wv2dOR4HpxxkWiuCVptkhwxHUwR4HzeEYCiz
-         yVzQ==
+        bh=v31GXG69vMHk4ux07CakUHVd4DKmezn/8McUHHPc5yQ=;
+        b=Z5ZMV0EBIC9p7mIVw5hMeXKtcyl5bjDW6ISujvli8bCjRIrkZ++6raSPG8Zt0qsJOj
+         tAaPSqdbPA1ePjOjOQZgERpTiGzjhO12+xn914UugGW9PtN//En6a+I9FvM7AvYEaq1u
+         TboutNC8vAZGKHzU+Vo5UQHQJqBDPOKrcqR/dcYyhadIrznIAktEkKOwqm2+8vzjm595
+         D59xeA6UsmTfCUZD9azo3iXkx22AqcBlXTQtZPeDGKf5TWOPSSr/skFYAN+IDwpAqfQ2
+         BwDee2QdaB0EJvGc4/3BrrN+Y//LBQoXZZChUQiucXmre1Y1ExvsTPIiOoO9VGVmN6jP
+         xGEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728652184; x=1729256984;
+        d=1e100.net; s=20230601; t=1728652186; x=1729256986;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=lrM6MfbqjGQogO7kaKSf9Rc0irvOSmDPvQniDSWlBW0=;
-        b=JOnn56VHcqXK6djkcMEYaR27Touc74V0uwS4mVpjOjNXbS+edGGnthdnIYEett2pHf
-         D2xviZ6ohp7NwyQ6EzdmLBAMf0ZsvpCU3nrtb0SUdUsl44rOGpqBXXg8+ODKzNjfu7Bg
-         jy7Ns6B8IFj3neiBzUR/CcrtdUxSVJG8in9GCXcaKO0CoK4mfY0w075gijN2skoYF++8
-         EPzeWKkuzHcbL5m45Ir2LS3oo6Cq6TijK1raGz2i850gF43wUEb0dsdMTIV5s6DuKrVK
-         D5jVo3VjAvi2ievzKv+raSpoJGc59H3vqPFbBDoKNK8r1qZhVGKITwwLZan5jExCQrxO
-         8Vhg==
-X-Gm-Message-State: AOJu0YyLMh8XybOdDZnFk0HMwFcirxgO3OFx+tzGlBfa+rJveM2d2aC/
-	Cj/Vl0H8ZDwANfly7+LPmsv6gI30CCBwMB90/W7wWYdhnYiEIibTSn5yDED9Vm/652hVLtTk7gR
-	w
-X-Google-Smtp-Source: AGHT+IGLzh9qD7wpeSjGtp0Ds5swuxDDAZLcgxh47KTeFVzcHhpNLCZB9ujHVAwAoK2ct2UW/jc3Gw==
-X-Received: by 2002:a5d:6942:0:b0:37d:54d0:1f15 with SMTP id ffacd0b85a97d-37d552b2603mr742424f8f.7.1728652184313;
-        Fri, 11 Oct 2024 06:09:44 -0700 (PDT)
+        bh=v31GXG69vMHk4ux07CakUHVd4DKmezn/8McUHHPc5yQ=;
+        b=cOo3bnwc924KUeBHNPqa1u/xKrMOFd3Kp6UlCKObcx7Tg4ypNf+Q3vs2udbZHoc5wZ
+         cf8Ci8vzHvYssYOMi4xECLghEffztDPAXD3CcUa15XE0WQ2+HjLj3zkUPARK5FXSJIOj
+         jhPIKqvr5tjdX7i3eSzw52q6KsPbA1K076N2g/2yQNk14tqnDl26mtN/MNVxIBIJO1/q
+         bRinKovkcLYE6h9YTGSUikh66vWPbk2njPq+S8ZTctDCVrD7b49Iv9KbNVqF6PMsRjA4
+         S0w+A8/xqQuBFiTe/afIxokegOhnFf3AT+zL8eLmsdvKchCg6gmLfrCMG4xgk4ErVGVj
+         6BwQ==
+X-Gm-Message-State: AOJu0Yy+QctJlRcXaJtOPkKlsvCrEl93YjAsAuXBJytbOIRLD7c0tCk3
+	jUH7tSODegBzF7PNkTkwkVyD4reqH4gMefK02IYBJkZYuQIRJ5anglDiCfnaj9k=
+X-Google-Smtp-Source: AGHT+IFJV0fBBqZyQIuuDztYZ99k87dRRpSQN2NCI/NjAAk0eHOZWEgeToj9dTo5YUpjSkp3esjnjA==
+X-Received: by 2002:a05:600c:358f:b0:42c:bfd6:9d1f with SMTP id 5b1f17b1804b1-4311debbe68mr9904785e9.1.1728652186408;
+        Fri, 11 Oct 2024 06:09:46 -0700 (PDT)
 Received: from [127.0.1.1] ([178.197.211.167])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431182ff6d3sm41621835e9.12.2024.10.11.06.09.43
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-431182ff6d3sm41621835e9.12.2024.10.11.06.09.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 06:09:43 -0700 (PDT)
+        Fri, 11 Oct 2024 06:09:44 -0700 (PDT)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date: Fri, 11 Oct 2024 15:09:17 +0200
-Subject: [PATCH 09/10] remoteproc: qcom_q6v5_wcss: Simplify with
+Date: Fri, 11 Oct 2024 15:09:18 +0200
+Subject: [PATCH 10/10] remoteproc: qcom_wcnss_iris: Simplify with
  dev_err_probe()
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
@@ -79,7 +78,7 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241011-remote-proc-dev-err-probe-v1-9-5abb4fc61eca@linaro.org>
+Message-Id: <20241011-remote-proc-dev-err-probe-v1-10-5abb4fc61eca@linaro.org>
 References: <20241011-remote-proc-dev-err-probe-v1-0-5abb4fc61eca@linaro.org>
 In-Reply-To: <20241011-remote-proc-dev-err-probe-v1-0-5abb4fc61eca@linaro.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -88,21 +87,21 @@ Cc: linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arm-msm@vger.kernel.org, 
  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4784;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=969;
  i=krzysztof.kozlowski@linaro.org; h=from:subject:message-id;
- bh=aMcNBPeURPXIhNuMngoM0gRIWvppAMi+Wbo99mTH2bs=;
- b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBnCSOG9GyRPmqGm0cNl2il7G6aX1v4RHpRs9z45
- 1XqkKwxmSCJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCZwkjhgAKCRDBN2bmhouD
- 1wTkD/9IxVIyRbJMy7WI1BiD2FudLyUctCTRvC13re08iv09i6WtfXEFj7X3R4O4IGVjadK+iiQ
- 03EsyuUpw29FtPnskFXRcSnLj2D+vilg3YHx64nZQyX8Z5lIWCeUncHYLGN2NGIyoPDVn5F/EeB
- hGFobyWZn5BKUpIRWjLMd+n3Of+RKN1cBoU/1uhsb2ONNWZsHFgOWlIhaoD/LOhFrvuEoNcptJm
- yqpcs+SkKgdxSFPKoLepNZw33fHt+jVx5D3Ifqtg/4FxLkUi4xjaiHO1dNQgWlQuiXU8AsWqBFE
- Jl7w4DzZQ7h01zfpj/HUjBMuMeT1FNBCm/7UlgTRxcQQfMRBY+FYAQJUuONfJLCisV+RHN7gJoe
- B8bl6hr3LeXaH9qg/M6ye2Svd5ORdTI5lZ5KRkO6trAce2qFWKt5mxsvH6F3u3Y7IS9xbugUHmt
- 5Fxuic7OVPvrPjzVEOyT6rlHGeCNQkt9DIhcPX07iv90B9wJJR+QQ+HVB+x1Au9tLP9iR2tgsdf
- d/UoRb3VCULVD4MFpAewCTBzrn5dumsEqmfZoHgwtjpTJ2N9utGN48x++M7J4LIESj0/tLbcYg0
- 8QZNlnx7/9keRRcw+bbjivQ3/zkC581kAj033mjnXmrfANvdN+TqD0ERpLZicVmMPr+ZxSTeFA+
- +SEY6GyqZOPy2tw==
+ bh=aiK48nBymVvo/dH/OUWaei0T3BtvhFeLUjzn+aJU3M8=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBnCSOHreCkDDMaYxg+FYD85uid+AJHsN2qlBqkX
+ gfF0DvhUfCJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCZwkjhwAKCRDBN2bmhouD
+ 18SCD/4xlZRL8UTPeW0P/qXuNj4U5/rZazAAwWCrbdb/JmJx1KmWWQapR5Ty9P3vU/UT9lKp+EK
+ 392NKtcByXR8vDiJtXv96LJwZWZV9Hl0+IVfDbngWC/W+IJT/07rXU5lVjo9+JeO0T143yU6GQ6
+ J2C9HWbklt61TT4Yk9yEF4m966qdA3OZLhnbXOsL/1BU8ZKt6gqdbSwV2dajQp6MQ9xCb6YsMXr
+ JnkOEIh2mqhUbd2gjgXCKFwtJi247kIizv5C7yaF/HExhnh4on/LjkfzMR4nititybGuPmRI0q7
+ stsvmdbiqAnzmLlLDt/LWjY64yVEBtmGl90G32RyB2XToY1U921JW6rGJUo0ZSjhL138H9zL0xm
+ +Nf90Wl8qEWdKvCy07axRt9Te2u1gRZ/Aof2b5cmw1GzFeVap4yL+wT6lkq3oHeVQRs2/SSin6j
+ KQF+eTk5md7RZp4WOoKZvWJwAKEidYQLPBxdLks0eYdLzT1AY6vVx9HlX/B56m06ABKg17IqN9w
+ gww58cvK3B5ntVmtVD8wZqVyL/03PbElXM1MoV3usWZniqETegyqNmDyK+nHWMPJ4r3pZAB+LzM
+ LUiWbq3YbWr/ksKP75Kzo1I1O8TBqQ3XjOUoYxTVuVg5NWnI7NSirK5xtSwuGPmWWAAgPx6q9Md
+ TOPVThfw/iiltiw==
 X-Developer-Key: i=krzysztof.kozlowski@linaro.org; a=openpgp;
  fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
 
@@ -110,134 +109,25 @@ Use dev_err_probe() to make error and defer code handling simpler.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/remoteproc/qcom_q6v5_wcss.c | 92 ++++++++++++-------------------------
- 1 file changed, 30 insertions(+), 62 deletions(-)
+ drivers/remoteproc/qcom_wcnss_iris.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_wcss.c b/drivers/remoteproc/qcom_q6v5_wcss.c
-index e913dabae99245da60404461240ebeaebded67eb..8161575d821c4533646223a1d967172e1cdee9c1 100644
---- a/drivers/remoteproc/qcom_q6v5_wcss.c
-+++ b/drivers/remoteproc/qcom_q6v5_wcss.c
-@@ -902,90 +902,58 @@ static int q6v5_alloc_memory_region(struct q6v5_wcss *wcss)
+diff --git a/drivers/remoteproc/qcom_wcnss_iris.c b/drivers/remoteproc/qcom_wcnss_iris.c
+index dd36fd077911afec942f553a55128258c10ba946..b989718776bdb5843bd48b2d724bf1c483725bf3 100644
+--- a/drivers/remoteproc/qcom_wcnss_iris.c
++++ b/drivers/remoteproc/qcom_wcnss_iris.c
+@@ -155,9 +155,8 @@ struct qcom_iris *qcom_iris_probe(struct device *parent, bool *use_48mhz_xo)
  
- static int q6v5_wcss_init_clock(struct q6v5_wcss *wcss)
- {
--	int ret;
--
- 	wcss->xo = devm_clk_get(wcss->dev, "xo");
--	if (IS_ERR(wcss->xo)) {
--		ret = PTR_ERR(wcss->xo);
+ 	iris->xo_clk = devm_clk_get(&iris->dev, "xo");
+ 	if (IS_ERR(iris->xo_clk)) {
+-		ret = PTR_ERR(iris->xo_clk);
 -		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get xo clock");
--		return ret;
--	}
-+	if (IS_ERR(wcss->xo))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->xo),
-+				     "failed to get xo clock");
+-			dev_err(&iris->dev, "failed to acquire xo clk\n");
++		ret = dev_err_probe(&iris->dev, PTR_ERR(iris->xo_clk),
++				    "failed to acquire xo clk\n");
+ 		goto err_device_del;
+ 	}
  
- 	wcss->gcc_abhs_cbcr = devm_clk_get(wcss->dev, "gcc_abhs_cbcr");
--	if (IS_ERR(wcss->gcc_abhs_cbcr)) {
--		ret = PTR_ERR(wcss->gcc_abhs_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get gcc abhs clock");
--		return ret;
--	}
-+	if (IS_ERR(wcss->gcc_abhs_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->gcc_abhs_cbcr),
-+				     "failed to get gcc abhs clock");
- 
- 	wcss->gcc_axim_cbcr = devm_clk_get(wcss->dev, "gcc_axim_cbcr");
--	if (IS_ERR(wcss->gcc_axim_cbcr)) {
--		ret = PTR_ERR(wcss->gcc_axim_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get gcc axim clock\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->gcc_axim_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->gcc_axim_cbcr),
-+				     "failed to get gcc axim clock\n");
- 
- 	wcss->ahbfabric_cbcr_clk = devm_clk_get(wcss->dev,
- 						"lcc_ahbfabric_cbc");
--	if (IS_ERR(wcss->ahbfabric_cbcr_clk)) {
--		ret = PTR_ERR(wcss->ahbfabric_cbcr_clk);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get ahbfabric clock\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->ahbfabric_cbcr_clk))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->ahbfabric_cbcr_clk),
-+				     "failed to get ahbfabric clock\n");
- 
- 	wcss->lcc_csr_cbcr = devm_clk_get(wcss->dev, "tcsr_lcc_cbc");
--	if (IS_ERR(wcss->lcc_csr_cbcr)) {
--		ret = PTR_ERR(wcss->lcc_csr_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get csr cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->lcc_csr_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->lcc_csr_cbcr),
-+				     "failed to get csr cbcr clk\n");
- 
- 	wcss->ahbs_cbcr = devm_clk_get(wcss->dev,
- 				       "lcc_abhs_cbc");
--	if (IS_ERR(wcss->ahbs_cbcr)) {
--		ret = PTR_ERR(wcss->ahbs_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get ahbs_cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->ahbs_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->ahbs_cbcr),
-+				     "failed to get ahbs_cbcr clk\n");
- 
- 	wcss->tcm_slave_cbcr = devm_clk_get(wcss->dev,
- 					    "lcc_tcm_slave_cbc");
--	if (IS_ERR(wcss->tcm_slave_cbcr)) {
--		ret = PTR_ERR(wcss->tcm_slave_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get tcm cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->tcm_slave_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->tcm_slave_cbcr),
-+				     "failed to get tcm cbcr clk\n");
- 
- 	wcss->qdsp6ss_abhm_cbcr = devm_clk_get(wcss->dev, "lcc_abhm_cbc");
--	if (IS_ERR(wcss->qdsp6ss_abhm_cbcr)) {
--		ret = PTR_ERR(wcss->qdsp6ss_abhm_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get abhm cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->qdsp6ss_abhm_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->qdsp6ss_abhm_cbcr),
-+				     "failed to get abhm cbcr clk\n");
- 
- 	wcss->qdsp6ss_axim_cbcr = devm_clk_get(wcss->dev, "lcc_axim_cbc");
--	if (IS_ERR(wcss->qdsp6ss_axim_cbcr)) {
--		ret = PTR_ERR(wcss->qdsp6ss_axim_cbcr);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get axim cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->qdsp6ss_axim_cbcr))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->qdsp6ss_axim_cbcr),
-+				     "failed to get axim cbcr clk\n");
- 
- 	wcss->lcc_bcr_sleep = devm_clk_get(wcss->dev, "lcc_bcr_sleep");
--	if (IS_ERR(wcss->lcc_bcr_sleep)) {
--		ret = PTR_ERR(wcss->lcc_bcr_sleep);
--		if (ret != -EPROBE_DEFER)
--			dev_err(wcss->dev, "failed to get bcr cbcr clk\n");
--		return ret;
--	}
-+	if (IS_ERR(wcss->lcc_bcr_sleep))
-+		return dev_err_probe(wcss->dev, PTR_ERR(wcss->lcc_bcr_sleep),
-+				     "failed to get bcr cbcr clk\n");
- 
- 	return 0;
- }
 
 -- 
 2.43.0
