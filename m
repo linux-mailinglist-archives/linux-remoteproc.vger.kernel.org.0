@@ -1,120 +1,111 @@
-Return-Path: <linux-remoteproc+bounces-2469-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2472-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C298B9A7029
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 21 Oct 2024 18:54:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3286B9A91B2
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 21 Oct 2024 23:00:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1A921C217CE
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 21 Oct 2024 16:54:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEE4F28279F
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 21 Oct 2024 21:00:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1AB61C3F1F;
-	Mon, 21 Oct 2024 16:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C50551FEFBA;
+	Mon, 21 Oct 2024 21:00:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="OgJaCPHM"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="l55scDGs"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF03947A73;
-	Mon, 21 Oct 2024 16:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1A61FE11C;
+	Mon, 21 Oct 2024 20:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729529685; cv=none; b=SfoSd8vhGOsdhM89gkl9/Zw/raZfFfh5/aqSN85qgaAyCyvirKTY9bQAiIGMNLo9gQlF5zfxxIuB5kPuq6oM0eZzeiuBjAg2vYGS/BNoN+Rs6Rz0+KC9pbiDDCofO1IXuvOL6WoQz979iibAZxErrSu15Z/NmMkiOcblcEiZS2k=
+	t=1729544401; cv=none; b=Yv4TyR5TbqORRA7CIFxw9j764dS74ziEj7vCY/MawaFNV2h8y+TfZDcfYpXbyL8uAWsAH68BZm8r9Con2PKjVF3mM5nGDlZVyv/zwmGL6X0vSVt6ncAqAsA+cq7rPmpWdPCsaRkuGzzPOLl+B0++b5RUCBNk1Z5oYD7j4gvN/Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729529685; c=relaxed/simple;
-	bh=xVLV19LdlMTEBFTYZcWLoFa2RJ2kafrvx0eUdZTpY6Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=S84tOM977unALE+YeT7RTPe9VobzNWuYuqRgm0N7D+c7/eH1UWELEZsHTtzQnhlP4EohWRS9GOvs5+sBpr9xDCawIBPz34KkTC49cR5KS4842uunoS1/haCi948K3sfh4FytsIrhdpnTi6c3W0BGmf4LUv32fl5yEE2nD451gIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=OgJaCPHM; arc=none smtp.client-ip=198.47.23.249
+	s=arc-20240116; t=1729544401; c=relaxed/simple;
+	bh=2sKBu+QZ+AvjZxLrr6nDrfL60wFayPkrk8TH7UhKTQg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KNqwfJbjZuxsTiAritMujDGLeKslAebO0svK1WlPOz1S2VmyAYxbyxtA8y2lBWyOD0254GlzbPtptDljZTSiiQKL6LvRavqZfcvvgDuwj93zTA2Ul7gLETTFF3gNe8noUIXdamnpMwvDTy7qBLjcrTcr7l17rLoQPI6lcKR7l/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=l55scDGs; arc=none smtp.client-ip=198.47.19.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 49LGsS1s015685;
-	Mon, 21 Oct 2024 11:54:28 -0500
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 49LKjwqR040165;
+	Mon, 21 Oct 2024 15:45:58 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1729529668;
-	bh=BkUiQQbb0Y/+KVsC+QJluVm1qSPbgAKIhXWGfYSCIF0=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=OgJaCPHM6sf5ryq0I2x45RORcQ1AKdvc0U+8TfYon+TW3SurtPoXAh299k00xJHie
-	 I9IiEJtIYo+8D6DXRVEa2mSxD6UpHP8LDjji1imk/T5FEXgs3ynCmXCGPTTCJWdkU7
-	 40/O2b+HwPJLSul4fVA/sqLJ6xbjcyBpFDOX9R4k=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 49LGsSqb008487
+	s=ti-com-17Q1; t=1729543558;
+	bh=Kcgzds91ib2MFPSxXFB3TTAvgTEhUg1wrYZ1rCJaZiU=;
+	h=From:To:CC:Subject:Date;
+	b=l55scDGsFpqYBUuj6j5zoUiixfg0krGqshfwxd5jrnWznETgYSAe4oX+9jGTNd0CJ
+	 takpgJXU4wIS3+UTasOeDr5wPGhXojF2g3KJyzEhKHfSUWh325DmKhtnejHEIYFgFo
+	 Wn4UxlvroE3r6nZ1pcb4i50q0Cf5qAPQrjMrGjV8=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 49LKjw8o013043
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Mon, 21 Oct 2024 11:54:28 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+	Mon, 21 Oct 2024 15:45:58 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 21
- Oct 2024 11:54:28 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2024 15:45:58 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 21 Oct 2024 11:54:28 -0500
-Received: from [10.249.42.149] ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49LGsRhU034368;
-	Mon, 21 Oct 2024 11:54:28 -0500
-Message-ID: <4954e8a6-06dc-49db-afdb-93260539649a@ti.com>
-Date: Mon, 21 Oct 2024 11:54:27 -0500
+ Frontend Transport; Mon, 21 Oct 2024 15:45:58 -0500
+Received: from fllvsmtp8.itg.ti.com ([10.249.42.149])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 49LKjwew030965;
+	Mon, 21 Oct 2024 15:45:58 -0500
+From: Andrew Davis <afd@ti.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier
+	<mathieu.poirier@linaro.org>,
+        Hari Nagalla <hnagalla@ti.com>, Beleswar Padhi
+	<b-padhi@ti.com>
+CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew
+ Davis <afd@ti.com>
+Subject: [PATCH 1/3] remoteproc: k3-r5: Use IO memset to clear TCMs
+Date: Mon, 21 Oct 2024 15:45:55 -0500
+Message-ID: <20241021204557.929823-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] remoteproc: k3-r5: Add compile testing support
-To: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>
-CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20241016164141.93401-1-afd@ti.com>
- <20241016164141.93401-3-afd@ti.com>
-Content-Language: en-US
-From: Andrew Davis <afd@ti.com>
-In-Reply-To: <20241016164141.93401-3-afd@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On 10/16/24 11:41 AM, Andrew Davis wrote:
-> This driver can be compile tested on non-K3 architectures as long
-> as TI_SCI_PROTOCOL is not compiled as a module. Enable this here
-> to improve this driver's build coverage.
-> 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->   drivers/remoteproc/Kconfig | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-> index 0ac1c8a6e4581..83962a114dc9f 100644
-> --- a/drivers/remoteproc/Kconfig
-> +++ b/drivers/remoteproc/Kconfig
-> @@ -355,7 +355,8 @@ config TI_K3_M4_REMOTEPROC
->   
->   config TI_K3_R5_REMOTEPROC
->   	tristate "TI K3 R5 remoteproc support"
-> -	depends on ARCH_K3
-> +	depends on ARCH_K3 || COMPILE_TEST
+While it should be safe to use normal memset() on these memories as they
+are mapped as Normal Non-Cached, using the memset_io() provides stronger
+guarantees on access alignment and fixes a sparse check warning. Switch
+to memset_io() here.
 
-kernel test robot is giving some extra warning now around the lines:
+Signed-off-by: Andrew Davis <afd@ti.com>
+---
+ drivers/remoteproc/ti_k3_r5_remoteproc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-memset(core->mem[0].cpu_addr, 0x00, core->mem[0].size);
+diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+index 2f996a962f557..e1fe85e5eba6a 100644
+--- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
++++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+@@ -487,10 +487,10 @@ static int k3_r5_rproc_prepare(struct rproc *rproc)
+ 	 * can be effective on all TCM addresses.
+ 	 */
+ 	dev_dbg(dev, "zeroing out ATCM memory\n");
+-	memset(core->mem[0].cpu_addr, 0x00, core->mem[0].size);
++	memset_io(core->mem[0].cpu_addr, 0x00, core->mem[0].size);
+ 
+ 	dev_dbg(dev, "zeroing out BTCM memory\n");
+-	memset(core->mem[1].cpu_addr, 0x00, core->mem[1].size);
++	memset_io(core->mem[1].cpu_addr, 0x00, core->mem[1].size);
+ 
+ 	return 0;
+ }
+-- 
+2.39.2
 
-This was already an issue and threw warnings even on ARM64 builds, but
-now that we can compile test on other archs, all those will start
-complaining too.
-
-Fix is easy, just s/memset()/memset_io() here. I'll give that a test
-run then send a patch.
-
-Andrew
-
-> +	depends on TI_SCI_PROTOCOL || (COMPILE_TEST && TI_SCI_PROTOCOL=n)
->   	depends on OMAP2PLUS_MBOX
->   	help
->   	  Say m here to support TI's R5F remote processor subsystems
 
