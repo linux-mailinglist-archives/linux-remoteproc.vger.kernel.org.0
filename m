@@ -1,84 +1,82 @@
-Return-Path: <linux-remoteproc+bounces-2474-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2476-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDA639A97B1
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 22 Oct 2024 06:17:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7B199A97C1
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 22 Oct 2024 06:21:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E59DA1C21B8B
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 22 Oct 2024 04:17:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 549301F23593
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 22 Oct 2024 04:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48C8F84E04;
-	Tue, 22 Oct 2024 04:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED5183A09;
+	Tue, 22 Oct 2024 04:21:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="EEi3ogLg"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="BTT3ehnV"
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01F4433BB
-	for <linux-remoteproc@vger.kernel.org>; Tue, 22 Oct 2024 04:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B5D84047
+	for <linux-remoteproc@vger.kernel.org>; Tue, 22 Oct 2024 04:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729570646; cv=none; b=POcimswt+5NJm3ZOpWVDUyH0KXujvT1yOp8jd8xm75SqiWzs+CWrVm+tbaYrx43zKuX1ooZD/bo1vf58se1QpP2o0yl3GeT3lyCdqIIi9UpCo5SmhRg97yhq6hV67HHVCf3R7vFrAtsNiHM25mym0lUxEn3qcax/nlz2RyBDL6c=
+	t=1729570868; cv=none; b=k5aHnw6BT8/JOg56K8Db+HSdD1fgmWx/HrW2jAOlAdGAyxac7PSV1m3dJqeqkwA+cNqtVVGam5fkFcVOhxev/YN+yjtfFgKKkddyDjugoM/9dQrn3TWD52O+PijP4yYslCPqscWFfr16E3woyIhf6DfCs/g9KP1YVNMthqwDSAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729570646; c=relaxed/simple;
-	bh=/58otU+mAPd8jrtLUJ/LEJCMOq0Y8R9ln/E00PBpe04=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Nm3ghrVkVFsBNZczZSQfVg2o10/L8Ai2P5VtAr20K8Dummva1X0CNOicI7CcsNBWVUESJY0PkBlkYEB8ipkDP3+D/KjbnZjxzGPjm+D3on2D2kUvXmqf8xqbQG+/1Yfp9WIBDZqoZFAoLFHpia/Tb4k7KUFOpdCRBnMcz4tv4ZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=EEi3ogLg; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1729570868; c=relaxed/simple;
+	bh=ZZx94kuPsJBqKhSDlU3Qol1h7nTVfSUnlGS8qd2Tcgg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=r38TsJyRX96huVtawMybzdwKQ5LdepcrJDBLIt85Uf1LpV5uMulU4vLTpni+FLh+QkIeRzy7e4G7GsufZgycRLEI5QJoZcVHcgrdLfLxygAnm1oerEq3elYSaZC2TD+UveWNGE5gdTCvPxJPNXJ9OADHRuG1lFQPtueK/w2k9sI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=BTT3ehnV; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49LJ909j028248
-	for <linux-remoteproc@vger.kernel.org>; Tue, 22 Oct 2024 04:17:17 GMT
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49M2Xw9P024011
+	for <linux-remoteproc@vger.kernel.org>; Tue, 22 Oct 2024 04:21:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	7xKskZvo1JH0YHB5j6L+rhDgLQp1E+PifEVPToIxcdA=; b=EEi3ogLgfHlwN63T
-	VT9zPpmvs/eMMScMDC1s6w7FZbw7TjuaxyCv6Hs+9h6M5W94fJQQKEVEsV5YkeoM
-	5Ku7HTj+ysjru28cDGzDaltVe38MXi70JKeoY9uYofwacqJqyTR8FgmjhkusvmCo
-	vqjiIfDaLQYS5k5DiBHBdSrfv+yuE3xrjl03UiVBLVzxmvwdlN40iHZfx7HwZLaa
-	SDdAvu93MEF81/yA+sLbGLK2iJHqYeqmF2QITvBnXvNXyZzmXQzEfC0qLBavsAl1
-	xaUi9+ocIaPmY9+sUXTiwIJ7rKH7LSEhPPd114rZ8xGxeGI+dxBnT0BORRZ9/d35
-	qq/nzw==
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42c6vc6wm6-1
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=HENcSFiPTx5iVYi4wXblKs
+	xcwftxsbQ86miIac1Sdxc=; b=BTT3ehnV1z6yapmJZZBY1Nzam93UHephGLtGny
+	DoGRjfnhRqo9SWxlSb5l2e7tYRpfBXmzTCrSgJmPntN9N78UrBW9J9kukcI76u+w
+	8ffswpuqWJqidUbojE6BQbap1oMcKX3JgpqA1VheieHhG2orN2gJcTeh29zrd+Fu
+	SWcOiNwutJ1m5n5Fba0vhBNasSjqF+CjF++0BcSUjiSNT6iurKMYH38KlPRYHY8a
+	9XrVxm6+7Spq/dZT50G2Zo+ISZa38oHUvRP8NKNA5nNf5gWDFMx/Dsnq4ckjHCVZ
+	0+N8BJ74LvbV4DegHy3GBsdaqZPK10sB8KPDn+vmJK12mEPg==
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42e3cgg77j-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-remoteproc@vger.kernel.org>; Tue, 22 Oct 2024 04:17:17 +0000 (GMT)
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-7db9418552fso4548227a12.0
-        for <linux-remoteproc@vger.kernel.org>; Mon, 21 Oct 2024 21:17:17 -0700 (PDT)
+	for <linux-remoteproc@vger.kernel.org>; Tue, 22 Oct 2024 04:21:06 +0000 (GMT)
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3a3c27c72d5so46297095ab.2
+        for <linux-remoteproc@vger.kernel.org>; Mon, 21 Oct 2024 21:21:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729570637; x=1730175437;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7xKskZvo1JH0YHB5j6L+rhDgLQp1E+PifEVPToIxcdA=;
-        b=aolbcV9BmuGhYHEsGmM0yft7vOAgIUArVoAIYiqTRnanF7o/9Jjedj8682mvtcsdE+
-         ZaEfx5JbLzZyoip6vpuq4c8RHRl6coh19ecHXFE5Lkn5bNgsRx87pDq6dkvw7jbp+EYj
-         /HHwpTEWwuS3qLGniQPzRfAC0Z+QAfzra0KOUeALM/VK6Q/ngaUJkkzfSg1u+wGFmHLC
-         NOF8Xi//RG72JrvnYr1a5Ip7t8PlWISu1rER5ypNuno3B1fuEIV0JpxDhSzxp7Ibofvh
-         B5XkQVCo8/MkwOEJH4EM+5h+dNkZUWpm99eoKybb/3eX+keD0cnfDKrlPT23v1L5tzBh
-         jRcw==
-X-Forwarded-Encrypted: i=1; AJvYcCUHhuztdDcdmJBiepLmcY5cLlibylOTDWtj8OWI7wU2fMBj9UwUVE6qjVLxGclh2I6SVpj982pJXfCUdWxLDcys@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuPPwvkuU8tQdL8qKvE5O1DwRB32wy275Gx48iLBVNyqMSN5oc
-	mPp8tP0wBXrIruhxc/upkJBNZu6r/hy3Qj4qOjuvh3+fVAfOLxcPgUIC4i/smbLyF5bPbnTGYdY
-	NWRy853o06oPKGHOOqs+UuukC1li9wpW8fdtYeNHUTHrON1gSLhB5hzeu6DCHZnKbHUod
-X-Received: by 2002:a05:6a21:78d:b0:1d9:9b2:8c2a with SMTP id adf61e73a8af0-1d92c56dd3dmr17885245637.34.1729570636734;
-        Mon, 21 Oct 2024 21:17:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE78YH2hf1L82uustEvCpYYzLIPYCc25WObHjaFYC7/91IoiTJYQGN3QBS8OiZQL2iTOE4O9A==
-X-Received: by 2002:a05:6a21:78d:b0:1d9:9b2:8c2a with SMTP id adf61e73a8af0-1d92c56dd3dmr17885224637.34.1729570636406;
-        Mon, 21 Oct 2024 21:17:16 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729570865; x=1730175665;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HENcSFiPTx5iVYi4wXblKsxcwftxsbQ86miIac1Sdxc=;
+        b=VPEkiiYxxDmU5ZymG0O0AmuQkM7pDaX/BfJ74AcKWWAaycLB+RVKKfiot0jhUsEcxW
+         tQkFSKQiHusfxi4sv80pFcvtn2cbSXthP4XjrMKYcGJUk6A0JzWkN2wBqp+mdpIq4EOe
+         idOxpRf1MBpJjNmI1QyydEwjZ+4V9QW3mZ1NpwCMWWvu++9HDMWummo7fATr7KkwMqPo
+         66x1OxpuIayQTf7V4ytOArluXk5f1HJrFucK7FQpQzvxJasPlUu/zW7Aa3LN/lZMFC6m
+         W36t6bc4jPDYWQ0aSf+lcU7178s7DhqZ+2xC5ClSFufYUiT8c8wyxeMk6PG+vKZmBetv
+         mRiw==
+X-Forwarded-Encrypted: i=1; AJvYcCVTlK+cxqz+TnfV6pPoI5KJeANV0zg6/JNs8LBdWEZftsy51Y2NeCx+8FfYc+e3C3KObvjzABdODxp7anLv45CO@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2HyfKXN5Nm/3r4k5UkJrhu7UlllK45aQemvfBnk2GZyxbHIDx
+	WRhkm4mTSPCaXm8ohQy6kG2ZEz6RDazG8vQFuUdePWsEg2NGXxEL5kV9hjzZrE3bTomxujGop2x
+	dn5uJZHFNAOO57GrV5eeTds62U6sKahxE9U9aXd4Lei1/Udk5xVhmaMwU/qtFK+O8CYqaTObpGI
+	aD
+X-Received: by 2002:a05:6e02:2169:b0:3a3:b527:e809 with SMTP id e9e14a558f8ab-3a3f406326amr131195985ab.14.1729570865033;
+        Mon, 21 Oct 2024 21:21:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH5uiaNduHPg+WyNp76ip1D4UiD9rzbbavv5abdTKo3logKNRs+dpMem9fvb6tI30AudDIw1w==
+X-Received: by 2002:a05:6e02:2169:b0:3a3:b527:e809 with SMTP id e9e14a558f8ab-3a3f406326amr131195825ab.14.1729570864690;
+        Mon, 21 Oct 2024 21:21:04 -0700 (PDT)
 Received: from ip-172-31-25-79.us-west-2.compute.internal (ec2-35-81-238-112.us-west-2.compute.amazonaws.com. [35.81.238.112])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e5ad25cb6dsm4836169a91.1.2024.10.21.21.17.15
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7eaeaafd36esm4062644a12.6.2024.10.21.21.21.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Oct 2024 21:17:15 -0700 (PDT)
+        Mon, 21 Oct 2024 21:21:04 -0700 (PDT)
 From: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-Date: Tue, 22 Oct 2024 04:17:12 +0000
-Subject: [PATCH 2/2] soc: qcom: pmic_glink: Handle GLINK intent allocation
- rejections
+Date: Tue, 22 Oct 2024 04:21:03 +0000
+Subject: [PATCH] remoteproc: qcom: pas: Make remoteproc name human friendly
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -87,109 +85,69 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241022-pmic-glink-ecancelled-v1-2-9e26fc74e0a3@oss.qualcomm.com>
-References: <20241022-pmic-glink-ecancelled-v1-0-9e26fc74e0a3@oss.qualcomm.com>
-In-Reply-To: <20241022-pmic-glink-ecancelled-v1-0-9e26fc74e0a3@oss.qualcomm.com>
+Message-Id: <20241022-rproc-friendly-name-v1-1-350c82b075cb@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIAC4oF2cC/x2MQQqAMAzAviI9W3BDUfyKeBiz04JO6UCUsb9bP
+ IaQZEgkTAnGKoPQzYnPqGDqCvzm4krIizLYxramsRblktNj0Cgu+4vRHYRqvOvN0HkyoOUlFPj
+ 5r9NcygeSUIgEZQAAAA==
+X-Change-ID: 20241022-rproc-friendly-name-410ca7185ce1
 To: Bjorn Andersson <andersson@kernel.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Chris Lew <quic_clew@quicinc.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Johan Hovold <johan@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, Bjorn Andersson <quic_bjorande@quicinc.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-        stable@vger.kernel.org
+        Chris Lew <quic_clew@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1729570634; l=2629;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1729570864; l=1350;
  i=bjorn.andersson@oss.qualcomm.com; s=20241022; h=from:subject:message-id;
- bh=/58otU+mAPd8jrtLUJ/LEJCMOq0Y8R9ln/E00PBpe04=;
- b=M6z9243vFSnt4Z0ApB6ZfscKtvvptNe5YFen5SppKT1aQOu4RImpegyQ4k25IyQz4rf6KNRxa
- /ZYKK2MuDGuBQtLSHVdzPZBR1b3v+3HaMrrStXFySAM+BSkjyplaLIP
+ bh=ZZx94kuPsJBqKhSDlU3Qol1h7nTVfSUnlGS8qd2Tcgg=;
+ b=AkHzqQQIe6kZ4eRZ0l4KUW7cv10TNSmawOi7RRnmXynFRX22M+BSpmS2uWx8Kb1Ypsz3TUjSg
+ F4W2Rk/T1IVDiwS5VnznSrF7j7c63ihq7clGki3AgOAJi70XlVD8Hno
 X-Developer-Key: i=bjorn.andersson@oss.qualcomm.com; a=ed25519;
  pk=SAhIzN2NcG7kdNPq3QMED+Agjgc2IyfGAldevLwbJnU=
-X-Proofpoint-GUID: A5CvwV-GzhKgDUuIGDbHCrjewImNbrwC
-X-Proofpoint-ORIG-GUID: A5CvwV-GzhKgDUuIGDbHCrjewImNbrwC
+X-Proofpoint-GUID: J5nPoxl0_WoBoX8_aTI6z8EqocRCH_Xn
+X-Proofpoint-ORIG-GUID: J5nPoxl0_WoBoX8_aTI6z8EqocRCH_Xn
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 suspectscore=0
- spamscore=0 phishscore=0 bulkscore=0 mlxscore=0 adultscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=965
+ spamscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ phishscore=0 clxscore=1015 impostorscore=0 suspectscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2409260000 definitions=main-2410220027
 
-Some versions of the pmic_glink firmware does not allow dynamic GLINK
-intent allocations, attempting to send a message before the firmware has
-allocated its receive buffers and announced these intent allocations
-will fail. When this happens something like this showns up in the log:
+The remoteproc "name" property is supposed to present the "human
+readable" name of the remoteproc, while using the device name is
+readable, it's not "friendly".
 
-	[    9.799719] pmic_glink_altmode.pmic_glink_altmode pmic_glink.altmode.0: failed to send altmode request: 0x10 (-125)
-	[    9.812446] pmic_glink_altmode.pmic_glink_altmode pmic_glink.altmode.0: failed to request altmode notifications: -125
-	[    9.831796] ucsi_glink.pmic_glink_ucsi pmic_glink.ucsi.0: failed to send UCSI read request: -125
+Instead, use the "sysmon_name" as the identifier for the remoteproc
+instance. It matches the typical names used when we speak about each
+instance, while still being unique.
 
-GLINK has been updated to distinguish between the cases where the remote
-is going down (-ECANCELLED) and the intent allocation being rejected
-(-EAGAIN).
-
-Retry the send until intent buffers becomes available, or an actual
-error occur.
-
-To avoid infinitely waiting for the firmware in the event that this
-misbehaves and no intents arrive, an arbitrary 10 second timeout is
-used.
-
-This patch was developed with input from Chris Lew.
-
-Reported-by: Johan Hovold <johan@kernel.org>
-Closes: https://lore.kernel.org/all/Zqet8iInnDhnxkT9@hovoldconsulting.com/#t
-Cc: stable@vger.kernel.org
 Signed-off-by: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
 ---
- drivers/soc/qcom/pmic_glink.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ drivers/remoteproc/qcom_q6v5_pas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-index 9606222993fd78e80d776ea299cad024a0197e91..221639f3da149da1f967dbc769a97d327ffd6c63 100644
---- a/drivers/soc/qcom/pmic_glink.c
-+++ b/drivers/soc/qcom/pmic_glink.c
-@@ -13,6 +13,8 @@
- #include <linux/soc/qcom/pmic_glink.h>
- #include <linux/spinlock.h>
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index ef82835e98a4efd4bc603cff604d531a51fe9f9c..b2108c3036a33f7e9a63380be3a6e319e76503cc 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -716,7 +716,7 @@ static int adsp_probe(struct platform_device *pdev)
+ 	if (desc->minidump_id)
+ 		ops = &adsp_minidump_ops;
  
-+#define PMIC_GLINK_SEND_TIMEOUT (10*HZ)
-+
- enum {
- 	PMIC_GLINK_CLIENT_BATT = 0,
- 	PMIC_GLINK_CLIENT_ALTMODE,
-@@ -112,13 +114,23 @@ EXPORT_SYMBOL_GPL(pmic_glink_client_register);
- int pmic_glink_send(struct pmic_glink_client *client, void *data, size_t len)
- {
- 	struct pmic_glink *pg = client->pg;
-+	unsigned long start;
-+	bool timeout_reached = false;
- 	int ret;
+-	rproc = devm_rproc_alloc(&pdev->dev, pdev->name, ops, fw_name, sizeof(*adsp));
++	rproc = devm_rproc_alloc(&pdev->dev, desc->sysmon_name, ops, fw_name, sizeof(*adsp));
  
- 	mutex_lock(&pg->state_lock);
--	if (!pg->ept)
-+	if (!pg->ept) {
- 		ret = -ECONNRESET;
--	else
--		ret = rpmsg_send(pg->ept, data, len);
-+	} else {
-+		start = jiffies;
-+		do {
-+			timeout_reached = time_after(jiffies, start + PMIC_GLINK_SEND_TIMEOUT);
-+			ret = rpmsg_send(pg->ept, data, len);
-+		} while (ret == -EAGAIN && !timeout_reached);
-+
-+		if (ret == -EAGAIN && timeout_reached)
-+			ret = -ETIMEDOUT;
-+	}
- 	mutex_unlock(&pg->state_lock);
- 
- 	return ret;
+ 	if (!rproc) {
+ 		dev_err(&pdev->dev, "unable to allocate remoteproc\n");
 
+---
+base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
+change-id: 20241022-rproc-friendly-name-410ca7185ce1
+
+Best regards,
 -- 
-2.43.0
+Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
 
 
