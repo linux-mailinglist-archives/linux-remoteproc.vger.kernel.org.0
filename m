@@ -1,126 +1,187 @@
-Return-Path: <linux-remoteproc+bounces-2593-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2598-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E4C49BA3F0
-	for <lists+linux-remoteproc@lfdr.de>; Sun,  3 Nov 2024 05:34:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD6839BB66B
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  4 Nov 2024 14:39:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FDEE1C21109
-	for <lists+linux-remoteproc@lfdr.de>; Sun,  3 Nov 2024 04:34:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B589282FCF
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  4 Nov 2024 13:39:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29B747080D;
-	Sun,  3 Nov 2024 04:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9494E13D53B;
+	Mon,  4 Nov 2024 13:38:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m3Pn4Nan"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="NopvYOf4"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBA3528EA;
-	Sun,  3 Nov 2024 04:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D8A913AD06;
+	Mon,  4 Nov 2024 13:38:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730608440; cv=none; b=TSUVm4K1HY34SsdWDtI6zsyaXwmmGJlEgJMKu9Cq3kAYsU7UFhYmcba/7bXxrZFvoj0Fb8sf5i4hgp/9gNvSmEB9+Q0z92tBPj2RO6aSZpLkfGVi/miBPCjD6OQci8+GkDZWu5A6+FAKR2DVv/xn+lzbo1ivFDwdjnRsH4LW1GI=
+	t=1730727505; cv=none; b=vDi7IVi88dSHyxrs4YNW1C3+AfK7CI7V4jsITUy6IH3OrS9A0Y/s4hnztRVu6LnRel6LveFyUiyr9li6OSGBXAvje6joXqBfIiieI4EsJwSksJbV1fgfEo+YFPMqjftp75lPKXAWftBoNAancENC7lW9YnqG3oniK73J4tu18u0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730608440; c=relaxed/simple;
-	bh=AOXl2fE38g+pYffxexzXwnV1Ljihe717OpCxiasdEjQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BvAcICS0CH0Qr1rn24d5jNwroOFXH1cHMmIOiV21km7WQD0dV3v4d4F+33as7oFOsS/ztKNAV2fiUWCiJ4tlqOr7OGFw0xxoYEY+9O/6zdqMrt83z2LqCnnHjCam7LiI2scrXCDZg3A2xtp0x5Li7E98No/dOoqh0u4P2ifKPFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m3Pn4Nan; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-71e52582cf8so2734805b3a.2;
-        Sat, 02 Nov 2024 21:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730608438; x=1731213238; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WZAuhtOauwqrAoTjzUTGUR7IGr2nFokByGMzm/jQiDU=;
-        b=m3Pn4NanY2yn+T1ggGdJK7vHKgDdcZtULR63WkVfwT58oE5lvbBgEt/yiPXmh/fRXM
-         lGuW4gOolGbGdyZLJGNndlFh5aDt7I1PbVL8KvwHs092mNN1ZtmCUHqbBfOu5JUYkO4C
-         jaeznurEotdGLuWJg7ERcv+AIg69tL8CrFFHoKGNhfveiqaWxCoS67vLIFrDhREa08Oc
-         26ig6x/OKvsrPVMDgOgCaMBnYAIa1avSAml4c5sI53oTHitYP53wko2/6dvI1+fx/wXF
-         vdN5YmMY0zKo6Wm50MRLaoluItIQE3dD4TLFDjuyImveZ1ZykaFQSbQayHrxTpfO/XS1
-         53lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730608438; x=1731213238;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WZAuhtOauwqrAoTjzUTGUR7IGr2nFokByGMzm/jQiDU=;
-        b=wQi9zeXboxPA1X5FXGtIoFeDVChVNWKDVetuMf2tuMRD+N5INrUmw6k5Tm9yj9DzJI
-         FLbBjho0i4MHkysZeWhq6zDR58jKtw6AHRAq/4cwMXgG35gW8MxgJkOvufVvZLMIt6i2
-         KYSebmzMlEY0LAYtZstp3xg0YG3JWOpZt1ygWoVETdKvbQ3JR9wrbUbfhZ2Yq4ElQZz2
-         KPiGLDz0ZVgYUegyRTijLoQNlVe6MLt0Dj4ZJHwNgXm7MhjE4GKiwqC4b8T10xUsdmrJ
-         tXcG6IvfNeobwygxWMwp4YUSQl9tTTG9YbRUuEv4CA+J0mn9u7EzJb76LSjPCAoYxHI3
-         i1bg==
-X-Forwarded-Encrypted: i=1; AJvYcCUnL10XeO0AhWJ874++mXXmeYtJatq5jI52umPi5Qt7EoEXFKpwpkrPdRPFYaTjaMHFLKxXa1HEB80pTvgwVgle5w==@vger.kernel.org, AJvYcCVTbyzrbBO6ap/09KMI6z1bJUa8azj98RZ42SOnWWzLKdl/4U2c3uLBdxvARMiEKaUFFtntPS6F6SS3FL2n@vger.kernel.org, AJvYcCXDqR9NfVoURuMWOozPdsge7T/3c08HMTRZ0XFOoEX4ceh85CBztrKvW1AWOwjx5dcdO4pg4DerjLQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkGXCDaXjvBlec+PvHVWEhoSJIKmejbmxR2y0jZLQYxmO2PBe2
-	5+yMS8168Y3n/HehNxPLr50azSOHPsFwRzGY8O8k0BSlQT6aDeov
-X-Google-Smtp-Source: AGHT+IGvpSuZXrPK2QGqFXEaZfWJIaRCCUOqHpDu3T373+UbdA/a75udXVfPIvfOtlJ+UUPUydaRXA==
-X-Received: by 2002:a05:6a20:e605:b0:1d9:1906:a68e with SMTP id adf61e73a8af0-1dba55ac470mr11836622637.34.1730608437868;
-        Sat, 02 Nov 2024 21:33:57 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc1b90e8sm5000851b3a.25.2024.11.02.21.33.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Nov 2024 21:33:56 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 194624207D11; Sun, 03 Nov 2024 11:33:52 +0700 (WIB)
-Date: Sun, 3 Nov 2024 11:33:52 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Mathieu Poirier <mathieu.poirier@linaro.org>,
-	anish kumar <yesanishhere@gmail.com>
-Cc: andersson@kernel.org, mathieu.poirier@linaro.orgi, corbet@lwn.net,
-	linux-doc@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH V5] remoteproc: Documentation: update with details
-Message-ID: <Zyb9MJ2H0bkRXk3X@archie.me>
-References: <20241026212259.31950-1-yesanishhere@gmail.com>
- <ZyT2piU27MF28XcN@p14s>
+	s=arc-20240116; t=1730727505; c=relaxed/simple;
+	bh=nb50FcRXGbkHVWHED55Ne7lUWE97SSW6moxTOdvw9ac=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aQSK+HuM2fRc0mIvOUUVp4naUTOxmlpf+X34tJOEEQ9vw0iSE+/bkORHZfOWZIs6eNo3H0dYVuuFgciWNDeZSPdG0QKbwQVlT56nrSwm6BLk/j4OWv7kaj+OQvidyqOnAAxKRLIz1NemN8qMb4mO6KWoAu7JBfEGQOxATd5dDlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=NopvYOf4; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A4AfqkT029108;
+	Mon, 4 Nov 2024 14:37:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=RCD3Q2YdIVAxPFAAJwbPXm
+	d28Y6JXATrIQ5pwcB4yzU=; b=NopvYOf4lkojTI3Qekra4C84gk8Rcys1krOXjm
+	Bl4QON9GLkit10ECuSbTfq7cdRAof3R4RUrOERfn4vXAjrkxI+hAZNgnkez5dGhS
+	DEuL+TaVa812Jh514d4pD5egZJDknW26a5KFf90DzUswy4nlx1Z/K777bekLsx4C
+	fFbFYxgT8sL1L+J4eAzMHbCKeVoQvp7T1BWZquskTaqfvIV2uJA3krGJf18ZvgKU
+	LllcjYLhCT0cZMALWZ07xsglpjp0uVUdRT4ntr+nlSp30adz4pQBPBDu3YdGTB6D
+	Sxk//PSwCPIJwCirgnVEze1tuzQeUJjMusGvhqoRCFkRGh+g==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 42nd0578u3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 Nov 2024 14:37:59 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id B6F0B40045;
+	Mon,  4 Nov 2024 14:36:48 +0100 (CET)
+Received: from Webmail-eu.st.com (eqndag1node4.st.com [10.75.129.133])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E67CD28A180;
+	Mon,  4 Nov 2024 14:35:53 +0100 (CET)
+Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE4.st.com
+ (10.75.129.133) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 4 Nov
+ 2024 14:35:53 +0100
+Received: from localhost (10.48.86.121) by SAFDAG1NODE1.st.com (10.75.90.17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 4 Nov
+ 2024 14:35:53 +0100
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier
+	<mathieu.poirier@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <op-tee@lists.trustedfirmware.org>, <devicetree@vger.kernel.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Subject: [PATCH v13 0/7] Introduction of a remoteproc tee to load signed firmware
+Date: Mon, 4 Nov 2024 14:35:08 +0100
+Message-ID: <20241104133515.256497-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="prVtwJ4O92547TcU"
-Content-Disposition: inline
-In-Reply-To: <ZyT2piU27MF28XcN@p14s>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SAFCAS1NODE1.st.com (10.75.90.11) To SAFDAG1NODE1.st.com
+ (10.75.90.17)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+
+Main updates from version V12[1]:
+Fix warning build by fixing the inline declaration in
+remoteproc_tee.h (when CONFIG_REMOTEPROC_TEE is not set).
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202410262040.PWNrKv2Q-lkp@intel.com/
+
+Main updates from version V11[2]:
+- rename structures, functions, and variables from "tee_rproc_xxx" to
+  "rproc_tee_xxx",
+- update rproc_tee_register to return an error instead of
+  "struct rproc_tee *" pointer
+  
+[1] https://lore.kernel.org/lkml/20241025205924.2087768-1-arnaud.pouliquen@foss.st.com/
+[2] https://lore.kernel.org/lkml/ZxZ4cBilIlpf3IPw@p14s/T/
+
+Tested-on: commit 42f7652d3eb5 ("Linux 6.12-rc4")
+Description of the feature:
+--------------------------
+This series proposes the implementation of a remoteproc tee driver to
+communicate with a TEE trusted application responsible for authenticating
+and loading the remoteproc firmware image in an Arm secure context.
+
+1) Principle:
+
+The remoteproc tee driver provides services to communicate with the OP-TEE
+trusted application running on the Trusted Execution Context (TEE).
+The trusted application in TEE manages the remote processor lifecycle:
+
+- authenticating and loading firmware images,
+- isolating and securing the remote processor memories,
+- supporting multi-firmware (e.g., TF-M + Zephyr on a Cortex-M33),
+- managing the start and stop of the firmware by the TEE.
+
+2) Format of the signed image:
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/src/remoteproc_core.c#L18-L57
+
+3) OP-TEE trusted application API:
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/include/ta_remoteproc.h
+
+4) OP-TEE signature script
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/scripts/sign_rproc_fw.py
+
+Example of usage:
+sign_rproc_fw.py --in <fw1.elf> --in <fw2.elf> --out <signed_fw.sign> --key ${OP-TEE_PATH}/keys/default.pem
 
 
---prVtwJ4O92547TcU
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+5) Impact on User space Application
 
-On Fri, Nov 01, 2024 at 09:41:26AM -0600, Mathieu Poirier wrote:
-> Before spinning off another revision I encourage you to spend time lookin=
-g at
-> existing documentation.  Reading various mailing lists with a special
-> focus on how people split their patches based on topics would also be
-> beneficial.
+No sysfs impact. The user only needs to provide the signed firmware image
+instead of the ELF image.
 
-That's why I'm more focused on formatting and wording to get my feet wet
-on kernel docs...
 
-Thanks.
+For more information about the implementation, a presentation is available here
+(note that the format of the signed image has evolved between the presentation
+and the integration in OP-TEE).
 
---=20
-An old man doll... just what I always wanted! - Clara
+https://resources.linaro.org/en/resource/6c5bGvZwUAjX56fvxthxds
 
---prVtwJ4O92547TcU
-Content-Type: application/pgp-signature; name="signature.asc"
+Arnaud Pouliquen (7):
+  remoteproc: core: Introduce rproc_pa_to_va helper
+  remoteproc: Add TEE support
+  remoteproc: core: Refactor resource table cleanup into
+    rproc_release_fw
+  remoteproc: Introduce release_fw optional operation
+  dt-bindings: remoteproc: Add compatibility for TEE support
+  remoteproc: stm32: Create sub-functions to request shutdown and
+    release
+  remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
 
------BEGIN PGP SIGNATURE-----
+ .../bindings/remoteproc/st,stm32-rproc.yaml   |  58 +-
+ drivers/remoteproc/Kconfig                    |  10 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/remoteproc_core.c          |  72 ++-
+ drivers/remoteproc/remoteproc_tee.c           | 510 ++++++++++++++++++
+ drivers/remoteproc/stm32_rproc.c              | 139 +++--
+ include/linux/remoteproc.h                    |   8 +
+ include/linux/remoteproc_tee.h                | 105 ++++
+ 8 files changed, 848 insertions(+), 55 deletions(-)
+ create mode 100644 drivers/remoteproc/remoteproc_tee.c
+ create mode 100644 include/linux/remoteproc_tee.h
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZyb9MAAKCRD2uYlJVVFO
-o+qSAP9IT/sQsL5VMH7lYSqm/08CIwNCqkaCZsEqkiGZSvYctgD/QEMbrX1r1uTw
-3VWE4hMg+LvMX0mcRbWKCo0S8Acl4wA=
-=CyG2
------END PGP SIGNATURE-----
 
---prVtwJ4O92547TcU--
+base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
+-- 
+2.25.1
+
 
