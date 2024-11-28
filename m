@@ -1,240 +1,224 @@
-Return-Path: <linux-remoteproc+bounces-2664-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2673-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E839A9DB2AC
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 28 Nov 2024 06:59:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA93E9DB43F
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 28 Nov 2024 09:51:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D903B21FE3
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 28 Nov 2024 05:59:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A793281EDD
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 28 Nov 2024 08:51:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7139E14265F;
-	Thu, 28 Nov 2024 05:59:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D161534FB;
+	Thu, 28 Nov 2024 08:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ANNJ3Fkt"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Cq2gG0ud"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9A914036E;
-	Thu, 28 Nov 2024 05:59:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C14D1514DC;
+	Thu, 28 Nov 2024 08:51:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732773575; cv=none; b=HWZTlXdZnMoqpt7+Psd8AyEVZNLL7zRlBB1JivusdcqX03QoBBzUnofwo0qnbAl7Mlsv8fRQaxN8Y5D0SJ9Ux0gU0a9tldj159TpeqrDWoKlrzuyelPRyfisSQro3P02cvLhKyTr0WE+s27Lga86E5wnfkLMFbmuooVEjEmHrrA=
+	t=1732783870; cv=none; b=CCuq9miJlZyrM7apWX6ksFZ1c/le9paz87oJ7idq6+iKicx5vCn8BpVcVouzNGAP667Uwa14ZbKON67XTlyM7CZAe5A3yKN2NT1a9rR5L5PiYcXafMZ30uvVqbrOEBP1eJz/s55esU7CXevO6K7gghUqdspg/ciGQbG06/wxLag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732773575; c=relaxed/simple;
-	bh=c0KVSQsmu1rPPpFE3S5HnK03A6rk+5gg33/ro18oufE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qzmDFfLS8nLJuuC6IwfL34c3GvOn6068RUE4VlPVoEa1ChyYfIweyfy1Jfl0my/n02jYzWBEPJ0U3gRCeGuyC+82ayq8I+eDclvpA3trA+97TY6dfFQ77lZWV93yeHkwbTpcqQn+Mll21sohbX5VMW9ud2bzJZvWDGZvMPaVaek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ANNJ3Fkt; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732773573; x=1764309573;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c0KVSQsmu1rPPpFE3S5HnK03A6rk+5gg33/ro18oufE=;
-  b=ANNJ3Fktf0C79okrhDW4lYngFcx3IfVpobfLIuwgshqbK+tMeefOxhNC
-   1KFT/OtKfenmQLpZidOpTvtQzzFBDzo9TUR8KWlbi0z9ACa46RZiU6i3x
-   ICt2QIFBvuBpKL14zC2kMDH7pscEmGP+fY80y2uYBUBT7gR5ci7BKPJLQ
-   J0zF2Lr9KZ/CtlxqqOInEXrhADEfQPVHgeD47EnZfZhkFeGZMgUoOAtxa
-   QLqdvhzJ8LWR+teYEEl6ox5mF392w0KLUxBKh3GWB/M16RfOv6/nCqYfv
-   eSGJYZ8VA6o5vu/08O1w3ISI9BBnvhzP36zCeUsJI6bgqUkKJ5ryxUjm3
-   g==;
-X-CSE-ConnectionGUID: b9k1rEShTyuxudCVVYjq+w==
-X-CSE-MsgGUID: 882UXU0DQCed5jZlmGf9sg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11269"; a="43662852"
-X-IronPort-AV: E=Sophos;i="6.12,191,1728975600"; 
-   d="scan'208";a="43662852"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2024 21:59:32 -0800
-X-CSE-ConnectionGUID: kPW4/6JXQPuGryDD7XfTRQ==
-X-CSE-MsgGUID: lmzrxaPdSyinw+0AgZvGbg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,191,1728975600"; 
-   d="scan'208";a="91751016"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 27 Nov 2024 21:59:27 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tGXYi-00097f-2U;
-	Thu, 28 Nov 2024 05:59:24 +0000
-Date: Thu, 28 Nov 2024 13:58:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-	linux-remoteproc@vger.kernel.org, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-amlogic@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v14 4/8] remoteproc: Rename load() operation to
- load_segments() in rproc_ops struct
-Message-ID: <202411281332.Ra70nJAW-lkp@intel.com>
-References: <20241126091042.918144-5-arnaud.pouliquen@foss.st.com>
+	s=arc-20240116; t=1732783870; c=relaxed/simple;
+	bh=I6cGktlifvU5SqyHCpxWRIIkrk3UI6gKoK3RsROdavw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MTNeumiHYoQv36irxKdMOikjxeT+3eIhlTizpFPdkiET1CkPMCXV6tQUD4xQvI4NhQNkIKN2UOnLuJSr2htAAT5JY6JHoJaQV28J3Y51P5GP6ppnsWA8AHjpqZFMwUR9w1jQTjRES7cjnOlEcBV8xQrivaN0UjHw8KW7m79z6B8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Cq2gG0ud; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AS20mMo014838;
+	Thu, 28 Nov 2024 09:50:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=EYr4h/c0WQP59LjcKOXodU
+	NANQzD9BhOLn9fwkTUXdw=; b=Cq2gG0udCMmyFRXkl+cmmchbQjWFadgBjjPbAx
+	1W4jzoSRgq8pSxF8He9LOfuz6QwwHzsIA8Nedyu/mlRGsWqaUlRX6AcReY7Frsdq
+	Tyv3etwZEnNe0NahQ+dzspPTlP69X1VnvE2Mnauy6z8iI9J+hXCk/sZ+RTy3VSlK
+	QzK9S4YT7f7TdGzXrCu5jeeIgABSC0KC8s4lJVPLTNPK46HOwcePPac/dZrlN8k+
+	jG3zodNPqFljM56OPtXmSXeWPNXfy2tANBrjb9FAKOLKKbQr3zblUJEZcSeYovOl
+	fps5s05Cx5JM08pUjRK9y30alkODhzGiZBvqD2r6skaM74aA==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 436719b4kq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 28 Nov 2024 09:50:30 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 249CC4002D;
+	Thu, 28 Nov 2024 09:48:36 +0100 (CET)
+Received: from Webmail-eu.st.com (eqndag1node6.st.com [10.75.129.135])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 82CDD266A56;
+	Thu, 28 Nov 2024 09:42:48 +0100 (CET)
+Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE6.st.com
+ (10.75.129.135) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Thu, 28 Nov
+ 2024 09:42:48 +0100
+Received: from localhost (10.48.86.121) by SAFDAG1NODE1.st.com (10.75.90.17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Thu, 28 Nov
+ 2024 09:42:47 +0100
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier
+	<mathieu.poirier@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Maxime
+ Coquelin" <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue
+	<alexandre.torgue@foss.st.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer
+	<s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Neil Armstrong
+	<neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        "Jerome
+ Brunet" <jbrunet@baylibre.com>,
+        Martin Blumenstingl
+	<martin.blumenstingl@googlemail.com>,
+        Matthias Brugger
+	<matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>,
+        Patrice Chotard
+	<patrice.chotard@foss.st.com>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+CC: <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <imx@lists.linux.dev>, <linux-amlogic@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>
+Subject: [PATCH v15 0/8] Introduction of a remoteproc tee to load signed firmware
+Date: Thu, 28 Nov 2024 09:42:07 +0100
+Message-ID: <20241128084219.2159197-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241126091042.918144-5-arnaud.pouliquen@foss.st.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SAFCAS1NODE1.st.com (10.75.90.11) To SAFDAG1NODE1.st.com
+ (10.75.90.17)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-Hi Arnaud,
+Main updates from version V14[1]:
+Fix Rename missing load() to load_segments() in pru_rproc.c.
 
-kernel test robot noticed the following build errors:
+Main updates from version V13[2]:
+- Introduce new rproc_ops operation: load_fw() and release_fw(),
+- Rename load() operation to load_segments() in rproc_ops structure and
+  drivers.
 
-[auto build test ERROR on adc218676eef25575469234709c2d87185ca223a]
+More details are available in each patch commit message.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Arnaud-Pouliquen/remoteproc-core-Introduce-rproc_pa_to_va-helper/20241128-094434
-base:   adc218676eef25575469234709c2d87185ca223a
-patch link:    https://lore.kernel.org/r/20241126091042.918144-5-arnaud.pouliquen%40foss.st.com
-patch subject: [PATCH v14 4/8] remoteproc: Rename load() operation to load_segments() in rproc_ops struct
-config: i386-buildonly-randconfig-002-20241128 (https://download.01.org/0day-ci/archive/20241128/202411281332.Ra70nJAW-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241128/202411281332.Ra70nJAW-lkp@intel.com/reproduce)
+[1] https://lore.kernel.org/linux-arm-kernel/20241126091042.918144-1-arnaud.pouliquen@foss.st.com/T/
+[2] https://lore.kernel.org/linux-arm-kernel/20241104133515.256497-1-arnaud.pouliquen@foss.st.com/T/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411281332.Ra70nJAW-lkp@intel.com/
+Tested-on: commit adc218676eef ("Linux 6.12")
+Description of the feature:
+--------------------------
+This series proposes the implementation of a remoteproc tee driver to
+communicate with a TEE trusted application responsible for authenticating
+and loading the remoteproc firmware image in an Arm secure context.
 
-All errors (new ones prefixed by >>):
+1) Principle:
 
-   In file included from drivers/remoteproc/pru_rproc.c:24:
-   In file included from include/linux/remoteproc.h:40:
-   In file included from include/linux/virtio.h:7:
-   In file included from include/linux/scatterlist.h:8:
-   In file included from include/linux/mm.h:2213:
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
->> drivers/remoteproc/pru_rproc.c:1018:14: error: no member named 'load' in 'struct rproc_ops'
-    1018 |         rproc->ops->load = pru_rproc_load_elf_segments;
-         |         ~~~~~~~~~~  ^
-   1 warning and 1 error generated.
+The remoteproc tee driver provides services to communicate with the OP-TEE
+trusted application running on the Trusted Execution Context (TEE).
+The trusted application in TEE manages the remote processor lifecycle:
+
+- authenticating and loading firmware images,
+- isolating and securing the remote processor memories,
+- supporting multi-firmware (e.g., TF-M + Zephyr on a Cortex-M33),
+- managing the start and stop of the firmware by the TEE.
+
+2) Format of the signed image:
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/src/remoteproc_core.c#L18-L57
+
+3) OP-TEE trusted application API:
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/include/ta_remoteproc.h
+
+4) OP-TEE signature script
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/scripts/sign_rproc_fw.py
+
+Example of usage:
+sign_rproc_fw.py --in <fw1.elf> --in <fw2.elf> --out <signed_fw.sign> --key ${OP-TEE_PATH}/keys/default.pem
 
 
-vim +1018 drivers/remoteproc/pru_rproc.c
+5) Impact on User space Application
 
-d4ce2de7e4af8b Suman Anna      2020-12-08   987  
-d4ce2de7e4af8b Suman Anna      2020-12-08   988  static int pru_rproc_probe(struct platform_device *pdev)
-d4ce2de7e4af8b Suman Anna      2020-12-08   989  {
-d4ce2de7e4af8b Suman Anna      2020-12-08   990  	struct device *dev = &pdev->dev;
-d4ce2de7e4af8b Suman Anna      2020-12-08   991  	struct device_node *np = dev->of_node;
-d4ce2de7e4af8b Suman Anna      2020-12-08   992  	struct platform_device *ppdev = to_platform_device(dev->parent);
-d4ce2de7e4af8b Suman Anna      2020-12-08   993  	struct pru_rproc *pru;
-d4ce2de7e4af8b Suman Anna      2020-12-08   994  	const char *fw_name;
-d4ce2de7e4af8b Suman Anna      2020-12-08   995  	struct rproc *rproc = NULL;
-d4ce2de7e4af8b Suman Anna      2020-12-08   996  	struct resource *res;
-d4ce2de7e4af8b Suman Anna      2020-12-08   997  	int i, ret;
-1d39f4d199214f Suman Anna      2020-12-08   998  	const struct pru_private_data *data;
-d4ce2de7e4af8b Suman Anna      2020-12-08   999  	const char *mem_names[PRU_IOMEM_MAX] = { "iram", "control", "debug" };
-d4ce2de7e4af8b Suman Anna      2020-12-08  1000  
-1d39f4d199214f Suman Anna      2020-12-08  1001  	data = of_device_get_match_data(&pdev->dev);
-1d39f4d199214f Suman Anna      2020-12-08  1002  	if (!data)
-1d39f4d199214f Suman Anna      2020-12-08  1003  		return -ENODEV;
-1d39f4d199214f Suman Anna      2020-12-08  1004  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1005  	ret = of_property_read_string(np, "firmware-name", &fw_name);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1006  	if (ret) {
-d4ce2de7e4af8b Suman Anna      2020-12-08  1007  		dev_err(dev, "unable to retrieve firmware-name %d\n", ret);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1008  		return ret;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1009  	}
-d4ce2de7e4af8b Suman Anna      2020-12-08  1010  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1011  	rproc = devm_rproc_alloc(dev, pdev->name, &pru_rproc_ops, fw_name,
-d4ce2de7e4af8b Suman Anna      2020-12-08  1012  				 sizeof(*pru));
-d4ce2de7e4af8b Suman Anna      2020-12-08  1013  	if (!rproc) {
-d4ce2de7e4af8b Suman Anna      2020-12-08  1014  		dev_err(dev, "rproc_alloc failed\n");
-d4ce2de7e4af8b Suman Anna      2020-12-08  1015  		return -ENOMEM;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1016  	}
-d4ce2de7e4af8b Suman Anna      2020-12-08  1017  	/* use a custom load function to deal with PRU-specific quirks */
-d4ce2de7e4af8b Suman Anna      2020-12-08 @1018  	rproc->ops->load = pru_rproc_load_elf_segments;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1019  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1020  	/* use a custom parse function to deal with PRU-specific resources */
-d4ce2de7e4af8b Suman Anna      2020-12-08  1021  	rproc->ops->parse_fw = pru_rproc_parse_fw;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1022  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1023  	/* error recovery is not supported for PRUs */
-d4ce2de7e4af8b Suman Anna      2020-12-08  1024  	rproc->recovery_disabled = true;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1025  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1026  	/*
-d4ce2de7e4af8b Suman Anna      2020-12-08  1027  	 * rproc_add will auto-boot the processor normally, but this is not
-d4ce2de7e4af8b Suman Anna      2020-12-08  1028  	 * desired with PRU client driven boot-flow methodology. A PRU
-d4ce2de7e4af8b Suman Anna      2020-12-08  1029  	 * application/client driver will boot the corresponding PRU
-d4ce2de7e4af8b Suman Anna      2020-12-08  1030  	 * remote-processor as part of its state machine either through the
-d4ce2de7e4af8b Suman Anna      2020-12-08  1031  	 * remoteproc sysfs interface or through the equivalent kernel API.
-d4ce2de7e4af8b Suman Anna      2020-12-08  1032  	 */
-d4ce2de7e4af8b Suman Anna      2020-12-08  1033  	rproc->auto_boot = false;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1034  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1035  	pru = rproc->priv;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1036  	pru->dev = dev;
-1d39f4d199214f Suman Anna      2020-12-08  1037  	pru->data = data;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1038  	pru->pruss = platform_get_drvdata(ppdev);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1039  	pru->rproc = rproc;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1040  	pru->fw_name = fw_name;
-919e8942548aa8 MD Danish Anwar 2023-01-06  1041  	pru->client_np = NULL;
-102853400321ba Roger Quadros   2023-01-06  1042  	spin_lock_init(&pru->rmw_lock);
-919e8942548aa8 MD Danish Anwar 2023-01-06  1043  	mutex_init(&pru->lock);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1044  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1045  	for (i = 0; i < ARRAY_SIZE(mem_names); i++) {
-d4ce2de7e4af8b Suman Anna      2020-12-08  1046  		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
-d4ce2de7e4af8b Suman Anna      2020-12-08  1047  						   mem_names[i]);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1048  		pru->mem_regions[i].va = devm_ioremap_resource(dev, res);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1049  		if (IS_ERR(pru->mem_regions[i].va)) {
-d4ce2de7e4af8b Suman Anna      2020-12-08  1050  			dev_err(dev, "failed to parse and map memory resource %d %s\n",
-d4ce2de7e4af8b Suman Anna      2020-12-08  1051  				i, mem_names[i]);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1052  			ret = PTR_ERR(pru->mem_regions[i].va);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1053  			return ret;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1054  		}
-d4ce2de7e4af8b Suman Anna      2020-12-08  1055  		pru->mem_regions[i].pa = res->start;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1056  		pru->mem_regions[i].size = resource_size(res);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1057  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1058  		dev_dbg(dev, "memory %8s: pa %pa size 0x%zx va %pK\n",
-d4ce2de7e4af8b Suman Anna      2020-12-08  1059  			mem_names[i], &pru->mem_regions[i].pa,
-d4ce2de7e4af8b Suman Anna      2020-12-08  1060  			pru->mem_regions[i].size, pru->mem_regions[i].va);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1061  	}
-d4ce2de7e4af8b Suman Anna      2020-12-08  1062  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1063  	ret = pru_rproc_set_id(pru);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1064  	if (ret < 0)
-d4ce2de7e4af8b Suman Anna      2020-12-08  1065  		return ret;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1066  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1067  	platform_set_drvdata(pdev, rproc);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1068  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1069  	ret = devm_rproc_add(dev, pru->rproc);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1070  	if (ret) {
-d4ce2de7e4af8b Suman Anna      2020-12-08  1071  		dev_err(dev, "rproc_add failed: %d\n", ret);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1072  		return ret;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1073  	}
-d4ce2de7e4af8b Suman Anna      2020-12-08  1074  
-20ad1de0f14fbd Suman Anna      2020-12-08  1075  	pru_rproc_create_debug_entries(rproc);
-20ad1de0f14fbd Suman Anna      2020-12-08  1076  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1077  	dev_dbg(dev, "PRU rproc node %pOF probed successfully\n", np);
-d4ce2de7e4af8b Suman Anna      2020-12-08  1078  
-d4ce2de7e4af8b Suman Anna      2020-12-08  1079  	return 0;
-d4ce2de7e4af8b Suman Anna      2020-12-08  1080  }
-d4ce2de7e4af8b Suman Anna      2020-12-08  1081  
+No sysfs impact. The user only needs to provide the signed firmware image
+instead of the ELF image.
 
+
+For more information about the implementation, a presentation is available here
+(note that the format of the signed image has evolved between the presentation
+and the integration in OP-TEE).
+
+https://resources.linaro.org/en/resource/6c5bGvZwUAjX56fvxthxds
+
+Arnaud Pouliquen (8):
+  remoteproc: core: Introduce rproc_pa_to_va helper
+  remoteproc: Add TEE support
+  remoteproc: Introduce load_fw and release_fw optional operation
+  remoteproc: Rename load() operation to load_segments() in rproc_ops
+    struct
+  remoteproc: Make load_segments and load_fw ops exclusive and optional
+  dt-bindings: remoteproc: Add compatibility for TEE support
+  remoteproc: stm32: Create sub-functions to request shutdown and
+    release
+  remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
+
+ .../bindings/remoteproc/st,stm32-rproc.yaml   |  58 +-
+ drivers/remoteproc/Kconfig                    |  10 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/imx_dsp_rproc.c            |   2 +-
+ drivers/remoteproc/imx_rproc.c                |   2 +-
+ drivers/remoteproc/meson_mx_ao_arc.c          |   2 +-
+ drivers/remoteproc/mtk_scp.c                  |   2 +-
+ drivers/remoteproc/pru_rproc.c                |   2 +-
+ drivers/remoteproc/qcom_q6v5_adsp.c           |   2 +-
+ drivers/remoteproc/qcom_q6v5_mss.c            |   2 +-
+ drivers/remoteproc/qcom_q6v5_pas.c            |   4 +-
+ drivers/remoteproc/qcom_q6v5_wcss.c           |   4 +-
+ drivers/remoteproc/qcom_wcnss.c               |   2 +-
+ drivers/remoteproc/rcar_rproc.c               |   2 +-
+ drivers/remoteproc/remoteproc_core.c          |  68 ++-
+ drivers/remoteproc/remoteproc_internal.h      |  20 +-
+ drivers/remoteproc/remoteproc_tee.c           | 508 ++++++++++++++++++
+ drivers/remoteproc/st_remoteproc.c            |   2 +-
+ drivers/remoteproc/st_slim_rproc.c            |   2 +-
+ drivers/remoteproc/stm32_rproc.c              | 141 +++--
+ drivers/remoteproc/xlnx_r5_remoteproc.c       |   2 +-
+ include/linux/remoteproc.h                    |  20 +-
+ include/linux/remoteproc_tee.h                | 105 ++++
+ 23 files changed, 894 insertions(+), 69 deletions(-)
+ create mode 100644 drivers/remoteproc/remoteproc_tee.c
+ create mode 100644 include/linux/remoteproc_tee.h
+
+
+base-commit: adc218676eef25575469234709c2d87185ca223a
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
 
