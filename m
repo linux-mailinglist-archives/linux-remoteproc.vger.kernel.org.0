@@ -1,83 +1,94 @@
-Return-Path: <linux-remoteproc+bounces-2670-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2674-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47A459DB430
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 28 Nov 2024 09:50:00 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3A1D166E9C
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 28 Nov 2024 08:49:47 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACBC153BFC;
-	Thu, 28 Nov 2024 08:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="CkrdQkYh"
-X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC7949DEFAD
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 30 Nov 2024 10:48:13 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B51157E6B;
-	Thu, 28 Nov 2024 08:49:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C8492815B7
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 30 Nov 2024 09:48:12 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F03136E21;
+	Sat, 30 Nov 2024 09:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bqEg5BQq"
+X-Original-To: linux-remoteproc@vger.kernel.org
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBCA14B962
+	for <linux-remoteproc@vger.kernel.org>; Sat, 30 Nov 2024 09:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732783760; cv=none; b=bHrE8t4KR/RG6GXIydOioU1e0Jnvk4Yo9R8sW6VgHi82q0IcpcDiNT5ADkKF2/RTX0IIypUDvhSefnL83FiTHKN1id7+ww08KrAOZyoGV3F6kNvMwdHvAKr6LNohMzhpXKBZZ4NlSLFEcqtQlBQ6uJECg7rS3fgvr0LlzxfQPYM=
+	t=1732960086; cv=none; b=MJgf7aU5atgcWuGZ9wHKYFNTqvglkjQgFeULXbakS3/l9GvhwdcvQlhl9Q4n+Ad9iz5rFP/zgvxMr/F8RX1pbwS2oET/pRtQZ6RKxm6d2ZcT7Hf06S/xeykvO/Xa9LM3f0ueYUgETSJfW0dJjzpKBs7kry6wDnluUapnXdORIbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732783760; c=relaxed/simple;
-	bh=zIh7+rupdKYdEllxkp3HBAmDO9jJKqmj6fRSxVKyEGY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TfJktT/6pJvvOzv5OsElA/VHOF1mcTGWDf5ChjyQLT+5C4zBmWo6WNsqLr91BiB3k0ysgeNVyPlgsDI2biFTLk+C+pmarZ5UVcPdNsDpdnScixlBPiG8GeFl/sonWg6HJ29B0lYEXLBiBFkKyknXRLZ9dLMeDSzhw3bxYD8taS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=CkrdQkYh; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AS20ga6032593;
-	Thu, 28 Nov 2024 09:48:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	SAfvJ3TEs0/PCnOeD3h2G0c1LftVV4b4PpZbNQaqv2s=; b=CkrdQkYhhZKw0WRi
-	ImF9n7YPOPpwdh0B/YQ7kzioWdqjXyf7WBhIpjL8zE2EleJV9LnZo8AXoMwVIcGK
-	rNIS/HDQ9iwNSKXNuXUsO+Rl//ujxyr0LEOauRyIVlxdFIiV8qrnPQDplqWKgB2T
-	nweCF/o4u9v4Pz4kA9YdGWzjrS+FE/b1XC0JKdk52kFTZRA1bQiPM6JLGZFBa6vp
-	Y9XN2nIbAn9WzjmPDRs6PI8GCGdPJuu6udqWzkvaZ7b82nLhkRuBNHXLfhncSzPR
-	tqZ8s8FIMrW+Q49P66HLVF2+XWE6IUu34a7Lz8dOVIrzOYwb65JMIMW1jcvl+Stt
-	Agte+A==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 436713k662-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 28 Nov 2024 09:48:59 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id E555F40069;
-	Thu, 28 Nov 2024 09:47:33 +0100 (CET)
-Received: from Webmail-eu.st.com (eqndag1node4.st.com [10.75.129.133])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C7277269E10;
-	Thu, 28 Nov 2024 09:43:09 +0100 (CET)
-Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE4.st.com
- (10.75.129.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Thu, 28 Nov
- 2024 09:43:09 +0100
-Received: from localhost (10.48.86.121) by SAFDAG1NODE1.st.com (10.75.90.17)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Thu, 28 Nov
- 2024 09:43:09 +0100
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        <linux-remoteproc@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v15 8/8] remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
-Date: Thu, 28 Nov 2024 09:42:15 +0100
-Message-ID: <20241128084219.2159197-9-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241128084219.2159197-1-arnaud.pouliquen@foss.st.com>
-References: <20241128084219.2159197-1-arnaud.pouliquen@foss.st.com>
+	s=arc-20240116; t=1732960086; c=relaxed/simple;
+	bh=GlCVO+kLbVQTddt0lqq8TR/JxbNulJ9bzIayK53xUc0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BZxq9q2ggbpCoRSAYiM6Lw3ZCrvRuvDGjkQ8tVZ2+fDbIhHgJF+ySzIbyCatZLihygjeJXmQupLxjNq9ecV25Xk1JYe4HoI0klt0kHfxPYcfMcxkIee/qCU2iCcCrywsoTiu7iW+O14Kaoxoa0FfzwrBl1OF0QAWAWT7uGR/NA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bqEg5BQq; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-434975a1fb1so2239695e9.0
+        for <linux-remoteproc@vger.kernel.org>; Sat, 30 Nov 2024 01:48:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1732960082; x=1733564882; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QMZ3vQAZGlKurLBaRPYkpSZkQS2FApMbIvFv0fZWybg=;
+        b=bqEg5BQqu4Y4o0fmHWj921p/yBrisgpZrduOIG6fKdjpVdu9MCEi4d1ElcEbizf8yc
+         XyeOG557hW6TnLjgmppPS0sIHF3fBq2GSvjR/DAXyqeo8DCcljOBBhxM0k8sMAFDxY0g
+         2n5um9Jk4E89OLyVTha0FhkuU6RDPgNOQnysnrst+2UUqg4lNrEqejyvDauvZryr2pk2
+         z75N4+U25MUbjgkuPsCgjWKISV5myC4t5LqNV73MFBaBjvUOreV4hVCKhOtVI76kwr8Z
+         WrODD6XTVIucsPV9CHVnJTUMLLUNvs7yx6nDMujQWPYd/fVXU3Vwzz4/9J7A+Im/dxBC
+         Xx4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732960082; x=1733564882;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QMZ3vQAZGlKurLBaRPYkpSZkQS2FApMbIvFv0fZWybg=;
+        b=HeKpJqe+M17B0hnyktaTMFIeZWPkot09FHXnmdbyjX9uZVbJI63IPT+x8SH0oFViae
+         ekxar/4jxdJk0dSk1KVlx3OqBczHyqWOzL4rd4oVTSP6pMoyU1fwxJ7SJnqI8tlhXaTz
+         DYSU1pP+i3mshpqLXzChed7nP0QjmFeA+N0XHc/WwoPDJdLIbaJdt3zOWoxP/AjfYV6K
+         s6ZR9uz8qvo2UdYBTgRe6hAv3VedwfAh6DaVIV9czJJpiT1LaC/r1WX0VgKtjKx0VQxI
+         smW2fcp4vfQT91z5VWtCEyRf7nOJ/PJo35q1Guj1MfZD2EUSJiLh8G7muOq5g5B6/1dW
+         YNGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXKcFhbEPbDSwI/Si8jYR+/7eHQhksVjva/5mfICC5+9h4yEREJol+0XAh6EIWbE0twZ3gev4659AZdAIOW3qcS@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp/PDPMHUacPLiV6XiZE8EBiIjjtAHPohLD6SOc2TsepsNYGN5
+	K70WOWtmQ9vLnoLzjMmKwll753QOLx5HYMRaoYkNCcLS0Gt92ry3lT9tAgihQjgzqJFXtLzE2lj
+	8Eu8=
+X-Gm-Gg: ASbGncvYzYJ+B9mhu4d0Uuoi3WyvMIIWtvYXsqJzCTNSR8QvT4Zh5jCpDVK74xDffq9
+	8DOObOSusZv9pWC5Dc4yBpiKala9wNRvhLR5Gk2MR80qNH2A86oIFt67wnwnQVTQ7iHfKgP8rJG
+	0lhkD0VAy9ApcBskm4LkuypgeEBj58a7FCrhUnOV+ExDPUhnd6tVaOY6KHYx4VoPJx8LMpSu6hJ
+	uCCK/MVpzMyCtok7WHmBqw0GO1CFMPZgYQcvdgNq7CK4NoGiBEP3KgpmAHFi04=
+X-Google-Smtp-Source: AGHT+IGAD//hnR/MMYCCnkHt3edWtS0NmQaVqN57BZvJFzV3wr/U7GG9jNuDIxTQAxhDIXQ/JnVhbA==
+X-Received: by 2002:a05:600c:198d:b0:434:a1e4:d32d with SMTP id 5b1f17b1804b1-434a9d4f18cmr53980355e9.0.1732960082560;
+        Sat, 30 Nov 2024 01:48:02 -0800 (PST)
+Received: from krzk-bin.. ([178.197.218.23])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa74fec9sm110637725e9.6.2024.11.30.01.48.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 30 Nov 2024 01:48:00 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mmc@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-remoteproc@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Bhupesh Sharma <bhupesh.linux@gmail.com>
+Subject: [PATCH] dt-bindings: Drop Bhupesh Sharma from maintainers
+Date: Sat, 30 Nov 2024 10:47:58 +0100
+Message-ID: <20241130094758.15553-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -85,141 +96,77 @@ List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SAFCAS1NODE1.st.com (10.75.90.11) To SAFDAG1NODE1.st.com
- (10.75.90.17)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
 
-The new TEE remoteproc driver is used to manage remote firmware in a
-secure, trusted context. The 'st,stm32mp1-m4-tee' compatibility is
-introduced to delegate the loading of the firmware to the trusted
-execution context. In such cases, the firmware should be signed and
-adhere to the image format defined by the TEE.
+For more than a year all emails to Bhupesh Sharma's Linaro emails bounce
+and there were no updates to mailmap.  No reviews from Bhupesh, either,
+so change the maintainer to Bjorn and Konrad (Qualcomm SoC maintainers).
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Cc: Bhupesh Sharma <bhupesh.linux@gmail.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-updates vs version V13:
-- register load_fw() ops instead of load() to call rproc_tee_load_fw()
+ Documentation/devicetree/bindings/crypto/qcom-qce.yaml         | 3 ++-
+ Documentation/devicetree/bindings/mmc/sdhci-msm.yaml           | 3 ++-
+ Documentation/devicetree/bindings/net/qcom,ethqos.yaml         | 3 ++-
+ .../devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml        | 3 ++-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
- drivers/remoteproc/stm32_rproc.c | 57 ++++++++++++++++++++++++++++++--
- 1 file changed, 54 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index 1586978c5757..c155822324d8 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -18,6 +18,7 @@
- #include <linux/pm_wakeirq.h>
- #include <linux/regmap.h>
- #include <linux/remoteproc.h>
-+#include <linux/remoteproc_tee.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/workqueue.h>
-@@ -255,6 +256,19 @@ static int stm32_rproc_release(struct rproc *rproc)
- 	return 0;
- }
+diff --git a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+index c09be97434ac..62310add2e44 100644
+--- a/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
++++ b/Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+@@ -7,7 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm crypto engine driver
  
-+static int stm32_rproc_tee_stop(struct rproc *rproc)
-+{
-+	int err;
-+
-+	stm32_rproc_request_shutdown(rproc);
-+
-+	err = rproc_tee_stop(rproc);
-+	if (err)
-+		return err;
-+
-+	return stm32_rproc_release(rproc);
-+}
-+
- static int stm32_rproc_prepare(struct rproc *rproc)
- {
- 	struct device *dev = rproc->dev.parent;
-@@ -691,8 +705,20 @@ static const struct rproc_ops st_rproc_ops = {
- 	.get_boot_addr	= rproc_elf_get_boot_addr,
- };
+ maintainers:
+-  - Bhupesh Sharma <bhupesh.sharma@linaro.org>
++  - Bjorn Andersson <andersson@kernel.org>
++  - Konrad Dybcio <konradybcio@kernel.org>
  
-+static const struct rproc_ops st_rproc_tee_ops = {
-+	.prepare	= stm32_rproc_prepare,
-+	.start		= rproc_tee_start,
-+	.stop		= stm32_rproc_tee_stop,
-+	.kick		= stm32_rproc_kick,
-+	.load_fw	= rproc_tee_load_fw,
-+	.parse_fw	= rproc_tee_parse_fw,
-+	.find_loaded_rsc_table = rproc_tee_find_loaded_rsc_table,
-+	.release_fw	= rproc_tee_release_fw,
-+};
-+
- static const struct of_device_id stm32_rproc_match[] = {
- 	{ .compatible = "st,stm32mp1-m4" },
-+	{ .compatible = "st,stm32mp1-m4-tee" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, stm32_rproc_match);
-@@ -853,15 +879,36 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	struct device_node *np = dev->of_node;
- 	struct rproc *rproc;
- 	unsigned int state;
-+	u32 proc_id;
- 	int ret;
+ description:
+   This document defines the binding for the QCE crypto
+diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+index 8b393e26e025..eed9063e9bb3 100644
+--- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
++++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+@@ -7,7 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm SDHCI controller (sdhci-msm)
  
- 	ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
- 	if (ret)
- 		return ret;
+ maintainers:
+-  - Bhupesh Sharma <bhupesh.sharma@linaro.org>
++  - Bjorn Andersson <andersson@kernel.org>
++  - Konrad Dybcio <konradybcio@kernel.org>
  
--	rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
--	if (!rproc)
--		return -ENOMEM;
-+	if (of_device_is_compatible(np, "st,stm32mp1-m4-tee")) {
-+		/*
-+		 * Delegate the firmware management to the secure context.
-+		 * The firmware loaded has to be signed.
-+		 */
-+		ret = of_property_read_u32(np, "st,proc-id", &proc_id);
-+		if (ret) {
-+			dev_err(dev, "failed to read st,rproc-id property\n");
-+			return ret;
-+		}
-+
-+		rproc = devm_rproc_alloc(dev, np->name, &st_rproc_tee_ops, NULL, sizeof(*ddata));
-+		if (!rproc)
-+			return -ENOMEM;
-+
-+		ret = rproc_tee_register(dev, rproc, proc_id);
-+		if (ret)
-+			return dev_err_probe(dev, ret,  "signed firmware not supported by TEE\n");
-+	} else {
-+		rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
-+		if (!rproc)
-+			return -ENOMEM;
-+	}
+ description:
+   Secure Digital Host Controller Interface (SDHCI) present on
+diff --git a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+index 0bcd593a7bd0..f117471fb06f 100644
+--- a/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
++++ b/Documentation/devicetree/bindings/net/qcom,ethqos.yaml
+@@ -7,7 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm Ethernet ETHQOS device
  
- 	ddata = rproc->priv;
+ maintainers:
+-  - Bhupesh Sharma <bhupesh.sharma@linaro.org>
++  - Bjorn Andersson <andersson@kernel.org>
++  - Konrad Dybcio <konradybcio@kernel.org>
  
-@@ -913,6 +960,8 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 		dev_pm_clear_wake_irq(dev);
- 		device_init_wakeup(dev, false);
- 	}
-+	rproc_tee_unregister(rproc);
-+
- 	return ret;
- }
+ description:
+   dwmmac based Qualcomm ethernet devices which support Gigabit
+diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml
+index 758adb06c8dd..059cb87b4d6c 100644
+--- a/Documentation/devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml
++++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm6115-pas.yaml
+@@ -7,7 +7,8 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: Qualcomm SM6115 Peripheral Authentication Service
  
-@@ -933,6 +982,8 @@ static void stm32_rproc_remove(struct platform_device *pdev)
- 		dev_pm_clear_wake_irq(dev);
- 		device_init_wakeup(dev, false);
- 	}
-+
-+	rproc_tee_unregister(rproc);
- }
+ maintainers:
+-  - Bhupesh Sharma <bhupesh.sharma@linaro.org>
++  - Bjorn Andersson <andersson@kernel.org>
++  - Konrad Dybcio <konradybcio@kernel.org>
  
- static int stm32_rproc_suspend(struct device *dev)
+ description:
+   Qualcomm SM6115 SoC Peripheral Authentication Service loads and boots
 -- 
-2.25.1
+2.43.0
 
 
