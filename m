@@ -1,52 +1,52 @@
-Return-Path: <linux-remoteproc+bounces-2708-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2711-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEE659E1D9A
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Dec 2024 14:32:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E9529E2063
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Dec 2024 15:57:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94524B2AE85
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Dec 2024 13:03:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F3892895CE
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Dec 2024 14:57:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF2B1EC018;
-	Tue,  3 Dec 2024 13:03:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB031F758E;
+	Tue,  3 Dec 2024 14:57:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="Kc4yhuXu"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="WJoHxyHP"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mr85p00im-ztdg06021801.me.com (mr85p00im-ztdg06021801.me.com [17.58.23.195])
+Received: from pv50p00im-zteg10011501.me.com (pv50p00im-zteg10011501.me.com [17.58.6.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D521EE002
-	for <linux-remoteproc@vger.kernel.org>; Tue,  3 Dec 2024 13:03:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C4591DE2A1
+	for <linux-remoteproc@vger.kernel.org>; Tue,  3 Dec 2024 14:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733231023; cv=none; b=NjFDTuWM7VGf+F6t+OydTgAZZxWr3rmG5mGblRXpNWG4MzQmyJ5dyq3bjUp51JcOIUoKCha9mpU+oy2OTNqdWbFtTHeLBwnYTdONjehumSpe359Q7oLJvbOsqAjSdwsVm5vKaaOiCg+zG7++UYq+dNw7t4M1FdzZxw7FLRH8cYs=
+	t=1733237856; cv=none; b=aYOIJwKu1pi7J+P4RpyhaWX++FmdavakEdN7v5Q9TSB66WBf15581LiAopvEp4XDp1mMcWy2kHQXZb4T70oOLnRIwKk18+7qQlGgkVxtm/P8ULOFBgTeLyTvkI+NegoNlojRb8CkeQkCDRF0Mnh+8Q4cVQuyr7JtFCiihNlD1es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733231023; c=relaxed/simple;
-	bh=PMZl124fAJi/9a12repkCEPo/NdFlnbWHM0+eGs6QGw=;
+	s=arc-20240116; t=1733237856; c=relaxed/simple;
+	bh=I1QE9YqXRd/95EuZ6shU92lVYpx6jSwp7U8UdDQ+eqY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lul9/hltVfO8Te0SCeeKfs+8EmJrRxmx4eI1zsiUwW0kVVN4TDhXAVOpcDt+WLa9sF1sab5jl1oblGCN+ddFxUV0M3EoK/XtcKODkdBflIZyehY7k+TSoPIwaoqIDbPuDlLQ1NAieAwWH6tkbFm8epKndtPRqzuJA4rRoc6y+hU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=Kc4yhuXu; arc=none smtp.client-ip=17.58.23.195
+	 In-Reply-To:Content-Type; b=e69lvjFmFHx6JLzDLSBKeyBI7aQ4RGP4bvXRjYBxUKB88iKPMTpVfjNaHbF8q3Co/QbgsQ6gyzdp/ekwHHKyKMWTdQZDSuE8HDK7LD+uf1lJcHxJ6GVuAPEjmWfL3nFgfacL+q3MBhIZiKzjG/o5t1S9w+yc5Tq9fNuW/h4pP2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=WJoHxyHP; arc=none smtp.client-ip=17.58.6.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1733231020;
-	bh=QEJ75x+TqYUJVxmVF6uQZZWFOEl0WJRfUhXN2h5KpKM=;
+	s=1a1hai; t=1733237853;
+	bh=zPP2M6RHoQlxRDoHnjCsF/MyKgy2Hv/oTH6yXikXqgI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
 	 x-icloud-hme;
-	b=Kc4yhuXugc/D/qtZZ41v8wAnuwEzwggEWUway63IXkClqixwU1cfn/v3YVm8Qsiaw
-	 28NLlORRwJjFZX7JY4DZlIgrQ1s8zKvPJAQ+RXHBAEkcNRuUPk0OyxBiAs9kB0GBL/
-	 4jgwTolEa8TiqyUyeuv6tr/7DG898UMLRPOw8P2qzUVkHb/i6BK0gmuVjOCVuRaOL4
-	 yVOUtS8ijY+iNGs/3oFthLPmtWg3RPz3zQCNIexvybyNTkT8kJ+0hPmRIWLu7xxlpo
-	 9HqUza+TM66+s3TNEHqlu5QAj7PkxbSr1VPZfaRzmcsea2BKweNx4LzKqRftuLVcUB
-	 Ma8BwRHqOq26Q==
-Received: from [192.168.1.26] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-	by mr85p00im-ztdg06021801.me.com (Postfix) with ESMTPSA id 67D49442839;
-	Tue,  3 Dec 2024 13:03:18 +0000 (UTC)
-Message-ID: <b9885785-d4d4-4c72-b425-3dc552651d7e@icloud.com>
-Date: Tue, 3 Dec 2024 21:02:59 +0800
+	b=WJoHxyHPQic0UPYroDs8nCEAWsZm40sH8RhZy74XvLp/u3uVoK8y0NcRam0ip/lrx
+	 bXSlxO0ATLyoBoLBgb1HPjJ6VzOkweGc3d49hUpXLFFHcJz2ky04rRviy7vj4V1Uv0
+	 UrP8xtrDy605sSzzXJfwV92hCnmVSa/In2c5FK+QwsvdkOzwtlVoKR8MfrPuM+OkJ3
+	 kTV9qWoS0uz7z4phORc7Uz1s0gw2Ayri2PFJ13eQLHgrebkECU60pYLHuubiEEJ1y+
+	 pdLr+ixZhVq84c1mKgl9tDNm6hKdk1MRV7Fp8S0cKzjfCmv+0IlvKjaoM5N1+JgTTH
+	 Pur3pBzgfGODA==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-zteg10011501.me.com (Postfix) with ESMTPSA id 367E14A0413;
+	Tue,  3 Dec 2024 14:56:59 +0000 (UTC)
+Message-ID: <f5ea7e17-5550-4658-8f4c-1c51827c7627@icloud.com>
+Date: Tue, 3 Dec 2024 22:56:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -56,8 +56,10 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 00/32] driver core: Constify API device_find_child()
  and adapt for various existing usages
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+ James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>,
  Chun-Kuang Hu <chunkuang.hu@kernel.org>,
  Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
@@ -83,7 +85,6 @@ Cc: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
  Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
  Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
  Mike Christie <michael.christie@oracle.com>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
  "Martin K. Petersen" <martin.petersen@oracle.com>,
  Nilesh Javali <njavali@marvell.com>,
  Manish Rangankar <mrangankar@marvell.com>,
@@ -111,60 +112,91 @@ References: <20241203-const_dfc_done-v2-0-7436a98c497f@quicinc.com>
  <g32cigmktmj4egkq2tof27el2yss4liccfxgebkgqvkil32mlb@e3ta4ezv7y4m>
  <9d34bd6f-b120-428a-837b-5a5813e14618@icloud.com>
  <2024120320-manual-jockey-dfd1@gregkh>
+ <b9885785-d4d4-4c72-b425-3dc552651d7e@icloud.com>
+ <8eb7c0c54b280b8eb72f82032ede802c001ab087.camel@HansenPartnership.com>
+ <8fb887a0-3634-4e07-9f0d-d8d7c72ca802@t-8ch.de>
 Content-Language: en-US
 From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <2024120320-manual-jockey-dfd1@gregkh>
+In-Reply-To: <8fb887a0-3634-4e07-9f0d-d8d7c72ca802@t-8ch.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: CNFmwAOF9NCRr2KajfMjTjtFd_qlM54K
-X-Proofpoint-GUID: CNFmwAOF9NCRr2KajfMjTjtFd_qlM54K
+X-Proofpoint-GUID: JxnDC87bqdECTEQWZZVsnICFx4KSLLiI
+X-Proofpoint-ORIG-GUID: JxnDC87bqdECTEQWZZVsnICFx4KSLLiI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-03_02,2024-12-03_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- clxscore=1015 malwarescore=0 adultscore=0 phishscore=0 mlxscore=0
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2412030113
+ definitions=2024-12-03_04,2024-12-03_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 mlxlogscore=999
+ bulkscore=0 clxscore=1011 malwarescore=0 phishscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2412030127
 
-On 2024/12/3 20:41, Greg Kroah-Hartman wrote:
-> On Tue, Dec 03, 2024 at 08:23:45PM +0800, Zijun Hu wrote:
->> On 2024/12/3 20:00, Uwe Kleine-König wrote:
->>> Hello,
+On 2024/12/3 22:07, Thomas Weißschuh wrote:
+> On 2024-12-03 08:58:26-0500, James Bottomley wrote:
+>> On Tue, 2024-12-03 at 21:02 +0800, Zijun Hu wrote:
+>>> On 2024/12/3 20:41, Greg Kroah-Hartman wrote:
+>>>> On Tue, Dec 03, 2024 at 08:23:45PM +0800, Zijun Hu wrote:
+>> [...]
+>>>>> or squash such patch series into a single patch ?
+>>>>>
+>>>>> various subsystem maintainers may not like squashing way.
+>>>>
+>>>> Agreed, so look into either doing it in a bisectable way if at all
+>>>> possible.  As I don't see a full series here, I can't suggest how
+>>>> it needs to happen :(
+>>>>
 >>>
->>> On Tue, Dec 03, 2024 at 08:33:22AM +0800, Zijun Hu wrote:
->>>> This patch series is to constify the following API:
->>>> struct device *device_find_child(struct device *dev, void *data,
->>>> 		int (*match)(struct device *dev, void *data));
->>>> To :
->>>> struct device *device_find_child(struct device *dev, const void *data,
->>>> 				 device_match_t match);
->>>> typedef int (*device_match_t)(struct device *dev, const void *data);
->>>
->>> This series isn't bisectible. With only the first two patches applied I
->>> hit:
+>>> let me send you a full series later and discuss how to solve this
+>>> issue.
 >>
->> yes. such patch series needs to be merge as atomic way.
->>
->> Hi Greg,
->>
->> is it possible to ONLY merge such patch series by atomic way into your
->> driver-core tree?
+>> It's only slightly more complex than what we normally do: modify all
+>> instances and then change the API.  In this case you have an additional
+>> problem because the prototype "const void *" will cause a mismatch if a
+>> function has "void *".  The easiest way to solve this is probably to
+>> make device_find_child a macro that coerces its function argument to
+>> having a non const "void *" and then passes off to the real function. 
+>> If you do that in the first patch, then you can constify all the
+>> consumers and finally remove the macro coercion in the last patch.
 > 
-> Nope!
+> Casting function pointers like that should be detected and trapped by
+> control flow integrity checking (KCFI).
 > 
->> or squash such patch series into a single patch ?
->>
->> various subsystem maintainers may not like squashing way.
+> Another possibility would be to use a macro and _Generic to dispatch to
+> two different backing functions. See __BIN_ATTR() in
+> include/linux/sysfs.h for an inspiration.
+
+this way may fix building error issue but does not achieve our purpose.
+our purpose is that there are only constified device_find_child().
+
+
+> This also enables an incremental migration.
 > 
-> Agreed, so look into either doing it in a bisectable way if at all
-> possible.  As I don't see a full series here, I can't suggest how it
-> needs to happen :(
 > 
 
-let me send you a full series later and discuss how to solve this issue.
+change the API prototype from:
+device_find_child(..., void *data_0, int (*match)(struct device *dev,
+void *data));
 
-> thanks,
-> 
-> greg k-h
+to:
+device_find_child(..., const void *data_0, int (*match)(struct device
+*dev, const void *data));
+
+For @data_0,  void * -> const void * is okay.
+but for @match, the problem is function pointer type incompatibility.
+
+there are two solutions base on discussions.
+
+1) squashing likewise Greg mentioned.
+   Do all of the "prep work" first, and then
+   do the const change at the very end, all at once.
+
+2)  as changing platform_driver's remove() prototype.
+Commit: e70140ba0d2b ("Get rid of 'remove_new' relic from platform
+driver struct")
+
+ introduce extra device_find_child_new() which is constified  -> use
+*_new() replace ALL device_find_child() instances one by one ->  remove
+device_find_child() -> rename *_new() to device_find_child() once.
+
+> Thomas
 
 
