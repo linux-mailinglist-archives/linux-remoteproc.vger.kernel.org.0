@@ -1,52 +1,52 @@
-Return-Path: <linux-remoteproc+bounces-2706-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2708-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16A5E9E1D9E
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Dec 2024 14:32:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DEE659E1D9A
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Dec 2024 14:32:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0E9CB26D13
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Dec 2024 12:24:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94524B2AE85
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Dec 2024 13:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812E91E5027;
-	Tue,  3 Dec 2024 12:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF2B1EC018;
+	Tue,  3 Dec 2024 13:03:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="PgY5nn9U"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="Kc4yhuXu"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from pv50p00im-hyfv10011601.me.com (pv50p00im-hyfv10011601.me.com [17.58.6.43])
+Received: from mr85p00im-ztdg06021801.me.com (mr85p00im-ztdg06021801.me.com [17.58.23.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AC21E412E
-	for <linux-remoteproc@vger.kernel.org>; Tue,  3 Dec 2024 12:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D521EE002
+	for <linux-remoteproc@vger.kernel.org>; Tue,  3 Dec 2024 13:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733228656; cv=none; b=GeFUW6PyxLx4/omxERlTv4WF6dUSe02N3aBUAO1LWpbr/lKeSyHzFTPEEbPnqDC3b23AhHN5cNIhDhBcqpOiDvvsws+zjpi2oz0Jj2lPsDUVIGdq3dwsaibeTjk9CEH8+4kidtd0ngxUJfUmUg2GPRKFrSVNQtUYp/0FIpZ7Iq0=
+	t=1733231023; cv=none; b=NjFDTuWM7VGf+F6t+OydTgAZZxWr3rmG5mGblRXpNWG4MzQmyJ5dyq3bjUp51JcOIUoKCha9mpU+oy2OTNqdWbFtTHeLBwnYTdONjehumSpe359Q7oLJvbOsqAjSdwsVm5vKaaOiCg+zG7++UYq+dNw7t4M1FdzZxw7FLRH8cYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733228656; c=relaxed/simple;
-	bh=mCIHbMTp8TXOIpl1+nubIptrAHWq3pU6doVeMEipNVc=;
+	s=arc-20240116; t=1733231023; c=relaxed/simple;
+	bh=PMZl124fAJi/9a12repkCEPo/NdFlnbWHM0+eGs6QGw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N0FvRf6BCbWJ9+AObBMf2GFq6YGYe9pU9VpHFHX3faqu7OvKK1CSMHtTn+jdv0h0LO0Y2Cqwa7TN/fR0QZecsaVdMQilmwPIAT6Abr70lt83//BZY85tELJhgCs4xxHt+oqt8fm2goqoShE7bUi1fIKl2A1z3DIOH7cG1cHQ/9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=PgY5nn9U; arc=none smtp.client-ip=17.58.6.43
+	 In-Reply-To:Content-Type; b=Lul9/hltVfO8Te0SCeeKfs+8EmJrRxmx4eI1zsiUwW0kVVN4TDhXAVOpcDt+WLa9sF1sab5jl1oblGCN+ddFxUV0M3EoK/XtcKODkdBflIZyehY7k+TSoPIwaoqIDbPuDlLQ1NAieAwWH6tkbFm8epKndtPRqzuJA4rRoc6y+hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=Kc4yhuXu; arc=none smtp.client-ip=17.58.23.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1733228654;
-	bh=CgCScBX/+fgZ0roCuYsgonJhaxWB8rsl1yCC6V0WM+E=;
+	s=1a1hai; t=1733231020;
+	bh=QEJ75x+TqYUJVxmVF6uQZZWFOEl0WJRfUhXN2h5KpKM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
 	 x-icloud-hme;
-	b=PgY5nn9UjaNQNnW4ZpJ9WuRQx6im5psJe58NOrhuMYaP81TCjCoqg7OOKUTCf/GiQ
-	 U5NzWhh2P25K5ajpXMvRXYX0Q0QlkR8pgL3oTItbqVZutGKevLmlI66ZBGBcrDMdzZ
-	 tMmlV2WZ2o8x16WpoGlJ/JnV1zI3oqt06fGl4I8/qI7wYj0KQ1QQr5n3xLSgizk9fw
-	 TQ9xaKi2nZyOPqodk3YoZL2QcRqFeCLp3CsTqDDtllnMk1q4GHXKVq7SsECnBkg8jm
-	 H9mCDktUr1zn+c+7ek7cGPeMoLhQxufGfyCDPYAJQXskQd4pXIE2C7c2QiBSj9B4RB
-	 vRrMl0+rr+jVw==
-Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-hyfv10011601.me.com (Postfix) with ESMTPSA id 675CEC8010E;
-	Tue,  3 Dec 2024 12:23:51 +0000 (UTC)
-Message-ID: <9d34bd6f-b120-428a-837b-5a5813e14618@icloud.com>
-Date: Tue, 3 Dec 2024 20:23:45 +0800
+	b=Kc4yhuXugc/D/qtZZ41v8wAnuwEzwggEWUway63IXkClqixwU1cfn/v3YVm8Qsiaw
+	 28NLlORRwJjFZX7JY4DZlIgrQ1s8zKvPJAQ+RXHBAEkcNRuUPk0OyxBiAs9kB0GBL/
+	 4jgwTolEa8TiqyUyeuv6tr/7DG898UMLRPOw8P2qzUVkHb/i6BK0gmuVjOCVuRaOL4
+	 yVOUtS8ijY+iNGs/3oFthLPmtWg3RPz3zQCNIexvybyNTkT8kJ+0hPmRIWLu7xxlpo
+	 9HqUza+TM66+s3TNEHqlu5QAj7PkxbSr1VPZfaRzmcsea2BKweNx4LzKqRftuLVcUB
+	 Ma8BwRHqOq26Q==
+Received: from [192.168.1.26] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+	by mr85p00im-ztdg06021801.me.com (Postfix) with ESMTPSA id 67D49442839;
+	Tue,  3 Dec 2024 13:03:18 +0000 (UTC)
+Message-ID: <b9885785-d4d4-4c72-b425-3dc552651d7e@icloud.com>
+Date: Tue, 3 Dec 2024 21:02:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -56,9 +56,8 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 00/32] driver core: Constify API device_find_child()
  and adapt for various existing usages
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
  "Rafael J. Wysocki" <rafael@kernel.org>,
  Chun-Kuang Hu <chunkuang.hu@kernel.org>,
  Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
@@ -110,77 +109,62 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  linux-remoteproc@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
 References: <20241203-const_dfc_done-v2-0-7436a98c497f@quicinc.com>
  <g32cigmktmj4egkq2tof27el2yss4liccfxgebkgqvkil32mlb@e3ta4ezv7y4m>
+ <9d34bd6f-b120-428a-837b-5a5813e14618@icloud.com>
+ <2024120320-manual-jockey-dfd1@gregkh>
 Content-Language: en-US
 From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <g32cigmktmj4egkq2tof27el2yss4liccfxgebkgqvkil32mlb@e3ta4ezv7y4m>
+In-Reply-To: <2024120320-manual-jockey-dfd1@gregkh>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: HfN3ugOwn0RD4lT0NgRrMbrQZDyUcr0J
-X-Proofpoint-ORIG-GUID: HfN3ugOwn0RD4lT0NgRrMbrQZDyUcr0J
+X-Proofpoint-ORIG-GUID: CNFmwAOF9NCRr2KajfMjTjtFd_qlM54K
+X-Proofpoint-GUID: CNFmwAOF9NCRr2KajfMjTjtFd_qlM54K
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-03_01,2024-12-03_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 suspectscore=0
- clxscore=1015 adultscore=0 malwarescore=0 mlxlogscore=903 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2412030107
+ definitions=2024-12-03_02,2024-12-03_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
+ clxscore=1015 malwarescore=0 adultscore=0 phishscore=0 mlxscore=0
+ suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2412030113
 
-On 2024/12/3 20:00, Uwe Kleine-König wrote:
-> Hello,
+On 2024/12/3 20:41, Greg Kroah-Hartman wrote:
+> On Tue, Dec 03, 2024 at 08:23:45PM +0800, Zijun Hu wrote:
+>> On 2024/12/3 20:00, Uwe Kleine-König wrote:
+>>> Hello,
+>>>
+>>> On Tue, Dec 03, 2024 at 08:33:22AM +0800, Zijun Hu wrote:
+>>>> This patch series is to constify the following API:
+>>>> struct device *device_find_child(struct device *dev, void *data,
+>>>> 		int (*match)(struct device *dev, void *data));
+>>>> To :
+>>>> struct device *device_find_child(struct device *dev, const void *data,
+>>>> 				 device_match_t match);
+>>>> typedef int (*device_match_t)(struct device *dev, const void *data);
+>>>
+>>> This series isn't bisectible. With only the first two patches applied I
+>>> hit:
+>>
+>> yes. such patch series needs to be merge as atomic way.
+>>
+>> Hi Greg,
+>>
+>> is it possible to ONLY merge such patch series by atomic way into your
+>> driver-core tree?
 > 
-> On Tue, Dec 03, 2024 at 08:33:22AM +0800, Zijun Hu wrote:
->> This patch series is to constify the following API:
->> struct device *device_find_child(struct device *dev, void *data,
->> 		int (*match)(struct device *dev, void *data));
->> To :
->> struct device *device_find_child(struct device *dev, const void *data,
->> 				 device_match_t match);
->> typedef int (*device_match_t)(struct device *dev, const void *data);
+> Nope!
 > 
-> This series isn't bisectible. With only the first two patches applied I
-> hit:
-
-yes. such patch series needs to be merge as atomic way.
-
-Hi Greg,
-
-is it possible to ONLY merge such patch series by atomic way into your
-driver-core tree?
-
-or squash such patch series into a single patch ?
-
-various subsystem maintainers may not like squashing way.
-
+>> or squash such patch series into a single patch ?
+>>
+>> various subsystem maintainers may not like squashing way.
 > 
->   CC      drivers/pwm/core.o
-> drivers/pwm/core.c: In function ‘pwm_unexport_child’:
-> drivers/pwm/core.c:1292:55: error: passing argument 3 of ‘device_find_child’ from incompatible pointer type [-Wincompatible-pointer-types]
->  1292 |         pwm_dev = device_find_child(pwmchip_dev, pwm, pwm_unexport_match);
->       |                                                       ^~~~~~~~~~~~~~~~~~
->       |                                                       |
->       |                                                       int (*)(struct device *, void *)
-> In file included from include/linux/acpi.h:14,
->                  from drivers/pwm/core.c:11:
-> include/linux/device.h:1085:49: note: expected ‘device_match_t’ {aka ‘int (*)(struct device *, const void *)’} but argument is of type ‘int (*)(struct device *, void *)’
->  1085 |                                  device_match_t match);
->       |                                  ~~~~~~~~~~~~~~~^~~~~
-> drivers/pwm/core.c: In function ‘pwm_class_get_state’:
-> drivers/pwm/core.c:1386:55: error: passing argument 3 of ‘device_find_child’ from incompatible pointer type [-Wincompatible-pointer-types]
->  1386 |         pwm_dev = device_find_child(pwmchip_dev, pwm, pwm_unexport_match);
->       |                                                       ^~~~~~~~~~~~~~~~~~
->       |                                                       |
->       |                                                       int (*)(struct device *, void *)
-> include/linux/device.h:1085:49: note: expected ‘device_match_t’ {aka ‘int (*)(struct device *, const void *)’} but argument is of type ‘int (*)(struct device *, void *)’
->  1085 |                                  device_match_t match);
->       |                                  ~~~~~~~~~~~~~~~^~~~~
-> make[5]: *** [scripts/Makefile.build:194: drivers/pwm/core.o] Error 1
-> make[4]: *** [scripts/Makefile.build:440: drivers/pwm] Error 2
-> make[3]: *** [scripts/Makefile.build:440: drivers] Error 2
-> make[2]: *** [Makefile:1989: .] Error 2
-> make[1]: *** [Makefile:372: __build_one_by_one] Error 2
-> make: *** [Makefile:251: __sub-make] Error 2
+> Agreed, so look into either doing it in a bisectable way if at all
+> possible.  As I don't see a full series here, I can't suggest how it
+> needs to happen :(
 > 
-> Best regards
-> Uwe
+
+let me send you a full series later and discuss how to solve this issue.
+
+> thanks,
+> 
+> greg k-h
 
 
