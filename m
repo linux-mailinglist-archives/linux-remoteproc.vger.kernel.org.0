@@ -1,71 +1,71 @@
-Return-Path: <linux-remoteproc+bounces-2795-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2797-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F10C49F7A07
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 19 Dec 2024 12:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F5429F7A0B
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 19 Dec 2024 12:06:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBFB57A20F8
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 19 Dec 2024 11:06:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12FDB7A24E0
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 19 Dec 2024 11:06:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5430222D6B;
-	Thu, 19 Dec 2024 11:06:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46158223C7E;
+	Thu, 19 Dec 2024 11:06:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="dJPVFCQP"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Xjdnw+Eh"
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39F0222591;
-	Thu, 19 Dec 2024 11:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0D222371F;
+	Thu, 19 Dec 2024 11:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734606370; cv=none; b=s7TgwH5Q1WgEURbNluFmtbS678L8BlFVg4JoER2quw07S+PKBb0QRuq86v7K9BmWiLpqs1D4YtEIkkWMAQ8smlI346mAUUi1JsouTnIZGcZVrZA9n5HABhqTcYwZfd69DXi2eOzfp2gdsq2yYKVwNx5i+7aGus29Qg1EDCXysBM=
+	t=1734606373; cv=none; b=RtKI4bzOL9u4+igC+tjbkkcOm4BdYM3AUIIBY5cOdlWZuYB9lctyVFYYoATnCMqinIQRVry8zhkUXjsKdPK0VF1CDqi/DLjbptL9hV76mQE3bUo3W9rnBEcfAuCF8g1Fa9LJ/Yjr6K6Od8I1pQ4+TNstYTwMkNZG1uzUvtFe9Lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734606370; c=relaxed/simple;
-	bh=9got5afp3kwpNmGyX3X5DFFZ/ORTpuwcMBoxJATTLAc=;
+	s=arc-20240116; t=1734606373; c=relaxed/simple;
+	bh=pqQEK8y55QGByePDVmPjsKwKYeZfL2kJtO2DqsNTzZs=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AKRzHTqj4AoXlMydNcJdQzIGGo9W2+YugBGZVpqlbRRXTXDid9AWcvAk9As7wxkzEKs3JQGtOXTBcMhFUy3WOeMtguwr6BVDG5xFwPTS7H0EPc900jUB2C4+6ZhSEAQpNNDYYqIjF9dgNBqm7erPMwYnrfS08sJf0Em0yF+B/So=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=dJPVFCQP; arc=none smtp.client-ip=198.47.19.245
+	 MIME-Version:Content-Type; b=a8WiQXJJ7o29KswJQra6ePUZP1HrxMPyqfuVpTrnywHrbMwJJkEkr0b2QDK9/hL9NaZ8dBU1g1fFEYJMYi9wOphMrV7C8GPDI+q/o9JwtIVmjNbzRu7Z1Aww/PyK0lVNofGZieftOIwZMEwFzV/2K19jibM5BdPbdNrLR+/q6U8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Xjdnw+Eh; arc=none smtp.client-ip=198.47.19.245
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 4BJB5rnx3773114
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 4BJB5uks3773118
 	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 19 Dec 2024 05:05:53 -0600
+	Thu, 19 Dec 2024 05:05:56 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1734606353;
-	bh=/Zm+E6WmfjClb5CVQFdTgeL5GpKLvseHQ4i/Wj/uBTo=;
+	s=ti-com-17Q1; t=1734606356;
+	bh=Kfiag7TP1cLf4p9eFnhkxZKznqydLbnnKUDaCrM+PGk=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=dJPVFCQPCIJLh/IqRd+a45IQjkuBp+Wv+34Q8+dWCy7Fg+5KhM8WEFsSEi8Julp+U
-	 H5QaS17XTGVssCJ+YcvbumOrihbCFDk/ktTdzOG7pNHuh+ygIzh9jtH/pzL2ANmTF3
-	 furnWvScLxCpZMIHIaiklO9085v6KtgqJgOzlwH0=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4BJB5rWX015250
+	b=Xjdnw+EhvOKCcURdx7ttbRBUaMtjzVOgV25SGvOBl/74iRBahESDtm1Wj5rvD34P3
+	 CPCQJwGZzbtmR8KnjeYKbYtYrRZo5xzw3l7KiAj5cC7GKo5vL4Yq3m7NXP1II1hd1c
+	 6GeaNqaWjijSWVz84jHoCNCfxg133hWDsCLcTr2Y=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4BJB5uJT013014
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 19 Dec 2024 05:05:53 -0600
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+	Thu, 19 Dec 2024 05:05:56 -0600
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 19
- Dec 2024 05:05:53 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ Dec 2024 05:05:56 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 19 Dec 2024 05:05:52 -0600
+ Frontend Transport; Thu, 19 Dec 2024 05:05:56 -0600
 Received: from uda0510294.dhcp.ti.com (uda0510294.dhcp.ti.com [172.24.227.151])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4BJB5jY9088123;
-	Thu, 19 Dec 2024 05:05:49 -0600
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4BJB5jYA088123;
+	Thu, 19 Dec 2024 05:05:53 -0600
 From: Beleswar Padhi <b-padhi@ti.com>
 To: <andersson@kernel.org>, <mathieu.poirier@linaro.org>
 CC: <afd@ti.com>, <hnagalla@ti.com>, <u-kumar1@ti.com>,
         <jan.kiszka@siemens.com>, <christophe.jaillet@wanadoo.fr>,
         <jkangas@redhat.com>, <eballetbo@redhat.com>, <b-padhi@ti.com>,
         <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 1/5] remoteproc: k3-r5: Add devm action to release reserved memory
-Date: Thu, 19 Dec 2024 16:35:41 +0530
-Message-ID: <20241219110545.1898883-2-b-padhi@ti.com>
+Subject: [PATCH v2 2/5] remoteproc: k3-r5: Use devm_kcalloc() helper
+Date: Thu, 19 Dec 2024 16:35:42 +0530
+Message-ID: <20241219110545.1898883-3-b-padhi@ti.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241219110545.1898883-1-b-padhi@ti.com>
 References: <20241219110545.1898883-1-b-padhi@ti.com>
@@ -79,73 +79,47 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Use a device lifecycle managed action to release reserved memory. This
-helps prevent mistakes like releasing out of order in cleanup functions
-and forgetting to release on error paths.
+Use a device lifecycle managed action to free memory. This helps prevent
+mistakes like freeing out of order in cleanup functions and forgetting
+to free on error paths.
 
 Signed-off-by: Beleswar Padhi <b-padhi@ti.com>
 ---
 v2: Changelog:
 1. None to this patch
- 
-Link to v1:
-https://lore.kernel.org/all/20241204111130.2218497-2-b-padhi@ti.com/
 
- drivers/remoteproc/ti_k3_r5_remoteproc.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+Link to v1:
+https://lore.kernel.org/all/20241204111130.2218497-3-b-padhi@ti.com/
+
+ drivers/remoteproc/ti_k3_r5_remoteproc.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-index 6560b7954027..d51f88a5abc1 100644
+index d51f88a5abc1..0753a5c35c7e 100644
 --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
 +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-@@ -955,6 +955,13 @@ static int k3_r5_rproc_configure(struct k3_r5_rproc *kproc)
- 	return ret;
- }
- 
-+static void k3_r5_mem_release(void *data)
-+{
-+	struct device *dev = data;
-+
-+	of_reserved_mem_device_release(dev);
-+}
-+
- static int k3_r5_reserved_mem_init(struct k3_r5_rproc *kproc)
- {
- 	struct device *dev = kproc->dev;
-@@ -985,12 +992,14 @@ static int k3_r5_reserved_mem_init(struct k3_r5_rproc *kproc)
+@@ -997,7 +997,7 @@ static int k3_r5_reserved_mem_init(struct k3_r5_rproc *kproc)
  		return ret;
- 	}
  
-+	ret = devm_add_action_or_reset(dev, k3_r5_mem_release, dev);
-+	if (ret)
-+		return ret;
-+
  	num_rmems--;
- 	kproc->rmem = kcalloc(num_rmems, sizeof(*kproc->rmem), GFP_KERNEL);
--	if (!kproc->rmem) {
--		ret = -ENOMEM;
--		goto release_rmem;
--	}
-+	if (!kproc->rmem)
-+		return -ENOMEM;
+-	kproc->rmem = kcalloc(num_rmems, sizeof(*kproc->rmem), GFP_KERNEL);
++	kproc->rmem = devm_kcalloc(dev, num_rmems, sizeof(*kproc->rmem), GFP_KERNEL);
+ 	if (!kproc->rmem)
+ 		return -ENOMEM;
  
- 	/* use remaining reserved memory regions for static carveouts */
- 	for (i = 0; i < num_rmems; i++) {
-@@ -1041,8 +1050,6 @@ static int k3_r5_reserved_mem_init(struct k3_r5_rproc *kproc)
+@@ -1049,7 +1049,6 @@ static int k3_r5_reserved_mem_init(struct k3_r5_rproc *kproc)
+ unmap_rmem:
  	for (i--; i >= 0; i--)
  		iounmap(kproc->rmem[i].cpu_addr);
- 	kfree(kproc->rmem);
--release_rmem:
--	of_reserved_mem_device_release(dev);
+-	kfree(kproc->rmem);
  	return ret;
  }
  
-@@ -1053,8 +1060,6 @@ static void k3_r5_reserved_mem_exit(struct k3_r5_rproc *kproc)
+@@ -1059,7 +1058,6 @@ static void k3_r5_reserved_mem_exit(struct k3_r5_rproc *kproc)
+ 
  	for (i = 0; i < kproc->num_rmems; i++)
  		iounmap(kproc->rmem[i].cpu_addr);
- 	kfree(kproc->rmem);
--
--	of_reserved_mem_device_release(kproc->dev);
+-	kfree(kproc->rmem);
  }
  
  /*
