@@ -1,61 +1,61 @@
-Return-Path: <linux-remoteproc+bounces-2850-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2851-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 711BBA00793
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Jan 2025 11:13:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD71AA00795
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Jan 2025 11:13:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BDB7163E0E
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Jan 2025 10:13:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 814283A3BCA
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  3 Jan 2025 10:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29E031F9EB1;
-	Fri,  3 Jan 2025 10:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C886A1F9ECE;
+	Fri,  3 Jan 2025 10:13:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="D2EtF9+G"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="aJBherqi"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 347A41F9AB6;
-	Fri,  3 Jan 2025 10:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFABC1F941F;
+	Fri,  3 Jan 2025 10:13:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735899184; cv=none; b=IYnKdKCn/YhcYIkqVOFjs7NwzeyQbW0ZMmix9G4H0xH2RrdDaBhO7UD2n5cPIcmlPbOuGishCizaOcA+O+sgi1iX6596vNgWaVd2ytAY3Bx13rl4Ke5hYgMMoK+Iv7XAYw/nF/lqDHaHreu1Uj029Xkwa8EGlnGyOx9Jr8WDZqY=
+	t=1735899189; cv=none; b=LCp9iLhjD8rxtdsegFdEANAzIOLDh14l8uFF3aNGB+WeppZ3E1+nGKHJE9lbWZlFGmvzQ0MQXc/RpJKpLG7EnH7ycxu8H4fS3saw9sMKWXhsigzUIrAJE1zIpWWa2xGYjVykmUHp59i488wSPCDWSBWTi9UDCGdvLeXzAAQAbKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735899184; c=relaxed/simple;
-	bh=YbMs7JlqVUHC8NgrQl9CQBdLtGYXH6D2DqArDUwl7Mk=;
+	s=arc-20240116; t=1735899189; c=relaxed/simple;
+	bh=Fm5OkSK3KIib1TPPxadSQXRiQkaYbKKsLNDV1NvqS2o=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bXd8DrlI7dQnxxylE+gjuDOdNJ4dlprgL5z7PvtNBWlLV2U2AbtDMiQnFuT6Fw/i0RNGUjSryg05qOiMaI/E2uAAEb2SWflQ8X99qHtGs06gT2BQjZwVwOOWD2I2UoBr0F1ieGhw9BEmSCPEAcrNeXprzrzFW7hQ1FoTQawckpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=D2EtF9+G; arc=none smtp.client-ip=198.47.19.245
+	 MIME-Version:Content-Type; b=hcPsnsVtzdbNUyjz/TR+/HG523hci/2wVxLJ/jJZt19zp10MB+NsXGvmrJPonFCmpx2mf78zgtReoiMWnqKisSM//MFUrcszG38jJvLFZeP68nY0oIcyB7CcR9ZgGTUbyg2QLo5/SmfWV7TAy5CPN8oM9Kj2bpPmyeaddkJoXnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=aJBherqi; arc=none smtp.client-ip=198.47.23.234
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 503ACpgC2019398
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 503ACs7Y2076372
 	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Fri, 3 Jan 2025 04:12:51 -0600
+	Fri, 3 Jan 2025 04:12:54 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1735899171;
-	bh=DgyVEw7oOl3tnOK8cHQEwe00QwCEYwZiiFEcw9txbtE=;
+	s=ti-com-17Q1; t=1735899174;
+	bh=fq5TNC9QrfaSZDncZPI6A87HfJTjjUWbjcK9fTzKL9U=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=D2EtF9+G3bkr/uC0PGMHWDj+SB3iKnZpklY4nG6l+OmDvFN+R2ttyI/ckUT2rarA7
-	 A1ittsx8YT2CV6kkfXohPbi4OnhkXQTZA5ulQpu32BVo6G7A3Zj4LoocgVFPWNPOeV
-	 qksE6/x8uWGKrSSAf/GcXA7B/+nkQ83N/RraLu+8=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 503ACpNR041856;
-	Fri, 3 Jan 2025 04:12:51 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+	b=aJBherqippPaVVYGjiSr6zc1zeg688GQunhIfZzQy6bsEd+ZwuJvlJKW+dvsnyutq
+	 +LIh9Jq8LeGU9WdEoPfaZzO18uWbgBy2A3TqHsPdAc83S8KQpATsX4pQfpDwtd+mpR
+	 hsBTQAKcR8pSx+uDvRY+rlcK95t/V4E9z9GcKzMI=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 503ACsJY041864;
+	Fri, 3 Jan 2025 04:12:54 -0600
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 3
- Jan 2025 04:12:50 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2025 04:12:54 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 3 Jan 2025 04:12:50 -0600
+ Frontend Transport; Fri, 3 Jan 2025 04:12:54 -0600
 Received: from uda0510294.dhcp.ti.com (uda0510294.dhcp.ti.com [172.24.227.151])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 503ACVSM126047;
-	Fri, 3 Jan 2025 04:12:47 -0600
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 503ACVSN126047;
+	Fri, 3 Jan 2025 04:12:51 -0600
 From: Beleswar Padhi <b-padhi@ti.com>
 To: <andersson@kernel.org>, <mathieu.poirier@linaro.org>
 CC: <afd@ti.com>, <hnagalla@ti.com>, <u-kumar1@ti.com>,
@@ -63,9 +63,9 @@ CC: <afd@ti.com>, <hnagalla@ti.com>, <u-kumar1@ti.com>,
         <christophe.jaillet@wanadoo.fr>, <jkangas@redhat.com>,
         <eballetbo@redhat.com>, <b-padhi@ti.com>,
         <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 04/20] remoteproc: k3: Refactor .kick rproc ops into common driver
-Date: Fri, 3 Jan 2025 15:42:15 +0530
-Message-ID: <20250103101231.1508151-5-b-padhi@ti.com>
+Subject: [PATCH v8 05/20] remoteproc: k3-m4: Use k3_rproc_mem_data structure for memory info
+Date: Fri, 3 Jan 2025 15:42:16 +0530
+Message-ID: <20250103101231.1508151-6-b-padhi@ti.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250103101231.1508151-1-b-padhi@ti.com>
 References: <20250103101231.1508151-1-b-padhi@ti.com>
@@ -79,185 +79,136 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-The .kick rproc ops implementations in ti_k3_dsp_remoteproc.c and
-ti_k3_m4_remoteproc.c drivers sends a mailbox message to the remote
-processor in the same way. Refactor the implementations into a common
-function 'k3_rproc_kick()' in the ti_k3_common.c driver.
+The ti_k3_m4_remoteproc.c driver previously hardcoded device memory
+region addresses and names. Change this to use the k3_rproc_mem_data
+structure to store memory information. This aligns with
+ti_k3_dsp_remoteproc.c driver, and can be refactored out later.
 
 Signed-off-by: Beleswar Padhi <b-padhi@ti.com>
 ---
- drivers/remoteproc/ti_k3_common.c         | 31 +++++++++++++++++++++
- drivers/remoteproc/ti_k3_common.h         |  1 +
- drivers/remoteproc/ti_k3_dsp_remoteproc.c | 31 ++-------------------
- drivers/remoteproc/ti_k3_m4_remoteproc.c  | 34 ++---------------------
- 4 files changed, 36 insertions(+), 61 deletions(-)
+ drivers/remoteproc/ti_k3_m4_remoteproc.c | 40 ++++++++++++++++--------
+ 1 file changed, 27 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/remoteproc/ti_k3_common.c b/drivers/remoteproc/ti_k3_common.c
-index a87a06744f71..bd6353283078 100644
---- a/drivers/remoteproc/ti_k3_common.c
-+++ b/drivers/remoteproc/ti_k3_common.c
-@@ -86,5 +86,36 @@ void k3_rproc_mbox_callback(struct mbox_client *client, void *data)
- }
- EXPORT_SYMBOL_GPL(k3_rproc_mbox_callback);
- 
-+/*
-+ * Kick the remote processor to notify about pending unprocessed messages.
-+ * The vqid usage is not used and is inconsequential, as the kick is performed
-+ * through a simulated GPIO (a bit in an IPC interrupt-triggering register),
-+ * the remote processor is expected to process both its Tx and Rx virtqueues.
-+ */
-+void k3_rproc_kick(struct rproc *rproc, int vqid)
-+{
-+	struct k3_rproc *kproc = rproc->priv;
-+	struct device *dev = kproc->dev;
-+	u32 msg = (u32)vqid;
-+	int ret;
-+
-+	/*
-+	 * Do not forward messages to a detached core, except when the core
-+	 * is in the process of being attached in IPC-only mode.
-+	 */
-+	if (!kproc->is_attach_ongoing && kproc->rproc->state == RPROC_DETACHED)
-+		return;
-+	/*
-+	 * Send the index of the triggered virtqueue in the mailbox payload.
-+	 * NOTE: msg is cast to uintptr_t to prevent compiler warnings when
-+	 * void* is 64bit. It is safely cast back to u32 in the mailbox driver.
-+	 */
-+	ret = mbox_send_message(kproc->mbox, (void *)(uintptr_t)msg);
-+	if (ret < 0)
-+		dev_err(dev, "failed to send mailbox message, status = %d\n",
-+			ret);
-+}
-+EXPORT_SYMBOL_GPL(k3_rproc_kick);
-+
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("TI K3 common Remoteproc code");
-diff --git a/drivers/remoteproc/ti_k3_common.h b/drivers/remoteproc/ti_k3_common.h
-index 251ecc2df1dd..57792d68b7ef 100644
---- a/drivers/remoteproc/ti_k3_common.h
-+++ b/drivers/remoteproc/ti_k3_common.h
-@@ -89,4 +89,5 @@ struct k3_rproc {
- };
- 
- void k3_rproc_mbox_callback(struct mbox_client *client, void *data);
-+void k3_rproc_kick(struct rproc *rproc, int vqid);
- #endif /* REMOTEPROC_TI_K3_COMMON_H */
-diff --git a/drivers/remoteproc/ti_k3_dsp_remoteproc.c b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-index 70fbceccbac2..b2551b5171a9 100644
---- a/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-+++ b/drivers/remoteproc/ti_k3_dsp_remoteproc.c
-@@ -24,33 +24,6 @@
- 
- #define KEYSTONE_RPROC_LOCAL_ADDRESS_MASK	(SZ_16M - 1)
- 
--/*
-- * Kick the remote processor to notify about pending unprocessed messages.
-- * The vqid usage is not used and is inconsequential, as the kick is performed
-- * through a simulated GPIO (a bit in an IPC interrupt-triggering register),
-- * the remote processor is expected to process both its Tx and Rx virtqueues.
-- */
--static void k3_dsp_rproc_kick(struct rproc *rproc, int vqid)
--{
--	struct k3_rproc *kproc = rproc->priv;
--	struct device *dev = rproc->dev.parent;
--	mbox_msg_t msg = (mbox_msg_t)vqid;
--	int ret;
--
--	/*
--	 * Do not forward messages to a detached core, except when the core is
--	 * in the process of being attached in IPC-only mode.
--	 */
--	if (!kproc->is_attach_ongoing && kproc->rproc->state == RPROC_DETACHED)
--		return;
--
--	/* send the index of the triggered virtqueue in the mailbox payload */
--	ret = mbox_send_message(kproc->mbox, (void *)msg);
--	if (ret < 0)
--		dev_err(dev, "failed to send mailbox message (%pe)\n",
--			ERR_PTR(ret));
--}
--
- /* Put the DSP processor into reset */
- static int k3_dsp_rproc_reset(struct k3_rproc *kproc)
- {
-@@ -239,7 +212,7 @@ static int k3_dsp_rproc_stop(struct rproc *rproc)
-  * Attach to a running DSP remote processor (IPC-only mode)
-  *
-  * This rproc attach callback only needs to set the "is_attach_ongoing" flag to
-- * notify k3_dsp_rproc_{kick/mbox_callback} functions that the core is in the
-+ * notify k3_rproc_{kick/mbox_callback} functions that the core is in the
-  * process of getting attached in IPC-only mode. The remote processor is already
-  * booted, and all required resources have been acquired during probe routine,
-  * so there is no need to issue any TI-SCI commands to boot the DSP core. This
-@@ -366,7 +339,7 @@ static void *k3_dsp_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len, bool
- static const struct rproc_ops k3_dsp_rproc_ops = {
- 	.start		= k3_dsp_rproc_start,
- 	.stop		= k3_dsp_rproc_stop,
--	.kick		= k3_dsp_rproc_kick,
-+	.kick		= k3_rproc_kick,
- 	.da_to_va	= k3_dsp_rproc_da_to_va,
- };
- 
 diff --git a/drivers/remoteproc/ti_k3_m4_remoteproc.c b/drivers/remoteproc/ti_k3_m4_remoteproc.c
-index f1fe7d462d2a..953c3999019f 100644
+index 953c3999019f..fc688b124a54 100644
 --- a/drivers/remoteproc/ti_k3_m4_remoteproc.c
 +++ b/drivers/remoteproc/ti_k3_m4_remoteproc.c
-@@ -24,36 +24,6 @@
- #define K3_M4_IRAM_DEV_ADDR 0x00000
- #define K3_M4_DRAM_DEV_ADDR 0x30000
+@@ -21,9 +21,6 @@
+ #include "ti_sci_proc.h"
+ #include "ti_k3_common.h"
  
--/*
-- * Kick the remote processor to notify about pending unprocessed messages.
-- * The vqid usage is not used and is inconsequential, as the kick is performed
-- * through a simulated GPIO (a bit in an IPC interrupt-triggering register),
-- * the remote processor is expected to process both its Tx and Rx virtqueues.
-- */
--static void k3_m4_rproc_kick(struct rproc *rproc, int vqid)
--{
--	struct k3_rproc *kproc = rproc->priv;
--	struct device *dev = kproc->dev;
--	u32 msg = (u32)vqid;
--	int ret;
--
--	/*
--	 * Do not forward messages to a detached core, except when the core
--	 * is in the process of being attached in IPC-only mode.
--	 */
--	if (!kproc->is_attach_ongoing && kproc->rproc->state == RPROC_DETACHED)
--		return;
--	/*
--	 * Send the index of the triggered virtqueue in the mailbox payload.
--	 * NOTE: msg is cast to uintptr_t to prevent compiler warnings when
--	 * void* is 64bit. It is safely cast back to u32 in the mailbox driver.
--	 */
--	ret = mbox_send_message(kproc->mbox, (void *)(uintptr_t)msg);
--	if (ret < 0)
--		dev_err(dev, "failed to send mailbox message, status = %d\n",
--			ret);
--}
+-#define K3_M4_IRAM_DEV_ADDR 0x00000
+-#define K3_M4_DRAM_DEV_ADDR 0x30000
 -
  static int k3_m4_rproc_ping_mbox(struct k3_rproc *kproc)
  {
  	struct device *dev = kproc->dev;
-@@ -424,7 +394,7 @@ static int k3_m4_rproc_stop(struct rproc *rproc)
-  * Attach to a running M4 remote processor (IPC-only mode)
-  *
-  * This rproc attach callback only needs to set the "is_attach_ongoing" flag to
-- * notify k3_m4_rproc_{kick/mbox_callback} functions that the core is in the
-+ * notify k3_rproc_{kick/mbox_callback} functions that the core is in the
-  * process of getting attached in IPC-only mode. The remote processor is already
-  * booted, so there is no need to issue any TI-SCI commands to boot the M4 core.
-  * This callback is used only in IPC-only mode.
-@@ -468,7 +438,7 @@ static const struct rproc_ops k3_m4_rproc_ops = {
- 	.stop = k3_m4_rproc_stop,
- 	.attach = k3_m4_rproc_attach,
- 	.detach = k3_m4_rproc_detach,
--	.kick = k3_m4_rproc_kick,
-+	.kick = k3_rproc_kick,
- 	.da_to_va = k3_m4_rproc_da_to_va,
- 	.get_loaded_rsc_table = k3_m4_get_loaded_rsc_table,
+@@ -210,14 +207,13 @@ static void *k3_m4_rproc_da_to_va(struct rproc *rproc, u64 da, size_t len, bool
+ static int k3_m4_rproc_of_get_memories(struct platform_device *pdev,
+ 				       struct k3_rproc *kproc)
+ {
+-	static const char * const mem_names[] = { "iram", "dram" };
+-	static const u32 mem_addrs[] = { K3_M4_IRAM_DEV_ADDR, K3_M4_DRAM_DEV_ADDR };
++	const struct k3_rproc_dev_data *data = kproc->data;
+ 	struct device *dev = &pdev->dev;
+ 	struct resource *res;
+ 	int num_mems;
+ 	int i;
+ 
+-	num_mems = ARRAY_SIZE(mem_names);
++	num_mems = kproc->data->num_mems;
+ 	kproc->mem = devm_kcalloc(kproc->dev, num_mems,
+ 				  sizeof(*kproc->mem), GFP_KERNEL);
+ 	if (!kproc->mem)
+@@ -225,17 +221,17 @@ static int k3_m4_rproc_of_get_memories(struct platform_device *pdev,
+ 
+ 	for (i = 0; i < num_mems; i++) {
+ 		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+-						   mem_names[i]);
++						   data->mems[i].name);
+ 		if (!res) {
+ 			dev_err(dev, "found no memory resource for %s\n",
+-				mem_names[i]);
++				data->mems[i].name);
+ 			return -EINVAL;
+ 		}
+ 		if (!devm_request_mem_region(dev, res->start,
+ 					     resource_size(res),
+ 					     dev_name(dev))) {
+ 			dev_err(dev, "could not request %s region for resource\n",
+-				mem_names[i]);
++				data->mems[i].name);
+ 			return -EBUSY;
+ 		}
+ 
+@@ -243,15 +239,15 @@ static int k3_m4_rproc_of_get_memories(struct platform_device *pdev,
+ 							 resource_size(res));
+ 		if (!kproc->mem[i].cpu_addr) {
+ 			dev_err(dev, "failed to map %s memory\n",
+-				mem_names[i]);
++				data->mems[i].name);
+ 			return -ENOMEM;
+ 		}
+ 		kproc->mem[i].bus_addr = res->start;
+-		kproc->mem[i].dev_addr = mem_addrs[i];
++		kproc->mem[i].dev_addr = data->mems[i].dev_addr;
+ 		kproc->mem[i].size = resource_size(res);
+ 
+ 		dev_dbg(dev, "memory %8s: bus addr %pa size 0x%zx va %pK da 0x%x\n",
+-			mem_names[i], &kproc->mem[i].bus_addr,
++			data->mems[i].name, &kproc->mem[i].bus_addr,
+ 			kproc->mem[i].size, kproc->mem[i].cpu_addr,
+ 			kproc->mem[i].dev_addr);
+ 	}
+@@ -446,6 +442,7 @@ static const struct rproc_ops k3_m4_rproc_ops = {
+ static int k3_m4_rproc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
++	const struct k3_rproc_dev_data *data;
+ 	struct k3_rproc *kproc;
+ 	struct rproc *rproc;
+ 	const char *fw_name;
+@@ -453,6 +450,10 @@ static int k3_m4_rproc_probe(struct platform_device *pdev)
+ 	bool p_state = false;
+ 	int ret;
+ 
++	data = of_device_get_match_data(dev);
++	if (!data)
++		return -ENODEV;
++
+ 	ret = rproc_of_parse_firmware(dev, 0, &fw_name);
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "failed to parse firmware-name property\n");
+@@ -467,6 +468,7 @@ static int k3_m4_rproc_probe(struct platform_device *pdev)
+ 	kproc = rproc->priv;
+ 	kproc->rproc = rproc;
+ 	kproc->dev = dev;
++	kproc->data = data;
+ 	platform_set_drvdata(pdev, rproc);
+ 
+ 	kproc->ti_sci = devm_ti_sci_get_by_phandle(dev, "ti,sci");
+@@ -534,8 +536,20 @@ static int k3_m4_rproc_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static const struct k3_rproc_mem_data am64_m4_mems[] = {
++	{ .name = "iram", .dev_addr = 0x0 },
++	{ .name = "dram", .dev_addr = 0x30000 },
++};
++
++static const struct k3_rproc_dev_data am64_m4_data = {
++	.mems = am64_m4_mems,
++	.num_mems = ARRAY_SIZE(am64_m4_mems),
++	.boot_align_addr = SZ_1K,
++	.uses_lreset = true,
++};
++
+ static const struct of_device_id k3_m4_of_match[] = {
+-	{ .compatible = "ti,am64-m4fss", },
++	{ .compatible = "ti,am64-m4fss", .data = &am64_m4_data, },
+ 	{ /* sentinel */ },
  };
+ MODULE_DEVICE_TABLE(of, k3_m4_of_match);
 -- 
 2.34.1
 
