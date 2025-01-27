@@ -1,115 +1,94 @@
-Return-Path: <linux-remoteproc+bounces-2936-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2942-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC8EAA1CE98
-	for <lists+linux-remoteproc@lfdr.de>; Sun, 26 Jan 2025 21:58:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01164A1D1B9
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 27 Jan 2025 08:48:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4ADA2188703E
-	for <lists+linux-remoteproc@lfdr.de>; Sun, 26 Jan 2025 20:58:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69D787A2CBB
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 27 Jan 2025 07:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5535A18FDD2;
-	Sun, 26 Jan 2025 20:57:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7672F1FC11B;
+	Mon, 27 Jan 2025 07:48:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b="xqtrzZ+Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AcjVdmGd"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5915615E5B8;
-	Sun, 26 Jan 2025 20:57:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF86189B9D;
+	Mon, 27 Jan 2025 07:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737925066; cv=none; b=P0n5hbqwjD92I2xvMkmmTHk3/cny2+zT31vBhja+RFoTQqCHH7fcpFzyXJGbWQdTEgysjlAt5Tvv2AAU1uwqSkKzgB/Nz4iS/sfRjlbplzLObipiBPdllZ5RibFg+ULCF28litcZuqESNlMaxOiar4aCfTRKTjBjEoN+SS3Fcbs=
+	t=1737964102; cv=none; b=GGgdxE4C6h2DedZosfZ74b1w4xef6ogl3/IRKNGrPW0Oav7+zri2f87rSWQ/GWSYSuhymKCxxOCbfzsOEUcW0gMDTJ6OqhN+M2zjE0Y4wv5SwFb5ZV0teAm9Jz+rtIVi0m9VUprEVnz3+94QD5QpST3zLBRf4KcWsAwjKMVVwqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737925066; c=relaxed/simple;
-	bh=0egKTUGxa+ERnYUVurdjg+IC7rkSiLmW2RdF+5o2nW8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fYIKVv6juzSZHSKGecO7TtzcRHbPJS6+S04plo9oS7Zqaoynvq1vUXhwp3cAWhCPOGHqVRF4x9JuJtlgmglYcuwtO/i3xnS9E/9E1ht57dImNcvzuhqwZ86p2Sp5HwOtcO0H0vgvKng0XMDIRF3sk7QD7LgCfaCCsraBkN+yPHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu; spf=pass smtp.mailfrom=lucaweiss.eu; dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b=xqtrzZ+Q; arc=none smtp.client-ip=128.199.32.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lucaweiss.eu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lucaweiss.eu; s=s1;
-	t=1737925055; bh=0egKTUGxa+ERnYUVurdjg+IC7rkSiLmW2RdF+5o2nW8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=xqtrzZ+QUOAPnSOfzX/gpr/RQ6P/PCTlBKauM6jHoeN8SFNv6w5eVacJCt1H0yRij
-	 CY1L13V4DBNdGq9un+vTOS/8zyFDXE7oL6Pa0W0V3CXFgl4chnRT0XLYhXjab1fiMH
-	 V8QuvseXPmZZvsv6JaKC1wAogMmbhb1TCebEDDS8=
-From: Luca Weiss <luca@lucaweiss.eu>
-Date: Sun, 26 Jan 2025 21:57:28 +0100
-Subject: [PATCH v2 9/9] ARM: dts: qcom: msm8226-samsung-matisse-common:
- Enable modem
+	s=arc-20240116; t=1737964102; c=relaxed/simple;
+	bh=tdXuqfRrBC8ui0Vd36c31GzT2w+e2Q3ACD1hOw81m98=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lfJl0wAoFwqMk4SPZ/qsoUGCxUptKHIdWidvrG2K17VDwpAIpXvkH5sf9ZmMLcD13L0JJ8l0J1jBxZLU4qrP6VRb5AAqGOukrMUXJTZgGqFv8YK70HHBEfqIfCOTeZegBjxBozgaQgh3HupCZU3E9ewyskfTa687/L0kYe78x3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AcjVdmGd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23860C4CED2;
+	Mon, 27 Jan 2025 07:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737964102;
+	bh=tdXuqfRrBC8ui0Vd36c31GzT2w+e2Q3ACD1hOw81m98=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AcjVdmGd8JZH/b3AVWbFqLqZ6EHHwiQVbh5NvCFAFRqTYeH5iN995lPysvs6D5xqD
+	 rHfLR0/mm4Z0MMWbxcGOirsKwNp2ZDlwogw7Jsgc1qBg935WRwww4S+A6QUIa0gMOL
+	 mWcXC4pFSDUHpysN1TI5RLppERKn7Ojj/azsyejKdw59RCkdt/Cd8q5PWPqeCSMBtp
+	 deNwL1CIGh9mYR9ab+Amiq3eZrs3H51dgdEtYRz1MH0bgvUcP2ZxTHtRXqtrRi3l0c
+	 8fSfuk07SttHHgNm4o6VdulbiPa5jA2qBNUnjO/K1QV4kPCF/Q2q7TmzDr8GqZmZOB
+	 znjT4v7cKgcFw==
+Date: Mon, 27 Jan 2025 08:48:18 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Luca Weiss <luca@lucaweiss.eu>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+	Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Stephan Gerhold <stephan@gerhold.net>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Matti =?utf-8?Q?Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>, 
+	linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] dt-bindings: remoteproc: qcom,msm8916-mss-pil:
+ Support platforms with one power domain
+Message-ID: <20250127-bee-of-strongest-cookies-cd1ace@krzk-bin>
+References: <20250126-msm8226-modem-v2-0-e88d76d6daff@lucaweiss.eu>
+ <20250126-msm8226-modem-v2-1-e88d76d6daff@lucaweiss.eu>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250126-msm8226-modem-v2-9-e88d76d6daff@lucaweiss.eu>
-References: <20250126-msm8226-modem-v2-0-e88d76d6daff@lucaweiss.eu>
-In-Reply-To: <20250126-msm8226-modem-v2-0-e88d76d6daff@lucaweiss.eu>
-To: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- Bjorn Andersson <andersson@kernel.org>, 
- Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Stephan Gerhold <stephan@gerhold.net>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- =?utf-8?q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Luca Weiss <luca@lucaweiss.eu>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=937; i=luca@lucaweiss.eu;
- h=from:subject:message-id; bh=ms+h1V3/vx0OGMHh37WkMZeY/4HSrJ5DAFiQ+O2CuVY=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBnlqG8zLMCrwklnyIIlr1c6crjkQ04dZtUB4lrn
- 0fq1yNYQyKJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZ5ahvAAKCRBy2EO4nU3X
- VkYsEACsVDIyxDx8FWCDEzoQ8x3t26S/Pl/WdhGHdaOioL18ZRG+lA6C4Pe0OXoe7ikI/CR7HZs
- yt0SzPuNK+plbni1FYVxv8NBvMlwOw7l59uJnB77h1/OVBYvazgOOI30jUv3yvNenaAlXxnfw/V
- lRtfQfdVBvGVrZOpXeLtE4W4PI+PrKg3XBOclkzifD8I1VLSpq2Ybu2DDH6jewaJ2JfcB7VCIiU
- 4lblEu7eqA1EpYo5HaA3Wa7YPu0dKyDKctRTm3Ev5Iucc54lCy0lBD3geZrkPiNw1pCe+Ago929
- xUZsAeQDHswwMkexo0a08tBjv1eJHGGoL8icYNCcNTHtRg4O3LRnyAiqTavRRh+6q5bqtcHDvkA
- yynosjKG7H7TqUGNEimZ5PpJT7FQux6uIfyN5QiHT7ypESkaZzg6zd57JQn0CG4z4F56L5Beo0l
- iAim380hvDG4JwPq1n070ewdmlXYb4dikglX6fWquJD5EoHS7Km+OTy5z2C1pdLjdg3x6bprX8Z
- F6pt52axS+bb63dWgva24XZoXtngJavKEaXlXQi7G0u8dP+coly/K+EoLaDCqUCyUK5Sx/RGlth
- X4OYGRTFZa6Y3t2W2QLWfChwN22IeRpOVqSJ14KpIlPqpvyl2bTw9V4zgkjiLVk0xMKp4WkgnPL
- 5D+h5dgx2vz73JA==
-X-Developer-Key: i=luca@lucaweiss.eu; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250126-msm8226-modem-v2-1-e88d76d6daff@lucaweiss.eu>
 
-From: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+On Sun, Jan 26, 2025 at 09:57:20PM +0100, Luca Weiss wrote:
+> From: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
+>=20
+> Add support for platforms such as MSM8974 which have the mx voltage rail
+> exposed as regulator and only cx voltage rail as power domain.
+>=20
+> Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
+> Signed-off-by: Luca Weiss <luca@lucaweiss.eu>
+> ---
+> New patch in v2 split from previous first patch
+>   - Improve description of changes
+>   - Add one power domain changes to existing MSM8974
+>   - Add missing minItems to other platforms
+>   - Require mx-supply for MSM8974
+> ---
+>  .../bindings/remoteproc/qcom,msm8916-mss-pil.yaml  | 34 ++++++++++++++++=
++++---
+>  1 file changed, 30 insertions(+), 4 deletions(-)
 
-Enable modem remoteproc on samsung,matisse-wifi & matisselte.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-Signed-off-by: Luca Weiss <luca@lucaweiss.eu>
----
- arch/arm/boot/dts/qcom/qcom-msm8226-samsung-matisse-common.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/arch/arm/boot/dts/qcom/qcom-msm8226-samsung-matisse-common.dtsi b/arch/arm/boot/dts/qcom/qcom-msm8226-samsung-matisse-common.dtsi
-index fbd568c7d6b7415d240aa1a2329d07cf9135274c..4155bfb2136022f2a85d69451c34f06ed2a700ac 100644
---- a/arch/arm/boot/dts/qcom/qcom-msm8226-samsung-matisse-common.dtsi
-+++ b/arch/arm/boot/dts/qcom/qcom-msm8226-samsung-matisse-common.dtsi
-@@ -225,6 +225,13 @@ &blsp1_uart3 {
- 	status = "okay";
- };
- 
-+&modem {
-+	mx-supply = <&pm8226_l3>;
-+	pll-supply = <&pm8226_l8>;
-+
-+	status = "okay";
-+};
-+
- &rpm_requests {
- 	regulators {
- 		compatible = "qcom,rpm-pm8226-regulators";
-
--- 
-2.48.1
+Best regards,
+Krzysztof
 
 
