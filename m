@@ -1,227 +1,161 @@
-Return-Path: <linux-remoteproc+bounces-2992-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-2997-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25DD9A213D2
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 28 Jan 2025 23:02:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 371FAA2150F
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Jan 2025 00:37:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7DECE7A42CA
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 28 Jan 2025 22:01:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6370B1887E6B
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 28 Jan 2025 23:37:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90742199E80;
-	Tue, 28 Jan 2025 22:02:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590701F5601;
+	Tue, 28 Jan 2025 23:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b="2FmEwSwk"
+	dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b="x5Q+gJec"
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A197DA62;
-	Tue, 28 Jan 2025 22:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FE7EAF6;
+	Tue, 28 Jan 2025 23:36:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738101765; cv=none; b=qOnFYA8Krtcg8QrJJVWEucUjN/qd6e4h9VDMrPe2CcIhVDKUSN0BwwaDl0/Ib8hsJuua9KGLc+53q30sPlWy+MZkH8/2CVknj8BXAeleC/aglAYZpe0y/Dtng5hkOh4t2xN17InxqgLAjLtYa0T85JyP69sPGTLOW6ouFwQUi3U=
+	t=1738107390; cv=none; b=Agn+i6d3TVw47ow7PQmJFSBl1BRj2qNf66qfi3Ww1eEwJ5nw8eFoFwuSLaTFzmPA4x/ZRC8jCeGY2a3rp16+amTqPXP4cgHz/xRVAHfBotD95+immKCn/NR0svyXpJXvGzx/32x07Spb2/Lp22pbpwp0oWR1LA1CiU9zNqyMzEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738101765; c=relaxed/simple;
-	bh=YccFbEl8Fq7zn27tZqe5aQ5AwzGbXsANSfkE8s3T/FQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=V3KmYXM7V/M2TmGpEwB21Fpl3e4cevtfXLkeziCftI/8HJoO4DJS3oKn7cbnqNWFtH9U2UR9I5+UPgrl5dYw9cCmDcnr6mnvSfDqOhDZXJPB4w+gASvuvEDt1Ke8RviKG6wFSE+BkosU4/J9mKx6Ibw62SOyS4CBr0vGzqR1Tvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu; spf=pass smtp.mailfrom=lucaweiss.eu; dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b=2FmEwSwk; arc=none smtp.client-ip=128.199.32.197
+	s=arc-20240116; t=1738107390; c=relaxed/simple;
+	bh=x6gQkQ4gVXHmFdfMkn1LTVVuiTDOy4PcZeJYpn2+DLY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=u19hDvjSOHBo0dfYNuAs19HevsH21pTU5MMzza0U0V49Lc9ND9S27uAsFhpCAUqK5eb1cB3E2FuecpEGcbnZ2HMCGI/R4rKmJ9mRGD8ip6tqVn0fqylm9Cb9dCFE4SSAAu+zSZMNpZXkToBk3e01rFN182bCcggy0+F1ovr3lt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu; spf=pass smtp.mailfrom=lucaweiss.eu; dkim=pass (1024-bit key) header.d=lucaweiss.eu header.i=@lucaweiss.eu header.b=x5Q+gJec; arc=none smtp.client-ip=128.199.32.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lucaweiss.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lucaweiss.eu
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lucaweiss.eu; s=s1;
-	t=1738101762; bh=YccFbEl8Fq7zn27tZqe5aQ5AwzGbXsANSfkE8s3T/FQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=2FmEwSwkh81MQvM817kJpMo2rTXcA26m1DoDAIvH22RLW6JvPlyxf9qPAsfLab+25
-	 Cg0Sf9E7C+s5PA5/HVJgm9Qi5cHg4FDvKlXq97LSMvoUn/VfRvcVnWBnpaiOZMuseY
-	 EhPaFo0p4v8ZvHN029TqB+m13CKONYyNjM60fywU=
+	t=1738107378; bh=x6gQkQ4gVXHmFdfMkn1LTVVuiTDOy4PcZeJYpn2+DLY=;
+	h=From:Subject:Date:To:Cc;
+	b=x5Q+gJecCy5iVMeg3ZmY9StkQcYk5j2LyjR2Nk+nesPg88sc+G+0UbRo6yhlLJSCN
+	 IsRzpCLYlAE/0xv7khGOMNACEHrZKPrDuhBge1jLm/gxstaT289KfYQcDlMGiIMUFc
+	 ooNXSu+W+uwBF8TuLJ2XiuEbgkadZp2BZSORc+TQ=
 From: Luca Weiss <luca@lucaweiss.eu>
-To: Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
- Bjorn Andersson <andersson@kernel.org>,
- Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Stephan Gerhold <stephan@gerhold.net>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Matti =?UTF-8?B?TGVodGltw6RraQ==?= <matti.lehtimaki@gmail.com>,
- linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH v2 3/9] remoteproc: qcom_q6v5_mss: Handle platforms with one power
- domain
-Date: Tue, 28 Jan 2025 23:02:36 +0100
-Message-ID: <2353651.ElGaqSPkdT@lucaweiss.eu>
-In-Reply-To: <Z5iHkeXebKd7HEAO@linaro.org>
-References:
- <20250126-msm8226-modem-v2-0-e88d76d6daff@lucaweiss.eu>
- <2764902.mvXUDI8C0e@lucaweiss.eu> <Z5iHkeXebKd7HEAO@linaro.org>
+Subject: [PATCH v4 00/13] Modem support for MSM8226
+Date: Wed, 29 Jan 2025 00:35:32 +0100
+Message-Id: <20250129-msm8226-modem-v4-0-2b02ed7b7f1c@lucaweiss.eu>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMRpmWcC/13OQQ6CMBCF4auQWVtTCrTVlfcwLho6lSYWTEeqh
+ nB3C3GhLP+XzJeZgDB6JDgWE0RMnvzQ56h3BbSd6a/IvM0NgouGl1yxQEELIVkYLAbmysaUKJ2
+ 2uoZ8c4/o/Gv1zpfcnafHEN8rn8SyfqVF+JOSYJyh1lZJK61x7nQbW/NET7THERYsVb/A9pVUZ
+ UAqPEittELcAvM8fwDgtgm97gAAAA==
+X-Change-ID: 20250107-msm8226-modem-f15a1e6f8d84
+To: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Stephan Gerhold <stephan@gerhold.net>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ =?utf-8?q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Luca Weiss <luca@lucaweiss.eu>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Stephan Gerhold <stephan.gerhold@linaro.org>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3518; i=luca@lucaweiss.eu;
+ h=from:subject:message-id; bh=x6gQkQ4gVXHmFdfMkn1LTVVuiTDOy4PcZeJYpn2+DLY=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBnmWnTIxBi0vijtcDpq4QcN+UZHQRIBOBQk20Qj
+ LyMULlWQqKJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZ5lp0wAKCRBy2EO4nU3X
+ VgJeD/9u4b8tOfdaKFIEnVtU/jLNZWoviNWVJdxLO5cBfePgqde6wLsiUuq3bUZovqoVr97Mj/I
+ TGZUwtNF4HlpgHmXL4E2sFWCuHos2Hw3T85kaP0eVgNKGAzJiKcMvqyK0fYiucnG8d5jaZHHboy
+ oO077l1ju1mu55NqDtjSbJL8sbYNJmryx68DUr1jRLpdkulTeedmeMP9LYFYhGHmCkbYHJo1RAv
+ K3Otw92dppABo6oAXrao5p+r2RikZALHU+jBj3f7n/K1f4459nf3j4Yr6FkswlPmlh99E+GnVv6
+ BqNI3IjjTdXqdVXQaajMRvEbv1s+EkEsfFf7c2FpTES8eQ42FnlNqGV6cklbvJz4TRRRAovo7c/
+ ymxgVFyhkJAuscmS0XsdAn9L/zShGaFbnkUVo5ArPE9hCyHCA8W0pc7rbwpj4+z1/zDSSNvKjni
+ nZWYo7YWvXdjMC8aMOSfe6OvI26tn76u+NYRwsh+9RQ+TUn365EAtlTKDUC1BSM08b0Eavxa4/b
+ f1JbaWtNjwlN6USNJrPeWuqmRRWxDswAJCgmfZYcQtkAfqSFXKonQYBiCIOjZ4xYzCZCunC+0q/
+ NekXvdjge64D9CAoPADMcMyGDL4sD7jIVRYusckJZMNHRNsvxEb4NWuFfwW+t/q2W3gk4KTaWhx
+ mLdT6NuadtRpeMg==
+X-Developer-Key: i=luca@lucaweiss.eu; a=openpgp;
+ fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 
-On dinsdag 28 januari 2025 08:30:25 Midden-Europese standaardtijd Stephan G=
-erhold wrote:
-> On Mon, Jan 27, 2025 at 11:21:04PM +0100, Luca Weiss wrote:
-> > On maandag 27 januari 2025 09:58:45 Midden-Europese standaardtijd Steph=
-an Gerhold wrote:
-> > > On Sun, Jan 26, 2025 at 09:57:22PM +0100, Luca Weiss wrote:
-> > > > For example MSM8974 has mx voltage rail exposed as regulator and on=
-ly cx
-> > > > voltage rail is exposed as power domain. This power domain (cx) is
-> > > > attached internally in power domain and cannot be attached in this =
-driver.
-> > > >=20
-> > > > Fixes: 8750cf392394 ("remoteproc: qcom_q6v5_mss: Allow replacing re=
-gulators with power domains")
-> > > > Co-developed-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
-> > > > Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
-> > > > Signed-off-by: Luca Weiss <luca@lucaweiss.eu>
-> > > > ---
-> > > > Changes in v2:
-> > > >   - Move MSM8974 mx-supply from "fallback_proxy_supply" to
-> > > >     "proxy_supply" to match updated DT schema
-> > > >   - Add fixes tag
-> > > > ---
-> > > >  drivers/remoteproc/qcom_q6v5_mss.c | 20 +++++++++++++++++---
-> > > >  1 file changed, 17 insertions(+), 3 deletions(-)
-> > > >=20
-> > > > diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remotepro=
-c/qcom_q6v5_mss.c
-> > > > index e78bd986dc3f256effce4470222c0a5faeea86ec..e2523b01febf393abfe=
-50740a68b85a04011293c 100644
-> > > > --- a/drivers/remoteproc/qcom_q6v5_mss.c
-> > > > +++ b/drivers/remoteproc/qcom_q6v5_mss.c
-> > > > @@ -1828,6 +1828,13 @@ static int q6v5_pds_attach(struct device *de=
-v, struct device **devs,
-> > > >  	if (!pd_names)
-> > > >  		return 0;
-> > > > =20
-> > > > +	/* Handle single power domain */
-> > > > +	if (dev->pm_domain) {
-> > > > +		devs[0] =3D dev;
-> > > > +		pm_runtime_enable(dev);
-> > > > +		return 1;
-> > > > +	}
-> > > > +
-> > > >  	while (pd_names[num_pds])
-> > > >  		num_pds++;
-> > >=20
-> > > Hmm, I think you should put the above if condition below this loop and
-> > > verify that num_pds =3D=3D 1. Otherwise this would hide the error con=
-dition
-> > > if the platform needs multple PDs, but someone only specifies one of
-> > > them in the DT. i.e.
-> > >=20
-> > > 	if (num_pds =3D=3D 1 && dev->pm_domain) {
-> > > 		// ...
-> > > 	}
-> > >=20
-> > > > =20
-> > > > @@ -1851,8 +1858,15 @@ static int q6v5_pds_attach(struct device *de=
-v, struct device **devs,
-> > > >  static void q6v5_pds_detach(struct q6v5 *qproc, struct device **pd=
-s,
-> > > >  			    size_t pd_count)
-> > > >  {
-> > > > +	struct device *dev =3D qproc->dev;
-> > > >  	int i;
-> > > > =20
-> > > > +	/* Handle single power domain */
-> > > > +	if (dev->pm_domain && pd_count) {
-> > >=20
-> > > Maybe if (pd_count =3D=3D 1 && dev->pm_domain) for consistency with t=
-he
-> > > above then.
-> >=20
-> > Good suggestions, thanks!
-> >=20
-> > >=20
-> > > > +		pm_runtime_disable(dev);
-> > >=20
-> > > I'm guessing it does, but just to make sure: Have you verified that t=
-he
-> > > power domain is indeed voted for off after this call to
-> > > pm_runtime_disable()? Start the remoteproc and when it's booted inspe=
-ct
-> > > /sys/kernel/debug/pm_genpd/pm_genpd_summary to see if the PD/remotepr=
-oc
-> > > dev is suspended.
-> >=20
-> > Looks sane I think (modem: remoteproc@fc880000)
-> >=20
->=20
-> The modem does look sane yeah...
->=20
-> > htc-memul:~$ sudo cat /sys/kernel/debug/pm_genpd/pm_genpd_summary
-> > domain                          status          children        perform=
-ance
-> >     /device                         runtime status                  man=
-aged by
-> > -----------------------------------------------------------------------=
-=2D------
-> > oxili_cx                        off-0                           0
-> >     fdb00000.gpu                    suspended                   0      =
-     SW
-> > camss_vfe                       off-0                           0
-> > camss_jpeg                      off-0                           0
-> > mdss                            on                              0
-> >     fd900000.display-subsystem      active                      0      =
-     SW
-> > venus0                          off-0                           0
-> > cx_vfc                          off-0                           0
-> > cx_ao                           off-0                           0
-> > cx                              on                              0
-> >     fc880000.remoteproc             suspended                   0      =
-     SW
-> >     fe200000.remoteproc             unsupported                 0      =
-     SW
-> >     fb204000.remoteproc             suspended                   0      =
-     SW
->=20
-> ... but "unsupported" for ADSP and the end result for cx ("on") does
-> look suspicious. Looking at qcom_q6v5_pas.c, it uses almost the same
-> code for single power domain support as here...
->=20
-> What state is the ADSP in here at this point? Did it boot sucessfully?
->=20
-> If I'm reading the code correctly, the pm_runtime_enable() in
-> adsp_pds_attach() should get rid of the "unsupported" at probe time,
-> so I'm a bit confused how this can happen..
->=20
-> [5 minutes of staring later...]
->=20
-> Um, qcom,msm8226-adsp-pil uses &adsp_resource_init, which doesn't have
-> any "proxy_pd_names". It should use &msm8996_adsp_resource so that it
-> actually manages the CX power domain. Same for MSM8974, but that was
-> never converted to use power domains... =F0=9F=99=88
+This series adds support for modem remoteproc found on MSM8226.
+It also adds needed device tree nodes and enables modem used for
+location service on matisse-wifi.
 
-Oh wow, thanks for catching this!
+Also bam-dmux node is added for mobile data which is used on
+3G/4G-enabled devices.
 
->=20
-> Can you submit a patch that changes at least msm8226 to use
-> &msm8996_adsp_resource? Would be also good to make the same changes
-> I suggested here (check num_pds =3D=3D 1 / pd_count =3D=3D 1).
+Signed-off-by: Luca Weiss <luca@lucaweiss.eu>
+---
+Changes in v4:
+- Drop mx from .proxy_pd_names for msm8974 as it's always a regulator
+  @Stephan: Please check that one also since I still picked up your R-b
+- Move q6v5_external_bhs_enable to just after regulator enable and
+  _disable to just before regulator disable, instead of them being in
+  _probe and _remove (Stephan)
+- Pick up tags
+- Link to v3: https://lore.kernel.org/r/20250127-msm8226-modem-v3-0-67e968787eef@lucaweiss.eu
 
-Sent a series to fix the above and this:
-https://lore.kernel.org/linux-arm-msm/20250128-pas-singlepd-v1-0-85d9ae4b00=
-93@lucaweiss.eu/T/
+Changes in v3:
+- Include dt-bindings & driver patch for MSM8926 modem which is slightly
+  different
+- Include patch to add msm8926.dtsi with modified modem
+- Include patch to enable modem on MSM8926 HTC memul
+- In single-pd driver patch modify if conditions to only trigger for
+  8226, even for misconfigured dts (Stephan)
+- Don't /delete-node/ & /delete-property/ for no-modem smartwatches,
+  just make mpss_region & mba_region be disabled by default (Stephan)
+- Configure matisselts mss-supply correctly (Stephan)
+- Pick up tags
+- Link to v2: https://lore.kernel.org/r/20250126-msm8226-modem-v2-0-e88d76d6daff@lucaweiss.eu
 
-Regards
-Luca
+---
+Luca Weiss (8):
+      dt-bindings: remoteproc: qcom,msm8916-mss-pil: Add MSM8926
+      remoteproc: qcom_q6v5_mss: Handle platforms with one power domain
+      remoteproc: qcom_q6v5_mss: Add modem support on MSM8226
+      remoteproc: qcom_q6v5_mss: Add modem support on MSM8926
+      ARM: dts: qcom: msm8226: Add modem remoteproc node
+      ARM: dts: qcom: msm8226: Add BAM DMUX Ethernet/IP device
+      ARM: dts: qcom: Introduce dtsi for LTE-capable MSM8926
+      ARM: dts: qcom: msm8926-htc-memul: Enable modem
 
->=20
-> Thanks,
-> Stephan
->=20
+Matti Lehtimäki (5):
+      dt-bindings: remoteproc: qcom,msm8916-mss-pil: Support platforms with one power domain
+      dt-bindings: remoteproc: qcom,msm8916-mss-pil: Add MSM8226
+      ARM: dts: qcom: msm8226: Add node for TCSR halt regs
+      ARM: dts: qcom: msm8226: Add smsm node
+      ARM: dts: qcom: msm8226-samsung-matisse-common: Enable modem
 
+ .../bindings/remoteproc/qcom,msm8916-mss-pil.yaml  |  64 ++++++-
+ arch/arm/boot/dts/qcom/msm8926.dtsi                |  11 ++
+ .../dts/qcom/qcom-apq8026-samsung-matisse-wifi.dts |   1 +
+ .../dts/qcom/qcom-apq8026-samsung-milletwifi.dts   |   2 +
+ .../dts/qcom/qcom-msm8226-microsoft-common.dtsi    |   6 +-
+ .../dts/qcom/qcom-msm8226-microsoft-dempsey.dts    |   1 +
+ .../dts/qcom/qcom-msm8226-microsoft-makepeace.dts  |   1 +
+ .../dts/qcom/qcom-msm8226-microsoft-moneypenny.dts |   1 +
+ .../qcom/qcom-msm8226-samsung-matisse-common.dtsi  |  19 ++-
+ arch/arm/boot/dts/qcom/qcom-msm8226.dtsi           | 147 ++++++++++++++++
+ arch/arm/boot/dts/qcom/qcom-msm8926-htc-memul.dts  |  14 +-
+ .../qcom/qcom-msm8926-microsoft-superman-lte.dts   |   1 +
+ .../boot/dts/qcom/qcom-msm8926-microsoft-tesla.dts |   1 +
+ .../dts/qcom/qcom-msm8926-motorola-peregrine.dts   |   2 +-
+ .../dts/qcom/qcom-msm8926-samsung-matisselte.dts   |   5 +
+ drivers/remoteproc/qcom_q6v5_mss.c                 | 186 ++++++++++++++++++++-
+ 16 files changed, 446 insertions(+), 16 deletions(-)
+---
+base-commit: 15fbefd533c38e72315c25ae3746005fddb4b8e3
+change-id: 20250107-msm8226-modem-f15a1e6f8d84
 
-
+Best regards,
+-- 
+Luca Weiss <luca@lucaweiss.eu>
 
 
