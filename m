@@ -1,161 +1,126 @@
-Return-Path: <linux-remoteproc+bounces-3080-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-3082-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 751F6A3FAC1
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 21 Feb 2025 17:19:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A21BFA427CB
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 24 Feb 2025 17:23:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BCDB861837
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 21 Feb 2025 16:09:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF892168A5D
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 24 Feb 2025 16:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E12BF1FBEB0;
-	Fri, 21 Feb 2025 16:03:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2401F1A3176;
+	Mon, 24 Feb 2025 16:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DtksPI8d"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d+yhHi3s"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A81661FF603
-	for <linux-remoteproc@vger.kernel.org>; Fri, 21 Feb 2025 16:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D0518950A
+	for <linux-remoteproc@vger.kernel.org>; Mon, 24 Feb 2025 16:23:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740153790; cv=none; b=h3I2CVQhbazHoeVue8Yz1AXQNl13fjfTitMJ5j4jvd5jOEBojiwHmzv8oYcUGkJ/iHZjVs3knfI0Ki72tQS7E6aTW0eSDMeI77PI1QwjE/2Wd0yBBWBlgD9FT09o2ySvPfUqbVrxQ20Bxt4GqWIee9nSrvaqGbvazqgvzp/k6HA=
+	t=1740414184; cv=none; b=mDip0XZCdWCBkHSAioVrFwiw2jubPp29bRJsRp0EyhLUStI+++i2jtQxlIzs/2pspOitRYiJW0VYJZ5WHbZuP9aLEN1K9jkraotUrCNIQvKGFdnE6QmIx/HGjgVrFOHBOSBGnqjaO/ZQ29RCOT9TODy2sU+8K/d6suVdosIa6Lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740153790; c=relaxed/simple;
-	bh=jNpVKLpJOZImpyW3PpLBE59YQPImFyESp7Aep3FgeYc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rOW61f8mRGNyAe4RAdD+4Xp3Nja3dGvskQqKn7SidgHWA6l7YlKE76bln+a/O6ETYikxv1lyBG4IQmRJc4v01/dw93cEIOBaYuymjBDgCNyMqjUrBmVDk/n8uW1uuvig3XpQpKM81Q3K7zoQ5l0sKb7v/GRPCg176EhdlMv7lMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DtksPI8d; arc=none smtp.client-ip=209.85.208.52
+	s=arc-20240116; t=1740414184; c=relaxed/simple;
+	bh=OPT6qQsNtzyNIGY8raE9TrOAutuaFnPvwjknhDTd0i4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cM/o0KQMDYp06pmkawqnmiQDAfmJ9p0jR47UuRuYOU5RMUyqN3bjPt1KWhgVLaXrJPy39NEhpzY4+dzlnhhMOjgjOuCy144WdKxbwwjYlH2keKktld9yCvUvMU1wORE2DQM5WC7CM4/cQi2aSmkPErVhOlKS/2MTIUxlQXd0/kI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=d+yhHi3s; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5dc191ca8baso461311a12.1
-        for <linux-remoteproc@vger.kernel.org>; Fri, 21 Feb 2025 08:03:08 -0800 (PST)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-220c92c857aso79079515ad.0
+        for <linux-remoteproc@vger.kernel.org>; Mon, 24 Feb 2025 08:23:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740153787; x=1740758587; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4OXcF/TG2PCFERI1SWimzKBOweiSs1ZB9MJg92lP4jc=;
-        b=DtksPI8dHyXYI3s8/lSvEydMFfe1Ml0RKpZXT9qDgs/XJbs+PrPqJzY5eEQljcQ1yq
-         jkIpdnxGsPPsDxaLEK8t3ylKrCX2nJuuhcuPj8YYyFaTYR/+vU5ylpUaVN76ck+KBx+A
-         fAzUfz7YESVaN7xCiDUNZ2pCB8Epg7QelzWians6hJUKJN0ezGNcA2eE/cOKctmmd7te
-         0o0Cz/vNUoBdmG/LXzcjtJuYZcCzh7MAcWajWtjkD6rbTBT9M6HqUlsb53eAdkI8jFoN
-         WojTZ7JCLrLBDTkoih+dOtJmhOZ2U4G7JlNpm48UCtY3nTlbDZtXGg/hLwLQGWDgVHIk
-         z3ZA==
+        d=linaro.org; s=google; t=1740414181; x=1741018981; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9HW8mIRa9V/90F96aEndp8VPY5eTy4hb9hqr/gPpaTU=;
+        b=d+yhHi3sVPaWGuGepFrNVgwKjpEqddc6l8fs8dBFkfTTQqexEm6MIjyYE2xxKUI1cH
+         yWxttjx2gAx1W7hCumuKmstEGBTSo9thz6UM0y86vYQhOR7cLFW7m9Ijt3QTd0a8fH3/
+         aiW3X64HmTBWbhDOh2hUEdx5LzNHNhTXeTmkObqveOKgkx0KF0Ej9pH1iHLI57awuQIt
+         pShDWByCoaALBmvYsAluioAn3ePOXGI3PfV/zfAvbqZ/ZjAeFc4rubz6QQ07HL0Bdt4C
+         LsJpjcC8WaKXyz5j7UdZGIyUe0JZWUBoO2gAj22yRIMG5cHMpFur0PbRUYPMnjow4iTJ
+         GS5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740153787; x=1740758587;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4OXcF/TG2PCFERI1SWimzKBOweiSs1ZB9MJg92lP4jc=;
-        b=IPVUWxl2eyScGxDRMJ13l84OKjatWxU1fm6bHcN2C8Y+Gzppaogtw8QW3Ss+FXhD9X
-         vxO2mjbIfpenLFRRllpsHHOCx4SiiJkNV5aeJOF4W673UrgGzJYJbKsai9JNuq8Nh0Ft
-         2NckNOjB8BSrM7Ymf6ToO6zznl/nhCh5M0BdCPU/qtpBVR0nRlbpXgfryZfjTUArde6J
-         bkyT0Fnpq2EQCnuPARNrYeX+82XrGRcp/XlwMAeF8BrB4ElgEKnKb8kVgD6B80wzBA75
-         7gTN/1Tgw5Xd8A9fB38POGJTlsgPTAB+sZWWUIDOyUEE6JsyTnqCWQySVFnRW9sMRFhd
-         RMBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCULs3Rk85t8Vh31/+8DIaCuNJ83a1IzZqCWdYNACOXyn6ZwikIU3Jwj1unmlNME215CHjZ58L5RULeAb5i+d1cE@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTvRhlXHhpzZB7p66AOlzmbjv4MOuWLTrbEdthtFIVsi6+K/4j
-	HcWgCn0GbsKd5HzC5vVvD4Bkv3bE0Xlq4MF1dIMkyOW6b8HH8LnJA4yjAoW3gD8=
-X-Gm-Gg: ASbGncu/9ftAArK1HwdEyp60La4lZJoaRX9dW7fI0qZ4nMrwIU9VW3HD/L8iFQK9iBA
-	p1piu9YQgy5LHN0u3tbm1cd5JYFaaITA+8VA+4/sGnFQRjpppBrhtWoZmezFREM7IdhoeHBfNQ6
-	b7rdCEZa2Q9mwh6PsP55cn7IXfMnac3ggIYuBCC0vFGc8UEZgkYsq+lGYde7f8dGxxyQu9EQsGu
-	em4zDr1TiNSXxdmWB07q/dhLoR55PgG4C/lyPfLFSjCZctwXlFCRdzSWwAfSMgzx3AJXKLYyuOp
-	J+8SYy6vWjBL+i2Y5g3Yz3xPoGEYeiRgxdx6eRxiZld2M0m0IHo5xeWdSaVu74egER7XVnSzfWs
-	=
-X-Google-Smtp-Source: AGHT+IEkEFcjqxp6Jb7RRhAg97Jh8Ki4FzCRDMhO8xX32MsiOvuIBNnukhiVmbZ0l7ZZyA6t7WA3Rw==
-X-Received: by 2002:a05:6402:4406:b0:5e0:803c:2440 with SMTP id 4fb4d7f45d1cf-5e0b72311b3mr1279503a12.8.1740153786941;
-        Fri, 21 Feb 2025 08:03:06 -0800 (PST)
-Received: from krzk-bin.. (78-11-220-99.static.ip.netia.com.pl. [78.11.220.99])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb98640619sm1040782766b.54.2025.02.21.08.03.05
+        d=1e100.net; s=20230601; t=1740414181; x=1741018981;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9HW8mIRa9V/90F96aEndp8VPY5eTy4hb9hqr/gPpaTU=;
+        b=burlUrse4ekRZ3lvinMOnv6G//Wp2c2X8Z7YKDVc6zAPd2vmaMUZwJlwEYrBe/be0+
+         kFIzu0xmSjHDt5VDEYzb1uAJVh+URKofO9FEnVGv4SA65+AcR6Sn56mKpB+SDk/0NfCq
+         ecz5C47yrXvB6r3a18rjhLYCsr/dy48+pm77AK7kCFw8ysYLX5bKMzcR5jA1GRTaKi0o
+         hqBmHlvI/6bk4LO6/l2KAveQXIpKHy+dvqgp46duN6NGrjADS97Lu4XZ3UNv2hS9UN3C
+         83oBeSvLIlrbX/LPPCcw3SDyiynXKqiZROYLX8UZw6Ln9hwgKNQAkIBA/Bi4B0QigPV0
+         TEQA==
+X-Forwarded-Encrypted: i=1; AJvYcCXnc4ugW+70+Rk6q5xKo2mMhvKfcCR3hd+JX+rwGtxyng+AoVL93/Xb2kcH73FWOeR8W14DBSCv2AAtfTPILVMo@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPmRXlGFfNNayPx2h8qk7fYfdx4vj3Qq4+031TCCtgyRwCBABn
+	SKv6UV/J2wMuqYiuClukoEWsFvK3044CyrElYa+ySaUciLzLTSChxUGYVYpV+ig=
+X-Gm-Gg: ASbGnctyprDqlSQptWzS6jnJMCm9XfGxAVVr9HGbT66tIHf9LsrHF0v937ylfseC4yb
+	SGwPLF+UqmxAiVjF7HIdirOxX/BoR4g5ZFhNnyrXjsgwvcXfgtW1li4vbtCK3UoUAl969+8dKB7
+	fnfZz6HOXJKWiaOk4qMV1NjovEn2F11W+qU2WC2pet8dDSoTcyyTEN6fqqK/2JXRU0HuZvQaXRQ
+	2hda7OzeBYNreUFlZ45/j33/RhJ49EKu/MHZ70G/BSW8iGdbIp93s9G+GutE0zz+H8M8shKn/gB
+	ZFrMRpNJvJpcgsLoakoIwr6YDAPx
+X-Google-Smtp-Source: AGHT+IFDFplnMA6+/8FYcZqB6DS/ssdWReuVVNZtjllJgj6vqL14f/4j3jgX+FcwDSzN/kuF2IhjYg==
+X-Received: by 2002:a17:902:e549:b0:21f:6d63:6f4f with SMTP id d9443c01a7336-2218c3d0815mr271291165ad.2.1740414181558;
+        Mon, 24 Feb 2025 08:23:01 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:b170:307:9f3b:9744])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7328619e138sm14385748b3a.66.2025.02.24.08.22.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 08:03:06 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH RFC v2 2/2] remoteproc: qcom: pas: Add SM8750 MPSS
-Date: Fri, 21 Feb 2025 17:03:00 +0100
-Message-ID: <20250221160300.160404-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250221160300.160404-1-krzysztof.kozlowski@linaro.org>
-References: <20250221160300.160404-1-krzysztof.kozlowski@linaro.org>
+        Mon, 24 Feb 2025 08:23:00 -0800 (PST)
+Date: Mon, 24 Feb 2025 09:22:58 -0700
+From: Mathieu Poirier <mathieu.poirier@linaro.org>
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: andersson@kernel.org, linux-remoteproc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+	kernel test robot <lkp@intel.com>, Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH] remoteproc: omap: add comment for is_iomem
+Message-ID: <Z7yc4vxYkTMhSWni@p14s>
+References: <20250217075858.616737-1-peng.fan@oss.nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250217075858.616737-1-peng.fan@oss.nxp.com>
 
-Add remote processor PAS loaders for SM8750 MPSS (modem), which differs
-from SM8650 by lack of fifth memory region for Qlink Logging.
+On Mon, Feb 17, 2025 at 03:58:58PM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Address warning: "Function parameter or struct member 'is_iomem' not
+> described in 'omap_rproc_da_to_va'" with adding comment for is_iomem.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202502161648.WZWrFV7I-lkp@intel.com/
+> Cc: Andrew Davis <afd@ti.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/remoteproc/omap_remoteproc.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Applied - thanks,
+Mathieu
 
----
-
-Changes in v2:
-None
----
- drivers/remoteproc/qcom_q6v5_pas.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
-
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index 97c4bdd9222a..c34b7780f786 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -1409,6 +1409,30 @@ static const struct adsp_data sm8650_mpss_resource = {
- 	.region_assign_vmid = QCOM_SCM_VMID_MSS_MSA,
- };
- 
-+static const struct adsp_data sm8750_mpss_resource = {
-+	.crash_reason_smem = 421,
-+	.firmware_name = "modem.mdt",
-+	.dtb_firmware_name = "modem_dtb.mdt",
-+	.pas_id = 4,
-+	.dtb_pas_id = 0x26,
-+	.minidump_id = 3,
-+	.auto_boot = false,
-+	.decrypt_shutdown = true,
-+	.proxy_pd_names = (char*[]){
-+		"cx",
-+		"mss",
-+		NULL
-+	},
-+	.load_state = "modem",
-+	.ssr_name = "mpss",
-+	.sysmon_name = "modem",
-+	.ssctl_id = 0x12,
-+	.smem_host_id = 1,
-+	.region_assign_idx = 2,
-+	.region_assign_count = 2,
-+	.region_assign_vmid = QCOM_SCM_VMID_MSS_MSA,
-+};
-+
- static const struct of_device_id adsp_of_match[] = {
- 	{ .compatible = "qcom,msm8226-adsp-pil", .data = &adsp_resource_init},
- 	{ .compatible = "qcom,msm8953-adsp-pil", .data = &msm8996_adsp_resource},
-@@ -1474,6 +1498,7 @@ static const struct of_device_id adsp_of_match[] = {
- 	{ .compatible = "qcom,sm8650-adsp-pas", .data = &sm8550_adsp_resource},
- 	{ .compatible = "qcom,sm8650-cdsp-pas", .data = &sm8650_cdsp_resource},
- 	{ .compatible = "qcom,sm8650-mpss-pas", .data = &sm8650_mpss_resource},
-+	{ .compatible = "qcom,sm8750-mpss-pas", .data = &sm8750_mpss_resource},
- 	{ .compatible = "qcom,x1e80100-adsp-pas", .data = &x1e80100_adsp_resource},
- 	{ .compatible = "qcom,x1e80100-cdsp-pas", .data = &x1e80100_cdsp_resource},
- 	{ },
--- 
-2.43.0
-
+> diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
+> index 5f463937cbbf..9c7182b3b038 100644
+> --- a/drivers/remoteproc/omap_remoteproc.c
+> +++ b/drivers/remoteproc/omap_remoteproc.c
+> @@ -724,6 +724,7 @@ static int omap_rproc_stop(struct rproc *rproc)
+>   * @rproc: remote processor to apply the address translation for
+>   * @da: device address to translate
+>   * @len: length of the memory buffer
+> + * @is_iomem: pointer filled in to indicate if @da is iomapped memory
+>   *
+>   * Custom function implementing the rproc .da_to_va ops to provide address
+>   * translation (device address to kernel virtual address) for internal RAMs
+> -- 
+> 2.37.1
+> 
 
