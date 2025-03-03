@@ -1,639 +1,206 @@
-Return-Path: <linux-remoteproc+bounces-3107-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-3109-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ECD6A4E3E0
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Mar 2025 16:42:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC093A4EA75
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Mar 2025 19:05:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5005119C3A30
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Mar 2025 15:34:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 817B718971D6
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  4 Mar 2025 17:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0794827E1D4;
-	Tue,  4 Mar 2025 15:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED3242D3A6F;
+	Tue,  4 Mar 2025 17:39:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DHgJml78"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="L3nS6aHS"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A6327E1BE;
-	Tue,  4 Mar 2025 15:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106FA2D1F4B
+	for <linux-remoteproc@vger.kernel.org>; Tue,  4 Mar 2025 17:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.116
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741109941; cv=fail; b=RxMsrH1pr/DdoZghLAx5oD0PZM6L5SbFEkO6qhVX2N/EhRyHxl7KY+tM92G0iGe38K/4HA2GLH/LXHuUd6GkPwFq1Q29OBT1PUkZjgnzCrsIGvET1TVIwPAUEuYbVllZo7Skt3mDoHvks48rTQQpnDdQR1/hBQMqF8s/CRHJ8Fw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741109941; c=relaxed/simple;
+	bh=L052cmVk4wyGc+Nu9lUf05ZJ4kgBMInXjELKQika774=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sphQroqfGDDRmNza5yEfrXeDPUuZze/5JpLi7DMbB+GId47Y9i60qLIxRBgl8bWa6eFxhBmA0paQjm8SgKWd/WOiIl6HbJCK+jk3Qi4XQL1sWjZjHbpqxAgDtW7/kKVsViTa/N3vQwrJ5oP/UEcm75qKuDfnRr6YPDhFDrjQRRQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=L3nS6aHS reason="signature verification failed"; arc=none smtp.client-ip=205.220.180.131; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; arc=fail smtp.client-ip=160.75.25.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
+Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id 1D36B4089261
+	for <linux-remoteproc@vger.kernel.org>; Tue,  4 Mar 2025 20:38:58 +0300 (+03)
+X-Envelope-From: <root@cc.itu.edu.tr>
+Authentication-Results: lesvatest1.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=quicinc.com header.i=@quicinc.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=L3nS6aHS
+Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6gHh12SszG1bl
+	for <linux-remoteproc@vger.kernel.org>; Tue,  4 Mar 2025 18:55:12 +0300 (+03)
+Received: by le1 (Postfix, from userid 0)
+	id 7A85B4272E; Tue,  4 Mar 2025 18:55:07 +0300 (+03)
+Authentication-Results: lesva1.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=L3nS6aHS
+X-Envelope-From: <linux-kernel+bounces-541238-bozkiru=itu.edu.tr@vger.kernel.org>
+Authentication-Results: lesva2.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=L3nS6aHS
+Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
+	by le2 (Postfix) with ESMTP id A027B42192
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:10:14 +0300 (+03)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id 5129B2DCDE
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:10:14 +0300 (+03)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8B201667C7
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 09:09:28 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46EAD1F0E55;
+	Mon,  3 Mar 2025 09:09:07 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58201F03D7;
+	Mon,  3 Mar 2025 09:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741101786; cv=none; b=kCe0Qc8AvbsVVco0rtW7wRvrfjZhvVoIJJm/pLTb8+lQAFVSxiQD0BM8J6cE4z8669F27fVuVrHJIguDC6zUxDmKNk5lxX3GSI58YRFn6mTzCRHAWVDM0lJ94rBThY9hHQXzZdpm9p8pv0ZglR/qR5QNdKUkncLLWuEdBieyAMs=
+	t=1740992944; cv=none; b=lx7hAGKEiY/WkNi00KgZSBxJJoDEa4XgiLB3xObVHgoRjkT+ojWkAwF/LSfzHPrusKwv18RXUZJF/0tH+wxLAHOXBtPIOmQ4raHIP8pX2i/NqAVo3pbILenEwol2s/GW0rBvEfrdr9SI6yOnQ1bwgnNjo8+dDIkHoCFeeiCmrDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741101786; c=relaxed/simple;
-	bh=i9Fjy7b2eniP9gOtdKlYjWzyR05PlZoTy9/QadsvNPw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XQ/kv5UyvqDhk1DE2tfj0slG6c3KJt1hgu5mvfTNK4nkPUhjrSB1jVa0iHyj42/67sndI9HswLXQ2aNIRsHg+QocKieMcRMttIGYjOf0xkXt822cyK1Sww2eF4fAhI81miZxIi3yFO6PAdkDW0zkHh+iwWM72Y8GIJ0mFjItddg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DHgJml78; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D89C4CEE5;
-	Tue,  4 Mar 2025 15:23:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741101785;
-	bh=i9Fjy7b2eniP9gOtdKlYjWzyR05PlZoTy9/QadsvNPw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DHgJml78DLps98lqFgDlcMtJyuV+dOydli6fpT7JTKinY5OtRIGp/rKzbvp4uVnUS
-	 kJQpjRnoTJiVWVwGQSV1JcEQpGnxbHc/6fUFBmAwThb/BMCNorvmg3x2mrAx6fUxy4
-	 gLRhZGdlvY50RJ7SXXrBx5/BcwgIqr9QA+tAzQxtndy6t5xGTus2fo4z3A7fyQ6qBU
-	 52cL9e5HDkLHUDQE6CWjAW5PnI6yADtgzDTj55r3d0upF3QnwyOos/6YCnB/X30zzX
-	 dPVNu8i/RSW18QwZezVHhOmAwThti1sbi4G4K3vf9Ne6GTEy8voEf44u1Hon+uij2T
-	 zh+mPcfEUMkPA==
-Date: Tue, 4 Mar 2025 09:23:03 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>, 
-	linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v15 3/8] remoteproc: Introduce load_fw and release_fw
- optional operation
-Message-ID: <24qvypaz5flpioelqxjamtk4hi6qiicqqbyp3glix5bmwclnvi@uz5sg2drsj2k>
-References: <20241128084219.2159197-1-arnaud.pouliquen@foss.st.com>
- <20241128084219.2159197-4-arnaud.pouliquen@foss.st.com>
- <adqulwb54wvn36mnjq7u23qdiyapadr3ruhqluxab7mg3kowz5@4rexefd5mlwp>
- <a8654e63-ff92-4d11-a3f5-75626e6dc6fe@foss.st.com>
- <ol4wp4szz2qpyz7viukivpjtvx3urw3yfaae3rzxvfuywrfjmb@aojo6gcc65ww>
- <1f720397-1af2-4cd7-9cf5-fecc3f40c9db@foss.st.com>
+	s=arc-20240116; t=1740992944; c=relaxed/simple;
+	bh=ZRrV6YVukHwqMpA7xuFqqMELfGYmOq7MQoJMG5pfdZ0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tMaZspEGNP1X1gwzYPpJPnT1+np3o1E4/Hv1FzWbNgMvq9CZMofXVeOWjqbQxYXsiuZe4Pa81rZ+2feXZr51WVmmgMwmPFLrECG9cDETZTUudQMk/AhQQfu8NQSRN2/xextTK0kNwfyG3if1w0ORuOnt7t4cco6jYFWzLM+X27Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=L3nS6aHS; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 522MmU91029520;
+	Mon, 3 Mar 2025 09:08:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=1imeeoL46u9Hm/RGGWve8ZtZEslUgdzzc5Q
+	ogPrqr+c=; b=L3nS6aHSaTL3v/MiZBQNDavAS2N8rx5TXjsVIS7nbMYAVjtcx4s
+	yiXvFmOLJUMIulLlRvQh0Z+5ypxdEMOEFf/8l/6v9oJmXpG/rUWN+qgar/DdsbZn
+	i/dgczwB9Ijj+gsdcmq1A7zL0DrzZf6b1JRZ4PaJRVEbvGpIJHSZUfF1b08SQOrj
+	My72yn2xRww/nJwpYjNEc8cY65YXMhgQKKyDJLM4hAEtaFT3nq/GMEEeU/aROfR2
+	raXk5zXz33RR3ejps9jtHhPzKjQ3I8nYrUxrUD3FyS/kPOQwydiXiXY/A9/663SW
+	wwYOpexv16NQ4VkNw19+HkG22JzxaltE6ag==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453tm5mc71-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 09:08:58 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 52391opR010699;
+	Mon, 3 Mar 2025 09:08:55 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 453uakvnwy-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 09:08:54 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 52395vJk014646;
+	Mon, 3 Mar 2025 09:08:54 GMT
+Received: from hu-devc-hyd-u22-c.qualcomm.com (hu-schowdhu-hyd.qualcomm.com [10.213.97.56])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 52398seY017511
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 09:08:54 +0000
+Received: by hu-devc-hyd-u22-c.qualcomm.com (Postfix, from userid 2365959)
+	id C9EC759C; Mon,  3 Mar 2025 14:38:53 +0530 (+0530)
+From: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To: Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: stable <stable@vger.kernel.org>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH v1] remoteproc: Add device awake calls in rproc boot and shutdown path
+Date: Mon,  3 Mar 2025 14:38:52 +0530
+Message-Id: <20250303090852.301720-1-quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.34.1
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1f720397-1af2-4cd7-9cf5-fecc3f40c9db@foss.st.com>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6FUX2QfO2D3oIp_7k9lYsn5K-DoOLYHJ
+X-Proofpoint-GUID: 6FUX2QfO2D3oIp_7k9lYsn5K-DoOLYHJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-03_03,2025-03-03_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+ priorityscore=1501 adultscore=0 clxscore=1011 bulkscore=0 mlxscore=0
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2503030069
+Content-Transfer-Encoding: quoted-printable
+X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
+X-ITU-Libra-ESVA-ID: 4Z6gHh12SszG1bl
+X-ITU-Libra-ESVA: No virus found
+X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
+X-ITU-Libra-ESVA-Watermark: 1741714637.04665@rgshaxonB+ccfLA8To+xpg
+X-ITU-MailScanner-SpamCheck: not spam
 
-On Wed, Feb 12, 2025 at 02:48:30PM +0100, Arnaud POULIQUEN wrote:
-> 
-> 
-> On 2/12/25 04:54, Bjorn Andersson wrote:
-> > On Tue, Dec 10, 2024 at 11:33:31AM +0100, Arnaud POULIQUEN wrote:
-> >>
-> >>
-> >> On 12/10/24 00:14, Bjorn Andersson wrote:
-> >>> On Thu, Nov 28, 2024 at 09:42:10AM GMT, Arnaud Pouliquen wrote:
-> >>>> This patch updates the rproc_ops structures to include two new optional
-> >>>> operations.
-> >>>>
-> >>>> - The load_fw() op is responsible for loading the remote processor
-> >>>> non-ELF firmware image before starting the boot sequence. This ops will
-> >>>> be used, for instance, to call OP-TEE to  authenticate an load the firmware
-> >>>> image before accessing to its resources (a.e the resource table)
-> >>>>
-> >>>> - The release_fw op is responsible for releasing the remote processor
-> >>>> firmware image. For instance to clean memories.
-> >>>> The ops is called in the following cases:
-> >>>>  - An error occurs between the loading of the firmware image and the
-> >>>>    start of the remote processor.
-> >>>>  - after stopping the remote processor.
-> >>>>
-> >>>
-> >>> Why does this difference need to be encoded in rproc_ops? I think we
-> >>> should strive for having a single, simple high level flow of operations
-> >>> through the remoteproc core for which the specifics of each remoteproc
-> >>> instance can be encoded in that driver.
-> >>>
-> >>>
-> >>> Perhaps there's a good reason for this, but if so please read and follow
-> >>> https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
-> >>> to make that reasoning clear in the commit message.
-> >>>
-> >>
-> >> The actual sequence to load a remoteproc firmware is
-> >> - get firmware from file system and store the firmware image in Linux kernel memory
-> > 
-> > This sounds like "load" in remoteproc terminology.
-> 
-> it is the request_firmware()
-> 
-> > 
-> >> - get resource table from the firmware image and make a copy(
-> >> - parse the resource table and handle the resources
-> > 
-> >> - load the firmware
-> >> - start the firmware
-> > 
-> > And these two are "start".
-> 
-> yes done in rproc_start()
-> 
-> > 
-> >>
-> >>
-> >> In OP-TEE we support not only one ELF image but n images (for instance a TF-M +
-> >> a zephyr), the segments can be encrypted the OP-TEE load sequence is
-> >>  - copy header and meta data of the signed image in a secure memory
-> >>  - verify it
-> >>  - copy segments in remote processor memory and authenticate segments in place.
-> >>  - optionally decrypt the segments
-> >>
-> >> Only at this step the resource table as been authenticated (and decrypted)
-> > 
-> > "this step" meaning TA_RPROC_FW_CMD_LOAD_FW? 
-> 
->  yes
-> 
-> >Above you say that happens
-> > after you parse the resource table.
-> 
-> The sequence above staring by "the actual sequence to load a remoteproc firmware
-> is" describes the existing legacy Linux kernel sequence without my series
-> 
+Add device awake calls in case of rproc boot and rproc shutdown path.
+Currently, device awake call is only present in the recovery path
+of remoteproc. If a user stops and starts rproc by using the sysfs
+interface, then on pm suspension the firmware loading fails. Keep the
+device awake in such a case just like it is done for the recovery path.
 
-It's useful not to call this "the legacy sequence", because it's a
-sequence that all other cases will continue to use. The task at hand is
-to determine a sequence that (at some abstraction level) captures the
-different sequences that we need to support.
+Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+---
+ drivers/remoteproc/remoteproc_core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> > 
-> >>
-> >> So the point is that we need to load the firmware before getting the resource table
-> >>
-> >>
-> >>>> Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-> >>>> ---
-> >>>> Update vs version V13:
-> >>>> - Rework the commit to introduce load_fw() op.
-> >>>> - remove rproc_release_fw() call from  rproc_start() as called in
-> >>>>   rproc_boot() and rproc_boot_recovery() in case of error.
-> >>>> - create rproc_load_fw() and rproc_release_fw() internal functions.
-> >>>> ---
-> >>>>  drivers/remoteproc/remoteproc_core.c     | 16 +++++++++++++++-
-> >>>>  drivers/remoteproc/remoteproc_internal.h | 14 ++++++++++++++
-> >>>>  include/linux/remoteproc.h               |  6 ++++++
-> >>>>  3 files changed, 35 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> >>>> index ace11ea17097..8df4b2c59bb6 100644
-> >>>> --- a/drivers/remoteproc/remoteproc_core.c
-> >>>> +++ b/drivers/remoteproc/remoteproc_core.c
-> >>>> @@ -1488,6 +1488,7 @@ static int rproc_fw_boot(struct rproc *rproc, const struct firmware *fw)
-> >>>>  	kfree(rproc->cached_table);
-> >>>>  	rproc->cached_table = NULL;
-> >>>>  	rproc->table_ptr = NULL;
-> >>>> +	rproc_release_fw(rproc);
-> >>>>  unprepare_rproc:
-> >>>>  	/* release HW resources if needed */
-> >>>>  	rproc_unprepare_device(rproc);
-> >>>> @@ -1855,8 +1856,14 @@ static int rproc_boot_recovery(struct rproc *rproc)
-> >>>>  		return ret;
-> >>>>  	}
-> >>>>  
-> >>>> +	ret = rproc_load_fw(rproc, firmware_p);
-> >>>
-> >>> It is not clear to me why in the case of OP-TEE we need to invoke the
-> >>> "load operation" here, and in the case of "legacy" ELF loading we do it
-> >>> first thing in rproc_start() (i.e. on the very next line of code being
-> >>> executed).
-> >>
-> >> For the OP-TEE, please refer to my comment above.
-> >>
-> >> The only reason I can see for the legacy ELF is that the resource table could
-> >> contain information to be able to configure some resources to load the firmware.
-> >> In case of OP-TEE this would be managed in OP-TEE.
-> >>
-> > 
-> > Sure, but as I say...inline rproc_start() here and the very next
-> > operation we perform is something we call "load".
-> > 
-> > Why do we need to differentiate "load" and "load firmware", when we call
-> > them at the same step in the sequence?
-> 
-> A simplified sequence showing the implementation after this commit would be
-> 
-> 1) request_firmware()
-> 2) rproc_load_fw() (optional)
-> 3) rproc_parse_fw()
-> 4) rproc_handle_resources()
-> 5) rproc_load_segments() (optional)
-> 6) rproc->ops->start()
-> 
-> Here we introduce rproc_load_fw() because we need to load the firmware and
-> authenticate it before parsing it for the resource table calling rproc_parse_fw().
-> 
-
-Per your explanation, I think what you're saying is that before
-rproc_handle_resources() we must load and authenticate the resource
-table. The loading of ELF segments is more a side effect of the firmware
-being processed by OP-TEE at this point (I'm not saying that you must
-implement rproc_load_segments() here)
-
-> legacy Elf format sequence:
-> 1) request_firmware()
-> 3) rproc_parse_fw()
-> 4) rproc_handle_resources()
-> 5) rproc_load_segments()
-> 6) rproc->ops->start()
-> 
-> 
-> Requested remoteproc TEE sequence
-> 1) request_firmware()
-> 2) rproc_load_fw()
-> 3) rproc_parse_fw()
-> 4) rproc_handle_resources()
-> 6) rproc->ops->start()
-> 
-> 
-> > 
-> >>>
-> >>>
-> >>> Should we start by renaming rproc_load_segments() rproc_load() and move
-> >>> it out of rproc_start()? (I.e. here?)
-> >>>
-> >>> Perhaps define that rproc_load() is responsible for "loading firmware"
-> >>> (whatever that means) and establishing rproc->cached_table, and
-> >>> rproc->table_ptr?
-> >>>
-> >>> (Note that this seems like a good cleanup of the spaghetti regardless)
-> >>>
-> >>
-> >> It's something that crossed my mind, but I don't know the legacy well enough to
-> >> guarantee that it will work in all drivers.
-> >>
-> > 
-> > Looking at this again, if we move it, we need to duplicate it across a
-> > few different call sites. So might need to take another look at that.
-> > 
-> > Still flatten the code and you seem to do:
-> > 
-> > if (load_fw)
-> > 	load_fw();
-> > if (load)
-> > 	load();
-> > 
-> > Why do we need two different things named "load".
-> 
-> Right, the terminology can be confusing, but both perform a load. We arrived at
-> this terminology with Mathieu, but if you have a suggestion, don't hesitate to
-> share.
-> 
-
-If the terminology is confusing, then it's a bad API.
-
-If you clearly define that resource table needs to be
-decrypted/authenticated before rproc_handle_resources() then it's not so
-confusing.
-
-> > 
-> >> If you want to go in this direction, perhaps this is something that could be
-> >> addressed in a dedicated pull request? In this case, the ops could become
-> >> load_fw and load_fw_new, similar to how it is done for platform_driver::remove.
-> >>
-> > 
-> > No need to make it more complicated than it is, change the symbol name
-> > and fix the 3 places that calls the function.
-> > 
-> >>
-> >>>> +	if (ret)
-> >>>> +		return ret;
-> >>>> +
-> >>>>  	/* boot the remote processor up again */
-> >>>>  	ret = rproc_start(rproc, firmware_p);
-> >>>> +	if (ret)
-> >>>> +		rproc_release_fw(rproc);
-> >>>
-> >>> The fact that you rproc_release_fw() in the error path here, right
-> >>> before we unconditionally release_firmware() the actual firmware means
-> >>> that you have 2 different life cycles with very very similar names.
-> >>>
-> >>> This will contain bugs, sooner or later.
-> >>
-> >> So we need to find a better way for the ops if we continue in this direction.
-> >> What about introducing rproc_load_new and rproc_release?
-> >>
-> > 
-> > You need to help me understand why load and load_new are both needed.
-> > 
-> > And no, "load_new" is not an ok name.
-> > 
-> >>>
-> >>>>  
-> >>>>  	release_firmware(firmware_p);
-> >>>>  
-> >>>> @@ -1997,7 +2004,13 @@ int rproc_boot(struct rproc *rproc)
-> >>>>  			goto downref_rproc;
-> >>>>  		}
-> >>>>  
-> >>>> +		ret = rproc_load_fw(rproc, firmware_p);
-> >>>> +		if (ret)
-> >>>> +			goto downref_rproc;
-> >>>> +
-> >>>>  		ret = rproc_fw_boot(rproc, firmware_p);
-> >>>> +		if (ret)
-> >>>> +			rproc_release_fw(rproc);
-> >>>>  
-> >>>>  		release_firmware(firmware_p);
-> >>>>  	}
-> >>>> @@ -2071,6 +2084,7 @@ int rproc_shutdown(struct rproc *rproc)
-> >>>>  	kfree(rproc->cached_table);
-> >>>>  	rproc->cached_table = NULL;
-> >>>>  	rproc->table_ptr = NULL;
-> >>>> +	rproc_release_fw(rproc);
-> >>>>  out:
-> >>>>  	mutex_unlock(&rproc->lock);
-> >>>>  	return ret;
-> >>>> @@ -2471,7 +2485,7 @@ static int rproc_alloc_ops(struct rproc *rproc, const struct rproc_ops *ops)
-> >>>>  	if (!rproc->ops->coredump)
-> >>>>  		rproc->ops->coredump = rproc_coredump;
-> >>>>  
-> >>>> -	if (rproc->ops->load)
-> >>>> +	if (rproc->ops->load || rproc->ops->load_fw)
-> >>>>  		return 0;
-> >>>>  
-> >>>>  	/* Default to ELF loader if no load function is specified */
-> >>>> diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-> >>>> index 0cd09e67ac14..2104ca449178 100644
-> >>>> --- a/drivers/remoteproc/remoteproc_internal.h
-> >>>> +++ b/drivers/remoteproc/remoteproc_internal.h
-> >>>> @@ -221,4 +221,18 @@ bool rproc_u64_fit_in_size_t(u64 val)
-> >>>>  	return (val <= (size_t) -1);
-> >>>>  }
-> >>>>  
-> >>>> +static inline void rproc_release_fw(struct rproc *rproc)
-> >>>> +{
-> >>>> +	if (rproc->ops->release_fw)
-> >>>> +		rproc->ops->release_fw(rproc);
-> >>>> +}
-> >>>> +
-> >>>> +static inline int rproc_load_fw(struct rproc *rproc, const struct firmware *fw)
-> >>>> +{
-> >>>> +	if (rproc->ops->load_fw)
-> >>>> +		return rproc->ops->load_fw(rproc, fw);
-> >>>> +
-> >>>> +	return 0;
-> >>>> +}
-> >>>> +
-> >>>>  #endif /* REMOTEPROC_INTERNAL_H */
-> >>>> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-> >>>> index 2e0ddcb2d792..ba6fd560f7ba 100644
-> >>>> --- a/include/linux/remoteproc.h
-> >>>> +++ b/include/linux/remoteproc.h
-> >>>> @@ -381,6 +381,10 @@ enum rsc_handling_status {
-> >>>>   * @panic:	optional callback to react to system panic, core will delay
-> >>>>   *		panic at least the returned number of milliseconds
-> >>>>   * @coredump:	  collect firmware dump after the subsystem is shutdown
-> >>>> + * @load_fw:	optional function to load non-ELF firmware image to memory, where the remote
-> >>>> + *		processor expects to find it.
-> >>>
-> >>> Why does it matter if it's an ELF or not?
-> >>
-> >> No matter. It was more to differentiate from the legacy one, but it does not
-> >> make sense and adds to the argument that the ops naming is not accurate.
-> >>
-> > 
-> > I'm probably misunderstanding your intention here, but I can't help
-> > feeling that you add this code path to avoid understanding or fixing the
-> > existing code.
-> > 
-> >>>
-> >>> In the Qualcomm case, firmware comes in ELF format, Linux loads the
-> >>> LOAD segments and the trusted world then authenticates the content and
-> >>> start the remote processor.
-> >>>
-> >>>
-> >>> I think the difference in your case is that you have memory reserved
-> >>> elsewhere, and you want the "load" operation to pass the firmware to the
-> >>> TEE - which means that you need rproc_release_fw() to eventually clean
-> >>> up the state if rproc_start() fails - and upon shutdown.
-> >>
-> >> Yes the OP-TEE is make more stuff:
-> >> - authenticate several firmware images
-> > 
-> > Please tell me how that work. I'm not able to see the multiple calls to
-> > request_firmware()...
-> 
-> From a Linux perspective, it is only one firmware image to load.
-> 
-> The format defined in OP-TEE, available here [1], allows concatenation of
-> several firmware images into one signed binary image. For instance, for the
-> stm32mp2 platform, we can run a TF-M and a Zephyr firmware on the Cortex-M33.
-> 
-
-Okay, that makes sense
-
-E.g. the ELF files loaded by the Qualcomm remoteproc drivers contain any
-number of ELF segments. Each remoteproc as one entity in the view of
-Linux, but Linux has no awareness of the internal hardware
-configuration.
-
-But there are also cases in the Qualcomm space where multiple firmware
-files are loaded for a single remoteproc - something which is rather
-messy.
-
-> [1]
-> https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/src/remoteproc_core.c#L18
-> 
-> 
-> > 
-> >> - decrypt images if encrypte
-> > 
-> > This is done for some Qualcomm remoteprocs as well.
-> 
-> Do you decrypt before authenticating? On the stm32mp1, due to memory
-> constraints, we encrypt only the ELF segment to load. We compute the signature
-> based on the encrypted version of the ELF. So, we authenticate before decrypting."
-> 
-
-I actually don't know, both operations are performed by the secure
-world.
-
-But authenticating the encrypted data makes sense to me.
-
-> > 
-> >> - ensure that the load is done in granted memories
-> > 
-> > At the top of your reply you say that you're loading the firmware into
-> > Linux memory, then you invoke TA_RPROC_FW_CMD_LOAD_FW to "load" it once
-> > more - presumably copying into some other memory.
-> 
-> Sorry if it was not clear. By 'loading the firmware into Linux memory' I mean
-> calling request_firmware() to get the image from the filesystem and copy it into
-> Linux-allocated memory. Then, the address of this memory is registered in OP-TEE
-> memory space and provided as a parameter of the TA_RPROC_FW_CMD_LOAD_FW command.
-> 
-
-Okay, this is an important difference. In the Qualcomm case Linux will
-load the ELF segments and then at "authenticate and start" memory
-management tricks will be played to lock Linux out of the memory while
-the remoteproc is running.
-
-In your case you effectively have "external" pre-allocated memory for
-your remoteproc instance - and TA_RPROC_FW_CMD_LOAD_FW is the mechanism
-used to populate it _and_ decode the resource table.
-
-> > 
-> > It sounds like this is an optimization to fail early in the case that
-> > something is wrong?
-> 
-> Not only that, it is to ensure that everything is valid and decrypted before
-> enabling the parsing of the resource table (rproc_parse_fw()).
-> 
-
-But correct me if I'm wrong, there's no strong reason for why the
-non-resource-table segments needs to be decrypted at this point, right?
-
-(I acknowledge that it makes sense to do it in one go, just trying to
-understand)
-
-> > 
-> >> - manage the memory access rights to enure that the code and data memory
-> >>  is never accessible by the Linux.
-> >>
-> > 
-> > Right, after authentication Linux must be locked out. That's done in the
-> > Qualcomm "authenticate and start" phase, at the very end of the loading
-> > and setting things up.
-> 
-> Make sense, but not possible with the resource table handling.
-> 
-
-Correct, if the resource table needs to be authenticated and/or
-decrypted this needs to happen at an earlier point.
-
-> > 
-> >>>
-> >>> If we improve the definition of rproc_load_segments() to mean
-> >>> "remoteproc (or remoteproc driver) is loading segments", then in your
-> >>> case there's no "loading" operation in Linux. Instead you make that a
-> >>> nop and invoke LOAD_FW and START_FW within your start callback, then you
-> >>> can clean up the remnant state within your driver's start and stop
-> >>> callbacks - without complicating the core framework.
-> >>
-> >> This would not work as I need to load the firmware before calling
-> >> rproc_handle_resources().
-> 
-> Yes this is the blocking point. I suppose that you don't have this constraint in
-> Qualcomm implementations?
-> 
-
-Correct, as Linux is being locked out of the memory while the remoteproc
-is running the "carveout"-style resources are defined using no-map
-reserved-memory regions, and IPC is described in Devicetree (as there's
-both consumers and providers for other Devicetree entries there).
-
-But there's been some prototyping in the past related to utilizing the
-resource table, at which point this would become a "problem".
-
-> >>
-> > 
-> > Ohh, now I see what you're saying. This is why you should follow
-> > https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
-> > when you write a commit message. Then I would have understood your
-> > problem in the very first paragraph of the patch.
-> 
-> My apologize with the succession of versions and associated discussions. I
-> forgot that a series version must be self-sufficient in terms of explanation.
-> 
-> > 
-> > This very much sounds like what's intended to happen in
-> > rproc_parse_fw(), per the comment right next to the call:
-> > 
-> > /* Load resource table, core dump segment list etc from the firmware */
-> 
-> Yes, the main difference is that for ELF files, we get the resource table from
-> the ELF image and put it in rproc->cached_table. Then, the cached_table is
-> updated in rproc_handle_resources() and finally written to the destination
-> memory in rproc_start().
-> 
-> For the TEE implementation, we directly provide the destination memory address,
-> which is stored in rproc->cached_table.
-> 
-
-I presume you mean, you call TA_RPROC_FW_CMD_LOAD_FW which will decode
-the resource table and you then request the address of the loaded and
-decoded resource table from TA_RPROC?
-
-> Notice that the rproc->cached_table is mandatory for the recovery.
-> 
-> > 
-> > 
-> > But I'm guessing that would require loading the segments etc into the
-> > destination memory, perform the authentication and then you can get hold
-> > of the resource table?
-> > 
-> > Which..per your patch you do before calling rproc_fw_boot(), so you're
-> > already diverging completely from the expected flow.
-> 
-> The call of rproc_load_fw() should be moved in rproc_fw_boot(), I guess
-> 
-> What would you suggest as the next step for these commits? Should I just rename
-> load_fw to release_fw? If so, do you have a naming suggestion?
-> 
-> Or do we need to find another way to sequence the boot?
-> 
-
-I think it's clear from this discussion that you need a way to load,
-authenticate and decrypt the resource table before
-rproc_handle_resources().
-
-It's also clear that "freeing" the resource table can no longer be done
-with just a call to kfree().
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/re=
+moteproc_core.c
+index c2cf0d277729..908a7b8f6c7e 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -1916,7 +1916,8 @@ int rproc_boot(struct rproc *rproc)
+ 		pr_err("invalid rproc handle\n");
+ 		return -EINVAL;
+ 	}
+-
++=09
++	pm_stay_awake(rproc->dev.parent);
+ 	dev =3D &rproc->dev;
+=20
+ 	ret =3D mutex_lock_interruptible(&rproc->lock);
+@@ -1961,6 +1962,7 @@ int rproc_boot(struct rproc *rproc)
+ 		atomic_dec(&rproc->power);
+ unlock_mutex:
+ 	mutex_unlock(&rproc->lock);
++	pm_relax(rproc->dev.parent);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(rproc_boot);
+@@ -1991,6 +1993,7 @@ int rproc_shutdown(struct rproc *rproc)
+ 	struct device *dev =3D &rproc->dev;
+ 	int ret =3D 0;
+=20
++	pm_stay_awake(rproc->dev.parent);
+ 	ret =3D mutex_lock_interruptible(&rproc->lock);
+ 	if (ret) {
+ 		dev_err(dev, "can't lock rproc %s: %d\n", rproc->name, ret);
+@@ -2027,6 +2030,7 @@ int rproc_shutdown(struct rproc *rproc)
+ 	rproc->table_ptr =3D NULL;
+ out:
+ 	mutex_unlock(&rproc->lock);
++	pm_relax(rproc->dev.parent);
+ 	return ret;
+ }
+ EXPORT_SYMBOL(rproc_shutdown);
+--=20
+2.34.1
 
 
-I also find it conceivable that someone would have the desire to
-authenticate the resource table before rproc_handle_resources() and then
-use rproc_load_segments() to load the firmware content (followed by
-another round of authentication in start()).
-
-
-So if we've established that what you're looking for is a
-driver-specific way to get hold of the resource table and that's the
-reason for your modifications, then that should fit pretty well into the
-concept of rproc_parse_fw().
-
-You have a non-standard optimization in that in that same operation you
-store the rest of the firmware in the non-Linux side, to avoid having to
-call load_segment separately (but there doesn't seem to be any clear
-reason for the segments to be loaded at this time (perhaps you encrypt
-the whole image and don't have segments?)).
-
-rproc_load_segments() is already optional, so no change is needed there.
-
-We need to abstract out the kfree(rproc->cached_table) so that this can
-also release the resource table resources and secure state that you
-established during rproc_parse_fw().
-
-Regards,
-Bjorn
-
-> Thanks,
-> Arnaud
-> 
-> > 
-> >> I can not use rproc_prepare_device() as it is not called on recovery
-> >>
-> > 
-> > The purpose of rproc_prepare_device() is to ensure that any clocks etc
-> > for the memory where we're going to load the firmware is enabled, so
-> > that doesn't sounds like the right place.
-> > 
-> > Regards,
-> > Bjorn
-> > 
-> >> Thanks,
-> >> Arnaud
-> >>
-> >>>
-> >>> Regards,
-> >>> Bjorn
-> >>>
-> >>>> + * @release_fw:	optional function to release the firmware image from memories.
-> >>>> + *		This function is called after stopping the remote processor or in case of error
-> >>>>   */
-> >>>>  struct rproc_ops {
-> >>>>  	int (*prepare)(struct rproc *rproc);
-> >>>> @@ -403,6 +407,8 @@ struct rproc_ops {
-> >>>>  	u64 (*get_boot_addr)(struct rproc *rproc, const struct firmware *fw);
-> >>>>  	unsigned long (*panic)(struct rproc *rproc);
-> >>>>  	void (*coredump)(struct rproc *rproc);
-> >>>> +	int (*load_fw)(struct rproc *rproc, const struct firmware *fw);
-> >>>> +	void (*release_fw)(struct rproc *rproc);
-> >>>>  };
-> >>>>  
-> >>>>  /**
-> >>>> -- 
-> >>>> 2.25.1
-> >>>>
 
