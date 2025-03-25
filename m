@@ -1,276 +1,185 @@
-Return-Path: <linux-remoteproc+bounces-3248-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-3252-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12B9EA6EA64
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 25 Mar 2025 08:22:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C1FCA6ED37
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 25 Mar 2025 11:01:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D5B53B79F7
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 25 Mar 2025 07:20:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 128A01894167
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 25 Mar 2025 10:01:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1957B25484F;
-	Tue, 25 Mar 2025 07:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DBF425484F;
+	Tue, 25 Mar 2025 10:00:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="C9bnNZUZ"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F72A20E6F7;
-	Tue, 25 Mar 2025 07:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955D119CC08;
+	Tue, 25 Mar 2025 10:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742887218; cv=none; b=TCDt+GUDqUBxtXlejW5IVxw9IcgkICQKaEgaiDt/fzaOhPQyDodOWmlkmsQ4aWJISN9nkkNA1Pt5IgYktYs29RjJLjOJyAFfvMrCwMcfZi9aUUqsYH0VdYo7rqCuo1+mN6J51JG4hvLpsEtPkoHrz9byDnuqvy5J+aN46Mol1Uc=
+	t=1742896856; cv=none; b=CrDXm09h/+ObBplyLiIvoe8y21dlh9umM8isCcbyEQon/ledALwjdiYIE2BoGiIgAUrpaA9aSgCgH6InFBKtxaLsZeHTpoc+8iXdFETSozwLi9fD+DtCqVA1smaCK55avdl2LhM8e5Yd2MWlgnZe1p/iLNsoscny0mzwt/lQUh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742887218; c=relaxed/simple;
-	bh=7yAN5DWEseLPhSuJtJplgqzsW8Fn2NnOCRGJNmY+TWE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bJtNdqIm+UZrzoVtz/WLlfsOnT59+cPNPgkgOpG+OY1d0tz6PJscs274wNO6CJZZaOkD63wIwhVaspagEZUGjjOtT7dcLCpROIH3p8Wx2oiRaBT4AdT5qcmMI03ZxwbPQ7+I0/fd2WCRazI/nr3jagIBGer1fNgPQAqBB9YwyJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4ZMLXZ26Lwz9sSV;
-	Tue, 25 Mar 2025 08:05:18 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id RFFIDcgfzoK7; Tue, 25 Mar 2025 08:05:18 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4ZMLXY2g73z9sSS;
-	Tue, 25 Mar 2025 08:05:17 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id DA00C8B766;
-	Tue, 25 Mar 2025 08:05:16 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id FEOhRsdEs3K2; Tue, 25 Mar 2025 08:05:16 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 285238B763;
-	Tue, 25 Mar 2025 08:05:15 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-	by PO20335.IDSI0.si.c-s.fr (8.18.1/8.17.1) with ESMTPS id 52P756MK009381
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 25 Mar 2025 08:05:07 +0100
-Received: (from chleroy@localhost)
-	by PO20335.IDSI0.si.c-s.fr (8.18.1/8.18.1/Submit) id 52P742SQ009337;
-	Tue, 25 Mar 2025 08:04:02 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: tglx@linutronix.de, "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, maz@kernel.org,
-        linux-kernel@vger.kernel.org, Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Ghiti <alex@ghiti.fr>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Alex Deucher <alexander.deucher@amd.com>, Alex Shi <alexs@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        amd-gfx@lists.freedesktop.org, Amit Kucheria <amitk@kernel.org>,
-        Anatolij Gustschin <agust@denx.de>, Andi Shyti <andi.shyti@kernel.org>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Andreas Kemnade <andreas@kemnade.info>,
-        Andrew Jeffery <andrew@codeconstruct.com.au>,
-        Andrew Lunn <andrew@lunn.ch>, Andy Shevchenko <andy@kernel.org>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Anup Patel <anup@brainfault.org>, Arnd Bergmann <arnd@arndb.de>,
-        asahi@lists.linux.dev, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Baruch Siach <baruch@tkos.co.il>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, Borislav Petkov <bp@alien8.de>,
-        Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-        Corentin Chary <corentin.chary@gmail.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Daniel Mack <daniel@zonque.org>, Daniel Palmer <daniel@thingy.jp>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        DENG Qingfang <dqfext@gmail.com>, Dinh Nguyen <dinguyen@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Dongliang Mu <dzm91@hust.edu.cn>, Doug Berger <opendmb@gmail.com>,
-        dri-devel@lists.freedesktop.org, Eddie James <eajames@linux.ibm.com>,
-        Eric Dumazet <edumazet@google.com>, Fabio Estevam <festevam@gmail.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Geoff Levand <geoff@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Guo Ren <guoren@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Haojian Zhuang <haojian.zhuang@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        "Chester A. Unal" <chester.a.unal@arinc9.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Chris Zankel <chris@zankel.net>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Imre Kaloz <kaloz@openwrt.org>, Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, James Morse <james.morse@arm.com>,
-        Janne Grunau <j@jannau.net>, Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Jiawen Wu <jiawenwu@trustnetic.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jim Quinlan <jim2101024@gmail.com>, Jingoo Han <jingoohan1@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        John Crispin <john@phrozen.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Jonas Bonn <jonas@southpole.se>, Jonathan Cameron <jic23@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Joyce Ooi <joyce.ooi@intel.com>,
-        Karthikeyan Mitran <m.karthikeyan@mobiveil.co.in>,
-        Keerthy <j-keerthy@ti.com>, Kevin Hilman <khilman@baylibre.com>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linus Walleij <linusw@kernel.org>, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-mips@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-sh@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-sound@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-um@lists.infradead.org,
-        linux-wireless@vger.kernel.org, loongarch@lists.linux.dev,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, "Luke D. Jones" <luke@ljones.dev>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Mark Brown <broonie@kernel.org>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Mengyuan Lou <mengyuanlou@net-swift.com>, Michael Buesch <m@bues.ch>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Simek <michal.simek@amd.com>,
-        Miodrag Dinic <miodrag.dinic@mips.com>,
-        Naveen N Rao <naveen@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>, netdev@vger.kernel.org,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Nikhil Agarwal <nikhil.agarwal@amd.com>,
-        Nipun Gupta <nipun.gupta@amd.com>, Nishanth Menon <nm@ti.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>, Paolo Abeni <pabeni@redhat.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Peter Rosin <peda@axentia.se>, Philipp Zabel <p.zabel@pengutronix.de>,
-        Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-        platform-driver-x86@vger.kernel.org,
-        Prasad Kumpatla <quic_pkumpatl@quicinc.com>,
-        Qiang Zhao <qiang.zhao@nxp.com>, Qin Jian <qinjian@cqplus1.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>, Ray Jui <rjui@broadcom.com>,
-        Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Richard Weinberger <richard@nod.at>, Rich Felker <dalias@libc.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Robert Richter <rric@kernel.org>, Rob Herring <robh@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Scott Branden <sbranden@broadcom.com>, Scott Wood <oss@buserror.net>,
-        Sean Paul <sean@poorly.run>, Sean Wang <sean.wang@kernel.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>, Shawn Lin <shawn.lin@rock-chips.com>,
-        Siddharth Vadapalli <s-vadapalli@ti.com>,
-        Simona Vetter <simona@ffwll.ch>, Stafford Horne <shorne@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stephen Boyd <sboyd@kernel.org>, Sven Peter <sven@svenpeter.dev>,
-        Takashi Iwai <tiwai@suse.com>, Talel Shenhar <talel@amazon.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Thangaraj Samynathan <Thangaraj.S@microchip.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Toan Le <toan@os.amperecomputing.com>,
-        Tony Lindgren <tony@atomide.com>, Tony Luck <tony.luck@intel.com>,
-        UNGLinuxDriver@microchip.com,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vineet Gupta <vgupta@kernel.org>, Vladimir Oltean <olteanv@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>, WANG Xuerui <kernel@xen0n.name>,
-        Woojung Huh <woojung.huh@microchip.com>, x86@kernel.org,
-        Yanteng Si <si.yanteng@linux.dev>,
-        Yoshinori Sato <ysato@users.osdn.me>, Zhang Rui <rui.zhang@intel.com>
-Subject: Re: (subset) [PATCH v2 00/57] irqdomain: Cleanups and Documentation
-Date: Tue, 25 Mar 2025 08:03:28 +0100
-Message-ID: <174288553816.2234438.13558299160543301187.b4-ty@csgroup.eu>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20250319092951.37667-1-jirislaby@kernel.org>
-References: <20250319092951.37667-1-jirislaby@kernel.org>
+	s=arc-20240116; t=1742896856; c=relaxed/simple;
+	bh=3i5iIdP2A5+tdt0wI9VGzafnmLIhDZd2kl+nuqMFEVU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ahiSt4lffKDKhbPC/WyQWOwKLsKXQTpnuP0nLku05N1ZrbWDtl089u7pPE9iqR9SOBERc3bVOMhNhEVYPtfw6Zqk7yreVqvwl9e3P1pSf2nvi3pTZXnJ0QRFYf0VROsZ46C9GYAlDkOMPA65ANvGDRVzuXZioB12/MDQMGkHtQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=C9bnNZUZ; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52P69SAF005985;
+	Tue, 25 Mar 2025 11:00:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=pjwodPeGoQRNskM8wRB/+5
+	v/OYaad9fMmX1WtOfP2Ug=; b=C9bnNZUZubciQOiwpWJibY0aPgIVkw+SJaz/Ps
+	aaliIjjvmLR9uWL/nlp/Ji+MyFzxP9K0wOlEifwtYAeIxzvoZ122sCdVnNKL8QhM
+	djJEozRmLNwD5E+tfvlm6Uf12lwGF/CKZEW2ZPo1JJTFkaQ6HqIdPvEaHMf7jEpl
+	WpoiFj25hTD+xgGnz32GwBFrL3j/UNQ3KrQyE28QWMPcM4LUJglxpDfXwOaA0Kbd
+	o8qkKB4yplNtWVJC1/WBzPkfDZUnV6+1NzeFPZKoXd0YS95+ry2LyHz/DuQw80OD
+	rtRAUCu2ywEKG5WHofSfnxGor3fEvZTcdUqg/UR3MsdkyaWw==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 45hk7d3yg3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 25 Mar 2025 11:00:38 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 1B07940055;
+	Tue, 25 Mar 2025 10:59:36 +0100 (CET)
+Received: from Webmail-eu.st.com (eqndag1node4.st.com [10.75.129.133])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id EFBF3823755;
+	Tue, 25 Mar 2025 10:58:44 +0100 (CET)
+Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE4.st.com
+ (10.75.129.133) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 25 Mar
+ 2025 10:58:44 +0100
+Received: from localhost (10.252.12.99) by SAFDAG1NODE1.st.com (10.75.90.17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 25 Mar
+ 2025 10:58:44 +0100
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier
+	<mathieu.poirier@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC: <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <op-tee@lists.trustedfirmware.org>, <devicetree@vger.kernel.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Subject: [PATCH v16 0/6] Introduction of a remoteproc tee to load signed firmware
+Date: Tue, 25 Mar 2025 10:58:27 +0100
+Message-ID: <20250325095833.3059895-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1742886214; l=533; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=EKh0/GewaFERhfnFRfKBg2j5NzMhdBBECdrA+NV/qUk=; b=vA70hw72XKaj1SXthnl6PXh4i9Z2K3Egqlb0PIRXfpHV2vrVCLTo/AG4L7b0hc2x3UCZ6Qx3v FOB4ERwauOeBecqk7A7PBvaW/237URvW4CKvgDK24Wh/OVU59RY4zZO
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SAFCAS1NODE1.st.com (10.75.90.11) To SAFDAG1NODE1.st.com
+ (10.75.90.17)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-25_04,2025-03-25_01,2024-11-22_01
+
+Main updates from version V15[1]:
+- Removed the rproc_ops:load_fw() operation introduced in the previous version.
+- Returned to managing the remoteproc firmware loading in rproc_tee_parse_fw to
+  load and authenticate the firmware before getting the resource table.
+- Added spinlock and dev_link mechanisms in remoteproc TEE to better manage
+  bind/unbind.
+
+More details are available in each patch commit message.
+
+[1] https://lore.kernel.org/linux-remoteproc/20241128084219.2159197-7-arnaud.pouliquen@foss.st.com/T/
+
+Tested-on: commit 0a0ba9924445 ("Linux 6.14-rc7")
+
+Description of the feature:
+--------------------------
+This series proposes the implementation of a remoteproc tee driver to
+communicate with a TEE trusted application responsible for authenticating
+and loading the remoteproc firmware image in an Arm secure context.
+
+1) Principle:
+
+The remoteproc tee driver provides services to communicate with the OP-TEE
+trusted application running on the Trusted Execution Context (TEE).
+The trusted application in TEE manages the remote processor lifecycle:
+
+- authenticating and loading firmware images,
+- isolating and securing the remote processor memories,
+- supporting multi-firmware (e.g., TF-M + Zephyr on a Cortex-M33),
+- managing the start and stop of the firmware by the TEE.
+
+2) Format of the signed image:
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/src/remoteproc_core.c#L18-L57
+
+3) OP-TEE trusted application API:
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/include/ta_remoteproc.h
+
+4) OP-TEE signature script
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/scripts/sign_rproc_fw.py
+
+Example of usage:
+sign_rproc_fw.py --in <fw1.elf> --in <fw2.elf> --out <signed_fw.sign> --key ${OP-TEE_PATH}/keys/default.pem
 
 
-On Wed, 19 Mar 2025 10:28:53 +0100, Jiri Slaby (SUSE) wrote:
-> tl;dr if patches are agreed upon, I ask subsys maintainers to take the
-> respective ones via their trees (as they are split per subsys), so that
-> the IRQ tree can take only the rest. That would minimize churn/conflicts
-> during merges.
-> 
-> ===
-> 
-> [...]
+5) Impact on User space Application
 
-Applied, thanks!
+No sysfs impact. The user only needs to provide the signed firmware image
+instead of the ELF image.
 
-[48/57] irqdomain: soc: Switch to irq_find_mapping()
-        commit: a70a3a6322131632cc6cf71e9d2fa6409a029fd7
 
-Best regards,
+For more information about the implementation, a presentation is available here
+(note that the format of the signed image has evolved between the presentation
+and the integration in OP-TEE).
+
+https://resources.linaro.org/en/resource/6c5bGvZwUAjX56fvxthxds
+
+
+
+Arnaud Pouliquen (6):
+  remoteproc: core: Introduce rproc_pa_to_va helper
+  remoteproc: Add TEE support
+  remoteproc: Introduce release_fw optional operation
+  dt-bindings: remoteproc: Add compatibility for TEE support
+  remoteproc: stm32: Create sub-functions to request shutdown and
+    release
+  remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
+
+ .../bindings/remoteproc/st,stm32-rproc.yaml   |  58 +-
+ drivers/remoteproc/Kconfig                    |  10 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/remoteproc_core.c          |  52 ++
+ drivers/remoteproc/remoteproc_internal.h      |   6 +
+ drivers/remoteproc/remoteproc_tee.c           | 619 ++++++++++++++++++
+ drivers/remoteproc/stm32_rproc.c              | 139 +++-
+ include/linux/remoteproc.h                    |   4 +
+ include/linux/remoteproc_tee.h                |  90 +++
+ 9 files changed, 935 insertions(+), 44 deletions(-)
+ create mode 100644 drivers/remoteproc/remoteproc_tee.c
+ create mode 100644 include/linux/remoteproc_tee.h
+
+
+base-commit: 0a0ba99244455fea8706c4a53f5f66a45d87905d
 -- 
-Christophe Leroy <christophe.leroy@csgroup.eu>
+2.25.1
+
 
