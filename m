@@ -1,107 +1,127 @@
-Return-Path: <linux-remoteproc+bounces-3492-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-3494-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC171A994AA
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 23 Apr 2025 18:19:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF461A99460
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 23 Apr 2025 18:13:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4122C1BA123E
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 23 Apr 2025 16:00:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78D401BC0E1A
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 23 Apr 2025 16:02:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6536729AB04;
-	Wed, 23 Apr 2025 15:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC62728FFDE;
+	Wed, 23 Apr 2025 15:52:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y0PG0OWA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cR5mNZxJ"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371E5285401;
-	Wed, 23 Apr 2025 15:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D89428DEEB;
+	Wed, 23 Apr 2025 15:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745423373; cv=none; b=RpOSaFbYuR9Y/0UtEEaAXkYEgnck3XY+ZOUhCp7PWSYZET6i0VTWlfV21v1ziR4Z2x98dLBlFI7thMgBUKiE2XQGHpd0gWi2hVNISL1Nl8uZISfAnIHG8PTvGoqwvIhLL7CZUQEEqYQN5L5eZZjL481mdXwc3PjjArqOAy7VqlY=
+	t=1745423528; cv=none; b=SAYsRKTYNlJVZpLOtWUgxLIMiDg4uQ/E65myzqktK4GtNCXx7JDwXawlSWwlX5VlugPgCyZyNeXWFgzCJzQWy8XFxcvMYAvB8ZnwKxjGkimgwjlcIH3i2MzeWqDHOqiXPFZokgXp5F9sLr9yyc31QiROQb14KaIYdGg275eH55k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745423373; c=relaxed/simple;
-	bh=Rd6C0AT8kRiDT9Gitf5UOmK5rHvXSI/4LUIbOAcAcWE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bpMB2ZC1Dm/tTnCzgwW09nuVV6IJQAcPf5ScHyC9J1eejuySKQ8+BUlYxJnqtNvAULsu/R7ZfIOXKG2Gqz84UxLJGq+sPNmxW4hG6adgZPC3aQKWiVtgFWalK9W4F+X2wermnbWX9ysfkT0rg5yeWlqrlGiT6AE3RNWOSf9a9ng=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y0PG0OWA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6031FC4CEE2;
-	Wed, 23 Apr 2025 15:49:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745423372;
-	bh=Rd6C0AT8kRiDT9Gitf5UOmK5rHvXSI/4LUIbOAcAcWE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y0PG0OWAI+2W/ge4r1n+ZVwPbQIzUTMG9Qfvf8bmuuEHZ0COTIPA7+Oyv91NxxUgM
-	 lVM2/9F/ssXzOPY4Xu/DuoJEKfQwxn3vHV0aEgY4VRgx/uqjvuqeSsOZnrjM+11tHm
-	 9+1YkjLtIcWSuqqM1LT3WQaz+KmkuavW/gAySngz7Uqz5SLAPyH7AghzKlclsuZsa6
-	 xlg5r5SzgF2gqi0oer+43A009BlYknBI/xG1/azywsD3pCc+7t8lVSELM/S5v6vKD4
-	 e/hdUXBhfo1mHahkpeyAHd0BjMMZ+VIVwVVAMrQAhG5ZPqT72kGWcQdTRomOFaKt2l
-	 6iOCE4JorUREQ==
-Date: Wed, 23 Apr 2025 10:49:30 -0500
-From: Rob Herring <robh@kernel.org>
-To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
+	s=arc-20240116; t=1745423528; c=relaxed/simple;
+	bh=xyjs0rLrd34P5DK/m9PmTC/jCEqBM3B50Jzi+NTDjBM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZXeVdXQQte9yYxT5p9mA7qGWoenUbLtBMinY09L1ftPVvWJj1nmQ3YdOT915btd/4tn4i8xxQ+rIla7SwYax1bj3lkwsnIAD2vSjG027siY3Y2suC9iox1ZBKiUkxHTAMDMs1rmrV4mBcyxjEe6NN/WljS/9MideIeT4jYnrVXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cR5mNZxJ; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-af6a315b491so5827774a12.1;
+        Wed, 23 Apr 2025 08:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745423525; x=1746028325; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zSN8LA1qXE8sSMrIXXGWvP/A1XS/xD/J162Xg5jQH2M=;
+        b=cR5mNZxJVs+4hEauiKYGnHCKfyrTgvxBfDOWsYJ09GGncQsGXIKWKDbMmQRV4eC6xO
+         v+DujIKSWN5IADKgfEkcOlq+IBzMQDMhcs5kuuQqkR0Zlr1LZygCLGCIWgxKck20E2dJ
+         JhsrznWPTbOXUTZMXkWaY3hyDA/6z0NULE+npcx8Jfr04HsVW/6dgNZIo9MSNYhgLwOv
+         MoXm2NaS/hUyVv/BmyTGUTU8/puE21M+1a8pFpTA/RNShrKIUJfE55Z8N3auJ9N/gfKg
+         IX7MU3yFeQlFHG4mCgEXFtvJrIfXQbbtTkSOZHM+LXmaB8HTfwFjFYR8Qom0FOnqto6/
+         QDpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745423525; x=1746028325;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zSN8LA1qXE8sSMrIXXGWvP/A1XS/xD/J162Xg5jQH2M=;
+        b=pmbRytLk8HTFMqSah1TcFA0rzwziuvXSQ2QRm4bNym2KNKf61lahQNJfKqiwCveIHf
+         UHlcWylg6sAjFkFxxBaWU4TOssaNWDdIjfxZDq/UqLT3FPN3976zglS+AZ22+q1l2nRk
+         G6UyG1Kbk2K138sE72GqE5D6XvQDVSo+owDAUZPTCFZPMenGhyRrkDcn0AKVfzasQbiE
+         tMOxakGQBwUbzyv4KxE1gP+B53r727B69xMfah7jfuw6qS2uDDm+vaKuKeKf0qjSv4ls
+         T7I782X5uj8Rykat1/DoSZRqhH3LNYSO2jAa4EKJe9Q8tMN+XNl8ZlZ/qfYk9uDSC6vb
+         Dt4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXLMUqRKjJ5QkfeWvCz6W3j1FWYN1oGwR9z1gCSKOOc7Hd+cCwfyQuAyT65haF3TDEa4rpAzPxva0Udr+Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLK5Wx4bfFvgtjqgOwfVoLg+jD2m8U4R4qxjOtmFzBSvJWm/NA
+	B5CqJ7w9q6q82GRzYPopowmVhTkJIrQQCaEc0XdMWR1sMxYYzZ+SjL0dkgUTNPE=
+X-Gm-Gg: ASbGncvNCXcajbPWxsHKo5ClAy7Ss+7ET7Gd4fcuBvfeHoZdHh0Ox+64nZHG7J81o6i
+	0m8qqTkmzsGpff7kOnGO08GZXh5bbv8rs+Ki6/QpR2MtIzcXranUuEcb2+tAqGHsWa00FzChQG5
+	njlNvBs4/dDlUorknl33mIBtMhDw1DumeMOEuZEuHZ8Lf91Ma5mP8lLgVnd9SEtQipVTb6OgnsJ
+	Mm6vgiAW5SspdVy4/ZaTUwaAi038qh3kb15KTwAIHwxj4iwl4Cbjvvf6pPHXzSdCqhl65JdIUf6
+	AzouA2bzV4drS8JdJu3bhAnCsQ2bxjO7Pzcszp9VNaqdjzmOOBoc66o7urffyx8=
+X-Google-Smtp-Source: AGHT+IH9NXu1Zh4il4mX+tmqFO/fGM0azr6O1PCj5OfemeTOeltYbazHILrLFl2ZpdVQAwyq5Vkrfg==
+X-Received: by 2002:a05:6a20:12cd:b0:1f5:92ac:d6b7 with SMTP id adf61e73a8af0-203cbc05557mr29541583637.4.1745423525288;
+        Wed, 23 Apr 2025 08:52:05 -0700 (PDT)
+Received: from hiagof-nb.corp.toradex.com ([67.159.246.222])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73dbf8c0228sm10598640b3a.25.2025.04.23.08.52.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Apr 2025 08:52:04 -0700 (PDT)
+From: Hiago De Franco <hiagofranco@gmail.com>
+To: linux-remoteproc@vger.kernel.org
 Cc: Bjorn Andersson <andersson@kernel.org>,
 	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Tinghan Shen <tinghan.shen@mediatek.com>,
-	Olivia Wen <olivia.wen@mediatek.com>, kernel@collabora.com,
-	linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2 1/5] dt-bindings: remoteproc: mediatek: Add missing
- minItems for 8192/8195
-Message-ID: <20250423154930.GA579807-robh@kernel.org>
-References: <20250421-scp-dual-core-mt8390-v2-0-c84117a959a9@collabora.com>
- <20250421-scp-dual-core-mt8390-v2-1-c84117a959a9@collabora.com>
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Hiago De Franco <hiago.franco@toradex.com>
+Subject: [PATCH] remoteproc: imx_rproc: replace devm_clk_get() with devm_clk_get_optional()
+Date: Wed, 23 Apr 2025 12:51:31 -0300
+Message-Id: <20250423155131.101473-1-hiagofranco@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250421-scp-dual-core-mt8390-v2-1-c84117a959a9@collabora.com>
 
-On Mon, Apr 21, 2025 at 04:49:04PM -0400, Nícolas F. R. A. Prado wrote:
-> Both MT8192 and MT8195 have an L1TCM memory, so it should be described
-> in reg, and therefore reg's minItems should be 3, as is already implicit
-> by reg-names being three entries long. However minItems is currently
-> unset for mt8192/mt8195, resulting in it being equal to 2, from the base
-> schema. Fix reg minItems for MT8192 and MT8195 by setting it to 3.
-> 
-> Fixes: 6b55b1e2fd7f ("dt-bindings: remoteproc: mediatek: Support MT8195 dual-core SCP")
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
->  Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> index adc6b3f36fde49eb3fa7ed3f08b0fa9e7f331162..ee33c233e44f3d51f0851b35697a24208c87f68a 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/mtk,scp.yaml
-> @@ -185,6 +185,7 @@ allOf:
->      then:
->        properties:
->          reg:
-> +          minItems: 3
->            maxItems: 3
+From: Hiago De Franco <hiago.franco@toradex.com>
 
-As the max is already 3 at the top-level, you should drop maxItems here.
+The "clocks" device tree property is not mandatory, and if not provided
+Linux will shut down the remote processor power domain during boot if it
+is not present, even if it is running (e.g. it was started by U-Boot's
+bootaux command).
 
->          reg-names:
->            items:
-> 
-> -- 
-> 2.49.0
-> 
+Use the optional devm_clk_get instead.
+
+Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
+---
+ drivers/remoteproc/imx_rproc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+index 74299af1d7f1..45b5b23980ec 100644
+--- a/drivers/remoteproc/imx_rproc.c
++++ b/drivers/remoteproc/imx_rproc.c
+@@ -1033,7 +1033,7 @@ static int imx_rproc_clk_enable(struct imx_rproc *priv)
+ 	if (dcfg->method == IMX_RPROC_NONE)
+ 		return 0;
+ 
+-	priv->clk = devm_clk_get(dev, NULL);
++	priv->clk = devm_clk_get_optional(dev, NULL);
+ 	if (IS_ERR(priv->clk)) {
+ 		dev_err(dev, "Failed to get clock\n");
+ 		return PTR_ERR(priv->clk);
+-- 
+2.39.5
+
 
