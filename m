@@ -1,114 +1,152 @@
-Return-Path: <linux-remoteproc+bounces-3598-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-3601-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 231FEAA3CD6
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 30 Apr 2025 01:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 06C92AA3D04
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 30 Apr 2025 01:50:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3AB01884A7C
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 29 Apr 2025 23:46:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B05431BC5F94
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 29 Apr 2025 23:49:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32048280307;
-	Tue, 29 Apr 2025 23:46:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C36C524677B;
+	Tue, 29 Apr 2025 23:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="jtfFETES"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="oj1lLeZD"
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721602222A3;
-	Tue, 29 Apr 2025 23:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14D5C246762;
+	Tue, 29 Apr 2025 23:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745970385; cv=none; b=EIIXt0BRKys5r76nqDR7s6/xOhAXB2NOnoKWfiLtcRJzEPKhtmfXLmxYGWVXdzg9Exclz7U/AQ11+NnDO27QgTCtty7624Z2meEuZ3dAW7pu8BTX4q/E2drsouzmVsp0N8Xj3uLVmCLGYb/WUHOXxZkYd2CtrNV2A21dxL+aRbk=
+	t=1745970463; cv=none; b=ftI5GpX2+C0C+v3cU6vJ9ZiAW/IblbaL/YrHaIccMmwNnTJoxV8rwlY7sXLLuCdIqcGp1zgu7YB/OuVF7X9bsX4M0TKqr65w2O1DGT4LC0pkjVIHENrHHlz9L72Sp6bSIns+qE4D2mstONi4K2hkhr4ymg29jG5FOXswJNxfylw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745970385; c=relaxed/simple;
-	bh=NGaIyrfLvZYm2Bbqj86f7XJVeWE52V6E339DRzSa20w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dMamOO3THuqS57cb3v/RfGgha+owjk7uYfqcwlH+9kpN3rB1P4SaS7U4A5Sj2uD3cZQ2N4jdIrboUJk9xSil5LcKFxmYmiK3Ovqcj/wTkox421TI9ayBdQA+Qpk1L0G4OGHzsk/k9R8Znkg1ueV8vYzVNGT5+KY0r2qumzmcovU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=jtfFETES; arc=none smtp.client-ip=46.235.229.95
+	s=arc-20240116; t=1745970463; c=relaxed/simple;
+	bh=XkiAREM0que9989LTPRy0Ga/JqzoNw/ix1/Y2kzR1Gk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OUl3wIgm9aLbBz8MvLbhKbrNzo/nuc7VBQPJC6QMguYf5xrPpfoPRDNMOHapyk5kE8U15AK+a609Liz8zTeoFktz73ZKh0P6kbNWnDa80HJAY6Dc9K23jKcXCSI0MieSePV/uxLD5CyYJIPiB/5SeX9UihMAi5rPEfoHPn8KkRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=oj1lLeZD; arc=none smtp.client-ip=46.235.229.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=SrpJl8aswLmDlKg/oEU55Eu7Y/A7GY9f/+w2KaZJniM=; b=jtfFETESGjVlJ+3P
-	ztmtGff/8bCt5BaU0drQID5thdVjuAF/Y8r0L1WeeeBB5+h+0xiq8yeI9zAVKszMsmHF23Gy0r2IH
-	sYcJV371+suYiJucgwfrAzf1ioqHIiGnCdd+KcLgkrv/hkKkxRHKcInwamBHB8IpCJiz/J5+jPpWr
-	sZfaOlYPPCJaGjbiEVHHktkFxRnETaOsOvEIPDvFxD3nNjW7fvnrP/uPHfWlYQK/ipaObId7LXYBc
-	J8yA77KRfYjRpuaWe3HH04O+Dk7BZIOo0kR11phwAsucDJZ/k87qCrokLBZLZ13j1I+Rn3iHs40/6
-	QgN+iczIc1EO++J9JQ==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-	by mx.treblig.org with esmtp (Exim 4.96)
-	(envelope-from <linux@treblig.org>)
-	id 1u9ueQ-000WFz-2H;
-	Tue, 29 Apr 2025 23:46:10 +0000
-From: linux@treblig.org
-To: arnaud.pouliquen@foss.st.com,
-	andersson@kernel.org,
-	mathieu.poirier@linaro.org
-Cc: corbet@lwn.net,
-	linux-remoteproc@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH v3 3/3] rpmsg: Remove unused method pointers *send_offchannel
-Date: Wed, 30 Apr 2025 00:45:59 +0100
-Message-ID: <20250429234600.301083-4-linux@treblig.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250429234600.301083-1-linux@treblig.org>
-References: <20250429234600.301083-1-linux@treblig.org>
+	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
+	:Subject; bh=U0saWugJmx2Vge5QQBUQ8pQdCUNf2tXtPiln6IpxNQc=; b=oj1lLeZDB0X6Upyb
+	ihEqvpUuNnq00BpLydvh3AIOPIxHi0LTMEiQie/y6wMerIY242+rs0UlhGDtP6ErUNgPHZuTWpqEE
+	mH0OMG/xN2NNQDqUI9StoV6yH4pr7CBQVt/0SBt2fFZdr/W1qFi9DJkgjmVO77Xw/YppLrRzHEP/c
+	pNeXjd44khC1CjzAMmSfaYf/AfBhJe69cC2f4MqvobyBTnDe5OmoxONL55e1nCtXlUamTWCiRx4Z6
+	80gHrWAl0tNGIufEy93h5OGeyGyQsTA2MAO31CsSmds2gQVV255t2PO5un2oNE5Q2bpmswG9Avjbz
+	NNZK8Llz/0yguXJXYw==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1u9ufp-000WJY-18;
+	Tue, 29 Apr 2025 23:47:37 +0000
+Date: Tue, 29 Apr 2025 23:47:37 +0000
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
+To: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: arnaud.pouliquen@foss.st.com, andersson@kernel.org, corbet@lwn.net,
+	linux-remoteproc@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] rpmsg: Remove unused method pointers
+ *send_offchannel
+Message-ID: <aBFlGWI9usTpjQIU@gallifrey>
+References: <20250424142746.79062-1-linux@treblig.org>
+ <20250424142746.79062-4-linux@treblig.org>
+ <aBEh85gDlaEywWtX@p14s>
+ <aBEzcYaw63e93fFw@gallifrey>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <aBEzcYaw63e93fFw@gallifrey>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-34-amd64 (x86_64)
+X-Uptime: 23:46:27 up 2 days,  8:00,  1 user,  load average: 0.06, 0.04, 0.00
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
+* Dr. David Alan Gilbert (linux@treblig.org) wrote:
+> * Mathieu Poirier (mathieu.poirier@linaro.org) wrote:
+> > Hi,
+> > 
+> > On Thu, Apr 24, 2025 at 03:27:46PM +0100, linux@treblig.org wrote:
+> > > From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> > > 
+> > > After the previous patch, there are no implementers of the
+> > > send_offchannel() and trysend_offchannel() methods.
+> > > 
+> > > Remove them.
+> > > 
+> > > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+> > > ---
+> > >  drivers/rpmsg/rpmsg_internal.h | 6 ------
+> > >  1 file changed, 6 deletions(-)
+> > > 
+> > > diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+> > > index 42c7007be1b5..397e4926bd02 100644
+> > > --- a/drivers/rpmsg/rpmsg_internal.h
+> > > +++ b/drivers/rpmsg/rpmsg_internal.h
+> > > @@ -50,10 +50,8 @@ struct rpmsg_device_ops {
+> > >   * @destroy_ept:	see @rpmsg_destroy_ept(), required
+> > >   * @send:		see @rpmsg_send(), required
+> > >   * @sendto:		see @rpmsg_sendto(), optional
+> > > - * @send_offchannel:	see @rpmsg_send_offchannel(), optional
+> > >   * @trysend:		see @rpmsg_trysend(), required
+> > >   * @trysendto:		see @rpmsg_trysendto(), optional
+> > > - * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
+> > >   * @poll:		see @rpmsg_poll(), optional
+> > >   * @set_flow_control:	see @rpmsg_set_flow_control(), optional
+> > >   * @get_mtu:		see @rpmsg_get_mtu(), optional
+> > > @@ -67,13 +65,9 @@ struct rpmsg_endpoint_ops {
+> > >  
+> > >  	int (*send)(struct rpmsg_endpoint *ept, void *data, int len);
+> > >  	int (*sendto)(struct rpmsg_endpoint *ept, void *data, int len, u32 dst);
+> > > -	int (*send_offchannel)(struct rpmsg_endpoint *ept, u32 src, u32 dst,
+> > > -				  void *data, int len);
+> > >  
+> > >  	int (*trysend)(struct rpmsg_endpoint *ept, void *data, int len);
+> > >  	int (*trysendto)(struct rpmsg_endpoint *ept, void *data, int len, u32 dst);
+> > > -	int (*trysend_offchannel)(struct rpmsg_endpoint *ept, u32 src, u32 dst,
+> > > -			     void *data, int len);
+> > >  	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
+> > >  			     poll_table *wait);
+> > >  	int (*set_flow_control)(struct rpmsg_endpoint *ept, bool pause, u32 dst);
+> > 
+> > I'm good with this patchset.  Can you fix the last paragraph in the comment for
+> > function rpmsg_send_offchannel_raw() and remove the reference to "_offchannel"?
+> 
+> Sure.  I'll cut a v3 with that as an extra patch at the end.
 
-After the previous patch, there are no implementers of the
-send_offchannel() and trysend_offchannel() methods.
+Actually I rolled it in, see v3 series starting with message:
+  20250429234600.301083-1-linux@treblig.org
 
-Remove them.
+that I just sent.
 
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- drivers/rpmsg/rpmsg_internal.h | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-index 42c7007be1b5..397e4926bd02 100644
---- a/drivers/rpmsg/rpmsg_internal.h
-+++ b/drivers/rpmsg/rpmsg_internal.h
-@@ -50,10 +50,8 @@ struct rpmsg_device_ops {
-  * @destroy_ept:	see @rpmsg_destroy_ept(), required
-  * @send:		see @rpmsg_send(), required
-  * @sendto:		see @rpmsg_sendto(), optional
-- * @send_offchannel:	see @rpmsg_send_offchannel(), optional
-  * @trysend:		see @rpmsg_trysend(), required
-  * @trysendto:		see @rpmsg_trysendto(), optional
-- * @trysend_offchannel:	see @rpmsg_trysend_offchannel(), optional
-  * @poll:		see @rpmsg_poll(), optional
-  * @set_flow_control:	see @rpmsg_set_flow_control(), optional
-  * @get_mtu:		see @rpmsg_get_mtu(), optional
-@@ -67,13 +65,9 @@ struct rpmsg_endpoint_ops {
- 
- 	int (*send)(struct rpmsg_endpoint *ept, void *data, int len);
- 	int (*sendto)(struct rpmsg_endpoint *ept, void *data, int len, u32 dst);
--	int (*send_offchannel)(struct rpmsg_endpoint *ept, u32 src, u32 dst,
--				  void *data, int len);
- 
- 	int (*trysend)(struct rpmsg_endpoint *ept, void *data, int len);
- 	int (*trysendto)(struct rpmsg_endpoint *ept, void *data, int len, u32 dst);
--	int (*trysend_offchannel)(struct rpmsg_endpoint *ept, u32 src, u32 dst,
--			     void *data, int len);
- 	__poll_t (*poll)(struct rpmsg_endpoint *ept, struct file *filp,
- 			     poll_table *wait);
- 	int (*set_flow_control)(struct rpmsg_endpoint *ept, bool pause, u32 dst);
+Dave
+  
+> Dave
+> 
+> > Thanks,
+> > Mathieu
+> > 
+> > > -- 
+> > > 2.49.0
+> > > 
+> > 
+> -- 
+>  -----Open up your eyes, open up your mind, open up your code -------   
+> / Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+> \        dave @ treblig.org |                               | In Hex /
+>  \ _________________________|_____ http://www.treblig.org   |_______/
+> 
 -- 
-2.49.0
-
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
 
