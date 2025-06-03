@@ -1,230 +1,157 @@
-Return-Path: <linux-remoteproc+bounces-3867-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-3874-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B3CBACC416
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Jun 2025 12:13:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DEBBACC62D
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Jun 2025 14:09:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD6483A2C8E
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Jun 2025 10:12:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D329E168192
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Jun 2025 12:09:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A39B1F4C90;
-	Tue,  3 Jun 2025 10:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15A7B22F16C;
+	Tue,  3 Jun 2025 12:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="uqlu6V+7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QKjE60on"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593921D5ACE;
-	Tue,  3 Jun 2025 10:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF0722B8CF
+	for <linux-remoteproc@vger.kernel.org>; Tue,  3 Jun 2025 12:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748945572; cv=none; b=BafDykYM8vxs7TLyLRt8i2PBlMea7i1IeINlx/cyX+CzbJrsu1pFEj49wFcMayOKDC61sSpK/uX/3BXOft67fV0MIXDv+6cu8dO+MN9H055QVL1pN+S7vF9IBfrpEzYCddGmrloE2uKdOkE0DaytN1qIVpd5nykYgKZp9R1hgq0=
+	t=1748952594; cv=none; b=BL+9t9+mQv1qrCr/Xzi2x1bb0hHVVrbHYFs2Tf6HHPI4y0caWdzUvMBx3ivUXfyH1nyo4/VsXL5rPLC000cnnX+h2lX+/rtSP0QaeYTxeO5+pSw4dNAwLbfibzRU2AUfK2v6gnTt+PY5D0d8U/YLN5/0wzP42rHxUwxeLhu2u5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748945572; c=relaxed/simple;
-	bh=uhWKMUq4SxkHrWCJQIXkkJfpUiPZGQJMAVCk7n/ceZA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=r2PtXgpWzBbpkCEGw43vS2Q/29HTKX2cmodBPlGrngNB8aDaJmdDjfO64wz/0DpOHMZGEFwD8E3DxleujfAbW3X3yOcIbr+GHOWah57BgfLUZn5KQo4ZklmnAGUne6yF2wCeUe8e/W7eCBLrLA7ZRrOfBr8G6IE3VCViHVJsu90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=uqlu6V+7; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5539RZmQ020528;
-	Tue, 3 Jun 2025 12:12:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	H1yZJgiwJMRHj8OpFG9/1Htf5NRc6OSP2RzM3XiEJGs=; b=uqlu6V+7CK8o8DiE
-	7+kqe9qMXZ/UQBDvnEJ+rq42xWLJqTGPv2XNq17OfwRiJhDZ8UuRaest4+DSD31P
-	GTSeA+LFcH7egjpIDPfv9ZZxTFwUB++I5rV7O0ctOynYSHFZi6G+Z0+Ax1yotL/L
-	NUUvp2tlSXROl3ey6s6ZeVA3B0lglsK+gz71EKqWSK2nZk47WPOh/lau+ut1gCBH
-	eGVfnSLmSIAe28vqXRV+5DZ77+4gCll1S8J3nTrrIDlLAclqFaNxTD4qaVpgvxuI
-	NKgtOf+m/njKKCNmX211tiFHlCY02eClwqD9ubVd3XjHfYzDXLXVkTdCF0itKm0O
-	XpL8MQ==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 471g8tbd6d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Jun 2025 12:12:36 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id D3DAC4005B;
-	Tue,  3 Jun 2025 12:11:26 +0200 (CEST)
-Received: from Webmail-eu.st.com (eqndag1node4.st.com [10.75.129.133])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 21C15A8C942;
-	Tue,  3 Jun 2025 12:10:15 +0200 (CEST)
-Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE4.st.com
- (10.75.129.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 3 Jun
- 2025 12:10:14 +0200
-Received: from localhost (10.252.31.160) by SAFDAG1NODE1.st.com (10.75.90.17)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 3 Jun
- 2025 12:10:14 +0200
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Conor Dooley" <conor+dt@kernel.org>
-CC: <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <op-tee@lists.trustedfirmware.org>, <devicetree@vger.kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [RESEND PATCH v16 6/6] remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
-Date: Tue, 3 Jun 2025 12:08:08 +0200
-Message-ID: <20250603100808.1074812-7-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250603100808.1074812-1-arnaud.pouliquen@foss.st.com>
-References: <20250603100808.1074812-1-arnaud.pouliquen@foss.st.com>
+	s=arc-20240116; t=1748952594; c=relaxed/simple;
+	bh=YryBAYYqkusGLWOaZUx/ENPVrzfzihfvA3OAF4RkZyE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DjPte7TvQc2wIXsS0ROu8iz7JYxBtoIIuDAywPYsXI71uOjMSE4O0nhanh3KxHVeyvqfj9gLBQu3xqTtXojJ7LztDaAvw5/5vYziWRVGOJqyJajQDvL7sahQEE06zcwYllR6kjvKPdbvmiMFAS9V9hOmGocheuQABem7ou41cjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QKjE60on; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-70e64b430daso48788287b3.3
+        for <linux-remoteproc@vger.kernel.org>; Tue, 03 Jun 2025 05:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1748952591; x=1749557391; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wkgkfx1ZHJ5WRXN3wk71OJao3glFFdhvQiWlOBbCHtw=;
+        b=QKjE60on8C0B1uf7Wkdr4vd3wZEUNW/3x685xZ2L1Ujg5MCiUKYJVHko1af2IRHuCw
+         eiZlimKJqQe561ASjCIvjujo/a63N+xe4UPdANf0Mk+eP172bgz2yHZQ5ZKgItNkps0d
+         8bjOdPteDQF4uyTGMcvppPAeOERxrH+gdS1gvmyPh9phN9LCKcbXM7dMEqGStpPMaWd6
+         fPzTKrePbM7X2xzNuiOxKfGnErudddrnTJoRo6luOt5ona3WXNTPktOj4HgeFNRsCyB7
+         vZCC9fQycUzJqkIMqqatqK6CtGCOD28cecO9XgWuaZypgtdmUSX+VMK9NHfOtxU0YoQU
+         xr8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748952591; x=1749557391;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wkgkfx1ZHJ5WRXN3wk71OJao3glFFdhvQiWlOBbCHtw=;
+        b=Pi25q6lf6nm+Zs/1dyYd71aoavgz0Zc9mudUViPTBvgv7NBHo+9fNr2hjX7TEjf0n9
+         F8qbbQO3Gk3xn79HqzFUh6/75600gOmMwbAF20xA1bKNcnw4f91vXUq6UqV/ZVOGns8N
+         lYEvoyGo0SBMPMIOy9sPxy1m8LBIwRQdEMQjSJCjIw4T/0heRDElD5pWogqXSVIVuiT5
+         abhe4HwQj8Qx335fCd3gnWQPiGLjWotkFw94j+gn17Jg2AQLlz7dM2DSACfzgn4GZajM
+         Y4NM2NV1KTEcFXUUTeCS0mZWvRULDg9U/UpEureyd15zyKU+d23W3r3V+7RcdBohmML6
+         XgRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVXRpWs/z9ooRHIWJ9QxI3Zr98tX46GG1u4fxABqbhcn9RORsonp59uAV/dwUuGUeSy6Zo+holt6uQofUl5wJpE@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5/PIUZDE9CCEyy9XSXOsEMtMQqsWeRdeoWKImTPoELadeXUg2
+	H8rw5WHBROJpIVR3Tbn7zpYYiDikXDO7hNu//otXVS2WBEK4k7dHTcoF172/ZfpUMl8A7t8TPct
+	O3DEU/IDu1gq4D6f7Mw9jVj4x067DmDO7jDEhL/7Fdg==
+X-Gm-Gg: ASbGncv4jpffPsFT6Ebhsrv4Wsi+CA1viD4zElLUjfhzyUwxF59uZ/ra1k5SvZpuoSh
+	7HCIYrhGY3bSwW1EhaKjv9HcKaW2MGZ1l+wHrYZviJPbbENMe1qcKlzlhRBTzYizC/T/sTXTjMm
+	ureJIDnVkPm/dfJy4qQ05wwjD3/05UcsTwCo8tDsANP7E=
+X-Google-Smtp-Source: AGHT+IEBu6kRLR+QihKU16+LErg47sPGw3yJ9MbHWp+STBlEAPmBRdPA2kKSotqf4d+nhihTdrEqxcQCav79Y/SEImk=
+X-Received: by 2002:a05:690c:6888:b0:70e:923:2173 with SMTP id
+ 00721157ae682-71097c2a76fmr158597817b3.5.1748952591135; Tue, 03 Jun 2025
+ 05:09:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SAFDAG1NODE1.st.com
- (10.75.90.17)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-03_01,2025-06-02_01,2025-03-28_01
+References: <20250602131906.25751-1-hiagofranco@gmail.com>
+In-Reply-To: <20250602131906.25751-1-hiagofranco@gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 3 Jun 2025 14:09:14 +0200
+X-Gm-Features: AX0GCFuMy0nMLljWiQ8PZlmv65MxrymGJ77Eb8A4CZbrmvODDSNF3Eq2H4oVdUw
+Message-ID: <CAPDyKFrUAF5oWkyc3mLf0+R9VAypBotNyR4B5Chr3KQFYJOjbw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] remoteproc: imx_rproc: allow attaching to running
+ core kicked by the bootloader
+To: Hiago De Franco <hiagofranco@gmail.com>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Bjorn Andersson <andersson@kernel.org>, 
+	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Peng Fan <peng.fan@oss.nxp.com>, daniel.baluta@nxp.com, iuliana.prodan@oss.nxp.com, 
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-The new TEE remoteproc driver is used to manage remote firmware in a
-secure, trusted context. The 'st,stm32mp1-m4-tee' compatibility is
-introduced to delegate the loading of the firmware to the trusted
-execution context. In such cases, the firmware should be signed and
-adhere to the image format defined by the TEE.
+On Mon, 2 Jun 2025 at 15:19, Hiago De Franco <hiagofranco@gmail.com> wrote:
+>
+> From: Hiago De Franco <hiago.franco@toradex.com>
+>
+> This patch series depends on Ulf's patches that are currently under review,
+> "pmdomain: Add generic ->sync_state() support to genpd" [1]. Without them,
+> this series is not going to work.
+>
+> For the i.MX8X and i.MX8 family SoCs, currently when the remotecore is
+> started by the bootloader and the M core and A core are in the same
+> partition, the driver is not capable to detect the remote core and
+> report the correct state of it.
+>
+> This patch series implement a new function, dev_pm_genpd_is_on(), which
+> returns the power status of a given power domain (M core power domains
+> IMX_SC_R_M4_0_PID0 and IMX_SC_R_M4_0_MU_1A in this case). If it is already
+> powered on, the driver will attach to it.
+>
+> Finally, the imx_rproc_clk_enable() function was also changed to make it
+> return before dev_clk_get() is called, as it currently generates an SCU
+> fault reset if the remote core is already running and the kernel tries
+> to enable the clock again. These changes are a follow up from a v1 sent
+> to imx_rproc [2] and from a reported regression [3].
+>
+> [1] https://lore.kernel.org/all/20250523134025.75130-1-ulf.hansson@linaro.org/
+> [2] https://lore.kernel.org/lkml/20250423155131.101473-1-hiagofranco@gmail.com/
+> [3] https://lore.kernel.org/lkml/20250404141713.ac2ntcsjsf7epdfa@hiago-nb/
+>
+> v4:
+> - dev_pm_genpd_is_on() introduced to drivers/pmdomain/core.c
+> - imx_rproc.c updated to use the generic power domains instead of the
+>   SCU API call, which depends on Ulf's patch series.
+>
+> v3:
+> - https://lore.kernel.org/all/20250519171514.61974-1-hiagofranco@gmail.com/
+>
+> v2:
+> - https://lore.kernel.org/lkml/20250507160056.11876-1-hiagofranco@gmail.com/
+>
+> v1:
+> - https://lore.kernel.org/lkml/20250505154849.64889-1-hiagofranco@gmail.com/
+>
+> Hiago De Franco (3):
+>   pmdomain: core: introduce dev_pm_genpd_is_on
+>   remoteproc: imx_rproc: skip clock enable when M-core is managed by the
+>     SCU
+>   remoteproc: imx_rproc: detect and attach to pre-booted remote cores
+>
+>  drivers/pmdomain/core.c        | 27 +++++++++++++++++++++++++++
+>  drivers/remoteproc/imx_rproc.c | 33 ++++++++++++++++++++++++++-------
+>  include/linux/pm_domain.h      |  6 ++++++
+>  3 files changed, 59 insertions(+), 7 deletions(-)
+>
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
-updates vs previous version
-- rename structures, variables and function from tee_rproc_xxx to
-  rproc_tee_xxx
-- rework code to take into account rproc_tee_register and
-  rproc_tee_unregister APIs update.
-- optimize code around dev_err_probe() when rproc_tee_register() fails,
----
- drivers/remoteproc/stm32_rproc.c | 57 ++++++++++++++++++++++++++++++--
- 1 file changed, 54 insertions(+), 3 deletions(-)
+We are awaiting further feedback on the other series [1]. As you have
+tested it, may I add your tested-by tag for it? Or perhaps if you can
+send a reply to the cover-letter for it?
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index b1bda314ca85..829dfd440dbf 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -18,6 +18,7 @@
- #include <linux/pm_wakeirq.h>
- #include <linux/regmap.h>
- #include <linux/remoteproc.h>
-+#include <linux/remoteproc_tee.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/workqueue.h>
-@@ -255,6 +256,19 @@ static int stm32_rproc_release(struct rproc *rproc)
- 	return 0;
- }
- 
-+static int stm32_rproc_tee_stop(struct rproc *rproc)
-+{
-+	int err;
-+
-+	stm32_rproc_request_shutdown(rproc);
-+
-+	err = rproc_tee_stop(rproc);
-+	if (err)
-+		return err;
-+
-+	return stm32_rproc_release(rproc);
-+}
-+
- static int stm32_rproc_prepare(struct rproc *rproc)
- {
- 	struct device *dev = rproc->dev.parent;
-@@ -691,8 +705,20 @@ static const struct rproc_ops st_rproc_ops = {
- 	.get_boot_addr	= rproc_elf_get_boot_addr,
- };
- 
-+static const struct rproc_ops st_rproc_tee_ops = {
-+	.prepare	= stm32_rproc_prepare,
-+	.start		= rproc_tee_start,
-+	.stop		= stm32_rproc_tee_stop,
-+	.kick		= stm32_rproc_kick,
-+	.load		= rproc_tee_load_fw,
-+	.parse_fw	= rproc_tee_parse_fw,
-+	.find_loaded_rsc_table = rproc_tee_find_loaded_rsc_table,
-+	.release_fw	= rproc_tee_release_fw,
-+};
-+
- static const struct of_device_id stm32_rproc_match[] = {
- 	{ .compatible = "st,stm32mp1-m4" },
-+	{ .compatible = "st,stm32mp1-m4-tee" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, stm32_rproc_match);
-@@ -853,15 +879,36 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	struct device_node *np = dev->of_node;
- 	struct rproc *rproc;
- 	unsigned int state;
-+	u32 proc_id;
- 	int ret;
- 
- 	ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
- 	if (ret)
- 		return ret;
- 
--	rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
--	if (!rproc)
--		return -ENOMEM;
-+	if (of_device_is_compatible(np, "st,stm32mp1-m4-tee")) {
-+		/*
-+		 * Delegate the firmware management to the secure context.
-+		 * The firmware loaded has to be signed.
-+		 */
-+		ret = of_property_read_u32(np, "st,proc-id", &proc_id);
-+		if (ret) {
-+			dev_err(dev, "failed to read st,rproc-id property\n");
-+			return ret;
-+		}
-+
-+		rproc = devm_rproc_alloc(dev, np->name, &st_rproc_tee_ops, NULL, sizeof(*ddata));
-+		if (!rproc)
-+			return -ENOMEM;
-+
-+		ret = rproc_tee_register(dev, rproc, proc_id);
-+		if (ret)
-+			return dev_err_probe(dev, ret,  "signed firmware not supported by TEE\n");
-+	} else {
-+		rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, NULL, sizeof(*ddata));
-+		if (!rproc)
-+			return -ENOMEM;
-+	}
- 
- 	ddata = rproc->priv;
- 
-@@ -913,6 +960,8 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 		dev_pm_clear_wake_irq(dev);
- 		device_init_wakeup(dev, false);
- 	}
-+	rproc_tee_unregister(dev, rproc);
-+
- 	return ret;
- }
- 
-@@ -933,6 +982,8 @@ static void stm32_rproc_remove(struct platform_device *pdev)
- 		dev_pm_clear_wake_irq(dev);
- 		device_init_wakeup(dev, false);
- 	}
-+
-+	rproc_tee_unregister(dev, rproc);
- }
- 
- static int stm32_rproc_suspend(struct device *dev)
--- 
-2.25.1
+Anyway, for $subject series:
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
+Kind regards
+Uffe
 
