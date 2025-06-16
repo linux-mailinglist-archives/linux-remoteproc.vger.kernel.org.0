@@ -1,224 +1,186 @@
-Return-Path: <linux-remoteproc+bounces-3969-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-3971-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5E83ADAA17
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Jun 2025 09:59:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 529AAADB10A
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Jun 2025 15:05:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 72FB87A3FA1
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Jun 2025 07:58:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 532D27A9524
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 16 Jun 2025 13:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84675214A9E;
-	Mon, 16 Jun 2025 07:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C4C285CB6;
+	Mon, 16 Jun 2025 13:05:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="tvb1wGB0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WOVoHjGu"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9501D20F085;
-	Mon, 16 Jun 2025 07:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8152E427E;
+	Mon, 16 Jun 2025 13:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750060726; cv=none; b=jU+BQssFg5wbCpqxISi6imW7vfnO/lr9cV0KZ3lT6JFw8P9YhgVl8GZfqRE09C6cHCxzaxsN/pYYyKyRdyB+Vo3Oy61R6foUfTE9gF02zt1KJ4jdZa/juVXfKcQLX7GT4un11PBR7kfORksvH4jjQjNEIUECoMX3VebiHH82qZQ=
+	t=1750079105; cv=none; b=sqviGhnSVziTg8GJEkA0sMYVzIqqZi7WvklB3zAz5m0mAzHvAzUiV/PyZ6gfLBcBI7hfUGyQFldQ6haXvoWdCUWaGvYvXuFkhT+VK/R7p5RcQyb0jteSh6q7ROA4emr8I9fJmiOQ/HieOvjzRYUko5fhcnzB2FqrETZNm2Pxvkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750060726; c=relaxed/simple;
-	bh=jPK4wtVtgowQBi+UmxZnj54EDsYP4uXpHHgPQcBnK9Y=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pllbGIT65DLjZP3e1KGV3DtWB77H5GcBOPymgC+YLQwhRdCYc2SIFmia4AwYgDwF5mC/79bkXZqjrateIRq7zZVmCOLflzJwiUbJHdsl+ccSsZYa0Tk8ts6jwSPTIIPww3sdoDALL296vTDtSZ0sB41CoKFfoNEiTeLx5kHk+rM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=tvb1wGB0; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55G6VltD029998;
-	Mon, 16 Jun 2025 09:58:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=selector1; bh=
-	XnJtiwxef0NlsIA0iJK2TmfZ9WiB+Rmg7cFo4i5Ph/o=; b=tvb1wGB0lVwOwiRr
-	Z7bMY1fiIFQ9Ji1hnw5hcBxVKjKd4vYwI8tg3zEXrirjw3VSxkYVLtEqUgQaItk/
-	YIAkI3/DsnUCHDUNPCcIFom519v8Ne+uUdjfjSHXVr3cw2xEjyDvPQQkMwV25xWk
-	VvjqBe7k6Ojnt1BbaGygHYfsxhvzOQZet0mf5BTlFiDd58e5fyp94lQ5Qplyru5o
-	cCWqq5dmK2MXRkuOrcetm3ANimlt+TiVxJxTGJcxhk9711KGQvJ7jHqPlzvjjg9Y
-	0bNojv/bQW7aEkrYYQ0UJX7JWXC+qg/fUVZNZPweKXUVW6YS2xd8zjApRFqKWc7w
-	FiFVUg==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 479jn4m31q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Jun 2025 09:58:27 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 7076C40047;
-	Mon, 16 Jun 2025 09:57:12 +0200 (CEST)
-Received: from Webmail-eu.st.com (eqndag1node6.st.com [10.75.129.135])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1754E4CB020;
-	Mon, 16 Jun 2025 09:56:24 +0200 (CEST)
-Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE6.st.com
- (10.75.129.135) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 16 Jun
- 2025 09:56:23 +0200
-Received: from localhost (10.48.86.121) by SAFDAG1NODE1.st.com (10.75.90.17)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 16 Jun
- 2025 09:56:23 +0200
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "Conor Dooley" <conor+dt@kernel.org>
-CC: <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <op-tee@lists.trustedfirmware.org>, <devicetree@vger.kernel.org>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH v18 6/6] remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
-Date: Mon, 16 Jun 2025 09:55:30 +0200
-Message-ID: <20250616075530.4106090-7-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250616075530.4106090-1-arnaud.pouliquen@foss.st.com>
-References: <20250616075530.4106090-1-arnaud.pouliquen@foss.st.com>
+	s=arc-20240116; t=1750079105; c=relaxed/simple;
+	bh=siv3Ien97FCkgAjG2Q1suDpHQa4tobCL+W3T5TCoEj8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AHdpWQOIGO8O8AU+Vh9IDZ4QfPfoMiPY0cvR06/Rrh3ED7jvQwL3zzWbaumdsOK2tfnbuwkI3fO6kl4/cocOa3ugImcPKH08o3stp5LIdTvteYF+VSRi09BZYmi4yzq+COzG0OK25w3uzYFgW73jlus64yTA6IsGXN7egYgCFqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WOVoHjGu; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-23602481460so40202995ad.0;
+        Mon, 16 Jun 2025 06:05:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750079103; x=1750683903; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GUTXDzJTms5RZMMJbgvvc42mrXG+pZ1XuTEHVE/rMMo=;
+        b=WOVoHjGu8O8duegrNKas8XFo8SpB9kFi1Yp4O5T7e1jGuMWKoS8SKOvIMFB7gDqV8i
+         l45khUvkjVDKp4OsHETIgNqzD5Bb0RCKuFRoTaC3aMtrPZ+q1f9xPBnOp4TVG384I+Vt
+         R4+Phd39IqtL3s9KK2164crpaqtRsXbPS4hAIhbX4zWLfH3Win/nNpvgqDCg1SIzLQbn
+         /I/9oHVXHAfJGPLFOFWPdGHCgm4MlxOfg5ZvaPfDN4p3FjhL01UzuIu7ovtI/xnEFCdc
+         GGZWdSNIf3WHUj6DYG0sDRKDSP5PPQ3NFtftnkeQ0xhkCEBbv+q+FHfJ3H/5ksaoCeWy
+         Geog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750079103; x=1750683903;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GUTXDzJTms5RZMMJbgvvc42mrXG+pZ1XuTEHVE/rMMo=;
+        b=gQ+ZMRPq+R0jWwA26KNMUx1+m6WGsPhQ+Xk5ULQo6Puyu9Rg5fLtm+z+Ny0/l9YrrT
+         Uq7KHqpVJPe7gPCDBnrw3ZwfKLRccF30DK0XTjfgVqlStg9lRiI6WGGA6PH3mYVDF08i
+         +IN8/dVST93cM7ZvWmsgbayrKKz0VeLivnzRBe3U2Egt7a5ax0Dhrp6fyBBGmA+hDLo2
+         utI0RzqK7QAjZZx1PN4otfC9rXSwiudZRP0IVWsYrnOdCRfsfYqT/JI/21oRnp3VsGqB
+         TNeiKvpNc/7zgVAf29xORSpJFt3sORtGO7y4Xa39cYwJ8Ccg1jpELh6UZa01y6RfKN/6
+         jxog==
+X-Forwarded-Encrypted: i=1; AJvYcCURz2yv3AyIfaS2iqgB5OAg5v7Z1/20aID48BFlG2z4p004rmLSkHTmufwHKltkvgIkSQ9BQqerW+ac@vger.kernel.org, AJvYcCXHnLopgPiM7UJpy+RQ6DYB5U/re922TDn3UZC8IfxxNqFp5fd9MYbg/jg8kEsB+llPGlh5T48dqFIV324gp53+Og==@vger.kernel.org, AJvYcCXONbM1x68MoYntZyKoxctqbEqZSANooLuSbSiLCPuxsqRpPYnd1oSr8U9qxY5uQ2RYjUVPmn6+aPK2O2KS@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOCu/hYwXjRex9eF92gfsEY1xkKA1bYo0UAP930RJ4h5z6GGvB
+	XdQ1i9AjIcWUusQyhjDNqnvIYCd9ZW2vACxHGZ9uHV1kD9qN9jpt/hM3kadAEZbm7X2YWUMfHO5
+	Whinu1RAnMWG9W9WLfRgP9qLSgDT18fw=
+X-Gm-Gg: ASbGnctGLQ2jkfljyZtJZzvs3ATY3qq4zNgV1z9LXypjoZ0jShU53sUSuntzEA9cWpq
+	d9mpVjO5QjZsMpu3yAz647qpjRQxfVCQKtXM5IbOr6eBTvV/rXglIRvEdADNP6T3BD45srKBhKy
+	nJFAof6bE3mXfbjolaY6zksixTxtVvdiLNhrNrqP13
+X-Google-Smtp-Source: AGHT+IGIA/B2yzj9kVtPTV819XunUr+pzfOmCuEtfwePf361QYYolQtgx4s3tdeFt0KKKXYZVrT1BQRfBwQae0le85A=
+X-Received: by 2002:a17:902:ce91:b0:224:76f:9e4a with SMTP id
+ d9443c01a7336-2366afe7bfdmr139261545ad.14.1750079103282; Mon, 16 Jun 2025
+ 06:05:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SAFDAG1NODE1.st.com
- (10.75.90.17)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-16_03,2025-06-13_01,2025-03-28_01
+References: <20250606-imx95-rproc-1-v2-0-a2bd64438be9@nxp.com> <20250606-imx95-rproc-1-v2-1-a2bd64438be9@nxp.com>
+In-Reply-To: <20250606-imx95-rproc-1-v2-1-a2bd64438be9@nxp.com>
+From: Daniel Baluta <daniel.baluta@gmail.com>
+Date: Mon, 16 Jun 2025 16:07:02 +0300
+X-Gm-Features: AX0GCFsHX-yp69BTpUbkYuCgM8eD072u2RLLllJxgon-4nc2mIU3mnAX1gZC5_Q
+Message-ID: <CAEnQRZCQj5b9GSb=i2cTn4YKtAsQPTwJ6DkiqaZjmrmboim-8A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] dt-bindings: remoteproc: fsl,imx-rproc: Add
+ support for i.MX95
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Iuliana Prodan <iuliana.prodan@nxp.com>, Daniel Baluta <daniel.baluta@nxp.com>, 
+	linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The new TEE remoteproc driver is used to manage remote firmware in a
-secure, trusted context. The 'st,stm32mp1-m4-tee' compatibility is
-introduced to delegate the loading of the firmware to the trusted
-execution context. In such cases, the firmware should be signed and
-adhere to the image format defined by the TEE.
+On Fri, Jun 6, 2025 at 4:57=E2=80=AFAM Peng Fan (OSS) <peng.fan@oss.nxp.com=
+> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> i.MX95 has a System Manager(SM) core runs the System Control Management
+> Interface(SCMI) firmware. Vendor extenions are implemented in the
+> firmware, Logical Machine Management(LMM) protocol to manage
+> Logical Machines and CPU protocol to manage cores. The documentation
+> could be found in file drivers/firmware/arm_scmi/vendors/imx/imx95.rst.
+>
+> Add below to support i.MX95
+>  - compatible string for i.MX95 M7
+>  - fsl,lmm-id to indicate the LMM ID of M7 LM
+>  - fsl,cpu-id to indicate the CPU ID of M7
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../bindings/remoteproc/fsl,imx-rproc.yaml         | 27 ++++++++++++++++=
+++++++
+>  1 file changed, 27 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.y=
+aml b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> index 57d75acb0b5e52ca49d1361176fdebc18a0bf7a2..a3ffab60df52be6f1d7cf4846=
+ca5ba1c40f03bde 100644
+> --- a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> +++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
+> @@ -28,6 +28,7 @@ properties:
+>        - fsl,imx8qxp-cm4
+>        - fsl,imx8ulp-cm33
+>        - fsl,imx93-cm33
+> +      - fsl,imx95-cm7
+>
+>    clocks:
+>      maxItems: 1
+> @@ -68,6 +69,12 @@ properties:
+>        Indicate whether need to load the default firmware and start the r=
+emote
+>        processor automatically.
+>
+> +  fsl,cpu-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This property is to specify the CPU ID of the remote processor
+> +      in SoC which supports System Manager
+> +
+>    fsl,entry-address:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description:
+> @@ -78,6 +85,12 @@ properties:
+>      description:
+>        Phandle to IOMUXC GPR block which provide access to CM7 CPUWAIT bi=
+t.
+>
+> +  fsl,lmm-id:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      This property is to specify the Logical Machine ID of the remote p=
+rocessor
+> +      in SoC which supports System Manager
+> +
+>    fsl,resource-id:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description:
+> @@ -114,6 +127,20 @@ allOf:
+>        properties:
+>          power-domains: false
+>
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: fsl,imx95-cm7
+> +    then:
+> +      required:
+> +        - fsl,lmm-id
+> +        - fsl,cpu-id
+> +    else:
+> +      properties:
+> +        fsl,lmm-id: false
+> +        fsl,cpu-id: false
 
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
----
- drivers/remoteproc/stm32_rproc.c | 57 ++++++++++++++++++++++++++++++--
- 1 file changed, 54 insertions(+), 3 deletions(-)
+Hi Peng,
 
-diff --git a/drivers/remoteproc/stm32_rproc.c b/drivers/remoteproc/stm32_rproc.c
-index db82d4308376..a3613c337264 100644
---- a/drivers/remoteproc/stm32_rproc.c
-+++ b/drivers/remoteproc/stm32_rproc.c
-@@ -18,6 +18,7 @@
- #include <linux/pm_wakeirq.h>
- #include <linux/regmap.h>
- #include <linux/remoteproc.h>
-+#include <linux/remoteproc_tee.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/workqueue.h>
-@@ -255,6 +256,19 @@ static int stm32_rproc_release(struct rproc *rproc)
- 	return 0;
- }
- 
-+static int stm32_rproc_tee_stop(struct rproc *rproc)
-+{
-+	int err;
-+
-+	stm32_rproc_request_shutdown(rproc);
-+
-+	err = rproc_tee_stop(rproc);
-+	if (err)
-+		return err;
-+
-+	return stm32_rproc_release(rproc);
-+}
-+
- static int stm32_rproc_prepare(struct rproc *rproc)
- {
- 	struct device *dev = rproc->dev.parent;
-@@ -691,8 +705,20 @@ static const struct rproc_ops st_rproc_ops = {
- 	.get_boot_addr	= rproc_elf_get_boot_addr,
- };
- 
-+static const struct rproc_ops st_rproc_tee_ops = {
-+	.prepare	= stm32_rproc_prepare,
-+	.start		= rproc_tee_start,
-+	.stop		= stm32_rproc_tee_stop,
-+	.kick		= stm32_rproc_kick,
-+	.load		= rproc_tee_load_fw,
-+	.parse_fw	= rproc_tee_parse_fw,
-+	.find_loaded_rsc_table = rproc_tee_find_loaded_rsc_table,
-+	.release_fw	= rproc_tee_release_fw,
-+};
-+
- static const struct of_device_id stm32_rproc_match[] = {
- 	{ .compatible = "st,stm32mp1-m4" },
-+	{ .compatible = "st,stm32mp1-m4-tee" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, stm32_rproc_match);
-@@ -854,6 +880,7 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	const char *fw_name;
- 	struct rproc *rproc;
- 	unsigned int state;
-+	u32 proc_id;
- 	int ret;
- 
- 	ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
-@@ -865,9 +892,29 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 	if (ret < 0 && ret != -EINVAL)
- 		return ret;
- 
--	rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, fw_name, sizeof(*ddata));
--	if (!rproc)
--		return -ENOMEM;
-+	if (of_device_is_compatible(np, "st,stm32mp1-m4-tee")) {
-+		/*
-+		 * Delegate the firmware management to the secure context.
-+		 * The firmware loaded has to be signed.
-+		 */
-+		ret = of_property_read_u32(np, "st,proc-id", &proc_id);
-+		if (ret) {
-+			dev_err(dev, "failed to read st,rproc-id property\n");
-+			return ret;
-+		}
-+
-+		rproc = devm_rproc_alloc(dev, np->name, &st_rproc_tee_ops, fw_name, sizeof(*ddata));
-+		if (!rproc)
-+			return -ENOMEM;
-+
-+		ret = rproc_tee_register(dev, rproc, proc_id);
-+		if (ret)
-+			return dev_err_probe(dev, ret,  "signed firmware not supported by TEE\n");
-+	} else {
-+		rproc = devm_rproc_alloc(dev, np->name, &st_rproc_ops, fw_name, sizeof(*ddata));
-+		if (!rproc)
-+			return -ENOMEM;
-+	}
- 
- 	ddata = rproc->priv;
- 
-@@ -919,6 +966,8 @@ static int stm32_rproc_probe(struct platform_device *pdev)
- 		dev_pm_clear_wake_irq(dev);
- 		device_init_wakeup(dev, false);
- 	}
-+	rproc_tee_unregister(dev, rproc);
-+
- 	return ret;
- }
- 
-@@ -939,6 +988,8 @@ static void stm32_rproc_remove(struct platform_device *pdev)
- 		dev_pm_clear_wake_irq(dev);
- 		device_init_wakeup(dev, false);
- 	}
-+
-+	rproc_tee_unregister(dev, rproc);
- }
- 
- static int stm32_rproc_suspend(struct device *dev)
--- 
-2.25.1
+Can you remind me why do we need the else branch here?
 
+I mean if the compatible is not fsl,imx95-cm7 then the properties
+fsl,lmm-id and fsl,cpu-id are not required and I think that's fine.
 
