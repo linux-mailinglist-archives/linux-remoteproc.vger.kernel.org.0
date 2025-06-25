@@ -1,161 +1,186 @@
-Return-Path: <linux-remoteproc+bounces-4047-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-4049-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92BAAAE7C83
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Jun 2025 11:24:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D34ADAE7DC1
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Jun 2025 11:46:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31C503BC180
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Jun 2025 09:23:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 684D67A4B86
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Jun 2025 09:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01F829E117;
-	Wed, 25 Jun 2025 09:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62EEA288522;
+	Wed, 25 Jun 2025 09:42:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="SM3O5nFR"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="TjYA1M/i"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E47D2BD5BC
-	for <linux-remoteproc@vger.kernel.org>; Wed, 25 Jun 2025 09:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0C101EF0A6;
+	Wed, 25 Jun 2025 09:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750842940; cv=none; b=Pv2Ud4W2bypdhEE/zxq6aoF6VquxoVHAj1XX1Aa5Lb4OKMgTSMmGIGWTVEEddb5z0XolBycgIxWIoC+zDGftd0o8/xk3wqv0R7iYX0dKyCFxGny2kkx0euwLfyRwc9VhNv8sxTKbpH3fr7tSTSTvsglhsBWJPlp0FqObyNWTU/U=
+	t=1750844543; cv=none; b=AdBT6mw3X+eNr6UtfVl1SvH7m4n2l4nClpQuyod/eY0fGXJes/KJPutwKHf18SKOn09FPIq+yfeRuHpzrrRaP/o5dkfbUL/3YodRQXhhn30WvBphey3fcVnJhL5CneqMzbXDOx4VWpRDYUjo1KdXx77rSqkstxtw7tEgQ6SbtKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750842940; c=relaxed/simple;
-	bh=vCp//gPYQcR3DNj7zr7SuBIjoFrxsV54Ke1YSaCx7AM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Y7Tp5NODkBp+q4ZWWuyQjySgL2S52jM6ELDKFVIEtt1CjxFqB7dOaxrx6rEWo55fdyVk+o/czkPmgL7WRfYUHDGBIZHB9ShQNBH36DUbG7MFkWSpre0drMK9CWTrWdcuIFRlV40v2qNYmqKBMyLaGAPgrpVFXspN48qPQ2uP1bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=SM3O5nFR; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fairphone.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-adb2bd27c7bso972819666b.2
-        for <linux-remoteproc@vger.kernel.org>; Wed, 25 Jun 2025 02:15:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1750842937; x=1751447737; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k+LGnTNcVQ28XMxEvYu54IUxPobup7v+2rWujowv9BA=;
-        b=SM3O5nFRQHEsv8VN0Cmmh9NTOVterKyDltoX7QgHtBeQ00m5a5L1+BgTIr6r0huxp6
-         Xr6VS73kc9bTFrNyX9cHB08T/7aTRxdvnIce6wl5K0bnK1XYOdTgoGDnsrUcGQqWIwMZ
-         MysajJGPnFaH/GMbw3lOIhZGCFzOXgiPS4IST+n7qJACcsy3cDVN3UTw+Uimad8Ouqus
-         +reNjDhOqyqrvEY4BYi7bkIPYpM6sw3/89+O9C4O0xJUoyJtDd+asMtJDiapz/yciLPU
-         Svc9tWHO3FlhHL4wfqJ/DBd18kS2D5pg6d+gGmOEi59CQ72BL3bX2adln7dbfML+S913
-         tw1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750842937; x=1751447737;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k+LGnTNcVQ28XMxEvYu54IUxPobup7v+2rWujowv9BA=;
-        b=QuHeWA8WHF2VR2e7bMaDNS5RfYiIQgzV31A6Or/UgcmCKMd941Saxd8sRI2qbO5s9l
-         6/Eqs4xez4oDR5BWVbVnafLwbW0PLpKMMnEtH9RN4nSZGFfDLiXEiwvWdK9UTmiwW5RU
-         61h93hL/N1UZL6kzjRtb6RXVBKNKZ1MAy4/U1MVrcSloH+EU4WmC2ZzWelL+nWAc3vX1
-         0d0CXP971xy4/Tfb5hf1uYmi+3ww5XM7C4VGw8a46XT9QV4I63W6klE/2iIVgmFwiEDF
-         xZsxkxaLerdtQKv4gPMSpHRcUVNhP0Muj03A86x5AtHdfvAoQt9tqjevbg0GsvbPuYgq
-         CSJw==
-X-Forwarded-Encrypted: i=1; AJvYcCVYdGuZMGyqRsGTwft5pCVrx2yHgD5hctx4+vBXCdrR+eh02t9dQJPBcoUWNCMbJ3wcS27T8MoEbGpKCaR0sgsl@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhWv3XRvppwPKzR6B32LGMHEi2HFDZ6ROCyk1rpMhckN0m32tH
-	1Nvx97lJ19NU69Ini8OnaI/4G/laN8SFx6JnV+6snszMwczBUO9vVnm5LhP6y2RYB8c=
-X-Gm-Gg: ASbGnctp+0iV6U7WSkz/uh2yVzc6lgrAtQnlJ+561RTlSjyKWTOc5ORaBaBqhbpi8CI
-	NLNdxpbHBJH/EfvArB4wbtJcX0KU8rmKPXqbQTpLzFd7k8Y4Mf4KTAyfmzgCGRObf5Gh0ojyVyt
-	71WAu/NNXSZFiI1SDWcpDyeee93YOAJLziorPEmaCRoO+r0NkL57jM5c/NZiZ5LB0IMPnyt9TJz
-	zSbejtfNOp20RH3LLE+Mqfk+6gGFjL1aCIWTcwDxcFZbfMAvkYgL68FiYSbzu5hFjstCF1cADOF
-	6KQi+GXY+fDoMpHMR4hx1reAewRohApQhck5qTigFUUTAGl8QQigfqQLkWrZGU9fkA9YgIGGQ3I
-	ssdLX/jnpH+v/Tw4dStbAj+6ok7qddOIL
-X-Google-Smtp-Source: AGHT+IGSQHONXHhGs7cWOB0/NTlFhiN2ogHvgUjj0VhDky9sGi/Ee+gtbAm+6l/Fi03lgPKfdTnIGA==
-X-Received: by 2002:a17:907:3e0e:b0:ae0:c7b4:b797 with SMTP id a640c23a62f3a-ae0c7b4b8e3mr100993766b.45.1750842936691;
-        Wed, 25 Jun 2025 02:15:36 -0700 (PDT)
-Received: from otso.local (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae0542035ddsm1029713266b.147.2025.06.25.02.15.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jun 2025 02:15:36 -0700 (PDT)
-From: Luca Weiss <luca.weiss@fairphone.com>
-Date: Wed, 25 Jun 2025 11:15:26 +0200
-Subject: [PATCH 3/3] remoteproc: qcom: pas: Add SM7635 remoteproc support
+	s=arc-20240116; t=1750844543; c=relaxed/simple;
+	bh=IoUf917CXn1rY3sfDCmBi9UNym+tGdSpsxRSrSvZuxk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=B7jd07JbUHH0AWTXjSbKrAXRm2xd/M5ojKjMS12eytF8MhmMzGlVxEP6mWi4FRTHrkvN8FyQIadvDQW8eCaJ6PB28qeTXWFfOOO5xjNXnrom0ewJh3bcl+EDd7I7wcSV0kucdyYg6OLYyzQHFlYPClpBHorYlHasZT9gqDyCBIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=TjYA1M/i; arc=none smtp.client-ip=185.132.182.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55P6TNdK008602;
+	Wed, 25 Jun 2025 11:42:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=selector1; bh=dWT/lq3ezUgwjJtZ7iXKMD
+	5/gM55U+METxpHEphd3xI=; b=TjYA1M/i9kiwj0xW7K69CkB715jG9Tc1/NBvhN
+	13rdzv3F59kAvAv7F57DPvkyhTUGm9i/ecoUFus0YFUhx0LDKiBdplSAYpzM6ejd
+	DCdDg/I2D6GsUR0IHaSS7wvbk5MxFfLGxkHCD2EYQbS56TjMNZ5R8sKlfEvVNebc
+	YX4leCmbCJeLrn2l+DpK4HKpHsD2By7MTdMVMvjZpR3XiRZiW1lT7XiIzMC7xry7
+	NNdNzit9ccjjjrFo/VDHuVKsqwM+qaEfUrRLXSyh/Rg9qL/5cv+0uuZG3ro4NuUT
+	nVfoTzVqpwGFnepelzieT4jaLh27s0DvdsNXBKy4HtGmX87w==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 47e6a6q3m1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Jun 2025 11:42:05 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 3968740047;
+	Wed, 25 Jun 2025 11:40:57 +0200 (CEST)
+Received: from Webmail-eu.st.com (eqndag1node4.st.com [10.75.129.133])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8270364326D;
+	Wed, 25 Jun 2025 11:40:41 +0200 (CEST)
+Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE4.st.com
+ (10.75.129.133) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 25 Jun
+ 2025 11:40:41 +0200
+Received: from localhost (10.48.86.121) by SAFDAG1NODE1.st.com (10.75.90.17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 25 Jun
+ 2025 11:40:41 +0200
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+To: Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier
+	<mathieu.poirier@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Conor Dooley" <conor+dt@kernel.org>
+CC: <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <op-tee@lists.trustedfirmware.org>, <devicetree@vger.kernel.org>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Subject: [PATCH v19 0/6] Introduction of a remoteproc tee to load signed firmware
+Date: Wed, 25 Jun 2025 11:40:22 +0200
+Message-ID: <20250625094028.758016-1-arnaud.pouliquen@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250625-sm7635-remoteprocs-v1-3-730d6b5171ee@fairphone.com>
-References: <20250625-sm7635-remoteprocs-v1-0-730d6b5171ee@fairphone.com>
-In-Reply-To: <20250625-sm7635-remoteprocs-v1-0-730d6b5171ee@fairphone.com>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1750842933; l=2007;
- i=luca.weiss@fairphone.com; s=20250611; h=from:subject:message-id;
- bh=vCp//gPYQcR3DNj7zr7SuBIjoFrxsV54Ke1YSaCx7AM=;
- b=f5gSZiEPc0KYORoD9MIxojR436BImQVvwqEP0M+uXcgT4W6dNEvF51An0CzYkuee1ijtEq4Co
- CF7+pN7zZ/aA3gtmkblm7pFHD1iPm+Aw0sp4Z5flwM76VydGzDVk5Ke
-X-Developer-Key: i=luca.weiss@fairphone.com; a=ed25519;
- pk=O1aw+AAust5lEmgrNJ1Bs7PTY0fEsJm+mdkjExA69q8=
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SAFDAG1NODE1.st.com
+ (10.75.90.17)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-25_02,2025-06-23_07,2025-03-28_01
 
-Add the different remoteprocs found on SM7635: ADSP, CDSP, MPSS and
-WPSS.
+Main updates from version V18[2]:
+- rework documentation for the release_fw ops 
+- rework function documentation in remoteproc_tee.c
+- replace spinlock by mutex and generalize usage in remoteproc_tee.c
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- drivers/remoteproc/qcom_q6v5_pas.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index b306f223127c452f8f2d85aa0fc98db2d684feae..6aae61dea8d0dbb9cf3ce84b9dbebb77b5aa1d52 100644
---- a/drivers/remoteproc/qcom_q6v5_pas.c
-+++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -1261,6 +1261,26 @@ static const struct adsp_data sdx55_mpss_resource = {
- 	.ssctl_id = 0x22,
- };
- 
-+static const struct adsp_data sm7635_cdsp_resource = {
-+	.crash_reason_smem = 601,
-+	.firmware_name = "cdsp.mdt",
-+	.dtb_firmware_name = "cdsp_dtb.mdt",
-+	.pas_id = 18,
-+	.dtb_pas_id = 0x25,
-+	.minidump_id = 7,
-+	.auto_boot = true,
-+	.proxy_pd_names = (char*[]){
-+		"cx",
-+		"mx",
-+		NULL
-+	},
-+	.load_state = "cdsp",
-+	.ssr_name = "cdsp",
-+	.sysmon_name = "cdsp",
-+	.ssctl_id = 0x17,
-+	.smem_host_id = 5,
-+};
-+
- static const struct adsp_data sm8450_mpss_resource = {
- 	.crash_reason_smem = 421,
- 	.firmware_name = "modem.mdt",
-@@ -1478,6 +1498,10 @@ static const struct of_device_id adsp_of_match[] = {
- 	{ .compatible = "qcom,sm6375-adsp-pas", .data = &sm6350_adsp_resource},
- 	{ .compatible = "qcom,sm6375-cdsp-pas", .data = &sm8150_cdsp_resource},
- 	{ .compatible = "qcom,sm6375-mpss-pas", .data = &sm6375_mpss_resource},
-+	{ .compatible = "qcom,sm7635-adsp-pas", .data = &sm8550_adsp_resource},
-+	{ .compatible = "qcom,sm7635-cdsp-pas", .data = &sm7635_cdsp_resource},
-+	{ .compatible = "qcom,sm7635-mpss-pas", .data = &sm8450_mpss_resource},
-+	{ .compatible = "qcom,sm7635-wpss-pas", .data = &sc7280_wpss_resource},
- 	{ .compatible = "qcom,sm8150-adsp-pas", .data = &sm8150_adsp_resource},
- 	{ .compatible = "qcom,sm8150-cdsp-pas", .data = &sm8150_cdsp_resource},
- 	{ .compatible = "qcom,sm8150-mpss-pas", .data = &mpss_resource_init},
+Main updates from version V17[1]:
+- Fix:  warning: EXPORT_SYMBOL() is used, but #include <linux/export.h>
+  is missing
 
+More details are available in each patch commit message.
+
+[1] https://lore.kernel.org/linux-remoteproc/20250613091650.2337411-1-arnaud.pouliquen@foss.st.com/
+[2] https://lore.kernel.org/linux-remoteproc/20250616075530.4106090-1-arnaud.pouliquen@foss.st.com/
+
+Tested-on: commit 19272b37aa4f ("Linux 6.16-rc1")
+
+Description of the feature:
+--------------------------
+This series proposes the implementation of a remoteproc tee driver to
+communicate with a TEE trusted application responsible for authenticating
+and loading the remoteproc firmware image in an Arm secure context.
+
+1) Principle:
+
+The remoteproc tee driver provides services to communicate with the OP-TEE
+trusted application running on the Trusted Execution Context (TEE).
+The trusted application in TEE manages the remote processor lifecycle:
+
+- authenticating and loading firmware images,
+- isolating and securing the remote processor memories,
+- supporting multi-firmware (e.g., TF-M + Zephyr on a Cortex-M33),
+- managing the start and stop of the firmware by the TEE.
+
+2) Format of the signed image:
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/src/remoteproc_core.c#L18-L57
+
+3) OP-TEE trusted application API:
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/ta/remoteproc/include/ta_remoteproc.h
+
+4) OP-TEE signature script
+
+Refer to:
+https://github.com/OP-TEE/optee_os/blob/master/scripts/sign_rproc_fw.py
+
+Example of usage:
+sign_rproc_fw.py --in <fw1.elf> --in <fw2.elf> --out <signed_fw.sign> --key ${OP-TEE_PATH}/keys/default.pem
+
+
+5) Impact on User space Application
+
+No sysfs impact. The user only needs to provide the signed firmware image
+instead of the ELF image.
+
+
+For more information about the implementation, a presentation is available here
+(note that the format of the signed image has evolved between the presentation
+and the integration in OP-TEE).
+
+https://resources.linaro.org/en/resource/6c5bGvZwUAjX56fvxthxds
+
+Arnaud Pouliquen (6):
+  remoteproc: core: Introduce rproc_pa_to_va helper
+  remoteproc: Add TEE support
+  remoteproc: Introduce optional release_fw operation
+  dt-bindings: remoteproc: Add compatibility for TEE support
+  remoteproc: stm32: Create sub-functions to request shutdown and
+    release
+  remoteproc: stm32: Add support of an OP-TEE TA to load the firmware
+
+ .../bindings/remoteproc/st,stm32-rproc.yaml   |  58 +-
+ drivers/remoteproc/Kconfig                    |  10 +
+ drivers/remoteproc/Makefile                   |   1 +
+ drivers/remoteproc/remoteproc_core.c          |  52 ++
+ drivers/remoteproc/remoteproc_internal.h      |   6 +
+ drivers/remoteproc/remoteproc_tee.c           | 708 ++++++++++++++++++
+ drivers/remoteproc/stm32_rproc.c              | 139 +++-
+ include/linux/remoteproc.h                    |   6 +
+ include/linux/remoteproc_tee.h                |  87 +++
+ 9 files changed, 1023 insertions(+), 44 deletions(-)
+ create mode 100644 drivers/remoteproc/remoteproc_tee.c
+ create mode 100644 include/linux/remoteproc_tee.h
+
+
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
 -- 
-2.50.0
+2.25.1
 
 
