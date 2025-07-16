@@ -1,264 +1,157 @@
-Return-Path: <linux-remoteproc+bounces-4193-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-4195-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B09C4B07E64
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Jul 2025 21:50:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 307BEB07FAA
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Jul 2025 23:31:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A59143A342D
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Jul 2025 19:49:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 532187B70E9
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 16 Jul 2025 21:29:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC3EE29AAE9;
-	Wed, 16 Jul 2025 19:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C5F92EBDC7;
+	Wed, 16 Jul 2025 21:31:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iwg2OguT"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="bLn5fAtq"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2088.outbound.protection.outlook.com [40.107.237.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E49288C2D;
-	Wed, 16 Jul 2025 19:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752695412; cv=none; b=VGi1lVxZTJVPx2RjlZG6Tae+yaq1R7FQ/y40M/O0tKyw9BTzPsj/kiiNHki9ThyCmr7BpHlhmsRBfGwxcOqzDyXvyw8AsThv/doHylUIgdVjLH2BVU9KXynSyHcFwc9U9sI93cFbDvvMDKUAlbxzfJWkHrM9+Rqq6GAowH5WWyw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752695412; c=relaxed/simple;
-	bh=SsZPmiVgiEbGyuQvV/yeqg4poe+PgKXSBFskoQzwdAg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=avfTvxWILyuRDXAr/t+iLUrQj/ihSu9BxMYh0TGBPJMvpVBdqX4S0HKcTSfkB5R7xldBQNlmpMeL1Vsrin5BTKzF9V+kNTi3PDr5nPWVYSZe8pyQfk1ihcvMl+qT18TAdphdIIbaCeJROIiS1LNsbUyzkK3lEnRA7O0f9WBp3Qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Iwg2OguT; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-313a188174fso1042951a91.1;
-        Wed, 16 Jul 2025 12:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752695410; x=1753300210; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kZZgzA7unxaQYTpUKeT3tiFqc0eDBxi7N6aA9SCTkxo=;
-        b=Iwg2OguTpTjvgUmJ2POq4QxjIuHGkxBJVWFY6sPVvogYQwNGQIFF5ckFqIa1SODjT9
-         x+QZBGIs6w4MTcntxpow1sa9ZQnoigwBS2RnTxEJCSN5XcJr9c2RXoWc8k0RZWI8ZkT1
-         xZl++uEV49f03P1EaZUNRbvFH/4w9xfQMqU6Tm8JuDU2D5vGYWmu/XDQTyXAxrFftqQn
-         pgStHC+rIWqTibPriQaG/NFixnp4j3o8/Zfx+eiU96o21x384Uwz5spnZb0+65/ZFo4v
-         MtloLu12lwEa43NoNXUw9jeKGafIXL1l4Xb5szW5DQedqntGJZnzJ4AAZIadsYJ1Pa4r
-         zDYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752695410; x=1753300210;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kZZgzA7unxaQYTpUKeT3tiFqc0eDBxi7N6aA9SCTkxo=;
-        b=AneQSy+Mt9wE2ssc2i6QtNTK192m9BuxD7qCQIWhZsoU+cdysEqKpE1yy7wIKgXldx
-         B7pIvDMVmSyNG3xHOOzYiRyTLpTig2Aj6ih7wA75MokoLfV1s+bFrIqWJLpFmP2/E4k+
-         H1MNqT3WZAXG5BRSlEg4Fuyg3n0Z8xIKwEiTRYvShg3xUCall138jwokVJQme20hF3xx
-         5Y7YIwnGXGYzPERU4DEW88LY46M3c/0rMkqltAa6uTXygL7DOq3OKhytYQ+N5pE5YaA3
-         bCePm8cT2Wx2JxbvqVssF0UIysY6v2LPiDYQWeQPK3JwwjvGmTuQ+7X1Fo4vDVBaLB0r
-         CMKA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/RGnWq/6NXK12K15Z02AgsXRAIE6tZJxa/doJofVuTnmlML7KTF8I4wb0Mw6qsTTdczRYD9eZ7R8pOxc=@vger.kernel.org, AJvYcCVPMq0HYE5xeh0V6Mf1gA/DV2CazStO0HW6A7YxkIFd+DFWX55yQsGaqyLO1JeLHd/ZT3UDt0r35PYHieyVNNEDrQ==@vger.kernel.org, AJvYcCVhiofV/RfZ9ONkn/yo8ivxXDQuWPuioVlaetyNFn4pdWPab3g1wagwsBd6LKT/eT+M6n577U1xdYo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxibxEXGa6a5WhgORQD5uGBrl1+fbRz7ffRe2GLBzuofpCwKxhL
-	8K9+T8/kkQrYAATytlomrJg9lX0L87MJdgxQrKaZWRg5qkL/IaC6ubhy
-X-Gm-Gg: ASbGncslJMUnGFFKKhDuIIkRW4wvsjBQLbqNNHoHcqZEEBherGj4bKaV+InnXVIoEL5
-	LcX2S3E83hNqCInykFfs/dGCjjvTQ93CWNiAxVKKO31x1yIPHdMw3sr1bFNUtR3sA7woxwut+cZ
-	NLZ1xjc4yGDOsP/hgbwTPs/0W60eLCHEMAgas+HtHMSllXDn+UsugPtAluiXuWezyKewJJv2VXV
-	WGzNuxXgzr2KPhjzpZ4PMQAPZnOG5olZG1P5Sfaai/KYy6bFBYTAiHJsWI2dAnIOY91Tpt42iiA
-	l4B+uRC5Wi4eo1Zt5DCwS45LQnxTZvM8acZ+DG3s73Bk1DA+IVxX9vG7wQEKX+OeQKk6zNZrj+Y
-	2ZIx+GPn4h6phRlqQXyA=
-X-Google-Smtp-Source: AGHT+IGkORjHEJ3lwLi+FibgkhUKI9Xi/FApJrENFdLLcxtfYU8HO8fS+q0sfAOpe3IeYIpcVRS1Jw==
-X-Received: by 2002:a17:90b:3d81:b0:312:e73e:cded with SMTP id 98e67ed59e1d1-31caea21526mr783583a91.16.1752695410205;
-        Wed, 16 Jul 2025 12:50:10 -0700 (PDT)
-Received: from hiagonb ([2804:1b3:a7c1:459e:e3dd:d2e:b1ee:b9ec])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31c9f1e684csm1947200a91.12.2025.07.16.12.50.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jul 2025 12:50:09 -0700 (PDT)
-Date: Wed, 16 Jul 2025 16:50:03 -0300
-From: Hiago De Franco <hiagofranco@gmail.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>, linux-pm@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Hiago De Franco <hiago.franco@toradex.com>, imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	Peng Fan <peng.fan@oss.nxp.com>, daniel.baluta@nxp.com,
-	iuliana.prodan@oss.nxp.com,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH v7 3/3] remoteproc: imx_rproc: detect and attach to
- pre-booted remote cores
-Message-ID: <20250716195003.5kunymu3nrdsfnz2@hiagonb>
-References: <aHZ0nK4ZZShAr6Xz@p14s>
- <CAPDyKFrWng0CY-ayKoEbnS_yanghSqogxfuizxEVbVogJ4DT=g@mail.gmail.com>
- <20250716132552.bra37ucw4fcjwril@hiagonb>
- <aHfYQFvkJcdfq9K_@p14s>
- <20250716172308.lzh3aak24d6mt4cs@hiagonb>
- <CAPDyKFr8eYiyj5s7wGsru8GJ+CS6h-o+a+BOV-nvCdSzWM0bSw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7A82EBB9C;
+	Wed, 16 Jul 2025 21:31:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752701474; cv=fail; b=Vd5LooR3cc9st3JuJM2QwPIJLAl5lhIBZvHKCije/zLSoYfnZk+nRfv6Q5GFZsojwzUMMkAqHaJy0aAxCTfa9zADN1tfE5erDWJv/GFt2sl+Pd3FAzb7QPB30mZBDV5JCzDLZ33aLEVeYxPQpQBCrMzWIY7DzXNytokhuV6WuPo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752701474; c=relaxed/simple;
+	bh=w7S8KuUT5PQx0QcitQRbaVnpwD4JK02XxwBMib0U79I=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=scQ6CIBgTFGhScicrqJXfrPbsAhH9xTuu/WT4Vq8VQNgOwr/Ydnl5lfX9/EWBsqDbfExH22v2xqSSDm7uTAcuiU7bR/dAwZRs+i0MXlvrQe+8nTjsgRmksLmMqRljmRUdeGgfkfRcG3VHw4IjWPgMgDwbCqa0eCEC2xQSpQShAc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=bLn5fAtq; arc=fail smtp.client-ip=40.107.237.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZjhjOVbRIR0PEp7bc4FM5GvjEdlHw98EGmsq6AxKHKfnAc+qgFUq0d1d28RC9Ls2HaKg5SF6T/lUqnTHxucmgu9dSnPW23gZ5pxU5XbSUoH6Cjy1N5+OsDyNs6HkmNzBR1Ol0Uxeyiz5rlfRd69XwkdVStS1ywbN5L2f7W41MfZia9wUlHEd7wvhvZYqEWLD7N2QzZW1h59H7pfVTz3sdmK3hSEXsqF2yWG8Y5/QyX705xTKoglY8Dce8+r3t93tT3M6masY6B1wPUGOYnQD4WyFi/3w9BAT7G/GsJbTYM2VD5xkeMWmF8nHAHtTGXEYu2+UiMujBOtgilY566EWwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2n9/rViGivS5pt1hX4xncAvmVUuHhtRoPiFDDymchBI=;
+ b=wdIDlc2DdZeaqKVixXGqiU40mVdaKV669wf5c8r7mhrlWjAT9e/uxnRdoW4Py39pi9O7mi4Uz2shUiNpL3ZTrhAlbHUh8xLzuK0IlVFYPdcp64TGRZAVQ0aD2WFqDTZu+0swydGdKzoxp+yYnXp1VYpBpS9DzcoDvbFxPqfgzDb1y2UiEvrMsxLSVsiRb8gJRujYaaPt9Uzlc/zf1PEFgAbnZ0nC2CZzj8WDPFoIJycB4GUSQr0ZmznqxEODS9WKvIXgLhg3D4VwcKBEslpti9k6viC2A8po/wED7nRG9msI2+Sla7yP8HcF5nX+QqBcpmdYG49WZZOm6EY7rsGNWw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2n9/rViGivS5pt1hX4xncAvmVUuHhtRoPiFDDymchBI=;
+ b=bLn5fAtqDoaAbZYOFgss3iWPJaWyAP6FZ2UFfmXQ4/ZUTDsxHOIL6wQDE478iD94snH0n9V+rdREiY4rt472fgI92EykK7HhyYFYZdtRFwcRRaQsDOPNy02BQzd16x4GWaard59QHRQIaGhn9k316QvreSRs52f4Po6CB5wzmbs=
+Received: from MW4PR04CA0097.namprd04.prod.outlook.com (2603:10b6:303:83::12)
+ by SA5PPFE91247D15.namprd12.prod.outlook.com (2603:10b6:80f:fc04::8e8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.33; Wed, 16 Jul
+ 2025 21:31:07 +0000
+Received: from SJ1PEPF000026C3.namprd04.prod.outlook.com
+ (2603:10b6:303:83:cafe::99) by MW4PR04CA0097.outlook.office365.com
+ (2603:10b6:303:83::12) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8943.20 via Frontend Transport; Wed,
+ 16 Jul 2025 21:31:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ1PEPF000026C3.mail.protection.outlook.com (10.167.244.100) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8943.21 via Frontend Transport; Wed, 16 Jul 2025 21:31:06 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 16 Jul
+ 2025 16:31:05 -0500
+Received: from xsjtanmays50.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Wed, 16 Jul 2025 16:31:04 -0500
+From: Tanmay Shah <tanmay.shah@amd.com>
+To: <andersson@kernel.org>, <mathieu.poirier@linaro.org>
+CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	"Tanmay Shah" <tanmay.shah@amd.com>
+Subject: [PATCH 0/2] remoteproc xlnx driver enhancements
+Date: Wed, 16 Jul 2025 14:30:46 -0700
+Message-ID: <20250716213048.2316424-1-tanmay.shah@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFr8eYiyj5s7wGsru8GJ+CS6h-o+a+BOV-nvCdSzWM0bSw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB04.amd.com: tanmay.shah@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000026C3:EE_|SA5PPFE91247D15:EE_
+X-MS-Office365-Filtering-Correlation-Id: 72ba0d93-025a-43f6-309f-08ddc4b0131b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ugjOJVEXlbMa1AlmnhR23fYO17WOn3QdJVoYPllDJjWO9Q9UIGTvlYYSa7fM?=
+ =?us-ascii?Q?plYkqJ1EihZTqzyrnSe681Q7P/wAV80vY0qO5R8CEeqyu3aEUlxN30g3KXc6?=
+ =?us-ascii?Q?rWHOOd6oBzDBh1PNNG8klyErh5V2QyIj/DM0NWfhenPYerCYY8aLVOYHEaGL?=
+ =?us-ascii?Q?N8Hf6c8Ra5TkWOL5USyyHKUd1aQzMEDw8W4Mt/e95PUI5PXp3/EifY3uZHaS?=
+ =?us-ascii?Q?Zx8Syq7biAhgQ/m73rtkJeDNK50PavLiaaVFKn2dP1U7N29SXWB70/2v1cO4?=
+ =?us-ascii?Q?qe4DSkxUL8zxEnTAkb1+LG5skZoIwxRsRVxm83imI8TdXcg26ed1dDjqH/kv?=
+ =?us-ascii?Q?BGNKUiEaU9LO2kudEqOFWB5urSU3fT/KF8Wca4kX2MXVZuiwtfP5Co6/CweZ?=
+ =?us-ascii?Q?CrSOIC7CnhC65Vxyb7Nh/niLUZD/bNqJ9ax/yM7NCiBAVvcSgoINB2UiOsT6?=
+ =?us-ascii?Q?CrtgHXGDkZAq03pOdrcFkW4vjH6IyM4JMtHNXDT3g6sEjB1YF2ggAJP/cDdJ?=
+ =?us-ascii?Q?6+y4jDv/G2qsNuNG0bRUMxPcyjbYrwUELmPXkJZb62XcmufNttJrjh6YqqBV?=
+ =?us-ascii?Q?ej6m/1mYtzadKNEgjnM4t7Xm1h4KXHfosUIcLbc0Leidn++oNgxYGRF6OvJ6?=
+ =?us-ascii?Q?A0M6Xa1vc4EDzfjTUQt7mmxl4ajivKUAvMb2zyjTizjbu5zkOdmplMiFUKNg?=
+ =?us-ascii?Q?pYSpPlQNR5a4bcStIPTCJ+nwPvq2fPlmCcvM/PnCFB4PBcmpx63BeSNHsvNY?=
+ =?us-ascii?Q?TzLLw+5RDiC2akhpQhuFcmInKZNfueyh4u16iVe/Qz+qGlc8s7NgTE4Iwb47?=
+ =?us-ascii?Q?sM4If9P2xdk6VQP9r4nLu1WV+5K9uhiRGht5pyQY2+9AkzX07CkyHsa0V19l?=
+ =?us-ascii?Q?o4gZVlXyLFwO8nkqZlo6Nclylr6XIEBqMxfFLzke68Uf9+FUhhP9Fux5pxDV?=
+ =?us-ascii?Q?eSTnKprLWfz9hgKyVKKTADtDLJMtc56nH+iekn4yZs19HFoHOGIcBxmkg/Lo?=
+ =?us-ascii?Q?PtpjAR8vpgA0Rxyeya2k7Pvhkizu2zGGwhO+auNN5Rbf/CuXiWUBzw+R8Q6V?=
+ =?us-ascii?Q?WLCqTvC/BcoWdCm0+SP48Z+9wnfqFpVfdpGVOfTm8qvnI4Y1BnVnhEritQI/?=
+ =?us-ascii?Q?Y+h4SVxuSy4koijz23MIX0ClVQMv1Ggu3CQyBn9H+66lMwcRNGO/Mc6hKz4K?=
+ =?us-ascii?Q?pqJ/jEnQxeBs8nd9tV4ialA97p22PTbe9+lIL1Sy4ueppM4RrEyU6zYW4h6C?=
+ =?us-ascii?Q?3vbumV4sFJLLNiXHAEiaUOx43/vAZGBxtLvBooRkcMY2+wyFUJxKNMWw8wd6?=
+ =?us-ascii?Q?0Mkkj7QNxbNmBdzmEWmeEInELnN3P3pp+u3z2N7cz+7T1TKcnk0iTVUc0WuY?=
+ =?us-ascii?Q?jdntqUKK6zo80T3XY9Blw+hTHlfNIE6Ley9eTCeqELdYUMG2SDGsnuITmsqk?=
+ =?us-ascii?Q?VoRMRCUtXEN3zgqb+csCgty4v8vDINSKspyunEi7qIbjVjjV7xz0El/+2DGh?=
+ =?us-ascii?Q?QW1YcpMyMNiMmdRJ7fkG0jjUOocK2LBBGbYV?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2025 21:31:06.9042
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72ba0d93-025a-43f6-309f-08ddc4b0131b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF000026C3.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA5PPFE91247D15
 
-On Wed, Jul 16, 2025 at 08:56:37PM +0200, Ulf Hansson wrote:
-> On Wed, 16 Jul 2025 at 19:23, Hiago De Franco <hiagofranco@gmail.com> wrote:
-> >
-> > On Wed, Jul 16, 2025 at 10:50:08AM -0600, Mathieu Poirier wrote:
-> > > On Wed, Jul 16, 2025 at 10:25:52AM -0300, Hiago De Franco wrote:
-> > > > Hi Mathieu, Ulf,
-> > > >
-> > > > On Tue, Jul 15, 2025 at 09:32:44AM -0600, Mathieu Poirier wrote:
-> > > > > On Sun, Jun 29, 2025 at 02:25:12PM -0300, Hiago De Franco wrote:
-> > > > > > From: Hiago De Franco <hiago.franco@toradex.com>
-> > > > > >
-> > > > > > When the Cortex-M remote core is started and already running before
-> > > > > > Linux boots (typically by the Cortex-A bootloader using a command like
-> > > > > > bootaux), the current driver is unable to attach to it. This is because
-> > > > > > the driver only checks for remote cores running in different SCFW
-> > > > > > partitions. However in this case, the M-core is in the same partition as
-> > > > > > Linux and is already powered up and running by the bootloader.
-> > > > > >
-> > > > > > This patch adds a check using dev_pm_genpd_is_on() to verify whether the
-> > > > > > M-core's power domains are already on. If all power domain devices are
-> > > > > > on, the driver assumes the M-core is running and proceed to attach to
-> > > > > > it.
-> > > > > >
-> > > > > > To accomplish this, we need to avoid passing any attach_data or flags to
-> > > > > > dev_pm_domain_attach_list(), allowing the platform device become a
-> > > > > > consumer of the power domain provider without changing its current
-> > > > > > state.
-> > > > > >
-> > > > > > During probe, also enable and sync the device runtime PM to make sure
-> > > > > > the power domains are correctly managed when the core is controlled by
-> > > > > > the kernel.
-> > > > > >
-> > > > > > Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > > > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > > > Reviewed-by: Peng Fan <peng.fan@nxp.com>
-> > > > > > Signed-off-by: Hiago De Franco <hiago.franco@toradex.com>
-> > > > > > ---
-> > > > > > v6 -> v7:
-> > > > > >  - Added Peng reviewed-by.
-> > > > > > v5 -> v6:
-> > > > > >  - Commit description improved, as suggested. Added Ulf Hansson reviewed
-> > > > > >    by. Comment on imx-rproc.c improved.
-> > > > > > v4 -> v5:
-> > > > > >  - pm_runtime_get_sync() removed in favor of
-> > > > > >    pm_runtime_resume_and_get(). Now it also checks the return value of
-> > > > > >    this function.
-> > > > > >  - Added pm_runtime_disable() and pm_runtime_put() to imx_rproc_remove()
-> > > > > >    function.
-> > > > > > v3 -> v4:
-> > > > > >  - Changed to use the new dev_pm_genpd_is_on() function instead, as
-> > > > > >    suggested by Ulf. This will now get the power status of the two
-> > > > > >    remote cores power domains to decided if imx_rpoc needs to attach or
-> > > > > >    not. In order to do that, pm_runtime_enable() and
-> > > > > >    pm_runtime_get_sync() were introduced and pd_data was removed.
-> > > > > > v2 -> v3:
-> > > > > >  - Unchanged.
-> > > > > > v1 -> v2:
-> > > > > >  - Dropped unecessary include. Removed the imx_rproc_is_on function, as
-> > > > > >    suggested.
-> > > > > > ---
-> > > > > >  drivers/remoteproc/imx_rproc.c | 37 +++++++++++++++++++++++++++++-----
-> > > > > >  1 file changed, 32 insertions(+), 5 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> > > > > > index 627e57a88db2..24597b60c5b0 100644
-> > > > > > --- a/drivers/remoteproc/imx_rproc.c
-> > > > > > +++ b/drivers/remoteproc/imx_rproc.c
-> > > > > > @@ -18,6 +18,7 @@
-> > > > > >  #include <linux/of_reserved_mem.h>
-> > > > > >  #include <linux/platform_device.h>
-> > > > > >  #include <linux/pm_domain.h>
-> > > > > > +#include <linux/pm_runtime.h>
-> > > > > >  #include <linux/reboot.h>
-> > > > > >  #include <linux/regmap.h>
-> > > > > >  #include <linux/remoteproc.h>
-> > > > > > @@ -890,10 +891,8 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
-> > > > > >  static int imx_rproc_attach_pd(struct imx_rproc *priv)
-> > > > > >  {
-> > > > > >         struct device *dev = priv->dev;
-> > > > > > -       int ret;
-> > > > > > -       struct dev_pm_domain_attach_data pd_data = {
-> > > > > > -               .pd_flags = PD_FLAG_DEV_LINK_ON,
-> > > > > > -       };
-> > > > > > +       int ret, i;
-> > > > > > +       bool detached = true;
-> > > > > >
-> > > > > >         /*
-> > > > > >          * If there is only one power-domain entry, the platform driver framework
-> > > > > > @@ -902,7 +901,22 @@ static int imx_rproc_attach_pd(struct imx_rproc *priv)
-> > > > > >         if (dev->pm_domain)
-> > > > > >                 return 0;
-> > > > > >
-> > > > > > -       ret = dev_pm_domain_attach_list(dev, &pd_data, &priv->pd_list);
-> > > > > > +       ret = dev_pm_domain_attach_list(dev, NULL, &priv->pd_list);
-> > > > > > +       /*
-> > > > > > +        * If all the power domain devices are already turned on, the remote
-> > > > > > +        * core is already powered up and running when the kernel booted (e.g.,
-> > > > > > +        * started by U-Boot's bootaux command). In this case attach to it.
-> > > > > > +        */
-> > > > > > +       for (i = 0; i < ret; i++) {
-> > > > > > +               if (!dev_pm_genpd_is_on(priv->pd_list->pd_devs[i])) {
-> > > > > > +                       detached = false;
-> > > > > > +                       break;
-> > > > > > +               }
-> > > > > > +       }
-> > > > >
-> > > > > I was doing one final review of this work when I noticed the return code for
-> > > > > dev_pm_domain_attach_list() is never checked for error.
-> > > >
-> > > > As Ulf pointed out, the 'return' a few lines below will return the
-> > > > negative value to the caller of 'imx_rproc_attach_pd', which ultimately
-> > > > will fail 'imx_rproc_detect_mode' and fail the probe of imx_rproc.
-> > > >
-> > > > Please notice that even tough 'dev_pm_domain_attach_list' fails, the
-> > > > rproc->state will still be set as RPROC_DETACHED because we are starting
-> > > > 'detached' as true, but I am not seeing this as an issue because as
-> > > > mentioned above the probe will fail anyway. Please let me know if you
-> > > > see this as an issue.
-> > >
-> > > Two things to consider here:
-> > >
-> > > (1) It is only a matter of time before someone with a cleaver coccinelle script
-> > > sends me a patch that adds the missing error check.
-> > >
-> > > (2) I think that @rproc->state being changed on error conditions is a bug
-> > > waiting to happen.  This kind of implicit error handling is difficult to
-> > > maintain and even more difficult for people to make enhancements to the driver.
-> > >
-> > > Adding a simple error check will make sure neither of the above will happen.  It
-> > > is a simple change and we are at rc6 - this work can still go in the merge
-> > > window.
-> >
-> > Sure, I can submit a new revision with this error check. Sorry I did not
-> > see this before, I only had a close look at this '->state' now that you
-> > asked on the previous email.
-> 
-> Alright. To avoid having you to resend patch1 and patch2 I have
-> applied them on my next branch and added Mathieu's ack for patch2.
-> 
-> Note that my vacation is around the corner, so if you want patch3 for
-> v6.17 you better be quick. :-)
+- Disable unsupported features from platform driver
+- Fix kernle-doc warnings to make documentation better
 
-Thanks Ulf, as requested I resend only patch 3.
+Tanmay Shah (2):
+  remoteproc: xlnx: disable unsupported features
+  remoteproc: xlnx: fix kernel-doc warnings
 
-https://lore.kernel.org/all/20250716194638.113115-1-hiagofranco@gmail.com/
+ drivers/remoteproc/xlnx_r5_remoteproc.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-Have a nice vacation =)
 
-Best Regards,
+base-commit: 76970c009cefc4f9308b57d063beb169762b9164
+-- 
+2.34.1
 
-Hiago.
-
-> 
-> [...]
-> 
-> Thanks and kind regards
-> Uffe
 
