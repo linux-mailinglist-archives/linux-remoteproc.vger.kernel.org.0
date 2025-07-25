@@ -1,98 +1,98 @@
-Return-Path: <linux-remoteproc+bounces-4282-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-4287-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CF65B11DD3
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 25 Jul 2025 13:45:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B82A7B11DEA
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 25 Jul 2025 13:50:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EE821CE1AAE
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 25 Jul 2025 11:45:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1F30560B0E
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 25 Jul 2025 11:50:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9214C19343B;
-	Fri, 25 Jul 2025 11:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA55723F40F;
+	Fri, 25 Jul 2025 11:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nR0np34M"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="C/3xN2FG"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF483D994
-	for <linux-remoteproc@vger.kernel.org>; Fri, 25 Jul 2025 11:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD3814E2F2
+	for <linux-remoteproc@vger.kernel.org>; Fri, 25 Jul 2025 11:50:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753443905; cv=none; b=l/Vqj7sTNAUDw7ned0zWcy6zDLq7RZ/qz3Ly5lYFSqwN/rV/gWJfpRzXNUU/Mapy7oFz1rlxT/5ZXDRRhGaROKBLK9bdK84Q/3rnraigxnZlhRzWia+o97rSKIJrpgVKoD2ARh9w42OfnALRsJ2cwGEM0yhojEHwmYOKPvbBAr4=
+	t=1753444246; cv=none; b=B9LeNjoATTlymXsbgfexu648ZjsKgctzSsBLfPMAKDgvsCXL9yCX8pEDCMb3Xbu8fRErJa4weVszO3FW07Df8PbVYhu2FkzIYxCGqMS18k8H9jhjZUG6bMsb8Zns8s0KtdhcgkPgomGt2yT2VRYer7p54cbuL86J1hblqXIvnvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753443905; c=relaxed/simple;
-	bh=IU7jvnAwzmp5GuJHgplXAk58lqyd9tH4hjc214tIw4o=;
+	s=arc-20240116; t=1753444246; c=relaxed/simple;
+	bh=AyRroNoAAfZMLYMuOWzL5KFUvjXMr31GJOyZqB2g5AQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=keW2HemrI8qeleodKpkc2x2AKb0u4h4eHHrL4kPQstYqB533jNCmc+l59Pee+dCfRpgdgDKXCPcLxpDaYlv4Gdefqt0fFliI2JZ4/+ZFAa8sdRwVmWDp2yYh3eNRZBlbVGT2/mKVFjCAvBJYd0Q5x8Qj1hVGkCK6Y1cmw4QKYok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nR0np34M; arc=none smtp.client-ip=209.85.222.177
+	 To:Cc:Content-Type; b=rmeDoDCGlri2lWpSZbLXZgKWYfUmalyJ9c0ca1D2rKVpdCFfYsUv/bDstDtfrUvA4fnuw0qcu4QNch4jqUNsMQWWLqP4oX1FR7x6bJgYzSDkLiPv0i3gm8Ku8LVIKiJGLfbINF5ErbBnXjLLsv24OSBik2EXb3ox7C7893n9F7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=C/3xN2FG; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7e33d36491dso277263385a.3
-        for <linux-remoteproc@vger.kernel.org>; Fri, 25 Jul 2025 04:45:03 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-31e41cfa631so2298601a91.2
+        for <linux-remoteproc@vger.kernel.org>; Fri, 25 Jul 2025 04:50:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1753443903; x=1754048703; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1753444243; x=1754049043; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=liSvRWA4OuPhKZFuMFSYIULFcTNts/JUeGi4znSdmNM=;
-        b=nR0np34MRawC0+WJ7lS16XVtT+KrxO2i5py82tyIMsh5aSC+gyqDjg9gbU215PeGyH
-         QaXI1DvU0i4DUbSD62OWo52DVd/Dc+hBnwsizZCIrRteI38qvaVEAQHx0tNWrfye/HMP
-         0ugr++BYpqb0KgI4zwV6SDYG24htS1ki1PlgA=
+        bh=t63BOHgVickClQUeVRs7VclE4TnB0fFJ8koSEGsWT2s=;
+        b=C/3xN2FGAlTnOmxhKVRtaRPsay2jPXxhrAZp4e1I07//xcqnKgyq3icp13sxJYEMHX
+         OwJtYSorSxbvBQ4MUnZllP8bphB1uudxJ8+ri5uRYXeYQn6KdmZDMDwaAHjWSUdUlsgr
+         XzWHrTWz/CsXqeRE+RZmbTQD6DmUT6+Y8En3Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753443903; x=1754048703;
+        d=1e100.net; s=20230601; t=1753444243; x=1754049043;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=liSvRWA4OuPhKZFuMFSYIULFcTNts/JUeGi4znSdmNM=;
-        b=BPUSJEqPJezgKRGjLocg22+XwGsuSyIifQfS5ex1pJ9i0ZKxceK0uHyXP6P1DYf2LX
-         00xvwgE9PmxEy/HiNZgzViEEPOqYnFFoAmGMETYmbstyNVK1yphkKyj2KYffpRzDa0S3
-         xO//N2bl5w4wJ1crx6MR6TXnQU/UoiDOMwR2w5SQxBpqsALu1K5rrwIbwqvNO8TEDsTm
-         cvxXTmNbG3/iYLQAhUI0wdC1sXitNmKwKkPaKzM0Z9FHUPCjZroeN/INwrXTmuf5zYa5
-         Dv+vU4LCJM/obs/TJvA7/Hvc+R2knLSGP2ONXTKxzOR39I5T0lhqKvP3CCFBEALCmt9m
-         Azsg==
-X-Forwarded-Encrypted: i=1; AJvYcCXX+P8XtLECRXp5hTlpc0+QahwrERGblqoak98OWWkkwK7Pdk7L0Al1Tgk3P2EBqh22DJUlI5I8dv8VLFSyIFZq@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzkrcUZxGW9x64h5TlA70cT6WWKDuZuqtPUxJQ64iQ1uDvdIbT
-	yJNy4xXdmZbOf6gTz+vPf9HQuYuxwf5GD5j3pRMDLtds3GuDo2JTViZOmX3baIUXuWHTBxTJEbY
-	hqqytwQ==
-X-Gm-Gg: ASbGncvlfin1yRT3aDISvjLp6h++KPEMozQB7byxaElHhn8ePrm3bIm/NIoJvesiiLA
-	o7Fi9CnIimjk3FICQxWY1eOeyHa6hEAL/yO+oT8Qj4bRm23Ilh5m9MANbvlxZlWRsj1pNre4mjL
-	tztq7VUlmTSQw7Yy+czRWZ0BpwJ3Bg2gG/P0Fg40hUTCNX5Os0GFe7PyO33Q0aw7I6+RI5RqQBk
-	zUTychRM9xU2dZWPMWzxAMdbLhP+TAarjK12bkFGj1gDnrNvJiNWN+PryWV0aOHVBH1zCv9huuE
-	29N/buHix3NM5/lPN7MjAHaVRYqsqjbrAYJCZ2wl1Z+mthOi2agby/1qQO7LoPpaRQR8//cQR1y
-	+9qrwVGH1JlKvW6QIuSVLU9uO5eKnMpcVK0ZlhOae1IjQP0yYjPFotVjeGg==
-X-Google-Smtp-Source: AGHT+IERg0AXb4bYzVHVkmdlMlwlUCeFKhAfw5sS00RmlX8Do2gt1CcXsF0lyiZA9ePl67zQHCnXgA==
-X-Received: by 2002:a05:620a:3c0a:b0:7e3:2f19:deb1 with SMTP id af79cd13be357-7e63bfb3605mr112635085a.33.1753443902535;
-        Fri, 25 Jul 2025 04:45:02 -0700 (PDT)
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com. [209.85.219.51])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e632d4d0bfsm241298885a.11.2025.07.25.04.45.02
+        bh=t63BOHgVickClQUeVRs7VclE4TnB0fFJ8koSEGsWT2s=;
+        b=WQChaEZ+2cuMkzS5SYEqIcAX8la3FasbFTTg9SrGE1hhtt2r/uvBCpwyC8Tvs2qKOL
+         ksYRGSEkP8jS1iXSO5S58HutHtk0Yodn57xReE3NTQDj2nQjP/j0rYSkTzRMTRoDK+Xj
+         BVnrvShhLfbnzjBpNdcju1Z54+IU+AMV9MNqD/dByJZVWzfcP4Ts+PW/VgmlM3VH0+fY
+         qE1l7IkdiE6mMRHu2boeO41ed5BSj5S5FklYEP5iAE3qpkrMuqSC0CTj840OQJGE4Cg2
+         RDs+fbKhAaiXZW/92YHUFkgz8FTOh6wrhFhRmWIFbzP8PHfunbiC4vpNuvwR9wA4RSDQ
+         N8+A==
+X-Forwarded-Encrypted: i=1; AJvYcCWsciwADFzNZ1rf0VGa4hZMFadmZTJpuwADLx3W8mEfzJ9oQz4dO8UsPH67G8YHsUun7SP/X3nf2FtHVl3Ei37B@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLfPPAuypFXhqGHVxc5CvV+KlCFduE3TNdlD3Qz2UJMrfcAXzz
+	6LizuJ2aDaxDuhZZXPJ6fdcC65+D/TD3lLmQ3/awbMDnr1UMErF0r+BcKin1yN3Rn8jjKNQlVGx
+	hUb4=
+X-Gm-Gg: ASbGncshaHTYhyXS1RHuerH6pq0UQm8NrRCESHZSlxsJex5yCPOvyjK5j8L5/3dQPwY
+	5s7Vc6F2mulRo6tWX91qrA/lBCir7cTa7m09KRdlbpVMuDKfT4pNe8Z8WQMzk7z1gmHWm26c0/t
+	eoYlTTBRNTCmDwCYgwZ3W8mmeZFbimHG4qbQZceJ9RJTJ7WsYVxyx52vBF0e0xRLIN+Gl8XUOR1
+	DHcGRDzEd0dVH7QJN9R0qNrUeor+IdzEZwZJJrd3Jk3dy7xfE2kx5S+JjegsvTgZ1xrwiSq3drn
+	8fg5c0g2/Mvaq8AbXUExgf0M69/4OivjZjOnw6dx19QzGFNod3kpVU5QcPXB2rKY3MBMjhl6gli
+	IlTKo3bh382Ci2WZgve8+FmeZcVRrwdL0LwNDE4jd42FbYXw8OpkF8zImXR6U0A==
+X-Google-Smtp-Source: AGHT+IGcNOh7bawRPeRU0fiI+giHiCN2/SnvclaMiY7H4OSCwzTLXgQsPBdh5fa8UE8esvwN4cUOVA==
+X-Received: by 2002:a17:90b:3d4e:b0:311:ff18:b83e with SMTP id 98e67ed59e1d1-31e77857876mr2619632a91.9.1753444243461;
+        Fri, 25 Jul 2025 04:50:43 -0700 (PDT)
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com. [209.85.210.169])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31e66250725sm3391627a91.2.2025.07.25.04.50.43
         for <linux-remoteproc@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Jul 2025 04:45:02 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6fac7147cb8so27027726d6.1
-        for <linux-remoteproc@vger.kernel.org>; Fri, 25 Jul 2025 04:45:02 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV6bJK3vcB7zxKQTxBefZFNw+xPTmCTZosrsHmuj6xHYkB50VU2+vMVARWDFGcV0i8k1eyyhUFn/czAHwtwdq7j@vger.kernel.org
-X-Received: by 2002:a05:6102:6891:b0:4dd:b82d:e0de with SMTP id
- ada2fe7eead31-4fa3ff44195mr308667137.17.1753440019738; Fri, 25 Jul 2025
- 03:40:19 -0700 (PDT)
+        Fri, 25 Jul 2025 04:50:43 -0700 (PDT)
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-748e378ba4fso2611301b3a.1
+        for <linux-remoteproc@vger.kernel.org>; Fri, 25 Jul 2025 04:50:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVRz341/7JkVKpOpAZiLyg2Cd6/xtTKViedggRj/KSb2zI0RDRGsxMXrVhgNHAzONBqUtNU5GI3rKgSIG77by/y@vger.kernel.org
+X-Received: by 2002:a05:6102:3053:b0:4e6:67f6:e9af with SMTP id
+ ada2fe7eead31-4fa3fa71860mr256656137.9.1753440125688; Fri, 25 Jul 2025
+ 03:42:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250724083914.61351-1-angelogioacchino.delregno@collabora.com> <20250724083914.61351-38-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20250724083914.61351-38-angelogioacchino.delregno@collabora.com>
+References: <20250724083914.61351-1-angelogioacchino.delregno@collabora.com> <20250724083914.61351-27-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20250724083914.61351-27-angelogioacchino.delregno@collabora.com>
 From: Fei Shao <fshao@chromium.org>
-Date: Fri, 25 Jul 2025 18:39:43 +0800
-X-Gmail-Original-Message-ID: <CAC=S1njv7qrL0LyhZsp=HVdxxDo2bA7FbCkMVqJ9R9qpg-0hMw@mail.gmail.com>
-X-Gm-Features: Ac12FXzAeqGgOrEJjRR1J4ryO0U3L8RJWv4_H_TyT4RYPsIpmGY3ViSbTr41uno
-Message-ID: <CAC=S1njv7qrL0LyhZsp=HVdxxDo2bA7FbCkMVqJ9R9qpg-0hMw@mail.gmail.com>
-Subject: Re: [PATCH 37/38] arm64: dts: mediatek: mt8395-kontron-i1200: Fix
- MT6360 regulator nodes
+Date: Fri, 25 Jul 2025 18:41:29 +0800
+X-Gmail-Original-Message-ID: <CAC=S1ni_6YRK0RWheKZJDgCknaZzPsde0J4dFdmkNhY7HMMD+w@mail.gmail.com>
+X-Gm-Features: Ac12FXwspafB6XO0s33DaaDCIfXTapXC0TbPbPDsXvwxpmO6Wfy_iIb8kWhO-Rk
+Message-ID: <CAC=S1ni_6YRK0RWheKZJDgCknaZzPsde0J4dFdmkNhY7HMMD+w@mail.gmail.com>
+Subject: Re: [PATCH 26/38] arm64: dts: mediatek: acelink-ew-7886cax: Remove
+ unnecessary cells in spi-nand
 To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: linux-mediatek@lists.infradead.org, robh@kernel.org, 
 	daniel.lezcano@linaro.org, mwalle@kernel.org, devicetree@vger.kernel.org, 
@@ -117,109 +117,39 @@ Cc: linux-mediatek@lists.infradead.org, robh@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 24, 2025 at 5:51=E2=80=AFPM AngeloGioacchino Del Regno
+On Thu, Jul 24, 2025 at 5:50=E2=80=AFPM AngeloGioacchino Del Regno
 <angelogioacchino.delregno@collabora.com> wrote:
 >
-> All of the MT6360 regulator nodes were wrong and would not probe
-> because the regulator names are supposed to be lower case, but
-> they are upper case in this devicetree.
+> There is no need to specify #address-cells and #size-cells in a
+> node that has only one non-addressable subnode, and this is the
+> case of the flash@0 node in this devicetree, as it has only one
+> "partitions" subnode.
 >
-> Change all nodes to be lower case to get working regulators.
+> Remove those to suppress an avoid_unnecessary_addr_size warning.
 >
-> Fixes: 94aaf79a6af5 ("arm64: dts: mediatek: add Kontron 3.5"-SBC-i1200")
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
 abora.com>
 
 Reviewed-by: Fei Shao <fshao@chromium.org>
 
 > ---
->  .../mediatek/mt8395-kontron-3-5-sbc-i1200.dts    | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+>  arch/arm64/boot/dts/mediatek/mt7986a-acelink-ew-7886cax.dts | 2 --
+>  1 file changed, 2 deletions(-)
 >
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8395-kontron-3-5-sbc-i1200.dt=
-s b/arch/arm64/boot/dts/mediatek/mt8395-kontron-3-5-sbc-i1200.dts
-> index 4985b65925a9..d16f545cbbb2 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8395-kontron-3-5-sbc-i1200.dts
-> +++ b/arch/arm64/boot/dts/mediatek/mt8395-kontron-3-5-sbc-i1200.dts
-> @@ -352,7 +352,7 @@ regulator {
->                         LDO_VIN2-supply =3D <&vsys>;
->                         LDO_VIN3-supply =3D <&vsys>;
->
-> -                       mt6360_buck1: BUCK1 {
-> +                       mt6360_buck1: buck1 {
->                                 regulator-name =3D "emi_vdd2";
->                                 regulator-min-microvolt =3D <600000>;
->                                 regulator-max-microvolt =3D <1800000>;
-> @@ -362,7 +362,7 @@ MT6360_OPMODE_LP
->                                 regulator-always-on;
->                         };
->
-> -                       mt6360_buck2: BUCK2 {
-> +                       mt6360_buck2: buck2 {
->                                 regulator-name =3D "emi_vddq";
->                                 regulator-min-microvolt =3D <300000>;
->                                 regulator-max-microvolt =3D <1300000>;
-> @@ -372,7 +372,7 @@ MT6360_OPMODE_LP
->                                 regulator-always-on;
->                         };
->
-> -                       mt6360_ldo1: LDO1 {
-> +                       mt6360_ldo1: ldo1 {
->                                 regulator-name =3D "mt6360_ldo1"; /* Test=
- point */
->                                 regulator-min-microvolt =3D <1200000>;
->                                 regulator-max-microvolt =3D <3600000>;
-> @@ -380,7 +380,7 @@ mt6360_ldo1: LDO1 {
->                                                            MT6360_OPMODE_=
-LP>;
->                         };
->
-> -                       mt6360_ldo2: LDO2 {
-> +                       mt6360_ldo2: ldo2 {
->                                 regulator-name =3D "panel1_p1v8";
->                                 regulator-min-microvolt =3D <1800000>;
->                                 regulator-max-microvolt =3D <1800000>;
-> @@ -388,7 +388,7 @@ mt6360_ldo2: LDO2 {
->                                                            MT6360_OPMODE_=
-LP>;
->                         };
->
-> -                       mt6360_ldo3: LDO3 {
-> +                       mt6360_ldo3: ldo3 {
->                                 regulator-name =3D "vmc_pmu";
->                                 regulator-min-microvolt =3D <1800000>;
->                                 regulator-max-microvolt =3D <3300000>;
-> @@ -396,7 +396,7 @@ mt6360_ldo3: LDO3 {
->                                                            MT6360_OPMODE_=
-LP>;
->                         };
->
-> -                       mt6360_ldo5: LDO5 {
-> +                       mt6360_ldo5: ldo5 {
->                                 regulator-name =3D "vmch_pmu";
->                                 regulator-min-microvolt =3D <3300000>;
->                                 regulator-max-microvolt =3D <3300000>;
-> @@ -404,7 +404,7 @@ mt6360_ldo5: LDO5 {
->                                                            MT6360_OPMODE_=
-LP>;
->                         };
->
-> -                       mt6360_ldo6: LDO6 {
-> +                       mt6360_ldo6: ldo6 {
->                                 regulator-name =3D "mt6360_ldo6"; /* Test=
- point */
->                                 regulator-min-microvolt =3D <500000>;
->                                 regulator-max-microvolt =3D <2100000>;
-> @@ -412,7 +412,7 @@ mt6360_ldo6: LDO6 {
->                                                            MT6360_OPMODE_=
-LP>;
->                         };
->
-> -                       mt6360_ldo7: LDO7 {
-> +                       mt6360_ldo7: ldo7 {
->                                 regulator-name =3D "emi_vmddr_en";
->                                 regulator-min-microvolt =3D <1800000>;
->                                 regulator-max-microvolt =3D <1800000>;
+> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-acelink-ew-7886cax.dts =
+b/arch/arm64/boot/dts/mediatek/mt7986a-acelink-ew-7886cax.dts
+> index 08b3b0827436..30805a610262 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt7986a-acelink-ew-7886cax.dts
+> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-acelink-ew-7886cax.dts
+> @@ -98,8 +98,6 @@ &spi0 {
+>         flash@0 {
+>                 compatible =3D "spi-nand";
+>                 reg =3D <0>;
+> -               #address-cells =3D <1>;
+> -               #size-cells =3D <1>;
+>                 spi-max-frequency =3D <52000000>;
+>                 spi-rx-bus-width =3D <4>;
+>                 spi-tx-bus-width =3D <4>;
 > --
 > 2.50.1
 >
