@@ -1,83 +1,82 @@
-Return-Path: <linux-remoteproc+bounces-4483-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-4485-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40476B2E1EE
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Aug 2025 18:09:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF64FB2E1F9
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Aug 2025 18:11:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BE931C8649E
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Aug 2025 16:03:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AE47602626
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Aug 2025 16:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709FC326D7F;
-	Wed, 20 Aug 2025 16:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B7C23277B6;
+	Wed, 20 Aug 2025 16:02:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EytWJOU+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AXICg8kl"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645FC3596D
-	for <linux-remoteproc@vger.kernel.org>; Wed, 20 Aug 2025 16:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5881C1DDC33
+	for <linux-remoteproc@vger.kernel.org>; Wed, 20 Aug 2025 16:02:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755705766; cv=none; b=kRGkb5ea3eanj/QhYzDtV8ZN7wICOcyMQLAVgBNgs09olO8mSeJVTnNUZL3IGpxH+W0WIgc0Xj2DT5IzvWhPULBElCOcp5dY+aKy3VUI7bPmurVicF2GpbAi3cYWkiqNSfkR6KWdoHJiK/kk7/jbBIekJLbZTy2yzwhxGZb1634=
+	t=1755705767; cv=none; b=GKA8CKFx4NA8RfkxbDKxYOL2jzsiKKkW1Cgi3O1NmV/3OBpwvAVDZr+QCzgm70URLY4P017YLqY6/tKo97Fr7VBPoHz2TC/Jixo8Mv3C9qdbZJx5o7X/U5IDBYHHUicX5sMywoZsQPxwMHBILIUGPB6M2GfRtjvyJNUA3VbcCVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755705766; c=relaxed/simple;
-	bh=+mkqb2Ue7u1YvGacNORI9vgglAhAHZA5EgMtWKI45No=;
+	s=arc-20240116; t=1755705767; c=relaxed/simple;
+	bh=ceYKT3vSfgejeLJSxkGS10wrJuDMf2QLAgi1+YybTuo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bul4sF1F6tCiaD+An4MT0jrWc2POAT4uL9mC5kcuoSEpm2tRSu3cwgRjf9s6YubQp7BNjUe9XzH/igEorfrHJRZovI9hJTYr123u6XxlmZ00nfwRfCW8NB6fSM4sCJi2eSe2leM+um6g4IgRaGVaYT8d+UvJ6IJBptI9PoULX5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EytWJOU+; arc=none smtp.client-ip=209.85.128.42
+	 In-Reply-To:To:Cc; b=nAPKVvEsOghZn/Bvp+pVN47gsS4z7oH4gvVXg5PwAeL1xgy4bWqf0+mVa8ukBbrRv7r8UOzSrlP239i78oiuUBmWlnANxGNvtkI/rvlnLNCrxu9Tk2+lZDj0Eb/h7SXSmYsBzBmcGl0Cfl1ChHeo3e+BB7ot6hmcgsh9Jj7mLTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AXICg8kl; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-45a1b0c8867so54065e9.3
-        for <linux-remoteproc@vger.kernel.org>; Wed, 20 Aug 2025 09:02:44 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3b9d41c1963so74022f8f.0
+        for <linux-remoteproc@vger.kernel.org>; Wed, 20 Aug 2025 09:02:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755705763; x=1756310563; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1755705764; x=1756310564; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Qhuxsj5hUNsmEcvC7TbsLqtTmOhmGuaHA8uQAx721Xg=;
-        b=EytWJOU+bQQ8j4GVe5d/aJNc8AMOtNfbvTaFJ61RKvxm1k9M9C58jRDKZAY6zuDsUR
-         mzs2ENEd7z0orwjGIj53UV7VkzP5qTcwuWqCkfkdchmJ6pnEzdBoFydwhb47eJHvhO+u
-         xNACs0BOC4xpoee6mw7nA9ebO5/8ej6eKw4qi1LuYVfat1zG1k0s5Ls41eNSEN+bGUMp
-         jDFlStS9OPQ2CGkDaLlDD59Akt+cXXEiIMMV8wzSkD/7wWQhbYpj1mX5zFEjJOJIeFN5
-         kUiFcDNrkcuGixdjBGspNWUf6ojfqOW/Wpa9jMJ6d20cnUyuDaoYb8N91iouzkb6d1X/
-         P99A==
+        bh=tjfVhv9eLkbIqBEE7fXFjARPFm2eJB57FpMUozSdD4M=;
+        b=AXICg8klDQtptdu2WXQUS6lLMhl+jfNMcldtF2JtnPfZM1OCRCFGgQJRJCh+AnlqGP
+         demvMr8uOMpO0nQklbriS+DltyQ0d6iVFIj3TKp072qU1aeKy5C51UwL71nSjALFs7Ts
+         noJXVVraYsEnwo++CDDyAr1urdle8Mb1QxQPzBIMqTkNxhdURCrCL9+epjFYVpSx2iHa
+         mQKwS9ujO9ujFf8+pE5yuR1I3R8L0/ZdJ0BqP0kKBzfpLCAvrM64nMu34J1V2dJhYTYX
+         CKt5DtIpk2PNUru/IrrEsfzu8YQNYPiKZhgsKfMcVOstiwpKhOhJGnliVDLXHaXGHRU5
+         AAVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755705763; x=1756310563;
+        d=1e100.net; s=20230601; t=1755705764; x=1756310564;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Qhuxsj5hUNsmEcvC7TbsLqtTmOhmGuaHA8uQAx721Xg=;
-        b=DOm02VZU0y7wUEODskzLPXql1hTdXeFTiqVDNyMeWMz653CgV0KDM16uXOqhCxJPU1
-         t5rywrStDZ3TK+bH1qdmuGJ2+VPjmAfx3hQVCDeJ7bwwpPz91/9qfS8v8JoxLiT25WEQ
-         2ctyA7DTIbkW/8LGEFCpDo1BkbHfa/lE3FO34AfoIL3zhXDXCxOCOkunLhjuG8xcobCS
-         HZobSMs1dlRMv3CAxqYAy04ZVXeJP1OlInyFATKRwSOPzbZah5XhD6AamZxWW/D/vfaR
-         GeavLQNqF9n9uZ+Sjz8fJWyQyfCkPIRt0ECBqw6Ydy+VMkTsI5vBnIifEWTF9l6Rk7wv
-         wDfA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6dxUrhQ18/AxQ0AglRecdGGsw/GHPFsVLTXkwedAXrJBuqeLXDt+01iDlIiqNBBoItNj2oyUiYDqEHQ71Dw0v@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP7726Xp0c7GHo6yZNB4i3Y+RgFAVGda7fSobird73aYiGM7ZJ
-	tPAlPcdPhrOPC1Divbpbxu/J2aKXPyxu8/sohSz9UWA3aqPmmqxi21VRMlA1DDpbShZBRKDcFBt
-	BDLY+
-X-Gm-Gg: ASbGncs2mJaILOxx0Spn9nw3xsqQ4aZMAHO2eEf0zqkThTKbB3zep89Ebis1KOximzg
-	btE3eIr1A4tVFQYbX4nminXlDH4wHI7U4Iv6OqobXcZtTzpbO9DISrCSbZVUSkGUNBmoGkFTgXH
-	qMEPTyPSLOjO2FJGiXf1cOrXQruFm7PCRC3QMC1PPyFvxTzMJSM0wBZ88r1ifJ6aC0v9adahd//
-	RH1s/B6FeZBvYAJCcSAxCQzxvL2IXWzyQ8vaAH1hrMZuwuhnLqoUoG25qokrJaszeoFNIGsME89
-	LIWCrNxEcwXRGighrI7sabIxd4FCt2PPGdcOGEB81WhTUXphLu0MpqNJzFQnpiuSm44/LWcAJOR
-	LR5IY4Oz6mPsowBt1zGssYZNZPIjWo+d6nLKJk4TcF94hHwo=
-X-Google-Smtp-Source: AGHT+IGvG4k/agQ1VYv0xl78frC3MBSWK35BnNz8JnK0jUOga4Or/7FWKiGhMWhFKLnbdgZxkb+pAA==
-X-Received: by 2002:a05:600c:8b17:b0:459:ddad:a3bd with SMTP id 5b1f17b1804b1-45b479b331cmr32104145e9.15.1755705762491;
-        Wed, 20 Aug 2025 09:02:42 -0700 (PDT)
+        bh=tjfVhv9eLkbIqBEE7fXFjARPFm2eJB57FpMUozSdD4M=;
+        b=W5KoP2ZHNlVZnHy8lsq+D2K9CuP4sXWVyf8CLWpAJOVbxqa3j857hzVwvrmZJtv2Te
+         G/mm3lFi/b4nrHshd940Ef2v/fr0NPa/aNai38xrWq5XXSIBUrlHCSws/9lgxSagYH0u
+         PF5pXJPdLjJHTOOmD2rrKwIOdrj7Bp2fy/zqwQtjvmgA4HaRc3Xl8QWnK+DkGikNO0QJ
+         eWuYQKRQoAcPhnYrGpd0yAHNT4OphixLABabzGJTux4NoOBRshkpRK/KHzfISG7qXPp7
+         oadZxzd6qoVzbfVqCVzFkzkriG9HJ3DYoVEYlCSw05omqX1/jqwX32+Loce5PWasQoSV
+         a/lg==
+X-Forwarded-Encrypted: i=1; AJvYcCUVyMG3//MXOxyCh50gg21HpVOCfXp/g2HiBfFAYWiRmBQaHG6Su+/aG9etlFsatOep7BDFviIjMfvRBLiel5m7@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1qGSGSeQijRPlF81bSDIn915PiGRlTvozXtHxkAwtTqLxBWdb
+	bJqpppgQej80BR5mllw2owWMzzsNPAbaXz7FcM0ul77abmtkcF5WWnWIE14AxIQChpA=
+X-Gm-Gg: ASbGnctGErvKqQfulTUWQ2qXCGwSGpuWgs3DFEQQP46o+R8YWoQzaQqp0VrMw5JRGN2
+	PfEs+nRCd4wM7ockB+t+THQAjk1I+S8d3xTBFUWYvI9NsydazRtaSRk/YcT9tRwskED3E7Ksx0x
+	tA4DSSf7t6xN1o1E7+0QsxxqMgsiFzGEZQOKjRBOSxC3tAfvZWM2W8YtjFiP4q7i8q1u/ePdN6N
+	JDS8rZpeWZgCtIuWTOa9a7OvyDUigscQViOGsWaw3zr6vfSzCdeuEX1x53fvxECaKGNnJUUHrJL
+	jW07mZTx3KyCbBmfduAA+TP2K3xS0lfTvM/tjU1J5tCo4m4fxgwE3jLHDXVM/Wokipae7QAwMhR
+	eiQ9+rhi2jjsdpFmhGKsiJzvDmndhM3JGlbsn
+X-Google-Smtp-Source: AGHT+IFhMcKbAMu0PvVDiGeVBMEhgCK2n9Gg7XUc2NrwrVFxoYM9mheSAsCoD/kyMWNfHdDuo2ptCA==
+X-Received: by 2002:a05:6000:4313:b0:3b7:8fcd:d145 with SMTP id ffacd0b85a97d-3c32be67bdbmr2961716f8f.5.1755705763407;
+        Wed, 20 Aug 2025 09:02:43 -0700 (PDT)
 Received: from [127.0.0.2] ([2a02:2454:ff21:ef41:f5f2:96b:fcb7:af4b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c074d43956sm8364628f8f.19.2025.08.20.09.02.41
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c074d43956sm8364628f8f.19.2025.08.20.09.02.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Aug 2025 09:02:42 -0700 (PDT)
+        Wed, 20 Aug 2025 09:02:43 -0700 (PDT)
 From: Stephan Gerhold <stephan.gerhold@linaro.org>
-Date: Wed, 20 Aug 2025 18:02:35 +0200
-Subject: [PATCH v2 3/4] remoteproc: qcom_q6v5_pas: Shutdown lite ADSP DTB
- on X1E
+Date: Wed, 20 Aug 2025 18:02:36 +0200
+Subject: [PATCH v2 4/4] remoteproc: qcom_q6v5_pas: Drop redundant
+ assignment to ret
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -86,7 +85,7 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250820-rproc-qcom-q6v5-fixes-v2-3-910b1a3aff71@linaro.org>
+Message-Id: <20250820-rproc-qcom-q6v5-fixes-v2-4-910b1a3aff71@linaro.org>
 References: <20250820-rproc-qcom-q6v5-fixes-v2-0-910b1a3aff71@linaro.org>
 In-Reply-To: <20250820-rproc-qcom-q6v5-fixes-v2-0-910b1a3aff71@linaro.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -97,77 +96,28 @@ Cc: Sibi Sankar <quic_sibis@quicinc.com>, Abel Vesa <abel.vesa@linaro.org>,
  Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
 
-The ADSP firmware on X1E has separate firmware binaries for the main
-firmware and the DTB. The same applies for the "lite" firmware loaded by
-the boot firmware.
-
-When preparing to load the new ADSP firmware we shutdown the lite_pas_id
-for the main firmware, but we don't shutdown the corresponding lite pas_id
-for the DTB. The fact that we're leaving it "running" forever becomes
-obvious if you try to reuse (or just access) the memory region used by the
-"lite" firmware: The &adsp_boot_mem is accessible, but accessing the
-&adsp_boot_dtb_mem results in a crash.
-
-We don't support reusing the memory regions currently, but nevertheless we
-should not keep part of the lite firmware running. Fix this by adding the
-lite_dtb_pas_id and shutting it down as well.
-
 We don't have a way to detect if the lite firmware is actually running yet,
-so ignore the return status of qcom_scm_pas_shutdown() for now. This was
-already the case before, the assignment to "ret" is not used anywhere.
+so we should ignore the return status of qcom_scm_pas_shutdown() for now.
+The assignment to "ret" is not used anywhere, so just drop it.
 
-Fixes: 62210f7509e1 ("remoteproc: qcom_q6v5_pas: Unload lite firmware on ADSP")
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 Signed-off-by: Stephan Gerhold <stephan.gerhold@linaro.org>
 ---
- drivers/remoteproc/qcom_q6v5_pas.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/remoteproc/qcom_q6v5_pas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
-index 02e29171cbbee2d305827365ef7d2241b6eb786b..f3ec5b06261e8bafe8a8d2378b60285d0855674a 100644
+index f3ec5b06261e8bafe8a8d2378b60285d0855674a..6faedae8d32ef6c3c2071975f2f1e37a9ffd8abe 100644
 --- a/drivers/remoteproc/qcom_q6v5_pas.c
 +++ b/drivers/remoteproc/qcom_q6v5_pas.c
-@@ -42,6 +42,7 @@ struct qcom_pas_data {
- 	int pas_id;
- 	int dtb_pas_id;
- 	int lite_pas_id;
-+	int lite_dtb_pas_id;
- 	unsigned int minidump_id;
- 	bool auto_boot;
- 	bool decrypt_shutdown;
-@@ -80,6 +81,7 @@ struct qcom_pas {
- 	int pas_id;
- 	int dtb_pas_id;
- 	int lite_pas_id;
-+	int lite_dtb_pas_id;
- 	unsigned int minidump_id;
- 	int crash_reason_smem;
- 	unsigned int smem_host_id;
-@@ -226,6 +228,8 @@ static int qcom_pas_load(struct rproc *rproc, const struct firmware *fw)
+@@ -227,7 +227,7 @@ static int qcom_pas_load(struct rproc *rproc, const struct firmware *fw)
+ 	pas->firmware = fw;
  
  	if (pas->lite_pas_id)
- 		ret = qcom_scm_pas_shutdown(pas->lite_pas_id);
-+	if (pas->lite_dtb_pas_id)
-+		qcom_scm_pas_shutdown(pas->lite_dtb_pas_id);
+-		ret = qcom_scm_pas_shutdown(pas->lite_pas_id);
++		qcom_scm_pas_shutdown(pas->lite_pas_id);
+ 	if (pas->lite_dtb_pas_id)
+ 		qcom_scm_pas_shutdown(pas->lite_dtb_pas_id);
  
- 	if (pas->dtb_pas_id) {
- 		ret = request_firmware(&pas->dtb_firmware, pas->dtb_firmware_name, pas->dev);
-@@ -722,6 +726,7 @@ static int qcom_pas_probe(struct platform_device *pdev)
- 	pas->minidump_id = desc->minidump_id;
- 	pas->pas_id = desc->pas_id;
- 	pas->lite_pas_id = desc->lite_pas_id;
-+	pas->lite_dtb_pas_id = desc->lite_dtb_pas_id;
- 	pas->info_name = desc->sysmon_name;
- 	pas->smem_host_id = desc->smem_host_id;
- 	pas->decrypt_shutdown = desc->decrypt_shutdown;
-@@ -1085,6 +1090,7 @@ static const struct qcom_pas_data x1e80100_adsp_resource = {
- 	.pas_id = 1,
- 	.dtb_pas_id = 0x24,
- 	.lite_pas_id = 0x1f,
-+	.lite_dtb_pas_id = 0x29,
- 	.minidump_id = 5,
- 	.auto_boot = true,
- 	.proxy_pd_names = (char*[]){
 
 -- 
 2.50.1
