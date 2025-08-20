@@ -1,81 +1,81 @@
-Return-Path: <linux-remoteproc+bounces-4481-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-4484-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59171B2E1ED
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Aug 2025 18:09:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3347B2E1FA
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Aug 2025 18:11:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D83C0A23852
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Aug 2025 16:02:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A17B16B149
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 Aug 2025 16:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D09A322A19;
-	Wed, 20 Aug 2025 16:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A05A432778D;
+	Wed, 20 Aug 2025 16:02:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lxLUdCM8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Nk2aej5+"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C49B2E8B64
-	for <linux-remoteproc@vger.kernel.org>; Wed, 20 Aug 2025 16:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697C9322A0D
+	for <linux-remoteproc@vger.kernel.org>; Wed, 20 Aug 2025 16:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755705764; cv=none; b=GA+Otcna/Qrf9H4s6Zz2ucYjQnu4/qNo7jxYdQ861LqPHyLw2Z7q3hVy8/XzJ2Mvc5jPecOQYIfFtD9LT3cvs2QWt1o5bW6CAGIEyZmYJDTgS61/CYS/JceLXgPpJk2Tauo83vKCU1LITcg54kHmipeBJD77wr51IAYgMm67OxE=
+	t=1755705766; cv=none; b=pQu1CiZ+96a3XG47IdMg8TafFE9uJgol124QiclyKl95AgPDlmw0Ghv6gHl/gJDdObqT6hobBP2hN+0urRVLeVVponHcQ4Knuptj6jJuA1pYqGf7LZrCiDoQnHyCNOpp/OarrX9oXIC/yhWurvRy2ShwfNbnuCd1QomgjmrvptA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755705764; c=relaxed/simple;
-	bh=AuE9xsSC85xnCqMl1lnmYWUzXXJoeJtib/kNkW715Qg=;
+	s=arc-20240116; t=1755705766; c=relaxed/simple;
+	bh=J9tk26b5d9valUn3AJ23BPP4CY9PZS2upYUI2TK7QI0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=h998UU74+SenyKcFWLmflahsjFOYq6d1YC2KKd8s791QZZxfjnd+tqBUbAKDNH4wgWfJznnZmJBFpwfaBRIzTvQ9EN2RWV76uKsvj0sBUrq7jKtWgDRx/KTEJHdphvfK5TXnlUmReYl2nOB7VUBBbq5PPjhFgRLET0ZI+wYmbAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lxLUdCM8; arc=none smtp.client-ip=209.85.128.50
+	 In-Reply-To:To:Cc; b=rsvqGQKRjbs0z7QlAvqGWqa6d0dWlA9gGLUfxq1I46v7LnbQKs0TQC6BFMph4ued8m51bdGKMfLMHYDoX6bf7PE7ZhuPVH0Y9yeKx6cQeC/GNKT8JudPbdEMfnABMDH9kMrqgreh6Rgyw5Z/KLUQGnfi/8lb1wnDZSQo3RNX1uU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Nk2aej5+; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-45a1b0d224dso86025e9.3
-        for <linux-remoteproc@vger.kernel.org>; Wed, 20 Aug 2025 09:02:42 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3b9e4193083so74235f8f.3
+        for <linux-remoteproc@vger.kernel.org>; Wed, 20 Aug 2025 09:02:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755705761; x=1756310561; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1755705762; x=1756310562; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ShZhIijPGclQUKdObNofvMry47iIISxjqJO+kVsJ9ug=;
-        b=lxLUdCM8TxTAu4kSLD+bBZxm3ckdeok0ee3jOkAzD9AJWyL4Cvf57SVrQaifRrPUZb
-         APEW4XhGAxq77IE6c4P6mYn0tCkJJyxgsWFELA+4Ush2uYaWcutTge0V2dE8/Svrzi2f
-         pBF7dexwSmuVv8sMM4uvUSS5M1hqyqeJPG34hmkQsk4g+K9DMfDtyDhl4MoOIy6ObttE
-         Ym8v0O/aRN0pN8/7NEzbp6w3Lvc1eZ+ilx2NCCkMcB9Ptihi2HOVmxof9WagpCHS6keQ
-         PzAuJWodVGdDQfqCDiis3uRArTlTnhLPtSB/fb95gcJp+aVT9rstemfm+/aC2N50Zpwc
-         fodA==
+        bh=SDa/L/vLfvl5Q/JDuMqiafLyaLhOcwaxXf7Kgn9DrQA=;
+        b=Nk2aej5+FL3m6VlEtkGxF9S8CjsFj2ivRw3PpaLk6Xot2jdIcq4WShB55LesLwb9F8
+         tiPiBHVoaW3hlTs6YHHr57zJLoDTJpppgxywGXTCtRUXNugHu2hD5ZFn1M5xgY+eN4oB
+         HQs4+LHbToBJv5cQDX4y4eqszCBG1SxdQBSanGg5iMHwI7QKZwkMFHnlExayYHLLQr7l
+         Ccfse6M+iFy9KCU/03dF2+qUNi8ZVhzgSMxqtQb1dx+UH3RltjCKJRiaHhrSPj5CrJZT
+         GTsenxk2BFOkTJebB12DqfUgMBCzqmMjHLt3Pw8Zmi4xGeHuU0WBY4mfNlfYI5993mS5
+         FBXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755705761; x=1756310561;
+        d=1e100.net; s=20230601; t=1755705762; x=1756310562;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ShZhIijPGclQUKdObNofvMry47iIISxjqJO+kVsJ9ug=;
-        b=NWxUjw0neZRfqgCNOkIP30Nj54bTsLoUTJ+2X+uqU4bHPm+385jKcll1vmY2DI8Ykb
-         1T1Y7q05RxuytdfMDOUDFCdr4KHvqBnQOwJ4NBv5ti3tac1n2eowNX1usNmGkGxsuFcN
-         E0kIP8Ml2QrEm0a2xgoyEQPrZlLJEL78cK7LywJqeYjaHgSYNUpT+LjSxveSl61+Jxbn
-         /Th7unrb6lYYvyS0on+KWJ+b5uL7QxVbVnoFYxVb+tEg1E/1vL0gY3zoRQCMSs8gsUrl
-         0Di6E5bmTPhyJlUd200uefEM/Ns/xqDANTZhEnT8i3xVjT4bB6OWY5VBUww8n0BuniPd
-         B9Ug==
-X-Forwarded-Encrypted: i=1; AJvYcCXRMhYvGG2h/DptpOX81rF6T2OmNQZmlmg+PGxwI85TqG5lVxbXIRof0YLzCxUnxjpOQRaD5ds1tjQoEjbeWP0B@vger.kernel.org
-X-Gm-Message-State: AOJu0YxftXr72QSzJuIs1AD75Na+GKwpl01pJnXJ7kN9puHYhJvs2KMZ
-	mksspZzMoNrOQHcFoJl5c1bDU5Rmpz79Nv8mW9cdJ/JFuceLt4HezdIxKgXFLruPfBU=
-X-Gm-Gg: ASbGncufM/dpqct1sItSARHIEV/L+yDC1FqTGxZXyV5G/GBB9PIooIdwGQ9nd7dI4Jb
-	AN/qo9bEqEDexrORXKsl8XBK5lbaM4wI9F+jLRy73CMCnHbYx8YZOt/5yXTaK+qvSWlGtXIoz32
-	CvF+DwYJRRvPd2KvFaVU6EFTaxA1N7UOUdWFn5qbzeOBuxp4mzbQ1IWtC4FW2G/Yo7NvuseDWlb
-	rJgdctCmKxz6g4LTrgmUF3DOiP9PC0NRlULyOs+Y3boOGF88WbkID2z5h72qKVT4C/gIWcos1QL
-	zbet8+IfnNykJDask8bdJbqGnG2cPxFp2MZ3RCwp7h4OQl3dxDxYtHdOL37lt44T3lkdl0g/887
-	G0CLxYOsI2I+R4c0urEbxMQTT3NClIQ/CQSx3
-X-Google-Smtp-Source: AGHT+IG5dx4R83R85oNexKaNvANypEQgTudqcO+VWF9RVGmv2uV7QlWml9pzFQ9+qhiHJ4Pwd4vwVA==
-X-Received: by 2002:a05:6000:250a:b0:3b7:7c3b:1073 with SMTP id ffacd0b85a97d-3c32fe1a409mr2287696f8f.52.1755705760657;
-        Wed, 20 Aug 2025 09:02:40 -0700 (PDT)
+        bh=SDa/L/vLfvl5Q/JDuMqiafLyaLhOcwaxXf7Kgn9DrQA=;
+        b=J1rZDGQJhwZSLfVu+/l0W+XzHfR8fMw9lZaMpyuuZ4XxoUSdhKXZq64HoBtZ0rpdam
+         CTCChY9sWdn0E8HWu5DBdyVba7Ga7B9POQCTpc5Wpgox4b2dorX6bOwywdt/q4/+yWXm
+         lHatk8aR43Lw2xdTbJQBnWCIxjgFWCx+jDLv/TNY8p6jlNo0K/+DD22G6nJ3iJUk3FTP
+         0aBGZdt1uEiEmzY2VApe6Yb7lMKRmIYYH1FFKN1/QWo+9WdJP9eUeXEEdKBbKbH/sTh3
+         hdZiJDQUlal0hftgg9WGQ/MmoaPBv+brMSZq1REgGh2JlWs6mTspMJ4iuZihSS05Hn7o
+         ShKw==
+X-Forwarded-Encrypted: i=1; AJvYcCWca/i3HjH1lwmYztH00HbY7d6uu0e7RcIczJ7C30O6CMzOnMc2Sgtt+Nzowf7Y9W2VQWV7yOOVLJkJ0ZLrwDrR@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywimr21Acuu0upovBsO/OZmf4JWuriHzXZj+NiTZmUSR10tFUBZ
+	fml/72dpm0JzLdv/0qOQFgkNx/+RLNx0iVvAG2571JZuUqM8czw6VLIhN7EUg2eKHyc=
+X-Gm-Gg: ASbGncttCPMjC8SMtJQT+2y9g+yl0ASdnQxdEFPDVctMpN8ndJIaJp66ypTFG24PqFX
+	sFLdWW+jx0cRU58ceidQV21uXYuPbZoV0LHbTjBhkwaUowxdpM7lZyQyDee1cQ8EcntUOMP/2P/
+	HkaELU9TvprvTSIk1rOzIiIiH4go3EFYPS9zDhm/3kGaLjxsrWC2QGnsWtIi3YPKXIcJZDIeby3
+	FdzGkWSYFOglw2Y4FIvdioPHdgkfYQ690x42uUgH3s0drq/hB4sDJ9JneraocsKDSr2OhDzcw+M
+	r0hAHahxXPUh5KBwkTR+trxgJexm5yOI5qo+lTGuPB61te5zdqcS0Vj7apBRKIs+Os7A1FrPMhr
+	mdRkOh00IstKNPi1r4SHcRMwonvnJCbmOip18
+X-Google-Smtp-Source: AGHT+IEGtQPDjtGEux8eJN642OMcw5qEtkm8AZN7DXfDDbrt3JlPYakLqgOYzRpBWVMGssyGGPAxFg==
+X-Received: by 2002:a5d:62c8:0:b0:3b9:7bea:149e with SMTP id ffacd0b85a97d-3c32c52bb7dmr1711279f8f.8.1755705761522;
+        Wed, 20 Aug 2025 09:02:41 -0700 (PDT)
 Received: from [127.0.0.2] ([2a02:2454:ff21:ef41:f5f2:96b:fcb7:af4b])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c074d43956sm8364628f8f.19.2025.08.20.09.02.39
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c074d43956sm8364628f8f.19.2025.08.20.09.02.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Aug 2025 09:02:40 -0700 (PDT)
+        Wed, 20 Aug 2025 09:02:41 -0700 (PDT)
 From: Stephan Gerhold <stephan.gerhold@linaro.org>
-Date: Wed, 20 Aug 2025 18:02:33 +0200
-Subject: [PATCH v2 1/4] remoteproc: qcom_q6v5: Avoid disabling handover IRQ
+Date: Wed, 20 Aug 2025 18:02:34 +0200
+Subject: [PATCH v2 2/4] remoteproc: qcom_q6v5: Avoid handling handover
  twice
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
@@ -85,7 +85,7 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250820-rproc-qcom-q6v5-fixes-v2-1-910b1a3aff71@linaro.org>
+Message-Id: <20250820-rproc-qcom-q6v5-fixes-v2-2-910b1a3aff71@linaro.org>
 References: <20250820-rproc-qcom-q6v5-fixes-v2-0-910b1a3aff71@linaro.org>
 In-Reply-To: <20250820-rproc-qcom-q6v5-fixes-v2-0-910b1a3aff71@linaro.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
@@ -96,40 +96,33 @@ Cc: Sibi Sankar <quic_sibis@quicinc.com>, Abel Vesa <abel.vesa@linaro.org>,
  Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
 
-enable_irq() and disable_irq() are reference counted, so we must make sure
-that each enable_irq() is always paired with a single disable_irq(). If we
-call disable_irq() twice followed by just a single enable_irq(), the IRQ
-will remain disabled forever.
+A remoteproc could theoretically signal handover twice. This is unexpected
+and would break the reference counting for the handover resources (power
+domains, clocks, regulators, etc), so add a check to prevent that from
+happening.
 
-For the error handling path in qcom_q6v5_wait_for_start(), disable_irq()
-will end up being called twice, because disable_irq() also happens in
-qcom_q6v5_unprepare() when rolling back the call to qcom_q6v5_prepare().
-
-Fix this by dropping disable_irq() in qcom_q6v5_wait_for_start(). Since
-qcom_q6v5_prepare() is the function that calls enable_irq(), it makes more
-sense to have the rollback handled always by qcom_q6v5_unprepare().
-
-Fixes: 3b415c8fb263 ("remoteproc: q6v5: Extract common resource handling")
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 Signed-off-by: Stephan Gerhold <stephan.gerhold@linaro.org>
 ---
- drivers/remoteproc/qcom_q6v5.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/remoteproc/qcom_q6v5.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
-index 4ee5e67a9f03f5f766f04396b9a3e45f77293764..769c6d6d6a731672eca9f960b05c68f6d4d77af2 100644
+index 769c6d6d6a731672eca9f960b05c68f6d4d77af2..58d5b85e58cdadabdd3e23d39c06a39196c3a194 100644
 --- a/drivers/remoteproc/qcom_q6v5.c
 +++ b/drivers/remoteproc/qcom_q6v5.c
-@@ -156,9 +156,6 @@ int qcom_q6v5_wait_for_start(struct qcom_q6v5 *q6v5, int timeout)
- 	int ret;
+@@ -164,6 +164,11 @@ static irqreturn_t q6v5_handover_interrupt(int irq, void *data)
+ {
+ 	struct qcom_q6v5 *q6v5 = data;
  
- 	ret = wait_for_completion_timeout(&q6v5->start_done, timeout);
--	if (!ret)
--		disable_irq(q6v5->handover_irq);
--
- 	return !ret ? -ETIMEDOUT : 0;
- }
- EXPORT_SYMBOL_GPL(qcom_q6v5_wait_for_start);
++	if (q6v5->handover_issued) {
++		dev_err(q6v5->dev, "Handover signaled, but it already happened\n");
++		return IRQ_HANDLED;
++	}
++
+ 	if (q6v5->handover)
+ 		q6v5->handover(q6v5);
+ 
 
 -- 
 2.50.1
