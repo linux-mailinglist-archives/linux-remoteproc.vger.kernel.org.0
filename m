@@ -1,94 +1,189 @@
-Return-Path: <linux-remoteproc+bounces-4780-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-4783-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA613B918EB
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 22 Sep 2025 16:01:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F695B92218
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 22 Sep 2025 18:07:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26C6F2A318D
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 22 Sep 2025 14:00:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF9C43B207A
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 22 Sep 2025 16:07:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42C61A23B9;
-	Mon, 22 Sep 2025 14:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE381310636;
+	Mon, 22 Sep 2025 16:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eln0plRe"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DRLfBTly"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE8A19F111;
-	Mon, 22 Sep 2025 14:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B17F2EA75C
+	for <linux-remoteproc@vger.kernel.org>; Mon, 22 Sep 2025 16:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758549630; cv=none; b=Sfq+wPSjmAk3Sm1Ej62OU6Mf2YJIPPvfEz3LpUfmePkXeAVMXXjELGd5405kjYw99KEjsWfwjer53tEcBfJB05fKo2Z1h+Id4+d5EztZkFO4Dr6JaD6b7inGIi2ZUMJXDN+ysFq05ulTMJhcSTP1WposRH2xE1aWq9mBEHSgdQ0=
+	t=1758557234; cv=none; b=IZxtyqxLE6quz5i83kb+jXpuMN3Cuj9BuNfXDuXCVwKEGJbMrHCwODrkpta8LrIRV5BlxUeU5QTyWtF4HcTHYuHQuGGKChHvZIijPgY/rInuRs0VCQ1SCpAMaHeMSZ8omggOU/0mCk2OM12D5Rgb0x/7DqoUHX7WXQxpIgQLNUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758549630; c=relaxed/simple;
-	bh=QM4Xe+Ere+bNd5tqXHknQgb0b4fotLoTht1uGvK9hSc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RyNqOJt8D09BGoVUKomwVZdCadjS5ac+1XutzCNfsjWbhNPT56i3uzPRk7fd+SXVGY7npfkNuRSewpx4mvVqE1mbkGa112W4Li8FpJYVZTJck6FvR/KCbNPy4gf4jUkD3BogHPEG5KkYcos9x9r3nQuxZzdGqQrZcARa/OzOrmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eln0plRe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A008C4CEF0;
-	Mon, 22 Sep 2025 14:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758549630;
-	bh=QM4Xe+Ere+bNd5tqXHknQgb0b4fotLoTht1uGvK9hSc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Eln0plRe+pAFA8SgXSlmm54EpxKcIi+paMDG3JraQCQqeKv3kfkI7aSh8KyYEeT5P
-	 qtkL7OJanS5YXSbdSHZ0Fh+2Fdj63MuLvlJNG99uPGnrRz93f/Cjap5OvPdBh5LbcL
-	 PkAA3kTGUlM12FjXf0ko2N3EfJfmi1tGS5CSIZrlvMC0fn4saeWl7qmrpfMfBnPOj0
-	 RAAUaaNBPRCn7TEqkctkGM9Y79NyJmLNB7vwGd3pbf4fGT1ZyWzlLYJ8pde+YUUGJ9
-	 bIZ4ENYXMho7+iofDPesxH/IJYXB8W25YzlT4aXPKz81dnLT2CgNh0yepgscJhR2r4
-	 GJENzJXwDe+2A==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: Sibi Sankar <quic_sibis@quicinc.com>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: [PATCH v2 0/4] remoteproc: qcom_q6v5: Misc fixes to prepare for reusing the "lite" ADSP FW
-Date: Mon, 22 Sep 2025 09:00:23 -0500
-Message-ID: <175854961651.817693.12196182147383570806.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20250820-rproc-qcom-q6v5-fixes-v2-0-910b1a3aff71@linaro.org>
-References: <20250820-rproc-qcom-q6v5-fixes-v2-0-910b1a3aff71@linaro.org>
+	s=arc-20240116; t=1758557234; c=relaxed/simple;
+	bh=SGd/Y77sUXn6Zr/jkMncw9ZuF4nFQwtDQXKAhq+qfS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PoP4WNpR8K+2f2RslABDdwfI7mdPIuPHse970ff/+ssBcqdHMYI8UPHSBtNVEqmOaPHg73jCJYghnGlu12Wm8S2jxFKvJdh8TPFbS93/QAUWcvafseRj/H1tCX7idLxmA0lzaKNy+ZTTKj94yLT621wm622Zt0Ul44gKkEy1FR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DRLfBTly; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b55562f3130so530797a12.2
+        for <linux-remoteproc@vger.kernel.org>; Mon, 22 Sep 2025 09:07:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1758557232; x=1759162032; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fBIeGLBQwDo9z1+Bndm5UcTEHsot/RRojoQ38PoeRdg=;
+        b=DRLfBTlyHnUlMcWvnYMgQvmpSaqcJiqzu0BEqpV1QgdubDyXcYGLmLUnJxLti/all/
+         dj/5C5VxBetClD9Mqyhzea5S+AaWykDwyvTRSXnxn7gxMI/lfVQ1WfDrN7u0ep2Ob5/9
+         XKMODoLfya6/uZJEUFyCuM7sS5CdHQHvR+tGs8jLU0s2/vmZHa4T5Dt5mVizV1z78zA0
+         3tII8HM3bLRGPauj6SO6sLU0hDEZ7bmafog/uxTmYaAPprJgh/9+cNGohmVxsDlhFDL4
+         XS/wHbJ7KMbNyTfOFgG0N+Vt5VB6Do56MBtBx3oCXEvoiGlh3XdyytqWAqKOryA0X7Yq
+         Jy8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758557232; x=1759162032;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fBIeGLBQwDo9z1+Bndm5UcTEHsot/RRojoQ38PoeRdg=;
+        b=YCxIpZovxmNm6sCCZg7RX3/Iv47OhzFc+tU7TisPOHmPHS7Q9XUvbxojqdS40dZv/C
+         gHim9Wjq2NOMpG4sNMGwJxreiea1ARNbJfNrHF9ESr8k/Emaerb8BbgQ7MKiqpAu4C+W
+         4VHRq1mBdN8AHqFFsSgRoo8nXhJoOlIBr1nStKP7TI22TCn1eoOXofOvqV/L0062VZDl
+         KQrvSYwzNhpPcbL/H1fg0ldsrXjwduwbAKFQukrxOUFZZFHqoaN1HTdWSM+Iz2jM8VAu
+         DNNM/K88vUt8yBkH1ERbt5TwF2PERvyM0dkQFDNSaROQs75eYUtwvffaRZ3mPv34PuTP
+         K+Qw==
+X-Forwarded-Encrypted: i=1; AJvYcCWyC5jGRCuPje/yhuLh8477LK/WcYni8uQ7+wZcsqv5KkyWKNA1oCBupWqUQ0RkPQE8VFJMAwiOq92kaqDD1COJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTEbNDXM2WqdCtEEkoo6aKxRo18Kk5VH2tNJquFIYeXkbP1pZb
+	0L9KQsfzY0wwWzzbQKt8XXZHEKXnKL+gy4eUs5fc5LCCAb3vc8y0IUtT/Cd6bKDMNfU=
+X-Gm-Gg: ASbGnct+Wy7QrMqMl7u83E7KbtwVuDyIhCA2NPpzIpFwhpguCWDA3ymvieQ/++plyMd
+	ZIuRGE5ZLYET6ELJMAot/EMglAKSVq4GYpYCCDhHrzBXtrN+1RYiViM2p0mD+GTFeiq11vUgKy/
+	O2W3owRZseHU14Qr1ksA470XyGDfyDan/2gEEL+ub1WWFvD04laAs4TOQi8GjGoRa9aoPHrJcfy
+	KXpiZyM86OPUP4kwPYNT8ymJlPtlBczz9q3OpWAOLKDSQDGoAL0PHtsGO289fw/PtV48ot8fhj/
+	vPw1VR1QnQcIobwx4KWY4fAz+heEpfa7EP9UeOfrwVvYd6MSN80JhfydDzf/YSYT47Pn2PzNppO
+	dUv3eaRvX96VZQ1hPyq1TrlS2pqbN7Qtq7lRaAghExLH33Yxu4jtM5nhzJtrkNDM/GSUimIoe+9
+	0nlGV2VhIqfyxoRYBHNdkhAXrjd5LK9ZaWvCg=
+X-Google-Smtp-Source: AGHT+IH2NzERQbi1RoTQELtlO5ZOlqSD7C5iySM5N99gbWGr6H6ojxxoxB4xZsUBWMUxh34xDnn+dA==
+X-Received: by 2002:a17:902:ccd2:b0:267:99bf:6724 with SMTP id d9443c01a7336-269ba50876fmr165383605ad.31.1758557232460;
+        Mon, 22 Sep 2025 09:07:12 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:4631:7929:7e95:6485])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-269803184d3sm133896545ad.116.2025.09.22.09.07.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Sep 2025 09:07:11 -0700 (PDT)
+Date: Mon, 22 Sep 2025 10:07:08 -0600
+From: Mathieu Poirier <mathieu.poirier@linaro.org>
+To: Peng Fan <peng.fan@nxp.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Hiago De Franco <hiago.franco@toradex.com>,
+	linux-remoteproc@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] remoteproc: imx_rproc: Fix runtime PM cleanup order
+ and error handling
+Message-ID: <aNF0LFkuS_hADmrz@p14s>
+References: <20250917-imx_rproc_c2-v1-0-00ce23dc9c6e@nxp.com>
+ <20250917-imx_rproc_c2-v1-1-00ce23dc9c6e@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250917-imx_rproc_c2-v1-1-00ce23dc9c6e@nxp.com>
 
+On Wed, Sep 17, 2025 at 09:19:13PM +0800, Peng Fan wrote:
+> The order of runtime PM API calls in the remove path is wrong.
+> pm_runtime_put() should be called before pm_runtime_disable(), per the
+> runtime PM guidelines.
 
-On Wed, 20 Aug 2025 18:02:32 +0200, Stephan Gerhold wrote:
-> On X1E, the boot firmware already loads a "lite" ADSP firmware that
-> provides essential functionality such as charging, battery status and USB-C
-> detection. Only the audio functionality is missing. Since the full ADSP
-> firmware is device-specific and needs to be manually copied by the user, it
-> would be useful if we could provide the basic functionality even without
-> having the full firmware present.
+Where is this mentioned?  I have looked in [1] and couldn't find anything.
+
+[1]. Documentation/power/runtime_pm.rst
+
+> Calling pm_runtime_disable() prematurely can
+> lead to incorrect reference counting and improper device suspend behavior.
 > 
-> [...]
-
-Applied, thanks!
-
-[1/4] remoteproc: qcom_q6v5: Avoid disabling handover IRQ twice
-      commit: 110be46f5afe27b66caa2d12473a84cd397b1925
-[2/4] remoteproc: qcom_q6v5: Avoid handling handover twice
-      commit: 54898664e1eb6b5b3e6cdd9343c6eb15da776153
-[3/4] remoteproc: qcom_q6v5_pas: Shutdown lite ADSP DTB on X1E
-      commit: 142964960c7c35de5c5f7bdd61c32699de693630
-[4/4] remoteproc: qcom_q6v5_pas: Drop redundant assignment to ret
-      commit: 1ae4e2dbf4cbf7c1ab2bdc89af1dc1a6af4106b3
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+> Additionally, proper cleanup should be done when rproc_add() fails by
+> invoking both pm_runtime_put() and pm_runtime_disable() to avoid leaving
+> the device in an inconsistent power state.
+> 
+> With using devm_pm_runtime_enable() for automatic resource management and
+> introducing a devres-managed cleanup action imx_rproc_pm_runtime_put() to
+> enforce correct PM API usage and simplify error paths, the upper two
+> issues could be fixed. Also print out error log in case of error.
+> 
+> Fixes: a876a3aacc43 ("remoteproc: imx_rproc: detect and attach to pre-booted remote cores")
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Hiago De Franco <hiago.franco@toradex.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/remoteproc/imx_rproc.c | 24 +++++++++++++++++++-----
+>  1 file changed, 19 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> index bb25221a4a8987ff427d68e2a5535f0e156b0097..12305f36552fb5265b0953a099ea0d561880e3ff 100644
+> --- a/drivers/remoteproc/imx_rproc.c
+> +++ b/drivers/remoteproc/imx_rproc.c
+> @@ -1046,6 +1046,13 @@ static int imx_rproc_sys_off_handler(struct sys_off_data *data)
+>  	return NOTIFY_DONE;
+>  }
+>  
+> +static void imx_rproc_pm_runtime_put(void *data)
+> +{
+> +	struct device *dev = data;
+> +
+> +	pm_runtime_put(dev);
+> +}
+> +
+>  static int imx_rproc_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+> @@ -1125,12 +1132,23 @@ static int imx_rproc_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	if (dcfg->method == IMX_RPROC_SCU_API) {
+> -		pm_runtime_enable(dev);
+> +		ret = devm_pm_runtime_enable(dev);
+> +		if (ret) {
+> +			dev_err(dev, "Failed to enable runtime PM, %d\n", ret);
+> +			goto err_put_clk;
+> +		}
+> +
+>  		ret = pm_runtime_resume_and_get(dev);
+>  		if (ret) {
+>  			dev_err(dev, "pm_runtime get failed: %d\n", ret);
+>  			goto err_put_clk;
+>  		}
+> +
+> +		ret = devm_add_action_or_reset(dev, imx_rproc_pm_runtime_put, dev);
+> +		if (ret) {
+> +			dev_err(dev, "Failed to add devm disable pm action: %d\n", ret);
+> +			goto err_put_clk;
+> +		}
+>  	}
+>  
+>  	ret = rproc_add(rproc);
+> @@ -1158,10 +1176,6 @@ static void imx_rproc_remove(struct platform_device *pdev)
+>  	struct rproc *rproc = platform_get_drvdata(pdev);
+>  	struct imx_rproc *priv = rproc->priv;
+>  
+> -	if (priv->dcfg->method == IMX_RPROC_SCU_API) {
+> -		pm_runtime_disable(priv->dev);
+> -		pm_runtime_put(priv->dev);
+> -	}
+>  	clk_disable_unprepare(priv->clk);
+>  	rproc_del(rproc);
+>  	imx_rproc_put_scu(rproc);
+> 
+> -- 
+> 2.37.1
+> 
 
