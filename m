@@ -1,74 +1,74 @@
-Return-Path: <linux-remoteproc+bounces-5315-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-5317-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C2BDC34D8E
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 05 Nov 2025 10:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 16C9AC34DF7
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 05 Nov 2025 10:35:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 286944FF503
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  5 Nov 2025 09:24:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EA4184E4C9E
+	for <lists+linux-remoteproc@lfdr.de>; Wed,  5 Nov 2025 09:29:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 017192FF643;
-	Wed,  5 Nov 2025 09:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B56602F99B3;
+	Wed,  5 Nov 2025 09:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hFloza97"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nJqI7A8L"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D049261586
-	for <linux-remoteproc@vger.kernel.org>; Wed,  5 Nov 2025 09:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F402FD68E
+	for <linux-remoteproc@vger.kernel.org>; Wed,  5 Nov 2025 09:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762334498; cv=none; b=t8EofORA5VStlj7VQXjg7Oz1ZhgR+469pDfTB/e5bPhUZvDIleW5+g/hekCCW59RqeY/E+dOglClKRXDk+cgt59J8Hum2+FAAh8S6681pwwCHb0k2Gvy3MzCoVpQInoljllfigOOFPDZcS6LatqsdncylvESFN8coch2sHsWGcA=
+	t=1762334965; cv=none; b=GOf+mXGTovJF4d8XDR+9jtAs9J4k1tHW4d+t7Lpgmue1L7De7VBUNFCha373X+HbXISkLq0vLMSm2zgNJ8heVxAumScEacGjxJm/pARzLLJr2GuvNwjQXb72/uDmnSIzBKpidSdb3Q6g9eK+PXBYI/PxBK94FPAOqOq044wNGX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762334498; c=relaxed/simple;
-	bh=r6IAr6ThWrXT0VQC+S0LBlsjUYHMVkUu3AebSU18ydI=;
+	s=arc-20240116; t=1762334965; c=relaxed/simple;
+	bh=0XgQsaPK8SkvjG5BCRqme8oV5Z9wnVFe1B2vfhJEqDo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ffZnIjt08uHegXuxWTW3rRTUHWWly5HhbO0eP8MWqXmvv3NNW5yYXoeipMt3aBGmXkzLRqUvIzHzy5RhBACQkHLa8YeNnHCOVkYLEt6Bz5Z0juOKr6gMtnmsAJGuY3WT1vIZ1s7Ga8vp9fKU07etjEJ1YXgQY+G+yMNE6Ksgqtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hFloza97; arc=none smtp.client-ip=209.85.210.172
+	 To:Cc:Content-Type; b=JwL3qOne5Fm9xJIrdxk146kYZDEPFOguzHDxxV7t/sZgnqo78x8xatpuebZT0TfQCgFjVQ2upkX8hr5H58++zzBPPLGatzUFxBmMEz3oLMkSGLvHY7WfnDn0phql1R/7f9EP83qYX8HqYq2/fTJGLulolCBsY0KWuoLIoYE6Av4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nJqI7A8L; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-781206cce18so660172b3a.0
-        for <linux-remoteproc@vger.kernel.org>; Wed, 05 Nov 2025 01:21:37 -0800 (PST)
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b6329b6e3b0so468103a12.1
+        for <linux-remoteproc@vger.kernel.org>; Wed, 05 Nov 2025 01:29:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762334497; x=1762939297; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762334962; x=1762939762; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r6IAr6ThWrXT0VQC+S0LBlsjUYHMVkUu3AebSU18ydI=;
-        b=hFloza97B5w7DsfQRSi4Mjmbe20uloSJ7wYu1EimKgZ6DZ3Na5V6ADVnzVomaUu6u6
-         mD1l3vSGK80x7M8o1hqNS7Kz5vx1s4PwdNPc2T3YQwEii5ZmhXRXNXhsur+Ud+lIKhV5
-         xwkFUK1aJPCYAGf+2+ty92lkFxC3UMTu4TKnlDTroYeZk9PB6s35t4XWsJJCe1A563RD
-         GLfOuHwGXxRxbkh25qjzZdueFH0lvzkdhdcIEtOoHBwsKyLVVFvtFK47Q7sDGuEb//4i
-         dNGfA5t5cq+V1oHpm3m49A8ja5DRWu/jz3nne+JTCF/cRM9zb9u61eeghGllBBq9ng7k
-         CZ1A==
+        bh=txxoHQsD9SBr+0uAjaOafgKfJPgFXKi5Q4JCWLCgjxk=;
+        b=nJqI7A8LPzJlSbQA29EphnNUto43lCTj51ndnNIF1NN/I6hrJogOdP9hdNM1weaWDD
+         6jh6VUh7oJ9hrC7br6J8eCpPdLqb4J5036zW7kwCAQ9incIaayQ9+QsnsaS8hrjDxayq
+         bdV6kUiR31hidRXMrftwZcGlMlwk75xqAlquUQ5XzJDJyZ/hm7Bi9Fx1wviv933BrRxD
+         i6wV3p24RemznNZy5BppEiMUQfvrc0icGBcl88Jj2nERxX+f0PcOHM7Fg8b8Bp8Ys6An
+         6DUu31QP4wTbF7RCVBCnoxhifgX6OgbOoxxMTx9xJQ50IYcyvDpoU1r6SaiShdltZTWv
+         1bQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762334497; x=1762939297;
+        d=1e100.net; s=20230601; t=1762334962; x=1762939762;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=r6IAr6ThWrXT0VQC+S0LBlsjUYHMVkUu3AebSU18ydI=;
-        b=w3R7GDIiqy/FTh+bew2gGzTlQAsk5Q+MQpFPy29wouXQFxBE/2DPprMWCVoyTZuiFm
-         zzndWxbunnmXYuOEhABnZjFtmN+RJ9H0z81qlcfqCh95Uo/uxuXmVzBxFsaXRDAVkoka
-         LMOsL16Q9RBQSaB9dX7sAUjGHWq1GimtS3MBwWOXc+Pg1yCtZki76+kHjfr7eB2XE6JZ
-         ieJ5QKyZXcZV2q/R62Vz/Q5ao6u8DAulZxW91Yi9dwxLbw5tXUqDiTx9F7NQr68nPSfl
-         p48BDYTWjA72ADfcnztCT3VnEh+tIwQ12kAghz4y84MOPIW8Jt4JI702f2OljJ0ixKAU
-         9C7A==
-X-Forwarded-Encrypted: i=1; AJvYcCUwU6NoNo3YTbAMoMx5vzyLxHzk/zqLnTe73kvjyisGtYUM+9xBLTsxQAXgcw8KV5kR5OsqzqJnmp+WMcIIcdE8@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTcK8IBAOW5ENfVJbsAgC8zKEaA6rY9p2bRa/SprX5J/GY+fSm
-	LdRf1RugQmBKeIsyoSVOTrlQKwvQ8ly51kAnFaPMKBhyiho1lawMyJ7bMlZ9Ao6erhHZhRKD1vq
-	gR0MQ2F9p5crHDZ0BvFGXxvYXxfA5cZE=
-X-Gm-Gg: ASbGncvD2jscz0rQjryyqxyjGsYoIGGdqtoPRwcMfjEIcNWMgrOegMzmeUHdZjEjt3u
-	6lw8Ipn3TCbjqsvO3Spy8pfqyXWbGg9z1zJXQ0V8uZ8S2WLU48yNnmQUJSVlkiNAJTeA1ZVwps5
-	t7BfKfIeGayH2JzIDh5qc4EH/iXfAJ6/2zHqMGN9tHqsQBqA/29XT17Nlo67//UpYMUyTuK1jDQ
-	wt/qZBBgnxxErVUfmFAWHZBwCCswC1v962/mMiz3533RyQpXV8unlRd5Q==
-X-Google-Smtp-Source: AGHT+IEhLgnnarruJw6eIIB+8bTnN8uYAF3Chn6W7iyK13efG69zCQaoyAaLYmuTmnpZholD6kqVshKjrwpDBWN3vSI=
-X-Received: by 2002:a05:6a20:d049:b0:345:4b5a:16b7 with SMTP id
- adf61e73a8af0-34e278f999bmr7748938637.11.1762334496625; Wed, 05 Nov 2025
- 01:21:36 -0800 (PST)
+        bh=txxoHQsD9SBr+0uAjaOafgKfJPgFXKi5Q4JCWLCgjxk=;
+        b=REcanwXUWCgQRUy1oiygED4SFlrYX1htz0Pb1V173KsbvUFLBvXi8NHJK17huoDVsH
+         Vhy3ZvhEIqOyogX02xV0jjL8zkIYcOU7EjpnEn3kurSuMmlvvcNGfNFYthUkav/uDfUM
+         CxzZ7iCTDzXDRfSPTY3070CHoGbeoDJzniG/ORs6ACESLZpi8Xyu6AIBVtAPzzL94+KA
+         2iiQichSiPXZORbhLChWuBmmWGFTWir2mYJvBR6Rl6PcadyfHpO5JBtVdlcCKZwWnFmN
+         rA40o6MbkeEsBldsYmsBHrbcE/azKSSjstrJniVkf78pumCHzx7ZJAExXeaCaoKwYcPj
+         DpWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXbZEuiTTYxAXktHk7F1g+UP/MOyjqOkNY7OwpN7lX+9TDRxns1uaFYlvoUKPLJczzK4cqcm+mmKilDddd/6pIU@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy24K6qDvc/x9bsTd3TKRAY25cGT82SxvpsLGGGVhttS++N5m7U
+	+2ftkrDy0TutmDbMxZXGbgDcHdv8mLUjIPQ1WcmS0CCOJXEAklxTOpbj1A53TsIkKhddpz9F0xv
+	aspvi0VQ+CYAFVc+dtsVkWVZBN0cq920=
+X-Gm-Gg: ASbGncsqtsFH3c4VfJwj0RSHJhlPlus+eqIHCAY+xGj/o3wakCYiQ/g3LOusOMkqwK8
+	U0P6ZL4qWgd5h7PEgHHHExSFf5ipSwNhjrrbf3ugtJFpw2hGYPdDsJGvYLmtSwLYK0UqKPLgPVn
+	YQZzhRveM5+bAaN2hzvlQAAnecNi92bDvP/ZDheQR1+pkDkfDXob9tmmu8jfeCbGoBhyVZBHe9L
+	PPxTP7QXynYME70Y+oGB6i7BMNLkQ9g051xLvH0XifbEqEKS9bYfHEY5w==
+X-Google-Smtp-Source: AGHT+IGkCxRvJh3fC5yidm37chqdIHgljJdYABqu7mHMgdmlemqRQI0lkZmwfrypszqAHRlZ8j+gATWb4FCpIOGaggI=
+X-Received: by 2002:a05:6a21:999f:b0:334:7e78:7030 with SMTP id
+ adf61e73a8af0-34e278f99b1mr8298964637.8.1762334962544; Wed, 05 Nov 2025
+ 01:29:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -76,51 +76,61 @@ List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20251031-imx-dsp-2025-10-31-v1-0-282f66f55804@nxp.com>
- <20251031-imx-dsp-2025-10-31-v1-3-282f66f55804@nxp.com> <aQUEzx6sobI4Yes5@lizhi-Precision-Tower-5810>
-In-Reply-To: <aQUEzx6sobI4Yes5@lizhi-Precision-Tower-5810>
+In-Reply-To: <20251031-imx-dsp-2025-10-31-v1-0-282f66f55804@nxp.com>
 From: Daniel Baluta <daniel.baluta@gmail.com>
-Date: Wed, 5 Nov 2025 11:24:04 +0200
-X-Gm-Features: AWmQ_blaxwVbzKBmJKN_0Fj3HFefT03QXEkDQ4Lh8h-h3RbucXTuRrqR5o2qb58
-Message-ID: <CAEnQRZBNzo6RKjNf4JxxxjxtLCFfEGMMt2fSK4MdVeSjtF5aag@mail.gmail.com>
-Subject: Re: [PATCH 03/11] remoteproc: imx_dsp_rproc: Use devm_pm_runtime_enable()
- helper
-To: Frank Li <Frank.li@nxp.com>
-Cc: Peng Fan <peng.fan@nxp.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Shengjiu Wang <shengjiu.wang@nxp.com>, Daniel Baluta <daniel.baluta@nxp.com>, 
+Date: Wed, 5 Nov 2025 11:31:49 +0200
+X-Gm-Features: AWmQ_bkrt0ospuWqleJ6w_sx1LCaBE7SCRpsPmV7R0cWe73tR0hYLHwUvfH1Zeg
+Message-ID: <CAEnQRZAOTFw=sBppHTYQAdfDBuNqkqk6gVO4FyP0EBsva3Oi+Q@mail.gmail.com>
+Subject: Re: [PATCH 00/11] remoteproc: imx_dsp_rproc: Refactor to use new ops
+ and remove switch-case logic
+To: Peng Fan <peng.fan@nxp.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Shengjiu Wang <shengjiu.wang@nxp.com>, 
+	Frank Li <frank.li@nxp.com>, Daniel Baluta <daniel.baluta@nxp.com>, 
 	Iuliana Prodan <iuliana.prodan@nxp.com>, linux-remoteproc@vger.kernel.org, 
 	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 31, 2025 at 8:50=E2=80=AFPM Frank Li <Frank.li@nxp.com> wrote:
+On Fri, Oct 31, 2025 at 11:20=E2=80=AFAM Peng Fan <peng.fan@nxp.com> wrote:
 >
-> On Fri, Oct 31, 2025 at 05:08:32PM +0800, Peng Fan wrote:
-> > Replace manual pm_runtime_enable() with devm_pm_runtime_enable() to
-> > leverage device-managed cleanup and simplify resource handling.
-> >
-> > pm_runtime_disable_action() not only calls pm_runtime_disable(), but
-> > also calls pm_runtime_dont_use_autosuspend(). The current driver
-> > only calls pm_runtime_disable(). But this should be fine here to use
-> > devm_pm_runtime_enable().
+> This patchset aligns imx_dsp_rproc with the cleanup and modernization
+> previously applied to imx_rproc.c. The goal is to simplify the driver by
+> transitioning to the new ops-based method, eliminating the legacy
+> switch-case logic for a cleaner and more maintainable design.
 >
-> looks like this paragaph is reduntant.
+> Patches 1=E2=80=935: General cleanup, including code simplification and a=
+doption
+>              of the devres API.
+> Patches 6=E2=80=9310: Transition to the new ops-based approach, removing =
+the
+>               switch-case structure.
+> Patch 11: Remove the obsolete enum imx_rproc_method.
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> Peng Fan (11):
+>       remoteproc: imx_dsp_rproc: simplify power domain attach and error h=
+andling
+>       remoteproc: imx_dsp_rproc: Use devm_rproc_add() helper
+>       remoteproc: imx_dsp_rproc: Use devm_pm_runtime_enable() helper
+>       remoteproc: imx_dsp_rproc: Use dev_err_probe() for firmware and mod=
+e errors
+>       remoteproc: imx_dsp_rproc: Drop extra space
+>       remoteproc: imx_dsp_rproc: Use start/stop/detect_mode ops from imx_=
+rproc_dcfg
+>       remoteproc: imx_dsp_rproc: Move imx_dsp_rproc_dcfg closer to imx_ds=
+p_rproc_of_match
+>       remoteproc: imx_dsp_rproc: Simplify IMX_RPROC_MMIO switch case
+>       remoteproc: imx_dsp_rproc: Simplify IMX_RPROC_SCU_API switch case
+>       remoteproc: imx_dsp_rproc: Simplify IMX_RPROC_RESET_CONTROLLER swit=
+ch case
+>       remoteproc: imx_rproc: Remove enum imx_rproc_method
 
-This is not redundant! But it can be phrased better.
+Thanks Peng patchseries looks good to me.
 
-```
-Current code on the cleanup path just disables runtime PM for a device.
-
-Using resource managed version devm_pm_runtime_enable registers a
-cleanup callback that
-sets autosuspend to false and then disables runtime PM for a device.
-So, basically the same
-functionality as we don't use autosuspend anyway.
-```
-
-thanks,
-Daniel.
+Reviewed-by: Daniel Baluta <daniel.baluta@nxp.com>
 
