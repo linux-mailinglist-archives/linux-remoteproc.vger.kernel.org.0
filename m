@@ -1,152 +1,111 @@
-Return-Path: <linux-remoteproc+bounces-5383-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-5387-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88B70C48771
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Nov 2025 19:04:46 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1B13C489A0
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Nov 2025 19:38:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BFA6B4EFE84
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Nov 2025 18:03:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E9D334F51D0
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 10 Nov 2025 18:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E6322E6CD4;
-	Mon, 10 Nov 2025 18:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F6F732D0CE;
+	Mon, 10 Nov 2025 18:30:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="npM/vE2E"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="Xo2Nsqbw";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="NvqIc479"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1CA257845
-	for <linux-remoteproc@vger.kernel.org>; Mon, 10 Nov 2025 18:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798B4329E67;
+	Mon, 10 Nov 2025 18:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762797789; cv=none; b=eqyzYI/0gQoOnXTG8Qau6n7wxR148aVuxqy9HfVRZPk0rQUdslEj4NTegrDTZDMRrX5GMjdfVu7ylSgYBdTcL3JkXH46ujX1z/m+1KIGce0y+kkSGKsMlyZkTHP4gX8YDujbngtzY3CgiOf5W9tpH375pPWDHbyhRWzI4yvd/JA=
+	t=1762799450; cv=none; b=eM9rG8LcHzDxa+1/McHBgNmtFVXcKsdZvj0min+TXgWLxmt92gsrEOB3cfRIK9zsftr4qKMlB9lKKlRN1QWCw8eu+gfezY0Rp9BHfs82x7zWIEHCpEyMGpylCk7JEXwhwjTXgm2xOHxNd5I60PHMja4oLzETNSDDwvWm++Fe5Jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762797789; c=relaxed/simple;
-	bh=j//I72pxjWcMF3asq98y3R+83xTar6DU+rEGXdBJHDQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QMVZTuWTQjlNWGSiyMgN7CLloksqyvPs3sbx8mqtWqT86Ve35ILzwOhUjVfOjZas/63cgoaPmQ8DVZU/eWAuHGPLh+z6moBMF+IJ4S7B75FagtAzb+aAYM0j+uxOGZkULO74fTo5d8e15nbbrr1qS9C1tV12nQpTG1B16miQl9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=npM/vE2E; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-343514c7854so15819a91.1
-        for <linux-remoteproc@vger.kernel.org>; Mon, 10 Nov 2025 10:03:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762797787; x=1763402587; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EXgY6uiuq0FwYuYwuPfUmG8ZQgy+HUaTGGXE58Lpr3U=;
-        b=npM/vE2EoAxID6JMW6FWaF7PNcYjewj5XX3RGoeC3BTWDRNPt6hyQ4WqA1+olnR0dw
-         kvc8B5VaztA1c+c+gCpScU2j392vT39QAtJJpWsSTX/kO8BUoBTW/Mp5tg/ePUVxN3Uz
-         i9jT9upRLHUWTlE56Q89xSMHhFPd8TCntZa8VlQF9W263UYwjIXE+gJUmhPDIujOM6LG
-         ToUfayUQn8XlWQCutMF9az3aU8uxLR/4AoCe7ee3b7EVPEdJ38faSeQsYj7ug3y8k21U
-         7moYXSJ2liPsOlckubQKHG7FLPWQLCwy+LqJ94OqDTLZ0tH67L+i8nxnjorh1nzB8oZb
-         WuYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762797787; x=1763402587;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EXgY6uiuq0FwYuYwuPfUmG8ZQgy+HUaTGGXE58Lpr3U=;
-        b=T0yt05jCmhsEHfMo6LQvdEvoJQ6XOeG81D7Gs39u0j3htPwyCy9vikWPSjw47CDUmx
-         BoO0k0M5CDD5UeO7ACFTlyKLDB/YiEzYo97GhX9Zhdk1qRHPFCD4etqXGragrKH1mZTM
-         TJp0WZ3q88hMkXfI3PxfyWbIxXfgaSVO49RgjCL0LcygB/QKUS68obKs1fh7fsuqZ5Af
-         pDrIY62Ulh/YrsUVgwpxfrfk0F8G8myIPzDofobXcUBz7LUDn78m6szbMETDAdUhOgID
-         4HDH3+ahmd8o+kjhfAbmS7jVPu8Bx511YA9WJb+E0V29Hq32Hq4UJ6fibw3oBWx93Pmd
-         D+/w==
-X-Forwarded-Encrypted: i=1; AJvYcCWL93IPz+OO6si6mxcuxLT35Vf0e9Urwi5d9feH4Xhr+3MgFDpHBTFxx7AfieDFcaproNfCj7XDxvQr464kGz7o@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5TDJ+WY+qd8MEeY2nDoVuVKOUSIlmIHSEdGIV8iHuga4P4jv/
-	xiZZslB1/3PtLOgdv8s8MFre32CKQWlYR07QTyGShaaURZ06G2WhihKOzToz7IYGtEI=
-X-Gm-Gg: ASbGncsC8xpQIvzC3NR04Sqd46Vp66mldr5yR02NmUD2Gu+AfRBxRtw0GsTBXNYWJXJ
-	oxXZTpWS2gzFfk4oHU81LWTCCHBTv116yUHr1a3mmH7a592I838G4w1tZbkuTlnZTS2X+dbwJAm
-	H+NaRDq5FxW4gmwofqhRtWB8l1F7mtU89fY7ePAnmKTGXcEhWw6KrPydhFckFCSTOCkkGcQ2OEE
-	TKDuQtkYgoR5cyjRY+JCQ6cc6RJRp2bAo/3Xud/JFpOqz4XPSxVYBftv9QBLfIF2Ds13s7cLqWO
-	F1HyiJebNdUCh15cMlc0i6NvCsOBkJOOc2MYW6n/Jp71zCC62F9f/pS/F8oROvHan0DhRwEC87a
-	v51reVEN8VKB3wvCXVCd0y/+Dl+Y7T+CCBmuAZbVQi52JJrYtZ0rTCX6r8jQdx5n7vEcgejvoFI
-	bj/uh32MJ7v9xX
-X-Google-Smtp-Source: AGHT+IHC7Imfj7cGkhR74bYmKh2j9kSgYdYuG4G34KbAjsmXPPbwIE4U9hQteTj2lzNkj3tD+sm36g==
-X-Received: by 2002:a17:90b:1e51:b0:343:89cc:6f23 with SMTP id 98e67ed59e1d1-343bf2540d4mr278216a91.14.1762797786874;
-        Mon, 10 Nov 2025 10:03:06 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:e689:789c:c35:41e7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34362f1f231sm9522807a91.10.2025.11.10.10.03.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 10:03:06 -0800 (PST)
-Date: Mon, 10 Nov 2025 11:03:04 -0700
-From: Mathieu Poirier <mathieu.poirier@linaro.org>
-To: Peng Fan <peng.fan@oss.nxp.com>
-Cc: Tanmay Shah <tanmay.shah@amd.com>, andersson@kernel.org,
-	linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/3] remoteproc: xlnx: remote crash recovery
-Message-ID: <aRIo2MUol09Onu9B@p14s>
-References: <20251028045730.1622685-1-tanmay.shah@amd.com>
- <20251029032422.GA7297@nxa18884-linux.ap.freescale.net>
- <b9ce8b9c-6391-47fd-b7b5-be5cddf9cd4e@amd.com>
- <1bb3a121-614d-4040-9cbe-505ccb7a7fcc@amd.com>
- <20251030042124.GA18595@nxa18884-linux.ap.freescale.net>
+	s=arc-20240116; t=1762799450; c=relaxed/simple;
+	bh=r6hjCFY7ZDfh8HONhlJU3D/wYlGjhLFGXKeOM2SCKyY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BsU+TTLe8lf9SJEEL3E7GJW9Uj05JA5DvIAQtyCpisAsYn4RSLR5JcriyG0u7IdaQ6U+ROdZrXpwtzWIdXF1sNTyqCahs/9hmuTPbJWlbgFaMEEgoUb4usNC7MDWi4HrlIzlJlMkvk1pT+uM6qLy3w3+bf8OfYv3M7QXfPTapR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=Xo2Nsqbw; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=NvqIc479; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Date:Subject:From; t=1762799389; bh=31Nk15njuGNIYaJvc37e73N
+	QXmUsWSKUyoBRg+NCptg=; b=Xo2NsqbwNspgbJaG/FeBgd8/X0SMKwTgngQNC3h0aiMGgOFJFF
+	IuDcSVur0Ee1drhmJaUnjL3oE7wE38n2VHRukRFFiI3lyd/ar5GbThC1TkvEDgyq7Uz99ELK7h7
+	7mtG6Xza/BGCumoLn0plCChY14z2tYToJ4xlwvObGGsbet8i6ejkCtESUJfy3jhTSrBbYLuHwpA
+	u8nTL2ON3qGLncJtmW5mcliFp3YkjixoUo8oB9M/4E42cVDv1C0lr7bho7yqGjXigIyFDlcvfxk
+	IlvWUGFrRs1kopxLcFWsz6W77/tEUzcDLUj7BeKqVQ94JSugw1vSmYG4WbQUtM++Mpg==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Date:Subject:From; t=1762799389; bh=31Nk15njuGNIYaJvc37e73N
+	QXmUsWSKUyoBRg+NCptg=; b=NvqIc479J2hlHJFLojgrh5XyxhLrPVBWyl6OetjooMq0O8rqkZ
+	Lq1PTP5ZNPdWX/6msyItHMp0PThWWFePixAA==;
+From: Nickolay Goppen <setotau@mainlining.org>
+Subject: [PATCH v3 0/3] Add SDM660 cDSP support
+Date: Mon, 10 Nov 2025 21:29:42 +0300
+Message-Id: <20251110-qcom-sdm660-cdsp-v3-0-cc3c37287e72@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251030042124.GA18595@nxa18884-linux.ap.freescale.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABYvEmkC/33NTQrCMBCG4auUrB1J0jamrryHuMif7YBNaiJBK
+ b27aVeC4vL9YJ6ZSXIRXSLHaibRZUwYfIl6VxEzKN87QFuacMpbRpmEuwkjJDsKQcHYNEHbKds
+ KKQ6KSVLOpuiu+NzI86X0gOkR4mv7kNm6/sEyAwq04Y7L2mre6dOo0N/Qo+/3IfZkFTP/VLofC
+ l8VW2ujGyGto1/KsixvrQPQT/sAAAA=
+X-Change-ID: 20251018-qcom-sdm660-cdsp-59ad56867a18
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ ~postmarketos/upstreaming@lists.sr.ht, linux@mainlining.org, 
+ Nickolay Goppen <setotau@mainlining.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762799388; l=1097;
+ i=setotau@mainlining.org; s=20250815; h=from:subject:message-id;
+ bh=r6hjCFY7ZDfh8HONhlJU3D/wYlGjhLFGXKeOM2SCKyY=;
+ b=fcdDXLO0PLxddxH6w0ZXBjGqx18n7GGwDSgBV3tNeZXhwEpmnSwf4mpHiIE8Q2FUSI30AP1lz
+ Eq5MXPiQ0thAJqTIWfBPrHgRc4Zpm0fMnUBN5FOpmUVPMVq/7lV48yp
+X-Developer-Key: i=setotau@mainlining.org; a=ed25519;
+ pk=Og7YO6LfW+M2QfcJfjaUaXc8oOr5zoK8+4AtX5ICr4o=
 
-On Thu, Oct 30, 2025 at 12:21:24PM +0800, Peng Fan wrote:
-> Hi Tanmay,
-> 
-> On Wed, Oct 29, 2025 at 06:51:51PM -0500, Tanmay Shah wrote:
-> ...
-> >> > 
-> >> 
-> >> Hi Peng,
-> >> 
-> >> I don't understand why it should fail. The patch simply implements
-> >> rproc_detach() -> rproc_attach() sequence.
-> >> 
-> >
-> >Hi Peng,
-> >
-> >Thanks for testing the patch. I appreciate your quick response. I think
-> >rproc_boot() should be used instead of rproc_attach(). That should probably
-> >solve the issue you are facing. I will send v2 with this change for you to
-> >try.
-> >
-> >Thanks,
-> >Tanmay
-> >
-> >> In your case, when you do detach -> attach via sysfs that sequence works?
-> >> If that works, then crash recovery should work as well.
-> 
-> sysfs does not have attach option, only start/stop/detach are there.
-> 
-> >> 
-> >> Could you give steps how do you generate the crash?
-> 
-> I have not look into the details on why it fails at my side for the 2nd time.
-> 
-> On my board, the M4 core use watchdog to reset itself and notify Linux, then
-> linux side imx_rproc driver will do
-> "rproc_report_crash(priv->rproc, RPROC_WATCHDOG);"
-> 
-> I will give a debug on the failures in a few days.
->
+This series adds an ability to load and boot the cDSP remoteproc
+found in the SDM660 SoC.
 
-So what is happening here - Peng, do you plan on providing more debugging
-information? Tanmay - are you planning on sending a second revision?
- 
-> Thanks,
-> Peng
-> 
-> >> 
-> >> Thanks,
-> >> Tanmay
-> >> 
-> >> > Thanks,
-> >> > Peng
-> >> 
-> >
+Signed-off-by: Nickolay Goppen <setotau@mainlining.org>
+---
+Changes in v3:
+- Resend after 2 weeks passed with R-b's and T-b's added.
+- Link to v2: https://lore.kernel.org/r/20251019-qcom-sdm660-cdsp-v2-0-0d3bcb468de0@mainlining.org
+
+Changes in v2:
+- Added missing constrains for both aDSP and cDSP.
+- Link to v1: https://lore.kernel.org/r/20251018-qcom-sdm660-cdsp-v1-0-042e283db29b@mainlining.org
+
+---
+Nickolay Goppen (3):
+      dt-bindings: remoteproc: qcom: adsp: Add missing constrains for SDM660 ADSP
+      dt-bindings: remoteproc: qcom: adsp: Add SDM660 CDSP compatible
+      remoteproc: qcom: pas: Add support for SDM660 CDSP
+
+ Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml | 8 ++++++++
+ drivers/remoteproc/qcom_q6v5_pas.c                          | 1 +
+ 2 files changed, 9 insertions(+)
+---
+base-commit: 93f3bab4310d4ff73027cc4f87174284d4977acf
+change-id: 20251018-qcom-sdm660-cdsp-59ad56867a18
+
+Best regards,
+-- 
+Nickolay Goppen <setotau@mainlining.org>
+
 
