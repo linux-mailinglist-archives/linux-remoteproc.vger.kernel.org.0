@@ -1,207 +1,114 @@
-Return-Path: <linux-remoteproc+bounces-5422-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-5424-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54A08C53A92
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Nov 2025 18:24:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10844C549CC
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Nov 2025 22:23:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51333620C1A
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Nov 2025 16:37:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB9473A5B2C
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 12 Nov 2025 21:18:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 918633148AA;
-	Wed, 12 Nov 2025 16:37:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1AC22DE70E;
+	Wed, 12 Nov 2025 21:18:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZrpAvmtL"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="G1lxgetf"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A632550AF;
-	Wed, 12 Nov 2025 16:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3402874ED;
+	Wed, 12 Nov 2025 21:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762965464; cv=none; b=cNg243BdKyOkUOSTfYMtru/Ix1UmeHuCNbO4Oz+RJVmzCUNk3XRyJLT4KzdfqdzLuLhno1KzPGn+sX4qLkWhPiiHXQyQGttiw3C0zM4OKnmWVXk9bMDSMKyYmzblpc84DmLutU8zYlI0XiapN382xss5oTGhHZNoM1Xbnku0lPY=
+	t=1762982296; cv=none; b=m9g66A1OJjgnMqmvCDYXqDck0RUJGG1qg442pkhHDNS0tc4ugNfWnyoEC2/elubCobxG2gA9HDArf/GWPNli7WRA7pJWCssQcY/3cYRmXPVBdX0F31TfMvhjYFJ91tcwPq+cNG+lz2ep6NrscCBZBFLdtL0KKIP0wl7GiGCsgso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762965464; c=relaxed/simple;
-	bh=l4GXyKV/Cz3Ck66FAmBPqfmbKasFWSaJ+quqBmgBNs8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r1f8i0jiyNuQnb+434q1bmXEXJBAyr945LGGC66y0od2emoQ64lYyV2/HtUi94JfwYYaRe9teYDex9CKojIF3Ynvpfh6C98Fxai/wguFdDjyuY0TclFMsDJ++KPxrjn7Uj4BMO9NFw0ZjhNspdWuRGM8gseRD0uzQ+DnJhHwr68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZrpAvmtL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8849CC19422;
-	Wed, 12 Nov 2025 16:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762965464;
-	bh=l4GXyKV/Cz3Ck66FAmBPqfmbKasFWSaJ+quqBmgBNs8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZrpAvmtLt9Ubvlp82eqYMhmf/3mDVFBfrpDB2DtxMTRawTJS9mzRHdt569DiVjjCG
-	 PcVWx2OdnuD67pWlLwrw8R/mbqLXZtm3TztFFwQt4nhp4333UT1Ey+VohkBXIcxpuo
-	 LJNeNGWUULQjp1dv/SpYWpI1XtjjFDVyZUDpdrn0dHFUNrwk9DKeu97ly1VZHGNc/n
-	 8fEgxpEW3yiP8zzmsm1hiDiPxIcxJ7da4YM3MH9ozx4nSymKxIN4XQRvY0GU++qpK7
-	 4GT1yvGTZnHsYDPnOCcL650IxlkivIZnwclQF6+KtPl9TtNtfEb/lQ8+X/UyHb5lBF
-	 DM3AtQHqPCr0A==
-Date: Wed, 12 Nov 2025 10:42:01 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Dawei Li <dawei.li@linux.dev>
-Cc: mathieu.poirier@linaro.org, linux-remoteproc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, set_pte_at@outlook.com, Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: [PATCH] rpmsg: char: Fix UAF and memory leak
-Message-ID: <mxctlnzpywrdahcvuahmxaa4h5vttz6p5yiu7jvtsemahjcsgj@bflvnu7viwff>
-References: <20251112142813.33708-1-dawei.li@linux.dev>
+	s=arc-20240116; t=1762982296; c=relaxed/simple;
+	bh=cw8aLLstIpkNY61VL2Zf1icBfgfy27WtaHcCKq84PYs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iJ67RAnxvmIxgn6Aib4R+L09MQx6znFDAdny/ambkxnM4xYqM86wVuCoQ5g+ISan/EZ+nqokfbojMw5JLEQCXy82lhtcJO7+2GtmHgJ9nYYPp60/m2bRKv4KW+n9C4oPNZaU6POhC+wb8I9uqJUwfYG1RpCAztiyIkBQyZ+8q50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=G1lxgetf; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=gdSVwVNFWa3UDXoRV1/YfYWA8WTDmQgTkzVuCwG7akc=; b=G1lxgetfC7Zd7s86zg/08QZrTc
+	Whr63hWvH1OMA9Foe7hxbzxeXVZSGhbueF4cV72JQ9GqPqt1rBcPr0gS7ZxMaM28pYZKoTeLgJcoC
+	WWiRgCfgri/C042sU1nOHCQMFC/knOU+VZcNYYN5KFNbFTCO3FABOTnrxAJpFgsA2kgz3jvE1CUZL
+	/WTVNDygkdnn3dsUdKeslaluUKlvWoGYfUeoYnVP7QBkl6QQuDIg36L/uu1yVsXz2ykCe0pNSmDCT
+	ptfdh+XcpjW02zTXN/Wx8a2+fNSh8OUjHgwYxmgJhQ3jrDSZT/yRlbsWBopkYKcU/SW5CiHMHkGzq
+	pMwA29iw==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vJIEB-00000009Wvw-0PB3;
+	Wed, 12 Nov 2025 21:18:07 +0000
+Message-ID: <1dd236fc-26f7-4c02-b183-c3fc13d24767@infradead.org>
+Date: Wed, 12 Nov 2025 13:18:06 -0800
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251112142813.33708-1-dawei.li@linux.dev>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/5] docs: staging: gpio-rpmsg: gpio over rpmsg bus
+To: Daniel Baluta <daniel.baluta@gmail.com>, Rob Herring <robh@kernel.org>
+Cc: Shenwei Wang <shenwei.wang@nxp.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Jonathan Corbet <corbet@lwn.net>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>,
+ linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-imx@nxp.com
+References: <20251104203315.85706-1-shenwei.wang@nxp.com>
+ <20251104203315.85706-4-shenwei.wang@nxp.com>
+ <20251112125741.GB1319094-robh@kernel.org>
+ <CAEnQRZB4ymvSERKhJW=PAk5xA2JYD=i4wzkbumj_g5S8BjONjg@mail.gmail.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAEnQRZB4ymvSERKhJW=PAk5xA2JYD=i4wzkbumj_g5S8BjONjg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 12, 2025 at 10:28:13PM +0800, Dawei Li wrote:
-> Potential UAF and memory leak exsit in exception handling paths for
-> rpmsg_anonymous_eptdev_create(), fix them.
 
-Please describe the condition where this happens.
 
+On 11/12/25 5:35 AM, Daniel Baluta wrote:
+> On Wed, Nov 12, 2025 at 2:59 PM Rob Herring <robh@kernel.org> wrote:
+>>
+>> On Tue, Nov 04, 2025 at 02:33:13PM -0600, Shenwei Wang wrote:
+>>> Describes the gpio rpmsg transport protocol over the rpmsg bus between
+>>> the cores.
+>>>
+>>> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
+>>> ---
+>>>  Documentation/staging/gpio-rpmsg.rst | 202 +++++++++++++++++++++++++++
+>>>  Documentation/staging/index.rst      |   1 +
+>>
+>> Why is this in staging when none of the drivers are?
 > 
-> While at it, rework the error handling of rpmsg_eptdev_add() and its
-> callers, following rule of "release resource where it's allocated".
+> I guess that's because remoteproc.rst and rpmsg.rst are in Documentation/staging
+> and that's because when converting them from .txt to .rst the author
+> didn't know a
+> good place where to move them.
+> 
+> Would Documentation/driver-api be a good place for these doc files? I
+> can move them
+> and then Shenwei place the gpio-rpmsg.rst in the Documentation/driver-api also
 
-Can this be done in a separate patch, to limit the impact of the two
-parts of this change?
+Documentation/driver-api/gpio/ if its driver documentation.
+Documentation/userspace-api/gpio/ if it user API docs
+There is also gpio documentation in Documentation/admin-guide/gpio/ which could
+also be appropriate depending on the nature of the document.
 
-Regards,
-Bjorn
+-- 
+~Randy
 
-> 
-> Fixes: 2410558f5f11 ("rpmsg: char: Implement eptdev based on anonymous inode")
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Closes: https://lore.kernel.org/all/aPi6gPZE2_ztOjIW@stanley.mountain/
-> 
-> Signed-off-by: Dawei Li <dawei.li@linux.dev>
-> ---
->  drivers/rpmsg/rpmsg_char.c | 59 +++++++++++++++++++++-----------------
->  1 file changed, 32 insertions(+), 27 deletions(-)
-> 
-> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-> index 34b35ea74aab..de058a8b99ff 100644
-> --- a/drivers/rpmsg/rpmsg_char.c
-> +++ b/drivers/rpmsg/rpmsg_char.c
-> @@ -460,44 +460,34 @@ static int rpmsg_eptdev_add(struct rpmsg_eptdev *eptdev,
->  
->  	eptdev->chinfo = chinfo;
->  
-> -	if (cdev) {
-> -		ret = ida_alloc_max(&rpmsg_minor_ida, RPMSG_DEV_MAX - 1, GFP_KERNEL);
-> -		if (ret < 0)
-> -			goto free_eptdev;
-> -
-> -		dev->devt = MKDEV(MAJOR(rpmsg_major), ret);
-> -	}
-> -
->  	/* Anonymous inode device still need device name for dev_err() and friends */
->  	ret = ida_alloc(&rpmsg_ept_ida, GFP_KERNEL);
->  	if (ret < 0)
-> -		goto free_minor_ida;
-> +		return ret;
->  	dev->id = ret;
->  	dev_set_name(dev, "rpmsg%d", ret);
->  
-> -	ret = 0;
-> -
->  	if (cdev) {
-> +		ret = ida_alloc_max(&rpmsg_minor_ida, RPMSG_DEV_MAX - 1, GFP_KERNEL);
-> +		if (ret < 0) {
-> +			ida_free(&rpmsg_ept_ida, dev->id);
-> +			return ret;
-> +		}
-> +
-> +		dev->devt = MKDEV(MAJOR(rpmsg_major), ret);
-> +
->  		ret = cdev_device_add(&eptdev->cdev, &eptdev->dev);
-> -		if (ret)
-> -			goto free_ept_ida;
-> +		if (ret) {
-> +			ida_free(&rpmsg_ept_ida, dev->id);
-> +			ida_free(&rpmsg_minor_ida, MINOR(dev->devt));
-> +			return ret;
-> +		}
->  	}
->  
->  	/* We can now rely on the release function for cleanup */
->  	dev->release = rpmsg_eptdev_release_device;
->  
-> -	return ret;
-> -
-> -free_ept_ida:
-> -	ida_free(&rpmsg_ept_ida, dev->id);
-> -free_minor_ida:
-> -	if (cdev)
-> -		ida_free(&rpmsg_minor_ida, MINOR(dev->devt));
-> -free_eptdev:
-> -	put_device(dev);
-> -	kfree(eptdev);
-> -
-> -	return ret;
-> +	return 0;
->  }
->  
->  static int rpmsg_chrdev_eptdev_add(struct rpmsg_eptdev *eptdev, struct rpmsg_channel_info chinfo)
-> @@ -509,12 +499,17 @@ int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent
->  			       struct rpmsg_channel_info chinfo)
->  {
->  	struct rpmsg_eptdev *eptdev;
-> +	int ret;
->  
->  	eptdev = rpmsg_chrdev_eptdev_alloc(rpdev, parent);
->  	if (IS_ERR(eptdev))
->  		return PTR_ERR(eptdev);
->  
-> -	return rpmsg_chrdev_eptdev_add(eptdev, chinfo);
-> +	ret = rpmsg_chrdev_eptdev_add(eptdev, chinfo);
-> +	if (ret)
-> +		kfree(eptdev);
-> +
-> +	return ret;
->  }
->  EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
->  
-> @@ -546,6 +541,11 @@ int rpmsg_anonymous_eptdev_create(struct rpmsg_device *rpdev, struct device *par
->  	ret =  rpmsg_eptdev_add(eptdev, chinfo, false);
->  	if (ret) {
->  		dev_err(&eptdev->dev, "failed to add %s\n", eptdev->chinfo.name);
-> +		/*
-> +		 * Avoid put_device() or WARN() will be triggered due to absence of
-> +		 * device::release(), refer to device_release().
-> +		 */
-> +		kfree(eptdev);
->  		return ret;
->  	}
->  
-> @@ -571,6 +571,7 @@ static int rpmsg_chrdev_probe(struct rpmsg_device *rpdev)
->  	struct rpmsg_channel_info chinfo;
->  	struct rpmsg_eptdev *eptdev;
->  	struct device *dev = &rpdev->dev;
-> +	int ret;
->  
->  	memcpy(chinfo.name, rpdev->id.name, RPMSG_NAME_SIZE);
->  	chinfo.src = rpdev->src;
-> @@ -589,7 +590,11 @@ static int rpmsg_chrdev_probe(struct rpmsg_device *rpdev)
->  	 */
->  	eptdev->default_ept->priv = eptdev;
->  
-> -	return rpmsg_chrdev_eptdev_add(eptdev, chinfo);
-> +	ret = rpmsg_chrdev_eptdev_add(eptdev, chinfo);
-> +	if (ret)
-> +		kfree(eptdev);
-> +
-> +	return ret;
->  }
->  
->  static void rpmsg_chrdev_remove(struct rpmsg_device *rpdev)
-> -- 
-> 2.25.1
-> 
 
