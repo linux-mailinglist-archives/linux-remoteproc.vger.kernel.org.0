@@ -1,61 +1,61 @@
-Return-Path: <linux-remoteproc+bounces-5453-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-5455-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 567E4C5883F
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 13 Nov 2025 16:55:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B60CDC5A16D
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 13 Nov 2025 22:23:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 644734F12EF
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 13 Nov 2025 15:48:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B74E43B0D1D
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 13 Nov 2025 21:22:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1597F30149D;
-	Thu, 13 Nov 2025 15:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6B62857C7;
+	Thu, 13 Nov 2025 21:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KOsxIVru"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="NFLW4Vh+"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012047.outbound.protection.outlook.com [52.101.48.47])
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010060.outbound.protection.outlook.com [52.101.193.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5CD2FC896;
-	Thu, 13 Nov 2025 15:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B482580F3;
+	Thu, 13 Nov 2025 21:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.60
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763048703; cv=fail; b=LdHOCOm0KO1VMFiV8BH0EJxZuuFgWgqJ6Vym6uArq33dnPu2pixG31UoVumwEubBwklcYJb+jkoCldiDr5kWyOeofr7bI7qj9qBmSELeRXWKSNjiMHh19Twn8DSa6KJdMsFhSjhJP/CRnVIBw3HXnFvmLSso14An9mqvC7uVuUM=
+	t=1763068936; cv=fail; b=RXBzGRBbiwwHv9gTYPTqqsPSxWylb/QI5fF8acUAh77L+tlV+0zqRyDF3PBR74bF9kV44kfW/RF4KrjNMYv7bShq2PENFC2t4x5P7cNKKVS2P4DD4dCI/oKtxuNEiJ+Gus1ReKhL31b2PfBxa7f8yrNKkQ1sxsXmWXoe885ZXCQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763048703; c=relaxed/simple;
-	bh=JdobXBDvp+OWp9j76u8MhCvgaOh/jEcj8zizbDUMpKM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=shgvABFfzK6urv4ZshiwLon2R7jMbYZgoRjWGSy3BP7H49trXgm85YeD/wtWtmTcP+gFzVdxQYhCMvu8Gx7rd7wHL7onoRm7DmM/z/HP++6rYPpbVbLspDCVPpeLgeUC/6bRVtljJtsdhscfoxPSxx2UuqGqIpqB84gKYY7+3hw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=KOsxIVru; arc=fail smtp.client-ip=52.101.48.47
+	s=arc-20240116; t=1763068936; c=relaxed/simple;
+	bh=AuBl9slciZsQ1n5/UGmbJ/YO9J+ko37Q6/6E10Cai0M=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=Xm3Xbs24+vhzT1CnpaPA9sgVnCLxCOWRHp+zZRxnqhbKBVRe1sff8ezNTpfrcO+IdHnzH6mRkkxNANuJFvFWTeJ47oo4+Hqwbo3ByL7my0DoUo5Cwg+7S7S8VWMkvBPj8XzCc/BfrB93hDqxwCy3ygWaX5kaLtMhgQGESMMf+ME=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=NFLW4Vh+; arc=fail smtp.client-ip=52.101.193.60
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EVBWwlU+n+uhykUY082AsRgubehua0c1eumJoD0EdHlTAOGm5/MZjw4z97RxsYqtXNdOM2kUbM+8Ao2+J7K0u8D3njZNVa52X8yQifvNKt9sGs4AUSEs5ckACPP96b6r18obAcqWqfW9TvquNEQ7gjElpymlZF4t+rwRLaEnd9gfvjVV4DKWhsgRxIL/r7HYvbekZwGxpSXEspCCRaYCkKRE3/6s+dertglMglU9KXPrXPTgoxO1pV4MpBIyZ5KKtnacRb+VoZMhsOff0p7cRpc+pKU4v3/0PEmazITpvRkudNzeaLzw/DzM9Ay85naFVt2OtFawdqVeEEaLI0FxYA==
+ b=Ls+m1NEpyVPnwJD3bduWFZ7ATzqfKMxJNZDbKM6JfIj2MrVQQ7kvf6EmJF+Mh87Atul/+831f96V7kp3WzxEmSdkU98Jg8/8akyVWC2dNvqef4xv4Y1/wgrMmTJXFalR/cw9AD6cSO2BNaSVQcMmTrl7kpSJlA39/tVQr4Ry2YK71CCt2AvBLxm4O6RJit7yfdjnKjttV18OOM/v0wXeBQQKHjKk3vrW0US6cuSW+Kbxg16mhsj1xP2WE8n3/o0h1utSg8Om2/mIXSlVS3XPQ0Gsbir3D4msm6lIF22XFmqbFh1wSWC9ev4Q8M8qppiCkv4qQIZ3bzzPAjTzQMZuAw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y62PLCnAIMTm/4r+BIoKdRq7WXwqG5VbRVW0HIEHIJ8=;
- b=VkZYFDsx5+Bnb3jFE0fzupugN8ZYlMYQf0yUJIT8YLddN62IPqYFM68wJ9gD159IjdTzsKh1466+WMirGMvYjuZwnxYoAusER2oNfbpP4yv5TTJSMpx6VSnkZ6PNMKo6GpSv2SRVqYd72xd+cYA0YIwmfpVpY2WMoO0yh8X5HLkqECJbwCuGH7xGA/QUmb2v6nSuOnErnVCa0uL1fPqQplZOlGtSEDXQpNS3syfBXOs0DvIKjyU45sXx8xkDedZGqp+Yk0BWoKv0vfuEXRPdM2HLwagglml0IG6X3prIsuBULtbHfhhr2G/gIYk0wbpuHNVRhw2GXwRw/9q9vZi0NA==
+ bh=yoNfeF+UBZO89SAUaa5BcJlGImi70LwwENhKhYA1EQs=;
+ b=jHwLwtmWJHQe7/8y4l9c7AGMy78k/6qXRBURHjvvIiIhOPRo8Otx+57MTPxPMsLzSKM5ctHBav9LKRuMOqaMu11nNxldcx2E7r8oHxOh5uYR03xSnxOcCdgKpBvn+6StrhyHS0u4jnh8vAkhN9WUvBBbb82uGbTscYaTziGAZp0Daq4RV6td6LDDozesRY1zVA+QvToYWFmb5eeObcejQodhVvbxb6UxOGKu1m1I5H0RMe3Ru0/8b6zkyH1x53fxYP8JkaoN6eCds+tv+wKoo6FB3uqTD7CDgIg5OKe3FuHpwtJoSFt6XzzAmd9ETR9uNm4xCcFP5jWveH1PVO3nlA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Y62PLCnAIMTm/4r+BIoKdRq7WXwqG5VbRVW0HIEHIJ8=;
- b=KOsxIVruL96T5PfED6V2hqhESqaoVca9i+MEABL9iIglR2ikrKcyiyPlkF11pgPGX0DTftsFmEXkKi/NzNDQDsecdBSYlo95a35mUvhL9g8xg/0Z51i2huhYb0tdoHRkTRKW9NQwbHzYv/MxhMyerQfXP+/xTl6LPhpZfRpcbLA=
-Received: from BYAPR21CA0004.namprd21.prod.outlook.com (2603:10b6:a03:114::14)
- by SA3PR12MB7808.namprd12.prod.outlook.com (2603:10b6:806:31b::18) with
+ bh=yoNfeF+UBZO89SAUaa5BcJlGImi70LwwENhKhYA1EQs=;
+ b=NFLW4Vh+kcs2O4hpobWU0W0oiu2H3KKi50YEPtZ690aCZqm5Sc+JgLEWDl4hwbNDZx7aBY/TnV/yfVLrMltFCUPs3OwnLfcYvtNtiJQ5GIMCruoPOELScbVS1YVxeMj18Uz95fHGwlha7nbn9t937TTVa50LkOimAAVeuw7MBZE=
+Received: from SA9PR13CA0064.namprd13.prod.outlook.com (2603:10b6:806:23::9)
+ by LV8PR12MB9270.namprd12.prod.outlook.com (2603:10b6:408:205::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.17; Thu, 13 Nov
- 2025 15:44:55 +0000
-Received: from SJ1PEPF00002313.namprd03.prod.outlook.com
- (2603:10b6:a03:114:cafe::6) by BYAPR21CA0004.outlook.office365.com
- (2603:10b6:a03:114::14) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.7 via Frontend Transport; Thu,
- 13 Nov 2025 15:44:55 +0000
+ 2025 21:22:12 +0000
+Received: from SN1PEPF0002BA4E.namprd03.prod.outlook.com
+ (2603:10b6:806:23:cafe::c8) by SA9PR13CA0064.outlook.office365.com
+ (2603:10b6:806:23::9) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.15 via Frontend Transport; Thu,
+ 13 Nov 2025 21:22:12 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,248 +63,221 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
 Received: from satlexmb08.amd.com (165.204.84.17) by
- SJ1PEPF00002313.mail.protection.outlook.com (10.167.242.167) with Microsoft
+ SN1PEPF0002BA4E.mail.protection.outlook.com (10.167.242.71) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.13 via Frontend Transport; Thu, 13 Nov 2025 15:44:55 +0000
-Received: from satlexmb10.amd.com (10.181.42.219) by satlexmb08.amd.com
+ 15.20.9320.13 via Frontend Transport; Thu, 13 Nov 2025 21:22:11 +0000
+Received: from Satlexmb09.amd.com (10.181.42.218) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 13 Nov
- 2025 07:44:54 -0800
-Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb10.amd.com
- (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 13:22:02 -0800
+Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb09.amd.com
+ (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 13 Nov
- 2025 07:44:54 -0800
-Received: from xsjtanmays50.xilinx.com (10.180.168.240) by satlexmb08.amd.com
+ 2025 13:22:01 -0800
+Received: from [172.31.8.141] (10.180.168.240) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Thu, 13 Nov 2025 07:44:54 -0800
-From: Tanmay Shah <tanmay.shah@amd.com>
-To: <andersson@kernel.org>, <mathieu.poirier@linaro.org>
-CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Tanmay
- Shah <tanmay.shah@amd.com>
-Subject: [PATCH v2 3/3] remoteproc: xlnx: add crash detection mechanism
-Date: Thu, 13 Nov 2025 07:44:04 -0800
-Message-ID: <20251113154403.2454319-4-tanmay.shah@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251113154403.2454319-1-tanmay.shah@amd.com>
-References: <20251113154403.2454319-1-tanmay.shah@amd.com>
+ Transport; Thu, 13 Nov 2025 13:22:01 -0800
+Message-ID: <6691892e-dc55-49bc-9c86-eac12756d681@amd.com>
+Date: Thu, 13 Nov 2025 15:22:00 -0600
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Reply-To: <tanmay.shah@amd.com>
+Subject: Re: [PATCH v2 1/2] mailbox: check mailbox queue is full or not
+From: Tanmay Shah <tanmay.shah@amd.com>
+To: Jassi Brar <jassisinghbrar@gmail.com>
+CC: <andersson@kernel.org>, <mathieu.poirier@linaro.org>,
+	<linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
+References: <20251007151828.1527105-1-tanmay.shah@amd.com>
+ <20251007151828.1527105-2-tanmay.shah@amd.com>
+ <CABb+yY0m_Whm1F7d2ub+vhn0eTb47UC9g=JvpLnWh-2E1oo52A@mail.gmail.com>
+ <aa1ff206-d505-433b-9715-56d866a5f675@amd.com>
+ <33edad1d-08b9-4fe4-8525-a1f50a898e2f@amd.com>
+Content-Language: en-US
+In-Reply-To: <33edad1d-08b9-4fe4-8525-a1f50a898e2f@amd.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002313:EE_|SA3PR12MB7808:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc99f648-81a7-4434-861f-08de22cb97dc
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA4E:EE_|LV8PR12MB9270:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3edf3e56-81ac-4cd5-c23e-08de22fab58c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
+	BCL:0;ARA:13230040|36860700013|376014|1800799024|82310400026|13003099007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?nBPPc7b5sGqW1YrSrw4k399AnywMSL0rtDTSrXLATty/qZY0owQt4hyThNoN?=
- =?us-ascii?Q?2nk6dScr29EzMN6oBR4noMtZ8aPmdkXLfgVcLhcX6dJUKvZlgp4L0x9gOUd/?=
- =?us-ascii?Q?X/jXsFtjdFHbGiFmr113fApY5uMZf4azK5JMIE3eRaAh6nfXGvDNsTDBVjt6?=
- =?us-ascii?Q?yx4F3avxgOclRvch8FzUzPVP6X4tHs7ywhgoOUH7ouuStOQq60JRPWKiK7lN?=
- =?us-ascii?Q?IgClunx5v4dA7Xh4pERCGcpbLpDCFr0l2BDlkIjfcXKmwxC/jDkcjc1tPgRa?=
- =?us-ascii?Q?MY7Ky+MuZNbpCqudTWa37IicgvwW42cxv9+0wRg+KPrYX/AcFe3eI0qaN2sC?=
- =?us-ascii?Q?/gNzTTymXZhioFuB47qsh1ROOoZGFrQshUMLLuN1yeGYfaRFRGALwR1aCzRJ?=
- =?us-ascii?Q?Q4Uxbprd9RarjYf8OkpXTsvxd/nDtgtmmQphpjuqgBBwlnMPq4xa6+xLIgGd?=
- =?us-ascii?Q?czdzp48lKKLT9ohiL0vauDXuSjDuShV975gt5mrh976j94hxHUhy1k/grjNX?=
- =?us-ascii?Q?6DkZRJ4do3x55v9OJhdkZeOvhQR3JX/gEjNrgFZu8d3YD53UBGQBPK3Jpa02?=
- =?us-ascii?Q?Hph3Yi7Vf1kjTuEFpYhDEs7BlhZDqAThqAO1mKudv0myJhfT7lbL7VVC0TkV?=
- =?us-ascii?Q?TW/cDOwRYeNqyM/yLSG69fgwoHuZ3Uaxf9OxmDBLTEnVzc7UUM+rjGF0K6QO?=
- =?us-ascii?Q?isEErH4fwd9XP0c4KeUHgTivxdauXq+WstyezaptPadYa1Ejb4b5cubpMqBr?=
- =?us-ascii?Q?gmRFxjdhL3eVJzpGxSgovzkbYLrLSzPmCipC43AGbRzHWskx4j7gB3h4elnl?=
- =?us-ascii?Q?p9mn4V45vJM+2nPhDz9wVQoam+WnAP5jvSTPuykjvrRfbFiM8HPHDZ67natK?=
- =?us-ascii?Q?inBl2R0fWdHSVx4lfYLyxRo1OawH+iS/kCuPVGQZfq0iiB/GouGctmcGZ1sI?=
- =?us-ascii?Q?Ez4dfp3DUNNfF8o8FQAZWjoQGTIVuAaLOZUm+Snx9Lac4LLNdYgtCFnipA1h?=
- =?us-ascii?Q?Tln9d0oh2vEit/YK+hSLMHNEmmACbJ/LnD1OyPXVcSu1r9lqWwvkZ2GFGoiM?=
- =?us-ascii?Q?y9vPwphClIIfnSBoDrjB3B9LKPXeYg4MfC1yslTb3s/ErzGbsCKLgwawTw98?=
- =?us-ascii?Q?ejRRRUpfNc1zOc+eVZ30U6mkaIu5cei8IsgvhONfc+2aeoUXWBmxS3COsHYn?=
- =?us-ascii?Q?pMIL6XED5Zq/6fvnXg1SXqLj2PIw+w6hWCP/WC9PUuInlsk+id90pAD9ciED?=
- =?us-ascii?Q?+MJh1wSJgq6Crdd6JhtxP6TiJw53gpuE6cS/ZR+1R/sF/3wKZPSkZG62ayPl?=
- =?us-ascii?Q?qmXRUFyWMg4owTsOKFtnSI+ijafkJN/PUVMEUJMM3k3dVDo70cXH75AXBf6m?=
- =?us-ascii?Q?xNXy064JOV6MYp6YqCy5+P2NPvwNwLpcjEosAVjDs+8LMsWQbF3ZAb6sTDL8?=
- =?us-ascii?Q?xrI/65OK2oX2W6Vrbss98pZ6b2cr0zuhw7eaDqXD6l9jJ7ebc4uiWJo5tIlV?=
- =?us-ascii?Q?tgSy8l+oKJtL4JwTnfCqwypRoO2rhsMAQnOC9H5xkodotpEm969q9ortuuTH?=
- =?us-ascii?Q?G+Wa7rWNMOAMKZvgGcY=3D?=
+	=?utf-8?B?Z2thSWNoY011VHJSYURXWVBPVDhpU0tncHZQQzVQQzAxekFXN1dLZzhpdnBP?=
+ =?utf-8?B?VjJGMW40U2VzdDB6NnIrMjNJc1M1Unc4Tmo0Um5CdXVQbFV3RmJaTytkcmRz?=
+ =?utf-8?B?S3BRTHdsQUE1QW5SeGJwZjUvWTlKV09kUm9BZmJQVkY2QkVwWVVJeDlGUHg2?=
+ =?utf-8?B?UlBpTkgyT1JDTDFzSHR6bmdhSVJyRm9vQXlubnhBK2RhdnprcHVCTDN0a0to?=
+ =?utf-8?B?bDdUcENjUVJzZlU1a3FtSXV3TzBLT1BpTnF4N2JDMTYrL2grUk9mMjQ1U1Mw?=
+ =?utf-8?B?ZXFQMHVReUQ0Rnc2MXRUSk5MRlhIcjMvV2R1Uy9YZktKTGtkaHFGRGk0L01S?=
+ =?utf-8?B?ZzFDSkZNY2Izc20xMUhoZnFtMXRlRWY5amptakdQTUVOMkVscG53MGczK25O?=
+ =?utf-8?B?SWdXZXF1cUw3ZjVPS211anp0UCtyYkpxNDI1WUlvaG54MXpvMUhqTTc5bitn?=
+ =?utf-8?B?OVNzSWw1d1YrNi9ERXB6TFJlUmJ4SVZGVVF1T2RTRCtJNzIzT0l2TnZHd0dh?=
+ =?utf-8?B?WWpremZ3bnJhR1p4TWluUUtCazFJY1JoYmNGbm5wbVFic2tWNGt1QTdlSWxK?=
+ =?utf-8?B?cVMvc043WFI3SVBqYUpCbzlYUmw3RGI5MW9QUlNHS0Jmb0Y3N0N4UlhCbkp4?=
+ =?utf-8?B?MTQ4a0dPbWY1Q0JTVm11Y29XVWcvcGU5L3VydFU5dWtIbFVyNi8reUlYMFJn?=
+ =?utf-8?B?bmRydXhqRlZJZnNwM3hCdkJWS25rQ1FCdjVUV2VXeFpOYVA5WUVBTTVUWTFX?=
+ =?utf-8?B?ZHNkUzZYOXVLOEJVVE96KzU1STkzSU9QZHlyMk50VGJpWVZaeWFrNE94bjgy?=
+ =?utf-8?B?QVhOdHRWb0NhU0tkalV5djVhYzVuNE1YMkJOTG9HU1BVNktYVTY2Y2xhNnht?=
+ =?utf-8?B?ei8zcmloQVVhZk1lYTI1UTBVSE9jMVJ5UG5mSVRiUmR5dklBZUtpRDBpTVdy?=
+ =?utf-8?B?T0NCK0crV0JlNndGUnM4TFVmbnRSZFAvb2FzMmowVlFKQkM5b2d3ckoxdXpr?=
+ =?utf-8?B?dlVhOS92RU9ORjk4ck91MGhkYnhxaHgyZ0htWE1lYlhKTm1TeWovellDdG5l?=
+ =?utf-8?B?ckJoY3ltUTlKRW91QnRzOXU4YTR2MVI4dmxheVNsOW1FREpYeUFaTHd6RlQx?=
+ =?utf-8?B?QXR2aDQvUElRblJsNzF5N3hSTnd2RzhVaS9yN1pqYUg4YWxPV3BXNjVEUnVN?=
+ =?utf-8?B?bDZRdmVkNEZmQkNxM0lLYzZIblFkU3dWRFpGUEE0clRRTWdIYWxUa1B4cUEz?=
+ =?utf-8?B?akVPT1I5ekVSdzgwekg4TGl6cWJqN1I4dkU3MHVzdUNWV1VXTmhpQnZRczJ1?=
+ =?utf-8?B?STgzN3JXdll6UEZSL1c0WGsyMGYrSWI5ZTMvc2p6WHBzemQzWHBkeGxaOVhz?=
+ =?utf-8?B?VnRqaWRnWG5UcENNTFhCbzJRY3FzaHBkbkFvbmEzM2dCQ0tPU0hJYjdEM1N4?=
+ =?utf-8?B?bE9xRWoyTHlOZUxhS0Frd05LOW1LZEZXUTVyZmUwOHVEalFJd01sdmhqUHl5?=
+ =?utf-8?B?enUzUFo0cGZXOEEzclZ4aWUvTkNkUTNubE90ZVhHdVpSMFFPN1dqREp6NDM5?=
+ =?utf-8?B?V0Q3VHJUQlpyaXBVOFV5WkNUdnBIMUZtL25hL2FrRHZEeU5YNy9UTVVtMmY4?=
+ =?utf-8?B?ckV5T0FxSnNWc2gvcThIQUtWREVvUnFkS0dwVFRHMDQ2NXZ0cnRKMXVjKzRw?=
+ =?utf-8?B?RDhLK0s2Z2tQQXZoSzJlNmIvU0s3SnRwK2FlYUlFRHF4THRpMTNJRWpuOEVl?=
+ =?utf-8?B?dGN6OVBuSEUwaTc3OUx4Zk1qUlFWTy9QQ0lYTkZGOHVZSlg5RlRsRmxWVHdo?=
+ =?utf-8?B?Z3I2VXFOc0MxOFVqbmdEdkVNQ0xsbXc0dDRQOHg5VWxjTDFodDE2V1pnT0xR?=
+ =?utf-8?B?LzRsVG1hZEJGTUVJSkZDU1VUVDVDbWIvQVpPbjZuNHFBUXBmQk5UMno4ajUy?=
+ =?utf-8?B?ckswL2p5TjVEbVM0NXZPOEVsb2k5YUZaZGZ0aDdXbWVDempoejE2aUYwdVMw?=
+ =?utf-8?B?MTlCcW4yTkdzZXYxUmJZWUx6WWNvdHNKbjhZTkZ0UktiT0JGdTBsR1Y2WURI?=
+ =?utf-8?Q?+oz+Ov?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(1800799024)(82310400026)(13003099007);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2025 15:44:55.3366
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2025 21:22:11.5577
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc99f648-81a7-4434-861f-08de22cb97dc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3edf3e56-81ac-4cd5-c23e-08de22fab58c
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00002313.namprd03.prod.outlook.com
+	SN1PEPF0002BA4E.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7808
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9270
 
-Remote processor will report the crash reason via the resource table
-and notify the host via kick. The host checks this crash reason on
-every kick notification from the remote and report to the core
-framework. Then the rproc core framework will start the recovery
-process.
 
-Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
----
 
-Changes in v2:
-  - clear attach recovery boot flag during detach and stop ops
+On 10/15/25 10:26 AM, Tanmay Shah wrote:
+> 
+> 
+> On 10/8/25 11:49 AM, Tanmay Shah wrote:
+>>
+>>
+>> On 10/7/25 2:58 PM, Jassi Brar wrote:
+>>> On Tue, Oct 7, 2025 at 10:19 AM Tanmay Shah <tanmay.shah@amd.com> wrote:
+>>>>
+>>>> Sometimes clients need to know if mailbox queue is full or not before
+>>>> posting new message via mailbox. If mailbox queue is full clients can
+>>>> choose not to post new message. This doesn't mean current queue length
+>>>> should be increased, but clients may want to wait till previous Tx is
+>>>> done. Introduce variable per channel to track available msg slots.
+>>>> Clients can check this variable and decide not to send new message if
+>>>> it is 0. This  can help avoid false positive warning from mailbox
+>>>> framework "Try increasing MBOX_TX_QUEUE_LEN".
+>>>>
+>>>> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+>>>> ---
+>>>>
+>>>> v2:
+>>>>    - Separate patch for remoteproc subsystem.
+>>>>    - Change design and introduce msg_slot_ro field for each channel
+>>>>      instead of API. Clients can use this variable directly.
+>>>>    - Remove mbox_queue_full API
+>>>>
+>>>>   drivers/mailbox/mailbox.c          | 3 +++
+>>>>   include/linux/mailbox_controller.h | 2 ++
+>>>>   2 files changed, 5 insertions(+)
+>>>>
+>>>> diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
+>>>> index 5cd8ae222073..c2e187aa5d22 100644
+>>>> --- a/drivers/mailbox/mailbox.c
+>>>> +++ b/drivers/mailbox/mailbox.c
+>>>> @@ -35,6 +35,7 @@ static int add_to_rbuf(struct mbox_chan *chan, 
+>>>> void *mssg)
+>>>>          idx = chan->msg_free;
+>>>>          chan->msg_data[idx] = mssg;
+>>>>          chan->msg_count++;
+>>>> +       chan->msg_slot_ro = (MBOX_TX_QUEUE_LEN - chan->msg_count);
+>>>>
+>>>>          if (idx == MBOX_TX_QUEUE_LEN - 1)
+>>>>                  chan->msg_free = 0;
+>>>> @@ -70,6 +71,7 @@ static void msg_submit(struct mbox_chan *chan)
+>>>>                  if (!err) {
+>>>>                          chan->active_req = data;
+>>>>                          chan->msg_count--;
+>>>> +                       chan->msg_slot_ro = (MBOX_TX_QUEUE_LEN - 
+>>>> chan->msg_count);
+>>>>
+>>> No, I had suggested adding this info in client structure.
+>>> There is no point in carrying msg_count and msg_slot_ro in mbox_chan.
+>>> The client needs this info but can/should not access the chan internals.
+>>>
+>>
+>> Hi Jassi,
+>>
+>> If I move msg_slot_ro to mbox_client that means, each channel needs 
+>> its own client structure. But it is possible to map single client to 
+>> multiple channels.
+>>
+>> How about if I rename msg_slot_ro to msg_slot_tx_ro -> that says this 
+>> field should be used only for "tx" channel.
+>>
+>> Or is it must to map unique client data structure to each channel? If 
+>> so, can I update mbox_client structure documentation ?
+>>
+> 
+> Hi Jassi,
+> 
+> I looked into this further. Looks like it's not possible to introduce 
+> msg_slot_ro in the client data structure as of today. Because multiple 
+> drivers are sharing same client for "tx" and "rx" both channels. 
+> [references: 1, 2, 3]
+> 
+> so, msg_slot_ro won't be calculated correctly I believe.
+> 
+> I can change architecture for xlnx driver i.e. assign separate clients 
+> for each channel, but still it won't work for other platforms. Please 
+> let me know how to proceed further.
+> 
+> Can we provide API that does (MBOX_TX_QUEUE_LEN - chan->msg_count) == 0?
+> 
+> I am not sure if I should attempt to change the architecture of other 
+> platform's drivers.
+> 
+> 
+> References:
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/ 
+> linux.git/tree/drivers/remoteproc/imx_rproc.c?h=for-next#n768
+> 
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/ 
+> linux.git/tree/drivers/remoteproc/xlnx_r5_remoteproc.c?h=for-next#n280
+> 
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/ 
+> linux.git/tree/drivers/remoteproc/st_remoteproc.c?h=for-next#n386
+> 
+> Thank you.
+> 
+> 
 
- drivers/remoteproc/xlnx_r5_remoteproc.c | 56 +++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+Hello Jassi,
 
-diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
-index 8677b732ad14..5d04e8c0dc52 100644
---- a/drivers/remoteproc/xlnx_r5_remoteproc.c
-+++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
-@@ -108,6 +108,10 @@ struct rsc_tbl_data {
- 	const uintptr_t rsc_tbl;
- } __packed;
- 
-+enum fw_vendor_rsc {
-+	FW_RSC_VENDOR_CRASH_REASON = RSC_VENDOR_START,
-+};
-+
- /*
-  * Hardcoded TCM bank values. This will stay in driver to maintain backward
-  * compatibility with device-tree that does not have TCM information.
-@@ -127,9 +131,21 @@ static const struct mem_bank_data zynqmp_tcm_banks_lockstep[] = {
- 	{0xffe30000UL, 0x30000, 0x10000UL, PD_R5_1_BTCM, "btcm1"},
- };
- 
-+/**
-+ * struct xlnx_rproc_crash_report - resource to know crash status and reason
-+ *
-+ * @crash_state: if true, the rproc is notifying crash, time to recover
-+ * @crash_reason: reason of crash
-+ */
-+struct xlnx_rproc_crash_report {
-+	u32 crash_state;
-+	u32 crash_reason;
-+} __packed;
-+
- /**
-  * struct zynqmp_r5_core - remoteproc core's internal data
-  *
-+ * @crash_report: rproc crash state and reason
-  * @rsc_tbl_va: resource table virtual address
-  * @sram: Array of sram memories assigned to this core
-  * @num_sram: number of sram for this core
-@@ -143,6 +159,7 @@ static const struct mem_bank_data zynqmp_tcm_banks_lockstep[] = {
-  * @ipi: pointer to mailbox information
-  */
- struct zynqmp_r5_core {
-+	struct xlnx_rproc_crash_report *crash_report;
- 	void __iomem *rsc_tbl_va;
- 	struct zynqmp_sram_bank *sram;
- 	int num_sram;
-@@ -227,10 +244,14 @@ static void handle_event_notified(struct work_struct *work)
- static void zynqmp_r5_mb_rx_cb(struct mbox_client *cl, void *msg)
- {
- 	struct zynqmp_ipi_message *ipi_msg, *buf_msg;
-+	struct zynqmp_r5_core *r5_core;
-+	struct rproc *rproc;
- 	struct mbox_info *ipi;
- 	size_t len;
- 
- 	ipi = container_of(cl, struct mbox_info, mbox_cl);
-+	r5_core = ipi->r5_core;
-+	rproc = r5_core->rproc;
- 
- 	/* copy data from ipi buffer to r5_core */
- 	ipi_msg = (struct zynqmp_ipi_message *)msg;
-@@ -244,6 +265,13 @@ static void zynqmp_r5_mb_rx_cb(struct mbox_client *cl, void *msg)
- 	buf_msg->len = len;
- 	memcpy(buf_msg->data, ipi_msg->data, len);
- 
-+	/* Check for crash only if rproc crash is expected */
-+	if (rproc->state == RPROC_ATTACHED || rproc->state == RPROC_RUNNING) {
-+		if (r5_core->crash_report->crash_state)
-+			rproc_report_crash(rproc,
-+					   r5_core->crash_report->crash_reason);
-+	}
-+
- 	/* received and processed interrupt ack */
- 	if (mbox_send_message(ipi->rx_chan, NULL) < 0)
- 		dev_err(cl->dev, "ack failed to mbox rx_chan\n");
-@@ -397,6 +425,7 @@ static int zynqmp_r5_rproc_start(struct rproc *rproc)
- 	if (ret)
- 		dev_err(r5_core->dev,
- 			"failed to start RPU = 0x%x\n", r5_core->pm_domain_id);
-+
- 	return ret;
- }
- 
-@@ -438,6 +467,8 @@ static int zynqmp_r5_rproc_stop(struct rproc *rproc)
- 	if (ret)
- 		dev_err(r5_core->dev, "core force power down failed\n");
- 
-+	test_and_clear_bit(RPROC_FEAT_ATTACH_ON_RECOVERY, rproc->features);
-+
- 	return ret;
- }
- 
-@@ -874,6 +905,8 @@ static int zynqmp_r5_get_rsc_table_va(struct zynqmp_r5_core *r5_core)
- 
- static int zynqmp_r5_attach(struct rproc *rproc)
- {
-+	rproc_set_feature(rproc, RPROC_FEAT_ATTACH_ON_RECOVERY);
-+
- 	dev_dbg(&rproc->dev, "rproc %d attached\n", rproc->index);
- 
- 	return 0;
-@@ -888,6 +921,8 @@ static int zynqmp_r5_detach(struct rproc *rproc)
- 	 */
- 	zynqmp_r5_rproc_kick(rproc, 0);
- 
-+	clear_bit(RPROC_FEAT_ATTACH_ON_RECOVERY, rproc->features);
-+
- 	return 0;
- }
- 
-@@ -896,6 +931,26 @@ static void zynqmp_r5_coredump(struct rproc *rproc)
- 	(void)rproc;
- }
- 
-+static int zynqmp_r5_handle_crash_rsc(struct rproc *rproc, void *rsc,
-+				      int offset, int avail)
-+{
-+	struct zynqmp_r5_core *r5_core = rproc->priv;
-+
-+	r5_core->crash_report =
-+		(struct xlnx_rproc_crash_report *)(r5_core->rsc_tbl_va + offset);
-+
-+	return RSC_HANDLED;
-+}
-+
-+static int zynqmp_r5_handle_rsc(struct rproc *rproc, u32 rsc_type, void *rsc,
-+				int offset, int avail)
-+{
-+	if (rsc_type == FW_RSC_VENDOR_CRASH_REASON)
-+		return zynqmp_r5_handle_crash_rsc(rproc, rsc, offset, avail);
-+
-+	return RSC_IGNORED;
-+}
-+
- static const struct rproc_ops zynqmp_r5_rproc_ops = {
- 	.prepare	= zynqmp_r5_rproc_prepare,
- 	.unprepare	= zynqmp_r5_rproc_unprepare,
-@@ -911,6 +966,7 @@ static const struct rproc_ops zynqmp_r5_rproc_ops = {
- 	.attach		= zynqmp_r5_attach,
- 	.detach		= zynqmp_r5_detach,
- 	.coredump	= zynqmp_r5_coredump,
-+	.handle_rsc	= zynqmp_r5_handle_rsc,
- };
- 
- /**
--- 
-2.34.1
+Gentle reminder on this matter. I am waiting for your input on above.
+
+Thank You,
+Tanmay
+
+>> Thanks,
+>> Tanmay.
+>>
+>>> thanks
+>>> jassi
+>>
+> 
+> 
 
 
