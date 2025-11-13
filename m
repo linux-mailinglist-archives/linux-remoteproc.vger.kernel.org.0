@@ -1,55 +1,60 @@
-Return-Path: <linux-remoteproc+bounces-5447-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-5449-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0F0BC58874
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 13 Nov 2025 16:57:05 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BDF2C58847
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 13 Nov 2025 16:55:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0F64A4EFB8C
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 13 Nov 2025 15:46:01 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 635FD362440
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 13 Nov 2025 15:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E35442F39D1;
-	Thu, 13 Nov 2025 15:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2990350D52;
+	Thu, 13 Nov 2025 15:40:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="itzfM3rT"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QFhRljHR"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80CC34404F
-	for <linux-remoteproc@vger.kernel.org>; Thu, 13 Nov 2025 15:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A578F32255C
+	for <linux-remoteproc@vger.kernel.org>; Thu, 13 Nov 2025 15:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763048381; cv=none; b=i7TcfW3I62U39RDQB1C9rTnuvKJul91SY/GCatfzW4ICXrZdjyqJUG4qryDtqJxu/TVY92xpbdXoAI3l21huFLHrgFHVUnPovnxVWXA5tODmqbI4tX29XbFmrxDSNnfJF49KnZgR583SoHqXii95h8ILseOIr8b2R7Izt0H0NwU=
+	t=1763048402; cv=none; b=FRbaGcUyRZPVmOdrsVumuMzEFAfTh4IySIYZTFIoN+GZ4ssShyd1Uuj0/v+1gc7Pag1vBkJVPQ4UW1iu6MUrUx7chtgS/yjS5CrY3yMBu2x2DXDOxrL3TZz4QHhI77rioMvKGpJKfLM1YxfCApU+UrrZ5CfbOcqm/1I6CstdUOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763048381; c=relaxed/simple;
-	bh=rPDGirdNX7egxsQQCFOPloEeBzb80gdFa4+7RU1D6gk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OJuMg3fI7N5omN0Rs6kyngEu+EIPQi9IxMLFyIhW1k6xwe2rr03iYIU9hyT/A+qpYVMXDI6yy/2Nd1TXXqOnjFQ4ubuzpXFYL+BNoLkXUpxCY7BsusO7nATltAJPekyVHAxSX58J4DzxCrdVT3V2AULku4V3uzEHfFAx9XjczXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=itzfM3rT; arc=none smtp.client-ip=91.218.175.174
+	s=arc-20240116; t=1763048402; c=relaxed/simple;
+	bh=IAwkvPGN1J6/ndtGV/PbZPfm2JVOjdVPyim6gdQtW9A=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=W0lvPw4CFUg6FPNgYtTpHcrZqbNRy+Pol+7GsEogHY/+mntBh+Yh7ooJf9Y3aYub+zkfcUPqTp4XVmPkeyyQvniz8FBvCK60sl173qYXeWrW9SQSuBKptdKtSvzKYpGvQJq3j9JNN1MAm62N51uzAHewnGl5b59vUw2+Xsb4hoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QFhRljHR; arc=none smtp.client-ip=95.215.58.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763048377;
+	t=1763048388;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VsSo0rHruUYZUSRInyxcyCIV2SApYNLgLqp/uhMcd54=;
-	b=itzfM3rTNRenebQwm+O2xoQPz+w2sJQcLcsGGiKHPoOVKyLL8OmRZkNh6vzwqPlMyscxhq
-	qBLToCimsI4idMU7ycNWx22mEjVyaQURtcy1qwfU+Hn13bfIOK1Ru+bODhjs+3LDP6axYU
-	ueJTceI6ZYNGz8EwwMXykwDfwCQzEOU=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gE+3sRbPyHtFVg+iv45yjGoy/qm9/uVMyd8LB7zMmwc=;
+	b=QFhRljHRmtIGs223E59VPERVczvN2nHQAZk8qZV5OgPZgVtwzjez+vinkcRX9sBdKFUyOi
+	gsIxw0nqty75c4NLgYc08QFgtLph1EoUtBEBKtxgXPPVXeIqxGAJZRVcR6SgCShaRzxSbR
+	c+wLs+NVMI97YHz8Tha5UIAk6ExPYYg=
 From: Dawei Li <dawei.li@linux.dev>
 To: andersson@kernel.org,
 	mathieu.poirier@linaro.org
 Cc: linux-remoteproc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	dawei.li@linux.dev,
-	set_pte_at@outlook.com
-Subject: [PATCH v3 0/3] Fix and rework of rpmsg_eptdev_add()
-Date: Thu, 13 Nov 2025 23:39:06 +0800
-Message-Id: <20251113153909.3789-1-dawei.li@linux.dev>
+	set_pte_at@outlook.com,
+	stable@vger.kernel.org
+Subject: [PATCH v3 1/3] rpmsg: char: Remove put_device() in rpmsg_eptdev_add()
+Date: Thu, 13 Nov 2025 23:39:07 +0800
+Message-Id: <20251113153909.3789-2-dawei.li@linux.dev>
+In-Reply-To: <20251113153909.3789-1-dawei.li@linux.dev>
+References: <20251113153909.3789-1-dawei.li@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -59,36 +64,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Hi,
+put_device() is called on error path of rpmsg_eptdev_add() to cleanup
+resource attached to eptdev->dev, unfortunately it's bogus cause
+dev->release() is not set yet.
 
-This series fixes bug introduced by anonymous inode eptdev code and
-rework the exception handing paths. 
+When a struct device instance is destroyed, driver core framework checks
+the possible release() callback from candidates below:
+- struct device::release()
+- dev->type->release()
+- dev->class->dev_release()
 
-And it tries to address a long suffering issue which may be backported
-to stable kernels. 
+Rpmsg eptdev owns none of them so WARN() will complaint the absence of
+release():
 
-Change for v3:
-- Split it into 3 patches:
-  1/3: Fix legacy bug.
-  2/3: Fix new bug introduced by anonymous eptdev code.
-  3/3: Rework error handling code.
-Link to v2:
-https://lore.kernel.org/all/20251112150108.49017-1-dawei.li@linux.dev/
+[  159.112182] ------------[ cut here ]------------
+[  159.112188] Device '(null)' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
+[  159.112205] WARNING: CPU: 2 PID: 1975 at drivers/base/core.c:2567 device_release+0x7a/0x90
 
-Change for v2:
-- Add put_device() when __rpmsg_eptdev_open() failed.
-Link to v1:
-https://lore.kernel.org/all/20251112142813.33708-1-dawei.li@linux.dev/
+Fixes: c0cdc19f84a4 ("rpmsg: Driver for user space endpoint interface")
+Cc: stable@vger.kernel.org
+Signed-off-by: Dawei Li <dawei.li@linux.dev>
+---
+ drivers/rpmsg/rpmsg_char.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Dawei Li (3):
-  rpmsg: char: Remove put_device() in rpmsg_eptdev_add()
-  rpmsg: char: Fix UAF and memory leak in
-    rpmsg_anonymous_eptdev_create()
-  rpmsg: char: Rework exception handling of rpmsg_eptdev_add()
-
- drivers/rpmsg/rpmsg_char.c | 61 +++++++++++++++++++++-----------------
- 1 file changed, 34 insertions(+), 27 deletions(-)
-
+diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+index 34b35ea74aab..1b8297b373f0 100644
+--- a/drivers/rpmsg/rpmsg_char.c
++++ b/drivers/rpmsg/rpmsg_char.c
+@@ -494,7 +494,6 @@ static int rpmsg_eptdev_add(struct rpmsg_eptdev *eptdev,
+ 	if (cdev)
+ 		ida_free(&rpmsg_minor_ida, MINOR(dev->devt));
+ free_eptdev:
+-	put_device(dev);
+ 	kfree(eptdev);
+ 
+ 	return ret;
 -- 
 2.25.1
 
