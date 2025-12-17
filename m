@@ -1,48 +1,48 @@
-Return-Path: <linux-remoteproc+bounces-5891-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-5894-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC6EACC8953
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 17 Dec 2025 16:51:15 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01669CC893B
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 17 Dec 2025 16:50:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D8D7030143D8
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 17 Dec 2025 15:50:38 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C9C2F302D594
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 17 Dec 2025 15:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C465F348454;
-	Wed, 17 Dec 2025 15:40:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44DFE348883;
+	Wed, 17 Dec 2025 15:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Rt79TrLP"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Iel72G6s"
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B9F17C77;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A7333B6F4;
 	Wed, 17 Dec 2025 15:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.132.182.106
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765986013; cv=fail; b=Fr5i3lzkwvSC966pQrZ0hHaZpH03fGJyJjiS5Ox+9jvtG2X5+wGobEYTmWCuSuffYMwxDPMTEiXIBbwxa7EqXwepuvRBaU3SYyWgCR2zGnbtuoTSFGaWTwFDg5aazVsRQB+k2DoJIIAXX/9ycdwyzawrHaaHxz9HWFlkTuaG1ho=
+	t=1765986014; cv=fail; b=Lx3tWDLndE8ZjG8GcpjE6OYKWLFV2nl4r0tejY37HDLFaQ49hrBYDM9+rC6/RFCSsfEuN/dusjFIV/bnguUyhfP7jOr3Xkzu/xHFnMvQmT4vZWBL7G/G8LinpNSpwxSDy946eWZiSf9jN8hXpKIpskFw3x6hEnoCaT+O42F5xzc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765986013; c=relaxed/simple;
-	bh=p6jptTaSs7JBJgzDPJtk4MmJnAdK+bAJp2WTXTZ6Znc=;
+	s=arc-20240116; t=1765986014; c=relaxed/simple;
+	bh=J9hfwHiZgZC1CSFh12EldpmuDF/6ZrdDPOvmH0oRFns=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mBOA4448LfBQLf5U7pw0lV2A9tQox2hHUDS9CW4u1NEW8Yv+R7R8NVGxp2dbjudfTVvDEjz8tiZ1SDkVRIhu5l/G+bCafu0Rw33ihRJMdTr5Uj9ynw2QANABe5SJMXuZZzPALp6BhyUiXRtNm4aLvJopP3uEbIG+ahG2Qr/4d8A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Rt79TrLP; arc=fail smtp.client-ip=185.132.182.106
+	 MIME-Version:Content-Type; b=AUxpV89pJreXF2NpQQrNdDVahQYFuiQhj89EBLa6CB/T/+cEuSY6cfY4lbMAvJd+VHsm9gtlpYy16qO3jAX2OhWrP+6ujHzgTyx31wUjzBBrkElytvb5h6YkwGWiCcRtk2XOoocznHwv3Zt/xNc8vxjadz68l9f7kmLG0ZXOjkY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Iel72G6s; arc=fail smtp.client-ip=185.132.182.106
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BHFaOhF3369922;
-	Wed, 17 Dec 2025 16:39:58 +0100
-Received: from mrwpr03cu001.outbound.protection.outlook.com (mail-francesouthazon11011063.outbound.protection.outlook.com [40.107.130.63])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4b3a3wmn86-1
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BHFWBYX617538;
+	Wed, 17 Dec 2025 16:40:00 +0100
+Received: from duzpr83cu001.outbound.protection.outlook.com (mail-northeuropeazon11012024.outbound.protection.outlook.com [52.101.66.24])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4b3bbecdfx-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 16:39:58 +0100 (CET)
+	Wed, 17 Dec 2025 16:40:00 +0100 (CET)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Xsj0UjUsY2mkZPoOk6iuA+EjkdRAD2OkNP+cZdKCMl6LgVGrbsalm4s+FoxIFZidAmkmZ914yX29Kky7xAObQ2+sQXvQ277AV0wdYxIL39Izr+w57vmDrcCXZBqNPLgGIEkstC2c/Z++jB/ZNi23uWbTdGZfLkbngJ5/ljsyA4foo4E3lwtILqgPErcRhmiqLT5S7y7ia/nzmd3D03aFVH1z8z3IAm/o+bnfUautQkXdxZCLisSoaUd3hkgIWYR9v1MTx6FXyCpQUNlEuCdAn0POT9RP41SvMoAthmZwOofbsZ+7h8NjvsWx0wELeBLBXEGUgF+rjdIgqKXl0JzVPg==
+ b=uVpsd1HH0WUZoBbJ6X7//KBO0R5tVRTwcd4MqCDLQ+P7twBp/8vF1h+8FjbH/2mjK6t9Mjb5Y1Zv+ADoslFNQOPNWtR+9qqWSnoJhoqKzeYl9L6/0SMzXNCCDr5Uo5YvafU1Dx44cYYVfCieMnINNnEsD1ymOCY2OesDBttXses/YlVb0IWWiuCXQMe4AF/U7donHbqwi+sQLJ02j2+qtPiu8BKX2vU7NU3kaWjSFJ1x7lEg/kbp9Sot64S+DK8z1Tu8C8zpYn3AtU+1ZgF9TP2NJ+9cE2ljOQb4muHIk05+zLu4MYNh/tkdDUw/ShWb7o3vkclZR6BEAUMlkYQ8iQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KOl/LxvZc49Z7Tz8i0JalXOr+dGCvyAzl7LCpi4fZws=;
- b=GdoXXDXLTi1WdDx+ZOrxHckULHP9rUaObG14m7cYoijt2p0olqcXy+dcSPWzWRvjniIobEQJYMY846XjPRkG+zoidhWrwM93+NJNc6Q2TACYdDIjYmIrmYjpY6d2EJmkNqmh1OT8o25KfDWAUYq9ExveW55XgS7swDMilT293aSNKEkwpQ85Xn0R/I8AiTMy83gie7OR5WYOhqzMXKIjPCQaw6W8y9E/JexLV3fY8JNmHQ/WDFwkILLRATmbd7WXb7D51e4G51j7LhotbabKQH8dmqbl+xHqcyPPRSL8V86Gf0XZrA8htB49Tm6Uy3pcjxIoxi+6CHky99HLjOC5pw==
+ bh=Xra17NmZ0bE1TL7GUNzTpKv680VBaVNZOky9y00OaFc=;
+ b=MDfJZp8TACKcmeQxhZV3Ua5KLaa3lgBewpnI9Oerj8TZ0D2noQNpT4cG46x5C+VuD1hlelaEcfGoosYNBRXqBPdIA+JNWehsdcQRNmpaIyUZWYiDJesuqsOeBlL04lXDM3rupCY/i/sRvjPLlwRdZ6cnAAttH5CHaW8REfcKz8Cm8+k3VRjHKOYCn5+rJlZnuGYG+Juh7qVdQ7P8pKFILdccmftfIT3idjsN5rBHz8vTXTrTWzlwU9Ft0PxJpZgdz65sOMKcNahR1Rk+ei/9A97lMb3pJCai9xW/LWQcX9ucdBFwNHltvrRboDxJyRL4hqdmEkds57ED9BEtqIzJrQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
  164.130.1.59) smtp.rcpttodomain=kernel.org smtp.mailfrom=foss.st.com;
  dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
@@ -50,18 +50,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KOl/LxvZc49Z7Tz8i0JalXOr+dGCvyAzl7LCpi4fZws=;
- b=Rt79TrLPZcCbARO1uHq7LiZeQvP3bpqgvmRcVoIeMoTzSPT1iTWY/PRhh2N3IP6TzwRTxIiFaATlUFpSn4YavNPzNGcpkGeb2ntbhGuTfpT1QYgVPrFO2KdRb45FFOXkMUHJQZkjQnghgRMVaN4w1cyzpV0lbsxsdPW15MEjeiqYJH/ffff8/NlkFdENMLHydcqTu2dYTEe6k8/r4nUFFt0Se/As+gnkERSLnrPIe8/4UkBbwd1lzURtu0fVlPilg9UJ7avZdpWj2WK6r4TMR8WpBalLEIxfX3GuUIxzRwJJq9lXxD4pS63BV2usAZxwSF/fnQVB01xt7j7AnO54dg==
-Received: from AS4P195CA0053.EURP195.PROD.OUTLOOK.COM (2603:10a6:20b:65a::9)
- by DU0PR10MB6605.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:406::19) with
+ bh=Xra17NmZ0bE1TL7GUNzTpKv680VBaVNZOky9y00OaFc=;
+ b=Iel72G6s3MOusdAbwnO2BcCqoP3C1peAiFkMSOBjUYw81g9vy+bhAzEj+qs/SRvbB7hWB9wt6BuaKITyR17mu/IEqEU1q8MMMa3tvJ/iGdCe4FGscNQJ22k7sZIkFN2Ljf49AFP8BvaW/A1Q5NCYQxHIUtWAKL5Ywx84+9ztxWHBaPFT4C2adOvGqTOS/QcfC4T1ht0VVoW/qmx8uiWV2X3FYjbzqHTfIxo1kNnbgV4w8EUxIeUonfHeyOh1hQvywATj8NRN4CYt1+XV7uKcQWzztVgJGHMHgNci8/GYnSqZe4nUgymSnEldU2dugqSjZPDUeAu+xX55fl0aWlHUnw==
+Received: from AS4P195CA0051.EURP195.PROD.OUTLOOK.COM (2603:10a6:20b:65a::17)
+ by GV2PR10MB6381.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:bf::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.13; Wed, 17 Dec
- 2025 15:39:54 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.6; Wed, 17 Dec
+ 2025 15:39:55 +0000
 Received: from AMS0EPF00000197.eurprd05.prod.outlook.com
- (2603:10a6:20b:65a:cafe::92) by AS4P195CA0053.outlook.office365.com
- (2603:10a6:20b:65a::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.6 via Frontend Transport; Wed,
- 17 Dec 2025 15:39:52 +0000
+ (2603:10a6:20b:65a:cafe::a) by AS4P195CA0051.outlook.office365.com
+ (2603:10a6:20b:65a::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.7 via Frontend Transport; Wed,
+ 17 Dec 2025 15:39:53 +0000
 X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.59)
  smtp.mailfrom=foss.st.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=none header.from=foss.st.com;
@@ -71,11 +71,11 @@ Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
 Received: from smtpO365.st.com (164.130.1.59) by
  AMS0EPF00000197.mail.protection.outlook.com (10.167.16.219) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9434.6 via Frontend Transport; Wed, 17 Dec 2025 15:39:53 +0000
+ 15.20.9434.6 via Frontend Transport; Wed, 17 Dec 2025 15:39:54 +0000
 Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpo365.st.com
  (10.250.44.71) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 17 Dec
- 2025 16:40:41 +0100
+ 2025 16:40:42 +0100
 Received: from localhost (10.48.87.127) by STKDAG1NODE2.st.com (10.75.128.133)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Wed, 17 Dec
@@ -94,9 +94,9 @@ CC: <linux-stm32@st-md-mailman.stormreply.com>,
         <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <op-tee@lists.trustedfirmware.org>, <devicetree@vger.kernel.org>,
         Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH v20 2/6] dt-bindings: remoteproc: Add STM32 TEE-controlled rproc binding
-Date: Wed, 17 Dec 2025 16:39:13 +0100
-Message-ID: <20251217153917.3998544-3-arnaud.pouliquen@foss.st.com>
+Subject: [PATCH v20 3/6] remoteproc: core: Introduce rproc_pa_to_va helper
+Date: Wed, 17 Dec 2025 16:39:14 +0100
+Message-ID: <20251217153917.3998544-4-arnaud.pouliquen@foss.st.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251217153917.3998544-1-arnaud.pouliquen@foss.st.com>
 References: <20251217153917.3998544-1-arnaud.pouliquen@foss.st.com>
@@ -112,194 +112,157 @@ X-ClientProxiedBy: ENXCAS1NODE2.st.com (10.75.128.138) To STKDAG1NODE2.st.com
  (10.75.128.133)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AMS0EPF00000197:EE_|DU0PR10MB6605:EE_
-X-MS-Office365-Filtering-Correlation-Id: cf3f32ad-19d9-4f47-9a0b-08de3d828620
+X-MS-TrafficTypeDiagnostic: AMS0EPF00000197:EE_|GV2PR10MB6381:EE_
+X-MS-Office365-Filtering-Correlation-Id: 29d7d29c-6aab-46b8-89bd-08de3d8286ce
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|7416014|376014|1800799024|82310400026|13003099007;
+	BCL:0;ARA:13230040|82310400026|1800799024|7416014|376014|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?gmsqPHoYvB+7UOnacl4bs0DwlmN09pYjnmT63BNtTF/PoYWyNG0kEUzGiC6y?=
- =?us-ascii?Q?RtVYNd/N3BJxdVKegOJ6iKcy9RJC9rOM/cI4zy6G7xeJuw3VF30m6WvIXxWa?=
- =?us-ascii?Q?dOmTlIIzoMH4H3BY0tz7/YC5jgKRIdbKmvw9yBaj4+ltkaKTp3oOXmMCnCcI?=
- =?us-ascii?Q?BzLARjS5jcSR6V4+6kKzdr3ATE0wgps7qMY1XHHypH4ZJ9TNUSe9a77IxH/K?=
- =?us-ascii?Q?8a6+A7pDtteGfq7H7P6hBWLQ4iF9BfKtFy2c1JOPnKkFuhsq7eDv9aBZEo7h?=
- =?us-ascii?Q?6y+1Mwgu4+9Z8tE87c/i6PtbYu458FE0NpZABfLPvYI2SYCviY60tnCFOobu?=
- =?us-ascii?Q?drcaA0PNiROixZBstOY9srNIZTyOnOcIPhQRculTtr03LGVe2yxapXxkTuMv?=
- =?us-ascii?Q?WDXWWsRED5edXRpck4DXJZi6XIHKujDJoWhaRG1hxxbfgbxLVp1MQGdopwwv?=
- =?us-ascii?Q?zqTqKf971tTswXhiVtROnVIX2V0GVXEBS5htmSPOqKT3MsamJR08yxHAqmQ3?=
- =?us-ascii?Q?d2rDpNSP5Hm6FbJGYt25pD+Fi+ZAHUHcf1acf8Vsa2bgalmFgQHGyME7qjbm?=
- =?us-ascii?Q?0+RtsUg1NvSby9Y0KC6MYMKgNBBXQY5YKJ2K2RVJCqY2JEotxjdfBG+phDyK?=
- =?us-ascii?Q?Krb5qk/ioQ+J1yDBgEBotgC3U0l1iOjcuRZYSa2lUNYSB8K+pcR6FpU/XPbU?=
- =?us-ascii?Q?FKLpnOZZUkUuyt89QCn1fXRrEn/+Ybu+C6eQf3Aao4Si4k60FSbnZwdSvH7r?=
- =?us-ascii?Q?2KXTJ1s2M2sW6O0OvqWd0Cf0vGCVs3n+jxV5jlGxePKbhT2ucmS0hFeiMzTP?=
- =?us-ascii?Q?fPG/XbQVJ9IDMuVP9lzqYAJWuuhjJiPV609PD7KX88IvTS5FSDKE1KyFEM+7?=
- =?us-ascii?Q?iYrxitEd4AGcrtTNJq6EcVBJIwl5akuIGwp3Rc5RIdwKfeMCP4v9ULx1Yz2J?=
- =?us-ascii?Q?rc/8hD2+maNQ7iXuakv/ZkLvJ98KMOBfnirxr4T33izVElqoWDxerFfIumWP?=
- =?us-ascii?Q?tq0sltu6g8vY6tFKxToFfDNbQ08gb6HijbBNL3/X7FsXkbAer16a7KNts1B/?=
- =?us-ascii?Q?hmYCtQaUHYaY/hVnDAXYY/VxN/VuTyivLwr9tgomUTxSXjSJCeJgPTFKDdhI?=
- =?us-ascii?Q?lg2GB8JVHexnq69ZuWS9DzvsvOVlMoC/TUzfTwUAbN1ZP7lZ8lNGC2ylsfWn?=
- =?us-ascii?Q?GCld8v+gDYji52yrHOiqixYogNIY1MR8nFcoD6peedTYI0/vLYIB+znm2CHf?=
- =?us-ascii?Q?39nAPlShWHRzoWkPLpLx6llqqaeYTFAnOKLHZcJYxwq1EI4pneO3zRAmqF+u?=
- =?us-ascii?Q?BtZUKUI1lc03BEqM2CF1mvWgL4G/CGcHizAxHhVpRB1WdWisFlf+CDyRwTb7?=
- =?us-ascii?Q?kZaT6QObg65veVL8yC4X9NWs0kKpIWLnsOVlqEM5k/xgH4evlizxnHsov8rf?=
- =?us-ascii?Q?SIcsUbI3LWoCfvF4eH0Q6YmH7jcSilSgbJFJ8XzGZSUzI/0CNfK9yTZEAyL6?=
- =?us-ascii?Q?z1qZlr0np2q0ytJEX7ZENu5T83wzHqIvSIie?=
+	=?us-ascii?Q?ZLnehrmQXsM0C1MTaB1xIzVCIQ0HOaYIT+ON3EYbpTR68g0SQtNB+LAUxHvc?=
+ =?us-ascii?Q?/oWsHhZYwm/DaVHPszrqkMMgYP1dHYg0XcFW9cAWyWh5fY0yvU8K6IjQe4Rj?=
+ =?us-ascii?Q?pBKIv7vS6JXWssbHkILq1r5dfHDGfCU9PTMDXyDxG9u+Dk3Guzl5f40ge8Bk?=
+ =?us-ascii?Q?RKQJ9j4YELG8G9DzGJpAIdhcDNR5ieAsHVe/ZYWL5lNCOYZkQ+fetdWzEE7X?=
+ =?us-ascii?Q?lrdhsRnMxKLFhLhknxj05wddgJ+MxvIiPNByq4FiW7ZtHCVTaUskheu7gs3l?=
+ =?us-ascii?Q?xkU2jrG9naotbYa7ugGKkpfT6V3kMyfQAF5KTwlxv2k8oTXV5LAYzdF98Mwf?=
+ =?us-ascii?Q?Bk70iO4R1A1F4/7KzTG1pRs/AZZeRSWtBU2QwVSpgj1iKovt+AYVWD2Py6Wa?=
+ =?us-ascii?Q?ZJbNPabc4cBEvy64z5vRzg0Qi21gYVYE6la+yeeMy6wUaR4cqawmQPK8RR2o?=
+ =?us-ascii?Q?Y94A038FJ4uTGyFHUstgLKAjvbQIqfgbQAkAxoGP2WBBnMWSfTlvmCuA4zFK?=
+ =?us-ascii?Q?TeJ0o19H3rKWrsvgGazTUR0Mbc8oNwOmHL8PwiOTWQTOma1CpTjaWMh9Jrc8?=
+ =?us-ascii?Q?03VKI7VtoOGIYMbT90M6cZ9jIehoNqhcaFyKsoXHObKdbadwvhP2Eynd7KUS?=
+ =?us-ascii?Q?P2b/P0Kp/Xw8+/C7b2q59t++9ZPFC79zsW+IIIp6XxePL10Q3IT4MzQXiEFa?=
+ =?us-ascii?Q?JpwLRDAVkB2NpOBzWgGgePlz0JpSoDki8uRJVJHdX9aFGaJN3yBktvq8Irud?=
+ =?us-ascii?Q?n8/i5x296qKC2K70fBG4ZDv9q1pguspqxZdP4DqOhQq8I5j38giA2qBH7MSJ?=
+ =?us-ascii?Q?j1lQjl+Zbjb+TIhBfSfoe0TukLIP1CXc5oA1NKU8Jzd53KiSiTtYyMy/su+p?=
+ =?us-ascii?Q?W8cUH1J8I0rnYZ8lrw1f0tfgohp6OpS5GN1hskG2q6wi1K7n22MPCUGpMigN?=
+ =?us-ascii?Q?Q0oxOTQVdR4Nu+n7fXWbdfeNfSwANT30DuBwqTmhyi+s21O1TaTfEaM+XQDP?=
+ =?us-ascii?Q?20rGbcPeo4umluGu19JUI2eJBONgsl4/E0lG9b6DRCs5pOz54fkQ0SXwVyic?=
+ =?us-ascii?Q?hEs3EAJzCrQqwLGmMKz82+JybFtTxySaHT9D/KuS7+mpd+CBhUDnWGaNfner?=
+ =?us-ascii?Q?MEgvTsyAhX/j4JMVSRjAOEl6TY7ncbqP07J2nBLppk7jikJQHmDqxe6kIy5R?=
+ =?us-ascii?Q?zn/4/kG8SoLIlKHL+7E5RqOLBXa3Uho5dzmyw6gZbK+gg3kigCrvJtvDq+e0?=
+ =?us-ascii?Q?knPBTMSHEuqwpmYdhkyTkgngOxz70oBh+bq73F/EM6p/Se53FzoAUYG8Ah8d?=
+ =?us-ascii?Q?Xf2hYqiov4A3FgSYMNv3hiMmJBQvD2KAdJOxqZBrLfZaz7X21DgGvjPGsp4E?=
+ =?us-ascii?Q?KYzs/GSeR5cHhYdRdIrujSqYwG48QsDEnp2hhf+0eKnncUxIdWEdzF4HkBC8?=
+ =?us-ascii?Q?unPCEQKlrTHEtquhlZjtDIHkZRHRt5jk01NhUz1XyvgpxyY73sBzIOVfwBXg?=
+ =?us-ascii?Q?KpgdHx1JTxegJiQR/2klJKC83it7+FM+esYhFWiodh84UTg0GNJN1JfyknsL?=
+ =?us-ascii?Q?mbciSeiKssFiXYMGoXM=3D?=
 X-Forefront-Antispam-Report:
-	CIP:164.130.1.59;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(1800799024)(82310400026)(13003099007);DIR:OUT;SFP:1101;
+	CIP:164.130.1.59;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(7416014)(376014)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: foss.st.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2025 15:39:53.7691
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2025 15:39:54.9129
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf3f32ad-19d9-4f47-9a0b-08de3d828620
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29d7d29c-6aab-46b8-89bd-08de3d8286ce
 X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.59];Helo=[smtpO365.st.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	AMS0EPF00000197.eurprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB6605
-X-Authority-Analysis: v=2.4 cv=HLHO14tv c=1 sm=1 tr=0 ts=6942cece cx=c_pps
- a=ymtDJClzu6q9zAPI/ygaog==:117 a=d6reE3nDawwanmLcZTMRXA==:17
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR10MB6381
+X-Authority-Analysis: v=2.4 cv=JK82csKb c=1 sm=1 tr=0 ts=6942ced0 cx=c_pps
+ a=qOkcUHOkeTdS7jQc1VlYeQ==:117 a=d6reE3nDawwanmLcZTMRXA==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=FOPVHIcnkjUA:10 a=wP3pNCr1ah4A:10
  a=s63m1ICgrNkA:10 a=KrXZwBdWH7kA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=gEfo2CItAAAA:8 a=8b9GpE9nAAAA:8 a=Gk9aBJqvnsFLiQrOkBgA:9
- a=sptkURWiP4Gy88Gu7hUp:22 a=T3LWEMljR5ZiDmsYVIUa:22
-X-Proofpoint-ORIG-GUID: OvjVSdEVs_YFL8u5gyS0Cy0eaXj_U1Y5
-X-Proofpoint-GUID: OvjVSdEVs_YFL8u5gyS0Cy0eaXj_U1Y5
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE3MDEyMyBTYWx0ZWRfX5+LTN5UgMBkl
- iTUS16yDpCN6SQdQr0AZfI4M7kNyRjTBfDKeLaETVAulAWj+3RfLRTJas/7bRzndtoPVcnzbPsW
- 6pj63QQiBleBSuyrKbhegMlf0KRmbHNXtmKQSLvNYu2Y4jHE0ZCBM/XluEzJ3OIIncVMk8agsec
- spKeSiL/SxZaPd1281mskS/XQ5zEGHubm4VifarND8UAi3RZYM448DOragXOR1P+bK8VfZ6eaEO
- 3LdnN2q4a0yaT0J3bB8D6mLxnwKCtgC38kHY/KCyGcjONlIbLQkGPaU2Fpq7O/tx4+83axjCR//
- iYNKP+xYfrNl+ZUf31kTdrCWgd93rKRFI3B1Ud6IuJrHt3HbOmy6RJXS/WMOHOdZpWkpxRISu3L
- +sqfClPoxCh1sfw8NiNXVu3Vf0N0gQ==
+ a=8b9GpE9nAAAA:8 a=UTKkbO-VyYAnisI0h10A:9 a=T3LWEMljR5ZiDmsYVIUa:22
+X-Proofpoint-ORIG-GUID: 3EGPlHkhSBc1mYEUuGNLajJxZd2r5HPj
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE3MDEyMyBTYWx0ZWRfXyIhhG+WrFna7
+ jdRLpt+9946auDaGtGyjPLEJWngDsM4VwC3necqlolSvYINDm8nZkQt7xna5kT0jcqTD1Lnnfym
+ yxnB5DK1t3NRi4AQg6mrOv6ykpLJGl9lbMcWfkF7aIL1X9GXHJi0QeQkDBkwuq28HgIl4KwyWmn
+ 6ihIDoToBj36WIV6S/ZVFZ1io+Ge2vQyhd01GAkM57d65IOKnGbbiIEgr4qlBCrypEf3Itvu5q2
+ JALZSJ5p8vZ/HLi4ibBa7tsAnr/IfgmVIVXMCz5Pf0Ln0gdLYwGlKsXWNGWNrf+mBCyqnpbtSBs
+ qxY5ib3jhwFejoynrfqgX8nVlGeV7Vh6ejIbhXE4WpKo0xh3i3aqZnVICJ1nMX0nd5lyjc4dvMJ
+ L/sjd/+1B0rcPI+YWPfmmFu+MZLzQQ==
+X-Proofpoint-GUID: 3EGPlHkhSBc1mYEUuGNLajJxZd2r5HPj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-17_03,2025-12-16_05,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
- adultscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
- impostorscore=0 malwarescore=0 bulkscore=0 phishscore=0 clxscore=1011
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0
+ adultscore=0 spamscore=0 phishscore=0 malwarescore=0 suspectscore=0
+ clxscore=1011 bulkscore=0 lowpriorityscore=0 priorityscore=1501
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512170123
 
-Add a device tree binding for the STM32 remote processor controlled
-via a TEE Trusted Application. Provide an example of the STM32MP15
-Cortex-M4 core exposed as a child of the TEE remoteproc service
-(rproc-service-80a4c275-0a47-4905-8285-1486a9771a08) and managed by
-the remoteproc through a TEE client driver.
+When a resource table is loaded by an external entity such as U-boot or
+OP-TEE, we do not necessarily get the device address(da) but the physical
+address(pa).
+This helper performs similar translation than the rproc_da_to_va()
+but based on a physical address.
 
 Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 ---
- .../remoteproc/st,stm32-rproc-tee.yaml        | 100 ++++++++++++++++++
- 1 file changed, 100 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/remoteproc/st,stm32-rproc-tee.yaml
+ drivers/remoteproc/remoteproc_core.c | 46 ++++++++++++++++++++++++++++
+ include/linux/remoteproc.h           |  1 +
+ 2 files changed, 47 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc-tee.yaml b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc-tee.yaml
-new file mode 100644
-index 000000000000..e9cf8e781543
---- /dev/null
-+++ b/Documentation/devicetree/bindings/remoteproc/st,stm32-rproc-tee.yaml
-@@ -0,0 +1,100 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/remoteproc/st,stm32-rproc-tee.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 825672100528..f7c96dbed189 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -230,6 +230,52 @@ void *rproc_da_to_va(struct rproc *rproc, u64 da, size_t len, bool *is_iomem)
+ }
+ EXPORT_SYMBOL(rproc_da_to_va);
+ 
++/**
++ * rproc_pa_to_va() - lookup the kernel virtual address for a physical address of a remoteproc
++ * memory
++ *
++ * @rproc: handle of a remote processor
++ * @pa: remoteproc physical address
++ * @len: length of the memory region @pa is pointing to
++ * @is_iomem: optional pointer filled in to indicate if @da is iomapped memory
++ *
++ * This function is a helper function similar to rproc_da_to_va() but it deals with physical
++ * addresses instead of device addresses.
++ *
++ * Return: a valid kernel address on success or NULL on failure
++ */
++void *rproc_pa_to_va(struct rproc *rproc, phys_addr_t pa, size_t len, bool *is_iomem)
++{
++	struct rproc_mem_entry *carveout;
++	void *ptr = NULL;
 +
-+title: STMicroelectronics STM32 remote processor controlled via TEE
++	list_for_each_entry(carveout, &rproc->carveouts, node) {
++		int offset = pa - carveout->dma;
 +
-+maintainers:
-+  - Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
++		/*  Verify that carveout is allocated */
++		if (!carveout->va)
++			continue;
 +
-+description: |
-+  STM32MP remote processor controlled by a Trusted Application
-+  running in OP-TEE. This node is a child of the TEE remoteproc service
-+  (UUID 80a4c275-0a47-4905-8285-1486a9771a08) and exposes a remoteproc
-+  instance managed by the Linux remoteproc core via the TEE rproc service.
++		/* try next carveout if da is too small */
++		if (offset < 0)
++			continue;
 +
-+  Firmware loading, authentication and remote processor start/stop are managed
-+  by the TEE application. The STM32-specific driver handles platform resources
-+  such as the mailboxes and reserved-memory.
++		/* try next carveout if da is too large */
++		if (offset + len > carveout->len)
++			continue;
 +
-+properties:
-+  compatible:
-+    const: st,stm32mp15-m4-tee
++		ptr = carveout->va + offset;
 +
-+  reg:
-+    description: |
-+      Remote processor identifier used by the TEE service. The <0> value
-+      in the example denotes a single instance with ID 0.
-+    maxItems: 1
++		if (is_iomem)
++			*is_iomem = carveout->is_iomem;
 +
-+  mboxes:
-+    description: |
-+      Mailbox channels used for rpmsg/virtio functionality and processor
-+      shutdown.
-+    maxItems: 3
++		break;
++	}
 +
-+  mbox-names:
-+    items:
-+      - const: vq0
-+      - const: vq1
-+      - const: shutdown
++	return ptr;
++}
++EXPORT_SYMBOL(rproc_pa_to_va);
 +
-+  memory-region:
-+    description: |
-+      List of phandles to reserved-memory nodes describing the memory layout
-+      for the interprocessors communication.
-+
-+  interrupts:
-+    description: |
-+      Optional watchdog / status interrupt line used to detect crashes
-+      and optionally wake up the system.
-+    maxItems: 1
-+
-+  st,auto-boot:
-+    type: boolean
-+    description: |
-+      If present, the remote processor will be automatically started by
-+      the remoteproc core at boot.
-+
-+  wakeup-source:
-+    type: boolean
-+    description: |
-+      Indicates that the watchdog interrupt can be used as a wakeup source.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    rproc_service: rproc-service@0 {
-+      compatible = "rproc-service-80a4c275-0a47-4905-8285-1486a9771a08";
-+      reg = <0 0>;
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      status = "okay";
-+
-+      m4: m4@0 {
-+        compatible = "st,stm32mp15-m4-tee";
-+        reg = <0>;
-+
-+        mboxes = <&ipcc 0>, <&ipcc 1>, <&ipcc 2>;
-+        mbox-names = "vq0", "vq1", "shutdown";
-+
-+        memory-region = <&vdev0vring0>, <&m_ipc_shm>, <&mcuram2>,
-+                        <&vdev0vring1>, <&vdev0buffer>, <&retram>;
-+
-+        interrupt-parent = <&exti>;
-+        interrupts = <68 1>;
-+
-+        st,auto-boot;
-+        wakeup-source;
-+
-+        status = "okay";
-+      };
-+    };
-+...
+ /**
+  * rproc_find_carveout_by_name() - lookup the carveout region by a name
+  * @rproc: handle of a remote processor
+diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
+index b4795698d8c2..8fd0d7f63c8e 100644
+--- a/include/linux/remoteproc.h
++++ b/include/linux/remoteproc.h
+@@ -690,6 +690,7 @@ int rproc_detach(struct rproc *rproc);
+ int rproc_set_firmware(struct rproc *rproc, const char *fw_name);
+ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type);
+ void *rproc_da_to_va(struct rproc *rproc, u64 da, size_t len, bool *is_iomem);
++void *rproc_pa_to_va(struct rproc *rproc, phys_addr_t pa, size_t len, bool *is_iomem);
+ 
+ /* from remoteproc_coredump.c */
+ void rproc_coredump_cleanup(struct rproc *rproc);
 -- 
 2.43.0
 
