@@ -1,322 +1,221 @@
-Return-Path: <linux-remoteproc+bounces-5919-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-5923-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49036CC9B10
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 17 Dec 2025 23:22:49 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 625C3CCA158
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 18 Dec 2025 03:30:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1823F3003F64
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 17 Dec 2025 22:22:48 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 48F843039DE0
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 18 Dec 2025 02:30:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE153101B5;
-	Wed, 17 Dec 2025 22:22:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EFF22F83D8;
+	Thu, 18 Dec 2025 02:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IeFXHlrf"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="WdaDAGkn"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010024.outbound.protection.outlook.com [52.101.69.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908273002DC
-	for <linux-remoteproc@vger.kernel.org>; Wed, 17 Dec 2025 22:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766010167; cv=none; b=gLztf57HsJFQWcYvsZ+t49yLG4R6tmAkPK0UQWe1pag2QA0iFMDTL1ZQij8i4YJLkjLiGobbBfWO7qOysEn9BKXaqbJsDQWHVlTyiHTLxLTe8G9NEny9Zu5J6RTgmSZ47gW6GT9aZl8N+nG/2+L+dgSeVZWGdRMNOq/WpVH/REo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766010167; c=relaxed/simple;
-	bh=vYwp4I8hbPBtRMIorBvdZ6p/CrpScVwqDiWtbE9lOpQ=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=FosNJ6gpd0xqv/nVN4fOTKyO4D6I7NWPyTRf3GrRQwO20tAKoAoPhjU05kT58QM84Mfa8C3FIXA4mSxOiqF4eT1F5O/e1Ifz3ev/TcdRWrONM16l2GSv7Or4j7+9v9+p4l1hHawCFc+CjtDv8RVZ0S+9304XnVCVk3PqJr25Pvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IeFXHlrf; arc=none smtp.client-ip=209.85.160.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-3ec3cdcda4eso26152fac.1
-        for <linux-remoteproc@vger.kernel.org>; Wed, 17 Dec 2025 14:22:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766010164; x=1766614964; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eBxT+qxJytm2iSkVjV6pmyZyn6kdgr+cvKPmdICf7/8=;
-        b=IeFXHlrfbgBg1N0YXjTUL63mqq2/6P9fJmISj5Ic2e/EwSmailkKZ4wqG+jOwv72dQ
-         rEMkcyYpk7y/3WKml9bXC4Py2MZMbA1emtxBf0qlMc4mhu3+vB+r2DZInr+lJITD89gg
-         1/jsr0L86LveK+NRq4rEJCEN9peZ90sqjQviqx1/SMO66OoXI8IrWyoXXxGoTCzq4tpK
-         1TKyWzGOer1+ZmEMKIMjSx0GNWDOcfTAyKrK+wPytEtqZfdAwYtvQHsy5pjBiYxYe3kY
-         QW0wNVLMUk8V0OV1Um7GUf1YhocoHImH6hFXXvLneEYRUcqUsKVwVhUj2XS7JdwDPamo
-         iGaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766010164; x=1766614964;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eBxT+qxJytm2iSkVjV6pmyZyn6kdgr+cvKPmdICf7/8=;
-        b=k58jgWF2WfoWvulDKHiyqTJCT8BNtWHQQBsKz/wBkRm6S33+xSF6DQAdnlTZuTCcYD
-         HHK/VB/t/TSxfCWPJb1sA7mrH1gnaU6CZyrzjM9Zv/COSfrtqOon2gC6KAsK02nfROda
-         GJiycACqmbkygz4+LJqcFRfWxCoQtf+TepkVBOzUDLVjzYdEaVx1VpsKXd+T0o9V5O06
-         k58VdZq8a9rM8X09m0zexNBTXvVuK6ewYM0eJzCs03tYu9KJ5sZTq709fvhmtLv/uNgG
-         1yprj9H+i+sD5s//6wGoOzrWv5RRVTXuLR2nmq3G6QcYLR5oSV853pV8tUXIbeD+0FgL
-         uarg==
-X-Forwarded-Encrypted: i=1; AJvYcCX9ROEzkLLeyHR+ugte/xkMr/Bqv0diXpIDGfWf811BgEgkRcgTrnQwa6awv6KJL+6AcTNqeTnp+qnOLnsAvmV7@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHAj8kgk9S1AF0sP5MscHzJCs6JNNxtlf6aa9DKnmLYRAX5w6l
-	uk0rz9BaxcV/kbFvUync0FZyJzUej4wb6gsfVxujbxf5QjClSx0E+kbd
-X-Gm-Gg: AY/fxX4PBLEPGQW5WoOWoED1TRQIJYnTWPuVNXv/AoA0/xWLiHw+9+7I8v8Z+hn96cq
-	A22/9OPNP4YJIn3dCmeLIKbzlb+hsI5ulJbJzvnhdDBaJ8J8TFC9UTADWjzAuJLWBbiqHbnCMGs
-	pJHuujVUJr5A2N+3Nlio63VIhS6k9xjmH43E5hjvmRrIfji6Unh8DjE8MULFyEMnQse7T6tPzQU
-	Vo4CHfg7K1/3y9/h8+GtZyDImeB28tqUtOsnZT4ugaxCDPX3fuCkzHlr+314lmHEU+3CTP+lE3+
-	pBhu5bNEl9zJb7QHtjfVgchQ+CfbQGXoDGz82bWYeVwhwB13UvNQWwjyzvsXPt/uZYIcBjkkLmu
-	WgkFlDRPRq6sO7RY5KSqows2D698eDn357ZNw1vs7xzy2HQazR1/PmB/EFLI+O8v3a4FnVSehoQ
-	W3zWhSu2Tmw0mnzw7huWOZtS83w1vGgrZRc0Bw06iS/KEBIYPsAdvnG5Z1lUAb1Q4zl7KMPyEH9
-	L7QybvZudvTE6Ej5M/GpyofnALN1Ag+Lg==
-X-Google-Smtp-Source: AGHT+IFC26iHFHHe2fXKYJJ8rDtCJgJSSJ/HdeAkwkJxZvAMW9JxllEHGz3GExgYx6xskoAuaUue/A==
-X-Received: by 2002:a05:6870:3211:b0:3e8:9ac2:a4db with SMTP id 586e51a60fabf-3f5f8c1572dmr8900323fac.36.1766010164315;
-        Wed, 17 Dec 2025 14:22:44 -0800 (PST)
-Received: from [192.168.7.203] (c-98-57-15-22.hsd1.tx.comcast.net. [98.57.15.22])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3fa18024d96sm426403fac.22.2025.12.17.14.22.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Dec 2025 14:22:43 -0800 (PST)
-Message-ID: <4bbc7303-759f-4e00-a397-d233a013f620@gmail.com>
-Date: Wed, 17 Dec 2025 16:22:42 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD53E2D3ED2;
+	Thu, 18 Dec 2025 02:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.24
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766025014; cv=fail; b=JbddPX7w4nBnk9BwdkIrqMeZbDp7piKa1m3IrNoBB+yp+p6NRTaLDNjT4ctxldqLztWzNiZXFArcVkBTd5tIiqZhQVrmbcVsX/gk4CbycAhL9WHXT4XBqoTfrEsSUhLHb7vaW96Qxc1FXVJO/EsS3ZrpzmVFwNWT53OiVoUXjts=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766025014; c=relaxed/simple;
+	bh=+ddc2O5F8UdSW5e9KzzkprlOgX4ZYlr0FWtOHPJWlUM=;
+	h=Message-ID:Date:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=FgPg2OrJWNjwykMH/6oRMj9Nn/RM+S/DH5B4sNhzHrj88si9zZmQYYVm8NKocGU1Pw5/b1afAwOhlprc5hIwAoqu2wFilQYnwyKASF00HH0ybr1rFAd8hiB5J8rtbMcty1/q/9EvW5/BY9fKJ6NLUXunpXvsEG2KaTuyiIxGoiA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=WdaDAGkn; arc=fail smtp.client-ip=52.101.69.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+Received: from PA4PR04MB7821.eurprd04.prod.outlook.com (2603:10a6:102:c5::5)
+ by PAXPR04MB8845.eurprd04.prod.outlook.com (2603:10a6:102:20c::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.7; Thu, 18 Dec
+ 2025 00:57:34 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=shSVGccANbm60QVAk4JowMrCZ2mAXytisVJKHVyiAlhq6077kx30U5LyzIcYGxh8H82qhAMCT5YMDrwC4+jgbX2qW/TZXC4BAD9v534m2Vf/JKZBXAv5qmO6fFLmwOJIMpRnhUJM4O5OGAWYsoqUTmlI9tEnC13N+K4EvCb6635/fQXnZcyCmEpaQujKGdTHC2jvl7eFkM0fEGrFdKSzMWrGBzfzpgWNjAnDlfGRjUQntolZXPecFb/5vIv+QA9CeZYPFmLNZP9Z7CDjCX+VL6dmhDJR49ZnFF/qlpaORZEffOg697YzmdzXSSikhpvo/K3JauI+6h0WkzkebI8+OQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yQ6rufNVMBJ2mKHCiX+8OC9Th/HVedTr8Dr0Cm+BPW8=;
+ b=v+qT+IOWFq5K8vQYAjzjZ0CzEE7pOUZTg3YfPfeFZiNOi3QPE1guUlx3BBaom/0dhMtKf5Oc82kaqetOaqdP7oGaMgWEaXHewFhVcczunKuZk6dHIYfns+fryFR5jahC9cJXM/zIBzeLXBWKJPT2ba+oCkzxhdSKpaKOgsRC6J5KSey82GLIjPNnu7Ye6a87tbzLjn4dl7QowPqWVB78VjWGdjVbE/lHmS/9ullTumPTuja5d+E9cmWS2oKlh4Ybg1nrYh+/7oLHf/wPpVOjE3+2AX871vfDoCOOIDoCUtEzZAIx7aBS0trLGs2J6T6t2NjR9vqWBDy8bV/FT6acEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yQ6rufNVMBJ2mKHCiX+8OC9Th/HVedTr8Dr0Cm+BPW8=;
+ b=WdaDAGknF5V7deKqCDW/8fRGHr/oJgZGb5CKrpbAD/wi8iJUFhTMwcqKw0xuZGeRuULvblvnIi5u9vRYiXN0vbKWwLZN9LwQHG+gWRdBqKY6N3UqwqqVMo7JcfDVyZsV7oXZFmTnOTMvuE3tzBErknk7X5KLG8/wNyypCOVqFnhO9QRTXvq/qSG+T8Usk/DaxaUg1xmmulxlpMFFuf75Lh+KYQhpJYdATXCn7KF5+LaUm5FFvuMEsFiGQeVbGbjXV3s/GP/DUdH1GP27R8GWBpPcnrozS4AiUmUHBlazXjZFUzI0Qi9vRBqvP1wpyFWBf/iVra4atEDCjV2vOoeNXw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8907.eurprd04.prod.outlook.com (2603:10a6:20b:40a::22)
+ by PA4PR04MB7821.eurprd04.prod.outlook.com (2603:10a6:102:c5::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.7; Wed, 17 Dec
+ 2025 23:06:29 +0000
+Received: from AM9PR04MB8907.eurprd04.prod.outlook.com
+ ([fe80::a361:2618:7785:3bc9]) by AM9PR04MB8907.eurprd04.prod.outlook.com
+ ([fe80::a361:2618:7785:3bc9%4]) with mapi id 15.20.9434.001; Wed, 17 Dec 2025
+ 23:06:29 +0000
+Message-ID: <ad45e803-1235-4320-a87b-a60b18df2cf0@nxp.com>
+Date: Thu, 18 Dec 2025 01:06:27 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] remoteproc: imx_dsp_rproc: only reset carveout memory at
+ RPROC_OFFLINE state
+To: Shengjiu Wang <shengjiu.wang@nxp.com>, andersson@kernel.org,
+ mathieu.poirier@linaro.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+ kernel@pengutronix.de, festevam@gmail.com, daniel.baluta@nxp.com,
+ linux-remoteproc@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20251216074216.447193-1-shengjiu.wang@nxp.com>
+Content-Language: en-US
+From: Iuliana Prodan <iuliana.prodan@nxp.com>
+In-Reply-To: <20251216074216.447193-1-shengjiu.wang@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM0PR10CA0004.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:208:17c::14) To AM9PR04MB8907.eurprd04.prod.outlook.com
+ (2603:10a6:20b:40a::22)
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: mr.nuke.me@gmail.com
-Subject: Re: [PATCH RFC 1/3] dt-bindings: remoteproc: qcom,ipq8074-wcss-pil:
- convert to DT schema
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
- Mathieu Poirier <mathieu.poirier@linaro.org>, konradybcio@kernel.org,
- linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251210003729.3909663-1-mr.nuke.me@gmail.com>
- <20251210003729.3909663-2-mr.nuke.me@gmail.com>
- <20251216-notorious-omniscient-frog-caceaf@quoll>
- <f38764d7-9d7d-47f4-a099-b6ac6b12be6e@gmail.com>
- <a4e0bc9b-1482-49ac-8454-39edeaf3b676@kernel.org>
-Content-Language: en-US
-In-Reply-To: <a4e0bc9b-1482-49ac-8454-39edeaf3b676@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic:
+	AM9PR04MB8907:EE_|PA4PR04MB7821:EE_|PAXPR04MB8845:EE_
+X-MS-Office365-Filtering-Correlation-Id: b39bf024-37ee-4e7b-567a-08de3dc0e931
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|366016|376014|7416014|19092799006|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+ =?utf-8?B?SGF6cWU1RFc0UXIyVUxyVHBTbDFJdGpWc1pHL05nc1pGMGxsc28rRVJ6VVhW?=
+ =?utf-8?B?MGpQMHFSMlcwRnFkeWtNMXRKOWpNMkhGREljTXV3bFVEQkM0Q2djaDNLcFRo?=
+ =?utf-8?B?ZDZ5b3JrUC9TOVpyRHQ0alJlbnl6V29JcWNSR21naWtmNytTdTYvQlRzUW1k?=
+ =?utf-8?B?a0pQbm03enFFajhJUS9wYVZKYWdCQTVxa3I4OTYrVTVXZGErcENIOVF2K2NL?=
+ =?utf-8?B?YmFoNUtmTDlCRlEvMldFaVo3N1NSeTBGc2lPdThzME5zT1ovaHhxbkZkMnJG?=
+ =?utf-8?B?d0NIMjRHWFZrMFhQT04yK1FXVC95NUMwU0lkSU8rNXFaemxzS3VpM1VWeTJK?=
+ =?utf-8?B?RDdTOEtjdmdzQytRZWhWQ0o0ZW94TzRodFFEWjBlSFRNaXljdURvVlA3TXpi?=
+ =?utf-8?B?dVVUNkI4QUJreXVwalplemxqZlZGWGhCNG1jSHk3bTFSVzgrTnhTYVI3MTFq?=
+ =?utf-8?B?Q0VwMDFDcjAvKy8vblJ4YzUyeThncDQ2eXFxUUcvNzUyRDYxbjJzOVpGa0Vs?=
+ =?utf-8?B?dFFtdEZsMXd4Z3lDM1BMZGtOVjVyVHhTbE90Yml5U1QyRmF3UWI1U0p0ZlBO?=
+ =?utf-8?B?L0pBV2RlTVRwcHlCWXNuUUJJcWlmeWJiZDNEbzBVa2FNUFVvdjR4WW95Nzcx?=
+ =?utf-8?B?U3FRd3NsWEF5QWdXLzl3QjVjVVd5cGVqUGh5cEFua2pqVmxyMWtWdnVXQmhX?=
+ =?utf-8?B?b3MzTGF6ZXhESzV3Y28vcVJTZXJuWGZTVmxBaXIwRzl2TUNWY205WUw1WEps?=
+ =?utf-8?B?M2txaUZWaFpVYTFFeHdYc01Ka3o4VWl0SDROU1dxdzkzWjFPbC8vQk1oSmJ2?=
+ =?utf-8?B?RHRsMTBqRHQ0VG9FU211NUJFRnNXT3dHY09XNWhVam9HTGIraTNqQTQyU2tR?=
+ =?utf-8?B?S2Q1T25OZWExaWlmWVBaQWFnc2grbXhyWTJ3UGZHQXFWQVlZaldzNlNrNzlo?=
+ =?utf-8?B?S2RHZzNUZ2JXNzg1MnlBbkNTbkR3RjcxWGZ6V3hITFlHdUFYSUFKUm5SZjRE?=
+ =?utf-8?B?a0dDVUh3Vno4NHk0WnoxZFZDaXR6MkNiNEc1YVRWM1RrL2RWRjUrNmlQbnZF?=
+ =?utf-8?B?NW5DWlcvdVg1QUVxWXhrYzFuYzhvWXFtUDhqWDI0N1pIcWNnRC84dENYd0J6?=
+ =?utf-8?B?N3IrZDYwdVcyRWIwVURHN1hhVS9nM0VSZjNuUW9iWGY2NHNHeGZSTzVjaXky?=
+ =?utf-8?B?WFA2ZHdvUU96TlJCLytuRmk5TE56a1FpQkxVUjBMRTcvdWFVWmFXTEdqN2tS?=
+ =?utf-8?B?eWFmQnBoVFFiSkFITXEra3lSVXg0R0FKeVA0Z1NYOGVpSDViYTZNaFBDcUNU?=
+ =?utf-8?B?Y3czN0xXZ245U3J0N0hsZ2NBUy84VmpnZG9Ec3NuRTFWVmt1djBkQUU1Yzk0?=
+ =?utf-8?B?M0x0ZGVNRDJpOW44bFhjR2s1SmFkOXBQTENwSjRFZ1hLdGhPY0MwS3c1SjdB?=
+ =?utf-8?B?dU5JM1lXQXVpS1ROWFJFM2ZpNGdrSDdvelREVWRYY0NnWXZXTUwrNGZoMTdm?=
+ =?utf-8?B?R2VrM1hXeHZsUFRZeS8wUXk1b0wvOHlsVW1SWW92elJpdWdjMi9ZZWZrM0Jt?=
+ =?utf-8?B?WUdpNERWcXpiUkJqbWJWTWpoM2NrR2dlbGExc2FvYlFRQzNnL0FoUldTa2lQ?=
+ =?utf-8?B?aDV6VGpROUpSeG1SL21QSW1qUlV6WXNNcU1heUNMV0U2RDBOSXNMNGpXVFpN?=
+ =?utf-8?B?M0h5RjRYOWxOTjg5RkRybllUZWIyY2VSeXUwTUFmOGNpY1NvNWJRam5GeW82?=
+ =?utf-8?B?S3diSnBaVXZKVlR3NHJlY1R4b1Brd3pCMDlNWGFaRW56a2hhZWRUbStSb2FS?=
+ =?utf-8?B?TEZRbHBJelhoZ1FkcSt2RUN2WTNtRGNkY2FhTFV0WW9iOStNRVBSRzRwaXJB?=
+ =?utf-8?B?cUdncmVRMmo0dWJUS2tNaUdXT0QyeEtPUFlodWZQRFRnNERHQ1hYb0Q1U2t1?=
+ =?utf-8?B?MGlUTEEvbmkyT3d4UTB5UFQrejkycnY1c242OEQ1cVJYQzVIQXdVTGNtZGV4?=
+ =?utf-8?B?RXljeEx3bGx1eW5oZ1FrYnlmajRCK1NyV2tpbE5WeGZWYU84bnJMN1BCSHIr?=
+ =?utf-8?Q?5J2IKI?=
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8907.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(19092799006)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ =?utf-8?B?aTZVaHc2alI5NUw5ay92QVhMSXo2aFk5VnJyVlVqa3BlRHhISFZHbERWVWY3?=
+ =?utf-8?B?TUZYeWRybnpNbGRHOUJENmtVV3BjMWZLcjFxUzdpUjYzejhyaWRJaEZwWU9L?=
+ =?utf-8?B?VWRlT3d5bFVPWFdRbFZhcGdGdXlVN2I4THF4d0puYWlodXVPQmFVUGtIWS9B?=
+ =?utf-8?B?ak0vRjdpejNFS1JNUWpmcm5tczhzVVZWdGh2TDRHZ1VqQSs2a0lNaTMxSEtI?=
+ =?utf-8?B?TXVxdFo2dXFleEIvTGprclpaNjVXL0dOcHNub0hqMHRYbmFNS0duc1ZCZU8z?=
+ =?utf-8?B?cDFuQ1lTd2lhVm5WeFRsTkxqWXlHdmtSbE44QXhPNXJMN0ZGVlhBWUdXdXdy?=
+ =?utf-8?B?WGxGRkZCRjJMVXV5RUxLekNwcVV3TXpyaFBGMXlmVXNFMnVnNkdiRTJIcW9I?=
+ =?utf-8?B?dmo1RG5nSUJYUU1wamNJQjBCMll1UFBGY2ZHM1RUeDEwS2VlZzdqV2R0WEhP?=
+ =?utf-8?B?Z2t0bHZyZmVJbWZrbVFFWElRcU1NbWlBNzMySUN6UkpoNXRaMXRUMFAvalhY?=
+ =?utf-8?B?YW55S2l2eUVXWUQ1amFnUmMwajFPR0ZwQjBaNGdMdkZ0WmFBMVJVendyUmRi?=
+ =?utf-8?B?RTc5amxVZ2I3RnN4OGx6V3d2Vmkra2JNT3kzb2FVY2d0cGl5a00xVjBXRzAz?=
+ =?utf-8?B?Qno2aGpWcnphektCcVAvMTRYdkdPekZTQzF3MHN0NHR4V29iRzVzWnlqQ1hm?=
+ =?utf-8?B?cENWbG5oZC85dFBJNzV6NnFVQlR2cGVxcGxTcnFHOEQwNzhxclRGOXhPdWxZ?=
+ =?utf-8?B?VkxWMm8wVzNCaUwwYjNCVEpoVkpYbzJETkxPSHp6ZTNQZ21aN0hzQzFobUpk?=
+ =?utf-8?B?OGZUVEM5WWh0Z280T3I4K2F1UEdjY3VEUXowTy9iVXFLR3NHTFg5NHJxTzlu?=
+ =?utf-8?B?MDFDM2RJMjRGSmdEZHdNUzM2RnI0cWJTQlg5SmtNTDJ0dWpDaGE0MW14WjZq?=
+ =?utf-8?B?RXpCQ3Rwa2xNQ21kdjlFLzQ3SUxGNFhaY3hlbmxxSFYwbEtyZ0dQZlBsQTla?=
+ =?utf-8?B?SmxHdnc1dXVjR0duRXltUFk2Q0FiY3JYaUdoa2F3eGtzbEdvbXBBcENrMTFl?=
+ =?utf-8?B?Znhna2VvbmNuUGVaT2hyTUIwV3hmUE9oenRGMklGa1M1cllUOG4yNllLSWts?=
+ =?utf-8?B?TUNQKzdGRFBIV1NsQlQ0ZUNTbE9WREJ4N2o0NENxa2JWRHAxUXcwc0x3ZU1x?=
+ =?utf-8?B?bDNDRFBnSDRuczRhdzd1amRaTCtXQTQ2dEZtSzJ4Q3NEaHdmQVJDUjlxbTJh?=
+ =?utf-8?B?RmYrQkdENndZMG5yaUcyR2NjdDFjZWZtQ0NVKzY1MFlyZFBZUHpMZFBZNXYz?=
+ =?utf-8?B?aVZySmZpa3pCRGJ0eEVtZ3podjVVS2VQY3oyZkYwMDg5eGhLTVpHNGZiTkZy?=
+ =?utf-8?B?Q2REM1pOZ2phYVVCOEZpYStPbWpCeVkvbnVYTDFzY093VWwyTXdjYlJNV0Vv?=
+ =?utf-8?B?NlB2UzFvaG9ZVm54RitTTEQ5YVpqZW9ScU5QQzdiVHBZTnF5LzI1cGRPYkwr?=
+ =?utf-8?B?RTFaeTk1QjdpYlhpbVFpTFozcUJaLzdRT2lqbjVoNCtQZUZJSjBoUWpJeE5R?=
+ =?utf-8?B?MzY1SEJ0bGpleXAybURzTWwreFdOOVVPQ1FuOGp6OXVHTW1wZ2lsaFJCUEow?=
+ =?utf-8?B?N0t2RTRjM0o2Tk1laE5JR0JlaER1cW9DcGp2cEF4alRScFBjVTZkT25Icnlo?=
+ =?utf-8?B?b3JZQVFVQmtjbjViMFB1czZBckljOWx4WjFMekRzWEdzbTZEQ2tZelBxdWtQ?=
+ =?utf-8?B?SmdMYUN2R0JBNHdCMFhkenlOQWcxWmtobVpGUFF0c0lwTi9CeUNrQzdyZS9i?=
+ =?utf-8?B?S0pzZXhudnJJcjlzYk5CWkVWSzY4bWozeE9KaFFYWWJMcmxFamx1eXhRZ00w?=
+ =?utf-8?B?MFRtTjFxK29BbHF6M0t3S05ZWXplempBZjVhSVlSd3hmb3l1bkZ4b0dpTHI2?=
+ =?utf-8?B?YzF6NWVtVXRjM1pTcDVKT2sxbXVibXBJdUh3RkNYNGZ6R1ZPbGFQa1NpZStr?=
+ =?utf-8?B?eGNPajB2MnJRYWJva2V0bVdreURTVGtiWitRYVo3VmRzVEJpMXhlQVBuNGtJ?=
+ =?utf-8?B?bGpYZkM3Y3dMdGRmTkNZTHdNaVhFRWJmMFJva3V4T1lOUjY2SUZIeVVxUUI5?=
+ =?utf-8?B?MXBjOEh3a0JNQjArK0tyR3pqc05HQzEvWU1zNG4yNnovR2QzTmFsMUpSQmt0?=
+ =?utf-8?B?MFE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b39bf024-37ee-4e7b-567a-08de3dc0e931
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8907.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2025 23:06:29.0860
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y7RvvIN8oJnGz6Zs52pIkQT4uIEMfzaSDaQiMRr3NyzGcuF8sLDLqaZfv7+iT61wdjQFOU1p/Ihh4O2jT4m/2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7821
+X-OriginatorOrg: nxp.com
 
-
-
-On 12/17/25 1:55 AM, Krzysztof Kozlowski wrote:
-> On 17/12/2025 06:01, Alex G. wrote:
->>> Filename based on the compatible, so for example:
->>> qcom,ipq8074-wcss-pil.yaml
->> Okay.
->>>> @@ -0,0 +1,167 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/remoteproc/qcom,ipq9574-wcss-pil.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Qualcomm IPQ WCSS Peripheral Image Loader
->>>> +
->>>> +maintainers:
->>>> +  - Placeholder Maintainer <placeholder@kernel.org>
->>>
->>> This must be a real person. Fallback is your SoC maintainer.
->>
->> I can't find an official maintainer for IPQ8074 or IPQ9574. I could list
+On 12/16/2025 9:42 AM, Shengjiu Wang wrote:
+> Don't need to reset memory at suspend and resume stage, because some
+> memory is used to save the software state for resume, if it is cleared,
+> the resume operation can fail.
 > 
-> I don't think you looked then. get_maintainers gives you clear answer.
+> Fixes: c4c432dfb00f ("remoteproc: imx_dsp_rproc: Add support of recovery and coredump process")
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
 
-get_maintainers on qcom,q6v5.txt gives five generic subsystem 
-maintainers, and you are on of them! I'll take something more specific, 
-but just defaulting to get_maintainers is not helpful here.
+Reviewed-by: Iuliana Prodan <iuliana.prodan@nxp.com>
 
->> myself, but you know a lot about these bindings. Is it okay if I list
->> you as the maintainer of this binding, Krzysztof?
+Thanks,
+Iulia
+
+> ---
+>   drivers/remoteproc/imx_dsp_rproc.c | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> No. I am not the maintainer of this SoC.
-
-Thank you for confirming you do not wish to be listed as the maintainer 
-here.
-
->>>> +
->>>> +  reg-names:
->>>> +    items:
->>>> +      - const: qdsp6
->>>> +      - const: rmb
->>>> +
->>>> +  interrupts-extended:
->>>
->>> No, you only need interrupts. Please look at other bindings - how they
->>> write this.
->>
->> I thought I needed interrupts-extended if the interrupts use more than
->> one interrupt controller. Is that not the case?
-> 
-> Instead of asking the same question again, which would give you the same
-> answer "No, you only need interrupts" please rather think on the rest of
-> the answer - look at other bindings.
-
-No. It's a clarifying question with additional context. I think I should 
-be expected to ask them when I still have doubts.
->>>> +  qcom,smem-states:
->>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->>>
->>> That's incomplete - missing constraints. Are you sure you wrote this
->>> code the same way we already did for other devices?
->>
->> I am not sure. It seems to match qcom,qcs404-cdsp-pil.yaml or
-> 
-> No, it does not.
-> 
-> Look at these files even - they have maxItems. Where do you see maxItems
-> here? So how this can be done the same way ("match")?
-> 
->> qcom,wcnss.yaml. What constraints are you expecting here?
-> 
-> So you take the latest binding, e.g. pas-common for all new platforms.
-> Or qcom,qcs404-cdsp-pil.yaml. You need maxItems here and list of items
-> for the names.
-
-Okay. I wasn't sure if that's the appropriate solution when QCS404 and 
-IPQ8074 take a different number of smem-states.
->>
->>>> +    description: States used by the AP to signal the remote processor
->>>> +
->>>> +  qcom,smem-state-names:
->>>> +    description:
->>>> +      Names of the states used by the AP to signal the remote processor
->>>> +
->>>> +  glink-edge:
->>>> +    $ref: /schemas/remoteproc/qcom,glink-edge.yaml#
->>>> +    description:
->>>> +      Qualcomm G-Link subnode which represents communication edge, channels
->>>> +      and devices related to the Modem.
->>>> +
->>>> +required:
->>>> +  - compatible
->>>> +  - reg
->>>> +  - reg-names
->>>> +  - interrupts-extended
->>>> +  - interrupt-names
->>>> +  - memory-region
->>>> +  - qcom,halt-regs
->>>> +  - qcom,smem-states
->>>> +  - qcom,smem-state-names
->>>> +
->>>> +allOf:
->>>
->>> Seems you do not reference other schemas. I am going to repeat myself
->>> for 10th time: are you sure you followed other devices?
->>
->> It's the sixth time, but I see your point. Comparing to
->> qcom,qcs404-cdsp-pil.yaml or qcom,wcnss.yaml, I can't see what's
->> missing. What do I need here?
-> 
-> In previous cases you did not look at other binding, so I am questioning
-> now everything.I resent the accusation. I looked at several other bindings to see the 
-best way to write this one in a manner that also works with "make 
-dt_binding_check". I have done my homework, and think it is unproductive 
-to accuse me of not doing it because I did not do it to your standards 
-or liking.
-
->>
->>>
->>>> +  - if:
->>>> +      properties:
->>>> +        compatible:
->>>> +          contains:
->>>> +            enum:
->>>> +              - qcom,ipq8074-wcss-pil
->>>> +    then:
->>>> +      properties:
->>>> +        qcom,smem-states:
->>>> +          items:
->>>> +            - description: Shutdown Q6
->>>> +            - description: Stop Q6
->>>> +        qcom,smem-state-names:
->>>> +          items:
->>>> +            - const: shutdown
->>>> +            - const: stop
->>>
->>> Missing clocks
->>
->> The text binding that this replaces implies no clocks for IPQ8074. What
->> would you like me to add instead?
-> 
-> Disallow the clocks. See example-schema.
-
-Okay. Makes sense (clocks: false).
-
->>
->>> Missing blank line
->>>
->>>> +  - if:
->>>> +      properties:
->>>> +        compatible:
->>>> +          contains:
->>>> +            enum:
->>>> +              - qcom,qcs404-wcss-pil
->>>> +    then:
->>>> +      properties:
->>>> +        qcom,smem-states:
->>>> +          maxItems: 1
->>>> +        qcom,smem-state-names:
->>>> +          items:
->>>> +            - const: stop
->>>
->>>> +
->>>> +  - if:
->>>> +      properties:
->>>> +        compatible:
->>>> +          contains:
->>>> +            enum:
->>>> +              - qcom,qcs404-wcss-pil
->>>> +    then:
->>>> +      properties:
->>>> +        clocks:
->>>> +          minItems: 10
->>>> +          maxItems: 10
->>>> +        clock-names:
->>>> +          items:
->>>> +            - const: xo
->>>> +            - const: gcc_abhs_cbcr
->>>> +            - const: gcc_axim_cbcr
->>>> +            - const: lcc_ahbfabric_cbc
->>>> +            - const: tcsr_lcc_cbc
->>>> +            - const: lcc_abhs_cbc
->>>> +            - const: lcc_tcm_slave_cbc
->>>> +            - const: lcc_abhm_cbc
->>>> +            - const: lcc_axim_cbc
->>>> +            - const: lcc_bcr_sleep
->>>
->>> All this goes to previous if.
->>
->> Okay
->>
->>>> +      required:
->>>> +        - clocks
->>>> +        - clock-names
->>>> +        - cx-supply
->>>> +
->>>> +additionalProperties: false
->>>
->>> Missing example.
->>
->> I plan to add the example in the next patch in the series that adds
->> IPQ9547 binding. I don't have the resources to test IPQ8074 or QCS404,
->> and I want to be sure that the example I add is tested.
-> 
-> I don't understand what example has anything to do with testing. We
-> speak here ONLY about this binding. I do not review other code. This
-> patch should have the example, but if you cannot come with one, because
-> it does not exist in any existing sources, then you should just say
-> that. You have entire commit msg to explain every unusual thing. And
-> testing something on a device is not a reason, because you do not test
-> the binding on a device.
-
-I will mention this discrepant in the commit message.
-
-> Best regards,
-> Krzysztof
+> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+> index d03017d6b214..ac8aa71aa56c 100644
+> --- a/drivers/remoteproc/imx_dsp_rproc.c
+> +++ b/drivers/remoteproc/imx_dsp_rproc.c
+> @@ -984,9 +984,11 @@ static int imx_dsp_rproc_load(struct rproc *rproc, const struct firmware *fw)
+>   	 * Clear buffers after pm rumtime for internal ocram is not
+>   	 * accessible if power and clock are not enabled.
+>   	 */
+> -	list_for_each_entry(carveout, &rproc->carveouts, node) {
+> -		if (carveout->va)
+> -			memset(carveout->va, 0, carveout->len);
+> +	if (rproc->state == RPROC_OFFLINE) {
+> +		list_for_each_entry(carveout, &rproc->carveouts, node) {
+> +			if (carveout->va)
+> +				memset(carveout->va, 0, carveout->len);
+> +		}
+>   	}
+>   
+>   	ret = imx_dsp_rproc_elf_load_segments(rproc, fw);
 
 
