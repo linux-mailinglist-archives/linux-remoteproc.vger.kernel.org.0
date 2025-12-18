@@ -1,94 +1,120 @@
-Return-Path: <linux-remoteproc+bounces-5920-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-5924-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CA44CC9CA7
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 18 Dec 2025 00:20:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBA73CCA3AB
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 18 Dec 2025 04:56:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DFDB6303C825
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 17 Dec 2025 23:19:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1B1C8302EF4A
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 18 Dec 2025 03:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 487F5330644;
-	Wed, 17 Dec 2025 23:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 987CB2FFF90;
+	Thu, 18 Dec 2025 03:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jjk1Ngbn"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lbi9vIlp";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="PB53Lx6M"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153902D7DD7
-	for <linux-remoteproc@vger.kernel.org>; Wed, 17 Dec 2025 23:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32A1277026
+	for <linux-remoteproc@vger.kernel.org>; Thu, 18 Dec 2025 03:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766013551; cv=none; b=CGqagSpA+Y2qJNfbynPXGKKlakrzV94jEwRyozGD9jkW0QXsiHk3VuMvkbkr9hWB7KD7z1m+WeBi0JveMGWo7iTSnNdNEQNWT8+96enXqoLD5zxrKjh8rWQqspyMmlaCnSpL3mMATh299IzSDB3if+u2KIgVv/NN72Anh9ZhGME=
+	t=1766030092; cv=none; b=EWpDMu9Ly1W5zao8JntWpKh3tDKz6zGnmgXKzbAQ3OJengr3BwukokpycDO6o1l7EG3W1eXT4nrwEZ/VK1ZDjCtKQ4CqK8sgE918FmQCEzyU/yQz0AomEqY/MiB4TDQ+YizYD1/Oh8LYL2NMpsXlGMJM78KcFSJEzHTe7XpMdyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766013551; c=relaxed/simple;
-	bh=aS8cgkXk/CAoYKh5hZLA6lveJ5wPCoWZ4Uz5qZAeLzY=;
+	s=arc-20240116; t=1766030092; c=relaxed/simple;
+	bh=+Ixh6mHhj1J7OoVqFw0KYGRBtx6vLQZ9oqZL1VqVLtw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ArHS9ezsCwSo97HYCHnLZl9k/0bBw3h+59COK00YN5o5jsYuwXbTYn9Xu7Zu7QZXbQW9bYIyRSUk1CudMg5EG5QM1ESow78XLceBYMXCpIPq6WmJj+KX+1Amsi+m1qecu1J+7bu6pIraA/LFBA2e6ATwK0lbEg4FVA6NcQPKXiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jjk1Ngbn; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2a09757004cso224735ad.3
-        for <linux-remoteproc@vger.kernel.org>; Wed, 17 Dec 2025 15:19:07 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=cxUYZFxluS5BNmypLkLgktnzUrP8xowOjkxW1WOP+0krkGHlIcxmWirTRBv/Qc9rTDDXNhk1yJiZERigfOMDrODG+qzXl86WZNTFVdHgX+Ko9/te77iWeaxoBusjyG4fOAeUivqeh+a9DByWVYBZSpGmjlkHxkPilyrL0AVqLuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lbi9vIlp; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=PB53Lx6M; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BI1YjDw167749
+	for <linux-remoteproc@vger.kernel.org>; Thu, 18 Dec 2025 03:54:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=+Ixh6mHhj1J7OoVqFw0KYGRB
+	tx6vLQZ9oqZL1VqVLtw=; b=lbi9vIlp73QWd6uD7cBQ2B8ewAZ5G3KxH4vDUOQG
+	o6bSFIM0q1huXXWPDcWCEcbVRZpqgCYBaCm2XTqatbcStZYwkeAVQN2TRAPKA2Zf
+	2QbmzHo93WHJjRuwBjhcawtw8DpRgzmRj0vy55QIrW6M4QzXmTc+q0BbQbz20NA6
+	BKpGDe1YWtCMyuQ2HXDPFAE+155FDOriwF9X1ZduAGZIXwkWTvEUSa0gHGz+NP9Y
+	PHe+yq89ng4m6DIWntcQ0WrCR85MzytJo1XRUwEgVabgBFgY8VavmQHCszPRiYW2
+	CQf6Y62SLc8KKF1ZLvUVdEBufSNec+8ASyfa2R22yKU3TQ==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b45w50nth-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-remoteproc@vger.kernel.org>; Thu, 18 Dec 2025 03:54:49 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-7b80de683efso450306b3a.3
+        for <linux-remoteproc@vger.kernel.org>; Wed, 17 Dec 2025 19:54:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1766013547; x=1766618347; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1766030089; x=1766634889; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fnvJD5vnTj/iz4qjBfnZiFYyD/tC1WL5vWTNfDJr3Pg=;
-        b=jjk1NgbnGDHRpzSAgqyE6/a9z3c+SP1FEB4usZOgcHqZ4ZsW35s8RnxLepgpIVlyVQ
-         8OKd7bACL0ST1zrJVdmd3YEksm8M9UtR+zznBqBHzcRibTx2YJz3Az5XC2DN9mmT9qk6
-         TV5HyEpWBT12Xy0ohvUN37YKsBnVH5i83s7uAoYF+JXIyhcxparbOYEnDmedxo/iU19E
-         83NLsZUksh2GpKKN1HnVLuddc2WGqt6M68XrouoHwMMwFXXbUwMSi1Ns518MYhOJRTYQ
-         lFOFsA1sM2YWCFYxNuoBB8EGsVBzzkjciFtYeRs3cYAuv66kh0ZjBuD3qUwU0LV1QV0u
-         fFUQ==
+        bh=+Ixh6mHhj1J7OoVqFw0KYGRBtx6vLQZ9oqZL1VqVLtw=;
+        b=PB53Lx6Mk9sKHhcopSOrAu3X9ByCbaXihpQpBfCpqtfp6EUbtucy+TahqzU8dXK3wU
+         eZnIltyfeGRAOLnEVTqTd9S4pQCN0alXyb//fB2yF1J3RkkSoZ4gvAKi6BfLPvPAB1g9
+         yv5fPODNr2BLhbWLtcbL0U6BBAoRthCn8bHEZB7fGKv208K+ZIZV16mHFLOLYGGZ/5Wu
+         VWpM13u5kFybuFznP4PbANIZeH8uRl23ILNsMm3Ck34BEDIFVAWfoandjcr6FQ7N956X
+         +Ue7U8XF9faSv+DbbkDrWXts8rNAHuNCRDqE1ysZGZubxieptYwSz2mvQYSnCst9qDIO
+         8pfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766013547; x=1766618347;
+        d=1e100.net; s=20230601; t=1766030089; x=1766634889;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fnvJD5vnTj/iz4qjBfnZiFYyD/tC1WL5vWTNfDJr3Pg=;
-        b=QvB2w4rt6jlkOIV752ZQ2vY/PJ+gTZvM1ye0jFgHc3UfjP3feN0wItPn4Sxo52AGv7
-         Z4jrqki1a/63EQf4nZCNMIP0N6MjTkIPKw3qpPGBHstUw3cU+/Fq99hTHqHrJcpFDLQM
-         /0GiT+bNhmGotdN1ijSLOj4nCHsrP+cPtrInjJJ0b56FZlrDQh/gh7v4JZ0ufSdS0zd0
-         RBnnPwDlWk/4B0V5+wAZBq8qlpoOYpTa6HUhWgItsHOzV92vFCqqLJkXAnMuIfTteEkN
-         wXIzik8nDsVEqZQQcZ7vb8pvIyRJ3YUq0MNbDF2UDaliPW3RrWMJ9dygYq5/E+lLwf71
-         m79Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUE2l0Trsq7YnSYlUD/W/mlpBEXPO8kKUoPksRVZXMA46sfYajOR3aWVACwkkxNDmkk46EhnrviUzepVGxBe8E0@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyPqva8eiY3fXUXpgpgEQ5HT34WHhJHHJXdSVOfqJ79E+1OO48
-	orizMJ1uMAkZMi8MDWmEPAb536LNdoUyvPN3YJpJMnJFqdq80ZOf46ld4fHYDc/oj0s=
-X-Gm-Gg: AY/fxX5VpYVY01QnlMtv2zIH8nJfTcA4Y2Vmhq0ENg99vhazpqkWA0Xv/KxpouFhLi4
-	FVrvzFaAwJJMyTrauW31a1A7A4yGYI0Y/6CVZfHAl8Pbr7N5PxGaS+93eb1VVglrzyydmPmhiFH
-	mQ4SwH3LiRgsrRp2SQXT3rTo6f4LOJOjdYDG+OP9Flya+2O6lG42Mka9Iv9e4coFDcJXyNVJB2P
-	no8o0Wmz7+fFSfleQTZZ2uB1DMpRl7tEdpCt0k+95sXcVtRnxXCXbD2uWmA75B7MT6RMpjiYuwd
-	8fKAvdWYJngjMKvwZui+axhOyKrBAHuR6MP9YAGpMuUoOBXOu7HhFWwhAh8oOvbHNDzSPN1t0WF
-	YaHCQ2dlyu15SAk5w6TaZ/iwee1FSdlaBXKxfUaDD/sM9rXiOouPkggqpnGYrERj9CyrmI+sET0
-	PW5APadPQv4vlXFP180a7UxUw=
-X-Google-Smtp-Source: AGHT+IFGDqxMNPRy4HzlHPhca7EFo7g467xFIgnEfyyXQR5wehGNGfMsyhEWYaEwCFxwgFNc1WWorA==
-X-Received: by 2002:a17:902:d4c8:b0:2a0:b4f6:5595 with SMTP id d9443c01a7336-2a0b4f65742mr126278535ad.50.1766013547181;
-        Wed, 17 Dec 2025 15:19:07 -0800 (PST)
-Received: from p14s ([2604:3d09:148c:c800:cfb9:c35:9f28:8222])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2cef1bf32sm4528385ad.0.2025.12.17.15.19.05
+        bh=+Ixh6mHhj1J7OoVqFw0KYGRBtx6vLQZ9oqZL1VqVLtw=;
+        b=rbzJ87HmjOCMDNW4Mh5MRQlGy0WiZCpwq7Wg0wjC8bMLwfxsftTe7SrlzcMXSE2ysq
+         3gM1JICY5PKXIyc1ZRHwBqI35kAqWCsQJu4ICws2lfgoG8tjujMAHu9y6yU7sHnpaFL+
+         G5fPRh5Jf+3EffuKYoRrrOsVT31ejiEvoBx1HwS05HY00mp5UJ5NT68QVwTo20cEXoY6
+         sWTASFzblk4hjYu7YA2+Bvgh4nyCgdzrE+9Sxsgy2iw6QvRY7wncqULySQW5ZnDZ+o5E
+         iOq5Idgc4MX4iivtzkEpL7bmWgd2mgPf4nb5UOp0o+z2ZP7McBKBV5uY03ei/P7OlREx
+         925w==
+X-Forwarded-Encrypted: i=1; AJvYcCXi6XGvFFfSkmTzbxNYSpzgbltZ4cIj/5nr5m7kf/5ezd5eXkxUB5XQekSAutv3wPeSg04WIRRpFnkDUajOXVFG@vger.kernel.org
+X-Gm-Message-State: AOJu0YxteabmNw5fUnEyd0tfC6zZtvsht3bxJ7OJwaDh7X2mc42pcaDy
+	XSAi/CDw+Ul3HCLU1kZ7I6rVHMWt229oTyDjH8GeI8FgP7uemJvaZ9bbEDw0S898N+QPTnwE+U+
+	KgZsbqmUuNO6Kl17Q9SSu2yw3yy7WRYhPug3LZGpQlc0fakNCiSGF9wVIvP8JtTaYNhLNhn7b
+X-Gm-Gg: AY/fxX64iy4OntgavdS9kzPqImO+mMWIBxn0zWgBCk4nRyMEDsJqFztNDtgLyOrmaGd
+	hEkgsphqUabTTVZMX7w0fcguX8gjaNOU4K2ad9s5mD7CNc6BjI/hY2weqt02VpXw1Qs3FoVFMwa
+	wk3NhBmVU5iK23j0pA72GTS99CtZRoGC/jFfWHRv6R5w9Z4Q4jbCCRWziRKMrdd6YN2iqgZ+lRd
+	5UKEEimjLbOCtcNMTb0U/O8BOtwrCllHOf2hkzokC8a9nwwlWXFQTqCIICTqq/35DFQCkcipMCh
+	Mqa7E7/wBqTUwLRvd/Zy3TOdNarL/hHbnZ0ERA2yC69YwRsCc6jm1X8mv6FWCox4srjVMLJIYz9
+	HeH++RE/tzZxrmYmqC+/goOXxsv3lvPIgsXd7GCzpBnNc7/lHXw3BSwHkWgzEfO6ov53MBRzpwz
+	pdE2+GkQt74agl4sz6VILOjtOcGuiJwo4EokQnHjg=
+X-Received: by 2002:a05:6a00:8f0b:b0:7e8:450c:61c5 with SMTP id d2e1a72fcca58-7f671a5d1cdmr20208945b3a.53.1766030089228;
+        Wed, 17 Dec 2025 19:54:49 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHfu0Z3RC/to5VX7uxyJoj5tA2aImIYyZUEcHPMbUfZKbpUXduHFabbKbu+cgv5q+CNrqcywQ==
+X-Received: by 2002:a05:6a00:8f0b:b0:7e8:450c:61c5 with SMTP id d2e1a72fcca58-7f671a5d1cdmr20208915b3a.53.1766030088758;
+        Wed, 17 Dec 2025 19:54:48 -0800 (PST)
+Received: from hu-varada-blr.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com. [103.229.18.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7fe121290a6sm946895b3a.24.2025.12.17.19.54.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Dec 2025 15:19:06 -0800 (PST)
-Date: Wed, 17 Dec 2025 16:19:04 -0700
-From: Mathieu Poirier <mathieu.poirier@linaro.org>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>,
-	Daniel Baluta <daniel.baluta@nxp.com>,
-	linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH v4 4/5] remoteproc: imx_rproc: Add support for System
- Manager API
-Message-ID: <aUM6aGbSH9ICOL5f@p14s>
-References: <20251216-imx95-rproc-2025-12-15-v4-0-bf1064ea8daf@nxp.com>
- <20251216-imx95-rproc-2025-12-15-v4-4-bf1064ea8daf@nxp.com>
+        Wed, 17 Dec 2025 19:54:48 -0800 (PST)
+Date: Thu, 18 Dec 2025 09:24:41 +0530
+From: Varadarajan Narayanan <varadarajan.narayanan@oss.qualcomm.com>
+To: George Moussalem <george.moussalem@outlook.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Gokul Sriram Palanisamy <gokul.sriram.p@oss.qualcomm.com>,
+        Gokul Sriram Palanisamy <quic_gokulsri@quicinc.com>,
+        Vignesh Viswanathan <vignesh.viswanathan@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v7 0/8] Add new driver for WCSS secure PIL loading
+Message-ID: <aUN7Aer/GG1d5Om9@hu-varada-blr.qualcomm.com>
+References: <20251215-ipq5018-wifi-v7-0-ec4adba941b5@outlook.com>
+ <aUKC5EuWRzsyrHnz@hu-varada-blr.qualcomm.com>
+ <DS7PR19MB88836ABB87B9858CB8EBCEFD9DABA@DS7PR19MB8883.namprd19.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -97,351 +123,52 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251216-imx95-rproc-2025-12-15-v4-4-bf1064ea8daf@nxp.com>
+In-Reply-To: <DS7PR19MB88836ABB87B9858CB8EBCEFD9DABA@DS7PR19MB8883.namprd19.prod.outlook.com>
+X-Proofpoint-ORIG-GUID: bXQtob-1phk9jVy8QKWexsR-viPSm_7T
+X-Authority-Analysis: v=2.4 cv=eKceTXp1 c=1 sm=1 tr=0 ts=69437b09 cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=Ou0eQOY4+eZoSc0qltEV5Q==:17
+ a=kj9zAlcOel0A:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=sgi0gA_3S5oNtm6GieEA:9
+ a=CjuIK1q_8ugA:10 a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-GUID: bXQtob-1phk9jVy8QKWexsR-viPSm_7T
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE4MDAzMCBTYWx0ZWRfX5FgP8bjOSRb+
+ Vw9eXkL1xq0zK5WFq9AuHCoGQIPUWz8/WkchdOoXHrJASR+kLPzfpZ74V3ZVMYZtgTRPxlzQgtx
+ /eTJ6Wsju21T1LzU6B0c2JEAgKruw5qKnHN8hIuDu3xVJA3lieDZybZfSGanvQqr/Qh8Iysz94I
+ IjIoktbhU1+ADVDxCjN2hQohdxClYXlDYrAUXFQfbMv3xlR+jbBq4Vm45P6y0/y6e0lABAQPFEF
+ tGA8OPZAnsWKPEhfgtGbLiswWbXIu6zUx9xim/sZiqrJ33Ab68q/1RepEFSy6KCdbAsS4shcFDr
+ X7TnuZxol6KoeR8fEEzbbYR5t80p4k4dx1xAI2bSQbdikZWYRxmqc9oqVQt7q+CqSCiYb61+lnG
+ sFxdvb4S2jWfqPZBLZklgNEEZes/yg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-18_01,2025-12-17_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 bulkscore=0 adultscore=0 clxscore=1015 malwarescore=0
+ spamscore=0 suspectscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512180030
 
-On Tue, Dec 16, 2025 at 09:51:02AM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> i.MX95 features a Cortex-M33 core, six Cortex-A55 cores, and
-> one Cortex-M7 core. The System Control Management Interface(SCMI)
-> firmware runs on the M33 core. The i.MX95 SCMI firmware named System
-> Manager(SM) includes vendor extension protocols, Logical Machine
-> Management(LMM) protocol and CPU protocol and etc.
-> 
-> Depending on SM configuration, M7 can be used as follows:
->  (1) M7 in a separate Logical Machine (LM) from A55 cores, that Linux
->      can't control
->  (2) M7 in a separate LM from A55 cores that Linux can control using LMM
->      protocol.
->  (3) M7 runs in same Logical Machine as A55 cores, so Linux can control it
->      using CPU protocol
-> 
-> So extend the driver to using LMM and CPU protocol to manage the M7 core.
->  - Compare linux LM ID(got using scmi_imx_lmm_info) and M7 LM ID(the ID
->    is fixed as 1 in SM firmware if M7 is in a separate LM),
->    if Linux LM ID equals M7 LM ID(linux and M7 in same LM), use CPU
->    protocol to start/stop. Otherwise, use LMM protocol to start/stop.
->    Whether using CPU or LMM protocol to start/stop, the M7 status
->    detection could use CPU protocol to detect started or not. So
->    in imx_rproc_detect_mode, use scmi_imx_cpu_started to check the
->    status of M7.
->  - For above case (1) and (2), Use SCMI_IMX_LMM_POWER_ON to detect whether
->    the M7 LM is under control of A55 LM.
->  - For above case , after using SCMI_IMX_LMM_POWER_ON to check
->    permission, SCMI_IMX_LMM_SHUTDOWN API should be called to shutdown
->    the M7 LM to save power only when M7 LM is going to be started by
->    remoteproc framework. Otherwise bypass SCMI_IMX_LMM_SHUTDOWN API if
->    M7 LM is started before booting Linux.
-> 
-> Current setup relies on pre-Linux software(U-Boot) to do M7 TCM ECC
-> initialization. In future, we could add the support in Linux to decouple
-> U-Boot and Linux.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/remoteproc/Kconfig     |   2 +
->  drivers/remoteproc/imx_rproc.c | 193 +++++++++++++++++++++++++++++++++++++++++
->  drivers/remoteproc/imx_rproc.h |   3 +
->  3 files changed, 198 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
-> index 48a0d3a69ed08057716f1e7ea950899f60bbe0cf..ee54436fea5ad08a9c198ce74d44ce7a9aa206de 100644
-> --- a/drivers/remoteproc/Kconfig
-> +++ b/drivers/remoteproc/Kconfig
-> @@ -27,6 +27,8 @@ config IMX_REMOTEPROC
->  	tristate "i.MX remoteproc support"
->  	depends on ARCH_MXC
->  	depends on HAVE_ARM_SMCCC
-> +	depends on IMX_SCMI_CPU_DRV || !IMX_SCMI_CPU_DRV
-> +	depends on IMX_SCMI_LMM_DRV || !IMX_SCMI_LMM_DRV
->  	select MAILBOX
->  	help
->  	  Say y here to support iMX's remote processors via the remote
-> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> index 35585235c683e6327c3e6db65d5d33253ffba327..55e555f2b5dd63e7d82996437e792a8152c91521 100644
-> --- a/drivers/remoteproc/imx_rproc.c
-> +++ b/drivers/remoteproc/imx_rproc.c
-> @@ -8,6 +8,7 @@
->  #include <linux/clk.h>
->  #include <linux/err.h>
->  #include <linux/firmware/imx/sci.h>
-> +#include <linux/firmware/imx/sm.h>
->  #include <linux/interrupt.h>
->  #include <linux/kernel.h>
->  #include <linux/mailbox_client.h>
-> @@ -22,6 +23,7 @@
->  #include <linux/reboot.h>
->  #include <linux/regmap.h>
->  #include <linux/remoteproc.h>
-> +#include <linux/scmi_imx_protocol.h>
->  #include <linux/workqueue.h>
->  
->  #include "imx_rproc.h"
-> @@ -92,8 +94,12 @@ struct imx_rproc_mem {
->  #define ATT_CORE_MASK   0xffff
->  #define ATT_CORE(I)     BIT((I))
->  
-> +/* Linux has permission to handle the Logical Machine of remote cores */
-> +#define IMX_RPROC_FLAGS_SM_LMM_AVAIL	BIT(0)
-> +
->  static int imx_rproc_xtr_mbox_init(struct rproc *rproc, bool tx_block);
->  static void imx_rproc_free_mbox(void *data);
-> +static int imx_rproc_sm_detect_mode(struct rproc *rproc);
->  
->  struct imx_rproc {
->  	struct device			*dev;
-> @@ -117,6 +123,11 @@ struct imx_rproc {
->  	u32				core_index;
->  	struct dev_pm_domain_list	*pd_list;
->  	const struct imx_rproc_plat_ops	*ops;
-> +	/*
-> +	 * For i.MX System Manager based systems
-> +	 * BIT 0: IMX_RPROC_FLAGS_SM_LMM_AVAIL(RPROC LM is under Linux control )
-> +	 */
-> +	u32				flags;
->  };
->  
->  static const struct imx_rproc_att imx_rproc_att_imx93[] = {
-> @@ -313,6 +324,44 @@ static int imx_rproc_scu_api_start(struct rproc *rproc)
->  	return imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc_id, true, priv->entry);
->  }
->  
-> +static int imx_rproc_sm_cpu_start(struct rproc *rproc)
-> +{
-> +	struct imx_rproc *priv = rproc->priv;
-> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
-> +	int ret;
-> +
-> +	ret = scmi_imx_cpu_reset_vector_set(dcfg->cpuid, 0, true, false, false);
-> +	if (ret) {
-> +		dev_err(priv->dev, "Failed to set reset vector cpuid(%u): %d\n", dcfg->cpuid, ret);
-> +		return ret;
-> +	}
-> +
-> +	return scmi_imx_cpu_start(dcfg->cpuid, true);
-> +}
-> +
-> +static int imx_rproc_sm_lmm_start(struct rproc *rproc)
-> +{
-> +	struct imx_rproc *priv = rproc->priv;
-> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
-> +	struct device *dev = priv->dev;
-> +	int ret;
-> +
-> +	ret = scmi_imx_lmm_reset_vector_set(dcfg->lmid, dcfg->cpuid, 0, 0);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to set reset vector lmid(%u), cpuid(%u): %d\n",
-> +			dcfg->lmid, dcfg->cpuid, ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = scmi_imx_lmm_operation(dcfg->lmid, SCMI_IMX_LMM_BOOT, 0);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to boot lmm(%d): %d\n", dcfg->lmid, ret);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int imx_rproc_start(struct rproc *rproc)
->  {
->  	struct imx_rproc *priv = rproc->priv;
-> @@ -369,6 +418,25 @@ static int imx_rproc_scu_api_stop(struct rproc *rproc)
->  	return imx_sc_pm_cpu_start(priv->ipc_handle, priv->rsrc_id, false, priv->entry);
->  }
->  
-> +static int imx_rproc_sm_cpu_stop(struct rproc *rproc)
-> +{
-> +	struct imx_rproc *priv = rproc->priv;
-> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
-> +
-> +	return scmi_imx_cpu_start(dcfg->cpuid, false);
-> +}
-> +
-> +static int imx_rproc_sm_lmm_stop(struct rproc *rproc)
-> +{
-> +	struct imx_rproc *priv = rproc->priv;
-> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
-> +
-> +	if (!(priv->flags & IMX_RPROC_FLAGS_SM_LMM_AVAIL))
-> +		return -EACCES;
-> +
-> +	return scmi_imx_lmm_operation(dcfg->lmid, SCMI_IMX_LMM_SHUTDOWN, 0);
-> +}
-> +
->  static int imx_rproc_stop(struct rproc *rproc)
->  {
->  	struct imx_rproc *priv = rproc->priv;
-> @@ -485,6 +553,33 @@ static int imx_rproc_mem_release(struct rproc *rproc,
->  	return 0;
->  }
->  
-> +static int imx_rproc_sm_lmm_prepare(struct rproc *rproc)
-> +{
-> +	struct imx_rproc *priv = rproc->priv;
-> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
-> +	int ret;
-> +
-> +	/*
-> +	 * IMX_RPROC_FLAGS_SM_LMM_AVAIL not set indicates Linux is not able
-> +	 * to start/stop rproc LM, then if rproc is not in detached state,
-> +	 * prepare should fail. If in detached state, this is in rproc_attach()
-> +	 * path.
-> +	 */
-> +	if (!(priv->flags & IMX_RPROC_FLAGS_SM_LMM_AVAIL))
-> +		return rproc->state == RPROC_DETACHED ? 0 : -EACCES;
-> +
-> +	/* Power on the Logical Machine to make sure TCM is available. */
-> +	ret = scmi_imx_lmm_operation(dcfg->lmid, SCMI_IMX_LMM_POWER_ON, 0);
-> +	if (ret) {
-> +		dev_err(priv->dev, "Failed to power on lmm(%d): %d\n", dcfg->lmid, ret);
-> +		return ret;
-> +	}
-> +
-> +	dev_info(priv->dev, "lmm(%d) powered on by Linux\n", dcfg->lmid);
-> +
-> +	return 0;
-> +}
-> +
->  static int imx_rproc_prepare(struct rproc *rproc)
->  {
->  	struct imx_rproc *priv = rproc->priv;
-> @@ -980,6 +1075,104 @@ static int imx_rproc_scu_api_detect_mode(struct rproc *rproc)
->  	return 0;
->  }
->  
-> +static const struct imx_rproc_plat_ops imx_rproc_ops_sm_lmm = {
-> +	.detect_mode	= imx_rproc_sm_detect_mode,
-> +	.prepare	= imx_rproc_sm_lmm_prepare,
-> +	.start		= imx_rproc_sm_lmm_start,
-> +	.stop		= imx_rproc_sm_lmm_stop,
-> +};
-> +
-> +static const struct imx_rproc_plat_ops imx_rproc_ops_sm_cpu = {
-> +	.detect_mode	= imx_rproc_sm_detect_mode,
-> +	.start		= imx_rproc_sm_cpu_start,
-> +	.stop		= imx_rproc_sm_cpu_stop,
-> +};
+> On 12/17/25 14:16, Varadarajan Narayanan wrote:
+> > Dmitry/George,
+> >
+> >> Imported from f20250417061245.497803-1-gokul.sriram.p@oss.qualcomm.com
+> >> I've resumed Gokul's work as the last submission dates back April 2025.
+> >
+> > Thanks for following up on this.
+> >
+> >> This series depends on Sricharan's tmel-qmp mailbox driver series v4 [1].
+> >
+> > Since Sricharan's tmel-qmp driver is stuck, this patch series will not
+> > get merged. Shall I drop the ipq5424 related patches and portions of
+> > code in the driver and post a new version so that other SoCs are
+> > unblocked. Please let me know.
+>
+> That would be helpful, yes, so wifi can be enabled on ipq5018, ipq5332,
+> and ipq9574. Sricharan can always submit a patch down the line for
+> adding ipq5254 support. Are you in a position to timely post a v8 or
+> would you like me to drop ipq5424 support?
 
-Why are these not at the bottom of the file with the rest of the
-imx_rproc_plat_ops?  That way you wouldn't have to declare
-imx_rproc_sm_detect_mode() at the top of the file...
+Will post it.
 
-> +
-> +static int imx_rproc_sm_lmm_check(struct rproc *rproc, bool started)
-> +{
-> +	struct imx_rproc *priv = rproc->priv;
-> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
-> +	struct device *dev = priv->dev;
-> +	int ret;
-> +
-> +	/*
-> +	 * Use power on to do permission check. If rproc is in different LM,
-> +	 * and linux has permission to handle the LM, set IMX_RPROC_FLAGS_SM_LMM_AVAIL.
-> +	 */
-> +	ret = scmi_imx_lmm_operation(dcfg->lmid, SCMI_IMX_LMM_POWER_ON, 0);
-> +	if (ret) {
-> +		if (ret == -EACCES) {
-> +			/*
-> +			 * rproc LM is booted before Linux and not under Linux Control, so only
-> +			 * do IPC between RPROC and Linux, not return failure
-> +			 */
-> +			dev_info(dev, "lmm(%d) not under Linux Control\n", dcfg->lmid);
-> +			return 0;
-> +		}
-> +
-> +		dev_err(dev, "power on lmm(%d) failed: %d\n", dcfg->lmid, ret);
-> +		return ret;
-> +	}
-> +
-> +	priv->flags |= IMX_RPROC_FLAGS_SM_LMM_AVAIL;
-> +
-> +	/* rproc was started before boot Linux and under control of Linux, directly return */
-> +	if (started)
-> +		return 0;
-> +
-> +	/* else shutdown the LM to save power */
-> +	ret = scmi_imx_lmm_operation(dcfg->lmid, SCMI_IMX_LMM_SHUTDOWN, 0);
-> +	if (ret) {
-> +		priv->flags &= ~IMX_RPROC_FLAGS_SM_LMM_AVAIL;
-> +		dev_err(dev, "shutdown lmm(%d) failed: %d\n", dcfg->lmid, ret);
-> +		return ret;
-> +	}
-
-If you move this call to scmi_imx_lmm_operation() (and the error check) before
-setting priv->flags, you won't have to reset it in the error path.
-
-Let's see how the next revision goes...
-
-Thanks,
-Mathieu
-
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx_rproc_sm_detect_mode(struct rproc *rproc)
-> +{
-> +	struct imx_rproc *priv = rproc->priv;
-> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
-> +	struct device *dev = priv->dev;
-> +	struct scmi_imx_lmm_info info;
-> +	bool started = false;
-> +	int ret;
-> +
-> +	ret = scmi_imx_cpu_started(dcfg->cpuid, &started);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to detect cpu(%d) status: %d\n", dcfg->cpuid, ret);
-> +		return ret;
-> +	}
-> +
-> +	if (started)
-> +		priv->rproc->state = RPROC_DETACHED;
-> +
-> +	/* Get current Linux Logical Machine ID */
-> +	ret = scmi_imx_lmm_info(LMM_ID_DISCOVER, &info);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to get current LMM ID err: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * Check whether rproc is in the same LM as host core(running Linux)
-> +	 * If yes, use CPU protocol API to manage rproc.
-> +	 * If no, use Logical Machine API to manage rproc.
-> +	 */
-> +	if (dcfg->lmid == info.lmid) {
-> +		priv->ops = &imx_rproc_ops_sm_cpu;
-> +		dev_info(dev, "Using CPU Protocol OPS\n");
-> +		return 0;
-> +	}
-> +
-> +	priv->ops = &imx_rproc_ops_sm_lmm;
-> +	dev_info(dev, "Using LMM Protocol OPS\n");
-> +
-> +	return imx_rproc_sm_lmm_check(rproc, started);
-> +}
-> +
->  static int imx_rproc_detect_mode(struct imx_rproc *priv)
->  {
->  	/*
-> diff --git a/drivers/remoteproc/imx_rproc.h b/drivers/remoteproc/imx_rproc.h
-> index 37417568a0ade2ae4d6a4e3d0f139ea52b185254..d37e6f90548cec727b4aeb874680b42af85bdbb4 100644
-> --- a/drivers/remoteproc/imx_rproc.h
-> +++ b/drivers/remoteproc/imx_rproc.h
-> @@ -38,6 +38,9 @@ struct imx_rproc_dcfg {
->  	size_t				att_size;
->  	u32				flags;
->  	const struct imx_rproc_plat_ops	*ops;
-> +	/* For System Manager(SM) based SoCs */
-> +	u32				cpuid; /* ID of the remote core */
-> +	u32				lmid;  /* ID of the Logcial Machine */
->  };
->  
->  #endif /* _IMX_RPROC_H */
-> 
-> -- 
-> 2.37.1
-> 
+Thanks
+Varada
 
