@@ -1,143 +1,126 @@
-Return-Path: <linux-remoteproc+bounces-5993-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-5995-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDF67CD96FC
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Dec 2025 14:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BB2ACDA6D3
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Dec 2025 20:54:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 99F5C3014585
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Dec 2025 13:29:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3EE3731321E1
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 23 Dec 2025 19:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684F4339855;
-	Tue, 23 Dec 2025 13:29:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D50E82DA77E;
+	Tue, 23 Dec 2025 19:47:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Huyf8TTc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CXFWLLIM"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364942F5474;
-	Tue, 23 Dec 2025 13:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C3F4346E62
+	for <linux-remoteproc@vger.kernel.org>; Tue, 23 Dec 2025 19:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766496557; cv=none; b=NGfG9L4V48H5gNW/6SkadqiF4JhxeE9OTfCFQcYaOZqE2DL7l12oejcVYs5HEILtGRT5tzY7+CC2r5IccaYC+IvodtZmtqzM6MQRZlOIYkBqakaSvmN4Y8oXrrrtweskKo9wJplml5MdMg+tkObkNdCKdlbYXHEJg2RaVfqrwo8=
+	t=1766519277; cv=none; b=omuxfw5+QA0E6U/fQ2fbEdYov7NfvD9HhCy5bnOdRpaQDLwzXwjsZ+W+mNWF6+0Ii4fdHCt6iKTMVTnTHHSP0/ZIPItMvY57rEI9ScRFnqEXfYrGfGy/rTCqPXtsYWZlR0WtZTDIjJXTEQmIAGPAr1+ZMa8HoitG1H3ZLTLfLKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766496557; c=relaxed/simple;
-	bh=JZWAlyUrlKyOOwYtREmas/qP136s8GOhnReNHA0gubA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j+oeqxtj/xEvig8Iq9mlI9lXS1o+Hqir05ssHit1QHdR5tqb0eGwXAfGte5qfVWYj3hd0rySblXHbSTnObuM2MAHyZ+V1O0wUGtD4YKwN9Y6K57Nd8zG/uQmD+QMRM4CRwJdoAi7GM1jsVT/iCeuViUr9Uf4dj646ccMUKd5Fas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Huyf8TTc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF8BEC113D0;
-	Tue, 23 Dec 2025 13:29:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766496556;
-	bh=JZWAlyUrlKyOOwYtREmas/qP136s8GOhnReNHA0gubA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Huyf8TTcfgUqsI6uSudhVZqJbDsCMc1rXlWLlCbvxyOEfrbHnRZC/telWly7SAosF
-	 ce1nhDA9v7kUtU8JtyB8AOIgNQw5rwUKpPDEjBujxlzNDBze0BokbmfHlAM9OaWorr
-	 kqKOSbEFP9SnxU6V/lT1x3pTxTlR7GHjfvk/ZGJ3XSjyE3cIGOkSkgwcuZbcU7GcvB
-	 8FuYeYh7T2xa0EqkhQX4jeBeN4Q/f3MhSVZMWQjtQKBQsg0hL2J7aeqJv3/pBuE9Ji
-	 46z1L0CunYJQIVvLqTcZjInTAJlOUczn5ukhiarzR0bbqrXhSL7+84wfIhV2atL1GT
-	 uggKZ7nobREeA==
-Date: Tue, 23 Dec 2025 14:29:13 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com, 
-	trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com, linux-arm-msm@vger.kernel.org, 
-	linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sibi Sankar <sibi.sankar@oss.qualcomm.com>
-Subject: Re: [PATCH v3 3/5] dt-bindings: remoteproc: qcom,pas: Document pas
- for SoCCP on Kaanapali and Glymur platforms
-Message-ID: <20251223-furry-mighty-agouti-a222f7@quoll>
-References: <20251223-knp-remoteproc-v3-0-5b09885c55a5@oss.qualcomm.com>
- <20251223-knp-remoteproc-v3-3-5b09885c55a5@oss.qualcomm.com>
+	s=arc-20240116; t=1766519277; c=relaxed/simple;
+	bh=O+al3T5GzHGSlUthhDdnNmN3jTqqvKqHzxLvsIe+qrQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=o20lBnxv24zluiGEcrY/cfK5kk8bnWBisJ4vv32SwdcBb9lySd+5Kz/KG7LjjyWFZQ36DzJOJK64+2GIRkXDgR5qLFfXhYFFBUs7oOb+L9ya42EGXGA3hPtMc99r4Po8NrFCRTDrH2a+exr4BhDRxFLfWhnTWANwxPkV+eszSrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CXFWLLIM; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-3e80c483a13so3802158fac.2
+        for <linux-remoteproc@vger.kernel.org>; Tue, 23 Dec 2025 11:47:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766519275; x=1767124075; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/3mRJeRPuNplyzmtQpT+uTf1WmnP55bf7PHuhNJ2LCk=;
+        b=CXFWLLIMvJnxkqVhl3qf+hIIVPPt5ZKmDrDA7ZV/DOpjTjEgOpNdkCG+A1dT+5u8ro
+         xBdUxmdH/vt3sBPZ3O90WglZQyfxYCHVUHvVG27dTD6B5lwqlEE9pg9gOIqQM/WaGiON
+         UBCwebTgRFg0wWscS8nzqMcUh56SP11luotZjZ6YfJiZiEPGRJT8rO26GPnwfaBnPY8W
+         CGD2lpgl2tfqtnSnOeeetRkEf2Z0w9d29kZlvRrJe7RN8+14ZRRPUKfG1T6L9zMDGOxw
+         RA1OhwRvpIDaFOi1ds9pp2MBfbVCDZoS/81GDBl4wLukE4kgev8iYcrLjGM23aDHkCBP
+         6nPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766519275; x=1767124075;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/3mRJeRPuNplyzmtQpT+uTf1WmnP55bf7PHuhNJ2LCk=;
+        b=BGrswCriUCFzjIAD21BDLGYeFO2zeaNZtKsLPKudn7x7uQDhUfEQJZ+AcVctE4MI/m
+         FpC/mT46qlI+OahJI1SA3s+HbXkEnrESAcD8TyFfyTjslfrHQ23njzYVHFADVwf6lR4v
+         c7CYZIv/qtGKnUeVAbkM1Dyky5KXNM1jDz+tcOeDoUX/DVa/kv9KXQT6Z0EbKI0uoBsl
+         SX2AAEvbM32UV7p1yL2YneHKPwzoHLLQHKhzGiypxYneeqq775MaR2G+wFQfCMMeP7wt
+         9USRC2dCZsAZpPhHnIL53zUp+SkAdMsXan/wu47oyhlbczSsKkh86ovByZ6tyNwlrxaB
+         Vf8w==
+X-Forwarded-Encrypted: i=1; AJvYcCX/wXoDSm7BOsXP1Pmfn4Zvp7c+Kf8kJwYZnIXMqT6FwwfbwBOwf+Qq6NlpRMrNY1tFK5ELoRTBDRiqHHonMIwy@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywzdw2g3l7PY6UaPX14N7w2EHSOlcnakdZeP+smTtQfk0NdZP+Y
+	B7p62pXRB33jEUiXjCNyzupORRV60DV8U/NIZgsMtO9HPCYbP9HUHH30
+X-Gm-Gg: AY/fxX73LkaF2S/Vq/f+VQ9/rCo/hHtsSSBtrm5KTRz916Bus5Ez6M+Suic0JGRuDe1
+	3J7v2UcEpcYerBmOWhoU5I8M6UsxKhY45XFBYYQM044CSH1f89ubWIilWg5VgHuYgZcatQdkcQV
+	8/5snhBPOt44FVVTK4Vwj+gutHr56QaSUNSnKbdsYyXRDzDV6t0Zwi5g8O5lAGk798uYNeqkSnr
+	m7Oxlx5LZ54h/0vg0mcHkn8ElErlffdsk/DHWrP40YsfzW0VMi4CxLaeC/FzexPRsJ7szdzPZuK
+	i+4ey6vlg2vrhPQSm7G8sqF7bwl0+bfQeuRxqxisTHf6Z+b2bSWXE9VHH+TV0UjzfVBCWiJ8qwR
+	zdv5ngf9jRSe/bjpzvB/+hPovab9d+EODDbxZJPDoERCYuTjivmgzNtKiRWzB5o3O5gj7PZBtrr
+	mA9DPdmOg30Xps/Di2AoJWxs73hQ/MJR05wcZQfUmXuH4fT6TL8y03GwnciDtI8a80DVs2/WYlJ
+	01oir268uErzSMl45wF8vxeJmKnW9pQjSfNf4/zug==
+X-Google-Smtp-Source: AGHT+IHcrjhYUuAj6vozocg7gaQdzG5Vqlzq6aaTKhOSW+rv6kUgyk2MG7UftkvU7tvQ1KVlt/vjsw==
+X-Received: by 2002:a05:6820:e010:b0:65c:fcdf:a350 with SMTP id 006d021491bc7-65d0e9bae35mr4930818eaf.24.1766519275181;
+        Tue, 23 Dec 2025 11:47:55 -0800 (PST)
+Received: from nukework.gtech (c-98-57-15-22.hsd1.tx.comcast.net. [98.57.15.22])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-65d0f69b9e9sm9066832eaf.12.2025.12.23.11.47.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Dec 2025 11:47:54 -0800 (PST)
+From: "Alex G." <mr.nuke.me@gmail.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>
+Cc: andersson@kernel.org, mathieu.poirier@linaro.org, krzk+dt@kernel.org,
+ Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH 2/9] dt-bindings: remoteproc: qcom: add IPQ9574 image loader
+Date: Tue, 23 Dec 2025 13:45:49 -0600
+Message-ID: <4260401.mvXUDI8C0e@nukework.gtech>
+In-Reply-To: <20251220-imaginary-merciful-quoll-a91a4c@quoll>
+References:
+ <20251219043425.888585-1-mr.nuke.me@gmail.com>
+ <20251219144433.GA3163791-robh@kernel.org>
+ <20251220-imaginary-merciful-quoll-a91a4c@quoll>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251223-knp-remoteproc-v3-3-5b09885c55a5@oss.qualcomm.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Dec 23, 2025 at 01:13:49AM -0800, Jingyi Wang wrote:
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
-> index 63a82e7a8bf8..149e993282bb 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
-> @@ -33,16 +33,22 @@ properties:
->        - description: Handover interrupt
->        - description: Stop acknowledge interrupt
->        - description: Shutdown acknowledge interrupt
-> +      - description: Pong interrupt
-> +      - description: Wake acknowledge interrupt
->  
->    interrupt-names:
->      minItems: 5
-> +    maxItems: 7
->      items:
-> -      - const: wdog
-> -      - const: fatal
-> -      - const: ready
-> -      - const: handover
-> -      - const: stop-ack
-> -      - const: shutdown-ack
-> +      enum:
+On Saturday, December 20, 2025 2:54:02 AM CST Krzysztof Kozlowski wrote:
+> On Fri, Dec 19, 2025 at 08:44:33AM -0600, Rob Herring wrote:
+> > On Thu, Dec 18, 2025 at 10:34:10PM -0600, Alexandru Gagniuc wrote:
+> > > Document the IPQ9574 native (non-PAS) WCSS image loader. It is similar
+> > > to IPQ8074 WCSS, but requires several new clocks. These clocks must be
+> > > enabled by the host in non-PAS mode, and are not optional. Add an
+> > > example that uses the "qcom,ipq9574-wcss-pil" binding.
 
-No, no. Stop doing random changes. NAK
+Hi Rob and Krzysztof,
 
-Now you remove strict order (see writing bindings) and claim every
-device like SM8550 ADSP PAS has any order.
+> > Is the new example really much different and unique. If not, drop it
+> > (especially since it wasn't even tested).
+> 
+> There is simply no example for existing devices, so this is fine. It
+> could be mentioned here WHY it is being added, which would solve two
+> people's questions (yours and mine earlier). If only people knew and
+> said WHY they are doing something.
 
-And it is now de-synced with interrupts. Read writing bindings - this is
-clearly described there at line 90!
+TIL, I need to put the third patch ("dt-bindings: clock: gcc-ipq9574: add wcss 
+remoteproc clocks") before this one to resolve dtb check issues with the 
+example. I'll also add a blurb to the commit message to explain WHY.
 
-You can only grow existing list.
+Alex
 
 
-
-> +        - wdog
-> +        - fatal
-> +        - ready
-> +        - handover
-> +        - stop-ack
-> +        - shutdown-ack
-> +        - pong
-> +        - wake-ack
->  
->    power-domains:
->      minItems: 1
-> @@ -55,13 +61,21 @@ properties:
->    qcom,smem-states:
->      $ref: /schemas/types.yaml#/definitions/phandle-array
->      description: States used by the AP to signal the Hexagon core
-> +    minItems: 1
->      items:
-> -      - description: Stop the modem
-> +      - description: Stop the remoteproc
-> +      - description: Wake up the remoteproc
-> +      - description: Make the remoteproc sleep
-> +      - description: Ping the remoteproc
-
-So every device like SM8550 PAS has now four smem states... without any
-explanation. Read writing bindings - what does it say?
-
-"... and define constraints specific to the device."
-
-"DO define properties in terms of constraints. How many entries? What are
- possible values? What is the order? All these constraints represent the ABI
-  as well."
-
-It is your homework to read the docs. Not mine.
-
-If you want to change common list you must define strict constraints for
-EVERY user.
-
-Best regards,
-Krzysztof
 
 
