@@ -1,267 +1,344 @@
-Return-Path: <linux-remoteproc+bounces-6172-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-6174-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB09BCFFC27
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 07 Jan 2026 20:31:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A73ED03183
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 08 Jan 2026 14:40:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B4FFF302C4E4
-	for <lists+linux-remoteproc@lfdr.de>; Wed,  7 Jan 2026 18:38:06 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C82493044369
+	for <lists+linux-remoteproc@lfdr.de>; Thu,  8 Jan 2026 13:31:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6425034AAF2;
-	Wed,  7 Jan 2026 18:25:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5BFB421894;
+	Thu,  8 Jan 2026 10:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aTpEgJXx";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="N+dZ+r6+"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="L+cahRrJ"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011070.outbound.protection.outlook.com [52.101.65.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 832E534AAE9
-	for <linux-remoteproc@vger.kernel.org>; Wed,  7 Jan 2026 18:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767810333; cv=none; b=Gx/rteEh9mD9mZK+hkBR4rJQUFi3EREKuhHjrhmboI571JfUpZtT8yc7UYbSruZhKDSv8KESK7vvFVC5ya4/avhlgYNC6SzKwiIOYMTiofwsuep3nt8JTMhRS02xJ2eAcOU5lMdd1txpX+7DZu55T1ZvXJKcFGljYavpqP9pKhc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767810333; c=relaxed/simple;
-	bh=vmHz7AdKXekh6B5BnPe/pPGBiGFpwRkvtASFzJtYyv0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sf40p7aww6ZOQRVHmlwYkFef3/hnW8JtRIrMBzMg6NqRRtmpYQazo6xv00GAv9GfeER9NcaR0aVzOBrjUhh2HaOuDiIA5jvqHqKN6x2m14lxwF2UVxqcFaxH+ttqjyfPHvg6or33eBrFtPm+MFtUZ4DI6FA4HBqyVPYglTc58HY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aTpEgJXx; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=N+dZ+r6+; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 607H5ktL2454339
-	for <linux-remoteproc@vger.kernel.org>; Wed, 7 Jan 2026 18:25:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	zyEta6qSo9ogUjLix7zMK7X4kwhSaxFV32Ej4UwDIGI=; b=aTpEgJXxl9iktJw2
-	fDoHW5+B3jzEDw0DfJu+BqTBh8xUtatlb2uynSgTFYj46Z5JlxcoyUgrMC9Ls2wE
-	vinFZhtoFeInearVCB9qnfQPSURxHnROpDG2bZY+8pzmwiPdHD0G/CCyfBk5wZAz
-	5abHiMnRCdFxhfAz9gNYLufMAekPMyIusgcPIxgv5gM+cSYh4yltWbbIrpKjAiks
-	/cNY4z8z+4KR8RFX7l5jJ+jZ3zMhCusRWQ8kSA3dUaBfaypdb0INohCaIa3AITGH
-	5FPFkxNzzwdizIvFUxMB0DSd6M0xWsvBNd+K0xmSCUvUZZpsN7DmoFtymAgU9IhP
-	z0HFZQ==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bhmnbhqse-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-remoteproc@vger.kernel.org>; Wed, 07 Jan 2026 18:25:22 +0000 (GMT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2a0d59f0198so26600995ad.1
-        for <linux-remoteproc@vger.kernel.org>; Wed, 07 Jan 2026 10:25:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767810322; x=1768415122; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zyEta6qSo9ogUjLix7zMK7X4kwhSaxFV32Ej4UwDIGI=;
-        b=N+dZ+r6+1/3Rmx5g/8pyDjKX4nX9VLXttzt/WbVq7zTechXCNNui6EkJM+oC7xVDy2
-         dc20+wzVY/HE38Uu/cFYLsHYgBgwjbcUBjMgkbbx6uwwzgp7VL5xLMfbYm3P+P2nALMt
-         Kk0Yd38lLOP3E3agocH5cza96EGFPlzIHAANlopUQnA4R5yrVSpbsWir2QW0Zpl3V67E
-         kut10JNU4oiitiGpd53jdXR0ZmLXAoVSenlApnUW/oA4FBr+Vv5qADTltLh6DX2FgSRM
-         vh0lgy3mucL/6/DAl0CsBXznjwGoouSjw7Sg/a7cyXqlxaxl3Hf8Koq64OMhRoHEDMUE
-         Kx4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767810322; x=1768415122;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zyEta6qSo9ogUjLix7zMK7X4kwhSaxFV32Ej4UwDIGI=;
-        b=AAJoDmZwZbEmwRClEvwAK8NkuXLx/lzU9kmvHqgl9LonvYphJlzGMFlSoVLJS8+4jf
-         NppRHZxdx5dLNhHkQGUzIP+Tbl0jn50wGCrLSDfjQK8JCPutbZqAKcvZ8KsiLnpKgmHm
-         6TwbKYyfe74nlR2FJiMSXkv0NZwfb8xP1L4gQuo4WAVPRXvgWzs9U+ZqGWPOZ9p1tZ1F
-         LKZXg5FTYDBWFEmzLRLO6cDSgio1CYuu1Za/g1j+dTaEv8JmCw2JgPRlB2ieVNNQ1SGs
-         /Cw+T39VxBuKfaUz9iaxw+aFklWV8RF9HBgae6RVcq1OxDM3JUbRLpdxZfTnNgN//46x
-         Mq2A==
-X-Forwarded-Encrypted: i=1; AJvYcCVBQ9D2bSexbRw9LJSyskkfexEPNQBPAHiPvkaMm+/9ZIBVOi+pSFy0qCZ2LxguwL5hNcRti/pHCuaXpDlde14m@vger.kernel.org
-X-Gm-Message-State: AOJu0YwL00tq64t0Oc9vQuenuxsv+nDy3Q0HVD2mab/kFSbmuU/ACS3k
-	oV700eQpJq637lVh8/O4l/YVcwQBl/dfXB4r9RyaIVy7qkML52+PI3yxZ8J9QPoyFL4TS+kxfRq
-	XtgM3g8I0y26IWoblDKyxIac9K8fCcnQCIflGOwFxSm2QH8N18TzyVYvwYTDMOrQNMasrMH88
-X-Gm-Gg: AY/fxX668zd0NoxQ8lXasglJ0cdEp6pkSyr67eNHz7TFqFB6AG0al+zR3rNQAAvkLeo
-	KYqquM75wXX52v6Swba1F93xRcj5ToUTNc1+/zNlnuY/+D9SIN1xPGVpd23OGKShh3VK39D0eKW
-	EUaxjRnCqJ6JI6WJDZZajTDYqLTt28kAtFXOmZg417NjIYcbEWEqJJ5JjP1JdsR9ErWO+CWNrOx
-	nII0enH65pOKr4v+s9BGizGVNBK+L1KWlNpvPyWl9DcKjdvZ5CStBHIEUDfKlGG3nDeWqXgJ3Ed
-	hV0jg7vA9oEpopqt/ZrC1Apr+2TS/xW6dixJZiA2hbwoIWcedeW+mpkZX6Yd4IYFIgzmnzkxus2
-	hxWzjU+ElO29Z2etriXgk0+kFZb/7XSXrl02NJJ1bWut3TuBH4w==
-X-Received: by 2002:a17:902:db11:b0:2a3:bf5f:926b with SMTP id d9443c01a7336-2a3ee4c2efbmr33516545ad.47.1767810321467;
-        Wed, 07 Jan 2026 10:25:21 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEfHrr8KjmgskM6tzkI1fufrRVJjhzck7KWftUvD8noNaTImoMFpsm27QF6u/kaeY+q/8yS6Q==
-X-Received: by 2002:a17:902:db11:b0:2a3:bf5f:926b with SMTP id d9443c01a7336-2a3ee4c2efbmr33516275ad.47.1767810320858;
-        Wed, 07 Jan 2026 10:25:20 -0800 (PST)
-Received: from [192.168.0.109] ([183.82.31.185])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3c5ce06sm56105135ad.44.2026.01.07.10.25.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jan 2026 10:25:20 -0800 (PST)
-Message-ID: <21468f66-56df-43ea-99c2-7257d8d6bb7c@oss.qualcomm.com>
-Date: Wed, 7 Jan 2026 23:55:16 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E5B41E5C0;
+	Thu,  8 Jan 2026 10:28:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767868103; cv=fail; b=mKC5bCrdhwz0mDos1gMJvXX0WoJ8KAJOqEGGvEjBIvG25Nwu/NhNxEoqwbF4VFJdlWOsJlHNbTgb2aXuiLmi49l0J1naaJ+oW3XQFTA6uKzrxULzhfwWro+NMGw3++Q4d9avryrj2uusFG7LaHWf7u4ki0gdmYmB3llhUjcXwtY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767868103; c=relaxed/simple;
+	bh=BPOqElXP3nSybyuUALH++GQaBk+OJ3VeuDTTQrdmHrk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=r85lUA1NBK6dOuGgkYs7g0qAYJmajo+6W3ZLcQR9/mc0Gtwa8QXxLvELwKzPeEQRYsBeAEFKFt/J7dMSvfT+rZOnALjE9UBJbS5cv4ilGviBPv+Mv8GEFKhpdA02220ufqwe22s0hlDeHzjjZJevyH1H3nc8q7M9NZujZjTF1Ps=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=L+cahRrJ; arc=fail smtp.client-ip=52.101.65.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mTj2HOKq1EKSdHnayOXYGe/bwbt/9YhULgHj+Z78EgAGm1uyZNPS100V1CdrdLnhqecRBpewjLRLO5yErbyIVIedSH5jT+MllG1ZK7O+ITEn/x/oRiNJrHK637mOHpxp8l58eT+onKYPaq6HBmLjau3Z+JC4aiFMD53pXpbxBtx/itd4fvDpnQZo0ZiNsErFN/kvpSnplpae/gnnXJdDPAp987y12poguQ/ifaSO4Nxgkx74RVHiOSPnOa00TRJA4oDj9x8vcSOyto6y9voI63pt1k8o03AgGsPbk6uODwBnjONh3bIPPpSKClK+rWEEu5t4nBzv9+3vjPDy/reVDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Os/KBcqKoPx7couqn3OqVcK6He3fnr7cEJqFU1UgtS0=;
+ b=hhk6wKGVcHAMf4QbfosYFH9WQxD3ESbGpVw8uWhfaad6yhgaHwxmQwoiHcsgVxqzzccVaO2/VweMUGplfXywmULgi+RWl1rVSTo4NPSDig9FEhxJc+xAgiJ91DL9uwDQVP7QG9TTMIh21u7F6+KYbsYX5XRpEtAxI8NROw25mvrqDMrGjUPdAwm/YJ0bRMrCV1ADns2l26nkEZbCk4wuOxlJOqh2wFpcFGE5pxottsgyk/OdLy1avC+Y7kVSr/hFSJJ+WQJf96WrwVofn1F/lM4UAK20F8rFWea50UCP2cAkURmV8KGceJAETdk1IUzBOy9KMnFv4eK6d0PsgzQ/cQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Os/KBcqKoPx7couqn3OqVcK6He3fnr7cEJqFU1UgtS0=;
+ b=L+cahRrJMcH/mwrud9VztbXCrpdVoQeUGJGCVtn7+CjpzMiUWmM2jGIfL7JoiA+bs+l+W5fT8M1Suj1ACtraSOG3ckVGkL7xzq0cFAO/r/V5ivSImrTsv0N8fhxmD89cYA0bvzYF9osG6G6Qu1LxP7r64iY4MeyA2ZeCODBTdTl0a9i6S6LS5dBBOhU/TYQJ6hd6LVwZLooHBL4575Q4qvGj2WaKT68KO0fHDjgFMQEc9eX86CLZm0R2gRSdGPbog64m7KhKP749mu18wByCHKX7bmE6ovMYMrLhUO05kPfdubpd2i5NIg1kfv6bUTN223rrcsW1z8HWHDiDu2FQ0A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DB9PR04MB8461.eurprd04.prod.outlook.com (2603:10a6:10:2cf::20)
+ by AS1PR04MB9311.eurprd04.prod.outlook.com (2603:10a6:20b:4dd::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.2; Thu, 8 Jan
+ 2026 10:28:13 +0000
+Received: from DB9PR04MB8461.eurprd04.prod.outlook.com
+ ([fe80::b1b9:faa9:901b:c197]) by DB9PR04MB8461.eurprd04.prod.outlook.com
+ ([fe80::b1b9:faa9:901b:c197%4]) with mapi id 15.20.9499.003; Thu, 8 Jan 2026
+ 10:28:13 +0000
+Date: Thu, 8 Jan 2026 18:29:36 +0800
+From: Peng Fan <peng.fan@oss.nxp.com>
+To: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+	Daniel Baluta <daniel.baluta@nxp.com>,
+	linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH v5 4/5] remoteproc: imx_rproc: Add support for System
+ Manager API
+Message-ID: <aV+HEAzwNSOCUx88@shlinux89>
+References: <20251218-imx95-rproc-2025-12-18-v5-0-b56a27d4158f@nxp.com>
+ <20251218-imx95-rproc-2025-12-18-v5-4-b56a27d4158f@nxp.com>
+ <aV6ow9dGUNaPDqZg@p14s>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aV6ow9dGUNaPDqZg@p14s>
+X-ClientProxiedBy: SI2PR02CA0034.apcprd02.prod.outlook.com
+ (2603:1096:4:195::9) To DB9PR04MB8461.eurprd04.prod.outlook.com
+ (2603:10a6:10:2cf::20)
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/9] remoteproc: qcom_q6v5_wcss: support IPQ9574
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, mr.nuke.me@gmail.com,
-        andersson@kernel.org, mathieu.poirier@linaro.org,
-        linux-kernel@vger.kernel.org
-Cc: krzk+dt@kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        varadarajan.narayanan@oss.qualcomm.com
-References: <20251219043425.888585-1-mr.nuke.me@gmail.com>
- <20251219043425.888585-6-mr.nuke.me@gmail.com>
- <a14e40b7-b70b-4658-9dee-7e5e6265ad5f@oss.qualcomm.com>
- <12223416.nUPlyArG6x@nukework.gtech>
- <55d70e0b-7a6b-4979-9ae9-4443e54ab584@oss.qualcomm.com>
- <7f6754a4-4a3b-4b6f-9220-a1790a9ba393@gmail.com>
- <f9adaaa2-1672-4246-8139-93f9c220530a@oss.qualcomm.com>
-Content-Language: en-US
-From: Vignesh Viswanathan <vignesh.viswanathan@oss.qualcomm.com>
-In-Reply-To: <f9adaaa2-1672-4246-8139-93f9c220530a@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA3MDE0NSBTYWx0ZWRfXz366bK57+oCM
- 7cmITLkzUMIoWKeiaEJtZU+wPc1Ziao4nD+OnwsfWFQ6nrxYaGC6oCeI3eb+AoMxzyOQYj2CABf
- 0jBhuqB5HZj4xrOF0pSp+AQBAzo3JaRTK09GPKevCepEhAgerUFDlnTycdBTd0VColfO+w6oL7N
- vKRzvl2LySjqOlTQh+tNeQXqJFAsLlVrJSavaDE2NNzsUw7s3USc/twUw9lA1iDljoEfFOhlH0I
- m0WCTN2X0vPYkP1pHsf+nHdZ9/RZqKSnrSRLsm9G/PhPeHy3saa0t/6UFXwKhFnC3cSlHQ+sLI8
- UjYNz/8pUURBGvkN5wctYddOWMrQPwH6DOYOauef/aeTkWe50yQXWRpH1rOhV31Yyy4oAOfXO9H
- 46QjlqehWdyjfmSbBbihOyvBTWBRR6U/ka2fU7o1snjRESCR8UlAhYJGeth7SkpRrBHk+yoUUi0
- XypkYVBcZM5E4JLWqeQ==
-X-Proofpoint-GUID: gaLG-8kJL7mz-eGx5jI0EJZM8weqHX0N
-X-Authority-Analysis: v=2.4 cv=eIkeTXp1 c=1 sm=1 tr=0 ts=695ea512 cx=c_pps
- a=IZJwPbhc+fLeJZngyXXI0A==:117 a=V6Ol1F/91haf34TWKFX4Fg==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=pGLkceISAAAA:8
- a=-gmn0QAXPwOg_dpREwIA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=uG9DUKGECoFWVXl0Dc02:22
-X-Proofpoint-ORIG-GUID: gaLG-8kJL7mz-eGx5jI0EJZM8weqHX0N
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-07_03,2026-01-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 clxscore=1015 malwarescore=0 suspectscore=0 phishscore=0
- impostorscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601070145
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB9PR04MB8461:EE_|AS1PR04MB9311:EE_
+X-MS-Office365-Filtering-Correlation-Id: 65129cdb-a4d8-422a-4175-08de4ea0a01c
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|19092799006|52116014|7416014|376014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?mNXeoyhjoC2VdNB3t3pdgmTIlDtJ6+OjfoJhvVQm5xejuiRcoshG5V+iynsx?=
+ =?us-ascii?Q?l/gs+woLsaGumPespaYOz/1tVAXZ1dNNs9A/1UUz/Cv2Ebqf1YXsNq+Q0BSS?=
+ =?us-ascii?Q?NhYGGKklD0iF5DsJ8Rm9Gnc1S8oidHDs4Sfnc1TZnyp+NQNRz+Q0XL7ZoSvc?=
+ =?us-ascii?Q?+vAvWxl/ZJSbOf4vi+8I2qbw4OpkhtMInW2kk3HcXvC6RWQZrRpWZl7gPPmp?=
+ =?us-ascii?Q?Ls3N7AHlpqW7bsoWRxaEBWQvhCz/muwtDXSpSmk/pBzfP6a5siE16TTjbqN5?=
+ =?us-ascii?Q?HYnTMIzjWcyUtLbu0dTKUuZgYcRgf2Vl8aj9TGU9oUNazAzGCLWDVk9JJIsg?=
+ =?us-ascii?Q?dos075dyJAEehd/vQRzpNcl7Wa5L7IWT7KqLzG4RsGXMRuHX3KsnzEBCVE4F?=
+ =?us-ascii?Q?SDsO8s/FkTwP8Ryq3VYIMOrFW3s9gZlIEg1xctzOLQUW7WrBvH/WCAEUPWMw?=
+ =?us-ascii?Q?bNlBLt1qbf52fNqPVpMV9IeDu5FF5THtUoBbb1geVLs+0+p8hyHZvX8vuprg?=
+ =?us-ascii?Q?Ru8GFpqKSif9fzKXHHngoUzjA+U1+BkmPRGGjr02h7gjJRgdlPKGgUZDQvF/?=
+ =?us-ascii?Q?3/sVBONZhfLp7A6M/BIm7q5uB0T4kwtZ7qPR77/QcvfslGDFIH2qFqPr34jP?=
+ =?us-ascii?Q?X9ZZTnDI5lvAtT/2tbFX6WUQ7aavM5SzldRv615xNks/gkGNgI2k4vA53qi/?=
+ =?us-ascii?Q?OHWjeIthM8ywap/Jg0UEmbJpl5czGsbsskmi2mm4xZM6gTEezztGZYAxAJUZ?=
+ =?us-ascii?Q?YbfQ0xNX6HEEvrbvEW3va1nJbc6Zjqyl50iBex43PE2e7EjIXT8v6JOhHNJy?=
+ =?us-ascii?Q?tjxos+cJNPoW781/wtZLIZE2HsKx4Ve5fOqZ7glflJBuny8FPdS9EP5Z1svf?=
+ =?us-ascii?Q?XnHiukq/NjE6yJxR/2+Hkp1F98lyqRMmFOOGCf/P1QPPXdzvkIUV8dO66m1O?=
+ =?us-ascii?Q?UbZH7rJlw3FE52cFPyqU/FjvXY3cZKjN9BvFse753Nq9BdmYNemOq/XDO+6X?=
+ =?us-ascii?Q?4FyuYfYWZhFh7CvJn8iR2DKRJgvr/kfqdi+FQ4rFq+/0wbwY8NmS2yicXlWp?=
+ =?us-ascii?Q?oSGCG5O8tRqjAkb+3hcUDnwU+2rz1CPekqjB+ZLlwFdTR0r5Qbenmbk70of1?=
+ =?us-ascii?Q?m6pExGQJNxaoAgwoLXNvbkQfgOecWFRoJWsYZImYFpKB6BLw/c0zx5UChBf5?=
+ =?us-ascii?Q?ezEOOKnc6KCiJEtfcbajohtGFGydWciss5oKK4jlka22gsLUcbbHMH/ptCtn?=
+ =?us-ascii?Q?vxDBPO5Kom98o2bdsQ0WKfHV8aHWUGFBSbZShmE0Ix147D6veYwg2tOsk2TQ?=
+ =?us-ascii?Q?7x1cvOe+2w4owaWeEnRySjD/a4brnkRq/RP25AyhWQLPa5b0W0kCLbHW9oiN?=
+ =?us-ascii?Q?BXXQzjB9L8LeaTrXp/aGJvVfPxFNMWeBYS/vZyYWXMfKdQbTUupoKRvdDgIk?=
+ =?us-ascii?Q?lw4BlJAmnc1vXTzsJ4uNiPIS75ATj3Y/iAMdeT01Mcd+kpQPTvyYl3GpYMOi?=
+ =?us-ascii?Q?H5XejDafHV2LnWOduLuQjJ1t6GNAuePvUWqc?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8461.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(52116014)(7416014)(376014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?S4vJZLC1Kp6wZ4JZUCJxibxPK9HjqOGojtTrrjLhmdm1IeRrtBgPnUdw9KH7?=
+ =?us-ascii?Q?QXI8Dru+e/oV9jMvF64wXb5FeoILcBmrHJIo1fLUII9Q8KP/WpE41JMjC2AC?=
+ =?us-ascii?Q?tByOhTWD93PmMmaQ8we3hjg91lbDIlUw1BYJlteVsCrhT5+RildrDxmYF9Vy?=
+ =?us-ascii?Q?eGtgPJsZGgr80Jij5r3AKVcy5vp3oSXUE1Ovgzqb32IEwjgfyVb4e5rc/FtV?=
+ =?us-ascii?Q?bT93/9uh3dEJCGuSXXrVnRvuENa1i6pFTvTiDw5tr9R+24wkrkzK20uAIiqY?=
+ =?us-ascii?Q?5oKsWjJ9BFM0KMrBbDwY3LRs6zPtEFDLbiewTf3O/XK1DKh2ohUja23ujjjy?=
+ =?us-ascii?Q?nrwdVmMQB5eAGcJesLI6AIEGjN5XeUsDzlmhBKjzoUdZSTuGCnTet9JoG29s?=
+ =?us-ascii?Q?g9VR6yLJo6lLzP5FLrHfKdDiN0MSUWLILCARaN1hy/4W8iEMASNVmah4pVO6?=
+ =?us-ascii?Q?WyI1X4s1+0dKFgwYhQgRlxKPddxwyumxtE3AfYsR7qUqNDQGs7vOjFizNCOl?=
+ =?us-ascii?Q?XVthbmXQupwmB6C+RnFAvq+1M6X6gw3ZrBq88K8hQa7va/Lw4ae71OsBKm6H?=
+ =?us-ascii?Q?O4RD66Dcw85FV+kLku/YYthLZki940U9Ec9D0GM06DajvYnOHZEHHfmyljo4?=
+ =?us-ascii?Q?zSQP+4gxi1NShiKi+NMLprscrCq0JwU6zNwUUsj9pR8fGyCrmF8r/hUaMMI6?=
+ =?us-ascii?Q?i0e6X3oADCfreJFnJSP9iGZcLZ9qlJaEoM/fYfAteNmSj8wR4zU0kWiuWp7c?=
+ =?us-ascii?Q?1SdOOU/MsrdhUv7sp664Whj2dMusaAlfWjVE8ILfia1pbpVPIiW55Lit6k8X?=
+ =?us-ascii?Q?/+N4HiJPjICZejR7x+aUZ8X9C5S3Bps9+zpfYR88LQDGBsW7TmTM1/8jfnqk?=
+ =?us-ascii?Q?Dhcx+uYOfCuqZ8Kmdu0kLxQEChUdBQVKDhwmgot5+uN/kCXznrReZogOiVHA?=
+ =?us-ascii?Q?1ESzcGn1qvJpRMec0oqNo+ctnaIL9nOdgugiByu5wl2VSojo+Lv15Gsny6TD?=
+ =?us-ascii?Q?1Xb18xC/lxgx+Lm+1pnPBkzdtncxhg94TLPk7zkt5tU/qlN5QhDIplpd8qYu?=
+ =?us-ascii?Q?5PqXn6H5ZXI6ZBG/0Z+LEq7XdOtXUZ44QWnWSje3sHo49jonJH+MXj2CNcST?=
+ =?us-ascii?Q?5RpXRWLaEV/4Zdwave4oehXKTGRtKwfur4HvdA9vXUgVxDPE7BYlOP+Ozjpw?=
+ =?us-ascii?Q?Iq5Zb03Kk8Jsa5Uqf6o2CNHVHrQekZtQLeQ2DTGZDIERyld/hvVHghXJzzPG?=
+ =?us-ascii?Q?q3na89ROEwrw29Q1oyCMId7aaVSNJTssVpql3YwTvAy0fYODDfApDiHl9WsH?=
+ =?us-ascii?Q?RRtigimRRkw8A9s6CTn9Xs9joWVdLVYN4B316R8m4DrHpgSn8WXERujdvXMo?=
+ =?us-ascii?Q?l3ZONlO9r1SFLYu4R/S6dnuhxpHUohndaXZW3plLx5nF6jXEJUtZOApIhqso?=
+ =?us-ascii?Q?9cxngtibVkQQ0OJVXtr+MAUtje5Q0eARUFRH2X4LM3EG25UwF432kKTyqGQW?=
+ =?us-ascii?Q?r5JJ8NgasmdIY41Rf0q1h31vPjN6bqthn/s1OwfnuMaOOZspO8qlXlB4HaJL?=
+ =?us-ascii?Q?7MhGJVYQXn+eK5Icc5m+Dv/s3JPqdRnLZh+dXtgfTG7SU1saN0STa9j/JqJL?=
+ =?us-ascii?Q?8MmbrarUGYqLV88g4zrgJc4pOAqa76EvLqFAnF6a8dQ7k8dcJmqjA+yRpOFF?=
+ =?us-ascii?Q?wMvS1lPTpz5Tjij6P7tIoKJfL4uGIGSp8Uhe0Cp5Wl+bBwk9ZWLVOVdd2Sod?=
+ =?us-ascii?Q?MioGokoR7w=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65129cdb-a4d8-422a-4175-08de4ea0a01c
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8461.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2026 10:28:13.0640
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: R9LzS9QSl2/0nfxB0E08nlLa2hHekyE6zdcev0J0lTCAVvCdHllmoGFQSzzwu66MYvUGCFlPb9z1U9kYsFMkJQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9311
 
+Hi Mathieu,
 
+On Wed, Jan 07, 2026 at 11:41:07AM -0700, Mathieu Poirier wrote:
+>On Thu, Dec 18, 2025 at 01:17:38PM +0800, Peng Fan (OSS) wrote:
+>> From: Peng Fan <peng.fan@nxp.com>
+>> 
+...
+>> +/* Linux has permission to handle the Logical Machine of remote cores */
+>> +#define IMX_RPROC_FLAGS_SM_LMM_AVAIL	BIT(0)
+>> +
+>
+>This should be named IMX_RPROC_FLAGS_SM_LMM_CTRL.
 
-On 1/7/2026 6:56 PM, Konrad Dybcio wrote:
-> On 1/5/26 5:09 PM, mr.nuke.me@gmail.com wrote:
->>
->>
->> On 12/29/25 6:35 AM, Konrad Dybcio wrote:
->>> On 12/23/25 9:21 PM, Alex G. wrote:
->>>> On Friday, December 19, 2025 7:20:04 AM CST Konrad Dybcio wrote:
->>>>> On 12/19/25 5:34 AM, Alexandru Gagniuc wrote:
->>>>>> Q6 based firmware loading is also present on IPQ9574, when coupled
->>>>>> with a wifi-6 device, such as QCN5024. Populate driver data for
->>>>>> IPQ9574 with values from the downstream 5.4 kerrnel.
->>>>>>
->>>>>> Add the new sequences for the WCSS reset and stop. The downstream
->>>>>> 5.4 kernel calls these "Q6V7", so keep the name. This is still worth
->>>>>> using with the "q6v5" driver because all other parts of the driver
->>>>>> can be seamlessly reused.
->>>>>>
->>>>>> The IPQ9574 uses two sets of clocks. the first, dubbed "q6_clocks"
->>>>>> must be enabled before the Q6 is started by writing the Q6SS_RST_EVB
->>>>>> register. The second set of clocks, "clks" should only be enabled
->>>>>> after the Q6 is placed out of reset. Otherwise, the host CPU core that
->>>>>> tries to start the remoteproc will hang.
->>>>>>
->>>>>> The downstream kernel had a funny comment, "Pray god and wait for
->>>>>> reset to complete", which I decided to keep for entertainment value.
->>>>>>
->>>>>> Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
->>>>>> ---
->>>>>
->>>>> [...]
->>>>>
->>>>>> @@ -128,6 +137,12 @@ struct q6v5_wcss {
->>>>>>
->>>>>>       struct clk *qdsp6ss_xo_cbcr;
->>>>>>       struct clk *qdsp6ss_core_gfmux;
->>>>>>       struct clk *lcc_bcr_sleep;
->>>>>>
->>>>>> +    struct clk_bulk_data *clks;
->>>>>> +    /* clocks that must be started before the Q6 is booted */
->>>>>> +    struct clk_bulk_data *q6_clks;
->>>>>
->>>>> "pre_boot_clks" or something along those lines?
->>>>
->>>> I like "pre_boot_clocks".
->>>>
->>>>> In general i'm not super stoked to see another platform where manual and
->>>>> through-TZ bringup of remoteprocs is supposed to be supported in parallel..
->>>>>
->>>>> Are you sure your firmware doesn't allow you to just do a simple
->>>>> qcom_scm_pas_auth_and_reset() like in the multipd series?
->>>>
->>>> I am approaching this from the perspective of an aftermarket OS, like OpenWRT.
->>>> I don't know if the firmware will do the right thing. I can mitigate this for
->>>> OS-loaded firmware, like ath11k 16/m3 firmware, because I can test the driver
->>>> and firmware together. I can't do that for bootloader-loaded firmware, so I try
->>>> to depend on it as little as possible. I hope that native remoterproc loading
->>>> for IPQ9574 will be allowed.
->>>
->>> These are two parallel questions. I didn't even know that the bootloader
->>> preloaded firmware on these platforms (are you sure that's the case?)
->>>
->>> qcom_scm_pas_auth_and_reset() is usually preceded by qcom_mdt_pas_init() +
->>> qcom_mdt_load_no_init() where *you* supply the loadable firmware for the
->>> remote processor.
->>
->> What I mean is that the init sequence is implemented in the trustzone firmware which is loaded at boot time. Irrespective of what Q6 and M3 firmware I supply, if trustzone doesn't cooperate, I can't start the remoteproc. I don't have that problem when the init sequence is implemented in the kernel.
-> 
-> The TZ will always "cooperate" in the sense that if you supply a valid set of
-> loadable firmware files and allocate a chunk of memory, it will power up the
-> remote processors. I wouldn't imagine any software release would have ever
-> been approved with this not working (given the SCM call is marked available).
-> 
-> It may also be that you have something else in mind, but I didn't quite catch
-> your concern.
-> 
->>> The init sequence provided by this interface will be at worst identical to
->>> what you're proposing here (except abstracted out), and at best containing
->>> some fixes and/or workarounds that may be necessary.
->>
->> I think this portrays the TZ path as somehow superior. That's not how things work in my use casee.
-> 
-> Indeed the sequence baked into the TZ is generally to be considered
-> authoritative.
-> 
->> The bootloader/FW versions depends on when and who made the device. So while the newest TZ from upstream may have the latest fixes, I have no guarantee that they will be present on a given device at runtime. The best solution I found to get consistent behavior across devices is to do these sequences from the kernel. Is there something incomplete in my init sequence that I can fix?
-> 
-> Because of the complexity of these systems, it's absolutely not inconceivable
-> that a fix/workaround is only necessary/desired when coupled with a specific
-> TZ (or other proprietary component, such as RPMh) firmware version (because
-> many HW settings are co-dependent).
-> 
-> I can not answer your last question.
-> 
->>  > Please try using PAS and see if that works.
->>
->> I found the v6 of the multipd series [1]. It needed some minor adjustments to compile. I went as far as loading the Q6 firmware and starting the remoteproc without error. I did not test any further.
-> 
-> Please give it a shot.
-> 
-> Bjorn, Vignesh, do we see the multipd series going anywhere? It's been
-> last posted in 2023..
+Fix in V6.
 
-Hi Konrad,
+>
+>>  static int imx_rproc_xtr_mbox_init(struct rproc *rproc, bool tx_block);
+>>  static void imx_rproc_free_mbox(void *data);
+>>  
+...
+>> +static int imx_rproc_sm_lmm_start(struct rproc *rproc)
+>> +{
+>> +	struct imx_rproc *priv = rproc->priv;
+>> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
+>> +	struct device *dev = priv->dev;
+>> +	int ret;
+>> +
+>
+>A comment is needed here to say that if the remoteproc core can't start the M7,
+>it will already be handled in imx_rproc_sm_lmm_prepare()
 
-multipd series was dropped and replaced with WCSS secure PIL driver [1] which is
-currently in v9. I see that except the actual driver itself, patch 3/6 in
-the above series,  other patches in this series has a R-b tag.
+Add in V6:
+        /*
+         * If the remoteproc core can't start the LM, it will already be
+         * handled in imx_rproc_sm_lmm_prepare().
+         */
 
-Once this gets reviewed, it should enable secure PIL loading using the TZ interface
-for WCSS remoteprocs in IPQ5018/IPQ5332/IPQ9574.
+>
+>> +	ret = scmi_imx_lmm_reset_vector_set(dcfg->lmid, dcfg->cpuid, 0, 0);
+>> +	if (ret) {
+>> +		dev_err(dev, "Failed to set reset vector lmid(%u), cpuid(%u): %d\n",
+>> +			dcfg->lmid, dcfg->cpuid, ret);
+>> +		return ret;
+>> +	}
+>> +
+>>  
+...
+>> +static int imx_rproc_sm_lmm_prepare(struct rproc *rproc)
+>> +{
+>> +	struct imx_rproc *priv = rproc->priv;
+>> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
+>> +	int ret;
+>> +
+>
+>>>>>>>>>>>>
+>
+>> +	/*
+>> +	 * IMX_RPROC_FLAGS_SM_LMM_AVAIL not set indicates Linux is not able
+>> +	 * to start/stop rproc LM, then if rproc is not in detached state,
+>> +	 * prepare should fail. If in detached state, this is in rproc_attach()
+>> +	 * path.
+>> +	 */
+>> +	if (!(priv->flags & IMX_RPROC_FLAGS_SM_LMM_AVAIL))
+>> +		return rproc->state == RPROC_DETACHED ? 0 : -EACCES;
+>
+><<<<<<<<<<<
+>
+>        if (rproc->state == RPROC_DETACHED)
+>                return 0;
+>
+>        if (!(priv->flags & IMX_RPROC_FLAGS_SM_LMM_AVAIL))
+>                return -EACCES;
+>
+><<<<<<<<<<<
 
-[1] https://lore.kernel.org/linux-remoteproc/20260106105412.3529898-1-varadarajan.narayanan@oss.qualcomm.com/T/#t
+Update in v6 with your code snippets.
 
-> 
-> Konrad
+>> +
+>> +	/* Power on the Logical Machine to make sure TCM is available. */
+>> +	ret = scmi_imx_lmm_operation(dcfg->lmid, SCMI_IMX_LMM_POWER_ON, 0);
+>> +	if (ret) {
+>> +		dev_err(priv->dev, "Failed to power on lmm(%d): %d\n", dcfg->lmid, ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	dev_info(priv->dev, "lmm(%d) powered on by Linux\n", dcfg->lmid);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>  static int imx_rproc_prepare(struct rproc *rproc)
+>>  {
+>>  	struct imx_rproc *priv = rproc->priv;
+>> @@ -980,6 +1078,93 @@ static int imx_rproc_scu_api_detect_mode(struct rproc *rproc)
+>>  	return 0;
+>>  }
+>>  
+>> +static int imx_rproc_sm_lmm_check(struct rproc *rproc, bool started)
+>> +{
+>> +	struct imx_rproc *priv = rproc->priv;
+>> +	const struct imx_rproc_dcfg *dcfg = priv->dcfg;
+>> +	struct device *dev = priv->dev;
+>> +	int ret;
+>> +
+>> +	/*
+>> +	 * Use power on to do permission check. If rproc is in different LM,
+>> +	 * and linux has permission to handle the LM, set IMX_RPROC_FLAGS_SM_LMM_AVAIL.
+>> +	 */
+>
+>Two things here:
+>(1) This whole comment describes what this function does rather than what the
+>code is doing in the next few lines.  As such it needs to be moved above the
+>function declaration.
+>(2) We know the M7 is in a different LM, otherwise "dcfg->lmid == info.lmid" in
+>imx_rproc_sm_detect_mode() and we would not be here.  As such the comment is
+>wrong.  The only thing this code is doing is check if the remoteproc core is
+>responsible for the M7 lifecycle.
 
+Update in v6:
+/* Check whether remoteproc core is responsible for LM lifecycle */
+static int imx_rproc_sm_lmm_check(struct rproc *rproc, bool started)
+
+>
+>> +	ret = scmi_imx_lmm_operation(dcfg->lmid, SCMI_IMX_LMM_POWER_ON, 0);
+>> +	if (ret) {
+...
+>> +
+>> +
+>
+>>>>>>>>>>>>
+>
+>> +	/* rproc was started before boot Linux and under control of Linux, directly return */
+>> +	if (started) {
+>> +		priv->flags |= IMX_RPROC_FLAGS_SM_LMM_AVAIL;
+>> +		return 0;
+>> +	}
+>> +
+>> +	/* else shutdown the LM to save power */
+>> +	ret = scmi_imx_lmm_operation(dcfg->lmid, SCMI_IMX_LMM_SHUTDOWN, 0);
+>> +	if (ret) {
+>> +		dev_err(dev, "shutdown lmm(%d) failed: %d\n", dcfg->lmid, ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	priv->flags |= IMX_RPROC_FLAGS_SM_LMM_AVAIL;
+>
+><<<<<<<<<<<
+>
+>        /* Shutdown remote processor if not started */
+>        if (!started) {
+>	        ret = scmi_imx_lmm_operation(dcfg->lmid, SCMI_IMX_LMM_SHUTDOWN, 0);
+>	        if (ret) {
+>		        dev_err(dev, "shutdown lmm(%d) failed: %d\n", dcfg->lmid, ret);
+>		        return ret;
+>	        }
+>        }
+>
+>	priv->flags |= IMX_RPROC_FLAGS_SM_LMM_AVAIL;
+>
+><<<<<<<<<<<
+
+Thanks for your code snippets. Update in v6.
+
+>
+>This patchset would be a lot easier to digest if you had split the support for
+>CPU and LMM protocols in diffent patches.
+
+I appreciate your detailed review and the code snippets you provided. Please
+let me know if you'd prefer that I split the support for LMM
+and CPU into separate patches in v6, or keep them combined as they are.
+
+Thanks,
+Peng.
 
