@@ -1,78 +1,78 @@
-Return-Path: <linux-remoteproc+bounces-6184-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-6186-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Delivered-To: lists+linux-remoteproc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB0A4D07210
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 09 Jan 2026 05:34:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BD43D07270
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 09 Jan 2026 05:38:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 17E0D3047109
-	for <lists+linux-remoteproc@lfdr.de>; Fri,  9 Jan 2026 04:34:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CA0ED308D055
+	for <lists+linux-remoteproc@lfdr.de>; Fri,  9 Jan 2026 04:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5812E2E1730;
-	Fri,  9 Jan 2026 04:34:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA9C81DA628;
+	Fri,  9 Jan 2026 04:34:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kNf3ryl7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TQ60iQqM"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BF12DC33B
-	for <linux-remoteproc@vger.kernel.org>; Fri,  9 Jan 2026 04:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EAB32DC78D
+	for <linux-remoteproc@vger.kernel.org>; Fri,  9 Jan 2026 04:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767933265; cv=none; b=kVpP/TMtVuMRUvUFx7uHTpmh7NlNwx4wnXeKUrrXgpV/FqCqKs6s370g/Dezp8kmj4vboybgJVnwtojyHwaAd1KkpvOFUc9XHQ+hnauNCc8uQVx0Z57yweItl+lTC3b28S6UYYIQ4uFHpYOPf7/JyLuDWV3A9QklR3ykD/4ERfg=
+	t=1767933268; cv=none; b=kMkn02jnhGEhOyumB+SwmIuqxi9Grp6sGiZM8cmAc1NqVprYWAlwVSjXD0+xuatNRVKXs8OQXLUvw3K652xtveW+eR549Wp60dteJ4Dj5twi3upxx3unlAU7WrsPP1anrtgY3zZOXHvRk6msy5ux3ox5dJ9goj2915YVvrRJzyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767933265; c=relaxed/simple;
-	bh=ZwYTrMAmnkdh8YdhuMQNkEVxOPy2CIPYNXYMB5yEdew=;
+	s=arc-20240116; t=1767933268; c=relaxed/simple;
+	bh=2abIKdioHKuqFCVVrc2rlxdq1wJZS4xz8H+W/r0DMWw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mh7JZxOjS3G5yLqtzu1XfPedfL2C+OL+tMzjGWwCqkCFGUJ9IDRC9wRUfsPJKaPY+6d1SxCWbLHXComL8GDCHw1LlmjQOiqg4Gwiw2bjyfdkU/5LFoqVJD33QuRBKDPPZIFnhj+e7QrstE4/9J9fUVCrQ49+Rn6bF+TN5Q9JO+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kNf3ryl7; arc=none smtp.client-ip=209.85.160.42
+	 MIME-Version; b=pZ1RqoBLL5HPw8sNfuqsTcCXp6HibjdKHSARfSiRyQNX5NG7KjVuUsdpp+yrXrGnVS656quuQHKjM5Np901v56fHeg7FspiS6OBVPRQ8T+pDKYWxbTEA77x9R1KaI0W/fzgqOX+jZHKSLLIkbkSY2LgjuVFQYWxz/xtIYkSXtiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TQ60iQqM; arc=none smtp.client-ip=209.85.160.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-3f551ad50d1so1494235fac.0
-        for <linux-remoteproc@vger.kernel.org>; Thu, 08 Jan 2026 20:34:22 -0800 (PST)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-3e80c483a13so2449941fac.2
+        for <linux-remoteproc@vger.kernel.org>; Thu, 08 Jan 2026 20:34:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767933262; x=1768538062; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767933264; x=1768538064; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=05mvMiaCezgmzJYXVgjf/BCnZKgTJFkAHEvjQAEJ4/8=;
-        b=kNf3ryl73cPP3GKq/zB1JzSSfwyN0YTu2eplfmopTlGQbIZrgt2DjjY4eOjJz3T0D2
-         iyXjDHy9TLmIAGJ7ldPFc4/gUaha4rl7rfkS0jVTyMSKmYN0nDRX9z0f5gSfpAOEO2zg
-         B7oNlwQ5VDmUzV9A6UmyUrYY7vLsKM4kbZHsHeFE4nx59e8/wBAkHQHbEINPvjFjTz0z
-         8CQ8TVfCg2HuyCE9AIW4/oZ1nbaDDkmPuKbw2A6TRun1XUZjPVv/OUcdeB6vn5NIgLiy
-         D4ZgekwTNsAVKO3y440rvpULstAHFq10r3GgtYv8FRy6OnqLYGrHmrCL40wSfypjrNTs
-         Esjg==
+        bh=VymCizJkrbUg3Dme3lvHp49OC7wgHu27DgIm2cwwCWU=;
+        b=TQ60iQqMUKe2uCIohS5XyyzpfJ+dTYRvxRLDE0Xgbtx7DE3bLIQWau5OksA0C+V3rz
+         es0U/abwqL98tjLiDUCCzfmYgN+wyAFt6+hzP9RuCqR6X/ChQB3+Wncu2sIJ77ZY4NXW
+         JKCC4TcdFBOhmAWfrEdy8kx28MWZXVRya3E2bWeJcgCI19FfV2MUsq5H2XKLinPg1imw
+         6pdKS8TiII5/3bxAPh5uYNdkYrzcHfbeePIIrOSBVaX94WTSBKA65HrK2VbgGhuhhndi
+         TU7ltlw0fkpyRz0lZ6pRAkgjgC4G3Hv6b+eH+5kc0EPX8RewboN6PcJerraeuqeuZyPm
+         YAkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767933262; x=1768538062;
+        d=1e100.net; s=20230601; t=1767933264; x=1768538064;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=05mvMiaCezgmzJYXVgjf/BCnZKgTJFkAHEvjQAEJ4/8=;
-        b=HdqBbgqAzHj6ApXw+jMGc7eXSWWCXwjIazivVmZU8vr2hQe4IQVQ0qVD/ZbC5tdFYb
-         9Eer4aGS5CGrzbmEkIapUTKWf3nmjdNshOwiPjiWXXLvKvglijLlI9a/pyCcqgToIQNB
-         LL6/ok4g2YjHhCQ3R7C2crYNZezV174R1fZkXQy0vXL2A3NVXVR6u6C9qavWU2+fvgp+
-         Wgot7LF2JIFUqQmdgjeMXUCakNc+57WqkLkGcfAfIKody6qDaJOLpT3Lv6ABuPd+lItO
-         bZAZU5Ea9YamD9IhAUKuopWdmZHzYCa29DaA2v/s+xWLF5h6GeCTLz8CMErV9zTHfTwo
-         P2Ag==
-X-Forwarded-Encrypted: i=1; AJvYcCVP6EOO/EAb931ku2gbetHukYwM46rAhQSKtsXh03TX9+imFHME1rbsHIvnMiWG0Waadq/Fv6Be7X2BH4EE9deU@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFLrC2uzWbtV9qzjlJQByXfdCy2zDeaqiEDoS06+mm+UNGjkQ+
-	jpy4k/PJGzCMnlMvO94PQUbYuxNzQIcLCdZFQdxb3S55761eW/9Y575C
-X-Gm-Gg: AY/fxX6C3niX7N2NJEuC3OnFdQ0zPAgPDgt3xlMqcPUQHZcO7dzlVA9TvEDOq3fWFYv
-	u6xZr2ra/gPnc08GcWABKXZ26DebyDPAXVz3VamvZCa5h2Oq5zw+t75trVwlTvJLdrbQcLXEwPh
-	tpD6ZoTIF2XEo5y9QOXImHmMUbO+UOF1SGgSrCuIQUJaEp38BtXL2q1g4hnt9us3i+p7UN7pfDS
-	5nNIPrqfaynyWziJR15dZGB1pJB5gdboDt7IbcnD8IaOmn+z+j8ryGJ3dks2CqUsWCSKauURnvm
-	eg+eBC59UqQYkNOMkNnZBuhmNENSQxZ23WFQanBa3BfPIwER6kQ3pg5ELYLJs3hCBJ0HOIkPgAZ
-	+HGXav6xcJXNwQY/cQ4wuXHdrpYVvuSFHzjj9PKwA9qyTlngJoMouZ/hFYajnbzFq6bUR8f0Y03
-	8glXoyBExVZAJDdET3cEEMqYd1u91IpUJtV8i3cKlG6r8uKwbTtb7YD+Jp8Ey8X+kbNKnsDTz0V
-	r8yehUzh7aLKMc5zFq87Rnov8fcL0CGJuv/lEI=
-X-Google-Smtp-Source: AGHT+IFQMfD5BmYuMz67fv5qpmxGsSYuw3YF8lZjbLInnepHp8t3ZgfenUtKZ4QOFw08dY90b93PXw==
-X-Received: by 2002:a05:6870:3353:b0:3f5:b004:314e with SMTP id 586e51a60fabf-3ffc0b5e85bmr4715058fac.46.1767933261550;
-        Thu, 08 Jan 2026 20:34:21 -0800 (PST)
+        bh=VymCizJkrbUg3Dme3lvHp49OC7wgHu27DgIm2cwwCWU=;
+        b=jVp9CdqecorYLbSkfpQObV5GEm3ezkmGs/9K3vDylNjF+JBTUfOe3sdfl99sSu6NH/
+         KNgwXX/s+8a1K74Hh10iUQbo1RAxieHVIOXPV98Ah6y/1j8nA3Gq2wRRFM680Cx13KZf
+         4bN8KCpAOWJLfIl5rtPqM4ixBGOPOX9hZIAMoV1GYJo9tz/eL5/nGLg2/9ANatDreJxC
+         Li8GTBHhecr/GQZeATeXj+3VFxcUzAN/HtkPrBNctEaMNbJfhYxdALnkVVzLE7LSW2jj
+         hs1j/jy1CDP51nhGHeNkmLQCtw9pZHCAdkbWXz7kArDl8XDXtZOSNRHlEkmBO/aQhS9z
+         yCXw==
+X-Forwarded-Encrypted: i=1; AJvYcCWPYlCuUxHgq66TYkGew8shJRQPma3Wff7EscdgdKzA0ktAhdU5wVnUIGKmpBe5k//Y24QLTV0ecggikXFkZ84h@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6pmmrOllSysXiNgedC8H+aYekeYnCXp6Hr67RGdTYIMqP7sSv
+	YtqscSTotVCOQrw5KRbhRAP32YKx/LVSdHm/EhS6qPo1NvXVYzs5id74
+X-Gm-Gg: AY/fxX7A7QI4lJ6nb0uPIeZ8Rw9UX0JTThbntWcLAzWEtxihmgoGnT1LoKeMdIkxlsa
+	ppNFfiWhVne26vX6h8tigywyhKFcx2eGfiDZpqvqLmKj9y+bWGo4Th/WojFhDjLR3/ZaXHJkvvo
+	htaDeZ6/4UIU8hw4KWIq0ziojSOXe6Kg33h+5IC9YMTG9CtHKzrx4Ls9kle8S2hsuouLZeGOre5
+	hqO5bBiisXC3tZwUqN1MbVnbslvd24MgbUaW7kZeBa4xOoi3yZoidWdvrQ7I6H/HqXKJNVRYeqX
+	QiK5tLFAcM06goxLhINRiBnsFAg2fVby+Myv2Nv1o6hw50YIwmRPPWegm0Zf2CW0+ewG9GYzU6F
+	YQ0pKtxFUgTxHK2UV0mmiUSq5VxXqhqlvwS2iLOAg45EvFTyQC8dUO/Ik6460ccYeftjRoJtAYk
+	tHtFvDly/XilxhK9McVDDYN24RSbTzoiNewt5MjB0DCRqLbemkpvTyMwK1V8yuUCTnO1SVz2wLP
+	bK7NPXFvYXMtbxZ4L2GDk1p8WYSJr7bmOAx6rI=
+X-Google-Smtp-Source: AGHT+IGKogmUEb02ZbJlLltI7+PDxuLuhx/ja1knaw86NH00xOU50PG9fwQfnQN39e+H79FvmbOjIA==
+X-Received: by 2002:a05:6871:e709:b0:3e9:35d4:213f with SMTP id 586e51a60fabf-3ffc090099amr4432615fac.10.1767933264320;
+        Thu, 08 Jan 2026 20:34:24 -0800 (PST)
 Received: from nukework.lan (c-98-57-15-22.hsd1.tx.comcast.net. [98.57.15.22])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3ffa515f4dasm6274421fac.21.2026.01.08.20.34.19
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3ffa515f4dasm6274421fac.21.2026.01.08.20.34.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 20:34:20 -0800 (PST)
+        Thu, 08 Jan 2026 20:34:22 -0800 (PST)
 From: Alexandru Gagniuc <mr.nuke.me@gmail.com>
 To: andersson@kernel.org,
 	krzk+dt@kernel.org,
@@ -89,9 +89,9 @@ Cc: robh@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	Alexandru Gagniuc <mr.nuke.me@gmail.com>
-Subject: [PATCH v2 8/9] remoteproc: qcom_q6v5_wcss: support m3 firmware
-Date: Thu,  8 Jan 2026 22:33:43 -0600
-Message-ID: <20260109043352.3072933-9-mr.nuke.me@gmail.com>
+Subject: [PATCH v2 9/9] remoteproc: qcom_q6v5_wcss: use bulk clk API for q6 clocks in QCS404
+Date: Thu,  8 Jan 2026 22:33:44 -0600
+Message-ID: <20260109043352.3072933-10-mr.nuke.me@gmail.com>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20260109043352.3072933-1-mr.nuke.me@gmail.com>
 References: <20260109043352.3072933-1-mr.nuke.me@gmail.com>
@@ -103,128 +103,184 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-IPQ8074, IPQ6018, and IPQ9574 support an m3 firmware image in addtion
-to the q6 firmware. The firmware releases from qcom provide both q6
-and m3 firmware for these SoCs. Support loading the m3 firmware image.
+Five of the clocks on QCS404 are consistently enabled and disabled
+together. Use the bulk clock API to get and enable them. They are
+enabled after the Q6 reset is deasserted, implying that pre_boot is
+not the appropriate designator. Store them in wcss->clks.
 
 Signed-off-by: Alexandru Gagniuc <mr.nuke.me@gmail.com>
 ---
 Changes since v1:
- - Check for -ENOENT from q6v5_wcss_load_aux()
+ - Use wcss->clks, since wcss->q6_clks has been renamed.
 ---
- drivers/remoteproc/qcom_q6v5_wcss.c | 45 +++++++++++++++++++++++++----
- 1 file changed, 40 insertions(+), 5 deletions(-)
+ drivers/remoteproc/qcom_q6v5_wcss.c | 99 ++++++++---------------------
+ 1 file changed, 28 insertions(+), 71 deletions(-)
 
 diff --git a/drivers/remoteproc/qcom_q6v5_wcss.c b/drivers/remoteproc/qcom_q6v5_wcss.c
-index ccf5fbc5be66..2bb83e6afb6b 100644
+index 2bb83e6afb6b..3c1794fde3f0 100644
 --- a/drivers/remoteproc/qcom_q6v5_wcss.c
 +++ b/drivers/remoteproc/qcom_q6v5_wcss.c
-@@ -103,7 +103,8 @@ enum {
- };
+@@ -128,14 +128,9 @@ struct q6v5_wcss {
+ 	u32 halt_nc;
  
- struct wcss_data {
--	const char *firmware_name;
-+	const char *q6_firmware_name;
-+	const char *m3_firmware_name;
- 	unsigned int crash_reason_smem;
- 	u32 version;
- 	bool aon_reset_required;
-@@ -160,6 +161,7 @@ struct q6v5_wcss {
- 	unsigned int crash_reason_smem;
- 	u32 version;
- 	bool requires_force_stop;
-+	const char *m3_firmware_name;
+ 	struct clk *xo;
+-	struct clk *ahbfabric_cbcr_clk;
+ 	struct clk *gcc_abhs_cbcr;
+ 	struct clk *gcc_axim_cbcr;
+-	struct clk *lcc_csr_cbcr;
+ 	struct clk *ahbs_cbcr;
+-	struct clk *tcm_slave_cbcr;
+-	struct clk *qdsp6ss_abhm_cbcr;
+-	struct clk *qdsp6ss_axim_cbcr;
+ 	struct clk *lcc_bcr_sleep;
+ 	struct clk_bulk_data *clks;
+ 	/* clocks that must be started before the Q6 is booted */
+@@ -427,35 +422,16 @@ static int q6v5_wcss_qcs404_power_on(struct q6v5_wcss *wcss)
+ 	/* Remove reset to the WCNSS QDSP6SS */
+ 	reset_control_deassert(wcss->wcss_q6_bcr_reset);
  
- 	struct qcom_rproc_glink glink_subdev;
- 	struct qcom_rproc_pdm pdm_subdev;
-@@ -931,11 +933,41 @@ static void *q6v5_wcss_da_to_va(struct rproc *rproc, u64 da, size_t len, bool *i
- 	return wcss->mem_region + offset;
- }
+-	/* Enable Q6SSTOP_AHBFABRIC_CBCR clock */
+-	ret = clk_prepare_enable(wcss->ahbfabric_cbcr_clk);
+-	if (ret)
++	ret = clk_bulk_prepare_enable(wcss->num_clks, wcss->clks);
++	if (ret) {
++		dev_err(wcss->dev, "failed to enable q6 clocks, err=%d\n", ret);
+ 		goto disable_gcc_abhs_cbcr_clk;
+-
+-	/* Enable the LCCCSR CBC clock, Q6SSTOP_Q6SSTOP_LCC_CSR_CBCR clock */
+-	ret = clk_prepare_enable(wcss->lcc_csr_cbcr);
+-	if (ret)
+-		goto disable_ahbfabric_cbcr_clk;
++	};
  
-+static int q6v5_wcss_load_aux(struct q6v5_wcss *wcss, const char *fw_name)
-+{
-+	const struct firmware *extra_fw;
-+	int ret;
-+
-+	dev_info(wcss->dev, "loading additional firmware image %s\n", fw_name);
-+
-+	ret = request_firmware(&extra_fw, fw_name, wcss->dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = qcom_mdt_load_no_init(wcss->dev, extra_fw, fw_name,
-+				    wcss->mem_region, wcss->mem_phys,
-+				    wcss->mem_size, &wcss->mem_reloc);
-+
-+	release_firmware(extra_fw);
-+
-+	if (ret)
-+		dev_err(wcss->dev, "can't load %s\n", fw_name);
-+
-+	return ret;
-+}
-+
- static int q6v5_wcss_load(struct rproc *rproc, const struct firmware *fw)
+ 	/* Enable the Q6AHBS CBC, Q6SSTOP_Q6SS_AHBS_CBCR clock */
+ 	ret = clk_prepare_enable(wcss->ahbs_cbcr);
+ 	if (ret)
+-		goto disable_csr_cbcr_clk;
+-
+-	/* Enable the TCM slave CBC, Q6SSTOP_Q6SS_TCM_SLAVE_CBCR clock */
+-	ret = clk_prepare_enable(wcss->tcm_slave_cbcr);
+-	if (ret)
+-		goto disable_ahbs_cbcr_clk;
+-
+-	/* Enable the Q6SS AHB master CBC, Q6SSTOP_Q6SS_AHBM_CBCR clock */
+-	ret = clk_prepare_enable(wcss->qdsp6ss_abhm_cbcr);
+-	if (ret)
+-		goto disable_tcm_slave_cbcr_clk;
+-
+-	/* Enable the Q6SS AXI master CBC, Q6SSTOP_Q6SS_AXIM_CBCR clock */
+-	ret = clk_prepare_enable(wcss->qdsp6ss_axim_cbcr);
+-	if (ret)
+-		goto disable_abhm_cbcr_clk;
++		goto disable_clks;
+ 
+ 	/* Enable the Q6SS XO CBC */
+ 	val = readl(wcss->reg_base + Q6SS_XO_CBCR);
+@@ -538,17 +514,9 @@ static int q6v5_wcss_qcs404_power_on(struct q6v5_wcss *wcss)
+ 	val = readl(wcss->reg_base + Q6SS_XO_CBCR);
+ 	val &= ~Q6SS_CLK_ENABLE;
+ 	writel(val, wcss->reg_base + Q6SS_XO_CBCR);
+-	clk_disable_unprepare(wcss->qdsp6ss_axim_cbcr);
+-disable_abhm_cbcr_clk:
+-	clk_disable_unprepare(wcss->qdsp6ss_abhm_cbcr);
+-disable_tcm_slave_cbcr_clk:
+-	clk_disable_unprepare(wcss->tcm_slave_cbcr);
+-disable_ahbs_cbcr_clk:
+ 	clk_disable_unprepare(wcss->ahbs_cbcr);
+-disable_csr_cbcr_clk:
+-	clk_disable_unprepare(wcss->lcc_csr_cbcr);
+-disable_ahbfabric_cbcr_clk:
+-	clk_disable_unprepare(wcss->ahbfabric_cbcr_clk);
++disable_clks:
++	clk_bulk_disable_unprepare(wcss->num_clks, wcss->clks);
+ disable_gcc_abhs_cbcr_clk:
+ 	clk_disable_unprepare(wcss->gcc_abhs_cbcr);
+ 
+@@ -666,11 +634,7 @@ static int q6v5_qcs404_wcss_shutdown(struct q6v5_wcss *wcss)
+ 	val &= ~Q6SS_BHS_ON;
+ 	writel(val, wcss->reg_base + Q6SS_PWR_CTL_REG);
+ 
+-	clk_disable_unprepare(wcss->ahbfabric_cbcr_clk);
+-	clk_disable_unprepare(wcss->lcc_csr_cbcr);
+-	clk_disable_unprepare(wcss->tcm_slave_cbcr);
+-	clk_disable_unprepare(wcss->qdsp6ss_abhm_cbcr);
+-	clk_disable_unprepare(wcss->qdsp6ss_axim_cbcr);
++	clk_bulk_disable_unprepare(wcss->num_clks, wcss->clks);
+ 
+ 	val = readl(wcss->reg_base + Q6SS_SLEEP_CBCR);
+ 	val &= ~BIT(0);
+@@ -1112,6 +1076,20 @@ static int q6v5_alloc_memory_region(struct q6v5_wcss *wcss)
+ 
+ static int q6v5_wcss_init_clock(struct q6v5_wcss *wcss)
  {
- 	struct q6v5_wcss *wcss = rproc->priv;
- 	int ret;
++	static const char *const bulk_clks[] = {
++		"lcc_ahbfabric_cbc", "tcsr_lcc_cbc", "lcc_tcm_slave_cbc",
++		"lcc_abhm_cbc", "lcc_axim_cbc" };
++	int ret, i;
++
++	wcss->num_clks = ARRAY_SIZE(bulk_clks);
++	wcss->clks = devm_kcalloc(wcss->dev, wcss->num_clks,
++				       sizeof(*wcss->clks), GFP_KERNEL);
++	if (!wcss->clks)
++		return -ENOMEM;
++
++	for (i = 0; i < wcss->num_clks; i++)
++		wcss->clks[i].id = bulk_clks[i];
++
+ 	wcss->xo = devm_clk_get(wcss->dev, "xo");
+ 	if (IS_ERR(wcss->xo))
+ 		return dev_err_probe(wcss->dev, PTR_ERR(wcss->xo),
+@@ -1127,44 +1105,23 @@ static int q6v5_wcss_init_clock(struct q6v5_wcss *wcss)
+ 		return dev_err_probe(wcss->dev, PTR_ERR(wcss->gcc_axim_cbcr),
+ 				     "failed to get gcc axim clock\n");
  
-+	if (wcss->m3_firmware_name) {
-+		ret = q6v5_wcss_load_aux(wcss, wcss->m3_firmware_name);
-+		/* Continue if M3 firmware does not exist */
-+		if (ret && (ret != -ENOENT))
-+			return ret;
+-	wcss->ahbfabric_cbcr_clk = devm_clk_get(wcss->dev,
+-						"lcc_ahbfabric_cbc");
+-	if (IS_ERR(wcss->ahbfabric_cbcr_clk))
+-		return dev_err_probe(wcss->dev, PTR_ERR(wcss->ahbfabric_cbcr_clk),
+-				     "failed to get ahbfabric clock\n");
+-
+-	wcss->lcc_csr_cbcr = devm_clk_get(wcss->dev, "tcsr_lcc_cbc");
+-	if (IS_ERR(wcss->lcc_csr_cbcr))
+-		return dev_err_probe(wcss->dev, PTR_ERR(wcss->lcc_csr_cbcr),
+-				     "failed to get csr cbcr clk\n");
+-
+ 	wcss->ahbs_cbcr = devm_clk_get(wcss->dev,
+ 				       "lcc_abhs_cbc");
+ 	if (IS_ERR(wcss->ahbs_cbcr))
+ 		return dev_err_probe(wcss->dev, PTR_ERR(wcss->ahbs_cbcr),
+ 				     "failed to get ahbs_cbcr clk\n");
+ 
+-	wcss->tcm_slave_cbcr = devm_clk_get(wcss->dev,
+-					    "lcc_tcm_slave_cbc");
+-	if (IS_ERR(wcss->tcm_slave_cbcr))
+-		return dev_err_probe(wcss->dev, PTR_ERR(wcss->tcm_slave_cbcr),
+-				     "failed to get tcm cbcr clk\n");
+-
+-	wcss->qdsp6ss_abhm_cbcr = devm_clk_get(wcss->dev, "lcc_abhm_cbc");
+-	if (IS_ERR(wcss->qdsp6ss_abhm_cbcr))
+-		return dev_err_probe(wcss->dev, PTR_ERR(wcss->qdsp6ss_abhm_cbcr),
+-				     "failed to get abhm cbcr clk\n");
+-
+-	wcss->qdsp6ss_axim_cbcr = devm_clk_get(wcss->dev, "lcc_axim_cbc");
+-	if (IS_ERR(wcss->qdsp6ss_axim_cbcr))
+-		return dev_err_probe(wcss->dev, PTR_ERR(wcss->qdsp6ss_axim_cbcr),
+-				     "failed to get axim cbcr clk\n");
+-
+ 	wcss->lcc_bcr_sleep = devm_clk_get(wcss->dev, "lcc_bcr_sleep");
+ 	if (IS_ERR(wcss->lcc_bcr_sleep))
+ 		return dev_err_probe(wcss->dev, PTR_ERR(wcss->lcc_bcr_sleep),
+ 				     "failed to get bcr cbcr clk\n");
+ 
++	ret = devm_clk_bulk_get(wcss->dev, wcss->num_clks, wcss->clks);
++	if (ret < 0) {
++		return dev_err_probe(wcss->dev, ret,
++				     "failed to bulk get q6 clocks\n");
 +	}
 +
- 	ret = qcom_mdt_load_no_init(wcss->dev, fw, rproc->firmware,
- 				    wcss->mem_region, wcss->mem_phys,
- 				    wcss->mem_size, &wcss->mem_reloc);
-@@ -1196,7 +1228,7 @@ static int q6v5_wcss_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 
- 	rproc = devm_rproc_alloc(&pdev->dev, pdev->name, desc->ops,
--				 desc->firmware_name, sizeof(*wcss));
-+				 desc->q6_firmware_name, sizeof(*wcss));
- 	if (!rproc) {
- 		dev_err(&pdev->dev, "failed to allocate rproc\n");
- 		return -ENOMEM;
-@@ -1207,6 +1239,7 @@ static int q6v5_wcss_probe(struct platform_device *pdev)
- 
- 	wcss->version = desc->version;
- 	wcss->requires_force_stop = desc->requires_force_stop;
-+	wcss->m3_firmware_name = desc->m3_firmware_name;
- 
- 	ret = q6v5_wcss_init_mmio(wcss, pdev);
- 	if (ret)
-@@ -1284,7 +1317,8 @@ static void q6v5_wcss_remove(struct platform_device *pdev)
+ 	return 0;
  }
  
- static const struct wcss_data wcss_ipq8074_res_init = {
--	.firmware_name = "IPQ8074/q6_fw.mdt",
-+	.q6_firmware_name = "IPQ8074/q6_fw.mdt",
-+	.m3_firmware_name = "IPQ8074/m3_fw.mdt",
- 	.crash_reason_smem = WCSS_CRASH_REASON,
- 	.aon_reset_required = true,
- 	.wcss_q6_reset_required = true,
-@@ -1293,7 +1327,8 @@ static const struct wcss_data wcss_ipq8074_res_init = {
- };
- 
- static const struct wcss_data wcss_ipq9574_res_init = {
--	.firmware_name = "IPQ9574/q6_fw.mdt",
-+	.q6_firmware_name = "IPQ9574/q6_fw.mdt",
-+	.m3_firmware_name = "IPQ9574/m3_fw.mdt",
- 	.version = WCSS_IPQ9574,
- 	.crash_reason_smem = WCSS_CRASH_REASON,
- 	.aon_reset_required = true,
-@@ -1304,7 +1339,7 @@ static const struct wcss_data wcss_ipq9574_res_init = {
- 
- static const struct wcss_data wcss_qcs404_res_init = {
- 	.crash_reason_smem = WCSS_CRASH_REASON,
--	.firmware_name = "wcnss.mdt",
-+	.q6_firmware_name = "wcnss.mdt",
- 	.version = WCSS_QCS404,
- 	.aon_reset_required = false,
- 	.wcss_q6_reset_required = false,
 -- 
 2.45.1
 
