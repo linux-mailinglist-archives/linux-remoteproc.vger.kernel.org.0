@@ -1,64 +1,64 @@
-Return-Path: <linux-remoteproc+bounces-6335-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-6337-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wG2kAMZ9gmnAVQMAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-6335-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 03 Feb 2026 23:59:18 +0100
+	id oMQaCPZ9gmnAVQMAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-6337-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 04 Feb 2026 00:00:06 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C251DF7AA
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 03 Feb 2026 23:59:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F722DF7D7
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 04 Feb 2026 00:00:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 189893004421
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Feb 2026 22:59:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 35065309BEA9
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Feb 2026 22:59:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B225436F402;
-	Tue,  3 Feb 2026 22:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E98D2374723;
+	Tue,  3 Feb 2026 22:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XeYDOLyf"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="e0CN4et4"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010039.outbound.protection.outlook.com [52.101.46.39])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013010.outbound.protection.outlook.com [40.93.201.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EBF310763;
-	Tue,  3 Feb 2026 22:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC3436B044;
+	Tue,  3 Feb 2026 22:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.10
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770159554; cv=fail; b=EaEtbSaJqRtxVUECr9EMGc9DTOad8q3lttLeA/XTiI00d3oNX0Irlj+wx+3xPfyxFylQY8zKFgyt2Nhh9QPe/7uttanGGCy13wM1R6LWfMZcCbpLMiaQh+EWWLavpRHB2laD8tpVA42Wg7mf6Tnjudie1xa7w9CP3nVpi7YwHZ0=
+	t=1770159557; cv=fail; b=Zu4MSioUoo9ReMuqkvtIq5eiGTKt0LO3/lW8xXEBUMUsKQ/XrTLzs6QbbyDJyN9w7OSHJ4wJYWMROIww3SbV/87wKHkhgWf2QjYgs41SCmOaLSo7EDAjgKwnwhkvwhHlJB9lGecx7zHr958ySPnO21xm8gVSywz+EcJHfKLKndc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770159554; c=relaxed/simple;
-	bh=z0cSCiHL+me/Z3dKrwMPmA6FPXNcGqUmkK1Fxr1zLfo=;
+	s=arc-20240116; t=1770159557; c=relaxed/simple;
+	bh=cCC2x3aFm6Qsg6lKxC34fNDCWY7IaC6OZlbe1tk0QQo=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QjD5kYzZ9BBrBlg0S27MePRYTcUjhgNUOjK1B01GDQ3QMuPYjTDIWXfaNpu180nX8+dozEGIGuWtC0B1n+n5FDHMugyG4euWTwaqKdZick/kIJimWGN6vOrvVEGBnk+K+FG7SscL297Kic5fOSljoLcQLgcGYo3GXaZryPBasxM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=XeYDOLyf; arc=fail smtp.client-ip=52.101.46.39
+	 MIME-Version:Content-Type; b=ZcjBneU/fWIr1zsA7g4idzaMvVIvGpOTn5Bbz2i+EcGHJacLrL4sXLDThrRNvyIxxmeRfWJ5eo2ADyylKH8mfievI2BN6s1JT+gOma8rW1XlWKUA5ZZfJBwRY1IGl6exPlS6QVe+QzRnevjN+LUOHNKPG3b4pdx98Wm+qPYARL4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=e0CN4et4; arc=fail smtp.client-ip=40.93.201.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=syNO5fZMAToNo10FiEG20Y6D1c90BMvct1eQMnp8meKVgBiATrMqk88nXTtAFpolVulihxz/XvGbvZOl6KMZTuMDAU45udapndjseTfC8Tx3PtToclJG97OP9RN3DHXquqSags0YWE4qFMZzRXK3YDD6T58aCuZPPmIcT7yGq+OTw/Rwww0pdMwdQI6e0kamoBQKB/4YPFN9iJzvH8ZAs7Zq/RzHdpgrmH+vVOz5jrEc0nPc8trra++crWnNmTAyIEgTcSUXkUzyb8L2hgpk37QRp9KWr5r8Hr4hGtySlCGfD8uNVDtfABsoU4KWSyBR4Mfcq5wkkU4BX0ZjuH6ZEw==
+ b=EwQJQ9b7ylYRPQV7un6RahIeJiWTZd3uTppfZxqRmRup0DhRMv1zrKxneTcutQ4F5qbpqo9gtFlnIZKvbnv8lvxepALi6DuMdIJI4E7gm1cnCwBwnuJy1L5BYXod6KSM622AKlgQyJ5IgmDCeA8w234b4/xQC5rDFMAAHkN7eDDJLzjm2DhhfNr60XCJciMhwRoP3YpJDPRAqNTLXZdD0qpLc5UWq18zRZcLABt29X7G0wA5NOan/TLT++csz7tM8oos9lvxg+OZv9Qt1jexYfNTOXnw/2e1iBgq02jtZ7RJ40yy8LdqhLuD6LAX2nyV3LPmxZqUyLcmTJjaYEYoUw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jvkzzKVxNO1OEgtntTkxJjGgv8/T6HVcKeIJ9E0+9HU=;
- b=ARnR7qHpw0zpz5VdvYVj4OOgVC5h4h7dwnwNnLrdHMd6VnwIvo1o6KkgIY/zJyimFny58apsg28EuK7m6d+qtFJIo87mpNZtCqOUTu4BCcyQL/N0DJpS1JEntk97J8HvegLXa6MOO+ra2pFCHLBXoFjCgBPIsZBDmEw45WJ03yNPjt6Fvmcn2yYYDAZlxGyR5Px3wr9nGqIFlDUrJ2DRbm/drtwkWL9HfmbqMy68THPqVlk6wcRUI/rcyJRArg9Qzwlvu9RAyeFkGM53HX7+wuYxFQtZTT6iuNL0vlWy9e/X61+EaTf2yfg+0M83j+FHQ5OLWBDWZ38AnCTaiQMyAw==
+ bh=GmdVA78i2M5KDImjCXyYFX8pSjnWphQXroxASALXjtk=;
+ b=Mx4wIOfyuANkEftBljOqUr21aViKaVDIaM4HB+tcYRIe2Z1AurL1dBKpTZMxn/8kpmhpbEkYdMKJeqSPVGtMw2lecK7iBgdoGzVH/hHXDD1Nma7xuul6ry0FKMPGvvga/fgWa1/BY432v7CDuIjlecaei1slyX4VlBqVyu+IJGITgNTO5E61KUM6uTOk7c2ieFovn9Ayy+ts0SuqEouskFrpHTMcoghfm9fhZOKiF+4k5ZXCA4qDW3EFvdlVc+D0YR5wiGEBikJi6Ra+TFeijnc/c/P9WX9oJomgLMyGcFlAzd85Ll+laORW3WG+8UvrQV+Z8sGXk+HVV976jGkhuw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jvkzzKVxNO1OEgtntTkxJjGgv8/T6HVcKeIJ9E0+9HU=;
- b=XeYDOLyfqB0yqhP6/Z/2QHm3qOg8A5TnboqKs8x2feY0tcbwJic+2GjjY9srK7NAzPiuDVqNX/euvleZhLpEj7PXlMsMWSLDmDjpwGdEmESHGpt/JR7zV5lzyhDU+4eo/A5/2VK9a+i5y97jSbUH72aeFfnXFEx57MLK3PSe88w=
-Received: from MN2PR15CA0038.namprd15.prod.outlook.com (2603:10b6:208:237::7)
- by IA1PR12MB8553.namprd12.prod.outlook.com (2603:10b6:208:44e::5) with
+ bh=GmdVA78i2M5KDImjCXyYFX8pSjnWphQXroxASALXjtk=;
+ b=e0CN4et4PwMSE1vFYb+aeJUvHcQqjj0rwbAyTSmLV2sWQ21Ru2pgQpSAb3bpftvpHBYKwugjfXwHjIgvbSiV/DNir5z8GXpWq+kb93LvIu5rD83zPozq7Ylc3K4hUjHuoxE01dq6hpvSHeoJildG6l19dWMeYBI07X2f8ZxaCWA=
+Received: from MN2PR15CA0042.namprd15.prod.outlook.com (2603:10b6:208:237::11)
+ by SJ1PR12MB6361.namprd12.prod.outlook.com (2603:10b6:a03:455::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Tue, 3 Feb
- 2026 22:59:08 +0000
+ 2026 22:59:10 +0000
 Received: from MN1PEPF0000ECDB.namprd02.prod.outlook.com
- (2603:10b6:208:237:cafe::74) by MN2PR15CA0038.outlook.office365.com
- (2603:10b6:208:237::7) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10b6:208:237:cafe::fc) by MN2PR15CA0042.outlook.office365.com
+ (2603:10b6:208:237::11) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9587.12 via Frontend Transport; Tue,
- 3 Feb 2026 22:59:04 +0000
+ 3 Feb 2026 22:59:09 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -68,22 +68,26 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
 Received: from satlexmb08.amd.com (165.204.84.17) by
  MN1PEPF0000ECDB.mail.protection.outlook.com (10.167.242.139) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9587.10 via Frontend Transport; Tue, 3 Feb 2026 22:59:06 +0000
-Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb08.amd.com
+ 15.20.9587.10 via Frontend Transport; Tue, 3 Feb 2026 22:59:09 +0000
+Received: from Satlexmb09.amd.com (10.181.42.218) by satlexmb08.amd.com
  (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Tue, 3 Feb
  2026 16:59:05 -0600
+Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb09.amd.com
+ (10.181.42.218) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Tue, 3 Feb
+ 2026 14:59:05 -0800
 Received: from xsjtanmays50.xilinx.com (10.180.168.240) by satlexmb07.amd.com
  (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
- Transport; Tue, 3 Feb 2026 14:59:04 -0800
+ Transport; Tue, 3 Feb 2026 14:59:05 -0800
 From: Tanmay Shah <tanmay.shah@amd.com>
 To: <jassisinghbrar@gmail.com>, <andersson@kernel.org>,
 	<mathieu.poirier@linaro.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-	"Tanmay Shah" <tanmay.shah@amd.com>
-Subject: [PATCH v4 1/3] mailbox: check mailbox queue is full or not
-Date: Tue, 3 Feb 2026 14:58:20 -0800
-Message-ID: <20260203225821.3293475-2-tanmay.shah@amd.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>, Tanmay
+ Shah <tanmay.shah@amd.com>
+Subject: [PATCH v4 2/3] remoteproc: xlnx: assign mbox client per mbox channel
+Date: Tue, 3 Feb 2026 14:58:21 -0800
+Message-ID: <20260203225821.3293475-3-tanmay.shah@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260203225821.3293475-1-tanmay.shah@amd.com>
 References: <20260203225821.3293475-1-tanmay.shah@amd.com>
@@ -97,70 +101,70 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECDB:EE_|IA1PR12MB8553:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12847e97-e171-4c43-baec-08de6377d5a8
+X-MS-TrafficTypeDiagnostic: MN1PEPF0000ECDB:EE_|SJ1PR12MB6361:EE_
+X-MS-Office365-Filtering-Correlation-Id: d186f985-7f50-4aea-692f-08de6377d6e8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|1800799024|376014;
+	BCL:0;ARA:13230040|1800799024|82310400026|376014|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?6KXfQVhKkdfpcbnayF1iibGPoNYYIytJfV6R8s+Xc6OrCkOBgw0kF/KBOa0D?=
- =?us-ascii?Q?LkGmIZB4wlnvm3RHatF/Fq1BI53mcoKoqXfN2pbT633+jRoncC1dstZr5cAF?=
- =?us-ascii?Q?yNpT9tgh+mn/JGtf3ig2WitLzhTqOvAqEwev9OZFY/Q4SJ06FcdbRkqYneL1?=
- =?us-ascii?Q?NzFcRLDbvB+pefPvdpeeL8wxrVBop4WwO+Xwx+ZQ3619UaDZcviYSEFUQ9BA?=
- =?us-ascii?Q?7FMoLP+FIg4UnJ9I4MEv9kKYMF496CVgPRz4+qDOL+6oAdNEWyNpjtGqsmNV?=
- =?us-ascii?Q?VhuJ/UGCIRe1RsaqzLg8P01+cEiI9fJkn5CcVX2g3eHWqPz5sovlWca9mL3L?=
- =?us-ascii?Q?TfUkdsVnnjw5yvy6UMeFdhfjkLGIiMZo9PVLmEDNOZ/1/NovRp3Kl8N7u/KK?=
- =?us-ascii?Q?3lb8uee0KPAP5gAV4W7cz4GzxV2HtL8vON/bHp8I95w9HRb1HB1E0AqcvE1L?=
- =?us-ascii?Q?uLoy6UOL0HhlfbmJHCubQYhgLoj1loijYj0ZCptKrM9tuvtDM5jV4csU8Wca?=
- =?us-ascii?Q?hOiTLtdHqZ8T2pSAuQcSX6s30oYxcLTeUtqVaKXpCziEZKD6gNQrjGBeqyws?=
- =?us-ascii?Q?BpQ7EUSw/PrauX75hQ0Ydu21MpxNcGVeZURCr8MratTplbWTIkDPBGr4uOQV?=
- =?us-ascii?Q?HU4niTEiNh52BW+2+TUuSKQO8iGRhZRq/oMl0WwpmHtDt/b5QojHQv9uvAXg?=
- =?us-ascii?Q?WPDC+QC2xvTckTVyc3uIF/Nj7OIkXJLUHGLEhStXpeXygvhglAa8v2Waskm6?=
- =?us-ascii?Q?ie55ioyoDKWgxlY6y02xXYMtLIHW+o8qjnpBrEelWVsmt0hU5FpI2/KPR9UE?=
- =?us-ascii?Q?6F5AV2yKP/h3jchyLfDyZ5ylucPlu21Az6Yl3S95yxSY/nOxQodQLW1okKZe?=
- =?us-ascii?Q?82GtC608gaLitkVbaE7ur8gyAFd8lwkH5r7fjq/dVkveduF28GKOmXB345Zw?=
- =?us-ascii?Q?L8G1UzMLPKMEzmG9bH/N4uQZAau/hfkb0oJzM9q+wyH4HAz86kmR39Sp7MHQ?=
- =?us-ascii?Q?3r8MqKQpsgyBjIml1QYTqICnB28QAhAm04H/8KGoZf3kpSIHU5INYTopAHvP?=
- =?us-ascii?Q?qppJh7d/xaTwkydTg0Z5p0Ug1RnsqldniD1w8OrjQOL9Nyf9pfma7dN9FpUK?=
- =?us-ascii?Q?ifmxleBcTWcT6R58RE6GD71lQOqiUzs9xMblTUQNMLUAZ2o9e9sh0HzC7Vy2?=
- =?us-ascii?Q?chD4qR0rewuFJva934SLgguwqknxMTJZDBkAQYU6818EfwVwVsoEq5yTpNjN?=
- =?us-ascii?Q?wf2itkEuTMIqPcqQ5u/xJQsrLlmmb3TVcqImo2cmjP5gr9w1mZhIRP0LKlCy?=
- =?us-ascii?Q?dI0FLYgLUaS8NT/q7BMgZnzjYaS1ARZgG04EbM2IBydV7Mczf56fzGFPSUq+?=
- =?us-ascii?Q?fCOCDdClaghYiqf2FsoXBv50XgDFdaEW89+aPgDMoaBICU9qIubpfcDd6MbQ?=
- =?us-ascii?Q?1xiwD3W49PMFMg1Kw7Q1hjpac34PpQ/H+d5Y7n8NFKZfeBm0OeKNwoqKc0vk?=
- =?us-ascii?Q?hvDaBw2ZpTAMsWasG/ObwNWayKGcy+uP92knJEckn3N9zdq4lJehEHgaZ6R+?=
- =?us-ascii?Q?1gtgQlwMFUAmDrdiAQx6plh4X+3D9MKkBs3xhNg2oNCZObxYR73hf94ojmNX?=
- =?us-ascii?Q?7kx6yUwBluXVHMTN9wjH6bgGRfZ206xwBUnCVsLbzxr00z2ljiuIzmARa9Np?=
- =?us-ascii?Q?WwX7QA=3D=3D?=
+	=?us-ascii?Q?FZouz3AhDkCdjE9fmcDSK2EVCfdy/mRpMa1A9GA6ASN/KxHi9A6z45V54gUu?=
+ =?us-ascii?Q?iDrOlrAA0EXuGyKcy0In5Q69d5rc/+G0/H32OeAfbXLVmaRsTsstD7n5Wf46?=
+ =?us-ascii?Q?wCk7kDuukpnCDAx+rmcLf0dgQNp9nOy4zN9L3LrNaMz16f6YinbDy3y2kuj7?=
+ =?us-ascii?Q?SNUVCiS4ZFU6RIUYbsQ10Epiv7Vs4hZMJgaJmpfNHt55CRSEekTVJI4BITz0?=
+ =?us-ascii?Q?PDm+6ea4N+2nqnkEyDTRRR8L7BQTyKqYTvdPNtpD9hPyJdSDOvK5gBaf+0sJ?=
+ =?us-ascii?Q?ouUneCy2qMhl3U02xIGh1bSX9TXIB9ahbu2i8cRe1gQCPgOjZ/WXSQ1cVCvU?=
+ =?us-ascii?Q?70G3e2C/XXoQZIKpsSbdzVcmJLI1q66MnHCYpjrrpwvJsL8f0b70vkHIrOPU?=
+ =?us-ascii?Q?arlmGy7ZSQzhuAiG+5F7UJjDM8LxpD7LGrTwXPN5ImVVZoTlfw5lIb7EBW0M?=
+ =?us-ascii?Q?xgVhOM88yJBXJc4NoWrTwgji5y+w2epmbGXMSoSvGT1bbl/RAvCrqpPvoXsr?=
+ =?us-ascii?Q?OUwiZDZlqbuDl522+aDBY+YSoFIQ5+jRW3xbW3mDK34DjJObVM/N7lG/WzI7?=
+ =?us-ascii?Q?J91I482D3Pr8nK6t9E5Vl8SLVjv5iBdFqELC0j/zBhJ32Vb9CgBiq767Ep7Q?=
+ =?us-ascii?Q?i0QJxzmedCqNtMUQ+naaytTCV4BLUW3Cm0tS5U5Oi3UFzUWi92FNI0CSUJ/W?=
+ =?us-ascii?Q?Ln4lQAnSsO8QWLKfuskR3/0SUGa24yfYem3znCpqB/YT0ugK7MkRCK82D5zk?=
+ =?us-ascii?Q?CtTHAnSczyRbd018+G9olQj1kz3exG8egzEgrNO8AVshp3nQpLikDKgPAbRe?=
+ =?us-ascii?Q?9HEP1jd3URnTIESHMQXWAhBdFjPptZfthJyr2a5i7WgsDQ8ooxZIav9bYs3o?=
+ =?us-ascii?Q?DtfoMFLG1ckS0DOc1eErzPV5mtZvmSkPDbkRXuF1ESN5n6c2WkVnAOgSgSj6?=
+ =?us-ascii?Q?d1Xx/cnU9WY4SIWBWqPhc76trmfTHgQpG1X4pLLVYawpVYgSWFj2qmrQetrC?=
+ =?us-ascii?Q?xDknkvGramwl5dYu6/Hwb2Jhf8CEQ7bcIuT0FgyA/AbxnM3751yMMtPJXKu6?=
+ =?us-ascii?Q?O1OcGFQt4+nMNbZAOB2XA5HNBwUha8jVU7vmzPOQW2QJzTxh+aP0aq5S3ZS8?=
+ =?us-ascii?Q?nleJ6wPRWyVIlMzsXocN/aLEgBAAKVbuFg22dzO7xZp7MW/Esjak36EQGKew?=
+ =?us-ascii?Q?KexSu277V/f2O8P5cXLE1AIJ++PScvSW99R70LlRtqc1KBXyh5GMRCj0zdsg?=
+ =?us-ascii?Q?wbkWep1fR0nwuR1XvFGZRjPzrIHw847Jr5wkZetY7cyP9YIJYmCsVf2wCLDG?=
+ =?us-ascii?Q?qIZ5rzjCAQ5GEL2ZGewlmTP/jw6Rf6fhP3pFgPPbV3P/wQ043fnYslBoHI/u?=
+ =?us-ascii?Q?aZ2XVRdIC7IfjRErZkAEKQRYinV7Bs0ucDa23vaqWiIX/2NsJN6jMYb79VnH?=
+ =?us-ascii?Q?lHdbrdXi8WFFkArm/CESICEXyTz16co9XpZ8L7Pv+BilGS54yxx0pFxzkaUe?=
+ =?us-ascii?Q?1Zpzfx5RL81+19dRhYYgR7J+8WuK9KF1YWu+UWgCr6ii/WU3xUvlmMul3A4Y?=
+ =?us-ascii?Q?XJjkMQNwa1unpb8LJroKGwSfvZrndXkbtgDszuC0etTcxW7q8jz5LARW2cin?=
+ =?us-ascii?Q?C//vpnqeyTF7kPEGQ21O/aOKG3Re16PvqlxWXE/bvo/cx+avl8eyj+U3JosE?=
+ =?us-ascii?Q?eZkX5A=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(36860700013);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	0lwONUKYun05KHG5dHqwER9seJQM+YnCATZ5fTuxQ2dwed/3CCDfv3SCgYihOYQvHrPQ5zhEwt0RCQYMwv3D+NAzhcJP/8MNsR2Wt9A9rXjh8ICmm70srv5pDeABvlHy4is3bJHMn5Q2Gb5xf0+WaDBQhvuQO0ahnjK+5Kj5SXYgxYjuQAlRCJm1tLY5OH1CHxhLA8lEiuPI72DDt1H3dGYwMXVuTCwrCjb314xRpHh+QZq/YIOzSw+FR3mct2l4YxxT9gBsaVAxQCbHRPtkCp5mmQCyrAwjLIGsTea6bGSKkpq4tvgnk4g/5BM9YrYAoFLQFjPya/3yhzzsJWIIfo0U6SKW/8SHPsTXb+9fdywtnzWUdxels3xNhQOO101HAVk//UiN7knY25mIzqWYQlVvrs/g19JcnxueNB+tUy626mjWZgn6UsB6k5vB4cTu
+	rTiFMOKIhxMWbuNNUETRbMFT5xYGyjj/3oyHYXmmw2LLgMo4LCdJKx+jinnP5IJowfHoYles+yK4RqMKRpr25N78E6nt0EMBIzuQw6w75lelhlkHeQ7hpw3zGI/qgoOXPwLzrJ+vKXUFOlWkm92zO48O+59yJ0p8MyDOs7ppnnbxdnPQvFAPTw4aFFQbVBs4Vt/HC5B8MdDU2ARedJ4t1FVvhUNoKSH9nr9pPBK5fQT8+myS3eUkvsQTYpHxCfXtj+cE32op+90rnqY2m0I9I1LRD0Y09wki0AhOc9ChIAxJUBE57vpw0ItV3pTpehQoswSCCSpFfTqbb7uMPXfaokLIbH0FnqfpYkfo+TJRbEynnVqdtxy+Wtgrxm1O8WzOFpKnP1jyefujUMtChDwjfH8agtnGaDuBxXt5kODaO7ad9P76jfR77Qq7rQXg0DfQ
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2026 22:59:06.9614
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2026 22:59:09.0527
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12847e97-e171-4c43-baec-08de6377d5a8
+X-MS-Exchange-CrossTenant-Network-Message-Id: d186f985-7f50-4aea-692f-08de6377d6e8
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	MN1PEPF0000ECDB.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8553
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6361
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.34 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_REJECT(1.00)[cv is fail on i=2];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6335-lists,linux-remoteproc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6337-lists,linux-remoteproc=lfdr.de];
 	TO_DN_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -172,93 +176,85 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[tanmay.shah@amd.com,linux-remoteproc@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[amd.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:email,amd.com:dkim,amd.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,amd.com:email,amd.com:dkim,amd.com:mid];
 	TAGGED_RCPT(0.00)[linux-remoteproc];
 	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: 6C251DF7AA
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[9]
+X-Rspamd-Queue-Id: 6F722DF7D7
 X-Rspamd-Action: no action
 
-Sometimes clients need to know if mailbox queue is full or not before
-posting new message via mailbox. If mailbox queue is full clients can
-choose not to post new message. This doesn't mean current queue length
-should be increased, but clients may want to wait till previous Tx is
-done. Introduce variable per channel to track available tx msg slots.
-Clients can check this variable and decide not to send new message if
-it is 0. This will help avoid false positive warning from mailbox
-framework "Try increasing MBOX_TX_QUEUE_LEN".
+Sharing mbox client data structure between "tx" and "rx" channels
+can lead to data corruption. Instead each channel should have its own
+mbox client data structure.
 
 Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
 ---
 
-v4:
-  - %s/msg_slot_ro/tx_slots_avail_ro/
-  - do not use msg_count to calculate tx_slots_avail_ro instead modify
-    it directly
+changes in v4:
+  - separate remoteproc driver patch in to two patches
 
-v3:
-  - move msg_slot_ro to mbox_client instead of mbox_chan
-  - modify rest of the patch to use msg_slot_ro from mbox_client
+ drivers/remoteproc/xlnx_r5_remoteproc.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-v2:
-  - change design and introduce msg_slot_ro field for each channel
-    instead of API. Clients can use this variable directly.
-  - remove mbox_queue_full API and use msg_slot_ro to know if single
-    slot is available in msg queue or not.
-
- drivers/mailbox/mailbox.c      | 3 +++
- include/linux/mailbox_client.h | 2 ++
- 2 files changed, 5 insertions(+)
-
-diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
-index 2acc6ec229a4..8228e6a9ef97 100644
---- a/drivers/mailbox/mailbox.c
-+++ b/drivers/mailbox/mailbox.c
-@@ -36,6 +36,7 @@ static int add_to_rbuf(struct mbox_chan *chan, void *mssg)
- 	idx = chan->msg_free;
- 	chan->msg_data[idx] = mssg;
- 	chan->msg_count++;
-+	chan->cl->tx_slots_avail_ro--;
+diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
+index bd619a6c42aa..109831c5815c 100644
+--- a/drivers/remoteproc/xlnx_r5_remoteproc.c
++++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
+@@ -74,7 +74,8 @@ struct zynqmp_sram_bank {
+  * @tx_mc_buf: to copy data to mailbox tx channel
+  * @r5_core: this mailbox's corresponding r5_core pointer
+  * @mbox_work: schedule work after receiving data from mailbox
+- * @mbox_cl: mailbox client
++ * @mbox_tx_cl: tx channel mailbox client
++ * @mbox_rx_cl: rx channel mailbox client
+  * @tx_chan: mailbox tx channel
+  * @rx_chan: mailbox rx channel
+  */
+@@ -83,7 +84,8 @@ struct mbox_info {
+ 	unsigned char tx_mc_buf[MBOX_CLIENT_BUF_MAX];
+ 	struct zynqmp_r5_core *r5_core;
+ 	struct work_struct mbox_work;
+-	struct mbox_client mbox_cl;
++	struct mbox_client mbox_tx_cl;
++	struct mbox_client mbox_rx_cl;
+ 	struct mbox_chan *tx_chan;
+ 	struct mbox_chan *rx_chan;
+ };
+@@ -230,7 +232,7 @@ static void zynqmp_r5_mb_rx_cb(struct mbox_client *cl, void *msg)
+ 	struct mbox_info *ipi;
+ 	size_t len;
  
- 	if (idx == MBOX_TX_QUEUE_LEN - 1)
- 		chan->msg_free = 0;
-@@ -71,6 +72,7 @@ static void msg_submit(struct mbox_chan *chan)
- 		if (!err) {
- 			chan->active_req = data;
- 			chan->msg_count--;
-+			chan->cl->tx_slots_avail_ro++;
- 		}
+-	ipi = container_of(cl, struct mbox_info, mbox_cl);
++	ipi = container_of(cl, struct mbox_info, mbox_rx_cl);
+ 
+ 	/* copy data from ipi buffer to r5_core */
+ 	ipi_msg = (struct zynqmp_ipi_message *)msg;
+@@ -269,8 +271,8 @@ static struct mbox_info *zynqmp_r5_setup_mbox(struct device *cdev)
+ 	if (!ipi)
+ 		return NULL;
+ 
+-	mbox_cl = &ipi->mbox_cl;
+-	mbox_cl->rx_callback = zynqmp_r5_mb_rx_cb;
++	mbox_cl = &ipi->mbox_tx_cl;
++	mbox_cl->rx_callback = NULL;
+ 	mbox_cl->tx_block = false;
+ 	mbox_cl->knows_txdone = false;
+ 	mbox_cl->tx_done = NULL;
+@@ -285,6 +287,13 @@ static struct mbox_info *zynqmp_r5_setup_mbox(struct device *cdev)
+ 		return NULL;
  	}
  
-@@ -321,6 +323,7 @@ static int __mbox_bind_client(struct mbox_chan *chan, struct mbox_client *cl)
- 		chan->msg_count = 0;
- 		chan->active_req = NULL;
- 		chan->cl = cl;
-+		chan->cl->tx_slots_avail_ro = MBOX_TX_QUEUE_LEN;
- 		init_completion(&chan->tx_complete);
- 
- 		if (chan->txdone_method	== TXDONE_BY_POLL && cl->knows_txdone)
-diff --git a/include/linux/mailbox_client.h b/include/linux/mailbox_client.h
-index c6eea9afb943..e867f3d5c89b 100644
---- a/include/linux/mailbox_client.h
-+++ b/include/linux/mailbox_client.h
-@@ -17,6 +17,7 @@ struct mbox_chan;
-  * @dev:		The client device
-  * @tx_block:		If the mbox_send_message should block until data is
-  *			transmitted.
-+ * @tx_slots_avail_ro:	msg slots remaining for this client's channel.
-  * @tx_tout:		Max block period in ms before TX is assumed failure
-  * @knows_txdone:	If the client could run the TX state machine. Usually
-  *			if the client receives some ACK packet for transmission.
-@@ -29,6 +30,7 @@ struct mbox_chan;
- struct mbox_client {
- 	struct device *dev;
- 	bool tx_block;
-+	unsigned int tx_slots_avail_ro;
- 	unsigned long tx_tout;
- 	bool knows_txdone;
- 
++	mbox_cl = &ipi->mbox_rx_cl;
++	mbox_cl->rx_callback = zynqmp_r5_mb_rx_cb;
++	mbox_cl->tx_block = false;
++	mbox_cl->knows_txdone = false;
++	mbox_cl->tx_done = NULL;
++	mbox_cl->dev = cdev;
++
+ 	ipi->rx_chan = mbox_request_channel_byname(mbox_cl, "rx");
+ 	if (IS_ERR(ipi->rx_chan)) {
+ 		mbox_free_channel(ipi->tx_chan);
 -- 
 2.34.1
 
