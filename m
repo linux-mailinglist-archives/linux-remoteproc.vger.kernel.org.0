@@ -1,100 +1,97 @@
-Return-Path: <linux-remoteproc+bounces-6629-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-6631-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iG3MGqLrpWlLHwAAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-6629-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 02 Mar 2026 20:57:22 +0100
+	id gF48A5fwpWlLHwAAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-6631-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 02 Mar 2026 21:18:31 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDA1D1DF04B
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 02 Mar 2026 20:57:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A5941DF3C7
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 02 Mar 2026 21:18:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 51C4E3058478
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 Mar 2026 19:56:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6B737304E728
+	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 Mar 2026 20:17:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3AE6426EBF;
-	Mon,  2 Mar 2026 19:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0734F37703D;
+	Mon,  2 Mar 2026 20:17:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="dPehjQ8+"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="b+/SRoh/"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010067.outbound.protection.outlook.com [52.101.61.67])
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012071.outbound.protection.outlook.com [52.101.53.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021A147D947;
-	Mon,  2 Mar 2026 19:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4822FE044;
+	Mon,  2 Mar 2026 20:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.71
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772481387; cv=fail; b=QooiNwCI0MPXWCac8ZQKpoXcKlVulyb/E4OsvFlgGvj+fmnWLPudwEbIO39IST/Sw6WmPhpCBFc5V+t/Dj1f99Xw0Tbn44+1wAvO8T/lxdqtt2XOz89M1Xjb2q+NpD8SQ3IaCo14S7TzFRjIxyAqETnXnXzU6foH1schTc8OrGI=
+	t=1772482668; cv=fail; b=qKZV/+5//QRb/z8k1AJgqXo4hTCU031+9HnRdulycISW2igwUBD1S4sIOgq5uLXT4DMthPlfp0KVj4IFR104CgNiBC2jpp8c/NUJwX4lpzSR1ddbeqU5DPgSAVJgpm1WvX54OtWNIfgU0OTWBWDoJaI7JzU17Cox6UJ1CJy4G7Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772481387; c=relaxed/simple;
-	bh=bW7CN2EuXCYiz51Yhkvk76hko++trjMAS4UZXxVJp2M=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D19bc30e4LYPOVDbwAORw4h/9JTqEfGoarCszvGPenwFau7lWeyir3U9cRBSG9fhV7xIA+sh+iWUaojdlm0PIVWRa62DPvdKNK4PLwhxdMqtDqm0RdHw6eD+ZFZ9KAZuySAvxjx+kGf1xhPGT2toLvR2Rw35C3a1PBAwpVnXIYQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=dPehjQ8+; arc=fail smtp.client-ip=52.101.61.67
+	s=arc-20240116; t=1772482668; c=relaxed/simple;
+	bh=EfB1Pv8gMQGp/CUMd/oLQTAtqwl0T7P2D2lK3PlbxiM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=B7w+wM88ioPEiVVHznAu7GQrbAhUnWuuhAvzeB4axB+g99+jruzhiBlz6cJgFUF5EcVFlry10wbHfha9SLNJbl0TDlpU7rShUv7XXw743KBMGa36ZHTSyR7/MU1KCDDfELF3lRYVkfjy8tC2btRBOsQMbFtO4DFqi/7MCIHZ/Ck=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=b+/SRoh/; arc=fail smtp.client-ip=52.101.53.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=szrd5SDFabNT79QVjdBR5Vnum2hxELz/amlh5BGYyBmyxPCZfnQ71TU1Kb4SYymrV6PmB+WJMQAYzt2aXvCRCky+kso0daYkaCsT75KVHDh721PzNOJAfpgSVkQOsB1LRw8qNAb983KPdxNc92RWvkDFCKGPw+fomAtU1tAiwDZ8cea4F0awemJfw+e7dp1m7eDAmBoznLik42tA/AUymd9rszbJ1fR/pKoulsqXutxkP4CN4wsjCdQ9YtDIuTEmi96TWIYMZlrKuXvhBlbEQ8nwRxNf8zfsNSapVxhb0Fhr1AkiWX1KXX50fz2lr7pkQg+DV/4y+Lw3p4sqSaU4jQ==
+ b=Ro7449ItdpY9qXoPYRL2dd2P+km2v11JP4VDVbLUlH5J5NsQCYYCYE5iA5dByh7KJVZVJBghpy7SKKXcaB6QISjPTVueb8GfNNsJK1mgDUprVP0s4iPPtS6ZdJwDfA0dQzummZB6UIiF9D/6uqMtyQF5yCviDjFVIIN3vXaf65VMPujV7tT5xUmgsoJUmR8d8l93q6/NV7UMVPlmgTJqlmnC+ypWG6PXlAqpUDMybXrMiKY/6/HIMOpm6OlE77ghq8RHU2ysvLhFtc8gzaY7mefxyy73Dszvqq+1sniDCVVXx6h9HgU0P/WVBA4t7xvYkHvL5NqK012WF1iYHOoYpg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AEeNLxu2UYb41hDcjaMBJ7KumJThPNBuSGFiKM8qFzI=;
- b=JDbX64TrKuEFppUtN4eTiUoQj/twPHpqAK+jKr3lnJmcpUeu86kN6vxRn6ii4Qhxkd4Efw5/PQFT0UWFF9CHe9yKj/HZ5aCedVqp3+LDucdIGtzhfJupvYUViYpDlvytLk5pMqjg4Z25YYWMfZCiZ3TI215z9rbOh/L9fk4f0FB6dVXl2FXxvwSDN6M2IvMmdKxCnfwx7JvwnCJ+FLUlnMd+Is6MFX+El4huue1H4RVixLfI+rbifUFLJKxAA+OCnGX3sfEqQ+BvCM4oivnjlswFEYr+uOoR8+PKxbzS0XyYZ5y0o8bynjciinSluV7UyRRCyUYMFjRD7ks2eHBjsA==
+ bh=JfQ3u+an+Z2WWl5S5ElTTEv4QFYIPh75klDIxJbE6Ec=;
+ b=bcOX8MtxRgNFJbejc0PNznW5URHQeX8yxKvH/mh8/l1/1FaY2MiVpP2Rry5jiSliNujpyQVZar7jC1jJmAk9LKsx7PeEukScJaG60bVwHEl53zzA1npX/iEj3D8Yqc83Pd4AnZOn6rGeR2B+rkAan4Uo5jw22+H/Nsq5/8nT6AJkoCKmQC5/7LBkrSXfSpVGp199klDtkMSKhSKEp7b9V6+Mjg+bDSnZWpCh2//WLAIOB2vc1hmtd/VEJMF4bZkKIUVa1/9YnhJVhmUp+MOStmI7NDexMh5AqtZ6CPmsYh/kerHLdDNRS3XflYXbryT1ku3lwnrAYwlEGKLXqytOLw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ 198.47.21.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
  dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AEeNLxu2UYb41hDcjaMBJ7KumJThPNBuSGFiKM8qFzI=;
- b=dPehjQ8+qPlSQglNYXB7JXIvgnAytkdGfRC2V3CCKwYOQkxwrsil5T6qG9BxcqHVapgldBkrGZcglX6pndqyJ9P3FN8E7upKsH80naUGX40zB1n3pbJVmZb+JoAGcMvUtghqApkEbN3mzTI5AbLRbJAxCUS0r+4LpfFZl/ENi8E=
-Received: from BN0PR03CA0020.namprd03.prod.outlook.com (2603:10b6:408:e6::25)
- by SA1PR10MB7554.namprd10.prod.outlook.com (2603:10b6:806:379::18) with
+ bh=JfQ3u+an+Z2WWl5S5ElTTEv4QFYIPh75klDIxJbE6Ec=;
+ b=b+/SRoh/x1V2VqLr/MkKJTQdxt1/4f3MogaXyEi5QnhvqEWDl5i8UyqyWpQ4wsaUBKZ3r+EWdMACN4TOE3pBfRllHbDyHhRNQzn5ykAZaphyIwSU/PWlybueHKHeOQIa4adpTf+INcFlKxOugS4AcPFZ7EPPcrD4Vzt1lV0bvMQ=
+Received: from BL1PR13CA0418.namprd13.prod.outlook.com (2603:10b6:208:2c2::33)
+ by PH7PR10MB6081.namprd10.prod.outlook.com (2603:10b6:510:1fb::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.21; Mon, 2 Mar
- 2026 19:56:22 +0000
-Received: from BN3PEPF0000B069.namprd21.prod.outlook.com
- (2603:10b6:408:e6:cafe::c0) by BN0PR03CA0020.outlook.office365.com
- (2603:10b6:408:e6::25) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.18 via Frontend Transport; Mon,
- 2 Mar 2026 19:56:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.18; Mon, 2 Mar
+ 2026 20:17:43 +0000
+Received: from BL02EPF00029928.namprd02.prod.outlook.com
+ (2603:10b6:208:2c2:cafe::7d) by BL1PR13CA0418.outlook.office365.com
+ (2603:10b6:208:2c2::33) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.21 via Frontend Transport; Mon,
+ 2 Mar 2026 20:17:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
  smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
  action=none header.from=ti.com;
 Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
-Received: from flwvzet201.ext.ti.com (198.47.21.195) by
- BN3PEPF0000B069.mail.protection.outlook.com (10.167.243.68) with Microsoft
+ 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
+Received: from flwvzet200.ext.ti.com (198.47.21.194) by
+ BL02EPF00029928.mail.protection.outlook.com (10.167.249.53) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9700.0 via Frontend Transport; Mon, 2 Mar 2026 19:56:20 +0000
-Received: from DFLE214.ent.ti.com (10.64.6.72) by flwvzet201.ext.ti.com
- (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9654.16 via Frontend Transport; Mon, 2 Mar 2026 20:17:41 +0000
+Received: from DFLE210.ent.ti.com (10.64.6.68) by flwvzet200.ext.ti.com
+ (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 2 Mar
- 2026 13:56:20 -0600
-Received: from DFLE201.ent.ti.com (10.64.6.59) by DFLE214.ent.ti.com
- (10.64.6.72) with Microsoft SMTP Server (version=TLS1_2,
+ 2026 14:17:36 -0600
+Received: from DFLE211.ent.ti.com (10.64.6.69) by DFLE210.ent.ti.com
+ (10.64.6.68) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 2 Mar
- 2026 13:56:19 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE201.ent.ti.com
- (10.64.6.59) with Microsoft SMTP Server (version=TLS1_2,
+ 2026 14:17:36 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE211.ent.ti.com
+ (10.64.6.69) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 2 Mar 2026 13:56:19 -0600
+ Transport; Mon, 2 Mar 2026 14:17:36 -0600
 Received: from lelvem-mr06.itg.ti.com ([10.249.42.149])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 622JuIOc1348869;
-	Mon, 2 Mar 2026 13:56:19 -0600
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 622KHZ1P881392;
+	Mon, 2 Mar 2026 14:17:35 -0600
 From: Andrew Davis <afd@ti.com>
 To: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier
 	<mathieu.poirier@linaro.org>
 CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	"Andrew Davis" <afd@ti.com>
-Subject: [PATCH 3/3] remoteproc: da8xx: Reorder resource fetching in probe()
-Date: Mon, 2 Mar 2026 13:56:16 -0600
-Message-ID: <20260302195616.312378-3-afd@ti.com>
+Subject: [PATCH] remoteproc: keystone: Request IRQs in probe()
+Date: Mon, 2 Mar 2026 14:17:34 -0600
+Message-ID: <20260302201734.320747-1-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20260302195616.312378-1-afd@ti.com>
-References: <20260302195616.312378-1-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -106,31 +103,31 @@ Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B069:EE_|SA1PR10MB7554:EE_
-X-MS-Office365-Filtering-Correlation-Id: 60819ac6-cb39-4a12-7b9c-08de7895c64d
+X-MS-TrafficTypeDiagnostic: BL02EPF00029928:EE_|PH7PR10MB6081:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7ed43bf0-6a52-42e4-3cca-08de7898c1b3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|34020700016|36860700013;
+	BCL:0;ARA:13230040|1800799024|82310400026|34020700016|36860700013|376014;
 X-Microsoft-Antispam-Message-Info:
-	Ftj1pFJs7oX2kHhYDgyGU+8oK3K42ZjeGWgWUnYkcke6K4AfhGzhBvhGvsDRpMWDA5YK+Di2XX0w5kX9SeLhbp3kgjjR7D3uf5JLkbanvUaa3PYm3fqJixv9CDNTEobXC6FlKw94B6CkY+vry0F/ankVYedQmMYv7Zq29XNLnl+4cB6FcII6OKPsrWscRY6/ssXWlTS7/RsDTZ13u8j7dorYswLI/GmDJSBtCcERHvaMpHjpsX5tWdCBxYo9Exzjul0MQB/9lSTc+rS9azwGr09+dJGR7ZRRwjIWfKVdyjNoC6Nm2tfiHXJ70MNXC0Vlptj1XGtTCAiw/XYvo4RTshojlL0OrVFayXx4Kg5GPnCtX7GireUbdtkLQGBggmGILYpgFO8KSmpEeCYqlmzQOajkGi6yUl63bQjHGl9tglDYHaarBsD47O24+AMaQX+C3MjsNWHWZML2IkitReVO0NQ5JGO63pCBJ/imm45WnfeksHUv0fQKQ6X46ZTPwZTbeNtvGMskaoUNXcsJM8Gq8QW8IqeisycL69C3y9KRRJgqNqSdbCxRDZ6XcSAgoNV0e/OjENc947boPR86ewoufIPq6Bd7Y14nspJ0rO3m3Oaf8pkvEUzYkRJN6W1YFMqThkXsxBX9Ybe2f5mL2jiig07hFwOGLW7G/ZAN10obc4BJWbyqL1Fqiwjf+MHgPm9W4cN9ihjyNe+Ab6afYVEX0QgdliWwRH3TqtvYBXuTZ43Bi0iDTK7W6w/RO5+vDGETi5JQFEUWqaApiXprnXPB7cdxOkmpmQ645qRW+GWbSAXPbvR9MS0UEL2qYahWNQXL
+	V/IRUkDsk4hKNJxfeX+K2K5zHE3aTi8G+E+U54LhawGOnpRzH9Ia8+1rbRrrVZXuNPuITHnYmaDi81R2golu93vvJ/M6mVT/bCb6Aych8FV1W2Ud+YWA4tsT9SnxfUuMEnNR4Xp/B3JtbCDC2zhb72qVvrFhl+sTn9q6Iq74Am/ix3Aoq/1NXoqqc7Vi7XSNYN0CG3zZLnOlU4Okm5qatxRv8FXf/MCNwgAt1/ecMpLCpwBOzO6SvRv3jQPQeBwSc/bd7b/jd8QE4qQp99XkfPVQyD6xbib5/6tdhemNbVGAibaAHn5mpi4+z/Eko3JEQNBhAVR590OHEGsVCBwBFa48rx942qRoTD85bXv6VFuBFBf1JqOCXg0fzZSBYOfdgZ+zPUL+7bqQ4NdQODSdxtgwAYHB+Zg+jrhz6sSASvJsJvwy24TBuyJSpiolOOYyoru77lk5q44cgjgdfaHgJh1i6/H/0zeC9W+mXpRepgxM2PA62ypqmxy9BhzmqJgsrWNeWJUuxTKyk2NyqI1vyinbIiuM582vzWjtB8qx0P+hJ8ZNjX2VNC8x0sXhW1/OZ+uOJ67KWeE1oEUwXWVv7SdRdWj0Y46E7fWXpuW7WONHgj1i8zdtoYIEAAcCtnxXlyRjNIstahVqxVL35ISMcG03bZGa1GdVOc2T7WKJXoARKEUrL8vKxc2IUclVrIlu9bW1utqSjolxirmjx5Srtohax4EJZ7DtfOOTruvLd7jor0Tyh0KmNYaiyZnvg5Y29Wfsv/hJYr7lfhoObT68YNoB1u2Cg1jbQJBNC1t28+OyCla6BREi1TrdgmDiTyoEqJUufRW7YxaxGoYDzzVfAg==
 X-Forefront-Antispam-Report:
-	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(34020700016)(36860700013);DIR:OUT;SFP:1101;
+	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(34020700016)(36860700013)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	aXsAQMIUIWH80PH3LcG4HdZObtJx4A96VDJaTxAxbf5d5fUl8jq3UIfdLT1Sf8A+NSvsRwGsb8JiSFhHQK9aaMJSoHko/cV5dkM21kMsiYvS68tEVZaywiofHWeqA5G9eUSdLfPIZ1oryF4Rgdgy5GkiWGdAejkhYTNikq2Pn3HlKR9udXFTdk58Has1iCNcfA+5qN/hZE5FQed6nsEJbt3jDhFpktdOjyeebh38k0VIj/IcYhbkQIpT0S9/Nv8QCc0vmBMBZVB7c1MyVuNYrP3XSWcPK3INNmy/cjox6MK4QJqLoTPRq+Qpyrm0TTQl4+kNrKtkXJ4Ajv8w8osPi0yM7LJDjEB/hT9bcbERBkcm/ESNeweQOhKPXgYTJgF8IzQ5esWaGbRdXHLbK0nNK+zlslBywIB4N1wNzgzOH7Hap+Htn0Rm2FTeXB53tIak
+	Ev7Bsp9os02XYByevco7NdN3lSytw2DJtj9QzuWXsrG93YsArjmmq+eviXaAqRlEgyz2Hyp2Rh8RQeI6TVs/e3Kf/WZ4Cw1U9DvnmVtlEkW5vJKmOeDaaFthnELRr+S/ryilFN1RclTwcG/pT9ir7O3h/UrnLaklU4YQJgTOJeoweQnM4mikOsBXnobZ2od47xwVjj/lrZao6H+3YGdYCchYyaLyAAF96kg9iFtdWMGYzPF/mqLnErxdbP7CVxHMGITW607jVX5XoP8c1vBoCTi/eIUufkS0UP7fHZ9PtcBYufpcl6CXG8qXpk+Yr2u1RqOMGpvd0HyWTdv6hSSjs8WexLULIpmUUshyk6FMEu3WgkdFvnQ6xbgnDPJVXZSO+oz5zV/89cUfxLPVGCiyjRu88iUzeMt26HwLLwgWTjwbWVyBXuE5Ypsfhh3BdX8d
 X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 19:56:20.4408
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 20:17:41.2050
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60819ac6-cb39-4a12-7b9c-08de7895c64d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ed43bf0-6a52-42e4-3cca-08de7898c1b3
 X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B069.namprd21.prod.outlook.com
+	BL02EPF00029928.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB7554
-X-Rspamd-Queue-Id: CDA1D1DF04B
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6081
+X-Rspamd-Queue-Id: 3A5941DF3C7
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.34 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
@@ -138,14 +135,14 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[ti.com,quarantine];
 	R_DKIM_ALLOW(-0.20)[ti.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6629-lists,linux-remoteproc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6631-lists,linux-remoteproc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCPT_COUNT_FIVE(0.00)[5];
@@ -153,135 +150,97 @@ X-Spamd-Result: default: False [1.34 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[afd@ti.com,linux-remoteproc@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[ti.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,ti.com:dkim,ti.com:email,ti.com:mid];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ti.com:dkim,ti.com:email,ti.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo];
 	TAGGED_RCPT(0.00)[linux-remoteproc];
 	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[10]
 X-Rspamd-Action: no action
 
-Currently several resource are fetched before we allocate our instance
-data struct. The is unlike most other drivers that fill in the instance
-data with resources as they are fetched. Move these down which is more
-natural and also removes the need for several temporarily locals.
+IRQs can be registered in probe and only need to be enabled/disabled
+during remoteproc start/stop. This lets us catch IRQ issues early
+and simplify remoteproc start/stop.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- drivers/remoteproc/da8xx_remoteproc.c | 75 ++++++++++++---------------
- 1 file changed, 32 insertions(+), 43 deletions(-)
+ drivers/remoteproc/keystone_remoteproc.c | 41 +++++++++---------------
+ 1 file changed, 15 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/remoteproc/da8xx_remoteproc.c b/drivers/remoteproc/da8xx_remoteproc.c
-index f44bee303eb5e..ea82500165cb6 100644
---- a/drivers/remoteproc/da8xx_remoteproc.c
-+++ b/drivers/remoteproc/da8xx_remoteproc.c
-@@ -242,45 +242,9 @@ static int da8xx_rproc_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct da8xx_rproc *drproc;
- 	struct rproc *rproc;
--	struct irq_data *irq_data;
--	struct clk *dsp_clk;
--	struct reset_control *dsp_reset;
--	void __iomem *chipsig;
--	void __iomem *bootreg;
- 	int irq;
- 	int ret;
+diff --git a/drivers/remoteproc/keystone_remoteproc.c b/drivers/remoteproc/keystone_remoteproc.c
+index 4d6550b485675..e7fde55097866 100644
+--- a/drivers/remoteproc/keystone_remoteproc.c
++++ b/drivers/remoteproc/keystone_remoteproc.c
+@@ -173,35 +173,16 @@ static int keystone_rproc_start(struct rproc *rproc)
  
--	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
--
--	irq_data = irq_get_irq_data(irq);
--	if (!irq_data)
--		return dev_err_probe(dev, -EINVAL, "irq_get_irq_data(%d): NULL\n", irq);
--
--	bootreg = devm_platform_ioremap_resource_byname(pdev, "host1cfg");
--	if (IS_ERR(bootreg))
--		return PTR_ERR(bootreg);
--
--	chipsig = devm_platform_ioremap_resource_byname(pdev, "chipsig");
--	if (IS_ERR(chipsig))
--		return PTR_ERR(chipsig);
--
--	dsp_clk = devm_clk_get(dev, NULL);
--	if (IS_ERR(dsp_clk))
--		return dev_err_probe(dev, PTR_ERR(dsp_clk), "clk_get error\n");
--
--	dsp_reset = devm_reset_control_get_exclusive(dev, NULL);
--	if (IS_ERR(dsp_reset))
--		return dev_err_probe(dev, PTR_ERR(dsp_reset), "unable to get reset control\n");
--
--	if (dev->of_node) {
--		ret = of_reserved_mem_device_init(dev);
--		if (ret)
--			return dev_err_probe(dev, ret, "device does not have specific CMA pool\n");
--		devm_add_action_or_reset(&pdev->dev, da8xx_rproc_mem_release, &pdev->dev);
+ 	INIT_WORK(&ksproc->workqueue, handle_event);
+ 
+-	ret = request_irq(ksproc->irq_ring, keystone_rproc_vring_interrupt, 0,
+-			  dev_name(ksproc->dev), ksproc);
+-	if (ret) {
+-		dev_err(ksproc->dev, "failed to enable vring interrupt, ret = %d\n",
+-			ret);
+-		goto out;
 -	}
++	enable_irq(ksproc->irq_ring);
++	enable_irq(ksproc->irq_fault);
+ 
+-	ret = request_irq(ksproc->irq_fault, keystone_rproc_exception_interrupt,
+-			  0, dev_name(ksproc->dev), ksproc);
++	ret = keystone_rproc_dsp_boot(ksproc, rproc->bootaddr);
+ 	if (ret) {
+-		dev_err(ksproc->dev, "failed to enable exception interrupt, ret = %d\n",
+-			ret);
+-		goto free_vring_irq;
++		flush_work(&ksproc->workqueue);
++		return ret;
+ 	}
+ 
+-	ret = keystone_rproc_dsp_boot(ksproc, rproc->bootaddr);
+-	if (ret)
+-		goto free_exc_irq;
 -
- 	rproc = devm_rproc_alloc(dev, "dsp", &da8xx_rproc_ops, da8xx_fw_name,
- 				 sizeof(*drproc));
- 	if (!rproc)
-@@ -291,14 +255,43 @@ static int da8xx_rproc_probe(struct platform_device *pdev)
- 
- 	drproc = rproc->priv;
- 	drproc->rproc = rproc;
--	drproc->dsp_clk = dsp_clk;
--	drproc->dsp_reset = dsp_reset;
- 	rproc->has_iommu = false;
- 
-+	drproc->dsp_clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(drproc->dsp_clk))
-+		return dev_err_probe(dev, PTR_ERR(drproc->dsp_clk), "clk_get error\n");
-+
-+	drproc->dsp_reset = devm_reset_control_get_exclusive(dev, NULL);
-+	if (IS_ERR(drproc->dsp_reset))
-+		return dev_err_probe(dev, PTR_ERR(drproc->dsp_reset), "unable to get reset control\n");
-+
-+	if (dev->of_node) {
-+		ret = of_reserved_mem_device_init(dev);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "device does not have specific CMA pool\n");
-+		devm_add_action_or_reset(&pdev->dev, da8xx_rproc_mem_release, &pdev->dev);
-+	}
-+
- 	ret = da8xx_rproc_get_internal_memories(pdev, drproc);
- 	if (ret)
- 		return ret;
- 
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	drproc->irq_data = irq_get_irq_data(irq);
-+	if (!drproc->irq_data)
-+		return dev_err_probe(dev, -EINVAL, "irq_get_irq_data(%d): NULL\n", irq);
-+
-+	drproc->chipsig = devm_platform_ioremap_resource_byname(pdev, "chipsig");
-+	if (IS_ERR(drproc->chipsig))
-+		return PTR_ERR(drproc->chipsig);
-+
-+	drproc->bootreg = devm_platform_ioremap_resource_byname(pdev, "host1cfg");
-+	if (IS_ERR(drproc->bootreg))
-+		return PTR_ERR(drproc->bootreg);
-+
- 	/* everything the ISR needs is now setup, so hook it up */
- 	ret = devm_request_threaded_irq(dev, irq, da8xx_rproc_callback,
- 					handle_event, 0, "da8xx-remoteproc",
-@@ -311,14 +304,10 @@ static int da8xx_rproc_probe(struct platform_device *pdev)
- 	 * *not* in reset, but da8xx_rproc_start() needs the DSP to be
- 	 * held in reset at the time it is called.
- 	 */
--	ret = reset_control_assert(dsp_reset);
-+	ret = reset_control_assert(drproc->dsp_reset);
- 	if (ret)
- 		return ret;
- 
--	drproc->chipsig = chipsig;
--	drproc->bootreg = bootreg;
--	drproc->irq_data = irq_data;
+ 	return 0;
 -
- 	ret = devm_rproc_add(dev, rproc);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "rproc_add failed\n");
+-free_exc_irq:
+-	free_irq(ksproc->irq_fault, ksproc);
+-free_vring_irq:
+-	free_irq(ksproc->irq_ring, ksproc);
+-	flush_work(&ksproc->workqueue);
+-out:
+-	return ret;
+ }
+ 
+ /*
+@@ -215,8 +196,8 @@ static int keystone_rproc_stop(struct rproc *rproc)
+ 	struct keystone_rproc *ksproc = rproc->priv;
+ 
+ 	keystone_rproc_dsp_reset(ksproc);
+-	free_irq(ksproc->irq_fault, ksproc);
+-	free_irq(ksproc->irq_ring, ksproc);
++	disable_irq(ksproc->irq_fault);
++	disable_irq(ksproc->irq_ring);
+ 	flush_work(&ksproc->workqueue);
+ 
+ 	return 0;
+@@ -427,10 +408,18 @@ static int keystone_rproc_probe(struct platform_device *pdev)
+ 	ksproc->irq_ring = platform_get_irq_byname(pdev, "vring");
+ 	if (ksproc->irq_ring < 0)
+ 		return ksproc->irq_ring;
++	ret = devm_request_irq(dev, ksproc->irq_ring, keystone_rproc_vring_interrupt,
++			       IRQF_NO_AUTOEN, dev_name(dev), ksproc);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to request vring interrupt\n");
+ 
+ 	ksproc->irq_fault = platform_get_irq_byname(pdev, "exception");
+ 	if (ksproc->irq_fault < 0)
+ 		return ksproc->irq_fault;
++	ret = devm_request_irq(dev, ksproc->irq_fault, keystone_rproc_exception_interrupt,
++			       IRQF_NO_AUTOEN, dev_name(dev), ksproc);
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to enable exception interrupt\n");
+ 
+ 	ksproc->kick_gpio = devm_gpiod_get(dev, "kick", GPIOD_ASIS);
+ 	ret = PTR_ERR_OR_ZERO(ksproc->kick_gpio);
 -- 
 2.39.2
 
