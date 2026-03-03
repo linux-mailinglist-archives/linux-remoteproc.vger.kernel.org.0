@@ -1,200 +1,196 @@
-Return-Path: <linux-remoteproc+bounces-6633-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-6635-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6F/BACP2pWmkIQAAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-6633-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 02 Mar 2026 21:42:11 +0100
+	id kLszA8D7pmk7bgAAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-6635-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 03 Mar 2026 16:18:24 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7285F1E045A
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 02 Mar 2026 21:42:10 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CCD91F25F4
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 03 Mar 2026 16:18:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4ABBB3111137
-	for <lists+linux-remoteproc@lfdr.de>; Mon,  2 Mar 2026 20:31:40 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C1A183048C94
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Mar 2026 15:13:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E98A481249;
-	Mon,  2 Mar 2026 20:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23635481655;
+	Tue,  3 Mar 2026 15:13:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="t/lEpIxN"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="STLcj1gM"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012023.outbound.protection.outlook.com [52.101.43.23])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A400B481241;
-	Mon,  2 Mar 2026 20:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.23
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772483256; cv=fail; b=ugw9Uk90eIUQtsNwQufe/14k75NcLBs39VlRoVvqfHtnfFtd6MFyE+2xPQ4xojKBm5ksSwwZpxwx+1TndRgD7FDDnbkLtOq3XrBbiq4By+UMQrbCJVPw9W6w3tmH4bsbDQ+1czbYn4c7Ir5afqHSk/urHaqxcaFbvHecTr8Kal4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772483256; c=relaxed/simple;
-	bh=OxBfdlHp4ca4ORTxNS0lXqHGYKIFh1hBQRHj7u7QJvs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m5QmtrM7AFhlqZl/3Dcn9j7mAGcyV7H2gPwomnrpCwW/FPdovMr3ZyhTWyPc2qM1w3ztE29cNlZtL/sj2uxDHZ713MDevh4FNTa7XUyP3G5h3mL3Rabrn/YYm5zexbG9rjByIoTPhBdpMvf5ugnH6Lk7YFbGNv5t9/AVC2HrO5s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=t/lEpIxN; arc=fail smtp.client-ip=52.101.43.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MKQ6C+bd2qdgFk/WXZeAxHd/Te1aP9ma1+FVDYVm+4hqBJPbKtj/PAIWg1Ge25uteolg+bQUgTCb66JzwOvgcq3JULVYLZy9hjR5WaRk+8XVRfNpmYGp1YpVRgXp8ueP1Ossw14tBY6Tu+1mb+EYy4NTAU6iPU4q+nXK334o04sbz3V0/nTbRx1KIA2mCEzuDhmyZWyQkHP6LfP2aVOheboHPIcEDPhcKeZowna/XEXcxiUsmhzv2YMgLxNVjCI8slHqV84ZLYKaswqrkbq7TzdDJshKk8QIPPyH5ir4+HHn0FzCo/FgzwK9cAZqgSB02yIEH4ty0MFY7e3q3F7QOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iEQRSF1nXWASAQPjjFwLap+6ioUljNwYB3ui+Fl/3JI=;
- b=GzhoasrbZJxY1zeMeDIphAa13T57reNR56Wya/GRVfFf+gzhe7g7B6UQMSfRbCVflLVsb+htgDO1VpgL+IPz3s7Lr677lAAfaRgn4S2xXpCa8ghBht6yzpbWeQ3r3NykdTk3v3/eKcTsSAOwyWK7kkStdYT8hgual3rdUhhd8wMpfk3vzCKq+ctdYsevod7Gr5SQ1H9X/yntENj7PX3YYP1WrSHgxKsz4DBPeGJX2sgv5f2bKH7+eOO0me4tYsVkV8ImBPYOGLhAQk88cg1GpK2jb/h90Q3+JOft0UfyCSMeiJnrplC0jG1F/RP/u5eE1NvcEpxR9kvt+/XtJBk7Tg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iEQRSF1nXWASAQPjjFwLap+6ioUljNwYB3ui+Fl/3JI=;
- b=t/lEpIxNSB+jBa1as3LFxKRRWh1mv9m6NsNKDOO6Wga1imQR5CxK386jvvdv2jRzB+5RvZGXucR5/v+pZvjV+uDm5JqGn2xvYmVRwmQAfTQ6v/q2VRXoUpw82z717FVqAvEK6x5cIkA9TaJF5I1R7QmZ1un4wUG7KdDeM0xOb5A=
-Received: from SN1PR12CA0060.namprd12.prod.outlook.com (2603:10b6:802:20::31)
- by PH0PR10MB997594.namprd10.prod.outlook.com (2603:10b6:510:37f::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.21; Mon, 2 Mar
- 2026 20:27:33 +0000
-Received: from SN1PEPF0002BA4F.namprd03.prod.outlook.com
- (2603:10b6:802:20:cafe::ed) by SN1PR12CA0060.outlook.office365.com
- (2603:10b6:802:20::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.21 via Frontend Transport; Mon,
- 2 Mar 2026 20:27:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.195)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.195; helo=lewvzet201.ext.ti.com; pr=C
-Received: from lewvzet201.ext.ti.com (198.47.23.195) by
- SN1PEPF0002BA4F.mail.protection.outlook.com (10.167.242.72) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9654.16 via Frontend Transport; Mon, 2 Mar 2026 20:27:32 +0000
-Received: from DLEE212.ent.ti.com (157.170.170.114) by lewvzet201.ext.ti.com
- (10.4.14.104) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 2 Mar
- 2026 14:27:31 -0600
-Received: from DLEE202.ent.ti.com (157.170.170.77) by DLEE212.ent.ti.com
- (157.170.170.114) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 2 Mar
- 2026 14:27:31 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE202.ent.ti.com
- (157.170.170.77) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 2 Mar 2026 14:27:31 -0600
-Received: from fllvem-mr07.itg.ti.com ([10.249.42.149])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 622KRUtK1383398;
-	Mon, 2 Mar 2026 14:27:31 -0600
-From: Andrew Davis <afd@ti.com>
-To: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier
-	<mathieu.poirier@linaro.org>
-CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	"Andrew Davis" <afd@ti.com>
-Subject: [PATCH 2/2] remoteproc: pru: Remove empty remove callback
-Date: Mon, 2 Mar 2026 14:27:28 -0600
-Message-ID: <20260302202728.322073-2-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20260302202728.322073-1-afd@ti.com>
-References: <20260302202728.322073-1-afd@ti.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0783763CB
+	for <linux-remoteproc@vger.kernel.org>; Tue,  3 Mar 2026 15:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772550835; cv=none; b=ZoJDLg76copb4LNrNyduF9fT5DRrf5xTAtgpRx1msXBy0uJR1yKenZOnhg3bA0FrMqv2sRpsLuEtAEsMNM3Ngs36oc3Nit9KO2ltqE7M9BFQfzVEVfbNM0HSpExf03ZedyXFCXJYJHAE/eLbtc1M+uzPqitOYR6N3+z5vINmppY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772550835; c=relaxed/simple;
+	bh=9jv4a1vz0B4Y0Se6PnOzjXSDFfM4cHN/74M5HEnLJGA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Gom3k+CcodUU/9ZIYMnko4ZvDEpOKhmnXwbB19nB/3ETM5wdMSugHuN86ifIGckgwvGK8LdAIDREaa+TXt15eVroqDs0/2iyKWnDALGxlg4OBqKDCJ5fg3kj3kWT7xLVd14hEcWxnX1lQrJHsAzMLk5PaYOAcUg3bMMIpFXHzlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=STLcj1gM; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48379a42f76so47650965e9.0
+        for <linux-remoteproc@vger.kernel.org>; Tue, 03 Mar 2026 07:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1772550830; x=1773155630; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pqHM9PVtocZZ6dJkagETpj+4ELwjylZhR4+lPK5nnFE=;
+        b=STLcj1gMFPpnBlRzRPaGD5cLDek1o2dPTQ1CGIDEvhVatkkN5zvuRuuYj34alnhmJx
+         ZcJ0gBlcNPu3Wa8jCAooLNC3Q629WLNBAoMQrSEFLewxuULGAJpZgMZXIUmARtHi30I+
+         9wcpFbvaYkyzL9W+2tfd+ypAsYiLun1kO8Uo3qOIXVYld4M+g+n97UUd3oLDK6L/F3SU
+         rOdGy7/9r6SeTUpzyErj+5A/zFlsAYmbXi4hOJ2UZNvcVrQHGr7QnYI6IoTsTv9NpLbU
+         JA4dvohuobYKMXKKcTxjizNwpW24rHtfg+yUtmgsgrC5xB6QuR+q9+AI7JOib8VDAM1z
+         Z17A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772550830; x=1773155630;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pqHM9PVtocZZ6dJkagETpj+4ELwjylZhR4+lPK5nnFE=;
+        b=CjuF43bPQjvQfRGWKtKVoJrX47zIB8VTeHy0/1mUXIgqX+ktZ0w2ifSJbBxvzW0vh8
+         +i+GlSXL5TFD9uG5PVdM7iihVb9ZlSnmJHYXL1I0YAorifb0lWmPqvRo4AfPdu+2rjdw
+         VmQi1/fk4Ip2nH2I0RUVypwDvhYyp+pRxg+7baoY1zvmCqDKvcANmFYsUBpjTNuXoQ5x
+         mC7NudS5JuWpfDch7okdU6PtFPXkpSE3jUC7aEZ24COI3WkGuXNvHbuow6+w3rj1452O
+         H19VQUpBwq0ST7rpz5GuPkyzrnyaspOJiLiOs0z+WfLVyt9cxYPmBAEe61rFUR+Fs6xO
+         S1lA==
+X-Forwarded-Encrypted: i=1; AJvYcCUwwf1mHgnAXrnTBg7TTuYQzT/5On6Miyg50QM2INxPmSJAtFdwDBaM4aPnSIr8SSU65S68/yrGcvrXXzlR8c+b@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzbkrmn+IEYdHoGm8tPQwYuvAIEQyUQyJJYtgcWr8MZeMM0NqXS
+	H81jQsoMRaicD/ubokhEcFB6ZtRvd6Y4BTC9QpAwWq/oxWk/8t3IhkgeS84oUvlBjq8=
+X-Gm-Gg: ATEYQzy4OAe/TtmvmjsK1gzDh5MRDYIgT/6HnTuNZejq2+L2+NOtNXiWkMJAWefPfLk
+	2+hSHa9cIQ2b2PsIeIguvxqrxHi4FY76xPtaoMgLZKyVTXNtTBtfQVC6CaKrp1bNGa7uPiU2M0g
+	j+bhrhGk0GcXb7tZAwVtbNaJgFLSguhHI2cwhG3BFiX0UHpvoVbj8mmC5KVVt4NpI0C1vuiMnjr
+	vR5lr3W5iU2muK1SEC5BnW4uvGPmyDYDyueFOp7SNHMBg9iNym9BayQ4MJayYRO4M2NnH8diaei
+	+2lLqxrqX3OUtblleipyv4rki8IitG+2VApbbDuqnRbWY+QHqyay9sc31/vI33VhIO+Pe6KMEVQ
+	1Cucv7iyENnhGbNo5skagRmSN2MotZ5YFAlJF9O3/fBX9Z2bqYnnxRb3LiR3nu7nSRl04ylhJz7
+	1xgVKLipu67NF/BaSoKuOgVx6KNw3s7hI=
+X-Received: by 2002:a05:600c:34d6:b0:477:7af8:c8ad with SMTP id 5b1f17b1804b1-483c9c1cc59mr302543825e9.31.1772550830411;
+        Tue, 03 Mar 2026 07:13:50 -0800 (PST)
+Received: from localhost ([2001:4090:a244:8139:5278:cf5a:3494:5e80])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483c3b7713csm321623695e9.11.2026.03.03.07.13.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2026 07:13:49 -0800 (PST)
+From: "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
+Subject: [PATCH 0/6] arm64: dts: ti: k3-am62a7-sk: Split r5f memory region
+Date: Tue, 03 Mar 2026 16:12:58 +0100
+Message-Id: <20260303-topic-am62a-ioddr-dt-v6-19-v1-0-12fe72bb40d2@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA4F:EE_|PH0PR10MB997594:EE_
-X-MS-Office365-Filtering-Correlation-Id: be49ee9c-c9b1-400e-adb4-08de789a2257
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|376014|34020700016|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	fBHFns6UnWyMJCQaKbDLgyvqCv9zUKBlmVqhcLcBpquI+2BOtaBCgf13AmwHj3Xwe0viBtgclFCIognAY9Fq3NEx0RzgXjO6vG7ZX0xddP8bsaQF5VoO68WfLE9UU73w3opmFtdb1I7VqXJIa0HUP/xtBr6ow+e2DC70oGnqFBKqf3Trg5VH9N7Hj5QiUEuwNkeRjf4Mk2Wjd2BGLT8tS2N0cVSaUlkbTZ9VCaSSGPfH86f9qmDZtQd12C/KQVtjQQC44bkxya79bmS79LP8TpTmN/8Ox4nQV/h3YVe9a4PMawjo5QHFR5j7Pu0jgZdNQmyqY6MiJ5NuGPEu0WuV9dywRqJ+YNHzYMk7ySZzz8TLkeiWcfntUPjj61dgCK80ozaqvfVa/QLUcur4n6oPfBu+HErGieJ8nKpyJlsFwyUnul6tvHYJ1WxBqqPM7pI4qELzi7Y4MfiyNt1lWef0O4kqrLxYBzT2VzHxGNNo+lLtQ2DIMP0YmWG7ynXYQGKrFll0tVwPHp+vRm4oVoAB2Bjvbp4vMINnICAM+x+rv5baNEL3z+7kDnuXqFne1ZX+G5Q2EYlwFvDc8X05o7w8t4ZdWUJrRZC5ZF1K6KV9G77LuDg5vBtB3tkA4JXWwY9hFdqMLxf7WZoA0YE1z8hDa067Z2QEFpyaSJccO2PP+PftccPV8PF2+uPCXmcx88iDE4gb6B84uUG2lCXwFXTHtuHuvDhVlcq320wR9zPnHgR7dwS+wFcxAQ0Uef2Li/CIXoEjkHImlSbrVIAIktMoLnroSiIGAwRnpx9dAdbQX2dGcnOK0kOiCU9q0GUxj1VRVLWtXVeLzV4GdE/yaZUm/g==
-X-Forefront-Antispam-Report:
-	CIP:198.47.23.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet201.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(376014)(34020700016)(36860700013);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	zvaqr6azJjtBNEX4EvVKeh14PR5a/8Jla2t+MrIMTkcVEbGz7wd2zuFytYDQKcTsWl7H+UAITTsVSOBXngGKu46hft4e6uMwYwkyBbJT8LX0ueuMU59ko7DxRO6w5gQmmrvm7DOFcywnvSdkBgId3o4pzOlYIgDRgaBqxygdauqEQuGJKq1fKcrtoLmjvuj56e7RN+lHDb2Klq3TqOibrIXiaCCUqKAsoEZmyn6384tkKn3GTPGxAlgsQ3xhd6tC/HOK44z0dsRyCgANKp5Nwuq7leNOlbTozs31Y6nk6cZhTRQyy+vepkl6HeyHIAYiTmOYzxYyR1n54TUNzjqp17vWyUM3On0PcVCnb668IhN/ZTP90QmHBfxue/Fdq6QPImMKH6N0epAEshOLn/pPsCeBpBi29T3FIkvXuWqoyxPWKKkdXL4Dky5pQYit/GiH
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 20:27:32.8995
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: be49ee9c-c9b1-400e-adb4-08de789a2257
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.195];Helo=[lewvzet201.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF0002BA4F.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB997594
-X-Rspamd-Queue-Id: 7285F1E045A
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHr6pmkC/x3MwQqDMAwA0F+RnBdIcmjVXxk7FJNpDlppRQbiv
+ 1t2fJd3QbXiVmHsLih2evW8NfCrg2lJ22zo2gxCEkiY8Mi7T5jWIAk9qxbUA8+APCBpipGFetY
+ ILdiLff33z9+f+34AUxmDi2wAAAA=
+X-Change-ID: 20260210-topic-am62a-ioddr-dt-v6-19-0da7712081d7
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Suman Anna <s-anna@ti.com>, 
+ Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Tero Kristo <kristo@kernel.org>
+Cc: Vishal Mahaveer <vishalm@ti.com>, Kevin Hilman <khilman@baylibre.com>, 
+ Dhruva Gole <d-gole@ti.com>, Sebin Francis <sebin.francis@ti.com>, 
+ Kendall Willis <k-willis@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, 
+ linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2289; i=msp@baylibre.com;
+ h=from:subject:message-id; bh=9jv4a1vz0B4Y0Se6PnOzjXSDFfM4cHN/74M5HEnLJGA=;
+ b=owGbwMvMwCXWejAsc4KoVzDjabUkhsxlvzoO1/L61zJk/4vPK15VZG7vLng/9u7+Cwwnt90Nu
+ GbNe0uso5SFQYyLQVZMkaUzMTTtv/zOY8mLlm2GmcPKBDKEgYtTACbSuIqR4V2JyZ+ZU97MPb/a
+ 7gGjtFGJccxWsaCru3webIvdJlQ8MZaR4drsuf3GzPPrb/vwPpLfpyi6jcthf6vajiKRw5uVlAu
+ 1uAA=
+X-Developer-Key: i=msp@baylibre.com; a=openpgp;
+ fpr=BADD88DB889FDC3E8A3D5FE612FA6A01E0A45B41
+X-Rspamd-Queue-Id: 0CCD91F25F4
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[ti.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[ti.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6633-lists,linux-remoteproc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-6635-lists,linux-remoteproc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	FROM_NEQ_ENVFROM(0.00)[afd@ti.com,linux-remoteproc@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[ti.com:+];
+	DMARC_NA(0.00)[baylibre.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-remoteproc];
+	FROM_NEQ_ENVFROM(0.00)[msp@baylibre.com,linux-remoteproc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[10]
+	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,baylibre-com.20230601.gappssmtp.com:dkim,baylibre.com:mid,baylibre.com:email]
 X-Rspamd-Action: no action
 
-The .remove() callback only prints out a debug message, remove
-this otherwise unneeded callback.
+Hi,
 
-Signed-off-by: Andrew Davis <afd@ti.com>
+Split the firmware memory region in more specific parts so it is better
+described where which information is stored. Specifically the LPM metadata
+region is important as bootloader software like U-Boot has to know where
+that data is to be able to read that data and resume from RAM.
+
+IO+DDR is a deep sleep state in which a few pins are set to be sensitive
+for wakeup while the DDR is kept in self refresh. Everything else is
+powered off.
+
+The changes in this series were suggested as part of the IO+DDR u-boot series:
+  https://lore.kernel.org/r/814c211f-a9eb-4311-bb84-165b1a69755f@ti.com
+
+There are currently no real users of the memory-region that is split in
+this series. The size of the memory-region in total stays the same.
+The new layout is derived from the software running on the r5f
+processor:
+  https://github.com/TexasInstruments/mcupsdk-core-k3/blob/k3_main/examples/drivers/ipc/ipc_rpmsg_echo_linux/am62ax-sk/r5fss0-0_freertos/ti-arm-clang/linker.cmd#L172
+  https://github.com/TexasInstruments/mcupsdk-core-k3/blob/k3_main/source/drivers/device_manager/sciclient.h#L459
+
+Additionally the two important devicetree nodes for resuming from IO+DDR
+have the bootph-pre-ram flag added as this data needs to be read before
+the RAM is in use.
+
+Best
+Markus
+
+Signed-off-by: Markus Schneider-Pargmann (TI) <msp@baylibre.com>
 ---
- drivers/remoteproc/pru_rproc.c | 9 ---------
- 1 file changed, 9 deletions(-)
+Markus Schneider-Pargmann (TI) (6):
+      dt-bindings: remoteproc: k3-r5f: Split up memory regions
+      dt-bindings: remoteproc: k3-r5f: Add memory-region-names
+      arm64: dts: ti: k3-am62a7-sk: Split r5f memory region
+      arm64: dts: ti: k3-am62p5-sk: Split r5f memory region
+      arm64: dts: ti: k3-am62a7-sk: Add r5f nodes to pre-ram bootphase
+      arm64: dts: ti: k3-am62p5-sk: Add r5f nodes to pre-ram bootphase
 
-diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-index 19b107d29242d..a4636c7bc6b7b 100644
---- a/drivers/remoteproc/pru_rproc.c
-+++ b/drivers/remoteproc/pru_rproc.c
-@@ -1078,14 +1078,6 @@ static int pru_rproc_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--static void pru_rproc_remove(struct platform_device *pdev)
--{
--	struct device *dev = &pdev->dev;
--	struct rproc *rproc = platform_get_drvdata(pdev);
--
--	dev_dbg(dev, "%s: removing rproc %s\n", __func__, rproc->name);
--}
--
- static const struct pru_private_data pru_data = {
- 	.type = PRU_TYPE_PRU,
- };
-@@ -1131,7 +1123,6 @@ static struct platform_driver pru_rproc_driver = {
- 		.suppress_bind_attrs = true,
- 	},
- 	.probe  = pru_rproc_probe,
--	.remove = pru_rproc_remove,
- };
- module_platform_driver(pru_rproc_driver);
- 
+ .../bindings/remoteproc/ti,k3-r5f-rproc.yaml       | 37 ++++++++++++++++++-
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts            | 42 ++++++++++++++++++++--
+ arch/arm64/boot/dts/ti/k3-am62p5-sk.dts            | 42 ++++++++++++++++++++--
+ 3 files changed, 116 insertions(+), 5 deletions(-)
+---
+base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
+change-id: 20260210-topic-am62a-ioddr-dt-v6-19-0da7712081d7
+
+Best regards,
 -- 
-2.39.2
+Markus Schneider-Pargmann (TI) <msp@baylibre.com>
 
 
