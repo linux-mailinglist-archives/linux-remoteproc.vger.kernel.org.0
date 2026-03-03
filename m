@@ -1,100 +1,92 @@
-Return-Path: <linux-remoteproc+bounces-6659-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-6661-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uEp6HoY4p2mofwAAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-6659-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 03 Mar 2026 20:37:42 +0100
+	id cHvvBo5wp2kEhgAAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-6661-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 04 Mar 2026 00:36:46 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FA8C1F6273
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 03 Mar 2026 20:37:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DB191F86AF
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 04 Mar 2026 00:36:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 26CF33018E1B
-	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Mar 2026 19:33:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9755730610F1
+	for <lists+linux-remoteproc@lfdr.de>; Tue,  3 Mar 2026 23:36:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CC383976BD;
-	Tue,  3 Mar 2026 19:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D8BB366DDE;
+	Tue,  3 Mar 2026 23:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="cw10SYVS"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="wPr0ZyBg"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011022.outbound.protection.outlook.com [40.93.194.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36DA63976AE
-	for <linux-remoteproc@vger.kernel.org>; Tue,  3 Mar 2026 19:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772566331; cv=none; b=NEbsXV4qAqIq5NpbSuKw3LZCB8Wu3t5jHJIf/KyG3OQt48Rd5XYvs/o2SjpiLLtqkMXPw1mPCdWDU7iu4CNBsBNTqbnYKQnnB4sdr3dpzM34xlKAhvosEQ8CQ0OeQA6Vt9Y6OvmTsbVblMbnExzKRZiDEgNEdB2KPQJk1rEro74=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772566331; c=relaxed/simple;
-	bh=Gf5eeNAe7Cr11h709c9BHil3kb9/QlMdiA0MqCeCitE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i1Kmoezm2BnHm7Zod8GLyRXKePUwLL2xlrq0ZU05HlxzjFbc+jLH0MKiHuu/YMEDKAbLlBWiMKHYXUR47Sbil8+3OtBbrjMtTidLUzcc7gpFLMh9BkXAiKkFoQOjD9noaxGk7W1895EwmEwJYcoN5ZM1bmUl8Qbi/xwTl9+uZfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=cw10SYVS; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=j/Bo7yrFMAchCRfI3p9FgYu/8TRsrIClVI/vqJrM62s=; b=cw10SY
-	VSDDBIMncjsw9I85vcm2bgHLq7GMJJRqXG4XOCLpKthxayrGp0paHslau+AHGd1s
-	dR41SlnooKWBRS8WQoeERXhsFMeKBFnUJHbpmo0xuvwX11+tn20s+k0HMLsgSdLY
-	xjO7f7YY6NifLL67g3Pa2rMyTfIz/05/F4/m0Sa53CMoMzd260GMPJQiALXfCYOb
-	aTFMxQa0XV8IO7FniitASuMiiUYnduYueiKjggYfTq83Ux53lIZcymTfSxrbz1bO
-	Rk6viyJBLq9nz++IZTB+sXzV85siip/fIdJy0H5nZjq5esig8X24Hlkx9QtEe41R
-	eAsC59fy2I51GD0A==
-Received: (qmail 430895 invoked from network); 3 Mar 2026 20:31:43 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 3 Mar 2026 20:31:43 +0100
-X-UD-Smtp-Session: l3s3148p1@/BzYwCNMXKgujnu+
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Waiman Long <longman@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>,
-	David Lechner <dlechner@baylibre.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Lee Jones <lee@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Srinivas Kandagatla <srini@kernel.org>,
-	Antonio Borneo <antonio.borneo@foss.st.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	linux-remoteproc@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	driver-core@lists.linux.dev,
-	linux-iio@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-gpio@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Subject: [PATCH v3 15/15] hwspinlock/treewide: refactor consumer.h from public header
-Date: Tue,  3 Mar 2026 20:26:07 +0100
-Message-ID: <20260303192600.7224-32-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260303192600.7224-17-wsa+renesas@sang-engineering.com>
-References: <20260303192600.7224-17-wsa+renesas@sang-engineering.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D02F3587A2;
+	Tue,  3 Mar 2026 23:36:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.22
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772580996; cv=fail; b=NA1iEwqY7+v4nv7kXIxrFtG3NpoXWrBMcCtj5XZmBKr00I6kyF98HyvjiK8DpJRtCby1+Lns3X5zXnWiSRQ8MbcqiHFc+abubha8xdKVOh2eBPMNRBUDtAlBxhnuzpgSkNqHLIkKrNW7csHyWRTZremVjZNFPEJGW7hlHXKrWps=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772580996; c=relaxed/simple;
+	bh=DEsIj6hkBrV7HMW+ErideaYz+4nPkYqiim2YgTuQwHI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IIJfWzpTvb66DVbSMQio6GaUjS+jUaMjHHymAofG2+jJSq4BPDup2rskJ8YeDZgvNzmt8ujFRmpD4HelSbXU5nrcyHnOh1yGwz4WYnECq8oYeQIpNzQZLL3WqDJvmKo5CPWNPYs0pmS/XEuisAFFeYHeNv27qccS+nopQcVk4ok=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=wPr0ZyBg; arc=fail smtp.client-ip=40.93.194.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=E4KVUcqQx1n7kmGoLlg/lm4K1r/fQrOAs8aKF91lvLxU04sqyLq+UCo23p8Kwp0HTnZRkXe5KRSA8TKEwJx5WJFwfKqh/C0M3cXwtHsGC2nzBoTgJEoGuFCdeVzBUcp47n9D0dAdV4HVlwNagXURegmV/tCN7ksjZJLxa9RSV4fxyKdOD1C0Wg/4T0gt3Fk+Shlwg04TLEqle60ReBb4xcQLxD3tQ5mye/4KRdfbWAlsR1cPYAQT48fw+T//heyD561fHyih0rXSO6hcJClwjHf0IV2x0eimDQWE5q0Zu5ZVlHjXmtvUKCHlnVoony124ASntlEaO/CZJBd28n0lwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SqNqS5FNPn32/vt2c1xDr2oKXGNjB/NRyuUAJtl9etU=;
+ b=OHZOAtcPr9HvZ80pudh4R2KLq5ZWzAP5gwTBPphUokOC7rDCyRrPJoTC1eYc7fHJJoEkKxfxCbuJywCxLLCom0fbwTzyEvsPDiBhvjUhNt9jf+iW72eGD8q/Sh5DZ7uK+qMH3wwHsw9I5MeJo9ORdhauWFQBtJyjaALcaeiXTZwmnyFl3nPaQ9QNgkBbLPEzPwu2/bng82+nI/Q+GMizPqAqmSDw/UQkQBYmHl7zXWhPTDQaTUq6nMBfuhGv1nk29MozSIICWrA3L9XrC7lxB7v/llZzEnhdfQ/Oe4r4KCN9zlySvsyzT7uvqyr/sRapq7WQSqdkjpmnYqRunkgGjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SqNqS5FNPn32/vt2c1xDr2oKXGNjB/NRyuUAJtl9etU=;
+ b=wPr0ZyBgylu1SGLY4LsRdYPuHI+rtFb90k1bCDquINQZTEe8hpXDoMDeY6ZAgQ5AKNDeqLg+pDxg9m46IdicrammzdOCmSbrg5QBLDUajOuyXA9675MAhr+9JIutFp2eA0sKo5BtGLaCXmsVq0CI3TRsmUktQdRngtYRNs7pA0E=
+Received: from PH8PR22CA0015.namprd22.prod.outlook.com (2603:10b6:510:2d1::23)
+ by IA1PR12MB8312.namprd12.prod.outlook.com (2603:10b6:208:3fc::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.22; Tue, 3 Mar
+ 2026 23:36:31 +0000
+Received: from SN1PEPF000397AF.namprd05.prod.outlook.com
+ (2603:10b6:510:2d1:cafe::e2) by PH8PR22CA0015.outlook.office365.com
+ (2603:10b6:510:2d1::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.22 via Frontend Transport; Tue,
+ 3 Mar 2026 23:36:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
+Received: from satlexmb08.amd.com (165.204.84.17) by
+ SN1PEPF000397AF.mail.protection.outlook.com (10.167.248.53) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9654.16 via Frontend Transport; Tue, 3 Mar 2026 23:36:30 +0000
+Received: from satlexmb10.amd.com (10.181.42.219) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Tue, 3 Mar
+ 2026 17:36:29 -0600
+Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb10.amd.com
+ (10.181.42.219) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Tue, 3 Mar
+ 2026 17:36:29 -0600
+Received: from xsjtanmays50.xilinx.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Tue, 3 Mar 2026 17:36:28 -0600
+From: Tanmay Shah <tanmay.shah@amd.com>
+To: <andersson@kernel.org>, <mathieu.poirier@linaro.org>
+CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Tanmay
+ Shah <tanmay.shah@amd.com>
+Subject: [PATCH v4 0/2] remoteproc: xlnx: remote crash recovery
+Date: Tue, 3 Mar 2026 15:35:31 -0800
+Message-ID: <20260303233533.2310513-1-tanmay.shah@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -102,265 +94,157 @@ List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4FA8C1F6273
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF000397AF:EE_|IA1PR12MB8312:EE_
+X-MS-Office365-Filtering-Correlation-Id: 60685969-9832-439f-94b8-08de797db2b2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700015;
+X-Microsoft-Antispam-Message-Info:
+	xmITVD3vpMXywP46Icwg+m9GGhSQQNcYeLS96v6PZy3FCy0rFwFNqiNPU2wUXOSm+IpAFLHYQo8PEiD/tRXCq7Q90kVsIaVRHvqStL58NH3VezPkB8E+Cg4GXxVVzsuCsxDC4ZxWbOeNjWx3fbNuCED2KGg7SUdTrj25SMMx4AufBhnNQ5DOuUbdw1OSC4W4Y7mRdRBNCQDgwGQAJVQMieLaU1p3JwM8HPUPRhyY6oGXZ/LWQMKTPwtopkZdbxhLY2OhYiH3tJaLKJHi2EgeLsKjNIFUKDGJcXJpbbSR7FeqhMKXQ6nR+KBmjJ7FFJKm/Rp4EsepOvMrbqk3CgLIifx9NoZU4tsZloRgFtpTa7jZL8W2M2QBR3FvrgRoXub2YQgJYebA0Nuig+GKCZvYnYTdZKHMqMtINq4k/n3WzzTuUNTZ676V92SvLH37+W56OsvSrrmgAgUS0o4jZB3JmXdye/GJl7siSxNTVnT27bPNpY5y9aiGxk3SWF6c/GkJJO87ihLbkuOZNaskvQIfuadDZw7o7XECCObRxs3ehqonDVXG2J/g0O2GiG2H5PirK5WV+OibUwt8+yW1RqyA0u0KI6bhvFGqgNm+lw7Kf+CCqmDKPP2UjJLOwNPN12BjJo9HjKvszTgACiLRDYi+OgmVeRIav5jKaABTCfFI60s9DuCKq3xyT+UAr9dV1RHgqW+oEX0XgomNjqhCuTqEMDgmXj62iQXcCjrIpWGxoOhuqoneOlW4TbuHv+uKWjnFUmRBIAguvz/y8ou0OCJKdQ==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	eE7t/M3QB8LHs22wYAGpGpmJcIGRXazldcFEashtNM6wsaHQMTaYrPSZU9WG6iEGVMqPYiwAUqj/g3Pl7uTVnklZnWZml7LKebo7pl4zoCeziRAgzYYGxMTADYDEcnJFhbqwXqC18ZmtIz/PZBKtYQvRcpUUp8H65ZoaNkZBwbNSuHRz6E+RRLfPAmy6FEASz2TL6sFbYaG9slcUDZbMIG8sI2iOH4hkw40EwLApo7h9yyf88NOYc67S23nXCtM1OdgN9t3pQeKMoDe91WslzcGid8R27LRXt2t238H6PZtbud7BDpJt08iIYJ/jF1gZnWLxymeqySwQwgGthBD9lBu1bs1cs49y+Uucih7jc6NXA0t9bedfWrCHuH52gmkBwucqaEEgUvK00yg9DJR3KieoEQhuz9O6DGn8WdYMUT2S/kGA84bfnL2E87GdtOtq
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2026 23:36:30.8460
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60685969-9832-439f-94b8-08de797db2b2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF000397AF.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8312
+X-Rspamd-Queue-Id: 9DB191F86AF
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[sang-engineering.com:s=k1];
+	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6659-lists,linux-remoteproc=lfdr.de,renesas];
-	DMARC_NA(0.00)[sang-engineering.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[41];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,sang-engineering.com,kernel.org,huawei.com,linux.alibaba.com,infradead.org,redhat.com,lwn.net,linuxfoundation.org,baylibre.com,analog.com,gmail.com,foss.st.com,arndb.de,lists.linux.dev,st-md-mailman.stormreply.com,lists.infradead.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wsa@sang-engineering.com,linux-remoteproc@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[sang-engineering.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-remoteproc,renesas];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sang-engineering.com:dkim,sang-engineering.com:email,sang-engineering.com:mid,ti.com:url,intel.com:email,wizery.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6661-lists,linux-remoteproc=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tanmay.shah@amd.com,linux-remoteproc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[amd.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,amd.com:dkim,amd.com:mid];
+	TAGGED_RCPT(0.00)[linux-remoteproc];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[9]
 X-Rspamd-Action: no action
 
-Factor out the entries only needed for consumers from the generic public
-header. This allows for a clean separation between providers and
-consumers. Also remove contact field in favor of MAINTAINERS entries.
-Fix the users, too.
+Remote processor can crash or hang during normal execution. Linux
+remoteproc framework supports different mechanisms to recover the
+remote processor and re-establish the RPMsg communication in such case.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Acked-by: Mark Brown <broonie@kernel.org>
-Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com> # for IIO
----
- Documentation/locking/hwspinlock.rst              |  2 +-
- MAINTAINERS                                       |  1 -
- drivers/base/regmap/regmap.c                      |  2 +-
- drivers/hwspinlock/hwspinlock_core.c              |  2 +-
- drivers/iio/adc/sc27xx_adc.c                      |  2 +-
- drivers/irqchip/irq-stm32mp-exti.c                |  2 +-
- drivers/mfd/syscon.c                              |  2 +-
- drivers/nvmem/sc27xx-efuse.c                      |  2 +-
- drivers/nvmem/sprd-efuse.c                        |  2 +-
- drivers/pinctrl/stm32/pinctrl-stm32.c             |  2 +-
- drivers/soc/qcom/smem.c                           |  2 +-
- drivers/spi/spi-sprd-adi.c                        |  2 +-
- .../linux/{hwspinlock.h => hwspinlock/consumer.h} | 15 ++++++---------
- 13 files changed, 17 insertions(+), 21 deletions(-)
- rename include/linux/{hwspinlock.h => hwspinlock/consumer.h} (98%)
+Crash reporting on AMD-Xilinx platform:
 
-diff --git a/Documentation/locking/hwspinlock.rst b/Documentation/locking/hwspinlock.rst
-index a737c702a7d1..001bcab86690 100644
---- a/Documentation/locking/hwspinlock.rst
-+++ b/Documentation/locking/hwspinlock.rst
-@@ -306,7 +306,7 @@ Typical usage
- 
- ::
- 
--	#include <linux/hwspinlock.h>
-+	#include <linux/hwspinlock/consumer.h>
- 	#include <linux/err.h>
- 
- 	int hwspinlock_example(void)
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 4e95cbb48dd8..e1acfc1d6656 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11216,7 +11216,6 @@ F:	Documentation/devicetree/bindings/hwlock/
- F:	Documentation/locking/hwspinlock.rst
- F:	drivers/hwspinlock/
- F:	include/linux/hwspinlock/
--F:	include/linux/hwspinlock.h
- 
- HARDWARE TRACING FACILITIES
- M:	Alexander Shishkin <alexander.shishkin@linux.intel.com>
-diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
-index 607c1246d994..d25494495469 100644
---- a/drivers/base/regmap/regmap.c
-+++ b/drivers/base/regmap/regmap.c
-@@ -16,7 +16,7 @@
- #include <linux/sched.h>
- #include <linux/delay.h>
- #include <linux/log2.h>
--#include <linux/hwspinlock.h>
-+#include <linux/hwspinlock/consumer.h>
- #include <linux/unaligned.h>
- 
- #define CREATE_TRACE_POINTS
-diff --git a/drivers/hwspinlock/hwspinlock_core.c b/drivers/hwspinlock/hwspinlock_core.c
-index 6c8a03deb00c..e78ec4b5cfa3 100644
---- a/drivers/hwspinlock/hwspinlock_core.c
-+++ b/drivers/hwspinlock/hwspinlock_core.c
-@@ -12,7 +12,7 @@
- #include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/err.h>
--#include <linux/hwspinlock.h>
-+#include <linux/hwspinlock/consumer.h>
- #include <linux/hwspinlock/provider.h>
- #include <linux/jiffies.h>
- #include <linux/kernel.h>
-diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
-index 6209499c5c37..8a881d63b7dd 100644
---- a/drivers/iio/adc/sc27xx_adc.c
-+++ b/drivers/iio/adc/sc27xx_adc.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (C) 2018 Spreadtrum Communications Inc.
- 
--#include <linux/hwspinlock.h>
-+#include <linux/hwspinlock/consumer.h>
- #include <linux/iio/iio.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-diff --git a/drivers/irqchip/irq-stm32mp-exti.c b/drivers/irqchip/irq-stm32mp-exti.c
-index a24f4f1a4f8f..25d5aa67728a 100644
---- a/drivers/irqchip/irq-stm32mp-exti.c
-+++ b/drivers/irqchip/irq-stm32mp-exti.c
-@@ -6,7 +6,7 @@
-  */
- 
- #include <linux/bitops.h>
--#include <linux/hwspinlock.h>
-+#include <linux/hwspinlock/consumer.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/irq.h>
-diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
-index 21a7fcdd2737..8ec74f8513d7 100644
---- a/drivers/mfd/syscon.c
-+++ b/drivers/mfd/syscon.c
-@@ -11,7 +11,7 @@
- #include <linux/cleanup.h>
- #include <linux/clk.h>
- #include <linux/err.h>
--#include <linux/hwspinlock.h>
-+#include <linux/hwspinlock/consumer.h>
- #include <linux/list.h>
- #include <linux/mutex.h>
- #include <linux/of.h>
-diff --git a/drivers/nvmem/sc27xx-efuse.c b/drivers/nvmem/sc27xx-efuse.c
-index 4e2ffefac96c..309090cd4ff0 100644
---- a/drivers/nvmem/sc27xx-efuse.c
-+++ b/drivers/nvmem/sc27xx-efuse.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (C) 2018 Spreadtrum Communications Inc.
- 
--#include <linux/hwspinlock.h>
-+#include <linux/hwspinlock/consumer.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-diff --git a/drivers/nvmem/sprd-efuse.c b/drivers/nvmem/sprd-efuse.c
-index 1a7e4e5d8b86..92e3092719ba 100644
---- a/drivers/nvmem/sprd-efuse.c
-+++ b/drivers/nvmem/sprd-efuse.c
-@@ -3,7 +3,7 @@
- 
- #include <linux/clk.h>
- #include <linux/delay.h>
--#include <linux/hwspinlock.h>
-+#include <linux/hwspinlock/consumer.h>
- #include <linux/io.h>
- #include <linux/module.h>
- #include <linux/nvmem-provider.h>
-diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c b/drivers/pinctrl/stm32/pinctrl-stm32.c
-index 6a99708a5a23..17b2072d609e 100644
---- a/drivers/pinctrl/stm32/pinctrl-stm32.c
-+++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
-@@ -10,7 +10,7 @@
- #include <linux/clk.h>
- #include <linux/export.h>
- #include <linux/gpio/driver.h>
--#include <linux/hwspinlock.h>
-+#include <linux/hwspinlock/consumer.h>
- #include <linux/io.h>
- #include <linux/irq.h>
- #include <linux/mfd/syscon.h>
-diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
-index d5c94b47f431..6d574d65b4a3 100644
---- a/drivers/soc/qcom/smem.c
-+++ b/drivers/soc/qcom/smem.c
-@@ -4,7 +4,7 @@
-  * Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
-  */
- 
--#include <linux/hwspinlock.h>
-+#include <linux/hwspinlock/consumer.h>
- #include <linux/io.h>
- #include <linux/module.h>
- #include <linux/of.h>
-diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
-index e7d83c16b46c..04313e4a63dd 100644
---- a/drivers/spi/spi-sprd-adi.c
-+++ b/drivers/spi/spi-sprd-adi.c
-@@ -5,7 +5,7 @@
-  */
- 
- #include <linux/delay.h>
--#include <linux/hwspinlock.h>
-+#include <linux/hwspinlock/consumer.h>
- #include <linux/init.h>
- #include <linux/io.h>
- #include <linux/kernel.h>
-diff --git a/include/linux/hwspinlock.h b/include/linux/hwspinlock/consumer.h
-similarity index 98%
-rename from include/linux/hwspinlock.h
-rename to include/linux/hwspinlock/consumer.h
-index 4fe1c8831cd1..f476222ec924 100644
---- a/include/linux/hwspinlock.h
-+++ b/include/linux/hwspinlock/consumer.h
-@@ -1,17 +1,16 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Hardware spinlock public header
-+ * Hardware spinlock public header for consumers
-  *
-  * Copyright (C) 2010 Texas Instruments Incorporated - http://www.ti.com
-- *
-- * Contact: Ohad Ben-Cohen <ohad@wizery.com>
-+ * Copyright (C) 2026 Sang Engineering
-+ * Copyright (C) 2026 Renesas Solutions Corp.
-  */
- 
--#ifndef __LINUX_HWSPINLOCK_H
--#define __LINUX_HWSPINLOCK_H
-+#ifndef __LINUX_HWSPINLOCK_CONSUMER_H
-+#define __LINUX_HWSPINLOCK_CONSUMER_H
- 
- #include <linux/err.h>
--#include <linux/sched.h>
- 
- /* hwspinlock mode argument */
- #define HWLOCK_IRQSTATE		0x01 /* Disable interrupts, save state */
-@@ -22,8 +21,6 @@
- struct device;
- struct device_node;
- struct hwspinlock;
--struct hwspinlock_device;
--struct hwspinlock_ops;
- 
- #ifdef CONFIG_HWSPINLOCK
- 
-@@ -403,4 +400,4 @@ static inline void hwspin_unlock(struct hwspinlock *hwlock)
- 	__hwspin_unlock(hwlock, 0, NULL);
- }
- 
--#endif /* __LINUX_HWSPINLOCK_H */
-+#endif /* __LINUX_HWSPINLOCK_CONSUMER_H */
+1) Using debugfs node
+
+User can report the crash to the core framework via debugfs node using
+following command:
+
+echo 1 > /sys/kernel/debug/remoteproc/remoteproc0/crash
+
+2) Remoteproc notify to the host about crash state and crash reason
+via the resource table
+
+This is a platform specific method where the remote firmware contains
+vendor specific resource to update the crash state and the crash
+reason. Then the remote notifies the crash to the host via mailbox
+notification. The host then will check this resource on every mbox
+notification and reports the crash to the core framework if needed.
+
+Crash recovery mechanism on AMD-Xilnx platform:
+
+There are two mechanisms available to recover the remote processor from
+the crash. 1) boot recovery, 2) attach on recovery
+
+Remoteproc core framework will choose proper mechanism based on the
+rproc features set by the platform driver.
+
+1) Boot recovery
+
+This is the default mechanism to recover the remote processor.
+In this method core framework will first stop the remote processor,
+load the firmware again and then starts the remote processor. On
+AMD-Xilinx platforms this method is supported. The default coredump
+method is supported.
+
+2) Attach on recovery
+
+If RPROC_ATTACH_ON_RECOVERY feature is enabled by the platform driver,
+then the core framework will choose this method for recovery.
+
+On versal and later platforms following is the sequence of events expected
+during remoteproc crash and attach on recovery:
+
+a) Remoteproc attach/detach flow is working, and RPMsg comm is established
+b) Remote processor (RPU) crashed (crash not reported yet)
+c) Platform management controller is instructed to stop and reload elf
+   on inactive remote processor before reboot (platform specific method)
+d) Platform management controller reboots the remote processor
+e) Remote processor boots again, and detects previous crash (platform
+   specific mechanism to detect the crash)
+f) Remote processor Reports crash to the Linux (Host) and wait for
+   the recovery.
+g) Linux performs full detach and reattach to remote processor.
+h) Normal RPMsg communication is established.
+
+It is required to destroy all RPMsg related resources and recreate them
+during recovery to establish successful RPMsg communication. To achieve
+this complete rproc_detach followed by rproc_boot calls are needed. That
+is what this patch-series is fixing along with adding rproc recovery
+methods for AMD-Xilinx platforms.
+
+Change log:
+
+Changes in 3: 
+  - both rproc_attach_recovery() and
+    rproc_boot_recovery() are called the same way.
+  - remove unrelated changes
+  - %s/kick/mailbox notification/
+  - %s/core framework/rproc core framework/
+  - fold simple function within zynqmp_r5_handle_rsc().
+  - remove spurious change
+  - reset crash state after reporting the crash
+  - document set and reset of ATTACH_ON_RECOVERY flag
+  - set recovery_disabled flag to false
+  - check condition rproc->crash_reason != NULL
+
+Changes in v2:
+  - use rproc_boot instead of rproc_attach
+  - move debug message early in the function
+  - clear attach recovery boot flag during detach and stop ops
+Tanmay Shah (2):
+  remoteproc: core: full attach detach during recovery
+  remoteproc: xlnx: add crash detection mechanism
+
+ drivers/remoteproc/remoteproc_core.c    | 15 +++++-
+ drivers/remoteproc/xlnx_r5_remoteproc.c | 71 ++++++++++++++++++++++++-
+ 2 files changed, 84 insertions(+), 2 deletions(-)
+
+
+base-commit: 098493c6dced7b02545e8bd0053ef4099a2b769e
 -- 
-2.51.0
+2.34.1
 
 
