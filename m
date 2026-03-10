@@ -1,136 +1,198 @@
-Return-Path: <linux-remoteproc+bounces-6819-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-6820-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CC1UNZ7mr2nkdAIAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-6819-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2026 10:38:38 +0100
+	id wNGGHoLnr2nkdAIAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-6820-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2026 10:42:26 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96B272489DB
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2026 10:38:38 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 812F9248B14
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2026 10:42:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 25533305FC44
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2026 09:33:18 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DAFD530093B1
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 10 Mar 2026 09:39:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63F2E43DA5F;
-	Tue, 10 Mar 2026 09:33:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8741343DA39;
+	Tue, 10 Mar 2026 09:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mY3Ca3/H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H2KpT2PX"
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419CA43DA54
-	for <linux-remoteproc@vger.kernel.org>; Tue, 10 Mar 2026 09:33:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6309343DA26
+	for <linux-remoteproc@vger.kernel.org>; Tue, 10 Mar 2026 09:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773135193; cv=none; b=LYu8QYxtsbuc+IS1kHny9cRCb7DR6SIOcrV6fQfbCyYXGYh1oIk/fxIsMMhlBKMaihU9V+/Rw+Uxzqj/d9NXycZtiyaRL+8vQGv60qeOY1qGt9h7f3BzLpw9u4YtfT548284Lq/HYgo4aA5+tzZH99AeimUJQfjrc7scrntv2Mo=
+	t=1773135574; cv=none; b=rq0czLps1OpPT1vFrdMdjsy2bbaDUZYoBm3J8Q5SX4LJaU1lr7vzN7EIXfVI0XrT/aNHMpd4TvFNYUNmP+SREoxew8BgcXGEPLNNxzsnyNxmSy90h/oFHWXVu+a4LbdLiG3C/aEithDU3YS+4YxGrl9TP88YVZMqlCMZJgRdhqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773135193; c=relaxed/simple;
-	bh=iJrlNVsjh6+70Ec05z6rXG0svXgiagQ0oIi5LjzykKg=;
+	s=arc-20240116; t=1773135574; c=relaxed/simple;
+	bh=0NvNqkbHvopZkhx6T/+IIZIFE+ZXvBvs4x160lciOgk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DunNhkBcxprETLUNah6QW8kwP3ba/PGiyJ/sLgqBnC+yDhWAOIuXHbTlbRvpklTIxZzti9vnECe7RXEJqz/pIINvPVT8j+W7R22NlHVPxOLYPnJ4/Cvnhf2KXYwilbSgzALRlgKlcefSaSoH7SobivyAMYpD/Ro5uAT0Fwxibbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mY3Ca3/H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 040E2C2BCC9
-	for <linux-remoteproc@vger.kernel.org>; Tue, 10 Mar 2026 09:33:13 +0000 (UTC)
+	 To:Cc:Content-Type; b=MAkMH5I8fPuBnHE++zoEkuOYUucLcPHNwRT+cwfQUy2fL/3SSgt0EO2RFxIIw3YQUDJI2V1Kpipd84ceGHkSPvyMTzEQWdKvpniGJnFWMsOFvM4Kt5Rt9pFH+VNOGF6V/oiHIl8R2h1udInY8aMjOQOcX9KfRHsW7i+82Q6hkRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H2KpT2PX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27DB7C2BCB1
+	for <linux-remoteproc@vger.kernel.org>; Tue, 10 Mar 2026 09:39:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773135193;
-	bh=iJrlNVsjh6+70Ec05z6rXG0svXgiagQ0oIi5LjzykKg=;
+	s=k20201202; t=1773135574;
+	bh=0NvNqkbHvopZkhx6T/+IIZIFE+ZXvBvs4x160lciOgk=;
 	h=References:In-Reply-To:Reply-To:From:Date:Subject:To:Cc:From;
-	b=mY3Ca3/HEqRL1B0J9UDvEJsmn7P7e25xmxrk6/AjzBbbZnYWbAL1l2mRGg0Hu2E/C
-	 o1ZOdicwGfe/YyLu0nB1GZApWdL+Kc0aKRHeOjyjRC9y1GdP7kNe5TMdLNvp5hnGj0
-	 DXu5vC4qWM6T6nUb1k+q6VPiD8Kn4g/7Mcm5Lv6U3anSCEwICiGf3Qst6C3wsl2pkm
-	 BFGiiOOaaVND/P/IoZ8KVVez8URAYrTO5u0YI8eWR2aHRFvpFJUYfoVyFFsYgHUiGk
-	 FljTkyWz5rhYUpZCJUZK9EDqP+TC6oCqVNMj/VZkQ9gvQhW74dLRDg4evWaPDd9gtj
-	 Uy+bWPerEqlLw==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-38a2a59baa6so54208361fa.2
-        for <linux-remoteproc@vger.kernel.org>; Tue, 10 Mar 2026 02:33:12 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXBVNmCg0H20lPIia0eoqWFRg5SPlDh/qOnSX98zfoQlS/+NUQpEThUkRxMoeVwkStngaJyjRKFBZB2xAIIZqbp@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPJ3P45zeosAYupjmKkaxuDZTI3S6cFMRg382rF2xB7aAYV63b
-	3DZvIPOGUUte+ImTx552PZjAcg3F0/J7vxKeTwlLjGUdVpm4GHDRi28YGvxGHgz7hcQ+loQEy3W
-	CRRBT4Si9b1jJ/pidJakeoM12l6exfIE=
-X-Received: by 2002:a2e:bd82:0:b0:387:20:bdbc with SMTP id 38308e7fff4ca-38a40d61d78mr46199441fa.12.1773135191017;
- Tue, 10 Mar 2026 02:33:11 -0700 (PDT)
+	b=H2KpT2PXchY67iKw4BU6/Yl1d5CyFTJydVwdKiWhENgeBM56oCA722NqgJC/ZRPIG
+	 mcX0jIQIx1kcMLR4OAZYfqOZhUuRE8gNRiDITuGd8390h+DBEOY3DKTZeZoT8Lj5ar
+	 nVvSqlDVfImNkLRJWGOl6ukW7wHz2UZOTRMp7uhj+htw+N2CB3c65aiGg5qW6tW9sy
+	 Ak9PlF6y3l0DaC1BlEqnIrD7tMN1F9ugJ8VYbpYFwJJtAT8OcQG0kIoU52TdKendeA
+	 R5pbTOaQ167IykMHzzTJNVBSeraixqXTaF2fxtNnL3Y4GzbNRkW+CgoOijPvyqjJBh
+	 GecNHMqtZ/Omw==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5a13d6a2d7bso3484045e87.1
+        for <linux-remoteproc@vger.kernel.org>; Tue, 10 Mar 2026 02:39:34 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX8B6yc5S3VNGbhnCl2RdFJU+GeLB/0hyEy1bP2YRC2Y+VxLoBqjxgO+nkRXCS12jGUI93ZoUvLRMVxUpCsdKja@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6NnmjHGhy1JABFCH9kDP2oUjmUe3tnBaFK7ZnQZg6EopII00I
+	rx0Q57zI9uz0snlAfqAPLTJHA3mdVp00SbJ5fUadaQ71MoOEDE16Ak8bVo6YV0l/hX8vN3PvCHo
+	y8ec18RrscdZ0Nzn/VPbhuj6LVilZUWI=
+X-Received: by 2002:a05:651c:20ce:10b0:38a:3660:7feb with SMTP id
+ 38308e7fff4ca-38a5d010b86mr7646831fa.9.1773135572499; Tue, 10 Mar 2026
+ 02:39:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260310075539.11701-1-wsa+renesas@sang-engineering.com> <20260310075539.11701-4-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20260310075539.11701-4-wsa+renesas@sang-engineering.com>
+References: <20260310075539.11701-1-wsa+renesas@sang-engineering.com> <20260310075539.11701-10-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20260310075539.11701-10-wsa+renesas@sang-engineering.com>
 Reply-To: wens@kernel.org
 From: Chen-Yu Tsai <wens@kernel.org>
-Date: Tue, 10 Mar 2026 17:32:56 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65gV+2xZDO7h9Dsx=iOHX6Jt_JyHTOeWRYaEMuC+jR1FA@mail.gmail.com>
-X-Gm-Features: AaiRm51CffgMBtgWhMZCUpMdeeAdI463XBf8sQip2RO0V2c7exzECk92c7gy0OY
-Message-ID: <CAGb2v65gV+2xZDO7h9Dsx=iOHX6Jt_JyHTOeWRYaEMuC+jR1FA@mail.gmail.com>
-Subject: Re: [PATCH v4 03/15] hwspinlock: add helpers to retrieve core data
+Date: Tue, 10 Mar 2026 17:39:20 +0800
+X-Gmail-Original-Message-ID: <CAGb2v64gTM41Q3aBkS+dqJ7w9fHtePte-6jeoFR3j-O1_aX9-Q@mail.gmail.com>
+X-Gm-Features: AaiRm504Z-6QWp77ZJMLsW12D2p9SNHT7rtRZg5o6Wu6DQVg4_G6syeE7d95ZJ4
+Message-ID: <CAGb2v64gTM41Q3aBkS+dqJ7w9fHtePte-6jeoFR3j-O1_aX9-Q@mail.gmail.com>
+Subject: Re: [PATCH v4 09/15] hwspinlock: sun6i: use new callback to
+ initialize hwspinlock priv
 To: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Bjorn Andersson <andersson@kernel.org>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Orson Zhai <orsonzhai@gmail.com>, Chunyan Zhang <zhang.lyra@gmail.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Wilken Gottwalt <wilken.gottwalt@posteo.net>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Wilken Gottwalt <wilken.gottwalt@posteo.net>, Bjorn Andersson <andersson@kernel.org>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
 	Samuel Holland <samuel@sholland.org>, linux-remoteproc@vger.kernel.org, 
-	linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, 
 	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 96B272489DB
+X-Rspamd-Queue-Id: 812F9248B14
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6819-lists,linux-remoteproc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,posteo.net,kernel.org,linux.alibaba.com,gmail.com,sholland.org,lists.infradead.org,lists.linux.dev];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,linux.alibaba.com,gmail.com,foss.st.com,posteo.net,sholland.org,st-md-mailman.stormreply.com,lists.infradead.org,lists.linux.dev];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	DKIM_TRACE(0.00)[kernel.org:+];
+	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6820-lists,linux-remoteproc=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	REPLYTO_ADDR_EQ_FROM(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[wens@kernel.org,linux-remoteproc@vger.kernel.org];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-remoteproc,renesas];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	HAS_REPLYTO(0.00)[wens@kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,sang-engineering.com:email]
 X-Rspamd-Action: no action
 
 On Tue, Mar 10, 2026 at 3:56=E2=80=AFPM Wolfram Sang
 <wsa+renesas@sang-engineering.com> wrote:
 >
-> This is a first step to hide internal core structs from hwspinlock
-> providers. It adds helper functions to retrieve the data needed by them.
-> Because all users are only within the hwspinlock subsystem and the
-> change there is trivial, conversion is included in this patch as well.
+> Apply the new helper to avoid using internal structures from the core.
+> Remove superfluous setting of drvdata while here.
 >
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Reviewed-by: Chen-Yu Tsai <wens@kernel.org>
 > ---
->  drivers/hwspinlock/hwspinlock_core.c  | 12 ++++++++++++
->  drivers/hwspinlock/omap_hwspinlock.c  |  4 ++--
->  drivers/hwspinlock/qcom_hwspinlock.c  | 11 ++++++-----
->  drivers/hwspinlock/sprd_hwspinlock.c  |  6 +++---
->  drivers/hwspinlock/stm32_hwspinlock.c |  4 ++--
+>  drivers/hwspinlock/sun6i_hwspinlock.c | 18 ++++++++----------
+>  1 file changed, 8 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/hwspinlock/sun6i_hwspinlock.c b/drivers/hwspinlock/s=
+un6i_hwspinlock.c
+> index a0c76bba3f05..c3db81cb1793 100644
+> --- a/drivers/hwspinlock/sun6i_hwspinlock.c
+> +++ b/drivers/hwspinlock/sun6i_hwspinlock.c
+> @@ -74,9 +74,15 @@ static void sun6i_hwspinlock_unlock(struct hwspinlock =
+*lock)
+>         writel(SPINLOCK_NOTTAKEN, lock_addr);
+>  }
+>
+> +static void *sun6i_hwspinlock_init_priv(int local_id, void *init_data)
+> +{
+> +       return init_data + sizeof(u32) * local_id;
+> +}
+> +
+>  static const struct hwspinlock_ops sun6i_hwspinlock_ops =3D {
+>         .trylock        =3D sun6i_hwspinlock_trylock,
+>         .unlock         =3D sun6i_hwspinlock_unlock,
+> +       .init_priv      =3D sun6i_hwspinlock_init_priv,
+>  };
+>
+>  static void sun6i_hwspinlock_disable(void *data)
+> @@ -91,10 +97,9 @@ static void sun6i_hwspinlock_disable(void *data)
+>  static int sun6i_hwspinlock_probe(struct platform_device *pdev)
+>  {
+>         struct sun6i_hwspinlock_data *priv;
+> -       struct hwspinlock *hwlock;
+>         void __iomem *io_base;
+>         u32 num_banks;
+> -       int err, i;
+> +       int err;
+>
+>         io_base =3D devm_platform_ioremap_resource(pdev, SPINLOCK_BASE_ID=
+);
+>         if (IS_ERR(io_base))
+> @@ -161,11 +166,6 @@ static int sun6i_hwspinlock_probe(struct platform_de=
+vice *pdev)
+>                 goto bank_fail;
+>         }
+>
+> -       for (i =3D 0; i < priv->nlocks; ++i) {
+> -               hwlock =3D &priv->bank->lock[i];
+> -               hwlock->priv =3D io_base + SPINLOCK_LOCK_REGN + sizeof(u3=
+2) * i;
+> -       }
+> -
+>         /* failure of debugfs is considered non-fatal */
+>         sun6i_hwspinlock_debugfs_init(priv);
+>         if (IS_ERR(priv->debugfs))
+> @@ -177,10 +177,8 @@ static int sun6i_hwspinlock_probe(struct platform_de=
+vice *pdev)
+>                 goto bank_fail;
+>         }
+>
+> -       platform_set_drvdata(pdev, priv);
+> -
+>         return devm_hwspin_lock_register(&pdev->dev, priv->bank, &sun6i_h=
+wspinlock_ops,
+> -                                        SPINLOCK_BASE_ID, priv->nlocks, =
+NULL);
+> +                                        SPINLOCK_BASE_ID, priv->nlocks, =
+io_base + SPINLOCK_LOCK_REGN);
+>
+>  bank_fail:
+>         clk_disable_unprepare(priv->ahb_clk);
 
->  drivers/hwspinlock/sun6i_hwspinlock.c |  4 ++--
+Just a note, I see further code savings in using the clk and reset devm_
+helpers. I'll do this after this series is merged, as the context overlaps.
 
-Acked-by: Chen-Yu Tsai <wens@kernel.org> # sun6i
+
+ChenYu
 
