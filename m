@@ -1,384 +1,142 @@
-Return-Path: <linux-remoteproc+bounces-6899-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-6900-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OHemLGUxsWm0rwIAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-6899-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 Mar 2026 10:09:57 +0100
+	id SN9ME/84sWkLswIAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-6900-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 Mar 2026 10:42:23 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B89CC26009C
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 Mar 2026 10:09:56 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB1BA260F3E
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 Mar 2026 10:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id AD363300F28F
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 Mar 2026 09:09:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2F00034B1B63
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 11 Mar 2026 09:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DA4E3BD23F;
-	Wed, 11 Mar 2026 09:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF6153AEF25;
+	Wed, 11 Mar 2026 09:25:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hiav0/5S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IK9qaKAc"
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA234372EFE;
-	Wed, 11 Mar 2026 09:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504363C9ED1
+	for <linux-remoteproc@vger.kernel.org>; Wed, 11 Mar 2026 09:25:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773220162; cv=none; b=L9G/BVX7S9QHGoKsOVNqIY2PoSFqOWAuP4yq0eS7RIM0xD0yrNoCjy8OuYgIGP4l16IEF9DgCMwV300fboyWH4CuUOPjsfEmE4CIUHZfhiO/frOaDCiCK44oMpDIpUakRWZot9C+kpBnepaLETc7Y8Ce3uAlOx/RNEU/hTuSzCg=
+	t=1773221113; cv=none; b=Kh2Lha2nxPt0BDitDlSblrtX4/GHJvb3lYwcXZPwhr0Ru2iYQf2WYxe/A0ijnHZHLlFiqHATPh5ibDxBOKVhqRlqyMrixSbl/ctQm9OHgoxhoc390FpKfg54LACsUpI0r0nxCK/VsqnuBhIU8Y0UejVfKup9B5qPBtRJ6OEFId0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773220162; c=relaxed/simple;
-	bh=82aUC4VRpBGw7JMuttBYhm6dWXOcxLKrXkiWiKokSkc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jA86p5hNHRazNRIOu1r1qHyEYdUKyurQX1CcgrbCmfY+i1Mrfha/Is0uBqxHN8jTWAl66NrJId0jT1ldiRoBw5tIEL9leeSKyAUgJOh6062HuxRqzgjb+4fxhzNZ9Vdg9kqAaCk438hPp3/IIFMFgtDxiMGdLFS7E9iY9TRje/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hiav0/5S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97481C4CEF7;
-	Wed, 11 Mar 2026 09:09:21 +0000 (UTC)
+	s=arc-20240116; t=1773221113; c=relaxed/simple;
+	bh=01GKf65j/jScrwoKQ+C2Gxr6oYYNcBqF+y3kaUEjbLo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L2Xyc/I9hTRF5wm7cBifkxgbBbgoxqjDoN8E0NxtcE+OCgSWxeIThV7eHOhYluLjaXuIrv2AdfB9CEydEWhEaybMTG8OQLgcj9+mofMQcIFTPvSFJci5rvrZviPRefbz+T1+F4O2TjISAnY5VIu6Ddnq4IyJUJSO9LaPXl0tzfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IK9qaKAc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD68C2BCAF
+	for <linux-remoteproc@vger.kernel.org>; Wed, 11 Mar 2026 09:25:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773220162;
-	bh=82aUC4VRpBGw7JMuttBYhm6dWXOcxLKrXkiWiKokSkc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hiav0/5SDxMf9zR8suSIZHhKHiHBJdBn25HKmiP6Nvb/vZamKVkRaC+bkUU+MMoo3
-	 Ni0yaCeLrupAUaWRFNEnAuXIqphbhDlWgHLpNADqlynBDF7c35TM9zxQLOe8P0jKnC
-	 d1QXefq7ueIltcKqNd6w6N5kWro0EIIaImFy76V51md/QPFfq9cNwZLAKiY4+Iu9zH
-	 OAoeKfTgXg0iSyPWwQKKoQ/v1L08Sm6Dj3xv/KywOB97OeG83b4hfoG2GwyCSdg1IB
-	 zu45S0H/TgnahEqJdikaJQTJWaM9V9+zgqHuKySEF2INd3fBkw7cRzVCzwi155hFHW
-	 TDLU+bfophjrQ==
-Date: Wed, 11 Mar 2026 10:09:19 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Eugen Hristev <eugen.hristev@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Christoph Lameter <cl@gentwo.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, David Hildenbrand <david@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Kees Cook <kees@kernel.org>, 
-	Brendan Jackman <jackmanb@google.com>, Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <bhe@redhat.com>, 
-	Barry Song <baohua@kernel.org>, Youngjun Park <youngjun.park@lge.com>, 
-	Petr Mladek <pmladek@suse.com>, John Ogness <john.ogness@linutronix.de>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Saravana Kannan <saravanak@kernel.org>, 
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-arm-msm@vger.kernel.org, 
-	linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 25/25] meminspect: Add debug kinfo compatible driver
-Message-ID: <20260311-poetic-transparent-barracuda-b7a3ab@quoll>
-References: <20260311-minidump-v2-v2-0-f91cedc6f99e@oss.qualcomm.com>
- <20260311-minidump-v2-v2-25-f91cedc6f99e@oss.qualcomm.com>
+	s=k20201202; t=1773221113;
+	bh=01GKf65j/jScrwoKQ+C2Gxr6oYYNcBqF+y3kaUEjbLo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=IK9qaKAc40x9w1tTnDGK/5LfwtlPgFMQbzLlkR8KIJgzQd5uLNQvBbpMt2vh78Hdf
+	 uGFIdbEEKhpLM7kwrYSqd/d6UMtbhBEQn6P8nswxyoNEodBRhoszprfEvS+TvD881+
+	 KFaoGOWRRavp+r/ljv2ths/HESZBtfyYFBrTiWerLSWzV1GJ6IEITEuhK9bbwbRQrm
+	 JSrEUBKRCmA4D7VowIA5CT+EyZhNq2ZFR6u9nqkXA7vxtLKcSniNmqjqfUsh5kdNp3
+	 Yb95HaLUCp2J00ygi8cr6kBVXzHmTqlWtuqzhw9aLMoq9bG1iIIGd1/ZYY7er6CZid
+	 6upOZohwnPaqA==
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-79801df3e42so10677977b3.0
+        for <linux-remoteproc@vger.kernel.org>; Wed, 11 Mar 2026 02:25:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUW6EFumEfIjedevYueYUzY/EWIr+K+WtNd2sJQIr7J2mCqdgypm5cnHpoROjXzo/WlOyLJU0BgJnC2HDcieDjl@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGQYUv+5DlmkmZ45v5hFvs+agZw3BgNu6/98nEfql3qIcStbQZ
+	tYHeHtqa+zyhyIfesNzxddwsm38N+dPShapFUehJR6ilh127yvJAUb6AaFZm+2f3nD0h60O+Xcj
+	g7UkzS3ipt40DbPxKs2E6GORAo8haIOw=
+X-Received: by 2002:a05:690c:6d84:b0:794:f400:2bfb with SMTP id
+ 00721157ae682-79917f593b5mr14822137b3.26.1773221111798; Wed, 11 Mar 2026
+ 02:25:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260311-minidump-v2-v2-25-f91cedc6f99e@oss.qualcomm.com>
-X-Rspamd-Queue-Id: B89CC26009C
+References: <20260310075539.11701-1-wsa+renesas@sang-engineering.com> <20260310075539.11701-16-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20260310075539.11701-16-wsa+renesas@sang-engineering.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Wed, 11 Mar 2026 10:24:59 +0100
+X-Gmail-Original-Message-ID: <CAD++jLkoWCcBvB4G-2EDYU4kezPhVF6943TY6PmK5ooGwruLzA@mail.gmail.com>
+X-Gm-Features: AaiRm52-5ccgCpLSKuxxaehFi73jWhXjY0Lv_AX860GJVRZU0Kw14nXERH-rf2Y
+Message-ID: <CAD++jLkoWCcBvB4G-2EDYU4kezPhVF6943TY6PmK5ooGwruLzA@mail.gmail.com>
+Subject: Re: [PATCH v4 15/15] hwspinlock/treewide: refactor consumer.h from
+ public header
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Mark Brown <broonie@kernel.org>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Lee Jones <lee@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Waiman Long <longman@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
+	David Lechner <dlechner@baylibre.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Andy Shevchenko <andy@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
+	Chunyan Zhang <zhang.lyra@gmail.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Srinivas Kandagatla <srini@kernel.org>, 
+	Antonio Borneo <antonio.borneo@foss.st.com>, Konrad Dybcio <konradybcio@kernel.org>, 
+	linux-remoteproc@vger.kernel.org, linux-doc@vger.kernel.org, 
+	driver-core@lists.linux.dev, linux-iio@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: BB1BA260F3E
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6899-lists,linux-remoteproc=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-6900-lists,linux-remoteproc=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,huawei.com,linux.alibaba.com,infradead.org,redhat.com,lwn.net,linuxfoundation.org,baylibre.com,analog.com,gmail.com,foss.st.com,arndb.de,lists.linux.dev,st-md-mailman.stormreply.com,lists.infradead.org];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[lwn.net,linuxfoundation.org,linaro.org,arndb.de,kernel.org,gentwo.org,linux-foundation.org,infradead.org,linutronix.de,redhat.com,arm.com,goodmis.org,google.com,suse.de,oracle.com,suse.com,cmpxchg.org,nvidia.com,tencent.com,huaweicloud.com,gmail.com,lge.com,chromium.org,vger.kernel.org,kvack.org];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[57];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-remoteproc@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[40];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[linusw@kernel.org,linux-remoteproc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,qualcomm.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	TAGGED_RCPT(0.00)[linux-remoteproc,renesas];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,sang-engineering.com:email,huawei.com:email]
 X-Rspamd-Action: no action
 
-On Wed, Mar 11, 2026 at 01:46:09AM +0530, Mukesh Ojha wrote:
-> From: Eugen Hristev <eugen.hristev@linaro.org>
-> 
-> With this driver, the registered regions are copied to a shared memory
-> zone at register time. The shared memory zone is supplied via OF. This
-> driver will select only regions that are of interest, and keep only
-> addresses. The format of the list is Kinfo compatible, with devices like
-> Google Pixel phone. The firmware is only interested in some symbols'
-> addresses.
-> 
-> Signed-off-by: Eugen Hristev <eugen.hristev@linaro.org>
-> Signed-off-by: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
-> ---
->  MAINTAINERS                |   1 +
->  drivers/of/platform.c      |   1 +
->  kernel/meminspect/Kconfig  |  11 ++
->  kernel/meminspect/Makefile |   1 +
->  kernel/meminspect/kinfo.c  | 284 +++++++++++++++++++++++++++++++++++++++++++++
->  5 files changed, 298 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 2504b7df0e7d..48b5457fae98 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16597,6 +16597,7 @@ M:	Eugen Hristev <eugen.hristev@linaro.org>
->  M:	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/reserved-memory/google,kinfo.yaml
-> +F:	kernel/meminspect/kinfo.c
->  
->  MEMBLOCK AND MEMORY MANAGEMENT INITIALIZATION
->  M:	Mike Rapoport <rppt@kernel.org>
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index 2a7111e8354d..09047e021de4 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -495,6 +495,7 @@ static const struct of_device_id reserved_mem_matches[] = {
->  	{ .compatible = "ramoops" },
->  	{ .compatible = "nvmem-rmem" },
->  	{ .compatible = "google,open-dice" },
-> +	{ .compatible = "google,debug-kinfo" },
+On Tue, Mar 10, 2026 at 8:56=E2=80=AFAM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
 
-place it before open-dice
+> Factor out the entries only needed for consumers from the generic public
+> header. This allows for a clean separation between providers and
+> consumers. Also remove contact field in favor of MAINTAINERS entries.
+> Fix the users, too.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Jonathan Cameron <jonathan.cameron@huawei.com> # for IIO
+> Acked-by: Lee Jones <lee@kernel.org> # for MFD
 
->  	{}
->  };
->  
-> diff --git a/kernel/meminspect/Kconfig b/kernel/meminspect/Kconfig
-> index fa2b5a84b251..396510908e47 100644
-> --- a/kernel/meminspect/Kconfig
-> +++ b/kernel/meminspect/Kconfig
-> @@ -17,3 +17,14 @@ config MEMINSPECT
->  
->  	  Note that modules using this feature must be rebuilt if option
->  	  changes.
-> +
-> +config MEMINSPECT_KINFO
-> +	tristate "Shared memory KInfo compatible driver"
-> +	depends on MEMINSPECT
-> +	help
-> +	  Say y here to enable the Shared memory KInfo compatible driver
-> +	  With this driver, the registered regions are copied to a shared
-> +	  memory zone at register time.
-> +	  The shared memory zone is supplied via OF.
-> +	  This driver will select only regions that are of interest,
-> +	  and keep only addresses. The format of the list is Kinfo compatible.
-> diff --git a/kernel/meminspect/Makefile b/kernel/meminspect/Makefile
-> index 09fd55e6d9cf..283604d892e5 100644
-> --- a/kernel/meminspect/Makefile
-> +++ b/kernel/meminspect/Makefile
-> @@ -1,3 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
->  obj-$(CONFIG_MEMINSPECT) += meminspect.o
-> +obj-$(CONFIG_MEMINSPECT_KINFO) += kinfo.o
-> diff --git a/kernel/meminspect/kinfo.c b/kernel/meminspect/kinfo.c
-> new file mode 100644
-> index 000000000000..79918908968d
-> --- /dev/null
-> +++ b/kernel/meminspect/kinfo.c
-> @@ -0,0 +1,284 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + *
-> + * Copyright 2002 Rusty Russell <rusty@rustcorp.com.au> IBM Corporation
-> + * Copyright 2021 Google LLC
-> + * Copyright 2025 Linaro Ltd. Eugen Hristev <eugen.hristev@linaro.org>
-> + */
-> +#include <linux/container_of.h>
-> +#include <linux/kallsyms.h>
-> +#include <linux/meminspect.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_reserved_mem.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/utsname.h>
-> +
-> +#define BUILD_INFO_LEN		256
-> +#define DEBUG_KINFO_MAGIC	0xcceeddff
-> +
-> +/*
-> + * Header structure must be byte-packed, since the table is provided to
-> + * bootloader.
-> + */
-> +struct kernel_info {
-> +	/* For kallsyms */
-> +	u8 enabled_all;
-> +	u8 enabled_base_relative;
-> +	u8 enabled_absolute_percpu;
-> +	u8 enabled_cfi_clang;
-> +	u32 num_syms;
-> +	u16 name_len;
-> +	u16 bit_per_long;
-> +	u16 module_name_len;
-> +	u16 symbol_len;
-> +	u64 _relative_pa;
-> +	u64 _text_pa;
-> +	u64 _stext_pa;
-> +	u64 _etext_pa;
-> +	u64 _sinittext_pa;
-> +	u64 _einittext_pa;
-> +	u64 _end_pa;
-> +	u64 _offsets_pa;
-> +	u64 _names_pa;
-> +	u64 _token_table_pa;
-> +	u64 _token_index_pa;
-> +	u64 _markers_pa;
-> +	u64 _seqs_of_names_pa;
-> +
-> +	/* For frame pointer */
-> +	u32 thread_size;
-> +
-> +	/* For virt_to_phys */
-> +	u64 swapper_pg_dir_pa;
-> +
-> +	/* For linux banner */
-> +	u8 last_uts_release[__NEW_UTS_LEN];
-> +
-> +	/* Info of running build */
-> +	u8 build_info[BUILD_INFO_LEN];
-> +
-> +	/* For module kallsyms */
-> +	u32 enabled_modules_tree_lookup;
-> +	u32 mod_mem_offset;
-> +	u32 mod_kallsyms_offset;
-> +} __packed;
-> +
-> +struct kernel_all_info {
-> +	u32 magic_number;
-> +	u32 combined_checksum;
-> +	struct kernel_info info;
-> +} __packed;
-> +
-> +struct debug_kinfo {
-> +	struct device *dev;
-> +	void *all_info_addr;
-> +	size_t all_info_size;
-> +	struct notifier_block nb;
-> +};
-> +
-> +static void update_kernel_all_info(struct kernel_all_info *all_info)
-> +{
-> +	struct kernel_info *info;
-> +	u32 *checksum_info;
-> +	int index;
-> +
-> +	all_info->magic_number = DEBUG_KINFO_MAGIC;
-> +	all_info->combined_checksum = 0;
-> +
-> +	info = &all_info->info;
-> +	checksum_info = (u32 *)info;
-> +	for (index = 0; index < sizeof(*info) / sizeof(u32); index++)
-> +		all_info->combined_checksum ^= checksum_info[index];
-> +}
-> +
-> +static u8 global_build_info[BUILD_INFO_LEN];
+Acked-by: Linus Walleij <linusw@kernel.org>
 
-Don't create singletons. That's a driver so you can have multiple
-instances of it.
-
-> +
-> +static int build_info_set(const char *str, const struct kernel_param *kp)
-> +{
-> +	size_t build_info_size = sizeof(global_build_info);
-> +
-> +	if (strlen(str) > build_info_size)
-> +		return -ENOMEM;
-> +	memcpy(global_build_info, str, min(build_info_size - 1, strlen(str)));
-> +	return 0;
-> +}
-> +
-> +static const struct kernel_param_ops build_info_op = {
-> +	.set = build_info_set,
-> +};
-> +
-> +module_param_cb(build_info, &build_info_op, NULL, 0200);
-> +MODULE_PARM_DESC(build_info, "Write build info to field 'build_info' of debug kinfo.");
-
-Drop. Build info is a static, fixed information, there is no need to write it
-from user-space.
-
-
-...
-
-> +	memset(all_info, 0, sizeof(struct kernel_all_info));
-> +	info = &all_info->info;
-> +	info->enabled_all = IS_ENABLED(CONFIG_KALLSYMS_ALL);
-> +	info->enabled_absolute_percpu = IS_ENABLED(CONFIG_KALLSYMS_ABSOLUTE_PERCPU);
-> +	info->enabled_base_relative = IS_ENABLED(CONFIG_KALLSYMS_BASE_RELATIVE);
-> +	info->enabled_cfi_clang = IS_ENABLED(CONFIG_CFI_CLANG);
-> +	info->name_len = KSYM_NAME_LEN;
-> +	info->bit_per_long = BITS_PER_LONG;
-> +	info->module_name_len = MODULE_NAME_LEN;
-> +	info->symbol_len = KSYM_SYMBOL_LEN;
-> +	info->thread_size = THREAD_SIZE;
-> +	info->enabled_modules_tree_lookup = IS_ENABLED(CONFIG_MODULES_TREE_LOOKUP);
-> +	info->mod_mem_offset = offsetof(struct module, mem);
-> +	info->mod_kallsyms_offset = offsetof(struct module, kallsyms);
-> +
-> +	memcpy(info->build_info, global_build_info, strlen(global_build_info));
-> +
-> +	kinfo->nb.notifier_call = kinfo_notifier_cb;
-> +
-> +	meminspect_notifier_register(&kinfo->nb);
-> +	meminspect_lock_traverse(kinfo, register_kinfo_region);
-> +
-> +	return 0;
-> +}
-> +
-> +static void debug_kinfo_remove(struct platform_device *pdev)
-> +{
-> +	struct debug_kinfo *kinfo = platform_get_drvdata(pdev);
-> +
-> +	meminspect_notifier_unregister(&kinfo->nb);
-> +}
-> +
-> +static const struct of_device_id debug_kinfo_of_match[] = {
-> +	{ .compatible	= "google,debug-kinfo" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, debug_kinfo_of_match);
-> +
-> +static struct platform_driver debug_kinfo_driver = {
-> +	.probe = debug_kinfo_probe,
-> +	.remove = debug_kinfo_remove,
-> +	.driver = {
-> +		.name = "debug-kinfo",
-> +		.of_match_table = of_match_ptr(debug_kinfo_of_match),
-
-Drop of_match_ptr, you have warning here.
-
-> +	},
-> +};
-> +module_platform_driver(debug_kinfo_driver);
-> +
-> +MODULE_AUTHOR("Eugen Hristev <eugen.hristev@linaro.org>");
-> +MODULE_AUTHOR("Jone Chou <jonechou@google.com>");
-> +MODULE_DESCRIPTION("meminspect Kinfo Driver");
-> +MODULE_LICENSE("GPL");
-> 
-> -- 
-> 2.50.1
-> 
+Yours,
+Linus Walleij
 
