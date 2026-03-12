@@ -1,176 +1,196 @@
-Return-Path: <linux-remoteproc+bounces-6941-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-6943-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MDCKH27hsmmWQgAAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-6941-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2026 16:53:18 +0100
+	id yCmAHyblsmk3QwAAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-6943-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2026 17:09:10 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8A4E274EEC
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2026 16:53:17 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D1422753D3
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2026 17:09:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7981031258A6
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2026 15:51:03 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DFCBD301A2D5
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 12 Mar 2026 16:08:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B3913F166B;
-	Thu, 12 Mar 2026 15:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E1A93CAE9F;
+	Thu, 12 Mar 2026 16:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="CfHo8+Xm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IZcRoRrq"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD9EB3F0AAD
-	for <linux-remoteproc@vger.kernel.org>; Thu, 12 Mar 2026 15:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083C63B9D9A;
+	Thu, 12 Mar 2026 16:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773330621; cv=none; b=APHusl0JOfGcjkpcG/v8Xw1UkrqoICJ9sd/ahWpb+ccH5o0Xro2g0P5fnVBlMeMzwjnPKoXfOSJRBhJF5nkMRYj/TqYme9w6sLhTkvnNTLom21w7w+0uMSZCdDksA/CMDBHkqsNtVSNwADRvyeEU7u99NKKASwCYt5fL7Lp+lOo=
+	t=1773331733; cv=none; b=YKPXvAD0AQXpvLko5R6kTHXI85YR7wibz/ph9ytF0K4Zz/zre32iZSQAycxQrOPJLZTDkO/sebq98ikib11qs2m2TuBtr4nwlq+rKdVO9T60C3oeMAyBotMQUhsGGJSLmDsAUFnyUge2S087FtpUkZbCtTF2KT6K0j0fMDWfZho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773330621; c=relaxed/simple;
-	bh=CbhB5KQ/eIbZFKfZzmUbhzpOi/+XnjgwaeHVx94tB9g=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=J5dRAhisrzuZhm5Vr9zpaHMk+MceiBy5BaosFdcdbHjQ1Wt5c9agSF2D4eVgi+np5yAmSjNu9EhAmXQM0xvSWXQ6O39DxirAGDu3S2sGZnPaAit0Vc4zXa4OupJJUtlO7xtqzS17MXiuaFELz/LVZw7bPCotCA6m2RfuSlITq2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=CfHo8+Xm; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4852c9b4158so9936625e9.0
-        for <linux-remoteproc@vger.kernel.org>; Thu, 12 Mar 2026 08:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1773330616; x=1773935416; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a/f8358XeMqcTwt08gbPmPnqpZegBjCDtTpDZQVf+oU=;
-        b=CfHo8+Xm6A35aB3VABh6RHePecCVpWT60eN7eNxHJ+2vqmgosHPdYw7hJDPbLbDWL2
-         7m7penfHoyEo01ePB/8dvyDMOCjyRyFuvIh5EmAF4s8oJJK5RCs8PeIm9bRt1BwkhvsK
-         edlr/5AMGGZPcYJwzH1vqlsEHz1HHq8VgrZ5QPLUxAGb8mlOBh3inb8boQSnHwA+2is1
-         w0ixRKnb/+GnM+4Qz5zkl+mOUl0G2kXv6Hr0nT9UXBLz160uO8HgmdkCOgSWuzWNwIvB
-         JuD+Y0asW7hon6Xf9/GQDVQaI2Be9tdEENbLN01JjUERRYwfe7lqMUeUAGaHBceh0loe
-         M01Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1773330616; x=1773935416;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=a/f8358XeMqcTwt08gbPmPnqpZegBjCDtTpDZQVf+oU=;
-        b=vjsX22lJISo9ufaeCphtAU5f5ZQef5yfX+zt+5m3uWMjKGKTe1T27K/lG7EWdlI2N7
-         eVWTaQiuCgwhABY2pLq0CYwKGG0NYQ2d+J8fmGVyYuIlH+FV3y3eUwZwjF/+IoMDjTAU
-         tSuKQiXlbDGqdrJP0vrcgBlem+JOO5o97mP2zVk3X+jMqflr+b4c+JzGhmobWsVDfvGH
-         eu6JYANFCGDgPFwg7/dyjOgJaLiNs58JwBxArla9gFbsz3jg97Hxk9zaM8sS+1q+/aMY
-         f/FWQB4KCHqV7nz11p4ajeIKOy3XopPglkBggVI40i/RwwLznngR1ft7mCKOeJ7lNQdb
-         x+yQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX4CPS4bxIbJ4yWDvKvgKyZDqkHzHh49WXu1HqVP1OH70NHc8UHhvzfG8dFBNXV/VwIM1s/u/5EDW6eBWYfSeTV@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0lBxmMvN/u2irJEobIAJE1TvxfbGLJxAeo8ikDmkGS4CEZeHK
-	e1t70zep7k4v+3AXkoAZpAmvQliqWTNHVVXjsB63Ie4Gh/IUKk5Cxbdo3qGFdE6vx10=
-X-Gm-Gg: ATEYQzwkIOvJJeS3Ojp82rAMt/jpGUm5MhFXYJlFSy/IzrU4I+IU0QcRWKYkTWBGXpu
-	T65Q2r8xT2uzlHapy/9kyx7jgVHkCRSxf4ArOkJDoWlNjwzU/z2hpGZCEqdfy+tYfoE8S36WLf7
-	dUZ1hEdZAXLRgx1jgKm8XQqnw3ViWA94ijLjsXgNQmYhDPOKDWQMsK9a7X4ZHVfkUl62mKyEPwX
-	9bX7H2Ry/GBvblFRaaAnmJC4vUYwIGfY9bMbG/io2x8U7I+WH3fIe7wG7uTspQmx/MHYJv+si3d
-	OE5qW6t2J+mBvsi3nQZJ1CDHVZkTuqbn3oZl8xRUGrwE0VkH+S5ChzxE4j0+xF5gpuVIPlf6Z6y
-	3u13keVQ64rSeoFHF4vJCC7OU5ntEhBdkYDV44/x0dAL8BlX5G47xdjaNd2lBBbnqsOmSnCiHJd
-	ioW7Y1kSj5lod5n06OIDw8
-X-Received: by 2002:a05:600c:46d3:b0:483:2c98:4368 with SMTP id 5b1f17b1804b1-4854b12ce6bmr113978785e9.18.1773330615796;
-        Thu, 12 Mar 2026 08:50:15 -0700 (PDT)
-Received: from localhost ([2001:4090:a244:8139:5278:cf5a:3494:5e80])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4854b5e912fsm361187835e9.2.2026.03.12.08.50.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2026 08:50:15 -0700 (PDT)
-From: "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
-Date: Thu, 12 Mar 2026 16:49:02 +0100
-Subject: [PATCH v2 8/8] dt-bindings: remoteproc: k3-r5f: Require
- memory-region-names
+	s=arc-20240116; t=1773331733; c=relaxed/simple;
+	bh=zFFbQaZ9EHBZ5x8ESHNNR7uIFkubqOEgDYDn/DF6JCM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NPABmNGDXsO3+AZjNvx/P5F2PWfrDP0Sw903Dm0mnNmiQPOC+nn35BuQ3ddQaWEMNjsfUYpIcXP2g+vGSEr7DtztOVp80XARvvBVfCwklUkCJ53F6/6ruxkjN7JyuyYZImvrPi75CKqdOZwWlfk2ZMvIV+R4AxMFXe0tWfHOIqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IZcRoRrq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C6DC4CEF7;
+	Thu, 12 Mar 2026 16:08:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1773331732;
+	bh=zFFbQaZ9EHBZ5x8ESHNNR7uIFkubqOEgDYDn/DF6JCM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IZcRoRrq3pSBkWsZ25PaRviAIFR75H5dHYTXzSQjM7qoyR3tqI1/xrciJln6UJjT5
+	 XuaRDfiP8ZPOYr5QISpepjr/MLJm2kxyCHFEsyEjGKUOqqs6eyCBOOlBUiiHzRShQ+
+	 XIzr4wuTlmvl6HPEJY2X3NHz1L/K8dVag5CDBDSH4zGpmUL1IAvzkXQj6jJ2vF27Qq
+	 El8JWOcRbv+4Xh2lE+i4YW4L0oj0R7krri9w6wIr66RpReTKkgctuBhX0ViTVzW7Ea
+	 aF2r0KXQEPzt8tvUdi1/78gZKSVD6XOyeuM+ti6iwjsFR+14KQsWMbjupupM9RU+m/
+	 ezMzvWIn9GvEg==
+Message-ID: <bfcaf538-470f-4766-8ff7-122901872a75@kernel.org>
+Date: Thu, 12 Mar 2026 17:08:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 4/7] dt-bindings: remoteproc: qcom: Document pas for
+ SoCCP on Kaanapali and Glymur platforms
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Jingyi Wang <jingyi.wang@oss.qualcomm.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>,
+ Luca Weiss <luca.weiss@fairphone.com>, Bartosz Golaszewski
+ <brgl@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>,
+ aiqun.yu@oss.qualcomm.com, tingwei.zhang@oss.qualcomm.com,
+ trilok.soni@oss.qualcomm.com, yijie.yang@oss.qualcomm.com,
+ linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260310-knp-soccp-v4-0-0a91575e0e7e@oss.qualcomm.com>
+ <20260310-knp-soccp-v4-4-0a91575e0e7e@oss.qualcomm.com>
+ <oqvq52az6iknhg4negqaprfsx5dfo527acoeas3tusqpqvak2c@wrdmsydyy6ns>
+ <20260311-unique-daft-nightingale-584252@quoll>
+ <tpoksnga6erjhoh37vohoqw32fe62wbhjg74tvulgyn4jt2nbi@kamwahlyuqvo>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <tpoksnga6erjhoh37vohoqw32fe62wbhjg74tvulgyn4jt2nbi@kamwahlyuqvo>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260312-topic-am62a-ioddr-dt-v6-19-v2-8-37cb7ceec658@baylibre.com>
-References: <20260312-topic-am62a-ioddr-dt-v6-19-v2-0-37cb7ceec658@baylibre.com>
-In-Reply-To: <20260312-topic-am62a-ioddr-dt-v6-19-v2-0-37cb7ceec658@baylibre.com>
-To: Bjorn Andersson <andersson@kernel.org>, 
- Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Suman Anna <s-anna@ti.com>, 
- Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Tero Kristo <kristo@kernel.org>
-Cc: Vishal Mahaveer <vishalm@ti.com>, Kevin Hilman <khilman@baylibre.com>, 
- Dhruva Gole <d-gole@ti.com>, Sebin Francis <sebin.francis@ti.com>, 
- Kendall Willis <k-willis@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, 
- linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=902; i=msp@baylibre.com;
- h=from:subject:message-id; bh=CbhB5KQ/eIbZFKfZzmUbhzpOi/+XnjgwaeHVx94tB9g=;
- b=owGbwMvMwCXWejAsc4KoVzDjabUkhsxND5bypN1LePRk39SmSqu+s51n9xh/ZjRVYYo01E1c8
- e3amm2NHaUsDGJcDLJiiiydiaFp/+V3HktetGwzzBxWJpAhDFycAjARHy9GhqVGib++dapanHe1
- 3Vr165X+ZLVrP9JCrtoduf35wRLR+u8M//3OKt0I0EmLeeR6IL158/bzk7RiQ68Yd3xX2MRxu4b
- tPB8A
-X-Developer-Key: i=msp@baylibre.com; a=openpgp;
- fpr=BADD88DB889FDC3E8A3D5FE612FA6A01E0A45B41
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-6941-lists,linux-remoteproc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
+	TAGGED_FROM(0.00)[bounces-6943-lists,linux-remoteproc=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[msp@baylibre.com,linux-remoteproc@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-remoteproc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre-com.20230601.gappssmtp.com:dkim,baylibre.com:email,baylibre.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D8A4E274EEC
+	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email]
+X-Rspamd-Queue-Id: 2D1422753D3
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-If memory-region is used, require memory-region-names.
+On 12/03/2026 05:53, Dmitry Baryshkov wrote:
+> gn Wed, Mar 11, 2026 at 07:26:38AM +0100, Krzysztof Kozlowski wrote:
+>> On Wed, Mar 11, 2026 at 04:04:09AM +0200, Dmitry Baryshkov wrote:
+>>> On Tue, Mar 10, 2026 at 03:03:20AM -0700, Jingyi Wang wrote:
+>>>> Document the component used to boot SoCCP on Kaanapali SoC and add
+>>>> compatible for Glymur SoCCP which could fallback to Kaanapali. Extend
+>>>> the "qcom,smem-states", "qcom,smem-state-names" in the pas-common.
+>>>>
+>>>> Signed-off-by: Jingyi Wang <jingyi.wang@oss.qualcomm.com>
+>>>> ---
+>>>>  .../remoteproc/qcom,kaanapali-soccp-pas.yaml       | 154 +++++++++++++++++++++
+>>>>  .../bindings/remoteproc/qcom,pas-common.yaml       |   6 +-
+>>>>  2 files changed, 159 insertions(+), 1 deletion(-)
+>>>
+>>> With all the changes to pas-common, what is being left in it? Would it
+>>
+>> You need place for definition of properties - smd/glink-edge and
+>> qcom,smem-states. The latter is actually not properly defined in one
+>> place, becuse there are bindings having  it but not refencing
+>> pas-common.
+> 
+> So do we for schemas definig smd-edge.
+> 
+>>
+>> It can also define common order of interrupts, but as you pointed out
+>> this does not work for this new device anymore.
+> 
+> Nor does it work for SocCP smem-states. I think that having such a
 
-Signed-off-by: Markus Schneider-Pargmann (TI) <msp@baylibre.com>
----
- Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml | 7 +++++++
- 1 file changed, 7 insertions(+)
+It only does not work in full constraints, but for defining the type it
+works.
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-index 3f2425e0880f9a516ac10700a218ed035ff07d5a..775e9b3a193878349590c5036aa884617ebbcc9f 100644
---- a/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml
-@@ -245,6 +245,13 @@ patternProperties:
-       - resets
-       - firmware-name
- 
-+    if:
-+      required:
-+        - memory-region
-+    then:
-+      required:
-+        - memory-region-names
-+
-     unevaluatedProperties: false
- 
- allOf:
+> pas-common overcomplicates existing schema. What about splitting
+> qcom,dsp-common from qcom,pas-common with the latter keeping properties
+> that are common to existing DSP and SoCCP, while the former being used
+> only for DSPs?
+> 
 
--- 
-2.53.0
+What would be in the dsp-common then?
 
+Best regards,
+Krzysztof
 
