@@ -1,117 +1,160 @@
-Return-Path: <linux-remoteproc+bounces-6982-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-6983-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uP/KHf8jtWnFwwAAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-6982-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Mar 2026 10:01:51 +0100
+	id Rc8jGyZAtWkVyQAAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-6983-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Mar 2026 12:01:58 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72AE928C40F
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Mar 2026 10:01:50 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF89128CCDB
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Mar 2026 12:01:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A04BD300AD9C
-	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Mar 2026 09:01:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 390F03024A23
+	for <lists+linux-remoteproc@lfdr.de>; Sat, 14 Mar 2026 11:01:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E15429C325;
-	Sat, 14 Mar 2026 09:01:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01FA913790B;
+	Sat, 14 Mar 2026 11:01:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P28Ozixk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L9MLDCcD"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392A4286405;
-	Sat, 14 Mar 2026 09:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D731117BA6
+	for <linux-remoteproc@vger.kernel.org>; Sat, 14 Mar 2026 11:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773478905; cv=none; b=jIkrz/Ic+btxlytc1ebHDqrrXQ41VEvwmGiRXiNpCmSSW6UhFDV7Qzw2UeBDBFdRqJwJHWccC4Ng1QvxillE7iKYH7b0DI8W8XEHf7gO6qKYThtqcGraU6TOpi8gPq+ckCD1XY8zWD5DHGn6Ey2zlWNX7jD7erDw6IigDkfRpFE=
+	t=1773486113; cv=none; b=DfTYuc08JeUOECR+kPZi+ZN9HB3vWRZn+LNG4LTB69BPsEqpqbnpUttUKycM6acK9QGrRST/y9hX3TSC/KyxqWMqZOCDIK6ydako2KStAExIsfVaIDwmtfItQ6pBdcK5lbAnXuqDAHyMOYA0TBn1X8Di08d0+qmh5Euky37mzwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773478905; c=relaxed/simple;
-	bh=3un0fWnRuKDl/f/T8R1D28aJLdNp3WGmfmnjwwjKUOA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gQLOcXpj7tNvyr5qVzJnLTdQtBON4JXPszzlT2r3A9Idr9u5jP/aM84OxWOWTZIPMnXejzQq2jm6vHZCo6Whtd9MRim4OP/k66ibrwe5ICHmiuKfs3Q2dQFPXpM3ra8UarRiIDpSYjWCHhWnaXKpCgLaePr6vHRUz09sXKOGqbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P28Ozixk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C096C116C6;
-	Sat, 14 Mar 2026 09:01:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1773478904;
-	bh=3un0fWnRuKDl/f/T8R1D28aJLdNp3WGmfmnjwwjKUOA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P28OzixkGBKvfoAsS1woDY+WKvW5nIdpHY8IX0vCUArlyvkZZEs8wC8eIC80Miis7
-	 D2f70Sv5zuwcgODWpuMlW0II+znhLawrIF+9s6yhQtqNKmJp5A4x29G8KskNEOPdMl
-	 ZyJHNFO2smhPaeCFRsHvhousAwrq7lHtYnHjIfM7dREGjvePqp6Vh827Vb0QlGOlmI
-	 l2spjrE26+X5X5eRI/g9SBwxAXQLOWlul4Zxt6dtNmzqeCZrB3GWRyDsXwaf47VynR
-	 +3hyeo6HMgJHV6Mun73BuySav99ZgAiov36i76TMS+7c7Efzcjq5djdT4rfSnGBLXZ
-	 CPa1TRl1PTCVQ==
-Date: Sat, 14 Mar 2026 10:01:42 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Sibi Sankar <sibi.sankar@oss.qualcomm.com>
-Cc: robh@kernel.org, srini@kernel.org, amahesh@qti.qualcomm.com, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, andersson@kernel.org, 
-	konradybcio@kernel.org, mathieu.poirier@linaro.org, linux-arm-msm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-remoteproc@vger.kernel.org, mani@kernel.org
-Subject: Re: [PATCH V5 2/5] dt-bindings: remoteproc: qcom,sm8550-pas: Add
- Glymur CDSP
-Message-ID: <20260314-dashing-screeching-swift-ed0d1e@quoll>
-References: <20260313120814.1312410-1-sibi.sankar@oss.qualcomm.com>
- <20260313120814.1312410-3-sibi.sankar@oss.qualcomm.com>
+	s=arc-20240116; t=1773486113; c=relaxed/simple;
+	bh=GgiYRcNBv7L7kWMWQ3JAlzangWQCIyBWOuIXmPV0gbc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oz2n6yy/4eGkfFRdfJskCEOSFrWMNv0e/yaHUBxz9vXqrlLrGQQwa0N2TphEASFHSgIBnK2Mb8rO0nwmSQM8yhQuJma0zQlCHBzn5IpvEc3RqH6NzTP+VAfqgp2Rda4WDWqGr+L15AMK077QYfHYBYc0WFtVVtqXRU8am6/JVwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L9MLDCcD; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-829781b2b01so1964557b3a.2
+        for <linux-remoteproc@vger.kernel.org>; Sat, 14 Mar 2026 04:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1773486112; x=1774090912; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7t6dzhVKDoauqQq0cPP+eStWCVbmmVBroVSXvi9WWEQ=;
+        b=L9MLDCcDOtT9Ybym2xSHthXF/IN7COVB1ivcELiBNk707I/Ged8QkzywYZmCC4b0nd
+         RNR6YTbbhiFnL9bI22LaQI0C10/4oRsyl9prVT4T78J82aBMsHTjT17FVfmg+vaCjVOb
+         tYNyrdSCFHtn4YTThxFh+AlOzvFKAd/AIxg6Fi6bjOH+BO/cz1Bn2sGRRq77I+JGXS+3
+         cMKXdtmt09mr8lN8J8QavsV5QVJHUa9D7UEvnfiyRqw5+RPmQAnTdeVxZSIBtJ06Fs4C
+         h9msZHAjJW+0Pod/Ud6D2Gf3RSixyKWivQYjWqXIL84xK3pkkXfSRzDu5aq4Gfhfncqv
+         BSqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1773486112; x=1774090912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7t6dzhVKDoauqQq0cPP+eStWCVbmmVBroVSXvi9WWEQ=;
+        b=iuj5Gj811P013I6c3TocMwQxvR1brv7LIgWUPoO7RFrkA2u3YmHx8x29htdsZg/YPK
+         jNm40d2br4k9nSgstbWLYglWUhv5Sm84Z3OjLlcRaTtzQKrJ4h37q2jzAvLYX0XHG/46
+         vuR6fQbiaDUDiqptAfmhzaH9YBm05lYndIpaCChGZbuB6wkFmo7ce9RjJsLKD74w/F17
+         MenyDAGf6u1Hls3ABm5bzcOaVqBcOYwwW/b1MsLQKBW067RcIP2IXSAOxx5wAQyfWjpP
+         pbLLgL01IE6Y3o4KXX4y2fvijKTjar9WwlwggQ2yO2ze6J5GtT+YVCDx0ziRX9/al/CY
+         8HOQ==
+X-Gm-Message-State: AOJu0YwUWuKIJpR0FWJV73xjrOgv2oCN/nzKMkm0qMai5kf8nNNrDJHp
+	NtMyYfJ7Foe/4Uz5pOl2Gftapx4i94F5iz45oK209lbbm+0T6OVJKPjJ
+X-Gm-Gg: ATEYQzzB+eL9HbczndbUFH00064oOVGRuQ5AheZJnsjItWpPDrGOg3HY8LnH1JvX+I3
+	cUfEsuZCkfUH5Uk0hDNyi2DNO4mm2UpDxb5iB0OZq1W55J1IA2s+IGePKJh3LCa7YsYhKY0WQd0
+	GBsNvEbYHvLfUat7hbQ47fxDvslMlhfm392ZA2bDt3FxrmU8sfvHiljlbP3on6aTDREaq5+26l4
+	EpSzArMhEQTARBBNOEu0KXVaY6qshjxesa7VKGnsA+JjAk6uHXL2pZGVNpaBhOVQW8Efg3DwaEK
+	VvIGGpgpMqy8ge3CY5q5K03ONUiw9ahkoA3z93arzv276cOrVom8JYs6V3d1UByslC51vagfyly
+	79QhDjumP4KI2bYLwRRTNmQxc3C7SdIrHmSi7uDmPfQIkdZTIQtA07Uc0q965jI8BciONE3ghXw
+	BmTx9TPrl81N2+FLTmZzUFTrJR
+X-Received: by 2002:a05:6a20:a111:b0:398:a52d:5361 with SMTP id adf61e73a8af0-398eca524eemr5678599637.16.1773486112068;
+        Sat, 14 Mar 2026 04:01:52 -0700 (PDT)
+Received: from ubuntu.. ([152.58.152.9])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c73eb996257sm4044705a12.9.2026.03.14.04.01.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Mar 2026 04:01:51 -0700 (PDT)
+From: Anas Iqbal <mohd.abd.6602@gmail.com>
+To: andersson@kernel.org,
+	mathieu.poirier@linaro.org
+Cc: linux-remoteproc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Anas Iqbal <mohd.abd.6602@gmail.com>
+Subject: [PATCH] remoteproc: use SIZE_MAX in rproc_u64_fit_in_size_t()
+Date: Sat, 14 Mar 2026 11:01:37 +0000
+Message-ID: <20260314110137.178981-1-mohd.abd.6602@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260313120814.1312410-3-sibi.sankar@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-6982-lists,linux-remoteproc=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-6983-lists,linux-remoteproc=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mohdabd6602@gmail.com,linux-remoteproc@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-remoteproc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 72AE928C40F
+	TAGGED_RCPT(0.00)[linux-remoteproc];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: BF89128CCDB
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Fri, Mar 13, 2026 at 05:38:11PM +0530, Sibi Sankar wrote:
-> Document compatible for Qualcomm Glymur CDSP PAS which is compatible
-> with SM8550 SoC except for the one additional interrupt ("shutdown-ack").
-> Similar to the Qualcomm Kaanapali SoC, "global_sync_mem" is not managed
-> by the kernel so it remains unlisted.
-> 
-> Signed-off-by: Sibi Sankar <sibi.sankar@oss.qualcomm.com>
-> ---
->  .../devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml         | 2 ++
->  1 file changed, 2 insertions(+)
+Smatch reports:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+drivers/remoteproc/remoteproc_elf_loader.c:221
+warn: always true condition '(val <= -1)'
 
-Best regards,
-Krzysztof
+The helper function rproc_u64_fit_in_size_t() compares the value
+against (size_t)-1, which is equivalent to SIZE_MAX but can confuse
+static analysis tools and lead to the above warning.
+
+Replace (size_t)-1 with SIZE_MAX to make the intent explicit and
+avoid the Smatch warning without changing the behavior.
+
+Signed-off-by: Anas Iqbal <mohd.abd.6602@gmail.com>
+---
+ drivers/remoteproc/remoteproc_internal.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
+index 0cd09e67ac14..0a5e15744b1d 100644
+--- a/drivers/remoteproc/remoteproc_internal.h
++++ b/drivers/remoteproc/remoteproc_internal.h
+@@ -218,7 +218,7 @@ bool rproc_u64_fit_in_size_t(u64 val)
+ 	if (sizeof(size_t) == sizeof(u64))
+ 		return true;
+ 
+-	return (val <= (size_t) -1);
++	return val <= SIZE_MAX;
+ }
+ 
+ #endif /* REMOTEPROC_INTERNAL_H */
+-- 
+2.43.0
 
 
