@@ -1,98 +1,88 @@
-Return-Path: <linux-remoteproc+bounces-7040-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7042-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +NUyJ86XuWkJKwIAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7040-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 17 Mar 2026 19:05:02 +0100
+	id 0NhRBRm3uWnJMQIAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7042-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 17 Mar 2026 21:18:33 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41A5B2B0924
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 17 Mar 2026 19:05:02 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 644E32B2251
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 17 Mar 2026 21:18:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5CFAF304A909
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 17 Mar 2026 18:04:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0BFBE30AEA57
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 17 Mar 2026 20:13:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFC23F65E9;
-	Tue, 17 Mar 2026 18:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C6D937D132;
+	Tue, 17 Mar 2026 20:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="LuX2MRDG"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="e8cu7AfV"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013021.outbound.protection.outlook.com [52.101.83.21])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013057.outbound.protection.outlook.com [40.93.201.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF8937F8AE;
-	Tue, 17 Mar 2026 18:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B876FC5;
+	Tue, 17 Mar 2026 20:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.57
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1773770644; cv=fail; b=DB0f91TJs3Hs22wBs1XVon0SvO0k0XPo/Ep3JgksQW5LF+P3+6UrWR9TthUvUaG8EVyLzALP2dH5SIO4Ranmc6tDjKkLifQVuqhIy7RuWh9aUR637yOV+6o4y+vs/DXaVSrrc1oUdexNMj500LURMIMtcJAjmoCMZ0K+XbCYo9M=
+	t=1773778394; cv=fail; b=iiokIbvOqlPJUo7GB3fdOXTwVws0eomYeI8dWFT2qSQbWpJezkR4AfNEu+SAd9ehR/SoKALMwYim2ZkANHHRLpTjJVXpi0tunAyL/EkOKkHCppZlZbzNPxoQyZDkS1/V0piNdxkTp+Sg3CFPKdz2ZvLWvFPGhyL6aw6+zR/9sY0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1773770644; c=relaxed/simple;
-	bh=yDCuDemSoIajriiP9v3POzKMuldDX6WBAIguSRLJoS8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GFL8vmWE45Qp76EYgX1sSOa1LxNdzeWnCOaAUjDz+b3oaYv4PLylXGi1S75A7Vc1jaJOtHRPBJ/EpqXNMIAxOLRJp3oD46nFqOpKjiZfD88fBaD5ToTumvNlq2FyDWoT0RdVEgNcEAG+wQI8JlGUCjZ6jQjQ8X+goqnL+DjyZp0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=LuX2MRDG; arc=fail smtp.client-ip=52.101.83.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+	s=arc-20240116; t=1773778394; c=relaxed/simple;
+	bh=iShWKJ4u/mKxOn2lO5glIgS2FJEzKqcIGcbJVB7/k+Y=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FbR9NpEWXfzr8sh5yY05432oQADc97rP39xn4IU3A5K4piwqXAm5XRNcdwKtwHxHElti/EQ9B+N0QzliMtIrZKUGvDu6+C6hVJibEw91DmZb47QOAKz5h5nknA6XFr7vZbjEXa4fgWrbs2pmFdf9rM+k6F5ElOSpUmgGP9Ay5W8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=e8cu7AfV; arc=fail smtp.client-ip=40.93.201.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Jyl0Z3RfBV6aV7v08oj6ACNkFHLpg6kIs6bwUpTslX2EE86GnEfiXqj7IdwQUPNQ6Xw14mXASQEmn29zvRYaX71F7eCWc/lNPg2ghwcefsLQCGF6E5xYQosXWMc8N3ZceBX7YDDVXhkiRurgCxZPZsiUeecWdPBzrTm6eIjoZtVjfmRIjJZ7GwDJPcMydADMPHcX69pKVSqolE7eRHKjt+7XvTA1EfVG5zLsedwUTO6DHTMHm8obTikeQjZLWH2zGTEW/cPTW/fiJLE5ZxzM1mvJYTGZBnJxrlFHvRouXcamol4yZQYHTW6JiNa3uE7nPvYfdCv4A5s6vu4MLU461Q==
+ b=vtZcECzU0vEmwptJ0q94S3ducbiAP3GSTemZaUYIFkIwW1T5NTjpuW0zqCBTrstqLDfkf+z4XG6xRO7thQMo7CwZSzkp5/l36Mn3oKfwvi8lHAh7RD3hK2VBGa872naRg1O0DXkJfrrTiNQGr147DUeD0WwSziKKqm9Bgmyrzi1HZP10c1ECgf77nhCdk3DWjjmY5EOVCb9d3jqwr+Fmdtf5e71lBb7wa5RKbin1RRpANEpTa+LD2DPKErULwJ7DrduMfxQijeUvXxA+tckC+YxRT6q6VpBW6qP4nsSH3MTYTPCE5cHDCh+SddwN8lyh5kA6kEDjHXXLQ9ruSyV95g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nYUrr8jz9oVCqWAYFTgKtT8hJYyTAVaoGz6ikhSJ+yE=;
- b=Ue+7l7ipcQ1TVXdEs6l7MAUByee4xtXf5qcBrlTWZFxsTtpDMzMDIxD2xkKtKRZQQ3IHWZ+PElJX2NUQhCUgBaEJKkUiMic0qa1kuA3CdIvi402HVmkmX0IOYx20aMORnL3vIQI284qIJXMeQsE/d/+1JpnReS4rrnWpPSNaq7DwwDTJVE14xv1BljD9GN5eGfI4jtMATkTf4NGbe16jP4i5pII1dgly60hhUPcpA+TO3MUHcvETSNkuKIblfzAktz+RITrWwAjz6MrrJQfYjYg1Qs7vRCTzlOCOQkqA9TNwBbent9yZugpcUAivktszkTxDXLysXcxjEg16YXw+0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 164.130.1.59) smtp.rcpttodomain=kernel.org smtp.mailfrom=foss.st.com;
- dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
+ bh=dSqXA035eXT3iggyrrgzkzXthXDQJeD30zlrapLl1/Q=;
+ b=xqNn8QbFDFpcWEs+HoZuXCmWIJNAzQKMtctIym7nrK8n0yCQLbqKajcbW5u9AJe5uf2BS1k1QPyy7BnflML6yncli9oGZvabllFwDX3MN1ZHIfce9g0wqmYI+quKcsM5+m8oVL+SIpke7tdFCPcnTNVfSx9tGVWzPEKEeokjlO6Hf4d9xtuIc2p5nPReaZMK51z5Dje5vZvO5F3QFNIev495zc3F0briBqZvwzNVGshUU3Ij/YKDlQBkp6gXsqR/mTTWfrCGQZiBklpKu84jDguX/n1lbUFUDJ2wMeHbvJHhbY7V2YtB3gHaacqq2Qf3Nvx3opZyR3jocYKiGDdHpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
- s=selector2;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nYUrr8jz9oVCqWAYFTgKtT8hJYyTAVaoGz6ikhSJ+yE=;
- b=LuX2MRDGWOP8h92taDTW82IRR3ly6BPKrINmX6qlTBWIjYKTbmBlO+eK7h9HeHyEpR88CRzdYsiq61n6rn6QarHqIaRM4XLFbi0nEl9cm8FZ4KB7n2JLQbOJ22kr7OhmzLzVG7zblgZiCwdJ0R4FEjTo7DPplz3XYf/rowJfyqZ8eJ7uwZiET76xOaXWquk97J6C7I1Qy3QUscxD9AaA+jwRsJ5Mdj/F84rFEA//TGr9t7vntu7+KCv/j5PF3Lr1FpgD+pvQCrWj7Z08I/mb28d6gloLr7AKMW/F/XolYGy/cegNdES+JDBbqa0ngozkW5l2oYGleJnhMEcm+z6hbw==
-Received: from CWLP265CA0440.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1b7::21)
- by GV1PR10MB9089.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:1d3::15) with
+ bh=dSqXA035eXT3iggyrrgzkzXthXDQJeD30zlrapLl1/Q=;
+ b=e8cu7AfVeP+0qVY0waSMPM4vp9KgGARytUkkoejmI0tIASURZgJZgu2GhcbCfezZbbcK/PkAX4tbSysAwCTIi6TpCnlWc0hefhzGIuF6dnqGDeukCtPitMMScKqu/EmZXXerNaei/D/kADqXJIhfMfMqi7lQSdDvYQqPAOew3WI=
+Received: from SJ2PR07CA0011.namprd07.prod.outlook.com (2603:10b6:a03:505::20)
+ by BN5PR12MB9537.namprd12.prod.outlook.com (2603:10b6:408:2a9::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9700.27; Tue, 17 Mar
- 2026 18:03:55 +0000
-Received: from AMS0EPF00000198.eurprd05.prod.outlook.com
- (2603:10a6:400:1b7:cafe::20) by CWLP265CA0440.outlook.office365.com
- (2603:10a6:400:1b7::21) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9700.27 via Frontend Transport; Tue,
- 17 Mar 2026 18:03:34 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.59)
- smtp.mailfrom=foss.st.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=foss.st.com;
-Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
- designate 164.130.1.59 as permitted sender) receiver=protection.outlook.com;
- client-ip=164.130.1.59; helo=smtpO365.st.com;
-Received: from smtpO365.st.com (164.130.1.59) by
- AMS0EPF00000198.mail.protection.outlook.com (10.167.16.244) with Microsoft
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9723.19; Tue, 17 Mar
+ 2026 20:13:09 +0000
+Received: from SJ1PEPF00002314.namprd03.prod.outlook.com
+ (2603:10b6:a03:505:cafe::23) by SJ2PR07CA0011.outlook.office365.com
+ (2603:10b6:a03:505::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9700.25 via Frontend Transport; Tue,
+ 17 Mar 2026 20:13:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
+Received: from satlexmb08.amd.com (165.204.84.17) by
+ SJ1PEPF00002314.mail.protection.outlook.com (10.167.242.168) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9700.17 via Frontend Transport; Tue, 17 Mar 2026 18:03:54 +0000
-Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpo365.st.com
- (10.250.44.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Tue, 17 Mar
- 2026 19:06:28 +0100
-Received: from localhost (10.252.21.194) by STKDAG1NODE2.st.com
- (10.75.128.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.29; Tue, 17 Mar
- 2026 19:03:53 +0100
-From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-To: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier
-	<mathieu.poirier@linaro.org>, Jens Wiklander <jens.wiklander@linaro.org>,
-	"Rob Herring" <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	"Conor Dooley" <conor+dt@kernel.org>, Sumit Garg <sumit.garg@kernel.org>
-CC: <linux-stm32@st-md-mailman.stormreply.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-remoteproc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <op-tee@lists.trustedfirmware.org>,
-	<devicetree@vger.kernel.org>, Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Subject: [PATCH v21 6/6] remoteproc: stm32: Add TEE-controlled STM32 driver
-Date: Tue, 17 Mar 2026 19:03:27 +0100
-Message-ID: <20260317180329.1207625-7-arnaud.pouliquen@foss.st.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260317180329.1207625-1-arnaud.pouliquen@foss.st.com>
-References: <20260317180329.1207625-1-arnaud.pouliquen@foss.st.com>
+ 15.20.9700.17 via Frontend Transport; Tue, 17 Mar 2026 20:13:06 +0000
+Received: from satlexmb07.amd.com (10.181.42.216) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Tue, 17 Mar
+ 2026 15:13:04 -0500
+Received: from xsjtanmays50.xilinx.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Tue, 17 Mar 2026 15:13:04 -0500
+From: Tanmay Shah <tanmay.shah@amd.com>
+To: <andersson@kernel.org>, <mathieu.poirier@linaro.org>
+CC: <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	"Tanmay Shah" <tanmay.shah@amd.com>
+Subject: [PATCH] remoteproc: xlnx: reset virtio status during attach
+Date: Tue, 17 Mar 2026 13:12:51 -0700
+Message-ID: <20260317201251.3920841-1-tanmay.shah@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -101,653 +91,149 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: ENXCAS1NODE2.st.com (10.75.128.138) To STKDAG1NODE2.st.com
- (10.75.128.133)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AMS0EPF00000198:EE_|GV1PR10MB9089:EE_
-X-MS-Office365-Filtering-Correlation-Id: e98cc13c-f187-4eb8-4f3c-08de844f8db1
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00002314:EE_|BN5PR12MB9537:EE_
+X-MS-Office365-Filtering-Correlation-Id: 84f310ba-1ed6-4ab7-957c-08de84619a73
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|36860700016|82310400026|56012099003|18002099003|22082099003;
+	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700016|18002099003|56012099003;
 X-Microsoft-Antispam-Message-Info:
-	s2y8In+5HyhkAkjy5WlqwdIyb26YTKRQJIOSqZjmEIq/p2F710ztXYs1hpghOGGWtiIsz5Bz/W8qZrlORWY/Zye14DAzPedn30DR58IZ1yQpvOV0rqUAmIEtstISagmf3Oy1wBr8vF9Ymd8vtmUEsyHz6cRBw0/RiQ89rMAp6YUjLBgxEgbTC8wmoSO83aJPtNRBppKl1YDV0cnRLK57b2nbnjZzwROVoEClNxMj3eMAYD+hf/JhWBtgGrI5pgl81FOdz+MOrFWbmKQmYKFV3bCYvU9n7UlFQAp1Hpq1SGEdVtppHerzux3PtnK6tZh2kSvYLweRyUSMJZPooqluVxD354wU/FrtWmcXszPc1FDnptnLR55bgqQXUXAx+//H35rN0GE0qYtedTVKr8iAVLpY/nYKgAh/v/4SSberIUVYeA73EbQ4em3s4NMwpE0W6Z7XnMYeSp9JXt3BcI9aYBn6Z9CEie1ve0QFVKQuVRJEti8kv7RFLbwSqIcgfMtz7O42UnLtz65zbzRd7dE0jGo3ZjPmWsBJz8zONuWPgxy539kbJRd5BVh1Mkr6n5WcE+KXrRF3GKa6CTVcEju7f47EPF3I/ekoFI3+UbCTZcFQ1URLOwBEkkR4STDdjsJIcL3vZrDz6yO6mNksEHCtfraF6U4Oro4fZSeW5B/7D1aIEtqyA/xl2Gb8MnsTDNPPSvBcWjQziOCucUs3EN3yorEMbgkgk1CZfzrhsfsQGnNP6jbAilL6weuDNtJ1xCAPPYynbhuWTUVrn2eXTQTWrw==
+	Jx0+v0CtUCedYBfKKBo0sWfMAZCwnVsfzCnncfowkyvM63fmM0uIbg1hG/LDrZqJExlF37gvT+ttXpQLISdBy2vLzSCB4v4iPpfcwO6iUiOkS4HgXpib9LvEOEui5Dd3hG9AGa4+AYynVWDFSoL1zbuC5RvMgJguX+iGGi583qwjrYnPieZVZw/S/YnQ80xoiVFAQw5BlrAuDNKFlmSG/BQLb1nhw4Q0OmuFqcK+OgdJOEoi7uFYUtxOgtETmV/DQP2Y7qittSp5NqnLEWRRcvhZIB5kmt2JLZN4XcVBbvJqP92MqkuuWW20fUyJJBSrg+QR5MafJqkriRbQ+HqFHbbJD03wz0cxbgs83AQ57JSGHjukKOmJmLhxvA6nv3hTgfGCcUjZwWtGaaP/jzyXMZzZJEiqyztP+OaIKX828+sb1Z7/852RVbY2Xa66QqVlQkXBPA6RdhTVEQJV3JT/HaaCpwRE4Y/yB6ThTmgeqIEiXHv7M3DhXFDJ5STMMKxVlY8nWXHPDwuSioekSV1EPOYfPz+yLyBLVBd2S4+u1+l+qW/m0I0KgoddSzwyTfuuqS9+uU8D9KlaJdMHk77qXpCpOJGUxc1E7zq2bB6O+BRAMEZt2DhK5aCCY/+PISMV8yDj1r/D3TmxqPC53/gebvyyCX4h0e5yGOe+/6TU3n3xl+hJVDHv5D+DSFp//wZbAwAokLvXZDbvuDUjg/0sRsgyu+sMMmpAkZYuWFiYa1lnSNOogZOLtV8MXsKKh/3MU3qiSAQK2Oc8TfnfnHZpCA==
 X-Forefront-Antispam-Report:
-	CIP:164.130.1.59;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(36860700016)(82310400026)(56012099003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700016)(18002099003)(56012099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	7hrDPmPiOlD7TyP7CfhdEvzthK75c+0PS9YB1VQ/bSYxP9R9C7CeQMRBq/9VNYAeQXd9UJo792bbuoJExWEB/ffQkWT/uovlwsDE9aYTcRrcl222DHLaleNbQWaC1b8oi6NOW+VBd01gQYrKw2lgKVELkbaU34LTPHs1bjaImIl+g+xKKUht5iY5smoy8e44x+/2gLCCojS0S1lvUHf6oftXelZefUlYDdSPlvQ1EX8h0mdDtwBJOO19ZqCVn9F513X2yHL2QPiQYC7QbYXMd/bOvbstPx0KxF7BHPXprgsJ8wCPhSfaCzqU93y/W6cFklRxqcutZzH+D9WDDxpuOk6zljin7/B+kC8b0gS4+4hfOCxzlu2RzG4GReXTJmdVyNiqr39y2m+CUhWGOCq2DLTAUgN1pP7zFm6HfMlvPECCuQGrChc5ToR95JxhzJds
-X-OriginatorOrg: foss.st.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 18:03:54.6784
+	D8IfoVtXvmcykt0zXYdR/FQsdPKPw8mBieZwCt/Wp92ETWpQ1oTG+WeRRQm63Xyj4OLl6NaEENI6XSH8y0O+dh80a/pr1GD762aR3WSeQl3qaX8+9iUlOuQq9obrZTCVPMLm4tK+09ZmFM6OMbMJXYQSGAaQoLNv5nJnyFbp/OfjPS+NA/YlCPCpAP489o2m0pUzXBvs+RI2/GJP2Wl1BNsr1bwUbaRAUKvV5WMb4tM5yVKLHlSp+6DE5qZg9WCkqoQp+kbuvPtKYLjoGWTxsF/3aZhYMBdBe11DljBsLU8fXPATswyswGxeT4XJYkWkbRMD6WeUbUs4jvCjUaV7Rb6RKEoFQq1jMXxUV2Szw1XuRyJthlb3gMhbjkVqtQRdxTkgg7bBBQ8LiRBHo/+LELfFvb806b1kCVcA1aIVqHEZy/PzjCR8LPs06Wsquew0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2026 20:13:06.9883
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e98cc13c-f187-4eb8-4f3c-08de844f8db1
-X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.59];Helo=[smtpO365.st.com]
+X-MS-Exchange-CrossTenant-Network-Message-Id: 84f310ba-1ed6-4ab7-957c-08de84619a73
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	AMS0EPF00000198.eurprd05.prod.outlook.com
+	SJ1PEPF00002314.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR10MB9089
-X-Spamd-Result: default: False [2.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN5PR12MB9537
+X-Spamd-Result: default: False [1.34 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[foss.st.com,none];
+	ARC_REJECT(1.00)[cv is fail on i=2];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[foss.st.com:s=selector2];
+	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	RCVD_TLS_LAST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7040-lists,linux-remoteproc=lfdr.de];
-	DKIM_TRACE(0.00)[foss.st.com:+];
+	TAGGED_FROM(0.00)[bounces-7042-lists,linux-remoteproc=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[arnaud.pouliquen@foss.st.com,linux-remoteproc@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[tanmay.shah@amd.com,linux-remoteproc@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,args.np:url,st.com:email,foss.st.com:dkim,foss.st.com:mid,res.name:url];
-	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
+	DKIM_TRACE(0.00)[amd.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:dkim,amd.com:email,amd.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	TAGGED_RCPT(0.00)[linux-remoteproc];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_COUNT_SEVEN(0.00)[8]
-X-Rspamd-Queue-Id: 41A5B2B0924
+X-Rspamd-Queue-Id: 644E32B2251
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Add a remoteproc platform driver for the STM32MP15 Cortex-M4 core
-controlled via a TEE Trusted Application.
+On AMD-Xilinx platforms cortex-A and cortex-R can be configured as
+separate subsystems. In this case, both cores can boot independent of
+each other. If Linux went through uncontrolled reboot during active
+rpmsg communication, then during next boot it can find rpmsg virtio
+status not in the reset state. In such case it is important to reset the
+virtio status during attach callback and wait for sometime for the
+remote to handle virtio driver reset.
 
-The driver integrates with the generic TEE remoteproc layer
-(rproc_tee_*) to delegate firmware authentication, loading and
-start/stop operations to the TEE, while handling STM32-specific
-platform resources on the Linux side:
-
-  - Translation between physical and device addresses using
-    SoC-specific DMA ranges.
-  - Registration of reserved-memory carveouts from "memory-region"
-    phandles (including vdev vrings and buffers).
-  - Mailbox-based virtio queue kicks and a shutdown channel using
-    the IPCC mailbox controller.
-  - Optional watchdog interrupt for crash reporting and wakeup.
-
-This enables secure boot and runtime isolation of the M4 firmware
-while still using the standard remoteproc and rpmsg frameworks
-on STM32MP15.
-
-Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
 ---
-V21 updates:
-- use of the rproc-tee-phandle property
----
- drivers/remoteproc/Makefile          |   2 +-
- drivers/remoteproc/stm32_rproc_tee.c | 537 +++++++++++++++++++++++++++
- 2 files changed, 538 insertions(+), 1 deletion(-)
- create mode 100644 drivers/remoteproc/stm32_rproc_tee.c
+ drivers/remoteproc/xlnx_r5_remoteproc.c | 46 +++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index a1a5201982d4..80f0965bac95 100644
---- a/drivers/remoteproc/Makefile
-+++ b/drivers/remoteproc/Makefile
-@@ -36,7 +36,7 @@ qcom_wcnss_pil-y			+= qcom_wcnss_iris.o
- obj-$(CONFIG_RCAR_REMOTEPROC)		+= rcar_rproc.o
- obj-$(CONFIG_ST_REMOTEPROC)		+= st_remoteproc.o
- obj-$(CONFIG_ST_SLIM_REMOTEPROC)	+= st_slim_rproc.o
--obj-$(CONFIG_STM32_RPROC)		+= stm32_rproc.o
-+obj-$(CONFIG_STM32_RPROC)		+= stm32_rproc.o stm32_rproc_tee.o
- obj-$(CONFIG_TI_K3_DSP_REMOTEPROC)	+= ti_k3_dsp_remoteproc.o ti_k3_common.o
- obj-$(CONFIG_TI_K3_M4_REMOTEPROC)	+= ti_k3_m4_remoteproc.o ti_k3_common.o
- obj-$(CONFIG_TI_K3_R5_REMOTEPROC)	+= ti_k3_r5_remoteproc.o ti_k3_common.o
-diff --git a/drivers/remoteproc/stm32_rproc_tee.c b/drivers/remoteproc/stm32_rproc_tee.c
-new file mode 100644
-index 000000000000..7012f0a17a43
---- /dev/null
-+++ b/drivers/remoteproc/stm32_rproc_tee.c
-@@ -0,0 +1,537 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2025, STMicroelectronics - All Rights Reserved
-+ */
+diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
+index 50a9974f3202..f08806f13800 100644
+--- a/drivers/remoteproc/xlnx_r5_remoteproc.c
++++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
+@@ -5,6 +5,7 @@
+  */
+ 
+ #include <dt-bindings/power/xlnx-zynqmp-power.h>
++#include <linux/delay.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/firmware/xlnx-zynqmp.h>
+ #include <linux/kernel.h>
+@@ -29,6 +30,8 @@
+ #define RSC_TBL_XLNX_MAGIC	((uint32_t)'x' << 24 | (uint32_t)'a' << 16 | \
+ 				 (uint32_t)'m' << 8 | (uint32_t)'p')
+ 
++#define RPROC_ATTACH_TIMEOUT_US (100 * 1000)
 +
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/mailbox_client.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/of.h>
-+#include <linux/of_reserved_mem.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_wakeirq.h>
-+#include <linux/remoteproc.h>
-+#include <linux/remoteproc_tee.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
-+#include <linux/workqueue.h>
-+
-+#include "remoteproc_internal.h"
-+
-+#define MBOX_NB_VQ		2
-+#define MBOX_NB_MBX		3
-+
-+#define STM32_MBX_VQ0		"vq0"
-+#define STM32_MBX_VQ0_ID	0
-+#define STM32_MBX_VQ1		"vq1"
-+#define STM32_MBX_VQ1_ID	1
-+#define STM32_MBX_SHUTDOWN	"shutdown"
-+
-+struct stm32_rproc_tee_mem {
-+	char name[20];
-+	void __iomem *cpu_addr;
-+	phys_addr_t phy_addr;
-+	u32 dev_addr;
-+	size_t size;
-+};
-+
-+struct stm32_rproc_tee_dma_ranges {
-+	u32 dev_addr;
-+	u32 phy_addr;
-+	u32 size;
-+};
-+
-+struct stm32_mbox {
-+	const unsigned char name[10];
-+	struct mbox_chan *chan;
-+	struct mbox_client client;
-+	struct work_struct vq_work;
-+	int vq_id;
-+};
-+
-+struct stm32_rproc_tee {
-+	int wdg_irq;
-+	const struct stm32_rproc_tee_dma_ranges *ranges;
-+	struct stm32_mbox mb[MBOX_NB_MBX];
-+	struct workqueue_struct *workqueue;
-+	struct of_phandle_args tee_phandle;
-+};
-+
-+static const struct stm32_rproc_tee_dma_ranges stm32mp15_m4_dma_ranges[] = {
-+	/* RETRAM address translation */
-+	{ .dev_addr = 0x0, .phy_addr = 0x38000000, .size = 0x10000 },
-+	{/* sentinel */}
-+};
-+
-+static int stm32_rproc_tee_pa_to_da(struct rproc *rproc, phys_addr_t pa,
-+				    size_t size, u64 *da)
-+{
-+	struct stm32_rproc_tee *ddata = rproc->priv;
-+	const struct stm32_rproc_tee_dma_ranges *range;
-+	struct device *dev = rproc->dev.parent;
-+
-+	for (range = ddata->ranges; range->phy_addr; range++) {
-+		if (pa < range->phy_addr ||
-+		    pa >= range->phy_addr + range->size)
-+			continue;
-+		if (pa + size > range->phy_addr + range->size) {
-+			dev_err(dev, "range too small for %pa+0x%zx\n", &pa, size);
-+			return -EINVAL;
-+		}
-+		*da = pa - range->phy_addr + range->dev_addr;
-+		dev_dbg(dev, "pa %pa to da %llx\n", &pa, *da);
-+		return 0;
-+	}
-+
-+	*da = pa;
-+
-+	return 0;
-+}
-+
-+static int stm32_rproc_tee_mem_alloc(struct rproc *rproc,
-+				     struct rproc_mem_entry *mem)
-+{
-+	struct device *dev = rproc->dev.parent;
-+	void *va;
-+
-+	dev_dbg(dev, "map memory: %pad+%zx\n", &mem->dma, mem->len);
-+	va = (__force void *)ioremap_wc(mem->dma, mem->len);
-+	if (IS_ERR_OR_NULL(va)) {
-+		dev_err(dev, "Unable to map memory region: %pad+0x%zx\n",
-+			&mem->dma, mem->len);
-+		return -ENOMEM;
-+	}
-+
-+	/* Update memory entry va */
-+	mem->va = va;
-+
-+	return 0;
-+}
-+
-+static int stm32_rproc_tee_mem_release(struct rproc *rproc,
-+				       struct rproc_mem_entry *mem)
-+{
-+	dev_dbg(rproc->dev.parent, "unmap memory: %pa\n", &mem->dma);
-+	iounmap((__force __iomem void *)mem->va);
-+
-+	return 0;
-+}
-+
-+static int stm32_rproc_tee_mbox_idx(struct rproc *rproc, const unsigned char *name)
-+{
-+	struct stm32_rproc_tee *ddata = rproc->priv;
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(ddata->mb); i++) {
-+		if (!strncmp(ddata->mb[i].name, name, strlen(name)))
-+			return i;
-+	}
-+	dev_err(&rproc->dev, "mailbox %s not found\n", name);
-+
-+	return -EINVAL;
-+}
-+
-+static void stm32_rproc_tee_request_shutdown(struct rproc *rproc)
-+{
-+	struct stm32_rproc_tee *ddata = rproc->priv;
-+	int err, idx;
-+
-+	/* Request shutdown of the remote processor */
-+	if (rproc->state != RPROC_OFFLINE && rproc->state != RPROC_CRASHED) {
-+		idx = stm32_rproc_tee_mbox_idx(rproc, STM32_MBX_SHUTDOWN);
-+		if (idx >= 0 && ddata->mb[idx].chan) {
-+			err = mbox_send_message(ddata->mb[idx].chan, "detach");
-+			if (err < 0)
-+				dev_warn(&rproc->dev, "warning: remote FW shutdown without ack\n");
-+		}
-+	}
-+}
-+
-+static int stm32_rproc_tee_stop(struct rproc *rproc)
-+{
-+	stm32_rproc_tee_request_shutdown(rproc);
-+
-+	return rproc_tee_stop(rproc);
-+}
-+
-+static int stm32_rproc_tee_prepare(struct rproc *rproc)
-+{
-+	struct device *dev = rproc->dev.parent;
-+	struct device_node *np = dev->of_node;
-+	struct rproc_mem_entry *mem;
-+	int index = 0, mr = 0, nph;
-+	u64 da;
-+
-+	nph = of_reserved_mem_region_count(np);
-+	if (nph <= 0)
-+		return 0;
-+
-+	/* Register associated reserved memory regions */
-+	for (index = 0; index < nph; index++) {
-+		struct resource res;
-+		int ret;
-+
-+		ret = of_reserved_mem_region_to_resource(np, mr++, &res);
-+		if (ret)
-+			return ret;
-+
-+		if (stm32_rproc_tee_pa_to_da(rproc, res.start,
-+					     resource_size(&res), &da) < 0) {
-+			dev_err(dev, "memory region not valid %pR\n", &res);
-+			return -EINVAL;
-+		}
-+
-+		/* No need to map vdev buffer */
-+		if (strstarts(res.name, "vdev0buffer")) {
-+			/* Register reserved memory for vdev buffer alloc */
-+			mem = rproc_of_resm_mem_entry_init(dev, index,
-+							   resource_size(&res),
-+							   res.start,
-+							   "vdev0buffer");
-+		} else {
-+			/* Register memory region */
-+			mem = rproc_mem_entry_init(dev, NULL,
-+						   (dma_addr_t)res.start,
-+						   resource_size(&res), da,
-+						   stm32_rproc_tee_mem_alloc,
-+						   stm32_rproc_tee_mem_release,
-+						   "%.*s",
-+						   (int)(strchrnul(res.name, '@') - res.name),
-+						   res.name);
-+			if (mem)
-+				rproc_coredump_add_segment(rproc, da,
-+							   resource_size(&res));
-+		}
-+
-+		if (!mem)
-+			return -ENOMEM;
-+
-+		rproc_add_carveout(rproc, mem);
-+	}
-+
-+	return 0;
-+}
-+
-+static irqreturn_t stm32_rproc_tee_wdg(int irq, void *data)
-+{
-+	struct platform_device *pdev = data;
-+	struct rproc *rproc = platform_get_drvdata(pdev);
-+
-+	rproc_report_crash(rproc, RPROC_WATCHDOG);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void stm32_rproc_tee_mb_vq_work(struct work_struct *work)
-+{
-+	struct stm32_mbox *mb = container_of(work, struct stm32_mbox, vq_work);
-+	struct rproc *rproc = dev_get_drvdata(mb->client.dev);
-+
-+	mutex_lock(&rproc->lock);
-+
-+	if (rproc->state != RPROC_RUNNING && rproc->state != RPROC_ATTACHED)
-+		goto unlock_mutex;
-+
-+	if (rproc_vq_interrupt(rproc, mb->vq_id) == IRQ_NONE)
-+		dev_dbg(&rproc->dev, "no message found in vq%d\n", mb->vq_id);
-+
-+unlock_mutex:
-+	mutex_unlock(&rproc->lock);
-+}
-+
-+static void stm32_rproc_tee_mb_callback(struct mbox_client *cl, void *data)
-+{
-+	struct rproc *rproc = dev_get_drvdata(cl->dev);
-+	struct stm32_mbox *mb = container_of(cl, struct stm32_mbox, client);
-+	struct stm32_rproc_tee *ddata = rproc->priv;
-+
-+	queue_work(ddata->workqueue, &mb->vq_work);
-+}
-+
-+static void stm32_rproc_tee_free_mbox(struct rproc *rproc)
-+{
-+	struct stm32_rproc_tee *ddata = rproc->priv;
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(ddata->mb); i++) {
-+		if (ddata->mb[i].chan)
-+			mbox_free_channel(ddata->mb[i].chan);
-+		ddata->mb[i].chan = NULL;
-+	}
-+}
-+
-+static const struct stm32_mbox stm32_rproc_tee_mbox[MBOX_NB_MBX] = {
-+	{
-+		.name = STM32_MBX_VQ0,
-+		.vq_id = STM32_MBX_VQ0_ID,
-+		.client = {
-+			.rx_callback = stm32_rproc_tee_mb_callback,
-+			.tx_block = false,
-+		},
-+	},
-+	{
-+		.name = STM32_MBX_VQ1,
-+		.vq_id = STM32_MBX_VQ1_ID,
-+		.client = {
-+			.rx_callback = stm32_rproc_tee_mb_callback,
-+			.tx_block = false,
-+		},
-+	},
-+	{
-+		.name = STM32_MBX_SHUTDOWN,
-+		.vq_id = -1,
-+		.client = {
-+			.tx_block = true,
-+			.tx_done = NULL,
-+			.tx_tout = 500, /* 500 ms time out */
-+		},
-+	},
-+};
-+
-+static int stm32_rproc_tee_request_mbox(struct rproc *rproc)
-+{
-+	struct stm32_rproc_tee *ddata = rproc->priv;
+ /*
+  * settings for RPU cluster mode which
+  * reflects possible values of xlnx,cluster-mode dt-property
+@@ -865,6 +868,49 @@ static int zynqmp_r5_get_rsc_table_va(struct zynqmp_r5_core *r5_core)
+ 
+ static int zynqmp_r5_attach(struct rproc *rproc)
+ {
 +	struct device *dev = &rproc->dev;
-+	unsigned int i;
-+	int j;
-+	const unsigned char *name;
-+	struct mbox_client *cl;
++	bool wait_for_remote = false;
++	struct fw_rsc_vdev *rsc;
++	struct fw_rsc_hdr *hdr;
++	int i, offset, avail;
 +
-+	/* Initialise mailbox structure table */
-+	memcpy(ddata->mb, stm32_rproc_tee_mbox, sizeof(stm32_rproc_tee_mbox));
++	if (!rproc->table_ptr)
++		goto attach_success;
 +
-+	for (i = 0; i < MBOX_NB_MBX; i++) {
-+		name = ddata->mb[i].name;
++	for (i = 0; i < rproc->table_ptr->num; i++) {
++		offset = rproc->table_ptr->offset[i];
++		hdr = (void *)rproc->table_ptr + offset;
++		avail = rproc->table_sz - offset - sizeof(*hdr);
++		rsc = (void *)hdr + sizeof(*hdr);
 +
-+		cl = &ddata->mb[i].client;
-+		cl->dev = dev->parent;
-+
-+		ddata->mb[i].chan = mbox_request_channel_byname(cl, name);
-+		if (IS_ERR(ddata->mb[i].chan)) {
-+			if (PTR_ERR(ddata->mb[i].chan) == -EPROBE_DEFER) {
-+				dev_err_probe(dev->parent,
-+					      PTR_ERR(ddata->mb[i].chan),
-+					      "failed to request mailbox %s\n",
-+					      name);
-+				goto err_probe;
-+			}
-+			dev_info(dev, "mailbox %s mbox not used\n", name);
-+			ddata->mb[i].chan = NULL;
++		/* make sure table isn't truncated */
++		if (avail < 0) {
++			dev_err(dev, "rsc table is truncated\n");
++			return -EINVAL;
 +		}
-+		if (ddata->mb[i].vq_id >= 0) {
-+			INIT_WORK(&ddata->mb[i].vq_work,
-+				  stm32_rproc_tee_mb_vq_work);
-+		}
-+	}
 +
-+	return 0;
-+
-+err_probe:
-+	for (j = i - 1; j >= 0; j--)
-+		if (ddata->mb[j].chan) {
-+			mbox_free_channel(ddata->mb[j].chan);
-+			ddata->mb[j].chan = NULL;
-+		}
-+	return -EPROBE_DEFER;
-+}
-+
-+static void stm32_rproc_tee_kick(struct rproc *rproc, int vqid)
-+{
-+	struct stm32_rproc_tee *ddata = rproc->priv;
-+	unsigned int i;
-+	int err;
-+
-+	if (WARN_ON(vqid >= MBOX_NB_VQ))
-+		return;
-+
-+	for (i = 0; i < MBOX_NB_MBX; i++) {
-+		if (vqid != ddata->mb[i].vq_id)
++		if (hdr->type != RSC_VDEV)
 +			continue;
-+		if (!ddata->mb[i].chan)
-+			return;
-+		err = mbox_send_message(ddata->mb[i].chan, "kick");
-+		if (err < 0)
-+			dev_err(&rproc->dev, "%s: failed (%s, err:%d)\n",
-+				__func__, ddata->mb[i].name, err);
-+		return;
-+	}
-+}
 +
-+static int stm32_rproc_tee_parse_dt(struct platform_device *pdev,
-+				    struct stm32_rproc_tee *ddata,
-+				    bool *auto_boot)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	int err, irq;
-+
-+	/*
-+	 * remoteproc-backend = <&sproc N>;
-+	 *   args.np   : backend node
-+	 *   args.args[0] : remote processor identifier used by TEE
-+	 */
-+	err = of_parse_phandle_with_fixed_args(np, "rproc-tee-phandle",
-+					       1, 0, &ddata->tee_phandle);
-+	if (err) {
-+		dev_err_probe(dev, err,
-+			      "failed to parse remoteproc-backend (%d)\n", err);
-+		return err;
-+	}
-+
-+	of_node_put(ddata->tee_phandle.np);
-+
-+	irq = platform_get_irq_optional(pdev, 0);
-+	if (irq == -EPROBE_DEFER)
-+		return irq;
-+
-+	if (irq > 0) {
-+		err = devm_request_irq(dev, irq, stm32_rproc_tee_wdg, 0,
-+				       dev_name(dev), pdev);
-+		if (err)
-+			return dev_err_probe(dev, err,
-+					     "failed to request wdg irq\n");
-+
-+		ddata->wdg_irq = irq;
-+
-+		if (of_property_read_bool(np, "wakeup-source")) {
-+			device_init_wakeup(dev, true);
-+			dev_pm_set_wake_irq(dev, irq);
++		/*
++		 * reset vdev status, in case previous run didn't leave it in
++		 * a clean state.
++		 */
++		if (rsc->status) {
++			rsc->status = 0;
++			wait_for_remote = true;
++			break;
 +		}
-+
-+		dev_info(dev, "wdg irq registered\n");
 +	}
 +
-+	*auto_boot = of_property_read_bool(np, "st,auto-boot");
++	/* kick remote to notify about attach */
++	rproc->ops->kick(rproc, 0);
 +
-+	return 0;
-+}
++	/* wait for sometime until remote is ready */
++	if (wait_for_remote)
++		usleep_range(100, RPROC_ATTACH_TIMEOUT_US);
 +
-+static int stm32_rproc_tee_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct stm32_rproc_tee *ddata;
-+	struct rproc *rproc;
-+	bool auto_boot;
-+	int ret;
-+
-+	ret = dma_coerce_mask_and_coherent(dev, DMA_BIT_MASK(32));
-+	if (ret)
-+		return ret;
-+
-+	ddata = devm_kzalloc(dev, sizeof(*ddata), GFP_KERNEL);
-+	if (!ddata)
-+		return -ENOMEM;
-+
-+	ret = stm32_rproc_tee_parse_dt(pdev, ddata, &auto_boot);
-+	if (ret)
-+		return ret;
-+
-+	ret = rproc_tee_register(dev, &rproc, &ddata->tee_phandle, auto_boot);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "signed firmware not supported by TEE\n");
-+
-+	rproc->ops->prepare = stm32_rproc_tee_prepare;
-+	rproc->ops->stop = stm32_rproc_tee_stop;
-+	rproc->ops->kick = stm32_rproc_tee_kick;
-+
-+	ddata = rproc->priv;
-+
-+	ddata->ranges = device_get_match_data(&pdev->dev);
-+
-+	rproc->has_iommu = false;
-+	ddata->workqueue = create_workqueue(dev_name(dev));
-+	if (!ddata->workqueue) {
-+		dev_err(dev, "cannot create workqueue\n");
-+		ret = -ENOMEM;
-+		goto free_resources;
-+	}
-+
-+	platform_set_drvdata(pdev, rproc);
-+
-+	ret = stm32_rproc_tee_request_mbox(rproc);
-+	if (ret)
-+		goto free_wkq;
-+
-+	return 0;
-+
-+free_wkq:
-+	destroy_workqueue(ddata->workqueue);
-+free_resources:
-+	rproc_resource_cleanup(rproc);
-+	if (device_may_wakeup(dev)) {
-+		dev_pm_clear_wake_irq(dev);
-+		device_init_wakeup(dev, false);
-+	}
-+	rproc_tee_unregister(dev, rproc);
-+
-+	return ret;
-+}
-+
-+static void stm32_rproc_tee_remove(struct platform_device *pdev)
-+{
-+	struct rproc *rproc = platform_get_drvdata(pdev);
-+	struct stm32_rproc_tee *ddata = rproc->priv;
-+	struct device *dev = &pdev->dev;
-+
-+	stm32_rproc_tee_free_mbox(rproc);
-+	destroy_workqueue(ddata->workqueue);
-+
-+	if (device_may_wakeup(dev)) {
-+		dev_pm_clear_wake_irq(dev);
-+		device_init_wakeup(dev, false);
-+	}
-+
-+	rproc_tee_unregister(dev, rproc);
-+}
-+
-+static int stm32_rproc_tee_suspend(struct device *dev)
-+{
-+	struct rproc *rproc = dev_get_drvdata(dev);
-+	struct stm32_rproc_tee *ddata = rproc->priv;
-+
-+	if (device_may_wakeup(dev))
-+		return enable_irq_wake(ddata->wdg_irq);
-+
-+	return 0;
-+}
-+
-+static int stm32_rproc_tee_resume(struct device *dev)
-+{
-+	struct rproc *rproc = dev_get_drvdata(dev);
-+	struct stm32_rproc_tee *ddata = rproc->priv;
-+
-+	if (device_may_wakeup(dev))
-+		return disable_irq_wake(ddata->wdg_irq);
-+
-+	return 0;
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(stm32_rproc_tee_pm_ops,
-+				stm32_rproc_tee_suspend, stm32_rproc_tee_resume);
-+
-+static const struct of_device_id stm32_rproc_tee_match[] = {
-+	{
-+		.compatible = "st,stm32mp1-m4-tee",
-+		.data = &stm32mp15_m4_dma_ranges,
-+	},
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, stm32_rproc_tee_match);
-+
-+static struct platform_driver stm32_rproc_tee_driver = {
-+	.probe = stm32_rproc_tee_probe,
-+	.remove = stm32_rproc_tee_remove,
-+	.driver = {
-+		.name = "stm32-rproc-tee",
-+		.pm = pm_ptr(&stm32_rproc_tee_pm_ops),
-+		.of_match_table = stm32_rproc_tee_match,
-+	},
-+};
-+module_platform_driver(stm32_rproc_tee_driver);
-+
-+MODULE_DESCRIPTION("STM32 Remote Processor TEE Control Driver");
-+MODULE_AUTHOR("Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>");
-+MODULE_LICENSE("GPL");
-+
++attach_success:
+ 	dev_dbg(&rproc->dev, "rproc %d attached\n", rproc->index);
+ 
+ 	return 0;
+
+base-commit: d4ef36fbd57e610d4c334123ce706a2a71187cae
 -- 
-2.43.0
+2.34.1
 
 
