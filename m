@@ -1,221 +1,180 @@
-Return-Path: <linux-remoteproc+bounces-7153-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7156-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UHT2MCmMwmlvewQAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7153-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2026 14:05:45 +0100
+	id IKD+BCrqwmnnnAQAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7156-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2026 20:46:50 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84DBF308E32
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2026 14:05:45 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF9B431BC73
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2026 20:46:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BCEF030D1C6C
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2026 12:59:35 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D2BA6305C167
+	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2026 19:45:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2066E3C873B;
-	Tue, 24 Mar 2026 12:59:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A6D933A6EB;
+	Tue, 24 Mar 2026 19:44:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Su7gQstz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BI/PyKSY"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D1529D265;
-	Tue, 24 Mar 2026 12:59:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F8830FC0F;
+	Tue, 24 Mar 2026 19:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774357170; cv=none; b=nUGid8Ds2PVTfERIRVVDWuS5LFO/eee18sitjpkq4PLdSco8aAPbFsGw+UrJTQS5b3W/mAdUDB2NTGUVdiCyOAaE1WCvVVgxPz8fT2dyiKQ7brjGOWB1l7qpeK56uIM1t4tcNsbtYmwjxKo7ZwZSEJ23y+LIQFa1/GZlGNJes4o=
+	t=1774381491; cv=none; b=mtXEhXnWVSMZX2PGYgfHIdmbFOgRvn86vPDkldoUYeV1fwLZ/VvcPxqyimSYSdC9j/Uev8GqoO+huslebf6SWhYYXxSn7P8nZEizcYG/xApApkogRfrJZdgYZRj2h5s1IuhqgqmC+cSEbppaXgubDOEagcCXAhEsyREM5yls2nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774357170; c=relaxed/simple;
-	bh=jHv8K9pMMNQ6xFjsDOLiyEic78sAfLIcZfc3vWD5W4I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kHX4D7uQ5MDSPMWyhyzkEox5fc3kZ0EfAvc1Dh0SglGBZF6aVxRakJp/ra/Ucsd9lo1rS0hcGk+dCS07FdCMILfTnZUry3lY7pkzrkeiwZJvfmJ+/U1QsUfWprVhEgKo1ByI8f8soEtUh5BJIwB5PYgUjVnqbj9hTuzrheICI/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Su7gQstz; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62O9UV8t564224;
-	Tue, 24 Mar 2026 12:59:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Ej3Isx
-	3J43WHcbqsXFspxuLWGfpG7XzaDk8RnET7IuY=; b=Su7gQstz3B6aM6PFBG8uQh
-	x01IvkgpF4akIkC2Yv8b74FadNo9e27ekRxXsakT3p1TARe7CZAY29h53xxd8wz1
-	F4kZz+lkiD78vGhCs+laxqnB5u9xFRGK/Tsh6twYP7thvfsNIeWAGdP1jRWjsBE2
-	2NrTa+0v/b8PhcVeJOs61gs29vpCXXnXjqWi5QPV0rxXNiDc7IpzG9wKPCFU1dJu
-	hyIdXPUJ8IHi1NA9903kpVA7KAIe5DifhKuhpq4v9lSgLr3r1ewpvKEptBjvZ2uB
-	zO3ARjeDVnRRo3nNzvOHwsDydcL2Hd5OJrLdyn0FWx65JkOT58sm1iZ5/kZyz6iA
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4d1ky02vr9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Mar 2026 12:59:00 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 62OCedC1011824;
-	Tue, 24 Mar 2026 12:58:59 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4d27vk1pae-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Mar 2026 12:58:59 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 62OCwtnj51904902
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 24 Mar 2026 12:58:55 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8811920063;
-	Tue, 24 Mar 2026 12:58:55 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DD0782004E;
-	Tue, 24 Mar 2026 12:58:54 +0000 (GMT)
-Received: from [9.52.215.154] (unknown [9.52.215.154])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 24 Mar 2026 12:58:54 +0000 (GMT)
-Message-ID: <43139b81-2d3a-407b-9ddf-bd42aa70f780@linux.ibm.com>
-Date: Tue, 24 Mar 2026 13:58:54 +0100
+	s=arc-20240116; t=1774381491; c=relaxed/simple;
+	bh=WRF/0A79XI/IfrPujL8sWiRG4jtPsIHG8/HKlYhxfwg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=NGqVbPo8WKAGLL+OqD+s4OvjyUPaAE/OAUYZQ7T+tRf1S/uSvIuIjKCNBcFQcVSz6V08EFN6FakTUSo4VHhdiUPQXFVRFcK3zsuDRumc5D7eU1JpCkGI4G08/E73XLuWdIMeoLP1JrHw0htY8AsFlg7v5fCje9ISWg2Z9T730Kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BI/PyKSY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF553C19424;
+	Tue, 24 Mar 2026 19:44:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1774381490;
+	bh=WRF/0A79XI/IfrPujL8sWiRG4jtPsIHG8/HKlYhxfwg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=BI/PyKSYvjLJXWbEpQrc+czH+55hhTQfVKT55Uu1wKsITHQaRklHZhshTVjzHQFZN
+	 XI99w4CrCK+yRfm2877TM5yV4pPdvKaG1DWbUoq9X2UMljaiVAeNppp3zNtFe6VQcR
+	 Nbxio4BzKuKvbSdbHpiqyp9b0V4Wi4iBFmRLBu0AraFrnoul9PN3a4ntDRFnw+1WBV
+	 6VOLh/84HoNWnxFvJA4p13awciT/KZz8A8WdIkArI2aCUbV0ZkSk5h4r/JYUTPRIIT
+	 T8Jt8zQSnSc69wMDv4JXXRT2onYDSQlxz5UqGBDTvOp1c1OxGFbD7+EZxoeS8MPSTJ
+	 8n38/skizDzlQ==
+From: Mark Brown <broonie@kernel.org>
+To: Russell King <linux@armlinux.org.uk>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Ioana Ciornei <ioana.ciornei@nxp.com>, Nipun Gupta <nipun.gupta@amd.com>, 
+ Nikhil Agarwal <nikhil.agarwal@amd.com>, 
+ "K. Y. Srinivasan" <kys@microsoft.com>, 
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+ Bjorn Helgaas <bhelgaas@google.com>, Armin Wolf <W_Armin@gmx.de>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Mathieu Poirier <mathieu.poirier@linaro.org>, 
+ Vineeth Vijayan <vneethv@linux.ibm.com>, 
+ Peter Oberparleiter <oberpar@linux.ibm.com>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, 
+ Harald Freudenberger <freude@linux.ibm.com>, 
+ Holger Dengler <dengler@linux.ibm.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+ =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+ Alex Williamson <alex@shazbot.org>, Juergen Gross <jgross@suse.com>, 
+ Stefano Stabellini <sstabellini@kernel.org>, 
+ Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, 
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+ Danilo Krummrich <dakr@kernel.org>
+Cc: linux-kernel@vger.kernel.org, driver-core@lists.linux.dev, 
+ linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org, 
+ linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
+ linux-s390@vger.kernel.org, linux-spi@vger.kernel.org, 
+ virtualization@lists.linux.dev, kvm@vger.kernel.org, 
+ xen-devel@lists.xenproject.org, linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20260324005919.2408620-1-dakr@kernel.org>
+References: <20260324005919.2408620-1-dakr@kernel.org>
+Subject: Re: (subset) [PATCH 00/12] treewide: Convert buses to use generic
+ driver_override
+Message-Id: <177436441990.98682.12977271865531185229.b4-ty@b4>
+Date: Tue, 24 Mar 2026 15:00:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/12] s390/ap: use generic driver_override infrastructure
-To: Danilo Krummrich <dakr@kernel.org>, Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Nipun Gupta <nipun.gupta@amd.com>,
-        Nikhil Agarwal <nikhil.agarwal@amd.com>,
-        "K. Y. Srinivasan"
- <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, Armin Wolf <W_Armin@gmx.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Mark Brown
- <broonie@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
-        Alex Williamson <alex@shazbot.org>, Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: linux-kernel@vger.kernel.org, driver-core@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-spi@vger.kernel.org,
-        virtualization@lists.linux.dev, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-arm-kernel@lists.infradead.org
-References: <20260324005919.2408620-1-dakr@kernel.org>
- <20260324005919.2408620-11-dakr@kernel.org>
-From: Holger Dengler <dengler@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <20260324005919.2408620-11-dakr@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzI0MDEwMSBTYWx0ZWRfX6N1fBrtwZrfl
- aNao0Xhwv2iPArpXTciFzlHehJzd3FqyuyxByqEu+FLvzIew8kt3PjWdYdZtO7Ev/dzu1juD33i
- ULiVxPJi+Eu3Wm01+pD7w41oOcB6CO0eS2PR+DcOqwrlrsqbZgbqKoknbOSccN4kN1AdGDnpSh4
- giT9HWCMECWpapxDaYdMQ/IXQp+iHi2011iYdnklc4+iAjB4tA8YcsPMKFTESeLitzfCKx7CeYa
- F5bfAZ1prh5bHCsbzFtvW6c4E94vHNefJ4W5xyDv5bTOpwX5xpUV089SzGXBpTCh2Tn6j/1RJAy
- 8JrNkM5IZMTuuFxodSI3N0ItWWwaPezBykvTmfdz5CNBYNkZhJ/G7w4qUg5Kyf1QOlPIUBtuFZ0
- TaNFvnH1pIhI71CTLphAPYyjG3E9oMOG+wVPVi77oKaFO89fYZRslVgre89UqkZSjDGRx3OB3Tc
- tkfYq5p7x6UpUVDBiYg==
-X-Authority-Analysis: v=2.4 cv=JK42csKb c=1 sm=1 tr=0 ts=69c28a95 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=JtdtG7AWE7AhTqZWL1AA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: umcwOVG9OGh_DW7scW8FgcsJPpy_MgAT
-X-Proofpoint-GUID: iDlj1Pn5DnrzHKXcEcJoAVIWEUdMu_KQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-24_03,2026-03-23_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 clxscore=1011 priorityscore=1501 malwarescore=0 adultscore=0
- spamscore=0 suspectscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2603050001 definitions=main-2603240101
-X-Spamd-Result: default: False [-2.16 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.16-dev-6cc06
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1523; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=WRF/0A79XI/IfrPujL8sWiRG4jtPsIHG8/HKlYhxfwg=;
+ b=kA0DAAoBJNaLcl1Uh9AByyZiAGnC6amgudhaUXvPlk+pDm3GoyUp8H0DzJj7P23jodGH3vgaM
+ YkBMwQAAQoAHRYhBK3maKpnVxi1n+Kf6iTWi3JdVIfQBQJpwumpAAoJECTWi3JdVIfQ7W4H/0HK
+ bnLD6QxQOBC+fzyIxZ6G6kEKZPO4GVW3Pfn4yfAzX5qrdKQRkDgps7IYWut/u33hS3f+Z04EmOJ
+ lYrLIJIM422nR6nge6hF8EhqNBiTq/w9q7cGC48hH540F15d0sLd2//XCIGupIA1RXpBqVdzq5x
+ OT6qjdHSfs8FyZ+oeQmp08Rcg1XfVc+MneH1PzidJufZ+tJUtayZw29OlGfNk6vGZ389vkRi+Ec
+ XFn5qSzIYh78B0Z0zXzPv2/IjG8frEcheWdi3dJbD2bUS4h2S1US62r3HG8U3Au0lRz8ggXRMML
+ 03vuVW3IP0egShhpeZHJhBzFqhYb6LFlY+k9hXc=
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[ibm.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.ibm.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	TAGGED_FROM(0.00)[bounces-7153-lists,linux-remoteproc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,armlinux.org.uk,linuxfoundation.org,nxp.com,amd.com,microsoft.com,google.com,gmx.de,linaro.org,linux.ibm.com,redhat.com,linux.alibaba.com,shazbot.org,suse.com,epam.com];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[48];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dengler@linux.ibm.com,linux-remoteproc@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[armlinux.org.uk,linuxfoundation.org,kernel.org,nxp.com,amd.com,microsoft.com,google.com,gmx.de,linaro.org,linux.ibm.com,redhat.com,linux.alibaba.com,shazbot.org,suse.com,epam.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[48];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-7156-lists,linux-remoteproc=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-remoteproc@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-remoteproc];
-	RCVD_COUNT_SEVEN(0.00)[11]
-X-Rspamd-Queue-Id: 84DBF308E32
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: BF9B431BC73
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 24/03/2026 01:59, Danilo Krummrich wrote:
-> When the AP masks are updated via apmask_store() or aqmask_store(),
-> ap_bus_revise_bindings() is called after ap_attr_mutex has been
-> released.
+On Tue, 24 Mar 2026 01:59:04 +0100, Danilo Krummrich wrote:
+> treewide: Convert buses to use generic driver_override
 > 
-> This calls __ap_revise_reserved(), which accesses the driver_override
-> field without holding any lock, racing against a concurrent
-> driver_override_store() that may free the old string, resulting in a
-> potential UAF.
+> This is the follow-up of the driver_override generalization in [1], converting
+> the remaining 11 busses and removing the now-unused driver_set_override()
+> helper.
 > 
-> Fix this by using the driver-core driver_override infrastructure, which
-> protects all accesses with an internal spinlock.
+> All of them (except AP, which has a different race condition) are prone to the
+> potential UAF described in [2], caused by accessing the driver_override field
+> from their corresponding match() callback.
 > 
-> Note that unlike most other buses, the AP bus does not check
-> driver_override in its match() callback; the override is checked in
-> ap_device_probe() and __ap_revise_reserved() instead.
-> 
-> Also note that we do not enable the driver_override feature of struct
-> bus_type, as AP - in contrast to most other buses - passes "" to
-> sysfs_emit() when the driver_override pointer is NULL. Thus, printing
-> "\n" instead of "(null)\n".
-> 
-> Additionally, AP has a custom counter that is modified in the
-> corresponding custom driver_override_store().
-> 
-> Fixes: d38a87d7c064 ("s390/ap: Support driver_override for AP queue devices")
-> Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+> [...]
 
-Tested-by: Holger Dengler <dengler@linux.ibm.com>
-Reviewed-by: Holger Dengler <dengler@linux.ibm.com>
+Applied to
 
--- 
-Mit freundlichen Grüßen / Kind regards
-Holger Dengler
---
-IBM Systems, Linux on IBM Z Development
-dengler@linux.ibm.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-7.0
+
+Thanks!
+
+[11/12] spi: use generic driver_override infrastructure
+        https://git.kernel.org/broonie/spi/c/cc34d77dd487
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
