@@ -1,224 +1,176 @@
-Return-Path: <linux-remoteproc+bounces-7155-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7157-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4H0NDTzqwmkOnQQAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7155-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2026 20:47:08 +0100
+	id wDYnBcNRw2mIqAQAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7157-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Mar 2026 04:08:51 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB0B631BCA1
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2026 20:47:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD20031F0DD
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Mar 2026 04:08:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AA41E310DBA9
-	for <lists+linux-remoteproc@lfdr.de>; Tue, 24 Mar 2026 19:42:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1872C3057E90
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 25 Mar 2026 03:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04C4231E83F;
-	Tue, 24 Mar 2026 19:42:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26C1329D28F;
+	Wed, 25 Mar 2026 03:08:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="ifvPJxvA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QsG2jCun"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A425E3043DC;
-	Tue, 24 Mar 2026 19:42:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774381336; cv=none; b=Tt9bCBK+LTpfXSN9cGd7OFKwU64TPHqZD0lANIAdIvzq+coZrzJ88/q8ehn/UAPz1RSYq116h/5NKzGb20GPgEE+6/n68W/ew28KjbxVQap4BanyJNsWWlkn8nxV1RihU70aOYWng+YUB/pPaMKSjqdlAf0s4ZPKNlCienNqVRY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774381336; c=relaxed/simple;
-	bh=CP9KQznymj/57SvemGWPkQ/5+YO2JcQjnpOOJiKqnYw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AQs8E6t8UOd74GNHRtoe26daCV/ASXCnLqnVlOBZXVk/5KgspTtRQItQA+fHLtkTJcmpbyPP+njQyfEbXsJyF9EczJd2MSg9B68/sFjx5Hytt7tNRVQesiHi50asGIpNXawfd325ygCWOmVRNAuiV4B4rw+WomBCot2ON2N/VLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=ifvPJxvA; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1774381324; x=1774986124; i=w_armin@gmx.de;
-	bh=GGWlvb2n3V4HaO8XQjVf9hW7XhuAzhwdcuVxgB5Di8o=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=ifvPJxvAhtek8q+pCeeyITFinHZKIJzqVHZWD0oNtpjBH1VESRkcZtiJ0sFNIVvR
-	 +0tHnwJ18q+Z71ZrayUhU0vh5SiV1GPGwunmQmajPwVX4HXy1AnJ3jVQfcgYl/q0G
-	 7GpW93BfuY2TpH5ZIbrRDM1vyhuFD6vaYRPfQPHs2isrsWWvKb6H9asjxTkbrpRtL
-	 3vWhE/L/BP8v1cfiKyUpLIqIJ9UK3RIuIZtPTLzS2X0sC5ZIUWvYq6SpqamMfPhIB
-	 3LW6jjBPxIdqM4s0+mkdYOjqtI6GXvkruP0E13jFM3HajUwIRo0KgB5dciwbWvO8R
-	 RuMZmDRORvSKwwSOYw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MJE6L-1vpN8Z0wQN-00N053; Tue, 24
- Mar 2026 20:42:04 +0100
-Message-ID: <50ed0e80-c1f3-48da-81f6-9edd2b1c35e1@gmx.de>
-Date: Tue, 24 Mar 2026 20:41:59 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C072B29DB6C
+	for <linux-remoteproc@vger.kernel.org>; Wed, 25 Mar 2026 03:08:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1774408105; cv=pass; b=MQDfmZtw8sMDb+3nd6lq5dDcirqBpnmgmMdXzouEf18VFJWx0y5yXqxUEa5GAQqL/MnlHBCXeqwOlKSKKLWIFahSinp4kZJBSoJmaa2PU5bPZB96GGphllWEggUOfyPGBl9f60ASgW/XkEIlgGcZm0Vf2iwEATpkDur3c0g16+Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1774408105; c=relaxed/simple;
+	bh=hJdcGCQ3mHxI4qcvqZp/CCaqOJ76l13MZ1DRKNMUyZA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DN+/sjBm49sUf7+zIBefu6p+Dpyj6813NIUEmHiR0DwKi+WM8aERw8kx/Pp1ccVHoaL39u9S8IdsakcXLOm5fDHaiKJtrC3T92EaT9cobxvMcCiDcVn8mWd9GGfJSpOB4/JQFqrrMZoh2B5DK6d3COa3qRVe9UUQSuLoPiTwA3Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QsG2jCun; arc=pass smtp.client-ip=209.85.161.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-67df51b26ddso1079241eaf.2
+        for <linux-remoteproc@vger.kernel.org>; Tue, 24 Mar 2026 20:08:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1774408102; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MbJWaMWnLAzc1igKPvIsfDdksdQQbyPFRupKrkLHz5bF6GqImFV/zT0wS1nOH2NUMi
+         BawaXryKeO16D2kji8bvigIfUww0NBYo9wpeN7SyD/VVPHml3AuSID73J2IcbMP/TVsy
+         HOJRcPIzrSJGcyHdAFvbB4RbHyt5JHqg8BYsy+ACKysUQxaHegzSW3sSU2JCzOkHJXj+
+         1QicyUKRjkx8GL/wcE49HUqqdPBIcFTUyQP25hYuCdoX9mQKJb0toOkDbE5Wq6YrxCye
+         Bi7gtAkUUKmtJ3eMgkqR87QJpGl3k+0T6sYCpTLeRqpiDac4edUkMjHfHqvPVtw2dflH
+         jfzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=L1agqMYRVyCUyftxunjR/Gctujg8X1gDCx6TflvnIV4=;
+        fh=ORL+dbb5kUFCWy7hkPeB9QoJs0jdrVWOFcrfh8xBpwc=;
+        b=FDemI94Oa49OwzCe6j8P9EUCeZef/BsE3DbFAxvw9Ss+80PaostEan4n4096syxdcM
+         L/4T49S8PisYLgi+2MPGmTkuHHOzbqf+PVD7n2zd6mSPjmfB0UweyLPWmitGf4GERVOl
+         7fYi0OV3Q3z/o9FemKeqt4NVy5ltcU97fQUZTh0uPdQZc77MdamPfp5aG4+YC5JSMdtV
+         tv44vol8rcUgxXmKxJAsyr6kEqZ0hI5Y1Hc2ivnzTzhT9nYsvUpSAowpexq28ERX5HMW
+         daKTR1iYHjH1E5eItAIDJNrM8SHEV772qpdXX0Flu+pOFl3DUXHIVL65LaYSe2lZFA9+
+         J8+w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1774408102; x=1775012902; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L1agqMYRVyCUyftxunjR/Gctujg8X1gDCx6TflvnIV4=;
+        b=QsG2jCunF6U9HFdPFtYk1Fvt12375/QhCCqZnpk7qBrUJDtwoPwbZG00Jxz3BLNAhH
+         6yC6bntNmHyq7x7cP0+N6/uwrnu4b91f6kk14zUUgBqddni3wPt6K7GfK3VBO9vnm3J1
+         z+WYSyue1n99gDpMq448CDF5siFzxJf5yHSUwcyJx6VhvxvHBUVIoZCA8J8lRlFVzyE+
+         VVj1VO6NGN1ab9PiGjH0rUmDjcUZDFcwiB5b34LaaumYSy57XOpRmbzP5Qhozw3636yE
+         ih5IVdoV+6OvYilULBnmHxgj0HuKO1k2K64kakQdkM8JMyQ6HNVTAAeXTM51wOpVMwzo
+         g5Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1774408102; x=1775012902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=L1agqMYRVyCUyftxunjR/Gctujg8X1gDCx6TflvnIV4=;
+        b=MoIW/d4d3G/joZpIYNW1eck4A+KcnB7709MBbX1+aDSb+17/P6+7e0WnrwDMydqzDy
+         xeZr1HE/fFgF4v8iJyXYx74hl2uH0Nxji34cNCrrudDEaPu7FLYWW2BOByvx3tGtJy7g
+         GU0O6erwqt/IT+P4tCPJEfEeecroUqOqDeaYsErNxsQC+pmLsWhipq9AjbDtSedfrjjf
+         nXOE6q0w4wyn/vwA1zFIRELubbUwP398x1KnQZw02uix4JRkt/ZmFJPpJmnpaowt4gKg
+         gVxHq6aKTthautOccKHJtSvbPO/vXnUsar0ObtkDZVYnboRBbh5oiwU6E//LonxkUngA
+         +nZw==
+X-Forwarded-Encrypted: i=1; AJvYcCUR60QjkXqSZ8+EmtFZ1gmpUHpCuyS/2iyuRhov1z3n2Tf6XIjSya/aFPqDajL5nk26+fOjdOOH5tkRVqhu8yN7@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+SAHCfgEcBX0K7uvi+OnkpNzJLrUZvDlZ6OH1b/0x9DVIJ2tt
+	pGVLhp4xqf4Oy0mgyMxZp4/JxygH5luye+IK7DjWSgdztEWc/Z/VFAN8TVL+c8FGawDDVHRcV/c
+	Nw+8RFv7sHhYRQ8SyT/Om/6UIi4Un5WE=
+X-Gm-Gg: ATEYQzy5+tVYCIkN3FjpcmYf4HL/QRc6fi0e3JAyHEqOdL4pB6TjzeB9M+9Wa5X2pRK
+	uedzcbW/hutx4kIFESJYRM6/JCv5kcCD47LJVMZNGdxRzmpxeNNotWjWM6kxcMnQB+sUoyXq4/x
+	MiANfgZ8m+JPu92MygyZkkHquhb+KvxaDdvQ9/LyrfJ5ao6jjsExb1CE76Gh4KO2rMxXXzxIPNV
+	sJqYob+ATekmr8J+YfqIsWrJNUkLQBFKeMcD6dET/UjHDKOQJNoC5Rg/CDsq1KisIzD6pzhkQ1h
+	ksORns9HeXmXZYQBhFRzfp0uXkOWCRALevSnpgPjxXS5Rd1ahXFVjseCAoJUvQfWXCaFX8cvLbj
+	Q1NMpwnI=
+X-Received: by 2002:a05:6820:1787:b0:67b:e203:6c8d with SMTP id
+ 006d021491bc7-67dff53efc8mr1216692eaf.52.1774408101668; Tue, 24 Mar 2026
+ 20:08:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/12] platform/wmi: use generic driver_override
- infrastructure
-To: Danilo Krummrich <dakr@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Ioana Ciornei <ioana.ciornei@nxp.com>, Nipun Gupta <nipun.gupta@amd.com>,
- Nikhil Agarwal <nikhil.agarwal@amd.com>, "K. Y. Srinivasan"
- <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
- Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
- Long Li <longli@microsoft.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Mathieu Poirier <mathieu.poirier@linaro.org>,
- Vineeth Vijayan <vneethv@linux.ibm.com>,
- Peter Oberparleiter <oberpar@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Harald Freudenberger <freude@linux.ibm.com>,
- Holger Dengler <dengler@linux.ibm.com>, Mark Brown <broonie@kernel.org>,
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?=
- <eperezma@redhat.com>, Alex Williamson <alex@shazbot.org>,
- Juergen Gross <jgross@suse.com>, Stefano Stabellini
- <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: linux-kernel@vger.kernel.org, driver-core@lists.linux.dev,
- linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
- linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-spi@vger.kernel.org,
- virtualization@lists.linux.dev, kvm@vger.kernel.org,
- xen-devel@lists.xenproject.org, linux-arm-kernel@lists.infradead.org,
- Gui-Dong Han <hanguidong02@gmail.com>
-References: <20260324005919.2408620-1-dakr@kernel.org>
- <20260324005919.2408620-7-dakr@kernel.org>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <20260324005919.2408620-7-dakr@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20260324005919.2408620-1-dakr@kernel.org> <20260324005919.2408620-6-dakr@kernel.org>
+In-Reply-To: <20260324005919.2408620-6-dakr@kernel.org>
+From: Gui-Dong Han <hanguidong02@gmail.com>
+Date: Wed, 25 Mar 2026 11:08:11 +0800
+X-Gm-Features: AQROBzD64p8E8k4KuR51RUiYotZVMtC9NAESBq-7RvJsmuQyKbQ4KJC_uWmm37s
+Message-ID: <CALbr=La3gV5VmoXauF-fkmXveoJGtTvef1d1nrLtUZNHx2eF+w@mail.gmail.com>
+Subject: Re: [PATCH 05/12] PCI: use generic driver_override infrastructure
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Ioana Ciornei <ioana.ciornei@nxp.com>, 
+	Nipun Gupta <nipun.gupta@amd.com>, Nikhil Agarwal <nikhil.agarwal@amd.com>, 
+	"K. Y. Srinivasan" <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+	Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Armin Wolf <W_Armin@gmx.de>, 
+	Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
+	Vineeth Vijayan <vneethv@linux.ibm.com>, Peter Oberparleiter <oberpar@linux.ibm.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Harald Freudenberger <freude@linux.ibm.com>, 
+	Holger Dengler <dengler@linux.ibm.com>, Mark Brown <broonie@kernel.org>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	Alex Williamson <alex@shazbot.org>, Juergen Gross <jgross@suse.com>, 
+	Stefano Stabellini <sstabellini@kernel.org>, 
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, linux-kernel@vger.kernel.org, 
+	driver-core@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-spi@vger.kernel.org, virtualization@lists.linux.dev, 
+	kvm@vger.kernel.org, xen-devel@lists.xenproject.org, 
+	linux-arm-kernel@lists.infradead.org, Wang Jiayue <akaieurus@gmail.com>, 
+	Yao Zi <me@ziyao.cc>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:KKKjGPofriNO2Y7ny8bzLW+ogpO7D8lGPS1ezTtV32qPriElMBO
- jvtg2QtMPBSSFpK+K9f9/W3IHaIUxxM1SjbuL+eF3f/6Z6WRzj/HQbWdJ/0smqYXW/iekvq
- A+6iz88zZSNd21TB/fuLIMalZH7T5q5DuSXS3//CqYIoGgOXkyuC7c9IHxbPHBnE7ZSgdkY
- FFp1rdFLmEZzrK9+h1giQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:kIvBWcj/zXQ=;/niOuXlWvI8Na8RihCaK5ylBNR/
- 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
 X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmx.de,quarantine];
-	R_DKIM_ALLOW(-0.20)[gmx.de:s=s31663417];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20251104];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7155-lists,linux-remoteproc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,lists.ozlabs.org,lists.xenproject.org,lists.infradead.org,gmail.com];
-	FREEMAIL_FROM(0.00)[gmx.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[49];
-	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[armlinux.org.uk,linuxfoundation.org,kernel.org,nxp.com,amd.com,microsoft.com,google.com,gmx.de,linaro.org,linux.ibm.com,redhat.com,linux.alibaba.com,shazbot.org,suse.com,epam.com,vger.kernel.org,lists.linux.dev,lists.ozlabs.org,lists.xenproject.org,lists.infradead.org,gmail.com,ziyao.cc];
+	TAGGED_FROM(0.00)[bounces-7157-lists,linux-remoteproc=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MISSING_XM_UA(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_GT_50(0.00)[51];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[W_Armin@gmx.de,linux-remoteproc@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmx.de:+];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[hanguidong02@gmail.com,linux-remoteproc@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-remoteproc];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,gmx.de:dkim,gmx.de:email,gmx.de:mid]
-X-Rspamd-Queue-Id: BB0B631BCA1
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: AD20031F0DD
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Am 24.03.26 um 01:59 schrieb Danilo Krummrich:
-
+On Tue, Mar 24, 2026 at 9:00=E2=80=AFAM Danilo Krummrich <dakr@kernel.org> =
+wrote:
+>
 > When a driver is probed through __driver_attach(), the bus' match()
 > callback is called without the device lock held, thus accessing the
 > driver_override field without a lock, which can cause a UAF.
@@ -228,117 +180,223 @@ Am 24.03.26 um 01:59 schrieb Danilo Krummrich:
 >
 > Note that calling match() from __driver_attach() without the device lock
 > held is intentional. [1]
-
-Reviewed-by: Armin Wolf <W_Armin@gmx.de>
-
-> Link: https://lore.kernel.org/driver-core/DGRGTIRHA62X.3RY09D9SOK77P@ker=
-nel.org/ [1]
+>
+> Link: https://lore.kernel.org/driver-core/DGRGTIRHA62X.3RY09D9SOK77P@kern=
+el.org/ [1]
 > Reported-by: Gui-Dong Han <hanguidong02@gmail.com>
 > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D220789
-> Fixes: 12046f8c77e0 ("platform/x86: wmi: Add driver_override support")
+> Fixes: 782a985d7af2 ("PCI: Introduce new device binding path using pci_de=
+v.driver_override")
 > Signed-off-by: Danilo Krummrich <dakr@kernel.org>
+
+Tested on QEMU PCI with multiple debug configs enabled. The original
+PoCs run cleanly without triggering the issue.
+
+Thanks Danilo.
+
+Tested-by: Gui-Dong Han <hanguidong02@gmail.com>
+Reviewed-by: Gui-Dong Han <hanguidong02@gmail.com>
+
 > ---
->   drivers/platform/wmi/core.c | 36 +++++-------------------------------
->   include/linux/wmi.h         |  4 ----
->   2 files changed, 5 insertions(+), 35 deletions(-)
+>  drivers/pci/pci-driver.c           | 11 +++++++----
+>  drivers/pci/pci-sysfs.c            | 28 ----------------------------
+>  drivers/pci/probe.c                |  1 -
+>  drivers/vfio/pci/vfio_pci_core.c   |  5 ++---
+>  drivers/xen/xen-pciback/pci_stub.c |  6 ++++--
+>  include/linux/pci.h                |  6 ------
+>  6 files changed, 13 insertions(+), 44 deletions(-)
 >
-> diff --git a/drivers/platform/wmi/core.c b/drivers/platform/wmi/core.c
-> index b8e6b9a421c6..750e3619724e 100644
-> --- a/drivers/platform/wmi/core.c
-> +++ b/drivers/platform/wmi/core.c
-> @@ -842,39 +842,11 @@ static ssize_t expensive_show(struct device *dev,
->   }
->   static DEVICE_ATTR_RO(expensive);
->  =20
-> -static ssize_t driver_override_show(struct device *dev, struct device_a=
-ttribute *attr,
-> -				    char *buf)
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index dd9075403987..d10ece0889f0 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -138,9 +138,11 @@ static const struct pci_device_id *pci_match_device(=
+struct pci_driver *drv,
+>  {
+>         struct pci_dynid *dynid;
+>         const struct pci_device_id *found_id =3D NULL, *ids;
+> +       int ret;
+>
+>         /* When driver_override is set, only bind to the matching driver =
+*/
+> -       if (dev->driver_override && strcmp(dev->driver_override, drv->nam=
+e))
+> +       ret =3D device_match_driver_override(&dev->dev, &drv->driver);
+> +       if (ret =3D=3D 0)
+>                 return NULL;
+>
+>         /* Look at the dynamic ids first, before the static ones */
+> @@ -164,7 +166,7 @@ static const struct pci_device_id *pci_match_device(s=
+truct pci_driver *drv,
+>                  * matching.
+>                  */
+>                 if (found_id->override_only) {
+> -                       if (dev->driver_override)
+> +                       if (ret > 0)
+>                                 return found_id;
+>                 } else {
+>                         return found_id;
+> @@ -172,7 +174,7 @@ static const struct pci_device_id *pci_match_device(s=
+truct pci_driver *drv,
+>         }
+>
+>         /* driver_override will always match, send a dummy id */
+> -       if (dev->driver_override)
+> +       if (ret > 0)
+>                 return &pci_device_id_any;
+>         return NULL;
+>  }
+> @@ -452,7 +454,7 @@ static int __pci_device_probe(struct pci_driver *drv,=
+ struct pci_dev *pci_dev)
+>  static inline bool pci_device_can_probe(struct pci_dev *pdev)
+>  {
+>         return (!pdev->is_virtfn || pdev->physfn->sriov->drivers_autoprob=
+e ||
+> -               pdev->driver_override);
+> +               device_has_driver_override(&pdev->dev));
+>  }
+>  #else
+>  static inline bool pci_device_can_probe(struct pci_dev *pdev)
+> @@ -1722,6 +1724,7 @@ static const struct cpumask *pci_device_irq_get_aff=
+inity(struct device *dev,
+>
+>  const struct bus_type pci_bus_type =3D {
+>         .name           =3D "pci",
+> +       .driver_override =3D true,
+>         .match          =3D pci_bus_match,
+>         .uevent         =3D pci_uevent,
+>         .probe          =3D pci_device_probe,
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index 16eaaf749ba9..a9006cf4e9c8 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -615,33 +615,6 @@ static ssize_t devspec_show(struct device *dev,
+>  static DEVICE_ATTR_RO(devspec);
+>  #endif
+>
+> -static ssize_t driver_override_store(struct device *dev,
+> -                                    struct device_attribute *attr,
+> -                                    const char *buf, size_t count)
 > -{
-> -	struct wmi_device *wdev =3D to_wmi_device(dev);
-> -	ssize_t ret;
+> -       struct pci_dev *pdev =3D to_pci_dev(dev);
+> -       int ret;
 > -
-> -	device_lock(dev);
-> -	ret =3D sysfs_emit(buf, "%s\n", wdev->driver_override);
-> -	device_unlock(dev);
+> -       ret =3D driver_set_override(dev, &pdev->driver_override, buf, cou=
+nt);
+> -       if (ret)
+> -               return ret;
 > -
-> -	return ret;
+> -       return count;
 > -}
 > -
-> -static ssize_t driver_override_store(struct device *dev, struct device_=
-attribute *attr,
-> -				     const char *buf, size_t count)
+> -static ssize_t driver_override_show(struct device *dev,
+> -                                   struct device_attribute *attr, char *=
+buf)
 > -{
-> -	struct wmi_device *wdev =3D to_wmi_device(dev);
-> -	int ret;
+> -       struct pci_dev *pdev =3D to_pci_dev(dev);
+> -       ssize_t len;
 > -
-> -	ret =3D driver_set_override(dev, &wdev->driver_override, buf, count);
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	return count;
+> -       device_lock(dev);
+> -       len =3D sysfs_emit(buf, "%s\n", pdev->driver_override);
+> -       device_unlock(dev);
+> -       return len;
 > -}
 > -static DEVICE_ATTR_RW(driver_override);
 > -
->   static struct attribute *wmi_attrs[] =3D {
->   	&dev_attr_modalias.attr,
->   	&dev_attr_guid.attr,
->   	&dev_attr_instance_count.attr,
->   	&dev_attr_expensive.attr,
-> -	&dev_attr_driver_override.attr,
->   	NULL
->   };
->   ATTRIBUTE_GROUPS(wmi);
-> @@ -943,7 +915,6 @@ static void wmi_dev_release(struct device *dev)
->   {
->   	struct wmi_block *wblock =3D dev_to_wblock(dev);
->  =20
-> -	kfree(wblock->dev.driver_override);
->   	kfree(wblock);
->   }
->  =20
-> @@ -952,10 +923,12 @@ static int wmi_dev_match(struct device *dev, const=
- struct device_driver *driver)
->   	const struct wmi_driver *wmi_driver =3D to_wmi_driver(driver);
->   	struct wmi_block *wblock =3D dev_to_wblock(dev);
->   	const struct wmi_device_id *id =3D wmi_driver->id_table;
-> +	int ret;
->  =20
->   	/* When driver_override is set, only bind to the matching driver */
-> -	if (wblock->dev.driver_override)
-> -		return !strcmp(wblock->dev.driver_override, driver->name);
-> +	ret =3D device_match_driver_override(dev, driver);
-> +	if (ret >=3D 0)
-> +		return ret;
->  =20
->   	if (id =3D=3D NULL)
->   		return 0;
-> @@ -1076,6 +1049,7 @@ static struct class wmi_bus_class =3D {
->   static const struct bus_type wmi_bus_type =3D {
->   	.name =3D "wmi",
->   	.dev_groups =3D wmi_groups,
-> +	.driver_override =3D true,
->   	.match =3D wmi_dev_match,
->   	.uevent =3D wmi_dev_uevent,
->   	.probe =3D wmi_dev_probe,
-> diff --git a/include/linux/wmi.h b/include/linux/wmi.h
-> index 75cb0c7cfe57..14fb644e1701 100644
-> --- a/include/linux/wmi.h
-> +++ b/include/linux/wmi.h
-> @@ -18,16 +18,12 @@
->    * struct wmi_device - WMI device structure
->    * @dev: Device associated with this WMI device
->    * @setable: True for devices implementing the Set Control Method
-> - * @driver_override: Driver name to force a match; do not set directly,
-> - *		     because core frees it; use driver_set_override() to
-> - *		     set or clear it.
->    *
->    * This represents WMI devices discovered by the WMI driver core.
->    */
->   struct wmi_device {
->   	struct device dev;
->   	bool setable;
-> -	const char *driver_override;
->   };
->  =20
->   /**
+>  static struct attribute *pci_dev_attrs[] =3D {
+>         &dev_attr_power_state.attr,
+>         &dev_attr_resource.attr,
+> @@ -669,7 +642,6 @@ static struct attribute *pci_dev_attrs[] =3D {
+>  #ifdef CONFIG_OF
+>         &dev_attr_devspec.attr,
+>  #endif
+> -       &dev_attr_driver_override.attr,
+>         &dev_attr_ari_enabled.attr,
+>         NULL,
+>  };
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index bccc7a4bdd79..b4707640e102 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -2488,7 +2488,6 @@ static void pci_release_dev(struct device *dev)
+>         pci_release_of_node(pci_dev);
+>         pcibios_release_device(pci_dev);
+>         pci_bus_put(pci_dev->bus);
+> -       kfree(pci_dev->driver_override);
+>         bitmap_free(pci_dev->dma_alias_mask);
+>         dev_dbg(dev, "device released\n");
+>         kfree(pci_dev);
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci=
+_core.c
+> index d43745fe4c84..460852f79f29 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -1987,9 +1987,8 @@ static int vfio_pci_bus_notifier(struct notifier_bl=
+ock *nb,
+>             pdev->is_virtfn && physfn =3D=3D vdev->pdev) {
+>                 pci_info(vdev->pdev, "Captured SR-IOV VF %s driver_overri=
+de\n",
+>                          pci_name(pdev));
+> -               pdev->driver_override =3D kasprintf(GFP_KERNEL, "%s",
+> -                                                 vdev->vdev.ops->name);
+> -               WARN_ON(!pdev->driver_override);
+> +               WARN_ON(device_set_driver_override(&pdev->dev,
+> +                                                  vdev->vdev.ops->name))=
+;
+>         } else if (action =3D=3D BUS_NOTIFY_BOUND_DRIVER &&
+>                    pdev->is_virtfn && physfn =3D=3D vdev->pdev) {
+>                 struct pci_driver *drv =3D pci_dev_driver(pdev);
+> diff --git a/drivers/xen/xen-pciback/pci_stub.c b/drivers/xen/xen-pciback=
+/pci_stub.c
+> index e4b27aecbf05..79a2b5dfd694 100644
+> --- a/drivers/xen/xen-pciback/pci_stub.c
+> +++ b/drivers/xen/xen-pciback/pci_stub.c
+> @@ -598,6 +598,8 @@ static int pcistub_seize(struct pci_dev *dev,
+>         return err;
+>  }
+>
+> +static struct pci_driver xen_pcibk_pci_driver;
+> +
+>  /* Called when 'bind'. This means we must _NOT_ call pci_reset_function =
+or
+>   * other functions that take the sysfs lock. */
+>  static int pcistub_probe(struct pci_dev *dev, const struct pci_device_id=
+ *id)
+> @@ -609,8 +611,8 @@ static int pcistub_probe(struct pci_dev *dev, const s=
+truct pci_device_id *id)
+>
+>         match =3D pcistub_match(dev);
+>
+> -       if ((dev->driver_override &&
+> -            !strcmp(dev->driver_override, PCISTUB_DRIVER_NAME)) ||
+> +       if (device_match_driver_override(&dev->dev,
+> +                                        &xen_pcibk_pci_driver.driver) > =
+0 ||
+>             match) {
+>
+>                 if (dev->hdr_type !=3D PCI_HEADER_TYPE_NORMAL
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 1c270f1d5123..57e9463e4347 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -575,12 +575,6 @@ struct pci_dev {
+>         u8              supported_speeds; /* Supported Link Speeds Vector=
+ */
+>         phys_addr_t     rom;            /* Physical address if not from B=
+AR */
+>         size_t          romlen;         /* Length if not from BAR */
+> -       /*
+> -        * Driver name to force a match.  Do not set directly, because co=
+re
+> -        * frees it.  Use driver_set_override() to set or clear it.
+> -        */
+> -       const char      *driver_override;
+> -
+>         unsigned long   priv_flags;     /* Private flags for the PCI driv=
+er */
+>
+>         /* These methods index pci_reset_fn_methods[] */
+> --
+> 2.53.0
+>
 
