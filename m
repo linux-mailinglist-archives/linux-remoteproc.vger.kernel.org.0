@@ -1,69 +1,70 @@
-Return-Path: <linux-remoteproc+bounces-7181-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7182-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8M6fMgVKxWkU8wQAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7181-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2026 16:00:21 +0100
+	id QCfZKINJxWl39AQAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7182-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2026 15:58:11 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3387A33733B
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2026 16:00:21 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49DAA337271
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2026 15:58:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0534930EB76D
-	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2026 14:53:32 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 1320D30AB6B6
+	for <lists+linux-remoteproc@lfdr.de>; Thu, 26 Mar 2026 14:54:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B6343FB06E;
-	Thu, 26 Mar 2026 14:53:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB053FB05E;
+	Thu, 26 Mar 2026 14:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HmRvcq8+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i70ALy/5"
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A5E3FA5F9;
-	Thu, 26 Mar 2026 14:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792CE3F8804;
+	Thu, 26 Mar 2026 14:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774536807; cv=none; b=CxvvJPEJFRPVTcm1F5xXTOeGjX4InbsFR4yck6oMkeM2EN5VW9wSW8UZ2VTvkZtqMQXV4iEhBNYStaJN9WpLwCoJVHqg8KTqBFX71EMgJkoM09DYg2yYc1qinapRe7KtPZ1iN3cxXqPDvCrWTcEdLGvhQwIsCrvHhbJAxe9YLpg=
+	t=1774536837; cv=none; b=F0ZYYaN2jEUHubrPImGm57jfGyxfyLumDWm7qmmzeyBzmYorEaflyAQiotAxIqYNO6iCi5KWOA/0O23Jxp7PE/YbVXGHowHZjRARm+I/jHSa1VojuYwzfWVDayArwj/5DYFZlbu1i9iiDepONAZm4L5SMYWPKFAx1NVxPNLUQgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774536807; c=relaxed/simple;
-	bh=JskL5xnhwWFHaEenp/2RuGMXr1FMLRJRU6ueR9QY3vQ=;
+	s=arc-20240116; t=1774536837; c=relaxed/simple;
+	bh=yHktdqW37TrXaUepZwNO6fH5900GR3PtyoKBLnov98c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fzaqkNvgyoIfGewQrXFDn7Lx2ufDMaK/aHtqUrE7mHBP2ZEemF+BeZ0+pxfTkcKVITRVeYngwbLqDlVK0rboW5znoWYvYTki9Z70/iHomZDrllW1JgqiDil0WHqAPE3UowLgob+Y+jb/jFuDw5KHj9E44/QCCV0Twk7fzSBxBfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HmRvcq8+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98266C116C6;
-	Thu, 26 Mar 2026 14:53:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=K0JBCcWAP/ykz6dZBXhUAwtS0qZKGijTJlgQezHsX0QQN6jYjplToVDlkdAc/U0XOr42PNRPg0Cu3GQSNUvbyN+tlUaM/GLW4GhFyPcxRK2pbDH+9UNviRxexH0mo0vjn4Ca2eE50NgVqFN5qO8QAFCYOVbxnceDtbT2Rf5W8jE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i70ALy/5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F380FC116C6;
+	Thu, 26 Mar 2026 14:53:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1774536806;
-	bh=JskL5xnhwWFHaEenp/2RuGMXr1FMLRJRU6ueR9QY3vQ=;
+	s=k20201202; t=1774536837;
+	bh=yHktdqW37TrXaUepZwNO6fH5900GR3PtyoKBLnov98c=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HmRvcq8+156F4isswv49IFl/NxyXBTsW8Jwg0ob6oCwecqEMDKQfmmrH4cdaalwh1
-	 3LzjANvoInf0uo90/QjJvWzSIQPi+8Ejib3w+kgB9jJlPNWAZPLmKy3b32bL9+ovfp
-	 p3A/dIFjbNugUZa8s32ZUXlm/QA+l+ROtzlxQhZa67v4lidJrQeSJgGO0JilcQRs/v
-	 YsOlrkyNwrP874y+BmROKaQraGgqBQSO0RW6uVbEjwJ+YPIkqN+bijzvsxjmkJeTnt
-	 ROOzT2V+SbL87XkhBZSKB8OI41u4qcL/COq1/wpOgaGo3H2vZhise+5kZVhhfBShf6
-	 huPC3XBaTtzrQ==
-Date: Thu, 26 Mar 2026 09:53:23 -0500
+	b=i70ALy/5lGYrBo8Tzsj7piJ3wi0S/LRaCF9/tO1F6axA28niwP+AEM+zuioshbuKr
+	 4tqq+gVDpsGA2LSoaHyqIAsNs3MVr3W+381X+ZsnvK2VcBuZOo5CIGZEqpDqflKE7b
+	 8tyYpyZ/dXqY8SpYeqLblUm9aiWVfgfsAZ4fvjU2Obj0xrPrAP6yHXLKd8khggiRxq
+	 YYn5Oq9iPZDiy7nSlIm12mQ/ufS401CXmROjJqf9ZL9W7b+4x98J8gGi7tpLjZEVji
+	 +PGclWkEWJysMIbpWaqBi0vHvEsJ0WNyS4bH3jdP4Kzk2De7jiY+CoqY+Co13H+qHa
+	 vtaFVoj76jdRw==
+Date: Thu, 26 Mar 2026 09:53:53 -0500
 From: "Rob Herring (Arm)" <robh@kernel.org>
 To: "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
-Cc: linux-remoteproc@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
-	Dhruva Gole <d-gole@ti.com>, Kendall Willis <k-willis@ti.com>,
-	linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Tero Kristo <kristo@kernel.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+Cc: Vignesh Raghavendra <vigneshr@ti.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
 	Akashdeep Kaur <a-kaur@ti.com>,
-	Bjorn Andersson <andersson@kernel.org>, Suman Anna <s-anna@ti.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Sebin Francis <sebin.francis@ti.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Suman Anna <s-anna@ti.com>, Dhruva Gole <d-gole@ti.com>,
 	Vishal Mahaveer <vishalm@ti.com>, Nishanth Menon <nm@ti.com>,
-	Sebin Francis <sebin.francis@ti.com>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/7] dt-bindings: remoteproc: k3-r5f: Split up memory
- regions
-Message-ID: <177453680287.2360004.8754104483766299234.robh@kernel.org>
+	Kendall Willis <k-willis@ti.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Tero Kristo <kristo@kernel.org>, linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v3 2/7] dt-bindings: remoteproc: k3-r5f: Add
+ memory-region-names
+Message-ID: <177453683307.2360712.17341812490963918406.robh@kernel.org>
 References: <20260318-topic-am62a-ioddr-dt-v6-19-v3-0-c41473cb23c3@baylibre.com>
- <20260318-topic-am62a-ioddr-dt-v6-19-v3-1-c41473cb23c3@baylibre.com>
+ <20260318-topic-am62a-ioddr-dt-v6-19-v3-2-c41473cb23c3@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
@@ -72,20 +73,20 @@ List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260318-topic-am62a-ioddr-dt-v6-19-v3-1-c41473cb23c3@baylibre.com>
+In-Reply-To: <20260318-topic-am62a-ioddr-dt-v6-19-v3-2-c41473cb23c3@baylibre.com>
 X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-7181-lists,linux-remoteproc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7182-lists,linux-remoteproc=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -96,26 +97,24 @@ X-Spamd-Result: default: False [0.34 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-remoteproc@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[19];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 3387A33733B
+X-Rspamd-Queue-Id: 49DAA337271
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 
-On Wed, 18 Mar 2026 16:13:07 +0100, Markus Schneider-Pargmann (TI) wrote:
-> Split up the region reserved for the firmware image in more specific
-> sections to expose the full fixed layout. Especially the LPM metadata
-> section is important for bootloaders as it contains information about
-> how to exit IO+DDR. This is read by the bootloader but is written by the
-> firmware.
+On Wed, 18 Mar 2026 16:13:08 +0100, Markus Schneider-Pargmann (TI) wrote:
+> Add names to the memory-region-names for easier identification of memory
+> regions. As the meaning of the second memory region can be different
+> also require the use of memory-region-names if memory-region is in use.
 > 
 > Signed-off-by: Markus Schneider-Pargmann (TI) <msp@baylibre.com>
 > ---
->  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml       | 29 ++++++++++++++--------
->  1 file changed, 19 insertions(+), 10 deletions(-)
+>  .../bindings/remoteproc/ti,k3-r5f-rproc.yaml       | 26 ++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
 > 
 
 Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
