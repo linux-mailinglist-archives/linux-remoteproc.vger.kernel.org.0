@@ -1,230 +1,151 @@
-Return-Path: <linux-remoteproc+bounces-7215-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7218-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qELSC4HhxmnAPgUAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7215-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2026 20:58:57 +0100
+	id +KM7GQLmxmnrPwUAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7218-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2026 21:18:10 +0100
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C8C734A8D3
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2026 20:58:56 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE3C634ACE7
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2026 21:18:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E08E630263C1
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2026 19:58:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B11DD308B714
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 27 Mar 2026 20:12:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB753876BF;
-	Fri, 27 Mar 2026 19:58:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CD0039890C;
+	Fri, 27 Mar 2026 20:12:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SHnxVr6D"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="sSptJLDs";
+	dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="OVJUCQ0b"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E3B37EFFC
-	for <linux-remoteproc@vger.kernel.org>; Fri, 27 Mar 2026 19:58:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9539B393DE2;
+	Fri, 27 Mar 2026 20:12:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1774641524; cv=none; b=VL+XUXBtf0O0MqmhCy/lxqROhytap5CPFUMDW76aUN6qDDT8yxyBgv2ovxYDBFa7qF8qnyOx/SsnGW7TPGGchT7+1/Ttm3wWwByFqRT6QyqsuOpGlaIM0SshZm4bEV+slUw5YrBp8uj7b0S3lxcyD9yHkCU+fFeq8n4fX5ftEpM=
+	t=1774642323; cv=none; b=pn3NktgZa0gR4DhMMN/cOz2ID19GrOs6AfunumjJiJCY3OfwtwDg1kaPn6Nh5TOWxBEMdKxFKinM2o6vIxiit4WViD/WpUW2mVG2RGgQh7AhYD7Ekz0Ikle83d8/XRB12+K5CxfLcq13z33kOog03+Fn5IxKWn5ufm0G1N8AfFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1774641524; c=relaxed/simple;
-	bh=0evNptiIp2i5VFaMPmgvkXbxXGx4HuiZJh41Ylbun7k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r+jLyUObQGz4XInLSBSIyD59U8IWebjtLZ3m5u8NvcBExZjIwUVNwjnAHhTrFF/+bWxdqvAwn7sohfcI8PzxwNDH+4WhOqaycEGY7mFT7w9tAnMztOXpTea8pB9ej4EniVwRqpgBi9bMVigeV/90tu+6pf9qBuub79kdoDoMgjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SHnxVr6D; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2b0abdde280so24782635ad.1
-        for <linux-remoteproc@vger.kernel.org>; Fri, 27 Mar 2026 12:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1774641522; x=1775246322; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=riqFgloemKeGp2Z33+taeOI5x5WX9rolIEiX3Srhmn8=;
-        b=SHnxVr6Dw+kXmVpQOpEcyv5M7q4Gy78VtRHCtIJa+kJDths0ToU0FXWkjK23MA3FPH
-         /iWUW8M7xoU34ZPyzCsyT0O4AYJBLr/ZeYdvEBcJvNH8TizwnvlSWBcMfcebNjVJHCEb
-         7KJODkSsW+kPRY6qb9Hlx8WqY65I98R6x3aiT2aH15j39u292f8+TuPgFst2ejecMnEV
-         FEsUYENA6szSAEigKBPzBK+Nc2pZ3a/sZ2Je89BfEP61VMHN2IWAWSyUEJZxrb2jpKj+
-         e2qXXzoGb5Wycc5rAgnUO1/Yha4KAkaYt+2SMkWU5t//E9hmlBQLFwZwN/Pgjr6vXQHJ
-         YOEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1774641522; x=1775246322;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=riqFgloemKeGp2Z33+taeOI5x5WX9rolIEiX3Srhmn8=;
-        b=S0Ewlzo5USRHxFaj6qBhaQBr4p9ApJxydzdiym+qVAb0q75XmQDaTPQ83M8RnxUAfk
-         Vo3gpjUiU7C2lHspjIQUy7Dl2mZ4fKQLg2EJ80L9p77gfebCHVlsza1XgkvwPJ1rnA7m
-         9CSn1aB2QU837dNpTbCXNdg1hBFCrRvB36yWo9U1yhhX/JbFXUgpuJas6dUD8aWaq1eP
-         5kmrdncm0oYtj4tJSOBEM+ZC6baHcySh0Es+UWXknYNlX54xrfU5Kh78ZVuYsPpQmW2n
-         M4N1rFCaHNHqPDPK8oKCDXe6lRE6n7NJ5emWImR8YFJxFugS7wY/obAp+Ok6stUb3CFI
-         Yxjg==
-X-Forwarded-Encrypted: i=1; AJvYcCUNjF4tj4C+XNjhIIJYvyscUlsANnbADXVaMgYwF+Fq5OamLdZAS8O/GBgHd7WA0EYhPzU2D+Q0mDx8XtkzjN4s@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhqY5jsgcTropj8mNy0FV6n3yDZPn49Zs0MNN9ZuJh3ZDTKhl1
-	0KrVnjRE6zJgeGKtfKIT27Id53xM/VD7LbKhXKZACfBt61r12LLwjGICcdVfCTmxivI=
-X-Gm-Gg: ATEYQzzOxRHQgsfAyQVIeH4q50+hBkymq66PM/G8ygF1sDQC4Yv92BHpD+rRkov747D
-	qIzNvn5jw6sQNoVvXc7TxIqadTLL6Uj1hD5D3eClpVrZbSUIdKMRuMTkrlgFFbOmitG96/QpVwU
-	t+o+9sADXztC+HG5aJgRlYDpxYzPZCgeutpBVYwg75gwT8QGHC3QkC44jDe2hX9PfJ3IBdSyMHo
-	A69T9CtgiQzSFvYg3/qBNh4pGJGC30j4T7272DGgRu26lyxMNin12Mk6JNeG4TE4FmwC6KAauw1
-	tjp2/JaDgL/U79xUtoUZFQNf7tQ0hV2gVj3zJw7sMB+zBZl2aN7xR7zJBde1tIFd6iaUwqioUZ1
-	erbSxQNrglncFikmt+MYhCYRPSXVXLOxTrqEJH8tA5afGtuC8W85TJAOHz22MPN4JJVjCTad0Px
-	Ig/fsd5Ux3OTFEFWGQhIzLktnWEm4=
-X-Received: by 2002:a17:902:f681:b0:2b0:b2b4:1444 with SMTP id d9443c01a7336-2b0cdd13eaamr39512765ad.49.1774641521670;
-        Fri, 27 Mar 2026 12:58:41 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:2f18:b190:e634:5792])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b24264256asm1248025ad.13.2026.03.27.12.58.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2026 12:58:41 -0700 (PDT)
-Date: Fri, 27 Mar 2026 13:58:38 -0600
-From: Mathieu Poirier <mathieu.poirier@linaro.org>
-To: Tanmay Shah <tanmay.shah@amd.com>
-Cc: andersson@kernel.org, linux-remoteproc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] remoteproc: xlnx: reset virtio status during attach
-Message-ID: <acbhbnBgJCP7WETC@p14s>
-References: <20260317201251.3920841-1-tanmay.shah@amd.com>
+	s=arc-20240116; t=1774642323; c=relaxed/simple;
+	bh=wp85Izuvgs1/BBpNSpDNM8HQ3t2NnPm3AnGl4AKRDXI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aUZeqXWl1aBavMiO97lwNfh7w0pLi83cK43AyXRJInPr0J6o+xvz3ARABYTH8hy6t3uhzznziWXBilKUvpUKk6VtNKC5wibUQBQD0LgVr80LTHQF00WJpo/CCGOFeexl0xGkFghjcKRKS0j13m7YLpmpxn/sH908hkGUBiCJksA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=sSptJLDs; dkim=permerror (0-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=OVJUCQ0b; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+DKIM-Signature: v=1; a=rsa-sha256; s=202507r; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Date:Subject:From; t=1774642307; bh=4h88egP+wMClL/kBIddRbIy
+	9tren44YmNHTekhaFBm4=; b=sSptJLDsW51cArja/uh7/OxtiLyBaM3kqaJ98LIm6xiGdkv3nS
+	BbzVyWBPh6q5E4UgMtLBPMU5s79VqnkfBb9basevPnvKmCaz22nFAnLWInlIcfX1/mgL+xkxbsI
+	VIGI7eQBG6mbv5Vcxv3IRHuptSKbD1XjE05hnCLTJld4gCuF03wC/Gz8iwLL1+xriWFQnfIO2RH
+	3JBEmNu9L1Qw5ZAXDoWwuc1rBJN8V4wyzrH0j5pf+H+Q4rKu+v55676AVwXAfVImiUngdp61mTV
+	+9Jz83r1rPovEdfS8ZDsVIaiHiUObx1Nz9zijx8noTrlX89XYfg8H/ii/oyg8BmJ2cA==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202507e; d=mainlining.org; c=relaxed/relaxed;
+	h=To:Message-Id:Date:Subject:From; t=1774642307; bh=4h88egP+wMClL/kBIddRbIy
+	9tren44YmNHTekhaFBm4=; b=OVJUCQ0bw33Rx7lncuCQ09eKdD7EGl1z1mjJk7xZEWCNYVCnBU
+	BcJEkOkt18YZOpYlCJLomQZihM5mpRPx0FBA==;
+From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+Subject: [PATCH 0/7] MSM8953/SDM632 rpmpd/mss fixes
+Date: Fri, 27 Mar 2026 21:11:42 +0100
+Message-Id: <20260327-sdm632-rpmpd-v1-0-6098dc997d66@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260317201251.3920841-1-tanmay.shah@amd.com>
-X-Spamd-Result: default: False [-1.66 / 15.00];
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDY0NL3eKUXDNjI92igtyCFN1kg1Tj1CRTE4s0UwsloJaCotS0zAqwcdG
+ xtbUAZLisIF4AAAA=
+X-Change-ID: 20260319-sdm632-rpmpd-c0e3eb548f58
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, 
+ Mathieu Poirier <mathieu.poirier@linaro.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Stephan Gerhold <stephan@gerhold.net>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-remoteproc@vger.kernel.org, 
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+X-Mailer: b4 0.15.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1774642307; l=1659;
+ i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
+ bh=wp85Izuvgs1/BBpNSpDNM8HQ3t2NnPm3AnGl4AKRDXI=;
+ b=iXfKb+Fuw9GT7dLNVUFNY64r0T24USPXZFdxR7up9Lz7xRh1RhGAxXbQBuXJ0j6pgICD+ellm
+ +8RIC4Wv0N1C8eiv/JJ/4ku2vJocrAekH4HrZSZYUdXzidNGY0ak3C1
+X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
+ pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
+X-Spamd-Result: default: False [0.59 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	R_MIXED_CHARSET(1.25)[subject];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[mainlining.org,reject];
+	R_DKIM_ALLOW(-0.20)[mainlining.org:s=202507r,mainlining.org:s=202507e];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7215-lists,linux-remoteproc=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7218-lists,linux-remoteproc=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_COUNT_THREE(0.00)[3];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mathieu.poirier@linaro.org,linux-remoteproc@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[4];
+	FROM_NEQ_ENVFROM(0.00)[barnabas.czeman@mainlining.org,linux-remoteproc@vger.kernel.org];
+	DKIM_TRACE(0.00)[mainlining.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-remoteproc];
+	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,amd.com:email,linaro.org:dkim]
-X-Rspamd-Queue-Id: 9C8C734A8D3
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mainlining.org:dkim,mainlining.org:email,mainlining.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: BE3C634ACE7
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Tue, Mar 17, 2026 at 01:12:51PM -0700, Tanmay Shah wrote:
-> On AMD-Xilinx platforms cortex-A and cortex-R can be configured as
-> separate subsystems. In this case, both cores can boot independent of
-> each other. If Linux went through uncontrolled reboot during active
-> rpmsg communication, then during next boot it can find rpmsg virtio
-> status not in the reset state. In such case it is important to reset the
-> virtio status during attach callback and wait for sometime for the
-> remote to handle virtio driver reset.
+SDM632 pm domains are different from MSM8953 because MSM8953
+is defining pm8953_s1 as regulator but SDM632 is defining it
+as pm domain.
 
-I understand the user case, but won't that situation happen regardless of
-whether cores operate sync or split mode?
+This patch series correcting the pm domains defined in rpmpd
+driver and splitting the MSS resources for the both SoC to match
+the reality.
 
-> 
-> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
-> ---
->  drivers/remoteproc/xlnx_r5_remoteproc.c | 46 +++++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
-> 
-> diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> index 50a9974f3202..f08806f13800 100644
-> --- a/drivers/remoteproc/xlnx_r5_remoteproc.c
-> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> @@ -5,6 +5,7 @@
->   */
->  
->  #include <dt-bindings/power/xlnx-zynqmp-power.h>
-> +#include <linux/delay.h>
->  #include <linux/dma-mapping.h>
->  #include <linux/firmware/xlnx-zynqmp.h>
->  #include <linux/kernel.h>
-> @@ -29,6 +30,8 @@
->  #define RSC_TBL_XLNX_MAGIC	((uint32_t)'x' << 24 | (uint32_t)'a' << 16 | \
->  				 (uint32_t)'m' << 8 | (uint32_t)'p')
->  
-> +#define RPROC_ATTACH_TIMEOUT_US (100 * 1000)
-> +
+These changes was discussed in a previous threads:
+https://lore.kernel.org/all/2b057aa5-4416-4fd4-aeab-6bc23acbb53d@oss.qualcomm.com/
 
-There are some time constant already defined, please use them.
+Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+---
+Barnabás Czémán (7):
+      dt-bindings: power: qcom-rpmpd: Split MSM8953 and SDM632
+      pmdomain: qcom: rpmpd: Split SDM632 pm domains from MSM8953
+      remoteproc: qcom_q6v5_mss: Use mss as regulator for MSM8953
+      arm64: dts: qcom: msm8953: fix modem pm domains
+      dt-bindings: remoteproc: qcom,msm8916-mss-pil: Add SDM632
+      remoteproc: qcom_q6v5_mss: Add SDM632 MSS
+      arm64: dts: qcom: sdm632: Correct power domains
 
->  /*
->   * settings for RPU cluster mode which
->   * reflects possible values of xlnx,cluster-mode dt-property
-> @@ -865,6 +868,49 @@ static int zynqmp_r5_get_rsc_table_va(struct zynqmp_r5_core *r5_core)
->  
->  static int zynqmp_r5_attach(struct rproc *rproc)
->  {
-> +	struct device *dev = &rproc->dev;
-> +	bool wait_for_remote = false;
-> +	struct fw_rsc_vdev *rsc;
-> +	struct fw_rsc_hdr *hdr;
-> +	int i, offset, avail;
-> +
-> +	if (!rproc->table_ptr)
-> +		goto attach_success;
-> +
-> +	for (i = 0; i < rproc->table_ptr->num; i++) {
-> +		offset = rproc->table_ptr->offset[i];
-> +		hdr = (void *)rproc->table_ptr + offset;
-> +		avail = rproc->table_sz - offset - sizeof(*hdr);
-> +		rsc = (void *)hdr + sizeof(*hdr);
-> +
-> +		/* make sure table isn't truncated */
-> +		if (avail < 0) {
-> +			dev_err(dev, "rsc table is truncated\n");
-> +			return -EINVAL;
-> +		}
-> +
-> +		if (hdr->type != RSC_VDEV)
-> +			continue;
-> +
-> +		/*
-> +		 * reset vdev status, in case previous run didn't leave it in
-> +		 * a clean state.
-> +		 */
-> +		if (rsc->status) {
-> +			rsc->status = 0;
-> +			wait_for_remote = true;
-> +			break;
-> +		}
-> +	}
-> +
-> +	/* kick remote to notify about attach */
-> +	rproc->ops->kick(rproc, 0);
-> +
-> +	/* wait for sometime until remote is ready */
-> +	if (wait_for_remote)
-> +		usleep_range(100, RPROC_ATTACH_TIMEOUT_US);
+ .../devicetree/bindings/power/qcom,rpmpd.yaml      |  1 +
+ .../bindings/remoteproc/qcom,msm8916-mss-pil.yaml  |  9 ++--
+ arch/arm64/boot/dts/qcom/msm8953.dtsi              |  5 +-
+ arch/arm64/boot/dts/qcom/sdm632.dtsi               | 31 ++++++++++++
+ drivers/pmdomain/qcom/rpmpd.c                      | 39 ++++++++-------
+ drivers/remoteproc/qcom_q6v5_mss.c                 | 56 ++++++++++++++++++++--
+ include/dt-bindings/power/qcom-rpmpd.h             | 20 +++++---
+ 7 files changed, 127 insertions(+), 34 deletions(-)
+---
+base-commit: 8e42d2514a7e8eb8d740d0ba82339dd6c0b6463f
+change-id: 20260319-sdm632-rpmpd-c0e3eb548f58
 
-Instead of waiting, would it be possible to return -EPROBE_DEFER and let the
-driver core retry mechanic do it's work?
+Best regards,
+--  
+Barnabás Czémán <barnabas.czeman@mainlining.org>
 
-Thanks,
-Mathieu
-
-> +
-> +attach_success:
->  	dev_dbg(&rproc->dev, "rproc %d attached\n", rproc->index);
->  
->  	return 0;
-> 
-> base-commit: d4ef36fbd57e610d4c334123ce706a2a71187cae
-> -- 
-> 2.34.1
-> 
 
