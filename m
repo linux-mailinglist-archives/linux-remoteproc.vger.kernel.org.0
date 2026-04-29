@@ -1,410 +1,341 @@
-Return-Path: <linux-remoteproc+bounces-7524-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7526-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sBetJruo8WnqjQEAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7524-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 08:44:11 +0200
+	id ME/iC2Wt8WnTjgEAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7526-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 09:04:05 +0200
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1241848FE5E
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 08:44:10 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96982490282
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 09:03:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 011A930329BE
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 06:42:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E596C307FF55
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 06:59:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF311383C99;
-	Wed, 29 Apr 2026 06:41:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61A7D39E6C7;
+	Wed, 29 Apr 2026 06:59:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="jq09HnYA"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="g438JSka";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="TrWOAyrq"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012061.outbound.protection.outlook.com [52.101.48.61])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428D634F247;
-	Wed, 29 Apr 2026 06:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777444918; cv=fail; b=gxDoUNK0K3zfd6qdOPZ9GJBXDljD/3WVQ8UAkjQSzVvLEs0Lr6eAfoB0MV6UQJwC9c+4Z+T052nO0E0CJzW5KU5OQcHVvYaCau90hu0LK808Na697PFgCv0n0fzGvLxE0MdkXxrL12XyGcPnFWIBKXLLbWDdsLJfgTj8B450hzI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777444918; c=relaxed/simple;
-	bh=Hx93FmK7hjSRWzRHUWg06ael7ME7VfA4MJgK3AB9EKo=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=diLPD/sDkQKwY2y+1QtSbuIWS8PqOMxhFz68S/oaRMb6CqvlznJX7tnA0pYW8+zarVMxeoRhNPaqc6yK1oBkaVmK3oEvcBZ8WbsPBDgGVBLjvNff0MdUMG2nzX65VKCt4VtfCGt/18IykQoIlqmpLwNIGXtKaqg4bHLzsYRrj2A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=jq09HnYA; arc=fail smtp.client-ip=52.101.48.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=aJEiyMisI8xgIbpRSkC3/BsvHSgXbiRxrmi5cMapy8jFr/Y3bNjW+f7noKe42/6DVPwGUhjXMVmLWm07gu/luLWRSb2lW2BD7CsNio9QyAkhLmA37jl/R/mjwC+W3IbrTdIIJP0foqR/BwRUquTBxweu6gU4Tv6zMiDZHStGv5K733jnlChSe35cnNweVJxv/QOyieqvhgzWOe5sd3wtE3pGPvC78pDw43cEYg2B/y6FUIwgAMJm0lkjGKR/0+3Tt9u6pYASgCWD3RB7SQwR5waPqSC9O6a+nFrVlfghOzxX3z3IhEGoKUHtbhf0GnFi7vGmAqJmqGvo9yPcLweaBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1jwx9GMtBVvY+kGMilVizmz2e9t5B2rB7d9aWWu34Dk=;
- b=snFOqsvKcv/f9OksitIG4w4mEiEaZDV3kcHxIMt6JpfItH3lJ2jIAxq4y/pXu+lGk1ocBAXCxBI5kiA3hckjTImxk3AjsJHWyWAXOvK0EpLVeHKUp4Lr7ObNkjnMEKFWkgjbs8muI/sIXTcQUleis5xjhFa3PCPjnARXHVCjyJ8Y2RdlIzZZW0uffkEgRyVDc2L+RO9U/Xuqc73MrfnD+QcNmtNED4+YRtd5ELI0W7pZyXSJFbZwN1ueE3USdlb1WAVqhj27ne4epWZ2mYOcg20WJXqsOOjrXJbnxUrglweXboygOu6enZFSfArRWHcgcvY4vrg0pG/8iVqP6ABeug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1jwx9GMtBVvY+kGMilVizmz2e9t5B2rB7d9aWWu34Dk=;
- b=jq09HnYAdO6o66chWE33GWlkTVPIJKjehe+DwfJlMXzrf82xKDHzUxu8GTlAe63y/m/SD0DyRVBO8X36kRj8yQYUVzY3MVGTAOYzUO9OogyqufMIuLG8UzlYd0WGSr5JKTE67osM7LVD6G9Nx/OWRDXmGFpODdkdtNaG4bTJ9Js=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from LV5PR12MB9779.namprd12.prod.outlook.com (2603:10b6:408:301::14)
- by SJ0PR12MB6967.namprd12.prod.outlook.com (2603:10b6:a03:44b::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.16; Wed, 29 Apr
- 2026 06:41:52 +0000
-Received: from LV5PR12MB9779.namprd12.prod.outlook.com
- ([fe80::8ac8:e862:8ae9:9287]) by LV5PR12MB9779.namprd12.prod.outlook.com
- ([fe80::8ac8:e862:8ae9:9287%3]) with mapi id 15.20.9870.016; Wed, 29 Apr 2026
- 06:41:52 +0000
-Message-ID: <234751b2-ae80-4686-9e65-a5f12eec9f2c@amd.com>
-Date: Wed, 29 Apr 2026 08:41:47 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] remoteproc: xlnx: check remote core state
-To: Tanmay Shah <tanmay.shah@amd.com>, andersson@kernel.org,
- mathieu.poirier@linaro.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-remoteproc@vger.kernel.org
-References: <20260428221855.313752-1-tanmay.shah@amd.com>
-Content-Language: en-US
-From: Michal Simek <michal.simek@amd.com>
-Autocrypt: addr=michal.simek@amd.com; keydata=
- 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
- mpwx1d8=
-In-Reply-To: <20260428221855.313752-1-tanmay.shah@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0067.namprd05.prod.outlook.com
- (2603:10b6:a03:332::12) To LV5PR12MB9779.namprd12.prod.outlook.com
- (2603:10b6:408:301::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BEC39DBFD
+	for <linux-remoteproc@vger.kernel.org>; Wed, 29 Apr 2026 06:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777445987; cv=none; b=shZ2abWBWKCAUx4CWXxhG5q3UzPGNAhZj03M0U/AQSEtM6u/Hm/+4YsA/IdZ5L0oVFXRp5Ilm5Xoe7w8kXv//Asux6WCcYip2bOxlRhFmObWWwFoffQWZ8Y4LzWqg6/7Feo4YueDr2Gu7EpDIsiQaj5WA35vUS/jIQpNYtbPiSI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777445987; c=relaxed/simple;
+	bh=1o8QqlAow6PmoPIT9dbQVNVo33WTouwEyxLpj5AEVfE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hdJBEzj4PpebmclmlnAWZWkSM4FmPEoMOS6pcvoas8az0EwNoB1D1vICHUSALkhrLUDF9g3+WX8pbP+9aIEWM4zJ/iHQtPmDz6HpGTgImGOziNJBIrWMMOpwcT220E/Ii7nf67GBihay+6PGQ14jRUlqznUl0ZEPLTFFst9FJiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=g438JSka; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=TrWOAyrq; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 63T0o2e92007701
+	for <linux-remoteproc@vger.kernel.org>; Wed, 29 Apr 2026 06:59:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=rpnLGvqaOGowhqbh0BhtKXXR
+	xHvBmmvOGqR1wADwXo8=; b=g438JSkanjOpVQqT4BPx3R6bpd1VJbbmWFD6dKOd
+	jFfFB+w7o2BFIQkM8DUi3dk+eLi2MmG2yFu2mvJoaVjZRpuKpKC8SOHGN1T4k6HZ
+	eH9ZrtpUlQslZMlhYlYVUFi72Xrodhf1bXWVnE64mFiuiPhsLVRgk76DPLSLdQOe
+	3wpSPbqj+929j7SchNlWiT/Mvmx2f3w9te7+sxffPyvR3SZ4QpMR9dvdKxnbHoHd
+	r/5cgF5H5psWIcz6rpRnrZ7KiVHDlYy0AVG7IKRCWWDzx4ABdZYlug/nS7Nc/tDD
+	/Al6A+BepM0Qxu+178Yh7cY8Ecg/Vm71wutdCwmhxrioxQ==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4du7sx9403-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-remoteproc@vger.kernel.org>; Wed, 29 Apr 2026 06:59:44 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2b465bf993cso124974845ad.1
+        for <linux-remoteproc@vger.kernel.org>; Tue, 28 Apr 2026 23:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1777445983; x=1778050783; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rpnLGvqaOGowhqbh0BhtKXXRxHvBmmvOGqR1wADwXo8=;
+        b=TrWOAyrqtDiU/MXc6Y+9LG0ZO8VG9RGtG8RzWnSdkAgO0+GV64oDu27Zk7kBgmIs5D
+         oco9LKyBSAoIysviSjTvYB8KxHpepNvVGp9uTRSZomF0zcSOCQmbDY9K+qn3OkUDjWFM
+         Tc0Tv21gugU1ia6cKUsrBVOLDAhBomO2CuWoLY7LFSQoxXMZ3vzn+RUoj/pS3nSfMPd6
+         KQzdI9z5zjD4zMJ0aAtd93zTYHrrBPURiQ50Pb+PxzNxvW8WNJBfo+CBrxq0CpVmoJqG
+         lDMVJ8EVESzSm3xfsOIPtr5DzTo1th/tHyJrX+u/TyVOVoOCJF/byL/UI7eEguh/SD+V
+         tyXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1777445983; x=1778050783;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rpnLGvqaOGowhqbh0BhtKXXRxHvBmmvOGqR1wADwXo8=;
+        b=fEyMlr5tzj7c2Fs+K3k29kq6KzhA4aUzMNYIv/KNC7fqttj6wiR5ZxKp0sF4GMhYvZ
+         a5A4kLqgZSbh2Dch+bFOtY+jbFhUugUQn0+hHYrzNNDQy/jqIr+P5QSkKwJGKIn/PQsL
+         WSoGo+qWb2zxs7CIqBphNyTjj31x7Nua5RfbZfKYBNQLiTwNDbji52QFGc1ORgqEIqko
+         fCk/3F69uuM1msbkOr+annPVL0HX8Xs3HgEhrr4kIin0Rg62ClCG+SSpNlXmj/P54HLq
+         vW0X7pvqGK8zNUmXcrwPVx8RUiDG0FpupwULFKuOVy9HJ/YBMc7MKe9qg+Qf4nvsfI49
+         iYFQ==
+X-Forwarded-Encrypted: i=1; AFNElJ+PYOHZ9bNvq5kHRNSgxXP8AGxvKXH7UbUnYXvmF9jDnLonf1n4TTV24QuVkaO8F0d22rZtolTT4Bq1BYf7kuWb@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6WOpWAenCp83MUz+khQBwMkF8VzGOo48AQMpleBZSnU//Yzdh
+	rKeq0Azw1wtJzFx0Poto+cue05o8U5AJ3LwF+0+N79bLfLqhR8RW2apXH+zfzMhHDYDs3JZkYPl
+	ev/IfOdg9mn0LCbZ4ULa6LVTpADWotuUMWx5RoM+4tgjxmdpmuDAkUpcYBvFXa88rKUBplwCs
+X-Gm-Gg: AeBDiesRquaJQRfDvR1BHzEORXbue9zFYzzQwzHqdMic8PiBHHRJRUw2LPqxuMDMznE
+	ErQ9nzEPNKmg3bCdB9W9yjo+0HuFayakQLlmjnB/q7A14laeZ023Oj8V6Z6WG4ZXElKD3pwMdtl
+	GhYL7V92LGMk31axNmy8cR4W3Xf8sEJXAU+zaSyS4veh1t03D1DEc5cpF2Hil4kBpGwScsVDZqV
+	n5DIMuNU/X+pZlQ8RaXP6vcGKFiqnWFIp/VmJmbMGjF4df41NgM+dhG4JyH7+oXCPTjOlDTus83
+	Sv7TKSQ46e8s2/5X0da3gElzy3+ctiLsfjmw6VXiTb7ARntFE9u89LQ91evumMy5cGWOp2CXT+U
+	OMSdhJOJWOByiGCbilKHw1gT8Tn3K+3Yvb7ABFdBJ01FD3zidC4aXpKsqZ98=
+X-Received: by 2002:a17:903:984:b0:2b2:ec31:25b0 with SMTP id d9443c01a7336-2b98741da0dmr24709315ad.29.1777445983177;
+        Tue, 28 Apr 2026 23:59:43 -0700 (PDT)
+X-Received: by 2002:a17:903:984:b0:2b2:ec31:25b0 with SMTP id d9443c01a7336-2b98741da0dmr24708625ad.29.1777445982436;
+        Tue, 28 Apr 2026 23:59:42 -0700 (PDT)
+Received: from hu-mojha-hyd.qualcomm.com ([202.46.23.25])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b988971938sm11669805ad.71.2026.04.28.23.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Apr 2026 23:59:42 -0700 (PDT)
+Date: Wed, 29 Apr 2026 12:29:26 +0530
+From: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
+To: Sumit Garg <sumit.garg@kernel.org>
+Cc: andersson@kernel.org, konradybcio@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-media@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, ath12k@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, robin.clark@oss.qualcomm.com, sean@poorly.run,
+        akhilpo@oss.qualcomm.com, lumag@kernel.org, abhinav.kumar@linux.dev,
+        jesszhan0024@gmail.com, marijn.suijten@somainline.org,
+        airlied@gmail.com, simona@ffwll.ch, vikash.garodia@oss.qualcomm.com,
+        dikshita.agarwal@oss.qualcomm.com, bod@kernel.org, mchehab@kernel.org,
+        elder@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        jjohnson@kernel.org, mathieu.poirier@linaro.org,
+        trilokkumar.soni@oss.qualcomm.com, pavan.kondeti@oss.qualcomm.com,
+        jorge.ramirez@oss.qualcomm.com, tonyh@qti.qualcomm.com,
+        vignesh.viswanathan@oss.qualcomm.com,
+        srinivas.kandagatla@oss.qualcomm.com,
+        amirreza.zarrabi@oss.qualcomm.com, jens.wiklander@linaro.org,
+        op-tee@lists.trustedfirmware.org, apurupa@qti.qualcomm.com,
+        skare@qti.qualcomm.com, linux-kernel@vger.kernel.org,
+        Sumit Garg <sumit.garg@oss.qualcomm.com>
+Subject: Re: [PATCH v4 00/15] firmware: qcom: Add OP-TEE PAS service support
+Message-ID: <20260429065926.5iliebd3d2j6bong@hu-mojha-hyd.qualcomm.com>
+References: <20260427095603.1157963-1-sumit.garg@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV5PR12MB9779:EE_|SJ0PR12MB6967:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30813fdf-76a6-4774-5627-08dea5ba65de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|366016|22082099003|18002099003|56012099003;
-X-Microsoft-Antispam-Message-Info:
-	ZUt8zeJMiqG9VTsKl2vS/pLHnzsK15+A1us1XAXVnFUA9A2CIWCt98H3HSTggdlBVVGYOHv26MahjhbF0NgF+LbsWDC8cZBER5T8WNRFRdo3qEPqMkbyCrJUwCZFldRMlawIAaSEpMyQlqoIHiw6H0u95vykbfwyXAZjB+MuwGeetycli1x5rdQWJOi2onf3Jt9PxpXSARKgRw9aMHQJOM9yZjLsWwLp0qFmxczAowXgjxXL99pMtwiyLrG+yRqlk5OZcY30ssjkzrH+cCv0ahJQ2+v+tfz4+f2tg+hzQPADzWYV+HVx1hEFS7CNDLjKhv5x4wAhb0o2amKjmlT+ECzteJT+IAuwK7rrNCTTodxrjTUR2sb/LmW9QmpnYgI796qgB6U1BVy9CLd3HOttClSo00e5SjLC0bQigroWn27GNV2R0fJenKR4ru57r09fWIAX5ya+f+nmXKoB7Tt2CK32kDukfiREt/VjHGtlej1hJy+NVMbbZS43wo4O+BSWliR794jlgf2xyyp64YCfaHgP8gZesZHQd7/sTEW+Nn65j0I9+OI1boSy0TlVYtdGzAJ/cmB6MbgbnsjNShj/ShS6D9NlzmX788H2k4K0AYVbnunzNAwU0q52m0cPFIHZimEi1cpXIOo5zMOsSMyaN8S4G6LMzTg33MmBeyCNDArRiSTkaGyalW+p0CNCVhpozSieqKrWXKpWdq3AxAYYQ0zcDidbU+VGTU/pLBRXzaY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV5PR12MB9779.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(22082099003)(18002099003)(56012099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?U2ZpWmMwRnIzeWdEQldoL2ZNRnBhZThVZmhUK0xmRlFFQ1RiYndlZFA0SG50?=
- =?utf-8?B?dUxBYXB0QlovejRHTzAwUC9tV01XdEY4amdPcXZiS2xtTW14VkRDTlk2VjlZ?=
- =?utf-8?B?VjNnWjJjT2lmT0JwR2pkM21OeThyZ2c2S3QwS05nQkZ5cWdncElYNFdFUFF4?=
- =?utf-8?B?MWMzSjZOVUp2WGZGRW9pM2JYNnhRa3BtSTVHKzY3WFFNYjJjVnRZbEFXOHFL?=
- =?utf-8?B?K1J6VlF5WEk5SEZNZUV5dWxRRDhUaTloSDdYbTR0WFlocDZNL1dkWFF1dnZy?=
- =?utf-8?B?bUZ2Q1pSVTZlQjV2elFaNS95bitlaGZBWnR0NnQrekVxb0xwZGk1U2k5dnNw?=
- =?utf-8?B?WkZOd01sZTRwZTlUOHEwaWVoekY2d1B1dU44My9NSVNFUk1QVHkvNVpKMTdR?=
- =?utf-8?B?dGd1cHozTVM4bHd3a0lSV2thUjhjQ1NaUjIvSktFUDdOVVhqZGF5R0pRVWlW?=
- =?utf-8?B?L2RGNzA3S0padUoxeWtVdzRHNm9HYmtUQkVHNUw3L3FOb3VycVA0ZWFaOTF5?=
- =?utf-8?B?VS9hTkdnOFB0eFFjckpGMmF5QWQ5eHpJVmdBN1BUV2dtR3hnSy9taGJpRkor?=
- =?utf-8?B?eHFaRjY5RlBxTW5oVkVwQmpYa1Q3OWpPUGJRM3B6WVFRQ29Wa2VyL1JjdlNt?=
- =?utf-8?B?Z1ErY1ZQdVl4R0JNMXlJNGQyVmcyd0NNRkdTZEJMMmk2Zi9xdkJBRjRvanR3?=
- =?utf-8?B?WU9qWVhvRmRQUUVrZWc2TkVuR0tNQWhHRUtWNzlOUzUxUktsQml1aEl4bDRS?=
- =?utf-8?B?aWNPTEtpcFpLeFhNSGd6MWM4VWdCUjdYd3dBenZPWDlvRFVvaWRpbi9pSkdt?=
- =?utf-8?B?UTYvdnRBNytNcFpjN2Y1a0Zsai9Sd2p1ckdmb0JiQUJxbHVsbGUwZHJjanUr?=
- =?utf-8?B?NVY5cjFUUStXRlFuMjhmbmY0dG9HYUw4bXJzRnRRSWhJdFkvWTJmRXVOS2I0?=
- =?utf-8?B?OWYrMHF0VWQ3RWkxTnJXdlRkbUduUnRVd3R5WTJLNnNyUU1wZnZ6T2lEMERn?=
- =?utf-8?B?WXFwbUcyVUc1eFo0SkJjQnhRTXAyQlVvK3duV2dqWm5RRmE2d3JiN1NTTGw0?=
- =?utf-8?B?Smkrd3h5a3lmUm4vYVlxVlpaUjN5b0gwTUxyK3A0bCtkK1J0N2I1TVhkdmdM?=
- =?utf-8?B?R1plOWFwZlRoRi81UDUydmRDZUtVOW1WdFRjNDhUd2xGeXRza2xlZzdoOUpZ?=
- =?utf-8?B?akgzSmFRZHYxZ3M2RHVtN2hDcjB6cWp1VWtNUkhsaDVBUGpLSnVYVGI0OU9a?=
- =?utf-8?B?T0gxNzBpVU5xUEw5dmIzN1BBait2T242cXkrSVEwK3NCT2FDZWQ1U2E4V0dk?=
- =?utf-8?B?WU1vSEI0WjRWWEpRNXVBSlAwR3dxZnp4RTExalV3YkJ1eGxxS1V0WUJieFJm?=
- =?utf-8?B?cGphWmplUXVJVTZsMWxMNTh5dGZST1hRRFNEeWt6VnlMUXRYN0xCank3Nkdl?=
- =?utf-8?B?YzYrb2szcCtHN1pEaXJJMEtzakNmYmhXVnpCN3hWeFhLMkRhMWxnNUhqcmUy?=
- =?utf-8?B?K1puV0pTVGJpWVgyblhZUWRPN3R1ZkUzTUlqaUdyb21jQ3NOZU9qUmtQdzRv?=
- =?utf-8?B?V2R1YUVvaUZPZ3R4ejFONndiYU1iNTNvdUIzOHEzY1ZLZWR2SFE4cmtLMmVS?=
- =?utf-8?B?N0lwTE0xVWdJdHJFZXlSRUZhRWxnbkJ4a3ZkeG1qVlNKT0wwOFVBUXFhbkpX?=
- =?utf-8?B?OWRyalpnbkQ4Rm44SjFMdHhkbmZkYVgxajZoNHRkQjM3Z0FMNGU4R3NvR1F5?=
- =?utf-8?B?ejFsMHI5bzdDLytBQ3dDbkM2QVlXYmJBN005a3RjU3h3OG1YME85NnhlTGRu?=
- =?utf-8?B?UWh3ZVhYdUJPaUhxNTZiZjhKZFZBK1BWS2xwemNEQ1FnRkZYRGVrYUcxSkZl?=
- =?utf-8?B?VDMrQ0hXemV0K3hYS21vRFhzWmx4Rk9Rd05TOTZ5MEhSZmMxaGxaNThWTlZu?=
- =?utf-8?B?ZFJ0d2p2K0lTdkZtWjhQRDNoWW0zZ3diR2hVWENIVXNIaU03OURFWUNObXdZ?=
- =?utf-8?B?aDlVYjFxaUdaTlFzRHpydG1UY1hWcWFmSURPekJUb2tDTWhQMVpBQWpyVGsr?=
- =?utf-8?B?ejBiR3lQdHZFY2xmeWozOUNQTlM3ZHlaRmZncFM5dWx3SWFUZzBHUW9XeS96?=
- =?utf-8?B?aWUwNHg2dFd0bDZ3QU8vWXQ0cVF5OVpzWmxHRnROWHVDeHRoT0d4aWJQakhJ?=
- =?utf-8?B?d2ZZR3pXQWNGeUhXQktlbXhHVkNCcUdNN28rREhwM1hHZnBJYWdWd3hwYU9w?=
- =?utf-8?B?YWdBOXZvQUwvTFhKaVpFZGY1KzFHSWNyZUJ6eFpNdVRZNFV5WUlGVFhQYkpF?=
- =?utf-8?B?V3dTWnBhQjZNeXJMWEVXN3pUTkpIb2RhVE9HL09WTkxmS1R2bGtlQT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30813fdf-76a6-4774-5627-08dea5ba65de
-X-MS-Exchange-CrossTenant-AuthSource: LV5PR12MB9779.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2026 06:41:52.7435
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Y5E1vK0hoQKpHqPPeQk7NWvmG3kH8wQRLEBjnbenQlAR6ejb/XkOmiqCj5v9hYzY
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6967
-X-Rspamd-Queue-Id: 1241848FE5E
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260427095603.1157963-1-sumit.garg@kernel.org>
+X-Proofpoint-GUID: w1IAvKB6Yt6ETD8zGrIR31Z4t6zz1ZeB
+X-Authority-Analysis: v=2.4 cv=eeANubEH c=1 sm=1 tr=0 ts=69f1ac60 cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
+ a=kj9zAlcOel0A:10 a=A5OVakUREuEA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22
+ a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=IpgJVh4PXWExouJfQAQA:9
+ a=CjuIK1q_8ugA:10 a=1OuFwYUASf3TG4hYMiVC:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNDI5MDA2NyBTYWx0ZWRfX1lVzVsTGclpI
+ N47Oo6IgmC3EzDJMMGTEVBexly/vEEjmXuFlCCvD3jZ4SuM+IKRR0YSdUWmjOqyZzOy2wnxvfrI
+ 4GUb4FLl4GP0LxGXulSPTrsVUsc7FXsspt1+IWSxF+SlnEDG4RplvMPAUCZrSuH9Yr/shb41U+J
+ qt4G6Xox6Mlp7IvvnqdG58QbuyvmhZs4ODKVRabtbHtXoT6zebqTj5na67G4HxDdUJ/Cujb48mF
+ tk5U+QF2Mfosj57Fu1CIlegwi3TdqJFioRgWqOuk9G76bsod5l90WXB5sQN1f+qKK8kVz5KeltS
+ 9VnFYJqFvrMbDvqg/pgsHYwjJTp9OvmNek+HubnWRdT5oNWnsWA2ITmbyklZScx8LNot76zq5f8
+ ndFEopspCnr6HzQ3QLA4zDBj4qJmDNycpIcBWl2KGwH4IFAYTSKJGHo6PKBN/R7ZtuRN9216JrN
+ HDpqdtl9fr2FsS6gbXg==
+X-Proofpoint-ORIG-GUID: w1IAvKB6Yt6ETD8zGrIR31Z4t6zz1ZeB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-04-28_05,2026-04-28_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 adultscore=0 clxscore=1015 malwarescore=0 impostorscore=0
+ phishscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2604200000 definitions=main-2604290067
+X-Rspamd-Queue-Id: 96982490282
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7524-lists,linux-remoteproc=lfdr.de];
+	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,lists.freedesktop.org,lists.infradead.org,oss.qualcomm.com,poorly.run,linux.dev,gmail.com,somainline.org,ffwll.ch,lunn.ch,davemloft.net,google.com,redhat.com,linaro.org,qti.qualcomm.com,lists.trustedfirmware.org];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,qualcomm.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,hu-mojha-hyd.qualcomm.com:mid];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	RCPT_COUNT_TWELVE(0.00)[49];
+	TAGGED_FROM(0.00)[bounces-7526-lists,linux-remoteproc=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[amd.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[michal.simek@amd.com,linux-remoteproc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[mukesh.ojha@oss.qualcomm.com,linux-remoteproc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	MAILSPIKE_FAIL(0.00)[2600:3c04:e001:36c::12fc:5321:query timed out];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-remoteproc];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,amd.com:email,amd.com:dkim,amd.com:mid]
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-remoteproc,dt,netdev];
+	RCVD_COUNT_SEVEN(0.00)[7]
 
-
-
-On 4/29/26 00:18, Tanmay Shah wrote:
-> The remote state is set to RPROC_DETACHED if the resource table is found
-> in the memory. However, this can be wrong if the remote is not started,
-> but firmware is still loaded in the memory. Use PM_GET_NODE_STATUS call
-> to the firmware to request the state of the RPU node. If the RPU is
-> actually out of reset and running, only then move the remote state to
-> RPROC_DETACHED, otherwise keep the remote state to RPROC_OFFLINE.
+On Mon, Apr 27, 2026 at 03:25:48PM +0530, Sumit Garg wrote:
+> From: Sumit Garg <sumit.garg@oss.qualcomm.com>
 > 
-> Fixes: bca4b02ef92e ("remoteproc: xlnx: Add attach detach support")
-> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+> Qcom platforms has the legacy of using non-standard SCM calls
+> splintered over the various kernel drivers. These SCM calls aren't
+> compliant with the standard SMC calling conventions which is a
+> prerequisite to enable migration to the FF-A specifications from Arm.
+> 
+> OP-TEE as an alternative trusted OS to Qualcomm TEE (QTEE) can't
+> support these non-standard SCM calls. And even for newer architectures
+> using S-EL2 with Hafnium support, QTEE won't be able to support SCM
+> calls either with FF-A requirements coming in. And with both OP-TEE
+> and QTEE drivers well integrated in the TEE subsystem, it makes further
+> sense to reuse the TEE bus client drivers infrastructure.
+> 
+> The added benefit of TEE bus infrastructure is that there is support
+> for discoverable/enumerable services. With that client drivers don't
+> have to manually invoke a special SCM call to know the service status.
+> 
+> So enable the generic Peripheral Authentication Service (PAS) provided
+> by the firmware. It acts as the common layer with different TZ
+> backends plugged in whether it's an SCM implementation or a proper
+> TEE bus based PAS service implementation.
+> 
+> The TEE PAS service ABI is designed to be extensible with additional API
+> as PTA_QCOM_PAS_CAPABILITIES. This allows to accommodate any future
+> extensions of the PAS service needed while still maintaining backwards
+> compatibility.
+> 
+> Currently OP-TEE support is being added to provide the backend PAS
+> service implementation which can be found as part of this PR [1].
+> This implementation has been tested on Kodiak/RB3Gen2 board with lemans
+> EVK board being the next target. In addition to that WIN/IPQ targets
+> planning to use OP-TEE will use this service too. Surely the backwards
+> compatibility is maintained and tested for SCM backend.
+> 
+> Note that kernel PAS service support while running in EL2 is at parity
+> among OP-TEE vs QTEE. Especially the media (venus/iris) support depends
+> on proper IOMMU support being worked out on the PAS client end.
+> 
+> Patch summary:
+> - Patch #1: adds Kodiak EL2 overlay since boot stack with TF-A/OP-TEE
+>   only allow UEFI and Linux to boot in EL2.
+> - Patch #2: adds generic PAS service.
+> - Patch #3: migrates SCM backend to generic PAS service.
+> - Patch #4: adds TEE/OP-TEE backend for generic PAS service.
+> - Patch #5-#13: migrates all client drivers to generic PAS service.
+> - Patch #14: drops legacy PAS SCM exported APIs.
+
+
+Gave it a try to test the series on Lemans with Gunyah as well as KVM
+hypervisor and all the remote processor are coming up successfully.
+
+Feel free to carry 
+
+Tested-by: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com> # Lemans
+
+for the Series.
+
+
+> The patch-set is based on v7.1-rc1 tag and can be found in git tree here
+> [2].
+> 
+> Merge strategy:
+> 
+> It is expected due to APIs dependency, the entire patch-set to go via
+> the Qcom tree. All other subsystem maintainers, it will be great if I
+> can get acks for the corresponding subsystem patches.
+> 
+> [1] https://github.com/OP-TEE/optee_os/pull/7721
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/sumit.garg/linux.git/log/?h=qcom-pas-v4
+> 
 > ---
+> Changes in v4:
+> - Incorporate misc. comments on patch #4.
+> - Picked up an ack for patch #10.
+> - Clarify in cover letter about state of media support.
 > 
 > Changes in v3:
->    - add fixes tag
+> - Incorporated some style and misc. comments for patch #2, #3 and #4.
+> - Add QCOM_PAS Kconfig dependency for various subsystems.
+> - Switch from pseudo TA to proper TA invoke commands.
 > 
 > Changes in v2:
->    - fix subject line: %s/node/core/
->    - add comment explaining optional resource table availability in the
+> - Fixed kernel doc warnings.
+> - Polish commit message and comments for patch #2.
+> - Pass proper PAS ID in set_remote_state API for media firmware drivers.
+> - Added Maintainer entry and dropped MODULE_AUTHOR.
 > 
->   drivers/firmware/xilinx/zynqmp.c        | 28 +++++++++++++++
->   drivers/remoteproc/xlnx_r5_remoteproc.c | 46 +++++++++++++++++++------
->   include/linux/firmware/xlnx-zynqmp.h    | 21 +++++++++++
->   3 files changed, 85 insertions(+), 10 deletions(-)
+> Mukesh Ojha (1):
+>   arm64: dts: qcom: kodiak: Add EL2 overlay
 > 
-> diff --git a/drivers/firmware/xilinx/zynqmp.c b/drivers/firmware/xilinx/zynqmp.c
-> index fbe8510f4927..af838b2dc327 100644
-> --- a/drivers/firmware/xilinx/zynqmp.c
-> +++ b/drivers/firmware/xilinx/zynqmp.c
-> @@ -1450,6 +1450,34 @@ int zynqmp_pm_get_node_status(const u32 node, u32 *const status,
->   }
->   EXPORT_SYMBOL_GPL(zynqmp_pm_get_node_status);
->   
-> +/**
-> + * zynqmp_pm_get_rpu_node_status - PM call to request a RPU node's current power state
-> + * @node:		ID of the RPU component or sub-system in question
-> + * @status:		Current operating state of the requested RPU node.
-> + * @requirements:	Current requirements asserted on the RPU node.
-> + * @usage:		Usage information, used for RPU slave nodes only:
-> + *			PM_USAGE_NO_MASTER	- No master is currently using
-> + *						  the node
-> + *			PM_USAGE_CURRENT_MASTER	- Only requesting master is
-> + *						  currently using the node
-> + *			PM_USAGE_OTHER_MASTER	- Only other masters are
-> + *						  currently using the node
-> + *			PM_USAGE_BOTH_MASTERS	- Both the current and at least
-> + *						  one other master is currently
-> + *						  using the node
-> + *
-> + * Return:		Returns status, either success or error+reason
-> + */
-> +int zynqmp_pm_get_rpu_node_status(const u32 node, u32 *const status,
-> +				  u32 *const requirements, u32 *const usage)
-> +{
-> +	if (zynqmp_pm_feature(PM_GET_NODE_STATUS) < PM_API_VERSION_2)
-> +		return -EOPNOTSUPP;
-> +
-> +	return zynqmp_pm_get_node_status(node, status, requirements, usage);
-> +}
-> +EXPORT_SYMBOL_GPL(zynqmp_pm_get_rpu_node_status);
-> +
->   /**
->    * zynqmp_pm_force_pwrdwn - PM call to request for another PU or subsystem to
->    *             be powered down forcefully
-> diff --git a/drivers/remoteproc/xlnx_r5_remoteproc.c b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> index 50a9974f3202..45a62cb98072 100644
-> --- a/drivers/remoteproc/xlnx_r5_remoteproc.c
-> +++ b/drivers/remoteproc/xlnx_r5_remoteproc.c
-> @@ -948,16 +948,6 @@ static struct zynqmp_r5_core *zynqmp_r5_add_rproc_core(struct device *cdev)
->   		goto free_rproc;
->   	}
->   
-> -	/*
-> -	 * If firmware is already available in the memory then move rproc state
-> -	 * to DETACHED. Firmware can be preloaded via debugger or by any other
-> -	 * agent (processors) in the system.
-> -	 * If firmware isn't available in the memory and resource table isn't
-> -	 * found, then rproc state remains OFFLINE.
-> -	 */
-> -	if (!zynqmp_r5_get_rsc_table_va(r5_core))
-> -		r5_rproc->state = RPROC_DETACHED;
-> -
->   	r5_core->rproc = r5_rproc;
->   	return r5_core;
->   
-> @@ -1210,6 +1200,7 @@ static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
->   {
->   	struct device *dev = cluster->dev;
->   	struct zynqmp_r5_core *r5_core;
-> +	u32 req, usage, status;
->   	int ret = -EINVAL, i;
->   
->   	r5_core = cluster->r5_cores[0];
-> @@ -1255,6 +1246,41 @@ static int zynqmp_r5_core_init(struct zynqmp_r5_cluster *cluster,
->   		ret = zynqmp_r5_get_sram_banks(r5_core);
->   		if (ret)
->   			return ret;
-> +
-> +		/*
-> +		 * It is possible that firmware is loaded into the memory, but
-> +		 * RPU (remote) is not running. In such case, RPU state will be
-> +		 * moved to RPROC_DETACHED wrongfully. To avoid it first make
-> +		 * sure RPU is power-on and out of reset before parsing for the
-> +		 * resource table.
-> +		 */
-> +		ret = zynqmp_pm_get_rpu_node_status(r5_core->pm_domain_id,
-> +						    &status, &req, &usage);
-> +		if (ret) {
-> +			dev_warn(r5_core->dev,
-> +				 "failed to get rpu node status, err %d\n", ret);
-> +			continue;
-> +		}
-> +
-> +		/*
-> +		 * If RPU state is power on and out of reset i.e. running, then
-> +		 * assign RPROC_DETACHED state. If the RPU is not out of reset
-> +		 * then do not attempt to attach to the remote processor.
-> +		 */
-> +		if (status == PM_NODE_RUNNING) {
-> +			/*
-> +			 * Not all the firmware that is running on the remote
-> +			 * core is expected to have the resource table. The
-> +			 * firmware might not use RPMsg at all, and in that case
-> +			 * resource table becomes irrelevant. However, we still
-> +			 * need to make sure that running core is not reported
-> +			 * as offline. so do not decide remote core state based
-> +			 * on the resource table availability
-> +			 */
-> +			if (zynqmp_r5_get_rsc_table_va(r5_core))
-> +				dev_dbg(r5_core->dev, "rsc tbl not found\n");
-> +			r5_core->rproc->state = RPROC_DETACHED;
-> +		}
->   	}
->   
->   	return 0;
-> diff --git a/include/linux/firmware/xlnx-zynqmp.h b/include/linux/firmware/xlnx-zynqmp.h
-> index d70dcd462b44..7e27b0f7bf7e 100644
-> --- a/include/linux/firmware/xlnx-zynqmp.h
-> +++ b/include/linux/firmware/xlnx-zynqmp.h
-> @@ -542,6 +542,18 @@ enum pm_gem_config_type {
->   	GEM_CONFIG_FIXED = 2,
->   };
->   
-> +/**
-> + * enum pm_node_status - Device node status provided by xilpm fw
-> + * @PM_NODE_UNUSED: Device is not used
-> + * @PM_NODE_RUNNING: Device is power-on and out of reset
-> + * @PM_NODE_HALT: Device is power-on but in the reset state
-> + */
-> +enum pm_node_status {
-> +	PM_NODE_UNUSED = 0,
-> +	PM_NODE_RUNNING = 1,
-> +	PM_NODE_HALT = 12,
-> +};
-> +
->   /**
->    * struct zynqmp_pm_query_data - PM query data
->    * @qid:	query ID
-> @@ -630,6 +642,8 @@ int zynqmp_pm_set_rpu_mode(u32 node_id, enum rpu_oper_mode rpu_mode);
->   int zynqmp_pm_set_tcm_config(u32 node_id, enum rpu_tcm_comb tcm_mode);
->   int zynqmp_pm_get_node_status(const u32 node, u32 *const status,
->   			      u32 *const requirements, u32 *const usage);
-> +int zynqmp_pm_get_rpu_node_status(const u32 node, u32 *const status,
-> +				  u32 *const requirements, u32 *const usage);
->   int zynqmp_pm_set_sd_config(u32 node, enum pm_sd_config_type config, u32 value);
->   int zynqmp_pm_set_gem_config(u32 node, enum pm_gem_config_type config,
->   			     u32 value);
-> @@ -939,6 +953,13 @@ static inline int zynqmp_pm_get_node_status(const u32 node, u32 *const status,
->   	return -ENODEV;
->   }
->   
-> +static inline int zynqmp_pm_get_rpu_node_status(const u32 node, u32 *const status,
-> +						u32 *const requirements,
-> +						u32 *const usage)
-> +{
-> +	return -ENODEV;
-> +}
-> +
->   static inline int zynqmp_pm_set_sd_config(u32 node,
->   					  enum pm_sd_config_type config,
->   					  u32 value)
+> Sumit Garg (14):
+>   firmware: qcom: Add a generic PAS service
+>   firmware: qcom_scm: Migrate to generic PAS service
+>   firmware: qcom: Add a PAS TEE service
+>   remoteproc: qcom_q6v5_pas: Switch over to generic PAS TZ APIs
+>   remoteproc: qcom_q6v5_mss: Switch to generic PAS TZ APIs
+>   soc: qcom: mdtloader: Switch to generic PAS TZ APIs
+>   remoteproc: qcom_wcnss: Switch to generic PAS TZ APIs
+>   remoteproc: qcom: Select QCOM_PAS generic service
+>   drm/msm: Switch to generic PAS TZ APIs
+>   media: qcom: Switch to generic PAS TZ APIs
+>   net: ipa: Switch to generic PAS TZ APIs
+>   wifi: ath12k: Switch to generic PAS TZ APIs
+>   firmware: qcom_scm: Remove SCM PAS wrappers
+>   MAINTAINERS: Add maintainer entry for Qualcomm PAS TZ service
 > 
-> base-commit: fcdf2df56d34a3f04cab0725c5bc3abdaa73c2be
+>  MAINTAINERS                                   |   9 +
+>  arch/arm64/boot/dts/qcom/Makefile             |   2 +
+>  arch/arm64/boot/dts/qcom/kodiak-el2.dtso      |  35 ++
+>  drivers/firmware/qcom/Kconfig                 |  19 +
+>  drivers/firmware/qcom/Makefile                |   2 +
+>  drivers/firmware/qcom/qcom_pas.c              | 288 +++++++++++
+>  drivers/firmware/qcom/qcom_pas.h              |  50 ++
+>  drivers/firmware/qcom/qcom_pas_tee.c          | 479 ++++++++++++++++++
+>  drivers/firmware/qcom/qcom_scm.c              | 302 ++++-------
+>  drivers/gpu/drm/msm/Kconfig                   |   1 +
+>  drivers/gpu/drm/msm/adreno/a5xx_gpu.c         |   4 +-
+>  drivers/gpu/drm/msm/adreno/adreno_gpu.c       |  11 +-
+>  drivers/media/platform/qcom/iris/Kconfig      |  25 +-
+>  .../media/platform/qcom/iris/iris_firmware.c  |   9 +-
+>  drivers/media/platform/qcom/venus/Kconfig     |   1 +
+>  drivers/media/platform/qcom/venus/firmware.c  |  11 +-
+>  drivers/net/ipa/Kconfig                       |   2 +-
+>  drivers/net/ipa/ipa_main.c                    |  13 +-
+>  drivers/net/wireless/ath/ath12k/Kconfig       |   2 +-
+>  drivers/net/wireless/ath/ath12k/ahb.c         |   8 +-
+>  drivers/remoteproc/Kconfig                    |   1 +
+>  drivers/remoteproc/qcom_q6v5_mss.c            |   5 +-
+>  drivers/remoteproc/qcom_q6v5_pas.c            |  51 +-
+>  drivers/remoteproc/qcom_wcnss.c               |  12 +-
+>  drivers/soc/qcom/mdt_loader.c                 |  12 +-
+>  include/linux/firmware/qcom/qcom_pas.h        |  43 ++
+>  include/linux/firmware/qcom/qcom_scm.h        |  29 --
+>  include/linux/soc/qcom/mdt_loader.h           |   6 +-
+>  28 files changed, 1115 insertions(+), 317 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/qcom/kodiak-el2.dtso
+>  create mode 100644 drivers/firmware/qcom/qcom_pas.c
+>  create mode 100644 drivers/firmware/qcom/qcom_pas.h
+>  create mode 100644 drivers/firmware/qcom/qcom_pas_tee.c
+>  create mode 100644 include/linux/firmware/qcom/qcom_pas.h
+> 
+> -- 
+> 2.51.0
+> 
 
-Acked-by: Michal Simek <michal.simek@amd.com>
-
-Thanks,
-Michal
+-- 
+-Mukesh Ojha
 
