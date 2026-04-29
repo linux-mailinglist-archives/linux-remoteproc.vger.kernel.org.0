@@ -1,208 +1,222 @@
-Return-Path: <linux-remoteproc+bounces-7545-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7547-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2O4rDcgm8mm/oQEAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7545-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 17:42:00 +0200
+	id mCvhD7Yv8mlvogEAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7547-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 18:20:06 +0200
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0135C497225
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 17:41:55 +0200 (CEST)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F431497A42
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 18:20:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4D0FC3003831
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 15:41:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4E45531122A7
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 29 Apr 2026 16:13:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D316C34AB06;
-	Wed, 29 Apr 2026 15:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DC023FFADD;
+	Wed, 29 Apr 2026 16:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="x/27T86g"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Tmx5tqI8"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011063.outbound.protection.outlook.com [40.93.194.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0BB337F721
-	for <linux-remoteproc@vger.kernel.org>; Wed, 29 Apr 2026 15:41:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1777477313; cv=none; b=XfM5hmaCdg0Lpu1pFD063RuMicgf6MCao/lMBu4ucUjWXWzIScwX1qocD4RVXbXteexWeLxdBCtAYq6CtRzYjErK5cMthXTzrlmZ+wPcCF3IjiAarfcgHKbz+TGQU4qLRjLTg7Gttr8iFMF6NfZShf4SEh99XcFk7sh0Lz8zQqA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1777477313; c=relaxed/simple;
-	bh=ptDOA8oXfBcLNX1p/12OZLzqrk1BS6t5onLGu8IEt8M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JvWw6rEjAm+ByBv10jUNN1iRukoHbFy9GDMtNkl58L6tNu3blSOk2GS4a2NL5YR144vwNCATVSrXXHsJQprjwxN/pWxSDrxQhiEMiJiYDDZkiuwGnnYEwIFe2uMlgx+CSWm0CoAvEIg4dqMDIJtVWRELe2Aq/xi1Z/krXYZOuR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=x/27T86g; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c76c60c7502so448057a12.0
-        for <linux-remoteproc@vger.kernel.org>; Wed, 29 Apr 2026 08:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1777477311; x=1778082111; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h8L+nXE7L85P9lNyL2I2gs9CTUVcJOwgVrd7ZFlSaCE=;
-        b=x/27T86gUyqmFKiprX3Eig42Q7FCCl2TkTqFhm0EveKwg9ZNtlWgGtuOdD71R4J+Ad
-         g78mNZ31VSgKne6xap4Qepafn42S5ilLNua7qxaSqlGILcW3T+z2bQ8Onr+lKHKaqLUz
-         cznRYN1QngzriWUdnBiD6d5nrtXBdky30GuxtsXzD0yTGqYvnmw9pfeFqbqnGUBA1QMZ
-         noNSnrmA4VbtXWXRnOq84eXCnzAzVCCDrq8P1m8cjOrlfTBU+9M1Wrm2LXmz0AleFyYA
-         uFjd5HdDCgfQRMFWCsTRbWjmvinnIJvlHiTzSX46+ofmFs9Rv82jxzsk7zpV8m4ZSYkC
-         jUHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1777477311; x=1778082111;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h8L+nXE7L85P9lNyL2I2gs9CTUVcJOwgVrd7ZFlSaCE=;
-        b=QnJpb8W6xKdISjVq+Qzbej/j8NNW7PLYntKdY6Mf5/DMsLAPXc1VF4Ejbf7z6yjK4p
-         PLllcLxFN14eyitnwEoDw54xBztEg6VABFifn5ssI5/3ISUGP/Be5dauUzCv4vJlkd0H
-         xzbjDDTy2rM1CzRrlJiSgqio8l/oa2HAuTL2tcsuIvr60xkCHnF8p60i9Zq+aeKCl+3W
-         nYH/jKqFiHiHWwbgzLHMFhY5BnpubLewd8EnpZhyfmiew1QUbBQr3inF21KMjMpNBZJQ
-         q77pdZeLBlILgOvaPla9fPFqD9tr9E/3vaaUDQv+FHuj4zTMebanRUsPvEcymWDYqTFx
-         3KTA==
-X-Forwarded-Encrypted: i=1; AFNElJ+wj8usHVJB5VAP3KKk1kdGz42HVVJm+HcI7gLywEn2V54lxL1r2ZIwqb0OAFT+E70bisCGqOuoAgiOsOP/Nvms@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxRdJf8+gJhDQBTN+oMkPsxZ8msv66bSb5lrlkgiIWNmusc7bZ
-	BvBjD/RPBIwTl4GMk9pVvlfpyQxrJKDNoDbkfQFuM1WqKQcOSbWIqXf05JuAlBs3FYY=
-X-Gm-Gg: AeBDies77Z/vO8yGzxgRWC16y9lQ8NRsBpPjHjvIDxsSX2yHbGK+hOGlcv6DvGNYGSw
-	9SNQPuvIjhS3zSzhuy0YpPWE7Mpm/hqB2jnGL3SmsxMPnQzjHDOkFTUlidnzqpPI7WjJ/Od9xoZ
-	+hfjEUweXzVtGHdWgZc+mISETJXOeH0kpe7NU1R7NO4lGmeMxSHitYDwFxPldcKiVlGHzzRC53Z
-	jgtT0JStuD6ZKHSYesGZvk0Bi/aRQKEr9FCBsLpxBQrlzHVD2D1QpFswEXkbFcyiGM1bB9nD02N
-	BkgJMoCzzzkxLMDuAGk59zPbOQOopOJ0L8FdWCtbRMqEMLsybYUvlZzo2SVNmpHnxrRUSo0Icnd
-	crHsw26QeuBKALYCzI0OYRlkufzVyLpCTdr0Lv+7Z1cM8uqugicxZmjfPH4jMUL7ACclAajyT+V
-	17oTcDFQvhUdl9EZEQJOsu1wsEPwLUE491TQ3yhQ==
-X-Received: by 2002:a17:903:2410:b0:2b4:68c9:302a with SMTP id d9443c01a7336-2b9882388cdmr33673325ad.17.1777477310614;
-        Wed, 29 Apr 2026 08:41:50 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:8131:aef0:bb67:5559])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2b98899055fsm27045325ad.80.2026.04.29.08.41.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2026 08:41:50 -0700 (PDT)
-Date: Wed, 29 Apr 2026 09:41:46 -0600
-From: Mathieu Poirier <mathieu.poirier@linaro.org>
-To: Shenwei Wang <shenwei.wang@nxp.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, "Padhi, Beleswar" <b-padhi@ti.com>,
-	Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>, Frank Li <frank.li@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	dl-linux-imx <linux-imx@nxp.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v13 3/4] gpio: rpmsg: add generic rpmsg GPIO driver
-Message-ID: <afImuoeHolxGgw3H@p14s>
-References: <20260422212849.1240591-1-shenwei.wang@nxp.com>
- <20260422212849.1240591-4-shenwei.wang@nxp.com>
- <22fb5fac-2568-42be-a7e3-7e89d0017eb3@ti.com>
- <PAXPR04MB91850A11C58419C03909145F89362@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <6412a758-4560-4cf1-a0d0-5b24d1a715f1@lunn.ch>
- <PAXPR04MB9185009A17DFDF3D6C8B44E789362@PAXPR04MB9185.eurprd04.prod.outlook.com>
- <6e01e114-e336-4744-b6b4-563ec42e321b@lunn.ch>
- <PAXPR04MB9185A098D894B6A6EBCC13F889372@PAXPR04MB9185.eurprd04.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11AE33EFD25;
+	Wed, 29 Apr 2026 16:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1777479201; cv=fail; b=gmLD6rakaa9O1ooDVpN5bbspB3KECu8YqLEr7S/ZSx42WStP4ftZTgkJhChmcRF8JjV8MnRWW/JuYcZYbgwTppbSQ/PqJAMNzNi6cBjctY2YVddHyqQHCSrgDM71Sxdh5NZuL4JVpUGBrzCPVM2gT3WM8pdErxMRRec0Xz8KjpM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1777479201; c=relaxed/simple;
+	bh=GrlnJ1z5+mAcP1VFc/VfyGJ2sQqcyqy1A3kfErhaA1E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=r4/ZZn2fSObzpmWoQJVg6zlvulAksCIjMnNfxH/VmxpKlwcbmnLv9wqPpFH9imSYLOLpnfpy0/EXThzxARkrbFCfcdcSeyiQ2lf85eOQMs6pDw5DX2xxZsLovYX7BmKiX4PBXhZ/DP/+15zkLBWmk9T49aGnNidxCTR/3MdFZ70=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Tmx5tqI8; arc=fail smtp.client-ip=40.93.194.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=GhEL0FBQ8xu0SFfmpQkKC8rEX2qaLCgRWEMQ4Gnh/IQvARZVj8WZDSND8+v3XyHNCJeYc0IPvC4icwazT1yHzXU4zxDckwi4168+sacibTzNp/SslTrraIhFY4p6Ov7Soed5pdhPAxJmvtbarp+MGtZlz51z8/pbjJD/JuMmgYdyHlUAUjhVUCalcCmKipEvr5tzAzm6Ag8T05NoHGllquIBWW8fW86mMCEjcfE/vXMBuFii9kxBgl5s1Tt5hahfzkRb2VFeQHXMA0AlWjf2iTTpEJBGvikr8rpl0L+Q4wlYYCK43hXTdatR8C7Fg3mglz5YLhY7l8YFRLhCauEVnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1Zsi6lu2xaC/ek5jSKwsySu/19EgzmCfj54g794YZpY=;
+ b=diLtZg8Pye4lfdcXl1nnxTCuPq7Dvfs1XFNGNOkLlIx2jUFL9jotIHc50kCDw5VmrynrImYxRgnS2Cn56L//8IJ5S2sXbpqFGhUetSv0PQkaMTzXEj4wpDjSt2uZ3Vzx3xpnFFyWOYSr3q6dCEnVOu1ZvVsLZpNfj61KD+kUDaFFuArPVEQ+RVJpykWIQkwSF7ysW4l13XnQUMVESMSsHfZ5yxvRRUnV1KWWpsDv0pEVSAU+fWjIRAy91MPOgf4+MUTbLwzSyW2/5Xsabfs0lcHbKzy7eJ4buRB4Sn69jc66WKAFc4aD1NvM7pO5XDe1ydclawcIUKD5d8cE8rkEvg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1Zsi6lu2xaC/ek5jSKwsySu/19EgzmCfj54g794YZpY=;
+ b=Tmx5tqI8+uE5rmFHaARehnfTB8y+5/1bntcwXbkq05VKDg5Nfjd1vPNMEvak18m5tjhcDgHhPxLvT7zi5riy5F7kKJutKjpSePuJrD1DiUQJOrma4Ln9KMVdsHLytyF2fwXRZpRBF8PA10M0HW34Z3NELS0Mxgb8rrlhV2I6uVI=
+Received: from BN9PR03CA0413.namprd03.prod.outlook.com (2603:10b6:408:111::28)
+ by PH0PR12MB7983.namprd12.prod.outlook.com (2603:10b6:510:28e::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9870.20; Wed, 29 Apr
+ 2026 16:13:08 +0000
+Received: from BL6PEPF00022573.namprd02.prod.outlook.com
+ (2603:10b6:408:111:cafe::13) by BN9PR03CA0413.outlook.office365.com
+ (2603:10b6:408:111::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9846.28 via Frontend Transport; Wed,
+ 29 Apr 2026 16:13:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BL6PEPF00022573.mail.protection.outlook.com (10.167.249.41) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9846.18 via Frontend Transport; Wed, 29 Apr 2026 16:13:07 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Wed, 29 Apr
+ 2026 11:13:05 -0500
+Received: from satlexmb07.amd.com (10.181.42.216) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 29 Apr
+ 2026 11:13:05 -0500
+Received: from xsjtanmays50.xilinx.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Wed, 29 Apr 2026 11:13:04 -0500
+From: Tanmay Shah <tanmay.shah@amd.com>
+To: <andersson@kernel.org>, <mathieu.poirier@linaro.org>,
+	<arnaud.pouliquen@foss.st.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>, Tanmay
+ Shah <tanmay.shah@amd.com>
+Subject: [PATCH v2 0/3] Enhance RPMsg buffer management
+Date: Wed, 29 Apr 2026 09:10:50 -0700
+Message-ID: <20260429161052.528015-1-tanmay.shah@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PAXPR04MB9185A098D894B6A6EBCC13F889372@PAXPR04MB9185.eurprd04.prod.outlook.com>
-X-Rspamd-Queue-Id: 0135C497225
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB03.amd.com: tanmay.shah@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF00022573:EE_|PH0PR12MB7983:EE_
+X-MS-Office365-Filtering-Correlation-Id: c231ff64-1654-4198-292f-08dea60a3366
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700016|376014|13003099007|56012099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	QeiHkwQQaoGPrdvnhbAHAcRE6upp6LIeYsHkptysiOxzrKMH+SF1XiMcXVsX+VZF6n92/R2l3n8b7BlyScSm4eqaPGft7AW2yNCSSMV22eKntGgBmM1i7ovVs8NPp0sp9tUFacfZcjI4/Cm36t7gC0h9K8y/ANc2/2lq21ZeVWDSLq+VG3bFAzthMsiIUWlF6Q4Diq/0MnwOMRbHzWU8e6aKjsUn8Ei5108oh4MudwSSbDv74RpLgCk1ND49wruWtXcrQaiSskoz+8DhuHBLCOPWWPoX0sO57WTk2XQZEjCqhlrKjKLLMbmKYYABspu0YTrSEc5w1do4BqJFcdmTVKePmyMYD4YlyTfI2EGF1Hp5yg2zYdj48yqGWJQO6K9nVuXJ7bCyKJ8LXqYtTNGkHZKBzR22ayvevwPhGqBunIR3V40CXaczoKwZBqg+ESqf5BK2E3HK8kCFiQm8RvTVXydA6wG6O/6b4jnPBXw6JHrc1nCcw5+7MnXpvpw0DFhFnEekZXlEfCRoWwyOs97tTxMxFU3pJyjMLN3rOGxXC1NIio0MO5/wm7Q+MtW0rXH5jtO+7rhqA6qaDrkWRf8sHSWplQzO+uFU28qfoZiUlkfM0mCFtGKk9e8hWxiYO7Gda636jLk/YeYP/HmN6ZoG029DQdZDPOSw5Z/YivmoESbSjguT8iPZDLyzlsI6UFRKOfwWBe/U62wki8OX44U195rn2kl0dkH1zJnmjow3si+aQ4Hq1D3H9WqMqlDKx531kOW1kZnQS16qGJS0Soiljg//syIYLqcMUHk22hB+1DY=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700016)(376014)(13003099007)(56012099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	0tyAqdjx8jNl2nom3G+RpU4TS+zeLoR5xq59eGDxF0Jcj6tfZRfnro6tEV/f091JhUIsyECEvZTlhc82/G3rmcBXe2GVY5EJgXglB28YagjAkbND0EzDb46eLxlc3x00A0slGPFrRQy8GV08w6t0h56C+Wp8ZrSb2a54RzRr3TwcxqRowqAOF8h/xbhiyIhV6FMq6G+z0fVhs4gudOHguA0q0DW/tPmQHG60eQlKprAcG4fO7o5BJVyw/H8xqRWTasqw58ZnQBCE8lpmOKm6QDeM7cjUnjRG6tIrsP/tFGMuQnyVkLBYKYwwPgnybu28B3FC/D1TfSKIfFLQ5gWwFzt0lU84byT59c17jk/12sNDdtcyt2MrFV3v/i/NOuUWo2NNRi0d03lVfs+EPsYh/F+qOnmpDEgN5jy/ng4/xzl5ZBNPRqebok4g79qQm8k7
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2026 16:13:07.4962
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c231ff64-1654-4198-292f-08dea60a3366
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF00022573.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7983
+X-Rspamd-Queue-Id: 8F431497A42
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+X-Spamd-Result: default: False [1.34 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[lunn.ch,ti.com,kernel.org,lwn.net,nxp.com,pengutronix.de,linuxfoundation.org,vger.kernel.org,gmail.com,lists.linux.dev,lists.infradead.org,bgdev.pl];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7545-lists,linux-remoteproc=lfdr.de];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[mathieu.poirier@linaro.org,linux-remoteproc@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-7547-lists,linux-remoteproc=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tanmay.shah@amd.com,linux-remoteproc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[amd.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,amd.com:dkim,amd.com:mid];
+	TAGGED_RCPT(0.00)[linux-remoteproc];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_TWELVE(0.00)[25];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[9]
 
-On Tue, Apr 28, 2026 at 03:24:59PM +0000, Shenwei Wang wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Andrew Lunn <andrew@lunn.ch>
-> > Sent: Monday, April 27, 2026 3:49 PM
-> > To: Shenwei Wang <shenwei.wang@nxp.com>
-> > Cc: Padhi, Beleswar <b-padhi@ti.com>; Linus Walleij <linusw@kernel.org>;
-> > Bartosz Golaszewski <brgl@kernel.org>; Jonathan Corbet <corbet@lwn.net>;
-> > Rob Herring <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>;
-> > Conor Dooley <conor+dt@kernel.org>; Bjorn Andersson
-> > <andersson@kernel.org>; Mathieu Poirier <mathieu.poirier@linaro.org>; Frank Li
-> > <frank.li@nxp.com>; Sascha Hauer <s.hauer@pengutronix.de>; Shuah Khan
-> > <skhan@linuxfoundation.org>; linux-gpio@vger.kernel.org; linux-
-> > doc@vger.kernel.org; linux-kernel@vger.kernel.org; Pengutronix Kernel Team
-> > <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; Peng Fan
-> > <peng.fan@nxp.com>; devicetree@vger.kernel.org; linux-
-> > remoteproc@vger.kernel.org; imx@lists.linux.dev; linux-arm-
-> > kernel@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; Bartosz
-> > Golaszewski <brgl@bgdev.pl>
-> > Subject: [EXT] Re: [PATCH v13 3/4] gpio: rpmsg: add generic rpmsg GPIO driver
-> > > > struct virtio_gpio_response {
-> > > >         __u8 status;
-> > > >         __u8 value;
-> > > > };
-> > 
-> > > It is the same message format. Please see the message definition
-> > (GET_DIRECTION) below:
-> > 
-> > > +   +-----+-----+-----+-----+-----+----+
-> > > +   |0x00 |0x01 |0x02 |0x03 |0x04 |0x05|
-> > > +   | 1   | 2   |port |line | err | dir|
-> > > +   +-----+-----+-----+-----+-----+----+
-> > 
-> > Sorry, but i don't see how two u8 vs six u8 are the same message format.
-> > 
-> 
-> Some changes to the message format are necessary.
-> 
-> Virtio uses two communication channels (virtqueues): one for requests and replies, and a second one for events. 
-> In contrast, rpmsg provides only a single communication channel, so a type field is required to distinguish between 
-> different kinds of messages.
-> 
-> Since rpmsg replies and events share the same message format, an additional line is introduced to handle both cases.
-> 
-> Finally, rpmsg supports multiple GPIO controllers, so a port field is added to uniquely identify the target controller.
+Take rx and tx buffer size from the virtio device config space in the
+resource table. This allows each firmware to configure RPMsg buffer size
+as needed in each direction.
 
-I have commented on this before - RPMSG is already providing multiplexing
-capability by way of endpoints.  There is no need for a port field.  One
-endpoint, one GPIO controller. 
+Test performed:
+  - Test [1/2] patch with existing firmware as it is, rpmsg working.
+  - Verify [2/2] patch works with the existing firmware
+  - Verify [2/2] patch works with the firmware that configures
+    different tx & rx buf size via vdev config space.
 
-> 
-> Shenwei
-> 
-> >        Andrew
+Corresponding OpenAMP project PR:
+  - open-amp library: https://github.com/OpenAMP/open-amp/pull/684
+  - openamp-system-reference demo: 
+    https://github.com/OpenAMP/openamp-system-reference/pull/106
+
+Changes in v2:
+  - Change author
+  - fix commit message with better explanation
+  - %s/sbuf/tx_buf
+  - %s/rbuf/rx_buf
+  - %s/num_rbuf/num_rx_buf/
+  - %s/num_sbuf/num_tx_buf/
+  - %s/sbuf_size/tx_buf_size/
+  - %s/rbuf_size/rx_buf_size/
+  - fix typo
+  - do not use ALIGN on buf size, rely on allocator
+  - make err msg more explicit, %s/vdev config:/bad vdev config/
+  - fix license and add AMD copyrights in the header virtio_rpmsg.h
+  - Assign bit 1 to VIRTIO_RPMSG_F_BUFSZ feature
+  - use __virtio32 over __u32
+  - add version field to virtio rpmsg config structure
+  - Introduce new patch to print rpmsg mtu size in the sample rpmsg driver
+  - move linux/virtio_rpmsg.h to linux/rpmsg/virtio_rpmsg.h
+
+Original seris:
+https://lore.kernel.org/all/1548949280-31794-1-git-send-email-xiaoxiang@xiaomi.com/
+
+Following modificaitons are done to the original series in v1:
+  - Separate dma allocation is not done for tx and rx buffers. Instead
+    allocated chunk of memory is split between tx and rx buffers.
+  - If vdev doesn't support VIRTIO_RPMSG_F_BUFSZ feature then use the 
+    default size of 512 bytes for buffers
+  - Change MAX_RPMSG_BUF_SIZE to DEFAULT_RPMSG_BUF_SIZE
+  - move virtio_rpmsg.h from uapi to linux dir
+  - RPMsg buffer size must be set to hold rpmsg header at minimum in the
+    vdev config space of the firmware.
+  - align total buf size to page size when allocating and deallocating
+    memory
+
+Tanmay Shah (3):
+  rpmsg: virtio_rpmsg_bus: allow different size of tx and rx bufs
+  rpmsg: virtio_rpmsg_bus: get buffer size from config space
+  samples: rpmsg: add mtu size info
+
+ drivers/rpmsg/virtio_rpmsg_bus.c    | 124 ++++++++++++++++++----------
+ include/linux/rpmsg/virtio_rpmsg.h  |  27 ++++++
+ samples/rpmsg/rpmsg_client_sample.c |   3 +
+ 3 files changed, 109 insertions(+), 45 deletions(-)
+ create mode 100644 include/linux/rpmsg/virtio_rpmsg.h
+
+
+base-commit: fcdf2df56d34a3f04cab0725c5bc3abdaa73c2be
+-- 
+2.34.1
+
 
