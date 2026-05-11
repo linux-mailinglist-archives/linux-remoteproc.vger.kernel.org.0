@@ -1,45 +1,45 @@
-Return-Path: <linux-remoteproc+bounces-7697-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7699-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WjJ0Kt5AAWrxSwEAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7697-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 04:37:18 +0200
+	id oJe/DexAAWrxSwEAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7699-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 04:37:32 +0200
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F3FA5073A8
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 04:37:18 +0200 (CEST)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8EB65073BA
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 04:37:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 15EAC3008885
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 02:37:16 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 951F63006447
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 02:37:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2F326B756;
-	Mon, 11 May 2026 02:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1C8A221D89;
+	Mon, 11 May 2026 02:37:24 +0000 (UTC)
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6761C701F;
-	Mon, 11 May 2026 02:37:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA8F26ED3A;
+	Mon, 11 May 2026 02:37:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.121.34.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778467032; cv=none; b=kKUUFC0ZX1qq9/8NyhGUOlum2znOjAUadIAz61LiLn7RStbtg5e3aIiQf4IuSGgUgFgHOJpNaeQsz45NWazV27fd0/q2hQ1GS3WuXfyl+cV2oLIu3xcOeRi98PkY4HTo3PibezARBcSX7qrDclIiu+/+FyPaHnx+oflab8eBDH0=
+	t=1778467044; cv=none; b=DBPFkJ4GzZWQNK46pm2lhqzWk7qTw4qzqdCdd9k0MJNuR0f8VeNnb6w3lZhdYBotHHJdk3ZocJV4JLqznQRo2ZDKpknM5McflJEuLl+uBcsyO5hViwyfJQGodBcPPNkhu14N/Kew1xhK0cmZHFhYd8YUlLL24PKUMl709st4Kes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778467032; c=relaxed/simple;
-	bh=XjewDR+I37G8oNcTXpyclfh9G+81jGqiuY1IXmC5awY=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=o6KxOLrBN3PHBNd3szBRw1rq+E2r+oySnQEt2ICspCkoCiOSmDJQB/pLC9zCOa88mMMM3FGtKcfjrVx7kMwRO2u5mudLiwvR3qSM5R+22mZpXaEm39Mfu56mfh/g0SOohrNq9USTLXKiRAU8/44e+B40Ff/ERgfC1uPs1frTx1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.21
+	s=arc-20240116; t=1778467044; c=relaxed/simple;
+	bh=xNbxGe7aSwjgSU07Ix1JQliTrpp3b+Q5a295IWkbFu0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=tKefLMz6Vu5tSc9OJpolNzHI6O7HEzgB0TFPRuZ0UQUjJy49I/8qM+XG6T3KcESG4leSR3GQy+j7kKpV4Q0CMaQI822VWYYqHjgOB8FkdWOKUAOrnKaPTRKik+PW/XxzpphpBwhDZ5CY1IyUvRE6/TWHRwBGMETxaAiFn1OOERI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; arc=none smtp.client-ip=92.121.34.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 7C1A120489C;
-	Mon, 11 May 2026 04:37:03 +0200 (CEST)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id CA5CE1A4840;
+	Mon, 11 May 2026 04:37:07 +0200 (CEST)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-	by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 4F409201388;
-	Mon, 11 May 2026 04:37:03 +0200 (CEST)
+	by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 9C0771A4841;
+	Mon, 11 May 2026 04:37:07 +0200 (CEST)
 Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 2082718002DC;
-	Mon, 11 May 2026 10:37:01 +0800 (+08)
+	by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 69EE618002C2;
+	Mon, 11 May 2026 10:37:05 +0800 (+08)
 From: Jiafei Pan <Jiafei.Pan@nxp.com>
 To: andersson@kernel.org,
 	mathieu.poirier@linaro.org,
@@ -56,82 +56,118 @@ Cc: Zhiqiang.Hou@nxp.com,
 	linux-remoteproc@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	Jiafei Pan <Jiafei.Pan@nxp.com>
-Subject: [PATCH v3 0/4] remoteproc: add Cortex-A Core remoteproc support on i.MX platforms
-Date: Mon, 11 May 2026 10:39:24 +0800
-Message-Id: <20260511023928.39640-1-Jiafei.Pan@nxp.com>
+Subject: [PATCH v3 1/4] dt-bindings: remoteproc: add imx-rproc-psci
+Date: Mon, 11 May 2026 10:39:25 +0800
+Message-Id: <20260511023928.39640-2-Jiafei.Pan@nxp.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20260511023928.39640-1-Jiafei.Pan@nxp.com>
+References: <20260511023928.39640-1-Jiafei.Pan@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
-X-Rspamd-Queue-Id: 1F3FA5073A8
+X-Rspamd-Queue-Id: D8EB65073BA
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.14 / 15.00];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	DMARC_POLICY_SOFTFAIL(0.10)[nxp.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_TO(0.00)[kernel.org,linaro.org,nxp.com,pengutronix.de,gmail.com,lists.linux.dev,lists.infradead.org,vger.kernel.org];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7697-lists,linux-remoteproc=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	NEURAL_SPAM(0.00)[0.346];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Jiafei.Pan@nxp.com,linux-remoteproc@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-remoteproc];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	TAGGED_FROM(0.00)[bounces-7699-lists,linux-remoteproc=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
 	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.110];
+	FROM_NEQ_ENVFROM(0.00)[Jiafei.Pan@nxp.com,linux-remoteproc@vger.kernel.org];
+	TAGGED_RCPT(0.00)[linux-remoteproc];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	FROM_HAS_DN(0.00)[]
 X-Rspamd-Action: no action
 
-This patch series is to add remoteproc support on Cortex-A Core of i.MX platforms:
-1. Adding dts binding for Cortex-A Core remoteproc
-2. Enable Cortex-A Core remoteproc support in remoteproc driver
-3. Adding dts example on imx93 platforms.
+Add compatible string "fsl,imx-rproc-psci" for i.MX Cortex-A Core's
+remoteproc support.
 
 Signed-off-by: Jiafei Pan <Jiafei.Pan@nxp.com>
 
 ---
 Changes in v3:
 - Fixed dt_binding_check warnings
-- Updated prefix of patch subject
-
-Changes in v2:
-- Update arch/arm64/boot/dts/freescale/Makefile to add new dts
 
 ---
-Hou Zhiqiang (1):
-  remoteproc: imx_rproc: add autoboot support for A-core
-
-Jiafei Pan (3):
-  dt-bindings: remoteproc: add imx-rproc-psci
-  remoteproc: imx_rproc: add support for Cortex-A Core
-  arm64: dts: imx93: Cortex-A Core remoteproc device node
-
- .../remoteproc/fsl,imx-rproc-psci.yaml        |  51 ++++++
- arch/arm64/boot/dts/freescale/Makefile        |   2 +
- .../imx93-11x11-evk-multicore-rtos.dts        |  39 +++++
- .../imx93-14x14-evk-multicore-rtos.dts        |  39 +++++
- .../boot/dts/freescale/imx93-rproc-ca55.dtsi  |  14 ++
- drivers/remoteproc/imx_rproc.c                | 150 ++++++++++++++++++
- drivers/remoteproc/imx_rproc.h                |   2 +
- 7 files changed, 297 insertions(+)
+ .../remoteproc/fsl,imx-rproc-psci.yaml        | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc-psci.yaml
- create mode 100644 arch/arm64/boot/dts/freescale/imx93-11x11-evk-multicore-rtos.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx93-14x14-evk-multicore-rtos.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx93-rproc-ca55.dtsi
 
+diff --git a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc-psci.yaml b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc-psci.yaml
+new file mode 100644
+index 000000000000..28d00dbf8bc7
+--- /dev/null
++++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc-psci.yaml
+@@ -0,0 +1,51 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/remoteproc/fsl,imx-rproc-psci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP i.MX Cortex-A Core Remote Processor via PSCI
++
++maintainers:
++  - Jiafei Pan <Jiafei.Pan@nxp.com>
++
++description:
++  This binding provides support for managing Cortex-A cores as remote
++  processors on i.MX platforms using the PSCI (Power State Coordination
++  Interface) for CPU power management operations. This allows single
++  Cortex-A core or multiple Cortex-A cores to be controlled by Linux as
++  a remote processor, enabling them to run RTOS or bare-metal applications.
++
++properties:
++  compatible:
++    const: fsl,imx-rproc-psci
++
++  fsl,cpus-mask:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Bitmask indicating which CPU cores are assigned to this remote
++      processor instance. Each bit represents a CPU core, where bit N
++      corresponds to CPU N. For example, 0x2 (0b10) assigns CPU core 1,
++      while 0x6 (0b110) assigns CPU cores 1 and 2.
++
++  memory-region:
++    maxItems: 1
++    description:
++      Phandle to a reserved memory region to be used for the remote
++      processor's code and data.
++
++required:
++  - compatible
++  - fsl,cpus-mask
++  - memory-region
++
++additionalProperties: false
++
++examples:
++  - |
++        remoteproc-ca55-1 {
++            compatible = "fsl,imx-rproc-psci";
++            /* bitmask: 0b10, assign A55 Core 1 */
++            fsl,cpus-mask = <0x2>;
++            memory-region = <&rtos_ca55_reserved>;
++        };
 -- 
 2.43.0
 
