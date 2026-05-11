@@ -1,113 +1,142 @@
-Return-Path: <linux-remoteproc+bounces-7716-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7717-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wF+eMh4eAmocoAEAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7716-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 20:21:18 +0200
+	id WKRiGa0fAmq+oAEAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7717-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 20:27:57 +0200
 X-Original-To: lists+linux-remoteproc@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B00951447A
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 20:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09BDD5146F1
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 20:27:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0FB5F313569F
-	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 18:02:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EBFAF3024CB5
+	for <lists+linux-remoteproc@lfdr.de>; Mon, 11 May 2026 18:18:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C71A47884B;
-	Mon, 11 May 2026 18:02:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8498647B42E;
+	Mon, 11 May 2026 18:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FDAmnRf/"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Svt1i7E7"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B8135A387;
-	Mon, 11 May 2026 18:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A31747B437;
+	Mon, 11 May 2026 18:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1778522578; cv=none; b=F126vXeh0PtR2ys8mP+eabr2cihqB7qB1YyVozACQ0PA0CSX/RKew+4/MQC0izElaR5V5BGxChJ9bZCp0zu/n4eGgxqdyQ0GxIpYlo5SrvA3A3kzjQ1L97bgdWmsokR0+IG3V5s1BX6g8yGKZNZG9hcVlVhcqZooBP0umdql+0Q=
+	t=1778523525; cv=none; b=PGkfn0C6wVr6ihmZcMcTJJKhXkWywrRYkfq2AXYqZfBdLrYeaAlMoiUSJSwOWD1L6XT++3HfY4xp/0Kv5eDAFqu3S1qFL3h5+DYTSWvuUMRV8HCMH5ofEzik3R2BlMSpRvnDRa21ZMJxfHsY3KEwqezdLkCY1CIAvhksPUptNXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1778522578; c=relaxed/simple;
-	bh=CGt2BXFmLddnsPKtaW/96l4swYf5G9PBJ/De+0lW1tU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=nHGc8qpcptjIds1M5jThCvSVZr7WGq2Xq7EjQtF2EsAV9UYo+mgvppnnEC57NOUCtBIEvHVhFH9kF2ZMP8QHn6TQ93G6TZr6Bnkil/EKtmU8wxnscBDJsc8hjX80C12q69wvBgMCkK3RgGRMn3403B5lxRQSCSD9pUN3n2qR3F4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FDAmnRf/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A7DEC2BCB0;
-	Mon, 11 May 2026 18:02:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1778522578;
-	bh=CGt2BXFmLddnsPKtaW/96l4swYf5G9PBJ/De+0lW1tU=;
-	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
-	b=FDAmnRf/zb1SJiyqbsbSqtEkOw0In4byifA/3b/dTxH1MZgOMHi1ULublk5ky1tGc
-	 8dtPTdRfodbpm/1iMb8iCie37Q2jzdk28mwuQ748OMrm+98Cxy/5yJyC+IPOhvPRlo
-	 78yZN77yMSz8V//VxXY5PXR1xzz9xrKmApqU2De0K6T1+w+Tmf/0/7k+i7eye4Pfwv
-	 Y0Svju4r1dFKEqkcjbqHBNWdCPiozO2E7p2zWgdZhD+dak8yMBhLrpUP3/Hh1Lu3XX
-	 rEAlBAdpKqCdNq48XSrK42Ps60jtq35y4Y4d+ZOIFBLwBqoHz7KENVn7Wc5wY5TxjF
-	 XEcLs5hh/jQww==
+	s=arc-20240116; t=1778523525; c=relaxed/simple;
+	bh=LZoS+OqiDeEnrp9ZwW8sxybQzfDi32QlNvb6QTQaf/U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pYajYcZngd0bpLbAcIh6d8Uk0Gq5bGyX2mpjKLKfIb1s3r81f/xcfnH/pUHDS6VbNS6pM10u/9L63VizkJMFANfmYyyw3EoeIq/0Z0C2rhtRq3HMVk3GRCkOmaGhkAmx9g2l8XjIoDLndp8RQFvqjfGkGDH3HtHpoQoic+tH9C4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Svt1i7E7; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=UzghNUT8txexFJCdbHTb6EbJJDc5OYiK3uW8TFQuhMM=; b=Svt1i7E7y0/08/Z+DzdyOhPsu3
+	cjCGgikyfsBuQ78H8BQsgU6RWNsRiDoyUHNMSa7aqhb2LyfNOcsinu+3i/qoj43i6bx8XBo64xfEf
+	MCj3PsNwnWHh5s1uZcp+s04ZWd82kZSLNO5s/bs9SsI8xPE5tHHQdySpiQU1zJx4IT2Q=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wMVD2-002QBE-6n; Mon, 11 May 2026 20:18:28 +0200
+Date: Mon, 11 May 2026 20:18:28 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: tanmay.shah@amd.com, Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>,
+	Beleswar Prasad Padhi <b-padhi@ti.com>,
+	Shenwei Wang <shenwei.wang@nxp.com>,
+	Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>, Frank Li <frank.li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	dl-linux-imx <linux-imx@nxp.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: Re: [PATCH v13 3/4] gpio: rpmsg: add generic rpmsg GPIO driver
+Message-ID: <4ae35920-2539-4b12-8dea-efd407b8aaeb@lunn.ch>
+References: <472f85bd-42c2-40c6-abfd-b76924797069@ti.com>
+ <CANLsYkzt9xUczxSU28u-TfZAAjr0ufZKXAj8Eqfq=45gufXW3w@mail.gmail.com>
+ <f7ef3417-eb84-4467-ac72-a9bc8b0c81e8@foss.st.com>
+ <21de8440-adf7-454b-acfc-06e50882e075@ti.com>
+ <4c526816-b127-43e7-86e9-eee4dc1152bc@foss.st.com>
+ <c6f68ab5-271a-41ed-b285-75b739f1edd6@amd.com>
+ <87850f70-5275-4393-941f-d01146a9cffc@foss.st.com>
+ <da3b79b7-9dad-48cb-b552-cf6df445899f@amd.com>
+ <08c815f5-ccbe-404a-95a1-a549aac8a55d@amd.com>
+ <CANLsYkz8HpM_8eS7DjN_jmYs4T7P9xY0jYmdiAx5WO=_1zvFpQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 11 May 2026 20:02:52 +0200
-Message-Id: <DIG1MUKJVLEO.YGTSSYIO5T1K@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v2 0/5] treewide: Convert buses to use generic
- driver_override
-Cc: <driver-core@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
- <linux-hyperv@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
- <linux-remoteproc@vger.kernel.org>, "Danilo Krummrich" <dakr@kernel.org>
-To: <gregkh@linuxfoundation.org>, <rafael@kernel.org>,
- <linux@armlinux.org.uk>, <nipun.gupta@amd.com>, <nikhil.agarwal@amd.com>,
- <kys@microsoft.com>, <haiyangz@microsoft.com>, <wei.liu@kernel.org>,
- <decui@microsoft.com>, <longli@microsoft.com>, <andersson@kernel.org>,
- <mathieu.poirier@linaro.org>
-References: <20260505133935.3772495-1-dakr@kernel.org>
-In-Reply-To: <20260505133935.3772495-1-dakr@kernel.org>
-X-Rspamd-Queue-Id: 6B00951447A
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANLsYkz8HpM_8eS7DjN_jmYs4T7P9xY0jYmdiAx5WO=_1zvFpQ@mail.gmail.com>
+X-Rspamd-Queue-Id: 09BDD5146F1
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[lunn.ch,none];
+	R_DKIM_ALLOW(-0.20)[lunn.ch:s=20171124];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-7717-lists,linux-remoteproc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-7716-lists,linux-remoteproc=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[amd.com,foss.st.com,ti.com,nxp.com,kernel.org,lwn.net,pengutronix.de,linuxfoundation.org,vger.kernel.org,gmail.com,lists.linux.dev,lists.infradead.org,bgdev.pl];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dakr@kernel.org,linux-remoteproc@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andrew@lunn.ch,linux-remoteproc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[lunn.ch:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-remoteproc];
+	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sched.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lunn.ch:mid,lunn.ch:dkim]
 X-Rspamd-Action: no action
 
-On Tue May 5, 2026 at 3:37 PM CEST, Danilo Krummrich wrote:
-> This series is based on v7.1-rc1 with no additional dependencies, hence t=
-hose
-> patches can be picked up by subsystems individually.
+> Arnaud, Beleswar, Andrew and I are all advocating for one endpoint per
+> GPIO controller.  The remaining issue it about the best way to work
+> out source and destination addresses between Linux and the remote
+> processor.  I'm running out of time for today but I'll return to this
+> thread with a final analysis by the end of the week.
 
-Gentle ping on this one; I can alternatively also take those patches throug=
-h the
-driver-core tree if you prefer.
+How many of the participants here will be in Minneapolis next week for
+the Embedded Linux Conference? There is even a talk about this:
 
-Thanks,
-Danilo
+https://osselcna2026.sched.com/event/2JQpx/building-virtual-drivers-with-rpmsg-key-design-principles-challenges-trade-offs-beleswar-prasad-padhi-texas-instruments?iframe=yes&w=100%&sidebar=yes&bg=no
+
+Maybe we can get together and decide on the final design after the
+session.
+
+	Andrew
 
