@@ -1,202 +1,165 @@
-Return-Path: <linux-remoteproc+bounces-7842-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7843-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IJC4HoaSDWrTzgUAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7842-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 May 2026 12:52:54 +0200
+	id WPC5OcGdDWpO0AUAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7843-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 May 2026 13:40:49 +0200
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73C1D58BF9E
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 May 2026 12:52:53 +0200 (CEST)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6289858CC47
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 May 2026 13:40:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6D5B2300CF24
-	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 May 2026 10:52:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 03D0C305504A
+	for <lists+linux-remoteproc@lfdr.de>; Wed, 20 May 2026 11:33:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3580B3D9DA0;
-	Wed, 20 May 2026 10:52:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A1A3ECBDA;
+	Wed, 20 May 2026 11:26:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cqV5TORO"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="EOJLNiP4"
 X-Original-To: linux-remoteproc@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D9236CDEF;
-	Wed, 20 May 2026 10:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352B73EAC98;
+	Wed, 20 May 2026 11:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1779274368; cv=none; b=WdFpPWtea/ESDPe/cGRLIhxzu+WBJLqsNO/uib/AWLBPNK1kxAsHQ4vqqi7xgTWL0IHFPQyQTQxTcOZU+8q/q8QzjQba8Bk67Hp/MAYB4pK4ERS7658pawwBvuLS3Gob+iiAn6M2e52sJtXEQJ9LDDLPQzNh71oxaXVdZmKlK0Y=
+	t=1779276408; cv=none; b=DEJrEyEOUv2YLv+4YZq8ICI6LJgpwGvUsx7kSlqOSqDvecVYalmvMx8mxPHEPKahDBLdMWyWufmFXe+vHUs1FJNZGAlXciZe3mzDjRyVFgQvw2vnJPyf3HGQ+aux9XlnOivI2rKktYOZ+1xwY8oCee5KxG+nsA9Y3lUdmTG/FT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1779274368; c=relaxed/simple;
-	bh=zXtexlQVCEbqs+OfK4YFzp4q2ZrzX3es5Nc76/n+KME=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JUtbQEB3ABgDcaeG9fgTBgLgRbwkzk9rpSroWfQNXKJFIAv3YobxMUf6HfqR/XEjr8E92qMSA7h1TxOytqTSI11/OJJKT/aOniovMAKqeAOPubDjFI+EgxK8N4bBwMHW2UQv8fXFuTC0mZAi2ZLkJMNpnqABkJyIhE5eaJgAkSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cqV5TORO; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10E931F000E9;
-	Wed, 20 May 2026 10:52:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1779274366;
-	bh=DNwrWXV00W6j4SF3rDuWUfrAXoAetEJzwT90ivLlEuY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=cqV5TOROF4e8PZdhz90DTG4r89oqDJxUcfEV5YqOcWyAVgJ+3xzsWJItuxC4yoBeF
-	 65LItDuvHQTlMVePydSEg3wtn0OqYGiY0DLZSuJ8GvDgx2AB2L0wtoUixstDwLe2f5
-	 sHAn9Ya47q+oWA6P/9wnEj+bO3L4Db6nyv3xQziizH9gjKzq3sX0bbE8VWQTWO0+6f
-	 zKUhlqgpHy+diVlgvs7VeiksIjz/mfsVuk14kfBQjhMl/2la3/2NrQ806PxXqCKK6Q
-	 i8l60BXY1scgW4OvWsGsJs9HSuiZG0dA1y7lPa1/63K4pAqTVDKdp0FGQh1WVrAE3C
-	 +VEAPyQ8fN3nw==
-Date: Wed, 20 May 2026 12:52:44 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Vignesh Viswanathan <vignesh.viswanathan@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Mathieu Poirier <mathieu.poirier@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, sumit.garg@kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: remoteproc: Document IPQ9650 Compute DSP
-Message-ID: <20260520-hallowed-icy-otter-db13aa@quoll>
-References: <20260520-ipq9650-remoteproc-v1-0-542feb6efb2a@oss.qualcomm.com>
- <20260520-ipq9650-remoteproc-v1-1-542feb6efb2a@oss.qualcomm.com>
+	s=arc-20240116; t=1779276408; c=relaxed/simple;
+	bh=P8fXXB7ke2d49pyHCD53ay9lIR/yzm7qpiBQAzPLW2E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HKzB1v3Jxprhq7eV8ZphlBs5K86WVuWBodHq60XpglnECf2t4CSicpqEvXjkmsM97MLCZE6MoT1RJgLC3Sz8iCuKfhtlx25jCY4G7b0mFpvfhs8axy0AcggW6Myioe4tPHOz9iiBIJ6kcgccrqZ/xzQOxj3x4hkbU5itUOaY9l4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=EOJLNiP4; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: c21edb90543e11f1a3561939bc42ff46-20260520
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=neaiS3v6Ee0wnOpS6Uq6OxdGxu6XYh+uZ3ykA7gR8Z4=;
+	b=EOJLNiP41QCWkOta+YNBWlQSohWA1ZQa1Rsd9VD8V+/nB3H6s8z1swEp1csAxZtwoLYeR/tAcHq1xZDKPtgIJLka2GOCZ4ZTaOesoa2rNNTEaK+r84+it8kjub+XfTQyFWUjUc6+AI/Vf4m67odIQkkugIne8d2PxbFsdnq809g=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.14,REQID:41637fca-ac03-4f20-a115-e7369faed630,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:9091e75,CLOUDID:d64c081f-023f-4f87-9e9c-6c116c694fb3,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|865|888|898,TC:-5,Content:0|
+	15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,COL:0,OSI:0
+	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: c21edb90543e11f1a3561939bc42ff46-20260520
+Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
+	(envelope-from <arnab.layek@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 19811079; Wed, 20 May 2026 19:26:34 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.29; Wed, 20 May 2026 19:26:33 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.2562.29 via Frontend Transport; Wed, 20 May 2026 19:26:33 +0800
+From: Arnab Layek <arnab.layek@mediatek.com>
+To: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
+CC: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<matthias.bgg@gmail.com>, <angelogioacchino.delregno@collabora.com>,
+	<andersson@kernel.org>, <mathieu.poirier@linaro.org>,
+	<linux-remoteproc@vger.kernel.org>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, Arnab Layek
+	<arnab.layek@mediatek.com>
+Subject: [PATCH v4 0/1] dt-bindings: remoteproc: mtk,scp: Allow multiple memory regions for MT8188
+Date: Wed, 20 May 2026 19:26:28 +0800
+Message-ID: <20260520112629.3420612-1-arnab.layek@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-remoteproc@vger.kernel.org
 List-Id: <linux-remoteproc.vger.kernel.org>
 List-Subscribe: <mailto:linux-remoteproc+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-remoteproc+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260520-ipq9650-remoteproc-v1-1-542feb6efb2a@oss.qualcomm.com>
-X-Spamd-Result: default: False [-0.16 / 15.00];
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20260515];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[mediatek.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[mediatek.com:s=dk];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7842-lists,linux-remoteproc=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[13];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,collabora.com,linaro.org,vger.kernel.org,mediatek.com];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,linaro.org,gmail.com,vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-7843-lists,linux-remoteproc=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-remoteproc@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[arnab.layek@mediatek.com,linux-remoteproc@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[mediatek.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-remoteproc,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,devicetree.org:url]
-X-Rspamd-Queue-Id: 73C1D58BF9E
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 6289858CC47
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Wed, May 20, 2026 at 12:56:17AM +0530, Vignesh Viswanathan wrote:
-> Add device tree binding documentation for the Qualcomm IPQ9650 CDSP
-> Peripheral Authentication Service (PAS). Unlike existing PAS
-> implementations, the IPQ9650 CDSP does not require power domains or an XO
-> clock, requiring a separate binding.
+This patch updates the mtk,scp dt-binding schema to support MT8188's
+requirement for 1-2 memory regions while maintaining strict backward
+compatibility for other MediaTek SoCs.
 
-You still need to reference common bindings, to get common properties
-like smem-states.
+The MT8188 SCP requires a main SRAM region and optionally supports an
+L1TCM (Level 1 Tightly Coupled Memory) region for performance
+optimization. L1TCM is optional because basic SCP functionality works
+with only SRAM, but L1TCM provides faster memory access when the board
+hardware configuration includes it.
 
-Especially that you wrote this binding like it was including that ref.
+The base schema uses minItems: 1, maxItems: 2 (permissive range),
+following the pattern established in other MediaTek dt-bindings like
+mediatek,vcodec-encoder.yaml where the base accommodates all variants.
+Conditionals then narrow the constraints per device.
 
+Changes in v4:
+- Improved commit message clarity per kernel submission guidelines:
+  * Added bullet-point explanation of the two memory regions
+  * Explained WHY L1TCM is optional (performance optimization, not
+    required for basic functionality)
+  * Explicitly listed which SoCs remain single-region
+  * Clarified the two-conditional approach
+  * Explained how minItems: 1 allows board-specific configuration
+- Cover letter updated to explain L1TCM optional reasoning
 
-> 
-> Signed-off-by: Vignesh Viswanathan <vignesh.viswanathan@oss.qualcomm.com>
-> ---
->  .../bindings/remoteproc/qcom,ipq9650-pas.yaml      | 136 +++++++++++++++++++++
->  1 file changed, 136 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,ipq9650-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,ipq9650-pas.yaml
-> new file mode 100644
-> index 000000000000..58b3a9352d87
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,ipq9650-pas.yaml
-> @@ -0,0 +1,136 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/remoteproc/qcom,ipq9650-pas.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm IPQ9650 Peripheral Authentication Service
-> +
-> +maintainers:
-> +  - Vignesh Viswanathan <vignesh.viswanathan@oss.qualcomm.com>
-> +
-> +description:
-> +  Qualcomm IPQ9650 SoC Peripheral Authentication Service loads and boots
-> +  firmware on the Qualcomm CDSP Hexagon core.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,ipq9650-cdsp-pas
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 6
-> +
-> +  interrupt-names:
-> +    maxItems: 6
-> +
-> +  memory-region:
-> +    items:
-> +      - description: Memory region for main Firmware authentication
-> +      - description: Memory region for Devicetree Firmware authentication
-> +
-> +  firmware-name:
-> +    items:
-> +      - description: Firmware name of the Hexagon core
-> +      - description: Firmware name of the Hexagon Devicetree
-> +
-> +  qcom,smem-states:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: States used by the AP to signal the Hexagon core
-> +    items:
-> +      - description: Stop the modem
-> +
-> +  qcom,smem-state-names:
-> +    description: The names of the state bits used for SMP2P output
-> +    items:
-> +      - const: stop
-> +
-> +  glink-edge:
-> +    $ref: /schemas/remoteproc/qcom,glink-edge.yaml#
-> +    description:
-> +      Qualcomm G-Link subnode which represents communication edge, channels
-> +      and devices related to the CDSP.
-> +    unevaluatedProperties: false
-> +
-> +  smd-edge: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-> +  - memory-region
-> +  - qcom,smem-states
-> +  - qcom,smem-state-names
-> +
-> +allOf:
-> +  - if:
+Changes in v3:
+- Removed "Tested on..." line (bindings cannot be tested)
+- Added minItems: 1 to MT8188 conditional to make L1TCM truly optional
+- Referenced mediatek,vcodec-encoder.yaml iommus pattern explicitly
+- Base schema: minItems: 1, maxItems: 2 (permissive range)
+- Non-MT8188: explicitly restricted to maxItems: 1
+- MT8188: documented with item descriptions for both regions
 
-Pointless. Why do you need if? There are no other devices.
+Changes in v2:
+- Added conditional schema for MT8188 to allow 1-2 memory regions
+- Added descriptions for each memory region
+- Did not work: base maxItems: 1 conflicted with conditional
 
-Best regards,
-Krzysztof
+Arnab Layek (1):
+  dt-bindings: remoteproc: mtk,scp: Allow multiple memory regions for
+    MT8188
 
+ .../bindings/remoteproc/mtk,scp.yaml          | 45 ++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 2 deletions(-)
+
+-- 
+2.45.2
 
