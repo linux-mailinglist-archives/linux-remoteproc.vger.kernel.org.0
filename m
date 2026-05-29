@@ -1,62 +1,62 @@
-Return-Path: <linux-remoteproc+bounces-7958-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
+Return-Path: <linux-remoteproc+bounces-7959-lists+linux-remoteproc=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-remoteproc@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IH+aIHPAGWo1ywgAu9opvQ
-	(envelope-from <linux-remoteproc+bounces-7958-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 29 May 2026 18:36:03 +0200
+	id 4Cj0FkS9GWrayggAu9opvQ
+	(envelope-from <linux-remoteproc+bounces-7959-lists+linux-remoteproc=lfdr.de@vger.kernel.org>)
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 29 May 2026 18:22:28 +0200
 X-Original-To: lists+linux-remoteproc@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A5DB605B94
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 29 May 2026 18:36:03 +0200 (CEST)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 441076057FC
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 29 May 2026 18:22:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 79A7E34B61C1
-	for <lists+linux-remoteproc@lfdr.de>; Fri, 29 May 2026 16:05:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 36BFD306567A
+	for <lists+linux-remoteproc@lfdr.de>; Fri, 29 May 2026 16:06:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 807403F0AA7;
-	Fri, 29 May 2026 16:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242343F1AC4;
+	Fri, 29 May 2026 16:01:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LfZhU8YX";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Ho0nU9om"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1/s9wtGk";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="pNUXs75V"
 X-Original-To: linux-remoteproc@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CBD3F1673
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F273F1AAF
 	for <linux-remoteproc@vger.kernel.org>; Fri, 29 May 2026 16:01:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1780070485; cv=none; b=QCfF0PE2R3+iHSa6wvTUlWwVzKyH2Xa1t95OTzVSK8LZ2bWyj60QNxhaXxyJWs5hI3smmDLORrKw6pT+XGVXAnM1gS3az/HSSSg1BstP2HHBo2Dbs/lTZpaRyYttowioPQ6X7HscLmKEZrMNRdMZltBKdfPI1U9C+jSNf01nrvc=
+	t=1780070486; cv=none; b=QFfzba3KSaVDI/7drPKFxja0iLsjExuj5tyW5HZMDzImkUIY9L7t/8FlpnWfgeYWOSVQJfXI8Nij6SKF38m1ZkRDjTGdoFznt6k7vgevrTdWwbZM/Zz985ne1O96S4U6rnv9ev/NUV3ioWNgauH9y/rvK77EAIKTDABKzulCvN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1780070485; c=relaxed/simple;
-	bh=HN1SFeaRhMS8jENy7tU49XFln2/GhRs/C/9kuqxWh2Y=;
+	s=arc-20240116; t=1780070486; c=relaxed/simple;
+	bh=rB2UKiyDcM7IWJbPPVp1cw1OH36OaEEat8ZM5+jzFDo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bVJS/F6Kz86xQe5+V2V2uJZYynCwXJvla8nPrqkxFgSV8VUBt2LDkiW+GCBtIeLTbl7jfzL3PjvQ+j9sjDcrpnDrw7CnvLYNrWiH2FCgSNadOAYSGjyeKO0kvac9Z7jfUCqsAtyUscZzZkI2Zf0JokTJzC76ei8wuGKqlRjup7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LfZhU8YX; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Ho0nU9om; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version:Content-Type; b=fp6I47hQXaN65sHC32j9YwRwkji0DdEglJb7/bajo8k6Iagl8VrrJAKCm3kjnOvFhIB8+FRbbHs2BWpiIFTvlHQQG+oYqZEJ81ULEDsAWhg1ZL449NAF6gMFHKzN2zM+w8aWxqrkU8zICEgPJ9mMNo+DGEQyIb7eAmqWK32aGzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1/s9wtGk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=pNUXs75V; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1780070482;
+	s=2020; t=1780070483;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=g3pwpRlS/z22YoHkLrfQQIUXLQg6hhbTC7fKDUVYHXY=;
-	b=LfZhU8YXwzipNcrkic5SEMfrGEbSE2o0IJfbKlctYroXzzlwgwpwmvwE89LIpX+0b6ySKy
-	Pw0vGaOP8Bg1XZYt5Gyk5vIbgi71IMnDsxfkKvjY/8u7YteI6F+LOnXIa5iIA6WIucxZs+
-	BNCUjXWG6rFNCxFCIrSytFfl2snnWOb89PjfpEjda4xhHdKPZu8Wsz/hoZ+KXvyxPYqUao
-	vx4RbRqQTl2UmC2BS/354au3Go5vumFvIQJxXdRGnGN7iuEUMWqIIqYSp13IjUGl2Qmmca
-	+9xBFNbRTKOCmnp/TtQso+AldrpzrIc+CdClc7PwWWRp6V/fJ9sKCOsV7q082g==
+	bh=rg4CWBKqcg/43kRp7XELQX8SwIZj03OaAVdBvFZ3LCA=;
+	b=1/s9wtGkbbP63S+WX+KFqW5cjUuKHv+3qrwe1NUAAMt8dbiEEP2rquBjL+G59foO/CENDH
+	RtrzCvjfyJEeh14LnWZBq6sp4iK7EjoQra/7+yOGD+TQkXNPIt99MLtYvBDTUgYZGsyRCr
+	EoqQMJdncjyEFfFyYMeea7CAs2Ou04uvDlf412SmBSevQn3/3QsMXKkvndMWC3+/NRriJU
+	KM1VkThzc19zdD7AN38vTuCpJCEkUKjmSRJYn+1Vjl7fk6+TQpxBmv7DUJZuM+SXnifVdT
+	bW+EhEGekoXQ7yERN/zj6DzxIoxNUK8Wzg9Um1oAIHAHm7o43XhyinMaHQnN3g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1780070482;
+	s=2020e; t=1780070483;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=g3pwpRlS/z22YoHkLrfQQIUXLQg6hhbTC7fKDUVYHXY=;
-	b=Ho0nU9om8K+S3FNetbcHadnUM7bMDescUmeHyJBfv0YaFnkMt0lXDm/jOZjI92VwhZV0+n
-	bsZ1qqRcR2DaxSDQ==
+	bh=rg4CWBKqcg/43kRp7XELQX8SwIZj03OaAVdBvFZ3LCA=;
+	b=pNUXs75VMd5ZP3cQ3aEmB+wxuXvG8H5KjVDj6d+sXt0NqsaPRHMeOYkY90OSoQjjeDfTae
+	dDK6IzF9n1E58HCQ==
 To: linux-rt-devel@lists.linux.dev,
 	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
@@ -71,9 +71,9 @@ Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	Pengutronix Kernel Team <kernel@pengutronix.de>,
 	Sascha Hauer <s.hauer@pengutronix.de>,
 	Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 4/5] mailbox: imx: Don't force-thread the primary handler
-Date: Fri, 29 May 2026 18:01:06 +0200
-Message-ID: <20260529-imx_mbox_rproc-v1-4-b8ffc36e11e5@linutronix.de>
+Subject: [PATCH 5/5] remoteproc: imx_rproc: Invoke the callback directly
+Date: Fri, 29 May 2026 18:01:07 +0200
+Message-ID: <20260529-imx_mbox_rproc-v1-5-b8ffc36e11e5@linutronix.de>
 In-Reply-To: <20260529-imx_mbox_rproc-v1-0-b8ffc36e11e5@linutronix.de>
 References: <20260529-imx_mbox_rproc-v1-0-b8ffc36e11e5@linutronix.de>
 Precedence: bulk
@@ -87,12 +87,12 @@ Content-Transfer-Encoding: quoted-printable
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-7958-lists,linux-remoteproc=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-7959-lists,linux-remoteproc=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -107,85 +107,110 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-remoteproc@vger.kernel.org];
 	DKIM_TRACE(0.00)[linutronix.de:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-remoteproc];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linutronix.de:email,linutronix.de:mid,linutronix.de:dkim,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
-X-Rspamd-Queue-Id: 1A5DB605B94
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+X-Rspamd-Queue-Id: 441076057FC
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-The primary interrupt handler (imx_mu_isr()) no longer invokes any
-callbacks it only masks the interrupt source and returns. In a
-forced-threaded environment the IRQ-core will force-thread the primary
-handler which can be avoided.
+The imx-mailbox driver moved the callback invocation into the threaded
+IRQ handler. This means the callback is invoked in preemptible context
+and there is no need to schedule the kworker for the
+imx_rproc_notified_idr_cb() invocation.
 
-The primary handler uses a spinlock_t to protect the RMW operation in
-imx_mu_xcr_rmw() - nothing that may introduce long latencies.
+This was tested with the rpmsg-tty driver on imx93.
 
-The lock can be turned into a raw_spinlock_t and then the primary
-handler can run in hardirq context even on PREEMPT_RT skipping one
-thread.
-
-Make struct imx_mu_priv::xcr_lock a raw_spinlock_t and skip
-force-threading the primrary handler by marking it IRQF_NO_THREAD.
+Remove the workqueue handling and invoke the imx_rproc_notified_idr_cb()
+callback directly.
 
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- drivers/mailbox/imx-mailbox.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/remoteproc/imx_rproc.c | 33 +--------------------------------
+ 1 file changed, 1 insertion(+), 32 deletions(-)
 
-diff --git a/drivers/mailbox/imx-mailbox.c b/drivers/mailbox/imx-mailbox.c
-index 9bf6484af45ed..0a710316d791b 100644
---- a/drivers/mailbox/imx-mailbox.c
-+++ b/drivers/mailbox/imx-mailbox.c
-@@ -87,7 +87,7 @@ struct imx_mu_priv {
- 	struct device		*dev;
- 	void __iomem		*base;
- 	void			*msg;
--	spinlock_t		xcr_lock; /* control register lock */
-+	raw_spinlock_t		xcr_lock; /* control register lock */
+diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+index 0dd80e688b0ea..c97bc1c401655 100644
+--- a/drivers/remoteproc/imx_rproc.c
++++ b/drivers/remoteproc/imx_rproc.c
+@@ -24,7 +24,6 @@
+ #include <linux/regmap.h>
+ #include <linux/remoteproc.h>
+ #include <linux/scmi_imx_protocol.h>
+-#include <linux/workqueue.h>
 =20
- 	struct mbox_controller	mbox;
- 	struct mbox_chan	mbox_chans[IMX_MU_CHANS];
-@@ -207,15 +207,14 @@ static int imx_mu_rx_waiting_read(struct imx_mu_priv =
-*priv, u32 *val, u32 idx)
-=20
- static u32 imx_mu_xcr_rmw(struct imx_mu_priv *priv, enum imx_mu_xcr type, =
-u32 set, u32 clr)
- {
--	unsigned long flags;
- 	u32 val;
-=20
--	spin_lock_irqsave(&priv->xcr_lock, flags);
-+	guard(raw_spinlock_irqsave)(&priv->xcr_lock);
-+
- 	val =3D imx_mu_read(priv, priv->dcfg->xCR[type]);
- 	val &=3D ~clr;
- 	val |=3D set;
- 	imx_mu_write(priv, val, priv->dcfg->xCR[type]);
--	spin_unlock_irqrestore(&priv->xcr_lock, flags);
-=20
- 	return val;
+ #include "imx_rproc.h"
+ #include "remoteproc_internal.h"
+@@ -115,8 +114,6 @@ struct imx_rproc {
+ 	struct mbox_client		cl;
+ 	struct mbox_chan		*tx_ch;
+ 	struct mbox_chan		*rx_ch;
+-	struct work_struct		rproc_work;
+-	struct workqueue_struct		*workqueue;
+ 	void __iomem			*rsc_table;
+ 	struct imx_sc_ipc		*ipc_handle;
+ 	struct notifier_block		rproc_nb;
+@@ -835,21 +832,11 @@ static int imx_rproc_notified_idr_cb(int id, void *pt=
+r, void *data)
+ 	return 0;
  }
-@@ -617,7 +616,7 @@ static int imx_mu_startup(struct mbox_chan *chan)
+=20
+-static void imx_rproc_vq_work(struct work_struct *work)
+-{
+-	struct imx_rproc *priv =3D container_of(work, struct imx_rproc,
+-					      rproc_work);
+-	struct rproc *rproc =3D priv->rproc;
+-
+-	idr_for_each(&rproc->notifyids, imx_rproc_notified_idr_cb, rproc);
+-}
+-
+ static void imx_rproc_rx_callback(struct mbox_client *cl, void *msg)
  {
- 	struct imx_mu_priv *priv =3D to_imx_mu_priv(chan->mbox);
- 	struct imx_mu_con_priv *cp =3D chan->con_priv;
--	unsigned long irq_flag =3D 0;
-+	unsigned long irq_flag =3D IRQF_NO_THREAD;
- 	int ret;
+ 	struct rproc *rproc =3D dev_get_drvdata(cl->dev);
+-	struct imx_rproc *priv =3D rproc->priv;
 =20
- 	pm_runtime_get_sync(priv->dev);
-@@ -964,7 +963,7 @@ static int imx_mu_probe(struct platform_device *pdev)
- 		goto disable_clk;
- 	}
+-	queue_work(priv->workqueue, &priv->rproc_work);
++	idr_for_each(&rproc->notifyids, imx_rproc_notified_idr_cb, rproc);
+ }
 =20
--	spin_lock_init(&priv->xcr_lock);
-+	raw_spin_lock_init(&priv->xcr_lock);
+ static int imx_rproc_xtr_mbox_init(struct rproc *rproc, bool tx_block)
+@@ -1214,13 +1201,6 @@ static int imx_rproc_sys_off_handler(struct sys_off_=
+data *data)
+ 	return NOTIFY_DONE;
+ }
 =20
- 	priv->mbox.dev =3D dev;
- 	priv->mbox.ops =3D &imx_mu_ops;
+-static void imx_rproc_destroy_workqueue(void *data)
+-{
+-	struct workqueue_struct *workqueue =3D data;
+-
+-	destroy_workqueue(workqueue);
+-}
+-
+ static int imx_rproc_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev =3D &pdev->dev;
+@@ -1249,17 +1229,6 @@ static int imx_rproc_probe(struct platform_device *p=
+dev)
+ 		priv->ops =3D dcfg->ops;
+=20
+ 	dev_set_drvdata(dev, rproc);
+-	priv->workqueue =3D create_workqueue(dev_name(dev));
+-	if (!priv->workqueue) {
+-		dev_err(dev, "cannot create workqueue\n");
+-		return -ENOMEM;
+-	}
+-
+-	ret =3D devm_add_action_or_reset(dev, imx_rproc_destroy_workqueue, priv->=
+workqueue);
+-	if (ret)
+-		return dev_err_probe(dev, ret, "Failed to add devm destroy workqueue act=
+ion\n");
+-
+-	INIT_WORK(&priv->rproc_work, imx_rproc_vq_work);
+=20
+ 	ret =3D imx_rproc_xtr_mbox_init(rproc, true);
+ 	if (ret)
 
 --=20
 2.53.0
